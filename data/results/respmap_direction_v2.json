@@ -1,0 +1,4823 @@
+{
+  "result": "respmap_direction_v2",
+  "date": "2026-10-02",
+  "lane": "lane-propb",
+  "question": "of the response map's published `predicted` assertions, how many does direction rule v2 leave unresolved, and how many does it resolve to the opposite action from the one the map published? Counted per assertion from committed rows, never from a Counter total",
+  "registration": "data/results/respmap_direction_v2_registration.json",
+  "population": "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+  "increment_3_is_not_this_population": "increment 3 is a different population and is not counted here: the committed `data/results/response_map_increment3.json` carries 574 assertions over 337 entities in 93 chains, of which 73 are `predicted`. The figures 527 assertions, 567 entities, 195 chains and 166 `predicted` are increment 2's, as its own `counts` block records. Recorded because the brief this lane was given attached increment 2's counts to increment 3's name",
+  "classes": [
+    "resolved_agrees_with_published",
+    "resolved_opposite_to_published",
+    "unresolved"
+  ],
+  "class_rule": "the published action is the assertion's own `measurement.direction`, which is `quoted.predicted_coding.action` verbatim, and v1 reads that same field (`direction_v2._v1`), so no v1 call is recomputed from a value here. The v2 call is `direction_v2.direction_call(predicted_coding, V2, row=...)` on the cached gene row for the element's named target, applied unchanged. `activates` and `represses` are the same axis as `activates` and `inhibits`: the token is compared on the axis, never on its spelling",
+  "counts": {
+    "denominator": 166,
+    "by_class": {
+      "resolved_agrees_with_published": 54,
+      "resolved_opposite_to_published": 0,
+      "unresolved": 112
+    },
+    "unresolved_by_reason": {
+      "one_value_only": 93,
+      "one_track_seen_twice": 19
+    },
+    "unresolved_reasons_with_no_assertion": [
+      "below_magnitude_floor",
+      "context_unknown",
+      "no_row_for_target",
+      "no_value_for_cell",
+      "signs_disagree_in_cell",
+      "zero_value_in_cell"
+    ],
+    "by_published_axis": {
+      "activates_target": {
+        "published": 150,
+        "resolved_agrees_with_published": 53,
+        "resolved_opposite_to_published": 0,
+        "unresolved": 97
+      },
+      "represses_target": {
+        "published": 16,
+        "resolved_agrees_with_published": 1,
+        "resolved_opposite_to_published": 0,
+        "unresolved": 15
+      }
+    },
+    "no_cached_row": 0,
+    "published_value_among_retained": 166,
+    "unresolved_one_value_only_by_cell_opposite_to_published": 0,
+    "selection_excluded_diagnostic_hits": 0,
+    "cells_that_are_cached_tracks": 73
+  },
+  "flip_is_reported_as_measured": "the flip count is reported as measured and not as expected. stated before any count, because it follows from the rule and not from the data: under SIGN_RULE_V2 the flip count (c) is 0 by construction. v1's own selected value is itself one of the assigned cell's retained values, and v2 resolves only when every retained value shares one sign, so a resolved v2 call always carries v1's sign. v2 can therefore withhold a direction and can never reverse one. This is registered in advance so that a measured 0 is read as the arithmetic it is and not as evidence that v1's directions are sound - that is registered in advance, so a measured 0 here is the arithmetic of the rule and carries no agreement between v1 and v2; and a measured non-zero would refute the registered reading rather than this count, which is why each row also records whether the published value is numerically among the cell's retained values",
+  "absence_gloss_corrected": "`one_value_only` may NOT be glossed as `v1's own selected extreme was the one value retained`. On one escape branch the single retained value is `by_cell[cell]` and not the published value, and it can carry the opposite sign - a disagreement sitting inside the bucket that reads as absence. Genome-wide the count of that branch is unknown and bounded above by the selection-excluded diagnostic. Over these 166 assertions it is not unknown: every row records the retained values with the field each came from, so the branch is counted exactly, as `unresolved_one_value_only_by_cell_opposite_to_published`",
+  "earlier_tallies_not_touched": "the two earlier genome-wide tallies - 14 `signs_disagree_in_cell` and 10 selection-excluded diagnostic hits - overlap and may not be added. Neither is read, reused, adjusted or re-derived here, and neither is a denominator or a numerator of anything in this result. The counts in this result are taken over this result's own 166 rows and nowhere else, so they may not be added to those two either",
+  "selection_excluded_diagnostic": "one diagnostic is reported beside the counts and is not a v2 output: among v1 calls whose assigned cell is one of predict.enhancer_target.CELLS, how many have by_cell[cell] of the opposite sign to the selected extreme. These are the calls a variant that discarded the selected value as selected would reverse. The variant is not adopted here, because on a legacy row it would rest the whole direction on one order-dependent track, and the count is reported as a property of the cache and never as a count of wrong rules",
+  "unresolved_means": "unresolved means the sign rule did not resolve. It never means the element has no action, it is not a measurement of absence, and it is not a failure of the rule to produce an output: an unresolved call is the correct output of v2 wherever one cell's retained values do not carry a sign. It is recorded as molecular action unknown",
+  "nothing_rescored": "no element is re-scored, no rule is edited, no threshold is moved and no published figure is changed. `MAGNITUDE_FLOOR` is still the imported `predict.enhancer_target.MIN_EFFECT` and consistency is still unanimity; this module defines no threshold of its own. The response-map payload is read and never written",
+  "validates_nothing": "neither the unresolved counts nor the flip count validates anything, in either direction. A large unresolved count is not evidence that v1 was wrong, a small one is not evidence that v1 was right, and 0 flips is arithmetic (FLIPS_ARE_STRUCTURALLY_IMPOSSIBLE) rather than agreement. nothing here is validation. v2 reads the same AlphaGenome sweep v1 reads, restricted to one cell name, so it is a second reading of one model and never independent evidence. No v2 call has been held against a measured outcome by any method in this lane. This result says what the model's own rule says about the model's own published assertions. It does not say whether either is right, it measures no accuracy, it holds no v2 call against any measured outcome, and nothing in it is evidence that an unresolved element has no action",
+  "not_an_improvement": "v2 is not an improvement in accuracy and this lane has no measurement that would support calling it one. A rule that is more careful about direction is not thereby more correct about biology. What changed is that a direction one cell's values do not carry is now recorded as unknown instead of being asserted",
+  "wording": "a measured increase on knockdown is an increase on knockdown, and the prohibition on calling it anything else is attribution.increase_links.check_no_mechanism_claim, which this module neither copies nor shadows: it defines no word list of its own, and the tests run the imported checker and plant a counterfactual that it rejects. `not_open_in_reader` means not detected open at the reader's registered call, never closed. Unresolved means the sign rule did not resolve, never that the element has no action",
+  "no_recommendation": "this result is an input to the deferred decision on whether BioLang gains an action token for an unresolved direction, and it makes no recommendation about that decision. The decision changes every compiled program and is not this lane's to argue; only the number it would need is produced here",
+  "cannot_establish": [
+    "a v2 class is not a measurement of the element's action, and an unresolved class is not absence of regulation",
+    "no accuracy, agreement or improvement is measured: v2 reads the same AlphaGenome sweep v1 reads, restricted to one cell name",
+    "no per-locus independence is claimed: these 166 assertions are not grouped here, and `attribution.cell2.group` would be an operational grouping and NOT established biological independence if they were",
+    "the cell on a row is the cell the compiled rule assigned, not a cell any experiment in the response map read: every one of these assertions carries `context.cell` as `not recorded`",
+    "the counts do not generalise beyond this population: they are increment 2's published predicted assertions and not the genome-wide predicted layer"
+  ],
+  "assertions": [
+    {
+      "assertion_id": "r2|chr1:3774828-3775178|EH38E2780660|SMIM1",
+      "chrom": "chr1",
+      "element": "EH38E2780660",
+      "gene": "SMIM1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8482,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8482
+        },
+        {
+          "field": "by_cell",
+          "value": -0.8057
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:11798435-11798766|EH38E2786585|C1orf167",
+      "chrom": "chr1",
+      "element": "EH38E2786585",
+      "gene": "C1orf167",
+      "cell": "myocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1012,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1012
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:17441491-17441840|EH38E2790320|RCC2",
+      "chrom": "chr1",
+      "element": "EH38E2790320",
+      "gene": "RCC2",
+      "cell": "esophagus mucosa",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.401,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.401
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:28883878-28884223|EH38E2798810|OPRD1",
+      "chrom": "chr1",
+      "element": "EH38E2798810",
+      "gene": "OPRD1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3252,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3252
+        },
+        {
+          "field": "by_cell",
+          "value": -0.2722
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:31928780-31929117|EH38E1334647|PTP4A2",
+      "chrom": "chr1",
+      "element": "EH38E1334647",
+      "gene": "PTP4A2",
+      "cell": "Jurkat, Clone E6-1",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2619,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2619
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:95085473-95085816|EH38E2826117|TLCD4",
+      "chrom": "chr1",
+      "element": "EH38E2826117",
+      "gene": "TLCD4",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3861,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3861
+        },
+        {
+          "field": "by_cell",
+          "value": -0.3671
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:95115639-95115986|EH38E2826135|TLCD4",
+      "chrom": "chr1",
+      "element": "EH38E2826135",
+      "gene": "TLCD4",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.327,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.327
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:117655138-117655486|EH38E1380588|TENT5C",
+      "chrom": "chr1",
+      "element": "EH38E1380588",
+      "gene": "TENT5C",
+      "cell": "left lobe of liver",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2456,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2456
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:158689119-158689459|EH38E1389477|SPTA1",
+      "chrom": "chr1",
+      "element": "EH38E1389477",
+      "gene": "SPTA1",
+      "cell": "muscle of trunk",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2689,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2689
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:161503083-161503358|EH38E2843840|FCGR2A",
+      "chrom": "chr1",
+      "element": "EH38E2843840",
+      "gene": "FCGR2A",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.4663,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.4663
+        },
+        {
+          "field": "by_cell",
+          "value": -1.4147
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:184031378-184031720|EH38E2852957|COLGALT2",
+      "chrom": "chr1",
+      "element": "EH38E2852957",
+      "gene": "COLGALT2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -3.2036,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -3.2036
+        },
+        {
+          "field": "by_cell",
+          "value": -3.1868
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:202076100-202076447|EH38E2858370|ELF3",
+      "chrom": "chr1",
+      "element": "EH38E2858370",
+      "gene": "ELF3",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1223,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1223
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1081
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:225928452-225928801|EH38E2869635|LEFTY2",
+      "chrom": "chr1",
+      "element": "EH38E2869635",
+      "gene": "LEFTY2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.9972,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.9972
+        },
+        {
+          "field": "by_cell",
+          "value": -1.7633
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr1:231046851-231047102|EH38E2873179|FAM89A",
+      "chrom": "chr1",
+      "element": "EH38E2873179",
+      "gene": "FAM89A",
+      "cell": "bladder microvascular endothelial cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1561,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1561
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:231053681-231054031|EH38E1431189|FAM89A",
+      "chrom": "chr1",
+      "element": "EH38E1431189",
+      "gene": "FAM89A",
+      "cell": "CD14-positive monocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5592,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5592
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:247855189-247855537|EH38E2879912|TRIM58",
+      "chrom": "chr1",
+      "element": "EH38E2879912",
+      "gene": "TRIM58",
+      "cell": "liver",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.7168,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.7168
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr1:248889442-248889790|EH38E2880164|PGBD2",
+      "chrom": "chr1",
+      "element": "EH38E2880164",
+      "gene": "PGBD2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2103,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2103
+        },
+        {
+          "field": "by_cell",
+          "value": -0.2008
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:8526150-8526497|EH38E3323073|ID2",
+      "chrom": "chr2",
+      "element": "EH38E3323073",
+      "gene": "ID2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1309,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1309
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1309
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:10283223-10283573|EH38E3324451|HPCAL1",
+      "chrom": "chr2",
+      "element": "EH38E3324451",
+      "gene": "HPCAL1",
+      "cell": "GM23248",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3412,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3412
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr2:38652415-38652763|EH38E3337724|GALM",
+      "chrom": "chr2",
+      "element": "EH38E3337724",
+      "gene": "GALM",
+      "cell": "left ventricle myocardium superior",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1481,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1481
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr2:43190596-43190946|EH38E3339999|ZFP36L2",
+      "chrom": "chr2",
+      "element": "EH38E3339999",
+      "gene": "ZFP36L2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1334,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1334
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1334
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:85993955-85994305|EH38E2014320|ST3GAL5",
+      "chrom": "chr2",
+      "element": "EH38E2014320",
+      "gene": "ST3GAL5",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6014,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6014
+        },
+        {
+          "field": "by_cell",
+          "value": -0.5926
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:112683781-112684113|EH38E3365489|NT5DC4",
+      "chrom": "chr2",
+      "element": "EH38E3365489",
+      "gene": "NT5DC4",
+      "cell": "placenta",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5301,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5301
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr2:126645287-126645637|EH38E2030714|GYPC",
+      "chrom": "chr2",
+      "element": "EH38E2030714",
+      "gene": "GYPC",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2332,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2332
+        },
+        {
+          "field": "by_cell",
+          "value": -0.232
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:126651031-126651378|EH38E3369821|GYPC",
+      "chrom": "chr2",
+      "element": "EH38E3369821",
+      "gene": "GYPC",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1583,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1583
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1583
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:230659277-230659624|EH38E3405603|CAB39",
+      "chrom": "chr2",
+      "element": "EH38E3405603",
+      "gene": "CAB39",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1396,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1396
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1329
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:235460654-235460998|EH38E3408935|AGAP1",
+      "chrom": "chr2",
+      "element": "EH38E3408935",
+      "gene": "AGAP1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4343,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4343
+        },
+        {
+          "field": "by_cell",
+          "value": -0.4343
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr2:237964992-237965340|EH38E3410744|RAMP1",
+      "chrom": "chr2",
+      "element": "EH38E3410744",
+      "gene": "RAMP1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2693,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2693
+        },
+        {
+          "field": "by_cell",
+          "value": -0.2663
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr3:108104378-108104727|EH38E3530187|CD47",
+      "chrom": "chr3",
+      "element": "EH38E3530187",
+      "gene": "CD47",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1461,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1461
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1432
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr3:128415356-128415654|EH38E2236464|GATA2",
+      "chrom": "chr3",
+      "element": "EH38E2236464",
+      "gene": "GATA2",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1523,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1523
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr3:129245707-129246053|EH38E3539048|COPG1",
+      "chrom": "chr3",
+      "element": "EH38E3539048",
+      "gene": "COPG1",
+      "cell": "Whole_Blood",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.3495,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.3495
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr3:129305681-129306030|EH38E3539088|HMCES",
+      "chrom": "chr3",
+      "element": "EH38E3539088",
+      "gene": "HMCES",
+      "cell": "Purkinje cell",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.2988,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.2988
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr3:143085070-143085419|EH38E2244536|CHST2",
+      "chrom": "chr3",
+      "element": "EH38E2244536",
+      "gene": "CHST2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.769,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.769
+        },
+        {
+          "field": "by_cell",
+          "value": -1.6955
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr3:150729644-150729987|EH38E3547060|ERICH6",
+      "chrom": "chr3",
+      "element": "EH38E3547060",
+      "gene": "ERICH6",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1422,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1422
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1281
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr3:196181863-196182213|EH38E2272494|ZDHHC19",
+      "chrom": "chr3",
+      "element": "EH38E2272494",
+      "gene": "ZDHHC19",
+      "cell": "common myeloid progenitor, CD34-positive",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5975,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5975
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr3:196193916-196194266|EH38E3564105|ZDHHC19",
+      "chrom": "chr3",
+      "element": "EH38E3564105",
+      "gene": "ZDHHC19",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3977,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3977
+        },
+        {
+          "field": "by_cell",
+          "value": -0.3698
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr3:196194631-196194977|EH38E2272511|ZDHHC19",
+      "chrom": "chr3",
+      "element": "EH38E2272511",
+      "gene": "ZDHHC19",
+      "cell": "large intestine",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1514,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1514
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr4:1785157-1785506|EH38E3567140|FGFR3",
+      "chrom": "chr4",
+      "element": "EH38E3567140",
+      "gene": "FGFR3",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8569,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8569
+        },
+        {
+          "field": "by_cell",
+          "value": -0.8569
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr4:54542593-54542943|EH38E3584970|KIT",
+      "chrom": "chr4",
+      "element": "EH38E3584970",
+      "gene": "KIT",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6032,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6032
+        },
+        {
+          "field": "by_cell",
+          "value": -0.6032
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr4:55733922-55734272|EH38E3585368|NMU",
+      "chrom": "chr4",
+      "element": "EH38E3585368",
+      "gene": "NMU",
+      "cell": "colonic mucosa",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4007,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4007
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr4:78732587-78732930|EH38E3590826|BMP2K",
+      "chrom": "chr4",
+      "element": "EH38E3590826",
+      "gene": "BMP2K",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2427,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2427
+        },
+        {
+          "field": "by_cell",
+          "value": -0.2176
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr4:80127333-80127683|EH38E2306895|PRDM8",
+      "chrom": "chr4",
+      "element": "EH38E2306895",
+      "gene": "PRDM8",
+      "cell": "thoracic aorta endothelial cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6247,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6247
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr4:110248822-110249172|EH38E2319836|ENPEP",
+      "chrom": "chr4",
+      "element": "EH38E2319836",
+      "gene": "ENPEP",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1749,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1749
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1672
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr4:176290586-176290916|EH38E3616822|ASB5",
+      "chrom": "chr4",
+      "element": "EH38E3616822",
+      "gene": "ASB5",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1295,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1295
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1166
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr5:10310398-10310741|EH38E2356573|CMBL",
+      "chrom": "chr5",
+      "element": "EH38E2356573",
+      "gene": "CMBL",
+      "cell": "Kidney_Medulla",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2922,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2922
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr5:40802012-40802351|EH38E3634150|CARD6",
+      "chrom": "chr5",
+      "element": "EH38E3634150",
+      "gene": "CARD6",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1871,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1871
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1768
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr5:81754664-81755013|EH38E3646338|SSBP2",
+      "chrom": "chr5",
+      "element": "EH38E3646338",
+      "gene": "SSBP2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4023,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4023
+        },
+        {
+          "field": "by_cell",
+          "value": -0.4023
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr5:154653965-154654314|EH38E3672407|HAND1",
+      "chrom": "chr5",
+      "element": "EH38E3672407",
+      "gene": "HAND1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1652,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1652
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1337
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr5:173855681-173855988|EH38E3679837|CPEB4",
+      "chrom": "chr5",
+      "element": "EH38E3679837",
+      "gene": "CPEB4",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.192,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.192
+        },
+        {
+          "field": "by_cell",
+          "value": -0.172
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr5:177390540-177390890|EH38E3681847|PFN3",
+      "chrom": "chr5",
+      "element": "EH38E3681847",
+      "gene": "PFN3",
+      "cell": "left lobe of liver",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.4237,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.4237
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr6:14095446-14095736|EH38E2447945|CD83",
+      "chrom": "chr6",
+      "element": "EH38E2447945",
+      "gene": "CD83",
+      "cell": "K562",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.3049,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.3049
+        },
+        {
+          "field": "by_cell",
+          "value": 0.3049
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:15299551-15299901|EH38E2449027|JARID2",
+      "chrom": "chr6",
+      "element": "EH38E2449027",
+      "gene": "JARID2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1872,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1872
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1848
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:32131546-32131896|EH38E2459784|PRRT1",
+      "chrom": "chr6",
+      "element": "EH38E2459784",
+      "gene": "PRRT1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1326,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1326
+        },
+        {
+          "field": "by_cell",
+          "value": -0.0918
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:37183248-37183594|EH38E3705351|PIM1",
+      "chrom": "chr6",
+      "element": "EH38E3705351",
+      "gene": "PIM1",
+      "cell": "naive thymus-derived CD4-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8845,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8845
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr6:42199446-42199790|EH38E3708214|GUCA1B",
+      "chrom": "chr6",
+      "element": "EH38E3708214",
+      "gene": "GUCA1B",
+      "cell": "transverse colon",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.2205,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.2205
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr6:83974642-83974992|EH38E3718915|MRAP2",
+      "chrom": "chr6",
+      "element": "EH38E3718915",
+      "gene": "MRAP2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -2.1106,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -2.1106
+        },
+        {
+          "field": "by_cell",
+          "value": -2.0339
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:109304460-109304809|EH38E3725841|CD164",
+      "chrom": "chr6",
+      "element": "EH38E3725841",
+      "gene": "CD164",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1269,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1269
+        },
+        {
+          "field": "by_cell",
+          "value": -0.125
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:139445494-139445843|EH38E3736464|CITED2",
+      "chrom": "chr6",
+      "element": "EH38E3736464",
+      "gene": "CITED2",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1344,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1344
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1292
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:147161977-147162317|EH38E3739014|STXBP5",
+      "chrom": "chr6",
+      "element": "EH38E3739014",
+      "gene": "STXBP5",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2746,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2746
+        },
+        {
+          "field": "by_cell",
+          "value": -0.2557
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr6:154513916-154514265|EH38E3742206|CNKSR3",
+      "chrom": "chr6",
+      "element": "EH38E3742206",
+      "gene": "CNKSR3",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5334,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5334
+        },
+        {
+          "field": "by_cell",
+          "value": -0.5031
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:12722740-12723090|EH38E3758492|ARL4A",
+      "chrom": "chr7",
+      "element": "EH38E3758492",
+      "gene": "ARL4A",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1031,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1031
+        },
+        {
+          "field": "by_cell",
+          "value": -0.0896
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:29793554-29793893|EH38E3765041|WIPF3",
+      "chrom": "chr7",
+      "element": "EH38E3765041",
+      "gene": "WIPF3",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.7505,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.7505
+        },
+        {
+          "field": "by_cell",
+          "value": -1.585
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:44995145-44995495|EH38E2553689|MYO1G",
+      "chrom": "chr7",
+      "element": "EH38E2553689",
+      "gene": "MYO1G",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2098,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2098
+        },
+        {
+          "field": "by_cell",
+          "value": -0.2098
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:101138493-101138830|EH38E3789631|SERPINE1",
+      "chrom": "chr7",
+      "element": "EH38E3789631",
+      "gene": "SERPINE1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8717,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8717
+        },
+        {
+          "field": "by_cell",
+          "value": -0.8717
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:103996104-103996440|EH38E3791196|RELN",
+      "chrom": "chr7",
+      "element": "EH38E3791196",
+      "gene": "RELN",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.1626,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.1626
+        },
+        {
+          "field": "by_cell",
+          "value": -1.1113
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:106978580-106978926|EH38E3792551|PRKAR2B",
+      "chrom": "chr7",
+      "element": "EH38E3792551",
+      "gene": "PRKAR2B",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.339,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.339
+        },
+        {
+          "field": "by_cell",
+          "value": -0.3236
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr7:150320988-150321336|EH38E3807716|RARRES2",
+      "chrom": "chr7",
+      "element": "EH38E3807716",
+      "gene": "RARRES2",
+      "cell": "GM12892",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5664,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5664
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr8:18122684-18123034|EH38E2613654|ASAH1",
+      "chrom": "chr8",
+      "element": "EH38E2613654",
+      "gene": "ASAH1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3073,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3073
+        },
+        {
+          "field": "by_cell",
+          "value": -0.3013
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr8:90197364-90197713|EH38E3844210|CALB1",
+      "chrom": "chr8",
+      "element": "EH38E3844210",
+      "gene": "CALB1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.426,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.426
+        },
+        {
+          "field": "by_cell",
+          "value": -0.4209
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr8:123166219-123166559|EH38E3855583|FAM83A",
+      "chrom": "chr8",
+      "element": "EH38E3855583",
+      "gene": "FAM83A",
+      "cell": "mammary microvascular endothelial cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.146,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.146
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr8:124637518-124637868|EH38E2663777|MTSS1",
+      "chrom": "chr8",
+      "element": "EH38E2663777",
+      "gene": "MTSS1",
+      "cell": "naive B cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4855,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4855
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr8:129582124-129582471|EH38E2667782|GSDMC",
+      "chrom": "chr8",
+      "element": "EH38E2667782",
+      "gene": "GSDMC",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1433,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1433
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1228
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr8:129689428-129689778|EH38E3860253|GSDMC",
+      "chrom": "chr8",
+      "element": "EH38E3860253",
+      "gene": "GSDMC",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3148,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3148
+        },
+        {
+          "field": "by_cell",
+          "value": -0.271
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr8:144074283-144074631|EH38E2675917|OPLAH",
+      "chrom": "chr8",
+      "element": "EH38E2675917",
+      "gene": "OPLAH",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8616,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8616
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr9:73143908-73144257|EH38E3885957|ANXA1",
+      "chrom": "chr9",
+      "element": "EH38E3885957",
+      "gene": "ANXA1",
+      "cell": "HepG2",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6077,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6077
+        },
+        {
+          "field": "by_cell",
+          "value": -0.5237
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr9:87792785-87793135|EH38E2704384|CTSL",
+      "chrom": "chr9",
+      "element": "EH38E2704384",
+      "gene": "CTSL",
+      "cell": "CD4-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.279,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.279
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr9:97960870-97961216|EH38E3896696|HEMGN",
+      "chrom": "chr9",
+      "element": "EH38E3896696",
+      "gene": "HEMGN",
+      "cell": "Brain_Cerebellar_Hemisphere",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.138,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.138
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr9:129743005-129743354|EH38E2730815|PTGES",
+      "chrom": "chr9",
+      "element": "EH38E2730815",
+      "gene": "PTGES",
+      "cell": "left ventricle myocardium inferior",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2639,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2639
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr9:133004125-133004474|EH38E3915441|GFI1B",
+      "chrom": "chr9",
+      "element": "EH38E3915441",
+      "gene": "GFI1B",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.674,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.674
+        },
+        {
+          "field": "by_cell",
+          "value": -0.674
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr10:4941571-4941918|EH38E2882826|AKR1C1",
+      "chrom": "chr10",
+      "element": "EH38E2882826",
+      "gene": "AKR1C1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5234,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5234
+        },
+        {
+          "field": "by_cell",
+          "value": -0.5079
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr10:12265766-12266116|EH38E1448677|CAMK1D",
+      "chrom": "chr10",
+      "element": "EH38E1448677",
+      "gene": "CAMK1D",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4768,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4768
+        },
+        {
+          "field": "by_cell",
+          "value": -0.4768
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr10:70667289-70667631|EH38E2906480|ADAMTS14",
+      "chrom": "chr10",
+      "element": "EH38E2906480",
+      "gene": "ADAMTS14",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -3.0953,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -3.0953
+        },
+        {
+          "field": "by_cell",
+          "value": -3.0953
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr10:73991888-73992236|EH38E2908798|VCL",
+      "chrom": "chr10",
+      "element": "EH38E2908798",
+      "gene": "VCL",
+      "cell": "CD4-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.9074,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.9074
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr10:79286335-79286685|EH38E2911809|ZMIZ1",
+      "chrom": "chr10",
+      "element": "EH38E2911809",
+      "gene": "ZMIZ1",
+      "cell": "GM12878",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1367,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1367
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1367
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr10:87500688-87501038|EH38E2914557|MINPP1",
+      "chrom": "chr10",
+      "element": "EH38E2914557",
+      "gene": "MINPP1",
+      "cell": "left lobe of liver",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.0236,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.0236
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr10:92757158-92757494|EH38E2916681|HHEX",
+      "chrom": "chr10",
+      "element": "EH38E2916681",
+      "gene": "HHEX",
+      "cell": "CD14-positive monocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5748,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5748
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr10:95297435-95297779|EH38E2917603|PDLIM1",
+      "chrom": "chr10",
+      "element": "EH38E2917603",
+      "gene": "PDLIM1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4077,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4077
+        },
+        {
+          "field": "by_cell",
+          "value": -0.4077
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr11:316105-316451|EH38E2937283|IFITM1",
+      "chrom": "chr11",
+      "element": "EH38E2937283",
+      "gene": "IFITM1",
+      "cell": "HT-29",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1108,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1108
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:329402-329752|EH38E2937307|IFITM3",
+      "chrom": "chr11",
+      "element": "EH38E2937307",
+      "gene": "IFITM3",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1847,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1847
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1847
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr11:334286-334625|EH38E1513411|IFITM1",
+      "chrom": "chr11",
+      "element": "EH38E1513411",
+      "gene": "IFITM1",
+      "cell": "gastrocnemius medialis",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1031,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1031
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:350801-351150|EH38E2937330|B4GALNT4",
+      "chrom": "chr11",
+      "element": "EH38E2937330",
+      "gene": "B4GALNT4",
+      "cell": "placenta",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1119,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1119
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:356039-356389|EH38E2937342|B4GALNT4",
+      "chrom": "chr11",
+      "element": "EH38E2937342",
+      "gene": "B4GALNT4",
+      "cell": "CD4-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4759,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4759
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:5272822-5273045|EH38E2941908|HBE1",
+      "chrom": "chr11",
+      "element": "EH38E2941908",
+      "gene": "HBE1",
+      "cell": "HT1080",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1851,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1851
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:5275790-5276140|EH38E1516963|HBE1",
+      "chrom": "chr11",
+      "element": "EH38E1516963",
+      "gene": "HBE1",
+      "cell": "muscle of arm",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3894,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3894
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:5278711-5279056|EH38E2941915|OR51B6",
+      "chrom": "chr11",
+      "element": "EH38E2941915",
+      "gene": "OR51B6",
+      "cell": "K562",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.1002,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "inhibits",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.1002
+        },
+        {
+          "field": "by_cell",
+          "value": 0.0971
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr11:5280547-5280897|EH38E1516972|ENSG00000284931",
+      "chrom": "chr11",
+      "element": "EH38E1516972",
+      "gene": "ENSG00000284931",
+      "cell": "placental pericyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.1416,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.1416
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:5284625-5284974|EH38E1516978|HBE1",
+      "chrom": "chr11",
+      "element": "EH38E1516978",
+      "gene": "HBE1",
+      "cell": "muscle of back",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.0584,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.0584
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:5288078-5288426|EH38E2941920|HBE1",
+      "chrom": "chr11",
+      "element": "EH38E2941920",
+      "gene": "HBE1",
+      "cell": "right lung",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4747,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4747
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:33941700-33942010|EH38E2952356|LMO2",
+      "chrom": "chr11",
+      "element": "EH38E2952356",
+      "gene": "LMO2",
+      "cell": "myometrial cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2159,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2159
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:33944762-33945112|EH38E1531563|LMO2",
+      "chrom": "chr11",
+      "element": "EH38E1531563",
+      "gene": "LMO2",
+      "cell": "liver",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2955,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2955
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:57432752-57433101|EH38E1539499|PRG2",
+      "chrom": "chr11",
+      "element": "EH38E1539499",
+      "gene": "PRG2",
+      "cell": "mesenchymal stem cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.16,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.16
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:61834572-61834921|EH38E2960997|FADS2",
+      "chrom": "chr11",
+      "element": "EH38E2960997",
+      "gene": "FADS2",
+      "cell": "immature natural killer cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.4889,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.4889
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:65362512-65362838|EH38E1544977|TIGD3",
+      "chrom": "chr11",
+      "element": "EH38E1544977",
+      "gene": "TIGD3",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.38,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.38
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:65928080-65928428|EH38E2965050|DRAP1",
+      "chrom": "chr11",
+      "element": "EH38E2965050",
+      "gene": "DRAP1",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4435,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4435
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr11:95147509-95147859|EH38E1562402|ENDOD1",
+      "chrom": "chr11",
+      "element": "EH38E1562402",
+      "gene": "ENDOD1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4179,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4179
+        },
+        {
+          "field": "by_cell",
+          "value": -0.384
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr11:125532726-125533027|EH38E2992253|FEZ1",
+      "chrom": "chr11",
+      "element": "EH38E2992253",
+      "gene": "FEZ1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.0118,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.0118
+        },
+        {
+          "field": "by_cell",
+          "value": -0.8375
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr11:128553011-128553358|EH38E2993673|ETS1",
+      "chrom": "chr11",
+      "element": "EH38E2993673",
+      "gene": "ETS1",
+      "cell": "CD14-positive monocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1193,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1193
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr12:6264033-6264380|EH38E3000723|CD9",
+      "chrom": "chr12",
+      "element": "EH38E3000723",
+      "gene": "CD9",
+      "cell": "GM12878",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1622,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1622
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1622
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr12:33588079-33588420|EH38E3011039|SYT10",
+      "chrom": "chr12",
+      "element": "EH38E3011039",
+      "gene": "SYT10",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8704,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8704
+        },
+        {
+          "field": "by_cell",
+          "value": -0.8146
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr12:54304289-54304638|EH38E1614468|NFE2",
+      "chrom": "chr12",
+      "element": "EH38E1614468",
+      "gene": "NFE2",
+      "cell": "hematopoietic multipotent progenitor cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.8793,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.8793
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr12:54307074-54307424|EH38E1614473|NFE2",
+      "chrom": "chr12",
+      "element": "EH38E1614473",
+      "gene": "NFE2",
+      "cell": "esophagus mucosa",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3439,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3439
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr14:20820450-20820799|EH38E1701277|RNASE1",
+      "chrom": "chr14",
+      "element": "EH38E1701277",
+      "gene": "RNASE1",
+      "cell": "Karpas-422",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1816,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1816
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr14:91267498-91267775|EH38E3110960|GPR68",
+      "chrom": "chr14",
+      "element": "EH38E3110960",
+      "gene": "GPR68",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.191,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.191
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1766
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr15:51652227-51652577|EH38E3134115|SCG3",
+      "chrom": "chr15",
+      "element": "EH38E3134115",
+      "gene": "SCG3",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.7558,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.7558
+        },
+        {
+          "field": "by_cell",
+          "value": -1.7126
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr15:72237422-72237768|EH38E3144755|PKM",
+      "chrom": "chr15",
+      "element": "EH38E3144755",
+      "gene": "PKM",
+      "cell": "osteoblast",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2168,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2168
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr15:78244184-78244531|EH38E3148594|ACSBG1",
+      "chrom": "chr15",
+      "element": "EH38E3148594",
+      "gene": "ACSBG1",
+      "cell": "HT1080",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.2822,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.2822
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr15:81944958-81945302|EH38E3150495|MEX3B",
+      "chrom": "chr15",
+      "element": "EH38E3150495",
+      "gene": "MEX3B",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3982,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3982
+        },
+        {
+          "field": "by_cell",
+          "value": -0.3798
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr16:143036-143382|EH38E1794409|HBZ",
+      "chrom": "chr16",
+      "element": "EH38E1794409",
+      "gene": "HBZ",
+      "cell": "liver",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.2414,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.2414
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr16:144877-145203|EH38E3160025|HBZ",
+      "chrom": "chr16",
+      "element": "EH38E3160025",
+      "gene": "HBZ",
+      "cell": "adipose tissue",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1145,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1145
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr16:2140656-2140924|EH38E3162898|RAB26",
+      "chrom": "chr16",
+      "element": "EH38E3162898",
+      "gene": "RAB26",
+      "cell": "Artery_Tibial",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.5794,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.5794
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr16:11233138-11233487|EH38E3168220|SOCS1",
+      "chrom": "chr16",
+      "element": "EH38E3168220",
+      "gene": "SOCS1",
+      "cell": "T-cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.8469,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.8469
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:27570222-27570554|EH38E3215004|KSR1",
+      "chrom": "chr17",
+      "element": "EH38E3215004",
+      "gene": "KSR1",
+      "cell": "forelimb muscle",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.1113,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.1113
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:42624149-42624498|EH38E1863739|TUBG1",
+      "chrom": "chr17",
+      "element": "EH38E1863739",
+      "gene": "TUBG1",
+      "cell": "psoas muscle",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1018,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1018
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:44281602-44281951|EH38E3225601|SLC4A1",
+      "chrom": "chr17",
+      "element": "EH38E3225601",
+      "gene": "SLC4A1",
+      "cell": "umbilical cord",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2643,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2643
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:44288426-44288775|EH38E3225603|SLC4A1",
+      "chrom": "chr17",
+      "element": "EH38E3225603",
+      "gene": "SLC4A1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6594,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6594
+        },
+        {
+          "field": "by_cell",
+          "value": -0.6594
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr17:44326798-44327135|EH38E1865134|SLC25A39",
+      "chrom": "chr17",
+      "element": "EH38E1865134",
+      "gene": "SLC25A39",
+      "cell": "mononuclear cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2699,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2699
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:64025743-64026089|EH38E3236920|ICAM2",
+      "chrom": "chr17",
+      "element": "EH38E3236920",
+      "gene": "ICAM2",
+      "cell": "CD8-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1572,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1572
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:78258576-78258926|EH38E1888910|SOCS3",
+      "chrom": "chr17",
+      "element": "EH38E1888910",
+      "gene": "SOCS3",
+      "cell": "naive thymus-derived CD4-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1802,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1802
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr17:80254758-80255107|EH38E3248836|SLC26A11",
+      "chrom": "chr17",
+      "element": "EH38E3248836",
+      "gene": "SLC26A11",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6394,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6394
+        },
+        {
+          "field": "by_cell",
+          "value": -0.6055
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr18:50425129-50425479|EH38E1916450|SKA1",
+      "chrom": "chr18",
+      "element": "EH38E1916450",
+      "gene": "SKA1",
+      "cell": "adrenal gland",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1841,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1841
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:555966-556316|EH38E1930106|GZMM",
+      "chrom": "chr19",
+      "element": "EH38E1930106",
+      "gene": "GZMM",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3775,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3775
+        },
+        {
+          "field": "by_cell",
+          "value": -0.3499
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr19:3133439-3133789|EH38E3283231|GNA15",
+      "chrom": "chr19",
+      "element": "EH38E3283231",
+      "gene": "GNA15",
+      "cell": "Jurkat, Clone E6-1",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.6602,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.6602
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:4870028-4870378|EH38E3285315|PLIN3",
+      "chrom": "chr19",
+      "element": "EH38E3285315",
+      "gene": "PLIN3",
+      "cell": "HT1080",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.346,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.346
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:6674878-6675228|EH38E3286960|TNFSF14",
+      "chrom": "chr19",
+      "element": "EH38E3286960",
+      "gene": "TNFSF14",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6762,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6762
+        },
+        {
+          "field": "by_cell",
+          "value": -0.5627
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr19:12789868-12790217|EH38E3291244|JUNB",
+      "chrom": "chr19",
+      "element": "EH38E3291244",
+      "gene": "JUNB",
+      "cell": "neural crest cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.4914,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.4914
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:12847611-12847959|EH38E3291318|MAST1",
+      "chrom": "chr19",
+      "element": "EH38E3291318",
+      "gene": "MAST1",
+      "cell": "Karpas-422",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2396,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2396
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:12883659-12883995|EH38E3291349|KLF1",
+      "chrom": "chr19",
+      "element": "EH38E3291349",
+      "gene": "KLF1",
+      "cell": "CD14-positive monocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.6157,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.6157
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:12885178-12885472|EH38E3291353|KLF1",
+      "chrom": "chr19",
+      "element": "EH38E3291353",
+      "gene": "KLF1",
+      "cell": "GM23338",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.4244,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.4244
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:13104328-13104678|EH38E3291668|LYL1",
+      "chrom": "chr19",
+      "element": "EH38E3291668",
+      "gene": "LYL1",
+      "cell": "OCI-LY7",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.7857,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.7857
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:21128841-21129165|EH38E3297996|ZNF714",
+      "chrom": "chr19",
+      "element": "EH38E3297996",
+      "gene": "ZNF714",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2173,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2173
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1879
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr19:38636888-38637238|EH38E3304432|EIF3K",
+      "chrom": "chr19",
+      "element": "EH38E3304432",
+      "gene": "EIF3K",
+      "cell": "mole",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.2131,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.2131
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:48720700-48721035|EH38E3312574|RASIP1",
+      "chrom": "chr19",
+      "element": "EH38E3312574",
+      "gene": "RASIP1",
+      "cell": "peripheral blood mononuclear cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.3734,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.3734
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:48780994-48781343|EH38E1960291|FGF21",
+      "chrom": "chr19",
+      "element": "EH38E1960291",
+      "gene": "FGF21",
+      "cell": "Kidney_Medulla",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1307,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1307
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:48962342-48962663|EH38E3312821|BAX",
+      "chrom": "chr19",
+      "element": "EH38E3312821",
+      "gene": "BAX",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2227,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2227
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:48970968-48971235|EH38E3312838|GYS1",
+      "chrom": "chr19",
+      "element": "EH38E3312838",
+      "gene": "GYS1",
+      "cell": "Whole_Blood",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.1265,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.1265
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr19:50728407-50728757|EH38E3314575|CLEC11A",
+      "chrom": "chr19",
+      "element": "EH38E3314575",
+      "gene": "CLEC11A",
+      "cell": "CD8-positive, alpha-beta memory T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2234,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2234
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr20:4038020-4038369|EH38E3417463|RNF24",
+      "chrom": "chr20",
+      "element": "EH38E3417463",
+      "gene": "RNF24",
+      "cell": "CD4-positive, CD25-positive, alpha-beta regulatory T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3585,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3585
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr20:31608511-31608860|EH38E3426791|ID1",
+      "chrom": "chr20",
+      "element": "EH38E3426791",
+      "gene": "ID1",
+      "cell": "Whole_Blood",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.8119,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.8119
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr20:31610664-31611014|EH38E3426794|ID1",
+      "chrom": "chr20",
+      "element": "EH38E3426794",
+      "gene": "ID1",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.2974,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.2974
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr20:47360667-47361010|EH38E3436288|ZMYND8",
+      "chrom": "chr20",
+      "element": "EH38E3436288",
+      "gene": "ZMYND8",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1769,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1769
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1736
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr21:44196243-44196591|EH38E3462385|ICOSLG",
+      "chrom": "chr21",
+      "element": "EH38E3462385",
+      "gene": "ICOSLG",
+      "cell": "Whole_Blood",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2838,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2838
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chr21:45360242-45360590|EH38E3463738|COL18A1",
+      "chrom": "chr21",
+      "element": "EH38E3463738",
+      "gene": "COL18A1",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1728,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_track_seen_twice",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1728
+        },
+        {
+          "field": "by_cell",
+          "value": -0.1728
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chr22:30216721-30217043|EH38E2157628|LIF",
+      "chrom": "chr22",
+      "element": "EH38E2157628",
+      "gene": "LIF",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.9518,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.9518
+        },
+        {
+          "field": "by_cell",
+          "value": -0.9208
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chrX:12956876-12957222|EH38E2742842|TLR8",
+      "chrom": "chrX",
+      "element": "EH38E2742842",
+      "gene": "TLR8",
+      "cell": "CD8-positive, alpha-beta memory T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1682,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1682
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:12978224-12978570|EH38E3925541|TMSB4X",
+      "chrom": "chrX",
+      "element": "EH38E3925541",
+      "gene": "TMSB4X",
+      "cell": "naive thymus-derived CD8-positive, alpha-beta T cell",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.1534,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.1534
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:48782936-48783167|EH38E2754140|GATA1",
+      "chrom": "chrX",
+      "element": "EH38E2754140",
+      "gene": "GATA1",
+      "cell": "small intestine",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.9431,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.9431
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:48940588-48940858|EH38E3933950|PIM2",
+      "chrom": "chrX",
+      "element": "EH38E3933950",
+      "gene": "PIM2",
+      "cell": "liver",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3165,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3165
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:49164097-49164380|EH38E3934097|MAGIX",
+      "chrom": "chrX",
+      "element": "EH38E3934097",
+      "gene": "MAGIX",
+      "cell": "placenta",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.2373,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.2373
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:49166365-49166713|EH38E3934102|MAGIX",
+      "chrom": "chrX",
+      "element": "EH38E3934102",
+      "gene": "MAGIX",
+      "cell": "hair follicular keratinocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.5464,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.5464
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:49167364-49167671|EH38E3934104|MAGIX",
+      "chrom": "chrX",
+      "element": "EH38E3934104",
+      "gene": "MAGIX",
+      "cell": "CD14-positive monocyte",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -1.0324,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -1.0324
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:49177476-49177808|EH38E3934118|PRICKLE3",
+      "chrom": "chrX",
+      "element": "EH38E3934118",
+      "gene": "PRICKLE3",
+      "cell": "CD14-positive monocyte",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.1269,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.1269
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:49193615-49193941|EH38E3934140|SYP",
+      "chrom": "chrX",
+      "element": "EH38E3934140",
+      "gene": "SYP",
+      "cell": "Liver",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.1268,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.1268
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:65998097-65998440|EH38E3935978|VSIG4",
+      "chrom": "chrX",
+      "element": "EH38E3935978",
+      "gene": "VSIG4",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.9068,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.9068
+        },
+        {
+          "field": "by_cell",
+          "value": -0.8898
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chrX:66009255-66009577|EH38E3935989|VSIG4",
+      "chrom": "chrX",
+      "element": "EH38E3935989",
+      "gene": "VSIG4",
+      "cell": "K562",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.809,
+      "v2_class": "resolved_agrees_with_published",
+      "v2_action": "activates",
+      "v2_unresolved_reason": null,
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.809
+        },
+        {
+          "field": "by_cell",
+          "value": -0.7934
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": true
+    },
+    {
+      "assertion_id": "r2|chrX:103233290-103233585|EH38E3940111|BEX4",
+      "chrom": "chrX",
+      "element": "EH38E3940111",
+      "gene": "BEX4",
+      "cell": "hair follicular keratinocyte",
+      "published_action": "represses",
+      "published_axis": "represses_target",
+      "v1_action": "inhibits",
+      "published_value": 0.1397,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_rise",
+          "value": 0.1397
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    },
+    {
+      "assertion_id": "r2|chrX:153985437-153985786|EH38E3949311|TMEM187",
+      "chrom": "chrX",
+      "element": "EH38E3949311",
+      "gene": "TMEM187",
+      "cell": "Jurkat, Clone E6-1",
+      "published_action": "activates",
+      "published_axis": "activates_target",
+      "v1_action": "activates",
+      "published_value": -0.3012,
+      "v2_class": "unresolved",
+      "v2_action": null,
+      "v2_unresolved_reason": "one_value_only",
+      "cached_row_found": true,
+      "retained_values": [
+        {
+          "field": "max_drop",
+          "value": -0.3012
+        }
+      ],
+      "published_value_is_among_retained": true,
+      "only_retained_is_by_cell_opposite_to_published": false,
+      "by_cell_value_opposite_to_published": false,
+      "cell_is_a_cached_track": false
+    }
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: every input read was already on disk",
+  "seconds": 86.8,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the published increment-2 response map, as scripts/response_map_increment2.py wrote it",
+        "version": "the committed data/results/response_map_increment2.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache",
+        "version": "the per-chromosome archives on this machine, digested in inputs as a group"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/respmap_direction_v2_registration.json",
+        "sha256": "dbc09f28be0490b7d7a813feb82918a69d1f0dfa09764ddc7c92a3db4ba51062",
+        "bytes": 30923,
+        "partition": "this run's own registration, committed before it ran"
+      },
+      {
+        "path": "data/results/response_map_increment2.json",
+        "sha256": "5c0fa088785d7a61ec187f8dd9f1f634e8ba57ddc3237fff8e8a0d6e328f96a5",
+        "bytes": 1968109,
+        "partition": "the published response map whose predicted assertions are counted"
+      },
+      {
+        "path": "per_element_response_cache",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+            "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+            "bytes": 14622897
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+            "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+            "bytes": 470775
+          }
+        ],
+        "sha256": "dae60244f56738d071c120cf2a2b599d1f32ad322542e49039d5b0757a4d0781",
+        "bytes": 789611479,
+        "files": 24,
+        "partition": "the finished deletion sweep's own per-element cache, read for a sign only"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "population": "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+      "denominator": 166,
+      "classes": [
+        "resolved_agrees_with_published",
+        "resolved_opposite_to_published",
+        "unresolved"
+      ],
+      "class_rule": "the published action is the assertion's own `measurement.direction`, which is `quoted.predicted_coding.action` verbatim, and v1 reads that same field (`direction_v2._v1`), so no v1 call is recomputed from a value here. The v2 call is `direction_v2.direction_call(predicted_coding, V2, row=...)` on the cached gene row for the element's named target, applied unchanged. `activates` and `represses` are the same axis as `activates` and `inhibits`: the token is compared on the axis, never on its spelling",
+      "sign_rule": "consistency is unanimity of sign among the cell's retained values, using predict.enhancer_target's own definition of disagreement - some value above zero and some value below zero - imported rather than restated. Unanimity is the strictest available reading and carries no tunable number, so no count can move it",
+      "magnitude_floor": 0.1,
+      "magnitude_floor_imported_from": "genomeos.predict.enhancer_target.MIN_EFFECT",
+      "cached_cell_tracks": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "unresolved_reasons": [
+        "context_unknown",
+        "no_row_for_target",
+        "one_value_only",
+        "one_track_seen_twice",
+        "no_value_for_cell",
+        "signs_disagree_in_cell",
+        "below_magnitude_floor",
+        "zero_value_in_cell"
+      ],
+      "aggregate_function": "a count of rows per class; no mean, no rate, no interval",
+      "fill_value": "none: an assertion with no cached row is classified unresolved under its own reason no_row_for_target and is never dropped or imputed"
+    },
+    "exclusions": [
+      "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+      "the 361 `observed` assertions are outside the question by their status: an experiment's measurement carries no AlphaGenome direction for v2 to withhold",
+      "no assertion is excluded for its magnitude, its cell, its chromosome or its class: all 166 are classified and every class is reported",
+      "the two earlier genome-wide tallies - 14 `signs_disagree_in_cell` and 10 selection-excluded diagnostic hits - overlap and may not be added. Neither is read, reused, adjusted or re-derived here, and neither is a denominator or a numerator of anything in this result. The counts in this result are taken over this result's own 166 rows and nowhere else, so they may not be added to those two either"
+    ],
+    "partitions": {
+      "by_published_axis": "the axis the map published for the assertion, activates_target or represses_target, reported apart and never pooled",
+      "by_class": "respmap_v2.CLASSES, exhaustive and mutually exclusive",
+      "unresolved_by_reason": "direction_v2.UNRESOLVED_REASONS, one bucket per refusal"
+    },
+    "code_cleanliness": {
+      "git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/respmap_v2.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/respmap_v2.py"
+      ],
+      "counting_path_count": 53,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/respmap_direction_v2_registration.json"
+      ],
+      "argv": [
+        "scripts/respmap_v2.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "code_cleanliness_git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 5cc6224"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 173,
+      "opens_under_data": 49,
+      "files_read": 26,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

@@ -1,0 +1,403 @@
+{
+  "result": "respmap_direction_v2_registration",
+  "date": "2026-10-02",
+  "lane": "lane-propb",
+  "question": "of the response map's published `predicted` assertions, how many does direction rule v2 leave unresolved, and how many does it resolve to the opposite action from the one the map published? Counted per assertion from committed rows, never from a Counter total",
+  "why_an_emitter_had_to_be_built": "scripts/direction_v2.py accumulates two collections.Counter objects and writes no file: it calls no json.dump, opens no file for writing, and records no element id, locus, gene or cell for any call. Each of the nine reason tokens of direction_v2.UNRESOLVED_REASONS was searched across data/results and appears in 0 files. So no committed artefact carried the v2 class of any one published assertion, and the count could not be taken by reading one. A class is therefore emitted per assertion and read back from committed rows; it is never re-derived from a Counter total",
+  "population": "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+  "denominator": {
+    "value": 166,
+    "rule": "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+    "fixed_by": "the published payload's own counts.by_status, committed before this lane ran",
+    "the_other_361_are_observed": "361 of the 527 published assertions are `observed` - 195 CRISPRi perturbations and 166 ENCODE DNase readings - and `observed` is reserved for what an experiment measured, so they carry no AlphaGenome direction for v2 to leave unresolved"
+  },
+  "increment_3_is_not_this_population": "increment 3 is a different population and is not counted here: the committed `data/results/response_map_increment3.json` carries 574 assertions over 337 entities in 93 chains, of which 73 are `predicted`. The figures 527 assertions, 567 entities, 195 chains and 166 `predicted` are increment 2's, as its own `counts` block records. Recorded because the brief this lane was given attached increment 2's counts to increment 3's name",
+  "amendment_reason_count": "direction_v2.UNRESOLVED_REASONS holds 8 reason tokens, not nine: context_unknown, no_row_for_target, one_value_only, one_track_seen_twice, no_value_for_cell, signs_disagree_in_cell, below_magnitude_floor, zero_value_in_cell. This lane's brief said nine and this script's own docstring repeated it before being amended. The search that established the premise covered all of them, plus the key names direction_rule_v2 and unresolved_reason, and each appears in 0 of the 854 files of data/results, so the premise is unchanged; the figure in the sentence was wrong and is read from the tuple here so that it cannot drift again",
+  "classes": [
+    "resolved_agrees_with_published",
+    "resolved_opposite_to_published",
+    "unresolved"
+  ],
+  "class_rule": "the published action is the assertion's own `measurement.direction`, which is `quoted.predicted_coding.action` verbatim, and v1 reads that same field (`direction_v2._v1`), so no v1 call is recomputed from a value here. The v2 call is `direction_v2.direction_call(predicted_coding, V2, row=...)` on the cached gene row for the element's named target, applied unchanged. `activates` and `represses` are the same axis as `activates` and `inhibits`: the token is compared on the axis, never on its spelling",
+  "unresolved_reasons": [
+    "context_unknown",
+    "no_row_for_target",
+    "one_value_only",
+    "one_track_seen_twice",
+    "no_value_for_cell",
+    "signs_disagree_in_cell",
+    "below_magnitude_floor",
+    "zero_value_in_cell"
+  ],
+  "sign_rule_v2": "consistency is unanimity of sign among the cell's retained values, using predict.enhancer_target's own definition of disagreement - some value above zero and some value below zero - imported rather than restated. Unanimity is the strictest available reading and carries no tunable number, so no count can move it",
+  "magnitude_floor": {
+    "value": 0.1,
+    "imported": "the floor is predict.enhancer_target.MIN_EFFECT, the same object, asserted by `is` in the tests. It was not chosen here and no number was copied: MIN_EFFECT is already the project's threshold for an effect large enough to name a target, and this registration adopts it unchanged as the threshold for an effect large enough to name a direction. Nothing in the repository fixes a consistency threshold, so consistency is not a number at all (see CONSISTENCY_RULE): it is unanimity, which has nothing to tune"
+  },
+  "amendment_1": "amendment 1, 2026-10-02, against this lane's own first implementation and not against the registration. SIGN_RULE_V2 clause (1) says `at least two values are retained for that cell name, so that no direction rests on one track - which is the defect v1 has`, and the first implementation did not secure the reason it gives: on a legacy row by_cell[cell] can be the very track the maximum selected, so two retained fields can carry one track. Measured on chr21, 271 of 619 resolved calls had two numerically identical values. The implementation now requires the two retained values to be numerically distinct and records `one_track_seen_twice` otherwise. The cache records no track identity - predict.enhancer_target says in those words that none is invented, a value arrives with its cell name and nothing else - so two distinct tracks that happen to carry the same rounded value are refused too, which errs towards unresolved and is the direction this rule errs in. This amendment can only move a call from resolved to unresolved and never the other way, so it cannot have been chosen to produce a resolution, and it moves no threshold: MAGNITUDE_FLOOR is still the imported MIN_EFFECT and consistency is still unanimity. Both counts are reported, before it and after it",
+  "unresolved_means": "unresolved means the sign rule did not resolve. It never means the element has no action, it is not a measurement of absence, and it is not a failure of the rule to produce an output: an unresolved call is the correct output of v2 wherever one cell's retained values do not carry a sign. It is recorded as molecular action unknown",
+  "unresolved_is_first_class": "UNRESOLVED is a value of its own kind and not a third string beside `activates` and `inhibits`: it compares equal to neither, it is not a cell name, and reading a direction off a call that did not resolve raises rather than returning either token. No default, no coercion, and in particular no fall-through to `activates` because activation is the common case. A caller that wants a writable token must handle the unresolved case explicitly",
+  "flip_is_reported_as_measured": "the flip count is reported as measured and not as expected. stated before any count, because it follows from the rule and not from the data: under SIGN_RULE_V2 the flip count (c) is 0 by construction. v1's own selected value is itself one of the assigned cell's retained values, and v2 resolves only when every retained value shares one sign, so a resolved v2 call always carries v1's sign. v2 can therefore withhold a direction and can never reverse one. This is registered in advance so that a measured 0 is read as the arithmetic it is and not as evidence that v1's directions are sound - that is registered in advance, so a measured 0 here is the arithmetic of the rule and carries no agreement between v1 and v2; and a measured non-zero would refute the registered reading rather than this count, which is why each row also records whether the published value is numerically among the cell's retained values",
+  "absence_gloss_corrected": "`one_value_only` may NOT be glossed as `v1's own selected extreme was the one value retained`. On one escape branch the single retained value is `by_cell[cell]` and not the published value, and it can carry the opposite sign - a disagreement sitting inside the bucket that reads as absence. Genome-wide the count of that branch is unknown and bounded above by the selection-excluded diagnostic. Over these 166 assertions it is not unknown: every row records the retained values with the field each came from, so the branch is counted exactly, as `unresolved_one_value_only_by_cell_opposite_to_published`",
+  "earlier_tallies_not_touched": "the two earlier genome-wide tallies - 14 `signs_disagree_in_cell` and 10 selection-excluded diagnostic hits - overlap and may not be added. Neither is read, reused, adjusted or re-derived here, and neither is a denominator or a numerator of anything in this result. The counts in this result are taken over this result's own 166 rows and nowhere else, so they may not be added to those two either",
+  "selection_excluded_diagnostic": "one diagnostic is reported beside the counts and is not a v2 output: among v1 calls whose assigned cell is one of predict.enhancer_target.CELLS, how many have by_cell[cell] of the opposite sign to the selected extreme. These are the calls a variant that discarded the selected value as selected would reverse. The variant is not adopted here, because on a legacy row it would rest the whole direction on one order-dependent track, and the count is reported as a property of the cache and never as a count of wrong rules",
+  "row_fields": [
+    "assertion_id",
+    "chrom",
+    "element",
+    "gene",
+    "cell",
+    "published_action",
+    "published_axis",
+    "v1_action",
+    "published_value",
+    "v2_class",
+    "v2_action",
+    "v2_unresolved_reason",
+    "cached_row_found",
+    "retained_values",
+    "published_value_is_among_retained",
+    "only_retained_is_by_cell_opposite_to_published",
+    "by_cell_value_opposite_to_published",
+    "cell_is_a_cached_track"
+  ],
+  "counts_named_in_advance": [
+    "denominator: the published predicted assertions classified, one row each",
+    "by_class: one count per member of respmap_v2.CLASSES, exhaustive and mutually exclusive",
+    "unresolved_by_reason: one count per reason of direction_v2.UNRESOLVED_REASONS that any row carries, with the reasons no row carries listed apart so that an absent reason is visibly absent and not missing",
+    "by_published_axis: the same class counts split by the axis the map published, reported apart and never pooled",
+    "no_cached_row: rows for which the deletion cache holds no row for the named target",
+    "published_value_among_retained: rows whose published value is numerically among the cell's retained values, which is what FLIPS_ARE_STRUCTURALLY_IMPOSSIBLE rests on",
+    "unresolved_one_value_only_by_cell_opposite_to_published: the escape branch of ABSENCE_GLOSS_CORRECTED, counted exactly over this population",
+    "selection_excluded_diagnostic_hits: the diagnostic of direction_v2.SELECTION_EXCLUDED_DIAGNOSTIC over this population, a property of the cache and not a v2 output",
+    "cells_that_are_cached_tracks: rows whose assigned cell is one of predict.enhancer_target.CELLS"
+  ],
+  "nothing_rescored": "no element is re-scored, no rule is edited, no threshold is moved and no published figure is changed. `MAGNITUDE_FLOOR` is still the imported `predict.enhancer_target.MIN_EFFECT` and consistency is still unanimity; this module defines no threshold of its own. The response-map payload is read and never written",
+  "validates_nothing": "neither the unresolved counts nor the flip count validates anything, in either direction. A large unresolved count is not evidence that v1 was wrong, a small one is not evidence that v1 was right, and 0 flips is arithmetic (FLIPS_ARE_STRUCTURALLY_IMPOSSIBLE) rather than agreement. nothing here is validation. v2 reads the same AlphaGenome sweep v1 reads, restricted to one cell name, so it is a second reading of one model and never independent evidence. No v2 call has been held against a measured outcome by any method in this lane. This result says what the model's own rule says about the model's own published assertions. It does not say whether either is right, it measures no accuracy, it holds no v2 call against any measured outcome, and nothing in it is evidence that an unresolved element has no action",
+  "not_an_improvement": "v2 is not an improvement in accuracy and this lane has no measurement that would support calling it one. A rule that is more careful about direction is not thereby more correct about biology. What changed is that a direction one cell's values do not carry is now recorded as unknown instead of being asserted",
+  "wording": "a measured increase on knockdown is an increase on knockdown, and the prohibition on calling it anything else is attribution.increase_links.check_no_mechanism_claim, which this module neither copies nor shadows: it defines no word list of its own, and the tests run the imported checker and plant a counterfactual that it rejects. `not_open_in_reader` means not detected open at the reader's registered call, never closed. Unresolved means the sign rule did not resolve, never that the element has no action",
+  "no_recommendation": "this result is an input to the deferred decision on whether BioLang gains an action token for an unresolved direction, and it makes no recommendation about that decision. The decision changes every compiled program and is not this lane's to argue; only the number it would need is produced here",
+  "cannot_establish": [
+    "a v2 class is not a measurement of the element's action, and an unresolved class is not absence of regulation",
+    "no accuracy, agreement or improvement is measured: v2 reads the same AlphaGenome sweep v1 reads, restricted to one cell name",
+    "no per-locus independence is claimed: these 166 assertions are not grouped here, and `attribution.cell2.group` would be an operational grouping and NOT established biological independence if they were",
+    "the cell on a row is the cell the compiled rule assigned, not a cell any experiment in the response map read: every one of these assertions carries `context.cell` as `not recorded`",
+    "the counts do not generalise beyond this population: they are increment 2's published predicted assertions and not the genome-wide predicted layer"
+  ],
+  "requests": {
+    "alphagenome": 0,
+    "network": "none",
+    "money": "none: every input is on disk"
+  },
+  "what_the_run_will_write": "data/results/respmap_direction_v2.json",
+  "frozen_inputs": [
+    {
+      "path": "data/results/response_map_increment2.json",
+      "sha256": "5c0fa088785d7a61ec187f8dd9f1f634e8ba57ddc3237fff8e8a0d6e328f96a5",
+      "bytes": 1968109
+    },
+    {
+      "path": "per_element_response_cache",
+      "sha256": "dae60244f56738d071c120cf2a2b599d1f32ad322542e49039d5b0757a4d0781",
+      "bytes": 789611479,
+      "files": 24
+    }
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the published increment-2 response map, as scripts/response_map_increment2.py wrote it",
+        "version": "the committed data/results/response_map_increment2.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache",
+        "version": "the per-chromosome archives on this machine, digested in inputs as a group"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/response_map_increment2.json",
+        "sha256": "5c0fa088785d7a61ec187f8dd9f1f634e8ba57ddc3237fff8e8a0d6e328f96a5",
+        "bytes": 1968109,
+        "partition": "the published response map whose predicted assertions are counted"
+      },
+      {
+        "path": "per_element_response_cache",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+            "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+            "bytes": 14622897
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+            "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+            "bytes": 470775
+          }
+        ],
+        "sha256": "dae60244f56738d071c120cf2a2b599d1f32ad322542e49039d5b0757a4d0781",
+        "bytes": 789611479,
+        "files": 24,
+        "partition": "the finished deletion sweep's own per-element cache, read for a sign only"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "population": "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+      "denominator": 166,
+      "classes": [
+        "resolved_agrees_with_published",
+        "resolved_opposite_to_published",
+        "unresolved"
+      ],
+      "class_rule": "the published action is the assertion's own `measurement.direction`, which is `quoted.predicted_coding.action` verbatim, and v1 reads that same field (`direction_v2._v1`), so no v1 call is recomputed from a value here. The v2 call is `direction_v2.direction_call(predicted_coding, V2, row=...)` on the cached gene row for the element's named target, applied unchanged. `activates` and `represses` are the same axis as `activates` and `inhibits`: the token is compared on the axis, never on its spelling",
+      "sign_rule": "consistency is unanimity of sign among the cell's retained values, using predict.enhancer_target's own definition of disagreement - some value above zero and some value below zero - imported rather than restated. Unanimity is the strictest available reading and carries no tunable number, so no count can move it",
+      "magnitude_floor": 0.1,
+      "magnitude_floor_imported_from": "genomeos.predict.enhancer_target.MIN_EFFECT",
+      "cached_cell_tracks": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "unresolved_reasons": [
+        "context_unknown",
+        "no_row_for_target",
+        "one_value_only",
+        "one_track_seen_twice",
+        "no_value_for_cell",
+        "signs_disagree_in_cell",
+        "below_magnitude_floor",
+        "zero_value_in_cell"
+      ],
+      "aggregate_function": "a count of rows per class; no mean, no rate, no interval",
+      "fill_value": "none: an assertion with no cached row is classified unresolved under its own reason no_row_for_target and is never dropped or imputed"
+    },
+    "exclusions": [
+      "every assertion of the published increment-2 response-map payload (`data/results/response_map_increment2.json`) whose `status` is `predicted`. That payload's own `counts.by_status` gives 166 of its 527 assertions as `predicted` and 361 as `observed`, and `observed` is reserved for what an experiment measured, so the 361 are outside this question by their status and not by any choice made here. The denominator is therefore 166, fixed by the published payload before this lane read a single direction",
+      "the 361 `observed` assertions are outside the question by their status: an experiment's measurement carries no AlphaGenome direction for v2 to withhold",
+      "no assertion is excluded for its magnitude, its cell, its chromosome or its class: all 166 are classified and every class is reported",
+      "the two earlier genome-wide tallies - 14 `signs_disagree_in_cell` and 10 selection-excluded diagnostic hits - overlap and may not be added. Neither is read, reused, adjusted or re-derived here, and neither is a denominator or a numerator of anything in this result. The counts in this result are taken over this result's own 166 rows and nowhere else, so they may not be added to those two either"
+    ],
+    "partitions": {
+      "by_published_axis": "the axis the map published for the assertion, activates_target or represses_target, reported apart and never pooled",
+      "by_class": "respmap_v2.CLASSES, exhaustive and mutually exclusive",
+      "unresolved_by_reason": "direction_v2.UNRESOLVED_REASONS, one bucket per refusal"
+    },
+    "code_cleanliness": {
+      "git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/respmap_v2.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/respmap_v2_register.py"
+      ],
+      "counting_path_count": 53,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/respmap_v2_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "code_cleanliness_git_sha": "5cc6224b7ddacd217a3a55860b1e779caa8fe14a",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 5cc6224"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 186,
+      "opens_under_data": 25,
+      "files_read": 25,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
