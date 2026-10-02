@@ -14918,6 +14918,128 @@ The count was first committed at `3360c49` while its own writer was uncommitted,
 
 0 model requests, 0 downloads, no money: every input was already on disk, and the per-element response cache was opened 0 times — recorded by patching `builtins.open` for the whole run, because `targets.run_elements` reads its path out of a result file's field and no reading of the source can see it.
 
+## The authorised AstroREG run is refused on its own activity input, and nothing is bought: the frozen model needs DHS.RPM and H3K27ac.RPM and the astrocyte side has neither (2026-10-02, lane-astro)
+
+Albert authorised 1,322 AlphaGenome requests for the registered astrocyte test. **Requests sent: 0.
+Money spent: 0.** No ledger file exists, and the authorisation is intact and unused. What follows is
+why the run was refused before any of it was spent, and it is the registration's own rule applied
+rather than a new one.
+
+**The registered claim needs an input that does not exist for astrocyte.** The primary claim is the
+AUPRC of `activity + distance + deletion` minus the AUPRC of `activity + distance`, both with the
+weights frozen on the K562 training pairs, and "nothing is refitted on astrocyte data -- not the
+weights, not a threshold, not a feature definition". `activity` is therefore in the minuend and in
+the subtrahend of the only registered quantity. That term is built from two numbers, `DHS.RPM` and
+`H3K27ac.RPM`, and `crispri.Pair` is constructed in exactly one place in this project,
+`crispri.parse`, from exactly those two columns of the EPCrisprBenchmark tables. The benchmark
+publishes both for every pair of every cell type it covers: 10,356 of 10,356 training pairs and
+4,378 of 4,378 held-out pairs across K562, GM12878, HCT116, Jurkat and WTC11. That is the input the
+HCT116 arm had. The astrocyte screen appears in neither file, and its Supplementary Table 3 carries
+pair differential expression, controls, Nanostring probes and power calculations but no chromatin
+sheet. So no astrocyte pair can carry either column, and there is no code path in this project that
+would give one a value.
+
+**What is on disk instead is a peak call, in the wrong units and censored.** The only astrocyte
+activity on disk is the registration's own two inputs, ENCFF874OPW DNase peaks and ENCFF970DKF
+H3K27ac replicated peaks. Both are narrowPeak files whose signal column is `signalValue` -- the peak
+caller's signal for the DNase peaks, fold change over control for the ChIP-seq peaks -- and a weight
+fitted on reads per million applied to either is a different feature. They are also censored: a peak
+call carries no value outside a called peak, and **477 of the screen's 957 elements overlap no
+astrocyte H3K27ac peak at all**, so a peak call could give them no value but zero. Zero in the frozen
+feature means `log_activity = 0` and `activity_over_distance = -log(distance)`: a number invented for
+the arm the gain is subtracted by, not a measurement of it. Rescaling can address the units and
+cannot address the censoring, because the values that are missing were never measured into the file.
+
+**The one answer to the censoring objection is measured, and it does not move the verdict.** An
+uncensored continuous astrocyte H3K27ac track *is* on disk -- 24 chromosomes of 200 bp-binned fold
+change over control -- so the censoring defect could be avoided for one of the two columns. It
+changes nothing on two counts. The track is fold change over control and not reads per million, so
+the units defect survives it. And the signal store holds no DNase profile for any of its biosamples,
+so `DHS.RPM` has no continuous astrocyte source to be rescaled from at all and its only candidate
+remains the censored peak call. The missing input is missing in every form this repository holds.
+
+**The verdict, in the registration's own words.** The registration's feasibility rule is quoted and
+not restated: *"if an input the frozen model needs is missing, the model is not applied and no
+substitute is put in its place: a no-go is recorded instead"*. So the model is not applied, and the
+number of requests the gate permits is **0** -- not 1,322 spent on a deletion cache from which no
+registered claim could be computed. **No gain is reported, no AUPRC is reported, and no interval is
+reported, because none was computed.** None of the three registered readings applies: they read an
+interval, and there is no interval. In particular this is *not* "no gain detected" -- that reading
+belongs to an interval that covers zero, and an interval covering zero is never reported as "no
+effect" either. This is a test that was not run.
+
+**What would clear it**, neither of which this lane may do: an activity input in the frozen units for
+astrocyte, meaning a depth-normalised coverage from which reads per million in an element is
+computable, which is a different file from either registered accession and is an amendment to the
+registration's `activity_inputs`; or a second claim with no activity term in either arm, registered
+before any astrocyte score exists. Both are the registering lane's and Albert's to make, and neither
+is a reading of the present registration.
+
+**The request list, enumerated and priced without being bought.** `astrorun.plan_requests` is the one
+enumeration there is: one row per registry element overlapping a covered screen pair, which is the
+rule the registration costed the run with. The dry run prints it and any sender must iterate it, so
+the list reviewed before money is spent and the list actually sent cannot drift apart. It holds
+**1,322 requests over 23 chromosomes, matching the authorised total and the coverage table's
+`registry_elements_needed_total` exactly**, every element unique, and the screen's label counts
+reproduce the registration's to the pair: 133 positives, 25 increases held apart, 4,447 negatives,
+3,154 excluded. The dry run touches no network, has no `--send`, and its no-network property is
+checked against its own syntax tree rather than promised in prose. One observation about the costing
+is reported and deliberately not acted on: 90 of the 1,322 requests serve no pair the test scores (87
+cover only excluded non-hits, 3 only excluded pairs and increases held apart). They are in the list
+because the authorised total counts them, the registered rule being one request per registry element
+overlapping a covered pair of any label, and the registration's own `left_undone` already says a
+cheaper rule may exist and is not explored. Dropping them would be a cheaper run than the one
+registered.
+
+**The money guard, and what it cannot do.** The registering session was killed before its first
+request, so the guard's first duty is that a restart cannot spend the number twice. `RequestBudget`
+reconstructs its budget from the ledger: over a ledger of *n* charges it has *n* spent and 1,322 - *n*
+remaining, and over a ledger of 1,322 it refuses the first request of the new process. A line
+truncated by a kill counts *as a charge*, because the ledger line is written before the request is
+permitted, so a half-written line is evidence that a charge was being made. This is shown by
+removal rather than asserted: stripping the one line that makes the budget resume, from the real
+module's own source, makes a cap of 25 buy 50 requests across two processes, while the real class
+refuses and buys nothing. The guard is a protection and not a diagnosis. What it does **not** do is
+named in the code so it is not trusted for more: the lock makes the count and the ledger line atomic
+within one process, not across two, and a test demonstrates one element charged twice against a cap
+of 1 when two budgets are opened together. Only one executor holding the budget closes that, which is
+an operating rule and not a property of this code.
+
+**A stale entry in the frozen registration, reported and not edited.** `left_undone` says the
+astrocyte DNase and H3K27ac accessions are "not recorded anywhere in the repository; they are present
+but unprovenanced". That is the stale entry. All 48 per-chromosome files record their accession in
+their own first line: `# ENCFF874OPW astrocyte DNase-seq narrowPeak` in each of the 24 DNase files
+and `# ENCFF970DKF (ENCSR000AOQ) astrocyte H3K27ac replicated peaks` in each of the 24 H3K27ac files,
+both matching `terms.activity_inputs`. `terms.activity_inputs` is correct, and its own `correction`
+field already says so inside the same frozen artefact, so the two disagree with each other and the
+correction is the right one. What was missing was a manifest entry, not the provenance. The artefact
+is frozen and the wording is the registering lane's to correct.
+
+**The power class, carried in its required form because the class may not travel without it.** The
+registered class is *"exploratory (prevalence-matched power 0.79, conservative: simulated with ~27
+positives against the test's 133)"*. The 0.5x attenuation share of 0.81 travels beside it, and both
+limitations travel with it: the prevalence limitation, that the first figure of 0.96 was computed at
+K562's own 6.5% prevalence and does not describe a test run at 2.9%; and the sample-size limitation,
+that the simulation keeps a mean of about 27 positives because that is what 74 of K562's loci can
+supply at the matched prevalence, while the real test has 133, so the figure is conservative for
+sample size and is not grounds to reclassify. Per the registration, the 0.5x share **may not be
+quoted as power at half the effect**: shrinking the deletion arm scales the separation and the
+bootstrap spread together, so the shares stay nearly flat across 1x, 0.5x and 0.25x while the median
+achieved gain falls, which shows that the detectability of a proportionally smaller separation is
+similar and not that power survives a weaker true effect against unchanged noise. None of this was
+exercised, because no astrocyte pair was scored.
+
+**Not claimed**, carried from the registration: this is not a replication of the K562 result -- a
+different assay readout, element selection, hit threshold and cell lineage mean a difference could
+not be attributed to the cell type; not independence of the genomic regions, the locus grouping being
+an operational convention and AlphaGenome having been trained on ENCODE tracks that include astrocyte
+chromatin, so the labels are unseen and the regions are not; not a cell-type-specific claim about
+astrocytes, two donor lines of cultured fetal-derived astrocytes not being primary brain tissue; and
+no claim at all until a comparison is registered before any score is computed. To those this lane
+adds one more: **nothing here is evidence about the astrocyte deletion value in either direction.**
+The registration's note that 224 chr21 rows name `astrocyte` as a winning track is evidence that the
+track exists and was never read as a value.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
