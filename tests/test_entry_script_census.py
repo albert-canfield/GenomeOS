@@ -262,6 +262,14 @@ def test_the_manifest_meets_the_contract_and_counts_this_script_as_the_entry():
     assert len(entry["sha256"]) == 64
 
 
+def test_the_census_does_not_hash_its_own_result_as_an_input_of_the_run_that_writes_it():
+    """A file cannot be pinned as an input by the run that replaces it: the pin names absent bytes."""
+    source = split_source()
+    assert 'p.stem for p in RESULTS.glob("*.json") if p.stem != RESULT' in source
+    excluded = [e for e in census_mod.manifest_for([])["exclusions"] if census_mod.RESULT in e]
+    assert excluded, "the exclusion must be stated in the manifest, not only in the code"
+
+
 def test_the_artefact_carries_the_split_the_readings_and_the_population():
     if not HEADLINES.is_file():
         pytest.skip(f"{HEADLINES} is not in this checkout, so there is nothing to examine")
@@ -272,4 +280,5 @@ def test_the_artefact_carries_the_split_the_readings_and_the_population():
     assert a["readings_carried_word_for_word"] == census_mod.READINGS
     assert a["examined_files"] == ["data/results/manifest_headlines.json"]
     assert "writes none of them" in a["nothing_was_written"]
+    assert "EXCLUDED from the population" in a["itself"]
     json.dumps(a)  # the payload a result is written from must be JSON

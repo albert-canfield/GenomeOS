@@ -547,9 +547,11 @@ def artefact(every: list[str] | None = None) -> dict[str, Any]:
             "pin. The census reads and reports; what to do about what it finds is not its decision."
         ),
         "itself": (
-            f"data/results/{RESULT}.json is a result in data/results like any other, so this run "
-            "counts whatever version of it was already on disk -- none at all on the first run -- and "
-            "never the bytes it is about to write"
+            f"data/results/{RESULT}.json is EXCLUDED from the population when this script writes it, "
+            "and that is the one exclusion: a file cannot be hashed as a declared input by the same "
+            "run that replaces it, because the pin would name bytes no longer at that path. This "
+            "run's own entry script is in this result's own manifest, not in a row about the last "
+            "run's file"
         ),
         "examined_files": [f"{RESULTS.as_posix()}/{n}.json" for n in every],
     }
@@ -591,6 +593,9 @@ def manifest_for(every: list[str]) -> dict[str, Any]:
             "README.md is read to find the names it cites and is not an input to any count",
             "a registered name with no file on this disk is reported as `absent`, never skipped",
             "no result's bytes are read for anything but its own manifest, and none is written",
+            f"data/results/{RESULT}.json, this census's own result, is excluded from the examined set "
+            "when this script writes it: hashing a file as a declared input and then replacing it "
+            "would pin bytes that are no longer at that path (the `itself` field says the same)",
         ],
         "partitions": "n/a: a census of a record, not an evaluation",
         "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
@@ -609,7 +614,12 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     if args.write:
-        every = sorted(p.stem for p in RESULTS.glob("*.json"))
+        # Every result but the one this run is about to write. The census cannot both hash a file as a
+        # declared input and replace it: the pin would name bytes that no longer exist at that path, so
+        # nobody could re-verify it. The exclusion is one name, it is recorded in `exclusions` and in
+        # `itself`, and the entry script of this run is reported by its own manifest rather than by a
+        # row about last run's file.
+        every = sorted(p.stem for p in RESULTS.glob("*.json") if p.stem != RESULT)
         payload = artefact(every)
         path = save_result(RESULT, payload, manifest=manifest_for(every))
         split = payload["unrecorded_split"]
