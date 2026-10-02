@@ -345,6 +345,12 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
     records = sum(len(v) for v in with_hit.values())
     neg = sum(1 for v in with_hit.values() for h in v if h["slope"] < 0)
     pos = records - neg
+    # Two different quantities, and reporting only the larger would overstate what attaches. The
+    # distillation RETAINS a hit inside the element widened by MARGIN, because an eQTL a few
+    # hundred bases out is in linkage with it; increment 3's attachment ATTACHES a hit only inside
+    # the element itself, and that rule is imported here rather than widened to raise the figure.
+    retained = sum(len(v) for v in hits.values())
+    in_the_margin_only = retained - records
 
     # the before/after, taken from the committed count rather than restated
     with open(ROOT / "data/results/response_map_increment4_count.json") as fh:
@@ -382,6 +388,16 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
             "elements_carrying_at_least_one_retained_hit": len(with_hit),
             "elements_assessed_and_carrying_none": len(att_iv) - len(with_hit),
             "retained_records": records,
+            "records_retained_by_the_distillation": retained,
+            "records_retained_in_the_margin_but_not_attached": in_the_margin_only,
+            "retained_is_not_attached": (
+                "the distillation retains a hit inside the element widened by "
+                f"MARGIN = {MARGIN} bases, because a variant a few hundred bases out is in linkage "
+                "with the element. Increment 3's attachment counts a hit only inside the element "
+                "ITSELF, and that is the rule used for every locus figure here: it is imported, not "
+                "widened to raise the number. The two are reported side by side so the larger "
+                "cannot be read as the smaller"
+            ),
             "slope_negative": neg,
             "slope_positive": pos,
             "tissues": len({h["tissue"] for v in with_hit.values() for h in v}),

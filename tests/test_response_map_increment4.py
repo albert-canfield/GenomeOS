@@ -277,3 +277,11 @@ def test_assessed_and_found_are_different_fields(frame_mod):
 def test_the_retained_hit_rule_sets_no_cutoff_of_its_own(frame_mod):
     assert "GTEx's significance call is the one used" in frame_mod.RETAINED_HIT_RULE
     assert "sets no cut-off of its own" in frame_mod.RETAINED_HIT_RULE
+
+
+def test_retained_and_attached_are_separate_quantities(frame_mod):
+    """The distillation keeps a hit in the margin; the attachment counts only inside the element."""
+    src = (ROOT / "scripts/eqtl_crispri_frame.py").read_text()
+    assert '"records_retained_by_the_distillation"' in src
+    assert '"records_retained_in_the_margin_but_not_attached"' in src
+    assert "widened to raise the number" in src
