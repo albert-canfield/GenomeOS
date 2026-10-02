@@ -1327,3 +1327,71 @@ reading prose, not code.
 **And the chain held where it mattered.** No red tree reached the remote: the pre-push
 check refused, did not retry, and said *"a red check is a red check: fix it and push
 again."* Nothing was spent, nothing was published, and the authorisation survived intact.
+
+## A declaration decoupled from the read cannot even be wrong in a way the filesystem would show (2026-10-02)
+
+Three defects in input declarations were found in one day, each worse than the last, and
+the third names the general case.
+
+**First: a declaration that silently shrinks.** `organise.inputs()` appended a pointed-at
+table only `if w.exists()`, so a missing input left the declaration shorter **with no
+record**. The decisive argument came from the code rather than from principle:
+`genomeos/attribution/targets.py:50` **already raises** on exactly that condition — *"A
+summary whose table is missing raises, rather than reading as a run with no elements"* — so
+**the declaration was laxer than the read it describes**, and a manifest was buildable for
+a join that could not be read.
+
+**Second: another file answering in the absent one's place.** `therapeutic_benchmark`
+declared `data/knowledge/Ensembl2Reactome.txt`. That file is absent here, so
+`genomeos/lib/membership.py:98` falls back to `Membership.distilled()`, which reads
+`data/results/library_members.json` — 643,666 bytes, distilled **from** the very file that
+is gone. **The manifest named the input that was discarded and omitted the input that was
+read**, and the string `library_members` did not occur in it. A rebuild re-reading the
+right file cannot tell. Found only because `save_result` **refused** the regenerated result
+and named it.
+
+**Third, and the general case: a declaration built without looking at anything.** The
+`inputs` block written into every `organised_<chrom>` result was **four f-strings**. Being
+decoupled from the read, it could not be falsified by the filesystem at all. Measured on
+chr21:
+
+- it named `budget_chr21`, while `read_axes` restated the tiers from **`budget_axes_chr21`**
+  — and did so on **all 24 chromosomes**, because both files exist for all 24. The field
+  recording which branch ran was discarded;
+- it omitted **`enhancer_targets_all`** — **12,139 of the 12,439 elements** joined on
+  chr21, and **the only run whose summary is a pointer at a ~1.4 GB local table.** The
+  largest input, and the only unrecoverable one, was the one left out;
+- it named `variation` and `duplication` **unconditionally** — the mirror defect, a
+  declaration that will not shrink when it should.
+
+**The rule that covers all three: a declaration must be produced BY the read, not written
+alongside it.** A declaration that shrinks in silence is wrong and findable. A declaration
+that names the wrong file is wrong and hard to find. **A declaration that never consulted
+the filesystem is not even the kind of thing the filesystem can contradict.**
+
+**The remedy, three-way and not a blanket raise.** An earlier ruling here — *a missing
+declared input must raise with the path* — **was wrong applied verbatim**, and a peer proved
+it on the very file it was handed: `Ensembl2Reactome.txt` is **genuinely optional in the
+code with a documented fallback**, so raising would have made a README-backed benchmark
+unrunnable. What holds:
+
+1. **required** input missing → **raise, naming the path**;
+2. **conditional** input missing → **declare WHICH BRANCH RAN**: the fallback *and* the file
+   the fallback reads are declared, the stand-in is **hashed in the absent input's place**,
+   and the swap is recorded (`inputs_optional_absent`);
+3. **neither** present → **raise**, naming the packaged copy of last resort that would
+   otherwise have answered **unpinned**.
+
+**It is the house style, not three accidents.** Counted rather than estimated: **147
+`exists()` calls inside input-declaring functions across 71 files; 91 of them actually
+decide whether an entry enters an input list; 73 of those are over a fixed named path,
+which is where required-versus-conditional lives; 16 enumerate a candidate set and are
+legitimately tolerant; 7 already raise.** Of the 73, **exactly one has been classified
+correctly.** And **16 must be left alone** — discovery over a candidate set, where a raise
+would make a partial genome unwritable.
+
+**A larger gap sits beside all of this:** `organise.run_and_save()` calls `save_result`
+**with no manifest at all**, so `organised_<chrom>` carries *"manifest incomplete: missing
+sources; missing inputs"* — and `inputs()` is never called by its own writer, only by three
+downstream ones. **A declaration that does not exist is a separate and larger gap than one
+that shrinks.**
