@@ -14786,6 +14786,97 @@ Code `b3705c5` and `d65e803`; registration `0779c97`; result `data/results/direc
 requests, no money, no download, no network: the per-element cache is streamed in chunks rather than
 loaded, so peak memory is one record and not one chromosome.
 
+## A second cache cannot rescue the increase arm: 6 of the 7 HCT116 links carry a cached answer, 3 of them in the increase arm over one independent locus, so the pooled increase arm is 24 links over 14 loci against floors of 30 and 20 (2026-10-02, lane-hct)
+
+lane-direction's gate refused its comparison on the increases arm: 21 answered links against a floor of
+30, and 13 independent loci against a floor of 20 (`data/results/direction_link.json`). That lane read
+the K562 track, substituted nothing, and named a second, partial cache in its registration as present
+and deliberately not read, in these words: *"A separate partial cache
+data/knowledge/alphagenome/elements_hct116 exists over five chromosomes from a different run and does
+carry an HCT116 track; it is NOT read here, because mixing a second cache into one arm of a comparison
+is the same substitution by another route. It is named so that a later lane can register a test that
+uses it."* This is that count, and it is a count only: nothing of a direction was read.
+
+**Reading a direction was made impossible, not avoided.** The only reason to look at a second cache is
+that one arm missed a floor, and a lane that read predicted directions while counting whether it has
+enough of them would be choosing its population after seeing the outcome, which is what the floors exist
+to prevent. So exactly one function of this lane is ever handed a parsed cache record,
+`hct116_count.genes_with_an_answer`, and its return type is a frozenset of gene **names**: a value has
+no path out of it, and inside it the only operation applied to a value is an identity test against
+`None`. Three tests hold that structurally. A **poison object** that raises `BlindingError` from every
+comparison, every arithmetic operation, every conversion to a number, string or bool, every attribute
+access and every hash is put where a cached value lives: `is` and `is not` are the only operations
+Python performs on an object without consulting it, so a reader that asks `value is None` passes and a
+reader that compares, negates, converts, formats or hashes it raises instead. The same records are then
+read with -3.5, +3.5, exactly 0.0 and ±1e-300, on disk as well as in memory, and the output is asserted
+**identical** in every case, so no sign is recoverable from anything this lane computes even in
+principle. Third, an **AST check** over the function's own syntax tree asserts it holds no ordering or
+equality comparison, no arithmetic, and no call to `float`, `int`, `abs`, `round`, `str`, `repr` or
+`sorted`, so a later edit cannot reintroduce a value read silently; and no direction-carrying field of
+the record (`max_drop_log2fc`, `max_rise_log2fc`, `mean_log2fc` and the two tissue names beside them) is
+named anywhere in the module.
+
+**Presence is an upper bound, and it was declared before the count.** lane-direction's *answered* links
+are those whose cached value is present **and not exactly zero**, because an exactly-zero value carries
+no direction (`direction_link.SIGN_CALL`). Testing a value against zero is reading the value, so this
+lane does not do it: every count here is answer presence, which is an upper bound on answered links. An
+upper bound that falls short of a floor settles the gate; an upper bound that cleared one would not,
+and the registration says so rather than leaving it to a reader. On the K562 side the two coincide,
+because lane-direction reported 0 exactly-zero values over all 230 of its in-cell links, and this lane's
+own blinded presence pass over the sweep's archives reproduces that lane's answered counts exactly, 174
+in the decreases arm and 21 in the increases arm.
+
+**The count.** The eligibility join is lane-direction's own committed `links_of`, imported and
+unchanged, and it reconciles with that lane's published figures leaf for leaf: 260 links, 212 decreases
+and 48 increases, by cell K562 230, WTC11 14, Jurkat 5, HCT116 7, GM12878 4. Of the **7** eligible
+HCT116 links — 4 decreases and 3 increases — **6 carry a cached answer for the pair's own gene** on the
+HCT116 track: 3 decreases and 3 increases. The answer-presence gap is **1 link**, and it is reported
+with its reason: all 7 elements are in the partial cache, so 0 links are missing a cached element file,
+and the one gap is a decrease link whose element's cached window holds no entry for its own gene
+(EH38E3388449, SSFA2, chr2). Seven per-element files were opened, each named by path in the result. The
+three increase links with an answer are all CCND1 on chr11 and are therefore **one** independent locus
+under cell2's grouping, not three; the three decrease links are CCND1 twice and MYC once, over two.
+
+**The pooled arms against the imported floors.** Both floors are imported and neither is chosen here:
+`fresh.POSITIVE_FLOOR` = 30 links and `fresh.LOCUS_FLOOR`, which is `cell2.POOLED_LOCUS_FLOOR` = 20
+independent loci, applied by lane-direction's own `gate`, per arm, never to the two arms pooled
+together. cell2's grouping does not look at the cell, so pooling a second cell is not additive in loci:
+a link of either cell that shares its gene with another, or lies within 1 Mb of it on the same
+chromosome, is the same locus, and the pooled loci are counted over the pooled links together. The
+**pooled decreases arm** is 177 links (174 + 3) over 114 independent loci and meets both floors. The
+**pooled increases arm** is 24 links (21 + 3) over 14 independent loci: **short of 30 links by 6, and
+short of 20 loci by 6**. Both margins are on the record because a reader is owed them, and not because
+a small margin is better than a large one.
+
+**The verdict is a no-go.** A pooled arm is below an imported floor, so no comparison is made, no
+direction is read, no floor is moved, the two arms are not pooled together to reach a floor, no third
+cache is opened to widen an arm, and no direction test is registered or run. A count short of a floor is
+a no-go and is never close, promising, nearly enough, a good start or enough for a pilot. The locus
+count it is taken over is cell2's operational grouping and not established biological independence.
+
+**What it cannot establish.** This is a count of answer presence and not a measurement of anything a
+direction test would measure. It does not establish that any direction is readable, it is not a verdict
+on any compiled rule, because no compiled rule was consulted, and it establishes nothing about a
+mechanism: a measured increase on knockdown is an increase on knockdown, never a silencer, never a
+repressor and never evidence of repression (review item R2). lane-direction's own no-go stands unchanged
+as that lane's reading of that lane's population. And if a later lane does build a population from these
+links, HCT116 is **not** a fresh cell for the purpose: its decreases were scored in a39073d, so any such
+registration must state that prior exposure and may not describe this cell as held out, fresh or unseen.
+
+0 model requests, no money, nothing downloaded, no network. `data/results/hct116_count.json`;
+`genomeos/attribution/hct116_count.py`, `scripts/hct116_count.py`, `tests/test_hct116_count.py`.
+
+Provenance: `scripts/manifest_rebuild.py` on the result checked **106 of 106 declared inputs** by
+sha256, 0 unchecked, 0 absent and 0 differing, over 133 files opened and 1,412,504,413 bytes — the
+element tables behind the `elements_where` pointers among them, declared by path rather than left behind
+the 1.6 KB summaries that name them, because `targets.run_elements` takes that path out of a result
+field no grep can see. The rebuild compared 1,072 of 1,084 leaves with 0 must_hold failures and 0
+differences in anything the run computed; its three remaining differences are the new input tracer's own
+run facts, `traced_inputs.cwd_at_open`, `traced_inputs.cwd_at_close` and the raw `traced_inputs.opens`
+count (731 in this checkout against 878 in the rebuild's worktree), which are properties of where a run
+happened and not of what it counted, and which `manifest_rebuild.py`'s ignore lists do not yet name. The
+trace itself reconciles on both sides: 0 undeclared reads and 0 declared files that were never opened.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
