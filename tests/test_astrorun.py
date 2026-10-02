@@ -608,3 +608,110 @@ class TestTheSendableSubset:
 
     def test_narrowing_is_not_presented_as_changing_the_authorised_total(self):
         assert "only he can authorise" in astrorun.requests_serving_scored_pairs.__doc__
+
+
+class TestAstroreg2HasItsOwnCapAndAuthorisation:
+    """The old approval named the original registration by hash and must not be able to fund this one."""
+
+    def test_the_astroreg2_cap_is_1232_and_not_the_original_1322(self):
+        assert astrorun.ASTROREG2_CAP == 1232
+        assert astrorun.AUTHORISED_REQUESTS == 1322
+        assert astrorun.ASTROREG2_CAP != astrorun.AUTHORISED_REQUESTS
+
+    def test_no_astroreg2_approval_is_recorded_yet(self):
+        assert astrorun.ASTROREG2_AUTHORISATION is None
+
+    def test_asking_for_the_astroreg2_authorisation_refuses_while_it_is_absent(self):
+        with pytest.raises(astrorun.NoAuthorisationError, match="does not carry"):
+            astrorun.astroreg2_authorisation()
+
+    def test_no_budget_can_be_obtained_for_astroreg2_without_its_own_approval(self, tmp_path):
+        """The refusal comes BEFORE the budget exists, so there is nothing to send with."""
+        with pytest.raises(astrorun.NoAuthorisationError):
+            astrorun.astroreg2_budget(tmp_path / "l.jsonl")
+        assert not (tmp_path / "l.jsonl").exists(), "a refusal creates no ledger"
+
+    def test_the_astroreg2_scope_cannot_reach_the_original_1322_cap(self, tmp_path, monkeypatch):
+        """With an approval recorded, the cap is 1,232: request 1,233 is refused, 1,322 unreachable."""
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", "<verbatim words would go here>")
+        b = astrorun.astroreg2_budget(tmp_path / "l.jsonl")
+        assert b.cap == 1232
+        for _ in range(1232):
+            b.take(chrom="chr1", element="e")
+        assert b.remaining() == 0
+        with pytest.raises(astrorun.CapRefusedError) as exc:
+            b.take(chrom="chr1", element="one too many")
+        assert "1232 of 1232 sent" in str(exc.value)
+        assert b.sent == 1232 < astrorun.AUTHORISED_REQUESTS
+
+    def test_the_reason_absence_refuses_rather_than_warns_is_recorded(self):
+        assert "Not a warning, a refusal" in astrorun.NO_AUTHORISATION_MEANS_NO_SEND
+
+
+class TestTheSenderProvesItSendsTheReviewedList:
+    def plan(self, n=5):
+        return [
+            {
+                "chrom": "chr1",
+                "element": f"E{i}",
+                "start": i * 100,
+                "end": i * 100 + 50,
+                "serves_genes": ["AAA"],
+                "serves_labels": ["negative"],
+            }
+            for i in range(n)
+        ]
+
+    def test_the_same_list_has_the_same_digest(self):
+        a, b = self.plan(), self.plan()
+        assert astrorun.plan_digest(a) == astrorun.plan_digest(b)
+        assert astrorun.check_is_the_reviewed_plan(b, astrorun.plan_digest(a))
+
+    def test_formatting_does_not_move_the_digest(self):
+        """The digest is over the list's content, not the file's bytes."""
+        a = self.plan()
+        b = [dict(reversed(list(r.items()))) for r in a]
+        assert astrorun.plan_digest(b) == astrorun.plan_digest(a)
+
+    def test_a_planted_one_element_change_is_refused(self):
+        """By planting: change exactly one request and show the refusal fire."""
+        reviewed = astrorun.plan_digest(self.plan())
+        tampered = self.plan()
+        tampered[2]["element"] = "E2-but-different"
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.check_is_the_reviewed_plan(tampered, reviewed)
+
+    def test_a_planted_one_coordinate_change_is_refused(self):
+        reviewed = astrorun.plan_digest(self.plan())
+        tampered = self.plan()
+        tampered[0]["end"] += 1
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.check_is_the_reviewed_plan(tampered, reviewed)
+
+    def test_an_added_or_removed_request_is_refused(self):
+        reviewed = astrorun.plan_digest(self.plan())
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.check_is_the_reviewed_plan(self.plan(6), reviewed)
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.check_is_the_reviewed_plan(self.plan(4), reviewed)
+
+    def test_reordering_is_refused_because_the_order_is_part_of_the_list(self):
+        reviewed = astrorun.plan_digest(self.plan())
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.check_is_the_reviewed_plan(list(reversed(self.plan())), reviewed)
+
+    def test_a_changed_label_set_is_refused_because_it_changes_what_the_request_is_for(self):
+        reviewed = astrorun.plan_digest(self.plan())
+        tampered = self.plan()
+        tampered[1]["serves_labels"] = ["positive"]
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.check_is_the_reviewed_plan(tampered, reviewed)
+
+    def test_the_refusal_names_the_count_so_a_reviewer_can_see_what_changed(self):
+        reviewed = astrorun.plan_digest(self.plan())
+        with pytest.raises(ValueError) as exc:
+            astrorun.check_is_the_reviewed_plan(self.plan(7), reviewed)
+        assert "7 requests" in str(exc.value)
+
+    def test_the_reason_the_sender_recomputes_is_recorded(self):
+        assert "a review of nothing" in astrorun.THE_REVIEWED_LIST_IS_THE_SENT_LIST

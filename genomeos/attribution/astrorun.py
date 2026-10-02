@@ -397,6 +397,99 @@ def requests_serving_scored_pairs(
     return [r for r in plan if any(lab in scored for lab in r["serves_labels"])]
 
 
+# ------------------------------------------------- AstroREG-2: its own cap, its own authorisation
+
+#: AstroREG-2's scope: the requests that serve a pair the registered test scores. NOT 1,322. The
+#: original total counted a covered pair of any label; this is the subset either arm of the endpoint can
+#: use, and it is a DIFFERENT number under a DIFFERENT registration.
+ASTROREG2_CAP = 1_232
+
+#: Albert's approval for AstroREG-2, to be recorded here VERBATIM in his own words when he gives them.
+#: It is None because he has not given it. The approval already on record named the ORIGINAL
+#: registration by hash and does not carry: a runner that reused it would spend on the strength of an
+#: approval for a different registration.
+ASTROREG2_AUTHORISATION: str | None = None
+
+#: Why absence refuses instead of warning.
+NO_AUTHORISATION_MEANS_NO_SEND = (
+    "the AstroREG-2 scope REFUSES to send while no approval of its own is recorded. Not a warning, a "
+    "refusal: a warning can be read past, and the failure it would permit is spending real money under "
+    "an approval that covers a different registration. Requiring Albert's actual words to be physically "
+    "present in the code before anything can send is the only version of this that cannot drift, "
+    "because there is nothing to forget and nothing to infer"
+)
+
+
+class NoAuthorisationError(RuntimeError):
+    """No approval is recorded for this scope, so nothing may be sent under it."""
+
+
+def astroreg2_authorisation() -> str:
+    """Albert's AstroREG-2 approval, verbatim, or a refusal. Never a default and never inferred."""
+    if not ASTROREG2_AUTHORISATION:
+        raise NoAuthorisationError(
+            "no AstroREG-2 approval is recorded. The approval on record names the ORIGINAL "
+            f"registration by hash and does not carry to it. {NO_AUTHORISATION_MEANS_NO_SEND}"
+        )
+    return ASTROREG2_AUTHORISATION
+
+
+def astroreg2_budget(ledger: Path | str) -> RequestBudget:
+    """A budget for AstroREG-2's 1,232, obtainable only once its own approval is recorded.
+
+    The authorisation is checked BEFORE the budget exists, so there is no object to send with until the
+    approval is on record. The cap is `ASTROREG2_CAP` and never `AUTHORISED_REQUESTS`.
+    """
+    astroreg2_authorisation()
+    return RequestBudget(ledger, cap=ASTROREG2_CAP)
+
+
+# ------------------------------------------- the sender must prove it is sending the reviewed list
+
+#: Why the sender recomputes the list and compares a digest rather than trusting the reviewed file.
+THE_REVIEWED_LIST_IS_THE_SENT_LIST = (
+    "a review of a list the sender could quietly regenerate differently is a review of nothing. So the "
+    "sender rebuilds the list through plan_requests and the one filter, takes its digest, and REFUSES "
+    "if it differs from the digest that was reviewed. The digest is over the list's own canonical "
+    "content rather than the file's bytes, so a reformatting does not trip it and a changed, added or "
+    "removed request does"
+)
+
+
+def plan_digest(plan: list[dict[str, Any]]) -> str:
+    """A canonical digest of the request list: what was reviewed, and what must be sent.
+
+    Taken over each row's identity and the pairs it serves, in the list's order, so the digest moves if
+    any request is changed, added, removed or reordered, and does not move for a change in formatting.
+    """
+    import hashlib
+
+    canon = [
+        [
+            r["chrom"],
+            r["element"],
+            r["start"],
+            r["end"],
+            sorted(r.get("serves_genes", [])),
+            sorted(r.get("serves_labels", [])),
+        ]
+        for r in plan
+    ]
+    blob = json.dumps(canon, sort_keys=False, separators=(",", ":")).encode()
+    return hashlib.sha256(blob).hexdigest()
+
+
+def check_is_the_reviewed_plan(plan: list[dict[str, Any]], reviewed_digest: str) -> str:
+    """Refuse unless the recomputed list is byte-for-byte the list that was reviewed."""
+    got = plan_digest(plan)
+    if got != reviewed_digest:
+        raise ValueError(
+            f"the recomputed request list has digest {got}, not the reviewed {reviewed_digest}: "
+            f"{len(plan)} requests. It may not be sent. {THE_REVIEWED_LIST_IS_THE_SENT_LIST}"
+        )
+    return got
+
+
 # ----------------------------------------------------------------- the activity-input gate
 
 #: The two numbers the frozen activity term is made of, and the one place they are read from.

@@ -257,6 +257,19 @@ def astroreg2_scope(plan, pairs, summary, authorised, show) -> int:
             "enumeration and the scope disagree"
         )
     print(f"  {len(sendable)} requests serve a pair the test scores; {dropped} do not and are out")
+    digest = astrorun.plan_digest(sendable)
+    print(f"  reviewed-list digest sha256 {digest}")
+    try:
+        approval: str | None = astrorun.astroreg2_authorisation()
+        approval_state = "recorded"
+    except astrorun.NoAuthorisationError as e:
+        approval, approval_state = None, str(e)
+    blockers = []
+    if approval is None:
+        blockers.append(
+            "no AstroREG-2 approval is recorded in astrorun.ASTROREG2_AUTHORISATION, so the scope "
+            "REFUSES to send. The approval on record names the ORIGINAL registration by hash"
+        )
 
     payload = {
         "status": "a dry run for AstroREG-2's scope. NOTHING WAS SENT: no AlphaGenome import, no "
@@ -294,6 +307,24 @@ def astroreg2_scope(plan, pairs, summary, authorised, show) -> int:
             for r in plan
             if not any(lab in SCORED_LABELS for lab in r["serves_labels"])
         },
+        "the_reviewed_list_digest": {
+            "sha256": digest,
+            "over": "each request's chrom, element, start, end and the gene and label sets it serves, "
+            "in the list's order",
+            "rule": astrorun.THE_REVIEWED_LIST_IS_THE_SENT_LIST,
+            "how_a_sender_uses_it": "rebuild the list through plan_requests and the one filter, take "
+            "this digest, and REFUSE if it differs. astrorun.check_is_the_reviewed_plan does exactly "
+            "that and a planted one-element change is shown failing it in tests/test_astrorun.py",
+        },
+        "authorisation": {
+            "astroreg2_cap": astrorun.ASTROREG2_CAP,
+            "original_cap": astrorun.AUTHORISED_REQUESTS,
+            "astroreg2_approval_recorded": approval is not None,
+            "state": approval_state,
+            "rule": astrorun.NO_AUTHORISATION_MEANS_NO_SEND,
+        },
+        "send_blocked_by": blockers,
+        "may_this_list_be_sent": not blockers,
         "requests": sendable,
     }
     man = manifest(sorted({r["chrom"] for r in sendable}, key=lambda c: (len(c), c)), sendable, pairs)
@@ -322,6 +353,9 @@ def astroreg2_scope(plan, pairs, summary, authorised, show) -> int:
                 "sendable": len(sendable),
                 "dropped": dropped,
                 "matches_the_scope": len(sendable) == ASTROREG2_REQUESTS,
+                "reviewed_list_digest": digest,
+                "astroreg2_approval_recorded": approval is not None,
+                "may_this_list_be_sent": not blockers,
                 "requests_sent": 0,
                 "money_spent": 0,
             },

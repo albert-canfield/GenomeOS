@@ -152,6 +152,9 @@ def one_column(column: str, elements: list[tuple[str, int, int]], list_only: boo
         "chosen": chosen,
         "per_bam": summaries,
         "rpm": averaged,
+        "between_replicates": between_replicates(
+            per_bam, [b["accession"] for b in chosen["bams"]], chosen["bams"]
+        ),
         "combination": "mean of the per-BAM RPMs, as average_features does",
         "metadata_cross_check": {
             "per_file": cross,
@@ -160,6 +163,43 @@ def one_column(column: str, elements: list[tuple[str, int, int]], list_only: boo
             "computed_over_metadata": (computed / meta) if meta else None,
             "rule": rpm.METADATA_IS_A_CROSS_CHECK,
         },
+    }
+
+
+def between_replicates(per_bam, accessions, bams) -> dict[str, Any]:
+    """How far the per-replicate columns disagree, element by element.
+
+    This QUANTIFIES the mixed-read-length limitation instead of naming it. The producer's rule averages
+    the per-BAM RPMs (neighborhoods.py L602), so where the replicates disagree the mean is a compromise
+    between them. The disagreement measured here is the TOTAL between-replicate difference and is
+    CONFOUNDED with read length: depth, protocol and library all differ between replicates too, so it
+    bounds what read length contributes rather than estimating it.
+    """
+    if len(per_bam) != 2:
+        return {"replicates": len(per_bam), "note": "the spread is reported only for a pair"}
+    keys = sorted(per_bam[0])
+    a = [per_bam[0][k] for k in keys]
+    b = [per_bam[1][k] for k in keys]
+    lengths = [x.get("mapped_read_length") for x in bams]
+    return {
+        "accessions": list(accessions),
+        "mapped_read_lengths": lengths,
+        "read_lengths_differ": len({x for x in lengths if x is not None}) > 1,
+        "spearman_between_replicates": rpm.spearman(a, b),
+        "median_ratio_second_over_first": rpm.median_ratio(b, a),
+        "total_element_rpm_per_replicate": [round(sum(a), 2), round(sum(b), 2)],
+        "total_rpm_ratio_second_over_first": (sum(b) / sum(a)) if sum(a) else None,
+        "zero_elements_per_replicate": [
+            sum(1 for v in a if v == 0.0),
+            sum(1 for v in b if v == 0.0),
+        ],
+        "confounded": "this is the TOTAL between-replicate difference. Read length is one of several "
+        "things that differ between the two files, so it is an upper bound on the read-length "
+        "contribution and not a measurement of it. No attempt is made to separate them and none should "
+        "be read into it",
+        "why_it_matters": "the K562 validation did not test mixed read lengths, so where the astrocyte "
+        "replicates differ in read length the validated rule is applied outside the conditions it was "
+        "validated under. The mean averages over the difference rather than resolving it",
     }
 
 
@@ -275,6 +315,7 @@ def main() -> int:
                 "per_bam": columns[c]["per_bam"],
                 "combination": columns[c]["combination"],
                 "metadata_cross_check": columns[c]["metadata_cross_check"],
+                "between_replicates": columns[c]["between_replicates"],
                 "zero_rate": zeros[c],
             }
             for c in columns
@@ -282,6 +323,20 @@ def main() -> int:
         "elements_with_zero_in_both_columns": both_zero,
         "the_peak_call_this_replaces": PEAK_CENSORING,
         "a_measured_zero": rpm.A_MEASURED_ZERO,
+        "limitation_mixed_read_lengths": (
+            "the two astrocyte DNase replicates have DIFFERENT mapped read lengths, 36 bp and 20 bp. "
+            "Mappability differs with read length and the producer's multi-BAM mean averages over that "
+            "difference rather than resolving it. The K562 validation did not test mixed read lengths, "
+            "so in this respect the validated rule is applied outside the conditions it was validated "
+            "under. The between-replicate disagreement is measured per column under "
+            "`between_replicates`, and it is CONFOUNDED with everything else that differs between the "
+            "files, so it bounds the read-length contribution rather than estimating it"
+        ),
+        "limitation_no_published_column": (
+            "the reconstruction was validated against published values in K562 ONLY. There is no "
+            "published astrocyte activity column to check this against, so any result built on it says "
+            "'activity reconstructed by the K562-validated rule'"
+        ),
         "not_claimed": [
             "not validated against a published astrocyte column: none exists. The rule was validated "
             "on K562 and is applied here unchanged",
@@ -319,6 +374,14 @@ def main() -> int:
             f"    denominator computed {x['computed_denominator_total']:,} vs ENCODE metadata "
             f"{x['metadata_total_mapped_reads']:,} -> ratio {x['computed_over_metadata']}"
         )
+        br = columns[c]["between_replicates"]
+        if br.get("spearman_between_replicates") is not None:
+            print(
+                f"    between replicates {br['accessions']} lengths {br['mapped_read_lengths']}: "
+                f"Spearman {br['spearman_between_replicates']:.4f}, median ratio "
+                f"{br['median_ratio_second_over_first']['median_ratio']}, total RPM ratio "
+                f"{br['total_rpm_ratio_second_over_first']:.3f}"
+            )
     print(f"zero in BOTH columns: {both_zero}/{len(elements)}")
     print(f"-> {path}")
     print(f"({time.time() - t0:.0f} s)")
