@@ -43,6 +43,7 @@ import argparse
 import bisect
 import collections
 import hashlib
+import json
 import random
 import sys
 from pathlib import Path
@@ -463,12 +464,139 @@ def registration_payload(
     }
 
 
+# --------------------------------------------------------------------------- the read
+
+
+HIT_COLUMNS = ("chrom", "pos", "variant", "gene", "tissue", "pip")
+
+
+def _registered() -> dict[str, Any]:
+    path = ROOT / f"data/results/{REGISTRATION}.json"
+    if not path.exists():
+        raise RefusedError(
+            f"{path} does not exist: the frame, the controls and the rule are registered before any "
+            "byte is read, never after"
+        )
+    return json.loads(path.read_text())
+
+
+def read(progress: Any = print) -> dict[str, Any]:
+    """Read DAP-G by range over the registered intervals and keep the rows at or above the threshold.
+
+    Stops and reports rather than continuing if the cost is not a fraction of the precedent, which is
+    the bound the coordinator set and not this writer's judgement.
+    """
+    reg = _registered()
+    els = frame()
+    ctrl, info = controls(els)
+    if info["digest"] != reg["the_baseline"]["digest"]:
+        raise RefusedError(
+            "the control windows have moved since they were registered: "
+            f"{reg['the_baseline']['digest']} registered, {info['digest']} now. Nothing is read "
+            "against an unregistered baseline"
+        )
+    iv = intervals_to_read(els, ctrl)
+    want = reg["the_read"]["intervals"]
+    got = sum(len(v) for v in iv.values())
+    if got != want:
+        raise RefusedError(f"the interval set has moved: {want} registered, {got} now")
+
+    KNOWLEDGE.mkdir(parents=True, exist_ok=True)
+    cost: dict[str, Any] = {"requests": 0, "mb_fetched": 0.0, "by_chromosome": {}}
+    kept = 0
+    scanned = 0
+    for chrom in sorted(iv):
+        rows, c = hp.track_rows(TRACK_KEY, chrom, iv[chrom])
+        cost["requests"] += c["requests"]
+        cost["mb_fetched"] = round(cost["mb_fetched"] + c["mb_fetched"], 2)
+        cost["by_chromosome"][chrom] = c
+        out = []
+        for r in rows:
+            scanned += 1
+            pos = hp._eqtl_pos(r)
+            if pos is None:
+                continue
+            try:
+                pip = float(r.get("pip"))
+            except (TypeError, ValueError):
+                continue
+            if pip < PIP:
+                continue
+            out.append(
+                (chrom, pos, r.get("eqtlName") or "", r.get("geneName") or "", r.get("tissue") or "", pip)
+            )
+        kept += len(out)
+        path = KNOWLEDGE / f"hits_{chrom}.tsv"
+        with path.open("w") as fh:
+            fh.write("\t".join(HIT_COLUMNS) + "\n")
+            for row in sorted(set(out)):
+                fh.write("\t".join(str(x) for x in row) + "\n")
+        progress(
+            f"{chrom}: {len(iv[chrom])} intervals, {len(rows)} rows, {len(out)} kept at PIP>={PIP}; "
+            f"{c['requests']} requests, {c['mb_fetched']} MB "
+            f"(cumulative {cost['requests']} requests, {cost['mb_fetched']} MB)"
+        )
+        if cost["requests"] >= PRECEDENT_REQUESTS or cost["mb_fetched"] >= PRECEDENT_MB:
+            raise RefusedError(
+                "STOPPING: this read is not a fraction of the precedent. "
+                f"{cost['requests']} requests and {cost['mb_fetched']} MB after {chrom}, against the "
+                f"precedent of {PRECEDENT_REQUESTS} requests and {PRECEDENT_MB} MB that covered the "
+                "panel's millions of unit intervals. Reported rather than continued, as registered"
+            )
+    summary = {
+        "track": hp.BIGBEDS[TRACK_KEY],
+        "read_by": "HTTP range through genomeos.attribution.human_panel.track_rows; never downloaded",
+        "intervals": got,
+        "chromosomes": len(iv),
+        "rows_scanned": scanned,
+        "rows_kept_at_or_above_the_threshold": kept,
+        "pip_threshold": PIP,
+        "cost": cost,
+        "cost_precedent": {"requests": PRECEDENT_REQUESTS, "mb_fetched": PRECEDENT_MB},
+        "is_a_fraction_of_the_precedent": (
+            cost["requests"] < PRECEDENT_REQUESTS and cost["mb_fetched"] < PRECEDENT_MB
+        ),
+        "registration_sha256": mf.sha256_of(ROOT / f"data/results/{REGISTRATION}.json")[0],
+    }
+    (KNOWLEDGE / "read_summary.json").write_text(json.dumps(summary, indent=1) + "\n")
+    return summary
+
+
+def load_hits() -> dict[str, list[dict[str, Any]]]:
+    """The retained rows, read back per chromosome and sorted by position."""
+    out: dict[str, list[dict[str, Any]]] = {}
+    for path in sorted(KNOWLEDGE.glob("hits_*.tsv")):
+        chrom = path.stem[len("hits_") :]
+        rows = []
+        with path.open() as fh:
+            header = fh.readline().rstrip("\n").split("\t")
+            for line in fh:
+                v = line.rstrip("\n").split("\t")
+                d = dict(zip(header, v, strict=True))
+                d["pos"] = int(d["pos"])
+                d["pip"] = float(d["pip"])
+                rows.append(d)
+        rows.sort(key=lambda r: r["pos"])
+        out[chrom] = rows
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--register", action="store_true", help="write the frame, controls and rule first")
+    ap.add_argument("--read", action="store_true", help="read the track by range over the registered set")
     args = ap.parse_args()
-    if not args.register:
+    if not (args.register or args.read):
         raise SystemExit("--register is required: nothing is read before the registration exists")
+    if args.read:
+        from genomeos.jobs import heartbeat
+
+        def progress(msg: str) -> None:
+            heartbeat("finemap_dapg")
+            print(msg, flush=True)
+
+        print(json.dumps(read(progress), indent=1))
+        return 0
     els = frame()
     ctrl, info = controls(els)
     iv = intervals_to_read(els, ctrl)
