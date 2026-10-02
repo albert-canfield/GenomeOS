@@ -271,6 +271,10 @@ def main() -> None:
         "partitions": {
             "kinds_of_evidence": "what each locus carries beyond the perturbation and the reader",
             "observed_by_assay": "`observed` split by what measured it, never pooled",
+            "outcomes_by_assay": (
+                "what each assay's observations found, at its own denominator, because a count of "
+                "observations is not a measurement of what they say"
+            ),
         },
         "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }

@@ -619,6 +619,7 @@ def build(  # noqa: PLR0915 - one pass over the loci, kept in the order the payl
     refuse_unless_reconciled(payload["reconciliation"])
     payload["counts"]["loci"] = len(loci)
     payload["counts"]["observed_by_assay"] = observed_by_assay(payload["assertions"])
+    payload["outcomes_by_assay"] = outcomes_by_assay(payload["assertions"], loci)
     payload["sources"] = [files.table[p] for p in sorted(files.table)]
     return payload
 
@@ -659,23 +660,166 @@ def _kinds_of(b: dict[str, Any]) -> list[str]:
 
 def observed_by_assay(assertions: list[dict[str, Any]]) -> dict[str, int]:
     """`observed` split by what measured it. Four assays are not one experiment."""
-    prefix = {
-        "p2|": "CRISPRi perturbation (ENCODE benchmark)",
-        "s2|": reader.EVIDENCE,
-        "m3|": mpra.EVIDENCE,
-        "q3|": eqtl.EVIDENCE,
-    }
     out: Counter[str] = Counter()
     for a in assertions:
         if a["status"] != "observed":
             continue
-        for p, label in prefix.items():
+        for p, label in ASSAY_OF_PREFIX.items():
             if a["id"].startswith(p):
                 out[label] += 1
                 break
         else:  # pragma: no cover - a new observed kind must name what measured it
             raise rm.RefusedError(f"{a['id']}: observed, but nothing says what measured it")
     return dict(sorted(out.items()))
+
+
+def _outcome_of(a: dict[str, Any]) -> str:
+    """What one assertion's own record says it found, read out of the field that holds it.
+
+    Nothing is thresholded, compared or recomputed here: the CRISPRi outcome is the benchmark's own
+    call as `measured` recorded it, the reader state is reader v1's own call, the reporter label is the
+    measured layer's declared per-cell aggregation carried on the tile, the eQTL direction is the sign
+    of GTEx's own slope, and the predicted arm's direction is the compiler's. A kind whose outcome
+    field this does not know is refused rather than pooled into a total that would hide it.
+    """
+    m = a["measurement"]
+    if a["id"].startswith("p2|"):
+        return str(m["outcome"])
+    if a["id"].startswith("s2|"):
+        return str(m["value"])
+    if a["id"].startswith("m3|"):
+        return str(a["aggregated_label"]["label"])
+    if a["id"].startswith(("q3|", "r2|")):
+        return str(m["direction"])
+    raise rm.RefusedError(f"{a['id']}: nothing on this assertion says what it found")
+
+
+#: Which assay each assertion id's prefix came from. `r2|` is the compiled rule and is deliberately
+#: absent: it is predicted and is never reported beside the measured ones.
+ASSAY_OF_PREFIX = {
+    "p2|": "CRISPRi perturbation (ENCODE benchmark)",
+    "s2|": reader.EVIDENCE,
+    "m3|": mpra.EVIDENCE,
+    "q3|": eqtl.EVIDENCE,
+}
+
+A_COUNT_IS_NOT_A_MEASUREMENT = (
+    "a count of observations is not a measurement of what they say, and the two have been confused on "
+    "this project before: 198 loci where the model says nothing were quoted as 198 places it is wrong "
+    "when 66 of them held a measured decrease, and 48 measured links cleared a floor while only 21 "
+    "were answerable. So every count on this map carries what its own observations found, at its own "
+    "denominator"
+)
+
+OUTCOMES_ARE_NOT_AGREEMENT = (
+    "these breakdowns stand side by side and are never crossed. Each is at its own denominator, in its "
+    "own context, from its own assay, and no row here is read against another: nothing on this map "
+    "counts a locus whose readings point the same way, because two of these kinds measuring different "
+    "things in different contexts cannot agree or disagree in the first place"
+)
+
+
+def outcomes_by_assay(assertions: list[dict[str, Any]], payload_loci: list[dict[str, Any]]) -> dict[str, Any]:
+    """What each assay's observations on this map actually say, each at its own denominator.
+
+    The map's `counts` block says how many observations each assay contributed. That is a fact about
+    where the assays were pointed and says nothing about what any of them found, which is the error
+    this block exists to prevent. Every outcome is read off the assertion that carries it, by
+    `_outcome_of`, so no rule, threshold or call is applied here that was not already registered.
+
+    Two denominators are reported for each assay, because they answer different questions and have
+    been mixed up before: `observations`, one per assertion, and `loci_with_at_least_one_observation`,
+    one per locus of the map. A locus can hold observations of more than one outcome, so the locus rows
+    are counted independently and need not sum to the map's locus count; the block says so of itself.
+    """
+    by_locus: dict[str, set[str]] = {}
+    for locus in payload_loci:
+        for aid in locus["assertions"]:
+            by_locus.setdefault(aid, set()).add(locus["id"])
+
+    blocks: dict[str, Any] = {}
+    for prefix, label in ASSAY_OF_PREFIX.items():
+        mine = [a for a in assertions if a["id"].startswith(prefix)]
+        obs: Counter[str] = Counter()
+        loci_of: dict[str, set[str]] = {}
+        for a in mine:
+            o = _outcome_of(a)
+            obs[o] += 1
+            loci_of.setdefault(o, set()).update(by_locus.get(a["id"], set()))
+        blocks[label] = {
+            "status": "observed",
+            "observations": len(mine),
+            "what_they_found": dict(sorted(obs.items())),
+            "loci_with_at_least_one_observation": {o: len(ids) for o, ids in sorted(loci_of.items())},
+            "loci_rows_do_not_sum": (
+                "a locus can carry observations of more than one outcome, so these rows are counted "
+                "independently and do not sum to the map's locus count"
+            ),
+            "outcome_field": OUTCOME_FIELD[prefix],
+        }
+
+    pred = [a for a in assertions if a["status"] == "predicted"]
+    predicted: Counter[str] = Counter()
+    bases = sorted({a["basis"] for a in pred})
+    for a in pred:
+        predicted[_outcome_of(a)] += 1
+    return {
+        "measured": blocks,
+        "predicted": {
+            "status": "predicted",
+            "is_a_measurement": False,
+            "assertions": len(pred),
+            "what_the_compiler_said": dict(sorted(predicted.items())),
+            "basis": bases,
+            "never_observed": (
+                "a predicted quantity is never `observed` and is never counted beside a measured one. "
+                "It carries its own basis word for word, and it is not a check on the measurement at "
+                "the same locus"
+            ),
+        },
+        "a_count_is_not_a_measurement": A_COUNT_IS_NOT_A_MEASUREMENT,
+        "no_outcome_is_read_against_another": OUTCOMES_ARE_NOT_AGREEMENT,
+        "the_crispri_arm_holds_only_positives_by_construction": CRISPRI_ARM_IS_POSITIVES_ONLY,
+    }
+
+
+#: Why the CRISPRi outcomes on this map are the shape they are. A reader who takes the breakdown above
+#: for the screen's own direction mix would be reading a selection rule as a result.
+CRISPRI_ARM_IS_POSITIVES_ONLY = (
+    "a pair reaches this map only with the status `all_three_present`, and that status requires the "
+    "screen to have measured regulation at the pair. The pairs where it measured none are counted under "
+    "`no_measured_rule_the_screen_measured_no_regulation` and are not built, so the CRISPRi breakdown "
+    "above is over measured positives only. No rate, direction mix or share of significant effects may "
+    "be read off it, for the screen or for anything else: the selection chose them"
+)
+
+
+#: Where each kind's outcome is recorded, named so a reader can go to the field rather than trust this
+#: block, and so a kind cannot quietly start being summarised from somewhere else.
+OUTCOME_FIELD = {
+    "p2|": (
+        "measurement.outcome: the benchmark's own significance call and direction for this pair, as "
+        "`attribution.measured` recorded it. No threshold is applied here"
+    ),
+    "s2|": (
+        "measurement.value: reader v1's own call at the element's interval. `not_open_in_reader` means "
+        "not detected open at the reader's registered call, which is not closed"
+    ),
+    "m3|": (
+        "aggregated_label.label: the measured layer's declared per-cell aggregation over this "
+        "element's matched tiles, carried on each of that element's tile readings. It is NOT a reading "
+        "of the tile, so an element's label is counted once for each of its tiles in this cell, and "
+        "the tile's own observation is its log2(RNA/DNA) value"
+    ),
+    "q3|": (
+        "measurement.direction: the sign of GTEx's own slope for this variant-gene pair in this "
+        "tissue, over the retained significant set. No threshold is applied here"
+    ),
+    "r2|": (
+        "measurement.direction: which way the compiler's rule says the element acts on the gene it "
+        "named. Predicted, not measured"
+    ),
+}
 
 
 def _kinds_block(payload_loci: list[dict[str, Any]], kinds_per_locus: Counter[str]) -> dict[str, Any]:
