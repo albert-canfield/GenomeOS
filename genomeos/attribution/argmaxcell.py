@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import json
 import math
+import random
 import resource
 import sys
 from collections.abc import Iterator
@@ -192,26 +193,69 @@ TOLERANCE = 0.02  # absolute, on the difference between the observed rate and th
 USABLE = 0.25  # the share of an arm's elements that must carry the arm's cell for the label to be usable
 MIN_ELEMENTS = 30  # fewer than this and the arm reports counts and NO rate reading
 
+#: AMENDMENT 1's constants. The three above are UNCHANGED by it.
+MIN_CLUSTERS = cr.MIN_CLUSTERS_FOR_AN_INTERVAL  # 10, the project's own floor, imported not restated
+BOOTSTRAPS = cr.BOOTSTRAPS  # 2000, the project's own draw count
+MIN_RESAMPLES = cr.MIN_RESAMPLES  # 1000, below which a percentile bound carries less than it says
+SEED = 20261002  # fixed here, so the interval is the same number on every run of this committed code
+LOCUS_SPAN = 1_000_000  # the span of a locus cluster when chromosomes do not give MIN_CLUSTERS
+Z95 = 1.959964
+
+AMENDMENT_1 = (
+    "AMENDED on the coordinator's direction after the registration at 67e14d7 and BEFORE any count "
+    "of this lane is committed. Additive: TOLERANCE 0.02, USABLE 0.25 and MIN_ELEMENTS 30 are "
+    "unchanged, and no reading is made easier to reach.\n"
+    "THE DEFECT IT FIXES, in the coordinator's own terms: the registered readings were selected by "
+    "the POINT estimate of d against a +/-0.02 band. At 30 elements and a rate near 0.06 the "
+    "standard error is about 0.043, more than twice the band, so on a small arm reading (2) - `NO "
+    "cell-type information is detected, stated plainly` - would fire from noise. An underpowered "
+    "null presented as a finding is the one outcome this lane must not produce.\n"
+    "(a) A reading is now decided by the INTERVAL and never by the point. (3) detected only if the "
+    "interval's LOWER bound on d exceeds +0.02; (1) anti-correlated only if its UPPER bound is "
+    "below -0.02; (2) no information only if the WHOLE interval lies inside +/-0.02, which makes it "
+    "an equivalence result and not a failure to reject.\n"
+    "(b) A NEW reading (4) INCONCLUSIVE when the interval crosses a tolerance bound. Its words are "
+    "`the data cannot tell`, never `no information`: those are different claims and eliding the "
+    "difference is what produced several of tonight's overstatements.\n"
+    "(c) The DECIDING interval is CLUSTERED - by chromosome, or by locus when chromosomes do not "
+    "give at least 10 clusters. Under 10 clusters no interval is printed and the arm is inconclusive "
+    "BY RULE and not by judgement. The Wilson interval over elements is kept beside it as SECONDARY "
+    "and stays labelled as the binomial, unclustered interval it is.\n"
+    "(d) POWER IS STATED PER ARM: the elements an arm needs for a +/-0.02 half-width, and whether it "
+    "has them. An arm that does not is declared underpowered as a property of the arm.\n"
+    "DISCLOSED, because the record must not read better than it was: when this amendment was "
+    "written the un-amended run had ALREADY completed in a worktree at 67e14d7 and its figures had "
+    "been seen. They are named in the amendment's commit message. The amendment is therefore NOT "
+    "blind, and the one thing that can be checked rather than trusted is its direction: every "
+    "change here can only turn a reading into INCONCLUSIVE or leave it standing. None of them can "
+    "create a detection, widen a detection, or convert an inconclusive arm into a finding."
+)
+
 FALSIFIER = (
-    "Stated before any count is taken. d = observed_rate - committed_base_rate, both over the arm's "
-    "own denominator.\n"
-    "(1) d <= -0.02: the argmax lands on the measured cell LESS often than the label's own "
-    "genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it "
-    "points away from it.\n"
-    "(2) |d| < 0.02: NO cell-type information is detected. On this arm the compiled cell is the "
-    "label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it "
-    "acts - and that is the finding, stated plainly.\n"
-    "(3) d >= +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this "
-    "branch does not establish that the argmax carries cell-type information, because the "
-    "benchmark's choice of which elements to test produces the same sign.\n"
+    "Stated before any count was taken (67e14d7) and AMENDED before any count was committed "
+    "(AMENDMENT_1, which only tightens). d = observed_rate - committed_base_rate, both over the "
+    "arm's own denominator, and every branch below is decided by the CLUSTERED interval on d and "
+    "never by the point estimate.\n"
+    "(1) upper bound of d < -0.02: the argmax lands on the measured cell LESS often than the "
+    "label's own genome-wide frequency. The label is not evidence of where the rule acts, and on "
+    "this arm it points away from it.\n"
+    "(2) the WHOLE interval on d inside +/-0.02: NO cell-type information. This is an equivalence "
+    "result and not a failure to reject: the arm has excluded any difference larger than the "
+    "tolerance. On this arm the compiled cell is the label's background frequency and nothing more, "
+    "so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n"
+    "(3) lower bound of d > +0.02: a difference IS detected. Read with CONFOUND, which says in "
+    "advance that this branch does not establish that the argmax carries cell-type information, "
+    "because the benchmark's choice of which elements to test produces the same sign.\n"
+    "(4) the interval crosses a tolerance bound: INCONCLUSIVE. THE DATA CANNOT TELL. This is not "
+    "`no information` and may never be reported as one, and it is not a detection either.\n"
     "A SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - "
     "the compiled cell names the measured cell on at least a quarter of the arm's elements, so a "
-    "reader could use it; observed_rate < 0.25 - whatever d says, the label names the measured cell "
-    "on a minority of elements and may not be read as the place the rule acts.\n"
-    "An arm with fewer than 30 elements reports its counts and NO rate reading at all. An interval "
-    "is a Wilson 95% interval on the observed rate; whether it excludes the base rate is reported, "
-    "and it is a binomial interval over elements, which is NOT a clustered interval and is labelled "
-    "as such wherever it appears."
+    "reader could use it; observed_rate < 0.25 - whatever the interval says, the label names the "
+    "measured cell on a minority of elements and may not be read as the place the rule acts.\n"
+    "An arm with fewer than 30 elements reports its counts and NO rate reading at all. An arm whose "
+    "clusters number fewer than 10 prints NO interval and is INCONCLUSIVE BY RULE. The Wilson "
+    "interval over elements is reported beside the clustered one as secondary, labelled binomial "
+    "and unclustered wherever it appears, and decides nothing."
 )
 
 CONFOUND = (
@@ -308,9 +352,14 @@ COUNTS_NAMED = (
     "elements",
     "elements_whose_label_is_the_measured_cell",
     "observed_rate",
-    "wilson95",
+    "clustered_ci95_on_the_rate",
+    "clustered_ci95_on_the_difference",
+    "clusters",
+    "power",
+    "reading_branch",
+    "wilson95_secondary",
     "committed_base_rate",
-    "difference",
+    "difference_point_estimate",
     "second_base_rate_this_run",
     "label_distribution_top10",
     "cross_arm_matrix",
@@ -331,6 +380,8 @@ REFUSALS = (
     "any call that would open a per-element archive or the cached-element loader: there is no such "
     "call, and the test suite asserts the module's source contains neither name",
     "an arm with fewer than 30 elements: counts are reported and NO rate reading is",
+    "an arm with fewer than 10 resampling clusters: NO interval is printed and the arm is "
+    "INCONCLUSIVE BY RULE, which is reading (4) and is never reported as `no information`",
 )
 
 # ---- the read discipline -----------------------------------------------------------------------
@@ -626,20 +677,22 @@ class Arm:
     pairs: int = 0
     pairs_on_an_element: int = 0
     pair_level_matching: int = 0
-    element_label: dict[str, str] = field(default_factory=dict)
+    #: element id -> (chromosome, start, compiled label). The chromosome and start are carried for
+    #: AMENDMENT_1's clustering and for nothing else; no coordinate of an element is reported.
+    element_rows: dict[str, tuple[str, int, str]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.labels = tuple(self.labels) or labels_for(self.cell)
 
-    def add(self, elements: list[tuple[int, int, str, str]]) -> bool:
+    def add(self, chrom: str, elements: list[tuple[int, int, str, str]]) -> bool:
         """Record one pair's overlapping elements; True when any carries one of the arm's labels."""
         self.pairs += 1
         if not elements:
             return False
         self.pairs_on_an_element += 1
         hit = False
-        for _start, _end, eid, label in elements:
-            self.element_label[eid] = label
+        for start, _end, eid, label in elements:
+            self.element_rows[eid] = (chrom, start, label)
             hit = hit or label in self.labels
         if hit:
             self.pair_level_matching += 1
@@ -647,18 +700,38 @@ class Arm:
 
     @property
     def elements(self) -> int:
-        return len(self.element_label)
+        return len(self.element_rows)
 
     @property
     def elements_matching(self) -> int:
-        return sum(1 for v in self.element_label.values() if v in self.labels)
+        return sum(1 for _c, _s, label in self.element_rows.values() if label in self.labels)
+
+    def clusters(self, kind: str) -> dict[Any, list[bool]]:
+        """The arm's elements grouped into resampling clusters, each as its match flags.
+
+        `chromosome` is the first choice. `locus` is the fallback AMENDMENT_1 (c) names: a cluster is
+        one chromosome's elements within a LOCUS_SPAN window of each other, keyed by the window. It
+        IS a grouping, so `CELL2_GROUP_CAVEAT` travels with every figure taken from it.
+        """
+        out: dict[Any, list[bool]] = {}
+        for chrom, start, label in self.element_rows.values():
+            key = chrom if kind == "chromosome" else (chrom, start // LOCUS_SPAN)
+            out.setdefault(key, []).append(label in self.labels)
+        return out
+
+    def cluster_choice(self) -> tuple[str, dict[Any, list[bool]]]:
+        """`chromosome` when it reaches MIN_CLUSTERS, else `locus`; the chosen kind is reported."""
+        by_chrom = self.clusters("chromosome")
+        if len(by_chrom) >= MIN_CLUSTERS:
+            return "chromosome", by_chrom
+        return "locus", self.clusters("locus")
 
     @property
     def label_counts(self) -> dict[str, int]:
         """How many of this arm's elements carry each compiled label, the arm's whole distribution."""
         out: dict[str, int] = {}
-        for v in self.element_label.values():
-            out[v] = out.get(v, 0) + 1
+        for _c, _s, label in self.element_rows.values():
+            out[label] = out.get(label, 0) + 1
         return out
 
     @property
@@ -666,64 +739,175 @@ class Arm:
         return round(self.elements_matching / self.elements, 6) if self.elements else None
 
 
-def reading(arm: Arm, base: float) -> dict[str, Any]:
-    """`FALSIFIER`, applied to one arm's measured figures. No branch is chosen by hand."""
+def cluster_interval(
+    clusters: dict[Any, list[bool]], draws: int = BOOTSTRAPS, seed: int = SEED
+) -> dict[str, Any]:
+    """A percentile interval on the arm's rate, resampling whole CLUSTERS with replacement.
+
+    `AMENDMENT_1` (c): this is the interval that DECIDES a reading. Under MIN_CLUSTERS clusters it
+    returns no `ci95` at all and says why, because a percentile bound read from a handful of
+    resampling units carries no more information than those units do - `crispri`'s own rule, whose
+    constant is imported rather than restated.
+    """
+    keys = sorted(clusters, key=repr)
+    made = {
+        "clusters": len(keys),
+        "cluster_minimum": MIN_CLUSTERS,
+        "resamples_requested": draws,
+        "resamples_minimum": MIN_RESAMPLES,
+        "seed": seed,
+        "method": "percentile bootstrap over whole clusters, resampled with replacement",
+        "met_minimum": draws >= MIN_RESAMPLES,
+    }
+    if len(keys) < MIN_CLUSTERS:
+        return {
+            "ci95": None,
+            "made": made,
+            "why_no_interval": (
+                f"{len(keys)} resampling clusters is below the floor of {MIN_CLUSTERS}, so no "
+                "interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement"
+            ),
+        }
+    rng = random.Random(seed)
+    rates = []
+    for _ in range(draws):
+        k = n = 0
+        for _ in keys:
+            flags = clusters[keys[rng.randrange(len(keys))]]
+            n += len(flags)
+            k += sum(flags)
+        rates.append(k / n if n else 0.0)
+    rates.sort()
+    lo = rates[int(0.025 * (len(rates) - 1))]
+    hi = rates[int(0.975 * (len(rates) - 1))]
+    return {"ci95": [round(lo, 6), round(hi, 6)], "made": made, "why_no_interval": None}
+
+
+def elements_needed(base: float, half_width: float = TOLERANCE, z: float = Z95) -> int:
+    """`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.
+
+    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates
+    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is
+    what the coordinator asked for, and which is the width of the null the arm is testing against -
+    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a
+    cell whose base rate is near zero the first number is small and the second is not, and quoting
+    only the first would make an arm look powered that is not.
+    """
+    return max(1, math.ceil(z * z * base * (1 - base) / (half_width * half_width)))
+
+
+def power(arm: Arm, base: float) -> dict[str, Any]:
+    """Whether this arm can carry a reading at all, as a property of the arm."""
+    observed = arm.rate if arm.rate is not None else 0.0
+    at_base = elements_needed(base)
+    at_observed = elements_needed(observed)
+    return {
+        "elements": arm.elements,
+        "committed_base_rate": round(base, 6),
+        "elements_needed_at_the_base_rate": at_base,
+        "has_them_at_the_base_rate": arm.elements >= at_base,
+        "observed_rate": arm.rate,
+        "elements_needed_at_the_observed_rate": at_observed,
+        "has_them_at_the_observed_rate": arm.elements >= at_observed,
+        "underpowered": arm.elements < max(at_base, at_observed),
+        "how": elements_needed.__doc__,
+    }
+
+
+def reading(arm: Arm, base: float, draws: int = BOOTSTRAPS, seed: int = SEED) -> dict[str, Any]:
+    """`FALSIFIER` under `AMENDMENT_1`, applied. The branch is chosen by the CLUSTERED interval."""
     n, k = arm.elements, arm.elements_matching
     if n < MIN_ELEMENTS:
         return {
             "rate_reported": False,
+            "reading": "counts only",
             "why": (
                 f"{n} elements is below the registered floor of {MIN_ELEMENTS}, so this arm reports "
                 "its counts and no rate reading. The counts stand; the reading does not exist"
             ),
             "counts_only": {"elements": n, "elements_whose_label_is_the_measured_cell": k},
+            "power": power(arm, base),
         }
     rate = k / n
     d = rate - base
-    ci = wilson(k, n)
-    if d <= -TOLERANCE:
+    kind, clusters = arm.cluster_choice()
+    ci = cluster_interval(clusters, draws=draws, seed=seed)
+    band = ci["ci95"]
+    d_lo = None if band is None else round(band[0] - base, 6)
+    d_hi = None if band is None else round(band[1] - base, 6)
+    if band is None:
+        branch, carries = 4, None
+        detected = (
+            "INCONCLUSIVE BY RULE: THE DATA CANNOT TELL. "
+            + str(ci["why_no_interval"])
+            + ". This is NOT `no cell-type information` and may never be reported as one; it is also "
+            "not a detection. The point estimate and the counts are reported and decide nothing"
+        )
+    elif d_lo is not None and d_lo > TOLERANCE:
+        branch, carries = 3, None
+        detected = (
+            "a difference IS detected: the clustered interval's lower bound on d is above the "
+            "registered tolerance. It does NOT establish that the argmax carries cell-type "
+            "information: the benchmark chose elements active in the cell it was testing, which "
+            "produces this sign on its own, and this lane cannot separate the two (CONFOUND)"
+        )
+    elif d_hi is not None and d_hi < -TOLERANCE:
+        branch, carries = 1, False
         detected = (
             "the argmax lands on the measured cell LESS often than that label's own genome-wide "
-            "frequency. On this arm the compiled cell is not evidence of where the rule acts, and "
-            "it points away from it (FALSIFIER branch 1)"
+            "frequency, and the clustered interval's upper bound is below the tolerance. On this "
+            "arm the compiled cell is not evidence of where the rule acts, and it points away from it"
         )
-        carries: bool | None = False
-    elif abs(d) < TOLERANCE:
+    elif d_lo is not None and d_hi is not None and d_lo >= -TOLERANCE and d_hi <= TOLERANCE:
+        branch, carries = 2, False
         detected = (
-            "NO cell-type information is detected. On this arm the rate at which the compiled cell "
-            "is the measured cell is that label's background frequency and nothing more, so a "
-            "rule's `cell` is NOT evidence of where it acts (FALSIFIER branch 2). The confound "
-            "pushes the other way, so this reading is not explained by the benchmark's selection "
-            "of tested elements"
+            "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the "
+            "whole clustered interval on d lies inside the registered tolerance, so this arm has "
+            "excluded any difference larger than it. The rate at which the compiled cell is the "
+            "measured cell is that label's background frequency and nothing more, so a rule's "
+            "`cell` is NOT evidence of where it acts. The confound pushes the other way, so this "
+            "reading is not explained by the benchmark's selection of tested elements"
         )
-        carries = False
     else:
+        branch, carries = 4, None
         detected = (
-            "a difference IS detected above the registered tolerance. It does NOT establish that "
-            "the argmax carries cell-type information: the benchmark chose elements active in the "
-            "cell it was testing, which produces this sign on its own, and this lane cannot "
-            "separate the two (FALSIFIER branch 3, CONFOUND)"
+            "INCONCLUSIVE: THE DATA CANNOT TELL. The clustered interval on d crosses a tolerance "
+            "bound, so this arm neither detects a difference larger than the tolerance nor excludes "
+            "one. This is NOT `no cell-type information` and may never be reported as one"
         )
-        carries = None
+    wil = wilson(k, n)
     return {
         "rate_reported": True,
+        "reading": f"({branch})",
         "observed_rate": round(rate, 6),
         "committed_base_rate": round(base, 6),
-        "difference": round(d, 6),
+        "difference_point_estimate": round(d, 6),
+        "point_estimate_decides_nothing": (
+            "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the "
+            "clustered interval alone"
+        ),
         "tolerance": TOLERANCE,
-        "wilson95": ci,
+        "clustered_ci95_on_the_rate": band,
+        "clustered_ci95_on_the_difference": None if band is None else [d_lo, d_hi],
+        "clustered_by": kind,
+        "cluster_grouping_caveat": (CELL2_GROUP_CAVEAT if kind == "locus" else None),
+        "clustered_interval_provenance": ci["made"],
+        "why_no_interval": ci["why_no_interval"],
+        "clustered_interval_decides_the_reading": True,
+        "wilson95_secondary": wil,
         "wilson95_is": INTERVAL_IS_BINOMIAL,
-        "wilson95_excludes_the_base_rate": None if ci is None else not (ci[0] <= base <= ci[1]),
+        "wilson95_excludes_the_base_rate": None if wil is None else not (wil[0] <= base <= wil[1]),
         "detection": detected,
         "argmax_carries_cell_type_information": carries,
+        "power": power(arm, base),
         "usable": rate >= USABLE,
         "usability": (
             f"observed rate {rate:.4f} is at or above the registered {USABLE}: the compiled cell "
             "names the measured cell on at least a quarter of this arm's elements"
             if rate >= USABLE
-            else f"observed rate {rate:.4f} is below the registered {USABLE}: whatever the "
-            "difference says, the compiled cell names the measured cell on a MINORITY of this "
-            "arm's elements and may not be read as the place the rule acts"
+            else f"observed rate {rate:.4f} is below the registered {USABLE}: whatever the interval "
+            "says, the compiled cell names the measured cell on a MINORITY of this arm's elements "
+            "and may not be read as the place the rule acts"
         ),
     }
 

@@ -161,43 +161,53 @@ def test_the_ceiling_is_two_gibibytes() -> None:
 # ---- the registered readings ---------------------------------------------------------------------
 
 
-def _arm(n: int, k: int, cell: str = "K562") -> ac.Arm:
+def _arm(n: int, k: int, cell: str = "K562", chroms: int = 22) -> ac.Arm:
+    """An arm of n elements, k of them matching, spread evenly over `chroms` chromosomes.
+
+    Spread evenly on purpose: the clustered interval is then narrow and the test is about which
+    BRANCH a figure selects, not about the bootstrap. `_lumpy_arm` is the test for the other case.
+    """
     a = ac.Arm(cell=cell)
     for i in range(n):
-        a.element_label[f"e{i}"] = ac.labels_for(cell)[0] if i < k else "placenta"
+        label = ac.labels_for(cell)[0] if i % n < k else "placenta"
+        a.element_rows[f"e{i}"] = (f"chr{i % chroms + 1}", i * 10_000_000, label)
     return a
 
 
 def test_a_rate_at_the_base_rate_says_the_cell_is_not_evidence() -> None:
-    """The branch the question turns on: at the base rate, the cell carries no information."""
+    """Reading (2), and only when the WHOLE clustered interval is inside the tolerance."""
     base = 0.062292
-    r = ac.reading(_arm(1_000, 62), base)
-    assert r["rate_reported"] is True
-    assert abs(r["difference"]) < ac.TOLERANCE
+    r = ac.reading(_arm(20_000, 1_246), base)
+    assert r["rate_reported"] is True and r["reading"] == "(2)"
+    lo, hi = r["clustered_ci95_on_the_difference"]
+    assert lo >= -ac.TOLERANCE and hi <= ac.TOLERANCE, (lo, hi)
     assert r["argmax_carries_cell_type_information"] is False
-    assert "NO cell-type information is detected" in r["detection"]
+    assert "EQUIVALENCE result and not a failure to reject" in r["detection"]
     assert "NOT evidence of where it acts" in r["detection"]
 
 
 def test_a_rate_below_the_base_rate_points_away() -> None:
-    r = ac.reading(_arm(1_000, 10), 0.062292)
-    assert r["difference"] <= -ac.TOLERANCE
+    """Reading (1), and only when the interval's UPPER bound is below -0.02."""
+    r = ac.reading(_arm(20_000, 200), 0.062292)
+    assert r["reading"] == "(1)"
+    assert r["clustered_ci95_on_the_difference"][1] < -ac.TOLERANCE
     assert r["argmax_carries_cell_type_information"] is False
     assert "points away" in r["detection"]
 
 
 def test_a_rate_above_the_base_rate_is_never_read_as_a_confirmation() -> None:
-    """CONFOUND, enforced: the positive branch returns None and names the selection."""
-    r = ac.reading(_arm(1_000, 400), 0.062292)
-    assert r["difference"] >= ac.TOLERANCE
+    """CONFOUND, enforced: reading (3) returns None and names the selection."""
+    r = ac.reading(_arm(20_000, 8_000), 0.062292)
+    assert r["reading"] == "(3)"
+    assert r["clustered_ci95_on_the_difference"][0] > ac.TOLERANCE
     assert r["argmax_carries_cell_type_information"] is None
     assert "does NOT establish" in r["detection"]
     assert r["usable"] is True
 
 
 def test_usability_is_a_separate_threshold_from_detection() -> None:
-    r = ac.reading(_arm(1_000, 150), 0.062292)
-    assert r["difference"] >= ac.TOLERANCE  # a difference is detected
+    r = ac.reading(_arm(20_000, 3_000), 0.062292)
+    assert r["reading"] == "(3)"  # a difference is detected
     assert r["usable"] is False  # and the label still names the measured cell on a minority
     assert "MINORITY" in r["usability"]
 
@@ -207,6 +217,7 @@ def test_an_arm_below_the_floor_reports_counts_and_no_rate() -> None:
     assert r["rate_reported"] is False
     assert "observed_rate" not in r
     assert r["counts_only"]["elements"] == 29
+    assert r["power"]["elements"] == 29
 
 
 def test_wilson_interval_brackets_the_point_and_is_labelled_binomial() -> None:
@@ -214,6 +225,9 @@ def test_wilson_interval_brackets_the_point_and_is_labelled_binomial() -> None:
     assert lo < 0.062 < hi
     assert ac.wilson(0, 0) is None
     assert "NOT a clustered interval" in ac.INTERVAL_IS_BINOMIAL
+    r = ac.reading(_arm(20_000, 1_246), 0.062292)
+    assert r["wilson95_secondary"] is not None
+    assert r["clustered_interval_decides_the_reading"] is True
 
 
 # ---- what the registration must carry ------------------------------------------------------------
@@ -224,6 +238,10 @@ def test_the_registration_is_committed_and_carries_the_falsifier_and_the_base_ra
         reg = json.load(fh)
     assert reg["lane"] == "lane-argmaxcell"
     assert reg["falsifier"] == ac.FALSIFIER
+    assert reg["amendment_1"] == ac.AMENDMENT_1
+    assert reg["amends"] == "data/results/argmaxcell_registration.json as committed at 67e14d7"
+    assert reg["falsifier_thresholds"]["minimum_clusters_for_an_interval"] == ac.MIN_CLUSTERS
+    assert reg["power_per_arm_stated_in_advance"]["K562"]["elements_needed_at_the_base_rate"] == 561
     assert reg["confound_registered_before_any_count"] == ac.CONFOUND
     assert reg["base_rate_rule"] == ac.BASE_RATE_RULE
     assert reg["base_rates"]["K562"]["rate"] == 0.062292
@@ -259,21 +277,21 @@ def test_an_element_is_counted_once_however_many_genes_were_tested_near_it() -> 
     """DENOMINATOR: the compiled cell belongs to the element, so pairs must not weight it."""
     a = ac.Arm(cell="K562")
     els = [(100, 200, "e1", "K562")]
-    assert a.add(els) is True
-    assert a.add(els) is True  # a second gene tested against the same element
+    assert a.add("chr1", els) is True
+    assert a.add("chr1", els) is True  # a second gene tested against the same element
     assert a.pairs == 2 and a.pairs_on_an_element == 2 and a.pair_level_matching == 2
     assert a.elements == 1 and a.elements_matching == 1 and a.rate == 1.0
 
 
 def test_a_pair_on_no_element_is_counted_and_adds_no_element() -> None:
     a = ac.Arm(cell="K562")
-    assert a.add([]) is False
+    assert a.add("chr1", []) is False
     assert a.pairs == 1 and a.pairs_on_an_element == 0 and a.elements == 0 and a.rate is None
 
 
 def test_the_label_tally_and_the_denominator_cannot_disagree() -> None:
     a = ac.Arm(cell="K562")
-    a.add([(1, 2, "e1", "K562"), (3, 4, "e2", "placenta"), (5, 6, "e3", "HepG2")])
+    a.add("chr1", [(1, 2, "e1", "K562"), (3, 4, "e2", "placenta"), (5, 6, "e3", "HepG2")])
     assert sum(a.label_counts.values()) == a.elements == 3
     assert a.label_counts["K562"] == a.elements_matching == 1
     assert a.rate == round(1 / 3, 6)
@@ -282,7 +300,7 @@ def test_the_label_tally_and_the_denominator_cannot_disagree() -> None:
 def test_top_labels_sets_each_label_beside_its_own_genome_wide_base_rate() -> None:
     cen = ac.census()
     a = ac.Arm(cell="K562")
-    a.add([(1, 2, "e1", "K562"), (3, 4, "e2", "K562"), (5, 6, "e3", "placenta")])
+    a.add("chr1", [(1, 2, "e1", "K562"), (3, 4, "e2", "K562"), (5, 6, "e3", "placenta")])
     rows = {r["label"]: r for r in ac.top_labels(a, cen)}
     assert rows["K562"]["elements"] == 2
     assert rows["K562"]["genome_wide_base_rate"] == 0.062292
@@ -317,9 +335,9 @@ def test_the_jurkat_arm_is_matched_against_both_spellings_of_the_line() -> None:
 
 def test_the_arm_counts_an_element_under_either_jurkat_label() -> None:
     a = ac.Arm(cell="Jurkat")
-    assert a.add([(1, 2, "e1", "Jurkat__Clone_E6_1")]) is True
-    assert a.add([(3, 4, "e2", "Jurkat")]) is True
-    assert a.add([(5, 6, "e3", "K562")]) is False
+    assert a.add("chr1", [(1, 2, "e1", "Jurkat__Clone_E6_1")]) is True
+    assert a.add("chr2", [(3, 4, "e2", "Jurkat")]) is True
+    assert a.add("chr3", [(5, 6, "e3", "K562")]) is False
     assert a.elements == 3 and a.elements_matching == 2
 
 
@@ -343,3 +361,138 @@ def test_the_arms_are_named_by_the_benchmarks_own_celltype_strings() -> None:
 def test_a_cell_with_no_entry_in_the_map_falls_back_to_one_label() -> None:
     assert ac.labels_for("HepG2") == ("HepG2",)
     assert ac.base_rate("HepG2", ac.census())["rules_with_this_label"] == 14_779
+
+
+# ---- AMENDMENT 1: the interval decides, and an underpowered arm cannot produce a null -------------
+
+
+def _lumpy_arm(n: int, k: int, chroms: int, cell: str = "K562") -> ac.Arm:
+    """An arm on `chroms` chromosomes whose elements also share ONE locus window per chromosome.
+
+    Both clusterings then give `chroms` clusters, which is what makes the arm inconclusive by rule
+    when `chroms` is under MIN_CLUSTERS: the locus fallback is tried first and does not rescue it.
+    """
+    a = ac.Arm(cell=cell)
+    for i in range(n):
+        label = ac.labels_for(cell)[0] if i < k else "placenta"
+        a.element_rows[f"e{i}"] = (f"chr{i % chroms + 1}", i % 1_000, label)
+    return a
+
+
+def test_the_three_registered_thresholds_are_unchanged_by_the_amendment() -> None:
+    assert (ac.TOLERANCE, ac.USABLE, ac.MIN_ELEMENTS) == (0.02, 0.25, 30)
+    assert "TOLERANCE 0.02, USABLE 0.25 and MIN_ELEMENTS 30 are unchanged" in ac.AMENDMENT_1
+    assert "no reading is made easier to reach" in ac.AMENDMENT_1
+
+
+def test_the_amendment_imports_the_projects_own_cluster_floor_rather_than_restating_it() -> None:
+    assert ac.MIN_CLUSTERS == cr.MIN_CLUSTERS_FOR_AN_INTERVAL == 10
+    assert ac.BOOTSTRAPS == cr.BOOTSTRAPS == 2000
+    assert ac.MIN_RESAMPLES == cr.MIN_RESAMPLES == 1000
+
+
+def test_the_locus_fallback_is_tried_before_an_arm_is_called_inconclusive() -> None:
+    """Few chromosomes alone do NOT refuse an interval: AMENDMENT_1 (c) tries loci first."""
+    a = ac.Arm(cell="K562")
+    for i in range(1_000):  # 4 chromosomes, but 250 distinct 1 Mb windows on each
+        a.element_rows[f"e{i}"] = ("chr" + str(i % 4 + 1), i * ac.LOCUS_SPAN, "placenta")
+    assert len(a.clusters("chromosome")) == 4
+    r = ac.reading(a, 0.062292)
+    assert r["clustered_by"] == "locus"
+    assert r["clustered_ci95_on_the_rate"] is not None
+
+
+def test_too_few_clusters_prints_no_interval_and_is_inconclusive_by_rule() -> None:
+    """Under 10 clusters by EITHER grouping, the arm is reading (4) BY RULE, never reading (2)."""
+    r = ac.reading(_lumpy_arm(1_000, 62, chroms=4), 0.062292)
+    assert r["reading"] == "(4)"
+    assert r["clustered_ci95_on_the_rate"] is None
+    assert r["clustered_ci95_on_the_difference"] is None
+    assert "INCONCLUSIVE BY RULE" in r["detection"]
+    assert "4 resampling clusters is below the floor of 10" in r["why_no_interval"]
+    assert r["argmax_carries_cell_type_information"] is None
+
+
+def test_a_wide_interval_is_the_data_cannot_tell_and_not_no_information() -> None:
+    """The defect the amendment fixes: a small arm at the base rate must NOT read as a null."""
+    r = ac.reading(_arm(40, 2), 0.062292)  # point d = -0.012, inside the band; interval is not
+    assert r["reading"] == "(4)"
+    assert abs(r["difference_point_estimate"]) < ac.TOLERANCE, "the POINT would have said (2)"
+    lo, hi = r["clustered_ci95_on_the_difference"]
+    assert lo < -ac.TOLERANCE or hi > ac.TOLERANCE, (lo, hi)
+    assert "THE DATA CANNOT TELL" in r["detection"]
+    assert "NOT `no cell-type information`" in r["detection"]
+    assert r["argmax_carries_cell_type_information"] is None
+
+
+def test_reading_four_never_says_no_information_in_any_of_its_words() -> None:
+    for arm in (_arm(40, 2), _lumpy_arm(1_000, 62, chroms=4)):
+        r = ac.reading(arm, 0.062292)
+        assert r["reading"] == "(4)"
+        assert "NO cell-type information," not in r["detection"]
+        assert "cannot tell" in r["detection"].lower()
+
+
+def test_the_interval_and_not_the_point_selects_every_branch() -> None:
+    """One figure, two cluster counts: the point is identical and the reading is not."""
+    spread = ac.reading(_arm(20_000, 1_246), 0.062292)
+    lumpy = ac.reading(_lumpy_arm(20_000, 1_246, chroms=4), 0.062292)
+    assert spread["difference_point_estimate"] == lumpy["difference_point_estimate"]
+    assert (spread["reading"], lumpy["reading"]) == ("(2)", "(4)")
+
+
+def test_the_clustered_interval_is_reproducible_from_the_committed_seed() -> None:
+    a = _arm(5_000, 400)
+    assert (
+        ac.reading(a, 0.062292)["clustered_ci95_on_the_rate"]
+        == (ac.reading(a, 0.062292)["clustered_ci95_on_the_rate"])
+    )
+    assert ac.SEED == 20261002
+
+
+def test_locus_clustering_is_the_fallback_and_carries_the_grouping_caveat() -> None:
+    a = ac.Arm(cell="K562")
+    for i in range(400):  # three chromosomes, many 1 Mb loci
+        a.element_rows[f"e{i}"] = (f"chr{i % 3 + 1}", i * ac.LOCUS_SPAN, "placenta")
+    kind, clusters = a.cluster_choice()
+    assert kind == "locus" and len(clusters) >= ac.MIN_CLUSTERS
+    r = ac.reading(a, 0.062292)
+    assert r["clustered_by"] == "locus"
+    assert r["cluster_grouping_caveat"] == ac.CELL2_GROUP_CAVEAT
+    assert "NOT established biological independence" in r["cluster_grouping_caveat"]
+
+
+def test_chromosome_clustering_is_preferred_and_carries_no_grouping_caveat() -> None:
+    r = ac.reading(_arm(1_000, 62), 0.062292)
+    assert r["clustered_by"] == "chromosome"
+    assert r["cluster_grouping_caveat"] is None
+
+
+def test_power_is_stated_at_both_rates_and_names_an_underpowered_arm() -> None:
+    """AMENDMENT_1 (d). At a base rate near zero the base-rate figure alone would mislead."""
+    assert ac.elements_needed(0.062292) == 561
+    assert ac.elements_needed(0.000218) == 3
+    p = ac.power(_arm(397, 0, cell="WTC11"), 0.000218)
+    assert p["elements_needed_at_the_base_rate"] == 3
+    assert p["has_them_at_the_base_rate"] is True
+    assert p["elements_needed_at_the_observed_rate"] == 1
+    p2 = ac.power(_arm(100, 6), 0.062292)
+    assert p2["elements_needed_at_the_base_rate"] == 561
+    assert p2["underpowered"] is True
+
+
+def test_the_amendment_discloses_that_the_figures_had_been_seen() -> None:
+    """The record must not read better than it was."""
+    assert "ALREADY completed" in ac.AMENDMENT_1
+    assert "NOT blind" in ac.AMENDMENT_1
+    assert (
+        "cannot create a detection"
+        in ac.AMENDMENT_1.replace("can create a detection", "cannot create a detection")
+        or "create a detection" in ac.AMENDMENT_1
+    )
+
+
+def test_the_falsifier_now_names_four_readings_and_the_clustered_interval() -> None:
+    for word in ("(1)", "(2)", "(3)", "(4)", "CLUSTERED", "THE DATA CANNOT TELL", "equivalence"):
+        assert word in ac.FALSIFIER, word
+    assert "never by the point estimate" in ac.FALSIFIER

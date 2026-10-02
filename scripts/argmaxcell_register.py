@@ -101,10 +101,32 @@ def payload() -> dict[str, Any]:
         "assigned_cell": getattr(dv2, "ASSIGNED_CELL", ""),
         # --- 1. the falsifier, before any count ---
         "falsifier": ac.FALSIFIER,
+        "amendment_1": ac.AMENDMENT_1,
+        "amends": "data/results/argmaxcell_registration.json as committed at 67e14d7",
         "falsifier_thresholds": {
             "tolerance_on_the_difference": ac.TOLERANCE,
             "usable_rate": ac.USABLE,
             "minimum_elements_for_a_rate": ac.MIN_ELEMENTS,
+            "unchanged_by_amendment_1": "all three above",
+            "minimum_clusters_for_an_interval": ac.MIN_CLUSTERS,
+            "bootstrap_draws": ac.BOOTSTRAPS,
+            "minimum_resamples": ac.MIN_RESAMPLES,
+            "bootstrap_seed": ac.SEED,
+            "locus_span_when_chromosomes_are_too_few": ac.LOCUS_SPAN,
+        },
+        "power_per_arm_stated_in_advance": {
+            cell: {
+                "committed_base_rate": rate["rate"],
+                "elements_needed_at_the_base_rate": ac.elements_needed(rate["rate"]),
+                "how": "z^2 p (1-p) / 0.02^2 at p = this arm's committed base rate. The arm's "
+                "element count is not known until the run, so whether it HAS them is decided then "
+                "and reported per arm; the number it must reach is fixed here",
+                "also_reported_after_the_run": "the same figure at the arm's OBSERVED rate, which "
+                "is the width its own interval actually has. For a cell whose base rate is near "
+                "zero the base-rate figure is small and the observed-rate figure is not, and "
+                "quoting only the first would make an underpowered arm look powered",
+            }
+            for cell, rate in rates.items()
         },
         "confound_registered_before_any_count": ac.CONFOUND,
         "cross_arm_check": ac.CROSS_ARM,
@@ -136,6 +158,12 @@ def payload() -> dict[str, Any]:
         "overlap_rule": ac.OVERLAP_RULE,
         "label_rule": ac.LABEL_RULE,
         "alias_rule": ac.ALIAS_RULE,
+        "interval_that_decides": (
+            "the CLUSTERED interval of AMENDMENT_1 (c): a percentile bootstrap over whole "
+            "chromosomes, or over 1 Mb loci when chromosomes do not reach 10 clusters, 2000 draws, "
+            "seed 20261002. Under 10 clusters no interval is printed and the arm is INCONCLUSIVE BY "
+            "RULE. The Wilson interval over elements is secondary and decides nothing"
+        ),
         "labels_for_each_arm": {c: list(ac.labels_for(c)) for c in ac.ARMS},
         "interval_is_binomial": ac.INTERVAL_IS_BINOMIAL,
         "grouping": ac.GROUPING,

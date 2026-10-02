@@ -97,7 +97,7 @@ def run(chroms: tuple[str, ...], arms: tuple[str, ...]) -> dict[str, Any]:
             if p.cell not in armed:
                 continue
             here["pairs"] += 1
-            armed[p.cell].add(ac.overlapping(table, starts, p.start, p.end))
+            armed[p.cell].add(chrom, ac.overlapping(table, starts, p.start, p.end))
         per_chrom[chrom] = here
         del table, starts
         peak = max(peak, ac.check_rss(chrom))
@@ -177,10 +177,14 @@ def verdict(armed: dict[str, ac.Arm], readings: dict[str, Any]) -> dict[str, Any
     `argmax_carries_cell_type_information` is `reading`'s own field and not a sentence chosen here.
     """
     read = {a: r for a, r in readings.items() if r.get("rate_reported")}
-    no_info = [a for a, r in read.items() if r["argmax_carries_cell_type_information"] is False]
-    unresolved = [a for a, r in read.items() if r["argmax_carries_cell_type_information"] is None]
+    no_info = [a for a, r in read.items() if r["reading"] == "(2)"]
+    anti = [a for a, r in read.items() if r["reading"] == "(1)"]
+    detected = [a for a, r in read.items() if r["reading"] == "(3)"]
+    cannot_tell = [a for a, r in read.items() if r["reading"] == "(4)"]
+    unresolved = detected + cannot_tell
     floor = [a for a, r in readings.items() if not r.get("rate_reported")]
     usable = [a for a, r in read.items() if r.get("usable")]
+    underpowered = [a for a, r in readings.items() if (r.get("power") or {}).get("underpowered")]
     if read and not unresolved:
         answer = (
             "NO. On every arm with a rate, the compiled cell is the measured cell at or below that "
@@ -195,6 +199,12 @@ def verdict(armed: dict[str, ac.Arm], readings: dict[str, Any]) -> dict[str, Any
             "it was testing, which produces this sign on its own; this lane cannot separate the two "
             "and does not claim to (CONFOUND). What can be said is the rate itself, with its "
             "denominator, and whether it clears the usability threshold"
+        )
+    elif cannot_tell and not (no_info or detected or anti):
+        answer = (
+            "THE DATA CANNOT TELL on any arm with a rate. Every clustered interval crosses a "
+            "tolerance bound, so no arm detects a difference larger than the tolerance and no arm "
+            "excludes one. This is NOT a negative result and may not be reported as one"
         )
     elif read:
         answer = (
@@ -211,13 +221,23 @@ def verdict(armed: dict[str, ac.Arm], readings: dict[str, Any]) -> dict[str, Any
     return {
         "written_after_the_counts": (
             "this block was written after the counts and is a reading of them. The branch each arm "
-            "takes was fixed BEFORE them, by FALSIFIER, and is applied by `argmaxcell.reading`; "
-            "nothing here chooses a sentence that a figure did not select"
+            "takes was fixed BEFORE them, by FALSIFIER under AMENDMENT_1, and is applied by "
+            "`argmaxcell.reading` from the CLUSTERED interval; nothing here chooses a sentence that "
+            "a figure did not select"
         ),
         "does_the_argmax_carry_cell_type_information": answer,
-        "arms_with_no_cell_type_information": sorted(no_info),
-        "arms_where_a_difference_is_detected_but_not_attributable": sorted(unresolved),
+        "arms_with_no_cell_type_information_reading_2": sorted(no_info),
+        "reading_2_is_an_equivalence_result": (
+            "an arm is in the list above only because its WHOLE clustered interval on d lies inside "
+            "the tolerance, so it has EXCLUDED a difference larger than the tolerance. An arm that "
+            "merely failed to show one is in `arms_the_data_cannot_tell_reading_4` and the two lists "
+            "must never be merged"
+        ),
+        "arms_anti_correlated_reading_1": sorted(anti),
+        "arms_where_a_difference_is_detected_but_not_attributable_reading_3": sorted(detected),
+        "arms_the_data_cannot_tell_reading_4": sorted(cannot_tell),
         "arms_below_the_element_floor": sorted(floor),
+        "arms_declared_underpowered": sorted(underpowered),
         "arms_whose_label_clears_the_usability_threshold": sorted(usable),
         "what_this_does_not_say": ac.VALIDATES_NOTHING,
         "cannot_establish": list(ac.CANNOT_ESTABLISH),
@@ -290,6 +310,7 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
         "denominator": ac.DENOMINATOR,
         "denominator_is_separate": ac.DENOMINATOR_IS_SEPARATE,
         "falsifier": ac.FALSIFIER,
+        "amendment_1": ac.AMENDMENT_1,
         "confound_registered_before_any_count": ac.CONFOUND,
         "base_rate_rule": ac.BASE_RATE_RULE,
         "base_rate_is_not_uniform": ac.BASE_RATE_IS_NOT_UNIFORM,
@@ -316,6 +337,12 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
                 "elements_whose_label_is_the_measured_cell": arm.elements_matching,
                 "observed_rate": arm.rate,
                 "reading": readings[c],
+                "power": readings[c]["power"],
+                "clusters": {
+                    "kind": arm.cluster_choice()[0],
+                    "count": len(arm.cluster_choice()[1]),
+                    "minimum": ac.MIN_CLUSTERS,
+                },
                 "label_distribution_top10": ac.top_labels(arm, cen),
             }
             for c, arm in armed.items()
@@ -394,6 +421,10 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
                 "reach": cr.REACH,
                 "arms": list(armed),
                 "rss_ceiling_bytes": ac.RSS_CEILING_BYTES,
+                "minimum_clusters_for_an_interval": ac.MIN_CLUSTERS,
+                "bootstrap_draws": ac.BOOTSTRAPS,
+                "bootstrap_seed": ac.SEED,
+                "locus_span": ac.LOCUS_SPAN,
                 "no_threshold_of_any_rule_is_set_or_moved": "MIN_EFFECT, the direction clauses and "
                 "every magnitude floor stay exactly as committed",
             },
@@ -446,7 +477,9 @@ def main() -> int:
             print(
                 f"  {cell:18} {row['elements_whose_label_is_the_measured_cell']:>5} / "
                 f"{row['elements']:<6} = {r['observed_rate']:.4f}  base {r['committed_base_rate']:.6f}"
-                f"  d {r['difference']:+.4f}  carries={r['argmax_carries_cell_type_information']}"
+                f"  d {r['difference_point_estimate']:+.4f}  dCI {r['clustered_ci95_on_the_difference']}"
+                f"  {r['clustered_by']}x{r['clustered_interval_provenance']['clusters']}"
+                f"  reading {r['reading']}  carries={r['argmax_carries_cell_type_information']}"
             )
         else:
             print(f"  {cell:18} {row['elements']:>5} elements: below the floor, no rate reported")
