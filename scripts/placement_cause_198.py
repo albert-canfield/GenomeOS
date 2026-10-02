@@ -426,7 +426,6 @@ def main() -> None:
         raise SystemExit(f"the classes sum to {sum(classes.values())}, not {len(target)}")
 
     r1 = resource.getrusage(resource.RUSAGE_SELF)
-    peak = r1.ru_maxrss if sys.platform == "darwin" else r1.ru_maxrss * 1024
     payload: dict[str, Any] = {
         "question": (
             "for each of the 198 independent loci that hold a measured CRISPRi perturbation and attach "
@@ -450,6 +449,38 @@ def main() -> None:
             "reused_code": reused_code(),
         },
         "assignment_rule": ASSIGNMENT_RULE,
+        "audit_a_dependency": {
+            "result": "data/results/placement_audit.json",
+            "status": (
+                "suspended: not yet reproduced (the coordinator, 2026-10-02). Its committed manifest "
+                "records one grouped input through `manifest.files_entry`, standing for 24 files, and "
+                "the manifest_rebuild of that time resolved an input by path while a group entry "
+                "records a label, so the group was reported unavailable with no file opened and the "
+                "result was excused rather than compared. The tool is fixed (`ebbded6`), but audit A's "
+                "manifest predates the `members` field, so it cannot be checked from its manifest "
+                "until its writer re-records it"
+            ),
+            "what_this_lane_reuses_from_it": (
+                "its classification and nothing else: CAUSES, CAUSE_MEANING, EXCLUSION and the order "
+                "they are tried in. A classification is not a figure and is not suspended; inventing a "
+                "second one would be worse than reusing this"
+            ),
+            "no_figure_of_its_is_carried_as_evidence": (
+                "every figure of audit A's that appears anywhere in this result was recomputed in this "
+                "run from the primary inputs, each recorded by its own path and never through "
+                "`files_entry`, and the recomputation is the gate "
+                "`audit_a_cascade_reproduced_on_its_own_661_positive_links`. The committed file is read "
+                "once, only to compare against. A reader who wants audit A's own figures as audit A's "
+                "should treat them as suspended until that result is re-recorded; the same counts as "
+                "stated here are this run's"
+            ),
+            "classes_depending_on_a_figure_this_run_cannot_verify": [],
+            "why_the_reconciliation_matters_more_for_this": (
+                "198 loci and 387 pairs are different numbers on different denominators, and neither "
+                "may stand in for the other; the reconciliation block states how the two populations "
+                "meet, pair by pair, rather than equating them"
+            ),
+        },
         "classes": {"meaning": CLASS_MEANING, "built_from": {k: v for k, v in CLASS_OF.items()}},
         "population": {
             "what": (
@@ -585,9 +616,13 @@ def main() -> None:
         "cost": {
             "wall_seconds": round(time.perf_counter() - t0, 1),
             "cpu_seconds": round((r1.ru_utime - r0.ru_utime) + (r1.ru_stime - r0.ru_stime), 1),
-            "peak_memory_mb": round(peak / 2**20, 1),
             "downloads": 0,
             "requests": 0,
+            "peak_memory_is_not_recorded": (
+                "peak memory is a property of the machine, not of the count, and it differs by a "
+                "megabyte between two runs of the same code on the same inputs. It is left out so that "
+                "a difference a manifest rebuild reports is always a real one"
+            ),
         },
         "code_cleanliness": code_cleanliness(),
     }
