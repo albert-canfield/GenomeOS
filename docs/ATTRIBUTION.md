@@ -15287,6 +15287,99 @@ establish that a wider scoring window or a sweep covering WTC11 and HCT116 would
 says only that 27 of the 48 are beyond the sweep the project has, and the two gaps that reading harder
 could have closed are each exactly 0.
 
+## The 1,262 counts LD-tagged associations, not localised ones: DAP-G was read over 554 of the 1,505 elements, its posterior survives on disk for 48, 14 of those carry a variant at PIP 0.5 and 0 carry one for their own gene (2026-10-02, lane-finemap)
+
+`data/results/finemap_coverage.json`, written at 63e5428, the commit holding its code. Nothing is
+built on it, no baseline was registered and none was constructed.
+
+**What was read as a result and is not one.** The GTEx re-distillation indexed against the CRISPRi
+element set (`eqtl_crispri_frame_registration` → `eqtl_crispri_frame`) reported **1,262 of 1,505**
+compiled elements carrying a retained cis-eQTL and **96** addable loci on a shown element against a
+registered floor of 20. That lane did everything procedurally right: it registered the frame, the
+rule, the margin and the floor before a byte was streamed, it kept assessed and carrying-a-hit apart,
+and it built nothing. The defect is in what the hits are.
+`genomeos.attribution.eqtl.HIT_COLUMNS` is `("tissue", "chrom", "pos", "ref", "alt", "gene_id",
+"slope", "pval_nominal", "elements")` — no PIP, no credible set, no posterior. They are GTEx v8
+**single-tissue significant** variant-gene pairs. Significant variants travel in LD blocks, so an
+element-sized window widened by 500 bases catches one almost anywhere, and 84% of elements carrying
+one is close to what density alone produces. By this project's own existing distinction —
+`E2R_eqtl_replication` is the fine-mapped arm and `E3R_eqtl_linked_replication` is "the other
+significant eQTL values, which are usually linked to a cause rather than causal" — such an overlap is
+an **LD-tagged association, not localised**. It supports "a variant in LD with an association lies
+here" and not "the association is localised here". Nothing here says 1,262 is wrong as a count of
+what it counted.
+
+**The assessable count, first and apart.** The re-distillation's registration imposed a distinction on
+itself: `assessed` is "how many of the frame's elements could have been seen at all", `carrying_a_hit`
+is "how many of them carry at least one retained hit", and "conflating them is how an unassessed
+element becomes an element with no eQTL". Applied one level up, the question is whether a fine-mapped
+posterior was ever looked up over these elements. The posterior lives in a remote track, GTEx v8
+DAP-G (UCSC `gtexEqtlDapg`, `https://hgdownload.soe.ucsc.edu/gbdb/hg38/gtex/eQtl/gtexDapg.bb`), and
+**no local copy of it exists**. What is on disk is what a previous run retained from it while reading
+it one interval at a time over the human panel's storage units and MPRAVarDB's tested variants —
+**4,206 distinct variants at PIP ≥ 0.5** across 23 chromosomes, assembled for a different population.
+Where the track was read is not a guess: `human_panel.py` builds its intervals from the storage and
+hypervariable units, calls `track_rows("gtex_dapg", chrom, ivs)`, and writes what came back into each
+unit's own `eqtl` field, so the catalogues are the **record** of the read. Three questions that are
+easy to answer as one:
+
+| | elements of 1,505 |
+| --- | --- |
+| **assessable** — the window touches a catalogued unit **or** contains an MPRAVarDB-tested variant, so the track was read over it | **554** |
+| — from catalogued units alone | 519 |
+| — from MPRAVarDB-tested variants alone | 48 |
+| **unassessed** — DAP-G was never read here, so these are not elements without a fine-mapped variant | **951** |
+| where DAP-G **placed a row** at any posterior (the unit's `eqtl` field is non-empty) | **241** |
+| where the **posterior itself** survives on disk at any value — the only subframe 0.5 can decide over | **48** |
+| — of those, from MPRAVarDB-tested variants / from the panel's own unit reads | 40 / 8 |
+
+The last number is the one the carrying count belongs to, and it is the smallest. Each catalogued unit
+keeps the variant and the gene DAP-G named and **drops the PIP**, so an element among the 241 whose
+unit records a row but whose posterior was dropped is neither above the threshold nor below it: it is
+**undetermined**. 241 and 48 bound each other in neither direction — a unit can record a row whose PIP
+was dropped, and a retained posterior can sit where no catalogued unit reaches. **A frame this narrow
+is not a denominator**: no ratio over the 1,505 and none over the 554 is reportable, and none is given.
+That is the finding, not a limitation of the reporting.
+
+**The carrying count, second.** Of the 1,505, **14** have a fine-mapped variant at PIP ≥ 0.5 within
+the imported margin — 14 of the 48 the threshold can decide over. Of those 14, **0** have one whose gene is the element's own linked gene: 13 of
+the 14 resolve to a symbol through `scripts/eqtl_targets.py symbol_map` and every one names a
+different gene (WHRN at an `ATP6V1G1` element, AKR1C3 at a `GDI2` element, CAMK1D at a `SEC61A2`
+element, TPCN2 at a `CCND1` element, and MYH7, CYP1A1, NME4, DECR2, ADGRE2, ODAD1, SMOX, CLCN5,
+C6orf62, PKHD1L1 at the rest). The fourteenth, `EH38E2779106` on chr1 linked to PEX10 and RER1, carries
+only `ENSG00000272449`, which has no GENCODE symbol; it is named rather than counted as a non-match, so
+0 is a floor on matches and not a clean zero.
+
+**What this costs the 96.** The floor quantity of the re-distillation is addable loci carrying a hit
+on a shown element, reached at 96. Under the gene match no element of the frame carries a fine-mapped
+eQTL for its linked gene, so that quantity is **0** under fine-mapping and no locus count derived from
+it can be anything else. 96 and 0 are not two readings of one measurement: 96 counts LD-tagged
+associations over a frame that was fully assessed by construction, and 0 counts localised
+associations over a frame that mostly was not assessed at all.
+
+**Imported, never chosen.** The threshold is `genomeos.attribution.executor.DAPG_PIP = 0.5`, whose
+registered wording in `data/results/executor_replication.json` is "the unit's recurring value is a
+variant DAP-G fine-maps (PIP at or above 0.5) for a gene with GTEx p at or below 1e-5 and one sign
+across tissues"; the module uses the constant itself and a test asserts identity rather than equality.
+The margin is `scripts/eqtl_targets.MARGIN = 500`, reached through
+`response_map_increment3_count.EQTL_MARGIN`, and a test checks it against `eqtl_targets.py` directly so
+the comparison cannot drift from the set it is compared with. The element frame is
+`response_map2.candidates`'s own attachment at `measured.RECIPROCAL_OVERLAP = 0.5`, the same call the
+re-distillation's frame was built from. The locus convention is `cell2.group`'s, carrying its wording
+that it is an operational grouping and **not** established biological independence.
+
+**What was not done, and why.** Coverage is poor, which was the pre-set stop condition, so the two
+further conditions fell with it: no matched-window baseline was registered or constructed, no excess
+was computed, and no response-map increment was built. A fine-mapped set whose posterior survives over
+48 of the 1,505 would turn 96 into a number nobody can interpret. What would answer the question is the
+DAP-G track itself, read against the CRISPRi element set the way the re-distillation read the
+significant set; that is a fetch and a ruling, not a step this lane takes. The cost is already on the
+record and is small: the `cost.storage_tracks.gtex_dapg` fields of the 24 `human_panel_chr*.json`
+results add up to **222 HTTP range requests and 170.4 MB fetched** to cover the panel's millions of
+unit intervals, so 1,505 element intervals is a fraction of that, by range and never by downloading the
+file. No network request was made to establish this; it is read off results already on disk. 0 model
+requests, no money.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
