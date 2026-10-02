@@ -337,17 +337,11 @@
       "astrocyte_screen": "all 7759 pairs over 957 elements, every label"
     },
     "code_cleanliness": {
-      "git_sha": "4e1cc4118979fe6b804fec89407b242e2006c171",
+      "git_sha": "53f3b33f091cc6f7fa82854fd7c2145bb48dd3ab",
       "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
-      "foreign_uncommitted_code": [
-        "scripts/manifest_rebuild.py",
-        "tests/test_code_cleanliness_hermetic.py",
-        "tests/test_crispri_benchmark_v2.py",
-        "tests/test_crispri_published_v2.py",
-        "tests/test_manifest_rebuild_tracer_fields.py"
-      ],
+      "foreign_uncommitted_code": [],
       "foreign_uncommitted_code_on_the_counting_path": [],
       "counting_path": [
         "genomeos/__init__.py",
@@ -486,18 +480,10 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "4e1cc4118979fe6b804fec89407b242e2006c171",
-      "dirty": true,
-      "dirty_code_paths": [
-        "scripts/manifest_rebuild.py",
-        "tests/test_code_cleanliness_hermetic.py",
-        "tests/test_crispri_benchmark_v2.py",
-        "tests/test_crispri_published_v2.py",
-        "tests/test_manifest_rebuild_tracer_fields.py"
-      ],
-      "untracked_code_paths": [
-        "tests/test_code_cleanliness_hermetic.py"
-      ],
+      "git_sha": "675e54a8ddf66568e178aba7f66341d2408520da",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
       "dirty_result_paths": [
         "data/results/astroreg2_astrocyte_activity.json"
       ],
