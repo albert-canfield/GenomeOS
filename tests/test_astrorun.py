@@ -868,6 +868,10 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
             "registration": reg,
             "run_id": 1,
             "ledger_root": tmp_path,
+            # INJECTED, never read from the volume: item (g)'s disk clause still RUNS here, it is
+            # simply handed the figure instead of asking the laptop. See
+            # astrorun.THE_FIGURE_IS_INJECTED_IN_TESTS_AND_READ_ONLY_IN_A_REAL_RUN.
+            "free_bytes": 11 * 1024**3,
             "signoff": 'the supervisor wrote "dry run reviewed" at 2026-10-02T13:00:00',
             "plan": self.DIGEST_SOURCE,
             "reviewed_digest": astrorun.plan_digest(self.DIGEST_SOURCE),
@@ -1107,6 +1111,7 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
             "registration": reg,
             "run_id": run_id,
             "ledger_root": tmp_path,
+            "free_bytes": 11 * 1024**3,  # injected, so the run rule is not decided by free disk
             "signoff": 'the supervisor wrote "dry run reviewed" at 2026-10-02T20:05:00',
             "plan": plan,
             "reviewed_digest": astrorun.plan_digest(plan),
@@ -1263,6 +1268,37 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
             f"{2 * self.CAP} authorised in all, {self.CAP + 1} charged elsewhere"
         )
         assert str(budget.ledger).endswith(astrorun.ledger_for_run(2).name)
+
+    def test_PLANTED_injected_9_46_GB_REFUSES_at_the_figure_it_is_HANDED(self, tmp_path, monkeypatch):
+        """The figure push17's suite actually had, proved as a refusal without reading any volume.
+
+        9.46 GB was the live reading when three tests of Albert's OTHER clauses went red. That was not
+        a verdict about the code, and it is the fourth check tonight to assert the state of the live
+        machine -- this one inside a MONEY guard, which makes it the most expensive of the four. A guard
+        whose test cannot be run on a full disk is one somebody will eventually satisfy by deleting
+        files.
+        """
+        kwargs = self.kwargs(tmp_path, 1)
+        kwargs["free_bytes"] = int(9.46 * 1024**3)
+        self.approvals(monkeypatch, live=(1,), spent=())
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        with pytest.raises(astrorun.VectorRefusedError) as exc:
+            astrorun.may_send(**kwargs)
+        said = str(exc.value)
+        assert "9.46 GB is free" in said, said
+        assert "would leave less than the 10 GB floor" in said
+        assert "refusal and not a warning" in said
+        assert "paged twice tonight" in said
+        assert "item (g)" in said, "labelled the supervisor's, never attributed to Albert"
+
+    def test_NEAR_MISS_injected_11_GB_PASSES_and_the_run_proceeds(self, tmp_path, monkeypatch):
+        """The other way round, at a figure it is handed: a guard that can never pass is the defect."""
+        kwargs = self.kwargs(tmp_path, 1)
+        kwargs["free_bytes"] = 11 * 1024**3
+        self.approvals(monkeypatch, live=(1,), spent=())
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        out = astrorun.may_send(**kwargs)
+        assert out["may_send"] is True
 
     def test_NEAR_MISS_run_2_with_its_OWN_approval_and_its_OWN_signoff_PROCEEDS(self, tmp_path, monkeypatch):
         """A guard that can never pass is the fixed-point defect again, so the positive control.
@@ -1621,6 +1657,7 @@ class TestItemGTheFullTrackVectorIsKept:
                 plan=plan,
                 reviewed_digest=astrorun.plan_digest(plan),
                 committed=lambda p: True,
+                free_bytes=11 * 1024**3,
             )
 
     def test_may_send_also_checks_the_RECORDER_and_the_DISK_before_a_paid_run(self):
@@ -1659,6 +1696,60 @@ class TestItemGTheFullTrackVectorIsKept:
         assert astrorun.ADAPTER_NOTE_ROWS == 29
         assert max(371, len(rna)) == astrorun.OBSERVED_TRACKS_PER_ANSWER
         assert "Neither" in astrorun.OBSERVED_SHAPE_SOURCE or "neither" in astrorun.OBSERVED_SHAPE_SOURCE
+
+    def test_the_two_figures_straddle_the_floor_so_the_pair_is_a_real_contrast(self):
+        """Without this, both plants could sit on one side of the floor and prove nothing."""
+        need = astrorun.full_vector_disk_estimate(
+            1232,
+            astrorun.OBSERVED_ROWS_PER_ANSWER,
+            astrorun.OBSERVED_TRACKS_PER_ANSWER,
+            free_bytes=11 * 1024**3,
+        )
+        assert need["fits_above_the_floor"] is True
+        tight = astrorun.full_vector_disk_estimate(
+            1232,
+            astrorun.OBSERVED_ROWS_PER_ANSWER,
+            astrorun.OBSERVED_TRACKS_PER_ANSWER,
+            free_bytes=int(9.46 * 1024**3),
+        )
+        assert tight["fits_above_the_floor"] is False
+        assert tight["bytes_total"] == need["bytes_total"], "same need, different machine"
+
+    def test_the_LIVE_reading_is_exercised_but_cannot_RED_the_suite(self):
+        """One test keeps the live path honest: it returns a number. It does NOT judge the number.
+
+        Asserting the live figure is above or below the floor is what made the suite's verdict depend on
+        free disk. So this checks the reading happens and is well formed, and says nothing about how
+        much space the machine has.
+        """
+        live = astrorun.full_vector_disk_estimate(
+            1232, astrorun.OBSERVED_ROWS_PER_ANSWER, astrorun.OBSERVED_TRACKS_PER_ANSWER
+        )
+        assert isinstance(live["free_bytes"], int)
+        assert live["free_bytes"] > 0, "the volume was read"
+        assert isinstance(live["fits_above_the_floor"], bool), "a verdict was formed, not asserted here"
+        assert live["bytes_total"] == 1232 * live["bytes_per_answer"], "the need is machine-independent"
+        assert "a PARAMETER" in astrorun.THE_FIGURE_IS_INJECTED_IN_TESTS_AND_READ_ONLY_IN_A_REAL_RUN
+
+    def test_may_send_passes_the_INJECTED_figure_through_rather_than_ignoring_it(self):
+        """Planted against a may_send that called the clause with no figure and read the volume anyway."""
+        import ast
+
+        tree = ast.parse(Path(astrorun.__file__).read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "may_send")
+        assert "free_bytes" in {a.arg for a in fn.args.kwonlyargs}, "may_send takes the figure"
+        call = next(
+            c
+            for c in ast.walk(fn)
+            if isinstance(c, ast.Call)
+            and isinstance(c.func, ast.Name)
+            and c.func.id == "check_disk_for_full_vectors"
+        )
+        names = [a.id for a in call.args if isinstance(a, ast.Name)]
+        assert "free_bytes" in names, (
+            "may_send must hand the clause the injected figure; without it the clause reads the volume "
+            "and every test of every other clause becomes a test of the laptop"
+        )
 
     def test_item_g_is_labelled_the_supervisors_and_not_alberts(self):
         """Like item (f): a refusal must not attribute to him a condition he did not state."""

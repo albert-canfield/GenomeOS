@@ -1236,6 +1236,7 @@ def may_send(
     reviewed_digest: str,
     committed: Any = None,
     resume_authorisation: str | None = None,
+    free_bytes: int | None = None,
 ) -> dict[str, Any]:
     """Every clause of Albert's approval as its own refusal. Returns only if ALL of them hold.
 
@@ -1315,7 +1316,12 @@ def may_send(
     # Item (g), the supervisor's: the recording path must keep every row's whole track vector, and
     # the disk it needs must be there before a paid run starts rather than part way through one.
     check_adapter_writes_full_vectors(ADAPTER_MODULE)
-    check_disk_for_full_vectors(len(plan), OBSERVED_ROWS_PER_ANSWER, OBSERVED_TRACKS_PER_ANSWER)
+    # `free_bytes` is INJECTED by tests and None for a real run, which is the only time the volume is
+    # read. A test that read the live volume made the suite's verdict depend on free disk: three tests
+    # of Albert's OTHER clauses went red at 9.46 GB free, which is not a verdict about the code, and a
+    # money guard whose test cannot run on a full disk is one someone will eventually satisfy by
+    # deleting files. The guard's live reading is unchanged for real runs.
+    check_disk_for_full_vectors(len(plan), OBSERVED_ROWS_PER_ANSWER, OBSERVED_TRACKS_PER_ANSWER, free_bytes)
 
     budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
     if budget.charged() != budget.sent:
@@ -1509,6 +1515,15 @@ FULL_VECTOR_KEY = "track_vector"
 
 #: The free disk this project will not go below, matching scripts/capacity_gate.py's own floor.
 DISK_FLOOR_BYTES = 10 * 1024**3
+
+THE_FIGURE_IS_INJECTED_IN_TESTS_AND_READ_ONLY_IN_A_REAL_RUN = (
+    "the free-space figure is a PARAMETER. A real run passes nothing and the volume is read; a test "
+    "passes the figure it means to test and never reads the machine. Reading the live volume in a test "
+    "made the suite's verdict depend on free disk -- three tests of Albert's other clauses went red at "
+    "9.46 GB free, which is not a verdict about the code -- and it is worse than ordinary flakiness in "
+    "a MONEY guard, because a guard whose test cannot run on a full disk is one somebody will "
+    "eventually make pass by deleting files, which proves nothing about the code"
+)
 
 
 class VectorRefusedError(SendRefusedError):
