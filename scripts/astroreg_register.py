@@ -508,6 +508,12 @@ def power_figure() -> dict:
             "0.5x_share": arms[f"{0.5:g}x"]["share_of_resamples_excluding_zero"],
             "rule": "the 0.5x figure travels beside the class in every quote of it",
         },
+        "attenuation_limitation": astroreg.ATTENUATION_LIMITATION,
+        "attenuation_shares_are_flat": (
+            "the three shares sit within a few points of one another while the median achieved gain "
+            "falls, which is the limitation above showing itself in the numbers, not a finding that "
+            "power is insensitive to effect size"
+        ),
         "superseded": {
             "earlier_share": 0.96,
             "why": "computed at K562's own prevalence of 6.5% and at the full K562 gain; it does "

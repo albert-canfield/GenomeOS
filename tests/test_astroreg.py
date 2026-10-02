@@ -342,3 +342,22 @@ class TestAmendmentAndProvenance:
         t = astroreg.terms()
         for key in ("power_amendment_1", "track_roster_rule", "activity_inputs", "attenuations_reported"):
             assert key in t, key
+
+
+class TestAttenuationLimitation:
+    def test_the_limitation_forbids_quoting_the_half_share_as_power_at_half_effect(self):
+        lim = astroreg.ATTENUATION_LIMITATION
+        assert "may not be quoted as power at half the effect" in lim
+
+    def test_the_limitation_says_why_the_shares_stay_flat(self):
+        lim = astroreg.ATTENUATION_LIMITATION
+        assert "spread scales with it" in lim
+        assert "signal-to-noise ratio is close to" in lim
+
+    def test_the_limitation_admits_what_was_not_run(self):
+        assert "is not registered or run here" in astroreg.ATTENUATION_LIMITATION
+
+    def test_terms_carries_the_limitation_beside_the_attenuations(self):
+        t = astroreg.terms()
+        assert "attenuation_limitation" in t
+        assert t["attenuation_limitation"] == astroreg.ATTENUATION_LIMITATION

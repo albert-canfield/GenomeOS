@@ -180,6 +180,22 @@ K562_PREVALENCE_NOTE = (
 #: The attenuation factors reported. 1.0 sets the class; 0.5 travels beside it in every quote.
 ATTENUATIONS = (1.0, 0.5, 0.25)
 
+#: What the attenuation arm does NOT establish. Found on running it, recorded rather than presented as
+#: a result: the scheme shrinks the signal and its own sampling spread in the same proportion, so the
+#: share of intervals excluding zero barely moves while the achieved gain falls as intended. A reader
+#: must not take the 0.5x share as evidence that power survives a halved true effect.
+ATTENUATION_LIMITATION = (
+    "the attenuation reduces the achieved gain as intended, but it does NOT answer the question it "
+    "was asked. Shrinking the deletion arm toward the no-deletion arm scales the score separation, "
+    "and the cluster bootstrap's spread scales with it, so the signal-to-noise ratio is close to "
+    "preserved and the share of intervals excluding zero stays nearly flat across 1x, 0.5x and 0.25x "
+    "even though the median achieved gain falls. The arm therefore shows that the DETECTABILITY of a "
+    "proportionally smaller separation is similar; it does NOT show that power survives a weaker true "
+    "effect against unchanged measurement noise, which is what a conventional effect-size sensitivity "
+    "means. The 0.5x share may not be quoted as power at half the effect. A scheme that held the "
+    "noise fixed while lowering the signal would be needed, and is not registered or run here"
+)
+
 #: Term 3: what the deletion value does if `astrocyte` turns out to be several AlphaGenome tracks.
 #: Registered now so that no rule is invented at scoring time, when an outcome is visible.
 TRACK_ROSTER_RULE = (
@@ -481,6 +497,7 @@ def terms() -> dict[str, Any]:
         "astrocyte_prevalence": ASTROCYTE_PREVALENCE,
         "k562_prevalence_note": K562_PREVALENCE_NOTE,
         "attenuations_reported": list(ATTENUATIONS),
+        "attenuation_limitation": ATTENUATION_LIMITATION,
         "track_roster_rule": TRACK_ROSTER_RULE,
         "activity_inputs": ACTIVITY_INPUTS,
         "same_code_path": SAME_CODE_PATH,
