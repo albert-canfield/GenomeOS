@@ -43,10 +43,17 @@ CASE_READING = {
 }
 
 
-def blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
+def blocks(
+    chrom: str, results_dir: Path = RESULTS_DIR, budget: dict[str, Any] | None = None
+) -> list[dict[str, Any]]:
     """Every UNKNOWN block of the chromosome with its tier, both constraint axes, the copy flag
-    and the attributed elements inside it."""
-    budget = read_axes(chrom, results_dir)
+    and the attributed elements inside it.
+
+    `budget` is the `read_axes` record, for a caller that has already read it and needs to know
+    WHICH of the two budget files answered (`axes_source`): passing it back avoids a second read of
+    up to 2.7 MB and, more to the point, keeps the declaration and the join on one reading instead
+    of two that could disagree."""
+    budget = budget if budget is not None else read_axes(chrom, results_dir)
     if not budget:
         raise FileNotFoundError(f"no budget_{chrom} result; run genomeos budget --chrom {chrom}")
     var = {
@@ -90,11 +97,38 @@ def blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
 
 def inputs(chrom: str, results_dir: Path = RESULTS_DIR) -> list[Path]:
     """The files `blocks(chrom)` reads, for a result manifest (review item R9): the three per-block
-    readings and every attribution run with the local table a summary points at."""
+    readings and every attribution run with the local table a summary points at.
+
+    A POINTER THAT DOES NOT RESOLVE RAISES, naming the result that carries the pointer and the path
+    it names. Until 2026-10-02 the pointed-at table was appended only `if w.exists()`, so a summary
+    whose table was not on this machine left the declaration one entry shorter and said nothing.
+    That is worse than a declaration that never followed the pointer at all, because this one still
+    claims to be complete: the manifest goes on naming the summary, `targets.run_elements` goes on
+    reading the run's elements out of the table the summary points at, and nothing in the result
+    distinguishes a short declaration from a short run. The tables are git-ignored and run to about
+    1.4 GB, so the machine that wrote the result is the only one that has them -- which is exactly
+    why the pointer has to be declared and hashed rather than dropped.
+
+    The per-chromosome results in `names` are NOT the same case and are deliberately not required
+    one by one. `blocks()` reads `variation_<chrom>` and `duplication_<chrom>` through `or {}` and
+    reaches the attribution runs through `run_elements`, each of which tolerates absence, so a
+    chromosome that has not had one of them run is a smaller join and not a failed one; this list
+    enumerates candidates rather than following pointers, and raising per name would make a partial
+    genome unwritable. The pair of budget files is the one exception, because `read_axes` returns
+    None only when BOTH are absent and `blocks()` then raises: this function raises on that same
+    condition and names both paths, rather than handing a writer a declaration for a join that
+    cannot be built.
+    """
     from genomeos.attribution.targets import RUNS
 
     names = [f"budget_{chrom}", f"variation_{chrom}", f"duplication_{chrom}", *(f"{r}_{chrom}" for r in RUNS)]
     names.insert(0, f"budget_axes_{chrom}")  # read_axes opens both budget files
+    budget = [results_dir / f"budget_axes_{chrom}.json", results_dir / f"budget_{chrom}.json"]
+    if not any(b.exists() for b in budget):
+        raise FileNotFoundError(
+            f"neither budget file for {chrom} is on this machine, so there is no declaration to make "
+            f"for a join read_axes cannot build: {', '.join(str(b) for b in budget)}"
+        )
     out = []
     for name in names:
         p = results_dir / f"{name}.json"
@@ -102,12 +136,18 @@ def inputs(chrom: str, results_dir: Path = RESULTS_DIR) -> list[Path]:
             continue
         out.append(p)
         where = (load_result(name, results_dir) or {}).get("elements_where")
-        if where:
-            w = Path(where)
-            if not w.is_absolute() and not w.exists():
-                w = results_dir.parent.parent / where
-            if w.exists():
-                out.append(w)
+        if not where:
+            continue
+        w = Path(where)
+        if not w.is_absolute() and not w.exists():
+            w = results_dir.parent.parent / where
+        if not w.exists():
+            raise FileNotFoundError(
+                f"{p} declares elements_where={where} and the table it points at is not on this "
+                f"machine (resolved to {w}); this run reads that run's elements out of that table, so "
+                f"a declaration without it would understate what the result depends on"
+            )
+        out.append(w)
     return out
 
 
@@ -139,9 +179,74 @@ def reading(row: dict[str, Any]) -> str:
     return base
 
 
+def _declared(chrom: str, results_dir: Path, budget: dict[str, Any] | None) -> dict[str, Any]:
+    """What `organise(chrom)` ACTUALLY read, measured, for the result's `inputs` block.
+
+    Until 2026-10-02 this block was four f-strings built without looking at anything, and a
+    declaration decoupled from the read is worse than one that shrinks, because it cannot even be
+    wrong in a way the filesystem would show. Three things it got wrong on every committed
+    `organised_<chrom>`, all three measured on chr21 before the change:
+
+    * it named `budget_<chrom>` as "the budget", but `read_axes` prefers `budget_axes_<chrom>` when
+      it is there and restates the tiers from it -- which it did on all 24 chromosomes, because both
+      files are present for all 24. The record named the file that did NOT drive the join, and
+      `axes_source`, which says which did, was thrown away. That is the shape where a declaration
+      does not merely report a smaller run but names the WRONG FILE;
+    * it named two of the three attribution runs in `RUNS` and omitted `enhancer_targets_all`, which
+      is the largest by far (12,139 of the 12,439 elements joined on chr21) and the only one whose
+      summary is a POINTER at a local table of about 1.4 GB. The biggest input, and the one that
+      cannot be recovered from the repository, was the one left out;
+    * it named `variation_<chrom>` and `duplication_<chrom>` unconditionally, whether or not they
+      were there. `blocks()` reads both through `or {}`, so on a chromosome without them every
+      block's human-axis and copy field is null and the result would still have claimed them. The
+      mirror of a shrinking declaration: one that will not shrink when it should.
+
+    So: the budget branch that ran is named and `budget_branch` records which it was; every run in
+    `RUNS` is asked for; a conditional input that is absent is recorded under
+    `inputs_optional_absent` rather than dropped or claimed; and `declared` carries the path list
+    from `inputs()`, which follows each pointer and raises on one that does not resolve."""
+    from genomeos.attribution.targets import RUNS
+
+    declared = inputs(chrom, results_dir)  # raises if a pointer does not resolve
+    present = {p.name for p in declared}
+    absent: dict[str, str] = {}
+
+    def named(stem: str, note: str) -> str | None:
+        if f"{stem}.json" in present:
+            return stem
+        absent[stem] = note
+        return None
+
+    axes = f"budget_axes_{chrom}"
+    branch = (budget or {}).get("axes_source")
+    return {
+        "budget": axes if branch == axes else f"budget_{chrom}",
+        "budget_branch": branch,
+        "budget_pair_considered": [axes, f"budget_{chrom}"],
+        "variation": named(
+            f"variation_{chrom}",
+            "not on this machine: blocks() reads it through `or {}`, so every block's human_fraction "
+            "and case is null and no block carries a human axis",
+        ),
+        "duplication": named(
+            f"duplication_{chrom}",
+            "not on this machine: blocks() reads it through `or {}`, so every block's "
+            "duplicated_fraction is null and no block is read as a copy",
+        ),
+        "elements": [
+            n
+            for r in RUNS
+            if (n := named(f"{r}_{chrom}", "not on this machine: its elements are not in the join"))
+        ],
+        "declared": [str(p) for p in declared],
+        "inputs_optional_absent": absent,
+    }
+
+
 def organise(chrom: str, results_dir: Path = RESULTS_DIR, top: int = 25) -> dict[str, Any]:
     t0 = time.time()
-    rows = blocks(chrom, results_dir)
+    budget = read_axes(chrom, results_dir)
+    rows = blocks(chrom, results_dir, budget)
     by_tier: dict[str, dict[str, Any]] = {}
     for t in TIERS:
         sel = [r for r in rows if r["tier"] == t]
@@ -183,12 +288,7 @@ def organise(chrom: str, results_dir: Path = RESULTS_DIR, top: int = 25) -> dict
         },
         "candidates": cu[:top],
         "largest_copies": copies[:top],
-        "inputs": {
-            "budget": f"budget_{chrom}",
-            "variation": f"variation_{chrom}",
-            "duplication": f"duplication_{chrom}",
-            "elements": [f"constrained_targets_{chrom}", f"enhancer_targets_{chrom}"],
-        },
+        "inputs": _declared(chrom, results_dir, budget),
         "evidence": {
             "tier": "inferred: sequence class plus Zoonomia constraint (the budget)",
             "case": "inferred: Zoonomia phyloP against gnomAD Gnocchi (area J); unmeasured below a kilobase",
