@@ -25,11 +25,18 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import manifest_legacy as ml  # noqa: E402
 
+#: Since 2026-10-02 a new registry name must also carry `code_cleanliness` (genomeos/results.py, the
+#: supervisor's `save_result` cleanliness rule). The rule is checkable only by key set, so a key-complete
+#: stub serves here and keeps these tests off git; what the shared function actually returns is tested in
+#: tests/test_results_cleanliness_refusal.py and tests/test_code_cleanliness_shared.py.
+CLEAN = dict.fromkeys(mf.CLEANLINESS_KEYS, None)
+
 
 def full(tmp_path: Path) -> dict:
     src = tmp_path / "in.tsv"
     src.write_text("chrom\tstart\tend\nchr21\t0\t10\n")
     return {
+        "code_cleanliness": dict(CLEAN),
         "sources": [{"accession": "ENCSR000XXX", "version": "v1"}],
         "inputs": [mf.input_entry(src, partition="heldout")],
         "assembly": "GRCh38",

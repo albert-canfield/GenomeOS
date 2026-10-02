@@ -55,6 +55,12 @@ def save_result(
     where it went, so hours of compute are kept and the run still fails. Whether the file already
     exists does not matter: a retry of a failed result is quarantined again.
 
+    Since 2026-10-02 (the supervisor's review order, `save_result` cleanliness) a name that is not on
+    the allowlist must also carry `result_manifest.code_cleanliness` with every key of
+    `manifest.CLEANLINESS_KEYS`, which is what the one shared `manifest.code_cleanliness` returns. A
+    block built by hand is refused on the same path as any other incomplete manifest: quarantined with
+    its reason, ManifestError naming where it went, nothing written to `results_dir`.
+
     `strict=True` enforces in any directory; `strict=False` cannot admit a name that is not on the
     allowlist into the registry. Outside the registry (tests, scratch) an incomplete result warns
     unless `strict=True`.
@@ -71,6 +77,16 @@ def save_result(
     legacy = registry and name in legacy_names()
     enforce = True if registry and not legacy else bool(strict)
     stamped = mf.stamp(given)
+    # A new name entering the registry must also carry the cleanliness block, from the one shared
+    # function (genomeos/manifest.py: code_cleanliness). Every published result's honesty about which
+    # code was uncommitted when it was written rests on that block; it was copy-pasted into ten files
+    # whose answers had drifted apart, and nothing checked that they agreed. A legacy name is exempt,
+    # as it is from the rest of the contract, so the historical writers keep regenerating.
+    if registry and not legacy:
+        unclean = mf.cleanliness_problems(stamped)
+        if unclean:
+            stamped["problems"] = [*stamped.get("problems", []), *unclean]
+            stamped["complete"] = False
     out = {"result": name, "date": time.strftime("%Y-%m-%d"), **body, mf.KEY: stamped}
     q = quarantine_dir(results_dir) / f"{name}.json"
     if not stamped["complete"] and enforce:

@@ -31,11 +31,13 @@ rather than written, and the revision stamp counts untracked code.
 
 from __future__ import annotations
 
+import ast
 import contextlib
 import hashlib
 import subprocess
 import sys
-from pathlib import Path
+from collections.abc import Iterable, Sequence
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 KEY = "result_manifest"
@@ -307,6 +309,333 @@ def _pins_or_says_why(d: Any) -> bool:
     if not isinstance(d, dict) or not d.get("name"):
         return False
     return bool(d.get("model_version")) or str(d.get("unpinned", "")).startswith("unpinned: ")
+
+
+# --- the counting path and the cleanliness block -------------------------------------------------------
+# One implementation each, imported by every writer. Before 2026-10-02 `code_cleanliness` was
+# copy-pasted into ten files and the closure behind it into eight, and the copies had drifted into
+# three algorithms that gave three different answers about the same tree: the same entry script came
+# to 41, 68 or 44 paths depending on which copy ran. `scripts/cell2_eligibility.py` had never taken
+# the cd263bc fix and published `genomeos/genome/Genome.py`, `genomeos/genome/Annotation.py` and
+# `genomeos/knowledge/Reactome.py`, which are class names that no file spells, admitted only because
+# APFS is case-insensitive. Nothing checked that the copies agreed.
+#
+# The closure here is the broadest of the three, because a counting path is a claim about what COULD
+# have entered a number and the superset is the honest one: it follows every import that resolves to a
+# file in this repository rather than only the package, it counts the `__init__.py` of each package
+# above a module, and it resolves bare imports against the directories the source literally puts on
+# `sys.path` as well as the repository root. That last part is what makes
+# `scripts/response_map_coverage.py` appear on `scripts/placement_cause_198.py`'s path: that script
+# reaches it through `sys.path.insert(0, str(ROOT / "scripts"))`, its code does enter the numbers, and
+# every earlier copy reported it as off the path and therefore harmless.
+
+#: Paths under these roots are the repository's own code for the closure (manifest.CODE_ROOTS covers
+#: what makes a stamp dirty; this is what a closure may follow into).
+_CLOSURE_ROOTS = ("genomeos/", "scripts/", "tests/")
+
+
+def _is_file_exactly(root: Path, parts: Sequence[str]) -> bool:
+    """A file at `parts` below `root`, spelled as the directories spell it (carried from cd263bc).
+
+    `Path.is_file()` alone is not enough: on a case-insensitive filesystem it answers True for
+    `genomeos/genome/Genome.py`, so a class name enters the closure as a file and the result cannot be
+    reproduced where the filesystem is case-sensitive.
+    """
+    node = root
+    for part in parts:
+        if not part or part in (".", ".."):
+            return False
+        try:
+            if part not in {p.name for p in node.iterdir()}:
+                return False
+        except OSError:
+            return False
+        node = node / part
+    return node.is_file()
+
+
+def _literal_path(node: ast.AST, names: dict[str, PurePosixPath]) -> PurePosixPath | None:
+    """A path expression's value as a repository-relative path, or None when it is not literal.
+
+    Reads the expression rather than guessing from its text, so `Path(__file__).resolve().parent` and
+    `Path(__file__).resolve().parents[1]` are told apart, as are `ROOT` and `ROOT / "scripts"`.
+    """
+    if isinstance(node, ast.Constant):
+        return PurePosixPath(node.value) if isinstance(node.value, str) else None
+    if isinstance(node, ast.Name):
+        return names.get(node.id)
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        left = _literal_path(node.left, names)
+        right = _literal_path(node.right, names)
+        return None if left is None or right is None else left / right
+    if isinstance(node, ast.Call):
+        func = node.func
+        name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", "")
+        if name in ("resolve", "absolute", "expanduser") and isinstance(func, ast.Attribute):
+            return _literal_path(func.value, names)
+        if name in ("str", "Path", "PurePath", "PurePosixPath", "fspath") and node.args:
+            return _literal_path(node.args[0], names)
+        return None
+    if isinstance(node, ast.Attribute):
+        if node.attr == "parent":
+            base = _literal_path(node.value, names)
+            return None if base is None else base.parent
+        return None
+    if isinstance(node, ast.Subscript):  # X.parents[n]
+        value = node.value
+        if (
+            isinstance(value, ast.Attribute)
+            and value.attr == "parents"
+            and isinstance(node.slice, ast.Constant)
+            and isinstance(node.slice.value, int)
+        ):
+            base = _literal_path(value.value, names)
+            if base is None:
+                return None
+            for _ in range(node.slice.value + 1):  # parents[0] is the directory holding the file
+                base = base.parent
+            return base
+        return None
+    return None
+
+
+def _module_level_names(tree: ast.AST, file_rel: str) -> dict[str, PurePosixPath]:
+    """`__file__` and every module-level `NAME = <path expression>` this file binds, as paths."""
+    names: dict[str, PurePosixPath] = {"__file__": PurePosixPath(file_rel)}
+    for node in getattr(tree, "body", []):
+        if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+            continue
+        target = node.targets[0]
+        if not isinstance(target, ast.Name):
+            continue
+        value = _literal_path(node.value, names)
+        if value is not None:
+            names[target.id] = value
+    return names
+
+
+def _search_dirs(tree: ast.AST, file_rel: str) -> list[str]:
+    """The repository directories this file puts on `sys.path`, read from its own insert/append calls.
+
+    A target that is not literal (`sys.argv[1]`) is skipped: it names no directory at write time.
+    """
+    names = _module_level_names(tree, file_rel)
+    out: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+            continue
+        if node.func.attr not in ("insert", "append"):
+            continue
+        holder = node.func.value
+        if not (
+            isinstance(holder, ast.Attribute)
+            and holder.attr == "path"
+            and isinstance(holder.value, ast.Name)
+            and holder.value.id == "sys"
+        ):
+            continue
+        args = [a for a in node.args if not isinstance(a, ast.Constant) or not isinstance(a.value, int)]
+        if not args:
+            continue
+        value = _literal_path(args[-1], names)
+        if value is None:
+            continue
+        rel = value.as_posix()
+        out.append("" if rel in (".", "") else rel)
+    return out
+
+
+def _imported_modules(tree: ast.AST, file_rel: str) -> list[str]:
+    """Every dotted module name one file imports, with relative imports resolved against its package.
+
+    A `from X import a, b` contributes `X` and also `X.a` and `X.b`, because the name after `import`
+    may itself be a submodule; the resolver keeps only the ones that are files in this repository.
+    """
+    package = list(PurePosixPath(file_rel).parts[:-1])
+    out: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            out.extend(a.name for a in node.names)
+        elif isinstance(node, ast.ImportFrom):
+            if node.level:
+                base = package[: len(package) - (node.level - 1)]
+                prefix = ".".join([*base, *([node.module] if node.module else [])])
+            else:
+                prefix = node.module or ""
+            if prefix:
+                out.append(prefix)
+                out.extend(f"{prefix}.{a.name}" for a in node.names)
+    return out
+
+
+def _module_files(module: str, root: Path, search: str) -> list[str]:
+    """The repository files a dotted module name reads when it is imported from `search`.
+
+    The module itself and the `__init__.py` of every package above it. Empty when the name resolves to
+    nothing in this repository, which is how the standard library and the dependencies stay off a
+    counting path.
+    """
+    base = list(PurePosixPath(search).parts) if search else []
+    parts = [*base, *module.split(".")]
+    found = [
+        "/".join([*parts[: len(base) + i], "__init__.py"])
+        for i in range(1, len(parts) - len(base))
+        if _is_file_exactly(root, [*parts[: len(base) + i], "__init__.py"])
+    ]
+    for candidate in ([*parts[:-1], f"{parts[-1]}.py"], [*parts, "__init__.py"]):
+        if _is_file_exactly(root, candidate):
+            found.append("/".join(candidate))
+            break
+    return [f for f in found if f.startswith(_CLOSURE_ROOTS) or "/" not in f]
+
+
+def counting_path(entry: str | Path, root: Path | None = None) -> list[str]:
+    """Every file in this repository that `entry` can read by import, directly or at any remove.
+
+    The one implementation: `scripts/` and `genomeos/` must not define their own
+    (tests/test_code_cleanliness_shared.py fails if one does), because eight copies of this closure had
+    drifted into three algorithms that disagreed about the same tree.
+
+    Found by parsing the import statements, never by importing, so the answer is the same in any
+    checkout of the same revision -- which is what lets a rebuild in a clean worktree reproduce it.
+    Resolution follows the repository root and every directory the files literally put on `sys.path`,
+    counts the `__init__.py` of each package above a module, and matches every path component against
+    what its directory actually lists, so a class name cannot enter as a file.
+    """
+    root = Path(root) if root is not None else Path.cwd()
+    first = _repo_relative_to(entry, root)
+    seen = {first}
+    dirs = {""}
+    modules: set[str] = set()
+    trees: dict[str, ast.AST | None] = {}
+
+    def tree_of(rel: str) -> ast.AST | None:
+        if rel not in trees:
+            try:
+                trees[rel] = ast.parse((root / rel).read_text())
+            except (OSError, SyntaxError, ValueError):
+                trees[rel] = None
+        return trees[rel]
+
+    changed = True
+    while changed:
+        changed = False
+        for rel in sorted(seen):
+            tree = tree_of(rel)
+            if tree is None:
+                continue
+            for d in _search_dirs(tree, rel):
+                if d not in dirs:
+                    dirs.add(d)
+                    changed = True
+            for m in _imported_modules(tree, rel):
+                if m not in modules:
+                    modules.add(m)
+                    changed = True
+        for m in sorted(modules):
+            for d in sorted(dirs):
+                for f in _module_files(m, root, d):
+                    if f not in seen:
+                        seen.add(f)
+                        changed = True
+    return sorted(seen)
+
+
+def _repo_relative_to(path: str | Path, root: Path) -> str:
+    """`path` as a repository-relative posix string, whether it arrives absolute or already relative."""
+    p = Path(path)
+    if not p.is_absolute():
+        return PurePosixPath(p.as_posix()).as_posix()
+    try:
+        return p.resolve().relative_to(root.resolve()).as_posix()
+    except (OSError, ValueError):
+        return p.as_posix()
+
+
+def code_cleanliness(entry: str | Path, own_code: Iterable[str], root: Path | None = None) -> dict[str, Any]:
+    """Which uncommitted code this shared checkout held when a result was written, split into the
+    writing lane's own and other lanes', and whether any of it is on the counting path.
+
+    The one implementation (CLEANLINESS_KEYS is its key set, `genomeos/results.py` refuses a registry
+    write without it). Both of the things a caller may legitimately vary are arguments and neither is
+    guessed: `entry` is the script whose import closure is the counting path, and `own_code` is the
+    paths the writing lane is answerable for. Read from git and from the imports, never asserted.
+
+    The field names are the convention `scripts/cell2_eligibility.py` set and
+    `scripts/manifest_rebuild.py` matches, so `own_code_is_committed` and
+    `foreign_uncommitted_code_on_the_counting_path` must hold on both sides of a rebuild while the
+    lists that merely describe the tree a run happened in may take their clean-worktree values.
+    """
+    own_code = tuple(own_code)
+    rev = code_revision(root)
+    path = counting_path(entry, root)
+    dirty = list(rev.get("dirty_code_paths") or [])
+    own = [p for p in dirty if p in own_code]
+    foreign = [p for p in dirty if p not in own_code]
+    return {
+        "git_sha": rev.get("git_sha"),
+        "dirty": rev.get("dirty"),
+        "own_uncommitted_code": own,
+        "own_code_is_committed": not own,
+        "foreign_uncommitted_code": foreign,
+        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
+        "counting_path": path,
+        "counting_path_count": len(path),
+        "counting_path_is_computed": (
+            "the transitive import closure of this script, computed from the files' import statements "
+            "at write time (genomeos.manifest.counting_path), never by importing: it follows every "
+            "import that resolves to a file in this repository rather than only the package, counts "
+            "the __init__.py of each package above a module, resolves bare imports against the "
+            "directories the source literally puts on sys.path as well as the repository root, and "
+            "matches every path component against what its directory lists, so a class name such as "
+            "genomeos.genome.Genome cannot enter it as a file; not a hand-written list"
+        ),
+        "note": (
+            "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to "
+            "another lane; this lane did not write it and did not commit it. The counting path is the "
+            "computed closure above, so a foreign file outside it cannot have entered a number here, "
+            "and foreign_uncommitted_code_on_the_counting_path names any that could"
+        ),
+    }
+
+
+#: The keys `code_cleanliness` returns. A result entering the registry under a name that is not on the
+#: legacy allowlist must carry all of them (genomeos/results.py): the block is what says which code was
+#: uncommitted when the numbers were written, and before 2026-10-02 it was copy-pasted into ten files
+#: whose answers had drifted apart, so a hand-built block is refused rather than trusted.
+CLEANLINESS_KEYS = (
+    "git_sha",
+    "dirty",
+    "own_uncommitted_code",
+    "own_code_is_committed",
+    "foreign_uncommitted_code",
+    "foreign_uncommitted_code_on_the_counting_path",
+    "counting_path",
+    "counting_path_count",
+    "counting_path_is_computed",
+    "note",
+)
+
+
+def cleanliness_problems(manifest: Any) -> list[str]:
+    """What a manifest's `code_cleanliness` lacks, as sentences; empty when `code_cleanliness` wrote it.
+
+    Checked by key set, because that is what can be checked: a block carrying every key of
+    CLEANLINESS_KEYS is the shape the shared function returns, and one that lacks a key was built by
+    hand and cannot be relied on to have counted the same things.
+    """
+    if not isinstance(manifest, dict) or "code_cleanliness" not in manifest:
+        return ["missing code_cleanliness (call genomeos.manifest.code_cleanliness)"]
+    block = manifest["code_cleanliness"]
+    if not isinstance(block, dict):
+        return ["code_cleanliness must be the dict genomeos.manifest.code_cleanliness returns"]
+    missing = [k for k in CLEANLINESS_KEYS if k not in block]
+    if missing:
+        return [
+            f"code_cleanliness lacks {', '.join(missing)}, so it did not come from "
+            f"genomeos.manifest.code_cleanliness"
+        ]
+    return []
 
 
 def stamp(manifest: dict[str, Any] | None, root: Path | None = None) -> dict[str, Any]:
