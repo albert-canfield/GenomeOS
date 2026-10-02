@@ -1,0 +1,604 @@
+{
+  "result": "astroreg2_endpoint_k562",
+  "date": "2026-10-02",
+  "status": "AstroREG-2's endpoint gate, run once on the K562 held-out pairs. No AlphaGenome request, no money, no astrocyte value computed, no BAM written to disk",
+  "lane": "lane-astro",
+  "registration": {
+    "path": "data/results/astroreg2_registration.json",
+    "gate": "registered before either gain existed"
+  },
+  "what_was_held_fixed": "the weights, fitted once on the K562 training pairs with the PUBLISHED columns and reused for both runs; and the deletion features, which come from the same cache either way. Only the held-out pairs' activity differs",
+  "no_rescaling": "the reconstructed columns entered exactly as computed; no factor was fitted",
+  "reconstruction": {
+    "rule": "amendment 2's, read from the producer's source",
+    "producer": {
+      "repository": "mayasheth/chrom-annotate",
+      "commit": "91cda73ebe3a19153a582cab18cbf7ff70d85cfc",
+      "file": "workflow/scripts/neighborhoods.py",
+      "rpm_formula": "L579: df[feature_name + '.RPM'] = 1e6 * df[featurecount] / float(total_counts)",
+      "numerator": "L433-445 count_bam: pysam.AlignmentFile(bam).count(chr, start, end). pysam's default read_callback='all' skips BAM_FUNMAP, BAM_FSECONDARY, BAM_FQCFAIL and BAM_FDUP, and does NOT skip BAM_FSUPPLEMENTARY, so a duplicate is excluded from the numerator and a supplementary alignment is counted",
+      "sex_chromosomes": "L425-431 double_sex_chrom_counts, called from run_count_reads: the count of any region whose contig name ENDS in X or Y is multiplied by 2, 'to make it seem like they have 2 copies'",
+      "denominator": "L662-673 count_bam_mapped: `samtools idxstats`, summing column 3 over every reference. That is mapped read-segments including duplicates, secondaries and supplementaries, so the denominator is NOT the numerator's filter applied to the whole file",
+      "several_bams": "L596-602 average_features: df[feature + '.RPM'] = df[feature_RPM_cols].mean(axis=1). The per-BAM RPMs are AVERAGED; the counts are not pooled",
+      "files": "resources/metadata/epigenetic_datasets.tsv names them per biosample and assay. K562 DNase-seq ENCSR000EOT: ENCFF205FNC, ENCFF860XAE. K562 H3K27ac ChIP-seq ENCSR000AKP: ENCFF790GFL, ENCFF817HMW. Both pairs are ENCODE `unfiltered alignments`",
+      "region": "config/config_CRISPR.yml: for the `validation` set the chr/start/end columns are the benchmark's own chrom, chromStart and chromEnd, so the region is the element span as published and is not resized. `RPM_expanded_assays` is a SEPARATE set of columns (.expandedRegion) and is not the column the frozen model reads"
+    },
+    "bams": [
+      {
+        "column": "DHS.RPM",
+        "accession": "ENCFF205FNC",
+        "denominator": 245147436
+      },
+      {
+        "column": "DHS.RPM",
+        "accession": "ENCFF860XAE",
+        "denominator": 41597059
+      },
+      {
+        "column": "H3K27ac.RPM",
+        "accession": "ENCFF790GFL",
+        "denominator": 8473682
+      },
+      {
+        "column": "H3K27ac.RPM",
+        "accession": "ENCFF817HMW",
+        "denominator": 16245350
+      }
+    ],
+    "streamed_gb": 15.85,
+    "bytes_written_to_disk": 0
+  },
+  "verdict": {
+    "gain_published": 0.13469840308351688,
+    "gain_reconstructed": 0.1356191433942877,
+    "gain_shift": 0.000920740310770829,
+    "max_abs_gain_shift": 0.01,
+    "gain_shift_passes": true,
+    "score_spearman_deletion_arm": 0.9983964949559019,
+    "score_spearman_no_deletion_arm": 0.9982419665629555,
+    "min_score_spearman": 0.99,
+    "score_spearman_passes": true,
+    "passes": true,
+    "rule": "both conditions must hold; either one failing fails the gate",
+    "pairs": 1918,
+    "positives": 118,
+    "auprc_published": {
+      "with_deletion": 0.6779802915007618,
+      "without_deletion": 0.5432818884172449
+    },
+    "auprc_reconstructed": {
+      "with_deletion": 0.6798037798854011,
+      "without_deletion": 0.5441846364911134
+    }
+  },
+  "reading": "the endpoint is unchanged within the registered tolerance: the reconstructed activity is interchangeable with the published activity FOR THIS ENDPOINT, which is what the claim depends on. This does NOT mean the columns agree -- they do not, and the gate that measured that failed and stays failed",
+  "the_old_gate_is_not_reopened": "the scale gate failed and stays failed. Nothing here rescales anything, and this result must never be described as that test passing",
+  "not_claimed": [
+    "not a demonstration that the reconstructed columns equal the published ones: they do not",
+    "not a licence to use the reconstruction for anything but this endpoint: a quantity that leaves one AUPRC difference unchanged is not validated for a threshold, a percentile or any claim about activity itself",
+    "not an astrocyte result: no astrocyte value was read or computed",
+    "not a spending approval: Albert's named the original registration by hash"
+  ],
+  "requests_sent": 0,
+  "money_spent": 0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE alignments named by mayasheth/chrom-annotate resources/metadata/epigenetic_datasets.tsv: ENCFF205FNC, ENCFF860XAE, ENCFF790GFL, ENCFF817HMW",
+        "version": "15.85 GB streamed over HTTPS and not stored",
+        "url": "https://www.encodeproject.org"
+      },
+      {
+        "accession": "mayasheth/chrom-annotate, workflow/scripts/neighborhoods.py",
+        "version": "commit 91cda73ebe3a19153a582cab18cbf7ff70d85cfc; the reconstruction rule is read from this file, line by line",
+        "url": "https://github.com/mayasheth/chrom-annotate"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark training_K562 and heldout_5_cell_types",
+        "version": "fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/astroreg_registration.json",
+        "sha256": "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a",
+        "bytes": 37734,
+        "partition": null,
+        "role": "the frozen original, whose sha256 is checked; no term of it is moved and its failed calibration gate is not reopened"
+      },
+      {
+        "path": "data/results/astroreg2_registration.json",
+        "sha256": "64a62cb5589cca49c81246324552b184ea7ec91a7893064ad4896a3e1edb96dd",
+        "bytes": 22135,
+        "partition": null,
+        "role": "AstroREG-2's registered gate, read rather than restated"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training",
+        "role": "the K562 training pairs the frozen weights are fitted on, with the PUBLISHED columns, once, for both runs; already-read development evidence"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "role": "the K562 held-out pairs, their labels and their published activity columns: the endpoint comparison set; already-read"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr*.json",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+            "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+            "bytes": 59143558
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+            "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+            "bytes": 30053316
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+            "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+            "bytes": 33499966
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+            "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+            "bytes": 31351611
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+            "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+            "bytes": 15228015
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+            "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+            "bytes": 20072956
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+            "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+            "bytes": 20640048
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+            "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+            "bytes": 21208708
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+            "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+            "bytes": 28806649
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+            "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+            "bytes": 13758030
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+            "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+            "bytes": 21448470
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+            "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+            "bytes": 49594427
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+            "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+            "bytes": 17561812
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+            "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+            "bytes": 7768557
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+            "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+            "bytes": 13336425
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+            "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+            "bytes": 39520954
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+            "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+            "bytes": 29236717
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+            "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+            "bytes": 33400922
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+            "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+            "bytes": 35593651
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+            "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+            "bytes": 31588372
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+            "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+            "bytes": 27866660
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+            "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+            "bytes": 26873186
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+            "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+            "bytes": 14767878
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+            "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+            "bytes": 462897
+          }
+        ],
+        "sha256": "d8be757572cbaef70d78447644245d84063b4e198910b8aed0ea25d7ec525d9b",
+        "bytes": 622783785,
+        "files": 24,
+        "partition": null,
+        "role": "the swept registry element spans, read by crispri.DeletionTable's overlap test to decide which pairs are covered. Identical in both runs"
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr*.json.gz",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+            "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+            "bytes": 14622897
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+            "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+            "bytes": 470775
+          }
+        ],
+        "sha256": "dae60244f56738d071c120cf2a2b599d1f32ad322542e49039d5b0757a4d0781",
+        "bytes": 789611479,
+        "files": 24,
+        "partition": null,
+        "role": "the per-element deletion cache, the source of the deletion features. Read twice and identical both times, which is why the deletion arm is unchanged between the runs"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "max_abs_gain_shift": 0.01,
+      "min_score_spearman": 0.99,
+      "heldout_pairs": 1918,
+      "training_pairs": 10356,
+      "gain_shift": 0.000920740310770829,
+      "bams_streamed": 4,
+      "bytes_written_to_disk": 0,
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "requests_sent": 0,
+      "money_spent": 0,
+      "astrocyte_values_computed": 0
+    },
+    "exclusions": [
+      "no AlphaGenome request is sent and this script has no code path that could send one",
+      "no astrocyte value of any kind is read or computed",
+      "no rescaling factor was fitted: the reconstructed columns entered as computed",
+      "the weights were not refitted for the reconstructed run",
+      "the failed scale gate was not re-run and is not reopened",
+      "no BAM is written to disk"
+    ],
+    "partitions": {
+      "k562_training": "the frozen weights' source, published columns only",
+      "k562_heldout": "the endpoint comparison set, scored twice",
+      "astrocyte": "not touched"
+    },
+    "code_cleanliness": {
+      "git_sha": "63e5428bccd9ef3a998213a2127b36db3108366a",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/rescore_cost.py",
+        "scripts/rescore_cost.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/rpm.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/astroreg2_endpoint.py",
+        "scripts/astroreg2_register.py",
+        "scripts/astroreg_calib_register.py",
+        "scripts/astroreg_rpm_calibrate.py"
+      ],
+      "counting_path_count": 128,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "63e5428bccd9ef3a998213a2127b36db3108366a",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/rescore_cost.py",
+        "scripts/rescore_cost.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/rescore_cost.py",
+        "scripts/rescore_cost.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/finemap_coverage.json"
+      ],
+      "argv": [
+        "scripts/astroreg2_endpoint.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 358,
+      "opens_under_data": 145,
+      "files_read": 52,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
