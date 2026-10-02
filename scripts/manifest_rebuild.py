@@ -26,6 +26,13 @@ rebuild with the reason:
    `seconds_*`, `*_per_second`); the report lists their paths under `timing_fields_ignored`.
    Since 2026-10-02 the run-resource readings named in `RESOURCE_KEYS` are ignored too, by exact key,
    and listed under `resource_fields_ignored`.
+   Since 2026-10-02 the tracer's own `opens` count is ignored, by the exact paths in `RUN_FIELDS` and
+   never by key, suffix or substring, and listed under `run_fields_ignored`; `cwd_at_open` and
+   `cwd_at_close` are compared, and set aside as environment only where the recorded value is an
+   absolute path (`CWD_FIELDS`, `cwd_fields_recorded_absolute`).
+   Whatever was set aside is printed with the reason (`ignored_because`), and `comparison_reading` is
+   the one sentence that says whether anything was: "0 differences" and "0 differences after setting
+   aside N leaves" are different claims and the second is never printable as the first.
 """
 
 from __future__ import annotations
@@ -79,6 +86,129 @@ MUST_HOLD: tuple[tuple[str, Any], ...] = (
     ("own_code_is_committed", True),
     ("foreign_uncommitted_code_on_the_counting_path", []),
 )
+
+
+# --- the tracer's own fields (2026-10-02, lane-tracercwd) -----------------------------------------
+#
+# Two separate lanes finished a rebuild that reconciled at every leaf and then had to inspect and argue
+# away the same three differences by hand before they could report. lane-finemap's: 1,010 of 1,010 inputs
+# checked, 0 absent, 0 differing bytes, 0 must_hold failures, 4,353 of 4,370 leaves reconciling -- and
+# `opens` 1,684 against 1,855, plus two absolute working directories that a second worktree cannot ever
+# hold. A difference list that is never empty teaches its reader to skim it, which is the opposite of
+# what it is for.
+#
+# The two halves are not the same kind of fix, and conflating them was the first draft's error. A cwd
+# recorded absolutely carries NO information outside its own checkout, so making it repository-relative
+# loses nothing. `opens` DOES carry information -- see RUN_FIELDS, where what exempting it costs is
+# written down -- so it is set aside as a known loss with the loss named in the report, and not as noise.
+#
+# `cwd_at_open` and `cwd_at_close` are NOT exempted. `genomeos.manifest.cwd_as_recorded` now writes them
+# relative to the repository root, so the field keeps the purpose manifest.py states for it -- which
+# directory the recorded relative paths were taken against, and whether it moved inside the window --
+# and two checkouts at different absolute paths record the same value. Only the one case that cannot be
+# made relative, a cwd outside any repository, is recorded absolute, and only an absolute value is set
+# aside here. A result written BEFORE that change carries an absolute path and is covered by the same
+# clause: its bytes are not rewritten, because a committed result's bytes are a pin.
+
+#: The two leaves that say which directory a run's relative paths were taken against, by **exact path**.
+#: `traced_inputs` is a dict at one place in a manifest, not a list, so these paths carry no index.
+CWD_FIELDS = (
+    "/result_manifest/traced_inputs/cwd_at_open",
+    "/result_manifest/traced_inputs/cwd_at_close",
+)
+
+#: Exempt from comparison by **exact path**. This exemption is KNOWN TO BE LOSSY and the report says so:
+#: it is not the case that `opens` is noise.
+#:
+#: What is measured, and it is one case: in lane-finemap's rebuild `opens` moved 1,684 to 1,855 because
+#: THE WRITER'S OWN BEHAVIOUR CHANGED between the two runs -- its carry-forward had begun reading a git
+#: blob in place of a file on disk. That is a real change in what the code opened. No claim is made here
+#: that the count varies with the interpreter or the installed libraries; that was an unverified premise,
+#: it was withdrawn by the lane that raised it, and nothing in this file rests on it. What is claimed is
+#: only that the count is too coarse to diagnose anything -- it is one integer over every `open` the
+#: process made, naming no path -- and that a rebuild cannot act on it.
+#:
+#: So what is given up by setting it aside, stated rather than left to be inferred: `canonical` returns
+#: None for any path not under data/, and the hook then increments `opens` and records NOTHING ELSE. So
+#: `opens` is the only leaf in a manifest with any sensitivity at all to what a writer opened OUTSIDE
+#: data/, and the measured case is exactly that -- a git blob is not under data/. Exempting it makes the
+#: comparison blind to a change in a writer's reads outside data/.
+#:
+#: What is NOT given up, and what makes the trade defensible: everything the tracer records about reads
+#: UNDER data/ is still compared, leaf by leaf -- `opens_under_data`, `files_read`, `files_written`,
+#: `active`, and the two path lists `undeclared` and `declared_not_read`. A writer that becomes an
+#: undeclared input of itself, or that stops reading a file it declares, moves one of those.
+#:
+#: Why not compare the SET of traced paths instead of the count, which would be strictly better: the set
+#: is not in a manifest to compare. `manifest.traced_inputs` keeps the counts and the two difference
+#: lists and drops `trace_close()["reads"]`, so there is no set in any of the ~1,100 existing results;
+#: and the set that WOULD be recorded is canonicalised through data/, so it would not have held the git
+#: blob either and would not have caught the measured case. Recording something reproducible about reads
+#: outside data/ is recorder work and a separate lane, not a comparison change.
+#:
+#: Exact paths, never a key, a suffix or a substring match, and this is not hypothetical:
+#: `data/results/response_map_increment3.json` records `/per_element_response_cache/opens: 0`, which is
+#: an ASSERTION THE RUN COMPUTED -- "the run opened no file under the per-element cache", recorded by a
+#: patched `builtins.open` precisely because no reading of the source could establish it. A suffix match
+#: on `opens` would set that leaf aside, and a rebuild in which the run did open the cache would pass.
+RUN_FIELDS = ("/result_manifest/traced_inputs/opens",)
+
+
+def _at_path(payload: Any, path: str) -> Any:
+    """The value a `/a/b` path names, or None when nothing is there. Keys only: the paths that use this
+    carry no list index, and a path that needed one would not be found rather than silently matched."""
+    cur = payload
+    for part in path.strip("/").split("/"):
+        if not isinstance(cur, dict) or part not in cur:
+            return None
+        cur = cur[part]
+    return cur
+
+
+def cwd_fields_recorded_absolute(original: Any, rebuilt: Any) -> list[str]:
+    """Those of CWD_FIELDS whose recorded value is an ABSOLUTE path on either side, and only those.
+
+    This is the one cwd case a rebuild cannot be asked to reproduce, since a second worktree is at a
+    different absolute path by construction. Conditioned on the VALUE and not on the path, so the same
+    two leaves are compared like any other when both sides record a repository-relative directory: `.`
+    against `scripts` is a real difference and fails.
+    """
+    out = []
+    for path in CWD_FIELDS:
+        values = [_at_path(x, path) for x in (original, rebuilt)]
+        if any(isinstance(v, str) and os.path.isabs(v) for v in values):
+            out.append(path)
+    return out
+
+
+def comparison_reading(differences: list[str], ignored: dict[str, list[str]]) -> str:
+    """The one sentence that says what was compared and what was set aside.
+
+    "0 differences" and "0 differences after setting aside 3 leaves" are different claims, and this is
+    where the second is kept from being printable as the first.
+    """
+    set_aside = {k: len(v) for k, v in ignored.items() if v}
+    total = sum(set_aside.values())
+    named = ", ".join(
+        f"{n} {k.removesuffix('_ignored').replace('_', ' ')}" for k, n in sorted(set_aside.items())
+    )
+    # the one set-aside class that is a known loss rather than a free one has to reach the one sentence a
+    # reader reads, or the sentence invites exactly the inference the loss has to be protected from.
+    lossy = (
+        " One class set aside is KNOWN-LOSSY: run fields (the tracer's total `opens`), whose exemption"
+        " will hide a genuine change in the set of files this writer opens outside data/."
+        if ignored.get("run_fields_ignored")
+        else ""
+    )
+    if differences:
+        tail = f"; {total} further leaves were set aside ({named})" if total else "; nothing was set aside"
+        return f"{len(differences)} differences{tail}.{lossy}"
+    if total:
+        return (
+            f"0 differences AFTER SETTING ASIDE {total} leaves ({named}); every set-aside path is listed "
+            f"above with its reason, and this is not the same claim as 0 differences.{lossy}"
+        )
+    return "0 differences, and nothing was set aside: every leaf compared reconciles"
 
 
 def no_verdict_reason(declared: int, checked: int) -> str | None:
@@ -139,15 +269,33 @@ def leaf_reconciliation(original: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def environment_differences(found: list[str]) -> tuple[list[str], list[str]]:
+def _base_path(difference: str) -> str:
+    """The exact path a `diff()` line is about, with any list index dropped from its last step."""
+    return difference.split(":")[0].split("[")[0]
+
+
+def environment_differences(
+    found: list[str], also_environment: tuple[str, ...] | list[str] = ()
+) -> tuple[list[str], list[str]]:
     """(real differences, environment differences). A path counts as environmental only if it is exactly
-    one of ENVIRONMENT_FIELDS, or an element of one of those lists; no pattern matching."""
+    one of ENVIRONMENT_FIELDS or of `also_environment`, or an element of one of those lists; no pattern
+    matching. `also_environment` is for an exemption that depends on the recorded VALUE rather than on
+    the path alone -- `cwd_fields_recorded_absolute` is the only one -- so the caller decides per rebuild
+    and the decision is still an exact path when it reaches here."""
+    exempt = (*ENVIRONMENT_FIELDS, *also_environment)
     real, env = [], []
     for d in found:
-        path = d.split(":")[0]
-        base = path.split("[")[0]
-        (env if base in ENVIRONMENT_FIELDS else real).append(d)
+        (env if _base_path(d) in exempt else real).append(d)
     return real, env
+
+
+def run_differences(found: list[str]) -> tuple[list[str], list[str]]:
+    """(everything else, the differences at a RUN_FIELDS path). Exact path, never a key or a suffix: an
+    `opens` at any other path is a quantity some run computed and is compared like any other leaf."""
+    rest, run = [], []
+    for d in found:
+        (run if _base_path(d) in RUN_FIELDS else rest).append(d)
+    return rest, run
 
 
 def must_hold_failures(original: dict[str, Any], rebuilt: dict[str, Any]) -> list[str]:
@@ -200,6 +348,39 @@ def _ignored_key(key: Any) -> bool:
     """A key comparable() drops: a wall-clock reading or a run-resource one. Both are reported by path,
     under timing_fields_ignored and resource_fields_ignored, so a reader sees what was set aside."""
     return is_timing(key) or is_resource(key)
+
+
+#: Printed beside each list of set-aside paths, so an ignored field is visible and auditable with its
+#: reason attached, and never merely absent from the differences.
+IGNORED_BECAUSE = {
+    "environment_fields_ignored": (
+        "the tree the run happened in, not anything the run computed: the code-cleanliness lists in "
+        f"ENVIRONMENT_FIELDS, and a working directory recorded as an absolute path "
+        f"({', '.join(CWD_FIELDS)}), "
+        "which is either a cwd outside any repository or a result written before cwd_as_recorded; a "
+        "difference between two REPOSITORY-RELATIVE working directories is a real difference and is not "
+        "set aside"
+    ),
+    "run_fields_ignored": (
+        f"KNOWN-LOSSY EXEMPTION, not noise: {', '.join(RUN_FIELDS)} is the audit hook's count of every "
+        "open the process made, one integer naming no path. Setting it aside WILL HIDE A GENUINE CHANGE "
+        "IN THE SET OF FILES THIS WRITER OPENS, and in the one case measured it moved for a real reason "
+        "(1,684 to 1,855, a carry-forward that had begun reading a git blob in place of a file on disk). "
+        "It is set aside because the count is too coarse to diagnose anything and a rebuild cannot act on "
+        "it. It is the only leaf sensitive to reads OUTSIDE data/, so that is what the comparison is now "
+        "blind to; every leaf about reads under data/ is still compared -- opens_under_data, files_read, "
+        "files_written, active, and the undeclared and declared_not_read path lists. Exempt by exact path "
+        "only, so an `opens` anywhere else -- /per_element_response_cache/opens is one, and the run "
+        "computed it -- is compared like any other leaf"
+    ),
+    "timing_fields_ignored": (
+        "a wall-clock reading, matched by key (is_timing) at any depth: `seconds`, a name with a "
+        "`seconds` token, or one ending `per_second`. How long a machine took is not a quantity the "
+        "result asserts; `second` alone (an ordinal, as in second_endpoint) and `duration` (often "
+        "biological) are compared like any other leaf"
+    ),
+    "resource_fields_ignored": f"a run-resource reading, by exact key: {', '.join(RESOURCE_KEYS)}",
+}
 
 
 def _strip_timing(x: Any) -> Any:
@@ -705,15 +886,20 @@ def rebuild(
         rebuilt = json.loads((wt / "data" / "results" / result.name).read_text())
         report["rebuilt_sha256"] = mf.sha256_of(written)[0]
         found = diff(comparable(original), comparable(rebuilt))
-        real, env = environment_differences(found)
+        rest, run = run_differences(found)
+        real, env = environment_differences(rest, cwd_fields_recorded_absolute(original, rebuilt))
         report["differences"] = real
         report["environment_fields_ignored"] = env
+        report["run_fields_ignored"] = run
         report["must_hold_failures"] = must_hold_failures(original, rebuilt)
         report["differences"] += report["must_hold_failures"]
         report["timing_fields_ignored"] = sorted(set(timing_paths(original)) | set(timing_paths(rebuilt)))
         report["resource_fields_ignored"] = sorted(
             set(resource_paths(original)) | set(resource_paths(rebuilt))
         )
+        report["ignored_because"] = {k: IGNORED_BECAUSE[k] for k in IGNORED_BECAUSE if report.get(k)} or {
+            "nothing": "no leaf was set aside by any of the four rules"
+        }
         report["fields_compared"] = len(comparable(original))
         report["leaves"] = leaf_reconciliation(original)
         report["leaves_compared"] = report["leaves"]["compared"]
@@ -727,6 +913,12 @@ def rebuild(
             return {**report, "rebuilt": False}
         report["identical_bytes_except_date_and_run"] = not report["differences"]
         report["identical_bytes"] = written.read_bytes() == result.read_bytes()
+        set_aside = {k: report[k] for k in IGNORED_BECAUSE if report.get(k)}
+        report["leaves_set_aside"] = sum(len(v) for v in set_aside.values())
+        report["no_differences_and_nothing_set_aside"] = (
+            not report["differences"] and not report["leaves_set_aside"]
+        )
+        report["comparison_reading"] = comparison_reading(report["differences"], set_aside)
         return {**report, "rebuilt": True}
     finally:
         if not keep:

@@ -281,6 +281,15 @@ def _repo_relative(path: str | Path) -> str:
 #     directory held that file when it was hashed;
 #   - what a window missed when the working directory moved inside it, which the block below reports
 #     as `cwd_at_open` and `cwd_at_close` rather than leaving it to be assumed.
+#
+# Those two are recorded RELATIVE TO THE REPOSITORY ROOT (`cwd_as_recorded`), not as absolute paths.
+# The purpose is unchanged -- which directory the recorded relative spellings were taken against, and
+# whether it moved inside the window -- and the reason for the change is that an absolute path cannot
+# serve that purpose outside the checkout that wrote it. A rebuild in a second worktree sits at a
+# different absolute path BY CONSTRUCTION, so the field reported a difference on every rebuild while
+# carrying no information about the run, and a difference list that is never empty teaches its reader
+# to skim it. Relative to the root, the same directory in two checkouts records the same value and a
+# cwd that genuinely moved still records a different one.
 
 #: The directory a result's inputs live under, as the repository names it.
 DATA_DIR = "data"
@@ -299,6 +308,46 @@ def _is_write(mode: Any, flags: Any) -> bool:
     if isinstance(mode, str):
         return any(c in mode for c in "wax+")
     return bool(isinstance(flags, int) and flags & _WRITE_FLAGS)
+
+
+#: What `cwd_at_open` and `cwd_at_close` record when the working directory IS the repository root, which
+#: is where every writer in this project is run from. A rebuild in another checkout records the same.
+CWD_AT_ROOT = "."
+
+
+def _repo_root(start: str | Path) -> Path | None:
+    """The repository root at or above `start`, or None when `start` lies outside a repository.
+
+    Walked rather than asked: `git rev-parse --show-toplevel` would fork a subprocess inside the window
+    this module opens around every writer, and the answer is one `.git` lookup per parent. A linked
+    worktree's `.git` is a FILE and a clone's is a directory, so existence is the test and not `is_dir`:
+    a run inside `.claude/worktrees/<name>` is at the root of ITS checkout, and recording `.` there is
+    the honest answer, because that is the directory its relative paths were taken against.
+    """
+    here = Path(os.path.abspath(start))
+    for candidate in (here, *here.parents):
+        if (candidate / ".git").exists():
+            return candidate
+    return None
+
+
+def cwd_as_recorded(cwd: str | Path | None = None) -> str:
+    """A working directory as a rebuild in another checkout can compare it: relative to the repository
+    root, `.` at the root itself.
+
+    A cwd that lies OUTSIDE any repository cannot be made relative to one, so that case -- and only that
+    case -- is recorded as the absolute path it is, and `scripts/manifest_rebuild.py` sets a difference
+    aside as environment only for a value that is absolute. A difference between two relative values is
+    a real difference: the run was in a different directory, and the paths it recorded mean something
+    else than the paths it is being compared against.
+    """
+    here = Path(os.path.abspath(cwd if cwd is not None else os.getcwd()))
+    root = _repo_root(here)
+    if root is None:
+        return str(here)
+    with contextlib.suppress(ValueError):
+        return str(here.relative_to(root)) if here != root else CWD_AT_ROOT
+    return str(here)
 
 
 class _OpenTrace:
@@ -389,7 +438,7 @@ def trace_begin() -> bool:
     _TRACE._canonical.clear()
     _TRACE.opens = 0
     _TRACE.opens_under_data = 0
-    _TRACE.cwd = os.getcwd()
+    _TRACE.cwd = cwd_as_recorded()
     _TRACE.prefixes()
     _TRACE.recording = _TRACE.installed
     return _TRACE.recording
@@ -410,7 +459,7 @@ def trace_close() -> dict[str, Any]:
         "opens": _TRACE.opens,
         "opens_under_data": _TRACE.opens_under_data,
         "cwd_at_open": _TRACE.cwd,
-        "cwd_at_close": os.getcwd(),
+        "cwd_at_close": cwd_as_recorded(),
     }
     trace_begin()
     return held
