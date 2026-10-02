@@ -278,7 +278,7 @@ def main() -> None:
                     steps[s].outcomes.get(inc.INCREASE, 0) <= steps[prev].outcomes.get(inc.INCREASE, 0)
                 ),
             }
-            for prev, s in zip(inc.LADDER_STEPS, inc.LADDER_STEPS[1:], strict=True)
+            for prev, s in zip(inc.LADDER_STEPS[:-1], inc.LADDER_STEPS[1:], strict=True)
         ],
         "activity_axis_column": {
             step: {axis: tally.payload() for axis, tally in cols.items()}
