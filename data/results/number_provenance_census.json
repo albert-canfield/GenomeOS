@@ -1,0 +1,2107 @@
+{
+  "result": "number_provenance_census",
+  "date": "2026-10-02",
+  "lane": "lane-qualbound",
+  "registration": "data/results/number_provenance_registration.json",
+  "question": "which numbers in the hand-authored BioLang corpus are traceable to a source that states a number, which inherit a default convention, and which are asserted - so that the model's qualitative/quantitative boundary is counted rather than asserted",
+  "headline": {
+    "corpus": {
+      "slots_scoped": 522,
+      "denominator_numbers": 470,
+      "classes": {
+        "A_asserted_bare": 40,
+        "A_asserted_names_a_work": 8,
+        "D_language_default": 224,
+        "D_no_number": 44,
+        "E_existence_only": 168,
+        "N_non_numeric": 8,
+        "S_quoted": 30
+      },
+      "written": 254,
+      "outside_the_denominator": {
+        "D_no_number": 44,
+        "N_non_numeric": 8
+      },
+      "convention_tags_by_class": {
+        "A_asserted_bare:equals_language_default": 5,
+        "A_asserted_bare:repeated_in_file": 3,
+        "E_existence_only:equals_language_default": 28,
+        "E_existence_only:repeated_in_file": 41,
+        "S_quoted:equals_language_default": 3
+      }
+    },
+    "tier_1_dynamics_core": {
+      "slots_scoped": 194,
+      "denominator_numbers": 161,
+      "classes": {
+        "A_asserted_bare": 36,
+        "A_asserted_names_a_work": 7,
+        "D_language_default": 34,
+        "D_no_number": 27,
+        "E_existence_only": 76,
+        "N_non_numeric": 6,
+        "S_quoted": 8
+      },
+      "written": 133,
+      "outside_the_denominator": {
+        "D_no_number": 27,
+        "N_non_numeric": 6
+      },
+      "convention_tags_by_class": {
+        "A_asserted_bare:equals_language_default": 3,
+        "A_asserted_bare:repeated_in_file": 3,
+        "E_existence_only:equals_language_default": 25,
+        "E_existence_only:repeated_in_file": 38,
+        "S_quoted:equals_language_default": 3
+      }
+    },
+    "tier_2_other_declared_numbers": {
+      "slots_scoped": 328,
+      "denominator_numbers": 309,
+      "classes": {
+        "A_asserted_bare": 4,
+        "A_asserted_names_a_work": 1,
+        "D_language_default": 190,
+        "D_no_number": 17,
+        "E_existence_only": 92,
+        "N_non_numeric": 2,
+        "S_quoted": 22
+      },
+      "written": 121,
+      "outside_the_denominator": {
+        "D_no_number": 17,
+        "N_non_numeric": 2
+      },
+      "convention_tags_by_class": {
+        "A_asserted_bare:equals_language_default": 2,
+        "E_existence_only:equals_language_default": 3,
+        "E_existence_only:repeated_in_file": 3
+      }
+    },
+    "programs": 19,
+    "programs_with_no_scoped_slot": [
+      "genomeos/std/cell_types.bio",
+      "genomeos/std/development.bio"
+    ]
+  },
+  "per_file": {
+    "data/demo/celegans_lineage.bio": {
+      "all": {
+        "slots_scoped": 40,
+        "denominator_numbers": 32,
+        "classes": {
+          "A_asserted_bare": 1,
+          "D_language_default": 12,
+          "D_no_number": 8,
+          "E_existence_only": 16,
+          "S_quoted": 3
+        },
+        "written": 20,
+        "outside_the_denominator": {
+          "D_no_number": 8,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1,
+          "E_existence_only:repeated_in_file": 3
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 2,
+        "denominator_numbers": 2,
+        "classes": {
+          "A_asserted_bare": 1,
+          "S_quoted": 1
+        },
+        "written": 2,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 38,
+        "denominator_numbers": 30,
+        "classes": {
+          "D_language_default": 12,
+          "D_no_number": 8,
+          "E_existence_only": 16,
+          "S_quoted": 2
+        },
+        "written": 18,
+        "outside_the_denominator": {
+          "D_no_number": 8,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1,
+          "E_existence_only:repeated_in_file": 3
+        }
+      }
+    },
+    "data/demo/cell_context.bio": {
+      "all": {
+        "slots_scoped": 15,
+        "denominator_numbers": 12,
+        "classes": {
+          "D_language_default": 3,
+          "D_no_number": 3,
+          "E_existence_only": 9
+        },
+        "written": 9,
+        "outside_the_denominator": {
+          "D_no_number": 3,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 2
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 15,
+        "denominator_numbers": 12,
+        "classes": {
+          "D_language_default": 3,
+          "D_no_number": 3,
+          "E_existence_only": 9
+        },
+        "written": 9,
+        "outside_the_denominator": {
+          "D_no_number": 3,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 2
+        }
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/concentration_threshold.bio": {
+      "all": {
+        "slots_scoped": 19,
+        "denominator_numbers": 17,
+        "classes": {
+          "A_asserted_bare": 12,
+          "D_language_default": 3,
+          "D_no_number": 2,
+          "E_existence_only": 1,
+          "S_quoted": 1
+        },
+        "written": 14,
+        "outside_the_denominator": {
+          "D_no_number": 2,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 2
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 16,
+        "denominator_numbers": 14,
+        "classes": {
+          "A_asserted_bare": 12,
+          "D_language_default": 2,
+          "D_no_number": 2
+        },
+        "written": 12,
+        "outside_the_denominator": {
+          "D_no_number": 2,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 2
+        }
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 3,
+        "denominator_numbers": 3,
+        "classes": {
+          "D_language_default": 1,
+          "E_existence_only": 1,
+          "S_quoted": 1
+        },
+        "written": 2,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/flag_organism.bio": {
+      "all": {
+        "slots_scoped": 21,
+        "denominator_numbers": 15,
+        "classes": {
+          "A_asserted_bare": 1,
+          "D_language_default": 6,
+          "D_no_number": 6,
+          "E_existence_only": 8
+        },
+        "written": 9,
+        "outside_the_denominator": {
+          "D_no_number": 6,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 21,
+        "denominator_numbers": 15,
+        "classes": {
+          "A_asserted_bare": 1,
+          "D_language_default": 6,
+          "D_no_number": 6,
+          "E_existence_only": 8
+        },
+        "written": 9,
+        "outside_the_denominator": {
+          "D_no_number": 6,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1
+        }
+      }
+    },
+    "data/demo/gastrulation.bio": {
+      "all": {
+        "slots_scoped": 42,
+        "denominator_numbers": 42,
+        "classes": {
+          "A_asserted_bare": 8,
+          "D_language_default": 4,
+          "E_existence_only": 30
+        },
+        "written": 38,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 1,
+          "A_asserted_bare:repeated_in_file": 3,
+          "E_existence_only:equals_language_default": 8,
+          "E_existence_only:repeated_in_file": 17
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 42,
+        "denominator_numbers": 42,
+        "classes": {
+          "A_asserted_bare": 8,
+          "D_language_default": 4,
+          "E_existence_only": 30
+        },
+        "written": 38,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 1,
+          "A_asserted_bare:repeated_in_file": 3,
+          "E_existence_only:equals_language_default": 8,
+          "E_existence_only:repeated_in_file": 17
+        }
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/hoxd_order.bio": {
+      "all": {
+        "slots_scoped": 18,
+        "denominator_numbers": 9,
+        "classes": {
+          "D_language_default": 9,
+          "D_no_number": 9
+        },
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 9,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 18,
+        "denominator_numbers": 9,
+        "classes": {
+          "D_language_default": 9,
+          "D_no_number": 9
+        },
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 9,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/lateral_inhibition.bio": {
+      "all": {
+        "slots_scoped": 29,
+        "denominator_numbers": 24,
+        "classes": {
+          "A_asserted_bare": 6,
+          "D_language_default": 5,
+          "D_no_number": 5,
+          "E_existence_only": 8,
+          "S_quoted": 5
+        },
+        "written": 19,
+        "outside_the_denominator": {
+          "D_no_number": 5,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 1,
+          "E_existence_only:equals_language_default": 1,
+          "S_quoted:equals_language_default": 3
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 20,
+        "denominator_numbers": 17,
+        "classes": {
+          "A_asserted_bare": 4,
+          "D_language_default": 3,
+          "D_no_number": 3,
+          "E_existence_only": 5,
+          "S_quoted": 5
+        },
+        "written": 14,
+        "outside_the_denominator": {
+          "D_no_number": 3,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1,
+          "S_quoted:equals_language_default": 3
+        }
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 9,
+        "denominator_numbers": 7,
+        "classes": {
+          "A_asserted_bare": 2,
+          "D_language_default": 2,
+          "D_no_number": 2,
+          "E_existence_only": 3
+        },
+        "written": 5,
+        "outside_the_denominator": {
+          "D_no_number": 2,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 1
+        }
+      }
+    },
+    "data/demo/methylation_erosion.bio": {
+      "all": {
+        "slots_scoped": 10,
+        "denominator_numbers": 10,
+        "classes": {
+          "A_asserted_bare": 6,
+          "A_asserted_names_a_work": 3,
+          "E_existence_only": 1
+        },
+        "written": 10,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 10,
+        "denominator_numbers": 10,
+        "classes": {
+          "A_asserted_bare": 6,
+          "A_asserted_names_a_work": 3,
+          "E_existence_only": 1
+        },
+        "written": 10,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/repressilator.bio": {
+      "all": {
+        "slots_scoped": 24,
+        "denominator_numbers": 21,
+        "classes": {
+          "A_asserted_names_a_work": 3,
+          "D_language_default": 3,
+          "D_no_number": 3,
+          "E_existence_only": 15
+        },
+        "written": 18,
+        "outside_the_denominator": {
+          "D_no_number": 3,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 9,
+          "E_existence_only:repeated_in_file": 15
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 24,
+        "denominator_numbers": 21,
+        "classes": {
+          "A_asserted_names_a_work": 3,
+          "D_language_default": 3,
+          "D_no_number": 3,
+          "E_existence_only": 15
+        },
+        "written": 18,
+        "outside_the_denominator": {
+          "D_no_number": 3,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 9,
+          "E_existence_only:repeated_in_file": 15
+        }
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/segmentation_clock.bio": {
+      "all": {
+        "slots_scoped": 24,
+        "denominator_numbers": 22,
+        "classes": {
+          "A_asserted_bare": 2,
+          "D_language_default": 5,
+          "D_no_number": 2,
+          "E_existence_only": 14,
+          "S_quoted": 1
+        },
+        "written": 17,
+        "outside_the_denominator": {
+          "D_no_number": 2,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 5,
+          "E_existence_only:repeated_in_file": 6
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 24,
+        "denominator_numbers": 22,
+        "classes": {
+          "A_asserted_bare": 2,
+          "D_language_default": 5,
+          "D_no_number": 2,
+          "E_existence_only": 14,
+          "S_quoted": 1
+        },
+        "written": 17,
+        "outside_the_denominator": {
+          "D_no_number": 2,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 5,
+          "E_existence_only:repeated_in_file": 6
+        }
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/stage2_pools.bio": {
+      "all": {
+        "slots_scoped": 18,
+        "denominator_numbers": 12,
+        "classes": {
+          "A_asserted_bare": 1,
+          "A_asserted_names_a_work": 1,
+          "D_language_default": 2,
+          "D_no_number": 5,
+          "E_existence_only": 8,
+          "N_non_numeric": 1
+        },
+        "written": 11,
+        "outside_the_denominator": {
+          "D_no_number": 5,
+          "N_non_numeric": 1
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 8,
+        "denominator_numbers": 4,
+        "classes": {
+          "A_asserted_bare": 1,
+          "A_asserted_names_a_work": 1,
+          "D_language_default": 2,
+          "D_no_number": 4
+        },
+        "written": 2,
+        "outside_the_denominator": {
+          "D_no_number": 4,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 10,
+        "denominator_numbers": 8,
+        "classes": {
+          "D_no_number": 1,
+          "E_existence_only": 8,
+          "N_non_numeric": 1
+        },
+        "written": 9,
+        "outside_the_denominator": {
+          "D_no_number": 1,
+          "N_non_numeric": 1
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "data/demo/stage4_division.bio": {
+      "all": {
+        "slots_scoped": 12,
+        "denominator_numbers": 10,
+        "classes": {
+          "A_asserted_bare": 3,
+          "A_asserted_names_a_work": 1,
+          "D_language_default": 3,
+          "D_no_number": 1,
+          "E_existence_only": 3,
+          "N_non_numeric": 1
+        },
+        "written": 8,
+        "outside_the_denominator": {
+          "D_no_number": 1,
+          "N_non_numeric": 1
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 1
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 6,
+        "denominator_numbers": 5,
+        "classes": {
+          "A_asserted_bare": 2,
+          "D_language_default": 3,
+          "D_no_number": 1
+        },
+        "written": 2,
+        "outside_the_denominator": {
+          "D_no_number": 1,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 6,
+        "denominator_numbers": 5,
+        "classes": {
+          "A_asserted_bare": 1,
+          "A_asserted_names_a_work": 1,
+          "E_existence_only": 3,
+          "N_non_numeric": 1
+        },
+        "written": 6,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 1
+        },
+        "convention_tags_by_class": {
+          "A_asserted_bare:equals_language_default": 1
+        }
+      }
+    },
+    "genomeos/std/ageing.bio": {
+      "all": {
+        "slots_scoped": 4,
+        "denominator_numbers": 4,
+        "classes": {
+          "E_existence_only": 4
+        },
+        "written": 4,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 1,
+        "denominator_numbers": 1,
+        "classes": {
+          "E_existence_only": 1
+        },
+        "written": 1,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 3,
+        "denominator_numbers": 3,
+        "classes": {
+          "E_existence_only": 3
+        },
+        "written": 3,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "genomeos/std/cell_types.bio": {
+      "all": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "genomeos/std/development.bio": {
+      "all": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "genomeos/std/human_stages.bio": {
+      "all": {
+        "slots_scoped": 56,
+        "denominator_numbers": 56,
+        "classes": {
+          "D_language_default": 4,
+          "E_existence_only": 50,
+          "S_quoted": 2
+        },
+        "written": 52,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1
+        }
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 56,
+        "denominator_numbers": 56,
+        "classes": {
+          "D_language_default": 4,
+          "E_existence_only": 50,
+          "S_quoted": 2
+        },
+        "written": 52,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {
+          "E_existence_only:equals_language_default": 1
+        }
+      }
+    },
+    "genomeos/std/human_turnover.bio": {
+      "all": {
+        "slots_scoped": 34,
+        "denominator_numbers": 34,
+        "classes": {
+          "D_language_default": 17,
+          "S_quoted": 17
+        },
+        "written": 17,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 34,
+        "denominator_numbers": 34,
+        "classes": {
+          "D_language_default": 17,
+          "S_quoted": 17
+        },
+        "written": 17,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "genomeos/std/methylation.bio": {
+      "all": {
+        "slots_scoped": 8,
+        "denominator_numbers": 2,
+        "classes": {
+          "E_existence_only": 1,
+          "N_non_numeric": 6,
+          "S_quoted": 1
+        },
+        "written": 8,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 6
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 8,
+        "denominator_numbers": 2,
+        "classes": {
+          "E_existence_only": 1,
+          "N_non_numeric": 6,
+          "S_quoted": 1
+        },
+        "written": 8,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 6
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    },
+    "genomeos/std/signalling.bio": {
+      "all": {
+        "slots_scoped": 148,
+        "denominator_numbers": 148,
+        "classes": {
+          "D_language_default": 148
+        },
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_1_dynamics_core": {
+        "slots_scoped": 0,
+        "denominator_numbers": 0,
+        "classes": {},
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      },
+      "tier_2_other_declared_numbers": {
+        "slots_scoped": 148,
+        "denominator_numbers": 148,
+        "classes": {
+          "D_language_default": 148
+        },
+        "written": 0,
+        "outside_the_denominator": {
+          "D_no_number": 0,
+          "N_non_numeric": 0
+        },
+        "convention_tags_by_class": {}
+      }
+    }
+  },
+  "focus_module": {
+    "file": "data/demo/gastrulation.bio",
+    "summary": {
+      "slots_scoped": 42,
+      "denominator_numbers": 42,
+      "classes": {
+        "A_asserted_bare": 8,
+        "D_language_default": 4,
+        "E_existence_only": 30
+      },
+      "written": 38,
+      "outside_the_denominator": {
+        "D_no_number": 0,
+        "N_non_numeric": 0
+      },
+      "convention_tags_by_class": {
+        "A_asserted_bare:equals_language_default": 1,
+        "A_asserted_bare:repeated_in_file": 3,
+        "E_existence_only:equals_language_default": 8,
+        "E_existence_only:repeated_in_file": 17
+      }
+    },
+    "rules": {
+      "Nodal activates TBXT": {
+        "line": 18,
+        "evidence_kind": "experimental",
+        "fields": {
+          "strength": {
+            "value": 1.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default",
+              "repeated_in_file"
+            ]
+          },
+          "threshold": {
+            "value": 1.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default"
+            ]
+          },
+          "hill": {
+            "value": 2.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default"
+            ]
+          }
+        }
+      },
+      "Nodal activates SOX17": {
+        "line": 19,
+        "evidence_kind": "experimental",
+        "fields": {
+          "strength": {
+            "value": 1.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default",
+              "repeated_in_file"
+            ]
+          },
+          "threshold": {
+            "value": 3.0,
+            "class": "E_existence_only",
+            "convention_tags": []
+          },
+          "hill": {
+            "value": 4.0,
+            "class": "E_existence_only",
+            "convention_tags": []
+          }
+        }
+      },
+      "Tbxt inhibits SOX2": {
+        "line": 21,
+        "evidence_kind": "curated",
+        "fields": {
+          "strength": {
+            "value": 1.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default",
+              "repeated_in_file"
+            ]
+          },
+          "threshold": {
+            "value": 2.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          },
+          "hill": {
+            "value": 3.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          }
+        }
+      },
+      "Sox2 inhibits TBXT": {
+        "line": 22,
+        "evidence_kind": "curated",
+        "fields": {
+          "strength": {
+            "value": 1.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default",
+              "repeated_in_file"
+            ]
+          },
+          "threshold": {
+            "value": 4.0,
+            "class": "E_existence_only",
+            "convention_tags": []
+          },
+          "hill": {
+            "value": 3.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          }
+        }
+      },
+      "Sox17 inhibits TBXT": {
+        "line": 23,
+        "evidence_kind": "experimental",
+        "fields": {
+          "strength": {
+            "value": 1.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "equals_language_default",
+              "repeated_in_file"
+            ]
+          },
+          "threshold": {
+            "value": 2.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          },
+          "hill": {
+            "value": 3.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          }
+        }
+      },
+      "Sox17 inhibits SOX2": {
+        "line": 24,
+        "evidence_kind": "inferred",
+        "fields": {
+          "strength": {
+            "value": 1.0,
+            "class": "A_asserted_bare",
+            "convention_tags": [
+              "equals_language_default",
+              "repeated_in_file"
+            ]
+          },
+          "threshold": {
+            "value": 2.0,
+            "class": "A_asserted_bare",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          },
+          "hill": {
+            "value": 3.0,
+            "class": "A_asserted_bare",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          }
+        }
+      },
+      "Tbxt activates SOX17": {
+        "line": 27,
+        "evidence_kind": "experimental",
+        "fields": {
+          "strength": {
+            "value": 0.6,
+            "class": "E_existence_only",
+            "convention_tags": []
+          },
+          "threshold": {
+            "value": 4.0,
+            "class": "E_existence_only",
+            "convention_tags": []
+          },
+          "hill": {
+            "value": 3.0,
+            "class": "E_existence_only",
+            "convention_tags": [
+              "repeated_in_file"
+            ]
+          }
+        }
+      }
+    },
+    "reading": "not one number in this module is traceable to a source that states it. Every rule number is either a citation for the rule's existence that states no number (E_existence_only) or an assertion with no source (A_asserted_bare), and the same holds for every gene max and basal, every protein half_life and every param. The module is qualitative throughout, by count and not by assertion."
+  },
+  "sourced_class_in_full": [
+    {
+      "file": "data/demo/celegans_lineage.bio",
+      "line": 24,
+      "kind": "stage",
+      "declaration": "Gastrulation",
+      "field": "from",
+      "value": 100.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sulston et al. 1983 (E2 ingression at ~100 min)\"",
+      "numbers_quoted_after_strip": [
+        100.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "data/demo/celegans_lineage.bio",
+      "line": 27,
+      "kind": "param",
+      "declaration": "ab_cycle_min = 20 min",
+      "field": "value",
+      "value": 20.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sulston et al. 1983, Dev Biol 100:64 (AB blastomeres ~20 min early)\"",
+      "numbers_quoted_after_strip": [
+        20.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "data/demo/celegans_lineage.bio",
+      "line": 29,
+      "kind": "timer",
+      "declaration": "ab_cycle",
+      "field": "duration",
+      "value": 20.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sulston et al. 1983 (AB ~20 min early, lengthening)\"",
+      "numbers_quoted_after_strip": [
+        20.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "data/demo/concentration_threshold.bio",
+      "line": 26,
+      "kind": "compartment",
+      "declaration": "Cytosol",
+      "field": "absolute_volume",
+      "value": 94.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"a cytosol of red-cell volume: it 'averages 94 um3 at 300 mOsmol/kg' (Diez-Silva, Dao, Han, Lim & Suresh 2010, MRS Bulletin 35:382, section 'Healthy Red Blood Cell Structure')\"",
+      "numbers_quoted_after_strip": [
+        94.0,
+        300.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "data/demo/lateral_inhibition.bio",
+      "line": 33,
+      "kind": "protein",
+      "declaration": "Np",
+      "field": "initial",
+      "value": 0.5,
+      "cls": "S_quoted",
+      "evidence_kind": "curated",
+      "evidence_text": "\"Collier et al. 1996: n(0) = 0.5\"",
+      "numbers_quoted_after_strip": [
+        0.0,
+        0.5
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "data/demo/lateral_inhibition.bio",
+      "line": 34,
+      "kind": "protein",
+      "declaration": "Dp",
+      "field": "initial",
+      "value": 0.5,
+      "cls": "S_quoted",
+      "evidence_kind": "curated",
+      "evidence_text": "\"Collier et al. 1996: d(0) = 0.5\"",
+      "numbers_quoted_after_strip": [
+        0.0,
+        0.5
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "data/demo/lateral_inhibition.bio",
+      "line": 37,
+      "kind": "rule",
+      "declaration": "Dext activates N",
+      "field": "hill",
+      "value": 2.0,
+      "cls": "S_quoted",
+      "evidence_kind": "curated",
+      "evidence_text": "\"Collier et al. 1996: f(d) = d^2 / (0.01 + d^2)\"",
+      "numbers_quoted_after_strip": [
+        2.0,
+        0.01,
+        2.0
+      ],
+      "convention_tags": [
+        "equals_language_default"
+      ]
+    },
+    {
+      "file": "data/demo/lateral_inhibition.bio",
+      "line": 39,
+      "kind": "rule",
+      "declaration": "Np inhibits D",
+      "field": "strength",
+      "value": 1.0,
+      "cls": "S_quoted",
+      "evidence_kind": "curated",
+      "evidence_text": "\"Collier et al. 1996: g(n) = 1 / (1 + 100 n^2)\"",
+      "numbers_quoted_after_strip": [
+        1.0,
+        1.0,
+        100.0,
+        2.0
+      ],
+      "convention_tags": [
+        "equals_language_default"
+      ]
+    },
+    {
+      "file": "data/demo/lateral_inhibition.bio",
+      "line": 39,
+      "kind": "rule",
+      "declaration": "Np inhibits D",
+      "field": "hill",
+      "value": 2.0,
+      "cls": "S_quoted",
+      "evidence_kind": "curated",
+      "evidence_text": "\"Collier et al. 1996: g(n) = 1 / (1 + 100 n^2)\"",
+      "numbers_quoted_after_strip": [
+        1.0,
+        1.0,
+        100.0,
+        2.0
+      ],
+      "convention_tags": [
+        "equals_language_default"
+      ]
+    },
+    {
+      "file": "data/demo/segmentation_clock.bio",
+      "line": 19,
+      "kind": "param",
+      "declaration": "period_h = 5.0 h",
+      "field": "value",
+      "value": 5.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Matsuda et al. 2020, Science 369:1450 (human iPSC-derived PSM ~5 h)\"",
+      "numbers_quoted_after_strip": [
+        5.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_stages.bio",
+      "line": 33,
+      "kind": "timer",
+      "declaration": "human_cleavage",
+      "field": "duration",
+      "value": 20.0,
+      "cls": "S_quoted",
+      "evidence_kind": "curated",
+      "evidence_text": "\"2-cell at ~24 h, 8-cell at day 3: about one division per 20 h\"",
+      "numbers_quoted_after_strip": [
+        2.0,
+        24.0,
+        8.0,
+        3.0,
+        20.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_stages.bio",
+      "line": 34,
+      "kind": "timer",
+      "declaration": "human_segmentation_clock",
+      "field": "duration",
+      "value": 5.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Matsuda et al. 2020, Science 369:1450 (human presomitic mesoderm period 5 to 6 h)\"",
+      "numbers_quoted_after_strip": [
+        5.0,
+        6.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 5,
+      "kind": "timer",
+      "declaration": "Erythrocytes_lifespan",
+      "field": "duration",
+      "value": 119.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Erythrocytes lifespan 119 days\"",
+      "numbers_quoted_after_strip": [
+        119.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 6,
+      "kind": "timer",
+      "declaration": "MatureTCells_lifespan",
+      "field": "duration",
+      "value": 320.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Mature T cells lifespan 320 days\"",
+      "numbers_quoted_after_strip": [
+        320.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 7,
+      "kind": "timer",
+      "declaration": "Neutrophils_lifespan",
+      "field": "duration",
+      "value": 6.6,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Neutrophils lifespan 6.6 days\"",
+      "numbers_quoted_after_strip": [
+        6.6
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 8,
+      "kind": "timer",
+      "declaration": "EndothelialCells_lifespan",
+      "field": "duration",
+      "value": 2300.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Endothelial cells lifespan 2300 days\"",
+      "numbers_quoted_after_strip": [
+        2300.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 9,
+      "kind": "timer",
+      "declaration": "MatureBCells_lifespan",
+      "field": "duration",
+      "value": 63.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Mature B cells lifespan 63 days\"",
+      "numbers_quoted_after_strip": [
+        63.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 10,
+      "kind": "timer",
+      "declaration": "SmallIntestineEpithelia_lifespan",
+      "field": "duration",
+      "value": 5.3,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Small intestine epithelia lifespan 5.3 days\"",
+      "numbers_quoted_after_strip": [
+        5.3
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 11,
+      "kind": "timer",
+      "declaration": "EpidermalCells_lifespan",
+      "field": "duration",
+      "value": 31.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Epidermal cells lifespan 31 days\"",
+      "numbers_quoted_after_strip": [
+        31.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 12,
+      "kind": "timer",
+      "declaration": "Neurons_lifespan",
+      "field": "duration",
+      "value": 300000.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Neurons lifespan 300000 days\"",
+      "numbers_quoted_after_strip": [
+        300000.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 13,
+      "kind": "timer",
+      "declaration": "GlialCells_lifespan",
+      "field": "duration",
+      "value": 21000.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Glial cells lifespan 21000 days\"",
+      "numbers_quoted_after_strip": [
+        21000.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 14,
+      "kind": "timer",
+      "declaration": "ColonEpithelia_lifespan",
+      "field": "duration",
+      "value": 3.4,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Colon epithelia lifespan 3.4 days\"",
+      "numbers_quoted_after_strip": [
+        3.4
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 15,
+      "kind": "timer",
+      "declaration": "Adipocytes_lifespan",
+      "field": "duration",
+      "value": 4000.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Adipocytes lifespan 4000 days\"",
+      "numbers_quoted_after_strip": [
+        4000.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 16,
+      "kind": "timer",
+      "declaration": "AlveolarMacrophages_lifespan",
+      "field": "duration",
+      "value": 165.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Alveolar macrophages lifespan 165 days\"",
+      "numbers_quoted_after_strip": [
+        165.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 17,
+      "kind": "timer",
+      "declaration": "StomachEpithelia_lifespan",
+      "field": "duration",
+      "value": 13.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Stomach epithelia lifespan 13 days\"",
+      "numbers_quoted_after_strip": [
+        13.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 18,
+      "kind": "timer",
+      "declaration": "BronchialEpithelialCells_lifespan",
+      "field": "duration",
+      "value": 139.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Bronchial epithelial cells lifespan 139 days\"",
+      "numbers_quoted_after_strip": [
+        139.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 19,
+      "kind": "timer",
+      "declaration": "Monocytes_lifespan",
+      "field": "duration",
+      "value": 3.5,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Monocytes lifespan 3.5 days\"",
+      "numbers_quoted_after_strip": [
+        3.5
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 20,
+      "kind": "timer",
+      "declaration": "Cardiomyocytes_lifespan",
+      "field": "duration",
+      "value": 56000.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Cardiomyocytes lifespan 56000 days\"",
+      "numbers_quoted_after_strip": [
+        56000.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/human_turnover.bio",
+      "line": 21,
+      "kind": "timer",
+      "declaration": "Myocytes_lifespan",
+      "field": "duration",
+      "value": 18000.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Sender & Milo 2021: Myocytes lifespan 18000 days\"",
+      "numbers_quoted_after_strip": [
+        18000.0
+      ],
+      "convention_tags": []
+    },
+    {
+      "file": "genomeos/std/methylation.bio",
+      "line": 53,
+      "kind": "param",
+      "declaration": "methylation.neighbour_window_bp = 35 bp",
+      "field": "value",
+      "value": 35.0,
+      "cls": "S_quoted",
+      "evidence_kind": "experimental",
+      "evidence_text": "\"Zhou et al. 2018, Nat Genet 50:591 \u2014 the published definition of an isolated (solo) CpG: no other CpG within 35 bp on either side\"",
+      "numbers_quoted_after_strip": [
+        35.0
+      ],
+      "convention_tags": []
+    }
+  ],
+  "hand_adjudication": {
+    "registered_rule": "a member of S_quoted is demoted to E_existence_only when the matched digits fall in citation furniture the strip missed.",
+    "demoted_under_the_registered_rule": 0,
+    "contested_but_kept": [
+      {
+        "file": "data/demo/lateral_inhibition.bio",
+        "line": 39,
+        "declaration": "Np inhibits D",
+        "field": "strength",
+        "value": 1.0,
+        "matched": "the `1` in `g(n) = 1 / (1 + 100 n^2)`",
+        "contest": "the matched 1 is the numerator of a Hill function and not, as written, a statement about the strength of the interaction, so the match looked accidental.",
+        "the_contest_is_withdrawn": "checking the engine's arithmetic refutes it. The inhibiting branch is `rep *= 1 - strength * x^h/(threshold^h + x^h)`, which equals the quoted `1 / (1 + 100 n^2)` only when strength is exactly 1.0: any smaller strength leaves a floor of 1 - strength. So the quoted formula does constrain this slot's strength to 1.0, and the match is not accidental. S_quoted stands on its merits and not only on the registered rule.",
+        "registered_class": "S_quoted",
+        "class_if_the_rule_were_widened": "S_quoted; the widening does not reach it"
+      },
+      {
+        "file": "genomeos/std/human_stages.bio",
+        "line": 33,
+        "declaration": "human_cleavage",
+        "field": "duration",
+        "value": 20.0,
+        "matched": "the `20` in `about one division per 20 h`",
+        "contest": "the 20 h is the file's own arithmetic from two cited milestones (2-cell at ~24 h, 8-cell at day 3). The source states the milestones; the 20 is the author's division of them, written inside a curated evidence string.",
+        "registered_class": "S_quoted",
+        "class_if_the_rule_were_widened": "E_existence_only"
+      }
+    ],
+    "why_they_were_kept": "demoting them needs a wider rule than the one registered, and widening a test after seeing the data is the error this lane exists to avoid. One of the two contests was then refuted by the engine's own arithmetic and is withdrawn inside its entry, so the registered count of 30 stands and a reader who accepts the wider rule should read 29, not 28.",
+    "s_derived_promotions": 0,
+    "derivation_candidates_the_matcher_exposed": 30,
+    "strongest_case_the_registered_test_does_not_admit": [
+      {
+        "file": "data/demo/lateral_inhibition.bio",
+        "line": 37,
+        "declaration": "Dext activates N",
+        "field": "threshold",
+        "value": 0.1,
+        "evidence": "curated \"Collier et al. 1996: f(d) = d^2 / (0.01 + d^2)\"",
+        "arithmetic": "the engine's activating Hill form is x^h / (threshold^h + x^h), so threshold 0.1 with hill 2 gives d^2 / (0.1^2 + d^2) = d^2 / (0.01 + d^2), the quoted formula exactly. 0.1 = sqrt(0.01).",
+        "registered_class": "E_existence_only",
+        "why_not_s_derived": "the transform is in genomeos/runtime/grn.py, not in the evidence string, and the registered S_derived test required the transform to be written in the string. Promoting it would be widening a test after seeing the data."
+      },
+      {
+        "file": "data/demo/lateral_inhibition.bio",
+        "line": 39,
+        "declaration": "Np inhibits D",
+        "field": "threshold",
+        "value": 0.1,
+        "evidence": "curated \"Collier et al. 1996: g(n) = 1 / (1 + 100 n^2)\"",
+        "arithmetic": "the engine's inhibiting Hill form is threshold^h / (threshold^h + x^h) = 1 / (1 + (x/threshold)^h), so threshold 0.1 with hill 2 gives 1 / (1 + 100 n^2), the quoted formula exactly. 0.1 = 1/sqrt(100).",
+        "registered_class": "E_existence_only",
+        "why_not_s_derived": "the same reason."
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "cited_as": "Conlon et al. 1994, Development 120:1919",
+      "cited_for": "data/demo/gastrulation.bio line 18, `rule Nodal activates TBXT`, and its strength 1.0, threshold 1.0 and hill 2",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 7924997",
+      "full_text_fetched": false,
+      "full_text_why_not": "not open access (Europe PMC isOpenAccess=N, no PMCID); the fullTextXML endpoint returns nothing.",
+      "what_it_states": "A primary requirement for nodal in the formation and maintenance of the primitive streak in the mouse. The 413.d insertional proviral insertion is a loss of function mutation; nodal RNA is detected from day 5.5; 413.d mutant embryos show no morphological evidence for a primitive streak.",
+      "what_it_does_not_state": "no dose-response, no half-maximal concentration, no Hill coefficient and no numeric strength for the effect of nodal on Brachyury/T. The only number in the abstract is a penetrance, `about 25% of mutant embryos do form randomly positioned patches of cells of a posterior mesodermal character`, which is a fraction of embryos and not a parameter of a regulatory function."
+    },
+    {
+      "cited_as": "Kanai-Azuma et al. 2002, Development 129:2367",
+      "cited_for": "data/demo/gastrulation.bio line 19, `rule Nodal activates SOX17`, and its strength 1.0, threshold 3.0 and hill 4",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 11973269",
+      "full_text_fetched": false,
+      "full_text_why_not": "not open access (isOpenAccess=N, no PMCID).",
+      "what_it_states": "Depletion of definitive gut endoderm in Sox17-null mutant mice: Sox17(-/-) embryos are deficient of gut endoderm; reduced occupancy of the definitive endoderm; elevated apoptosis in the foregut; Sox17-null ES cells are excluded from mid- and hindgut endoderm in chimeras.",
+      "what_it_does_not_state": "it is a loss-of-function study of Sox17, not a measurement of nodal dose. It states no threshold at which NODAL activates SOX17, no Hill coefficient and no strength. It does not even address the direction `Nodal activates SOX17` quantitatively; it establishes that Sox17 is required for endoderm."
+    },
+    {
+      "cited_as": "Thomson et al. 2011, Cell 145:875",
+      "cited_for": "data/demo/gastrulation.bio lines 21 and 22, `rule Tbxt inhibits SOX2` (strength 1.0, threshold 2.0, hill 3) and `rule Sox2 inhibits TBXT` (strength 1.0, threshold 4.0, hill 3)",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 21663792",
+      "full_text_fetched": false,
+      "full_text_why_not": "PMCID PMC5603300 exists but isOpenAccess=N; the fullTextXML endpoint returns nothing.",
+      "what_it_states": "Pluripotency factors in embryonic stem cells regulate differentiation into germ layers: Oct4 suppresses neural ectodermal and promotes mesendodermal differentiation; Sox2 inhibits mesendodermal and promotes neural ectodermal differentiation; differentiation signals `continuously and asymmetrically modulate Oct4 and Sox2 protein levels`. This supports the EXISTENCE and the SIGN of a Sox2 brake on the mesendodermal programme.",
+      "what_it_does_not_state": "no threshold, no Hill coefficient, no strength. The abstract states that the regulation is level-dependent and gives no level. The two rules carry DIFFERENT thresholds, 2.0 and 4.0, from the same citation, and nothing in the citation distinguishes them."
+    },
+    {
+      "cited_as": "Lolas et al. 2014, PNAS 111:4478",
+      "cited_for": "data/demo/gastrulation.bio line 23, `rule Sox17 inhibits TBXT` (Fig. 3C) and line 27, `rule Tbxt activates SOX17` (Fig. 1A ChIP-seq, Fig. 3A knockdown)",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 24616493",
+      "full_text_fetched": false,
+      "full_text_why_not": "PMCID PMC3970479 exists but isOpenAccess=N; the fullTextXML endpoint returns nothing, so Fig. 3C itself was not read here.",
+      "what_it_states": "Charting Brachyury-mediated developmental pathways: ChIP-seq and ChIP-exo localisation of Brachyury; `Brachyury functions primarily as a transcriptional activator genome-wide`; `an unexpected gene-regulatory feedback loop consisting of Brachyury, Foxa2, and Sox17`. This supports the EXISTENCE of both rules and the sign of `Tbxt activates SOX17`, which is the `5cbce26` correction, and that correction stands.",
+      "what_it_does_not_state": "no dose, no strength, no threshold and no Hill coefficient. data/demo/gastrulation.bio says so itself in the comment at line 28: `Lolas 2014 supports the sign of the two Tbxt/Sox17 rules above and reports no dose, strength, threshold or Hill coefficient`. The census agrees with that comment and classifies all six numbers of those two rules E_existence_only.",
+      "a_false_match_this_citation_would_have_caused": "the evidence string contains `Fig. 3C`. Without the citation-furniture strip the matcher would have read that 3 as a quoted number and called `hill: 3` sourced. tests/test_number_provenance.py pins the demotion."
+    },
+    {
+      "cited_as": "Zhou et al. 2018, Nat Genet 50:591",
+      "cited_for": "genomeos/std/methylation.bio, `param methylation.neighbour_window_bp = 35 bp`, and (in data/demo/methylation_erosion.bio) the mechanism behind an unsourced per-division fidelity",
+      "fetched": "abstract (Europe PMC, pmid 29610480) and full text (PubMed Central PMC5893360, open access)",
+      "full_text_fetched": true,
+      "what_it_states": "the solo-WCGW context is defined by `CpGs with the combination of zero neighboring CpGs (\"solo\") and the WCGW motif`, solo meaning no further CpG in a 35 bp window on either side. The 35 is the paper's own definition, so `methylation.neighbour_window_bp = 35 bp` is a number this census confirms as sourced.",
+      "what_it_does_not_state": "no per-division maintenance fidelity as a number. Asked directly, the full text gives none: it describes methylation loss accumulating over divisions and a re-methylation-window model without quantifying fidelity per division. data/demo/methylation_erosion.bio already says this - `Zhou et al. 2018 show the loss, not the rate` - and the census classifies its 0.90 A_asserted_names_a_work, agreeing with the file's own note."
+    },
+    {
+      "cited_as": "Matsuda et al. 2020, Science 369:1450",
+      "cited_for": "data/demo/segmentation_clock.bio `param period_h = 5.0 h` and genomeos/std/human_stages.bio `timer human_segmentation_clock duration: 5 h`",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 32943519",
+      "full_text_fetched": false,
+      "full_text_why_not": "not open access (isOpenAccess=N, no PMCID).",
+      "what_it_states": "`we recapitulate murine and human segmentation clocks that display 2- to 3-hour and 5- to 6-hour oscillation periods, respectively`. The source states a number for the quantity the field names, so both slots are sourced.",
+      "what_it_does_not_state": "the source states a RANGE, 5 to 6 h, and both files write its lower bound, 5. The census counts them S_quoted and records here that the written value is the bottom of the stated interval and not a point estimate the paper gives."
+    },
+    {
+      "cited_as": "Sender & Milo 2021, Nat Med 27:45",
+      "cited_for": "genomeos/std/human_turnover.bio, all 16 `timer *_lifespan` durations, which are 16 of the 30 members of the sourced class",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 33432173",
+      "full_text_fetched": false,
+      "full_text_why_not": "not open access (isOpenAccess=N, no PMCID). The per-cell-type lifespans live in the paper's table, which was not fetched.",
+      "what_it_states": "`a total cellular mass turnover of 80 +/- 20 grams per day` and `close to 90% of the (0.33 +/- 0.02) x 10^12 cells per day turnover was blood cells`. The paper is explicitly a quantitative integration of `ubiquity, mass and lifespan of all major cell types`, so it is the right KIND of source for a per-type lifespan.",
+      "what_it_does_not_state": "the abstract states none of the 16 values the file attributes to it. Those 16 are the largest block of the sourced class and this census did NOT verify any of them against the paper. `S_quoted` for them means only that the FILE quotes a number equal to the written value; a lane with access to the table should check them."
+    },
+    {
+      "cited_as": "Collier et al. 1996, J Theor Biol 183:429",
+      "cited_for": "data/demo/lateral_inhibition.bio, the two rules' strength, threshold and hill and the two proteins' initial values",
+      "fetched": "abstract, Europe PMC REST resultType=core, pmid 9015458",
+      "full_text_fetched": false,
+      "full_text_why_not": "not open access (isOpenAccess=N, no PMCID).",
+      "what_it_states": "`we construct and analyse a simple and general mathematical model of such contact-mediated lateral inhibition`, with the postulate that receipt of inhibition diminishes the ability to deliver it. It is the one cited work in this corpus whose subject is a parameterised model, which is why the file can quote formulae at all.",
+      "what_it_does_not_state": "the abstract states no parameter value: not the 0.01, not the 100, not the exponents and not the initial conditions. So the figures the file attributes to Collier 1996 could not be confirmed here, and the two threshold slots that reproduce its quoted formulae exactly stay E_existence_only for that reason as well as for the registered one."
+    }
+  ],
+  "reported_not_edited": [
+    {
+      "file": "data/demo/gastrulation.bio",
+      "line": 3,
+      "text": "Mutual repression makes the choice sharp.",
+      "why_it_is_false": "the repression in the program is not mutual. SOX17 represses TBXT and SOX2 and is repressed by nothing: `d340e5c` measured SOX17's repression factor at exactly 1.00000. The header describes a circuit the file does not contain.",
+      "action": "reported, not edited: data/demo is a shared demo directory."
+    }
+  ],
+  "outside_the_population": [
+    {
+      "what": "the `M1` entry of the closed candidate list in scripts/mesoderm_diagnosis.py (registered at 0790d51) attributes two rules, `Nodal activates MIXL1` and `Mixl1 inhibits SOX2`, to Hart et al. 2002, Development 129:3597.",
+      "why_it_is_not_counted": "it is a Python registration table, not a .bio program, so it is outside this census's population.",
+      "what_it_shows_anyway": "the same distinction, and the prior lane was already honest about the level: the entry's own species note reads `level unsourced, module convention`.",
+      "fetched_here": "Hart AH et al. 2002, Development 129:3597-3608, pmid 12117810, abstract via Europe PMC REST resultType=core. It is a real paper and it is the paper cited.",
+      "what_the_abstract_does_not_claim": "it names neither Nodal nor Sox2. It is a Mixl1-null mouse study: thickened primitive streak, arrest at the early somite stage, deficient paraxial mesoderm, and in chimeras Mixl1(-/-) cells excluded from the hindgut. So it supports that Mixl1 acts in the mesendoderm split, which is what the entry's `acts_in_mesoderm_specification` field claims, and it supports neither of the two rules the entry attributes to it - not their existence and not their strength. Confirmed as a paper; its rules not confirmed by it. The full text is not open access (no PMCID), so a figure inside it could still name one of the two; the abstract does not."
+    }
+  ],
+  "unclassified": [],
+  "limits_of_this_census": [
+    "it is CONSERVATIVE in one direction and the direction is known. A file that cites a quantitative paper without quoting its number lands in E_existence_only even if the paper does state it. The clearest instance is data/demo/repressilator.bio: its three rules carry `strength: 1.0; threshold: 1.0; hill: 2` against `experimental \"Elowitz & Leibler 2000\"`, and the genes carry `max: 200; basal: 0.2`, whose ratio of 1e-3 looks like the paper's own dimensionless leakiness. The paper's Box 1 may well state the Hill coefficient and that ratio, but the evidence strings quote nothing, the paper is not open access (pmid 10659856, isOpenAccess=N) and its abstract states no parameter value, so the census leaves all fifteen of those slots in E. A reader should treat E_existence_only as `the FILE does not carry the number's provenance`, which is what a census of a repository can establish, and not as `no source states it`.",
+    "it cannot distinguish an honest assertion from a careless one. data/demo/concentration_threshold.bio and data/demo/stage4_division.bio say in every evidence string that their numbers are modelling devices and carry confidence 0.1 to 0.2; they count A_asserted alongside anything else unsourced. The `confidence` field would separate them and is deliberately out of scope, because classifying the provenance of a self-reported confidence is classifying an opinion about provenance.",
+    "`S_quoted` is a claim about the file, not about the paper, except where source_checks says a source was fetched. 16 of the 30 members are the Sender & Milo lifespans and none of those 16 was verified against the paper."
+  ],
+  "observations_the_counts_make_visible": [
+    "bio.std.methylation writes six of its params as `= unknown`, which is why they count N_non_numeric. That is not a missing number: the engine refuses to run until a program binds them, and data/demo/methylation_erosion.bio binds them as its own assumptions with `inferred` evidence, which is why that file carries nine A_asserted slots and one E. The corpus's most honest file is also its least sourced, and the census cannot tell the two apart - that is a limit of this census, not a finding about the file.",
+    "data/demo/hoxd_order.bio contributes nine numbers and all nine are omitted gene `basal` slots at the language default 0.0, because the program declares loci and no kinetics at all. A per-file denominator keeps that from reading as nine conventional kinetic numbers.",
+    "genomeos/std/signalling.bio contributes 148 tier-2 slots and not one tier-1 slot: its 149 signals declare ligand, receptor and mode and almost never a threshold. The one large file in the corpus carries no kinetics.",
+    "data/demo/concentration_threshold.bio is 12 A_asserted_bare slots out of 14 and says so in every evidence string (`a modelling device`), with confidence 0.1. An asserted number that declares itself asserted is the class working as intended."
+  ],
+  "corrections_to_the_premises_this_lane_was_given": [
+    "the module's inhibiting convention is not `threshold 2.0; hill 3` across the inhibiting rules. `Sox2 inhibits TBXT` writes threshold 4.0, so threshold 2.0 is on three of the four inhibiting rules, while hill 3 is on five of the seven rules - the activating `Tbxt activates SOX17` included. The convention is wider than the inhibiting rules and narrower in the threshold than the brief said.",
+    "`max: 10` is not a language default. The IR supplies NO max at all when a gene omits it (genomeos/runtime/grn.py warns `gene_parameter_missing` and reads zero), so the 10 on three of gastrulation's four genes is the file's own repeated value. The language's rule defaults are strength 1.0, threshold 1.0 and hill 2.0, which is why the module's written `threshold: 2.0; hill: 3` counts as a repeated-in-file convention and not as an inherited one.",
+    "`strength: 1.0` on six of the seven rules IS exactly the language default, so for strength the module's convention and the language's coincide; that is the one field where leaving it out would have changed nothing."
+  ],
+  "claims_not_made": [
+    "no number is changed: no strength, threshold, Hill coefficient, basal or max is edited, and no program file is written to. The census reads.",
+    "no claim about correctness: the census says what a number rests on, never whether it is right. No validation, no accuracy figure, no verdict on any rule's truth.",
+    "no claim that a cited paper is wrong, and none that it is right. Where a source was fetched, what it states and what it does not state about a NUMBER is reported, and nothing more.",
+    "no tuning. `8bb9123` and `19423bd` refused fitting two free numbers to unsourced targets and this lane inherits the refusal.",
+    "S_quoted means the FILE quotes a number equal to the written value. It does not by itself mean the cited work states that number; only a fetch can say that, and the fetch is reported separately per source.",
+    "no number of this corpus is read as evidence about the machine-written corpora excluded above."
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the hand-authored BioLang corpus of this repository: data/demo, genomeos/std",
+        "version": "the working tree at the code revision stamped below; every program digested by its own path in inputs"
+      },
+      {
+        "accession": "genomeos/ir/model.py dataclass defaults, read for the value the language supplies when a field is omitted",
+        "version": "the same code revision; transcribed into number_provenance.SCOPE and asserted equal by tests/test_number_provenance.py"
+      },
+      {
+        "accession": "Europe PMC REST search (resultType=core) and PubMed Central, for the abstracts and the one open full text in source_checks",
+        "version": "fetched 2026-10-02; each entry names what was fetched and what could not be"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/celegans_lineage.bio",
+        "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+        "bytes": 4382,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/cell_context.bio",
+        "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+        "bytes": 1659,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/concentration_threshold.bio",
+        "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+        "bytes": 3525,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/flag_organism.bio",
+        "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+        "bytes": 2920,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/gastrulation.bio",
+        "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+        "bytes": 3765,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/hoxd_order.bio",
+        "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+        "bytes": 3064,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/lateral_inhibition.bio",
+        "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+        "bytes": 4042,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/methylation_erosion.bio",
+        "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+        "bytes": 3260,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/repressilator.bio",
+        "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+        "bytes": 2363,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/segmentation_clock.bio",
+        "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+        "bytes": 1639,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/stage2_pools.bio",
+        "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+        "bytes": 2117,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/stage4_division.bio",
+        "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+        "bytes": 2322,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "genomeos/std/ageing.bio",
+        "sha256": "a1732381e5aa12b58da46ce96b00e537711a032b59e188a44d7a3dad4024570f",
+        "bytes": 907,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/cell_types.bio",
+        "sha256": "40d862845df9b92cd81aadaa041ad627f16b0ee085b0061d0055fb77f1c93408",
+        "bytes": 842,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/development.bio",
+        "sha256": "2ec2c5e109f858b42c74e4e5e93ea2e066be9b338dd466b04c2c22af7ab5b028",
+        "bytes": 943,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/human_stages.bio",
+        "sha256": "7f33f6d770f767dca5581b628b83a04f892126af98a0d703dde3d69f31b266b9",
+        "bytes": 4213,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/human_turnover.bio",
+        "sha256": "171bffc88359bc454569cb08a2e2f4c4b9770e3a17e69fcc34429cc50bf3cd31",
+        "bytes": 3288,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/methylation.bio",
+        "sha256": "73a3a4e3700e2d6421cd8876765275610ddd5528198c5af1396bf3e082ce9be2",
+        "bytes": 3141,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/signalling.bio",
+        "sha256": "ade53caa6c5a83bb3b46e1c4117bcc84c5e182e317fbe32e464bc38dbb24b199",
+        "bytes": 29470,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "data/results/number_provenance_registration.json",
+        "sha256": "aee4d97842d42e4a007b72f1e1206b79f7767c09fa0e2290e47c8526d3261cc6",
+        "bytes": 43032,
+        "partition": "the registration this count was pre-registered in"
+      }
+    ],
+    "assembly": "n/a: no genomic interval is read; genome coordinates are out of scope and the reason is in the registration's out_of_scope_fields.",
+    "coordinates": "n/a: slots are addressed by file and line, not by genomic position.",
+    "parameters": {
+      "population_directories": [
+        "data/demo",
+        "genomeos/std"
+      ],
+      "scoped_field_count": 24,
+      "classes": {
+        "S_quoted": "the field is written; the declaration's own evidence kind is experimental, curated or predicted; and the written value appears as a literal number in the evidence string once citation furniture is stripped. Every member is listed with the matched substring and is adjudicated by hand in the result: a match that falls in furniture is demoted to E.",
+        "S_derived": "the same, except the written value is an exact arithmetic transform of a number the evidence string quotes, AND the transform is written in that same string (for example an evidence string quoting `f(d) = d^2 / (0.01 + d^2)` for `threshold: 0.1`, where 0.01 = 0.1^2). Every member is listed with its arithmetic so a reader can check it.",
+        "E_existence_only": "the field is written; the declaration cites a source (evidence kind experimental, curated or predicted with a non-empty source) and that source supports the declaration's EXISTENCE; and no number equal to the written value is quoted anywhere in the evidence string. A citation that supports a rule's existence is not a citation for its strength. This class is expected to be the largest and may not collapse into either neighbour.",
+        "A_asserted_names_a_work": "the field is written and the declaration's evidence kind is `inferred` or `none` - which BioLang's own grammar defines as not measured - but its note names a publication, a database or a reported range. The number is asserted; the prose is context.",
+        "A_asserted_bare": "the field is written, the evidence kind is `inferred`, `none` or absent, and the note names no work at all.",
+        "D_language_default": "the field is NOT written and the language supplies a number for it (`genomeos/ir/model.py` dataclass defaults: rule strength 1.0, threshold 1.0, hill 2.0, gene basal 0.0, protein initial 0.0, field diffusion 0.2, decay 0.01, signal threshold 0.0, event rate 0.0, regime threshold 50.0, stage from 0.0, timer lengthening 1.0, decision priority 0).",
+        "D_no_number": "the field is NOT written and the language supplies no number: the IR holds UNKNOWN, or the engine warns and reads zero. Counted, and reported OUTSIDE the denominator of numbers, because no number exists to have a provenance.",
+        "N_non_numeric": "the field is written but its value is not a number (`regenerates: from Glycolysis, OXPHOS`). Counted and reported outside the denominator."
+      },
+      "cascade": [
+        "1. the field is not written -> D_language_default if the language supplies a number for it, else D_no_number.",
+        "2. the field is written but holds no number -> N_non_numeric.",
+        "3. the evidence kind is `inferred`, `none` or absent -> A_asserted_names_a_work if the source or note names a publication, a database or a reported range, else A_asserted_bare. An `inferred` declaration cannot be a source for its own number whatever it mentions, because BioLang's grammar defines the kind as not measured; this is decided here and not while counting.",
+        "4. the evidence kind claims a source -> S_quoted if the written value appears literally in the stripped evidence string, else S_derived if a stated transform of a quoted number, else E_existence_only."
+      ],
+      "repeated_in_file_floor": 3,
+      "denominator": "written slots + D_language_default slots, stated per file and per tier. D_no_number and N_non_numeric are counted and reported outside it.",
+      "model_requests": 0,
+      "money_spent": "none; no paid API was called. The source checks are free web fetches of Europe PMC and PubMed Central.",
+      "numbers_changed": 0,
+      "bio_files_written": 0
+    },
+    "exclusions": [
+      "no number is changed: no strength, threshold, Hill coefficient, basal or max is edited, and no program file is written to. The census reads.",
+      "no claim about correctness: the census says what a number rests on, never whether it is right. No validation, no accuracy figure, no verdict on any rule's truth.",
+      "no claim that a cited paper is wrong, and none that it is right. Where a source was fetched, what it states and what it does not state about a NUMBER is reported, and nothing more.",
+      "no tuning. `8bb9123` and `19423bd` refused fitting two free numbers to unsourced targets and this lane inherits the refusal.",
+      "S_quoted means the FILE quotes a number equal to the written value. It does not by itself mean the cited work states that number; only a fetch can say that, and the fetch is reported separately per source.",
+      "no number of this corpus is read as evidence about the machine-written corpora excluded above."
+    ],
+    "partitions": {
+      "S_quoted": "the field is written; the declaration's own evidence kind is experimental, curated or predicted; and the written value appears as a literal number in the evidence string once citation furniture is stripped. Every member is listed with the matched substring and is adjudicated by hand in the result: a match that falls in furniture is demoted to E.",
+      "S_derived": "the same, except the written value is an exact arithmetic transform of a number the evidence string quotes, AND the transform is written in that same string (for example an evidence string quoting `f(d) = d^2 / (0.01 + d^2)` for `threshold: 0.1`, where 0.01 = 0.1^2). Every member is listed with its arithmetic so a reader can check it.",
+      "E_existence_only": "the field is written; the declaration cites a source (evidence kind experimental, curated or predicted with a non-empty source) and that source supports the declaration's EXISTENCE; and no number equal to the written value is quoted anywhere in the evidence string. A citation that supports a rule's existence is not a citation for its strength. This class is expected to be the largest and may not collapse into either neighbour.",
+      "A_asserted_names_a_work": "the field is written and the declaration's evidence kind is `inferred` or `none` - which BioLang's own grammar defines as not measured - but its note names a publication, a database or a reported range. The number is asserted; the prose is context.",
+      "A_asserted_bare": "the field is written, the evidence kind is `inferred`, `none` or absent, and the note names no work at all.",
+      "D_language_default": "the field is NOT written and the language supplies a number for it (`genomeos/ir/model.py` dataclass defaults: rule strength 1.0, threshold 1.0, hill 2.0, gene basal 0.0, protein initial 0.0, field diffusion 0.2, decay 0.01, signal threshold 0.0, event rate 0.0, regime threshold 50.0, stage from 0.0, timer lengthening 1.0, decision priority 0).",
+      "D_no_number": "the field is NOT written and the language supplies no number: the IR holds UNKNOWN, or the engine warns and reads zero. Counted, and reported OUTSIDE the denominator of numbers, because no number exists to have a provenance.",
+      "N_non_numeric": "the field is written but its value is not a number (`regenerates: from Glycolysis, OXPHOS`). Counted and reported outside the denominator."
+    },
+    "code_cleanliness": {
+      "git_sha": "cd43fce251ce9b79d6b8d95845087bf6b6f1da1c",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg2_send.py",
+        "tests/test_astroreg2_send.py",
+        "tests/test_astrorun.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/number_provenance.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/number_provenance_census.py"
+      ],
+      "counting_path_count": 13,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "cd43fce251ce9b79d6b8d95845087bf6b6f1da1c",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg2_send.py",
+        "tests/test_astroreg2_send.py",
+        "tests/test_astrorun.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/number_provenance_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "cd43fce251ce9b79d6b8d95845087bf6b6f1da1c",
+      "code_cleanliness_git_sha": "cd43fce251ce9b79d6b8d95845087bf6b6f1da1c",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record cd43fce"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 99,
+      "opens_under_data": 37,
+      "files_read": 13,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "genomeos/std/ageing.bio",
+        "genomeos/std/cell_types.bio",
+        "genomeos/std/development.bio",
+        "genomeos/std/human_stages.bio",
+        "genomeos/std/human_turnover.bio",
+        "genomeos/std/methylation.bio",
+        "genomeos/std/signalling.bio"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
