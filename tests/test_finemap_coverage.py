@@ -168,3 +168,40 @@ def test_nothing_is_built_and_no_baseline_is_registered() -> None:
     )
     for forbidden in ("urllib", "requests", "http"):
         assert f"import {forbidden}" not in src, f"this writer makes no network request ({forbidden})"
+
+
+def test_the_catalogue_is_the_record_of_where_the_track_was_read() -> None:
+    """DAP-G was read over exactly the unit intervals, which is why the catalogues bound assessability."""
+    src = (ROOT / "genomeos/attribution/human_panel.py").read_text()
+    assert '"gtex_dapg"' in src
+    assert 'ivs = [(u["start"], u["end"]) for u in units + hyper]' in src
+    assert "track_rows(key, chrom, ivs)" in src
+
+
+def test_a_catalogued_unit_records_its_dapg_row_without_the_posterior() -> None:
+    """The reason the threshold cannot be applied over the whole assessable frame."""
+    import gzip
+    import json
+
+    p = ROOT / "data/knowledge/human_panel/chr6/storage_catalogue.json.gz"
+    if not p.exists():
+        pytest.skip("the chr6 catalogue is not on this machine")
+    with gzip.open(p, "rt") as fh:
+        units = json.load(fh)
+    rows = [r for u in units[:20000] if u.get("eqtl") for r in u["eqtl"]]
+    assert rows, "no DAP-G row in the first 20,000 units of chr6"
+    assert all("pip" not in r for r in rows), "the catalogue would then carry the posterior after all"
+    assert all("variant" in r and "gene" in r for r in rows)
+
+
+def test_the_three_assessability_arms_are_ordered() -> None:
+    """Read over >= a row placed >= a posterior on disk. Asserted, not assumed."""
+    import json
+
+    p = ROOT / "data/results/finemap_coverage.json"
+    if not p.exists():
+        pytest.skip("the result has not been written on this machine")
+    a = json.loads(p.read_text())["ASSESSABLE_FIRST"]
+    assert a["assessable"] >= a["where_dapg_placed_a_row_at_any_posterior"]
+    assert a["assessable"] >= a["where_a_posterior_is_recoverable_on_disk"]
+    assert a["assessable"] + a["unassessed"] == a["elements_of_the_frame"]

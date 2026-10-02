@@ -247,20 +247,28 @@ def fine_mapped() -> tuple[Points, dict[tuple[str, int], set[str]], dict[str, in
     return pts.freeze(), genes, rows_by_file
 
 
-def queried_upper_bound() -> tuple[Spans, Points]:
-    """The widest region a PIP could ever have been recorded over, from what is on disk.
+def queried_upper_bound() -> tuple[Spans, Spans, Points]:
+    """The region DAP-G was read over, the part of it where DAP-G placed a row, and the tested variants.
 
     DAP-G was read over the human panel's storage units and over MPRAVarDB's tested variants, never
-    genome-wide: `genomeos/attribution/human_panel.py` reads `gtex_dapg` for a unit's own interval,
-    and the panel's catalogues are the only unit tables on disk. Outside the union below no posterior
-    was ever looked up, so no element there can be assessed whatever is really present at it.
+    genome-wide: `genomeos/attribution/human_panel.py` reads `gtex_dapg` for exactly those unit
+    intervals and writes what came back into each unit's own `eqtl` field. So the catalogues are not a
+    guess at where the track was read - they are the record of it. Outside the union below no
+    posterior was ever looked up, so no element there can be assessed whatever is really present.
+
+    The second span set is the units whose `eqtl` field is non-empty: where DAP-G placed a row at ANY
+    posterior. The catalogue keeps only the variant and the gene and DROPS the PIP, so the imported
+    threshold cannot be applied there; that is why `queried_lower_bound` exists.
     """
     units = Spans()
+    with_a_row = Spans()
     for p in sorted(PANEL.glob("chr*/storage_catalogue.json.gz")):
         chrom = p.parent.name
         with gzip.open(p, "rt") as fh:
             for u in json.load(fh):
                 units.add(chrom, u["start"], u["end"])
+                if u.get("eqtl"):
+                    with_a_row.add(chrom, u["start"], u["end"])
     tested = Points()
     p = EXECUTOR / "two_instrument_rows.json.gz"
     if p.exists():
@@ -271,14 +279,16 @@ def queried_upper_bound() -> tuple[Spans, Points]:
                     c, q = v.split(":")[:2]
                     if q.isdigit():
                         tested.add(c, int(q))
-    return units.freeze(), tested.freeze()
+    return units.freeze(), with_a_row.freeze(), tested.freeze()
 
 
 def queried_lower_bound() -> Spans:
-    """The regions the executor's own records show it looked at, a floor on the queried frame.
+    """The regions where a POSTERIOR, and not only a variant and a gene, is recoverable on disk.
 
-    Every unit the executor names in its eQTL records is a unit it read. Units it read and found
-    nothing at do not all appear, so this is a floor and not the frame.
+    The panel's catalogues record which units DAP-G placed a row in but drop the PIP, so the imported
+    threshold can only be applied where an executor file retained the posterior itself. Every unit
+    those files name is such a unit. Units they read and found nothing at need not all appear, so this
+    is a floor on that subframe and not the subframe.
     """
     s = Spans()
     for f in ("replication_assembled.json.gz", "assembled.json.gz"):
@@ -311,11 +321,12 @@ def queried_lower_bound() -> Spans:
 def count(root: Path = ROOT) -> dict[str, Any]:
     els = elements(root)
     pts, var_genes, rows_by_file = fine_mapped()
-    units, tested = queried_upper_bound()
+    units, with_a_row, tested = queried_upper_bound()
     floor_spans = queried_lower_bound()
 
     by_chrom = collections.Counter(v["chrom"] for v in els.values())
     assessable_upper = assessable_units = assessable_mpra = assessable_floor = 0
+    with_a_dapg_row = 0
     unassessable_by_chrom: collections.Counter[str] = collections.Counter()
     carriers: list[dict[str, Any]] = []
     for eid, v in sorted(els.items()):
@@ -325,6 +336,7 @@ def count(root: Path = ROOT) -> dict[str, Any]:
         assessable_units += u
         assessable_mpra += m
         assessable_floor += floor_spans.touches(c, lo, hi)
+        with_a_dapg_row += with_a_row.touches(c, lo, hi)
         if u or m:
             assessable_upper += 1
         else:
@@ -370,12 +382,14 @@ def count(root: Path = ROOT) -> dict[str, Any]:
         "n_fine_mapped": pts.n,
         "fine_mapped_by_chromosome": pts.by_chromosome,
         "units": units,
+        "with_a_row": with_a_row,
         "tested": tested,
         "floor_spans": floor_spans,
         "assessable_upper": assessable_upper,
         "assessable_units": assessable_units,
         "assessable_mpra": assessable_mpra,
         "assessable_floor": assessable_floor,
+        "with_a_dapg_row": with_a_dapg_row,
         "unassessable_by_chromosome": dict(sorted(unassessable_by_chrom.items())),
         "carriers": carriers,
         "matched": matched,
@@ -450,23 +464,18 @@ def payload(k: dict[str, Any]) -> dict[str, Any]:
         "ASSESSABLE_FIRST": {
             "quantity": (
                 "compiled CRISPRi elements, widened by the imported margin, that lie inside a region "
-                "where a fine-mapped posterior could have been recorded at all"
+                "DAP-G was actually read over, so where a fine-mapped variant could have been seen"
             ),
             "elements_of_the_frame": n,
-            "upper_bound": k["assessable_upper"],
-            "upper_bound_rule": (
-                "the element window touches a human-panel storage unit OR contains an "
-                "MPRAVarDB-tested variant: the union of everywhere DAP-G was ever read. It is an "
-                "UPPER bound because only the subset of units the executor shortlisted was actually "
-                "queried, not every catalogued unit"
+            "assessable": k["assessable_upper"],
+            "assessable_rule": (
+                "the element window touches a catalogued human-panel unit OR contains an "
+                "MPRAVarDB-tested variant. This is the record of where the track was read and not a "
+                "guess at it: `genomeos/attribution/human_panel.py` reads `gtex_dapg` over exactly "
+                "those unit intervals and writes what came back into each unit's own `eqtl` field"
             ),
-            "upper_bound_from_storage_units_alone": k["assessable_units"],
-            "upper_bound_from_mpravardb_variants_alone": k["assessable_mpra"],
-            "lower_bound": k["assessable_floor"],
-            "lower_bound_rule": (
-                "the element window touches a unit the executor's own eQTL records name, so a unit "
-                "it demonstrably read. A floor, because a unit read and found empty need not appear"
-            ),
+            "assessable_from_catalogued_units_alone": k["assessable_units"],
+            "assessable_from_mpravardb_variants_alone": k["assessable_mpra"],
             "unassessed": n - k["assessable_upper"],
             "unassessed_meaning": (
                 "no fine-mapped posterior was ever looked up over these elements, so they are "
@@ -476,10 +485,21 @@ def payload(k: dict[str, Any]) -> dict[str, Any]:
             ),
             "unassessed_by_chromosome": k["unassessable_by_chromosome"],
             "elements_by_chromosome": k["elements_by_chromosome"],
-            "a_bound_is_not_a_denominator": (
-                "the assessable count is known only between a floor and a ceiling, so no ratio of "
-                "carriers to assessed elements is reportable. That is the finding, not a limitation "
-                "of the reporting"
+            "where_dapg_placed_a_row_at_any_posterior": k["with_a_dapg_row"],
+            "where_a_posterior_is_recoverable_on_disk": k["assessable_floor"],
+            "the_three_numbers_are_not_the_same_thing": (
+                "the assessable count is where the track was READ; the second is where DAP-G placed a "
+                "row at any PIP, which the catalogue records as a variant and a gene with the PIP "
+                "DROPPED; the third is where the posterior itself survives on disk, which is only "
+                "where an executor file retained it, and is the only subframe the imported threshold "
+                "can be applied over. The third is a floor, because a unit read and found empty need "
+                "not appear in those records"
+            ),
+            "a_frame_this_narrow_is_not_a_denominator": (
+                "the threshold can be applied over at most "
+                f"{k['assessable_floor']} of {n} elements, so no ratio of carriers to assessed "
+                "elements is reportable and none is given. That is the finding, not a limitation of "
+                "the reporting"
             ),
         },
         "CARRYING_SECOND": {
@@ -510,10 +530,11 @@ def payload(k: dict[str, Any]) -> dict[str, Any]:
                 "excess was computed and nothing was built"
             ),
             "why_poor": (
-                f"at most {k['assessable_upper']} of {n} elements could have been assessed and at "
-                f"least {n - k['assessable_upper']} could not. Of the frame, "
-                f"{len(k['carriers'])} elements carry a fine-mapped variant in range and "
-                f"{k['matched']} carry one for the element's own linked gene"
+                f"{k['assessable_upper']} of {n} elements lie where DAP-G was read at all and "
+                f"{n - k['assessable_upper']} do not; DAP-G placed a row of any posterior at "
+                f"{k['with_a_dapg_row']} of them; the posterior itself survives on disk over at most "
+                f"{k['assessable_floor']}; {len(k['carriers'])} carry a variant at or above the "
+                f"imported threshold and {k['matched']} carry one for the element's own linked gene"
             ),
             "the_number_that_cannot_be_recomputed": (
                 "the floor quantity of the re-distillation is addable loci carrying a hit on a shown "
@@ -656,7 +677,7 @@ def main() -> int:
     args = ap.parse_args()
     k = count()  # `genomeos.manifest` installs its one audit hook at import, so every open is traced
     p = payload(k)
-    print(json.dumps({kk: vv for kk, vv in p["ASSESSABLE_FIRST"].items() if isinstance(vv, int)}, indent=1))
+    print(json.dumps({kk: vv for kk, vv in p["ASSESSABLE_FIRST"].items() if isinstance(vv, int)}, indent=1))  # noqa: E501
     print(json.dumps({kk: vv for kk, vv in p["CARRYING_SECOND"].items() if isinstance(vv, int)}, indent=1))
     if args.save:
         out = save_result(NAME, p, manifest=manifest())
