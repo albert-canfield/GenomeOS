@@ -130,6 +130,41 @@ anyone else was working. `tests/test_code_cleanliness_hermetic.py` exists becaus
 defect one step further out, and `4f44dbf` fixed a third where a historical premise was asserted
 against the live tree. A claim about a tree belongs to that tree, by sha or by planting.
 
+## Two reds the coordinator bought by choosing WHEN instead of WHAT (2026-10-02)
+
+Both are pushes, both are the coordinator's, and both produced verdicts about trees nobody
+intended to ship. They are the same mistake twice: **the sha was decided by when something ran
+rather than by what was judged.**
+
+**The mid-sequence push.** push17 ran on a sha taken from `HEAD` while a lane was between two of
+its own commits. A lane that commits code and then regenerates the result that code governs passes
+through a tree where the new code and the old result disagree — here the module's `FALSIFIER`
+already carried amendment 2's wording while the committed registration still carried amendment 1's,
+because the result landed two commits later. **Five tests failed, and none of them was about the
+code.** A tree between a lane's code commit and its result commit is red BY CONSTRUCTION.
+
+**The late sha capture.** push18 was deliberately queued behind a timed wait, so the
+one-push-per-thirty-minutes interval would be measured from the previous push's start. It was
+launched as `--sha $(git rev-parse HEAD)`. **That substitution evaluated when the WAIT fired, not
+when the decision was made**, and a peer had committed twice in between — so the announced sha and
+the pushed sha were different (`dbb5d4a` announced, `47835d1` pushed). It happened to land on a
+boundary: the two extra commits were one lane's registration-only sequence, `dbb5d4a` was an
+ancestor, and all 52 files of the closure being verified had identical blobs at both shas, checked
+independently. **That is luck, not method.** A push is pinned to a sha precisely so the tree cannot
+move under the verdict, and the movement was reintroduced inside the command that does the pinning.
+
+**The rule, in two parts:**
+
+- **Push a sha at a SEQUENCE BOUNDARY** — a lane's declared-green sha, or `HEAD` when no lane is
+  mid-sequence — and ASK rather than assume. A registration-only commit is a boundary by
+  construction, because there is no result for it to disagree with.
+- **Capture the sha at DECISION time and pass it literally.** Never let a command substitution
+  resolve the subject of a verdict at execution time.
+
+**Why this belongs in this file rather than in a runbook:** neither red said anything about the
+code, both looked exactly like real failures, and the first one cost an hour of classification work
+before anybody noticed the tree was the problem. That is the definition this file exists for.
+
 ## Telling them apart from now on
 
 `genomeos/verdict.py` writes an `error_class` into every status file, with the list of classes beside
