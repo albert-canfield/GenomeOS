@@ -17,6 +17,25 @@ import pytest
 from genomeos.attribution import astrorun
 
 
+def grant_run(monkeypatch, run=1, requests=None, consumed=False, words="<the run's words>"):
+    """Record an approval for ONE run, so a test of another clause is not stopped by the approval one.
+
+    Run 1's REAL approval is marked consumed, because run 1 happened under it. A test that needs to
+    reach a later clause grants its own run an approval here rather than reusing a spent one.
+    """
+    monkeypatch.setattr(
+        astrorun,
+        "ASTROREG2_AUTHORISATIONS",
+        {
+            run: {
+                "words": words,
+                "requests": astrorun.ASTROREG2_CAP if requests is None else requests,
+                "consumed": consumed,
+            }
+        },
+    )
+
+
 class TestTheAuthorisedNumber:
     def test_the_cap_is_the_number_albert_approved(self):
         assert astrorun.AUTHORISED_REQUESTS == 1322
@@ -650,13 +669,19 @@ class TestAstroreg2HasItsOwnCapAndAuthorisation:
         """The refusal comes BEFORE the budget exists, so there is nothing to send with."""
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", None)
         with pytest.raises(astrorun.NoAuthorisationError):
-            astrorun.astroreg2_budget(tmp_path / "l.jsonl")
-        assert not (tmp_path / "l.jsonl").exists(), "a refusal creates no ledger"
+            astrorun.astroreg2_budget(run_id=1, root=tmp_path)
+        assert not astrorun.ledger_path_for_run(1, tmp_path).exists(), "a refusal creates no ledger"
 
     def test_the_astroreg2_scope_cannot_reach_the_original_1322_cap(self, tmp_path, monkeypatch):
         """With an approval recorded, the cap is 1,232: request 1,233 is refused, 1,322 unreachable."""
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", "<verbatim words would go here>")
-        b = astrorun.astroreg2_budget(tmp_path / "l.jsonl")
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {1: {"words": "<verbatim>", "requests": astrorun.ASTROREG2_CAP, "consumed": False}},
+        )
+        (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
+        b = astrorun.astroreg2_budget(run_id=1, root=tmp_path)
         assert b.cap == 1232
         for _ in range(1232):
             b.take(chrom="chr1", element="e")
@@ -769,6 +794,14 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         """
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
         monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        # Run 1's REAL approval is marked consumed, because run 1 happened under it. These tests are
+        # about Albert's other clauses, so run 1 is granted an unconsumed approval here; the per-run
+        # approval rule has its own planted tests, including run 2 under run 1's words.
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {1: {"words": "<run 1's words>", "requests": astrorun.ASTROREG2_CAP, "consumed": False}},
+        )
 
     @pytest.fixture
     def good(self, tmp_path):
@@ -776,10 +809,12 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
         reg = tmp_path / "astroreg2_registration.json"
         reg.write_text("{}")
+        (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
         return {
             "activity_result": act,
             "registration": reg,
-            "ledger": tmp_path / "l.jsonl",
+            "run_id": 1,
+            "ledger_root": tmp_path,
             "signoff": 'the supervisor wrote "dry run reviewed" at 2026-10-02T13:00:00',
             "plan": self.DIGEST_SOURCE,
             "reviewed_digest": astrorun.plan_digest(self.DIGEST_SOURCE),
@@ -838,6 +873,10 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
         monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
         assert astrorun.ASTROREG2_AUTHORISATION, "this test is about a FILLED slot"
+        # The slot stays REAL and unpatched, which is the point; what is granted is run 1's per-run
+        # approval, since the real one is consumed and would otherwise mask the clause under test --
+        # which is the same masking this test exists to catch.
+        grant_run(monkeypatch)
         good["signoff"] = None
         with pytest.raises(astrorun.SendRefusedError) as exc:
             astrorun.may_send(**good)
@@ -847,7 +886,8 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         """The same masking risk on the clause that guards a double spend."""
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
         monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
-        led = Path(good["ledger"])
+        grant_run(monkeypatch)
+        led = astrorun.ledger_path_for_run(good["run_id"], good["ledger_root"])
         astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP).take(chrom="chr1", element="E0")
         with pytest.raises(astrorun.SendRefusedError, match="a partial run exists"):
             astrorun.may_send(**good)
@@ -892,7 +932,9 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
             astrorun.may_send(**good)
 
     def test_PLANTED_a_second_run_after_a_completed_one(self, authorised, good):
-        astrorun.mark_run_complete(good["ledger"], requests=1232)
+        astrorun.mark_run_complete(
+            astrorun.ledger_path_for_run(good["run_id"], good["ledger_root"]), requests=1232
+        )
         with pytest.raises(astrorun.SendRefusedError) as exc:
             astrorun.may_send(**good)
         assert "One run" in str(exc.value)
@@ -966,6 +1008,225 @@ class TestAmendment2sRuleIsUnchangedSinceItWasRegistered:
         assert any("0f4c372" in k for k in where)
         assert any("230efc8" in k for k in where)
         assert "does NOT name the file" in where["data/results/astroreg2_registration.json at 0f4c372"]
+
+
+class TestOneApprovalPerRunAndOneTotalAcrossThem:
+    """The per-run ledger opened an UNBOUNDED path, and these are the four refusals that close it.
+
+    Shown before it was fixed, on 20fe5ee's body: `--run N` resolves a FRESH, EMPTY ledger, so
+    run_already_completed is False and charges are 0, so the one-run clause passed for run 2, then 3,
+    then 4, under run 1's single consumed approval -- 4,928 requests permitted across four further runs
+    with the approval text unchanged, and no stopping point. The cap of 1,232 was PER LEDGER, so there
+    was no total bound at all.
+
+    The shape is the day's third of one kind: a mechanism that existed and was not wired to the thing it
+    protected. ONE_RUN asked "is this ledger finished?" when the question is "has Albert authorised THIS
+    run?" -- and a guard keyed to a path the caller chooses cannot ask it. So may_send now takes a run
+    id and DERIVES the ledger.
+    """
+
+    CAP = 3
+
+    def plan(self, n=None):
+        return [
+            {
+                "chrom": "chr21",
+                "element": f"e{i}",
+                "start": i * 100,
+                "end": i * 100 + 50,
+                "serves_genes": ["G"],
+            }
+            for i in range(self.CAP if n is None else n)
+        ]
+
+    def kwargs(self, tmp_path, run_id, plan=None, signoff_seen=None):
+        plan = self.plan() if plan is None else plan
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        reg = tmp_path / "reg.json"
+        reg.write_text("{}")
+        (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
+        return {
+            "activity_result": act,
+            "registration": reg,
+            "run_id": run_id,
+            "ledger_root": tmp_path,
+            "signoff": 'the supervisor wrote "dry run reviewed" at 2026-10-02T20:05:00',
+            "plan": plan,
+            "reviewed_digest": astrorun.plan_digest(plan),
+            "committed": lambda p: True,
+        }
+
+    def complete_run(self, tmp_path, run, charges=1, cap=None):
+        """A run that ended: charges plus a run_complete line, which is what makes it terminal."""
+        led = astrorun.ledger_path_for_run(run, tmp_path)
+        led.parent.mkdir(parents=True, exist_ok=True)
+        budget = astrorun.RequestBudget(led, cap=self.CAP if cap is None else cap)
+        for i in range(charges):
+            budget.take(chrom="chr21", element=f"old{i}")
+        astrorun.mark_run_complete(led, requests=charges)
+        return led
+
+    def approvals(self, monkeypatch, live=(), spent=(1,)):
+        rec = {}
+        for run in spent:
+            rec[run] = {
+                "words": f"<run {run}'s words>",
+                "requests": self.CAP,
+                "consumed": True,
+                "why_consumed": f"run {run} happened under it",
+            }
+        for run in live:
+            rec[run] = {"words": f"<run {run}'s words>", "requests": self.CAP, "consumed": False}
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATIONS", rec)
+        monkeypatch.setattr(astrorun, "ASTROREG2_CAP", self.CAP)
+
+    @pytest.fixture(autouse=True)
+    def other_clauses(self, monkeypatch):
+        """The clauses this class is NOT about, stubbed so a refusal here names the run rule."""
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        monkeypatch.setattr(astrorun, "check_nothing_in_the_plan_is_already_cached", lambda *a, **k: None)
+
+    def test_PLANTED_run_2_with_only_run_1s_approval_REFUSES(self, tmp_path, monkeypatch):
+        """The hole itself: a fresh ledger used to make run 2 look like a run nobody had done yet."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(), spent=(1,))
+        self.complete_run(tmp_path, 1)
+        with pytest.raises(astrorun.NoAuthorisationError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 2))
+        said = str(exc.value)
+        assert "no approval is recorded for run 2" in said
+        assert "a run with no approval of its own does not start" in said
+
+    def test_PLANTED_run_1s_own_approval_is_CONSUMED_so_even_run_1_cannot_go_again(
+        self, tmp_path, monkeypatch
+    ):
+        """An approval is spent by the run that happened under it, recorded rather than inferred."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(), spent=(1,))
+        with pytest.raises(astrorun.NoAuthorisationError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 1))
+        assert "CONSUMED" in str(exc.value)
+        assert "A further run needs a NEW approval in Albert's own words" in str(exc.value)
+
+    def test_the_REAL_record_marks_run_1s_approval_spent_and_says_why(self):
+        """The fact about today, read from the record rather than from a ledger."""
+        rec = astrorun.ASTROREG2_AUTHORISATIONS[1]
+        assert rec["consumed"] is True
+        assert rec["words"] == astrorun.ASTROREG2_AUTHORISATION, "run 1 holds the existing text"
+        assert rec["requests"] == 1232
+        assert "not a second run, and not a resume" in rec["why_consumed"]
+        assert set(astrorun.ASTROREG2_AUTHORISATIONS) == {1}, (
+            "no approval for any later run is recorded, so no later run can start"
+        )
+        assert astrorun.total_authorised_requests() == 1232
+
+    def test_PLANTED_run_3_after_a_completed_run_2_without_its_own_approval_REFUSES(
+        self, tmp_path, monkeypatch
+    ):
+        """Completing a run must not be what authorises the next one."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(), spent=(1, 2))
+        self.complete_run(tmp_path, 1)
+        self.complete_run(tmp_path, 2)
+        with pytest.raises(astrorun.NoAuthorisationError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 3))
+        assert "no approval is recorded for run 3" in str(exc.value)
+
+    def test_PLANTED_run_3_SKIPPING_run_2_REFUSES(self, tmp_path, monkeypatch):
+        """No skipping and no two runs at once: an open run's charges count against nothing."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(3,), spent=(1, 2))
+        self.complete_run(tmp_path, 1)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 3))
+        said = str(exc.value)
+        assert "run 3 cannot start" in said
+        assert "run_complete" in said
+        assert "skip a run or put two runs on the same approvals at once" in said
+
+    def test_PLANTED_a_signoff_for_run_2_used_for_run_3_REFUSES(self, tmp_path, monkeypatch):
+        """A sign-off covers one run: its closure and its words were written about one run's spend."""
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_closure(record={"run_id": 2, "signed_closure": {"a": "b"}}, run_id=3)
+        assert "covers run 2, not run 3" in str(exc.value)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_closure(record={"signed_closure": {"a": "b"}}, run_id=3)
+        assert "names no run_id" in str(exc.value)
+
+    def test_PLANTED_a_total_across_runs_is_what_bounds_money(self, tmp_path, monkeypatch):
+        """A per-ledger cap is not a budget. The total is the sum over every run ledger on disk."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(2,), spent=(1,))
+        self.complete_run(tmp_path, 1, charges=self.CAP)  # run 1 used its whole allowance
+        assert astrorun.total_authorised_requests() == 2 * self.CAP
+        assert astrorun.total_charged_across_runs(tmp_path)["total"] == self.CAP
+        # run 2's own CAP still fits: CAP already + CAP asked == the total
+        out = astrorun.may_send(**self.kwargs(tmp_path, 2))
+        assert out["may_send"] is True
+        # but one more request than the total leaves does not
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {
+                1: {"words": "<1>", "requests": self.CAP, "consumed": True, "why_consumed": "ran"},
+                2: {"words": "<2>", "requests": self.CAP + 1, "consumed": False},
+            },
+        )
+        monkeypatch.setattr(astrorun, "ASTROREG2_CAP", self.CAP + 1)
+        big = self.plan(self.CAP + 2)
+        with pytest.raises(astrorun.CapRefusedError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 2, plan=big))
+        assert "the total ever authorised is" in str(exc.value)
+
+    def test_PLANTED_a_ledger_for_an_unapproved_run_refuses_rather_than_being_ignored(
+        self, tmp_path, monkeypatch
+    ):
+        """Charges outside the scheme are exactly what must not be passed over."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(2,), spent=(1,))
+        self.complete_run(tmp_path, 1)
+        self.complete_run(tmp_path, 9)  # a ledger no approval covers
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 2))
+        assert "[9]" in str(exc.value)
+        assert "no recorded approval covers" in str(exc.value)
+
+    def test_the_budget_itself_is_capped_by_what_the_total_leaves(self, tmp_path, monkeypatch):
+        """Enforced twice: a run must not cross the total PART WAY THROUGH, not only before it starts."""
+        self.approvals(monkeypatch, live=(2,), spent=(1,))
+        # run 1 charged MORE than its own allowance would suggest, so the total is what binds run 2
+        self.complete_run(tmp_path, 1, charges=self.CAP + 1, cap=self.CAP + 1)
+        budget = astrorun.astroreg2_budget(run_id=2, root=tmp_path)
+        assert budget.cap == self.CAP - 1, (
+            "the lower of this run's allowance and what the total leaves: "
+            f"{2 * self.CAP} authorised in all, {self.CAP + 1} charged elsewhere"
+        )
+        assert str(budget.ledger).endswith(astrorun.ledger_for_run(2).name)
+
+    def test_NEAR_MISS_run_2_with_its_OWN_approval_and_its_OWN_signoff_PROCEEDS(self, tmp_path, monkeypatch):
+        """A guard that can never pass is the fixed-point defect again, so the positive control.
+
+        The sign-off closure is stubbed because it is the supervisor's requirement and has its own
+        planted tests -- but the stub RECORDS what it was handed, so this also shows the run id
+        reaching the closure check rather than the check being asked about no run at all.
+        """
+        seen: dict[str, object] = {}
+
+        def closure(*a, **k):
+            seen.update(k)
+            return {}
+
+        monkeypatch.setattr(astrorun, "check_signoff_closure", closure)
+        self.approvals(monkeypatch, live=(2,), spent=(1,))
+        self.complete_run(tmp_path, 1)
+        out = astrorun.may_send(**self.kwargs(tmp_path, 2))
+        assert out["may_send"] is True
+        assert out["run_id"] == 2
+        assert out["ledger"].endswith(astrorun.ledger_for_run(2).name)
+        assert out["totals"]["total_authorised"] == 2 * self.CAP
+        assert seen.get("run_id") == 2, "the sign-off check must be asked about THIS run"
 
 
 class TestItemFAdapterV2:
@@ -1068,11 +1329,13 @@ class TestItemFAdapterV2:
         act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
         reg = tmp_path / "reg.json"
         reg.write_text("{}")
+        grant_run(monkeypatch)
         with pytest.raises(astrorun.SendRefusedError, match=r"item \(f\)"):
             astrorun.may_send(
                 activity_result=act,
                 registration=reg,
-                ledger=tmp_path / "l.jsonl",
+                run_id=1,
+                ledger_root=tmp_path,
                 signoff='the supervisor wrote "dry run reviewed" at 2026-10-02T13:00:00',
                 plan=plan,
                 reviewed_digest=astrorun.plan_digest(plan),

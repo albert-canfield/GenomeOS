@@ -340,13 +340,20 @@ class TestACrashRestartCannotRePay:
             astrorun, "recorded_signoff_words", lambda *a, **k: 'wrote "dry run reviewed" at 13:00'
         )
         monkeypatch.setattr(astrorun, "ASTROREG2_CAP", 20)
+        # Run 1's real approval is CONSUMED, so this test grants the run it uses one; its subject is the
+        # partial-run clause, not the approval clause, which has its own planted tests below.
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {1: {"words": "<run 1's words>", "requests": 20, "consumed": False}},
+        )
         # the activity result is a temp file, so the real git predicate cannot judge it; stubbing it is
         # what lets this test reach the PARTIAL-RUN clause rather than stopping at the activity clause
         monkeypatch.setattr(sender, "committed_in_git", lambda p: True)
         # the blob check is about a DIFFERENT clause and now refuses first, since this lane changed both
         # signed files; stubbing it is what lets this test reach the partial-run clause it is about
         monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
-        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send", "--run", "2"])
+        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send", "--run", "1"])
         assert sender.main() == 2
         said = capsys.readouterr().out
         assert "a partial run exists (7 charged)" in said
@@ -1420,13 +1427,19 @@ class TestAnUncommittedSignoffAuthorisesNothing:
         act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
         plan = [row(i) for i in range(astrorun.ASTROREG2_CAP)]
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {1: {"words": "<run 1's words>", "requests": astrorun.ASTROREG2_CAP, "consumed": False}},
+        )
         with pytest.raises(astrorun.SendRefusedError) as exc:
             astrorun.may_send(
                 plan=plan,
                 registration=reg,
                 activity_result=act,
                 reviewed_digest=astrorun.plan_digest(plan),
-                ledger=tmp_path / "l.jsonl",
+                run_id=1,
+                ledger_root=tmp_path,
                 signoff='wrote "dry run reviewed" at 13:00',
                 committed=lambda p: True,
             )
@@ -1434,6 +1447,38 @@ class TestAnUncommittedSignoffAuthorisesNothing:
         assert "astroreg2_signoff.jsonl" in said
         assert "no committed copy at HEAD" in said, said
         assert "An uncommitted sign-off authorises nothing" in said
+
+    def test_the_SENDER_hands_may_send_a_RUN_ID_and_no_ledger(self):
+        """The ledger the clauses are checked against must not be a value this script chose.
+
+        Planted against the call site as it stood at 20fe5ee, which passed `ledger=LEDGER` -- and
+        LEDGER came from `--run`, so the run picked the file its one-run clause was judged against.
+        """
+        import ast
+
+        tree = ast.parse((ROOT / "scripts/astroreg2_send.py").read_text())
+        calls = [
+            c
+            for c in ast.walk(tree)
+            if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr == "may_send"
+        ]
+        assert len(calls) == 1, "one gate, called once"
+        kw = {k.arg for k in calls[0].keywords}
+        assert "run_id" in kw, "the run id is the input"
+        assert "ledger" not in kw, (
+            "a ledger handed in is the defect: may_send must DERIVE it from the run id, or the caller "
+            "chooses what it is judged against"
+        )
+        budgets = [
+            c
+            for c in ast.walk(tree)
+            if isinstance(c, ast.Call)
+            and isinstance(c.func, ast.Attribute)
+            and c.func.attr == "astroreg2_budget"
+        ]
+        assert len(budgets) == 1
+        assert {k.arg for k in budgets[0].keywords} == {"run_id"}, "and the budget likewise"
+        assert not budgets[0].args, "no positional ledger either"
 
     def test_may_send_does_NOT_hand_the_check_a_record_which_would_skip_it(self):
         """check_signoff_closure(record=...) skips the committed check by design, for tests.

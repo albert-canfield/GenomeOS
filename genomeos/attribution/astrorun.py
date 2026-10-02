@@ -459,14 +459,166 @@ def astroreg2_authorisation() -> str:
     return ASTROREG2_AUTHORISATION
 
 
-def astroreg2_budget(ledger: Path | str) -> RequestBudget:
-    """A budget for AstroREG-2's 1,232, obtainable only once its own approval is recorded.
+# ----------------------------------- one approval per run, and one budget across every run's ledger
 
-    The authorisation is checked BEFORE the budget exists, so there is no object to send with until the
-    approval is on record. The cap is `ASTROREG2_CAP` and never `AUTHORISED_REQUESTS`.
+A_GUARD_KEYED_TO_WHAT_THE_CALLER_SUPPLIES_IS_NOT_A_GUARD = (
+    "the third appearance of one shape on this path: a mechanism that EXISTED and was not WIRED to the "
+    "thing it protected. The resume path could re-pay for charged elements while "
+    "requests_not_yet_charged sat unused; the blob signature could never be satisfied because a file "
+    "held its own hash; and the one-run clause was enforced against a ledger THE RUN ITSELF CHOOSES. "
+    "ONE_RUN asked 'is this ledger finished?' when the question is 'has Albert authorised THIS run?'. "
+    "So the run id is now the only input: may_send DERIVES the ledger from it instead of accepting "
+    "one, which removes the caller's ability to choose what it is judged against"
+)
+
+#: Albert's approvals KEYED BY RUN ID, because one text cannot answer a per-run question.
+#:
+#: The per-run ledger opened this: `--run N` resolves a FRESH, EMPTY file, so run_already_completed is
+#: False and charges are 0, so the one-run clause PASSED for run 2, then 3, then 4, under run 1's one
+#: consumed approval -- and the cap of 1,232 being per LEDGER left no total bound at all. Demonstrated
+#: on 20fe5ee's body before it was changed: 4,928 requests permitted across four further runs with the
+#: approval text unchanged, and no stopping point in sight. A per-ledger cap is not a budget.
+ASTROREG2_AUTHORISATIONS: dict[int, dict[str, Any]] = {
+    1: {
+        "words": ASTROREG2_AUTHORISATION,
+        "requests": ASTROREG2_CAP,
+        "consumed": True,
+        "why_consumed": (
+            "run 1 happened under it: its ledger records a completed run, and 'One run' is terminal. "
+            "So this approval authorises nothing further -- not a second run, and not a resume"
+        ),
+    },
+}
+
+AN_APPROVAL_IS_SPENT_WHEN_ITS_RUN_HAPPENS = (
+    "an approval is for ONE run, so a completed run spends it. Marking it consumed in the record rather "
+    "than inferring it from the ledger is deliberate: inference is what failed, because the ledger a "
+    "later run reads is not the ledger the earlier run wrote. Run N's approval must be Albert's own "
+    "words for run N, recorded verbatim by the session that received them FIRST-HAND, and a run with no "
+    "approval of its own does not start"
+)
+
+A_TOTAL_IS_THE_ONLY_BOUND_ON_MONEY = (
+    "the only figure that bounds spending is the sum of the authorised request counts across every run, "
+    "checked against the charges in EVERY run ledger on disk. It is enforced twice on purpose: once as "
+    "a refusal before a run starts, and once as the cap of the budget object itself, so a run cannot "
+    "cross the total part way through. A ledger on disk for a run with no recorded approval refuses "
+    "rather than being ignored, because charges outside the scheme are exactly what must not pass"
+)
+
+
+def ledger_path_for_run(run_id: int, root: Path | None = None) -> Path:
+    """Run N's ledger as an absolute path. The run id picks the file; nothing else may."""
+    base = Path(root) if root is not None else ROOT_FOR_BLOBS
+    return base / ledger_for_run(run_id)
+
+
+def run_ledgers(root: Path | None = None) -> dict[int, Path]:
+    """Every run ledger present on disk, by run id, authorised or not."""
+    import re as _re
+
+    base = Path(root) if root is not None else ROOT_FOR_BLOBS
+    found: dict[int, Path] = {}
+    first = base / LEDGER_RUN1
+    if first.exists():
+        found[1] = first
+    folder = base / LEDGER_RUN1.parent
+    if folder.is_dir():
+        for path in sorted(folder.glob("astroreg2_run*.jsonl")):
+            m = _re.fullmatch(r"astroreg2_run(\d+)\.jsonl", path.name)
+            if m:
+                found[int(m.group(1))] = path
+    return dict(sorted(found.items()))
+
+
+def total_charged_across_runs(root: Path | None = None) -> dict[str, Any]:
+    """Charges summed over EVERY run ledger, which is the only number that tracks money."""
+    per = {run: ledger_charges(path)["charges"] for run, path in run_ledgers(root).items()}
+    return {"per_run": per, "total": sum(per.values())}
+
+
+def total_authorised_requests() -> int:
+    """The sum of the authorised request counts, consumed or not: what has ever been approved in total."""
+    return sum(int(rec["requests"]) for rec in ASTROREG2_AUTHORISATIONS.values())
+
+
+def authorisation_for_run(run_id: int) -> dict[str, Any]:
+    """Albert's approval for THIS run, verbatim, or a refusal. Never run 1's, never inferred."""
+    rec = ASTROREG2_AUTHORISATIONS.get(int(run_id))
+    if rec is None or not rec.get("words"):
+        raise NoAuthorisationError(
+            f"no approval is recorded for run {run_id}. {AN_APPROVAL_IS_SPENT_WHEN_ITS_RUN_HAPPENS}. "
+            f"{NO_AUTHORISATION_MEANS_NO_SEND}"
+        )
+    if rec.get("consumed"):
+        raise NoAuthorisationError(
+            f"run {run_id}'s approval is CONSUMED: {rec.get('why_consumed')}. A further run needs a NEW "
+            f"approval in Albert's own words, recorded for that run. "
+            f"{AN_APPROVAL_IS_SPENT_WHEN_ITS_RUN_HAPPENS}"
+        )
+    return rec
+
+
+def check_earlier_runs_are_complete(run_id: int, root: Path | None = None) -> dict[str, Any]:
+    """Run N does not start until runs 1..N-1 each END in a run_complete line. No skipping, no parallel."""
+    ended = {}
+    for earlier in range(1, int(run_id)):
+        path = ledger_path_for_run(earlier, root)
+        if not run_already_completed(path):
+            raise SendRefusedError(
+                f"run {run_id} cannot start: run {earlier}'s ledger {ledger_for_run(earlier)} does not "
+                f"end in a {RUN_COMPLETE_EVENT} line, so run {earlier} either never happened or is "
+                "still going. Starting run "
+                f"{run_id} now would skip a run or put two runs on the same approvals at once, and "
+                "either way the charges of the run that is still open are not counted against anything"
+            )
+        ended[earlier] = str(ledger_for_run(earlier))
+    return {"earlier_runs_complete": ended}
+
+
+def check_total_cap(run_id: int, plan_size: int, root: Path | None = None) -> dict[str, Any]:
+    """Refuse unless this run's list still fits inside the TOTAL authorised across every run."""
+    spent = total_charged_across_runs(root)
+    unknown = sorted(set(spent["per_run"]) - set(ASTROREG2_AUTHORISATIONS))
+    if unknown:
+        raise SendRefusedError(
+            f"ledgers exist for run(s) {unknown} that no recorded approval covers, holding "
+            f"{sum(spent['per_run'][r] for r in unknown)} charge(s). {A_TOTAL_IS_THE_ONLY_BOUND_ON_MONEY}"
+        )
+    authorised = total_authorised_requests()
+    already = spent["total"] - spent["per_run"].get(int(run_id), 0)
+    if already + plan_size > authorised:
+        raise CapRefusedError(
+            f"run {run_id}'s {plan_size} requests on top of {already} already charged in other runs "
+            f"would come to {already + plan_size}, and the total ever authorised is {authorised}. "
+            f"{A_TOTAL_IS_THE_ONLY_BOUND_ON_MONEY}"
+        )
+    return {
+        "total_authorised": authorised,
+        "charged_in_other_runs": already,
+        "charged_per_run": spent["per_run"],
+        "remaining_in_total": authorised - already,
+    }
+
+
+def astroreg2_budget(*, run_id: int, root: Path | None = None) -> RequestBudget:
+    """A budget for run N, obtainable only once run N's OWN approval is recorded.
+
+    No ledger is accepted: the run id picks it. The cap is the LOWER of this run's approved count and
+    what the total leaves, so crossing the total is a refusal part way through a run and not only
+    before it starts.
     """
     astroreg2_authorisation()
-    return RequestBudget(ledger, cap=ASTROREG2_CAP)
+    rec = authorisation_for_run(run_id)
+    totals = check_total_cap(run_id, 0, root)
+    cap = min(int(rec["requests"]), int(totals["remaining_in_total"]))
+    if cap <= 0:
+        raise CapRefusedError(
+            f"run {run_id} has no room: {totals['charged_in_other_runs']} of "
+            f"{totals['total_authorised']} authorised requests are already charged in other runs. "
+            f"{A_TOTAL_IS_THE_ONLY_BOUND_ON_MONEY}"
+        )
+    return RequestBudget(ledger_path_for_run(run_id, root), cap=cap)
 
 
 #: The text of Albert's AstroREG-2 approval AS RELAYED to this lane, recorded as relayed and NOT as the
@@ -710,6 +862,13 @@ SIGNOFF_RECORD = Path("data/ledgers/astroreg2_signoff.jsonl")
 #: kept only so the history of what was signed is not erased by the move.
 SIGNOFF_RECORD_SUPERSEDED = Path("data/ledgers/astroreg2_signoff.json")
 
+A_SIGNOFF_IS_FOR_ONE_RUN = (
+    "each sign-off line names the run_id it covers, and the send path requires the governing line to "
+    "name THIS run. A sign-off that covered whatever run came next would be reusable, which is the same "
+    "defect as a consumed approval authorising a second run: the closure it signed and the words it "
+    "carries were written about one run's code and one run's spend"
+)
+
 ONLY_THE_LAST_LINE_GOVERNS = (
     "each line is one sign-off, carrying the closure it signed, the digest of that closure, the record "
     "it supersedes and why. ONLY THE LAST LINE AUTHORISES. An earlier line whose closure happens to "
@@ -941,6 +1100,7 @@ def check_signoff_closure(
     entry: str = SENDER_ENTRY,
     root: Path | None = None,
     path: Path | str | None = None,
+    run_id: int | None = None,
 ) -> dict[str, Any]:
     """Refuse unless the sender's whole closure is byte-for-byte what was signed. See the note above."""
     if record is None:
@@ -951,6 +1111,21 @@ def check_signoff_closure(
             f"no sign-off record is present at {SIGNOFF_RECORD}, so nothing is signed. "
             f"{A_SIGNOFF_IS_FOR_THE_CODE_IT_READ}"
         )
+    # A sign-off is for ONE run. A line that names no run, or names another, covers nothing here:
+    # reusing run 2's sign-off for run 3 is the same reuse as spending run 1's approval twice.
+    if run_id is not None:
+        named = rec.get("run_id")
+        if named is None:
+            raise SendRefusedError(
+                f"the governing sign-off line names no run_id, so it does not cover run {run_id}. "
+                f"{A_SIGNOFF_IS_FOR_ONE_RUN}"
+            )
+        if int(named) != int(run_id):
+            raise SendRefusedError(
+                f"the governing sign-off line covers run {named}, not run {run_id}. "
+                f"{A_SIGNOFF_IS_FOR_ONE_RUN}"
+            )
+
     signed = rec.get("signed_closure") or {}
     if not signed:
         raise SendRefusedError(
@@ -1052,8 +1227,9 @@ def may_send(
     *,
     activity_result: Path | str,
     registration: Path | str,
-    ledger: Path | str,
+    run_id: int,
     signoff: str | None,
+    ledger_root: Path | None = None,
     plan: list[dict[str, Any]],
     reviewed_digest: str,
     committed: Any = None,
@@ -1073,6 +1249,15 @@ def may_send(
             f"no AstroREG-2 approval is recorded. {NO_AUTHORISATION_MEANS_NO_SEND} "
             f"{WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL}"
         )
+
+    # THIS run's own approval, before any ledger is looked at. The ledger cannot answer this question:
+    # a fresh run resolves a fresh file, so "is this ledger finished?" is False for every new run.
+    authorisation_for_run(run_id)
+    check_earlier_runs_are_complete(run_id, ledger_root)
+    totals = check_total_cap(run_id, len(plan), ledger_root)
+
+    # DERIVED, not accepted: see A_GUARD_KEYED_TO_WHAT_THE_CALLER_SUPPLIES_IS_NOT_A_GUARD.
+    ledger = ledger_path_for_run(run_id, ledger_root)
 
     reg = Path(registration)
     if not reg.exists():
@@ -1104,7 +1289,7 @@ def may_send(
                 "was produced under a different rule",
             )
 
-    check_signoff_closure(root=ROOT_FOR_BLOBS)
+    check_signoff_closure(root=ROOT_FOR_BLOBS, run_id=run_id)
     check_nothing_in_the_plan_is_already_cached(plan)
     if not signoff or "dry run reviewed" not in signoff:
         _refuse(
@@ -1139,6 +1324,9 @@ def may_send(
         "resuming": bool(charged),
         "already_charged": charged,
         "remaining": len(remaining),
+        "run_id": int(run_id),
+        "ledger": str(ledger),
+        "totals": totals,
         "cap": ASTROREG2_CAP,
         "requests": len(plan),
         "digest": reviewed_digest,

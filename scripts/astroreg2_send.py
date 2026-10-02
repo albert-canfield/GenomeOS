@@ -254,6 +254,8 @@ def main() -> int:
         )
         return 2
     if args.run:
+        # Printed for the operator, but NOT handed to may_send: the gate derives the ledger from the run
+        # id itself, so the run cannot choose the file it is judged against.
         LEDGER = astrorun.ledger_for_run(args.run)
         print(f"run {args.run}, ledger {LEDGER}")
 
@@ -264,7 +266,7 @@ def main() -> int:
         permitted = astrorun.may_send(
             activity_result=ACTIVITY,
             registration=REGISTRATION,
-            ledger=LEDGER,
+            run_id=args.run,
             signoff=astrorun.recorded_signoff_words(),
             plan=plan,
             reviewed_digest=REVIEWED_DIGEST,
@@ -279,7 +281,10 @@ def main() -> int:
         print("--send was not given, so nothing is sent. The clause checks above all passed")
         return 0
 
-    budget = astrorun.astroreg2_budget(LEDGER)
+    # The ledger comes from the gate's own derivation, never from this script's module global: one
+    # source for the path the charges are written to, and it is the one the clauses were checked against.
+    LEDGER = Path(permitted["ledger"])
+    budget = astrorun.astroreg2_budget(run_id=args.run)
 
     # Built INLINE and exactly as the sweep that produced the frozen K562 values built it
     # (scripts/enhancer_targets_all.py worker_scorer, verified at :98-107): the pinned client with the
