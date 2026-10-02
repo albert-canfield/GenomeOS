@@ -369,8 +369,12 @@ def payload(state: dict[str, Any]) -> dict[str, Any]:
             "inputs": entries,
             "input_count": len(entries),
             "assembly": "GRCh38: the assembly both benchmark tables and the deletion sweep are on",
-            "coordinates": "0-based half-open, the benchmark tables' own chromStart/chromEnd and "
-            "the element tables' own start/end, compared only by OVERLAP_RULE",
+            "coordinates": {
+                "base": 0,
+                "interval": "half-open",
+                "note": "the benchmark tables' own chromStart/chromEnd and the element tables' own "
+                "start/end, compared only by OVERLAP_RULE",
+            },
             "parameters": {
                 "tolerance": ac.TOLERANCE,
                 "usable_rate": ac.USABLE,

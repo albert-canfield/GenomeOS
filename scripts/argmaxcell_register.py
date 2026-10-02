@@ -186,8 +186,13 @@ def payload() -> dict[str, Any]:
             "input_count": len(entries),
             "assembly": "GRCh38: the assembly both benchmark tables and the deletion sweep are on. "
             "No coordinate of this registration's own is in any build",
-            "coordinates": "0-based half-open, the benchmark tables' own chromStart/chromEnd, used "
-            "only for the overlap test in OVERLAP_RULE",
+            "coordinates": {
+                "base": 0,
+                "interval": "half-open",
+                "note": "the benchmark tables' own chromStart/chromEnd and the element tables' own "
+                "start/end, both 0-based half-open, used only for the overlap test in OVERLAP_RULE. "
+                "This registration itself reads no interval",
+            },
             "parameters": {
                 "tolerance": ac.TOLERANCE,
                 "usable_rate": ac.USABLE,
