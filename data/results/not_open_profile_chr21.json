@@ -1,0 +1,1826 @@
+{
+  "result": "not_open_profile_chr21",
+  "date": "2026-10-02",
+  "question": "of the 55,084 compiled rules whose element is not detected open in the cell they assert in, which cells, which element classes, which predicted effect sizes and which distances to the gene carry them - and how many are a strong predicted effect in a cell whose assignment the base-rate comparison found informative?",
+  "status": "descriptive and diagnostic, and NOT registered: context_evidence_registration.json fixed the states, the openness call, the mapping table and the denominator, and this changes none of them. Every state is context_evidence.state_for's, unchanged.",
+  "describes": "data/results/context_evidence.json",
+  "chromosomes": [
+    "chr21"
+  ],
+  "rules": 5176,
+  "per_state": {
+    "open_in_reader": 280,
+    "not_open_in_reader": 767,
+    "not_assessable": 4129
+  },
+  "assessable_rules": 1047,
+  "assessable_rules_on_the_record": null,
+  "not_open_in_reader": 767,
+  "population": "the 767 rules in state not_open_in_reader, out of the 1047 assessable rules (open_in_reader + not_open_in_reader), out of the 5176 rules the compiler emits",
+  "reproduces_the_census": "n/a: the record is over all 24 chromosomes and this run covers 1",
+  "no_interval_is_reported": "these are exhaustive counts over a fixed rule set, not an estimate from a sample, so no confidence interval is computed and none would mean anything here",
+  "by_cell": {
+    "reader_biosample": {
+      "K562": {
+        "not_open_in_reader": 293,
+        "open_in_reader": 79,
+        "assessable_rules": 372,
+        "not_open_share_of_this_biosample": 0.7876,
+        "population_of_that_share": "the 372 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.1227,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "keratinocyte": {
+        "not_open_in_reader": 110,
+        "open_in_reader": 23,
+        "assessable_rules": 133,
+        "not_open_share_of_this_biosample": 0.8271,
+        "population_of_that_share": "the 133 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.0953,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "CD14-positive monocyte": {
+        "not_open_in_reader": 108,
+        "open_in_reader": 71,
+        "assessable_rules": 179,
+        "not_open_share_of_this_biosample": 0.6034,
+        "population_of_that_share": "the 179 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.2163,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "HepG2": {
+        "not_open_in_reader": 102,
+        "open_in_reader": 52,
+        "assessable_rules": 154,
+        "not_open_share_of_this_biosample": 0.6623,
+        "population_of_that_share": "the 154 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.1909,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "GM12878": {
+        "not_open_in_reader": 56,
+        "open_in_reader": 21,
+        "assessable_rules": 77,
+        "not_open_share_of_this_biosample": 0.7273,
+        "population_of_that_share": "the 77 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.0702,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "H1": {
+        "not_open_in_reader": 49,
+        "open_in_reader": 16,
+        "assessable_rules": 65,
+        "not_open_share_of_this_biosample": 0.7538,
+        "population_of_that_share": "the 65 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.1141,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "cardiac muscle cell": {
+        "not_open_in_reader": 15,
+        "open_in_reader": 8,
+        "assessable_rules": 23,
+        "not_open_share_of_this_biosample": 0.6522,
+        "population_of_that_share": "the 23 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.1296,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "testis": {
+        "not_open_in_reader": 15,
+        "open_in_reader": 5,
+        "assessable_rules": 20,
+        "not_open_share_of_this_biosample": 0.75,
+        "population_of_that_share": "the 20 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.0525,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "IMR-90": {
+        "not_open_in_reader": 13,
+        "open_in_reader": 5,
+        "assessable_rules": 18,
+        "not_open_share_of_this_biosample": 0.7222,
+        "population_of_that_share": "the 18 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.1864,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": false
+      },
+      "ovary": {
+        "not_open_in_reader": 5,
+        "open_in_reader": 0,
+        "assessable_rules": 5,
+        "not_open_share_of_this_biosample": 1.0,
+        "population_of_that_share": "the 5 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": 0.026,
+        "clears_the_registered_tolerance": true,
+        "singled_out_by_lane_context2": true
+      },
+      "SK-N-SH": {
+        "not_open_in_reader": 1,
+        "open_in_reader": 0,
+        "assessable_rules": 1,
+        "not_open_share_of_this_biosample": 1.0,
+        "population_of_that_share": "the 1 assessable rules of this biosample: open_in_reader + not_open_in_reader",
+        "assignment_difference_over_the_base_rate": -0.0188,
+        "clears_the_registered_tolerance": false,
+        "singled_out_by_lane_context2": true
+      }
+    },
+    "compiled_cell_label": {
+      "K562": {
+        "not_open_in_reader": 293,
+        "open_in_reader": 79,
+        "assessable_rules": 372,
+        "not_open_share_of_this_label": 0.7876,
+        "population_of_that_share": "the 372 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "keratinocyte": {
+        "not_open_in_reader": 110,
+        "open_in_reader": 23,
+        "assessable_rules": 133,
+        "not_open_share_of_this_label": 0.8271,
+        "population_of_that_share": "the 133 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "CD14_positive_monocyte": {
+        "not_open_in_reader": 108,
+        "open_in_reader": 71,
+        "assessable_rules": 179,
+        "not_open_share_of_this_label": 0.6034,
+        "population_of_that_share": "the 179 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "HepG2": {
+        "not_open_in_reader": 102,
+        "open_in_reader": 52,
+        "assessable_rules": 154,
+        "not_open_share_of_this_label": 0.6623,
+        "population_of_that_share": "the 154 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "GM12878": {
+        "not_open_in_reader": 56,
+        "open_in_reader": 21,
+        "assessable_rules": 77,
+        "not_open_share_of_this_label": 0.7273,
+        "population_of_that_share": "the 77 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "H1": {
+        "not_open_in_reader": 49,
+        "open_in_reader": 16,
+        "assessable_rules": 65,
+        "not_open_share_of_this_label": 0.7538,
+        "population_of_that_share": "the 65 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "cardiac_muscle_cell": {
+        "not_open_in_reader": 15,
+        "open_in_reader": 8,
+        "assessable_rules": 23,
+        "not_open_share_of_this_label": 0.6522,
+        "population_of_that_share": "the 23 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "IMR_90": {
+        "not_open_in_reader": 13,
+        "open_in_reader": 5,
+        "assessable_rules": 18,
+        "not_open_share_of_this_label": 0.7222,
+        "population_of_that_share": "the 18 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "testis": {
+        "not_open_in_reader": 12,
+        "open_in_reader": 4,
+        "assessable_rules": 16,
+        "not_open_share_of_this_label": 0.75,
+        "population_of_that_share": "the 16 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "Ovary": {
+        "not_open_in_reader": 3,
+        "open_in_reader": 0,
+        "assessable_rules": 3,
+        "not_open_share_of_this_label": 1.0,
+        "population_of_that_share": "the 3 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "Testis": {
+        "not_open_in_reader": 3,
+        "open_in_reader": 1,
+        "assessable_rules": 4,
+        "not_open_share_of_this_label": 0.75,
+        "population_of_that_share": "the 4 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "ovary": {
+        "not_open_in_reader": 2,
+        "open_in_reader": 0,
+        "assessable_rules": 2,
+        "not_open_share_of_this_label": 1.0,
+        "population_of_that_share": "the 2 assessable rules of this label: open_in_reader + not_open_in_reader"
+      },
+      "SK_N_SH": {
+        "not_open_in_reader": 1,
+        "open_in_reader": 0,
+        "assessable_rules": 1,
+        "not_open_share_of_this_label": 1.0,
+        "population_of_that_share": "the 1 assessable rules of this label: open_in_reader + not_open_in_reader"
+      }
+    },
+    "tolerance": 0.02,
+    "informativeness_source": "data/results/context_evidence_baserate.json",
+    "reading": "a not_open_in_reader rule in a cell whose assignment carries no information about openness means something different from one in a cell where it does: in the first, the cell the compiler chose is not telling us where the element is open, so the element not being open there is close to uninformative. The three cells lane-context2 singled out are flagged on every row"
+  },
+  "by_element_class": {
+    "enhancer": {
+      "not_open_in_reader": 767,
+      "open_in_reader": 280,
+      "assessable_rules": 1047,
+      "not_open_share_of_this_class": 0.7326,
+      "population_of_that_share": "the 1047 assessable rules of this class: open_in_reader + not_open_in_reader"
+    },
+    "call": "`class:` as genomeos.attribution.compile.derived_class writes it on the compiled element, from the same axes the compiler builds: the first ENCODE registry role the element holds for certain, else unknown. No classification is invented here. Because every attributed element is a distal enhancer-like registry cCRE, that field takes one value over this population and separates nothing, so the compiler's own `activity:` and `origin:` axis values are reported beside it - also read off the compiled element, also not invented."
+  },
+  "by_activity_axis": {
+    "activates_target": {
+      "not_open_in_reader": 400,
+      "open_in_reader": 226,
+      "assessable_rules": 626,
+      "not_open_share_of_this_activity": 0.639,
+      "population_of_that_share": "the 626 assessable rules of this activity: open_in_reader + not_open_in_reader"
+    },
+    "represses_target": {
+      "not_open_in_reader": 367,
+      "open_in_reader": 54,
+      "assessable_rules": 421,
+      "not_open_share_of_this_activity": 0.8717,
+      "population_of_that_share": "the 421 assessable rules of this activity: open_in_reader + not_open_in_reader"
+    }
+  },
+  "by_origin_axis": {
+    "unique": {
+      "not_open_in_reader": 455,
+      "open_in_reader": 169,
+      "assessable_rules": 624,
+      "not_open_share_of_this_origin": 0.7292,
+      "population_of_that_share": "the 624 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "repeat_derived/LTR": {
+      "not_open_in_reader": 72,
+      "open_in_reader": 31,
+      "assessable_rules": 103,
+      "not_open_share_of_this_origin": 0.699,
+      "population_of_that_share": "the 103 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "repeat_derived/LINE": {
+      "not_open_in_reader": 56,
+      "open_in_reader": 17,
+      "assessable_rules": 73,
+      "not_open_share_of_this_origin": 0.7671,
+      "population_of_that_share": "the 73 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "partly_repeat_derived/SINE": {
+      "not_open_in_reader": 51,
+      "open_in_reader": 20,
+      "assessable_rules": 71,
+      "not_open_share_of_this_origin": 0.7183,
+      "population_of_that_share": "the 71 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "repeat_derived/SINE": {
+      "not_open_in_reader": 43,
+      "open_in_reader": 7,
+      "assessable_rules": 50,
+      "not_open_share_of_this_origin": 0.86,
+      "population_of_that_share": "the 50 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "partly_repeat_derived/LINE": {
+      "not_open_in_reader": 30,
+      "open_in_reader": 19,
+      "assessable_rules": 49,
+      "not_open_share_of_this_origin": 0.6122,
+      "population_of_that_share": "the 49 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "repeat_derived/DNA": {
+      "not_open_in_reader": 22,
+      "open_in_reader": 6,
+      "assessable_rules": 28,
+      "not_open_share_of_this_origin": 0.7857,
+      "population_of_that_share": "the 28 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "partly_repeat_derived/LTR": {
+      "not_open_in_reader": 20,
+      "open_in_reader": 6,
+      "assessable_rules": 26,
+      "not_open_share_of_this_origin": 0.7692,
+      "population_of_that_share": "the 26 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    },
+    "partly_repeat_derived/DNA": {
+      "not_open_in_reader": 18,
+      "open_in_reader": 5,
+      "assessable_rules": 23,
+      "not_open_share_of_this_origin": 0.7826,
+      "population_of_that_share": "the 23 assessable rules of this origin: open_in_reader + not_open_in_reader"
+    }
+  },
+  "by_effect_band": {
+    "weak": {
+      "not_open_in_reader": 627,
+      "open_in_reader": 160,
+      "assessable_rules": 787,
+      "not_open_share_of_this_band": 0.7967,
+      "population_of_that_share": "the 787 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "strong": {
+      "not_open_in_reader": 140,
+      "open_in_reader": 118,
+      "assessable_rules": 258,
+      "not_open_share_of_this_band": 0.5426,
+      "population_of_that_share": "the 258 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "measured_crispri": {
+      "not_open_in_reader": 0,
+      "open_in_reader": 2,
+      "assessable_rules": 2,
+      "not_open_share_of_this_band": 0.0,
+      "population_of_that_share": "the 2 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "call": "`strength` as genomeos.predict.enhancer_target already writes it on the cached prediction: strong at or above STRONG_EFFECT = 0.3 in |log2 fold change| of the predicted expression move on deleting the element, weak below. It is an effect-size band and never a certainty; this module reads the field and does not recompute it.",
+    "measured_rules_carry_no_alphagenome_effect": "a rule of the experimental layer: a CRISPRi screen measured it, so it carries the screen's effect size and no AlphaGenome deletion effect of its own. It is counted here and given no band."
+  },
+  "by_distance_band": {
+    "5 to 50 kb": {
+      "not_open_in_reader": 326,
+      "open_in_reader": 121,
+      "assessable_rules": 447,
+      "not_open_share_of_this_band": 0.7293,
+      "population_of_that_share": "the 447 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "50 to 250 kb": {
+      "not_open_in_reader": 282,
+      "open_in_reader": 84,
+      "assessable_rules": 366,
+      "not_open_share_of_this_band": 0.7705,
+      "population_of_that_share": "the 366 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "under 5 kb": {
+      "not_open_in_reader": 105,
+      "open_in_reader": 58,
+      "assessable_rules": 163,
+      "not_open_share_of_this_band": 0.6442,
+      "population_of_that_share": "the 163 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "beyond 250 kb": {
+      "not_open_in_reader": 54,
+      "open_in_reader": 17,
+      "assessable_rules": 71,
+      "not_open_share_of_this_band": 0.7606,
+      "population_of_that_share": "the 71 assessable rules of this band: open_in_reader + not_open_in_reader"
+    },
+    "call": "the distance from the element's midpoint to the target gene's GENCODE v50 TSS, by genomeos.attribution.target_calibration.tss_distance (floored at its MIN_DISTANCE), banded by genomeos.attribution.executor._band unchanged. That function bands up to executor.WIDE_MAX_DISTANCE = 250000, which is where the project's own banding stops, so everything above it is reported as one residual row, 'beyond 250 kb', and not as a new band.",
+    "beyond_the_scorer_window": {
+      "rules": 9,
+      "per_biosample": {
+        "K562": 9
+      },
+      "what_it_is": "the distance from the element to the TSS this gene symbol resolves to exceeds half the 1 Mb window the AlphaGenome deletion scorer reads, so the scorer cannot have read that TSS: the symbol resolved to another locus of the same symbol. This is a fault in the distance, not in the rule, and the rule is counted everywhere else unchanged.",
+      "population": "the 767 not_open_in_reader rules; these are counted in every other breakdown unchanged"
+    }
+  },
+  "by_source_of_the_rule": {
+    "predicted_alphagenome_deletion": {
+      "not_open_in_reader": 767,
+      "open_in_reader": 278,
+      "assessable_rules": 1045,
+      "not_open_share_of_this_source": 0.734,
+      "population_of_that_share": "the 1045 assessable rules of this source: open_in_reader + not_open_in_reader"
+    },
+    "measured_crispri": {
+      "not_open_in_reader": 0,
+      "open_in_reader": 2,
+      "assessable_rules": 2,
+      "not_open_share_of_this_source": 0.0,
+      "population_of_that_share": "the 2 assessable rules of this source: open_in_reader + not_open_in_reader"
+    }
+  },
+  "by_chromosome": {
+    "chr21": {
+      "open_in_reader": 280,
+      "not_open_in_reader": 767,
+      "not_assessable": 4129
+    }
+  },
+  "the_sharp_cross_tabulation": {
+    "what_it_crosses": "not_open_in_reader AND a strong predicted effect AND a cell whose assignment clears the base-rate tolerance. These are the sharpest candidate defects the three axes can name together; sharper is not the same as wrong",
+    "rules": 139,
+    "share_of_the_not_open_rules": 0.1812,
+    "population_of_that_share": "the 767 not_open_in_reader rules",
+    "also_dropping_the_three_cells_lane_context2_singled_out": {
+      "rules": 138,
+      "cells_dropped": [
+        "SK-N-SH",
+        "astrocyte",
+        "ovary"
+      ],
+      "why_both_are_given": "docs/ATTRIBUTION.md states SK-N-SH as the cell whose assignment carries no information, and astrocyte and ovary as clearing the tolerance only just. The first count applies the registered tolerance as arithmetic; the second also drops the two that only just clear it, so the figure does not depend on reading that sentence one way"
+    },
+    "per_cell": {
+      "K562": {
+        "rules": 49,
+        "assignment_difference_over_the_base_rate": 0.1227,
+        "share_of_this_cell_s_not_open_rules": 0.1672,
+        "population_of_that_share": "the 293 not_open_in_reader rules assigned to K562"
+      },
+      "CD14-positive monocyte": {
+        "rules": 20,
+        "assignment_difference_over_the_base_rate": 0.2163,
+        "share_of_this_cell_s_not_open_rules": 0.1852,
+        "population_of_that_share": "the 108 not_open_in_reader rules assigned to CD14-positive monocyte"
+      },
+      "keratinocyte": {
+        "rules": 19,
+        "assignment_difference_over_the_base_rate": 0.0953,
+        "share_of_this_cell_s_not_open_rules": 0.1727,
+        "population_of_that_share": "the 110 not_open_in_reader rules assigned to keratinocyte"
+      },
+      "HepG2": {
+        "rules": 18,
+        "assignment_difference_over_the_base_rate": 0.1909,
+        "share_of_this_cell_s_not_open_rules": 0.1765,
+        "population_of_that_share": "the 102 not_open_in_reader rules assigned to HepG2"
+      },
+      "GM12878": {
+        "rules": 13,
+        "assignment_difference_over_the_base_rate": 0.0702,
+        "share_of_this_cell_s_not_open_rules": 0.2321,
+        "population_of_that_share": "the 56 not_open_in_reader rules assigned to GM12878"
+      },
+      "H1": {
+        "rules": 11,
+        "assignment_difference_over_the_base_rate": 0.1141,
+        "share_of_this_cell_s_not_open_rules": 0.2245,
+        "population_of_that_share": "the 49 not_open_in_reader rules assigned to H1"
+      },
+      "testis": {
+        "rules": 4,
+        "assignment_difference_over_the_base_rate": 0.0525,
+        "share_of_this_cell_s_not_open_rules": 0.2667,
+        "population_of_that_share": "the 15 not_open_in_reader rules assigned to testis"
+      },
+      "IMR-90": {
+        "rules": 3,
+        "assignment_difference_over_the_base_rate": 0.1864,
+        "share_of_this_cell_s_not_open_rules": 0.2308,
+        "population_of_that_share": "the 13 not_open_in_reader rules assigned to IMR-90"
+      },
+      "cardiac muscle cell": {
+        "rules": 1,
+        "assignment_difference_over_the_base_rate": 0.1296,
+        "share_of_this_cell_s_not_open_rules": 0.0667,
+        "population_of_that_share": "the 15 not_open_in_reader rules assigned to cardiac muscle cell"
+      },
+      "ovary": {
+        "rules": 1,
+        "assignment_difference_over_the_base_rate": 0.026,
+        "share_of_this_cell_s_not_open_rules": 0.2,
+        "population_of_that_share": "the 5 not_open_in_reader rules assigned to ovary"
+      }
+    },
+    "per_element_class": {
+      "enhancer": 139
+    },
+    "per_activity_axis": {
+      "activates_target": 80,
+      "represses_target": 59
+    },
+    "per_origin_axis": {
+      "unique": 88,
+      "repeat_derived/LTR": 15,
+      "partly_repeat_derived/SINE": 10,
+      "repeat_derived/LINE": 10,
+      "partly_repeat_derived/DNA": 4,
+      "repeat_derived/SINE": 3,
+      "partly_repeat_derived/LINE": 3,
+      "repeat_derived/DNA": 3,
+      "partly_repeat_derived/LTR": 3
+    },
+    "per_distance_band": {
+      "5 to 50 kb": 63,
+      "50 to 250 kb": 41,
+      "under 5 kb": 33,
+      "beyond 250 kb": 2
+    },
+    "per_chromosome": {
+      "chr21": 139
+    },
+    "effect_size": {
+      "largest_absolute_log2_fold_change": 1.9857,
+      "smallest_absolute_log2_fold_change": 0.3003,
+      "note": "every rule here is in the strong band, so the smallest is at or just above STRONG_EFFECT = 0.3"
+    },
+    "strongest_rules": [
+      {
+        "chromosome": "chr21",
+        "element": "EH38E2144637",
+        "locus": "chr21:42395385-42395618",
+        "gene": "TMPRSS3",
+        "cell": "GM12878",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.9857,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 1000,
+        "distance_band": "under 5 kb",
+        "reader_biosample": "GM12878"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3458248",
+        "locus": "chr21:38121613-38121818",
+        "gene": "KCNJ15",
+        "cell": "K562",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "repeat_derived/SINE",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.4478,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 33833,
+        "distance_band": "5 to 50 kb",
+        "reader_biosample": "K562"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3451848",
+        "locus": "chr21:18759944-18760174",
+        "gene": "TMPRSS15",
+        "cell": "K562",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "repeat_derived/LTR",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.3007,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 274181,
+        "distance_band": "beyond 250 kb",
+        "reader_biosample": "K562"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E2144979",
+        "locus": "chr21:42731364-42731711",
+        "gene": "PDE9A",
+        "cell": "IMR_90",
+        "element_class": "enhancer",
+        "activity_axis": "represses_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": 1.2817,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 77954,
+        "distance_band": "50 to 250 kb",
+        "reader_biosample": "IMR-90"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E2141452",
+        "locus": "chr21:38156243-38156592",
+        "gene": "KCNJ15",
+        "cell": "K562",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.2446,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 1000,
+        "distance_band": "under 5 kb",
+        "reader_biosample": "K562"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3462551",
+        "locus": "chr21:44356672-44357017",
+        "gene": "TRPM2",
+        "cell": "GM12878",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "repeat_derived/LTR",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.16,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 6773,
+        "distance_band": "5 to 50 kb",
+        "reader_biosample": "GM12878"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3457156",
+        "locus": "chr21:35981664-35981928",
+        "gene": "RUNX1",
+        "cell": "HepG2",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.1535,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 22870,
+        "distance_band": "5 to 50 kb",
+        "reader_biosample": "HepG2"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3461800",
+        "locus": "chr21:43658841-43659191",
+        "gene": "HSF2BP",
+        "cell": "HepG2",
+        "element_class": "enhancer",
+        "activity_axis": "represses_target",
+        "origin_axis": "repeat_derived/SINE",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": 1.1019,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 1000,
+        "distance_band": "under 5 kb",
+        "reader_biosample": "HepG2"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E2146241",
+        "locus": "chr21:44658290-44658518",
+        "gene": "KRTAP12-3",
+        "cell": "Testis",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.0598,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 1000,
+        "distance_band": "under 5 kb",
+        "reader_biosample": "testis"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3462547",
+        "locus": "chr21:44353835-44353985",
+        "gene": "TRPM2",
+        "cell": "GM12878",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -1.0561,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 3839,
+        "distance_band": "under 5 kb",
+        "reader_biosample": "GM12878"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3459109",
+        "locus": "chr21:39660607-39660953",
+        "gene": "IGSF5",
+        "cell": "H1",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -0.9122,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 84402,
+        "distance_band": "50 to 250 kb",
+        "reader_biosample": "H1"
+      },
+      {
+        "chromosome": "chr21",
+        "element": "EH38E3459795",
+        "locus": "chr21:41369916-41370190",
+        "gene": "MX2",
+        "cell": "K562",
+        "element_class": "enhancer",
+        "activity_axis": "activates_target",
+        "origin_axis": "unique",
+        "source": "predicted_alphagenome_deletion",
+        "alphagenome_log2_fold_change": -0.907,
+        "effect_band": "strong",
+        "distance_to_tss_bp": 8097,
+        "distance_band": "5 to 50 kb",
+        "reader_biosample": "K562"
+      }
+    ],
+    "strongest_rules_per_cell": {
+      "K562": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3458248",
+          "locus": "chr21:38121613-38121818",
+          "gene": "KCNJ15",
+          "cell": "K562",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "repeat_derived/SINE",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.4478,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 33833,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "K562"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3451848",
+          "locus": "chr21:18759944-18760174",
+          "gene": "TMPRSS15",
+          "cell": "K562",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "repeat_derived/LTR",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.3007,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 274181,
+          "distance_band": "beyond 250 kb",
+          "reader_biosample": "K562"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2141452",
+          "locus": "chr21:38156243-38156592",
+          "gene": "KCNJ15",
+          "cell": "K562",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.2446,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 1000,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "K562"
+        }
+      ],
+      "CD14-positive monocyte": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2134366",
+          "locus": "chr21:26487439-26487596",
+          "gene": "CYYR1",
+          "cell": "CD14_positive_monocyte",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.6645,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 85796,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "CD14-positive monocyte"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3453187",
+          "locus": "chr21:26485515-26485780",
+          "gene": "CYYR1",
+          "cell": "CD14_positive_monocyte",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "repeat_derived/LINE",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.6097,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 87666,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "CD14-positive monocyte"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2134367",
+          "locus": "chr21:26488091-26488439",
+          "gene": "CYYR1",
+          "cell": "CD14_positive_monocyte",
+          "element_class": "enhancer",
+          "activity_axis": "represses_target",
+          "origin_axis": "partly_repeat_derived/SINE",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": 0.5036,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 85048,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "CD14-positive monocyte"
+        }
+      ],
+      "keratinocyte": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3459493",
+          "locus": "chr21:40814000-40814315",
+          "gene": "DSCAM",
+          "cell": "keratinocyte",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.5309,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 33000,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "keratinocyte"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3460689",
+          "locus": "chr21:42236670-42237017",
+          "gene": "ABCG1",
+          "cell": "keratinocyte",
+          "element_class": "enhancer",
+          "activity_axis": "represses_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": 0.464,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 37155,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "keratinocyte"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2135773",
+          "locus": "chr21:29146049-29146391",
+          "gene": "MAP3K7CL",
+          "cell": "keratinocyte",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.4605,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 69161,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "keratinocyte"
+        }
+      ],
+      "HepG2": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3457156",
+          "locus": "chr21:35981664-35981928",
+          "gene": "RUNX1",
+          "cell": "HepG2",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.1535,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 22870,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "HepG2"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3461800",
+          "locus": "chr21:43658841-43659191",
+          "gene": "HSF2BP",
+          "cell": "HepG2",
+          "element_class": "enhancer",
+          "activity_axis": "represses_target",
+          "origin_axis": "repeat_derived/SINE",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": 1.1019,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 1000,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "HepG2"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3464711",
+          "locus": "chr21:46098530-46098867",
+          "gene": "COL6A2",
+          "cell": "HepG2",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.781,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 1977,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "HepG2"
+        }
+      ],
+      "GM12878": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2144637",
+          "locus": "chr21:42395385-42395618",
+          "gene": "TMPRSS3",
+          "cell": "GM12878",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.9857,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 1000,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "GM12878"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3462551",
+          "locus": "chr21:44356672-44357017",
+          "gene": "TRPM2",
+          "cell": "GM12878",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "repeat_derived/LTR",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.16,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 6773,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "GM12878"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3462547",
+          "locus": "chr21:44353835-44353985",
+          "gene": "TRPM2",
+          "cell": "GM12878",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.0561,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 3839,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "GM12878"
+        }
+      ],
+      "H1": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3459109",
+          "locus": "chr21:39660607-39660953",
+          "gene": "IGSF5",
+          "cell": "H1",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.9122,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 84402,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "H1"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3455501",
+          "locus": "chr21:33105113-33105374",
+          "gene": "OLIG1",
+          "cell": "H1",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "repeat_derived/LINE",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.6265,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 35103,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "H1"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3456309",
+          "locus": "chr21:34521608-34521947",
+          "gene": "ENSG00000288711",
+          "cell": "H1",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.5501,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 93135,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "H1"
+        }
+      ],
+      "testis": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2146241",
+          "locus": "chr21:44658290-44658518",
+          "gene": "KRTAP12-3",
+          "cell": "Testis",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -1.0598,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 1000,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "testis"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3462836",
+          "locus": "chr21:44653696-44654018",
+          "gene": "KRTAP12-3",
+          "cell": "Testis",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.4412,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 4074,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "testis"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3455787",
+          "locus": "chr21:33491132-33491381",
+          "gene": "DNAJC28",
+          "cell": "testis",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.4161,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 1000,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "testis"
+        }
+      ],
+      "IMR-90": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2144979",
+          "locus": "chr21:42731364-42731711",
+          "gene": "PDE9A",
+          "cell": "IMR_90",
+          "element_class": "enhancer",
+          "activity_axis": "represses_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": 1.2817,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 77954,
+          "distance_band": "50 to 250 kb",
+          "reader_biosample": "IMR-90"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2147888",
+          "locus": "chr21:46291150-46291490",
+          "gene": "YBEY",
+          "cell": "IMR_90",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "partly_repeat_derived/SINE",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.6797,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 5490,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "IMR-90"
+        },
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2135676",
+          "locus": "chr21:29008421-29008717",
+          "gene": "RWDD2B",
+          "cell": "IMR_90",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.5704,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 10804,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "IMR-90"
+        }
+      ],
+      "cardiac muscle cell": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E2138966",
+          "locus": "chr21:34704655-34704834",
+          "gene": "CLIC6",
+          "cell": "cardiac_muscle_cell",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.3292,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 35779,
+          "distance_band": "5 to 50 kb",
+          "reader_biosample": "cardiac muscle cell"
+        }
+      ],
+      "ovary": [
+        {
+          "chromosome": "chr21",
+          "element": "EH38E3457805",
+          "locus": "chr21:37001485-37001831",
+          "gene": "RIPPLY3",
+          "cell": "Ovary",
+          "element_class": "enhancer",
+          "activity_axis": "activates_target",
+          "origin_axis": "unique",
+          "source": "predicted_alphagenome_deletion",
+          "alphagenome_log2_fold_change": -0.5058,
+          "effect_band": "strong",
+          "distance_to_tss_bp": 4491,
+          "distance_band": "under 5 kb",
+          "reader_biosample": "ovary"
+        }
+      ]
+    },
+    "the_whole_list": "the rows above are a handful for looking at by hand. The whole cross-tabulation is written as a TSV by this script's --dump option, which is reproducible from the committed code in one run and is not carried in this result"
+  },
+  "sources_of_a_rule": {
+    "predicted_alphagenome_deletion": "",
+    "measured_crispri": "a rule of the experimental layer: a CRISPRi screen measured it, so it carries the screen's effect size and no AlphaGenome deletion effect of its own. It is counted here and given no band."
+  },
+  "effect_bands": [
+    "strong",
+    "weak"
+  ],
+  "effect_band_call": "`strength` as genomeos.predict.enhancer_target already writes it on the cached prediction: strong at or above STRONG_EFFECT = 0.3 in |log2 fold change| of the predicted expression move on deleting the element, weak below. It is an effect-size band and never a certainty; this module reads the field and does not recompute it.",
+  "strong_effect": 0.3,
+  "distance_bands": [
+    "under 5 kb",
+    "5 to 50 kb",
+    "50 to 250 kb",
+    "beyond 250 kb"
+  ],
+  "distance_call": "the distance from the element's midpoint to the target gene's GENCODE v50 TSS, by genomeos.attribution.target_calibration.tss_distance (floored at its MIN_DISTANCE), banded by genomeos.attribution.executor._band unchanged. That function bands up to executor.WIDE_MAX_DISTANCE = 250000, which is where the project's own banding stops, so everything above it is reported as one residual row, 'beyond 250 kb', and not as a new band.",
+  "beyond_the_scorer_window": "the distance from the element to the TSS this gene symbol resolves to exceeds half the 1 Mb window the AlphaGenome deletion scorer reads, so the scorer cannot have read that TSS: the symbol resolved to another locus of the same symbol. This is a fault in the distance, not in the rule, and the rule is counted everywhere else unchanged.",
+  "scorer_half_window": 500000,
+  "element_class_call": "`class:` as genomeos.attribution.compile.derived_class writes it on the compiled element, from the same axes the compiler builds: the first ENCODE registry role the element holds for certain, else unknown. No classification is invented here. Because every attributed element is a distal enhancer-like registry cCRE, that field takes one value over this population and separates nothing, so the compiler's own `activity:` and `origin:` axis values are reported beside it - also read off the compiled element, also not invented.",
+  "informative_call": "a cell's assignment clears the registered tolerance when, over the rules assigned to it, the share of them open in that cell exceeds the mean share open in the other twelve reader biosamples by more than the tolerance context_evidence_baserate.json fixed before any share was computed. Both the difference and the tolerance are read from that result. This says the assignment is informative about where the element is open; it says nothing about whether the rule is right, and the base-rate comparison is itself descriptive and not independent.",
+  "cells_lane_context2_singled_out": [
+    "SK-N-SH",
+    "astrocyte",
+    "ovary"
+  ],
+  "state_call": "genomeos.attribution.context_evidence.state_for, imported unchanged, with its own mapping table and reader v1's own openness call. No threshold, mapping or registered definition is changed, and the chromosome counts are checked against the census result.",
+  "limitations": {
+    "not_closed": "not_open_in_reader means not detected open at the reader's registered threshold, not closed: a narrowPeak set is a call set, and absence is absence of a call",
+    "not_validation": "a consistency check between two readings of the same ENCODE chromatin, not validation: reader v1's openness comes from ENCODE peaks and AlphaGenome was trained on ENCODE, so open_in_reader is never independent evidence that the rule is right and must never be quoted as validation",
+    "base_rate_is_descriptive_and_not_independent": "the 1.81x figure of context_evidence_baserate.json - the assigned cell open on 0.3252 of the 81,635 assessable rules against 0.1796 of the 979,455 rule-and-biosample pairs in the other twelve - is descriptive and not independent, for the same reason: both readings are of the same ENCODE chromatin the model was trained on. It is quoted with that label or not at all.",
+    "descriptive_only": "this profile locates and types candidate defects. It establishes about no rule that the rule is wrong, no verdict is moved, no rule is deleted and no compiled label is changed.",
+    "informative_is_not_right": "a cell whose assignment clears the base-rate tolerance is informative about where the element is open, not correct about the rule. A not_open_in_reader rule in such a cell is a sharper candidate than one in a cell whose assignment carries no information, and nothing more than that."
+  },
+  "alphagenome_requests": 0,
+  "reading": {
+    "moves": "one number becomes a list: the 55,084 not_open_in_reader rules are located by cell, element class, predicted effect size and distance to the gene, and the three axes are crossed to name the sharpest candidates",
+    "does_not_move": "no verdict moved, no rule was deleted, no compiled label changed, no threshold or registered definition changed, and nothing was refitted. No rule is established to be wrong by anything here",
+    "never": "not_open_in_reader is never reported as the element being closed or the rule being contradicted, and open_in_reader is never reported as validation"
+  },
+  "code_cleanliness": {
+    "git_sha": "619148bff81f16a31e7a80267c1d0eb63d172459",
+    "dirty": false,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
+    "foreign_uncommitted_code": [],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+    "counting_path": [
+      "genomeos/__init__.py",
+      "genomeos/attribution/__init__.py",
+      "genomeos/attribution/bigwig.py",
+      "genomeos/attribution/budget.py",
+      "genomeos/attribution/compile.py",
+      "genomeos/attribution/constraint.py",
+      "genomeos/attribution/context_evidence.py",
+      "genomeos/attribution/correctness.py",
+      "genomeos/attribution/crispri.py",
+      "genomeos/attribution/element_types.py",
+      "genomeos/attribution/eqtl.py",
+      "genomeos/attribution/executor.py",
+      "genomeos/attribution/holdout.py",
+      "genomeos/attribution/human_panel.py",
+      "genomeos/attribution/measured.py",
+      "genomeos/attribution/mpra.py",
+      "genomeos/attribution/not_open_profile.py",
+      "genomeos/attribution/pilot.py",
+      "genomeos/attribution/pilot_bio.py",
+      "genomeos/attribution/target_calibration.py",
+      "genomeos/attribution/targets.py",
+      "genomeos/attribution/variation.py",
+      "genomeos/attribution/vista.py",
+      "genomeos/cancer/alterations.py",
+      "genomeos/cancer/compare.py",
+      "genomeos/cancer/tumour.py",
+      "genomeos/certainty.py",
+      "genomeos/coords.py",
+      "genomeos/flow/__init__.py",
+      "genomeos/flow/trace.py",
+      "genomeos/genome/__init__.py",
+      "genomeos/genome/annotation.py",
+      "genomeos/genome/bgzf.py",
+      "genomeos/genome/domains.py",
+      "genomeos/genome/epigenome.py",
+      "genomeos/genome/fetch.py",
+      "genomeos/genome/genome.py",
+      "genomeos/genome/index.py",
+      "genomeos/genome/individuals.py",
+      "genomeos/genome/lookup.py",
+      "genomeos/genome/missense.py",
+      "genomeos/genome/motifs.py",
+      "genomeos/genome/reader.py",
+      "genomeos/genome/regulation.py",
+      "genomeos/genome/regulatory.py",
+      "genomeos/genome/repeats.py",
+      "genomeos/genome/sequence.py",
+      "genomeos/genome/unknown.py",
+      "genomeos/genome/variants.py",
+      "genomeos/ir/__init__.py",
+      "genomeos/ir/model.py",
+      "genomeos/knowledge/__init__.py",
+      "genomeos/knowledge/across.py",
+      "genomeos/knowledge/homology.py",
+      "genomeos/knowledge/profiling.py",
+      "genomeos/knowledge/satmut.py",
+      "genomeos/lang/__init__.py",
+      "genomeos/lang/grammar.py",
+      "genomeos/lang/located.py",
+      "genomeos/lang/parser.py",
+      "genomeos/lib/__init__.py",
+      "genomeos/lib/membership.py",
+      "genomeos/manifest.py",
+      "genomeos/molecules/__init__.py",
+      "genomeos/molecules/reactome.py",
+      "genomeos/molecules/rna.py",
+      "genomeos/predict/alphagenome_adapter.py",
+      "genomeos/predict/enhancer_target.py",
+      "genomeos/predict/individual_effects.py",
+      "genomeos/results.py",
+      "genomeos/runtime/__init__.py",
+      "genomeos/runtime/central_dogma.py",
+      "genomeos/therapeutics/__init__.py",
+      "genomeos/therapeutics/pipeline.py",
+      "genomeos/therapeutics/report.py",
+      "genomeos/version.py",
+      "scripts/not_open_profile.py"
+    ],
+    "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+    "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+  },
+  "money": "none: every input was already on disk",
+  "seconds": 1.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE DNase-seq narrowPeak, GRCh38, released, 13 biosamples",
+        "version": "as reader v1 cached them under data/results/dnase_*_chr*.bed.gz"
+      },
+      {
+        "accession": "AlphaGenome output track metadata",
+        "version": "data/cache/entex/alphagenome_track_metadata_copy.csv"
+      },
+      {
+        "accession": "GENCODE",
+        "version": "v50, data/reference/gencode_v50_chr*.gff3.gz, for the TSS"
+      },
+      {
+        "accession": "the compiled non-coding programs of the 24 chromosomes",
+        "version": "re-enumerated in this run from the results on disk, not read from a file"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr21.json",
+        "sha256": "9f8112afa28902a6ef81caadad58d37cf709a3d1fbd35d2ca221d7b6aab08049",
+        "bytes": 263928,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/context_evidence.json",
+        "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+        "bytes": 184616,
+        "partition": null
+      },
+      {
+        "path": "data/results/context_evidence_baserate.json",
+        "sha256": "2cc67f4fe78158c92c1c23269edcfccb0356539af241753440e6c555dc52d771",
+        "bytes": 20289,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_CD14_positive_monocyte_chr21.bed.gz",
+        "sha256": "fe5e2266d2e24ab581c43d7c74adb365022a7f4d230de6fe2671cb4c022a8e59",
+        "bytes": 22361,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_GM12878_chr21.bed.gz",
+        "sha256": "f383e15521805c90895b02ae5cbb5dd583d22c57028c098fe34b72ee57daf9dc",
+        "bytes": 7453,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_H1_chr21.bed.gz",
+        "sha256": "bcb757ade8367a7c91a4f3044ba5406e5a2aa6e8b5fe9af0146dcb4e2f1cb6d1",
+        "bytes": 23407,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_HepG2_chr21.bed.gz",
+        "sha256": "413bb8f9ee36c88fac027beb2538b12cd27f5cdff9e60b1ced83c4df0b52c9fd",
+        "bytes": 16542,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_IMR_90_chr21.bed.gz",
+        "sha256": "1358f5f0e7f1429f8e65641fae84b4e30459f0be0b560509d929387d16793e37",
+        "bytes": 31329,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_K562_chr21.bed.gz",
+        "sha256": "51b47ea1224b57628a625b07491c6a7d8662049e1b37fa7ff6e4cbea38edf3fb",
+        "bytes": 44572,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_SK_N_SH_chr21.bed.gz",
+        "sha256": "b4ad8774d727769c7db3bb522a6947e0e2d6b4bd907d3e7c479a93943a4f45cd",
+        "bytes": 22747,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_astrocyte_chr21.bed.gz",
+        "sha256": "4172bdf12c916ddc59c012aff81dcd6dba61cc81d1cd8efa0613f8683000d387",
+        "bytes": 29772,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_cardiac_muscle_cell_chr21.bed.gz",
+        "sha256": "bee45380afec587096b0194933df22a3dce362a8032d05ae29103fdecc76a54f",
+        "bytes": 32669,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_hepatocyte_chr21.bed.gz",
+        "sha256": "582fa92fbe00e0d7b2dafc9e424ca66158879b693036aaaea12f026a9d0b5e50",
+        "bytes": 27804,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_keratinocyte_chr21.bed.gz",
+        "sha256": "33801c9a0399e16f37445e6ebb78e3f8e32412374ddbfc07014758a7311e0dc6",
+        "bytes": 8249,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_ovary_chr21.bed.gz",
+        "sha256": "e7b5de75c448354b3a493680e21eb7cb9745e128330c36d862000623433ffb28",
+        "bytes": 34344,
+        "partition": null
+      },
+      {
+        "path": "data/results/dnase_testis_chr21.bed.gz",
+        "sha256": "d6acc141a76c5fe9d7f70be92f0437a409c5a6ac8dc49195d745fadef5e6a233",
+        "bytes": 27234,
+        "partition": null
+      },
+      {
+        "path": "data/results/domains_chr21.json",
+        "sha256": "6bad711ecf1a3b11de1b1667b0b8ee9f9da25031a768147e13b412bfeae18ace",
+        "bytes": 105501,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr21.json",
+        "sha256": "4efb8a6d42ed89a7cd436e3100f2fef0bb7d068d8c5060ae742fe5e34c6814cf",
+        "bytes": 118130,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_CD14_positive_monocyte_chr21.json",
+        "sha256": "a4d3141c028522b09bc4321614f61a77c20d3847142ab2562d57e26e053fd25b",
+        "bytes": 48218,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_GM12878_chr21.json",
+        "sha256": "5fcaca258520af90b4dd009f8d0508892b4229a9a4102766deb59cf88b4e7c00",
+        "bytes": 48918,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_H1_chr21.json",
+        "sha256": "1ba10ebbf5dee5761f33bb8d32e0bdee6fd2079aaa3f750394ec231e6d55dfd7",
+        "bytes": 48174,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_HepG2_chr21.json",
+        "sha256": "486c7026a0fc61a49b752572a42bc05874ce98284570b3be3d22f363e460ea23",
+        "bytes": 48279,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_IMR_90_chr21.json",
+        "sha256": "f574b476ffa8ae6bef15218f1e1ac59bd39077a44db6aaa5c6a31a5031e188ca",
+        "bytes": 48042,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_K562_chr21.json",
+        "sha256": "92fc10a002243611a2e7b22ed08a5b83ae979610b3dad4a6083154d15c78fdee",
+        "bytes": 48464,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_K562_vs_HepG2_chr21.json",
+        "sha256": "84907b6b9a7b1ff7124f6da648c49ff527555ce2b731db86c96bf56388a3b448",
+        "bytes": 862,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_SK_N_SH_chr21.json",
+        "sha256": "b22720be07b904ec1c38534a891763b2173c5912b60c036d9fc541779aa216f8",
+        "bytes": 47871,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_astrocyte_chr21.json",
+        "sha256": "648f4af55a0340131f8e64af03ca31748a5ab681be87f000ae9fe22dcbd7be3e",
+        "bytes": 47958,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_cardiac_muscle_cell_chr21.json",
+        "sha256": "877ddcdaa3ffca02729013eef02636f6bb3cdb5afc0b009a51e28401aca8ea32",
+        "bytes": 48094,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_hepatocyte_chr21.json",
+        "sha256": "a186f8c7e2f917ae5acc6b806c9ff2d47eb41cdbb4d17bd3e2767edc373c6d89",
+        "bytes": 47688,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_keratinocyte_chr21.json",
+        "sha256": "6c6df98dc4c41aa328ba1feb29c1120835d9b2a471cfae6890f7b04cf76fc6da",
+        "bytes": 48957,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_ovary_chr21.json",
+        "sha256": "6d32ea3a8885a1a27521c9addca14baf0b4de7e4a5ee01c2abab7b0d8dd46409",
+        "bytes": 47607,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_testis_chr21.json",
+        "sha256": "1f31fd8a4cc1ed0cd7b49cb3dabc81052bcb7492063d50875bdee94b8926ed32",
+        "bytes": 47417,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr21.json",
+        "sha256": "28f6f18a43bcbc0ddd9cab5044586fe99290689d0df00dcd8beed4a1ecb1c4fd",
+        "bytes": 355767,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr21.json",
+        "sha256": "f68d07ae0c32f653b5c20abf1c74e7bb35df2a661bda11be17d588ba40ed5f5e",
+        "bytes": 348031,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
+      "measured_span": "a biosample's measured span on a chromosome is the interval from the first peak's start to the last peak's end in its cached narrowPeak file for that chromosome. Beyond it no read was placed, so an absent peak there is not a negative call. This is a statement about coverage, not a threshold on signal.",
+      "effect_band_call": "`strength` as genomeos.predict.enhancer_target already writes it on the cached prediction: strong at or above STRONG_EFFECT = 0.3 in |log2 fold change| of the predicted expression move on deleting the element, weak below. It is an effect-size band and never a certainty; this module reads the field and does not recompute it.",
+      "distance_call": "the distance from the element's midpoint to the target gene's GENCODE v50 TSS, by genomeos.attribution.target_calibration.tss_distance (floored at its MIN_DISTANCE), banded by genomeos.attribution.executor._band unchanged. That function bands up to executor.WIDE_MAX_DISTANCE = 250000, which is where the project's own banding stops, so everything above it is reported as one residual row, 'beyond 250 kb', and not as a new band.",
+      "informative_call": "a cell's assignment clears the registered tolerance when, over the rules assigned to it, the share of them open in that cell exceeds the mean share open in the other twelve reader biosamples by more than the tolerance context_evidence_baserate.json fixed before any share was computed. Both the difference and the tolerance are read from that result. This says the assignment is informative about where the element is open; it says nothing about whether the rule is right, and the base-rate comparison is itself descriptive and not independent.",
+      "tolerance": 0.02,
+      "chromosomes": [
+        "chr21"
+      ]
+    },
+    "exclusions": [
+      "no rule is excluded from the breakdowns: the denominator is every assessable rule",
+      "the sharp cross-tabulation is a selection, not an exclusion: every rule outside it is still counted in all four breakdowns",
+      "no new cut-off is introduced; the openness call, the effect band, the distance bands and the informativeness tolerance are all imported from where the project already fixed them"
+    ],
+    "partitions": {
+      "by_cell": "the reader biosample the rule's label maps to by ontology term, and the label",
+      "by_element_class": "`class:` as the compiler writes it on the element, with the compiler's own `activity:` and `origin:` axis values beside it",
+      "by_effect_band": "`strength` as the cached AlphaGenome prediction carries it",
+      "by_distance_band": "executor._band over the element-midpoint-to-TSS distance"
+    },
+    "code_cleanliness": {
+      "git_sha": "619148bff81f16a31e7a80267c1d0eb63d172459",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/version.py",
+        "scripts/not_open_profile.py"
+      ],
+      "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+      "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "619148bff81f16a31e7a80267c1d0eb63d172459",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/not_open_profile.json",
+        "data/results/not_open_profile_chr21.json",
+        "data/results/response_map_coverage.json",
+        "data/results/response_map_coverage_chr21.json"
+      ],
+      "argv": [
+        "scripts/not_open_profile.py",
+        "--chroms",
+        "chr21",
+        "--result",
+        "not_open_profile_chr21"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

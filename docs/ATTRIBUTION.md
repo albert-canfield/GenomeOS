@@ -13886,6 +13886,141 @@ one cannot, because twelve of its input groups are the per-chromosome reader res
 which are git-ignored for every chromosome but chr21, and the rebuild names them. 0 model requests and no
 money, every input already on disk.
 
+## The 55,084 rules whose element is not detected open in their own cell, typed and located (2026-10-02, lane-notopen)
+
+The census above left one number standing for a very mixed population: of 440,589 compiled rules,
+81,635 could be read at all and **55,084 of those are `not_open_in_reader`**. This takes exactly those
+rules, in exactly that order, and carries four properties beside each one. Nothing is refitted, no
+threshold is moved, no verdict is moved and no rule is deleted: the output is a list beside the
+compiled programs, not an edit to them.
+
+**Every band is imported from where the project already fixed it.** The state per rule is
+`context_evidence.state_for` unchanged, with its own mapping table and reader v1's own openness call.
+The element's class is `compile.derived_class` as the compiler writes it on the element. The effect
+band is the `strength` field the cached AlphaGenome prediction already carries, strong at or above
+`enhancer_target.STRONG_EFFECT = 0.3` in |log2 fold change|. The distance is the element midpoint to
+the GENCODE v50 TSS by `target_calibration.tss_distance`, banded by `executor._band` unchanged; that
+function bands up to `executor.WIDE_MAX_DISTANCE = 250,000`, where the project's own banding stops, so
+everything above it is one residual row and not a new band. Whether an assigned cell's assignment
+carries information at all is read from `context_evidence_baserate.json`'s own difference against the
+tolerance of 0.02 that result fixed before any share was computed. The run refuses to write anything
+unless it reads back the census's 440,589 rules, 26,551 open and 55,084 not open, and unless its
+per-biosample counts equal the census's own; it did, so the population here is the population there.
+
+**By cell.** The denominator of each share is that cell's own assessable rules, never the pooled set.
+
+| assigned cell | not open | assessable | not-open share | assignment difference | clears 0.02 |
+| --- | --- | --- | --- | --- | --- |
+| K562 | 19,364 | 27,445 | 0.7056 | +0.1227 | yes |
+| HepG2 | 9,478 | 14,779 | 0.6413 | +0.1909 | yes |
+| CD14-positive monocyte | 9,084 | 15,540 | 0.5846 | +0.2163 | yes |
+| GM12878 | 4,779 | 6,406 | 0.7460 | +0.0702 | yes |
+| keratinocyte | 3,872 | 5,359 | 0.7225 | +0.0953 | yes |
+| H1 | 2,705 | 3,747 | 0.7219 | +0.1141 | yes |
+| IMR-90 | 1,812 | 2,942 | 0.6159 | +0.1864 | yes |
+| testis | 1,645 | 2,152 | 0.7644 | +0.0525 | yes |
+| cardiac muscle cell | 1,304 | 1,865 | 0.6992 | +0.1296 | yes |
+| ovary | 467 | 603 | 0.7745 | +0.0260 | only just |
+| SK-N-SH | 264 | 347 | 0.7608 | −0.0188 | no |
+| hepatocyte | 166 | 241 | 0.6888 | +0.1432 | yes |
+| astrocyte | 144 | 209 | 0.6890 | +0.0294 | only just |
+
+The three cells the base-rate comparison singled out carry **875 of the 55,084** between them: ovary
+467, SK-N-SH 264, astrocyte 144. For the 264 in SK-N-SH the assignment carries no information about
+openness, so the element not being open in SK-N-SH is close to uninformative about those rules; they
+are reported separately rather than counted with the rest. The 317 compiled cell labels collapse onto
+these thirteen biosamples by ontology term, and two pairs of labels differ only in case — `testis`
+1,358 of 1,751 and `Testis` 287 of 401, `ovary` 200 of 264 and `Ovary` 267 of 339 — which is a fact
+about the track names the compiler carries, not about the chromatin.
+
+**By element class: the axis does not separate them at all.** `class:` is `enhancer` for all 55,084,
+because every attributed element is a distal enhancer-like registry cCRE. So the compiler's own
+`activity:` and `origin:` axis values are reported beside it, both read off the compiled element and
+neither invented — and `activity:` is the sharpest single split found anywhere here:
+
+| compiled axis value | not open | assessable | not-open share |
+| --- | --- | --- | --- |
+| `activity: activates_target` | 29,141 | 51,103 | 0.5702 |
+| `activity: represses_target` | 25,943 | 30,480 | **0.8511** |
+| `origin: unique` | 30,615 | 45,412 | 0.6742 |
+| `origin: repeat_derived/SINE` | 4,565 | 5,800 | 0.7871 |
+| `origin: repeat_derived/LINE` | 4,466 | 6,490 | 0.6881 |
+| `origin: repeat_derived/LTR` | 3,715 | 5,972 | 0.6221 |
+
+A repression rule is not detected open in its own cell in 0.8511 of the 30,480 assessable repressions,
+against 0.5702 of the 51,103 assessable activations. That is where the candidate defects concentrate,
+and it sits beside what the S4 correctness reading already recorded from the other direction, over a
+population of 4: **all 4 judged repressions wrong in direction**. Neither reading establishes the other,
+and this one establishes nothing about any individual rule.
+
+**By AlphaGenome effect size: the strong predictions are the *less* often affected ones.**
+
+| effect band | not open | assessable | not-open share |
+| --- | --- | --- | --- |
+| weak (below 0.3) | 46,835 | 62,249 | 0.7524 |
+| strong (0.3 and above) | 8,248 | 19,191 | **0.4298** |
+| a CRISPRi rule, no AlphaGenome effect of its own | 1 | 195 | 0.0051 |
+
+This is the opposite of the worst case and is reported as it came out: a strong predicted effect is
+detected open in its own cell more often than a weak one: open in 0.5702 of the 19,191 assessable
+strong rules against 0.2476 of the 62,249 assessable weak ones. 55,083 of the 55,084 are predicted
+rules; exactly one is a rule of the experimental layer, out of 195 assessable CRISPRi rules, and those
+carry the screen's effect size rather than AlphaGenome's, so they are counted and given no band.
+
+**By distance to the gene**, in the project's own bands:
+
+| distance band | not open | assessable | not-open share |
+| --- | --- | --- | --- |
+| under 5 kb | 9,377 | 14,981 | 0.6259 |
+| 5 to 50 kb | 21,305 | 32,853 | 0.6485 |
+| 50 to 250 kb | 19,390 | 27,019 | 0.7176 |
+| beyond 250 kb (residual, above where the project bands) | 5,012 | 6,776 | 0.7397 |
+
+The share rises with distance but across no large range: 0.6259 under 5 kb to 0.7397 beyond 250 kb.
+**1,678 of the 55,084 carry a distance the scorer cannot have read** — further from the element than
+half the 1 Mb deletion window — so for those the gene symbol resolved to another locus of the same
+symbol and the distance is a symbol-resolution fault rather than a real one. They are named and counted
+and nothing is dropped for it.
+
+**The sharp cross-tabulation: 8,184 rules.** Not detected open, *and* a strong predicted effect, *and*
+in a cell whose assignment clears the registered tolerance — **8,184 of the 55,084 (0.1486)**. Dropping
+the two cells that clear it only just as well leaves **8,017**, so the figure does not depend on reading
+that sentence one way. They are 2,359 in K562, 1,344 in CD14-positive monocyte, 1,297 in HepG2, 767 in
+GM12878, 630 in keratinocyte, 473 in testis, 431 in IMR-90, 387 in H1, 265 in cardiac muscle cell, 84 in
+ovary, 83 in astrocyte and 64 in hepatocyte; 4,952 activations and 3,232 repressions; 3,198 under 5 kb
+and 3,258 from 5 to 50 kb; chr1 holds the most at 853 and chrY the fewest at 14. Their predicted effects
+run from 0.3 to 7.3896 in |log2 fold change|. The strongest in each of five cells, as examples a person
+can open by hand:
+
+| element | locus | gene | cell | log2fc | distance |
+| --- | --- | --- | --- | --- | --- |
+| `EH38E2114228` | chr20:43726877-43727139 | GTSF1L | testis | −7.3896 | 1 kb or less |
+| `EH38E3219187` | chr17:35147428-35147769 | UNC45B | cardiac muscle cell | −7.3519 | 1,104 bp |
+| `EH38E2941764` | chr11:4607766-4608052 | TRIM68 | HepG2 | −5.0949 | 1 kb or less |
+| `EH38E1701250` | chr14:20799404-20799754 | RNASE1 | K562 | −4.7789 | 3,304 bp |
+| `EH38E2981517` | chr11:102725088-102725426 | MMP8 | CD14-positive monocyte | −3.5735 | 1,792 bp |
+
+Each asserts that deleting a promoter-proximal element would move its gene several-fold in a cell where
+reader v1's DNase peaks do not place a peak over the element at all. **Sharper is not the same as wrong.**
+
+**The limitation, unchanged in force and inherited rather than restated.** `not_open_in_reader` means
+*not detected open at the reader's registered call*, never *closed*: a narrowPeak set is a call set and
+absence is absence of a call. Reader v1's openness comes from ENCODE peaks and AlphaGenome was trained
+on ENCODE, so the whole axis is **a consistency check between two readings of the same chromatin, never
+independent evidence and never validation**. The 1.81× base-rate figure these shares lean on is
+**descriptive and not independent** for the same reason. Nothing here establishes that any one of the
+8,184 rules is wrong; it says where to look, and what kind of place each one is.
+
+In `data/results/not_open_profile.json`, with `data/results/not_open_profile_chr21.json` as the scoped
+copy a rebuild can actually reproduce: **0 differences over 1,364 of 1,378 leaves** in a clean worktree,
+all 64 inputs matching their recorded bytes and none absent. The genome-wide result records all 892 of
+its inputs by their own paths rather than as groups, so the rebuild checks what it can and **names what
+it cannot**: 294 inputs present and all 294 matching, 598 named absent one by one - the DNase peak rows
+and the reader results for the 23 chromosomes other than chr21, which are git-ignored - and no
+comparison attempted. A grouped input would have been reported absent without any file being checked at
+all. 0 model requests and no money, every input already on disk. 10 tests, which hold the enumeration to
+`context_evidence.rule_loci` locus for locus and the chr21 states to the registered chr21 census.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
