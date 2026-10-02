@@ -30,6 +30,13 @@ rebuild with the reason:
    never by key, suffix or substring, and listed under `run_fields_ignored`; `cwd_at_open` and
    `cwd_at_close` are compared, and set aside as environment only where the recorded value is an
    absolute path (`CWD_FIELDS`, `cwd_fields_recorded_absolute`).
+   Since 2026-10-02 neither name test applies to a key the DATA supplied rather than the writer: a
+   timing or resource name reached through a key tally (`is_key_tally`: a `keys` or `vocabulary` token
+   in the ancestry) is COMPARED, and those leaves are listed under
+   `names_not_exempted_because_the_data_supplied_them`. The matcher had been setting aside three
+   key-FREQUENCY counts (963,406, 3,209 and 705 under `schema_keys/seconds`) as though they were
+   durations. Every leaf a name test does set aside is printed with its VALUE under
+   `set_aside_by_a_name_test`.
    Whatever was set aside is printed with the reason (`ignored_because`), and `comparison_reading` is
    the one sentence that says whether anything was: "0 differences" and "0 differences after setting
    aside N leaves" are different claims and the second is never printable as the first.
@@ -259,7 +266,12 @@ def leaf_reconciliation(original: dict[str, Any]) -> dict[str, Any]:
             "ignored_keys": list(IGNORED),
             "manifest_code_block": "result_manifest.code: the stamp of the run, not a value it computed",
             "model_dependencies": "recorded after the fact for results made before 2026-09-28",
-            "timing_keys": "every key is_timing() matches, listed under timing_fields_ignored",
+            "timing_keys": (
+                "every key is_timing() matches OUTSIDE a key tally, listed under timing_fields_ignored "
+                "and printed with its value under set_aside_by_a_name_test; a timing name the data "
+                "supplied is compared, and named under "
+                "names_not_exempted_because_the_data_supplied_them"
+            ),
             "resource_keys": (
                 "the exact keys in RESOURCE_KEYS, a run-resource reading rather than a value the run "
                 "computed, listed under resource_fields_ignored"
@@ -344,9 +356,60 @@ def is_resource(key: Any) -> bool:
     return isinstance(key, str) and key in RESOURCE_KEYS
 
 
-def _ignored_key(key: Any) -> bool:
-    """A key comparable() drops: a wall-clock reading or a run-resource one. Both are reported by path,
-    under timing_fields_ignored and resource_fields_ignored, so a reader sees what was set aside."""
+# --- a tallied key name is not a field name (2026-10-02, lane-tracercwd) ---------------------------
+#
+# `is_timing` and `is_resource` match a key NAME at any depth, which is the rule this file's own
+# RUN_FIELDS comment rejects for `opens` -- and it was already firing. In lane-generow's result the
+# timing matcher set aside FOUR leaves and only one was a timing:
+#
+#   /key_vocabulary/per_element_archives/schema_keys/seconds   963406
+#   /key_vocabulary/loose_per_element_files/schema_keys/seconds   3209
+#   /key_vocabulary/the_newer_hct116_answers/schema_keys/seconds    705
+#   /seconds                                                       336.6   <- the only timing
+#
+# The first three are KEY-FREQUENCY COUNTS: how many cached records carry a key of that name. They sit
+# beside `id`, `chrom`, `start`, `end` and `genes` at the same 963,406, they are quantities the run
+# computed, and the result's credibility rests on `differences: []` meaning that they were compared.
+#
+# Why the fix is not an exact-path list, as it was for `opens`: across the 1,100 results in this
+# checkout a timing name appears at 536 DISTINCT paths, and every new result invents more. An explicit
+# list is the right shape for one leaf and the wrong shape for 536. (Resource readings appear at only 3
+# distinct paths, so those COULD be listed; they are narrowed the same way here instead, because the
+# defect is in the matching rule and not in either list, and one rule is easier to reason about.)
+#
+# So the name test stays and is narrowed STRUCTURALLY: it does not apply to a key reached through a
+# container whose own name says its keys came from the data. The direction of error is the point. A
+# container wrongly treated as a tally means a genuine timing leaf gets COMPARED, which produces a
+# loud difference somebody reads; a container wrongly treated as ordinary means a computed count is
+# SILENTLY set aside. Only the second is the failure this tool must not have, so the container test is
+# deliberately generous -- any `keys` or `vocabulary` token, anywhere in the ancestry -- and the report
+# prints both what was set aside WITH ITS VALUE and what the narrowing kept, so neither is invisible.
+
+
+def is_key_tally(container_key: Any) -> bool:
+    """Whether a dict's keys are names found in the DATA rather than field names the writer chose.
+
+    Nothing in a JSON document says which it is, so the containers whose keys are data are recognised by
+    their own name: a `keys` or `vocabulary` token. That catches `schema_keys`, `all_keys`,
+    `key_vocabulary` and `low_frequency_keys_that_are_not_element_ids`. Matched generously and on
+    purpose: see the note above on which direction the error has to run.
+    """
+    if not isinstance(container_key, str):
+        return False
+    tokens = container_key.lower().split("_")
+    return "keys" in tokens or "vocabulary" in tokens
+
+
+def _ignored_key(key: Any, inside_key_tally: bool = False) -> bool:
+    """A key comparable() drops: a wall-clock reading or a run-resource one. Both are reported by path
+    and by value, under timing_fields_ignored and resource_fields_ignored, so a reader sees what was set
+    aside and can see whether it looks like a reading at all.
+
+    `inside_key_tally` says the key is a name the DATA supplied, not a field name the writer chose, in
+    which case no name test applies to it and the leaf is compared like any other.
+    """
+    if inside_key_tally:
+        return False
     return is_timing(key) or is_resource(key)
 
 
@@ -377,39 +440,86 @@ IGNORED_BECAUSE = {
         "a wall-clock reading, matched by key (is_timing) at any depth: `seconds`, a name with a "
         "`seconds` token, or one ending `per_second`. How long a machine took is not a quantity the "
         "result asserts; `second` alone (an ordinal, as in second_endpoint) and `duration` (often "
-        "biological) are compared like any other leaf"
+        "biological) are compared like any other leaf. A NAME TEST, not an exact path, because a timing "
+        "name appears at 536 distinct paths across this checkout's results -- so it is narrowed by "
+        "is_key_tally: no name test applies to a key the DATA supplied, and the leaves that rule kept "
+        "comparable are printed under names_not_exempted_because_the_data_supplied_them. Every leaf set "
+        "aside is printed WITH ITS VALUE under set_aside_by_a_name_test, so a count that is plainly not "
+        "a reading is visible rather than merely absent"
     ),
-    "resource_fields_ignored": f"a run-resource reading, by exact key: {', '.join(RESOURCE_KEYS)}",
+    "resource_fields_ignored": (
+        f"a run-resource reading, by exact key at any depth: {', '.join(RESOURCE_KEYS)} -- what the "
+        "machine spent, not what the result asserts. Narrowed by is_key_tally on the same rule as the "
+        "timing test, and printed with its value under set_aside_by_a_name_test"
+    ),
 }
 
 
-def _strip_timing(x: Any) -> Any:
+def _strip_timing(x: Any, inside_key_tally: bool = False) -> Any:
+    """`inside_key_tally` is sticky: once the ancestry has passed through a key tally every key below it
+    came from the data, so no name test applies anywhere beneath."""
     if isinstance(x, dict):
-        return {k: _strip_timing(v) for k, v in x.items() if not _ignored_key(k)}
+        return {
+            k: _strip_timing(v, inside_key_tally or is_key_tally(k))
+            for k, v in x.items()
+            if not _ignored_key(k, inside_key_tally)
+        }
     if isinstance(x, list):
-        return [_strip_timing(v) for v in x]
+        return [_strip_timing(v, inside_key_tally) for v in x]
     return x
 
 
-def _paths_where(x: Any, pred: Any, where: str = "") -> list[str]:
+def _paths_where(x: Any, pred: Any, where: str = "", inside_key_tally: bool = False) -> list[str]:
+    """Every path whose key satisfies `pred(key, inside_key_tally)`, with the tally ancestry carried down
+    so a predicate can decide differently for a key the data supplied."""
     if isinstance(x, dict):
         out = []
         for k, v in x.items():
-            out.extend([f"{where}/{k}"] if pred(k) else _paths_where(v, pred, f"{where}/{k}"))
+            below = inside_key_tally or is_key_tally(k)
+            if pred(k, inside_key_tally):
+                out.append(f"{where}/{k}")
+            else:
+                out.extend(_paths_where(v, pred, f"{where}/{k}", below))
         return out
     if isinstance(x, list):
-        return [p for i, v in enumerate(x) for p in _paths_where(v, pred, f"{where}[{i}]")]
+        return [p for i, v in enumerate(x) for p in _paths_where(v, pred, f"{where}[{i}]", inside_key_tally)]
     return []
 
 
 def timing_paths(x: Any, where: str = "") -> list[str]:
-    """Every path at which comparable() drops a timing key."""
-    return _paths_where(x, is_timing, where)
+    """Every path at which comparable() drops a timing key. A timing NAME inside a key tally is not one
+    of these, because it is not dropped: see `names_rescued_from_a_key_tally`."""
+    return _paths_where(x, lambda k, tally: not tally and is_timing(k), where)
 
 
 def resource_paths(x: Any, where: str = "") -> list[str]:
     """Every path at which comparable() drops a run-resource key."""
-    return _paths_where(x, is_resource, where)
+    return _paths_where(x, lambda k, tally: not tally and is_resource(k), where)
+
+
+def names_rescued_from_a_key_tally(x: Any, where: str = "") -> list[str]:
+    """Every path where a key WOULD have been set aside by a name test but is compared, because the name
+    came from the data. The narrowing's own record: without it this rule would be invisible, and a
+    reader could not tell a tool that compared these leaves from one that quietly dropped them."""
+    return _paths_where(x, lambda k, tally: tally and (is_timing(k) or is_resource(k)), where)
+
+
+def value_at(payload: Any, path: str) -> Any:
+    """The value a `diff()`-style path names, list indices included, or None when nothing is there. Used
+    to print a set-aside leaf's VALUE beside its path, so a count that is plainly not a reading -- a
+    key-frequency 963,406 under `seconds` -- is visible to a reader rather than only to a test."""
+    cur = payload
+    for step in path.strip("/").split("/"):
+        name, _, rest = step.partition("[")
+        if name:
+            if not isinstance(cur, dict) or name not in cur:
+                return None
+            cur = cur[name]
+        for index in (i for i in rest.rstrip("]").split("][") if i):
+            if not isinstance(cur, list) or not index.isdigit() or int(index) >= len(cur):
+                return None
+            cur = cur[int(index)]
+    return cur
 
 
 def diff(a: Any, b: Any, where: str = "") -> list[str]:
@@ -897,6 +1007,20 @@ def rebuild(
         report["resource_fields_ignored"] = sorted(
             set(resource_paths(original)) | set(resource_paths(rebuilt))
         )
+        # the VALUE beside the path, because a path alone cannot show that a leaf set aside as a reading
+        # is not one: `/key_vocabulary/.../schema_keys/seconds` reads as a timing until its 963,406 is
+        # printed next to it. An over-exemption has to be visible to a reader, not only to a test.
+        report["set_aside_by_a_name_test"] = {
+            path: value_at(original, path)
+            for path in report["timing_fields_ignored"] + report["resource_fields_ignored"]
+        }
+        # and the narrowing's own record, so the rule is auditable rather than invisible
+        report["names_not_exempted_because_the_data_supplied_them"] = {
+            path: value_at(original, path)
+            for path in sorted(
+                set(names_rescued_from_a_key_tally(original)) | set(names_rescued_from_a_key_tally(rebuilt))
+            )
+        }
         report["ignored_because"] = {k: IGNORED_BECAUSE[k] for k in IGNORED_BECAUSE if report.get(k)} or {
             "nothing": "no leaf was set aside by any of the four rules"
         }

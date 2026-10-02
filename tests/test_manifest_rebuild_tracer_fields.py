@@ -383,3 +383,214 @@ def test_the_existing_environment_exemption_still_works_unchanged():
     )
     assert real == ["/verdict/positives: 12 vs 11"]
     assert env == ["/code_cleanliness/dirty: True vs False"]
+
+
+# --------------------------------------------------------------------------------------------------
+# 5. A tallied key NAME is not a field name: the timing matcher was setting aside computed counts.
+#
+# Measured by lane-generow, not hypothesised. In its result the timing matcher set aside FOUR leaves
+# and only one was a timing:
+#
+#   /key_vocabulary/per_element_archives/schema_keys/seconds   963406
+#   /key_vocabulary/loose_per_element_files/schema_keys/seconds   3209
+#   /key_vocabulary/the_newer_hct116_answers/schema_keys/seconds    705
+#   /seconds                                                       336.6   <- the only timing
+#
+# The first three are key-FREQUENCY counts -- how many cached records carry a key of that name -- and
+# they sit beside `id`, `chrom`, `start` and `end` at the same 963,406. They are quantities the run
+# computed, and that result's credibility rests on `differences: []` meaning they were compared. This
+# is the same wrong rule section 3 writes out for `opens`: a match on a NAME, swallowing a real value
+# that happens to share it. Narrowing it moved the leaf count 17,095 -> 17,098, those three exactly.
+# --------------------------------------------------------------------------------------------------
+
+TALLY = "/key_vocabulary/per_element_archives/schema_keys/seconds"
+
+
+def _a_tally(seconds=963406, real_timing=336.6):
+    """A result shaped like lane-generow's: a key-frequency tally that happens to contain `seconds`,
+    and a genuine wall-clock reading at the top level."""
+    return {
+        "seconds": real_timing,
+        "key_vocabulary": {
+            "per_element_archives": {
+                "schema_keys": {"id": 963406, "chrom": 963406, "seconds": seconds, "genes": 963406}
+            }
+        },
+        "result_manifest": {},
+    }
+
+
+def test_a_timing_name_the_data_supplied_is_compared_and_not_set_aside():
+    """The defect itself. `schema_keys` tallies key NAMES, so `seconds` there is a count, not a reading."""
+    payload = _a_tally()
+    assert mr.timing_paths(payload) == ["/seconds"], "only the genuine reading may be set aside"
+    assert mr.names_rescued_from_a_key_tally(payload) == [TALLY]
+    assert mr.value_at(payload, TALLY) == 963406
+
+
+def test_the_genuine_timing_is_still_set_aside():
+    """The narrowing must not cost the rule its purpose: a wall-clock reading outside a tally still goes."""
+    payload = _a_tally()
+    assert "/seconds" in mr.timing_paths(payload)
+    assert "seconds" not in mr.comparable(payload), "the real timing must still be dropped"
+
+
+def test_the_tallied_count_survives_into_the_compared_payload():
+    """`comparable()` is what the comparison actually sees, so the fix has to be visible there."""
+    kept = mr.comparable(_a_tally())
+    assert kept["key_vocabulary"]["per_element_archives"]["schema_keys"]["seconds"] == 963406
+
+
+def test_a_changed_key_frequency_count_fails_the_comparison():
+    """THE PLANTED COUNTERFACTUAL the coordinator asked for: a schema_keys["seconds"] count altered must
+    FAIL. lane-generow's own evidence is that these three leaves were compared and matched in its run, so
+    nothing was hiding behind the exemption -- but that is luck about one result, not a property of the
+    tool, and this is the property."""
+    original, rebuilt = _a_tally(seconds=963406), _a_tally(seconds=963405)
+    found = mr.diff(mr.comparable(original), mr.comparable(rebuilt))
+    rest, run = mr.run_differences(found)
+    real, env = mr.environment_differences(rest, mr.cwd_fields_recorded_absolute(original, rebuilt))
+    assert real == [f"{TALLY}: 963406 vs 963405"], real
+    assert (run, env) == ([], [])
+
+
+def test_a_changed_genuine_timing_still_does_not_fail_the_comparison():
+    """The other side of the same rule, so the narrowing is shown to be a narrowing and not a removal."""
+    original, rebuilt = _a_tally(real_timing=336.6), _a_tally(real_timing=999.9)
+    assert mr.diff(mr.comparable(original), mr.comparable(rebuilt)) == []
+
+
+# ------------------------------------------------- the counterfactual, by writing the wrong rule out
+
+
+def _strip_timing_by_name_alone(x):
+    """`_strip_timing` as it stood: the name test applied at any depth, with no notion of where the name
+    came from. This is the rule that was live, and the one the narrowing replaced."""
+    if isinstance(x, dict):
+        return {k: _strip_timing_by_name_alone(v) for k, v in x.items() if not mr.is_timing(k)}
+    if isinstance(x, list):
+        return [_strip_timing_by_name_alone(v) for v in x]
+    return x
+
+
+def test_the_unnarrowed_matcher_swallows_the_count_and_the_narrowed_one_does_not():
+    """The fix, credited only with what it is shown to stop. Same two results, same planted change in a
+    computed count: under the name test alone there is nothing left to fail on, so the rebuild reports
+    `differences: []` and the count's reproduction is unverified; under the narrowed rule it fails."""
+    original, rebuilt = _a_tally(seconds=963406), _a_tally(seconds=963405)
+
+    swallowed = mr.diff(_strip_timing_by_name_alone(original), _strip_timing_by_name_alone(rebuilt))
+    assert swallowed == [], "the wrong rule leaves nothing to fail on"
+
+    kept = mr.diff(mr.comparable(original), mr.comparable(rebuilt))
+    assert kept == [f"{TALLY}: 963406 vs 963405"], kept
+
+
+# --------------------------------------------------------- the container test, and its error direction
+
+
+@pytest.mark.parametrize(
+    "container", ["schema_keys", "all_keys", "key_vocabulary", "low_frequency_keys_that_are_not_element_ids"]
+)
+def test_the_containers_whose_keys_came_from_the_data_are_recognised(container):
+    """The four this checkout actually has. Nothing in a JSON document says whose names a dict's keys
+    are, so the containers whose keys are data are recognised by their own name."""
+    assert mr.is_key_tally(container)
+
+
+@pytest.mark.parametrize("container", ["cost", "compute", "budget", "chromosomes", "gate", "verdict"])
+def test_an_ordinary_container_is_not_treated_as_a_tally(container):
+    """Or the name test would stop applying everywhere and every timing would be compared."""
+    assert not mr.is_key_tally(container)
+
+
+def test_the_tally_flag_is_sticky_down_the_ancestry():
+    """A key tally's values can nest, and every key below one came from the data. Checking only the
+    immediate parent would set aside a count one level deeper."""
+    payload = {"all_keys": {"gene": {"seconds": 12}}, "result_manifest": {}}
+    assert mr.timing_paths(payload) == []
+    assert mr.names_rescued_from_a_key_tally(payload) == ["/all_keys/gene/seconds"]
+
+
+def test_the_container_test_errs_towards_comparing_rather_than_setting_aside():
+    """The direction of the error is the whole argument for a generous container test. A container
+    wrongly called a tally means a genuine timing is COMPARED -- a loud difference somebody reads. A
+    container wrongly called ordinary means a computed count is SILENTLY set aside. Only the second is
+    the failure this tool must not have, so a false positive here costs noise and never silence."""
+    looks_like_a_tally = {"some_keys": {"seconds": 1.5}, "result_manifest": {}}
+    assert mr.timing_paths(looks_like_a_tally) == [], "nothing is set aside, so nothing can hide"
+    a, b = looks_like_a_tally, {"some_keys": {"seconds": 2.5}, "result_manifest": {}}
+    assert mr.diff(mr.comparable(a), mr.comparable(b)), "the cost is a visible difference, not silence"
+
+
+def test_the_resource_test_is_narrowed_by_the_same_rule():
+    """`is_resource` matches an exact KEY at any depth, which is the same class of rule as the timing
+    one. A tally that happens to count a key named `peak_rss_mb` must not lose it."""
+    payload = {
+        "schema_keys": {"peak_rss_mb": 4096},
+        "compute": {"peak_rss_mb": 1300.5},
+        "result_manifest": {},
+    }
+    assert mr.resource_paths(payload) == ["/compute/peak_rss_mb"]
+    assert mr.names_rescued_from_a_key_tally(payload) == ["/schema_keys/peak_rss_mb"]
+    assert mr.comparable(payload)["schema_keys"]["peak_rss_mb"] == 4096
+
+
+# ------------------------------------------------------------------- what the report has to make visible
+
+
+def test_a_set_aside_leaf_is_reported_with_its_value_not_only_its_path():
+    """A path alone cannot show that a leaf set aside as a reading is not one:
+    `/key_vocabulary/.../schema_keys/seconds` reads as a timing until its 963,406 is printed beside it.
+    An over-exemption has to be visible to a reader, not only to a test."""
+    src = Path("scripts/manifest_rebuild.py").read_text()
+    assert '"set_aside_by_a_name_test"' in src
+    assert '"names_not_exempted_because_the_data_supplied_them"' in src
+    assert "value_at(original, path)" in src
+
+
+def test_the_timing_reason_says_it_is_a_name_test_and_why_it_is_not_an_exact_path():
+    """536 distinct timing paths across this checkout's results is why the `opens` fix does not transfer:
+    an explicit list is the right shape for one leaf and the wrong shape for 536."""
+    why = mr.IGNORED_BECAUSE["timing_fields_ignored"]
+    assert "NAME TEST" in why
+    assert "536" in why, "the reason a name test is kept must carry the number that justifies it"
+    assert "is_key_tally" in why
+
+
+def test_the_leaf_counts_still_reconcile_with_the_narrowing_in_place():
+    """compared plus not-compared must still equal the whole file, or the narrowing has moved a leaf out
+    of the denominator instead of into the comparison."""
+    r = mr.leaf_reconciliation(_a_tally())
+    assert r["total"] == mr.leaves(_a_tally())
+    assert r["compared"] + r["not_compared"] == r["total"]
+    assert r["reconciles"] is True
+    assert r["not_compared"] == 1, "only the one genuine timing leaves the comparison"
+
+
+# ------------------------------------------------- the audit: no THIRD name-matched exemption appears
+
+
+def test_every_exemption_is_either_an_exact_path_or_a_narrowed_name_test():
+    """Two name-matched exemptions were found by accident, a week apart, which is weak evidence that this
+    file was written with name matching as a habit. This test is the count, so a third cannot arrive
+    unnoticed: the exact-path lists are paths, and the only two name tests are both narrowed.
+    """
+    for field in (*mr.ENVIRONMENT_FIELDS, *mr.RUN_FIELDS, *mr.CWD_FIELDS):
+        assert field.startswith("/"), f"{field} is a name, not an exact path"
+    # the name tests, and the one place the narrowing can be applied for both of them
+    assert mr._ignored_key("seconds", inside_key_tally=True) is False
+    assert mr._ignored_key("peak_rss_mb", inside_key_tally=True) is False
+    assert mr._ignored_key("seconds", inside_key_tally=False) is True
+    assert mr._ignored_key("peak_rss_mb", inside_key_tally=False) is True
+    # `date` is dropped by name but only at the TOP level, which is an exact path in all but spelling
+    assert mr.IGNORED == ("date",)
+    assert mr.comparable({"deep": {"date": "x"}, "result_manifest": {}})["deep"]["date"] == "x"
+
+
+def test_must_hold_matches_by_name_but_fails_in_the_safe_direction():
+    """MUST_HOLD also matches a key at any depth, and is deliberately left alone: a tallied key named
+    `own_code_is_committed` would cause a spurious FAILURE, never a silent pass. A rule whose error is
+    loud is not the rule this tool has to fear."""
+    tallied = {"schema_keys": {"own_code_is_committed": 7}}
+    assert mr.must_hold_failures(tallied, {}), "it fires, which is noise and not silence"
