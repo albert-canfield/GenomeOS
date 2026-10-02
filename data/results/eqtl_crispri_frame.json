@@ -1,272 +1,109 @@
 {
-  "result": "response_map_increment4_count",
+  "result": "eqtl_crispri_frame",
   "date": "2026-10-02",
-  "question": "what a fourth response-map increment could honestly add, counted over every candidate increment 3's committed count names, before anything is built",
-  "verdict": "NOTHING. Every candidate is refused, and the numbers are the deliverable",
-  "counting_only": "no increment is built, nothing is added to the map, nothing is scored and nothing is fitted. No cut-off is introduced: every rule, span and call is imported from where it was registered. 0 model requests, no downloads, no money: every input was on disk",
-  "why_a_refusal_is_committed": "a refusal of this kind that lives only on a work board is re-litigated from scratch by someone who does not know the candidates were already enumerated. The numbers are what stops that, and they belong in a file with a manifest",
-  "native_locus_rule": "an observation OF a native locus is a measurement taken on the chromosome in place: the locus perturbed and the consequence read out (CRISPRi), the locus's own state read out (the reader's DNase peak), or the locus's own natural variation read out against expression (a GTEx cis-eQTL). A reporter assay reads a copy of the sequence outside the locus and is not such an observation, however well measured it is",
-  "reporter_wording_carried_word_for_word": "they read a sequence, or the bases inside it, not the native locus after a perturbation of it",
-  "increment_3_precedent_on_lentimpra": "increment 3 admitted lentiMPRA as `tile-in-cell` observations, labelled as such, AT LOCI THAT ALREADY CARRIED a perturbation and the reader's own reading, and still reported ZERO native-locus observations from it. A locus whose only evidence is a reporter reading carries no native-locus observation at all, so building such loci is not a labelled sequence arm: it is the map's population redefined to the loci the native-locus rule excludes",
-  "imported_not_chosen": [
-    "genomeos.response_map2.candidates - the three-input status of every CRISPRi pair, in the counting order scripts/response_map_coverage.py grouped in",
-    "genomeos.response_map2.map1_keys, .STATUS_ORDER and .STATUS_ADDABLE - the best-status-per-locus rule",
-    "genomeos.attribution.cell2.group - the independent-locus grouping, imported where registered",
-    "scripts/response_map_increment3_count.py eqtl_index, eqtl_hits_by_chrom, covered_by and hits_in - increment 3's own frame and attachment tests, imported from its file rather than rewritten",
-    "scripts/response_map_increment3_count.EQTL_MARGIN - scripts/eqtl_targets.MARGIN = 500, the margin the retained hits were distilled under",
-    "genomeos.attribution.eqtl.KNOWLEDGE and load_hits' own column order - the retained GTEx hits"
-  ],
-  "candidates": [
-    {
-      "candidate": "lentimpra",
-      "what_the_observation_is": "reporter activity: a 200 bp copy driving an integrated lentiviral reporter, outside its native locus (Agarwal et al. 2025, Nature)",
-      "further_independent_loci": 227,
-      "observations": 17869,
-      "independent_loci_of_this_kind": 472,
-      "of_those_the_crispri_arm_already_reaches": 245,
-      "an_observation_of_the_native_locus": false,
-      "native_locus_observations": 0,
-      "why_not": "they read a sequence, or the bases inside it, not the native locus after a perturbation of it",
-      "increment_3_precedent": "increment 3 admitted lentiMPRA as `tile-in-cell` observations, labelled as such, AT LOCI THAT ALREADY CARRIED a perturbation and the reader's own reading, and still reported ZERO native-locus observations from it. A locus whose only evidence is a reporter reading carries no native-locus observation at all, so building such loci is not a labelled sequence arm: it is the map's population redefined to the loci the native-locus rule excludes",
-      "verdict": "REFUSED",
-      "refused_under_cause": "zero_native_locus_observations",
-      "what_admitting_it_would_cost": "the native-locus rule relaxed. That is the only way these loci enter the map, and it is why they are refused rather than labelled",
-      "upper_bound": "the further-locus figure is an UPPER BOUND besides: a reporter observation names no measured gene, so only the 1 Mb proximity arm of the grouping can fire for it and with gene identity the groups could only be fewer"
-    },
-    {
-      "candidate": "vista",
-      "what_the_observation_is": "developmental activity: a transgenic reporter in the mouse embryo at e11.5",
-      "further_independent_loci": 35,
-      "observations": 98,
-      "independent_loci_of_this_kind": 89,
-      "of_those_the_crispri_arm_already_reaches": 54,
-      "an_observation_of_the_native_locus": false,
-      "native_locus_observations": 0,
-      "why_not": "they read a sequence, or the bases inside it, not the native locus after a perturbation of it",
-      "increment_3_precedent": "increment 3 admitted lentiMPRA as `tile-in-cell` observations, labelled as such, AT LOCI THAT ALREADY CARRIED a perturbation and the reader's own reading, and still reported ZERO native-locus observations from it. A locus whose only evidence is a reporter reading carries no native-locus observation at all, so building such loci is not a labelled sequence arm: it is the map's population redefined to the loci the native-locus rule excludes",
-      "verdict": "REFUSED",
-      "refused_under_cause": "zero_native_locus_observations",
-      "what_admitting_it_would_cost": "the native-locus rule relaxed. That is the only way these loci enter the map, and it is why they are refused rather than labelled",
-      "upper_bound": "the further-locus figure is an UPPER BOUND besides: a reporter observation names no measured gene, so only the 1 Mb proximity arm of the grouping can fire for it and with gene identity the groups could only be fewer"
-    },
-    {
-      "candidate": "satmut",
-      "what_the_observation_is": "base-level sensitivity: single substitutions of the element read out in a reporter",
-      "further_independent_loci": 3,
-      "observations": 4,
-      "independent_loci_of_this_kind": 4,
-      "of_those_the_crispri_arm_already_reaches": 1,
-      "an_observation_of_the_native_locus": false,
-      "native_locus_observations": 0,
-      "why_not": "they read a sequence, or the bases inside it, not the native locus after a perturbation of it",
-      "increment_3_precedent": "increment 3 admitted lentiMPRA as `tile-in-cell` observations, labelled as such, AT LOCI THAT ALREADY CARRIED a perturbation and the reader's own reading, and still reported ZERO native-locus observations from it. A locus whose only evidence is a reporter reading carries no native-locus observation at all, so building such loci is not a labelled sequence arm: it is the map's population redefined to the loci the native-locus rule excludes",
-      "verdict": "REFUSED",
-      "refused_under_cause": "zero_native_locus_observations",
-      "what_admitting_it_would_cost": "the native-locus rule relaxed. That is the only way these loci enter the map, and it is why they are refused rather than labelled",
-      "upper_bound": "the further-locus figure is an UPPER BOUND besides: a reporter observation names no measured gene, so only the 1 Mb proximity arm of the grouping can fire for it and with gene identity the groups could only be fewer"
-    },
-    {
-      "candidate": "eqtl",
-      "what_the_observation_is": "an association, not a perturbation: a significant cis-eQTL is a variant inside the element whose alleles go with a gene's expression across GTEx donors, in one tissue",
-      "source": "experimental: GTEx v8 single-tissue cis-eQTLs (significant variant-gene pairs), hg38",
-      "an_observation_of_the_native_locus": true,
-      "why": "the variant sits on the chromosome in place and the expression is of the donor's own gene, so the reading is of the native locus. It is natural variation and an association, never an experimental perturbation, and association is not mechanism",
-      "further_independent_loci": 264,
-      "observations": 30310,
-      "observations_unit": "element-eGene keys, not variant-gene-tissue records and emphatically not places in the genome",
-      "independent_loci_of_this_kind": 573,
-      "of_those_the_crispri_arm_already_reaches": 309,
-      "it_splits_into_two_arms_and_both_are_refused": {
-        "deepening": {
-          "what_it_would_be": "a SECOND native-locus kind at the loci the map is already built over, which is the only thing that makes the existing map deeper rather than wider",
-          "crispri_attached_compiled_elements": 1505,
-          "inside_the_distillation_frame_at_all": 61,
-          "outside_the_frame_unassessed": 1444,
-          "unassessed_is_not_an_absence": "the retained set was distilled against the intervals of three sampled element sets, so at an element outside that frame no eQTL could have been seen whatever is really there. Its absence is UNASSESSED and is not an absence of eQTLs",
-          "frame_intervals": 9286,
-          "elements_with_at_least_one_retained_hit": 36,
-          "attachment_rule": "increment 3's own, imported and not chosen: 'a retained hit whose variant position falls inside the compiled element widened by 500 bases each side, which is the margin the retained set was distilled under (scripts/eqtl_targets.MARGIN)'. `hits_in` applies that widening itself, so every figure on this arm is at that window",
-          "retained_records_on_them": 818,
-          "slope_negative": 472,
-          "slope_positive": 346,
-          "tissues": 45,
-          "crispri_loci_total": 473,
-          "loci_the_frame_could_have_seen_at_all": 37,
-          "loci_with_an_eqtl_inside_an_attached_element": 25,
-          "loci_with_a_hit_by_best_status": {
-            "all_three_present": 19,
-            "no_measured_rule_the_screen_measured_no_regulation": 6
-          },
-          "loci_assessable_by_best_status": {
-            "all_three_present": 24,
-            "no_measured_rule_the_screen_measured_no_regulation": 11,
-            "no_reader_state": 2
-          },
-          "addable_loci_with_a_hit_on_ANY_attached_element": 19,
-          "addable_loci_with_a_hit_on_a_SHOWN_element": 6,
-          "already_built_by_increment_3": 6,
-          "loci_this_arm_would_ADD": 0,
-          "why_zero": "19 addable loci carry an eQTL inside SOME element a CRISPRi pair attaches to, but only 6 carry it inside an element a built chain stands on - and those are the ones increment 3 built. The difference of 13 requires the attachment relaxed from the chain's element to any element at the locus. Increment 3 chose the shown elements deliberately: they are 'the elements the built chains actually stand on, which is where another kind of evidence has to attach to be evidence about the same chain'. Relaxing that is relaxing an imported rule, so this arm adds nothing",
-          "what_the_crispri_side_says_at_the_hit_loci": {
-            "pairs": {
-              "not_significant_well_powered": 3832,
-              "significant_decrease": 194,
-              "significant_increase": 79,
-              "not_significant_underpowered": 3609
-            },
-            "loci_with_at_least_one": {
-              "not_significant_well_powered": 24,
-              "significant_increase": 15,
-              "significant_decrease": 21,
-              "not_significant_underpowered": 7
-            },
-            "loci_rows_do_not_sum": "a locus can carry pairs of more than one outcome, so these rows are counted independently and do not sum to the locus count"
-          },
-          "what_the_crispri_side_says_at_the_hit_loci_that_are_not_addable": {
-            "pairs": {
-              "not_significant_well_powered": 665,
-              "significant_increase": 3,
-              "significant_decrease": 3
-            },
-            "loci_with_at_least_one": {
-              "not_significant_well_powered": 6,
-              "significant_increase": 2,
-              "significant_decrease": 2
-            },
-            "loci_rows_do_not_sum": "a locus can carry pairs of more than one outcome, so these rows are counted independently and do not sum to the locus count"
-          },
-          "the_only_way_to_grow_it": "re-distil GTEx v8 against the CRISPRi element set, which turns the 1,444 unassessed elements into an answer. Registered and run separately as `eqtl_crispri_frame`; it is not assumed here and no number here depends on it",
-          "refused_under_cause": "adds_no_locus_under_the_rules_as_registered"
-        },
-        "widening": {
-          "what_it_would_be": "the loci of the eQTL arm the CRISPRi arm does not reach, built as the map's own loci",
-          "further_independent_loci": 264,
-          "elements": 955,
-          "retained_records": 25806,
-          "element_egene_keys": 2481,
-          "distinct_egenes": 1567,
-          "tissues": 49,
-          "slope_negative": 14024,
-          "slope_positive": 11782,
-          "by_sampled_set": {
-            "vista": 277,
-            "uniform": 504,
-            "constrained": 174
-          },
-          "the_model_named_a_predicted_target": 646,
-          "the_model_named_none": 309,
-          "an_observation_of_the_native_locus": true,
-          "native_locus_kinds_per_locus": 1,
-          "perturbation_observations": 0,
-          "why_no_perturbation": "zero by construction, not by result: 'further' means the CRISPRi arm does not reach these loci, so the map's central relation - the locus perturbed and the consequence read out - is absent at every one of them",
-          "reader_state_observations": 0,
-          "why_no_reader_state": "the eQTL locus key names no cell: its context is `gtex_donors`. Increment 3 took the reader's biosample from the CRISPRi pair's own cell, and with no cell named a reader state would mean CHOOSING a biosample - a new choice rather than an imported call, and GTEx tissues are not the reader's biosamples. So no three-input chain can exist here",
-          "three_input_chains_possible": 0,
-          "population": "three sampled element sets (enhancer_targets_chr*, constrained_targets_chr*, vista_chr*), not the measured perturbation layer the map has been built over. This widens the frame rather than deepening the evidence",
-          "refused_under_cause": "one_native_locus_kind_and_no_possible_chain"
-        }
-      },
-      "verdict": "REFUSED on both arms"
-    }
-  ],
-  "the_number_withdrawn_before_it_was_quoted": {
-    "the_number": 92,
-    "what_it_would_have_been_quoted_as": "addable loci carrying two native-locus kinds - a CRISPRi perturbation and a GTEx cis-eQTL",
-    "the_honest_figure": 6,
-    "overstatement": "fifteen-fold",
-    "why_it_is_wrong": "`cell2.group` unions two keys on a shared gene or on 1 Mb proximity on one chromosome. An eQTL element 1 Mb from an addable locus therefore lands in that locus's group without the variant being anywhere inside the element the chain stands on. 86 of the 92 are joined only by that proximity arm, so they are a DIFFERENT element within 1 Mb and not a second observation of the same locus",
-    "the_rule_that_gives_6": "increment 3's own attachment rule, in its registered wording: 'a retained hit whose variant position falls inside the compiled element widened by 500 bases each side, which is the margin the retained set was distilled under (scripts/eqtl_targets.MARGIN), imported and not chosen here'. The element it must fall in is one the chain stands on. Applied to the 166 shown elements it gives 6 loci, which is what increment 3 built",
-    "the_window_is_not_what_separates_92_from_6": "both figures use the same 500-base window, because `hits_in` widens the element by the distil margin itself. What separates them is WHICH ELEMENT the hit must fall in - one the chain stands on, or any element at the locus - so the overstatement is about attachment and not about a tolerance",
-    "the_shape_it_is": "the same shape as the 198 loci quoted as 198 places the model is wrong when 66 held a measured decrease, and as the 48 measured links that cleared a floor while only 21 were answerable in their own cell. A count is not a measurement of the thing wanted",
-    "caught": "in this lane's own working, before the figure was quoted anywhere"
+  "question": "how many of the compiled elements a CRISPRi pair attaches to carry a GTEx cis-eQTL, with the new frame indexed against those elements",
+  "registered_at": "data/results/eqtl_crispri_frame_registration.json",
+  "registered_sha256": "a83343d378ddfb9ba77bde975a2126c55705292bf89aaec2852225ef46cda744",
+  "frame_rule": "every compiled element that a valid CRISPRi pair of the ENCODE benchmark attaches to, by `response_map2.candidates`'s own attachment at `measured.RECIPROCAL_OVERLAP = 0.5`, over all 24 chromosomes and every cell type, each widened by MARGIN = 500 bases on each side",
+  "retained_hit_rule": "a pair of GTEx v8's OWN single-tissue significant variant-gene set whose variant position falls inside one of the indexed intervals, kept by `genomeos.attribution.eqtl.distil` unchanged and written in `eqtl.HIT_COLUMNS` order so that `eqtl.load_hits` reads it. No p-value, effect size or tissue is filtered here: GTEx's significance call is the one used, and this lane sets no cut-off of its own",
+  "assessed": {
+    "elements_of_the_frame": 1505,
+    "assessed": 1505,
+    "unassessed": 0,
+    "by_construction": "every element of the frame is assessed BY CONSTRUCTION, because the frame is built from them. That is not a result and may not be reported as one: the figure that is a measurement is how many of them carry a retained hit, and the two are kept apart below for exactly that reason",
+    "what_changed": "61 of 1505 elements were inside the old frame and 1444 were unassessed. All 1505 are now assessed, and that part of the change is the frame's definition rather than a finding"
   },
-  "note_for_the_next_writer_on_this_path": "`response_map2.candidates` opens the 24 per-chromosome element tables through a result file's `elements_where` POINTER field - about 1.4 GB that no reading of the source can name - and `data/results/eqtl_targets.json` carries `cache_target_effect` values whose `window_source` is the per-element response cache. Both must be declared or `save_result` refuses the result. 17 published results read a table they never declared, which is why inputs are TRACED and not believed",
-  "anchors": {
-    "counted_at": "data/results/response_map_increment3_count.json",
-    "counted_sha256": "f970acb4ae44ce53a6c590df8872e48a48a4dfa96715df5f5c6e7859322233cd",
-    "re_derived_here": {
-      "pairs": 14734,
-      "crispri_loci": 473,
-      "addable_loci": 110,
-      "shown_elements": 166,
-      "shown_elements_with_a_retained_hit": 6,
-      "shown_elements_inside_the_frame": 10,
-      "addable_loci_with_an_eqtl_on_a_shown_element": 6,
-      "addable_loci_the_frame_could_see": 9,
-      "eqtl_loci_of_this_kind": 573,
-      "eqtl_loci_reached": 309,
-      "eqtl_loci_further": 264,
-      "eqtl_element_egene_keys": 30310,
-      "eqtl_elements": 6619
-    },
-    "as_the_committed_count_states_them": {
-      "pairs": 14734,
-      "crispri_loci": 473,
-      "addable_loci": 110,
-      "shown_elements": 166,
-      "shown_elements_with_a_retained_hit": 6,
-      "shown_elements_inside_the_frame": 10,
-      "addable_loci_with_an_eqtl_on_a_shown_element": 6,
-      "addable_loci_the_frame_could_see": 9,
-      "eqtl_loci_of_this_kind": 573,
-      "eqtl_loci_reached": 309,
-      "eqtl_loci_further": 264,
-      "eqtl_element_egene_keys": 30310,
-      "eqtl_elements": 6619
-    },
-    "anchors_compared": 13,
-    "anchors_differing": {},
-    "all_reproduce": true,
-    "why_this_is_here": "a candidate figure is trustworthy when the code that produced it first reproduces the committed quantities of the same population. Thirteen are compared and named, so a reader can see which were checked rather than take the agreement on trust"
+  "found": {
+    "elements_carrying_at_least_one_retained_hit": 1262,
+    "elements_assessed_and_carrying_none": 243,
+    "attachments_element_by_record": 88629,
+    "distinct_rows_attached_inside_an_element": 87409,
+    "distinct_rows_retained_by_the_distillation": 87409,
+    "distinct_rows_retained_in_the_margin_only": 0,
+    "two_units_and_one_window": "the attachment window is increment 3's registered one, imported and not chosen: 'a retained hit whose variant position falls inside the compiled element widened by 500 bases each side, which is the margin the retained set was distilled under (scripts/eqtl_targets.MARGIN)'. It is therefore the SAME window the distillation retained under, so distinct_rows_attached_inside_an_element equals distinct_rows_retained_by_the_distillation and the margin-only figure is 0 BY CONSTRUCTION - an identity between two imported rules, and not a finding. What does differ is the UNIT: a row inside two overlapping compiled elements attaches TWICE, so attachments_element_by_record is in ATTACHMENTS and the other three are in ROWS, and the slope split is of attachments at that same denominator. The first version of this block subtracted a row count from an attachment count and published a margin-only figure of -1,220; a smaller overlap would have made it positive and plausible, which is why the units are named here",
+    "slope_negative": 41373,
+    "slope_positive": 47256,
+    "tissues": 49,
+    "distinct_egenes": 3931,
+    "a_count_is_not_a_measurement": "the record count counts variant-gene-tissue rows and not places in the genome, and the slope split is of records rather than of loci. A cis-eQTL is an association over donors besides: linkage carries the signal some distance, so the variant inside the element need not be causal and the eGene need not be regulated by it"
   },
-  "reconciliation": {
-    "candidates_increment_3_names": 4,
-    "arms_they_divide_into": 5,
-    "arms_built": 0,
-    "arms_refused_by_cause": {
-      "zero_native_locus_observations": 3,
-      "adds_no_locus_under_the_rules_as_registered": 1,
-      "one_native_locus_kind_and_no_possible_chain": 1
-    },
-    "arms_accounted_for": 5,
-    "rule": "arms_built + sum(arms_refused_by_cause) == arms_they_divide_into, and no arm may leave the count without a named cause. `main` refuses to save a payload where this does not hold",
-    "crispri_loci": 473,
-    "crispri_loci_by_best_status": {
-      "all_three_present": 110,
-      "no_compiled_link_attaches_to_no_compiled_element": 198,
-      "no_measured_rule_the_screen_measured_no_regulation": 160,
+  "loci": {
+    "crispri_loci_total": 473,
+    "loci_with_an_eqtl_inside_an_attached_element": 241,
+    "loci_with_a_hit_by_best_status": {
+      "all_three_present": 99,
+      "no_measured_rule_the_screen_measured_no_regulation": 137,
       "no_reader_state": 5
     },
-    "crispri_loci_accounted_for": 473,
-    "eqtl_loci_of_this_kind": 573,
-    "eqtl_loci_reached_by_the_crispri_arm": 309,
-    "eqtl_loci_further": 264,
-    "eqtl_loci_accounted_for": 573,
-    "holds": true
+    "addable_loci_with_a_hit_on_ANY_attached_element": 99,
+    "addable_loci_with_a_hit_on_a_SHOWN_element": 96,
+    "shown_elements": 166,
+    "shown_elements_carrying_a_hit": 144,
+    "the_rule_that_counts": "increment 3's own attachment, carried in its registered wording: a retained hit whose variant position falls inside the compiled element widened by 500 bases each side - and, for the figure that counts, inside an element one of the BUILT CHAINS stands on. The ANY-element figure is reported beside it and is NOT the same quantity: 86 of the 92 the grouping offered were a different element within 1 Mb, which is the number this lane withdrew before quoting it"
+  },
+  "the_floor": {
+    "quantity": "addable loci with a hit on a shown element",
+    "floor": 20,
+    "reached": 96,
+    "increment_3_built": 6,
+    "cleared": true,
+    "registered_before_any_byte_was_streamed": true,
+    "what_follows": "a report and nothing else. Clearing the floor authorises proposing the deepening arm again; it does not authorise building increment 4, and nothing is built here"
+  },
+  "before_and_after": {
+    "old_frame": {
+      "intervals": 9286,
+      "indexed_against": "three sampled element sets",
+      "elements_inside_it": 61,
+      "elements_unassessed": 1444,
+      "elements_with_a_hit": 36,
+      "attachments_element_by_record": 818,
+      "loci_with_a_hit": 25,
+      "addable_loci_on_a_shown_element": 6
+    },
+    "new_frame": {
+      "intervals": 1505,
+      "indexed_against": "the CRISPRi element set",
+      "elements_inside_it": 1505,
+      "elements_unassessed": 0,
+      "elements_with_a_hit": 1262,
+      "attachments_element_by_record": 88629,
+      "loci_with_a_hit": 241,
+      "addable_loci_on_a_shown_element": 96
+    },
+    "not_a_comparison_of_biology": "the two frames index different element sets, so the difference between them is coverage and not an effect. Nothing here says the old numbers were wrong: they were about the elements they could see"
+  },
+  "stream": {
+    "tissues": 49,
+    "pairs_scanned": 71478479,
+    "hits_kept": 87409,
+    "mb_streamed": 1429.4,
+    "seconds": 97,
+    "bytes_of_the_archive_written_to_disk": 0,
+    "kept_where": "data/knowledge/gtex_crispri"
   },
   "cannot_establish": [
-    "nothing here is a verdict about biology. It is a count of what evidence exists and of where it stops, and a refusal to build on it",
-    "that the reporter assays' loci hold no regulatory function. They hold no NATIVE-LOCUS observation, which is a statement about what their assays read and not about the sequence",
-    "that the 1,444 unassessed elements carry no eQTL. No eQTL could have been seen at them at all, and unassessed is not absent",
-    "that the 25 loci carrying both a perturbation and an eQTL are 25 agreements. A second kind of evidence is not confirmation of the first, and GTEx tissues are not the CRISPRi cell lines",
-    "that the widening arm's 264 loci are 264 places in the genome where anything is established. They are loci of three sampled element sets carrying one association each",
-    "the independent-locus grouping is an operational grouping that pools cell types, NOT established biological independence, and nothing may cite it as one"
+    "that an element assessed and carrying no retained hit has no eQTL. It has none in GTEx v8's significant single-tissue set, which is a call set over 49 tissues and a finite number of donors, and the CRISPRi cell lines are not among those tissues",
+    "that an element carrying an eQTL is regulated by it, or that the eGene is its target. A cis-eQTL is an association over donors and linkage carries the signal some distance",
+    "any agreement between a GTEx eQTL and a CRISPRi effect. Nothing here reads one against the other, and GTEx tissues are not the CRISPRi cell lines",
+    "that the assessed figure is a finding. It is the frame's own definition",
+    "the independent-locus grouping is operational and pools cell types, NOT established biological independence"
   ],
   "alphagenome_requests": 0,
-  "money": "none: every input was already on disk",
+  "money": "none: GTEx v8 is a public bucket and no paid call was made",
   "result_manifest": {
     "sources": [
+      {
+        "accession": "GTEx v8 single-tissue cis-eQTLs (significant variant-gene pairs), hg38",
+        "version": "streamed from https://storage.googleapis.com/adult-gtex/bulk-qtl/v8/single-tissue-cis-qtl/GTEx_Analysis_v8_eQTL.tar and re-distilled against the CRISPRi element set; the retained hits are under data/knowledge/gtex_crispri"
+      },
       {
         "accession": "EngreitzLab/CRISPR_comparison (Gschwind et al. 2025)",
         "version": "the two local benchmark tables under data/knowledge/crispri"
       },
       {
-        "accession": "GTEx v8 single-tissue cis-eQTLs, significant variant-gene pairs",
-        "version": "the local distillation under data/knowledge/gtex, kept only inside the three sampled element sets; see data/knowledge/gtex/distil_summary.json"
-      },
-      {
-        "accession": "the response map's third increment and its count",
-        "version": "data/results/response_map_increment3_count.json, by sha256"
+        "accession": "the response map's fourth-increment count",
+        "version": "data/results/response_map_increment4_count.json, by sha256"
       }
     ],
     "inputs": [
@@ -5617,318 +5454,6 @@
         "partition": null
       },
       {
-        "path": "data/results/eqtl_targets.json",
-        "sha256": "1d84c4fb7d750167d70eabf13c4b6d62f5ccb6fd6004834b76072cb8d98c1d8c",
-        "bytes": 6156684,
-        "partition": null
-      },
-      {
-        "path": "data/results/response_map_increment3_count.json",
-        "sha256": "f970acb4ae44ce53a6c590df8872e48a48a4dfa96715df5f5c6e7859322233cd",
-        "bytes": 249031,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Adipose_Subcutaneous.tsv",
-        "sha256": "7e71e97c248caea71e7852bd36b6e4ef1892ae2fb80bf77bcd59662143da2b25",
-        "bytes": 1524862,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Adipose_Visceral_Omentum.tsv",
-        "sha256": "95c763aa2d3697c6e7d7dedb18ec304019d80fff2c55beef7164332899835ecc",
-        "bytes": 1041488,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Adrenal_Gland.tsv",
-        "sha256": "a9a98c26e59cef34cefda07e2c8aec5df0cfc3e1ef632f635a4ad1b07634ec7b",
-        "bytes": 425985,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Artery_Aorta.tsv",
-        "sha256": "78f1ed51d6103808e2ac8b374a4b8c7967adce7fa28617cc62aa10ab77493dc8",
-        "bytes": 981284,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Artery_Coronary.tsv",
-        "sha256": "68fe61a7162556c6a775ba9c493fe82103947e987f9053104cafe9dc7550ec26",
-        "bytes": 325834,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Artery_Tibial.tsv",
-        "sha256": "c3bf8c30972e32a6287ba2a3d5fe7c75d5bfc438b16fa987d93c9c4ec34c9356",
-        "bytes": 1438085,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Amygdala.tsv",
-        "sha256": "4e5ca3d45acbd822533b9d2d46bcd52ad25461ab819c16927a618ca1cb5c323f",
-        "bytes": 171980,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Anterior_cingulate_cortex_BA24.tsv",
-        "sha256": "cc1fa675de9336716749f1dba399249cf7576eb21cd509dc9494a0fcff3ea4e8",
-        "bytes": 325702,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Caudate_basal_ganglia.tsv",
-        "sha256": "3e6ceeaff34bd0b1426516abe357f502b65316a6aaf424ed52b8e00ab97e76f2",
-        "bytes": 471902,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Cerebellar_Hemisphere.tsv",
-        "sha256": "03bf9c4a26b250696b7d153d3331a49310799bb35e51ef2022e3d5b8f4fd1bc0",
-        "bytes": 641185,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Cerebellum.tsv",
-        "sha256": "5612521b498a4453b82492f5fde8eb664c98a0cf5be6306820a66e02f2b8ef14",
-        "bytes": 737242,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Cortex.tsv",
-        "sha256": "6c09911f6dfe7b67f754815fcd8898c95667b39c2558d677f67250a692a19458",
-        "bytes": 477997,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Frontal_Cortex_BA9.tsv",
-        "sha256": "114f5d3fff9f3a94dd9946b2b78b2df29e1fe1fc14f82d7fa5abe4cd3f59f97b",
-        "bytes": 383758,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Hippocampus.tsv",
-        "sha256": "00aa835adc59b0c9b07ec72361ed16057d71dded6436a66d3295fd72f4102b8e",
-        "bytes": 266947,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Hypothalamus.tsv",
-        "sha256": "fc12fe871efa8c70c521dd1aff1025dafc0936398a9176c68590741a61ac65fd",
-        "bytes": 283527,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Nucleus_accumbens_basal_ganglia.tsv",
-        "sha256": "86271aefe2a14d2ecb92249987db1bb1090686b4b3f2255e87aead8d766f3f6f",
-        "bytes": 532000,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Putamen_basal_ganglia.tsv",
-        "sha256": "7dd51af07d37a2f3b8844be6e163b6f162755c7c775a15dbcf25344c6b91fceb",
-        "bytes": 366581,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Spinal_cord_cervical_c-1.tsv",
-        "sha256": "e1e48e849fdb7da737b37f473d95e15252e2e567269fcb9aaff97f6b00766d8d",
-        "bytes": 246873,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Brain_Substantia_nigra.tsv",
-        "sha256": "7c943728285f7e58e239f287a9a4c8fd6718b2f0121115c0355d8b28212dd40b",
-        "bytes": 153393,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Breast_Mammary_Tissue.tsv",
-        "sha256": "4ca8d79762774492011a72299faf8c7c6d63671533f522a901d5fdbb3ef13cf5",
-        "bytes": 816240,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Cells_Cultured_fibroblasts.tsv",
-        "sha256": "ef687b3a868e6dacc0c73fbde086143a3d817214acfcc681bab63217e906651c",
-        "bytes": 1584825,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Cells_EBV-transformed_lymphocytes.tsv",
-        "sha256": "0b823bcbfb19fa95f9555f23cc80ef544c8dcff98984955b852301aebed6e4ec",
-        "bytes": 276054,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Colon_Sigmoid.tsv",
-        "sha256": "a3aa863efc8e1ab78a4d41ddbbe1c1d86778f36eb0e2c4e6fdca28d0b03e7e41",
-        "bytes": 699780,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Colon_Transverse.tsv",
-        "sha256": "366f96a4dcc0abe387befe95e01f76c927d4b9d1be5f0e43c43aaec3945145b2",
-        "bytes": 773632,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Esophagus_Gastroesophageal_Junction.tsv",
-        "sha256": "18ebc97fc263c60f871ede4c9b83d8b7578820c8799a9f291f74f231bac6215a",
-        "bytes": 884756,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Esophagus_Mucosa.tsv",
-        "sha256": "86ca00d5b3a533f33cdad9725e6355a2f0ea6569f8e9a493a0a51460844c602a",
-        "bytes": 1322161,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Esophagus_Muscularis.tsv",
-        "sha256": "4a33d218d4e73177d113cede7855ad1e7c992bff0adf7e8c3672eb2fbe2d40e5",
-        "bytes": 1290276,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Heart_Atrial_Appendage.tsv",
-        "sha256": "b4f9bed9a2a0677c46ed84b0332f96e8fb921e1039f3942a0655a00c773e9daa",
-        "bytes": 862704,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Heart_Left_Ventricle.tsv",
-        "sha256": "8eae4bf8c11c8a074936cc2db779d66782a76e183ec5f02a1a7d6e60b92dc793",
-        "bytes": 757656,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Kidney_Cortex.tsv",
-        "sha256": "599734443cb68ee0836620a4b4a2c9aff9475d27cdcfbb4aa9c617e161c0e62d",
-        "bytes": 48661,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Liver.tsv",
-        "sha256": "e9a66834e337e36ff04e4289fb96ef8e3be53acdc2aba936ceb2dbcb7677f2dd",
-        "bytes": 283674,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Lung.tsv",
-        "sha256": "359daad335e8bb1e7eba3db2389c92e218cae579119a0e0f66d1fd54105ae8ad",
-        "bytes": 1002366,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Minor_Salivary_Gland.tsv",
-        "sha256": "00979f8c71e4ca3db9ea6e923c5409488f196becf1e58c2ce5eec0e676410918",
-        "bytes": 221750,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Muscle_Skeletal.tsv",
-        "sha256": "9872bf62d2d11c632678215a1fea511f39c009e06a25a0efc85f6547a3d0bdf3",
-        "bytes": 1362211,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Nerve_Tibial.tsv",
-        "sha256": "2f950f34f8a7977a5d861a060ed4a8e8f20ffa9bd5e96bdcfd6da91648ed9aea",
-        "bytes": 1665423,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Ovary.tsv",
-        "sha256": "a50e733bd6cda9f8a75bd92d02b7b0c0e0937e7f6dfcd2984912f1ea194657f7",
-        "bytes": 241044,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Pancreas.tsv",
-        "sha256": "ccdc43bdf0ffac86b49fa3c02a0d7885d2b04bbb4ba2a94e880ea89d5f572937",
-        "bytes": 628314,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Pituitary.tsv",
-        "sha256": "7dcb775dc6cab29ce54d762bc497c50626a83ccc80fa241a0f43be39c37a7e94",
-        "bytes": 536244,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Prostate.tsv",
-        "sha256": "d6326e1447950dfee689b4092cd04e222063ff664687d30aa15944592134f70e",
-        "bytes": 372286,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Skin_Not_Sun_Exposed_Suprapubic.tsv",
-        "sha256": "c20d3636b170cea87fee3ddc8497ffc9d24b58ccdd2813c21f1b2f89782a4042",
-        "bytes": 1622208,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Skin_Sun_Exposed_Lower_leg.tsv",
-        "sha256": "9aaf1745340ae5844d692b3524842185ddb0d68a75c19a3ab0e1ab4341f5c017",
-        "bytes": 1848227,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Small_Intestine_Terminal_Ileum.tsv",
-        "sha256": "a9a3bbe2cbd1828d4a743f00a434723716cd49fd3db07ac40a1e74e842d68780",
-        "bytes": 350856,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Spleen.tsv",
-        "sha256": "7e7ef5bb41ea8a9c401bc2503e1e18b01796e9464660096bad9aa80dbfe821a8",
-        "bytes": 528491,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Stomach.tsv",
-        "sha256": "09cfe463146d027c15ad1974bdc1002a3b4f823516152d6923cc1224534339a7",
-        "bytes": 496677,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Testis.tsv",
-        "sha256": "0d8bbe69c88732bcb49a89dedbd98ad2234a4eb124298a5afc7fb393cecf72d1",
-        "bytes": 1190074,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Thyroid.tsv",
-        "sha256": "413457100576634c78f98d4bb984df761e14ca6cb12f5a1dc4f8b42d8040f996",
-        "bytes": 1643720,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Uterus.tsv",
-        "sha256": "c1fbec57440bffe9b2867ffdd3e92aadda7c1cdb0f1b960216ca8a6f8d69589f",
-        "bytes": 140157,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Vagina.tsv",
-        "sha256": "0fae0e42ec83c251080c3f1fff5c9906ffba73f5175d2ae4b7fa2fc597bfe3b2",
-        "bytes": 141954,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/hits_Whole_Blood.tsv",
-        "sha256": "1782965cd1d9b8eeb71875776c225ed1cca105b97552aa72b4e48e6c86f7a2c5",
-        "bytes": 1197811,
-        "partition": null
-      },
-      {
-        "path": "data/knowledge/gtex/distil_summary.json",
-        "sha256": "367d0bb98c512cb001d658841d3bffe4456a891c91bbae4b1485a465d87d3cd1",
-        "bytes": 413,
-        "partition": null
-      },
-      {
         "path": "data/knowledge/alphagenome/all_elements/chr1.json",
         "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
         "bytes": 59143558,
@@ -6157,147 +5682,315 @@
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr1.gff3.gz",
-        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
-        "bytes": 15781966,
+        "path": "data/knowledge/gtex_crispri/hits_Adipose_Subcutaneous.tsv",
+        "sha256": "304878b901b72dbffa2657c82bba4cd5b9c8f7ec3c53c0570d3bb0ee9bdf5ca6",
+        "bytes": 383897,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr2.gff3.gz",
-        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
-        "bytes": 12336546,
+        "path": "data/knowledge/gtex_crispri/hits_Adipose_Visceral_Omentum.tsv",
+        "sha256": "60912461267ced8f8939d2e303aa98737e7d736e769e4cc49744419db557ef66",
+        "bytes": 266310,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr3.gff3.gz",
-        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
-        "bytes": 10518849,
+        "path": "data/knowledge/gtex_crispri/hits_Adrenal_Gland.tsv",
+        "sha256": "ff4b8c7c606f608b8c9f1e00afc62a5587173f3fa39c12e4f6164c514dc67cda",
+        "bytes": 98004,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr4.gff3.gz",
-        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
-        "bytes": 6522948,
+        "path": "data/knowledge/gtex_crispri/hits_Artery_Aorta.tsv",
+        "sha256": "7347d027f5ff302eb5b3500611e7b7af89498d9e646ecc51865c585a3346e5fa",
+        "bytes": 224684,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr5.gff3.gz",
-        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
-        "bytes": 7000086,
+        "path": "data/knowledge/gtex_crispri/hits_Artery_Coronary.tsv",
+        "sha256": "ea978d24812ffccafe3c7483893001d477a298eb4f5b333006c76ec4a00ea0e8",
+        "bytes": 82657,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr6.gff3.gz",
-        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
-        "bytes": 7623994,
+        "path": "data/knowledge/gtex_crispri/hits_Artery_Tibial.tsv",
+        "sha256": "f5897c55c5ffd653036f96515d71a7ea5b3fdb6f33bf5987cfc628df6457e968",
+        "bytes": 346615,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr7.gff3.gz",
-        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
-        "bytes": 8058560,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Amygdala.tsv",
+        "sha256": "f9ac7cd5b5553138b01e2b65d90094c24c751f595ab73fc07f3ffb16c14df119",
+        "bytes": 32062,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr8.gff3.gz",
-        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
-        "bytes": 5864835,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Anterior_cingulate_cortex_BA24.tsv",
+        "sha256": "ff21748e32ca7f4ec35870f5f0e8343bfb075f2d1f57e4f7b2d780f43fd820b3",
+        "bytes": 62878,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr9.gff3.gz",
-        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
-        "bytes": 6759087,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Caudate_basal_ganglia.tsv",
+        "sha256": "567a53f48b1e655d0f60ea371b48f96d2fa06723f2eee495e5d2f734aef64b58",
+        "bytes": 115079,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr10.gff3.gz",
-        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
-        "bytes": 6971712,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Cerebellar_Hemisphere.tsv",
+        "sha256": "6c0a74a4695b577bb459c398d0edb53226656548941d8749a05b633af76db796",
+        "bytes": 156238,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr11.gff3.gz",
-        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
-        "bytes": 9161789,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Cerebellum.tsv",
+        "sha256": "106a0291a4e2b760a0a06b679c2383de7c3b399fe5b2b8844f446f621a448204",
+        "bytes": 187678,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr12.gff3.gz",
-        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
-        "bytes": 8537589,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Cortex.tsv",
+        "sha256": "b39d5b7ad19f1a55a9212fd8d8f8bef29ed2fcb416343577e49d2b0138fd8847",
+        "bytes": 97849,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr13.gff3.gz",
-        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
-        "bytes": 2925688,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Frontal_Cortex_BA9.tsv",
+        "sha256": "62fc1686581dfa0c6a09811a58c76d6cd2f78f10357454cb21a699aebfeb1098",
+        "bytes": 77411,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr14.gff3.gz",
-        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
-        "bytes": 5446220,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Hippocampus.tsv",
+        "sha256": "59ac8a4304d09ac9e952fe6881e8a8c3f619f4a8c791126f0428672cf6c81f71",
+        "bytes": 59625,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr15.gff3.gz",
-        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
-        "bytes": 5424386,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Hypothalamus.tsv",
+        "sha256": "68a970ddc73da7d7caa34262458c1b3204e1f8ff032cdd47a63e488e1a55ac7c",
+        "bytes": 57698,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr16.gff3.gz",
-        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
-        "bytes": 6795096,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Nucleus_accumbens_basal_ganglia.tsv",
+        "sha256": "261bd3a37318817adc45c5ac9b4e5a01dbd686b256242f43c8936bb7207d8b4b",
+        "bytes": 127947,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr17.gff3.gz",
-        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
-        "bytes": 9026753,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Putamen_basal_ganglia.tsv",
+        "sha256": "da32065993242ca36af1ec3f71e6fdfd0937b8110e0579f8e04dae89fa42a697",
+        "bytes": 89254,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr18.gff3.gz",
-        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
-        "bytes": 2682634,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Spinal_cord_cervical_c-1.tsv",
+        "sha256": "ea8339bb7d393d0052156a2e9e5f65e9c6b56103ceb7577a7e06860593d52508",
+        "bytes": 49771,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr19.gff3.gz",
-        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
-        "bytes": 8518707,
+        "path": "data/knowledge/gtex_crispri/hits_Brain_Substantia_nigra.tsv",
+        "sha256": "e2bbd31e303ec07f92033444791f56bffe5917b55433cae6f94ab1f3735ef0c3",
+        "bytes": 26475,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr20.gff3.gz",
-        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
-        "bytes": 3974515,
+        "path": "data/knowledge/gtex_crispri/hits_Breast_Mammary_Tissue.tsv",
+        "sha256": "e5e6778da0aa49ac47f929d3a08a28541eb20b3d39a55366ba2d98483048accd",
+        "bytes": 204242,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr21.gff3.gz",
-        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
-        "bytes": 1858385,
+        "path": "data/knowledge/gtex_crispri/hits_Cells_Cultured_fibroblasts.tsv",
+        "sha256": "661ba9077d586843c88ce253be24ededfa561bafdf4fe77d85d41ba551dbe170",
+        "bytes": 401055,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chr22.gff3.gz",
-        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
-        "bytes": 3912249,
+        "path": "data/knowledge/gtex_crispri/hits_Cells_EBV-transformed_lymphocytes.tsv",
+        "sha256": "95b170fa242e7933fbc00fc0694628354cf408521caaa5ff90a70702be439559",
+        "bytes": 55344,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chrX.gff3.gz",
-        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
-        "bytes": 4849239,
+        "path": "data/knowledge/gtex_crispri/hits_Colon_Sigmoid.tsv",
+        "sha256": "ea3518924b5a11dd71a45fd155dd48890aefa49ec35b40678525d6ef21ac51c8",
+        "bytes": 164220,
         "partition": null
       },
       {
-        "path": "data/reference/gencode_v50_chrY.gff3.gz",
-        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
-        "bytes": 428494,
+        "path": "data/knowledge/gtex_crispri/hits_Colon_Transverse.tsv",
+        "sha256": "df520b5181e7a418bd0e0233bd6ed569935f361ae38f778f82ca1fe21a2ff529",
+        "bytes": 206492,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Esophagus_Gastroesophageal_Junction.tsv",
+        "sha256": "355bdab7790d56ba21c528655dc799831e2f89882f224bbca0229c2614845514",
+        "bytes": 218422,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Esophagus_Mucosa.tsv",
+        "sha256": "b148234e505972658ef4f9627e0674e82a40cd5f35ae918bd252716f4655a41f",
+        "bytes": 324147,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Esophagus_Muscularis.tsv",
+        "sha256": "7fe16d8947a8916da4970f5d284e3fa5ae8687eda060ff92511079e4a296f33d",
+        "bytes": 305454,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Heart_Atrial_Appendage.tsv",
+        "sha256": "0f382ceef469ce0a604886a9e423d2eea3a702cc77db7e19f6c9dc89f3eef17f",
+        "bytes": 193497,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Heart_Left_Ventricle.tsv",
+        "sha256": "4107a792284145c6209fdeeebbcf9ba8e5057ee74dc03a9e799b68b89f24b905",
+        "bytes": 184942,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Kidney_Cortex.tsv",
+        "sha256": "ab42a880a8ed29397353eaddbe9988cf169a35492cc64c973b775ec945a3f38c",
+        "bytes": 7479,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Liver.tsv",
+        "sha256": "9066c4aa5c2474425465b73843b929157f0ada81aca4921eb99e223855a33d4c",
+        "bytes": 62019,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Lung.tsv",
+        "sha256": "3639ad7b4ec1e19783dd4ce3853bcf856365a03ec5332b4d4fac816fc864f265",
+        "bytes": 260893,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Minor_Salivary_Gland.tsv",
+        "sha256": "c26aa599bd950f6064dc5a6cc5cf244050a5ae3ebb91a4a1e976b4857f7ee070",
+        "bytes": 41589,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Muscle_Skeletal.tsv",
+        "sha256": "4bfeb11ab8c6b005d8ee8826649de00cc76923ac00982575623a675a7f062008",
+        "bytes": 318410,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Nerve_Tibial.tsv",
+        "sha256": "1cede1b25b935be3a3297fc43257778daae506a229fd26227003c565a3f5d027",
+        "bytes": 404602,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Ovary.tsv",
+        "sha256": "88111cfb4fe90d735077606adf07a2a8275afdf5acc327775b42e2b62df5ac5c",
+        "bytes": 53044,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Pancreas.tsv",
+        "sha256": "d0ca056d5e5c68be8466ad425bacfac1a8ecd072fc93f4284acf09089b39c287",
+        "bytes": 151156,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Pituitary.tsv",
+        "sha256": "b6de86dec38a581a4e9c5376cf66b818a902e4ee81faa5264f30e8062da44f5b",
+        "bytes": 117397,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Prostate.tsv",
+        "sha256": "296ef199ccfdf5d8fb6223d8b26d970c1e9e0ddd5d4879a0e7b4f04a615be4e0",
+        "bytes": 80290,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Skin_Not_Sun_Exposed_Suprapubic.tsv",
+        "sha256": "da2fbeed1c95d0f4d4fe3d3141b1460fc268babdfdc48cd2be24a131d58cbcbc",
+        "bytes": 396690,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Skin_Sun_Exposed_Lower_leg.tsv",
+        "sha256": "239cc3fee750cbb60b85554fbd03d8f5a30e69fc5db7afa233f292b88ad44032",
+        "bytes": 461308,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Small_Intestine_Terminal_Ileum.tsv",
+        "sha256": "11e91590c4cb6a2c5e922214695feb5510782efb229573c9f49f436658ee0b5b",
+        "bytes": 76910,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Spleen.tsv",
+        "sha256": "ab6d934c2981ae0460a51d186584f34f9d8d4645eaaf174c2869ca85c025608b",
+        "bytes": 143573,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Stomach.tsv",
+        "sha256": "21fa817379833413a953079a4a0912b29a7e9dbb59e2f9c6c935bf3ddef54aa4",
+        "bytes": 122148,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Testis.tsv",
+        "sha256": "2e8174deb05b6796081347f460fc2821299ab95cf868f40f396c46ea5b54b822",
+        "bytes": 261388,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Thyroid.tsv",
+        "sha256": "8663e95e90d767a2f8b0cfad243505cbfd9eff8cbbaac6a76a82ab81ab109828",
+        "bytes": 397500,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Uterus.tsv",
+        "sha256": "69dcf218fd7ed2c5aa30a11e45920539546a4c55f708cc683cae797c54691b9c",
+        "bytes": 32029,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Vagina.tsv",
+        "sha256": "061b5d068e42bea7e1af806540ef8fe532c6ad7795593e2802ba5fd3782c5937",
+        "bytes": 32441,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/hits_Whole_Blood.tsv",
+        "sha256": "6542f6e9924b434e545739495e356e9a2c7163971a43076ab3f80330b76f13a1",
+        "bytes": 324004,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/gtex_crispri/distil_summary.json",
+        "sha256": "ac741ba8e5f8efd768ce2e01f607b378473d8b7738120da2e67e591cf6ba2ba8",
+        "bytes": 419,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/eqtl_crispri_frame_registration.json",
+        "sha256": "a83343d378ddfb9ba77bde975a2126c55705292bf89aaec2852225ef46cda744",
+        "bytes": 212273,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/response_map_increment4_count.json",
+        "sha256": "d1bbba8f413c7a117b7e030732666f242791cf731ec09cdea499428a48a4bf8a",
+        "bytes": 246175,
         "partition": null
       }
     ],
@@ -6308,7 +6001,7 @@
         "the measured layer's other three assays, opened by `compile._measured_rows`": 5,
         "increment 1's own view, read by `response_map2.map1_keys`": 9
       },
-      "the_pointer_case": "`response_map2.candidates` opens the 24 per-chromosome element tables through a result file's `elements_where` POINTER field - about 1.4 GB that no reading of the source can name - and `data/results/eqtl_targets.json` carries `cache_target_effect` values whose `window_source` is the per-element response cache. Both must be declared or `save_result` refuses the result. 17 published results read a table they never declared, which is why inputs are TRACED and not believed"
+      "the_pointer_case": "`response_map2.candidates` opens the 24 per-chromosome element tables through a result file's `elements_where` POINTER field - about 1.4 GB that no reading of the source can name"
     },
     "assembly": "GRCh38",
     "coordinates": {
@@ -6316,10 +6009,10 @@
       "interval": "half-open"
     },
     "parameters": {
-      "independent_locus_span": 1000000,
-      "reciprocal_overlap": 0.5,
-      "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
       "eqtl_margin_bp": 500,
+      "reciprocal_overlap": 0.5,
+      "independent_locus_span": 1000000,
+      "floor_addable_loci_on_a_shown_element": 20,
       "chromosomes": [
         "chr1",
         "chr2",
@@ -6348,13 +6041,12 @@
       ]
     },
     "exclusions": [
-      "no pair is excluded: the denominator is every CRISPRi pair the measured layer parses as valid on these chromosomes, both arms and every cell type",
-      "lentiMPRA, VISTA and saturation mutagenesis are refused as candidate populations under a named cause - they read a sequence, not the native locus after a perturbation - and their further-locus counts are reported rather than dropped",
-      "an eQTL outside the distillation's sampled frame is excluded as unassessed, by name, and is not counted as an absence of eQTLs"
+      "no element of the frame is excluded, and an element assessed with no hit is reported as such rather than dropped",
+      "GTEx's own significance set is the population; no further filter is applied here"
     ],
     "partitions": {
-      "candidates": "one block per candidate increment 3's count names",
-      "arms": "the eQTL candidate's deepening and widening arms, refused separately"
+      "assessed": "what the frame could see at all, by construction",
+      "found": "what carries a retained hit, which is the measurement"
     },
     "code_cleanliness": {
       "git_sha": "b8513f4b3ead0412d7638397d3b3cf4f92693fe2",
@@ -6433,6 +6125,7 @@
         "genomeos/genome/variants.py",
         "genomeos/ir/__init__.py",
         "genomeos/ir/model.py",
+        "genomeos/jobs.py",
         "genomeos/knowledge/__init__.py",
         "genomeos/knowledge/across.py",
         "genomeos/knowledge/cells.py",
@@ -6495,10 +6188,10 @@
         "genomeos/therapeutics/structure.py",
         "genomeos/therapeutics/trafficking.py",
         "genomeos/version.py",
-        "scripts/response_map_increment3_count.py",
-        "scripts/response_map_increment4_count.py"
+        "scripts/eqtl_crispri_frame.py",
+        "scripts/response_map_increment3_count.py"
       ],
-      "counting_path_count": 131,
+      "counting_path_count": 132,
       "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
@@ -6513,10 +6206,12 @@
       ],
       "dirty_result_paths": [
         "data/results/astroreg_calibration_producer_rule_k562.json",
-        "data/results/eqtl_crispri_frame.json"
+        "data/results/eqtl_crispri_frame.json",
+        "data/results/response_map_increment4_count.json"
       ],
       "argv": [
-        "scripts/response_map_increment4_count.py"
+        "scripts/eqtl_crispri_frame.py",
+        "--count"
       ],
       "python": "3.12.13"
     },
@@ -6524,9 +6219,9 @@
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
       "active": true,
-      "opens": 2223,
-      "opens_under_data": 1695,
-      "files_read": 1005,
+      "opens": 1914,
+      "opens_under_data": 1384,
+      "files_read": 981,
       "files_written": 0,
       "undeclared": [],
       "declared_not_read": [],
