@@ -633,6 +633,40 @@ def run_already_completed(ledger: Path | str) -> bool:
     return False
 
 
+def answer_notes(ledger: Path | str) -> list[dict[str, Any]]:
+    """Every `event: answer` note the ledger holds, in order. What the pilot counts.
+
+    The pilot has to count the answers OF THE RUN and not of this process. Counting in memory would
+    re-pilot after a resume, or skip the pilot entirely, and since a pilot stop is terminal and consumes
+    Albert's one run, being wrong in either direction is expensive.
+    """
+    path = Path(ledger)
+    if not path.exists():
+        return []
+    out: list[dict[str, Any]] = []
+    for line in path.read_text(errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict) and row.get("event") == "answer":
+            out.append(row)
+    return out
+
+
+#: Why a crash stop is not the exception to "One run".
+A_CRASH_STOP_IS_NOT_A_CONTINUATION = (
+    "a partial ledger means a run started and did not finish. Resuming it is a NEW authorisation in "
+    "Albert's own words, not a continuation -- the same terms as a pilot stop, which he has been told "
+    "consumes his one run. A crash must not quietly become the exception to that. And a resume that "
+    "simply restarted the list would RE-PAY for every element already charged while the cap, which "
+    "resumes from the ledger, ran out that many requests early -- so it would cost more than he approved "
+    "AND score fewer elements than the registration names. Both halves are breaches of what he agreed to"
+)
+
+
 def may_send(
     *,
     activity_result: Path | str,
@@ -642,6 +676,7 @@ def may_send(
     plan: list[dict[str, Any]],
     reviewed_digest: str,
     committed: Any = None,
+    resume_authorisation: str | None = None,
 ) -> dict[str, Any]:
     """Every clause of Albert's approval as its own refusal. Returns only if ALL of them hold.
 
@@ -698,6 +733,14 @@ def may_send(
     if run_already_completed(ledger):
         _refuse("one_run", f"the ledger already records a completed run. {ONE_RUN_IS_TERMINAL}")
 
+    charged = ledger_charges(ledger)["charges"]
+    if charged and not resume_authorisation:
+        _refuse(
+            "one_run",
+            f"a partial run exists ({charged} charged) and no completion is recorded; a resume needs "
+            f"Albert's new word. {A_CRASH_STOP_IS_NOT_A_CONTINUATION}",
+        )
+
     check_adapter_v2(ADAPTER_MODULE)  # read at CALL time so the module under check is substitutable
 
     budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
@@ -707,8 +750,12 @@ def may_send(
             f"the ledger records {budget.charged()} charges and the budget counts {budget.sent}: the "
             "log and the money disagree, so not every request is logged",
         )
+    remaining = requests_not_yet_charged(plan, ledger)
     return {
         "may_send": True,
+        "resuming": bool(charged),
+        "already_charged": charged,
+        "remaining": len(remaining),
         "cap": ASTROREG2_CAP,
         "requests": len(plan),
         "digest": reviewed_digest,

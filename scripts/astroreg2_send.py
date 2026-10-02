@@ -94,6 +94,17 @@ def reviewed_plan() -> list[dict[str, Any]]:
     return plan
 
 
+def answer_is_usable_note(note: dict[str, Any]) -> dict[str, Any]:
+    """Read a ledger answer note back as a usability verdict, so the pilot can span a resume."""
+    return {
+        "id": note.get("id"),
+        "gene_name_present": bool(note.get("gene_name_present")),
+        "effects": note.get("effects"),
+        "effects_non_empty": bool(note.get("effects_non_empty")),
+        "usable": bool(note.get("usable")),
+    }
+
+
 def answer_is_usable(hit: dict[str, Any]) -> dict[str, Any]:
     """Whether one answer carries a gene name and a non-empty effects set."""
     genes = hit.get("genes") or []
@@ -119,9 +130,15 @@ def send(
     parameter so a test can substitute a recording-path double; it is NOT a place to substitute a direct
     client call, and the test that plants one shows the failure.
     """
+    # (b) iterate the UNCHARGED requests, never the plan. On a fresh ledger these are the same list; on
+    # a partial one this is what stops an element being paid for twice. A resume that restarted the plan
+    # would re-pay for everything already charged AND, because the cap resumes from the ledger, run out
+    # that many requests early -- costing more than was approved while scoring fewer elements.
+    todo = astrorun.requests_not_yet_charged(plan, budget.ledger)
+    already = len(plan) - len(todo)
     checks: list[dict[str, Any]] = []
     stopped: dict[str, Any] | None = None
-    for row in plan:
+    for row in todo:
         budget.take(
             chrom=row["chrom"],
             element=row["element"],
@@ -129,20 +146,36 @@ def send(
             end=row["end"],
             genes=row.get("serves_genes"),
         )
-        hit = score(chrom=row["chrom"], element_id=row["element"], start=row["start"], end=row["end"])
+        try:
+            hit = score(chrom=row["chrom"], element_id=row["element"], start=row["start"], end=row["end"])
+        except BaseException as e:  # noqa: BLE001 - recorded, then re-raised unchanged
+            # SMALL FIX 1: a charged-but-unanswered element is VISIBLE in the ledger rather than merely
+            # implied by a missing answer line. Written before the raise propagates.
+            budget.note(
+                event="error",
+                element=row["element"],
+                chrom=row["chrom"],
+                error=f"{type(e).__name__}: {e}",
+            )
+            raise
         check = answer_is_usable(hit or {})
         budget.note(event="answer", **check)
         checks.append(check)
-        if len(checks) == pilot_requests:
-            bad = [c for c in checks if not c["usable"]]
+        # SMALL FIX 2: the pilot counts the answers OF THE RUN, read from the ledger, not of this
+        # process. In memory it would re-pilot after a resume or skip the pilot, and a pilot stop is
+        # terminal and consumes Albert's one run, so being wrong either way is expensive.
+        answers_so_far = len(astrorun.answer_notes(budget.ledger))
+        if answers_so_far == pilot_requests:
+            pilot = [answer_is_usable_note(n) for n in astrorun.answer_notes(budget.ledger)]
+            bad = [c for c in pilot if not c["usable"]]
             if bad:
                 stopped = {
-                    "at_request": len(checks),
+                    "at_request": answers_so_far,
                     "failing": bad,
                     "rule": PILOT_RULE,
                     "consequence": PILOT_STOP_CONSUMES_THE_ONE_RUN,
                 }
-                budget.note(event="pilot_stop", at_request=len(checks), failing=len(bad))
+                budget.note(event="pilot_stop", at_request=answers_so_far, failing=len(bad))
                 break
     astrorun.mark_run_complete(
         budget.ledger,
@@ -152,7 +185,9 @@ def send(
     )
     return {
         "requests_sent": budget.sent,
-        "answers_checked": len(checks),
+        "requests_charged_before_this_pass": already,
+        "requests_this_pass": len(checks),
+        "answers_checked": len(astrorun.answer_notes(budget.ledger)),
         "pilot": {
             "requests": pilot_requests,
             "rule": PILOT_RULE,
