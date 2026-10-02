@@ -509,8 +509,20 @@ def test_a_legacy_registry_name_is_refused_too(tmp_path: Path) -> None:
 #: The exact body of `_is_registry`'s guarded return, taken from genomeos/results.py as written. The
 #: patched copies below replace this whole block rather than a line that two handlers share, so a
 #: future edit makes the assertion fail instead of letting the patch land in the wrong handler.
+#:
+#: Updated 2026-10-02 (lane-registryid), which is the maintenance the assertion below asks for and
+#: not a weakening of it: the body stopped being `resolve() == resolve()` -- a comparison of
+#: SPELLINGS, which read a case variant of the registry as a different directory -- and became
+#: `os.path.samefile` with a FileNotFoundError branch that walks up to the nearest existing ancestor.
+#: The planted `OSError(62)` still lands in the same catch-all handler and still stands for the same
+#: thing: a path this function cannot classify. The ELOOP is now planted rather than merely
+#: illustrative, because non-strict `Path.resolve` turned a real symlink loop into RuntimeError and
+#: never reached this handler at all (measured, CPython 3.12/APFS; see
+#: tests/test_results_registry_identity.py).
 _IS_REGISTRY_BODY = """    try:
-        return results_dir.resolve() == RESULTS_DIR.resolve()
+        return os.path.samefile(results_dir, RESULTS_DIR)
+    except FileNotFoundError:
+        return _nearest_existing_is_registry(results_dir)
     except OSError:
         return True
 """

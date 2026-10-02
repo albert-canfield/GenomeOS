@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import os
 import time
 import warnings
 from pathlib import Path
@@ -285,16 +286,70 @@ def _is_registry(results_dir: Path) -> bool:
     treated as the registry: a false-loud refusal gets read, a false-silent pass does not, and the
     refusal names the path so the reader can see which one could not be resolved.
 
-    The try/except stays, because `resolve` can raise -- ELOOP on a symlink loop, ENAMETOOLONG -- and
-    crashing every writer is worse than refusing one. tests/test_entry_script_counted.py plants it:
-    `resolve` made to raise on a registry write must refuse, and a scratch directory that resolves
-    normally must still write while recording the false verdict, so the fix cannot quietly have broken
-    every test writer instead.
+    IDENTITY IS BY FILE, NOT BY SPELLING (2026-10-02, lane-registryid). `resolve() ==` compared two
+    strings, and two strings can name one directory. Measured from the repository root:
+    `Path('data/RESULTS').resolve() != Path('data/results').resolve()` while
+    `os.path.samefile('data/RESULTS', 'data/results')` is True, because this volume is
+    case-INSENSITIVE -- so `data/RESULTS` IS the registry and the comparison denied it, with all four
+    refusals off and no OSError needed. `os.path.samefile` asks the filesystem which file a path names
+    (st_dev, st_ino), so a case variant, a symlink to the registry and a `./` detour all answer the
+    same.
+
+    THREE OUTCOMES, NOT TWO, and the ordering is why. `registry` is decided at the top of
+    `save_result` and `results_dir.mkdir(parents=True, exist_ok=True)` runs 104 lines further down, so
+    the check happens before the directory exists. Every writer that passes `tmp_path / "results"` --
+    which is how the whole test suite writes -- is asking about a path that is not there yet, and
+    reading "missing" as the registry would refuse all of them. So a FileNotFoundError is answered by
+    `_nearest_existing_is_registry`: walk up to the nearest ancestor that exists and ask whether THAT
+    is, or lies under, the registry. `data/results/newsub` is a registry write although it does not
+    exist; `tmp_path/"results"` is not, because the nearest thing that exists is `tmp_path`.
+
+    ANY OTHER OSError LEAVES THE QUESTION UNANSWERED, and unanswered counts as the registry. The
+    handler is not hypothetical and it was not reachable before: measured on CPython 3.12/APFS,
+    non-strict `Path.resolve` turns a symlink loop into RuntimeError (which `except OSError` does not
+    catch, so the writer raised instead of refusing) and raises NOTHING AT ALL for EACCES on an
+    unsearchable parent or for ENAMETOOLONG, handing back the path unchanged so that the spelling
+    comparison answered False. `os.path.samefile` raises OSError 62, 13 and 63 for the same three.
+    tests/test_results_registry_identity.py plants all of it, each plant beside a twin that runs the
+    same scenario through a copy of this module carrying the old body.
+
+    One acknowledged limit: the walk uses lexical ancestors, so a path spelled with `..` that climbs
+    out of the registry (`data/results/../scratch/x`) is read AS a registry write. That errs toward
+    refusing, which is the safe direction, and no writer in the project spells a path that way.
     """
     try:
-        return results_dir.resolve() == RESULTS_DIR.resolve()
+        return os.path.samefile(results_dir, RESULTS_DIR)
+    except FileNotFoundError:
+        return _nearest_existing_is_registry(results_dir)
     except OSError:
         return True
+
+
+def _nearest_existing_is_registry(results_dir: Path) -> bool:
+    """Whether a `results_dir` that does not exist yet would be inside the registry.
+
+    The nearest EXISTING ancestor is what can be asked about; everything below it is a directory the
+    write is about to create. If that ancestor is the registry, or lies under it, the write is a
+    registry write. The registry's own identity is read first, because a FileNotFoundError from
+    `samefile` does not say WHICH of the two paths was missing: if RESULTS_DIR is the missing one then
+    no path can be placed relative to it, the question is unanswerable, and unanswerable refuses."""
+    try:
+        reg = RESULTS_DIR.stat()
+    except OSError:
+        return True
+    registry = (reg.st_dev, reg.st_ino)
+    existed = False
+    for candidate in (results_dir, *results_dir.parents):
+        try:
+            st = candidate.stat()
+        except FileNotFoundError:
+            continue
+        except OSError:
+            return True  # an ancestor that cannot be read stops the walk; it is not climbed past
+        existed = True
+        if (st.st_dev, st.st_ino) == registry:
+            return True
+    return not existed  # nothing in the chain existed: unanswerable, so the registry
 
 
 def load_result(name: str, results_dir: Path = RESULTS_DIR) -> dict[str, Any] | None:
