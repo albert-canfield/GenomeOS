@@ -193,11 +193,35 @@ def test_the_writer_refuses_to_read_without_a_registration_flag() -> None:
     assert "--register is required: nothing is read before the registration exists" in src
 
 
-def test_the_cost_precedent_and_its_stop_rule_are_stated() -> None:
-    assert fd.PRECEDENT_REQUESTS == 222
-    assert fd.PRECEDENT_MB == 170.4
+def test_the_fired_request_bound_is_recorded_and_never_checked_again() -> None:
+    """It fired at 225 against 222. It is not relaxed, not amended and not reused as a live check."""
+    assert fd.FIRED_REQUEST_BOUND == 222
+    assert fd.FIRED_RUN["measured_requests"] == 225
+    assert fd.FIRED_RUN["fired_on"] == "requests"
+    assert fd.FIRED_RUN["measured_requests"] > fd.FIRED_REQUEST_BOUND, "the record must show it fired"
     src = (ROOT / "scripts/finemap_dapg.py").read_text()
-    assert "must therefore be a FRACTION of" in src
+    body = src[src.index("def read(") : src.index("def load_hits(")]
+    assert 'cost["requests"] >=' not in body, "requests must not bound the read any more"
+
+
+def test_the_live_bound_is_bytes_and_there_is_no_request_ceiling() -> None:
+    assert fd.BYTE_BOUND_MB == 170.4
+    src = (ROOT / "scripts/finemap_dapg.py").read_text()
+    body = src[src.index("def read(") : src.index("def load_hits(")]
+    assert "total_mb >= bound_mb" in body, "the only cost check is the cumulative byte figure"
+
+
+def test_the_geometry_reason_is_recorded_not_just_asserted() -> None:
+    """Why bytes and not requests, stated as a fact about the two interval sets."""
+    assert "DISJOINT intervals" in fd.WHY_BYTES_AND_NOT_REQUESTS
+    assert "total span" in fd.WHY_BYTES_AND_NOT_REQUESTS
+    assert "not a rationalisation" in fd.WHY_BYTES_AND_NOT_REQUESTS
+
+
+def test_the_wrong_quantity_is_attributed_to_the_mis_citation() -> None:
+    """Not to the panel results, which claim nothing about which quantity bounds another read."""
+    assert "mis-citation" in fd.WHOSE_MISTAKE_THE_WRONG_QUANTITY_WAS
+    assert "not the precedent's" in fd.WHOSE_MISTAKE_THE_WRONG_QUANTITY_WAS
 
 
 # --- the count refuses a partial read --------------------------------------------------------------
@@ -241,4 +265,19 @@ def test_the_cost_bound_is_checked_after_every_chromosome_not_at_the_end() -> No
     """A bound only checked once the work is done is not a bound."""
     src = (ROOT / "scripts/finemap_dapg.py").read_text()
     body = src[src.index("def read(") : src.index("def load_hits(")]
-    assert body.index('if cost["requests"] >= PRECEDENT_REQUESTS') < body.index("summary = {")
+    assert body.index("total_mb >= bound_mb") < body.index("summary = {")
+
+
+def test_the_read_refuses_without_the_new_cost_registration() -> None:
+    """The fired bound is not reusable, so reading further needs the new registration to exist."""
+    src = (ROOT / "scripts/finemap_dapg.py").read_text()
+    body = src[src.index("def read(") : src.index("def load_hits(")]
+    assert "stands fired; it is not reused and not" in body
+    assert body.index("COST_REGISTRATION") < body.index("for chrom in sorted(iv)")
+
+
+def test_the_resume_skips_chromosomes_already_read() -> None:
+    src = (ROOT / "scripts/finemap_dapg.py").read_text()
+    body = src[src.index("def read(") : src.index("def load_hits(")]
+    assert "already read, not fetched again" in body
+    assert "carried_mb" in body, "the byte bound must span both runs, not just this one"

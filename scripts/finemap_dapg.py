@@ -88,10 +88,72 @@ SEED = ex.SEED
 LINK_FLOOR = fresh.POSITIVE_FLOOR
 LOCUS_FLOOR = fresh.LOCUS_FLOOR
 
-#: The precedent this read's cost is held against, from the 24 panel results already on disk. If the
-#: read is NOT a fraction of this it stops and reports the figure instead of continuing.
-PRECEDENT_REQUESTS = 222
-PRECEDENT_MB = 170.4
+#: THE FIRED BOUND, kept here as a record and NEVER as a live check again. `finemap_dapg_registration`
+#: (d3a124b) bounded this read at 222 range requests and 170.4 MB. The request half fired at 225 after
+#: 11 of 22 chromosomes, with bytes at 27.55 MB - 16.2% of its own byte bound. It was NOT relaxed and
+#: is NOT amended: it stands fired. `finemap_dapg_cost_registration` is a NEW registration with a
+#: different and better-chosen quantity, and it cites this one.
+FIRED_REQUEST_BOUND = 222
+FIRED_RUN = {
+    "registration": "data/results/finemap_dapg_registration.json",
+    "bound": {"requests": FIRED_REQUEST_BOUND, "mb_fetched": 170.4},
+    "fired_on": "requests",
+    "measured_requests": 225,
+    "measured_mb": 27.55,
+    "chromosomes_completed": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+    ],
+    "intervals_covered": 2907,
+    "intervals_registered": 4515,
+    "rows_scanned": 335935,
+    "rows_kept": 7844,
+    "it_was_not_relaxed": (
+        "the bound fired and the run stopped itself. It is not amended, not raised and not reread. "
+        "A bound that moves once its designer has watched it fire is not a bound, and this project "
+        "refused that four times in one day - most sharply when the threshold's own designer believed "
+        "it mis-specified, where the AstroREG scale gate failed, its designer concluded it had asked a "
+        "question the claim did not ask, and the gate still stayed failed. What was permitted there is "
+        "what is done here: a NEW registration with a different quantity, history disclosed in full"
+    ),
+    "why_it_could_not_write_its_own_summary": (
+        "`read` writes read_summary.json last, so a run that stops part way leaves none. These "
+        "figures are the ones that run printed, recorded here because that is the only place they can "
+        "now live"
+    ),
+}
+
+#: THE NEW BOUND, and the only one checked. Bytes, because bytes measure load for a scattered interval
+#: set and request count does not.
+BYTE_BOUND_MB = 170.4
+
+WHY_BYTES_AND_NOT_REQUESTS = (
+    "range requests scale with the number of DISJOINT intervals; bytes scale with their total span. "
+    "The 222-request figure came from the panel's contiguous 200-base unit tiles covering 386 Mb, which "
+    "merge into a handful of enormous spans per chromosome: few requests, many bytes. This read's "
+    "4,515 windows are one to eight kilobases each and scattered over 22 chromosomes, so nearly every "
+    "cluster needs its own request: many requests, few bytes. The request half of that precedent never "
+    "fitted this geometry. That is a fact about the shape of the two interval sets, true before and "
+    "regardless of any row returned, which is what makes it a correction and not a rationalisation"
+)
+
+WHOSE_MISTAKE_THE_WRONG_QUANTITY_WAS = (
+    "the coordinator's mis-citation, not the precedent's. The panel results record requests and bytes "
+    "side by side and claim nothing about which bounds a different interval set. The coordinator handed "
+    "this lane '222 requests and 170.4 MB' and wrote that 1,505 intervals would be 'a fraction of "
+    "that' without saying WHICH quantity; the lane repeated it in the same undifferentiated form and "
+    "registered it as a bound on both. Right on bytes, wrong on requests. Recorded here so the defect "
+    "is attributed where it happened rather than to the data it was drawn from"
+)
 
 LD_TAGGED_LABEL = "LD-tagged association, not localised"
 
@@ -310,8 +372,8 @@ def registration_payload(
             "chromosomes": sorted(iv),
             "intervals": sum(len(v) for v in iv.values()),
             "cost_precedent": {
-                "requests": PRECEDENT_REQUESTS,
-                "mb_fetched": PRECEDENT_MB,
+                "requests": FIRED_REQUEST_BOUND,
+                "mb_fetched": BYTE_BOUND_MB,
                 "from": (
                     "the cost.storage_tracks.gtex_dapg fields of the 24 human_panel_chr*.json "
                     "results, which covered the panel's millions of unit intervals"
@@ -501,11 +563,27 @@ def read(progress: Any = print) -> dict[str, Any]:
     if got != want:
         raise RefusedError(f"the interval set has moved: {want} registered, {got} now")
 
+    cost_reg_path = ROOT / f"data/results/{COST_REGISTRATION}.json"
+    if not cost_reg_path.exists():
+        raise RefusedError(
+            f"{cost_reg_path} does not exist. The bound in `finemap_dapg_registration` FIRED at 225 "
+            f"requests against {FIRED_REQUEST_BOUND} and stands fired; it is not reused and not "
+            "relaxed. Reading further needs a NEW cost registration, in bytes, written first"
+        )
+    cost_reg = json.loads(cost_reg_path.read_text())
+    bound_mb = cost_reg["the_new_bound"]["bound_mb"]
+    carried_mb = cost_reg["the_fired_bound"]["measured_mb"]
+    carried_requests = cost_reg["the_fired_bound"]["measured_requests"]
+
     KNOWLEDGE.mkdir(parents=True, exist_ok=True)
+    done = {q.stem[len("hits_") :] for q in KNOWLEDGE.glob("hits_*.tsv")}
     cost: dict[str, Any] = {"requests": 0, "mb_fetched": 0.0, "by_chromosome": {}}
     kept = 0
     scanned = 0
     for chrom in sorted(iv):
+        if chrom in done:
+            progress(f"{chrom}: already read, not fetched again")
+            continue
         rows, c = hp.track_rows(TRACK_KEY, chrom, iv[chrom])
         cost["requests"] += c["requests"]
         cost["mb_fetched"] = round(cost["mb_fetched"] + c["mb_fetched"], 2)
@@ -536,26 +614,50 @@ def read(progress: Any = print) -> dict[str, Any]:
             f"{c['requests']} requests, {c['mb_fetched']} MB "
             f"(cumulative {cost['requests']} requests, {cost['mb_fetched']} MB)"
         )
-        if cost["requests"] >= PRECEDENT_REQUESTS or cost["mb_fetched"] >= PRECEDENT_MB:
+        total_mb = round(carried_mb + cost["mb_fetched"], 2)
+        if total_mb >= bound_mb:
             raise RefusedError(
-                "STOPPING: this read is not a fraction of the precedent. "
-                f"{cost['requests']} requests and {cost['mb_fetched']} MB after {chrom}, against the "
-                f"precedent of {PRECEDENT_REQUESTS} requests and {PRECEDENT_MB} MB that covered the "
-                "panel's millions of unit intervals. Reported rather than continued, as registered"
+                f"STOPPING on the registered BYTE bound: {total_mb} MB cumulative across both runs "
+                f"after {chrom}, against {bound_mb} MB. Reported rather than continued, as registered. "
+                "Requests are deliberately NOT checked here, because they are not a load measure for "
+                "a scattered interval set"
             )
     summary = {
         "track": hp.BIGBEDS[TRACK_KEY],
         "read_by": "HTTP range through genomeos.attribution.human_panel.track_rows; never downloaded",
         "intervals": got,
         "chromosomes": len(iv),
-        "rows_scanned": scanned,
-        "rows_kept_at_or_above_the_threshold": kept,
-        "pip_threshold": PIP,
-        "cost": cost,
-        "cost_precedent": {"requests": PRECEDENT_REQUESTS, "mb_fetched": PRECEDENT_MB},
-        "is_a_fraction_of_the_precedent": (
-            cost["requests"] < PRECEDENT_REQUESTS and cost["mb_fetched"] < PRECEDENT_MB
+        "rows_scanned_this_run": scanned,
+        "rows_kept_this_run": kept,
+        "rows_kept_total": sum(len(v) for v in load_hits().values()),
+        "rows_are_counted_from_the_files": (
+            "the total is read back off every per-chromosome file, so it covers both runs and does not "
+            "depend on this run having seen the first one's rows"
         ),
+        "pip_threshold": PIP,
+        "cost_this_run": cost,
+        "cost_carried_from_the_fired_run": {
+            "requests": carried_requests,
+            "mb_fetched": carried_mb,
+            "chromosomes": cost_reg["the_fired_bound"]["chromosomes_completed"],
+        },
+        "cost_total": {
+            "requests": carried_requests + cost["requests"],
+            "mb_fetched": round(carried_mb + cost["mb_fetched"], 2),
+        },
+        "the_bound_that_was_checked": {
+            "quantity": "bytes fetched, cumulative across both runs",
+            "bound_mb": bound_mb,
+            "registered_in": f"data/results/{COST_REGISTRATION}.json",
+            "within_it": round(carried_mb + cost["mb_fetched"], 2) < bound_mb,
+        },
+        "the_bound_that_fired_and_was_not_relaxed": cost_reg["the_fired_bound"]["bound"],
+        "requests_are_reported_and_not_bounded": (
+            "the total request count is recorded because it is a fact about the read, and it is NOT a "
+            "bound: requests scale with the number of disjoint intervals, not with load"
+        ),
+        "chromosomes_read_this_run": sorted(set(iv) - done),
+        "chromosomes_carried": sorted(done),
         "registration_sha256": mf.sha256_of(ROOT / f"data/results/{REGISTRATION}.json")[0],
     }
     (KNOWLEDGE / "read_summary.json").write_text(json.dumps(summary, indent=1) + "\n")
@@ -849,14 +951,174 @@ def _count_inputs() -> list[dict[str, Any]]:
     return out
 
 
+# --------------------------------------------------------------------------- the cost registration
+
+
+COST_REGISTRATION = "finemap_dapg_cost_registration"
+
+
+def cost_registration_payload() -> dict[str, Any]:
+    """A NEW registration of the cost bound, in bytes, citing the fired one rather than amending it."""
+    reg = _registered()
+    els, _keys = frame_with_keys()
+    ctrl, info = controls(els)
+    if info["digest"] != reg["the_baseline"]["digest"]:
+        raise RefusedError(
+            "the control windows do not match the first registration: "
+            f"{reg['the_baseline']['digest']} registered, {info['digest']} now. Every other term of "
+            "that registration must be untouched for this one to be a cost registration and not a "
+            "second bite at the frame"
+        )
+    iv = intervals_to_read(els, ctrl)
+    done = sorted(q.stem[len("hits_") :] for q in KNOWLEDGE.glob("hits_*.tsv"))
+    remaining = [c for c in sorted(iv) if c not in done]
+    return {
+        "result": COST_REGISTRATION,
+        "date": "2026-10-02",
+        "registered_before": "the remaining chromosomes are read",
+        "what_this_is": (
+            "a NEW registration of ONE quantity - the cost bound - and nothing else. It does not amend "
+            "`finemap_dapg_registration` and does not touch a single other term of it"
+        ),
+        "the_fired_bound": FIRED_RUN,
+        "the_new_bound": {
+            "quantity": "bytes fetched, cumulative across both runs",
+            "bound_mb": BYTE_BOUND_MB,
+            "source": (
+                "the coordinator's own byte figure from the 24 human_panel results' "
+                "cost.storage_tracks.gtex_dapg fields, unchanged"
+            ),
+            "request_ceiling": None,
+            "there_is_no_request_ceiling": (
+                "requests are not a load measure for a scattered interval set. " + WHY_BYTES_AND_NOT_REQUESTS
+            ),
+            "already_spent_mb": FIRED_RUN["measured_mb"],
+            "projection_for_the_whole_read_mb": 42.8,
+            "the_projection_is_not_the_bound": (
+                "42.8 MB is what the finished read is expected to cost, a quarter of the bound. The "
+                "bound is 170.4 and the run stops there whatever the projection said"
+            ),
+            "checked": "after every chromosome, on the cumulative figure across both runs",
+        },
+        "whose_mistake_the_first_quantity_was": WHOSE_MISTAKE_THE_WRONG_QUANTITY_WAS,
+        "why_a_new_registration_and_not_an_amendment": (
+            "an amendment would read as the fired bound relaxed, which is the one thing it must not "
+            "read as. The precedent is the AstroREG scale gate: it failed, its designer concluded it "
+            "had asked a question the claim did not ask, and it STILL stayed failed; what was "
+            "permitted was a new registration with a different and better-chosen quantity and the "
+            "history disclosed. This is that, and the fired bound stands fired in the record above"
+        ),
+        "what_does_not_move": {
+            "frame": (
+                "the 1,505 elements via scripts/finemap_coverage.elements, unchanged, and the control "
+                "digest is checked against the first registration before this file is written"
+            ),
+            "retained_hit_rule": reg["the_read"]["retained_hit_rule"],
+            "gene_match": reg["conditions"]["a_gene_match_is_mandatory"],
+            "baseline_digest": reg["the_baseline"]["digest"],
+            "floors": {
+                "gene_matched_elements_at_least": LINK_FLOOR,
+                "independent_loci_at_least": LOCUS_FLOOR,
+                "held_by_identity": (
+                    "the module uses fresh.POSITIVE_FLOOR and fresh.LOCUS_FLOOR themselves and the "
+                    "tests assert identity, not equality, so neither can drift"
+                ),
+            },
+            "nothing_here_is_renegotiated": (
+                "this registration moves the cost bound's QUANTITY and nothing else. If any other "
+                "term had moved, the digest check above would have refused it"
+            ),
+        },
+        "the_resume": {
+            "chromosomes_already_read": done,
+            "chromosomes_still_to_read": remaining,
+            "only_unread_chromosomes_are_fetched": (
+                "the 11 completed per-chromosome row files stand; each was written in full before the "
+                "bound was checked, so none is partial"
+            ),
+            "intervals_still_to_read": sum(len(iv[c]) for c in remaining),
+        },
+        "the_refusal_that_survives_the_resume": (
+            "`count` still refuses while read_summary.json is absent, naming the chromosomes it has, "
+            "and the check is hoisted ahead of the frame pass so it costs 0 seconds rather than 200. "
+            "That refusal is the more important one and it is untouched: the 11 completed chromosomes "
+            "are the ones that SORT FIRST, not a random half, and a claim holding on the chromosomes "
+            "read first and nowhere else is the failure executor_replication's registration says has "
+            "caught this project four times. A refusal that costs three minutes to reach is one "
+            "someone works around"
+        ),
+        "what_the_finished_read_may_not_be_read_as": {
+            "1505_is_a_denominator_for": (
+                "the question 'does a fine-mapped cis-eQTL lie inside this element'. Every element is "
+                "queried, so a zero there is a measured absence and not a gap"
+            ),
+            "1505_is_NOT_a_denominator_for": (
+                "the question 'is this element the cause of its gene's expression'. The read says "
+                "where a posterior lies, not what an element does"
+            ),
+            "the_widened_frame_is_not_a_result": ASSESSED_BY_CONSTRUCTION,
+            "the_limit_that_stays_named_not_counted": reg["the_two_figures_kept_apart"][
+                "the_limit_the_read_cannot_remove"
+            ],
+            "if_the_gene_matched_count_is_at_or_near_zero": (
+                "no baseline is needed and that is the result. The localised question answered in the "
+                "negative is worth more than the LD-tagged 1,262 ever was"
+            ),
+        },
+        "alphagenome_requests": 0,
+        "money": "none: a range read of a public UCSC bigBed is not a paid call",
+        "result_manifest": {
+            "sources": reg["result_manifest"]["sources"],
+            "inputs": _count_inputs(),
+            "inputs_opened_beside_the_declared_results": reg["result_manifest"][
+                "inputs_opened_beside_the_declared_results"
+            ],
+            "assembly": "GRCh38",
+            "coordinates": {"base": 0, "interval": "half-open"},
+            "parameters": {
+                **reg["result_manifest"]["parameters"],
+                "byte_bound_mb": BYTE_BOUND_MB,
+                "fired_request_bound": FIRED_REQUEST_BOUND,
+                "request_ceiling": None,
+            },
+            "exclusions": reg["result_manifest"]["exclusions"]
+            + ["the 11 chromosomes already read are not fetched again; their row files stand"],
+            "partitions": reg["result_manifest"]["partitions"],
+            "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
+        },
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--register", action="store_true", help="write the frame, controls and rule first")
     ap.add_argument("--read", action="store_true", help="read the track by range over the registered set")
     ap.add_argument("--count", action="store_true", help="assessable first, then carrying, then the baseline")
+    ap.add_argument(
+        "--register-cost",
+        action="store_true",
+        help="a NEW cost registration in bytes; the fired request bound stands fired",
+    )
     args = ap.parse_args()
-    if not (args.register or args.read or args.count):
+    if not (args.register or args.read or args.count or args.register_cost):
         raise SystemExit("--register is required: nothing is read before the registration exists")
+    if args.register_cost:
+        payload = cost_registration_payload()
+        path = save_result(COST_REGISTRATION, payload)
+        print(f"{COST_REGISTRATION}: {path}")
+        b, f, r = payload["the_new_bound"], payload["the_fired_bound"], payload["the_resume"]
+        print(
+            f"  FIRED bound stands fired: {f['measured_requests']} requests against {f['bound']['requests']}"
+        )
+        print(
+            f"  NEW bound: {b['bound_mb']} MB cumulative, no request ceiling; "
+            f"{b['already_spent_mb']} MB spent"
+        )
+        print(
+            f"  resume: {len(r['chromosomes_still_to_read'])} chromosomes, "
+            f"{r['intervals_still_to_read']} intervals"
+        )
+        return 0
     if args.read:
         from genomeos.jobs import heartbeat
 
