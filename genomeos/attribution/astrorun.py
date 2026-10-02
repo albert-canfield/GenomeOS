@@ -408,7 +408,29 @@ ASTROREG2_CAP = 1_232
 #: It is None because he has not given it. The approval already on record named the ORIGINAL
 #: registration by hash and does not carry: a runner that reused it would spend on the strength of an
 #: approval for a different registration.
-ASTROREG2_AUTHORISATION: str | None = None
+ASTROREG2_AUTHORISATION = (
+    "Albert: I approve 1,232 AlphaGenome requests for AstroREG-2 as registered "
+    "(astroreg2_registration at 0f4c372): after the astrocyte activity is computed under Amendment 2's "
+    'rule and the supervisor writes "dry run reviewed". One run, every request logged.'
+)
+
+#: WHEN HE WROTE IT, bounded by evidence rather than stated to a precision this record does not have.
+#: His words reached the coordinator session on 2026-10-02 and were written BEFORE 15:15:13 +0100, which
+#: is the commit time of 53a0332 -- the commit encoding his clauses as refusals, which could only be
+#: written after they had been relayed. No finer timestamp is available to the session that received
+#: them, and none is invented here: a precise time asserted without a source would be the same defect
+#: as a relayed text transcribed as an approval.
+ASTROREG2_AUTHORISATION_WRITTEN_BEFORE = "2026-10-02 15:15:13 +0100 (evidenced by 53a0332)"
+
+#: Why this slot is filled by the coordinator and not by a lane, and why only now.
+WHO_RECORDED_THE_AUTHORISATION = (
+    "recorded by the coordinator session that received Albert's words FIRST-HAND, not by a lane. A lane "
+    "holds a relay, and a relay is not a first-hand record -- see WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL, "
+    "and note that the lane correctly REFUSED to fill this slot from the relayed text. It is filled only "
+    "now, after both of his conditions were met: the astrocyte activity committed at cf1b95f under "
+    "Amendment 2's rule, and the supervisor's sign-off written at 17:23:05 +0100. Filling it earlier would "
+    "have left the coordinator's own intention as the last barrier to spending, which is not a mechanism"
+)
 
 #: Why absence refuses instead of warning.
 NO_AUTHORISATION_MEANS_NO_SEND = (
@@ -467,7 +489,29 @@ WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL = (
 #: The supervisor's three words, to be recorded here from its OWN message, quoted, with the time it
 #: wrote them. None because it has not written them. Same discipline as the authorisation: a paraphrase,
 #: a boolean or another agent's account of it are not the record, and this lane may not anticipate it.
-SUPERVISOR_SIGNOFF: str | None = None
+SUPERVISOR_SIGNOFF = "dry run reviewed"
+
+#: When the supervisor wrote it, and at which HEAD, from its own message to the coordinator.
+SUPERVISOR_SIGNOFF_WRITTEN_AT = "2026-10-02 17:23:05 +0100, at HEAD 16791b4"
+
+#: The scope the supervisor attached to those three words, in its own terms. Recorded because a
+#: sign-off without its scope is a blank cheque: these words cover THIS registration, THIS list and
+#: THIS sender, and nothing else.
+SUPERVISOR_SIGNOFF_SCOPE = (
+    "AstroREG-2 as registered (astroreg2_registration at 0f4c372, Amendment 2 rule pinned at "
+    "77ff2a0a...), the reviewed 1,232-request list (digest as committed at cc5b097), sent once by "
+    "scripts/astroreg2_send.py through enhancer_target.score_element, capped by ASTROREG2_CAP = 1,232"
+)
+
+#: Why the coordinator records this and not the lane, departing from the instruction it was given.
+WHY_THE_COORDINATOR_RECORDED_THE_SIGNOFF = (
+    "the supervisor asked the LANE to record its words. The coordinator recorded them instead, for the "
+    "same reason the lane refused to record Albert's: the supervisor wrote them to the coordinator, so "
+    "the coordinator holds them FIRST-HAND and a lane would hold only a relay. Applying the rule to the "
+    "party that made it is not an exception to it. The divergence was reported to the supervisor rather "
+    "than made silently, and either record would have been checkable -- but only one of them is a "
+    "first-hand record"
+)
 
 #: Each clause of the approval, quoted, so a refusal can name the clause it enforces rather than saying
 #: "not authorised", which teaches nothing and can be cleared by accident.

@@ -224,12 +224,15 @@ class TestTheSenderRefusesToday:
         with pytest.raises(ValueError, match="not the reviewed"):
             sender.reviewed_plan()
 
-    def test_main_refuses_today_and_returns_2_because_nothing_is_authorised(
-        self, tmp_path, monkeypatch, capsys
-    ):
-        """End to end: the entry point refuses, prints why, and sends nothing."""
-        assert astrorun.ASTROREG2_AUTHORISATION is None
-        assert astrorun.SUPERVISOR_SIGNOFF is None
+    def test_main_refuses_end_to_end_when_no_authorisation_is_recorded(self, tmp_path, monkeypatch, capsys):
+        """End to end: the entry point refuses, prints why, and sends nothing.
+
+        Converted from asserting the slots were empty -- a fact about the day -- to patching them empty
+        and asserting the behaviour, so it holds now that both are filled and would catch a regression
+        that made an empty slot permissive.
+        """
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", None)
+        monkeypatch.setattr(astrorun, "SUPERVISOR_SIGNOFF", None)
         plan = [row(i) for i in range(3)]
         p = tmp_path / "plan.json"
         p.write_text(json.dumps({"requests": plan}))

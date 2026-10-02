@@ -619,15 +619,35 @@ class TestAstroreg2HasItsOwnCapAndAuthorisation:
         assert astrorun.AUTHORISED_REQUESTS == 1322
         assert astrorun.ASTROREG2_CAP != astrorun.AUTHORISED_REQUESTS
 
-    def test_no_astroreg2_approval_is_recorded_yet(self):
-        assert astrorun.ASTROREG2_AUTHORISATION is None
+    def test_the_authorisation_is_read_only_through_the_function_that_can_refuse(self):
+        """Converted from an assertion that the slot was EMPTY, which was a fact about today.
 
-    def test_asking_for_the_astroreg2_authorisation_refuses_while_it_is_absent(self):
+        The slot has since been filled, and that must not change what the code does. What is
+        load-bearing is that nothing reads the constant directly: every reader goes through
+        astroreg2_authorisation(), which is the only place an absent approval can refuse.
+        """
+        import inspect
+
+        src = inspect.getsource(astrorun.astroreg2_budget)
+        assert "astroreg2_authorisation()" in src, (
+            "the budget must obtain the approval through the refusing function, not by reading the "
+            "constant, or an empty slot would be permissive"
+        )
+
+    def test_an_ABSENT_authorisation_refuses_whatever_the_slot_holds_today(self, monkeypatch):
+        """Mechanism, not state: patched to None, the refusal fires. Holds before or after approval."""
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", None)
         with pytest.raises(astrorun.NoAuthorisationError, match="does not carry"):
             astrorun.astroreg2_authorisation()
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", "")
+        with pytest.raises(astrorun.NoAuthorisationError):
+            astrorun.astroreg2_authorisation()  # an empty string is not an approval either
 
-    def test_no_budget_can_be_obtained_for_astroreg2_without_its_own_approval(self, tmp_path):
+    def test_no_budget_can_be_obtained_without_an_approval_whatever_the_slot_holds_today(
+        self, tmp_path, monkeypatch
+    ):
         """The refusal comes BEFORE the budget exists, so there is nothing to send with."""
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", None)
         with pytest.raises(astrorun.NoAuthorisationError):
             astrorun.astroreg2_budget(tmp_path / "l.jsonl")
         assert not (tmp_path / "l.jsonl").exists(), "a refusal creates no ledger"
@@ -772,13 +792,55 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         assert out["cap"] == 1232
         assert sorted(out["clauses_checked"]) == ["activity", "logged", "one_run", "scope", "signoff"]
 
-    def test_the_slot_is_empty_and_the_relayed_text_is_kept_apart(self):
-        assert astrorun.ASTROREG2_AUTHORISATION is None
+    def test_the_relayed_text_is_kept_apart_and_never_consulted_by_the_refusing_function(self):
+        """Converted: the old premise (slot empty) is obsolete; these claims are still load-bearing.
+
+        The relayed text remains a SEPARATE constant, the function that can refuse never reads it, and
+        the slot's content is byte-equal to it -- which is a cross-check between two transcriptions of
+        the same relay, not independent corroboration that Albert said it. It confirms the relay was
+        carried faithfully and nothing more.
+        """
+        import inspect
+
         assert "I approve 1,232" in astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED
         assert "not that person's approval" in astrorun.WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL
+        src = inspect.getsource(astrorun.astroreg2_authorisation)
+        assert "ASTROREG2_AUTHORISATION_AS_RELAYED" not in src, (
+            "the refusing function must never fall back to the relayed text"
+        )
+        assert astrorun.ASTROREG2_AUTHORISATION == astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED, (
+            "the recorded approval and this lane's transcription of the relay agree character for character"
+        )
 
-    def test_without_the_authorisation_recorded_nothing_sends(self, good):
+    def test_without_an_authorisation_recorded_nothing_sends_whatever_the_slot_holds_today(
+        self, good, monkeypatch
+    ):
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", None)
         with pytest.raises(astrorun.NoAuthorisationError):
+            astrorun.may_send(**good)
+
+    def test_a_FILLED_slot_alone_does_not_permit_a_send_while_another_clause_fails(
+        self, good, tmp_path, monkeypatch
+    ):
+        """What nothing covered until the slot was filled.
+
+        Until an hour ago an empty slot refused first and masked every other clause, so a regression in
+        one of them could not have been seen. With the real recorded approval in place and NO patching
+        of it, a failing clause must still refuse -- here the sign-off, removed.
+        """
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        assert astrorun.ASTROREG2_AUTHORISATION, "this test is about a FILLED slot"
+        good["signoff"] = None
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "dry run reviewed" in str(exc.value)
+
+    def test_a_filled_slot_does_not_mask_a_partial_run_either(self, good, monkeypatch):
+        """The same masking risk on the clause that guards a double spend."""
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        led = Path(good["ledger"])
+        astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP).take(chrom="chr1", element="E0")
+        with pytest.raises(astrorun.SendRefusedError, match="a partial run exists"):
             astrorun.may_send(**good)
 
     def test_PLANTED_activity_result_absent(self, authorised, good, tmp_path):
