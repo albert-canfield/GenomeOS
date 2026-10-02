@@ -23,6 +23,7 @@ import os
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
+from genomeos.attribution import astrorun
 from genomeos.certainty import Certainty
 from genomeos.ir import Action, Entity, Evidence, EvidenceKind, Module, Rule
 from genomeos.ir.model import UNSTATED
@@ -233,11 +234,7 @@ class AlphaGenomeAdapter:
                 self.last_scan = {"genes": len(genes), "tracks": len(tissues), "max_abs_log2fc": 0.0}
                 # the track table this answer was read on, as a checksum: no request, the response's own
                 model["tracks"] = len(tissues)
-                model["tracks_sha256"] = hashlib.sha256(
-                    "\n".join(
-                        f"{i}\t{n}\t{t}" for i, n, t in zip(adata.var.index, names, tissues, strict=False)
-                    ).encode()
-                ).hexdigest()
+                model["tracks_sha256"] = tracks_sha256(adata, tissues)
                 for gi, gene in enumerate(genes):
                     for ti, tissue in enumerate(tissues):
                         val = float(adata.X[gi, ti])
@@ -431,6 +428,20 @@ def tissue_names(adata: object) -> list[str]:
     return [str(g) if g and str(g) not in ("nan", "") else str(n) for g, n in zip(gtex, names, strict=False)]
 
 
+def tracks_sha256(adata: object, tissues: list[str]) -> str:
+    """The checksum of the track table this answer was read on: the response's own var axis.
+
+    One formula, called from both the scorer's run metadata and the gene-axis record, so the value
+    the sign-off binds and the value a reader checks cannot drift apart.
+    """
+    var = getattr(adata, "var", None)
+    index = list(getattr(var, "index", [])) if var is not None else []
+    names = list(var.get("biosample_name", index)) if var is not None else index
+    return hashlib.sha256(
+        "\n".join(f"{i}\t{n}\t{t}" for i, n, t in zip(index, names, tissues, strict=False)).encode()
+    ).hexdigest()
+
+
 def recorded_axis(
     output: int,
     adata: object,
@@ -468,6 +479,15 @@ def recorded_axis(
         rec["cell_values"] = {
             c: [_jsonable(float(adata.X[gi, ti])) for ti in tis] for c, tis in cell_tracks.items()
         }
+        # Item (g), ADDITIVE: this row's WHOLE track vector, in the response's own column order.
+        # `cell_values` above keeps CELL_TRACKS -- four non-neural cell lines -- and nothing else, so
+        # on an astrocyte screen every brain-tissue value would be bought and discarded, and paid data
+        # is the one kind this project cannot re-fetch for free. Nothing above this line reads the
+        # vector and nothing above it changed: the effects, the per-cell multisets and the emitted
+        # counts are built exactly as before, so no frozen feature can move.
+        rec[astrorun.FULL_VECTOR_KEY] = astrorun.full_vector_entry(
+            [float(adata.X[gi, ti]) for ti in range(len(tissues))]
+        )
         rows.append(rec)
     layers = getattr(adata, "layers", None)
     try:
@@ -479,6 +499,11 @@ def recorded_axis(
         "fields": fields,
         "rows": rows,
         "tracks_total": len(tissues),
+        # Item (g): the names the vector's positions mean, kept ONCE per answer rather than per row,
+        # with the checksum of the axis they were read on, so N named values come back out of one row.
+        "track_names": list(tissues),
+        "tracks_sha256": tracks_sha256(adata, tissues),
+        "full_vector_note": astrorun.WHY_THE_FULL_TRACK_VECTOR_IS_KEPT,
         "threshold": threshold,
         "cell_values_note": CELL_VALUES_NOTE,
         # the client attaches a quantiles layer when the response carries one; this run reads X only, so

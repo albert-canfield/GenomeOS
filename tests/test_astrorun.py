@@ -7,6 +7,7 @@ stops at the cap, and that the ledger on disk holds exactly one line per charge.
 
 from __future__ import annotations
 
+import csv
 import json
 import math
 import sys
@@ -1288,11 +1289,26 @@ class TestItemGTheFullTrackVectorIsKept:
     def test_the_vector_round_trips_and_comes_back_NAMED(self):
         """(c): the values back out, one per track, in the response's own column order."""
         axis = astrorun.with_full_track_vectors(self.axis(), self.Matrix(3, 6), self.names(), "a" * 64)
-        named = astrorun.named_track_values(axis, 1)
-        assert list(named) == self.names(), "names in column order"
-        assert len(named) == 6
-        assert named["astrocyte"] == pytest.approx(self.Matrix(3, 6).values[1][0])
-        assert named["GM12878"] == pytest.approx(self.Matrix(3, 6).values[1][5])
+        pairs = astrorun.named_track_values(axis, 1)
+        assert [n for n, _ in pairs] == self.names(), "names in column order"
+        assert len(pairs) == 6
+        assert pairs[0] == ("astrocyte", self.Matrix(3, 6).values[1][0])
+        assert pairs[5] == ("GM12878", self.Matrix(3, 6).values[1][5])
+
+    def test_PLANTED_duplicate_track_names_do_not_COLLAPSE(self):
+        """The defect the REAL metadata found: 667 rna_seq rows carry only 316 distinct names.
+
+        Returned as {name: value} a row came back with 316 entries -- 351 paid values dropped,
+        silently, under a length that looked plausible. Pairs in column order cannot do that, and no
+        stub could show it: a stub's names were tidy and unique.
+        """
+        dup = ["astrocyte", "astrocyte", "astrocyte", "K562", "K562", "K562"]
+        axis = astrorun.with_full_track_vectors(self.axis(), self.Matrix(3, 6), dup, "a" * 64)
+        pairs = astrorun.named_track_values(axis, 0)
+        assert len(pairs) == 6, "one pair per track, duplicates included"
+        assert len({n for n, _ in pairs}) == 2
+        assert len(dict(pairs)) == 2, "the collapse, demonstrated rather than described"
+        assert "COLLAPSES" in astrorun.NAMES_ARE_NOT_UNIQUE
 
     def test_PLANTED_a_TRUNCATED_vector_REFUSES_rather_than_returning_what_fits(self):
         """A short vector is a partly discarded answer, and returning its prefix would hide that."""
@@ -1362,11 +1378,17 @@ class TestItemGTheFullTrackVectorIsKept:
             astrorun.OBSERVED_TRACKS_PER_ANSWER,
             free_bytes=50 * 1024**3,
         )
-        assert est["tracks"] == 371
+        tracks = astrorun.OBSERVED_TRACKS_PER_ANSWER
+        assert est["tracks"] == tracks == 667, "the larger of the two figures"
         assert est["rows_per_element"] == 29
         # base64 of float64: 8 bytes a value, 4 characters a 3 bytes
-        assert est["bytes_per_row"] == math.ceil(8 * 371 / 3) * 4 + 40
-        assert 100 < est["mb_total"] < 200, est["mb_total"]
+        assert est["bytes_per_row"] == math.ceil(8 * tracks / 3) * 4 + 40
+        assert 200 < est["mb_total"] < 300, est["mb_total"]
+        # and on the smaller figure it is smaller, which is why the larger is the one used
+        note = astrorun.full_vector_disk_estimate(
+            1232, astrorun.ADAPTER_NOTE_ROWS, astrorun.ADAPTER_NOTE_TRACKS, free_bytes=50 * 1024**3
+        )
+        assert note["mb_total"] < est["mb_total"]
         assert est["fits_above_the_floor"] is True
         with pytest.raises(astrorun.VectorRefusedError) as exc:
             astrorun.check_disk_for_full_vectors(1232, 29, 371, free_bytes=10 * 1024**3 + 1)
@@ -1382,40 +1404,132 @@ class TestItemGTheFullTrackVectorIsKept:
         est = astrorun.full_vector_disk_estimate(1, 1, 371, free_bytes=50 * 1024**3)
         assert abs(written - est["bytes_per_row"]) <= 40, (written, est["bytes_per_row"])
 
-    def test_PLANTED_item_g_REFUSES_TODAY_because_the_adapter_still_keeps_four_cell_lines(self):
-        """Wired, and refusing: nothing can be bought until the recording path keeps the vector."""
-        with pytest.raises(astrorun.VectorRefusedError) as exc:
-            astrorun.check_adapter_writes_full_vectors()
-        said = str(exc.value)
-        assert "item (g)" in said
-        assert "keeps CELL_TRACKS only" in said
-        assert "every brain-tissue track would be bought and discarded" in said
-        assert "costs nothing while the response has not been received" in said
+    def test_the_REAL_recording_path_keeps_the_WHOLE_vector(self):
+        """(a) The real recorded_axis, run and read back: every value, named, equal.
 
-    def test_NEAR_MISS_an_adapter_that_DOES_keep_the_vector_PASSES(self, tmp_path, monkeypatch):
-        """A guard that can never pass is the fixed-point defect again, so the positive control.
-
-        A module whose recorded_axis calls with_full_track_vectors satisfies item (g), which shows the
-        refusal above is about the recording path as it stands and not about an unreachable condition.
+        A source check cannot say this and a stub cannot either. The response is built with the
+        library's own AnnData over the REAL RNA-seq track metadata, so the axis comes from the file
+        and the library rather than from what our code asks for.
         """
-        mod = tmp_path / "adapter_keeping_vectors.py"
+        import anndata
+        import numpy
+        import pandas
+
+        from genomeos.predict import alphagenome_adapter as adapter
+
+        meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
+        with open(meta_csv) as fh:
+            meta = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
+        assert len(meta) > 300, "the real metadata, not a handful of rows"
+        var = pandas.DataFrame(meta, index=[f"{r['name']}|{i}" for i, r in enumerate(meta)])
+        obs = pandas.DataFrame(
+            {
+                "gene_id": ["ENSG1", "ENSG2", "ENSG3"],
+                "gene_name": ["AAA", "BBB", "CCC"],
+                "strand": ["+", "-", "+"],
+            },
+            index=["ENSG1", "ENSG2", "ENSG3"],
+        )
+        matrix = numpy.random.default_rng(7).normal(size=(3, len(meta)))
+        matrix[1, 0] = 0.0  # an exact zero: a thresholded writer would drop it and look fine
+        adata = anndata.AnnData(X=matrix, obs=obs, var=var)
+        tissues = adapter.tissue_names(adata)
+        assert len(tissues) == len(meta)
+
+        axis = adapter.recorded_axis(0, adata, tissues, 0.0)
+        assert axis["tracks_total"] == len(meta)
+        assert axis["track_names"] == tissues
+        assert len(axis["tracks_sha256"]) == 64
+        for gi in range(3):
+            pairs = astrorun.named_track_values(axis, gi)
+            assert len(pairs) == len(meta), f"one value per track for row {gi}"
+            assert [n for n, _ in pairs] == tissues
+            assert [v for _, v in pairs] == [float(matrix[gi, ti]) for ti in range(len(meta))], (
+                "equal by value, not close: this is the paid answer"
+            )
+        assert astrorun.named_track_values(axis, 1)[0][1] == 0.0, "the exact zero survived"
+        got = astrorun.check_full_vectors_in_answer({"model": {"gene_axis_outputs": [axis]}})
+        assert got["gene_rows_with_full_vectors"] == 3
+
+    def test_the_REAL_adapter_PASSES_the_send_time_check(self):
+        """The positive control for item (g)'s gate, run against the module that will do the buying."""
+        out = astrorun.check_adapter_writes_full_vectors()
+        assert out["recorded_axis_keeps_the_full_vector"] is True
+        assert out["how"].startswith("the recording path was RUN")
+
+    def test_PLANTED_a_recorder_that_only_MENTIONS_the_key_in_its_DOCSTRING(self, tmp_path, monkeypatch):
+        """(b) Both verdicts side by side: the source check PASSES it, the behavioural check FAILS it.
+
+        This was the defect in the first version of the gate. ast.dump carries docstrings and every
+        string constant, so a recorder that merely NAMES the key satisfied it, and it refused
+        correctly only while the adapter was untouched. The day it passed would have been the day it
+        proved nothing -- and that day was the day the adapter changed.
+        """
+        import ast
+
+        mod = tmp_path / "recorder_that_only_talks_about_it.py"
+        mod.write_text(
+            "def recorded_axis(output, adata, tissues, threshold=0.0):\n"
+            '    "Keeps each row track_vector, honestly, see astrorun.FULL_VECTOR_KEY."\n'
+            "    return {'output': output, 'rows': [{'row': 0, 'gene_name': 'AAA'}],\n"
+            "            'tracks_total': len(tissues)}\n"
+        )
+        tree = ast.parse(mod.read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "recorded_axis")
+        source_verdict = astrorun.FULL_VECTOR_KEY in ast.dump(fn)
+        assert source_verdict is True, "THE SOURCE CHECK PASSES IT: existence by name"
+
+        monkeypatch.syspath_prepend(str(tmp_path))
+        with pytest.raises(astrorun.VectorRefusedError) as exc:
+            astrorun.check_adapter_writes_full_vectors("recorder_that_only_talks_about_it")
+        assert "does not write the whole track vector" in str(exc.value)
+        assert "existence-by-name" in astrorun.EXISTENCE_BY_NAME_IS_NOT_A_CHECK
+
+    def test_PLANTED_a_recorder_that_THRESHOLDS_fails_on_the_VALUES(self, tmp_path, monkeypatch):
+        """A vector that is present but not what arrived is the same loss, one step quieter."""
+        mod = tmp_path / "recorder_that_filters.py"
         mod.write_text(
             "from genomeos.attribution import astrorun\n\n\n"
             "def recorded_axis(output, adata, tissues, threshold=0.0):\n"
-            "    axis = {'output': output, 'rows': []}\n"
-            "    return astrorun.with_full_track_vectors(axis, adata, tissues, 'sha')\n"
+            "    rows = []\n"
+            "    for gi in range(adata.X.shape[0]):\n"
+            "        vals = [float(adata.X[gi, ti]) for ti in range(len(tissues))]\n"
+            "        vals = [v if abs(v) > 0.1 else 0.0 for v in vals]\n"
+            "        rows.append({'row': gi, astrorun.FULL_VECTOR_KEY: astrorun.full_vector_entry(vals)})\n"
+            "    return {'output': output, 'rows': rows, 'tracks_total': len(tissues),\n"
+            "            'track_names': list(tissues), 'tracks_sha256': 'x' * 64}\n"
         )
         monkeypatch.syspath_prepend(str(tmp_path))
-        out = astrorun.check_adapter_writes_full_vectors("adapter_keeping_vectors")
-        assert out["recorded_axis_keeps_the_full_vector"] is True
+        with pytest.raises(astrorun.VectorRefusedError) as exc:
+            astrorun.check_adapter_writes_full_vectors("recorder_that_filters")
+        said = str(exc.value)
+        assert "came back as" in said
+        assert "thresholded, rounded or partial vector is not what was paid for" in said
 
-    def test_PLANTED_item_g_is_WIRED_into_may_send_and_stops_it(self, tmp_path, monkeypatch):
+    def test_the_probe_carries_a_zero_and_a_negative_on_purpose(self):
+        """A probe whose values all survive a filter would pass a filtering writer."""
+        flat = [v for row in astrorun.PROBE_VALUES for v in row]
+        assert 0.0 in flat, "an exact zero, which a threshold drops"
+        assert any(v < 0 for v in flat), "and a negative, which a sign error flips"
+
+    def test_PLANTED_item_g_is_WIRED_into_may_send_and_a_REGRESSED_recorder_stops_it(
+        self, tmp_path, monkeypatch
+    ):
         """A mechanism not wired to what it protects is indistinguishable from one that is absent.
 
-        So the subject is the wiring: may_send is driven past every other clause and must refuse on
-        item (g). If the call were absent, this returns may_send True and the run buys 1,232 answers
-        that keep four cell lines.
+        The subject is the wiring. The real adapter passes now, so the plant is the module may_send
+        looks at: pointed at a recorder that only mentions the key, the REAL check runs and the send
+        stops. Nothing about the check is stubbed here.
         """
+        regressed = tmp_path / "regressed_recorder.py"
+        regressed.write_text(
+            "def recorded_axis(output, adata, tissues, threshold=0.0):\n"
+            '    "I keep the track_vector, see astrorun.FULL_VECTOR_KEY."\n'
+            "    return {'output': output, 'rows': [{'row': 0}], 'tracks_total': len(tissues)}\n"
+        )
+        monkeypatch.syspath_prepend(str(tmp_path))
+        monkeypatch.setattr(astrorun, "ADAPTER_MODULE", "regressed_recorder")
+
         act = tmp_path / "activity.json"
         act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
         reg = tmp_path / "reg.json"
@@ -1447,15 +1561,32 @@ class TestItemGTheFullTrackVectorIsKept:
                 committed=lambda p: True,
             )
 
-    def test_may_send_also_checks_the_DISK_before_a_paid_run(self):
-        """The estimate is checked before the run, not discovered part way through it."""
+    def test_may_send_also_checks_the_RECORDER_and_the_DISK_before_a_paid_run(self):
+        """Both of item (g)'s gates are called from may_send, before anything is bought."""
         import ast
 
-        tree = ast.parse((Path(astrorun.__file__)).read_text())
+        tree = ast.parse(Path(astrorun.__file__).read_text())
         fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "may_send")
         called = {c.func.id for c in ast.walk(fn) if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)}
         assert "check_adapter_writes_full_vectors" in called, "item (g)'s recording check"
         assert "check_disk_for_full_vectors" in called, "item (g)'s disk check"
+
+    def test_the_two_track_counts_are_both_recorded_and_the_LARGER_is_estimated_on(self):
+        """Neither figure is measured from a paid response, so the estimate takes the larger.
+
+        371 x 29 is adapter v2's own note. 667 is the rna_seq row count of the real metadata, checked
+        here against the file. No cached answer on this machine records a gene axis, so there is
+        nothing to measure either against -- and underestimating the disk a paid run needs is the
+        direction that stops a run part way through.
+        """
+        meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
+        with open(meta_csv) as fh:
+            rna = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
+        assert len(rna) == astrorun.RNA_SEQ_TRACKS_IN_THE_METADATA, "read from the file, not remembered"
+        assert astrorun.ADAPTER_NOTE_TRACKS == 371
+        assert astrorun.ADAPTER_NOTE_ROWS == 29
+        assert max(371, len(rna)) == astrorun.OBSERVED_TRACKS_PER_ANSWER
+        assert "Neither" in astrorun.OBSERVED_SHAPE_SOURCE or "neither" in astrorun.OBSERVED_SHAPE_SOURCE
 
     def test_item_g_is_labelled_the_supervisors_and_not_alberts(self):
         """Like item (f): a refusal must not attribute to him a condition he did not state."""

@@ -1579,8 +1579,21 @@ def with_full_track_vectors(
     return out
 
 
-def named_track_values(axis: dict[str, Any], row_index: int) -> dict[str, float]:
-    """One gene row's vector as {track name: value}, refusing unless the lengths agree."""
+NAMES_ARE_NOT_UNIQUE = (
+    "track names do not identify a track. The real RNA-seq metadata carries 667 rows under 316 "
+    "distinct names, so {name: value} COLLAPSES 351 of them and returns a shorter answer than was "
+    "paid for, silently. Found by running the real recording path over the real metadata rather than "
+    "over a stub with tidy unique names -- the same lesson as the four cell lines, one level smaller. "
+    "So a row's values come back as PAIRS in column order, one per track, and the count is checked"
+)
+
+
+def named_track_values(axis: dict[str, Any], row_index: int) -> list[tuple[str, float]]:
+    """One gene row's vector as (track name, value) PAIRS in the response's own column order.
+
+    Pairs and not a mapping: see NAMES_ARE_NOT_UNIQUE. Refuses unless there is exactly one name per
+    value, so a short or re-ordered name list is a refusal rather than a quietly shorter answer.
+    """
     names = axis.get("track_names") or []
     if not names:
         raise VectorRefusedError(
@@ -1597,7 +1610,12 @@ def named_track_values(axis: dict[str, Any], row_index: int) -> dict[str, float]
                 f"tracks are gone. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
             )
         values = unpack_track_vector(entry["b64"], expected=len(names))
-        return dict(zip(names, values, strict=True))
+        pairs = list(zip(names, values, strict=True))
+        if len(pairs) != len(values):
+            raise VectorRefusedError(
+                f"{len(values)} values came back under {len(pairs)} names. {NAMES_ARE_NOT_UNIQUE}"
+            )
+        return pairs
     raise VectorRefusedError(f"the answer has no gene row {row_index}")
 
 
@@ -1686,52 +1704,132 @@ def check_disk_for_full_vectors(
     return est
 
 
-#: What one answer of the sweep carried, read from adapter v2's own note on the response it recorded:
-#: 29 gene-axis rows on a 371-track axis. Cited rather than assumed, and a test reads a cached sweep
-#: answer when one is on the machine so a drift in either number fails instead of passing quietly.
-OBSERVED_ROWS_PER_ANSWER = 29
-OBSERVED_TRACKS_PER_ANSWER = 371
+#: How big one answer's vector is, from the two figures that exist and NEITHER of which is measured
+#: from a paid response: no cached answer on this machine records a gene axis at all, so there is
+#: nothing here to check either number against.
+#:
+#:  - 371 tracks x 29 gene rows is adapter v2's own NOTE on the response it recorded;
+#:  - 667 is the number of rna_seq rows in data/cache/entex/alphagenome_track_metadata_copy.csv,
+#:    which is the track table the axis is drawn from.
+#:
+#: The estimate uses the LARGER, because underestimating the disk a paid run needs is the direction
+#: that stops a run part way through, and the smaller figure is a note rather than a measurement.
+ADAPTER_NOTE_TRACKS = 371
+ADAPTER_NOTE_ROWS = 29
+RNA_SEQ_TRACKS_IN_THE_METADATA = 667
+OBSERVED_ROWS_PER_ANSWER = ADAPTER_NOTE_ROWS
+OBSERVED_TRACKS_PER_ANSWER = max(ADAPTER_NOTE_TRACKS, RNA_SEQ_TRACKS_IN_THE_METADATA)
 OBSERVED_SHAPE_SOURCE = (
-    "adapter v2's own note on the response it recorded: 29 gene-axis rows x 371 tracks, ~12.6 KiB at "
-    "the SUMMARY level. The full vector is materially larger, which is why the estimate is computed "
-    "from the format and checked against the floor rather than assumed to be small"
+    "371 x 29 is adapter v2's own note on the response it recorded, at ~12.6 KiB for the SUMMARY "
+    "level; 667 is the rna_seq row count of the real track metadata the axis is drawn from. Neither "
+    "is measured from a paid response -- no cached answer here records a gene axis -- so the estimate "
+    "takes the larger and is computed from the format rather than assumed to be small. The first "
+    "answer of a real run settles it, and the figure is read from the answer rather than from this "
+    "constant once one exists"
 )
 
 
+EXISTENCE_BY_NAME_IS_NOT_A_CHECK = (
+    "the first version of this check read the recording path's SOURCE and passed if the key appeared "
+    "in it. ast.dump carries docstrings and every string constant, so a recorded_axis that merely "
+    "MENTIONED the key -- or called the writer in a branch that never runs -- passed. It refused "
+    "correctly only while the adapter was untouched; the day it passed would have been the day it "
+    "proved nothing, and that day was the day the adapter changed. That is existence-by-name, the "
+    "same class as the invented helper and the stub that substituted a dependency's existence, so "
+    "this check RUNS the real recording path and requires the values back out"
+)
+
+#: The response the check builds: an exact zero and a value BELOW the 0.05 the adapter would once have
+#: emitted at, because a probe whose values all clear a filter would pass a writer that filters.
+PROBE_VALUES = ((0.5, -0.25, 1.5), (0.0, 0.03, -3.25))
+PROBE_TRACKS = ("astrocyte", "K562", "brain cortex")
+
+
 def check_adapter_writes_full_vectors(module_name: str = ADAPTER_MODULE) -> dict[str, Any]:
-    """Refuse unless the adapter the runner writes through keeps each row's WHOLE track vector.
+    """Item (g): RUN the recording path and require every value back, named and equal.
 
-    Item (g). Checked on the module's SOURCE rather than by running it, because the thing that must be
-    true is that the recording path persists the vector -- and a stub response cannot show that: a stub
-    returns what the code asks for, and the code was asking for four cell lines.
+    Not a source check. See EXISTENCE_BY_NAME_IS_NOT_A_CHECK. A response is built here with known
+    values -- including an exact zero and a negative -- the module's own recorded_axis is called on
+    it, and the vector is read back through named_track_values and compared exactly. A writer that
+    kept four cell lines, thresholded, rounded or named its tracks wrongly fails on the values.
     """
-    import ast
-    import importlib.util
+    import importlib
 
-    spec = importlib.util.find_spec(module_name)
-    origin = getattr(spec, "origin", None) if spec is not None else None
-    if not origin or not Path(origin).exists():
+    try:
+        mod = importlib.import_module(module_name)
+    except ModuleNotFoundError as e:
         raise VectorRefusedError(
-            f"item (g): the adapter module {module_name} has no source file to read, so the runner "
-            f"cannot be shown to keep the full track vector. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+            f"item (g): the adapter module {module_name} is not importable ({e}), so the recording "
+            f"path cannot be shown to keep the full track vector. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        ) from e
+    recorder = getattr(mod, "recorded_axis", None)
+    if not callable(recorder):
+        raise VectorRefusedError(
+            f"item (g): {module_name} has no callable recorded_axis, so the gene-axis recording path "
+            f"is not where this check believes it is. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
         )
-    tree = ast.parse(Path(origin).read_text())
-    recorder = next(
-        (n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "recorded_axis"),
-        None,
+    try:
+        import anndata
+        import numpy
+        import pandas
+    except ModuleNotFoundError as e:  # a check that cannot run REFUSES; it does not pass
+        raise VectorRefusedError(
+            f"item (g): {e.name} is not installed, so the recording path cannot be exercised. A check "
+            f"that cannot run must refuse: a 'not checked' that reads as a pass is worse than none. "
+            f"{EXISTENCE_BY_NAME_IS_NOT_A_CHECK}"
+        ) from e
+
+    rows, tracks = len(PROBE_VALUES), len(PROBE_TRACKS)
+    var = pandas.DataFrame(
+        {"biosample_name": list(PROBE_TRACKS), "gtex_tissue": [""] * tracks},
+        index=[f"t{i}" for i in range(tracks)],
     )
-    if recorder is None:
+    obs = pandas.DataFrame(
+        {
+            "gene_id": [f"ENSG{i}" for i in range(rows)],
+            "gene_name": [f"G{i}" for i in range(rows)],
+            "strand": ["+"] * rows,
+        },
+        index=[f"ENSG{i}" for i in range(rows)],
+    )
+    # float64 so the probe's values are the response's values exactly: a float32 X would come back
+    # close rather than equal, and this check must not teach itself to accept close.
+    matrix = numpy.array([[float(v) for v in row] for row in PROBE_VALUES], dtype="float64")
+    adata = anndata.AnnData(X=matrix, obs=obs, var=var)
+    try:
+        axis = recorder(0, adata, list(PROBE_TRACKS), 0.0)
+    except Exception as e:  # noqa: BLE001 - any failure here is a refusal, never a pass
         raise VectorRefusedError(
-            f"item (g): {module_name} has no recorded_axis, so the gene-axis recording path is not "
-            f"where this check believes it is. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
-        )
-    body = ast.dump(recorder)
-    keeps = FULL_VECTOR_KEY in body or "with_full_track_vectors" in body
-    if not keeps:
-        raise VectorRefusedError(
-            f"item (g): {module_name}.recorded_axis keeps CELL_TRACKS only and writes no "
-            f"{FULL_VECTOR_KEY}, so for 1,232 astrocyte elements every brain-tissue track would be "
-            f"bought and discarded. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}. "
-            f"{WIDENING_IS_FREE_ONLY_BEFORE_THE_RESPONSE_ARRIVES}"
-        )
-    return {"module": module_name, "recorded_axis_keeps_the_full_vector": True}
+            f"item (g): {module_name}.recorded_axis raised on a response built for this check ({e!r}), "
+            f"so it cannot be shown to keep the full vector. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        ) from e
+
+    for gi, wanted in enumerate(PROBE_VALUES):
+        try:
+            pairs = named_track_values(axis, gi)
+        except VectorRefusedError as e:
+            raise VectorRefusedError(
+                f"item (g): {module_name}.recorded_axis keeps CELL_TRACKS only and does not write the "
+                f"whole track vector ({e}), so for 1,232 astrocyte elements every brain-tissue track "
+                f"would be bought and discarded. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}. "
+                f"{WIDENING_IS_FREE_ONLY_BEFORE_THE_RESPONSE_ARRIVES}"
+            ) from e
+        got_names = [n for n, _ in pairs]
+        got_values = [v for _, v in pairs]
+        if got_names != list(PROBE_TRACKS):
+            raise VectorRefusedError(
+                f"item (g): the recorded names {got_names} are not the response's own track order "
+                f"{list(PROBE_TRACKS)}, so a named value is not that track's value"
+            )
+        if got_values != [float(v) for v in wanted]:
+            raise VectorRefusedError(
+                f"item (g): gene row {gi} came back as {got_values} and the response carried "
+                f"{list(wanted)}. A thresholded, rounded or partial vector is not what was paid for"
+            )
+    return {
+        "module": module_name,
+        "recorded_axis_keeps_the_full_vector": True,
+        "probe_rows": rows,
+        "probe_tracks": tracks,
+        "how": "the recording path was RUN and every value came back named and equal",
+    }

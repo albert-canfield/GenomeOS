@@ -302,7 +302,43 @@ def test_every_recorded_field_is_a_column_of_the_response_and_none_is_invented(s
     assert axis["fields"] == [str(c) for c in obs_columns]
     for row in axis["rows"]:
         extra = set(row) - set(axis["fields"])
-        assert extra == {"row", "obs_index", "tracks_total", "values_emitted", "cell_values"}
+        # `track_vector` joined this set with item (g): the row's WHOLE value vector in the response's
+        # own column order. It is not a column of the obs axis and is not claimed to be -- it is the
+        # var axis's values for this row, which the per-cell multisets kept only four cell lines of.
+        assert extra == {
+            "row",
+            "obs_index",
+            "tracks_total",
+            "values_emitted",
+            "cell_values",
+            "track_vector",
+        }
+
+
+def test_the_whole_track_vector_is_kept_for_every_row_and_equals_the_response(stub_alphagenome, tmp_path):
+    """Item (g), checked against the response this stub actually carries, value by value.
+
+    Before it, the record kept each row's values for K562, HepG2, GM12878 and IMR-90 and discarded the
+    rest of the axis. On an astrocyte screen that is the brain tracks bought and thrown away, and paid
+    data cannot be re-fetched for free.
+    """
+    from genomeos.attribution import astrorun
+
+    q = _frozen_quantities(new, responses())
+    axis = q["_model"]["gene_axis_outputs"][0]
+    response = responses()[0]
+    tissues = list(axis["track_names"])
+    assert len(tissues) == axis["tracks_total"]
+    assert len(axis["tracks_sha256"]) == 64
+    for row in axis["rows"]:
+        pairs = astrorun.named_track_values(axis, row["row"])
+        assert [n for n, _ in pairs] == tissues, "the response's own column order"
+        assert [v for _, v in pairs] == [float(response.X[row["row"], ti]) for ti in range(len(tissues))], (
+            "equal by value: this is what was paid for"
+        )
+    # and the exact zero the effects drop is present here
+    row0 = astrorun.named_track_values(axis, 0)
+    assert 0.0 in [v for _, v in row0]
 
 
 def test_a_cells_whole_multiset_is_kept_including_the_exact_zero(stub_alphagenome, tmp_path):
