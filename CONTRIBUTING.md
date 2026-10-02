@@ -264,6 +264,19 @@ pointed at a five-hour-old file from another lane. Note that the hook's "this no
 does not repeat" keys on the exact command text, so adding `--force` makes a new call
 and the notice fires once more; re-send that text unchanged too.
 
+## Kill by PID; never `pkill -f` in this checkout (2026-10-02)
+
+`-f` matches the whole command line of **every process on the machine**, so a pattern
+meant for your own job reaches every session's. One `pkill -f "scripts/check.sh"` killed
+the check inside another session's push worktree; the push then reported red with pytest
+already green, because `bio test` lost its working directory when pre-push tore the
+worktree down. Earlier the same night a `pgrep -f check.sh` waiter matched its own shell
+and nine waiters waited on each other.
+
+Kill a background job by its **own PID**. If a pattern is unavoidable, anchor it to the
+start of the command line (`pgrep -f '^bash scripts/check.sh'`) and make it specific
+enough that no peer's process can match.
+
 ## A new guard is shown to fire before it is trusted (2026-10-02)
 
 Plant something that **must** trip the check and something that **must not**, confirm

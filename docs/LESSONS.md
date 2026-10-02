@@ -1023,3 +1023,46 @@ a second definition appears — `tests/test_code_cleanliness_shared.py` fails if
 under `scripts/` or `genomeos/` defines its own `counting_path` or `code_cleanliness`.
 A re-export keeps a name that other writers already reach through; a `def` is a second
 implementation, and a second implementation is drift waiting to happen.
+
+## `pkill -f` and `pgrep -f` match every session on the machine (2026-10-02)
+
+Twice, five hours apart, an unanchored pattern reached work that was not its own.
+
+**First, a waiter that matched itself.** A loop waiting for a check to finish used
+`pgrep -f check.sh`, which matched the waiting shell's own command line. Nine waiters
+each saw "a check is running" — themselves — and waited on one another. A lane was
+blocked about twenty minutes. Fixed by anchoring: `pgrep -f '^bash scripts/check.sh'`.
+
+**Then a kill that reached a peer's push.** A lane ran, meaning to stop one stale
+background check of its own:
+
+```
+pkill -f "scripts/check.sh" ; pkill -f "pytest -q"
+```
+
+Three `check.sh` runs were live in this checkout. One was inside another session's
+pre-push worktree. Killing it made `pre-push.sh`'s subshell return non-zero, pre-push
+removed the worktree immediately, and `bio test` — a child of the killed `check.sh`,
+still running — lost its working directory. That push reported **red** with pytest
+already **green at 3,485 passed**: the failure was an absent path under TMPDIR and then
+a *relative* path to a tracked, present file, which is what a deleted working directory
+looks like from inside.
+
+**The rule.** Kill a background job by its own **PID**. Where a pattern is unavoidable,
+anchor it to the start of the command line and make it specific enough that no other
+session's process can match. `-f` matches the whole command line of every process on the
+machine, including the one doing the matching.
+
+**Two things this also teaches about reading a failure.** The push's own log was enough
+to tell it was not a test failure: pytest had completed, and the error was in a later
+leg, on a path that cannot go missing. And the lane that caused it volunteered the fact
+unprompted, which is the only reason it was diagnosed at all rather than filed as an
+intermittent `bio test` fault — the worst outcome, because an unexplained intermittent
+failure teaches everyone to re-run and ignore.
+
+**A mechanism is owed and not yet built.** `pre-push.sh` removes its worktree the
+instant the check returns non-zero, without waiting for the check's children. That is
+what turned one stray kill into a confusing failure rather than a clean one, and the
+cleanup should wait. A guard in the shared-checkout hook refusing an unanchored
+`pkill -f` is requested but not written: hooks are the owner's.
+
