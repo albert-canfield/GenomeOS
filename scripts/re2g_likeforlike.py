@@ -35,6 +35,19 @@ from genomeos.results import save_result  # noqa: E402
 RESULT = "re2g_likeforlike"
 MODEL = "dnase + distance + deletion"
 BASELINE = "dnase + distance"
+#: The only population `re2g.SECOND_REGISTRATION` registers. Every other population in this result is
+#: descriptive context and carries NO reading word: a registered reading on a descriptive arm gets lifted
+#: as a finding, which is the overstatement this whole lane exists to have withdrawn.
+REGISTERED_POPULATIONS = ("primary_k562",)
+DESCRIPTIVE = (
+    "no registered reading: descriptive context in re2g.SECOND_REGISTRATION, not a registered population"
+)
+#: Why the baseline arm's reading may stand: it is in the registration code, with its own reading, before
+#: any figure of it existed. It is a pre-specified secondary arm, not a post-hoc one.
+BASELINE_LABEL = (
+    "pre-specified secondary arm, registered in code at bdba855 within the registered K562 population, "
+    "before any figure of it existed"
+)
 
 
 def _paired_module() -> Any:
@@ -116,12 +129,19 @@ def main() -> None:
         }
         delta["ours_auprc"] = crispri.bench_metrics([ours[i] for i in idx], rows, weighted=True)["auprc"]
         delta["re2g_auprc"] = crispri.bench_metrics([theirs[i] for i in idx], rows, weighted=True)["auprc"]
+        registered = name in REGISTERED_POPULATIONS
         delta["dnase_plus_distance_alone"] = {
             "auprc": crispri.bench_metrics([base[i] for i in idx], rows, weighted=True)["auprc"],
             "delta_auprc": baseline["delta_auprc"],
             "ci95": baseline["ci95"],
-            "reading": baseline["reading"],
+            "reading": baseline["reading"] if registered else None,
+            "label": BASELINE_LABEL if registered else DESCRIPTIVE,
         }
+        # A descriptive population keeps its point estimate and its interval and loses the reading word.
+        delta["registered_population"] = registered
+        if not registered:
+            delta["reading"] = None
+            delta["descriptive"] = DESCRIPTIVE
         delta["deletion_features_share"] = round(
             (delta["delta_auprc"] or 0) - (baseline["delta_auprc"] or 0), 4
         )
@@ -172,7 +192,20 @@ def main() -> None:
             ),
         },
         "paired_delta": out,
-        "reading": {name: out[name]["reading"] for name in populations if out[name].get("reading")},
+        # The registered population only. A descriptive arm's figure lives in paired_delta and is not a
+        # reading, so it cannot be quoted from here as one.
+        "reading": {
+            name: out[name]["reading"] for name in REGISTERED_POPULATIONS if out.get(name, {}).get("reading")
+        },
+        "registered_populations": list(REGISTERED_POPULATIONS),
+        "descriptive_populations": [n for n in populations if n not in REGISTERED_POPULATIONS],
+        "why_descriptive_arms_carry_no_reading": (
+            "a registered reading word on a descriptive arm is lifted as a finding. The pooled arm of "
+            "this comparison previously carried 'ranks better than ENCODE-rE2G on these pairs' three "
+            "lines below a primary reading 'no difference detected', which is the overstatement this "
+            "lane exists to have withdrawn. Only the output labels changed when this was fixed: no "
+            "number moved, no threshold moved, and the analysis is the same one"
+        ),
         "reading_must_travel_with": {
             "lower_bound": f"the K562 primary interval's lower bound is {primary['ci95'][0]}, unrounded",
             "the_comparator_is_a_reconstruction": (

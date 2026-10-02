@@ -189,3 +189,112 @@ def test_the_like_for_like_result_leads_with_its_own_binding_outcome():
     notice = payload["read_this_first"]
     assert "THE BINDING RESULT OF THIS LANE" in notice
     assert payload["paired_delta"]["primary_k562"]["reading"] in notice
+
+
+# --- no registered reading word on an unregistered population ---------------------------------------
+
+READING_WORDS = ("ranks better than ENCODE-rE2G on these pairs", "no difference detected", "ranks worse")
+
+
+def _likeforlike_module():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "re2g_likeforlike", ROOT / "scripts" / "re2g_likeforlike.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _results_with_registered_sets():
+    """Each committed result of this lane with the registered population set taken FROM CODE.
+
+    The set is not read out of the result file: a result that simply omits the field would otherwise
+    excuse itself, which is exactly how the breach this guards against survived one review.
+    """
+    import json
+
+    from genomeos.attribution import re2g
+
+    registered = {
+        # re2g.POPULATIONS registers all three, each with its own `why`.
+        "re2g_paired": ("primary_k562", "secondary_pooled", "gm12878"),
+        # re2g.SECOND_REGISTRATION registers the K562 primary and nothing else.
+        "re2g_likeforlike": tuple(_likeforlike_module().REGISTERED_POPULATIONS),
+    }
+    assert set(re2g.POPULATIONS) == {"primary", "secondary", "gm12878"}
+    out = []
+    for name, names in registered.items():
+        path = ROOT / "data/results" / f"{name}.json"
+        if not path.is_file():
+            continue
+        payload = json.loads(path.read_text())
+        if "paired_delta" in payload:
+            out.append((name, payload, names))
+    return out
+
+
+def test_only_a_registered_population_carries_a_reading_word():
+    """General over whatever populations a result has, so a new descriptive arm cannot reintroduce this.
+
+    A descriptive arm carrying "ranks better than ENCODE-rE2G on these pairs" gets lifted as a finding.
+    It happened once in re2g_likeforlike.json, three lines below a primary reading "no difference
+    detected", and this is what fails if it happens again. The registered set comes from code, so
+    omitting the field in the result is not a way to pass.
+    """
+    results = _results_with_registered_sets()
+    if not results:
+        pytest.skip("no result of this lane has been generated in this checkout")
+    for name, payload, registered in results:
+        for population, block in payload["paired_delta"].items():
+            if not isinstance(block, dict) or "delta_auprc" not in block:
+                continue
+            if population in registered:
+                continue
+            assert block.get("reading") is None, (
+                f"{name}: descriptive population {population!r} carries a reading word "
+                f"{block.get('reading')!r}"
+            )
+            assert block.get("descriptive"), f"{name}: {population!r} is not labelled descriptive"
+            arm = block.get("dnase_plus_distance_alone") or {}
+            assert arm.get("reading") is None, (
+                f"{name}: descriptive population {population!r} has an arm carrying a reading word"
+            )
+
+
+def test_the_top_level_reading_block_holds_the_registered_population_only():
+    for name, payload, registered in _results_with_registered_sets():
+        assert set(payload["reading"]) <= set(registered), name
+        for population in payload["paired_delta"]:
+            if population not in registered:
+                assert population not in payload["reading"], (
+                    f"{name}: descriptive {population!r} is in the reading block"
+                )
+
+
+def test_a_descriptive_arm_keeps_its_estimate_and_interval_and_loses_only_the_word():
+    """The fix is a labelling fix: the figures stay so a reader can still see them."""
+    for name, payload, registered in _results_with_registered_sets():
+        for population, block in payload["paired_delta"].items():
+            if population in registered or not isinstance(block, dict):
+                continue
+            if "delta_auprc" not in block:
+                continue
+            assert block["delta_auprc"] is not None, f"{name}: {population!r} lost its point estimate"
+            assert "ci95" in block, f"{name}: {population!r} lost its interval field"
+
+
+def test_the_baseline_arm_on_the_registered_population_is_labelled_pre_specified_not_post_hoc():
+    """It is in the registration code with its own reading before any figure of it existed."""
+    import json
+
+    path = ROOT / "data/results/re2g_likeforlike.json"
+    if not path.is_file():
+        pytest.skip("re2g_likeforlike.json has not been generated in this checkout")
+    payload = json.loads(path.read_text())
+    arm = payload["paired_delta"]["primary_k562"]["dnase_plus_distance_alone"]
+    assert "pre-specified secondary arm" in arm["label"]
+    assert "post hoc" not in arm["label"].lower()
+    assert arm["reading"] in READING_WORDS
