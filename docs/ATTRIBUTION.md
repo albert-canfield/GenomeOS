@@ -13772,6 +13772,88 @@ running, which put a lint error on `dev` and blocked every session's push until 
 ran. Neither was a knowledge gap; both were an ordering gap. The rule taken from it is an order, not a
 check: the full check goes green **before** the commit, not beside it.
 
+## Every compiled rule's cell context now carries chromatin evidence, or a label saying why it has none (2026-10-02, lane-context2)
+
+R1 of the external review made every compiled rule gate on the cell it was measured or predicted in,
+as an executable `when: cell_type = ...`. That cell is **asserted**: it is the tissue of the winning
+AlphaGenome track from `predict_target`, or the cell a CRISPRi screen silenced in, and nothing in the
+compiler ever asked whether the element is open in that cell at all. Reader v1 has held the chromatin
+since 2026-09-14 — ENCODE DNase-seq narrowPeak sets for thirteen biosamples, genome-wide — and the two
+readings had never been put side by side. They are now: every rule carries `context_evidence:`, and
+the state is added beside the rule rather than replacing anything.
+
+**The states are named by the measurement, never by a verdict.** `open_in_reader` where the element's
+locus overlaps a DNase narrowPeak of the reader biosample the rule's cell maps to; `not_open_in_reader`
+where that biosample was read over the locus and called no peak on it; `not_assessable` where no
+reading could be taken. A test fails if any of those names, or either reason below, picks up a stem
+such as support, contradict, validate or confirm. `not_open_in_reader` is **not closed**: a narrowPeak
+file is a call set, so absence there is absence of a call, and the locus may be shut, may be open below
+what that experiment could call, or may be open in a state of the cell the experiment did not sample.
+
+**`not_assessable` is split in two**, because a never-looked state and a measured one are different
+outputs. `no_reader_for_this_cell` is the never-looked one. `region_outside_measured_span` is the
+measured one: the cell does have a reader, but that biosample's peak file for the chromosome covers
+nothing at the locus — no file, no peak in it, or a locus beyond its outermost peak. A female line's
+chrY, where the cached file carries three peaks over the whole chromosome, reads as the second.
+
+**The cell is mapped by ontology term through a registered table, never by comparing names.** A rule's
+cell label is the identifier form of an AlphaGenome track's biosample name, or of the GTEx tissue a
+track names, and AlphaGenome's own track metadata — already on disk — gives each of those names its
+`ontology_curie`. A test checks every one of the thirteen reader biosamples against that metadata, so
+the hand-written table cannot drift from the authority it copies. The mapping is not the one a string
+comparison would have made: `testis` and `Testis` are one reader between them, as are `ovary` and
+`Ovary`, because each pair is one UBERON term, while `foreskin_keratinocyte` reaches no reader at all,
+being CL:1001606 against the reader's CL:0000312.
+
+**No cut-off was introduced.** The openness call is reader v1's registered evidence unchanged, the
+released ENCODE DNase-seq narrowPeak set as the reader loads it, applied to the element's own interval
+— the element-level call the gene-level closure test has used since it was written. Nothing in the
+module reads a signal value, and a test asserts its source carries no comparison against one.
+
+**The counts, over every one of the 440,589 compiled rules.** The denominator is the rules the compiler
+emits, counted from the compiled text of all 24 chromosomes: 440,589, exactly the figure
+`when_census.json` has carried since 2026-09-28, neither side adjusted to the other.
+
+| state | rules | share of all 440,589 |
+| --- | --- | --- |
+| `open_in_reader` | 26,551 | 6.03% |
+| `not_open_in_reader` | 55,084 | 12.50% |
+| `not_assessable`, `no_reader_for_this_cell` | 358,949 | 81.47% |
+| `not_assessable`, `region_outside_measured_span` | 5 | 0.00% |
+
+Among the 81,635 rules where a reading could be taken, 0.3252 are open: **the element is not detected
+open in the very cell the rule asserts in about two of every three of them.** Per biosample, open
+against not-open: K562 8,081 against 19,364; CD14-positive monocyte 6,456 against 9,084; HepG2 5,301
+against 9,478; GM12878 1,627 against 4,779; keratinocyte 1,487 against 3,872; IMR-90 1,130 against
+1,812; H1 1,042 against 2,705; cardiac muscle cell 561 against 1,304; testis 507 against 1,645; ovary
+136 against 467; SK-N-SH 83 against 264; hepatocyte 75 against 166; astrocyte 65 against 144. Each
+cell is reported separately: a share pooled over a cell with 27,445 rules and a cell with 209 would be
+the first one's share. No interval is reported anywhere, because these are exhaustive counts over
+every compiled rule and not an estimate from a sample.
+
+**What the mapping could not map: nothing.** The compiled rules name 317 distinct cell labels and all
+317 resolved to exactly one ontology term — none ambiguous, none without a term. 15 of the 317 carry a
+term that is one of the thirteen biosamples reader v1 read; 302 do not, and those 302 hold the 358,949
+rules with no reader, led by placenta with 14,275, whole blood with 11,325, psoas muscle with 10,222
+and small intestine with 10,006. The shortfall is not a failure of the mapping but the shape of reader
+v1: thirteen biosamples against 317 asserted cells.
+
+**The weakness, stated rather than buried.** Reader v1's openness comes from ENCODE DNase and histone
+peaks, and AlphaGenome was trained on ENCODE. `open_in_reader` is therefore **a consistency check
+between two readings of the same chromatin and never independent evidence that a rule is right**. It
+must never be quoted as validation. The informative direction is the other one: a `not_open_in_reader`
+rule is a *located candidate defect*, a place where the program asserts activity in a cell whose own
+chromatin, read directly, shows no open element there.
+
+**What moved.** Honest: an asserted cell context is now either evidenced or labelled. Correct, in the
+second direction only: 55,084 located candidate defects where there were none before. Complete did not
+move at all — no rule was added, none removed, no verdict changed, nothing deleted, and no base of the
+genome became attributed that was not attributed before. `Rule.applies` does not read the new field, so
+a rule whose element is not detected open still fires in its own cell and in no other.
+
+Registered first in `data/results/context_evidence_registration.json`; counted in
+`data/results/context_evidence.json`; 0 model requests and no money, every input already on disk.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
