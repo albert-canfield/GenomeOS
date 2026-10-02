@@ -23,6 +23,7 @@ import pytest
 from genomeos.attribution import direction_v2 as dv
 from genomeos.attribution import respmap_v2 as rv
 from genomeos.predict import enhancer_target as et
+from tests.committed_data import must_be_committed
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_RELATIVE = "data/results/response_map_increment2.json"
@@ -209,23 +210,10 @@ def carriers_from_nowhere(
     return sorted(c for c in carriers if not is_the_v2_result(c) and not descends(c, frozenset()))
 
 
-def must_be_committed(relative: str) -> Path:
-    """The path, or an AssertionError. A committed result's absence is a defect, not a difference."""
-    path = ROOT / relative
-    tracked = (
-        subprocess.run(
-            ["git", "ls-files", "--error-unmatch", relative], cwd=ROOT, capture_output=True
-        ).returncode
-        == 0
-    )
-    if not path.exists():
-        raise AssertionError(
-            f"{relative} is absent from this checkout and git tracks it: {tracked}. {ABSENCE_IS_A_DEFECT}"
-        )
-    assert tracked, (
-        f"{relative} is present but git does not track it, so nothing fixes it. {ABSENCE_IS_A_DEFECT}"
-    )
-    return path
+# `must_be_committed` was written here at 4f44dbf and is now `tests/committed_data.py`, MOVED rather
+# than copied: 55 skip guards across 30 test files stood on paths git tracks, so a second copy of the
+# rule would have been the defect the rule is about. The local `ABSENCE_IS_A_DEFECT` above is kept
+# because it names the three guards THIS file converted; the shared module carries the general form.
 
 
 def test_no_committed_result_carried_a_v2_class_when_the_emitter_was_built() -> None:

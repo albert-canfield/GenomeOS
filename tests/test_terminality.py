@@ -16,11 +16,22 @@ import pytest
 
 from genomeos.organism import terminality as tg
 from genomeos.organism.reference import ReferenceLineage
+from tests.committed_data import committed, must_be_committed
 
-REF = Path("data/results/celegans_lineage_cells.json")
-RESULT = Path("data/results/celegans_terminality.json")
+REF_RELATIVE = "data/results/celegans_lineage_cells.json"
+REF = Path(REF_RELATIVE)
+RESULT_RELATIVE = "data/results/celegans_terminality.json"
+RESULT = Path(RESULT_RELATIVE)
 
-pytestmark = pytest.mark.skipif(not REF.exists(), reason="the distilled reference lineage is not present")
+
+@pytest.fixture(autouse=True)
+def _the_reference_lineage_is_committed() -> None:
+    """Every test here reads the distilled reference lineage, and git tracks it, so absence FAILS.
+
+    An autouse fixture rather than a `pytestmark`: a mark whose job is to fail would fail the
+    collection of the whole module, which says less than a named failure per test that needs it.
+    """
+    must_be_committed(REF_RELATIVE)
 
 
 @pytest.fixture(scope="module")
@@ -139,7 +150,7 @@ def test_grandparent_folds_split_sisters(ref: ReferenceLineage) -> None:
     assert sisters > 100
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the terminality result has not been run here")
+@committed(RESULT_RELATIVE)
 def test_the_result_file_accounts_for_every_cell() -> None:
     """V2, pinned on the committed result: every arm calls all 1,326 cells."""
     d = json.loads(RESULT.read_text())

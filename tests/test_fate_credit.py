@@ -18,8 +18,10 @@ from genomeos.organism import fate_rules as fr
 from genomeos.organism.reference import ReferenceLineage
 from genomeos.runtime.body import Body
 from scripts.celegans_fate_credit import credit
+from tests.committed_data import committed
 
-RESULT = Path("data/results/celegans_fate_credit.json")
+RESULT_RELATIVE = "data/results/celegans_fate_credit.json"
+RESULT = Path(RESULT_RELATIVE)
 ORG = Path("data/organisms/celegans")
 
 
@@ -110,7 +112,7 @@ def test_the_factor_rules_cannot_fire_before_the_lookup_has_written_a_fate():
             assert any(d.startswith("factor_fate_") for d in cell.fired)  # every error is the factors'
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_credit.py")
+@committed(RESULT_RELATIVE)
 def test_the_ladder_and_its_denominators():
     r = json.loads(RESULT.read_text())
     ladder = r["answer"]["ladder"]
@@ -140,7 +142,7 @@ def test_the_ladder_and_its_denominators():
     assert cited["honest"] > null["right_mean"] + 2 * null["right_sd"]
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_credit.py")
+@committed(RESULT_RELATIVE)
 def test_the_terminality_gate_is_measured_and_not_asserted():
     """The deepest borrowing: with the lookup's 555 fate decisions deleted the rules are never even asked,
     and when the guard is opened so that they can be, they call terminality wrong more often than right."""
@@ -155,7 +157,7 @@ def test_the_terminality_gate_is_measured_and_not_asserted():
     assert opened["honest_of_555"] < r["arms"]["cited only, nothing fitted"]["honest"] / 3
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_credit.py")
+@committed(RESULT_RELATIVE)
 def test_the_pre_registration_was_not_rewritten_to_match_the_run():
     """Three of the seven predictions broke. The discipline is that the docstring keeps the numbers it was
     committed with (e2defff, before the instrument had been run) and the result file records what happened,

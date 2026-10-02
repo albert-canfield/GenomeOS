@@ -19,10 +19,22 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-RESULT = ROOT / "data/results/target_calibration.json"
+from tests.committed_data import must_be_committed
 
-pytestmark = pytest.mark.skipif(not RESULT.exists(), reason="the calibration sweep has not been run here")
+ROOT = Path(__file__).resolve().parents[1]
+RESULT_RELATIVE = "data/results/target_calibration.json"
+RESULT = ROOT / RESULT_RELATIVE
+
+
+@pytest.fixture(autouse=True)
+def _the_calibration_sweep_is_committed() -> None:
+    """Every identity here is read out of the committed sweep, so its absence FAILS and never skips.
+
+    "the calibration sweep has not been run here" was never true of this checkout: git tracks the
+    result, so the only way it is absent is that something deleted or corrupted it -- which is the
+    one case these identities exist to catch, and the one case a skip hid.
+    """
+    must_be_committed(RESULT_RELATIVE)
 
 
 def genome_wide() -> dict:

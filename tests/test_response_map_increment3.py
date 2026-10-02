@@ -12,9 +12,11 @@ import pytest
 from genomeos.attribution import cell2
 from genomeos.attribution import measured as ms
 from genomeos.attribution import targets as tg
+from tests.committed_data import must_be_committed
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULT = ROOT / "data/results/response_map_increment3_count.json"
+RESULT_RELATIVE = "data/results/response_map_increment3_count.json"
+RESULT = ROOT / RESULT_RELATIVE
 
 
 def _load(name: str, path: str):
@@ -178,13 +180,12 @@ def test_increment_2s_limit_is_carried_word_for_word(count):
 
 @pytest.fixture(scope="module")
 def payload():
-    if not RESULT.exists():
-        pytest.skip("the genome-wide count has not been run here")
-    with RESULT.open() as fh:
+    # "has not been run here" was never true of this checkout: git tracks the count, so absence is
+    # a defect and fails naming the path.
+    with must_be_committed(RESULT_RELATIVE).open() as fh:
         return json.load(fh)
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the genome-wide count has not been run here")
 class TestTheCommittedCount:
     def test_it_reproduces_the_110_increment_2_committed(self, payload):
         assert payload["reconciliation"]["holds"] is True

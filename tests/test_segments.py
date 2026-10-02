@@ -1,14 +1,14 @@
 from pathlib import Path
 
-import pytest
-
 from genomeos.genome.segments import SegmentParser, codon_log_odds
 from genomeos.genome.signals import SignalSet
+from tests.committed_data import committed
 
-SIGNALS = Path("data/results/signals_chr21.json")
+SIGNALS_RELATIVE = "data/results/signals_chr21.json"
+SIGNALS = Path(SIGNALS_RELATIVE)
 
 
-@pytest.mark.skipif(not SIGNALS.exists(), reason="needs the learned chr21 signals")
+@committed(SIGNALS_RELATIVE)
 def test_parser_recovers_a_two_exon_gene_built_from_the_consensus_signals():
     sig = SignalSet.load(SIGNALS)
     d, a, k = sig.pwms["splice_donor"], sig.pwms["splice_acceptor"], sig.pwms["start_kozak"]

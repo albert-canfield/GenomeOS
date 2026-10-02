@@ -3,11 +3,11 @@
 
 from pathlib import Path
 
-import pytest
-
 from genomeos.runtime.sbml import SbmlModel, SbmlRuntime, compile_math
+from tests.committed_data import committed
 
-MODEL = Path("data/models/BIOMD0000000012.xml")
+MODEL_RELATIVE = "data/models/BIOMD0000000012.xml"
+MODEL = Path(MODEL_RELATIVE)
 
 
 def test_mathml_evaluator():
@@ -25,7 +25,7 @@ def test_mathml_evaluator():
     assert abs(compile_math(e)({}) - 1e-3) < 1e-12
 
 
-@pytest.mark.skipif(not MODEL.exists(), reason="download BIOMD0000000012 first")
+@committed(MODEL_RELATIVE)
 def test_biomodels_repressilator_oscillates():
     model = SbmlModel.from_file(MODEL)
     assert model.name.startswith("Elowitz2000")

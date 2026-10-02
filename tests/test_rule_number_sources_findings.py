@@ -11,13 +11,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from genomeos.lang import rule_number_sources as rns
 from genomeos.lang import rule_number_sources_findings as rnf
+from tests.committed_data import committed
 
 REGISTRATION = Path("data/results/rule_number_sources_registration.json")
-CENSUS = Path("data/results/rule_number_sources_census.json")
+CENSUS_RELATIVE = "data/results/rule_number_sources_census.json"
+CENSUS = Path(CENSUS_RELATIVE)
 
 
 def test_the_filled_table_covers_every_slot_and_leaves_the_registered_one_empty():
@@ -96,7 +96,7 @@ def test_the_verdict_states_the_count_and_claims_no_measurement():
     assert "No number in the program was changed." in rnf.VERDICT
 
 
-@pytest.mark.skipif(not CENSUS.exists(), reason="census not written yet")
+@committed(CENSUS_RELATIVE)
 def test_the_written_census_matches_the_findings_module():
     d = json.loads(CENSUS.read_text())
     assert d["counts"] == rnf.counts()

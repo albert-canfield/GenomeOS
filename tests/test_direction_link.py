@@ -12,8 +12,10 @@ from genomeos.attribution import cell2, fresh
 from genomeos.attribution import direction_link as dl
 from genomeos.attribution import increases as inc
 from genomeos.attribution import repress2 as rp
+from tests.committed_data import committed
 
-REGISTRATION = Path("data/results/direction_link_registration.json")
+REGISTRATION_RELATIVE = "data/results/direction_link_registration.json"
+REGISTRATION = Path(REGISTRATION_RELATIVE)
 
 
 # ---- the floors and the locus convention are imported, never chosen here -------------------------
@@ -388,7 +390,7 @@ def test_what_the_result_cannot_establish_is_its_own_section():
 # ---- the committed registration -----------------------------------------------------------------
 
 
-@pytest.mark.skipif(not REGISTRATION.exists(), reason="the registration has not been written")
+@committed(REGISTRATION_RELATIVE)
 def test_the_committed_registration_carries_what_the_run_may_not_move():
     r = json.loads(REGISTRATION.read_text())
     assert r["result"] == "direction_link_registration" and r["lane"] == "lane-direction"
@@ -416,7 +418,7 @@ def test_the_committed_registration_carries_what_the_run_may_not_move():
     assert r["what_the_run_will_write"] == "data/results/direction_link.json"
 
 
-@pytest.mark.skipif(not REGISTRATION.exists(), reason="the registration has not been written")
+@committed(REGISTRATION_RELATIVE)
 def test_the_registration_declares_the_cache_group_with_every_member_named():
     r = json.loads(REGISTRATION.read_text())
     groups = [e for e in r["result_manifest"]["inputs"] if e.get("path") == "per_element_response_cache"]
@@ -486,10 +488,11 @@ def test_the_cache_reader_asks_for_nothing_when_nothing_is_wanted(tmp_path):
 
 # ---- the committed result -------------------------------------------------------------------------
 
-RESULT = Path("data/results/direction_link.json")
+RESULT_RELATIVE = "data/results/direction_link.json"
+RESULT = Path(RESULT_RELATIVE)
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+@committed(RESULT_RELATIVE)
 def test_the_committed_result_reconciles_with_the_population_it_follows_from():
     r = json.loads(RESULT.read_text())
     e = r["eligibility"]
@@ -502,7 +505,7 @@ def test_the_committed_result_reconciles_with_the_population_it_follows_from():
     assert e["by_arm_and_cell"]["increases"] == dl.INHERITED_FIGURES["increase_links_by_cell"]
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+@committed(RESULT_RELATIVE)
 def test_the_answerability_breakdown_is_exhaustive_at_its_own_denominator():
     a = json.loads(RESULT.read_text())["answerability"]
     assert a["cell_read"] == "K562"
@@ -515,7 +518,7 @@ def test_the_answerability_breakdown_is_exhaustive_at_its_own_denominator():
         assert b["answered"] + b["predicted_zero_excluded"] + b["absent"] == n
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+@committed(RESULT_RELATIVE)
 def test_no_cell_the_cache_does_not_carry_entered_any_denominator():
     a = json.loads(RESULT.read_text())["answerability"]
     out = a["unanswerable_because_the_cache_carries_no_such_cell"]
@@ -531,7 +534,7 @@ def test_no_cell_the_cache_does_not_carry_entered_any_denominator():
     assert a["links_in_another_cached_cell_not_read"]["by_arm_and_cell"]["decreases"] == {"GM12878": 4}
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+@committed(RESULT_RELATIVE)
 def test_the_gate_refused_the_comparison_and_nothing_was_computed_past_it():
     r = json.loads(RESULT.read_text())
     g = r["gate"]
@@ -553,7 +556,7 @@ def test_the_gate_refused_the_comparison_and_nothing_was_computed_past_it():
     assert c["statistics_not_computed"]
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+@committed(RESULT_RELATIVE)
 def test_the_result_carries_the_floors_the_locus_rule_and_what_it_cannot_establish():
     r = json.loads(RESULT.read_text())
     for arm in dl.ARMS:

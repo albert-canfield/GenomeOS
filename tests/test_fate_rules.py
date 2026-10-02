@@ -4,15 +4,16 @@ precedence over the observed lineage lookup in the Body."""
 import json
 from pathlib import Path
 
-import pytest
-
 from genomeos.lang import parse
 from genomeos.organism import fate_rules as fr
 from genomeos.organism.reference import ReferenceLineage
 from genomeos.runtime.body import Body
+from tests.committed_data import committed
 
-RESULT = Path("data/results/celegans_fate_rules.json")
-READS_RESULT = Path("data/results/celegans_fate_reads.json")
+RESULT_RELATIVE = "data/results/celegans_fate_rules.json"
+RESULT = Path(RESULT_RELATIVE)
+READS_RESULT_RELATIVE = "data/results/celegans_fate_reads.json"
+READS_RESULT = Path(READS_RESULT_RELATIVE)
 
 
 def _toy_ref() -> ReferenceLineage:
@@ -124,7 +125,7 @@ def test_runtime_features_threshold_the_read_the_body_gives_the_cell():
     assert fr.runtime_features(reads, "exposure", "cell", 1.0) == {"Ea": set(), "MSa": set()}
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fates.py")
+@committed(RESULT_RELATIVE)
 def test_distilled_fate_rules():
     r = json.loads(RESULT.read_text())
     tb = r["textbook"]
@@ -152,7 +153,7 @@ def test_distilled_fate_rules():
     assert not Path("data/organisms/celegans/exposure.bio").exists()
 
 
-@pytest.mark.skipif(not READS_RESULT.exists(), reason="run scripts/celegans_fate_reads.py")
+@committed(READS_RESULT_RELATIVE)
 def test_fate_rules_read_what_the_runtime_integrates():
     from genomeos.lang import parse_file
 

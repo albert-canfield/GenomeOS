@@ -5,12 +5,12 @@ import random
 from collections import Counter
 from pathlib import Path
 
-import pytest
-
 from genomeos.organism import commitment as cm
 from genomeos.organism import lateral
+from tests.committed_data import committed
 
-RESULT = Path("data/results/celegans_commitment.json")
+RESULT_RELATIVE = "data/results/celegans_commitment.json"
+RESULT = Path(RESULT_RELATIVE)
 
 
 def test_curveball_keeps_both_margins():
@@ -44,7 +44,7 @@ def test_lateral_inhibition_needs_noise_to_break_symmetry():
     assert 0.25 < stats["first_cell_win_share"] < 0.75  # the winner is chosen by the noise
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_commitment.py")
+@committed(RESULT_RELATIVE)
 def test_distilled_commitment_result():
     r = json.loads(RESULT.read_text())
     assert r["cells_with_complete_lifetimes"] > 700

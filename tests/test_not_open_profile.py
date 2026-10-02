@@ -19,14 +19,33 @@ from genomeos.attribution import context_evidence as ce
 from genomeos.attribution import executor as ex
 from genomeos.attribution import not_open_profile as prof
 from genomeos.predict.enhancer_target import STRONG_EFFECT
+from tests.committed_data import committed, must_be_committed
 
-CHR21 = Path("data/results/budget_chr21.json")
-CENSUS21 = Path("data/results/context_evidence_chr21.json")
-BASERATE = Path("data/results/context_evidence_baserate.json")
+CHR21_RELATIVE = "data/results/budget_chr21.json"
+CHR21 = Path(CHR21_RELATIVE)
+CENSUS21_RELATIVE = "data/results/context_evidence_chr21.json"
+CENSUS21 = Path(CENSUS21_RELATIVE)
+BASERATE_RELATIVE = "data/results/context_evidence_baserate.json"
+BASERATE = Path(BASERATE_RELATIVE)
+# A MIXED guard, SPLIT rather than converted whole. The condition named two paths of opposite
+# kinds: `data/results/budget_chr21.json`, which git TRACKS, and `ce.TRACK_METADATA`
+# (`data/cache/entex/alphagenome_track_metadata_copy.csv`), which git IGNORES. One skip reason
+# covered both, so a deleted committed budget was indistinguishable from a machine without the
+# track-metadata cache. The ignored half keeps its skip -- by name, as `tests/local_data.py`
+# requires -- and the tracked half FAILS.
 needs_chr21 = pytest.mark.skipif(
-    not (CHR21.exists() and ce.TRACK_METADATA.exists()),
-    reason="chr21's budget or the track metadata is not on this machine",
+    not ce.TRACK_METADATA.exists(),
+    reason=(
+        f"NOT RUN HERE, not passed: {ce.TRACK_METADATA} is git-ignored machine-local data and is "
+        f"absent from this checkout"
+    ),
 )
+
+
+@pytest.fixture(autouse=True)
+def _chr21s_budget_is_committed() -> None:
+    """The tracked half of the old mixed guard: git tracks chr21's budget, so its absence FAILS."""
+    must_be_committed(CHR21_RELATIVE)
 
 
 def test_the_bands_are_imported_and_not_restated():
@@ -84,7 +103,7 @@ def test_the_limitations_are_the_reading_s_own_words():
     assert "no verdict is moved" in lim["descriptive_only"]
 
 
-@pytest.mark.skipif(not BASERATE.exists(), reason="the base-rate result is not on this machine")
+@committed(BASERATE_RELATIVE)
 def test_informativeness_is_read_from_the_base_rate_result():
     r = json.loads(BASERATE.read_text())
     info = prof.informativeness()
@@ -145,7 +164,7 @@ def test_the_effect_band_is_the_prediction_s_own_field():
 
 
 @needs_chr21
-@pytest.mark.skipif(not CENSUS21.exists(), reason="the chr21 census is not on this machine")
+@committed(CENSUS21_RELATIVE)
 def test_chr21_states_reproduce_the_registered_census():
     census = json.loads(CENSUS21.read_text())
     readers = ce.Readers()

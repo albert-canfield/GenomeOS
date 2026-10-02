@@ -11,12 +11,12 @@ to switch the read for +11.
 import json
 from pathlib import Path
 
-import pytest
-
 from genomeos.lang import parse_file
 from genomeos.organism import fate_rules as fr
+from tests.committed_data import committed
 
-RESULT = Path("data/results/celegans_fate_read_choice.json")
+RESULT_RELATIVE = "data/results/celegans_fate_read_choice.json"
+RESULT = Path(RESULT_RELATIVE)
 ORG = Path("data/organisms/celegans")
 
 
@@ -41,7 +41,7 @@ def test_the_commitment_that_makes_a_crossing_unable_to_say_anything_else():
     assert set(fr.TERMINAL_TYPES.split("|")) <= established
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_read_choice.py")
+@committed(RESULT_RELATIVE)
 def test_the_move_from_332_to_414_is_the_crossing_re_decisions_and_costs_nothing():
     """82 cells joined, none left, every one of them claimed-and-right, and the published score is 522
     either way -- so the score cannot see the move because there is nothing in it for the score to see."""
@@ -57,7 +57,7 @@ def test_the_move_from_332_to_414_is_the_crossing_re_decisions_and_costs_nothing
     assert m["crossings_taken"][1] == 0 and m["crossings_taken"][0] > 0
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_read_choice.py")
+@committed(RESULT_RELATIVE)
 def test_neither_read_decides_a_fate_the_lineage_had_not_written():
     """The count the bar was on, for every arm of both reads. It is zero and the guard makes it zero, so
     no choice of read can move it: this is what stops a higher score from being a better result."""
@@ -68,7 +68,7 @@ def test_neither_read_decides_a_fate_the_lineage_had_not_written():
         assert arm["abstained_wrong"] == 0, name
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_read_choice.py")
+@committed(RESULT_RELATIVE)
 def test_the_mean_read_wins_the_headline_and_loses_the_measure_the_bar_was_on():
     """The finding, in the shape that makes it a finding: `mean` is ahead on everything the earlier
     measurement published and behind on free credit, because nearly all of its claims are made at a
@@ -100,7 +100,7 @@ def test_the_mean_read_wins_the_headline_and_loses_the_measure_the_bar_was_on():
     assert mean["fired_only_at_the_cell_s_birth"] < shipped["fired_only_at_the_cell_s_birth"]
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="run scripts/celegans_fate_read_choice.py")
+@committed(RESULT_RELATIVE)
 def test_the_registration_was_not_rewritten_to_match_the_run():
     """All six predictions held, so there is nothing to diagnose -- but the discipline is the same one
     542d613 had to use when three of its seven broke: the docstring keeps what it was committed with."""

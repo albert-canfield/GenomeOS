@@ -14,9 +14,12 @@ from pathlib import Path
 import pytest
 
 from genomeos.lang import rule_number_sources as rns
+from tests.committed_data import committed
 
-REGISTRATION = Path("data/results/rule_number_sources_registration.json")
-CENSUS = Path("data/results/rule_number_sources_census.json")
+REGISTRATION_RELATIVE = "data/results/rule_number_sources_registration.json"
+REGISTRATION = Path(REGISTRATION_RELATIVE)
+CENSUS_RELATIVE = "data/results/rule_number_sources_census.json"
+CENSUS = Path(CENSUS_RELATIVE)
 
 
 def test_population_is_read_from_the_program_and_is_21():
@@ -104,7 +107,7 @@ def test_the_runtime_refuses_a_threshold_in_physical_units_for_this_program():
         NetworkRuntime(module)
 
 
-@pytest.mark.skipif(not REGISTRATION.exists(), reason="registration not written yet")
+@committed(REGISTRATION_RELATIVE)
 def test_the_written_registration_matches_the_code_that_will_apply_it():
     d = json.loads(REGISTRATION.read_text())
     payload = rns.registration()
@@ -114,7 +117,7 @@ def test_the_written_registration_matches_the_code_that_will_apply_it():
     assert d["result_manifest"]["complete"] is True
 
 
-@pytest.mark.skipif(not CENSUS.exists(), reason="census not written yet")
+@committed(CENSUS_RELATIVE)
 def test_every_slot_is_classified_and_every_finding_names_what_was_fetched():
     d = json.loads(CENSUS.read_text())
     findings = d["findings"]
@@ -132,7 +135,7 @@ def test_every_slot_is_classified_and_every_finding_names_what_was_fetched():
             assert f["fetched_what"]
 
 
-@pytest.mark.skipif(not CENSUS.exists(), reason="census not written yet")
+@committed(CENSUS_RELATIVE)
 def test_the_counts_in_the_census_are_the_findings_recounted():
     d = json.loads(CENSUS.read_text())
     findings = d["findings"]
@@ -145,7 +148,7 @@ def test_the_counts_in_the_census_are_the_findings_recounted():
     assert d["measured_loose"] >= d["measured_strict"]
 
 
-@pytest.mark.skipif(not CENSUS.exists(), reason="census not written yet")
+@committed(CENSUS_RELATIVE)
 def test_no_fitted_value_is_counted_as_measured():
     d = json.loads(CENSUS.read_text())
     fitted = [f for f in d["findings"] if f["class"] == "F_fitted_or_modelled"]
@@ -157,7 +160,7 @@ def test_no_fitted_value_is_counted_as_measured():
     assert not [f for f in d["findings"] if f["field"] == "hill" and f["class"] == "M_measured_quoted"]
 
 
-@pytest.mark.skipif(not CENSUS.exists(), reason="census not written yet")
+@committed(CENSUS_RELATIVE)
 def test_the_census_changed_no_number_in_the_program():
     """The census records the written value of every slot; they are the program's own."""
     d = json.loads(CENSUS.read_text())

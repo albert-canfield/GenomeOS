@@ -13,8 +13,10 @@ from genomeos.attribution import direction_link as dl
 from genomeos.attribution import increase_links as il
 from genomeos.attribution import reptest as rt
 from genomeos.attribution import rescore_cost as rc
+from tests.committed_data import must_be_committed
 
-RESULT = Path("data/results/rescore_cost.json")
+RESULT_RELATIVE = "data/results/rescore_cost.json"
+RESULT = Path(RESULT_RELATIVE)
 
 
 # ---- the window, which is the binding constraint --------------------------------------------------
@@ -222,9 +224,10 @@ def test_the_registration_states_it_registers_no_purchase_and_no_test():
 
 @pytest.fixture(scope="module")
 def result() -> dict:
-    if not RESULT.exists():
-        pytest.skip(f"{RESULT} is not in this checkout (the per-element cache is machine-local)")
-    return json.loads(RESULT.read_text())
+    # The per-element cache this lane COUNTED is machine-local; the result it wrote is not. git
+    # tracks data/results/rescore_cost.json, so the old reason named the wrong file: absence here is
+    # a deleted or corrupted published result, and it FAILS naming the path.
+    return json.loads(must_be_committed(RESULT_RELATIVE).read_text())
 
 
 def test_the_result_spends_nothing(result):

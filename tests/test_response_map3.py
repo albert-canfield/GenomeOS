@@ -14,9 +14,11 @@ from genomeos import response_map2 as rm2
 from genomeos import response_map3 as rm3
 from genomeos.attribution import eqtl, mpra
 from genomeos.attribution import measured as ms
+from tests.committed_data import must_be_committed
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULT = ROOT / "data/results/response_map_increment3.json"
+RESULT_RELATIVE = "data/results/response_map_increment3.json"
+RESULT = ROOT / RESULT_RELATIVE
 
 
 class _Files:
@@ -376,13 +378,12 @@ def test_a_page_past_the_end_clamps_rather_than_emptying():
 # --- the committed map -------------------------------------------------------------------------------
 @pytest.fixture(scope="module")
 def built():
-    if not RESULT.exists():
-        pytest.skip("the genome-wide map has not been built here")
-    with RESULT.open() as fh:
+    # "has not been built here" was never true of this checkout: git tracks the map, so absence is
+    # a defect and fails naming the path.
+    with must_be_committed(RESULT_RELATIVE).open() as fh:
         return json.load(fh)
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the genome-wide map has not been built here")
 class TestTheCommittedMap:
     def test_it_reconciles_against_the_count_committed_before_it(self, built):
         r = built["reconciliation"]
