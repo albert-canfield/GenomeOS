@@ -134,7 +134,9 @@ NOT_CLOSED = (
 OPENNESS_CALL = (
     "reader v1's own call, unchanged: " + reader.EVIDENCE + ", as genomeos.genome.reader loads it. "
     "The reader tests a promoter window for an overlapping peak; this tests the element's own "
-    "interval for one. No new cut-off is introduced and no signal value is thresholded."
+    "interval for one, which is the element-level call genomeos.attribution.closure has used since "
+    "it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new "
+    "cut-off is introduced and no signal value is thresholded."
 )
 
 SPAN_CALL = (
