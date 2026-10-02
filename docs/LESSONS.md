@@ -779,8 +779,8 @@ but whether it opened the files it says it checked, and whether it says how many
 
 ## A commit's message can describe one lane's work and carry another's (2026-10-02)
 
-Three commits tonight carry one lane's files under a different lane's message. History
-is **not** rewritten — in a checkout four lanes are committing to, a rebase to correct a
+Four commits tonight carry one lane's files under a different lane's message, and a fifth
+did the same on 2026-09-22 (`45e4f92`). History is **not** rewritten — in a checkout four lanes are committing to, a rebase to correct a
 message risks far more than the wrong message costs. The mapping is recorded instead, so
 a later reader is not misled by `git log`:
 
@@ -789,6 +789,7 @@ a later reader is not misled by `git log`:
 | `ec8536d` | lane-re2g restamping its registration | **only** lane-rebuild's `docs/ATTRIBUTION.md` section |
 | `dd5a223` | lane-re2g's identity-check loop fix | **only** lane-rebuild's `docs/ATTRIBUTION.md` section |
 | `cc677e8` → relabelled `a3f1c04` | lane-mrfix's grouped-input fix | **only** lane-map2's five files (`response_map2.py`, `web/server.py`, `web/static/index.html`, `scripts/response_map_increment2.py`, `tests/test_response_map2.py`). **Corrected on the machine before it was pushed**: identical tree, same parent, `update-ref` with the old value pinned, so nothing was rewritten that anyone else had |
+| `d0bc88a` | lane-rebuild's 2,000-draw benchmark rebuild — the message of `7fac349`, five hours older, word for word | **only** lane-198's `data/results/placement_cause_198.json` and its 155-line `docs/ATTRIBUTION.md` section. Already pushed, so not repairable the way `a3f1c04` was |
 
 **How it happens, and the first explanation here was wrong.** The cause is the **shared
 scratchpad**, not a shared file. Lanes write their commit message to a file and pass it to
@@ -802,13 +803,125 @@ the message was wrong, and no work was lost.
 The same refusal-then-rewrite sequence hit this coordinator repeatedly tonight; it escaped
 the collision only because its message files carried distinctive names.
 
-**What makes it less likely.** Lanes now stage a shared document by section
-(`scripts/stage_section.py`) rather than handing the whole file to `commit_own.sh`. The
-stronger fix, proposed and not yet built, is for `commit_own.sh` to refuse a commit whose
-staged diff of a shared document contains hunks outside the committing lane's declared
-section. That was deliberately **not** added while four lanes were mid-commit, because a
-new refusal would have blocked them.
+**Read the direction of the error before naming the cause.** The lane that wrote `d0bc88a`'s
+content reported it as a shared-index race between its run and a peer's. It is not: the
+commit holds **exactly** that lane's own two paths and nothing else, which is what its own
+`git add` of its own paths into its own private index produces. What came from elsewhere was
+the **message**, and a message reaches `git commit-tree` from one place only, the file given
+to `-F`. An index race would have produced the opposite signature — foreign *content* under
+the lane's own message. Both faults lose a message, so both feel identical from inside the
+lane; only the content tells them apart, and they have different fixes.
+
+The lane then settled it in one command, and its own account of why it had not is the part
+worth keeping: it reasoned from "my message is gone" to the failure mode it had read about,
+instead of running `head -1` on the file it had just handed to `-F`. **Before naming a cause,
+read the artefact you gave the tool.** What that one command showed: the file was dated
+00:32, five hours and eleven minutes before the lane's own changes, and the directory each
+session is told is "session-specific" in fact held some seventy `msg*.txt` files from every
+lane of the session at once. A generic name in a shared directory was a collision waiting.
+
+**What was built, 2026-10-02 06:00, and how much of the hole each part closes.**
+`commit_own.sh` now refuses the message **file** on three grounds, each with its own exit
+code and each overridable with `--force` only after the file has been opened:
+
+| | refuses | exit | what it actually catches |
+| --- | --- | --- | --- |
+| 1 | a basename that is not `msg-<lane>-<purpose>-<epoch>.txt`, or that omits the lane given by `-L` / `GENOMEOS_LANE` | 67 | **the whole class.** The epoch is the working part: write the file in the same call that commits, and a lost heredoc makes the retry name a file that does not exist, so the script stops at "no such message file" instead of reading what was there |
+| 2 | a message file more than 30 minutes older than the oldest uncommitted change among the paths being committed | 68 | only the hours-old case. `d0bc88a`'s message predated its files by five hours; but one of the five reused a file **15 minutes** old, well inside the slack, so this check would have passed it |
+| 3 | a first line equal to the first line of any of the last 200 commits | 66 | the subset whose reused text was already committed — which is most of them, since the file being reused is usually a message that already landed |
+
+The check that existed before this caught **none of the four after the first**: it compared
+the whole message to `HEAD`'s only, and the reused text was older than `HEAD` every time. A
+guard aimed one commit deep is a guard aimed at the case that does not happen.
+
+Two things were deliberately **not** done. The slack in check 2 was left at 30 minutes with
+its known hole written beside the number, because tightening it below about a quarter of an
+hour starts refusing the legitimate order of work — write the message, then rerun the
+generator that rewrites a result. And the stronger fix proposed earlier, refusing a staged
+diff of a shared document with hunks outside the committing lane's declared section, is
+still unbuilt; lanes stage by section (`scripts/stage_section.py`) by convention instead.
+
+The three checks landed **while five lanes were mid-commit**, which the same proposal was
+held back for a night earlier. The difference is that these three refuse on the message file
+alone: a lane that has already staged nothing loses nothing by being told to rename a file,
+whereas a refusal that reads the staged diff can only fire after the work is staged.
 
 **The shape to watch.** A commit message is evidence about a commit, and like any other
 record it can be wrong while every number inside it is right. `git log --stat` tells you
 what a commit did; its subject tells you only what someone meant it to do.
+## A nine-minute check is not a verdict on any one tree (2026-10-02)
+
+`scripts/check.sh` on this project takes about nine minutes. In a checkout five
+lanes commit to, that is long enough for the tree to change underneath it, and the
+failures that result exist in **neither** the tree it started on nor the tree it
+ended on.
+
+The case. A coordinator run started 06:05 and reported **4 failed, 3,367 passed** at
+06:14:33, every failure in `tests/test_promote_main.py`, each expecting the retired
+`would run: git push ...:refs/heads/main` or the old "eligible for protected
+promotion" wording. A lane committed `8df8799` at **06:14:39** — `promote_main.sh`
+and `tests/test_promote_main.py` changed together, 94 insertions. pytest had
+collected the **old** test code at 06:05 and executed it against the **new** script
+on disk nine minutes later. Rerunning the committed pair: **45 passed**.
+
+So the run tested a combination that was never committed: one lane's new script
+against another snapshot's old assertions. Neither lane did anything wrong, and the
+lane that landed it was right to finish rather than stop a step before its commit.
+
+**What told the difference, and it was not the rerun.** `git diff` on the failing
+file was **empty** — so the script was committed, not someone's working copy — and
+`git log -- <file>` named the commit and its timestamp. A rerun alone would have
+been "it passed the second time", which is not a diagnosis and is exactly how a real
+intermittent failure gets waved through.
+
+**The rule.** Before believing a failure in a shared checkout, read `git log` and
+`git diff` for the file that failed. A failure whose file was committed by a peer
+during your run is an artefact of your run.
+
+**The mechanism** (queued 2026-10-02, supervisor's ruling): a check whose verdict
+will be cited runs on the exact tree being committed, not on the live checkout.
+Build the tree from the private index with `git write-tree`, materialise it in a
+temporary worktree with the data stores linked as `scripts/pre-push.sh` already
+does, run the check there, then commit that same tree. The verdict then names a tree
+hash, and a peer's mid-run commit cannot reach it.
+
+## A function that prints its own file by line number (2026-10-02)
+
+`scripts/promote_main.sh` had `usage() { sed -n '8,10p' "$0" | sed 's/^# //' >&2; }`
+— it printed its own usage by **line number**, so any edit above line 10 silently
+changed what `--help` said. It had already rotted once: a second definition was added
+below the first rather than the first being fixed, and bash keeping the last
+definition is the only reason `--help` was right at all.
+
+Removing six dead lines above it moved the usage text to 6-8. The repair is not the
+new range; it is that a test now asserts the exact three lines `--help` prints, so the
+range cannot rot silently again. **A test on a line range is not a test of what the
+function says.**
+
+The same mistake in a different place: the two clean-up lists in docs/ROADMAP.md gave
+line numbers for every item, and after one intervening commit every number but one was
+wrong — the refusal had moved from 251 to 238, a case from 93 to 54. Every item still
+existed and still read as described, so the lists were sound and only their addresses
+had rotted. **Line numbers in a written plan are labels, not addresses: match by
+content, and quote the line's text beside its number.**
+
+## A guard that has never been shown to fire is not a guard (2026-10-02)
+
+Adopted after a lane planted its own counterexample unprompted. Before trusting a new
+check, plant something that **must** trip it and something that **must not**, confirm
+both, delete the probe, and say in the commit message that this was done.
+
+The near-miss is the half that is usually skipped, and it is the half that catches a
+check written too broadly. The lane testing "no shell script pushes to main" planted
+the push line twice in one file, once as a comment and once executable, and showed the
+check reported only the executable line. Without the commented copy it would not have
+known whether it had written a test or a grep for a string.
+
+For the three message-file refusals above, done in the live tree before the commit that
+added them: a generic name refused 67, a first line copied from HEAD refused 66, a file
+backdated to the previous day refused 68, and a correctly-formed name carrying another
+lane's name refused 67 — with `git log` unchanged after all four, so nothing was
+committed by the demonstration. The near-misses that must not trip: a message 20
+minutes older than the work (inside the slack) and a correctly named fresh file, both
+of which went through.
+

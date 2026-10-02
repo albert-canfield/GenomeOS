@@ -3,8 +3,12 @@
 #
 # Commit your own files from a private index, with the guard unskippable.
 #
-#     scripts/commit_own.sh -F msg.txt genomeos/compare.py tests/test_compare.py
-#     scripts/commit_own.sh -F msg.txt --force docs/ROADMAP.md
+#     scripts/commit_own.sh -F msg-<lane>-<purpose>-$(date +%s).txt genomeos/compare.py tests/...
+#     scripts/commit_own.sh -F msg-coord-roadmap-1759400000.txt --force docs/ROADMAP.md
+#
+# The message file's name is checked, not decoration: it must carry the committing lane and the
+# second it was written (-L <lane>, or GENOMEOS_LANE, says which lane you are). Five commits have
+# gone in under another lane's message from this shared scratchpad; see the three checks below.
 #
 # Several sessions share this checkout, so the documented sequence is: private index, read-tree HEAD,
 # add explicit paths, run the stale-base guard, commit-tree, update-ref pinning the old value. Every
@@ -23,10 +27,12 @@ set -euo pipefail
 
 force=""
 msg_file=""
+lane="${GENOMEOS_LANE:-}"
 paths=()
 while [ $# -gt 0 ]; do
   case "$1" in
     -F) msg_file="$2"; shift 2 ;;
+    -L) lane="$2"; shift 2 ;;
     --force) force="--force"; shift ;;
     -*) echo "unknown flag: $1" >&2; exit 64 ;;
     *) paths+=("$1"); shift ;;
@@ -41,14 +47,93 @@ done
 # 2026-09-22 one was: a lane's own heredoc had been refused by the guard inside a compound call,
 # so `-F msg1.txt` picked up the previous lane's text and 45e4f92 went in describing work it does
 # not contain. Nothing in git noticed, because a commit message is never wrong to git. The check
-# is the cheap half of the lesson: a message identical to the one already at HEAD is a stale file
-# far more often than it is a deliberate repeat.
-if [ "$(cat "$msg_file")" = "$(git log -1 --pretty=%B)" ]; then
-  echo "REFUSED: this message is byte-identical to HEAD's." >&2
-  echo "  $msg_file is almost certainly another lane's file, or your own from the last commit:" >&2
-  echo "  the scratchpad is shared between lanes. Write the message to a lane-unique name" >&2
-  echo "  (msg-\$LANE-\$(date +%s).txt) and run again; --force if the repeat is deliberate." >&2
-  [ -n "${force:-}" ] || exit 66
+# that went in then compared the whole message to HEAD's only, and it caught none of the four that
+# followed (ec8536d, dd5a223, a3f1c04, d0bc88a): the reused text was older than HEAD every time.
+#
+# Three checks replace it. Each refuses on its own, with its own exit code, and each is overridable
+# with --force once you have opened the file and seen that the repeat is deliberate.
+
+# 1. The name. A file any lane can write is a file any lane can read by accident, so the name
+#    carries the lane that is committing and the second it was written. The epoch is not
+#    decoration and it is the strongest part of this guard: write the file as
+#    msg-<lane>-<purpose>-$(date +%s).txt in the SAME call that commits, and a heredoc the hook
+#    refuses can no longer be papered over, because the name the retry expands to does not exist
+#    and the script stops at "no such message file" instead of reading whatever was there. Every
+#    one of the five bad commits came from a name that still existed after the write was lost.
+base=$(basename "$msg_file")
+case "$base" in
+  msg-*-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]*.txt) ;;
+  *)
+    echo "REFUSED: $base is not a lane-unique message name." >&2
+    echo "  Use msg-<lane>-<purpose>-\$(date +%s).txt. The scratchpad is shared between lanes, and" >&2
+    echo "  a name any of them would pick is how four commits so far carried another lane's text." >&2
+    [ -n "$force" ] || exit 67
+    ;;
+esac
+if [ -n "$lane" ]; then
+  case "$base" in
+    *"$lane"*) ;;
+    *)
+      echo "REFUSED: $base does not carry the lane name '$lane'." >&2
+      echo "  Name the file for the lane that is committing, or name the lane you mean with -L." >&2
+      [ -n "$force" ] || exit 67
+      ;;
+  esac
+fi
+
+# 2. When it was written. A message written before the work it describes is a file from an earlier
+#    round: d0bc88a's predated its own files by five hours. The comparison is against the OLDEST
+#    uncommitted change among the named paths, and it allows the message to be half an hour older
+#    than that, because writing the message and then rerunning the generator that rewrites a result
+#    is a normal order of work. Thirty minutes is this script's own tolerance, not a measured one,
+#    and it has a known hole: the stale file behind one of the five was only 15 minutes old, well
+#    inside the slack, and check 1 is what would have stopped that one. This check catches the
+#    hours-old case, nothing finer. Tightening it below about a quarter of an hour would start
+#    refusing the legitimate order of work above, which is why it has not been tightened.
+MSG_MAY_PREDATE_WORK_BY=1800
+case "$(uname)" in
+  Darwin|*BSD) mtime() { stat -f %m "$1"; }; when() { date -r "$1" '+%F %T'; } ;;
+  *) mtime() { stat -c %Y "$1"; }; when() { date -d "@$1" '+%F %T'; } ;;
+esac
+msg_mtime=$(mtime "$msg_file")
+oldest=""
+while IFS= read -r changed; do
+  [ -n "$changed" ] && [ -f "$changed" ] || continue
+  t=$(mtime "$changed")
+  if [ -z "$oldest" ] || [ "$t" -lt "$oldest" ]; then oldest="$t"; fi
+done <<EOF
+$( { git diff --name-only HEAD -- "${paths[@]}"; git ls-files --others --exclude-standard -- "${paths[@]}"; } | sort -u )
+EOF
+if [ -n "$oldest" ] && [ "$msg_mtime" -lt $(( oldest - MSG_MAY_PREDATE_WORK_BY )) ]; then
+  echo "REFUSED: $base was written $(( (oldest - msg_mtime) / 60 )) minutes before the oldest change it describes." >&2
+  echo "  message written $(when "$msg_mtime"); oldest uncommitted change $(when "$oldest")." >&2
+  echo "  A message older than the work is a stale scratchpad file. Write this commit's own message." >&2
+  [ -n "$force" ] || exit 68
+fi
+
+# 3. What it says. A first line already in recent history is the signature of a reused file. The
+#    count is taken without a pipe into a short-circuiting reader on purpose: `grep -q` closing the
+#    pipe early makes the pipeline's status 141 under pipefail, which would read as "no match" and
+#    silently retire this check. Piping a guard into something that swallows its status has cost
+#    this project a commit once already.
+first=$(head -1 "$msg_file")
+recent=$(git log -200 --pretty=%s)
+dups=0
+if [ -n "$first" ]; then
+  dups=$(printf '%s\n' "$recent" | grep -Fxc -- "$first" || true)
+fi
+if [ "$dups" -gt 0 ]; then
+  echo "REFUSED: this message's first line is already in the last 200 commits:" >&2
+  hits=$(printf '%s\n' "$recent" | grep -Fxn -- "$first" | cut -d: -f1 | head -3 || true)
+  shas=$(git log -200 --pretty=%h)
+  for n in $hits; do
+    echo "  $(printf '%s\n' "$shas" | sed -n "${n}p") already begins with this line" >&2
+  done
+  echo "  $msg_file is almost certainly another lane's file, or your own from an earlier commit:" >&2
+  echo "  the scratchpad is shared between lanes. Write this commit's message to a lane-unique" >&2
+  echo "  name (msg-<lane>-<purpose>-\$(date +%s).txt) and run again; --force if the repeat is" >&2
+  echo "  deliberate." >&2
+  [ -n "$force" ] || exit 66
 fi
 
 branch=$(git rev-parse --abbrev-ref HEAD)
