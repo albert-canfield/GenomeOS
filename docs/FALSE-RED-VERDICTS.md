@@ -90,6 +90,46 @@ which was which. What it records is that the count of this class in the record i
 second was seen, and that a verdict store keyed by tree alone cannot be used to count anything over
 time. Neither reading changes the mechanism or the fix.
 
+## The red that was a peer saving a file, and the only one with a `tree_moved` mechanism
+
+`tests/test_context_evidence.py::test_the_census_script_s_own_closure_is_the_module_s_closure`
+failed once at 22:07 in a run of eleven test modules: **305 passed, 1 failed.** The assertion that
+broke compared two `foreign_uncommitted_code_on_the_counting_path` lists and the diff named
+`genomeos/predict/alphagenome_adapter.py` — a file **the test does not mention**, belonging to a
+lane that was editing it at that moment.
+
+The test called `code_cleanliness` **twice** and asserted the two results agree, once with the
+census entry spelled relatively and once absolutely. Each call runs its own `git status`. In a
+checkout several sessions share, a peer saving a file between the two makes them disagree, and the
+verdict is then a statement about **no tree either call measured** — the `tree_moved` class, which
+until now had no worked example in this file. It passed three times out of three on re-run, which
+is the signature and is also why such a red is tempting to dismiss rather than explain.
+
+**The mechanism was planted rather than inferred**, because "a peer must have saved something" is a
+story and three green re-runs are not evidence of a cause. In a planted repository with one
+committed script importing one committed module, two consecutive `code_cleanliness` calls with the
+module modified between them return:
+
+| | `counting_path` | `foreign_uncommitted_code_on_the_counting_path` |
+| --- | --- | --- |
+| first call | identical | `[]` |
+| second call | identical | `['genomeos/peer.py']` |
+
+The closure is **not** what moved — it comes from the imports — and that is exactly the shape the
+one red had, with the first assertion passing and the second failing.
+
+**The fix is that both readings now come from one snapshot:** `code_revision` is called once and
+both calls are given its answer, so the only thing that differs between them is the entry's
+spelling, which is what the test was ever about. The plant became the regression test
+(`test_two_readings_of_one_tree_disagree_when_it_moves_between_them`), so the fix carries a reason
+that can be checked instead of a comment asserting one.
+
+**The general form, and it is this file's fourth instance of the same shape:** a check that reads
+the live checkout twice and compares the readings is not testing the code, it is testing whether
+anyone else was working. `tests/test_code_cleanliness_hermetic.py` exists because of the same
+defect one step further out, and `4f44dbf` fixed a third where a historical premise was asserted
+against the live tree. A claim about a tree belongs to that tree, by sha or by planting.
+
 ## Telling them apart from now on
 
 `genomeos/verdict.py` writes an `error_class` into every status file, with the list of classes beside

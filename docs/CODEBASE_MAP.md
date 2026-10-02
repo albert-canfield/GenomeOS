@@ -373,7 +373,7 @@ writes a new file under a new name. `retire()` **moves** entries to
 
 | Group | Examples |
 |---|---|
-| Repository workflow | `check.sh`, `commit_own.sh`, `check_staged.py`, `check_history.py`, `pre-push.sh`, `coordinate.py`, `stage_section.py`, `package_engine.py` |
+| Repository workflow | `check.sh`, `commit_own.sh`, `check_staged.py`, `check_history.py`, `pre-push.sh`, `suite_lock.sh`, `coordinate.py`, `stage_section.py`, `package_engine.py` |
 | Model-scoring jobs (spend quota) | `enhancer_targets_all.py`, `loci_score.py`, `mpra_score.py`, `vista_score.py`, `syntax_tiling.py`, `executor_test.py` |
 | Genome-wide sweeps, resumable | `motifs_genome_wide.py`, `variation_genome_wide.py`, `proteome_genome_wide.py`, `human_panel_sweep.py`, `compress_genome_wide.py` |
 | Panel background and controls | `panel_background_composition.py`, `panel_union_arms.py`, `panel_union_five.py`, `panel_tier_baseline.py` |
@@ -392,6 +392,25 @@ The workflow scripts are the ones to know:
   commit added — the stale-base guard.
 - **`pre-push.sh`** checks the pushed commit out into a clean worktree and
   runs `check.sh` there. `GENOMEOS_SKIP_CHECK=1` bypasses it.
+- **`suite_lock.sh`** serialises full-suite runs so they QUEUE instead of
+  interleaving, at `${TMPDIR:-/tmp}/genomeos-suite.lock` — the push lock's own
+  algorithm, deliberately, down to the wording, the takeover rule and the
+  re-announcement, because a second lock that behaved differently would be
+  worse than no second lock. A waiter re-prints the holder when it changes; a
+  DEAD holder is taken over; a LIVE holder is never stolen.
+  **Every path returns 0 — the lock is never a red.** When it cannot be had
+  (an unusable `TMPDIR`, or a holder past the cap) it says so on stderr, hands
+  `check.sh` a note for the verdict's `note` field, and the run proceeds
+  UNSERIALISED. A check exiting non-zero because it could not get a lock would
+  write a red status file about nothing in the tree, and a run that quietly
+  skipped its own serialisation would make the verdict mean less than its
+  reader thinks — so it does neither.
+  **What it does not fix, in its own words:** the status file is keyed by TREE
+  ALONE, so two checks of the same tree still collide and the later writer
+  still destroys the earlier verdict. Serialising makes that rarer, not
+  impossible. `pre-push.sh` does not source it yet — deferred until after the
+  next PR to main, so the gate does not change in the window the PR is judged
+  in.
 - **`stage_section.py`** stages one named Markdown section, so several
   sessions can edit a shared document without staging each other's work.
 
