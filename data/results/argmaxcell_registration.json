@@ -7,11 +7,51 @@
   "argmax_rule": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
   "argmax_is_a_selection": "`direction_v2.ASSIGNED_CELL` is `predicted_coding['tissue']`, and `enhancer_target.predict_target` sets that field to `max_drop_tissue` or `max_rise_tissue` - the tissue of the larger of the biggest fall and the biggest rise over every track, chosen jointly with the gene. An argmax is a selection: the cell is where an extreme fell, not a context chosen before the values were read. `lane-clause1` measured this on 166 of 166 rows of its own population (150 by max_drop, 16 by max_rise, 0 otherwise), registration ba8c41f, result b4622ad. That count is carried here, not recomputed, and this lane's denominators are separate from its 166.",
   "assigned_cell": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
-  "falsifier": "Stated before any count is taken. d = observed_rate - committed_base_rate, both over the arm's own denominator.\n(1) d <= -0.02: the argmax lands on the measured cell LESS often than the label's own genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it points away from it.\n(2) |d| < 0.02: NO cell-type information is detected. On this arm the compiled cell is the label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n(3) d >= +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this branch does not establish that the argmax carries cell-type information, because the benchmark's choice of which elements to test produces the same sign.\nA SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - the compiled cell names the measured cell on at least a quarter of the arm's elements, so a reader could use it; observed_rate < 0.25 - whatever d says, the label names the measured cell on a minority of elements and may not be read as the place the rule acts.\nAn arm with fewer than 30 elements reports its counts and NO rate reading at all. An interval is a Wilson 95% interval on the observed rate; whether it excludes the base rate is reported, and it is a binomial interval over elements, which is NOT a clustered interval and is labelled as such wherever it appears.",
+  "falsifier": "Stated before any count was taken (67e14d7) and AMENDED before any count was committed (AMENDMENT_1, which only tightens). d = observed_rate - committed_base_rate, both over the arm's own denominator, and every branch below is decided by the CLUSTERED interval on d and never by the point estimate.\n(1) upper bound of d < -0.02: the argmax lands on the measured cell LESS often than the label's own genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it points away from it.\n(2) the WHOLE interval on d inside +/-0.02: NO cell-type information. This is an equivalence result and not a failure to reject: the arm has excluded any difference larger than the tolerance. On this arm the compiled cell is the label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n(3) lower bound of d > +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this branch does not establish that the argmax carries cell-type information, because the benchmark's choice of which elements to test produces the same sign.\n(4) the interval crosses a tolerance bound: INCONCLUSIVE. THE DATA CANNOT TELL. This is not `no information` and may never be reported as one, and it is not a detection either.\nA SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - the compiled cell names the measured cell on at least a quarter of the arm's elements, so a reader could use it; observed_rate < 0.25 - whatever the interval says, the label names the measured cell on a minority of elements and may not be read as the place the rule acts.\nAn arm with fewer than 30 elements reports its counts and NO rate reading at all. An arm whose clusters number fewer than 10 prints NO interval and is INCONCLUSIVE BY RULE. The Wilson interval over elements is reported beside the clustered one as secondary, labelled binomial and unclustered wherever it appears, and decides nothing.",
+  "amendment_1": "AMENDED on the coordinator's direction after the registration at 67e14d7 and BEFORE any count of this lane is committed. Additive: TOLERANCE 0.02, USABLE 0.25 and MIN_ELEMENTS 30 are unchanged, and no reading is made easier to reach.\nTHE DEFECT IT FIXES, in the coordinator's own terms: the registered readings were selected by the POINT estimate of d against a +/-0.02 band. At 30 elements and a rate near 0.06 the standard error is about 0.043, more than twice the band, so on a small arm reading (2) - `NO cell-type information is detected, stated plainly` - would fire from noise. An underpowered null presented as a finding is the one outcome this lane must not produce.\n(a) A reading is now decided by the INTERVAL and never by the point. (3) detected only if the interval's LOWER bound on d exceeds +0.02; (1) anti-correlated only if its UPPER bound is below -0.02; (2) no information only if the WHOLE interval lies inside +/-0.02, which makes it an equivalence result and not a failure to reject.\n(b) A NEW reading (4) INCONCLUSIVE when the interval crosses a tolerance bound. Its words are `the data cannot tell`, never `no information`: those are different claims and eliding the difference is what produced several of tonight's overstatements.\n(c) The DECIDING interval is CLUSTERED - by chromosome, or by locus when chromosomes do not give at least 10 clusters. Under 10 clusters no interval is printed and the arm is inconclusive BY RULE and not by judgement. The Wilson interval over elements is kept beside it as SECONDARY and stays labelled as the binomial, unclustered interval it is.\n(d) POWER IS STATED PER ARM: the elements an arm needs for a +/-0.02 half-width, and whether it has them. An arm that does not is declared underpowered as a property of the arm.\nDISCLOSED, because the record must not read better than it was: when this amendment was written the un-amended run had ALREADY completed in a worktree at 67e14d7 and its figures had been seen. They are named in the amendment's commit message. The amendment is therefore NOT blind, and the one thing that can be checked rather than trusted is its direction: every change here can only turn a reading into INCONCLUSIVE or leave it standing. None of them can create a detection, widen a detection, or convert an inconclusive arm into a finding.",
+  "amends": "data/results/argmaxcell_registration.json as committed at 67e14d7",
   "falsifier_thresholds": {
     "tolerance_on_the_difference": 0.02,
     "usable_rate": 0.25,
-    "minimum_elements_for_a_rate": 30
+    "minimum_elements_for_a_rate": 30,
+    "unchanged_by_amendment_1": "all three above",
+    "minimum_clusters_for_an_interval": 10,
+    "bootstrap_draws": 2000,
+    "minimum_resamples": 1000,
+    "bootstrap_seed": 20261002,
+    "locus_span_when_chromosomes_are_too_few": 1000000
+  },
+  "power_per_arm_stated_in_advance": {
+    "K562": {
+      "committed_base_rate": 0.062292,
+      "elements_needed_at_the_base_rate": 561,
+      "how": "z^2 p (1-p) / 0.02^2 at p = this arm's committed base rate. The arm's element count is not known until the run, so whether it HAS them is decided then and reported per arm; the number it must reach is fixed here",
+      "also_reported_after_the_run": "the same figure at the arm's OBSERVED rate, which is the width its own interval actually has. For a cell whose base rate is near zero the base-rate figure is small and the observed-rate figure is not, and quoting only the first would make an underpowered arm look powered"
+    },
+    "GM12878": {
+      "committed_base_rate": 0.01454,
+      "elements_needed_at_the_base_rate": 138,
+      "how": "z^2 p (1-p) / 0.02^2 at p = this arm's committed base rate. The arm's element count is not known until the run, so whether it HAS them is decided then and reported per arm; the number it must reach is fixed here",
+      "also_reported_after_the_run": "the same figure at the arm's OBSERVED rate, which is the width its own interval actually has. For a cell whose base rate is near zero the base-rate figure is small and the observed-rate figure is not, and quoting only the first would make an underpowered arm look powered"
+    },
+    "HCT116": {
+      "committed_base_rate": 0.001348,
+      "elements_needed_at_the_base_rate": 13,
+      "how": "z^2 p (1-p) / 0.02^2 at p = this arm's committed base rate. The arm's element count is not known until the run, so whether it HAS them is decided then and reported per arm; the number it must reach is fixed here",
+      "also_reported_after_the_run": "the same figure at the arm's OBSERVED rate, which is the width its own interval actually has. For a cell whose base rate is near zero the base-rate figure is small and the observed-rate figure is not, and quoting only the first would make an underpowered arm look powered"
+    },
+    "Jurkat": {
+      "committed_base_rate": 0.002569,
+      "elements_needed_at_the_base_rate": 25,
+      "how": "z^2 p (1-p) / 0.02^2 at p = this arm's committed base rate. The arm's element count is not known until the run, so whether it HAS them is decided then and reported per arm; the number it must reach is fixed here",
+      "also_reported_after_the_run": "the same figure at the arm's OBSERVED rate, which is the width its own interval actually has. For a cell whose base rate is near zero the base-rate figure is small and the observed-rate figure is not, and quoting only the first would make an underpowered arm look powered"
+    },
+    "WTC11": {
+      "committed_base_rate": 0.000218,
+      "elements_needed_at_the_base_rate": 3,
+      "how": "z^2 p (1-p) / 0.02^2 at p = this arm's committed base rate. The arm's element count is not known until the run, so whether it HAS them is decided then and reported per arm; the number it must reach is fixed here",
+      "also_reported_after_the_run": "the same figure at the arm's OBSERVED rate, which is the width its own interval actually has. For a cell whose base rate is near zero the base-rate figure is small and the observed-rate figure is not, and quoting only the first would make an underpowered arm look powered"
+    }
   },
   "confound_registered_before_any_count": "Registered before any count, and it makes the two readings asymmetric. The CRISPRi benchmark chose which elements to test, and it tested candidate elements in regions active in the cell it was testing. So the elements of the K562 arm are not a random draw from the compiled population: they are enriched for K562-active sequence before any model touched them. That enrichment pushes the observed rate UP. Therefore:\n- a difference at or near zero is NOT explained by the selection, because the selection pushes the other way, and it is clean evidence that the argmax carries no cell-type information;\n- a positive difference is explained by the selection at least as readily as by the model, and this lane cannot separate the two with the data it reads. A positive difference is therefore reported as a difference and MUST NOT be reported as the argmax carrying cell-type information.\nThis lane can refute the proposition and can fail to refute it. It cannot confirm it.",
   "cross_arm_check": "The one check that bears on the confound without new data, reported for every pair of arms: the rate of `label == C` over the elements of arm A, for every arm cell C. If the argmax tracked the cell a measurement was taken in, arm A's own cell would stand out among the columns of row A. If instead each column is near that column's genome-wide base rate whatever the row, the compiled label is tracking the genome-wide label distribution and not the measured cell. This is a comparison of measured rates and sets no threshold of its own.",
@@ -135,6 +175,7 @@
   "overlap_rule": "`crispri.DeletionTable.overlapping`'s own rule, reimplemented over four scalars per element and asserted equal to it by test: an element overlaps [start, end) when element.end > start and element.start > start - 10000, searched from bisect_left(starts, end) - 1 downwards. 10000 is `crispri.REACH`, the longest element in the table, and is imported rather than restated.",
   "label_rule": "An element's compiled label is `compile.context(predicted_coding['tissue'])`, which is `compile.ident` on a non-empty name and `unknown` on an absent one. The arm's cell is passed through the same function before comparison, so both sides of the equality are the string the compiler would write into `when: cell_type`. Two raw tissue names that differ only in characters `ident` replaces collapse to one label; that is a property of the census this base rate comes from, so the observed side must share it or the two would not be comparable.",
   "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+  "interval_that_decides": "the CLUSTERED interval of AMENDMENT_1 (c): a percentile bootstrap over whole chromosomes, or over 1 Mb loci when chromosomes do not reach 10 clusters, 2000 draws, seed 20261002. Under 10 clusters no interval is printed and the arm is INCONCLUSIVE BY RULE. The Wilson interval over elements is secondary and decides nothing",
   "labels_for_each_arm": {
     "K562": [
       "K562"
@@ -161,9 +202,14 @@
     "elements",
     "elements_whose_label_is_the_measured_cell",
     "observed_rate",
-    "wilson95",
+    "clustered_ci95_on_the_rate",
+    "clustered_ci95_on_the_difference",
+    "clusters",
+    "power",
+    "reading_branch",
+    "wilson95_secondary",
     "committed_base_rate",
-    "difference",
+    "difference_point_estimate",
     "second_base_rate_this_run",
     "label_distribution_top10",
     "cross_arm_matrix",
@@ -177,7 +223,8 @@
     "a compact element table named by a committed summary is not on this machine: raise. `targets.run_elements` already raises for this reason and the same rule holds here",
     "resident memory passes RSS_CEILING_BYTES after any chromosome: raise, naming the chromosome and the figure. Never widen the ceiling to make a run pass",
     "any call that would open a per-element archive or the cached-element loader: there is no such call, and the test suite asserts the module's source contains neither name",
-    "an arm with fewer than 30 elements: counts are reported and NO rate reading is"
+    "an arm with fewer than 30 elements: counts are reported and NO rate reading is",
+    "an arm with fewer than 10 resampling clusters: NO interval is printed and the arm is INCONCLUSIVE BY RULE, which is reading (4) and is never reported as `no information`"
   ],
   "read_discipline": "No archive is opened and the cached-element loader is never called. The compact per-chromosome element table is decoded ONE element at a time by `stream_table` with `json.JSONDecoder.raw_decode`, and four scalars per element are retained, so the parsed object graph of a 59 MB table is never held. One chromosome is in hand at a time and its text is released before the next is opened. `check_rss` raises at RSS_CEILING_BYTES after every chromosome. The ceiling is 2147483648 bytes and the run reports its own peak.",
   "rss_ceiling_bytes": 2147483648,
@@ -273,7 +320,7 @@
       "the_census_440589": "the base rate's denominator, read from the committed census and computed by no code of this lane"
     },
     "code_cleanliness": {
-      "git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "git_sha": "21b80b12f3ba3df441fcf4ae792b418db40ee355",
       "dirty": false,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
@@ -412,7 +459,7 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "git_sha": "21b80b12f3ba3df441fcf4ae792b418db40ee355",
       "dirty": false,
       "dirty_code_paths": [],
       "untracked_code_paths": [],
@@ -424,13 +471,13 @@
     },
     "complete": true,
     "revision_stamps": {
-      "code_git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
-      "code_cleanliness_git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "code_git_sha": "21b80b12f3ba3df441fcf4ae792b418db40ee355",
+      "code_cleanliness_git_sha": "21b80b12f3ba3df441fcf4ae792b418db40ee355",
       "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
       "comparable": true,
       "agree": true,
       "revision_race": false,
-      "reading": "no revision race: both stamps record 32eedd1"
+      "reading": "no revision race: both stamps record 21b80b1"
     },
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
