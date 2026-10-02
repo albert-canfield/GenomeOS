@@ -1,0 +1,1330 @@
+{
+  "result": "gene_identity_registration",
+  "date": "2026-10-02",
+  "lane": "lane-identity",
+  "status": "registered before any count over the compiled programs was read. No outcome of the comparison this fixes has been computed at the time of writing",
+  "question": "a compiled rule names its target gene by symbol and the AlphaGenome deletion answer it is built from measured one gene. For every compiled rule: does the target token resolve to the same Ensembl gene id as the gene the deletion answer measured?",
+  "why": "lane-notopen registered that 1,678 rules carry a TSS further from the element than half the 1 Mb deletion window, so a repeated gene symbol resolved to another locus - a fault in the distance, not the rule. That is a distance test over a subset. An id comparison asks the identity question directly and over the whole compiled set",
+  "population": {
+    "rules": "every `rule` line of the 24 compiled programs, data/knowledge/compiled/noncoding_chr*.bio",
+    "why_the_programs_and_not_a_re_enumeration": "the compiled text is what the model asserts, and its rule lines are countable without any git-ignored intermediate. The count must equal 440,589, the denominator context_evidence_registration.json fixed, and the run refuses to write anything if it does not",
+    "expected_total": 440589,
+    "per_chromosome_check": "chr21 must hold 5,176 rules, the figure the chr21 census fixed"
+  },
+  "mis_resolution": "a rule whose target token resolves, by the project's own symbol resolution, to a different Ensembl gene id from the gene the deletion answer measured. It says the rule names a gene the model never scored; it does NOT say the predicted relation is wrong, and nothing here establishes that any one rule is wrong",
+  "compiled_side": "genomeos.attribution.pilot_bio.gene_tss's own choice, with the gene_id it discards carried: among the GENCODE v50 genes of the element's chromosome whose gene_name is the rule's target token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token that is itself a versionless gene_id of that chromosome resolves to that gene directly, which gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own.",
+  "measured_side": "the deletion answer records its target as a name and NO Ensembl gene id, so the id is recovered from two recorded things and never read: the element's own recorded window gene list (data/knowledge/alphagenome/elements/<chrom>.json.gz), which must name the target exactly once, and the window the method records, taken as the element midpoint plus or minus 500000 (not_open_profile.SCORER_HALF_WINDOW), inside which the gene's BODY must lie. Exactly one GENCODE v50 gene of that name with a body overlapping the window is the measured gene; none or several is an unresolvable cause and never a guess. A target token that is a versionless gene_id is read directly, because there the answer does record the id.",
+  "what_the_deletion_answer_records": "a gene NAME and no Ensembl gene id: `predicted_coding` in data/knowledge/alphagenome/all_elements/<chrom>.json is {gene, action, log2_fold_change, tissue, strength, confidence, basis}, where `gene` is a symbol or, for a gene with no symbol, a bare versionless Ensembl id. The measured side is therefore recovered from the record and never read off it",
+  "unresolvable_symbols": {
+    "rule": "a rule whose two sides cannot both be resolved is counted under a named cause and is never resolved on a preference, never dropped, and never swept into a residue. agree + differ + the causes sum to the population",
+    "causes": {
+      "target_absent_from_the_chromosome_annotation": "the rule's target token is neither a gene_name nor a versionless gene_id of any gene on the element's own chromosome in GENCODE v50, so neither side resolves to an id. The annotation AlphaGenome scored with and GENCODE v50 are not guaranteed to be the same release",
+      "rule_of_the_experimental_layer": "the rule's evidence is a CRISPRi screen, not an AlphaGenome deletion answer, so there is no deletion answer to compare against. The screen records its own Ensembl gene id (holdout.Unit.gene_id, `measuredGeneEnsemblId`) and that is a different comparison, reported separately and never added into these counts",
+      "element_absent_from_the_window_cache": "the element has no per-element record in data/knowledge/alphagenome/elements/<chrom>.json.gz, so what the scorer read in its window is not on disk and the measured side cannot be recovered without a request, which this lane does not make",
+      "target_not_in_the_recorded_window_list": "the element's recorded window gene list does not contain the rule's target name at all, so the record does not say which gene the answer named and no id is recoverable from it",
+      "target_named_more_than_once_in_the_recorded_window_list": "the scorer's own record lists more than one gene under the rule's target name in this element's window, so the answer's `gene` field does not say which of them it measured and no id is recoverable from the record",
+      "no_annotated_locus_of_that_name_overlaps_the_scorer_window": "the name is in the recorded window list, but no GENCODE v50 gene of that name on this chromosome has a gene body overlapping the scorer window, so the measured gene cannot be placed in the annotation both sides are resolved against",
+      "two_or_more_annotated_loci_of_that_name_in_the_scorer_window": "two or more GENCODE v50 genes of that name have a gene body inside the scorer window, so the window does not pick one out and no id is recoverable"
+    },
+    "precedence": [
+      "target_absent_from_the_chromosome_annotation",
+      "rule_of_the_experimental_layer",
+      "element_absent_from_the_window_cache",
+      "target_not_in_the_recorded_window_list",
+      "target_named_more_than_once_in_the_recorded_window_list",
+      "no_annotated_locus_of_that_name_overlaps_the_scorer_window",
+      "two_or_more_annotated_loci_of_that_name_in_the_scorer_window",
+      "then agree or differ"
+    ],
+    "precedence_is_fixed": "this order is fixed here and may not be re-ordered after a count is read. A rule that would fall under two causes is counted under the first of them"
+  },
+  "the_1678_reconciliation": {
+    "will_be_reported": "the same distance test lane-notopen ran - the compiled side's element-midpoint-to-TSS distance above not_open_profile.SCORER_HALF_WINDOW - computed over the whole compiled set, and cross-tabulated against the outcome classes of this check",
+    "populations_are_named_and_not_equated": "lane-notopen's 1,678 is that distance test restricted to the 55,084 rules in state not_open_in_reader. This lane's population is all 440,589 rules and it does not re-derive the openness state. The two numbers are stated with their populations and the 1,678 is never asserted to be the same set as any count here",
+    "the_containment_is_computed_not_assumed": "a compiled TSS outside the window does not by itself put the compiled and the measured gene apart: a long gene's body can overlap the window while its TSS does not. The overlap between the distance test and `differ` is therefore counted, not argued"
+  },
+  "correlations": {
+    "axes": [
+      "the activity axis, the element block's own `activity:` value as the compiler wrote it",
+      "the effect band, the rule line's own `strength:`, banded at predict.enhancer_target.STRONG_EFFECT = 0.3: strong at or above, weak below. Clipping at 1 cannot move a value across 0.3, so this is the same band the cached prediction's `strength` field carries.",
+      "the distance band, executor._band over the compiled side's distance with the residual row above executor.WIDE_MAX_DISTANCE"
+    ],
+    "denominator": "within each level, the resolvable rules of that level: agree + differ. The unresolvable rules of a level are reported beside the share and never inside it",
+    "reported_descriptively": "a share that differs between levels is reported as it came out. No cause is inferred, no axis is said to explain another, and no statement is made that the model's predictions are wrong by any of these proportions"
+  },
+  "sensitivity_fixed_in_advance": {
+    "half_window": 500000,
+    "second_half_window": 524288,
+    "why": "the project fixed half the scorer window at 500,000; AlphaGenome's 1 Mb interval is 2**20 bp, half of which is 524,288. Every count is reported at both, fixed here before either was read, so no figure can be read as chosen for the rounder number"
+  },
+  "the_experimental_layer": "the rules whose evidence is a CRISPRi screen have no deletion answer and are counted under `rule_of_the_experimental_layer`. The screen does record its own Ensembl gene id, so that comparison is reported as a separate figure with its own denominator and is never added into the deletion-answer counts",
+  "what_this_cannot_establish": {
+    "a_count_is_not_a_contribution": "this is a count of symbol resolutions. It says how many rules name a target whose id differs from the id of the gene the deletion answer measured. It does NOT say the model's predictions are wrong by that proportion, it is not a measure of any feature's contribution, and it establishes about no single rule that the rule is wrong",
+    "the_measured_id_is_recovered_not_read": "the deletion answer records a gene NAME and no Ensembl gene id. The measured side is recovered from the element's recorded window gene list and the window the method records. Where that recovery does not pick out exactly one gene the rule is counted as unresolvable with its cause named, never resolved on a preference",
+    "two_annotations_are_not_one": "AlphaGenome scored with its own gene annotation and both sides here are resolved against GENCODE v50. Where the two releases disagree about a name, the rule lands in `target_absent_from_the_chromosome_annotation` or in `no_annotated_locus_of_that_name_overlaps_the_scorer_window`, which are statements about the annotations and not about the rule",
+    "a_differing_id_is_not_a_repair": "nothing here deletes, rewrites or relabels a compiled rule. If a repair is warranted it is proposed and left to a ruling",
+    "the_window_is_a_model_of_the_scorer": "the scorer's window is taken from the method it records, as the element midpoint plus or minus not_open_profile.SCORER_HALF_WINDOW, with gene-body overlap. Every count is reported again at a half-window of 524288 - half AlphaGenome's 2**20 bp interval - so no figure can be read as depending on the rounder number",
+    "correlation_is_not_cause": "where the differing share is reported by activity, by effect band or by distance it is reported descriptively. No cause is inferred and no axis is claimed to explain another"
+  },
+  "imported_readings": {
+    "lane_notopen_1678": "1,678 rules carry a TSS further from the element than half the 1 Mb deletion window, so a repeated gene symbol resolved to another locus - a fault in the distance, not the rule",
+    "lane_notopen_1678_where": "data/results/not_open_profile.json, docs/ATTRIBUTION.md",
+    "lane_notopen_1678_population": "the 55,084 rules in state not_open_in_reader, out of the 81,635 assessable rules, out of the 440,589 rules the compiler emits",
+    "lane_notopen_activity_axis": "0.8511 of the 30,480 assessable repressions against 0.5702 of the 51,103 assessable activations",
+    "lane_notopen_refused_to_claim": "Nothing establishes that any one of the 8,184 rules is wrong; the list says where to look and what kind of place each one is."
+  },
+  "alphagenome_requests": 0,
+  "network_requests": 0,
+  "money": "none: every input was already on disk",
+  "code": {
+    "module": "genomeos/attribution/gene_identity.py",
+    "register": "scripts/gene_identity_register.py",
+    "count": "scripts/gene_identity.py",
+    "tests": "tests/test_gene_identity.py"
+  },
+  "code_cleanliness": {
+    "git_sha": "6aba86a51291ad3e7f0ac9ff4f7ca4c690f75615",
+    "dirty": true,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
+    "foreign_uncommitted_code": [
+      "genomeos/manifest.py",
+      "genomeos/results.py",
+      "tests/test_manifest_enforced.py",
+      "tests/test_results_cleanliness_refusal.py"
+    ],
+    "foreign_uncommitted_code_on_the_counting_path": [
+      "genomeos/manifest.py",
+      "genomeos/results.py"
+    ],
+    "counting_path": [
+      "genomeos/__init__.py",
+      "genomeos/attribution/__init__.py",
+      "genomeos/attribution/bigwig.py",
+      "genomeos/attribution/budget.py",
+      "genomeos/attribution/compile.py",
+      "genomeos/attribution/constraint.py",
+      "genomeos/attribution/context_evidence.py",
+      "genomeos/attribution/correctness.py",
+      "genomeos/attribution/crispri.py",
+      "genomeos/attribution/element_types.py",
+      "genomeos/attribution/eqtl.py",
+      "genomeos/attribution/executor.py",
+      "genomeos/attribution/gene_identity.py",
+      "genomeos/attribution/holdout.py",
+      "genomeos/attribution/human_panel.py",
+      "genomeos/attribution/measured.py",
+      "genomeos/attribution/mpra.py",
+      "genomeos/attribution/not_open_profile.py",
+      "genomeos/attribution/pilot.py",
+      "genomeos/attribution/pilot_bio.py",
+      "genomeos/attribution/target_calibration.py",
+      "genomeos/attribution/targets.py",
+      "genomeos/attribution/variation.py",
+      "genomeos/attribution/vista.py",
+      "genomeos/cancer/__init__.py",
+      "genomeos/cancer/alterations.py",
+      "genomeos/cancer/cbioportal.py",
+      "genomeos/cancer/compare.py",
+      "genomeos/cancer/libraries.py",
+      "genomeos/cancer/tumour.py",
+      "genomeos/certainty.py",
+      "genomeos/coords.py",
+      "genomeos/flow/__init__.py",
+      "genomeos/flow/trace.py",
+      "genomeos/genome/__init__.py",
+      "genomeos/genome/anatomy.py",
+      "genomeos/genome/annotation.py",
+      "genomeos/genome/bgzf.py",
+      "genomeos/genome/domains.py",
+      "genomeos/genome/epigenome.py",
+      "genomeos/genome/fasta.py",
+      "genomeos/genome/fetch.py",
+      "genomeos/genome/genome.py",
+      "genomeos/genome/index.py",
+      "genomeos/genome/individuals.py",
+      "genomeos/genome/lookup.py",
+      "genomeos/genome/missense.py",
+      "genomeos/genome/motifs.py",
+      "genomeos/genome/reader.py",
+      "genomeos/genome/regulation.py",
+      "genomeos/genome/regulatory.py",
+      "genomeos/genome/repeats.py",
+      "genomeos/genome/sequence.py",
+      "genomeos/genome/signals.py",
+      "genomeos/genome/unknown.py",
+      "genomeos/genome/variants.py",
+      "genomeos/ir/__init__.py",
+      "genomeos/ir/model.py",
+      "genomeos/knowledge/__init__.py",
+      "genomeos/knowledge/across.py",
+      "genomeos/knowledge/cells.py",
+      "genomeos/knowledge/go.py",
+      "genomeos/knowledge/homology.py",
+      "genomeos/knowledge/ligand_receptor.py",
+      "genomeos/knowledge/obo.py",
+      "genomeos/knowledge/profiling.py",
+      "genomeos/knowledge/reactome.py",
+      "genomeos/knowledge/satmut.py",
+      "genomeos/lang/__init__.py",
+      "genomeos/lang/grammar.py",
+      "genomeos/lang/located.py",
+      "genomeos/lang/parser.py",
+      "genomeos/lib/__init__.py",
+      "genomeos/lib/catalog.py",
+      "genomeos/lib/membership.py",
+      "genomeos/manifest.py",
+      "genomeos/molecules/__init__.py",
+      "genomeos/molecules/alphafold.py",
+      "genomeos/molecules/compiler.py",
+      "genomeos/molecules/ptm.py",
+      "genomeos/molecules/reactome.py",
+      "genomeos/molecules/report.py",
+      "genomeos/molecules/rna.py",
+      "genomeos/molecules/uniprot.py",
+      "genomeos/predict/__init__.py",
+      "genomeos/predict/alphagenome_adapter.py",
+      "genomeos/predict/enhancer_target.py",
+      "genomeos/predict/individual_effects.py",
+      "genomeos/results.py",
+      "genomeos/runtime/__init__.py",
+      "genomeos/runtime/cell.py",
+      "genomeos/runtime/central_dogma.py",
+      "genomeos/runtime/grn.py",
+      "genomeos/runtime/located.py",
+      "genomeos/runtime/methylation.py",
+      "genomeos/runtime/uncertainty.py",
+      "genomeos/runtime/variant_effect.py",
+      "genomeos/therapeutics/__init__.py",
+      "genomeos/therapeutics/atlas.py",
+      "genomeos/therapeutics/binding.py",
+      "genomeos/therapeutics/design.py",
+      "genomeos/therapeutics/evidence.py",
+      "genomeos/therapeutics/expression.py",
+      "genomeos/therapeutics/localisation.py",
+      "genomeos/therapeutics/logic.py",
+      "genomeos/therapeutics/mechanisms.py",
+      "genomeos/therapeutics/model.py",
+      "genomeos/therapeutics/neoantigen.py",
+      "genomeos/therapeutics/pipeline.py",
+      "genomeos/therapeutics/providers.py",
+      "genomeos/therapeutics/report.py",
+      "genomeos/therapeutics/safety.py",
+      "genomeos/therapeutics/scan.py",
+      "genomeos/therapeutics/scoring.py",
+      "genomeos/therapeutics/structure.py",
+      "genomeos/therapeutics/trafficking.py",
+      "genomeos/version.py",
+      "scripts/gene_identity_register.py"
+    ],
+    "counting_path_count": 118,
+    "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+    "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+  },
+  "inputs_named_by_sha256": {
+    "annotation": [
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      }
+    ],
+    "compiled_programs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      }
+    ],
+    "window_cache": [
+      {
+        "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+        "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+        "bytes": 77622737,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+        "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+        "bytes": 51646793,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+        "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+        "bytes": 40830506,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+        "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+        "bytes": 25247071,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+        "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+        "bytes": 34546268,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+        "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+        "bytes": 41715184,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+        "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+        "bytes": 35337035,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+        "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+        "bytes": 30518026,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+        "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+        "bytes": 31161454,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+        "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+        "bytes": 30030494,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+        "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+        "bytes": 46496550,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+        "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+        "bytes": 41655248,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+        "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+        "bytes": 14622897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+        "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+        "bytes": 31260018,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+        "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+        "bytes": 27369934,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+        "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+        "bytes": 38935424,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+        "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+        "bytes": 55243170,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+        "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+        "bytes": 13518960,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+        "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+        "bytes": 50085176,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+        "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+        "bytes": 22792705,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+        "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+        "bytes": 9769482,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+        "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+        "bytes": 24359126,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+        "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+        "bytes": 14376446,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+        "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+        "bytes": 470775,
+        "partition": null
+      }
+    ],
+    "all_three_are_git_ignored": "data/reference/, data/knowledge/ and data/cache/ are git-ignored, so a manifest rebuild of any result of this lane stops at the inputs rather than rebuilding them"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GENCODE",
+        "version": "v50, data/reference/gencode_v50_chr*.gff3.gz"
+      },
+      {
+        "accession": "AlphaGenome deletion answers per element, as the project cached them",
+        "version": "data/knowledge/alphagenome/elements/chr*.json.gz, the per-element record of every gene the scorer read in the element's window"
+      },
+      {
+        "accession": "the compiled non-coding programs of the 24 chromosomes",
+        "version": "data/knowledge/compiled/noncoding_chr*.bio, read as they are on disk"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+        "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+        "bytes": 77622737,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+        "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+        "bytes": 30030494,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+        "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+        "bytes": 46496550,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+        "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+        "bytes": 41655248,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+        "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+        "bytes": 14622897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+        "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+        "bytes": 31260018,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+        "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+        "bytes": 27369934,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+        "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+        "bytes": 38935424,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+        "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+        "bytes": 55243170,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+        "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+        "bytes": 13518960,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+        "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+        "bytes": 50085176,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+        "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+        "bytes": 51646793,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+        "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+        "bytes": 22792705,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+        "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+        "bytes": 9769482,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+        "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+        "bytes": 24359126,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+        "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+        "bytes": 40830506,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+        "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+        "bytes": 25247071,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+        "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+        "bytes": 34546268,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+        "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+        "bytes": 41715184,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+        "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+        "bytes": 35337035,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+        "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+        "bytes": 30518026,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+        "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+        "bytes": 31161454,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+        "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+        "bytes": 14376446,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+        "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+        "bytes": 470775,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr1.gff3.gz",
+        "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+        "bytes": 15781966,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr10.gff3.gz",
+        "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+        "bytes": 6971712,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr11.gff3.gz",
+        "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+        "bytes": 9161789,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr12.gff3.gz",
+        "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+        "bytes": 8537589,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr13.gff3.gz",
+        "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+        "bytes": 2925688,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr14.gff3.gz",
+        "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+        "bytes": 5446220,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr15.gff3.gz",
+        "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+        "bytes": 5424386,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr16.gff3.gz",
+        "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+        "bytes": 6795096,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr17.gff3.gz",
+        "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+        "bytes": 9026753,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr18.gff3.gz",
+        "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+        "bytes": 2682634,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr19.gff3.gz",
+        "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+        "bytes": 8518707,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr2.gff3.gz",
+        "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+        "bytes": 12336546,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr20.gff3.gz",
+        "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+        "bytes": 3974515,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr22.gff3.gz",
+        "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+        "bytes": 3912249,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr3.gff3.gz",
+        "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+        "bytes": 10518849,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr4.gff3.gz",
+        "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+        "bytes": 6522948,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr5.gff3.gz",
+        "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+        "bytes": 7000086,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr6.gff3.gz",
+        "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+        "bytes": 7623994,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr7.gff3.gz",
+        "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+        "bytes": 8058560,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr8.gff3.gz",
+        "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+        "bytes": 5864835,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr9.gff3.gz",
+        "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+        "bytes": 6759087,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrX.gff3.gz",
+        "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+        "bytes": 4849239,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chrY.gff3.gz",
+        "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+        "bytes": 428494,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "mis_resolution": "a rule whose target token resolves, by the project's own symbol resolution, to a different Ensembl gene id from the gene the deletion answer measured. It says the rule names a gene the model never scored; it does NOT say the predicted relation is wrong, and nothing here establishes that any one rule is wrong",
+      "compiled_side": "genomeos.attribution.pilot_bio.gene_tss's own choice, with the gene_id it discards carried: among the GENCODE v50 genes of the element's chromosome whose gene_name is the rule's target token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token that is itself a versionless gene_id of that chromosome resolves to that gene directly, which gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own.",
+      "measured_side": "the deletion answer records its target as a name and NO Ensembl gene id, so the id is recovered from two recorded things and never read: the element's own recorded window gene list (data/knowledge/alphagenome/elements/<chrom>.json.gz), which must name the target exactly once, and the window the method records, taken as the element midpoint plus or minus 500000 (not_open_profile.SCORER_HALF_WINDOW), inside which the gene's BODY must lie. Exactly one GENCODE v50 gene of that name with a body overlapping the window is the measured gene; none or several is an unresolvable cause and never a guess. A target token that is a versionless gene_id is read directly, because there the answer does record the id.",
+      "half_window": 500000,
+      "second_half_window": 524288,
+      "effect_band_call": "the rule line's own `strength:`, banded at predict.enhancer_target.STRONG_EFFECT = 0.3: strong at or above, weak below. Clipping at 1 cannot move a value across 0.3, so this is the same band the cached prediction's `strength` field carries.",
+      "causes": {
+        "target_absent_from_the_chromosome_annotation": "the rule's target token is neither a gene_name nor a versionless gene_id of any gene on the element's own chromosome in GENCODE v50, so neither side resolves to an id. The annotation AlphaGenome scored with and GENCODE v50 are not guaranteed to be the same release",
+        "rule_of_the_experimental_layer": "the rule's evidence is a CRISPRi screen, not an AlphaGenome deletion answer, so there is no deletion answer to compare against. The screen records its own Ensembl gene id (holdout.Unit.gene_id, `measuredGeneEnsemblId`) and that is a different comparison, reported separately and never added into these counts",
+        "element_absent_from_the_window_cache": "the element has no per-element record in data/knowledge/alphagenome/elements/<chrom>.json.gz, so what the scorer read in its window is not on disk and the measured side cannot be recovered without a request, which this lane does not make",
+        "target_not_in_the_recorded_window_list": "the element's recorded window gene list does not contain the rule's target name at all, so the record does not say which gene the answer named and no id is recoverable from it",
+        "target_named_more_than_once_in_the_recorded_window_list": "the scorer's own record lists more than one gene under the rule's target name in this element's window, so the answer's `gene` field does not say which of them it measured and no id is recoverable from the record",
+        "no_annotated_locus_of_that_name_overlaps_the_scorer_window": "the name is in the recorded window list, but no GENCODE v50 gene of that name on this chromosome has a gene body overlapping the scorer window, so the measured gene cannot be placed in the annotation both sides are resolved against",
+        "two_or_more_annotated_loci_of_that_name_in_the_scorer_window": "two or more GENCODE v50 genes of that name have a gene body inside the scorer window, so the window does not pick one out and no id is recoverable"
+      },
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [
+      "nothing is excluded here: this file fixes definitions and counts nothing",
+      "no new cut-off is introduced: the half-window, the effect band and the distance bands are imported from where the project already fixed them"
+    ],
+    "partitions": {
+      "none": "this registration partitions nothing; the breakdowns it fixes are listed under `correlations` and are computed by the run it registers"
+    },
+    "code_cleanliness": {
+      "git_sha": "6aba86a51291ad3e7f0ac9ff4f7ca4c690f75615",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "tests/test_manifest_enforced.py",
+        "tests/test_results_cleanliness_refusal.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [
+        "genomeos/manifest.py",
+        "genomeos/results.py"
+      ],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/gene_identity_register.py"
+      ],
+      "counting_path_count": 118,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "6aba86a51291ad3e7f0ac9ff4f7ca4c690f75615",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "tests/test_manifest_enforced.py",
+        "tests/test_results_cleanliness_refusal.py"
+      ],
+      "untracked_code_paths": [
+        "tests/test_results_cleanliness_refusal.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/gene_identity_registration.json"
+      ],
+      "argv": [
+        "scripts/gene_identity_register.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
