@@ -15186,6 +15186,107 @@ must watch is already on the record — the link-level direction test had **21 a
 measured, so a count of what exists is not a count of what can be answered. 0 model requests, no money,
 nothing downloaded.
 
+## 21 of the 48 increase-derived links can be asked at all, and both imported floors refuse the direction test: short of 30 links by 9 and of 20 loci by 7 (2026-10-02, lane-reptest)
+
+lane-inhibits built extractor v2 and emitted 48 increase-derived links, applying neither floor on purpose
+so that the lane testing them could not pick its own. The obvious next step was a direction test. It is
+not the step taken, because the record already held the counter-example: lane-direction's population had
+48 **measured** increase links and 21 **answerable** ones, and its gate refused the comparison. So the
+first question about the 48 was not what direction they read but how many of them can be asked at all.
+This is that count (`data/results/reptest_answerable.json`), and the answer is **21 answerable of 48
+measured, over 13 independent loci**. Against `fresh.POSITIVE_FLOOR = 30` answerable links and
+`fresh.LOCUS_FLOOR`, which is `cell2.POOLED_LOCUS_FLOOR = 20`, independent loci — both imported, neither
+chosen here — that is a **no-go**: short of the link floor by 9 and of the locus floor by 7. No direction
+was read, no agreement rate computed, no interval taken, no test registered and neither floor moved. 21
+of 48 is not close, not promising, not nearly enough, not a good start and not enough for a pilot.
+
+**The population is the extractor's own output.** This is the one thing the count adds that was not
+already on the record. lane-direction enumerated an equivalent population by hand from the cached pairs,
+and a count taken on a hand-rolled copy is a count about the copy. Here every link is a record
+`measured.rule_links_detail(row, 'v2')` returns over the rows `measured.rows` builds, genome-wide: **260
+links = 212 decrease-derived + 48 increase-derived**, v1's own count 212, **0** v1 links removed,
+additive, **0** conflicts. The two populations agree, and the result reports that as a comparison with
+both counts named rather than assuming it. A conflict count of 0 is a count and not a finding that the
+measurements agree about direction, in lane-inhibits' own words.
+
+**The answerability gap by its named causes, exhaustive and summing to 48.** The predicate is
+lane-direction's, imported from `direction_link.PREDICTED_CALL` and `direction_link.SIGN_CALL` rather
+than restated: the cached signed deletion value for that link's **own** gene on that link's **own** cell
+track, with nothing substituted.
+
+| cause | links |
+| --- | --- |
+| answerable in its own cell | 21 |
+| the cache carries no track of this cell | 9 |
+| the gene is not in the scorer's window at this element | 18 |
+| the element is absent from the cache archive | 0 |
+| the gene was scored but carries no entry on this cell's track | 0 |
+| the cached value is exactly zero, so it carries no direction | 0 |
+
+**The last three being zero is the finding, and it is why the gap will not close by reading harder.**
+lane-direction recorded 18 of its 39 K562 increase links under a single word, `absent`. Three different
+gaps hide in that word and only one of them could ever be closed by reading more of what is on disk, so
+they are counted apart here — `targets.py` already names two of them, `NOT_IN_WINDOW` and
+`NOT_ON_TRACK`. Counted apart, **all 18 are one cause**: the gene the CRISPRi benchmark tested was never
+in the scorer's 1 Mb window at that element. Not one is a missing element record, so the loose
+per-element files under `data/knowledge/alphagenome/elements/<chrom>/` — which the committed reader
+`targets.ElementResponses.element` consults and lane-direction's streaming reader did not — were
+searched and closed nothing: **0 opened**. Not one is a gene scored on other tracks but not this cell's.
+Nine more sit in cells the sweep never scored at all. So **27 of the 48 are beyond what the finished
+sweep contains**, and nothing short of a re-score with a different window, or a sweep covering WTC11 and
+HCT116, changes that number. The partial second cache `data/knowledge/alphagenome/elements_hct116` is
+named in the registration and **not read** here; lane-hct already counted it under its own blinding and
+reported the pooled increase arm at 24 links over 14 loci, which misses the same two floors.
+
+**Both arms apart, with their denominators, and neither pooled to reach a floor.** Increases: 21
+answerable of 48 measured, 13 independent loci (all 21 K562; 16 training, 5 held-out). Decreases: 178
+answerable of 212 measured, 116 independent loci — 174 K562 and 4 GM12878, with 17 in cells the cache
+carries no track of and 17 whose gene is outside the window. Those 178 reconcile with lane-direction's
+174 exactly: that lane restricted to K562, and this count asks each link about its **own** cell, which
+admits the 4 GM12878 links. Both counts are the extractor's own construction and **not** model coverage,
+the decrease arm's completeness above all; counting either as coverage would repeat the error
+`docs/LESSONS.md` records under *"A count is not a measurement of the thing you want to count"*. The
+locus counts are `cell2`'s operational grouping and not established biological independence.
+
+**The statistic was settled before the count and checked on these denominators, not assumed to
+transfer.** lane-direction proved, before reading any value and pinned by a test over 200 cases, that the
+excess of one arm's agreement minus the other's over a sign-shuffled baseline is identically
+`2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u)`. That identity is carried word for word, and
+`reptest.collapse_applies` recomputes its **premise** here from this lane's own answered denominators:
+178 against 21, so `(n_u - n_d)` is negative, a positive excess of the between-arm difference requires
+balanced accuracy **below** 0.5, and a one-sided test of that difference against the sign shuffle would
+be a test of the model doing **worse** than chance. Equal arms would have made the difference
+unidentifiable outright, which the module registers as a stop condition rather than a detail to work
+around. Either way there is exactly **one** skill number on a population of this shape and it is
+balanced accuracy against 0.5, which is what a test would have been registered on had the floors
+cleared. Five cases of the identity are pinned over this lane's own record shape in
+`tests/test_reptest.py`.
+
+**R2 holds in code, not in prose.** `increase_links.check_no_mechanism_claim` is called on all 260
+records and this module defines no forbidden-word list of its own, which a test asserts, so the
+prohibition cannot be weakened by shadowing it. A measured increase on knockdown is *an increase on
+knockdown*: never a silencer, never a repressor and never evidence of a repression mechanism, because an
+increase under CRISPRi can be indirect — KRAB spread onto a neighbouring promoter, competition between
+promoters for a shared enhancer.
+
+**What was read and what it cost.** 107 declared inputs over 1.413 GB, including the tables the
+`enhancer_targets_all` summaries name through their `elements_where` fields; the tracer recorded 415
+opens under `data/` over 128 files with **0 undeclared** and **0 declared and not read**. 22 per-element
+archives were streamed a record at a time and none was loaded whole; 53.6 s. `manifest_rebuild.py` in a
+detached worktree: 107 of 107 inputs checked by sha256, 128 files opened and hashed, 1,927 of 1,933
+leaves compared, 0 `must_hold` failures, and 3 differences — all three inside
+`result_manifest.traced_inputs`, the two `cwd` fields and the raw interpreter `open` count, which record
+where the run happened and not a value it computed. No computed field differs. 0 model requests, no
+money, nothing downloaded, no network.
+
+**What this does not establish.** It does not establish that the model reads the direction of these
+links badly, or well: no direction was read. It does not establish that the 27 unanswerable links would
+disagree, or agree — they are absent from the test rather than negative in it. It does not establish
+that the extractor's 48 links are wrong; they are what v2 was registered to emit. And it does not
+establish that a wider scoring window or a sweep covering WTC11 and HCT116 would clear the floors: it
+says only that 27 of the 48 are beyond the sweep the project has, and the two gaps that reading harder
+could have closed are each exactly 0.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
