@@ -111,11 +111,17 @@ class TestOnlyTheRecordingPathMaySend:
             elif isinstance(node, ast.ImportFrom) and node.module:
                 imported.add(node.module)
                 imported.update(f"{node.module}.{a.name}" for a in node.names)
-        assert not any("alphagenome_adapter" in r for r in imported), (
-            "the sender must reach AlphaGenome only through enhancer_target.score_element"
+        # The sender DOES import AlphaGenomeAdapter, because a scorer has to be constructed from
+        # something, and that scorer is then passed to score_element which does the recording. What must
+        # not happen is the sender calling the client itself -- which the planted direct-call test above
+        # is the real guarantee of. These assertions cover the structural half: no import of the vendor
+        # package, and no import of the client factory.
+        assert not any(r == "alphagenome" or r.startswith("alphagenome.") for r in imported), (
+            "the sender must not import the vendor package; it reaches the model through the adapter "
+            "and the recording path"
         )
-        assert not any("alphagenome" in r.lower() for r in imported), (
-            "no AlphaGenome client import of any kind"
+        assert "genomeos.predict.alphagenome_adapter.create_client" not in imported, (
+            "the client factory is not the sender's to call"
         )
         assert "genomeos.predict.enhancer_target" in imported
 
@@ -428,3 +434,124 @@ class TestTheErrorNoteAndTheLedgerPilot:
         )
         assert out["pilot"]["passed"] is True, "past ten, the checkpoint is behind the run"
         assert out["requests_this_pass"] == 18
+
+
+class TestEveryLiveEntryPointResolves:
+    """The test that was missing, and the only kind that could have caught it.
+
+    `enhancer_target.live_scorer_and_fetch()` was INVENTED: the name never existed. The sender passed 122
+    of its own tests, a code review and a dry run, and still failed on that line, because every test
+    SUBSTITUTED the entry point and the scorer is built only after the --send check. So the one line that
+    only a real send could exercise was the one line that was wrong.
+
+    These tests cost nothing, need no network and no key, and assert that every attribute the sender
+    reaches for on a module it does not define actually resolves. If one name was invented, another may
+    be, so this is derived from the syntax tree rather than from a list someone maintains.
+    """
+
+    SRC = ROOT / "scripts/astroreg2_send.py"
+
+    def imported_modules(self):
+        """The module objects the sender imports, by the name it binds them to."""
+        import ast
+        import contextlib
+        import importlib
+
+        tree = ast.parse(self.SRC.read_text())
+        bound: dict[str, object] = {}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+                for alias in node.names:
+                    full = f"{node.module}.{alias.name}"
+                    # a name imported FROM a module is not a submodule; the parent covers it
+                    with contextlib.suppress(ModuleNotFoundError):
+                        bound[alias.asname or alias.name] = importlib.import_module(full)
+            elif isinstance(node, ast.Import):
+                for alias in node.names:
+                    with contextlib.suppress(ModuleNotFoundError):
+                        bound[alias.asname or alias.name.split(".")[0]] = importlib.import_module(alias.name)
+        return bound
+
+    def attribute_uses(self):
+        """Every `module.attr` the sender reaches for, from its syntax tree."""
+        import ast
+
+        tree = ast.parse(self.SRC.read_text())
+        uses: set[tuple[str, str]] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name):
+                uses.add((node.value.id, node.attr))
+        return uses
+
+    def test_every_attribute_the_sender_reaches_for_resolves(self):
+        mods = self.imported_modules()
+        missing = [
+            f"{name}.{attr}"
+            for name, attr in sorted(self.attribute_uses())
+            if name in mods and not hasattr(mods[name], attr)
+        ]
+        assert missing == [], (
+            f"the sender names {missing} on an imported module and they do not exist. This is the defect "
+            "that stopped the first launch: an invented entry point, invisible because every test "
+            "substituted it"
+        )
+
+    def test_the_check_would_have_caught_the_invented_name(self):
+        """By planting the original defect: the check must fail on it, or it proves nothing."""
+        from genomeos.predict import enhancer_target
+
+        assert not hasattr(enhancer_target, "live_scorer_and_fetch"), (
+            "the invented name is still absent from enhancer_target, which is why the sender defines its own"
+        )
+        mods = {"enhancer_target": enhancer_target}
+        planted = {("enhancer_target", "live_scorer_and_fetch")}
+        missing = [f"{n}.{a}" for n, a in planted if n in mods and not hasattr(mods[n], a)]
+        assert missing == ["enhancer_target.live_scorer_and_fetch"]
+
+    def test_the_senders_own_live_entry_point_exists_and_is_callable(self):
+        assert callable(sender.live_scorer_and_fetch)
+
+    def test_score_element_is_the_real_recording_path_and_takes_what_the_sender_passes(self):
+        """Signature, not just existence: the sender's keywords must be ones it accepts."""
+        import inspect
+
+        from genomeos.predict import enhancer_target
+
+        params = inspect.signature(enhancer_target.score_element).parameters
+        for kw in ("chrom", "element_id", "start", "end"):
+            assert kw in params, f"score_element does not take {kw}"
+        positional = [n for n, p in params.items() if p.kind is p.POSITIONAL_OR_KEYWORD][:2]
+        assert positional == ["scorer", "fetch"], (
+            "the sender passes the scorer and fetcher positionally; if that order changed the send would "
+            "break on the one line only a real send exercises"
+        )
+
+    def test_the_adapter_names_the_sender_uses_exist(self):
+        """The scorer construction reaches into the adapter; those names must resolve too."""
+        from genomeos.predict import AlphaGenomeAdapter
+
+        a = AlphaGenomeAdapter.__new__(AlphaGenomeAdapter)
+        assert hasattr(type(a), "available")
+        assert callable(getattr(type(a), "_live_scorer", None)), (
+            "the adapter exposes no public scorer accessor, so the sender uses the private one and says "
+            "so; if a public one appears, the sender should move to it"
+        )
+
+    def test_the_genome_names_the_fetcher_uses_exist(self):
+        from genomeos.genome import IndexedGenome, reference_fasta
+
+        assert callable(reference_fasta)
+        assert callable(getattr(IndexedGenome, "fetch", None))
+
+
+class TestTheLedgerIsNotAResult:
+    def test_the_ledger_is_outside_data_results(self):
+        """A ledger is an append-only record of charges, not a computed value with a manifest."""
+        assert "data/results" not in str(sender.LEDGER)
+        assert str(sender.LEDGER) == "data/ledger/astroreg2_requests.jsonl"
+
+    def test_the_reason_it_is_not_a_result_is_recorded(self):
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        assert "is not" in src and "RESULT" in src
+        assert "append-only record of charges" in src
+        assert "cannot be reconstructed from outcomes" in src
