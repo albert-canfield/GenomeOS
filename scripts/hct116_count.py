@@ -336,6 +336,23 @@ def main() -> None:
         p = crispri.KNOWLEDGE / name
         if p.exists():
             paths.add(p)
+    # `measured.Layer.load` opens the whole layer, so this run OPENS the lentiMPRA, VISTA and
+    # saturation-mutagenesis tables as well, although its counting path reads only `layer.crispri`. An
+    # input is what a writer opened and not what it meant to read (the audit hook in genomeos/manifest.py
+    # records every open under data/), so they are declared, enumerated exactly as
+    # `measured.result_manifest` enumerates them rather than named by hand. Imported here and not at the
+    # top, the way that function imports its own helper, so the declaration cannot disturb a line of the
+    # import block another lane's diff is reading.
+    from genomeos.attribution import mpra, vista
+    from genomeos.knowledge import satmut as satmut_knowledge
+
+    for acc in mpra.FILES.values():
+        p = mpra.KNOWLEDGE / f"{acc}.bed.gz"
+        if p.exists():
+            paths.add(p)
+    for p in (vista.locus_path(vista.KNOWLEDGE), satmut_knowledge.DATA_PATH):
+        if p.exists():
+            paths.add(p)
     for glob in INPUT_GLOBS:
         for chrom in chroms:
             paths.update(RESULTS_DIR.glob(glob.replace("chr*", chrom)))
