@@ -1,0 +1,524 @@
+{
+  "result": "astroreg2_astrocyte_activity",
+  "date": "2026-10-02",
+  "status": "an INPUT computed, not a result. No deletion value read, no AUPRC formed, no outcome magnitude read, no AlphaGenome request, no money, nothing written to disk",
+  "lane": "lane-astro",
+  "what_this_is": "the astrocyte activity columns under amendment 2's rule, and the zero rate by label, which is the thing the no-go's censoring argument turns on",
+  "rule": {
+    "counting": "the producer's, cited term by term",
+    "producer": {
+      "repository": "mayasheth/chrom-annotate",
+      "commit": "91cda73ebe3a19153a582cab18cbf7ff70d85cfc",
+      "file": "workflow/scripts/neighborhoods.py",
+      "rpm_formula": "L579: df[feature_name + '.RPM'] = 1e6 * df[featurecount] / float(total_counts)",
+      "numerator": "L433-445 count_bam: pysam.AlignmentFile(bam).count(chr, start, end). pysam's default read_callback='all' skips BAM_FUNMAP, BAM_FSECONDARY, BAM_FQCFAIL and BAM_FDUP, and does NOT skip BAM_FSUPPLEMENTARY, so a duplicate is excluded from the numerator and a supplementary alignment is counted",
+      "sex_chromosomes": "L425-431 double_sex_chrom_counts, called from run_count_reads: the count of any region whose contig name ENDS in X or Y is multiplied by 2, 'to make it seem like they have 2 copies'",
+      "denominator": "L662-673 count_bam_mapped: `samtools idxstats`, summing column 3 over every reference. That is mapped read-segments including duplicates, secondaries and supplementaries, so the denominator is NOT the numerator's filter applied to the whole file",
+      "several_bams": "L596-602 average_features: df[feature + '.RPM'] = df[feature_RPM_cols].mean(axis=1). The per-BAM RPMs are AVERAGED; the counts are not pooled",
+      "files": "resources/metadata/epigenetic_datasets.tsv names them per biosample and assay. K562 DNase-seq ENCSR000EOT: ENCFF205FNC, ENCFF860XAE. K562 H3K27ac ChIP-seq ENCSR000AKP: ENCFF790GFL, ENCFF817HMW. Both pairs are ENCODE `unfiltered alignments`",
+      "region": "config/config_CRISPR.yml: for the `validation` set the chr/start/end columns are the benchmark's own chrom, chromStart and chromEnd, so the region is the element span as published and is not resized. `RPM_expanded_assays` is a SEPARATE set of columns (.expandedRegion) and is not the column the frozen model reads"
+    },
+    "file_selection": "NOT the producer's: it names no astrocyte file. The released analysis only, one BAM per biological replicate, enforced by rpm.check_one_bam_per_replicate",
+    "asymmetry_with_the_k562_validation": "for K562 both the rule and the files were the producer's. Here the rule is the producer's and the files are this lane's stated selection, and there is no published astrocyte column to validate the result against. Any astrocyte number must carry that: activity reconstructed by the K562-validated rule",
+    "no_rescaling": "the columns are as counted; no factor was fitted"
+  },
+  "columns": {
+    "DHS.RPM": {
+      "experiment": "ENCSR000EPM",
+      "analysis": "ENCODE4 v3.0.0-alpha.2 GRCh38 + Lab custom GRCh38",
+      "bams": [
+        "ENCFF636MYO",
+        "ENCFF688FWV"
+      ],
+      "biological_replicates": [
+        1,
+        2
+      ],
+      "per_bam": [
+        {
+          "elements": 957,
+          "denominator_reads_passing_the_filter": 196767444,
+          "reads_seen": 196767444,
+          "reads_rejected_by_the_read_rule": 0,
+          "reads_on_a_chromosome_with_no_element": 16507,
+          "elements_with_no_read": 0,
+          "total_element_overlaps": 204516,
+          "read_rule": "a read is counted when it is not unmapped, not secondary and not supplementary. Duplicates are whatever the filtered BAM delivers, because excluding them would be a rule the benchmark does not state. A paired-end fragment is counted ONCE, by counting read1 only. Overlap means any base: a read overlaps an element when its reference span intersects the element's span by at least one base, both half-open",
+          "accession": "ENCFF636MYO"
+        },
+        {
+          "elements": 957,
+          "denominator_reads_passing_the_filter": 22771395,
+          "reads_seen": 22771395,
+          "reads_rejected_by_the_read_rule": 0,
+          "reads_on_a_chromosome_with_no_element": 2524,
+          "elements_with_no_read": 2,
+          "total_element_overlaps": 57998,
+          "read_rule": "a read is counted when it is not unmapped, not secondary and not supplementary. Duplicates are whatever the filtered BAM delivers, because excluding them would be a rule the benchmark does not state. A paired-end fragment is counted ONCE, by counting read1 only. Overlap means any base: a read overlaps an element when its reference span intersects the element's span by at least one base, both half-open",
+          "accession": "ENCFF688FWV"
+        }
+      ],
+      "combination": "mean of the per-BAM RPMs, as average_features does",
+      "metadata_cross_check": {
+        "per_file": [
+          {
+            "accession": "ENCFF636MYO",
+            "mapped_reads": 196767444,
+            "from": "['SamtoolsFlagstatsQualityMetric']:mapped"
+          },
+          {
+            "accession": "ENCFF688FWV",
+            "mapped_reads": 22771395,
+            "from": "['SamtoolsStatsQualityMetric']:reads mapped"
+          }
+        ],
+        "computed_denominator_total": 219538839,
+        "metadata_total_mapped_reads": 219538839,
+        "computed_over_metadata": 1.0,
+        "rule": "ENCODE publishes a mapped-read total in each alignment's quality metrics. It is printed beside the computed denominator with their ratio, and it is NEVER used as the denominator, because it was counted under ENCODE's filters and the numerator here is counted under these. Two filter sets silently divided into one another is an error that looks like a result"
+      },
+      "from_cached_pass": false,
+      "between_replicates": {
+        "accessions": [
+          "ENCFF636MYO",
+          "ENCFF688FWV"
+        ],
+        "mapped_read_lengths": [
+          36,
+          20
+        ],
+        "read_lengths_differ": true,
+        "spearman_between_replicates": 0.9691719116902685,
+        "median_ratio_second_over_first": {
+          "median_ratio": 2.009533043437805,
+          "elements_used": 957,
+          "elements_excluded_published_not_positive": 0,
+          "p05": 0.9369750455547357,
+          "p95": 3.4328178835933936
+        },
+        "total_element_rpm_per_replicate": [
+          1042.41,
+          2552.76
+        ],
+        "total_rpm_ratio_second_over_first": 2.4488982658567244,
+        "zero_elements_per_replicate": [
+          0,
+          2
+        ],
+        "confounded": "this is the TOTAL between-replicate difference. Read length is one of several things that differ between the two files, so it is an upper bound on the read-length contribution and not a measurement of it. No attempt is made to separate them and none should be read into it",
+        "why_it_matters": "the K562 validation did not test mixed read lengths, so where the astrocyte replicates differ in read length the validated rule is applied outside the conditions it was validated under. The mean averages over the difference rather than resolving it"
+      },
+      "zero_rate": {
+        "by_label": {
+          "all labels": {
+            "elements": 957,
+            "zero": 0,
+            "zero_share": 0.0
+          },
+          "excluded_underpowered": {
+            "elements": 846,
+            "zero": 0,
+            "zero_share": 0.0
+          },
+          "increase_held_apart": {
+            "elements": 24,
+            "zero": 0,
+            "zero_share": 0.0
+          },
+          "negative": {
+            "elements": 882,
+            "zero": 0,
+            "zero_share": 0.0
+          },
+          "positive": {
+            "elements": 122,
+            "zero": 0,
+            "zero_share": 0.0
+          }
+        },
+        "positive_minus_negative": 0.0,
+        "differential_by_label": false,
+        "reading": "a measured zero means the element's span was read in the alignments and no read was there. It is not the censored zero the no-go refused, which recorded the absence of a measurement as though it were one. The shares per label are reported so that 'no asymmetry by construction' is shown rather than asserted",
+        "threshold_note": "0.05 is this report's own threshold for calling the rate differential and is not a registered term; the shares themselves are the evidence"
+      }
+    },
+    "H3K27ac.RPM": {
+      "experiment": "ENCSR000AOQ",
+      "analysis": "ENCODE4 v1.5.1 GRCh38",
+      "bams": [
+        "ENCFF312ZIP",
+        "ENCFF759CXE"
+      ],
+      "biological_replicates": [
+        1,
+        2
+      ],
+      "per_bam": [
+        {
+          "elements": 957,
+          "denominator_reads_passing_the_filter": 10925509,
+          "reads_seen": 10925509,
+          "reads_rejected_by_the_read_rule": 0,
+          "reads_on_a_chromosome_with_no_element": 21521,
+          "elements_with_no_read": 105,
+          "total_element_overlaps": 24735,
+          "read_rule": "a read is counted when it is not unmapped, not secondary and not supplementary. Duplicates are whatever the filtered BAM delivers, because excluding them would be a rule the benchmark does not state. A paired-end fragment is counted ONCE, by counting read1 only. Overlap means any base: a read overlaps an element when its reference span intersects the element's span by at least one base, both half-open",
+          "accession": "ENCFF312ZIP"
+        },
+        {
+          "elements": 957,
+          "denominator_reads_passing_the_filter": 10226128,
+          "reads_seen": 10226128,
+          "reads_rejected_by_the_read_rule": 0,
+          "reads_on_a_chromosome_with_no_element": 17215,
+          "elements_with_no_read": 134,
+          "total_element_overlaps": 18184,
+          "read_rule": "a read is counted when it is not unmapped, not secondary and not supplementary. Duplicates are whatever the filtered BAM delivers, because excluding them would be a rule the benchmark does not state. A paired-end fragment is counted ONCE, by counting read1 only. Overlap means any base: a read overlaps an element when its reference span intersects the element's span by at least one base, both half-open",
+          "accession": "ENCFF759CXE"
+        }
+      ],
+      "combination": "mean of the per-BAM RPMs, as average_features does",
+      "metadata_cross_check": {
+        "per_file": [
+          {
+            "accession": "ENCFF312ZIP",
+            "mapped_reads": 10925509,
+            "from": "['ChipAlignmentQualityMetric']:mapped_reads"
+          },
+          {
+            "accession": "ENCFF759CXE",
+            "mapped_reads": 10226128,
+            "from": "['ChipAlignmentQualityMetric']:mapped_reads"
+          }
+        ],
+        "computed_denominator_total": 21151637,
+        "metadata_total_mapped_reads": 21151637,
+        "computed_over_metadata": 1.0,
+        "rule": "ENCODE publishes a mapped-read total in each alignment's quality metrics. It is printed beside the computed denominator with their ratio, and it is NEVER used as the denominator, because it was counted under ENCODE's filters and the numerator here is counted under these. Two filter sets silently divided into one another is an error that looks like a result"
+      },
+      "from_cached_pass": false,
+      "between_replicates": {
+        "accessions": [
+          "ENCFF312ZIP",
+          "ENCFF759CXE"
+        ],
+        "mapped_read_lengths": [
+          36,
+          36
+        ],
+        "read_lengths_differ": false,
+        "spearman_between_replicates": 0.8691452376846689,
+        "median_ratio_second_over_first": {
+          "median_ratio": 0.7122610499953322,
+          "elements_used": 852,
+          "elements_excluded_published_not_positive": 105,
+          "p05": 0.0,
+          "p95": 2.670978937482496
+        },
+        "total_element_rpm_per_replicate": [
+          2267.08,
+          1780.24
+        ],
+        "total_rpm_ratio_second_over_first": 0.7852585337618609,
+        "zero_elements_per_replicate": [
+          105,
+          134
+        ],
+        "confounded": "this is the TOTAL between-replicate difference. Read length is one of several things that differ between the two files, so it is an upper bound on the read-length contribution and not a measurement of it. No attempt is made to separate them and none should be read into it",
+        "why_it_matters": "the K562 validation did not test mixed read lengths, so where the astrocyte replicates differ in read length the validated rule is applied outside the conditions it was validated under. The mean averages over the difference rather than resolving it"
+      },
+      "zero_rate": {
+        "by_label": {
+          "all labels": {
+            "elements": 957,
+            "zero": 50,
+            "zero_share": 0.0522466039707419
+          },
+          "excluded_underpowered": {
+            "elements": 846,
+            "zero": 49,
+            "zero_share": 0.057919621749408984
+          },
+          "increase_held_apart": {
+            "elements": 24,
+            "zero": 0,
+            "zero_share": 0.0
+          },
+          "negative": {
+            "elements": 882,
+            "zero": 42,
+            "zero_share": 0.047619047619047616
+          },
+          "positive": {
+            "elements": 122,
+            "zero": 1,
+            "zero_share": 0.00819672131147541
+          }
+        },
+        "positive_minus_negative": -0.039422326307572204,
+        "differential_by_label": false,
+        "reading": "a measured zero means the element's span was read in the alignments and no read was there. It is not the censored zero the no-go refused, which recorded the absence of a measurement as though it were one. The shares per label are reported so that 'no asymmetry by construction' is shown rather than asserted",
+        "threshold_note": "0.05 is this report's own threshold for calling the rate differential and is not a registered term; the shares themselves are the evidence"
+      }
+    }
+  },
+  "elements_with_zero_in_both_columns": 0,
+  "the_peak_call_this_replaces": {
+    "elements_with_no_h3k27ac_peak": 477,
+    "elements": 957,
+    "share": 0.49843260188087773,
+    "by_label_in_the_no_go": "15.6% of positives against 53.4% of negatives overlapped no H3K27ac peak, so a peak-signal substitute would have been differentially missing BY LABEL and the gain it produced would have been an artefact of the substitution",
+    "source": "data/results/astroreg_activity_nogo.json"
+  },
+  "a_measured_zero": "an element with no reads over it has RPM exactly 0, and that 0 is MEASURED: the alignments were read across that span and nothing was there. It is categorically different from the zero a peak call forces on an element outside any called peak, which is the absence of a measurement being written down as if it were one. The first is admissible in the frozen feature and the second is what the no-go refused",
+  "limitation_mixed_read_lengths": "the two astrocyte DNase replicates have DIFFERENT mapped read lengths, 36 bp and 20 bp. Mappability differs with read length and the producer's multi-BAM mean averages over that difference rather than resolving it. The K562 validation did not test mixed read lengths, so in this respect the validated rule is applied outside the conditions it was validated under. The between-replicate disagreement is measured per column under `between_replicates`, and it is CONFOUNDED with everything else that differs between the files, so it bounds the read-length contribution rather than estimating it",
+  "limitation_no_published_column": "the reconstruction was validated against published values in K562 ONLY. There is no published astrocyte activity column to check this against, so any result built on it says 'activity reconstructed by the K562-validated rule'",
+  "not_claimed": [
+    "not validated against a published astrocyte column: none exists. The rule was validated on K562 and is applied here unchanged",
+    "not a result about the deletion gain, and not an input to one until a deletion value is bought under an approval that names AstroREG-2",
+    "not a claim that the activity values are correct in magnitude: the K562 scale gate failed and stays failed, and what was validated is that the ENDPOINT is insensitive to that",
+    "no astrocyte outcome magnitude was read"
+  ],
+  "requests_sent": 0,
+  "money_spent": 0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE astrocyte alignments, released analysis, one per biological replicate: ENCFF636MYO, ENCFF688FWV, ENCFF312ZIP, ENCFF759CXE",
+        "version": "9.72 GB streamed over HTTPS and not stored",
+        "url": "https://www.encodeproject.org"
+      },
+      {
+        "accession": "mayasheth/chrom-annotate, workflow/scripts/neighborhoods.py",
+        "version": "commit 91cda73ebe3a19153a582cab18cbf7ff70d85cfc; the COUNTING RULE is read from this file line by line. It names NO astrocyte file, so the file selection is this lane's stated rule and not the producer's",
+        "url": "https://github.com/mayasheth/chrom-annotate"
+      },
+      {
+        "accession": "Green NFO, et al. CRISPRi screening in cultured human astrocytes. Nature Neuroscience 2025;29(3):703-716 -- Supplementary Table 3",
+        "version": "publisher open-access supplementary store; pinned here by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/fresh/astro_MOESM5.xlsx",
+        "sha256": "e09bb1434329999d07505916606b93216b60927c070f4174875c14cea512680c",
+        "bytes": 36185183,
+        "partition": null,
+        "role": "the screen's element coordinates and registered labels. No effect size, fold change, p-value, FDR or expression level is read"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "elements": 957,
+      "screen_pairs": 7759,
+      "bams_streamed": 4,
+      "gb_streamed": 9.72,
+      "bytes_written_to_disk": 0,
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "requests_sent": 0,
+      "money_spent": 0,
+      "deletion_values_read": 0,
+      "auprc_computed": 0,
+      "scratch_directory": "/var/folders/3_/4krlwq_j259_5ktpsv9fcslr0000gp/T/genomeos-rpm"
+    },
+    "exclusions": [
+      "no AlphaGenome request is sent and this script has no code path that could send one",
+      "no deletion value is read or requested, so neither arm of the endpoint exists and nothing about the result is visible from this work",
+      "no effect size, fold change, p-value, FDR or expression level is read from the screen; the registered LABEL is read, and only to report the zero rate by label",
+      "no BAM is written to disk",
+      "no rescaling factor is fitted: the columns are as counted"
+    ],
+    "partitions": {
+      "astrocyte_screen": "all 7759 pairs over 957 elements, every label"
+    },
+    "code_cleanliness": {
+      "git_sha": "4e1cc4118979fe6b804fec89407b242e2006c171",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/manifest_rebuild.py",
+        "tests/test_code_cleanliness_hermetic.py",
+        "tests/test_crispri_benchmark_v2.py",
+        "tests/test_crispri_published_v2.py",
+        "tests/test_manifest_rebuild_tracer_fields.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astroreg.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/rpm.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/astroreg2_astrocyte_activity.py",
+        "scripts/astroreg_calib_register.py",
+        "scripts/astroreg_register.py",
+        "scripts/astroreg_rpm_calibrate.py"
+      ],
+      "counting_path_count": 130,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "4e1cc4118979fe6b804fec89407b242e2006c171",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/manifest_rebuild.py",
+        "tests/test_code_cleanliness_hermetic.py",
+        "tests/test_crispri_benchmark_v2.py",
+        "tests/test_crispri_published_v2.py",
+        "tests/test_manifest_rebuild_tracer_fields.py"
+      ],
+      "untracked_code_paths": [
+        "tests/test_code_cleanliness_hermetic.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/astroreg2_astrocyte_activity.json"
+      ],
+      "argv": [
+        "scripts/astroreg2_astrocyte_activity.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 213,
+      "opens_under_data": 3,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
