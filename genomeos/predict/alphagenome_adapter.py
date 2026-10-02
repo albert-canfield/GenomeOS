@@ -20,7 +20,7 @@ import hashlib
 import importlib.metadata
 import importlib.util
 import os
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
 from genomeos.certainty import Certainty
@@ -221,7 +221,7 @@ class AlphaGenomeAdapter:
             variant = genome.Variant(chromosome=chrom, position=pos, reference_bases=ref, alternate_bases=alt)
             interval = variant.reference_interval.resize(dna_client.SEQUENCE_LENGTH_1MB)
             scorer = variant_scorers.RECOMMENDED_VARIANT_SCORERS["RNA_SEQ"]
-            scores = client.score_variant(interval=interval, variant=variant, variant_scorers=[scorer])
+            scores = list(client.score_variant(interval=interval, variant=variant, variant_scorers=[scorer]))
             out: list[tuple[str, str, float]] = []
             for adata in scores:
                 genes = list(adata.obs.get("gene_name", []))
@@ -245,6 +245,16 @@ class AlphaGenomeAdapter:
                             self.last_scan["max_abs_log2fc"] = abs(val)
                         if abs(val) > threshold:
                             out.append((str(gene), str(tissue), val))
+            # Gene-axis record (schema 1), additive: the response's own gene axis in full -- every
+            # column it carries, each row's position in it, and each named cell's whole value
+            # multiset before any threshold -- recorded beside the effects and never instead of
+            # them. Nothing above this line reads it and nothing above it changed, so `out` is the
+            # same list of effects built the same way; the record is only what makes a pooled gene
+            # row auditable afterwards (`gene_merge`), which the effects themselves cannot be.
+            axes = [recorded_axis(oi, a, tissue_names(a), threshold) for oi, a in enumerate(scores)]
+            model["gene_axis_schema"] = GENE_AXIS_SCHEMA
+            model["gene_axis_outputs"] = axes
+            model["gene_merge"] = gene_merge_audit(axes)
             return out
 
         score.model = model  # type: ignore[attr-defined]  # read by enhancer_target.score_element
@@ -298,3 +308,229 @@ class AlphaGenomeAdapter:
                 )
             )
         return m
+
+
+# --- the gene-axis record ------------------------------------------------------------------------
+#
+# These live after the class, not beside the other constants at the top, so that no line above the
+# point where the effects path takes only the gene symbol moves: another lane's test pins that point
+# by file and line number, and the statement it pins stays true, because the effects path is unchanged.
+# What is added here is a second, parallel record of the same response.
+
+#: Schema of the gene-axis record. 1: every gene-axis column the response carries, each row's position
+#: in that axis, each named cell's value multiset before any threshold, and the merge audit.
+GENE_AXIS_SCHEMA = 1
+
+#: The gene-axis columns alphagenome 0.9.0 can put on a gene scorer's response, read from the pinned
+#: client's own source (`alphagenome/models/dna_client.py`, `_construct_anndata_from_proto`): `gene_id`
+#: is set on every row, and each of the others only when the gene proto carries that field, so a
+#: response need not carry all six. Recorded for reference only, and nothing here selects by it:
+#: `recorded_axis` enumerates whatever columns the response actually exposes, so a column this tuple
+#: does not name is still kept and one it names but the response omits is simply absent. The axis
+#: carries no coordinate and no transcript, so a gene's position cannot be recovered from it.
+GENE_AXIS_COLUMNS_090 = (
+    "gene_id",
+    "strand",
+    "gene_name",
+    "gene_type",
+    "junction_Start",  # the client's own spelling, with the capital S
+    "junction_End",
+)
+
+#: The cell lines whose own tracks keep their full value multiset per gene-axis row. Must equal
+#: `genomeos.predict.enhancer_target.CELLS`; held separately so this module does not import its own
+#: consumer, and a test asserts the two are equal so neither can drift from the other.
+CELL_TRACKS = ("K562", "HepG2", "GM12878", "IMR-90")
+
+#: What a per-cell multiset is and what it is not. Unlike the emitted effects these values are not
+#: thresholded: every value the response carries on that cell's tracks is kept, exact zeros included,
+#: so the answer records what was paid for rather than what passed a filter. The tracks are not known
+#: to be biological replicates, so the multiset is evidence and not a cell-level effect.
+CELL_VALUES_NOTE = (
+    "every value the response carries on that cell's own tracks, in track order, before any threshold:"
+    " exact zeros and values below the emitting threshold are present here and absent from the effects"
+)
+
+#: What pooling by symbol does downstream, in the terms a reader of one answer needs.
+MERGE_NOTE = (
+    "two gene-axis rows under one symbol become one accumulated row: n_tracks is their sum, mean_log2fc"
+    " their pooled mean, and each extreme the extreme of either with no record of which row carried it;"
+    " the pooled values are unchanged here and these are the rows that were pooled"
+)
+
+
+def _axis_fields(axis: object) -> list[str]:
+    """Every column name an axis exposes, in its own order. Handles the client's pandas frame and the
+    plain mapping an injected test scorer uses."""
+    cols = getattr(axis, "columns", None)
+    if cols is not None:
+        return [str(c) for c in cols]
+    if isinstance(axis, Mapping):
+        return [str(k) for k in axis]
+    return []
+
+
+def _axis_values(axis: object, field: str) -> list:
+    """One column of an axis as a list, or [] when the axis does not carry it."""
+    try:
+        col = axis[field]
+    except (KeyError, IndexError, TypeError):
+        return []
+    tolist = getattr(col, "tolist", None)
+    if callable(tolist):
+        return list(tolist())
+    return list(col)
+
+
+def _axis_index(axis: object, n: int) -> list[str]:
+    """An axis's own row labels (the client sets them to the row's position as a string), falling back
+    to the position when the axis carries no index."""
+    idx = getattr(axis, "index", None)
+    if idx is not None:
+        try:
+            return [str(x) for x in idx]
+        except TypeError:
+            pass
+    return [str(i) for i in range(n)]
+
+
+def _jsonable(v: object) -> object:
+    """One axis cell as something `json.dumps` can write, without inventing a value: a numpy or pandas
+    scalar becomes its Python value, a non-finite float becomes None because JSON has no spelling for
+    one and rounding it to a number would be a fabrication, and anything else keeps its string form
+    rather than being dropped."""
+    item = getattr(v, "item", None)
+    # a numpy or pandas scalar, which is the only case `.item()` is meant for here: a 0-d, size-1 object.
+    # An array with more than one element is left alone rather than collapsed to its first value.
+    if callable(item) and getattr(v, "ndim", 0) == 0 and getattr(v, "size", 1) == 1:
+        v = item()
+    if v is None or isinstance(v, bool | int | str):
+        return v
+    if isinstance(v, float):
+        finite = v == v and v != float("inf") and v != float("-inf")
+        return v if finite else None
+    if isinstance(v, bytes):
+        try:
+            return v.decode()
+        except UnicodeDecodeError:
+            return repr(v)
+    return str(v)
+
+
+def tissue_names(adata: object) -> list[str]:
+    """The track axis's display names, one per column of X in column order: the GTEx tissue when the
+    response carries one for that track, else the biosample name, else the track's own index label.
+
+    This is the same rule the effects loop applies, factored out so the record names a track exactly as
+    the effects do. A test holds the two forms against each other on every branch, because a difference
+    between them would make the record describe a different response than the effects came from.
+    """
+    var = getattr(adata, "var", None)
+    names = _axis_values(var, "biosample_name") or [str(x) for x in (getattr(var, "index", None) or [])]
+    gtex = _axis_values(var, "gtex_tissue") or [None] * len(names)
+    return [str(g) if g and str(g) not in ("nan", "") else str(n) for g, n in zip(gtex, names, strict=False)]
+
+
+def recorded_axis(
+    output: int,
+    adata: object,
+    tissues: list[str],
+    threshold: float = 0.0,
+    cells: tuple[str, ...] = CELL_TRACKS,
+) -> dict:
+    """One response's gene axis, recorded rather than summarised.
+
+    Every column the axis exposes is kept for every row, with the row's position in the axis, so a gene
+    stops being a bare symbol. For each of `cells`, the whole multiset of values on that cell's own
+    tracks is kept unthresholded. `values_emitted` is how many of the row's values clear `threshold`,
+    which is what this row contributes to the symbol-keyed accumulator downstream; it is recorded so a
+    reader can reconcile a pooled row's track count against the rows that made it.
+    """
+    obs = getattr(adata, "obs", None)
+    fields = _axis_fields(obs)
+    columns = {f: _axis_values(obs, f) for f in fields}
+    n_rows = max([len(v) for v in columns.values()] or [0])
+    index = _axis_index(obs, n_rows)
+    cell_tracks = {c: [i for i, t in enumerate(tissues) if t == c] for c in cells}
+    cell_tracks = {c: t for c, t in cell_tracks.items() if t}
+    rows = []
+    for gi in range(n_rows):
+        rec: dict = {"row": gi, "obs_index": index[gi] if gi < len(index) else str(gi)}
+        for f in fields:
+            vals = columns[f]
+            rec[f] = _jsonable(vals[gi]) if gi < len(vals) else None
+        emitted = 0
+        for ti in range(len(tissues)):
+            if abs(float(adata.X[gi, ti])) > threshold:
+                emitted += 1
+        rec["tracks_total"] = len(tissues)
+        rec["values_emitted"] = emitted
+        rec["cell_values"] = {
+            c: [_jsonable(float(adata.X[gi, ti])) for ti in tis] for c, tis in cell_tracks.items()
+        }
+        rows.append(rec)
+    layers = getattr(adata, "layers", None)
+    try:
+        quantiles = layers is not None and "quantiles" in layers
+    except TypeError:
+        quantiles = False
+    return {
+        "output": output,
+        "fields": fields,
+        "rows": rows,
+        "tracks_total": len(tissues),
+        "threshold": threshold,
+        "cell_values_note": CELL_VALUES_NOTE,
+        # the client attaches a quantiles layer when the response carries one; this run reads X only, so
+        # the layer's presence is recorded and its values are not, which is said rather than implied
+        "quantiles_present": quantiles,
+        "quantiles_note": "presence only: this run reads X, and the quantiles layer is not read or kept",
+        "gene_name_present": "gene_name" in fields,
+    }
+
+
+def gene_merge_audit(axes: list[dict], key: str = "gene_name") -> dict:
+    """Which gene-axis rows the accumulator downstream pools into one row, and which genes they were.
+
+    `enhancer_target.aggregate` keys a gene by its symbol, so two gene-axis rows carrying one symbol
+    become a single row whose track count is the sum of both and whose extreme is the extreme of either,
+    with nothing saying which row it came from. That pooling is not changed here: it is recorded, so a
+    reader of a new answer can tell that two rows were pooled and which genes they were. A row carrying
+    no symbol emits no effect at all, because the effects are built by iterating the symbol column, so
+    those rows are counted apart under `rows_without_key` instead of being silently absent.
+    """
+    groups: dict[str, list[dict]] = {}
+    rows = missing = 0
+    for axis in axes:
+        for r in axis.get("rows", []):
+            rows += 1
+            name = r.get(key)
+            if name is None or name == "":
+                missing += 1
+                continue
+            groups.setdefault(str(name), []).append({"output": axis.get("output"), "row": r})
+    merged = []
+    for name, members in sorted(groups.items()):
+        if len(members) < 2:
+            continue
+        merged.append(
+            {
+                key: name,
+                "rows_merged": len(members),
+                "positions": [[m["output"], m["row"]["row"]] for m in members],
+                "gene_ids": [m["row"].get("gene_id") for m in members],
+                "values_emitted": [m["row"].get("values_emitted") for m in members],
+            }
+        )
+    merged.sort(key=lambda m: (-m["rows_merged"], m[key]))
+    return {
+        "schema": GENE_AXIS_SCHEMA,
+        "key": key,
+        "rows": rows,
+        "keys": len(groups),
+        "rows_without_key": missing,
+        "merged_keys": len(merged),
+        "merged_rows": sum(m["rows_merged"] for m in merged),
+        "merged": merged,
+        "what_merging_does": MERGE_NOTE,
+    }
