@@ -33,6 +33,19 @@ older than the window, is ordinary work and passes. Rewriting a line that a peer
 sometimes right too -- so a finding is a refusal you can override with `--force` once you have looked,
 not a lock. What it removes is the case where nobody looked at all.
 
+Since 2026-10-02 it asks a second, unrelated question of the same index, of every staged
+`data/results/*.json` (`unreproducible_results`):
+
+    could any commit ever reproduce this number?
+
+A result stamps the revision it was written at, so when the code that wrote it was uncommitted that
+sha names a tree WITHOUT that code and nothing reproduces the file. That is the one fault here which
+makes a number permanently unverifiable rather than merely awkward. Three shapes are refused: the
+writer's own code uncommitted, a peer's uncommitted file on the import closure that computed the
+number, and no `result_manifest` at all unless the name is on the committed legacy allowlist that
+`genomeos.results.save_result` reads. Writing such a result locally stays possible; committing it
+does not.
+
 A staged deletion of a file that exists in HEAD is always reported: an accidental one is unrecoverable
 by the author who lost it, and a deliberate one costs a flag.
 
@@ -60,10 +73,12 @@ Exit 0 clean, 2 on a finding, 1 on a usage error.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 # Lines that carry no authorship: blank, a lone brace, a bare fence. Counting them would make every
 # reformatting look like a revert.
@@ -240,6 +255,144 @@ def missing_imports(index: str | None) -> list[str]:
     return problems
 
 
+#: A result lives directly under this prefix -- `data/results/<name>.json`, and `<name>` is what the
+#: legacy allowlist lists.
+RESULTS_PREFIX = "data/results/"
+#: The two fields of `result_manifest.code_cleanliness` that decide whether a commit can reproduce the
+#: numbers. Named here only so a refusal can print the field a reader must go and look at; the values
+#: are written by the one shared `genomeos.manifest.code_cleanliness`.
+OWN_COMMITTED = "own_code_is_committed"
+FOREIGN_ON_PATH = "foreign_uncommitted_code_on_the_counting_path"
+#: The marker lines tests/test_check_staged.py cuts between to show, by removal, what gets through
+#: without these conditions. Keep the loop inside them.
+CONDITIONS_BEGIN = "    # --- the three result conditions ---"
+CONDITIONS_END = "    # --- end of the three result conditions ---"
+
+
+def _repo_root() -> Path:
+    """The tree being judged."""
+    top = _git("rev-parse", "--show-toplevel").strip()
+    return Path(top) if top else Path.cwd()
+
+
+def contract() -> tuple[str, Path, frozenset[str]]:
+    """The manifest key, where the legacy allowlist lives, and the names on it -- all three read from
+    the modules `save_result` itself uses.
+
+    `genomeos.results.legacy_names` is the function that decides who is exempt when a result is
+    written and `genomeos.results.LEGACY_ALLOWLIST` is where it looks, so the gate and the writer
+    cannot disagree: a second copy of 955 names in this file would drift from the committed list the
+    first time anybody touched either. The list is read from the tree under test, the code to read it
+    from this script's own repository, because a fixture repository holds results and an allowlist but
+    no package. A list that cannot be read is empty, so enforcement fails closed and a name that is
+    not on it must carry the contract.
+
+    The import is deliberately inside the function: `scripts/` is this script's sys.path entry, not
+    the repository root, and a module-level import of `genomeos` would make a usage error of every
+    run from somewhere else -- including the runs that have nothing to do with results.
+    """
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from genomeos.manifest import KEY
+    from genomeos.results import LEGACY_ALLOWLIST, legacy_names
+
+    return KEY, LEGACY_ALLOWLIST, legacy_names(_repo_root() / LEGACY_ALLOWLIST)
+
+
+def unreproducible_results(index: str | None) -> list[str]:
+    """Staged results that no commit reproduces, in the three shapes seen on 2026-10-02.
+
+    A result stamps the revision it was written at. When the code that wrote it was uncommitted, that
+    sha names a tree WITHOUT that code and no commit anywhere reproduces the file. Of every fault here
+    this is the only one that makes a number permanently unverifiable rather than merely awkward,
+    because everything else can at least be re-derived. It happened twice that night:
+    data/results/response_map_increment3_count.json at 3360c49 stamped 727c936 while naming its own
+    script under `own_uncommitted_code`, and an earlier result did the same at 42bbc4e.
+
+    So, of every staged `data/results/*.json`:
+
+    (a) `code_cleanliness.own_code_is_committed` false -- the writer's own code is not in the tree the
+        result points at;
+    (b) `code_cleanliness.foreign_uncommitted_code_on_the_counting_path` non-empty -- another lane's
+        uncommitted file sat on the import closure that computed the number. Seven results carried
+        this that night, while one lane held two modules that sit on every result's counting path;
+    (c) no `result_manifest` at all, unless the name is on the legacy allowlist.
+
+    (c) is not a check that was missing. `tests/test_manifest_enforced.py` caught
+    data/results/astroreg_request_plan.json at 1f880b2 and did not fail to refuse it -- it refused it
+    fifteen minutes into a push, in a clean worktree, by which time the repair had landed at 5d14d65
+    and the verdict was about a tree that no longer existed. The question is the same one; asking it of
+    the index is what makes the answer act on anything.
+
+    Writing such a result locally stays possible, deliberately: trial runs need it, and that night a
+    lane wrote a trial result and then deleted it so nothing produced from uncommitted code could be
+    taken for the real one. The refusal belongs at the commit that publishes the file, not at the write.
+
+    `own_code_is_committed` is compared against `False` and not read for falsity, because the shared
+    function writes a bool, and an absent or null field is a manifest that never answered the question
+    -- which `save_result` refuses on the key set for every non-legacy name before anything reaches
+    here. For the same reason a manifest with no `code_cleanliness` block passes (a) and (b) silently:
+    that gap is the writer's, it is already closed there, and guessing at it here would refuse the
+    legacy results whose manifests predate the block.
+    """
+    problems: list[str] = []
+    rows = [
+        path
+        for status, path in staged_paths(index)
+        if status != "D"
+        and path.startswith(RESULTS_PREFIX)
+        and path.endswith(".json")
+        and "/" not in path[len(RESULTS_PREFIX) :]
+    ]
+    if not rows:
+        return problems
+    env = dict(os.environ)
+    if index:
+        env["GIT_INDEX_FILE"] = index
+    # --- the three result conditions ---
+    # inside the markers with the conditions it serves, so the copy the counterfactual test makes of
+    # this file needs no package at all to run
+    key, listed_at, legacy = contract()
+    for path in rows:
+        # the staged blob, not the working copy: what this commit would publish
+        shown = subprocess.run(["git", "show", f":{path}"], capture_output=True, text=True, env=env)
+        try:
+            body = json.loads(shown.stdout)
+        except ValueError as exc:
+            problems.append(f"{path}: not readable as JSON ({exc}), so its `{key}` cannot be read")
+            continue
+        name = path[len(RESULTS_PREFIX) : -len(".json")]
+        given = body.get(key) if isinstance(body, dict) else None
+        if not isinstance(given, dict):
+            if name in legacy:
+                continue  # written before the contract, and the committed list says so
+            problems.append(
+                f"{path}: no `{key}`, and `{name}` is not on the legacy allowlist ({listed_at}), so "
+                "nothing in this commit says which code and which inputs produced these numbers. "
+                "astroreg_request_plan.json went in this way at 1f880b2."
+            )
+            continue
+        clean = given.get("code_cleanliness")
+        if not isinstance(clean, dict):
+            continue
+        if clean.get(OWN_COMMITTED) is False:
+            own = clean.get("own_uncommitted_code") or []
+            named = ", ".join(str(p) for p in own) or "not named"
+            problems.append(
+                f"{path}: `{key}.code_cleanliness.{OWN_COMMITTED}` is false, so the revision it stamps "
+                f"({str(clean.get('git_sha'))[:7]}) names a tree WITHOUT the code that wrote it and no "
+                f"commit reproduces this file. Uncommitted own code: {named}."
+            )
+        foreign = clean.get(FOREIGN_ON_PATH)
+        if isinstance(foreign, list) and foreign:
+            problems.append(
+                f"{path}: `{key}.code_cleanliness.{FOREIGN_ON_PATH}` is not empty, so another lane's "
+                "uncommitted code sat on the import closure that computed these numbers and the "
+                f"stamped tree does not contain it: {', '.join(str(p) for p in foreign)}."
+            )
+    # --- end of the three result conditions ---
+    return problems
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--index", default=os.environ.get("GIT_INDEX_FILE"), help="the index to check")
@@ -249,6 +402,7 @@ def main(argv: list[str] | None = None) -> int:
 
     problems = check(args.index, args.since)
     unimportable = missing_imports(args.index)
+    unreproducible = unreproducible_results(args.index)
     if unimportable:
         # not a revert, so not the message below; and not something --force should wave through,
         # because the fix is always to stage the module
@@ -256,9 +410,23 @@ def main(argv: list[str] | None = None) -> int:
         for problem in unimportable:
             print(f"    {problem}\n")
         return 2
+    if unreproducible:
+        # a separate heading because it is a separate question: not "is a peer's work going out" but
+        # "could anyone ever get this number back from a commit"
+        print("REFUSED: this commit adds a result no commit reproduces\n")
+        for problem in unreproducible:
+            print(f"    {problem}\n")
+        print(
+            "    Commit the code, re-run the result, and stage the two together, so the revision the\n"
+            "    result stamps names a tree that contains the code that wrote it. Writing such a result\n"
+            "    locally stays possible on purpose -- trial runs need it -- and committing it does not.\n"
+            "    If you have looked and the result is right as it stands, re-run with --force.\n"
+        )
     if not problems:
-        print("staged tree takes nothing back out")
-        return 0
+        if not unreproducible:
+            print("staged tree takes nothing back out")
+            return 0
+        return 0 if args.force else 2
     print("REFUSED: this commit would undo work that is already in HEAD\n")
     for problem in problems:
         print(f"    {problem}\n")

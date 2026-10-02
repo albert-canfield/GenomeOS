@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -11,6 +12,9 @@ from pathlib import Path
 import pytest
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "check_staged.py"
+# the counterfactual below cuts the guard between the marker lines the guard itself names,
+# so the markers cannot drift from the block they delimit
+sys.path.insert(0, str(SCRIPT.parent))
 
 BASE = """# Grammar
 
@@ -425,3 +429,259 @@ def test_the_subtraction_is_per_path_so_a_line_moved_to_another_file_is_still_re
     assert done.returncode == 2, done.stdout
     assert "reg.py: removes" in done.stdout
     assert PEER_SUBJECT in done.stdout
+
+
+# --------------------------------------------------------------------------------------------------
+# The result-reproducibility conditions (2026-10-02). A result stamps the revision it was written at;
+# when the code that wrote it was uncommitted, that sha names a tree without the code and NO COMMIT
+# REPRODUCES THE FILE. Two results went in that way the same night, and a third went in with no
+# manifest at all and was caught fifteen minutes into a push, about a tree that no longer existed.
+# --------------------------------------------------------------------------------------------------
+
+#: The shape of data/results/response_map_increment3_count.json at 3360c49, field for field: the sha it
+#: stamped, the dirty tree, and its own script named as uncommitted.
+AT_3360C49 = {
+    "git_sha": "727c9363dfcd23428e85f00da66fa99f3a818569",
+    "dirty": True,
+    "own_uncommitted_code": ["scripts/response_map_increment3_count.py"],
+    "own_code_is_committed": False,
+    "foreign_uncommitted_code": [],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+}
+#: A tree with other lanes' work uncommitted but none of it on the counting path: the committed shape
+#: of the same result after its repair, and the near-miss that must still commit.
+CLEAN_BUT_DIRTY_TREE = {
+    "git_sha": "7509b1ada433ed33712fa66ffeeb2a95bc10f620",
+    "dirty": True,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": True,
+    "foreign_uncommitted_code": ["genomeos/attribution/astrorun.py", "tests/test_astrorun.py"],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+}
+#: The seven-result shape: a peer's module on the import closure that computed the number.
+FOREIGN_ON_THE_PATH = dict(
+    CLEAN_BUT_DIRTY_TREE,
+    foreign_uncommitted_code=["genomeos/attribution/astrorun.py"],
+    foreign_uncommitted_code_on_the_counting_path=["genomeos/attribution/astrorun.py"],
+)
+
+
+def result_json(cleanliness: dict | None, *, manifest: bool = True) -> str:
+    """A result as the registry holds one: a number, and a manifest unless the caller wants none."""
+    body: dict = {"loci": 110, "delivered": 1322}
+    if manifest:
+        body["result_manifest"] = {
+            "sources": [{"accession": "ENCSR000XXX", "version": "v1"}],
+            "complete": True,
+            **({"code_cleanliness": dict(cleanliness)} if cleanliness is not None else {}),
+        }
+    return json.dumps(body, indent=1)
+
+
+@pytest.fixture
+def registry_repo(tmp_path: Path) -> Path:
+    """A checkout with a committed legacy allowlist, as the real one has beside data/results."""
+    repo = tmp_path / "registry"
+    repo.mkdir()
+    git(repo, "init", "-q", "-b", "main")
+    git(repo, "config", "user.email", "lane@example.test")
+    git(repo, "config", "user.name", "A Lane")
+    (repo / "data" / "results").mkdir(parents=True)
+    (repo / "data" / "results_legacy.txt").write_text(
+        "# name<TAB>source\nold_reader_chr1\ttracked\nabundance_gate\tignored-local\n"
+    )
+    (repo / "README.md").write_text("# a checkout\n")
+    git(repo, "add", "data/results_legacy.txt", "README.md")
+    git(repo, "commit", "-qm", "the legacy allowlist")
+    return repo
+
+
+def test_a_result_whose_own_code_was_uncommitted_is_refused(registry_repo: Path, tmp_path: Path) -> None:
+    """3360c49, exactly: the stamp names 727c936, a tree without the script named beside it. This is
+    the only fault here that makes a number permanently unverifiable instead of merely awkward."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/increment3_count.json", result_json(AT_3360C49))
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "no commit reproduces" in done.stdout
+    assert "data/results/increment3_count.json" in done.stdout  # the file
+    assert "own_code_is_committed" in done.stdout  # the field
+    assert "727c936" in done.stdout
+    assert "scripts/response_map_increment3_count.py" in done.stdout
+
+
+def test_a_peers_uncommitted_module_on_the_counting_path_is_refused(
+    registry_repo: Path, tmp_path: Path
+) -> None:
+    """The seven-result shape: the number was computed through a file the stamped tree does not have."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/astro_count.json", result_json(FOREIGN_ON_THE_PATH))
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "data/results/astro_count.json" in done.stdout
+    assert "foreign_uncommitted_code_on_the_counting_path" in done.stdout
+    assert "genomeos/attribution/astrorun.py" in done.stdout
+
+
+def test_a_result_with_no_manifest_is_refused_at_the_commit(registry_repo: Path, tmp_path: Path) -> None:
+    """1f880b2: astroreg_request_plan.json, committed with no manifest. The push-time test did catch
+    it -- fifteen minutes later, in a clean worktree, about a tree the repair had already replaced.
+    Here the same question is asked of the index, where the answer can still stop something."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(
+        registry_repo,
+        index,
+        "data/results/astroreg_request_plan.json",
+        result_json(None, manifest=False),
+    )
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "data/results/astroreg_request_plan.json" in done.stdout
+    assert "result_manifest" in done.stdout  # the field
+    assert "legacy allowlist" in done.stdout
+
+
+def test_a_clean_result_commits(registry_repo: Path, tmp_path: Path) -> None:
+    """The near-miss that matters most: a guard that refuses the honest case is one people route round."""
+    index = private_index(registry_repo, tmp_path)
+    clean = dict(CLEAN_BUT_DIRTY_TREE, dirty=False, foreign_uncommitted_code=[])
+    stage_blob(registry_repo, index, "data/results/good.json", result_json(clean))
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_an_empty_foreign_list_in_a_dirty_tree_commits(registry_repo: Path, tmp_path: Path) -> None:
+    """Several lanes share this checkout, so a tree is nearly always dirty with somebody's work. The
+    condition is the counting path, not the tree: uncommitted peer code that no import reached cannot
+    have entered the number, and refusing it would refuse almost every honest result."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/good.json", result_json(CLEAN_BUT_DIRTY_TREE))
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_a_legacy_allowlisted_name_with_no_manifest_commits(registry_repo: Path, tmp_path: Path) -> None:
+    """955 results were written before the contract. The exemption is the committed list that
+    `save_result` reads, and this reads the same list through the same function."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/old_reader_chr1.json", result_json(None, manifest=False))
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 0, done.stdout
+
+
+def test_the_allowlist_is_the_one_save_result_reads(registry_repo: Path, tmp_path: Path) -> None:
+    """Not a copy of it: a name absent from the list is refused and the same name added to the list is
+    not, so the file decides. Two copies of 955 names would drift the first time anybody touched one."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/only_in_the_list.json", result_json(None, manifest=False))
+    assert run_check(registry_repo, index).returncode == 2
+
+    listed = registry_repo / "data" / "results_legacy.txt"
+    listed.write_text(listed.read_text() + "only_in_the_list\ttracked\n")
+
+    assert run_check(registry_repo, index).returncode == 0
+
+
+def test_a_json_outside_the_registry_is_untouched(registry_repo: Path, tmp_path: Path) -> None:
+    """The contract is the result registry's. A config, a fixture or a nested file is not a result."""
+    index = private_index(registry_repo, tmp_path)
+    body = result_json(None, manifest=False)
+    stage_blob(registry_repo, index, "data/knowledge/panel.json", body)
+    stage_blob(registry_repo, index, "tests/data/case.json", body)
+    stage_blob(registry_repo, index, "data/results/held/inner.json", body)
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 0, done.stdout
+
+
+def test_force_reports_an_unreproducible_result_without_refusing(registry_repo: Path, tmp_path: Path) -> None:
+    """`--force` behaves here as it does for every other condition: it prints and does not refuse."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/increment3_count.json", result_json(AT_3360C49))
+
+    done = run_check(registry_repo, index, "--force")
+
+    assert done.returncode == 0, done.stdout
+    assert "own_code_is_committed" in done.stdout  # seen, not hidden
+
+
+def test_the_staged_blob_decides_and_not_the_working_copy(registry_repo: Path, tmp_path: Path) -> None:
+    """What this commit publishes is the index. A repaired file on disk does not excuse a staged one."""
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, "data/results/increment3_count.json", result_json(AT_3360C49))
+    (registry_repo / "data" / "results" / "increment3_count.json").write_text(
+        result_json(CLEAN_BUT_DIRTY_TREE)
+    )
+
+    done = run_check(registry_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "own_code_is_committed" in done.stdout
+
+
+def without_the_conditions(tmp_path: Path) -> Path:
+    """A copy of the guard with the three conditions cut out, between the markers the script names."""
+    import check_staged as cs
+
+    lines = SCRIPT.read_text().splitlines(keepends=True)
+    begin = next(i for i, line in enumerate(lines) if line.rstrip("\n") == cs.CONDITIONS_BEGIN)
+    end = next(i for i, line in enumerate(lines) if line.rstrip("\n") == cs.CONDITIONS_END)
+    assert begin < end
+    cut = tmp_path / "check_staged_without.py"
+    cut.write_text("".join(lines[:begin] + lines[end + 1 :]))
+    assert "own_code_is_committed` is false" not in cut.read_text()
+    return cut
+
+
+@pytest.mark.parametrize(
+    ("name", "cleanliness", "manifest", "shape"),
+    [
+        ("increment3_count", AT_3360C49, True, "3360c49"),
+        ("astro_count", FOREIGN_ON_THE_PATH, True, "the seven-result shape"),
+        ("astroreg_request_plan", None, False, "1f880b2"),
+    ],
+)
+def test_without_the_conditions_the_harm_happens(
+    registry_repo: Path, tmp_path: Path, name: str, cleanliness: dict | None, manifest: bool, shape: str
+) -> None:
+    """Credited with preventing something, shown to prevent it by removal.
+
+    The rule here is that a guard is demoted to a diagnosis unless the harm happens when it is taken
+    away -- on 2026-10-02 that test demoted a guard in scripts/push_own.sh, because git's own refusal
+    was doing the work. These three are protections: with the block cut out, each of the two shapes
+    that went in that night, and the peer-code shape, is committed without a word.
+    """
+    index = private_index(registry_repo, tmp_path)
+    stage_blob(registry_repo, index, f"data/results/{name}.json", result_json(cleanliness, manifest=manifest))
+
+    refused = run_check(registry_repo, index)
+    assert refused.returncode == 2, f"{shape} must be refused: {refused.stdout}"
+
+    env = dict(os.environ)
+    env["GIT_INDEX_FILE"] = index
+    allowed = subprocess.run(
+        [sys.executable, str(without_the_conditions(tmp_path))],
+        cwd=registry_repo,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert allowed.returncode == 0, allowed.stdout + allowed.stderr
+    assert "takes nothing back out" in allowed.stdout  # through, silently
+    assert name not in allowed.stdout
