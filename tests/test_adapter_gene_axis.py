@@ -605,3 +605,52 @@ def test_the_frozen_consumer_reads_the_collapsed_value_and_not_the_new_record():
     assert '(g.get("by_cell") or {}).get(cell)' in src
     assert "by_cell_summary" not in src
     assert "gene_axis" not in src and "gene_merge" not in src
+
+
+# --- the number a result can state ------------------------------------------------------------------
+
+
+def _answer(audit: dict | None) -> dict:
+    return {"id": "E1", "model": {} if audit is None else {"gene_merge": audit}}
+
+
+def test_the_merge_report_counts_the_pooled_rows_across_answers(stub_alphagenome, tmp_path):
+    """The number AstroREG-2's result needs: how many gene rows were pooled across the answers it used,
+    traceable back to the symbols they were pooled under."""
+    q = _frozen_quantities(new, responses())
+    answers = [{"id": "E1", "model": q["_model"]}, {"id": "E2", "model": q["_model"]}]
+    report = new.merge_report(answers)
+    assert report["answers"] == 2
+    assert report["answers_with_record"] == 2
+    assert report["answers_without_record"] == 0
+    assert report["answers_with_a_merge"] == 2
+    assert report["merged_symbols"] == 2  # one per answer
+    assert report["merged_rows"] == 4  # two rows pooled in each
+    assert report["pooled_symbols"] == {"AAA": 2}
+    assert report["rows_without_symbol"] == 4  # the second response's two rows, in each answer
+
+
+def test_an_answer_with_no_record_is_not_counted_as_an_answer_with_no_merge():
+    """The distinction the whole report turns on: the 963,406 answers already written carry no axis, so
+    they are silent on pooling rather than negative on it. Folding them in as zeros would turn a missing
+    record into evidence that nothing merged."""
+    report = new.merge_report([_answer(None), _answer(None)])
+    assert report["answers"] == 2
+    assert report["answers_without_record"] == 2
+    assert report["answers_with_record"] == 0
+    assert report["answers_with_a_merge"] == 0
+    assert report["merged_rows"] == 0
+    assert "not evidence" in report["no_record_note"]
+
+
+def test_an_answer_that_recorded_no_merge_is_distinguished_from_one_with_no_record():
+    recorded_none = _answer(new.gene_merge_audit([{"output": 0, "rows": [{"row": 0, "gene_name": "A"}]}]))
+    report = new.merge_report([recorded_none, _answer(None)])
+    assert report["answers_with_record"] == 1
+    assert report["answers_without_record"] == 1
+    assert report["answers_with_a_merge"] == 0
+    assert report["gene_rows"] == 1  # only the answer that recorded an axis contributes rows
+
+
+def test_the_merge_report_survives_an_answer_with_no_model_at_all():
+    assert new.merge_report([{"id": "E1"}, {}])["answers_without_record"] == 2

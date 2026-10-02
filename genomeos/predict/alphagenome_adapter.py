@@ -534,3 +534,57 @@ def gene_merge_audit(axes: list[dict], key: str = "gene_name") -> dict:
         "merged": merged,
         "what_merging_does": MERGE_NOTE,
     }
+
+
+#: Why an answer with no gene-axis record cannot be counted as an answer with no pooling. The record did
+#: not exist when the sweep was written, so such an answer is silent on the question rather than negative
+#: on it, and a report that folded the two together would read as evidence that nothing was pooled.
+NO_RECORD_NOTE = (
+    "an answer written before the gene-axis record carries no axis, so it cannot say whether any of its"
+    " rows were pooled; it is counted apart and never as zero merges, because the record's absence is not"
+    " evidence that nothing merged"
+)
+
+
+def merge_report(answers: list[dict]) -> dict:
+    """How much symbol pooling a set of answers records, for a result that needs to state the number.
+
+    Each answer is a cached deletion answer or the dict `enhancer_target.score_element` returns; the
+    record is read from its run record (`model.gene_merge`). Answers carrying no record are counted on
+    their own and are never folded in as zero, for the reason `NO_RECORD_NOTE` gives. `pooled_symbols`
+    names each symbol that was pooled in at least one answer with how many answers pooled it, so the
+    number a result reports can be traced back to the loci it came from.
+    """
+    total = with_record = with_merge = 0
+    merged_keys = merged_rows = rows = rows_without_key = 0
+    pooled: dict[str, int] = {}
+    for answer in answers:
+        total += 1
+        model = answer.get("model") if isinstance(answer, dict) else None
+        audit = model.get("gene_merge") if isinstance(model, dict) else None
+        if not isinstance(audit, dict):
+            continue
+        with_record += 1
+        rows += int(audit.get("rows") or 0)
+        rows_without_key += int(audit.get("rows_without_key") or 0)
+        merged_keys += int(audit.get("merged_keys") or 0)
+        merged_rows += int(audit.get("merged_rows") or 0)
+        entries = audit.get("merged") or []
+        if entries:
+            with_merge += 1
+        for entry in entries:
+            name = entry.get(audit.get("key") or "gene_name")
+            if name is not None:
+                pooled[str(name)] = pooled.get(str(name), 0) + 1
+    return {
+        "answers": total,
+        "answers_with_record": with_record,
+        "answers_without_record": total - with_record,
+        "answers_with_a_merge": with_merge,
+        "gene_rows": rows,
+        "rows_without_symbol": rows_without_key,
+        "merged_symbols": merged_keys,
+        "merged_rows": merged_rows,
+        "pooled_symbols": dict(sorted(pooled.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "no_record_note": NO_RECORD_NOTE,
+    }
