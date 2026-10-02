@@ -776,3 +776,33 @@ so a digest recorded earlier still verifies.
 **The shape to watch for**, which this project has met before: an instrument that preserves the quantity
 its test watches. The question to ask of a verification tool is not whether it reports zero differences,
 but whether it opened the files it says it checked, and whether it says how many it did not.
+
+## A commit's message can describe one lane's work and carry another's (2026-10-02)
+
+Three commits tonight carry one lane's files under a different lane's message. History
+is **not** rewritten — in a checkout four lanes are committing to, a rebase to correct a
+message risks far more than the wrong message costs. The mapping is recorded instead, so
+a later reader is not misled by `git log`:
+
+| commit | its message describes | its content actually is |
+| --- | --- | --- |
+| `ec8536d` | lane-re2g restamping its registration | **only** lane-rebuild's `docs/ATTRIBUTION.md` section |
+| `dd5a223` | lane-re2g's identity-check loop fix | **only** lane-rebuild's `docs/ATTRIBUTION.md` section |
+| `cc677e8` | lane-mrfix's grouped-input fix | **only** lane-map2's five files (`response_map2.py`, `web/server.py`, `web/static/index.html`, `scripts/response_map_increment2.py`, `tests/test_response_map2.py`) |
+
+**How it happens.** `commit_own.sh` is handed a shared file while another lane's hunk in
+it is pending, or a lane's `commit_own.sh` call is refused by the guard at the moment a
+peer's staged tree is in the private index. The content committed was correct and
+complete each time, and each lane verified its own text byte for byte afterwards; only
+the message was wrong. No work was lost.
+
+**What makes it less likely.** Lanes now stage a shared document by section
+(`scripts/stage_section.py`) rather than handing the whole file to `commit_own.sh`. The
+stronger fix, proposed and not yet built, is for `commit_own.sh` to refuse a commit whose
+staged diff of a shared document contains hunks outside the committing lane's declared
+section. That was deliberately **not** added while four lanes were mid-commit, because a
+new refusal would have blocked them.
+
+**The shape to watch.** A commit message is evidence about a commit, and like any other
+record it can be wrong while every number inside it is right. `git log --stat` tells you
+what a commit did; its subject tells you only what someone meant it to do.
