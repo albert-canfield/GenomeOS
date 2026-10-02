@@ -14101,6 +14101,161 @@ and the other **299 are named absent one by one** - reader v1's DNase peak sets,
 `data/results/` and are git-ignored, so a clean worktree does not receive them - and no field comparison
 was attempted. 0 model requests and no money: every input was already on disk. 19 tests.
 
+## Why 198 measured loci attach to no compiled element: 186 of the 198 are a property of the placement rule and 10 have no candidate element at all (item 13 C4 follow-up, 2026-10-02, lane-198)
+
+The second increment's coverage count (`0487e49`, `data/results/response_map_coverage.json`) found that
+of the 473 independent loci the measured layer's CRISPRi perturbation assay holds, **198 attach to no
+compiled element at all** under the measured layer's own overlap rule
+(`measured.RECIPROCAL_OVERLAP = 0.5`), and that this is the limiting input on the response map. It did
+not ask why. This section assigns **exactly one** cause to each of the 198 and says which of the two
+answers the counts give. `scripts/placement_cause_198.py`,
+`data/results/placement_cause_198.json`, `tests/test_placement_cause_198.py`.
+
+**Status.** Descriptive and diagnostic, internal development evidence. No rule is changed, no policy
+adopted, no verdict moved, nothing deleted. 0 model requests, no downloads, no money: every input was
+already on disk. Audit A's `prior_exposure` applies unchanged — every outcome read here was read by
+earlier lanes — so this is a bounded diagnosis and not a biological result.
+
+**The classification is not invented here.** The causes, their meanings and the order in which they are
+tried are audit A's (`6c0d39f`, `scripts/placement_audit.py`), imported and reported word for word:
+`CAUSES`, `CAUSE_MEANING` and, for a candidate exclusion, `EXCLUSION`. The locus is the operational
+grouping imported from `genomeos.attribution.cell2` — the same measured gene, or within 1 Mb on one
+chromosome, chained, cell-pooled. It is **not established biological independence** and nothing may
+cite it as one. The attachment test is the one that defines the 198, imported from
+`scripts/response_map_coverage.py`.
+
+**Audit A's result is suspended, and no figure of its is carried here as evidence.**
+`data/results/placement_audit.json` is **suspended: not yet reproduced** (the coordinator, 2026-10-02) —
+its committed manifest records one grouped input through `manifest.files_entry` standing for 24 files,
+and the `manifest_rebuild.py` of that time resolved an input by path while a group entry records a
+label, so the group was reported unavailable with no file opened and the result was excused rather than
+compared. The tool is fixed (`ebbded6`); audit A's manifest predates the `members` field, so it cannot
+be checked until its writer re-records it. What this lane reuses from it is **its classification, which
+is not a figure and is not suspended**. Every figure of audit A's that appears below — 212 placed, 62
+`registry_would`, 387 neither, and the 290 / 72 / 3 / 21 / 1 split of the 387 — was **recomputed in this
+run from the primary inputs**, each recorded by its own path and never through `files_entry`, and that
+recomputation is one of this lane's gates. The counts as stated here are therefore this run's own; a
+reader who wants them as *audit A's* should treat them as suspended until that result is re-recorded.
+**No class assignment depends on a figure this run cannot verify:** all four classes are computed here
+from the primary inputs, and `classes_depending_on_a_figure_this_run_cannot_verify` is empty.
+
+### The assignment rule
+
+One cause per measured pair from audit A's cascade, first match wins, the causes and their order
+exactly `placement_audit.CAUSES`. Then one cause per locus: **the earliest cause in that same frozen
+order that any one of the locus's measured pairs reaches**. `placed_compiled` is unreachable here by
+construction, since a locus enters this population only when none of its pairs attaches to a compiled
+element. The ranking is audit A's own furthest-along-first order and was not re-chosen; the result also
+reports the same 198 loci assigned by the **last** cause of that order instead, so the choice can be
+seen rather than trusted.
+
+### The four classes, summing to 198
+
+| Class | Audit A causes it is built from | Loci |
+|---|---|---|
+| 1. no cCRE in the tested interval | `absent_from_registry` | **10** |
+| 2. a cCRE present but failing the reciprocal-0.5 rule | `rule_width_unreachable` 90, `rule_width_mismatch` 18 | **108** |
+| 3. present but excluded by the candidate filter | `registry_would` | **78** |
+| 4. other, named: a boundary offset | `boundary_partial_overlap` 2, `coordinate_zero_width` 0 | **2** |
+
+Every one of the 198 received a cause from the imported cascade. **None had to be forced into a class
+and none is left out: `unclassifiable_from_what_is_on_disk` is 0.** A boundary offset also fails the
+reciprocal rule, so a reader who folds class 4 into class 2 reads class 2 as 110 and class 4 as 0; the
+split kept here is audit A's, which reports a partial overlap apart from a width failure, and both
+readings are given.
+
+At pair level, over the 699 measured pairs these 198 loci hold: `rule_width_unreachable` 360,
+`registry_would` 193, `rule_width_mismatch` 83, `absent_from_registry` 51,
+`boundary_partial_overlap` 12.
+
+**Ranking sensitivity.** Assigned by the last cause of the frozen order instead of the first, the same
+198 loci give class 1 37, class 2 129, class 3 29, class 4 3. 122 of the 198 hold only one cause across
+all their pairs, so the ranking decides 76. Under either extreme, classes 2 and 3 together are the
+large majority (186 of 198 one way, 158 of 198 the other).
+
+### The answer: a property of the placement rule, not real absence
+
+**186 of the 198 loci (93.9%) are class 2 or class 3** — a candidate element is present in the ENCODE
+cCRE v3 registry and the placement rule, or the candidate filter, is what keeps it out. **10 of 198
+(5.1%) are class 1**, real absence: no registry element shares a base with any tested interval of the
+locus. 2 are a boundary offset. On these counts the omission is **a property of the placement rule and
+of the model's element selection, not the compiled element set failing to cover where the screens
+looked.**
+
+Two things the classes say about what kind of property it is:
+
+- Class 2 is a width effect, and the widths say why. The registry's elements are 150 to 350 bp, so a
+  tested interval wider than 700 bp cannot cover half of its own width with one registry element
+  wherever it lies. The 699 pairs at these loci have a median tested width of 723 bp and **374 of them
+  are wider than 700 bp**.
+- Class 3 is not a defect of this repository. The furthest-along exclusion reason for each of the 78
+  class-3 loci is `scored_noncoding_target_only` 42, `scored_no_target_named` 32,
+  `not_scored_by_the_sweep` 4. **Neither `compiled_under_other_coordinates` nor
+  `coding_target_not_compiled` occurs at all**: no class-3 locus is one where a compiled element was
+  lost or a named coding target was dropped. All 78 are the model's element selection and the sweep's
+  scope. 127 of the 134 registry elements that meet the rule at these loci were scored by the
+  whole-chromosome run.
+
+### The named alternative, counted and not adopted
+
+Audit A's registered policy `min_side_half` (`dd8c49c`) already lives in the measured layer as a named
+discovery predicate, `measured.measures_min_side` in `measured.ATTACHMENT_RULES`. Counted on the frozen
+grouping, it **would attach a compiled element at 110 of the 198 loci** (238 of their 699 pairs): 78 of
+the 108 class-2 loci and 32 of the 78 class-3 loci, and none of class 1 or class 4.
+
+**Nothing is adopted.** The production rule is untouched, nothing is attached under the alternative, no
+element gains evidence and no verdict moves. `measured.ATTACHMENT_RULES` carries its own warning that an
+overlap under it is a candidate and never decisive evidence. The 110 is **not** a count of loci that
+would become addable: the response map needs a compiled rule and a reader state as well, neither of
+which this lane reads. It is also not stable under adoption, because a pair that attaches takes the
+element's interval into its locus key, so the grouping itself would change.
+
+### Reconciliation with audit A's 387
+
+The two numbers are **not the same kind of number** and are reconciled rather than equated, which
+matters more while audit A's own result is suspended, not less. Audit A counted *positive links* —
+significant decreases — that no element of either set carries: of 661, 212 placed, 62 `registry_would`,
+387 neither (reproduced in this run; as audit A's own figures, suspended). The 198 counts *independent loci*, over every outcome and
+cell-pooled, none of whose pairs attaches in the compiled set.
+
+The underlying objects are the same: both read the same 14,734 benchmark rows, and every row is its own
+C4 link key (checked: 14,734 rows, 14,734 distinct keys), so a pair here is a link there. The two
+populations then meet like this:
+
+- 449 positive links are not placed in a compiled element. **98 of them lie at one of the 198 loci; 351
+  lie at a locus that does attach somewhere** — a locus leaves this population as soon as any one of its
+  pairs attaches, and a 1 Mb locus pools many tested intervals.
+- Of audit A's 387, **80 lie at one of the 198 loci**; of its 62 `registry_would`, 18 do.
+- The 198 loci hold 699 of the 14,734 pairs. The other 9,210 of the 9,909 pairs that attach to no
+  compiled element sit at loci that do attach elsewhere.
+
+**What the 699 pairs measured, exactly.** 98 are a significant decrease, 8 a significant increase and
+**593 are well-powered nulls**. So 106 of 699 are a measured effect, and 66 of the 198 loci hold at
+least one significant decrease. The 9,909 figure is a count of pairs with no compiled element to be
+read beside, not a count of measured regulatory effects the model omits, and must not be quoted as one.
+
+### Gates, run before anything was read off this run
+
+- `response_map_coverage`'s own figures reproduce exactly: 14,734 measured pairs, 4,825 attached,
+  9,909 not, 473 independent loci, 198 with no compiled link.
+- Audit A's cascade reproduces exactly on its own population, the 661 positive links, recomputed here
+  from the primary inputs rather than read from its suspended result:
+  `placed_compiled` 212, `rule_width_unreachable` 290, `rule_width_mismatch` 72, `registry_would` 62,
+  `absent_from_registry` 21, `boundary_partial_overlap` 3, `coordinate_zero_width` 1.
+- The two compiled element sets — this lane's `compile._attributed` and audit A's compiled-program
+  blocks — are both 440,377 elements and **differ on 0 of the 14,734 pairs' causes**.
+- The locus count does not depend on the response map's own keys being in the grouping: 473 and 198
+  either way.
+- Every one of the 148 inputs is recorded by its own path and hashed on its own. No group entry is
+  used, because `manifest.files_entry` reports a group absent without checking a file.
+
+### Not done
+
+No rule or policy is proposed here and no registration is written: whether to adopt `min_side_half`,
+and under what discovery interface, remains audit A's and the reviewer's question. The 10 class-1 loci
+are not examined individually. Nothing is said about whether any of the 198 holds a real enhancer: a
+placement failure is a placement failure, not a proven absent element, and the converse holds too.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
