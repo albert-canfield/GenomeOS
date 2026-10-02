@@ -14877,6 +14877,25 @@ count (731 in this checkout against 878 in the rebuild's worktree), which are pr
 happened and not of what it counted, and which `manifest_rebuild.py`'s ignore lists do not yet name. The
 trace itself reconciles on both sides: 0 undeclared reads and 0 declared files that were never opened.
 
+**Correction, 2026-10-02 (`549cc35`), to the two claims in the paragraph above.** First, “properties of
+where a run happened and not of what it counted” is true of `cwd_at_open` and `cwd_at_close` and is
+**NOT true of `opens`**, and that claim is withdrawn. A later rebuild measured `opens` differing 1,684
+against 1,855 because the writer had started reading a git blob instead of a file on disk — a real
+change in what the code opened, not a property of where it ran. The coordinator originated the
+withdrawn wording and a test now greps the source for it so it cannot be reintroduced. Second, the
+ignore lists DO now name these fields: `cwd_at_open` and `cwd_at_close` are made repository-relative
+so a worktree at another absolute path reconciles, and `opens` is set aside by EXACT PATH and printed
+as set aside with its reason, never silently. What that exemption costs is stated rather than implied:
+`opens` is the only leaf in a manifest with any sensitivity to reads OUTSIDE `data/`, because the audit
+hook's `canonical(path)` returns `None` for anything not under `data/` and `traced_inputs()` drops the
+read SET entirely — so exempting the count hides a change in what a writer opens outside `data/`, and a
+clean rebuild may not be read as stronger than that. Comparing the read set instead was considered and
+rejected on evidence, not cost: no such set exists in any of the ~1,100 results, and a set restricted
+to `data/` would have missed the git-blob case exactly as the exemption does. The exemption is held to
+its exact path by a committed counterfactual — `traced_inputs.opens_under_data`, in the SAME dict,
+altered 4 → 99, is still caught — and the suffix-matching rule that would swallow
+`/per_element_response_cache/opens` is written out in the tests as the wrong rule.
+
 ## The response map's third increment: 40 of the 110 loci carry a further kind of evidence, and what each kind says is reported by what measured it (2026-10-02, lane-map3)
 
 Increment 2 stated its own limit and it is carried here word for word: its evidenced chain runs over 110 loci, and that is "23.26% of one of the measured layer's four assays"; lentiMPRA, VISTA and saturation mutagenesis contributed NOTHING to it, because "they read a sequence, or the bases inside it, not the native locus after a perturbation of it". So increment 2 is one assay deep. This increment asks what else reaches those loci, and builds the map over the ones that carry something.
