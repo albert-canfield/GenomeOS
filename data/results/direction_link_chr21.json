@@ -1,0 +1,554 @@
+{
+  "result": "direction_link_chr21",
+  "date": "2026-10-02",
+  "lane": "lane-direction",
+  "registered_before_this_run": "data/results/direction_link_registration.json",
+  "level": "link level, not rule level",
+  "why_not_rule_level": "of lane-increase's 48 increases exactly 1 has any compiled rule naming its own gene and 0 have one gated on its own cell (data/results/increase_population.json), so a rule-level test of direction on the increases is impossible. This lane does not attempt one: the model's direction calls are read directly out of the cached deletion answers and never through a compiled rule",
+  "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+  "follows_from": {
+    "lane": "lane-increase",
+    "commits": {
+      "registration": "e1c2671",
+      "population": "f521bdb",
+      "module": "6ca8095",
+      "attribution_section": "7f2b354"
+    },
+    "registered_go_carried_verbatim": "at or above both registered floors: a measured repression population could be built from the increases the committed extractor discards. This lane stops here. It reads no direction, reports no rate, tests no repression call and draws no conclusion about whether the compiled program's repression calls are right: a feasibility count that rolls straight into the test it enables is how a floor gets moved after the outcome is seen. The test is registered as its own lane, and this lane's remaining deliverable is a written proposal naming the extractor change the count shows is worth making",
+    "figures": {
+      "file": "data/results/increase_population.json",
+      "significant_increases_in_the_benchmark": 159,
+      "significant_increases_on_an_attributed_element": 48,
+      "significant_decreases_on_an_attributed_element": 212,
+      "increase_links": 48,
+      "increase_links_independent_loci": 33,
+      "increase_links_by_cell": {
+        "K562": 39,
+        "WTC11": 6,
+        "HCT116": 3
+      },
+      "increases_behind_the_links_by_split": {
+        "training": 25,
+        "heldout": 23
+      },
+      "increases_with_a_rule_naming_their_own_gene": 1,
+      "increases_with_a_rule_gated_on_their_own_cell": 0,
+      "contested_by_a_regulated_pair": 0,
+      "largest_increase_per_link_over_the_40_links_that_file_shows": {
+        "min": 0.0102,
+        "median": 0.0987,
+        "max": 4.2101,
+        "at_or_above_0.10": 20,
+        "of": 40
+      }
+    },
+    "and_behind_it": {
+      "lane": "lane-repress2",
+      "file": "data/results/repress2_population.json",
+      "registered_no_go_carried_verbatim": "the measured layer holds no repression call to test"
+    }
+  },
+  "prior_direction_lanes": {
+    "file": "data/results/crispri_direction_both.json",
+    "population": "held-out signed CRISPRi pairs in reach, K562 and GM12878, joined to the per-element response cache: 152 pairs, 116 measured down and 36 measured up",
+    "downward_arm": {
+      "k": 96,
+      "n": 116,
+      "rate": 0.8276
+    },
+    "upward_arm": {
+      "k": 15,
+      "n": 36,
+      "rate": 0.4167
+    },
+    "balanced_accuracy": {
+      "rate": 0.6221,
+      "ci95": [
+        0.5354,
+        null
+      ],
+      "band": "0.55 to 0.65"
+    },
+    "registered_verdict_carried_verbatim": "balanced accuracy 0.6221 is above chance but under 0.65; direction is faintly readable and not usable. UNDECIDABLE: the represses half of action stays unsupported, and every action word GenomeOS writes on a predicted rise is unbacked",
+    "registered_upward_reading_carried_verbatim": "upward sensitivity 0.4167 is at or below chance 0.5. The layer cannot call an increase, and the passing direction headline is a statement about downward effects only",
+    "not_this_lanes_population": "a different population under a different eligibility rule, so this lane neither confirms nor contradicts it by construction, and does not quote its figures as its own"
+  },
+  "chromosomes": [
+    "chr21"
+  ],
+  "eligibility": {
+    "call": "a link is one (attributed element, gene, cell) for which that element's reciprocally overlapping cached CRISPRi pairs hold at least one pair whose outcome is exactly one of ('significant_decrease', 'significant_increase'), under the committed join: the element and the pair's tested interval reciprocally overlap at measured.RECIPROCAL_OVERLAP = 0.5 or more, computed by measured.reciprocal_overlap over the candidates measured.Layer.near returns at measured.REACH = 200000. That is lane-increase's `and_on_an_attributed_element` step, the same step for both arms, and no compiled rule enters it. The outcome is read off the cached row's own outcome field and is never recomputed. A link is in the decreases arm when its pairs hold a significant decrease and no significant increase, and in the increases arm when they hold a significant increase and no significant decrease; a link whose pairs hold both is CONTESTED by the measurement itself, is in neither arm, and is counted and reported on its own. This is lane-increase's own contest rule applied symmetrically to both arms, and that lane recorded 0 contested links on the increase side (data/results/increase_population.json)",
+    "links": 3,
+    "by_arm": {
+      "decreases": 2,
+      "increases": 1
+    },
+    "by_cell": {
+      "GM12878": 1,
+      "K562": 2
+    },
+    "by_arm_and_cell": {
+      "decreases": {
+        "GM12878": 1,
+        "K562": 1
+      },
+      "increases": {
+        "K562": 1
+      }
+    },
+    "contested": 0,
+    "contest_rule": "a (element, gene, cell) carrying both a significant decrease and a significant increase is in NEITHER arm. Its measured sign is contested by the measurement, so an agreement computed on it would be an agreement with a choice this lane made rather than with a measurement. Contested links are counted and reported and are in no arm's denominator",
+    "contested_rows": []
+  },
+  "answerability": {
+    "cell_read": "K562",
+    "call": "the cached deletion answers carry exactly these cell tracks: ('HepG2', 'IMR-90', 'K562', 'GM12878'). They do NOT carry ('WTC11', 'HCT116'). Of lane-increase's 48 increase links, 39 are K562 and are answerable in their own cell; 6 are WTC11 and 3 are HCT116 and are NOT, because the sweep holds no track of either cell. Those 9 links are reported as unanswerable with their counts and are in no denominator. NO SUBSTITUTION IS MADE: no other cell's value, no other gene's value and no pooled or marginal value stands in for a cell the cache does not carry, because a substituted cell would make the comparison between the arms meaningless. A separate partial cache data/knowledge/alphagenome/elements_hct116 exists over five chromosomes from a different run and does carry an HCT116 track; it is NOT read here, because mixing a second cache into one arm of a comparison is the same substitution by another route. It is named so that a later lane can register a test that uses it",
+    "cached_cell_tracks": [
+      "HepG2",
+      "IMR-90",
+      "K562",
+      "GM12878"
+    ],
+    "cells_not_cached": [
+      "WTC11",
+      "HCT116"
+    ],
+    "links_in_the_cell_read": 2,
+    "answered": 2,
+    "predicted_zero_excluded": 0,
+    "absent": 0,
+    "breakdown_reconciles": true,
+    "sign_rule": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+    "unanswerable_because_the_cache_carries_no_such_cell": {
+      "links": 0,
+      "by_arm_and_cell": {
+        "decreases": {},
+        "increases": {}
+      },
+      "nothing_substituted": "no other cell, gene, cache or pooled value stands in for any of these links; they are absent from the test rather than negative in it"
+    },
+    "links_in_another_cached_cell_not_read": {
+      "links": 1,
+      "by_arm_and_cell": {
+        "decreases": {
+          "GM12878": 1
+        },
+        "increases": {}
+      },
+      "why": "the test is taken on the K562 links of both arms and on no other cell, because K562 is the one cell of this population the cached answers carry. Both arms are restricted identically, so the comparison is within one cell and no cell-type difference can be mistaken for an arm difference. The counts of every other cell are reported beside it as unanswerable and are never pooled in"
+    },
+    "by_arm": {
+      "decreases": {
+        "in_the_cell_read": 1,
+        "answered": 1,
+        "predicted_zero_excluded": 0,
+        "absent": 0
+      },
+      "increases": {
+        "in_the_cell_read": 1,
+        "answered": 1,
+        "predicted_zero_excluded": 0,
+        "absent": 0
+      }
+    }
+  },
+  "gate": {
+    "call": "the gate is taken first and on each arm separately: an arm's answered links must be at or above 30 and its answered links' independent loci at or above 20, both imported. The arms are never pooled to reach a floor. A gate reading is not a reading of the comparison: if either arm is below either floor the comparison is NOT made, no rate of that arm is read as a result and no floor is moved",
+    "per_arm": {
+      "decreases": {
+        "arm": "decreases",
+        "answered_links": 1,
+        "independent_loci": 1,
+        "floors": {
+          "links": 30,
+          "independent_loci": 20
+        },
+        "meets_both_floors": false,
+        "short_by": [
+          "answered links 1, short of 30 by 29",
+          "independent loci 1, short of 20 by 19"
+        ],
+        "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+        "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+      },
+      "increases": {
+        "arm": "increases",
+        "answered_links": 1,
+        "independent_loci": 1,
+        "floors": {
+          "links": 30,
+          "independent_loci": 20
+        },
+        "meets_both_floors": false,
+        "short_by": [
+          "answered links 1, short of 30 by 29",
+          "independent loci 1, short of 20 by 19"
+        ],
+        "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+        "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+      }
+    },
+    "both_arms_meet_both_floors": false,
+    "reading": "an arm is below an imported floor: a no-go. The comparison between the arms is not made, no agreement rate is read as a result, no floor is moved, the two arms are not pooled to reach a floor and no answered set is widened by substituting a cell, a gene or another cache. The counts go on the record with the margin each falls short by, because a reader is owed it and not because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot"
+  },
+  "arms": {
+    "decreases": {
+      "arm": "decreases",
+      "measured_sign": -1,
+      "answered_links": 1,
+      "agreements": 1,
+      "agreement_rate": 1.0,
+      "independent_loci": 1,
+      "by_split": {
+        "training": 1
+      },
+      "by_chromosome": {
+        "chr21": 1
+      },
+      "by_dataset": {
+        "Gasperini2019": 1
+      },
+      "predicted_sign_breakdown": {
+        "down": 1,
+        "up": 0
+      }
+    },
+    "increases": {
+      "arm": "increases",
+      "measured_sign": 1,
+      "answered_links": 1,
+      "agreements": 0,
+      "agreement_rate": 0.0,
+      "independent_loci": 1,
+      "by_split": {
+        "heldout": 1
+      },
+      "by_chromosome": {
+        "chr21": 1
+      },
+      "by_dataset": {
+        "K562_DC_TAP": 1
+      },
+      "predicted_sign_breakdown": {
+        "down": 1,
+        "up": 0
+      }
+    }
+  },
+  "arms_never_pooled": "the two arms are reported apart and are never pooled. The comparison between them is the result; neither arm alone is. A pooled agreement rate is not reported as a result",
+  "decrease_arm_is_not_model_coverage": "the 212-of-212 that the decrease column keeps at lane-increase's last two ladder steps is the EXTRACTOR'S OWN CONSTRUCTION and not model coverage: a significant decrease on an attributed element raises the measured rule that then names its gene and its cell, so the decreases survive those two steps by definition. Reading it as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'. This lane's decrease arm therefore does NOT sit at those steps: it is taken at the same step as the increase arm, `and_on_an_attributed_element`, where no compiled rule is consulted at all, so the two arms share one eligibility rule and the comparison between them is not a comparison of two different gates",
+  "split_rule": "23 of the 48 increases are held-out rows (data/results/increase_population.json, increases_behind_the_links_by_split). The 2026-09-28 split audit permits a held-out row as EVALUATION only, never as a feature and never as a fit. This lane fits nothing, selects nothing on an outcome and builds no feature: it reads a cached predicted value and a cached measured outcome and compares their signs, so every eligible link is evaluation and both splits are admitted. The training/held-out breakdown is reported beside every count",
+  "not_balanced": "the increase population is not balanced across cell types: 39 of the 48 links are K562, 6 WTC11 and 3 HCT116 (data/results/increase_population.json). No rate of this lane's is a genome-wide or a cell-type-general rate, and none is reported pooled across cells",
+  "floors_are_on_counts": "both imported floors are on COUNTS - links and independent loci - and neither is a floor on an effect size. Over the 40 links data/results/increase_population.json shows, the largest increase per link runs 0.0102 to 4.2101 with a median of 0.0987 and 20 of 40 at or above 0.10. No magnitude bar is imposed here, no link is dropped for being small, and clearing a count floor is not a statement that the effects behind it are large",
+  "locus_convention": {
+    "rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "span": 1000000,
+    "imported_from": "genomeos.attribution.cell2.INDEPENDENT_LOCUS_RULE",
+    "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+    "inherited_33_loci": "lane-increase's 33 independent loci are cell2's operational grouping and not established biological independence; so is every locus count and every interval this lane reports"
+  },
+  "cannot_establish": "a sign agreement is not a mechanism. Whatever this test says, nothing here establishes that any of these increases is a repression mechanism, that an element whose silencing raises a gene represses it, that any element is a silencer or a repressor, or that any compiled repression call is right or wrong: no compiled rule is consulted anywhere in this lane, by construction, because only one of the 48 increases has a rule naming its gene and none has one gated on its cell. Nothing here is a verdict on the deletion model's direction in general: the test is on one cell (K562), one assay (the ENCODE CRISPRi benchmark), and only those links that lie on an attributed element under the committed overlap rule, so it is not a genome-wide, cell-type-general or assay-general statement. A difference between the arms is a difference in sign agreement and not a measure of how large either effect is, since no magnitude bar is applied and the floors are on counts. The locus convention is cell2's operational grouping, never established biological independence, so an interval taken over loci is an interval over that grouping and not over established independent observations. The arms are not balanced and are not matched on magnitude, chromosome, gene, split or dataset, so a difference between them may be carried by any of those rather than by the sign. An undetected difference is not a measured absence of one. And the 9 WTC11 and HCT116 links are absent from the test rather than negative in it: this lane says nothing whatever about direction in a cell the cached answers do not carry",
+  "requests": 0,
+  "money": "none: every input was already on disk",
+  "no_requests": "0 model requests, no money, no download and no network. Every input is already on disk: the two benchmark tables, the per-chromosome attribution results and the per-element response cache of the finished sweep, which was written with threshold=0.0 and so already carries a signed per-cell value for every gene in the scorer's window",
+  "nothing_changed": "no extractor, compiled rule, threshold, floor, predicate, shuffle count, draw count or registered reading of any lane is changed by this lane, and no registered reading is restated in stronger words than the lane that registered it used",
+  "comparison": {
+    "taken": false,
+    "why": "an arm is below an imported floor: a no-go. The comparison between the arms is not made, no agreement rate is read as a result, no floor is moved, the two arms are not pooled to reach a floor and no answered set is widened by substituting a cell, a gene or another cache. The counts go on the record with the margin each falls short by, because a reader is owed it and not because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+    "short_by": {
+      "decreases": [
+        "answered links 1, short of 30 by 29",
+        "independent loci 1, short of 20 by 19"
+      ],
+      "increases": [
+        "answered links 1, short of 30 by 29",
+        "independent loci 1, short of 20 by 19"
+      ]
+    }
+  },
+  "seconds": 1.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.)",
+        "version": "the two benchmark tables cached under data/knowledge, digested in inputs"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache, written with threshold=0.0",
+        "version": "the per-chromosome archives this run streamed, digested as a group"
+      },
+      {
+        "accession": "the attributed elements of the chromosomes this run covers",
+        "version": "re-enumerated in this run from the results on disk, not read from a file"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/direction_link_registration.json",
+        "sha256": "0b67ae7f33c312c0d763caf3eef8128a2452f3f13fcf9046c6390ea2e6ceee7c",
+        "bytes": 54032,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "per_element_response_cache",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          }
+        ],
+        "sha256": "593177221e353b68395eaf2455fcb239efd70d89ae0e0edcdd171abc038b56ca",
+        "bytes": 9769482,
+        "files": 1,
+        "partition": "the finished deletion sweep's own per-element cache, read for a sign only"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "eligibility_predicate": "a link is one (attributed element, gene, cell) for which that element's reciprocally overlapping cached CRISPRi pairs hold at least one pair whose outcome is exactly one of ('significant_decrease', 'significant_increase'), under the committed join: the element and the pair's tested interval reciprocally overlap at measured.RECIPROCAL_OVERLAP = 0.5 or more, computed by measured.reciprocal_overlap over the candidates measured.Layer.near returns at measured.REACH = 200000. That is lane-increase's `and_on_an_attributed_element` step, the same step for both arms, and no compiled rule enters it. The outcome is read off the cached row's own outcome field and is never recomputed. A link is in the decreases arm when its pairs hold a significant decrease and no significant increase, and in the increases arm when they hold a significant increase and no significant decrease; a link whose pairs hold both is CONTESTED by the measurement itself, is in neither arm, and is counted and reported on its own. This is lane-increase's own contest rule applied symmetrically to both arms, and that lane recorded 0 contested links on the increase side (data/results/increase_population.json)",
+      "measured_sign": "the measured sign of a link is -1 in the decreases arm and +1 in the increases arm, by the arm's own definition. No effect size, magnitude or threshold enters it: the sign is the benchmark's own significance label, and a link is in exactly one arm or is contested",
+      "predicted_direction": "the predicted deletion direction of a link is the sign of the signed predicted log2 fold change the finished genome-wide deletion sweep cached for THAT link's own gene on THAT link's own cell track, read from the per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz under the link's own element id, at `genes[*].by_cell[cell]` for the gene whose name is exactly the link's gene. The link already names one element, so no second element is consulted and no resolution rule across overlapping elements is needed or applied. Nothing is recomputed, no model request is made and no value is derived from any other cell, gene or element",
+      "sign_rule_zero_and_absent": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+      "primary_statistic": "balanced accuracy, the unweighted mean of the two arms' agreement rates, against 0.5",
+      "chance": 0.5,
+      "difference_between_the_arms": "agreement rate in the decreases arm minus agreement rate in the increases arm",
+      "why_the_difference_is_not_the_reading": "the difference between the arms, held against a sign shuffle, cannot answer the question it looks like it answers, and the algebra is exact: with n_d answered decrease links of which a agree and n_u answered increase links of which b agree, the excess of the difference over the shuffled baseline is identically EXCESS = 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u). Two consequences follow and both were written down before the run. First, when the two arms are the same size the excess is exactly zero, so the whole difference between the arms IS the shuffled baseline and carries no information beyond the model's own marginal sign rate. Second, when the decreases arm is the larger one - which it is on this population, 212 against 48 - the factor (n_u - n_d) is negative, so a positive excess requires balanced accuracy BELOW 0.5: a one-sided test of the difference against the sign shuffle is a test of the model doing WORSE than chance, and a model that reads direction well scores below that control rather than above it. The same algebra says the two arms do not carry two skills: each arm's agreement against its own shuffled chance level (q for the decreases, 1 - q for the increases) differs from the other's only by that arm-size factor, and the two sum to 2 * (balanced_accuracy - 0.5). With one marginal sign rate there is exactly ONE skill number on this population and it is balanced accuracy. So the difference between the arms is reported, with its interval, its baseline and its excess, as a DESCRIPTION of the asymmetry and never as evidence that the model reads direction better on one sign; and the statistic the reading is taken on is balanced accuracy",
+      "baseline": "2q - 1, where q is the share of answered links whose predicted sign is -1",
+      "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "independent_locus_span": 1000000,
+      "locus_floor": 20,
+      "link_floor": 30,
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "bootstrap_unit": "independent locus",
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20261002,
+      "shuffles": 2000,
+      "shuffle_seed": 20261003,
+      "alpha_one_sided": 0.05,
+      "cells_read": [
+        "K562"
+      ],
+      "cached_cell_tracks": [
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "GM12878"
+      ],
+      "cells_not_cached": [
+        "WTC11",
+        "HCT116"
+      ],
+      "chromosomes": [
+        "chr21"
+      ],
+      "aggregate_function": "mean of a 0/1 agreement per answered link, per arm",
+      "fill_value": "none: an absent or exactly-zero predicted value is excluded and counted"
+    },
+    "exclusions": [
+      "a (element, gene, cell) carrying both a significant decrease and a significant increase is in NEITHER arm. Its measured sign is contested by the measurement, so an agreement computed on it would be an agreement with a choice this lane made rather than with a measurement. Contested links are counted and reported and are in no arm's denominator",
+      "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+      "the cached deletion answers carry exactly these cell tracks: ('HepG2', 'IMR-90', 'K562', 'GM12878'). They do NOT carry ('WTC11', 'HCT116'). Of lane-increase's 48 increase links, 39 are K562 and are answerable in their own cell; 6 are WTC11 and 3 are HCT116 and are NOT, because the sweep holds no track of either cell. Those 9 links are reported as unanswerable with their counts and are in no denominator. NO SUBSTITUTION IS MADE: no other cell's value, no other gene's value and no pooled or marginal value stands in for a cell the cache does not carry, because a substituted cell would make the comparison between the arms meaningless. A separate partial cache data/knowledge/alphagenome/elements_hct116 exists over five chromosomes from a different run and does carry an HCT116 track; it is NOT read here, because mixing a second cache into one arm of a comparison is the same substitution by another route. It is named so that a later lane can register a test that uses it",
+      "no pooled raw agreement rate over the two arms is reported as a result",
+      "no pair is excluded for its magnitude: no effect-size bar is applied anywhere"
+    ],
+    "partitions": {
+      "decreases": "links holding a significant decrease and no significant increase; sign -1",
+      "increases": "links holding a significant increase and no significant decrease; sign +1",
+      "contested": "a (element, gene, cell) carrying both a significant decrease and a significant increase is in NEITHER arm. Its measured sign is contested by the measurement, so an agreement computed on it would be an agreement with a choice this lane made rather than with a measurement. Contested links are counted and reported and are in no arm's denominator",
+      "training_and_heldout": "23 of the 48 increases are held-out rows (data/results/increase_population.json, increases_behind_the_links_by_split). The 2026-09-28 split audit permits a held-out row as EVALUATION only, never as a feature and never as a fit. This lane fits nothing, selects nothing on an outcome and builds no feature: it reads a cached predicted value and a cached measured outcome and compares their signs, so every eligible link is evaluation and both splits are admitted. The training/held-out breakdown is reported beside every count"
+    },
+    "code_cleanliness": {
+      "git_sha": "0779c9780d540c9080186541de8f4193316c7e69",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/n1_register.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/direction_link.py"
+      ],
+      "counting_path_count": 123,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "0779c9780d540c9080186541de8f4193316c7e69",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/n1_register.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/direction_link.py",
+        "--chroms",
+        "chr21",
+        "--result",
+        "direction_link_chr21"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

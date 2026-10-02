@@ -1,0 +1,1179 @@
+{
+  "result": "direction_link",
+  "date": "2026-10-02",
+  "lane": "lane-direction",
+  "registered_before_this_run": "data/results/direction_link_registration.json",
+  "level": "link level, not rule level",
+  "why_not_rule_level": "of lane-increase's 48 increases exactly 1 has any compiled rule naming its own gene and 0 have one gated on its own cell (data/results/increase_population.json), so a rule-level test of direction on the increases is impossible. This lane does not attempt one: the model's direction calls are read directly out of the cached deletion answers and never through a compiled rule",
+  "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+  "follows_from": {
+    "lane": "lane-increase",
+    "commits": {
+      "registration": "e1c2671",
+      "population": "f521bdb",
+      "module": "6ca8095",
+      "attribution_section": "7f2b354"
+    },
+    "registered_go_carried_verbatim": "at or above both registered floors: a measured repression population could be built from the increases the committed extractor discards. This lane stops here. It reads no direction, reports no rate, tests no repression call and draws no conclusion about whether the compiled program's repression calls are right: a feasibility count that rolls straight into the test it enables is how a floor gets moved after the outcome is seen. The test is registered as its own lane, and this lane's remaining deliverable is a written proposal naming the extractor change the count shows is worth making",
+    "figures": {
+      "file": "data/results/increase_population.json",
+      "significant_increases_in_the_benchmark": 159,
+      "significant_increases_on_an_attributed_element": 48,
+      "significant_decreases_on_an_attributed_element": 212,
+      "increase_links": 48,
+      "increase_links_independent_loci": 33,
+      "increase_links_by_cell": {
+        "K562": 39,
+        "WTC11": 6,
+        "HCT116": 3
+      },
+      "increases_behind_the_links_by_split": {
+        "training": 25,
+        "heldout": 23
+      },
+      "increases_with_a_rule_naming_their_own_gene": 1,
+      "increases_with_a_rule_gated_on_their_own_cell": 0,
+      "contested_by_a_regulated_pair": 0,
+      "largest_increase_per_link_over_the_40_links_that_file_shows": {
+        "min": 0.0102,
+        "median": 0.0987,
+        "max": 4.2101,
+        "at_or_above_0.10": 20,
+        "of": 40
+      }
+    },
+    "and_behind_it": {
+      "lane": "lane-repress2",
+      "file": "data/results/repress2_population.json",
+      "registered_no_go_carried_verbatim": "the measured layer holds no repression call to test"
+    }
+  },
+  "prior_direction_lanes": {
+    "file": "data/results/crispri_direction_both.json",
+    "population": "held-out signed CRISPRi pairs in reach, K562 and GM12878, joined to the per-element response cache: 152 pairs, 116 measured down and 36 measured up",
+    "downward_arm": {
+      "k": 96,
+      "n": 116,
+      "rate": 0.8276
+    },
+    "upward_arm": {
+      "k": 15,
+      "n": 36,
+      "rate": 0.4167
+    },
+    "balanced_accuracy": {
+      "rate": 0.6221,
+      "ci95": [
+        0.5354,
+        null
+      ],
+      "band": "0.55 to 0.65"
+    },
+    "registered_verdict_carried_verbatim": "balanced accuracy 0.6221 is above chance but under 0.65; direction is faintly readable and not usable. UNDECIDABLE: the represses half of action stays unsupported, and every action word GenomeOS writes on a predicted rise is unbacked",
+    "registered_upward_reading_carried_verbatim": "upward sensitivity 0.4167 is at or below chance 0.5. The layer cannot call an increase, and the passing direction headline is a statement about downward effects only",
+    "not_this_lanes_population": "a different population under a different eligibility rule, so this lane neither confirms nor contradicts it by construction, and does not quote its figures as its own"
+  },
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "eligibility": {
+    "call": "a link is one (attributed element, gene, cell) for which that element's reciprocally overlapping cached CRISPRi pairs hold at least one pair whose outcome is exactly one of ('significant_decrease', 'significant_increase'), under the committed join: the element and the pair's tested interval reciprocally overlap at measured.RECIPROCAL_OVERLAP = 0.5 or more, computed by measured.reciprocal_overlap over the candidates measured.Layer.near returns at measured.REACH = 200000. That is lane-increase's `and_on_an_attributed_element` step, the same step for both arms, and no compiled rule enters it. The outcome is read off the cached row's own outcome field and is never recomputed. A link is in the decreases arm when its pairs hold a significant decrease and no significant increase, and in the increases arm when they hold a significant increase and no significant decrease; a link whose pairs hold both is CONTESTED by the measurement itself, is in neither arm, and is counted and reported on its own. This is lane-increase's own contest rule applied symmetrically to both arms, and that lane recorded 0 contested links on the increase side (data/results/increase_population.json)",
+    "links": 260,
+    "by_arm": {
+      "decreases": 212,
+      "increases": 48
+    },
+    "by_cell": {
+      "GM12878": 4,
+      "HCT116": 7,
+      "Jurkat": 5,
+      "K562": 230,
+      "WTC11": 14
+    },
+    "by_arm_and_cell": {
+      "decreases": {
+        "GM12878": 4,
+        "HCT116": 4,
+        "Jurkat": 5,
+        "K562": 191,
+        "WTC11": 8
+      },
+      "increases": {
+        "HCT116": 3,
+        "K562": 39,
+        "WTC11": 6
+      }
+    },
+    "contested": 0,
+    "contest_rule": "a (element, gene, cell) carrying both a significant decrease and a significant increase is in NEITHER arm. Its measured sign is contested by the measurement, so an agreement computed on it would be an agreement with a choice this lane made rather than with a measurement. Contested links are counted and reported and are in no arm's denominator",
+    "contested_rows": []
+  },
+  "answerability": {
+    "cell_read": "K562",
+    "call": "the cached deletion answers carry exactly these cell tracks: ('HepG2', 'IMR-90', 'K562', 'GM12878'). They do NOT carry ('WTC11', 'HCT116'). Of lane-increase's 48 increase links, 39 are K562 and are answerable in their own cell; 6 are WTC11 and 3 are HCT116 and are NOT, because the sweep holds no track of either cell. Those 9 links are reported as unanswerable with their counts and are in no denominator. NO SUBSTITUTION IS MADE: no other cell's value, no other gene's value and no pooled or marginal value stands in for a cell the cache does not carry, because a substituted cell would make the comparison between the arms meaningless. A separate partial cache data/knowledge/alphagenome/elements_hct116 exists over five chromosomes from a different run and does carry an HCT116 track; it is NOT read here, because mixing a second cache into one arm of a comparison is the same substitution by another route. It is named so that a later lane can register a test that uses it",
+    "cached_cell_tracks": [
+      "HepG2",
+      "IMR-90",
+      "K562",
+      "GM12878"
+    ],
+    "cells_not_cached": [
+      "WTC11",
+      "HCT116"
+    ],
+    "links_in_the_cell_read": 230,
+    "answered": 195,
+    "predicted_zero_excluded": 0,
+    "absent": 35,
+    "breakdown_reconciles": true,
+    "sign_rule": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+    "unanswerable_because_the_cache_carries_no_such_cell": {
+      "links": 26,
+      "by_arm_and_cell": {
+        "decreases": {
+          "HCT116": 4,
+          "Jurkat": 5,
+          "WTC11": 8
+        },
+        "increases": {
+          "HCT116": 3,
+          "WTC11": 6
+        }
+      },
+      "nothing_substituted": "no other cell, gene, cache or pooled value stands in for any of these links; they are absent from the test rather than negative in it"
+    },
+    "links_in_another_cached_cell_not_read": {
+      "links": 4,
+      "by_arm_and_cell": {
+        "decreases": {
+          "GM12878": 4
+        },
+        "increases": {}
+      },
+      "why": "the test is taken on the K562 links of both arms and on no other cell, because K562 is the one cell of this population the cached answers carry. Both arms are restricted identically, so the comparison is within one cell and no cell-type difference can be mistaken for an arm difference. The counts of every other cell are reported beside it as unanswerable and are never pooled in"
+    },
+    "by_arm": {
+      "decreases": {
+        "in_the_cell_read": 191,
+        "answered": 174,
+        "predicted_zero_excluded": 0,
+        "absent": 17
+      },
+      "increases": {
+        "in_the_cell_read": 39,
+        "answered": 21,
+        "predicted_zero_excluded": 0,
+        "absent": 18
+      }
+    }
+  },
+  "gate": {
+    "call": "the gate is taken first and on each arm separately: an arm's answered links must be at or above 30 and its answered links' independent loci at or above 20, both imported. The arms are never pooled to reach a floor. A gate reading is not a reading of the comparison: if either arm is below either floor the comparison is NOT made, no rate of that arm is read as a result and no floor is moved",
+    "per_arm": {
+      "decreases": {
+        "arm": "decreases",
+        "answered_links": 174,
+        "independent_loci": 112,
+        "floors": {
+          "links": 30,
+          "independent_loci": 20
+        },
+        "meets_both_floors": true,
+        "short_by": [],
+        "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+        "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+      },
+      "increases": {
+        "arm": "increases",
+        "answered_links": 21,
+        "independent_loci": 13,
+        "floors": {
+          "links": 30,
+          "independent_loci": 20
+        },
+        "meets_both_floors": false,
+        "short_by": [
+          "answered links 21, short of 30 by 9",
+          "independent loci 13, short of 20 by 7"
+        ],
+        "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+        "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+      }
+    },
+    "both_arms_meet_both_floors": false,
+    "reading": "an arm is below an imported floor: a no-go. The comparison between the arms is not made, no agreement rate is read as a result, no floor is moved, the two arms are not pooled to reach a floor and no answered set is widened by substituting a cell, a gene or another cache. The counts go on the record with the margin each falls short by, because a reader is owed it and not because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot"
+  },
+  "arms": {
+    "decreases": {
+      "arm": "decreases",
+      "measured_sign": -1,
+      "answered_links": 174,
+      "agreements": 157,
+      "agreement_rate": 0.9023,
+      "independent_loci": 112,
+      "by_split": {
+        "heldout": 16,
+        "training": 158
+      },
+      "by_chromosome": {
+        "chr1": 16,
+        "chr10": 7,
+        "chr11": 33,
+        "chr12": 6,
+        "chr14": 2,
+        "chr15": 3,
+        "chr16": 4,
+        "chr17": 8,
+        "chr18": 1,
+        "chr19": 15,
+        "chr2": 10,
+        "chr20": 3,
+        "chr21": 1,
+        "chr3": 8,
+        "chr4": 7,
+        "chr5": 6,
+        "chr6": 9,
+        "chr7": 8,
+        "chr8": 7,
+        "chr9": 5,
+        "chrX": 15
+      },
+      "by_dataset": {
+        "Gasperini2019": 115,
+        "K562_DC_TAP": 6,
+        "Morris": 4,
+        "Nasser2021": 34,
+        "Reilly": 1,
+        "Schraivogel2020": 9,
+        "Xie": 5
+      },
+      "predicted_sign_breakdown": {
+        "down": 157,
+        "up": 17
+      }
+    },
+    "increases": {
+      "arm": "increases",
+      "measured_sign": 1,
+      "answered_links": 21,
+      "agreements": 11,
+      "agreement_rate": 0.5238,
+      "independent_loci": 13,
+      "by_split": {
+        "heldout": 5,
+        "training": 16
+      },
+      "by_chromosome": {
+        "chr11": 3,
+        "chr12": 1,
+        "chr14": 1,
+        "chr16": 1,
+        "chr19": 8,
+        "chr21": 1,
+        "chr6": 1,
+        "chr7": 1,
+        "chrX": 4
+      },
+      "by_dataset": {
+        "Gasperini2019": 4,
+        "K562_DC_TAP": 2,
+        "Klann": 1,
+        "Morris": 2,
+        "Nasser2021": 12
+      },
+      "predicted_sign_breakdown": {
+        "down": 10,
+        "up": 11
+      }
+    }
+  },
+  "arms_never_pooled": "the two arms are reported apart and are never pooled. The comparison between them is the result; neither arm alone is. A pooled agreement rate is not reported as a result",
+  "decrease_arm_is_not_model_coverage": "the 212-of-212 that the decrease column keeps at lane-increase's last two ladder steps is the EXTRACTOR'S OWN CONSTRUCTION and not model coverage: a significant decrease on an attributed element raises the measured rule that then names its gene and its cell, so the decreases survive those two steps by definition. Reading it as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'. This lane's decrease arm therefore does NOT sit at those steps: it is taken at the same step as the increase arm, `and_on_an_attributed_element`, where no compiled rule is consulted at all, so the two arms share one eligibility rule and the comparison between them is not a comparison of two different gates",
+  "split_rule": "23 of the 48 increases are held-out rows (data/results/increase_population.json, increases_behind_the_links_by_split). The 2026-09-28 split audit permits a held-out row as EVALUATION only, never as a feature and never as a fit. This lane fits nothing, selects nothing on an outcome and builds no feature: it reads a cached predicted value and a cached measured outcome and compares their signs, so every eligible link is evaluation and both splits are admitted. The training/held-out breakdown is reported beside every count",
+  "not_balanced": "the increase population is not balanced across cell types: 39 of the 48 links are K562, 6 WTC11 and 3 HCT116 (data/results/increase_population.json). No rate of this lane's is a genome-wide or a cell-type-general rate, and none is reported pooled across cells",
+  "floors_are_on_counts": "both imported floors are on COUNTS - links and independent loci - and neither is a floor on an effect size. Over the 40 links data/results/increase_population.json shows, the largest increase per link runs 0.0102 to 4.2101 with a median of 0.0987 and 20 of 40 at or above 0.10. No magnitude bar is imposed here, no link is dropped for being small, and clearing a count floor is not a statement that the effects behind it are large",
+  "locus_convention": {
+    "rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "span": 1000000,
+    "imported_from": "genomeos.attribution.cell2.INDEPENDENT_LOCUS_RULE",
+    "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+    "inherited_33_loci": "lane-increase's 33 independent loci are cell2's operational grouping and not established biological independence; so is every locus count and every interval this lane reports"
+  },
+  "cannot_establish": "a sign agreement is not a mechanism. Whatever this test says, nothing here establishes that any of these increases is a repression mechanism, that an element whose silencing raises a gene represses it, that any element is a silencer or a repressor, or that any compiled repression call is right or wrong: no compiled rule is consulted anywhere in this lane, by construction, because only one of the 48 increases has a rule naming its gene and none has one gated on its cell. Nothing here is a verdict on the deletion model's direction in general: the test is on one cell (K562), one assay (the ENCODE CRISPRi benchmark), and only those links that lie on an attributed element under the committed overlap rule, so it is not a genome-wide, cell-type-general or assay-general statement. A difference between the arms is a difference in sign agreement and not a measure of how large either effect is, since no magnitude bar is applied and the floors are on counts. The locus convention is cell2's operational grouping, never established biological independence, so an interval taken over loci is an interval over that grouping and not over established independent observations. The arms are not balanced and are not matched on magnitude, chromosome, gene, split or dataset, so a difference between them may be carried by any of those rather than by the sign. An undetected difference is not a measured absence of one. And the 9 WTC11 and HCT116 links are absent from the test rather than negative in it: this lane says nothing whatever about direction in a cell the cached answers do not carry",
+  "requests": 0,
+  "money": "none: every input was already on disk",
+  "no_requests": "0 model requests, no money, no download and no network. Every input is already on disk: the two benchmark tables, the per-chromosome attribution results and the per-element response cache of the finished sweep, which was written with threshold=0.0 and so already carries a signed per-cell value for every gene in the scorer's window",
+  "nothing_changed": "no extractor, compiled rule, threshold, floor, predicate, shuffle count, draw count or registered reading of any lane is changed by this lane, and no registered reading is restated in stronger words than the lane that registered it used",
+  "comparison": {
+    "taken": false,
+    "why": "an arm is below an imported floor: a no-go. The comparison between the arms is not made, no agreement rate is read as a result, no floor is moved, the two arms are not pooled to reach a floor and no answered set is widened by substituting a cell, a gene or another cache. The counts go on the record with the margin each falls short by, because a reader is owed it and not because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+    "short_by": {
+      "decreases": [],
+      "increases": [
+        "answered links 21, short of 30 by 9",
+        "independent loci 13, short of 20 by 7"
+      ]
+    },
+    "the_rates_in_arms_are_on_the_record_not_read_as_a_result": "the per-arm agreement rates under `arms` are the counts the registration says go on the record. Under a gate no-go they are NOT read as a result: no interval over independent loci was taken, no sign shuffle was run, no balanced accuracy was computed and the comparison between the arms was not made. Quoting either rate, or the gap between them, as a finding of this lane would be reading the result the gate refused",
+    "statistics_not_computed": [
+      "balanced accuracy",
+      "the cluster bootstrap intervals over independent loci",
+      "the sign-shuffled control and its one-sided p",
+      "the difference between the arms, its baseline and its excess"
+    ],
+    "answered_against_measured": "the two imported floors are applied here to ANSWERED links, and lane-increase applied them to measured links. Its population was 48 increase links over 33 independent loci; of those 48, 21 are answerable in their own cell from the cached answers and they fall over 13 independent loci. 9 of the 27 that are not answerable have a cell the cache carries no track of at all, and 18 have an element whose cached window carries no entry for their own gene. Neither floor is moved and neither count is pooled with the other arm to reach one"
+  },
+  "seconds": 75.5,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.)",
+        "version": "the two benchmark tables cached under data/knowledge, digested in inputs"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache, written with threshold=0.0",
+        "version": "the per-chromosome archives this run streamed, digested as a group"
+      },
+      {
+        "accession": "the attributed elements of the chromosomes this run covers",
+        "version": "re-enumerated in this run from the results on disk, not read from a file"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/direction_link_registration.json",
+        "sha256": "0b67ae7f33c312c0d763caf3eef8128a2452f3f13fcf9046c6390ea2e6ceee7c",
+        "bytes": 54032,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "per_element_response_cache",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          }
+        ],
+        "sha256": "bb959176c7385b192231fd23a4858d729c899028e6d0fd8559e6c06ae86f178a",
+        "bytes": 774517807,
+        "files": 22,
+        "partition": "the finished deletion sweep's own per-element cache, read for a sign only"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "eligibility_predicate": "a link is one (attributed element, gene, cell) for which that element's reciprocally overlapping cached CRISPRi pairs hold at least one pair whose outcome is exactly one of ('significant_decrease', 'significant_increase'), under the committed join: the element and the pair's tested interval reciprocally overlap at measured.RECIPROCAL_OVERLAP = 0.5 or more, computed by measured.reciprocal_overlap over the candidates measured.Layer.near returns at measured.REACH = 200000. That is lane-increase's `and_on_an_attributed_element` step, the same step for both arms, and no compiled rule enters it. The outcome is read off the cached row's own outcome field and is never recomputed. A link is in the decreases arm when its pairs hold a significant decrease and no significant increase, and in the increases arm when they hold a significant increase and no significant decrease; a link whose pairs hold both is CONTESTED by the measurement itself, is in neither arm, and is counted and reported on its own. This is lane-increase's own contest rule applied symmetrically to both arms, and that lane recorded 0 contested links on the increase side (data/results/increase_population.json)",
+      "measured_sign": "the measured sign of a link is -1 in the decreases arm and +1 in the increases arm, by the arm's own definition. No effect size, magnitude or threshold enters it: the sign is the benchmark's own significance label, and a link is in exactly one arm or is contested",
+      "predicted_direction": "the predicted deletion direction of a link is the sign of the signed predicted log2 fold change the finished genome-wide deletion sweep cached for THAT link's own gene on THAT link's own cell track, read from the per-element response cache data/knowledge/alphagenome/elements/<chrom>.json.gz under the link's own element id, at `genes[*].by_cell[cell]` for the gene whose name is exactly the link's gene. The link already names one element, so no second element is consulted and no resolution rule across overlapping elements is needed or applied. Nothing is recomputed, no model request is made and no value is derived from any other cell, gene or element",
+      "sign_rule_zero_and_absent": "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+      "primary_statistic": "balanced accuracy, the unweighted mean of the two arms' agreement rates, against 0.5",
+      "chance": 0.5,
+      "difference_between_the_arms": "agreement rate in the decreases arm minus agreement rate in the increases arm",
+      "why_the_difference_is_not_the_reading": "the difference between the arms, held against a sign shuffle, cannot answer the question it looks like it answers, and the algebra is exact: with n_d answered decrease links of which a agree and n_u answered increase links of which b agree, the excess of the difference over the shuffled baseline is identically EXCESS = 2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u). Two consequences follow and both were written down before the run. First, when the two arms are the same size the excess is exactly zero, so the whole difference between the arms IS the shuffled baseline and carries no information beyond the model's own marginal sign rate. Second, when the decreases arm is the larger one - which it is on this population, 212 against 48 - the factor (n_u - n_d) is negative, so a positive excess requires balanced accuracy BELOW 0.5: a one-sided test of the difference against the sign shuffle is a test of the model doing WORSE than chance, and a model that reads direction well scores below that control rather than above it. The same algebra says the two arms do not carry two skills: each arm's agreement against its own shuffled chance level (q for the decreases, 1 - q for the increases) differs from the other's only by that arm-size factor, and the two sum to 2 * (balanced_accuracy - 0.5). With one marginal sign rate there is exactly ONE skill number on this population and it is balanced accuracy. So the difference between the arms is reported, with its interval, its baseline and its excess, as a DESCRIPTION of the asymmetry and never as evidence that the model reads direction better on one sign; and the statistic the reading is taken on is balanced accuracy",
+      "baseline": "2q - 1, where q is the share of answered links whose predicted sign is -1",
+      "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "independent_locus_span": 1000000,
+      "locus_floor": 20,
+      "link_floor": 30,
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "bootstrap_unit": "independent locus",
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20261002,
+      "shuffles": 2000,
+      "shuffle_seed": 20261003,
+      "alpha_one_sided": 0.05,
+      "cells_read": [
+        "K562"
+      ],
+      "cached_cell_tracks": [
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "GM12878"
+      ],
+      "cells_not_cached": [
+        "WTC11",
+        "HCT116"
+      ],
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "aggregate_function": "mean of a 0/1 agreement per answered link, per arm",
+      "fill_value": "none: an absent or exactly-zero predicted value is excluded and counted"
+    },
+    "exclusions": [
+      "a (element, gene, cell) carrying both a significant decrease and a significant increase is in NEITHER arm. Its measured sign is contested by the measurement, so an agreement computed on it would be an agreement with a choice this lane made rather than with a measurement. Contested links are counted and reported and are in no arm's denominator",
+      "a predicted value v becomes a sign: -1 when v < 0, +1 when v > 0, and NO SIGN when v == 0.0 exactly. A link whose predicted value is exactly zero carries no predicted direction, is EXCLUDED from its arm's agreement denominator, and is counted and reported as `predicted_zero_excluded`. A link whose element is absent from the cache, or whose gene carries no entry for the cell track, is ABSENT: it is excluded from the denominator and counted and reported as `absent`. Neither a zero nor an absent value is ever scored as an agreement or as a disagreement, and neither is replaced by a default, a nearest gene, another cell or a marginal sign. Every denominator is reported with its own exhaustive breakdown of answered, zero and absent, so no count of this lane's can be quoted under a noun the breakdown does not support (docs/LESSONS.md, 'A count is not a measurement of the thing you want to count')",
+      "the cached deletion answers carry exactly these cell tracks: ('HepG2', 'IMR-90', 'K562', 'GM12878'). They do NOT carry ('WTC11', 'HCT116'). Of lane-increase's 48 increase links, 39 are K562 and are answerable in their own cell; 6 are WTC11 and 3 are HCT116 and are NOT, because the sweep holds no track of either cell. Those 9 links are reported as unanswerable with their counts and are in no denominator. NO SUBSTITUTION IS MADE: no other cell's value, no other gene's value and no pooled or marginal value stands in for a cell the cache does not carry, because a substituted cell would make the comparison between the arms meaningless. A separate partial cache data/knowledge/alphagenome/elements_hct116 exists over five chromosomes from a different run and does carry an HCT116 track; it is NOT read here, because mixing a second cache into one arm of a comparison is the same substitution by another route. It is named so that a later lane can register a test that uses it",
+      "no pooled raw agreement rate over the two arms is reported as a result",
+      "no pair is excluded for its magnitude: no effect-size bar is applied anywhere"
+    ],
+    "partitions": {
+      "decreases": "links holding a significant decrease and no significant increase; sign -1",
+      "increases": "links holding a significant increase and no significant decrease; sign +1",
+      "contested": "a (element, gene, cell) carrying both a significant decrease and a significant increase is in NEITHER arm. Its measured sign is contested by the measurement, so an agreement computed on it would be an agreement with a choice this lane made rather than with a measurement. Contested links are counted and reported and are in no arm's denominator",
+      "training_and_heldout": "23 of the 48 increases are held-out rows (data/results/increase_population.json, increases_behind_the_links_by_split). The 2026-09-28 split audit permits a held-out row as EVALUATION only, never as a feature and never as a fit. This lane fits nothing, selects nothing on an outcome and builds no feature: it reads a cached predicted value and a cached measured outcome and compares their signs, so every eligible link is evaluation and both splits are admitted. The training/held-out breakdown is reported beside every count"
+    },
+    "code_cleanliness": {
+      "git_sha": "d65e8036eb018c7da8bfc019291325b16c735e91",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/check_staged.py",
+        "scripts/n1_register.py",
+        "tests/test_check_staged.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/direction_link.py"
+      ],
+      "counting_path_count": 123,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "d65e8036eb018c7da8bfc019291325b16c735e91",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/check_staged.py",
+        "scripts/n1_register.py",
+        "tests/test_check_staged.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/direction_link.json",
+        "data/results/direction_link_chr21.json"
+      ],
+      "argv": [
+        "scripts/direction_link.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
