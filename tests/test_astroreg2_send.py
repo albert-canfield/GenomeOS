@@ -720,3 +720,120 @@ class TestTheSignoffIsBoundToTheCodeItRead:
             astrorun.check_signoff_blobs(blobs, root=astrorun.ROOT_FOR_BLOBS)
         said = str(exc.value)
         assert "b.py" in said and "a.py" not in said.split("b.py")[0].split("required")[-1]
+
+
+class TestTheSweepAndTheSenderReachTheSamePath:
+    """Code-path equivalence for the frozen feature, PINNED rather than remembered.
+
+    This replaces a check that could not be run: re-deriving cached by_cell values needs a stored raw
+    response and the cache holds none. What can be pinned statically is that the sweep which produced the
+    frozen K562 values and the sender which will buy the astrocyte ones both reach the SAME
+    `score_element`, with the same cache and the same MIN_EFFECT -- and that the extra arguments the sweep
+    passes cannot reach the cached gene rows that `crispri` reads.
+
+    The equivalence is currently a fact about two call sites that a future edit to either could break
+    silently, and the whole frozen-feature claim rests on it.
+    """
+
+    SWEEP = ROOT / "scripts/enhancer_targets_all.py"
+    SENDER = ROOT / "scripts/astroreg2_send.py"
+    TARGET = ROOT / "genomeos/predict/enhancer_target.py"
+
+    def test_the_sweep_reaches_score_element_through_context_score(self):
+        import ast
+        import inspect
+
+        from genomeos.predict.enhancer_target import Context
+
+        sweep = self.SWEEP.read_text()
+        assert ".score(" in sweep, "the sweep must call Context.score"
+        import textwrap
+
+        src = textwrap.dedent(inspect.getsource(Context.score))
+        calls = {
+            node.func.id
+            for node in ast.walk(ast.parse(src))
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        assert "score_element" in calls, "Context.score must reach score_element"
+
+    def test_the_sender_reaches_score_element_directly(self):
+        import ast
+
+        tree = ast.parse(self.SENDER.read_text())
+        reached = {
+            node.func.attr
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+        }
+        assert "score_element" in reached, "the sender must reach score_element"
+
+    def test_both_use_score_elements_own_cache_and_min_effect(self):
+        """Neither side overrides them, so the cached rows are written identically."""
+        import inspect
+
+        from genomeos.predict import enhancer_target
+
+        params = inspect.signature(enhancer_target.score_element).parameters
+        assert params["cache"].default is enhancer_target.CACHE
+        assert params["min_effect"].default == enhancer_target.MIN_EFFECT
+        sender = self.SENDER.read_text()
+        assert "cache=" not in sender and "min_effect=" not in sender, (
+            "the sender must not override the cache or the effect floor the frozen values used"
+        )
+        src = inspect.getsource(enhancer_target.Context.score)
+        assert "cache=cache" in src and "min_effect=min_effect" in src
+        sig = inspect.signature(enhancer_target.Context.score).parameters
+        assert sig["cache"].default is enhancer_target.CACHE
+        assert sig["min_effect"].default == enhancer_target.MIN_EFFECT
+
+    def test_the_extra_arguments_the_sweep_passes_cannot_reach_the_cached_rows(self):
+        """The substance of the equivalence: they feed predict_target, AFTER the cache is written.
+
+        `crispri` reads the cached gene rows. If inferred_targets, domain_genes or coding could influence
+        what is cached, the sweep and the sender would write different rows and the frozen feature would
+        not be the same feature. They appear only after the cache write, so they cannot.
+        """
+        import inspect
+
+        from genomeos.predict import enhancer_target
+
+        src = inspect.getsource(enhancer_target.score_element)
+        write = src.index("p.write_text(json.dumps(hit))")
+        before = src[:write]
+        for name in ("inferred_targets", "domain_genes", "coding"):
+            assert name not in before.split("def score_element")[-1].split('"""')[-1], (
+                f"{name} appears before the cache is written, so it could change the cached rows that "
+                "crispri reads"
+            )
+        after = src[write:]
+        assert "predict_target(" in after, "those arguments feed predict_target, after the cache write"
+
+    def test_the_cached_rows_hold_no_raw_response_so_a_replay_check_is_impossible(self):
+        """Why the output-level comparability check was not run, recorded as a fact not an excuse."""
+        import gzip
+        import json
+
+        arc_path = Path("data/knowledge/alphagenome/elements/chr21.json.gz")
+        if not arc_path.exists():
+            pytest.skip("the chr21 element archive is not on this machine")
+        with gzip.open(arc_path, "rt") as fh:
+            arc = json.load(fh)
+        keys, gene_keys = set(), set()
+        for hit in list(arc.values())[:50]:
+            keys |= set(hit)
+            for g in (hit.get("genes") or [])[:3]:
+                gene_keys |= set(g)
+        assert not [
+            k for k in keys | gene_keys if any(w in k.lower() for w in ("raw", "response", "adata", "proto"))
+        ]
+        assert gene_keys <= {
+            "by_cell",
+            "gene",
+            "max_drop_log2fc",
+            "max_drop_tissue",
+            "max_rise_log2fc",
+            "max_rise_tissue",
+            "mean_log2fc",
+            "n_tracks",
+        }
