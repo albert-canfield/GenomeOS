@@ -31,9 +31,11 @@ REGISTERED_BEFORE = "data/results/rule_number_sources_registration.json"
 
 OWN_CODE = (
     "genomeos/lang/rule_number_sources.py",
+    "genomeos/lang/rule_number_sources_findings.py",
     "scripts/rule_number_sources_register.py",
     "scripts/rule_number_sources_census.py",
     "tests/test_rule_number_sources.py",
+    "tests/test_rule_number_sources_findings.py",
 )
 
 
@@ -53,6 +55,18 @@ def findings() -> list[dict[str, Any]]:
 
 
 def main() -> None:
+    # The registration module's tables are the tables AS REGISTERED: empty, and they stay empty
+    # there so that `rns.registration()` keeps reproducing the committed artefact. The writer fills
+    # them here, in this process only, from the module written after every source was fetched, so
+    # nothing is mutated in a test run or in a registration run. `rns.registration()` is read below
+    # for the question text alone.
+    from genomeos.lang import rule_number_sources_findings as rnf
+
+    rns.FINDINGS.update(rnf.findings())
+    rns.SOURCES_FETCHED = rnf.SOURCES_FETCHED
+    rns.ATTRIBUTION_FINDINGS = rnf.attribution_findings()
+    rns.CONTRADICTIONS = rnf.CONTRADICTIONS
+    rns.VERDICT = rnf.VERDICT
     recs = findings()
     counts = {c: 0 for c in rns.CLASSES}
     for r in recs:
@@ -74,6 +88,9 @@ def main() -> None:
         "sources_fetched": rns.SOURCES_FETCHED,
         "verdict": rns.VERDICT,
         "attribution_findings": rns.ATTRIBUTION_FINDINGS,
+        "attribution_values_added_after_registration": dict(rns.ATTRIBUTION_ADDED_AFTER_REGISTRATION),
+        "declined_mappings": rnf.DECLINED_MAPPINGS,
+        "searches_run": list(rnf.SEARCHES_RUN),
         "contradictions": rns.CONTRADICTIONS,
         "reports": list(rns.REPORTS),
         "whichever_way_it_falls": rns.WHICHEVER_WAY_IT_FALLS,
@@ -109,6 +126,9 @@ def main() -> None:
             "classes": dict(rns.CLASSES),
             "cascade": list(rns.CASCADE),
             "cited_source_attribution_values": dict(rns.ATTRIBUTION),
+            "cited_source_attribution_values_added_after_registration": dict(
+                rns.ATTRIBUTION_ADDED_AFTER_REGISTRATION
+            ),
             "commensurability_values": dict(rns.COMMENSURABILITY),
             "denominator": rns.registration()["denominator"],
             "model_requests": 0,

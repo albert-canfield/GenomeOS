@@ -116,6 +116,21 @@ ATTRIBUTION = {
         "the declaration's evidence kind is `inferred` or `none`, which BioLang's own grammar "
         "defines as not measured, so there is no citation to check"
     ),
+    "names_both_but_not_this_direction": (
+        "ADDED AFTER REGISTRATION, and listed again in `ATTRIBUTION_ADDED_AFTER_REGISTRATION` with "
+        "the reason: what was fetched names both factors of the rule but supports the OPPOSITE "
+        "direction of regulation, or attributes the stated effect to a third factor"
+    ),
+}
+
+#: Added AFTER registration, and marked as added wherever it is used. None of the five registered
+#: attribution values could describe what the Thomson 2011 full text does for `rule Tbxt inhibits
+#: SOX2`: it names BOTH factors and states the opposite direction. Reaching for
+#: `names_one_factor_only` would have been false, so a value was added and named rather than a
+#: finding bent to fit one. The class axis, which carries the count, is unchanged, and the committed
+#: registration artefact holds only the five.
+ATTRIBUTION_ADDED_AFTER_REGISTRATION = {
+    "names_both_but_not_this_direction": ATTRIBUTION["names_both_but_not_this_direction"]
 }
 
 #: Axis 3: whether a literature value could be written into this field as the program stands.

@@ -42,6 +42,15 @@ def test_registration_assigns_no_class():
     assert payload["findings_at_registration"] == 0
     assert payload["sources_fetched_at_registration"] == 0
     assert payload["verdict_at_registration"] == ""
+    # the registration module's tables stay the tables AS REGISTERED: the filled ones live in
+    # rule_number_sources_findings, and the writer loads them in its own process only
+    assert rns.FINDINGS == {} and rns.SOURCES_FETCHED == () and rns.VERDICT == ""
+    if REGISTRATION.exists():
+        committed = json.loads(REGISTRATION.read_text())
+        assert committed["findings_at_registration"] == 0
+        assert committed["sources_fetched_at_registration"] == 0
+        assert committed["verdict_at_registration"] == ""
+        assert "verdict" not in committed and "counts" not in committed
     text = json.dumps(payload)
     for slot in payload["population"]:
         assert "class" not in slot
