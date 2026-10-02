@@ -37,6 +37,95 @@ from genomeos import manifest as mf
 STORES = ("reference", "knowledge", "cache")
 IGNORED = ("date",)
 
+#: The fields a rebuild in a clean worktree is allowed to differ on, by **exact path**, because they
+#: describe the tree the run happened in and not anything the run computed. A result that honestly records
+#: the other lanes' outstanding files in a shared checkout cannot reproduce those lists in a clean worktree,
+#: where there are none; under the unamended rule such a result could only ever fail, while one that omitted
+#: the record would pass. Adopted 2026-10-02 after the coordinator raised it and the supervisor ruled.
+ENVIRONMENT_FIELDS = tuple(
+    f"/{container}{field}"
+    for container in ("code_cleanliness/", "result_manifest/code_cleanliness/", "result_manifest/code/")
+    for field in (
+        "dirty",
+        "foreign_uncommitted_code",
+        "dirty_code_paths",
+        "untracked_code_paths",
+        "dirty_result_paths",
+    )
+)
+
+#: These must hold on **both** sides, so the exemption above can never excuse a result whose own code was
+#: uncommitted, or one with a foreign uncommitted file on the path that produced its numbers.
+MUST_HOLD: tuple[tuple[str, Any], ...] = (
+    ("own_code_is_committed", True),
+    ("foreign_uncommitted_code_on_the_counting_path", []),
+)
+
+
+def leaves(x: Any, where: str = "") -> int:
+    """How many leaf values a comparison covers. A count of top-level keys can hide a nested difference:
+    `cell2_eligibility.json` has 14 top-level keys and several hundred leaves."""
+    if isinstance(x, dict):
+        return sum(leaves(v, f"{where}/{k}") for k, v in x.items())
+    if isinstance(x, list):
+        return sum(leaves(v, f"{where}[{i}]") for i, v in enumerate(x))
+    return 1
+
+
+def leaf_reconciliation(original: dict[str, Any]) -> dict[str, Any]:
+    """Where every leaf of the original went, so a count carries its denominator.
+
+    `compared` plus `not_compared` equals `total`: a comparison reported without the leaves it dropped
+    invites the reader to assume it covered the file. The dropped leaves are the ones `comparable()`
+    removes before any diff -- the date, the manifest's own `code` block, `model_dependencies` and every
+    timing key -- and they are named here by cause rather than merely counted.
+    """
+    total = leaves(original)
+    compared = leaves(comparable(original))
+    return {
+        "total": total,
+        "compared": compared,
+        "not_compared": total - compared,
+        "not_compared_because": {
+            "ignored_keys": list(IGNORED),
+            "manifest_code_block": "result_manifest.code: the stamp of the run, not a value it computed",
+            "model_dependencies": "recorded after the fact for results made before 2026-09-28",
+            "timing_keys": "every key is_timing() matches, listed under timing_fields_ignored",
+        },
+        "reconciles": total == compared + (total - compared),
+    }
+
+
+def environment_differences(found: list[str]) -> tuple[list[str], list[str]]:
+    """(real differences, environment differences). A path counts as environmental only if it is exactly
+    one of ENVIRONMENT_FIELDS, or an element of one of those lists; no pattern matching."""
+    real, env = [], []
+    for d in found:
+        path = d.split(":")[0]
+        base = path.split("[")[0]
+        (env if base in ENVIRONMENT_FIELDS else real).append(d)
+    return real, env
+
+
+def must_hold_failures(original: dict[str, Any], rebuilt: dict[str, Any]) -> list[str]:
+    """Every place either side breaks MUST_HOLD. Checked at any depth, on both sides."""
+    out = []
+
+    def walk(x: Any, side: str, where: str = "") -> None:
+        if isinstance(x, dict):
+            for k, v in x.items():
+                for field, wanted in MUST_HOLD:
+                    if k == field and v != wanted:
+                        out.append(f"{side}{where}/{k}: {v!r}, must be {wanted!r}")
+                walk(v, side, f"{where}/{k}")
+        elif isinstance(x, list):
+            for i, v in enumerate(x):
+                walk(v, side, f"{where}[{i}]")
+
+    walk(original, "original")
+    walk(rebuilt, "rebuilt")
+    return out
+
 
 def is_timing(key: Any) -> bool:
     """A wall-clock key: `seconds`, or a snake_case name with a `seconds` token or ending `per_second`.
@@ -169,9 +258,16 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
             shutil.copyfile(written, wt / "data" / "results" / result.name)
         rebuilt = json.loads((wt / "data" / "results" / result.name).read_text())
         report["rebuilt_sha256"] = mf.sha256_of(written)[0]
-        report["differences"] = diff(comparable(original), comparable(rebuilt))
+        found = diff(comparable(original), comparable(rebuilt))
+        real, env = environment_differences(found)
+        report["differences"] = real
+        report["environment_fields_ignored"] = env
+        report["must_hold_failures"] = must_hold_failures(original, rebuilt)
+        report["differences"] += report["must_hold_failures"]
         report["timing_fields_ignored"] = sorted(set(timing_paths(original)) | set(timing_paths(rebuilt)))
         report["fields_compared"] = len(comparable(original))
+        report["leaves"] = leaf_reconciliation(original)
+        report["leaves_compared"] = report["leaves"]["compared"]
         # despite its name this key compares fields (date and the code block ignored); the next is bytes
         # (timing keys are ignored as well, and listed in timing_fields_ignored)
         report["identical_bytes_except_date_and_run"] = not report["differences"]

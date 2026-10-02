@@ -91,3 +91,67 @@ def test_the_estimators_report_their_provenance():
             assert key in out, key
         assert out["draws_requested"] == 50
         assert out["met_minimum"] is False
+
+
+# --- an interval needs enough clusters to mean 95% --------------------------------------------------------
+
+
+def _pairs_on(chroms: int, per: int = 8) -> list:
+    out = []
+    for c in range(chroms):
+        for i in range(per):
+            out.append(
+                crispri.Pair(
+                    chrom=f"chr{c + 1}",
+                    start=i * 1000,
+                    end=i * 1000 + 300,
+                    gene=f"G{c}_{i}",
+                    cell="K562",
+                    dataset="test",
+                    distance=10_000 + i * 100,
+                    dhs=1.0,
+                    h3k27ac=1.0,
+                    regulated=(i % 4 == 0),
+                )
+            )
+    return out
+
+
+def test_an_interval_from_too_few_clusters_is_withheld_not_reported():
+    """GM12878 reported [-0.0953, 0.1916] on 7 chromosomes. A ci95 field is read as a 95% interval
+    whatever is written beside it, so below the minimum there is no ci95 at all."""
+    pairs = _pairs_on(7)
+    a = [0.9 if p.regulated else 0.1 for p in pairs]
+    b = [0.5 for _ in pairs]
+    for out in (
+        crispri.gain_interval(a, b, pairs, n=200),
+        crispri.weighted_gain(a, b, pairs, weighted=False, n=200),
+    ):
+        assert out["clusters"] == 7
+        assert out["enough_clusters"] is False
+        assert out["ci95"] is None
+        assert "interval unreliable: 7 clusters" in out["interval_unreliable"]
+
+
+def test_the_point_estimate_survives_a_withheld_interval():
+    """Only the interval depends on the resampling, so the gain is still reported."""
+    pairs = _pairs_on(5)
+    a = [0.9 if p.regulated else 0.1 for p in pairs]
+    b = [0.5 for _ in pairs]
+    out = crispri.gain_interval(a, b, pairs, n=200)
+    assert out["gain"] is not None
+    assert out["ci95"] is None
+
+
+def test_enough_clusters_keeps_its_interval():
+    pairs = _pairs_on(crispri.MIN_CLUSTERS_FOR_AN_INTERVAL + 2)
+    a = [0.9 if p.regulated else 0.1 for p in pairs]
+    b = [0.5 for _ in pairs]
+    out = crispri.gain_interval(a, b, pairs, n=200)
+    assert out["enough_clusters"] is True
+    assert out["ci95"] is not None
+    assert "interval_unreliable" not in out
+
+
+def test_the_minimum_is_ten_clusters():
+    assert crispri.MIN_CLUSTERS_FOR_AN_INTERVAL == 10

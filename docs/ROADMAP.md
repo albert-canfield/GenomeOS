@@ -4941,6 +4941,23 @@ parameter.
 Ideas judged worth keeping, not yet scheduled. Each would be judged by the
 ambition in §1 before it is started.
 
+- **Cell2Sentence, as a comparator and never as evidence.** C2S-Scale (van
+  Dijk lab; Apache 2.0; Pythia 160M-1B and Gemma-2 2B/27B on HuggingFace since
+  2025-10-15; trained on 57M+ CellxGene and HCA cells) turns expression
+  profiles into ranked gene sentences for LLMs: annotation, generation,
+  perturbation prediction. **It reads expression, not DNA, so it cannot
+  attribute function to a non-coding element.** *Trigger:* only when a
+  perturbation-response test (N1 type) clears its label-coverage floors. Then
+  C2S-Scale enters as a **pre-registered comparator, never as evidence**.
+  *Conditions:* (1) a **contamination check first** -- is any benchmark
+  dataset, or a study it derives from, in CellxGene or HCA? If yes, it is
+  development evidence only; (2) **2B or smaller locally** (27B does not fit
+  18 GiB RAM); no 27B without Albert's approval, since it means paid compute;
+  (3) the same floors, bootstrap and reading rules as every comparator.
+  Logged 2026-10-02 by the supervisor, on Albert's question; **no lane opened,
+  and the figures in this row are the supervisor's and are not verified
+  here.**
+
 - **Programs that read the genome directly.** A `gene` block whose sequence
   is taken from a locus at compile time, so a BioLang program can be
   compiled against HG002 and against the reference and diffed.

@@ -259,5 +259,26 @@ sound only when it also carries, computed rather than asserted:
 
 And before any number from such a result is quoted in README, docs/ROADMAP.md,
 docs/ATTRIBUTION.md or a reply to the owner, run `scripts/manifest_rebuild.py`
-on it in a clean worktree at its own sha and record **0 differences**. A result
-that fails either half is a defect, not a result.
+on it in a clean worktree at its own sha.
+
+**What the rebuild must show (amended 2026-10-02).** `0` differences **at every
+leaf**, with one class of exception: the fields that describe the tree the run
+happened in, by **exact path** and never by pattern — `dirty` and the foreign,
+dirty and untracked path lists, under `code_cleanliness` and under
+`result_manifest.code`. They are listed in the report under
+`environment_fields_ignored`, and the exact paths are `ENVIRONMENT_FIELDS` in
+the script rather than a sentence here, so the rule is a mechanism.
+
+The first wording asked for 0 differences full stop, and that could only ever be
+failed by a result honest about a shared checkout: it records the other lanes'
+outstanding files, and a clean worktree has none, so the honest result failed
+while one that omitted the record passed.
+
+Two fields must hold on **both** sides, so the exception can never excuse a
+result no commit reproduces: `own_code_is_committed` is true, and
+`foreign_uncommitted_code_on_the_counting_path` is empty. Any other difference
+is a defect.
+
+Report **leaves compared, not top-level keys**. A key count hides a nested
+difference: `data/results/cell2_eligibility.json` has 14 top-level keys and
+**707** leaves. A result that fails any of this is a defect, not a result.

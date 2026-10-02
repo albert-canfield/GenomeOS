@@ -74,6 +74,13 @@ MIN_DISTANCE = 1_000  # a TSS closer than this counts as 1 kb, so contact stays 
 REACH = 10_000  # the longest element in the deletion table, for the overlap search
 BOOTSTRAPS = 2000  # chromosome resamples per interval; see MIN_RESAMPLES for why 200 was too few
 
+#: The fewest resampling clusters an interval may be read from. A percentile bootstrap over whole
+#: chromosomes cannot mean 95% when it has a handful of clusters to resample: at 5 chromosomes the 2.5%
+#: tail is set by the most extreme draw, and the bound carries no more information than that draw does. An
+#: interval below this reports no `ci95` at all and says why, because a number in a `ci95` field is read as
+#: a 95% interval whatever is written beside it. Adopted 2026-10-02.
+MIN_CLUSTERS_FOR_AN_INTERVAL = 10
+
 #: The fewest resamples an interval may be read from. At 200 draws the 2.5% percentile is the 5th value,
 #: so each tail rests on a handful of draws and the bound moves by more than it should between seeds. The
 #: committed results of 2026-09-27 and earlier were computed at 200 and say `resamples: 200`; their
@@ -641,13 +648,27 @@ def _interval_provenance(clusters: int, requested: int, kept: int) -> dict[str, 
     on far fewer draws than were asked for. `met_minimum` says whether the kept draws reach
     `MIN_RESAMPLES`, and is False rather than absent when they do not.
     """
-    return {
+    out = {
         "resamples": kept,
         "clusters": clusters,
         "draws_requested": requested,
         "draws_dropped": requested - kept,
         "met_minimum": kept >= MIN_RESAMPLES,
+        "enough_clusters": clusters >= MIN_CLUSTERS_FOR_AN_INTERVAL,
     }
+    if not out["enough_clusters"]:
+        out["interval_unreliable"] = (
+            f"interval unreliable: {clusters} clusters. A percentile bootstrap over whole chromosomes "
+            f"needs at least {MIN_CLUSTERS_FOR_AN_INTERVAL} to be read as 95%; below that the tail is set "
+            f"by the most extreme draw, so no ci95 is reported"
+        )
+    return out
+
+
+def _interval_or_none(ci: list[float] | None, made: dict[str, Any]) -> list[float] | None:
+    """The interval, or None where there are too few clusters to read one. The point estimate stands;
+    only the interval is withheld, because the estimate does not depend on the resampling."""
+    return ci if made.get("enough_clusters") else None
 
 
 def gain_interval(
@@ -676,7 +697,8 @@ def gain_interval(
     if not diffs:
         return {"gain": round(point, 4), "ci95": None, **made}
     lo, hi = diffs[int(0.025 * len(diffs))], diffs[min(len(diffs) - 1, int(0.975 * len(diffs)))]
-    return {"gain": round(point, 4), "ci95": [round(lo, 4), round(hi, 4)], **made}
+    ci = _interval_or_none([round(lo, 4), round(hi, 4)], made)
+    return {"gain": round(point, 4), "ci95": ci, **made}
 
 
 #: Why a gain is refused rather than reported. A stratum whose deletion feature was never available
@@ -1225,10 +1247,11 @@ def weighted_gain(
         round(diffs[int(0.025 * len(diffs))], 4),
         round(diffs[min(len(diffs) - 1, int(0.975 * len(diffs)))], 4),
     ]
+    made = _interval_provenance(len(chroms), n, len(diffs))
     return {
         "gain": round(point, 4),
-        "ci95": ci if diffs else None,
-        **_interval_provenance(len(chroms), n, len(diffs)),
+        "ci95": _interval_or_none(ci, made) if diffs else None,
+        **made,
     }
 
 
