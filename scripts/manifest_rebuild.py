@@ -11,17 +11,21 @@ rebuild with the reason:
 2. `git worktree add --detach` the recorded `code.git_sha` under DIR; uncommitted code at write time
    (`code.dirty_code_paths`) is named, since the commit alone did not run;
 3. link the local data stores (data/reference, data/knowledge, data/cache) read-only, as the
-   pre-push hook does, and check every input's sha256 against the manifest, naming any input that
-   is absent or has different bytes. Every declared input is accounted for: a group of files read
+   pre-push hook does, link the machine-local inputs under data/results read-only as well (see
+   `link_machine_local_inputs`), and check every input's sha256 against the manifest, naming any input
+   that is absent or has different bytes. Every declared input is accounted for: a group of files read
    together is opened and hashed member by member, and an input the tool cannot resolve stops the
    rebuild by name. `inputs_declared`, `inputs_checked` and `inputs_unchecked` carry the denominator,
    so an input that was not opened cannot leave the list and read as one that matched;
+   `inputs_satisfied_from_machine_local_paths` says how much of the rebuild rested on this machine;
 4. run `code.argv` in the worktree, in a fresh environment from the committed uv.lock (`--venv
    fresh`, offline) or the checkout's own (`--venv shared`);
 5. compare the rebuilt result with RESULT.json field by field, ignoring only `date` and the
    `code` block of the manifest (which records the run, not the result).
    Since 2026-09-28 wall-clock timing keys are ignored too, at any depth (`seconds`, `*_seconds`,
    `seconds_*`, `*_per_second`); the report lists their paths under `timing_fields_ignored`.
+   Since 2026-10-02 the run-resource readings named in `RESOURCE_KEYS` are ignored too, by exact key,
+   and listed under `resource_fields_ignored`.
 """
 
 from __future__ import annotations
@@ -39,6 +43,14 @@ from genomeos import manifest as mf
 
 STORES = ("reference", "knowledge", "cache")
 IGNORED = ("date",)
+
+#: Where a result's machine-local inputs live. data/results is git-ignored as a rule (docs/DATA.md), so a
+#: result computed from other results declares inputs that no clean worktree can hold: reader v1's cached
+#: DNase peak sets, 13 biosamples by 23 chromosomes, are on this machine and in no commit. Until 2026-10-02
+#: the rebuild linked only the three data stores, so those inputs were reported absent one by one and the
+#: rebuild stopped before any comparison: response_map_increment2 reached 111 of 410 inputs opened, and
+#: context_evidence hit the same wall. They are linked here instead, read-only, and hashed like any other.
+MACHINE_LOCAL_DIR = "data/results"
 
 #: What an input's `sha256` says when nothing was hashed to produce it. Such an input cannot be
 #: checked, which is a reason to stop and say so, not a reason to pass.
@@ -67,6 +79,26 @@ MUST_HOLD: tuple[tuple[str, Any], ...] = (
     ("own_code_is_committed", True),
     ("foreign_uncommitted_code_on_the_counting_path", []),
 )
+
+
+def no_verdict_reason(declared: int, checked: int) -> str | None:
+    """Why no verdict may be reported over these inputs, or None when one may.
+
+    The one rule the tool must never be able to break: a clean verdict over inputs it never opened. The
+    project's lesson of 2026-10-01 is that a verification tool can fail in the direction that flatters, and
+    this is where that would happen -- a report that compared the fields of two files and said nothing about
+    the bytes behind them reads as a reproduction. So the decision lives in one function, is asked for both
+    before the run and again before the verdict is written, and says yes only when at least one input was
+    declared and every declared input was opened and hashed.
+    """
+    if declared <= 0:
+        return (
+            "the manifest declares no inputs, so no bytes were opened: a comparison of fields would say "
+            "nothing about what the run read, and no verdict is reported"
+        )
+    if checked != declared:
+        return f"{checked} of {declared} declared inputs were opened and hashed: no verdict is reported"
+    return None
 
 
 def leaves(x: Any, where: str = "") -> int:
@@ -98,6 +130,10 @@ def leaf_reconciliation(original: dict[str, Any]) -> dict[str, Any]:
             "manifest_code_block": "result_manifest.code: the stamp of the run, not a value it computed",
             "model_dependencies": "recorded after the fact for results made before 2026-09-28",
             "timing_keys": "every key is_timing() matches, listed under timing_fields_ignored",
+            "resource_keys": (
+                "the exact keys in RESOURCE_KEYS, a run-resource reading rather than a value the run "
+                "computed, listed under resource_fields_ignored"
+            ),
         },
         "reconciles": total == compared + (total - compared),
     }
@@ -143,24 +179,56 @@ def is_timing(key: Any) -> bool:
     return "seconds" in tokens or tokens[-2:] == ["per", "second"]
 
 
+#: Run-resource readings, exempt from comparison by **exact key**. Added 2026-10-02 on the supervisor's
+#: ruling, and deliberately not through ENVIRONMENT_FIELDS, which is the code-cleanliness list and stays
+#: that way. A peak memory figure is of the same class as a wall-clock second: what the machine spent to
+#: produce the result, not anything the result asserts. Two otherwise identical rebuilds differed in this
+#: one leaf and nothing else -- `/cost/peak_memory_mb` 1142.5 against 1148.8 in placement_audit, and
+#: `/compute/peak_rss_mb` 1300.5 against 1298.2 in context_contrast_feasibility. Exact keys only: a pattern
+#: such as `*_mb` would one day swallow a leaf a run did compute, and the point of a short list is that
+#: adding to it is a decision somebody makes on the record.
+RESOURCE_KEYS = ("peak_rss_mb", "peak_memory_mb")
+
+
+def is_resource(key: Any) -> bool:
+    """A run-resource reading, matched by exact key and never by pattern, so a name that merely looks like
+    one -- `peak_signal_mb`, `peak_rss_mb_per_cell`, `memory_mb_budget` -- is compared like any other leaf."""
+    return isinstance(key, str) and key in RESOURCE_KEYS
+
+
+def _ignored_key(key: Any) -> bool:
+    """A key comparable() drops: a wall-clock reading or a run-resource one. Both are reported by path,
+    under timing_fields_ignored and resource_fields_ignored, so a reader sees what was set aside."""
+    return is_timing(key) or is_resource(key)
+
+
 def _strip_timing(x: Any) -> Any:
     if isinstance(x, dict):
-        return {k: _strip_timing(v) for k, v in x.items() if not is_timing(k)}
+        return {k: _strip_timing(v) for k, v in x.items() if not _ignored_key(k)}
     if isinstance(x, list):
         return [_strip_timing(v) for v in x]
     return x
 
 
-def timing_paths(x: Any, where: str = "") -> list[str]:
-    """Every path at which comparable() drops a timing key."""
+def _paths_where(x: Any, pred: Any, where: str = "") -> list[str]:
     if isinstance(x, dict):
         out = []
         for k, v in x.items():
-            out.extend([f"{where}/{k}"] if is_timing(k) else timing_paths(v, f"{where}/{k}"))
+            out.extend([f"{where}/{k}"] if pred(k) else _paths_where(v, pred, f"{where}/{k}"))
         return out
     if isinstance(x, list):
-        return [p for i, v in enumerate(x) for p in timing_paths(v, f"{where}[{i}]")]
+        return [p for i, v in enumerate(x) for p in _paths_where(v, pred, f"{where}[{i}]")]
     return []
+
+
+def timing_paths(x: Any, where: str = "") -> list[str]:
+    """Every path at which comparable() drops a timing key."""
+    return _paths_where(x, is_timing, where)
+
+
+def resource_paths(x: Any, where: str = "") -> list[str]:
+    """Every path at which comparable() drops a run-resource key."""
+    return _paths_where(x, is_resource, where)
 
 
 def diff(a: Any, b: Any, where: str = "") -> list[str]:
@@ -203,7 +271,134 @@ def is_group(entry: dict[str, Any]) -> bool:
     return entry.get("group") is True or isinstance(entry.get("members"), list)
 
 
-def check_inputs(worktree: Path, inputs: Any, root: Path) -> dict[str, Any]:
+def declared_paths(inputs: Any) -> list[str]:
+    """Every repository-relative path a manifest's inputs name, a group's members included.
+
+    A label is not a path, so a group contributes its members and not its own `path`; a group recorded
+    before its members were named contributes nothing, which is why such a group remains a named failure
+    in `_check_group` rather than something this could quietly satisfy.
+    """
+    out: list[str] = []
+    for i in inputs if isinstance(inputs, list) else []:
+        if not isinstance(i, dict):
+            continue
+        if is_group(i):
+            out += [
+                m["path"]
+                for m in i.get("members") or []
+                if isinstance(m, dict) and isinstance(m.get("path"), str)
+            ]
+        elif isinstance(i.get("path"), str):
+            out.append(i["path"])
+    return out
+
+
+def git_ignored(root: Path, paths: list[str]) -> set[str]:
+    """Which of `paths` git ignores in `root`: the machine-local ones, answered for all of them at once.
+
+    A path git does not ignore is never linked from this machine, whatever is sitting at it: for a tracked
+    path the committed tree at the rebuild's sha is what the rebuild must read, and a path that is neither
+    tracked nor ignored is not a machine-local store but a stray file. Both are left to be named absent.
+    """
+    if not paths:
+        return set()
+    r = subprocess.run(
+        ["git", "-C", str(root), "check-ignore", "--stdin"],
+        input="\n".join(paths),
+        capture_output=True,
+        text=True,
+    )
+    return {line for line in r.stdout.splitlines() if line}
+
+
+def link_read_only(src: Path, dst: Path) -> None:
+    """Link one machine-local file into the worktree so the rebuild can read it and cannot write it.
+
+    `cp -c` asks APFS for a clone: no bytes are copied, both sides share them until one is written, and the
+    clone is a separate inode -- so the 0o444 that follows takes the write bits off the worktree's side only
+    and never off the machine's one and only copy. That is the reason for a clone rather than a symlink or a
+    hard link: both of those carry the machine's own mode, so `open(path, "w")` through either would truncate
+    the machine's file, and the only way to refuse it would be to chmod the original, which other sessions
+    share. Through this link such an open fails with PermissionError before a byte is written, and the
+    rebuild cannot write a result into the directory it is reading its inputs from. On a filesystem with no
+    clone support the fallback is a plain copy, read-only in the same way; a worktree copy that is still
+    writable after the chmod is an error, not a warning.
+    """
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    if subprocess.run(["cp", "-c", str(src), str(dst)], capture_output=True).returncode:
+        shutil.copyfile(src, dst)
+    dst.chmod(0o444)
+    if dst.stat().st_mode & 0o222:
+        raise OSError(f"{dst} is writable after chmod 0444: the rebuild could overwrite the input it reads")
+
+
+def link_machine_local_inputs(
+    worktree: Path, root: Path, inputs: Any, output: str | None = None
+) -> dict[str, Any]:
+    """Link the git-ignored data/results inputs this manifest declares into the worktree, read-only.
+
+    Only a path the manifest declares is linked, only under MACHINE_LOCAL_DIR, only when git ignores it in
+    this checkout, and only when the worktree does not already hold that path -- a file the commit carries
+    is read from the commit. Nothing here decides whether an input matches: the bytes linked are hashed
+    afterwards against the sha256 the manifest declares, so a machine-local input whose bytes have since
+    changed is a reported difference and not a silent pass. `output` is the result the rebuild will write,
+    which is this run's product rather than its input and is never linked over.
+    """
+    out: dict[str, Any] = {
+        "linked": [],
+        "absent_on_this_machine": [],
+        "not_linked_because_git_does_not_ignore_it": [],
+        "not_linked_because_it_is_the_output": [],
+        "failures": [],
+    }
+    want = sorted(
+        {
+            p
+            for p in declared_paths(inputs)
+            if not os.path.isabs(p)
+            and ".." not in Path(p).parts
+            and (p == MACHINE_LOCAL_DIR or p.startswith(MACHINE_LOCAL_DIR + "/"))
+            and not (worktree / p).exists()
+        }
+    )
+    ignored = git_ignored(root, want)
+    for p in want:
+        if output is not None and p == output:
+            out["not_linked_because_it_is_the_output"].append(p)
+            continue
+        if p not in ignored:
+            out["not_linked_because_git_does_not_ignore_it"].append(p)
+            continue
+        src = root / p
+        if not src.exists():
+            out["absent_on_this_machine"].append(p)
+            continue
+        try:
+            if src.is_dir():
+                for f in sorted(x for x in src.rglob("*") if x.is_file()):
+                    link_read_only(f, worktree / p / f.relative_to(src))
+            else:
+                link_read_only(src, worktree / p)
+        except OSError as e:
+            out["failures"].append(f"{p}: {e}")
+            continue
+        out["linked"].append(p)
+    return out
+
+
+def unlock_links(worktree: Path, paths: list[str]) -> None:
+    """Put the write bits back on the linked copies, so removing the worktree cannot be refused by them.
+    Each is a clone of its own, so this touches nothing the machine keeps."""
+    for p in paths:
+        target = worktree / p
+        for f in sorted(x for x in target.rglob("*") if x.is_file()) if target.is_dir() else [target]:
+            if f.is_file():
+                os.chmod(f, 0o644)
+
+
+def check_inputs(
+    worktree: Path, inputs: Any, root: Path, machine_local: set[str] | None = None
+) -> dict[str, Any]:
     """Open and hash every declared input, a group member by member, and account for all of them.
 
     The contract the caller rests on: `unavailable` is empty only when at least one input was declared
@@ -221,10 +416,14 @@ def check_inputs(worktree: Path, inputs: Any, root: Path) -> dict[str, Any]:
         "declared": 0,
         "checked": 0,
         "files_opened": 0,
+        # how many declared inputs were opened and hashed from a git-ignored, machine-local path rather
+        # than from the committed tree: the share of the rebuild that rests on this machine
+        "machine_local_opened": 0,
         "entries": [],
         "unavailable": [],
         "checked_outside_the_worktree": [],
     }
+    local = machine_local or set()
     if not isinstance(inputs, list) or not inputs:
         out["unavailable"].append(
             "the manifest declares no inputs, so nothing was opened or hashed: a comparison of this "
@@ -240,7 +439,7 @@ def check_inputs(worktree: Path, inputs: Any, root: Path) -> dict[str, Any]:
             continue
         path = i["path"]
         if is_group(i):
-            _check_group(worktree, i, out)
+            _check_group(worktree, i, out, local)
         elif i.get("sha256") == NOT_HASHED:
             out["entries"].append(
                 {"path": path, "sha256_matches": False, "problem": f"sha256 is {NOT_HASHED!r}"}
@@ -250,11 +449,13 @@ def check_inputs(worktree: Path, inputs: Any, root: Path) -> dict[str, Any]:
                 "written, so there is nothing for a rebuild to check these bytes against"
             )
         else:
-            _check_one_path(worktree, i, linked, out)
+            _check_one_path(worktree, i, linked, out, local)
     return out
 
 
-def _check_group(worktree: Path, i: dict[str, Any], out: dict[str, Any]) -> None:
+def _check_group(
+    worktree: Path, i: dict[str, Any], out: dict[str, Any], local: set[str] | None = None
+) -> None:
     """One grouped input: every member opened and hashed on its own, then the group's own digest."""
     path, members = i["path"], i.get("members")
     named = [m for m in members or [] if isinstance(m, dict) and isinstance(m.get("path"), str)]
@@ -311,6 +512,7 @@ def _check_group(worktree: Path, i: dict[str, Any], out: dict[str, Any]) -> None
     recorded = {m["path"]: m.get("sha256") for m in named}
     differing = [s["path"] for s in seen if recorded.get(s["path"]) not in (None, s["sha256"])]
     ok = digest == i.get("sha256")
+    from_machine = sorted(set(names) & (local or set()))
     out["entries"].append(
         {
             "path": path,
@@ -318,10 +520,14 @@ def _check_group(worktree: Path, i: dict[str, Any], out: dict[str, Any]) -> None
             "members_declared": len(names),
             "members_opened_and_hashed": len(seen),
             "members_with_different_bytes": differing,
+            "members_from_machine_local_paths": len(from_machine),
             "sha256_matches": ok and not differing,
             "bytes": size,
         }
     )
+    if from_machine:
+        # a group counts once, as one declared input, whichever of its members came from this machine
+        out["machine_local_opened"] += 1
     if differing:
         out["unavailable"].append(
             f"input {path}: {len(differing)} of {len(names)} files in the group have different bytes, "
@@ -336,7 +542,9 @@ def _check_group(worktree: Path, i: dict[str, Any], out: dict[str, Any]) -> None
     out["checked"] += 1
 
 
-def _check_one_path(worktree: Path, i: dict[str, Any], linked: list[str], out: dict[str, Any]) -> None:
+def _check_one_path(
+    worktree: Path, i: dict[str, Any], linked: list[str], out: dict[str, Any], local: set[str] | None = None
+) -> None:
     """One input recorded as a single path, which may be a file or a directory."""
     path = i["path"]
     outside: dict[str, Any] | None = None
@@ -387,14 +595,23 @@ def _check_one_path(worktree: Path, i: dict[str, Any], linked: list[str], out: d
         out["checked_outside_the_worktree"].append(outside)
     ok = digest == i.get("sha256")
     out["files_opened"] += count
-    out["entries"].append({"path": path, "sha256_matches": ok, "bytes": size, "files_opened": count})
+    entry = {"path": path, "sha256_matches": ok, "bytes": size, "files_opened": count}
+    if path in (local or set()):
+        # opened and hashed, and counted here, whether or not it matched: a machine-local input whose
+        # bytes differ is still an input this rebuild took from this machine, and the difference is
+        # reported below. The count says what the rebuild rested on, not what passed.
+        entry["machine_local"] = True
+        out["machine_local_opened"] += 1
+    out["entries"].append(entry)
     if not ok:
         out["unavailable"].append(f"input {path} has different bytes (sha256 {digest[:12]})")
         return
     out["checked"] += 1
 
 
-def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) -> dict[str, Any]:
+def rebuild(
+    result: Path, where: Path, venv: str = "fresh", keep: bool = False, inputs_only: bool = False
+) -> dict[str, Any]:
     root = Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True).strip())
     original = json.loads(result.read_text())
     m = original.get(mf.KEY)
@@ -414,20 +631,44 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
         return {**report, "rebuilt": False}
     wt = where / f"rebuild-{sha[:10]}"
     subprocess.run(["git", "-C", str(root), "worktree", "add", "-q", "--detach", str(wt), sha], check=True)
+    links: dict[str, Any] = {"linked": []}
     try:
         for d in STORES:
             if (root / "data" / d).is_dir() and not (wt / "data" / d).exists():
                 (wt / "data" / d).symlink_to(root / "data" / d)
-        found = check_inputs(wt, m.get("inputs"), root)
+        links = link_machine_local_inputs(wt, root, m.get("inputs"), output=f"data/results/{result.name}")
+        found = check_inputs(wt, m.get("inputs"), root, machine_local=set(links["linked"]))
         report["inputs"] = found["entries"]
         report["inputs_declared"] = found["declared"]
         report["inputs_checked"] = found["checked"]
         report["inputs_unchecked"] = found["declared"] - found["checked"]
         report["files_opened_and_hashed"] = found["files_opened"]
+        report["inputs_satisfied_from_machine_local_paths"] = found["machine_local_opened"]
+        report["machine_local_inputs"] = {
+            "count": found["machine_local_opened"],
+            "of_declared": found["declared"],
+            "linked_read_only_from": str(root / MACHINE_LOCAL_DIR),
+            "how": "a clone at mode 0o444: the rebuild reads these bytes and a writer gets PermissionError",
+            "paths": links["linked"],
+            **{k: v for k, v in links.items() if k != "linked" and v},
+        }
+        report["unavailable"] += [
+            f"a machine-local input could not be linked read-only: {f}" for f in links["failures"]
+        ]
         if found["checked_outside_the_worktree"]:
             report["checked_outside_the_worktree"] = found["checked_outside_the_worktree"]
         report["unavailable"] += found["unavailable"]
         if report["unavailable"]:
+            return {**report, "rebuilt": False}
+        if inputs_only:
+            # Steps 1 to 3 only. Item 10's capacity rule allows two lanes at once to read the per-element
+            # cache, whose reader peaks near 2.9 GB, so a rebuild whose command reads it cannot be run by a
+            # third lane. The inputs can still be linked and hashed, which costs a megabyte at a time, and
+            # what that buys is the input figure and nothing else: no command ran, so nothing was compared.
+            report["unavailable"].append(
+                "--inputs-only: the command was not run, so no field was compared and no verdict is "
+                "reported; the input figures above are all this says"
+            )
             return {**report, "rebuilt": False}
         env = {k: v for k, v in os.environ.items() if k not in ("VIRTUAL_ENV", "UV_PROJECT_ENVIRONMENT")}
         if venv == "shared":
@@ -470,24 +711,26 @@ def rebuild(result: Path, where: Path, venv: str = "fresh", keep: bool = False) 
         report["must_hold_failures"] = must_hold_failures(original, rebuilt)
         report["differences"] += report["must_hold_failures"]
         report["timing_fields_ignored"] = sorted(set(timing_paths(original)) | set(timing_paths(rebuilt)))
+        report["resource_fields_ignored"] = sorted(
+            set(resource_paths(original)) | set(resource_paths(rebuilt))
+        )
         report["fields_compared"] = len(comparable(original))
         report["leaves"] = leaf_reconciliation(original)
         report["leaves_compared"] = report["leaves"]["compared"]
         # despite its name this key compares fields (date and the code block ignored); the next is bytes
         # (timing keys are ignored as well, and listed in timing_fields_ignored)
-        if report["inputs_checked"] != report["inputs_declared"] or not report["inputs_declared"]:
-            # unreachable through the branch above; kept so that no later edit can write a verdict for a
-            # result whose inputs were not all opened, which is the failure this tool had on 2026-10-02
-            report["unavailable"].append(
-                f"{report['inputs_checked']} of {report['inputs_declared']} declared inputs were opened "
-                "and hashed: no verdict is reported"
-            )
+        why = no_verdict_reason(report["inputs_declared"], report["inputs_checked"])
+        if why:
+            # unreachable through the branch above; asked again so that no later edit can write a verdict
+            # for a result whose inputs were not all opened, the failure this tool had on 2026-10-02
+            report["unavailable"].append(why)
             return {**report, "rebuilt": False}
         report["identical_bytes_except_date_and_run"] = not report["differences"]
         report["identical_bytes"] = written.read_bytes() == result.read_bytes()
         return {**report, "rebuilt": True}
     finally:
         if not keep:
+            unlock_links(wt, links["linked"])
             subprocess.run(["git", "-C", str(root), "worktree", "remove", "--force", str(wt)], check=False)
 
 
@@ -497,8 +740,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--where", type=Path, required=True, help="directory for the second checkout")
     ap.add_argument("--venv", choices=("fresh", "shared"), default="fresh")
     ap.add_argument("--keep", action="store_true", help="leave the worktree in place")
+    ap.add_argument(
+        "--inputs-only",
+        action="store_true",
+        help="link and hash every declared input, then stop: no command is run and no verdict is reported",
+    )
     args = ap.parse_args(argv)
-    r = rebuild(args.result.resolve(), args.where.resolve(), args.venv, args.keep)
+    r = rebuild(args.result.resolve(), args.where.resolve(), args.venv, args.keep, args.inputs_only)
     json.dump({k: v for k, v in r.items() if k != "stdout_tail"}, sys.stdout, indent=1)
     print()
     return 0 if r.get("rebuilt") and not r.get("differences") else 1
