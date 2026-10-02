@@ -1136,3 +1136,57 @@ value-level refusal is `scripts/check_staged.py` alone, deliberately — "Writin
 result locally stays possible, deliberately: trial runs need it… The refusal belongs at the
 commit that publishes the file, not at the write." The conclusion survived; the mechanism
 named in support of it did not.
+
+## When a classification is uncertain, err toward comparing (2026-10-02)
+
+Two exemptions in `scripts/manifest_rebuild.py` were narrowed on the same day, and the
+fix that was right for the first was **wrong** for the second. The difference is worth
+keeping, because the obvious generalisation is the mistake.
+
+**The first: one leaf, so an exact path.** The tracer's `opens` count could not be
+reconciled across a rebuild. A suffix or name match would have been the natural rule, and
+it is wrong: `data/results/response_map_increment3.json` asserts
+`/per_element_response_cache/opens: 0` as a **computed** value, so a name rule would have
+swallowed a real committed assertion and left nothing to fail on. Exempting the one exact
+path leaves that one standing.
+
+**The second: 536 paths, so a structural narrowing.** `is_timing` matched a key *name* at
+any depth. On the committed `gene_row_locus.json` it set aside 4 leaves, of which only
+`/seconds = 336.6` was a timing — the other three were the key-frequency counts 963,406 /
+3,209 / 705 under `schema_keys["seconds"]`, spelled `seconds` because the key vocabulary
+tallies key *names* found in the data. **This was a live silent pass, not a latent risk**:
+altering 963,406 to 963,405 on the real 17,000-leaf result returned `[]`. A quantity the
+run computed could be changed and the comparison said nothing.
+
+An explicit list cannot fix that, and the number is the reason: **a timing name appears at
+536 distinct paths across the ~1,100 results here, and every new result invents more.** So
+the name test was kept and narrowed *structurally* — it stops at any key **the data
+supplied**, detected by a `keys` or `vocabulary` token anywhere in the ancestry and
+**sticky downward**, because a tally's values nest and testing only the immediate parent
+would still swallow a count one level deeper.
+
+**The rule, now standing for every verification tool: when a classification is uncertain,
+err toward COMPARING.** A false-loud difference is read by someone; a false-silent pass is
+read by no one. So the container test is deliberately generous: a container wrongly called
+a tally gets a genuine timing compared, which is noise somebody resolves; a container
+wrongly called ordinary sets a computed count aside in silence, which is the failure the
+tool must not have. That asymmetry has its own test.
+
+The same reasoning decides what **not** to narrow. `MUST_HOLD` matches a key at any depth
+and was deliberately left alone: a tallied `own_code_is_committed` causes a spurious
+**failure**, never a pass, and a rule whose error is loud is not the one to fear.
+`is_resource` appears at only 3 distinct paths and *could* have been exact-path; it was
+narrowed instead, because **the defect is in the matching rule, not in either list**.
+
+**Two further things this taught.**
+
+**The audit, not the fix, is the deliverable.** Two name-matched exemptions had been found
+by accident in one day, which is weak evidence that a file was written with name matching
+as a habit. Asking "how many others" returned a definite answer — two rules could end in a
+silent pass, and there is no third — now pinned by
+`test_every_exemption_is_either_an_exact_path_or_a_narrowed_name_test`. Two accidents are
+a reason to count, not to fix twice.
+
+**A report must print the set-aside leaf's VALUE, not only its path.** A path alone cannot
+show that a leaf set aside as a reading is not one:
+`/key_vocabulary/…/schema_keys/seconds` reads as a timing until its 963,406 sits beside it.
