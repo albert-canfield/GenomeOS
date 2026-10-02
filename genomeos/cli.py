@@ -4631,7 +4631,12 @@ def cmd_work(args: argparse.Namespace) -> int:
 
     from genomeos import work
 
-    root = Path.cwd()
+    # The board is data/work/ under this root, and it is git-ignored, so a session working in its own
+    # git worktree writes to a board nobody else can read. That became a real failure on 2026-10-02:
+    # modules on every result's counting path are now edited in an isolated worktree, by rule, and the
+    # first lane to do so claimed a board only it could see. GENOMEOS_WORK_ROOT names the checkout
+    # whose board to use, so a worktree can keep its work isolated and its claim visible.
+    root = Path(os.environ.get("GENOMEOS_WORK_ROOT") or Path.cwd())
     args.who = args.who or os.environ.get("GENOMEOS_WHO", "")
     try:
         if args.action not in ("list", "retire") and not args.who:

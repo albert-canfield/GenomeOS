@@ -139,3 +139,42 @@ def test_api_work_and_roadmap():
     assert w["areas"]["B"].startswith("Genome decoding")
     r = api.roadmap()
     assert r["areas"] and "totals" in r
+
+
+def test_the_board_root_can_be_named_by_the_environment(tmp_path, monkeypatch):
+    """A session in its own git worktree must be able to claim the SHARED board.
+
+    `genomeos work` resolved the board as `Path.cwd()/data/work/`, and data/work/ is git-ignored, so a
+    lane working in an isolated worktree -- which is now the rule for any module on every result's
+    counting path -- wrote its claim to a board only it could read. On 2026-10-02 the first lane to work
+    that way was invisible on Albert's Progress tab while running. GENOMEOS_WORK_ROOT names the checkout
+    whose board to use, so the work stays isolated and the claim does not.
+
+    It also makes probing safe: the same day, a check of which argument order parses was run against the
+    live board and left an entry there that had to be removed by hand.
+    """
+    import subprocess
+    import sys
+
+    def run(*args, env_root=None):
+        env = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "HOME": str(tmp_path)}
+        if env_root is not None:
+            env["GENOMEOS_WORK_ROOT"] = str(env_root)
+        return subprocess.run(
+            [sys.executable, "-c", "from genomeos.cli import main; raise SystemExit(main())", *args],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            env={**env, "PYTHONPATH": str(ROOT)},
+        )
+
+    elsewhere = tmp_path / "a-worktree"
+    elsewhere.mkdir()
+    r = run("work", "start", "--who", "lane-in-a-worktree", "a task", env_root=elsewhere)
+    assert r.returncode == 0, (r.stdout, r.stderr)
+    # it went to the named root, and NOT to the live board
+    assert (elsewhere / "data" / "work" / "lane-in-a-worktree.json").is_file(), r.stdout
+    assert not (ROOT / "data" / "work" / "lane-in-a-worktree.json").exists(), "wrote to the live board"
+    # and the listing from that root sees it while the live board does not
+    assert "lane-in-a-worktree" in run("work", "list", env_root=elsewhere).stdout
+    assert "lane-in-a-worktree" not in run("work", "list").stdout
