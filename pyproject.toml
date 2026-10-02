@@ -68,6 +68,13 @@ dev = [
     # python-dateutil dual Apache-2.0/BSD-3-Clause, six MIT. Nothing copyleft arrives with them.
     "pandas>=2.2",
     "openpyxl>=3.1",
+    # The paid AlphaGenome path returns anndata.AnnData objects, so item (g)'s behavioural check and
+    # its tests build a response with the library's own class rather than a shape of our own. Without
+    # it those five tests fail on a missing import, which reads as a broken check rather than as a
+    # missing dependency - the same reason numpy and pandas are here. It arrives transitively with the
+    # `predict` extra; declared here so a checkout with only this group can still run them. Licence
+    # read from the installed metadata rather than taken on report: anndata 0.13.3 BSD-3-Clause.
+    "anndata>=0.13",
 ]
 
 [build-system]

@@ -1418,6 +1418,12 @@ class TestItemGTheFullTrackVectorIsKept:
         from genomeos.predict import alphagenome_adapter as adapter
 
         meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
+        if not meta_csv.exists():
+            pytest.skip(
+                f"{meta_csv.name} is not on this machine, so the vector cannot be checked against the "
+                "REAL track table here. The send-time gate's own probe-based test still runs, so item "
+                "(g) is not left unproven by this skip -- only the 667-track case is"
+            )
         with open(meta_csv) as fh:
             meta = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
         assert len(meta) > 300, "the real metadata, not a handful of rows"
@@ -1580,6 +1586,14 @@ class TestItemGTheFullTrackVectorIsKept:
         direction that stops a run part way through.
         """
         meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
+        assert astrorun.ADAPTER_NOTE_TRACKS == 371
+        assert astrorun.ADAPTER_NOTE_ROWS == 29
+        assert (
+            max(astrorun.ADAPTER_NOTE_TRACKS, astrorun.RNA_SEQ_TRACKS_IN_THE_METADATA)
+            == astrorun.OBSERVED_TRACKS_PER_ANSWER
+        )
+        if not meta_csv.exists():
+            pytest.skip(f"{meta_csv.name} is not on this machine, so 667 cannot be read from the file")
         with open(meta_csv) as fh:
             rna = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
         assert len(rna) == astrorun.RNA_SEQ_TRACKS_IN_THE_METADATA, "read from the file, not remembered"
