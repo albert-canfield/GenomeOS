@@ -44,7 +44,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.attribution import crispri  # noqa: E402
+from genomeos.attribution import crispri, rpm  # noqa: E402
 from genomeos.attribution.measured import CRISPRI_SPLIT_OF  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
@@ -193,6 +193,68 @@ BIGWIG_DIAGNOSTIC = (
     "passes, this lane STOPS and reports without choosing: that would say something real about what "
     "'read-depth normalized signal' is normalised by, and it is not this lane's to decide"
 )
+
+AMENDMENT_2 = {
+    "what_it_is": "the read rule restated as the code that PRODUCED the columns implements it, with "
+    "the repository, commit, file and line cited for every term",
+    "THE_EXPOSURE": (
+        "THIS IS NOT A BLIND GATE. It is written AFTER the first gate failed and after its numbers "
+        "were seen -- Spearman 0.9733 and median ratio 0.6070 on H3K27ac. A reader must not mistake "
+        "the second attempt for the first. What protects it is not blindness but PROVENANCE: every "
+        "term below is read out of the producer's own source code, and none was chosen because it "
+        "moved 0.607 toward 1.0. The two are different things and this file records which was done. "
+        "The second gate is a RECONSTRUCTION CHECK: it asks whether the producer's own documented "
+        "rule reproduces the producer's own published column"
+    ),
+    "how_the_rule_was_obtained": (
+        "by reading mayasheth/chrom-annotate, the annotator whose config/config_CRISPR.yml declares "
+        "`RPM_assays: [CTCF, DHS, H3K27ac, H3K27me3, H3K4me1]` over the benchmark's own chrom, "
+        "chromStart and chromEnd columns for the `validation` set -- the held-out five cell types this "
+        "gate uses -- and whose resources/metadata/epigenetic_datasets.tsv names the BAMs per biosample "
+        "and assay. NO candidate rule was tried against the data. The first rule was not adjusted; it "
+        "was replaced by the documented one"
+    ),
+    "citations": "see genomeos.attribution.rpm.PRODUCER, which carries the repository, the commit "
+    "91cda73ebe3a19153a582cab18cbf7ff70d85cfc, the file workflow/scripts/neighborhoods.py and the line "
+    "for each of: the RPM formula (L579), the numerator (L433-445), the sex-chromosome doubling "
+    "(L425-431), the denominator (L662-673) and the several-BAM combination (L596-602)",
+    "what_the_first_rule_got_wrong": [
+        "THE FILES. The first rule used ENCODE's FILTERED `alignments` and said in as many words that "
+        "the unfiltered ones are not used. The producer's metadata names UNFILTERED alignments: K562 "
+        "H3K27ac ENCSR000AKP -> ENCFF790GFL and ENCFF817HMW; K562 DNase ENCSR000EOT -> ENCFF205FNC and "
+        "ENCFF860XAE. This also settles the DNase source experiment from the producer's own records, so "
+        "the correlation-based selection registered earlier is NOT used and no candidate was ranked",
+        "SEVERAL BAMS. The first rule pooled counts and divided once, and argued against averaging "
+        "ratios. The producer AVERAGES the per-BAM RPMs (average_features, L602). With the depths "
+        "involved these differ materially",
+        "THE SEX CHROMOSOMES. The producer DOUBLES the count of any region whose contig name ends in X "
+        "or Y (L425-431). The first rule did not",
+        "THE NUMERATOR FILTER. The producer's numerator is pysam count()'s default, which drops "
+        "duplicates and QC-fail and KEEPS supplementary alignments. The first rule kept duplicates and "
+        "dropped supplementary ones",
+        "THE DENOMINATOR. The producer's denominator is `samtools idxstats` summed over all references "
+        "-- every mapped segment, duplicates included -- and so is NOT its own numerator filter applied "
+        "to the whole file. The first rule used one filter for both",
+    ],
+    "the_asymmetry_is_implemented_not_corrected": (
+        "the producer's numerator excludes duplicates while its denominator counts them. That is what "
+        "the code does, so that is what is implemented. Making the two agree would be a third rule of "
+        "this lane's own invention"
+    ),
+    "the_region_was_already_right": "config_CRISPR.yml takes chrom, chromStart and chromEnd for the "
+    "validation set, so the element span as published is the region, and it is not resized. The "
+    "`.expandedRegion` columns are a separate set that the frozen model does not read. The first "
+    "rule's region was correct and is unchanged",
+    "tolerances_unchanged": "Spearman >= 0.98 and median ratio in [0.9, 1.1], per column. Neither "
+    "moves, and neither moved when the first gate failed",
+    "one_run_only": "ONE run, covering BOTH columns in the same shot, because the activity term needs "
+    "both and a pass on one is not a result. If it fails, the no-go is FINAL for the activity route "
+    "and there is no third rule",
+    "if_a_term_had_been_undetermined": "the instruction was to record which term the code fails to "
+    "determine and stop, rather than fill a gap with a plausible default. No term was left "
+    "undetermined: the formula, both filters, the doubling, the combination, the region and the file "
+    "list are all read from the producer's code or its own metadata",
+}
 
 NOT_CLAIMED = [
     "not a demonstration that the published columns were produced this way: a reconstruction that "
@@ -408,6 +470,8 @@ def main() -> int:
         "read_rule": READ_RULE,
         "replicate_rule": REPLICATE_RULE,
         "replicate_rule_amendment_1": REPLICATE_RULE_AMENDMENT_1,
+        "amendment_2": AMENDMENT_2,
+        "amendment_2_citations": rpm.PRODUCER,
         "files": {
             "h3k27ac_k562": H3K27AC_K562,
             "dnase_k562_selection": DNASE_K562_SELECTION,

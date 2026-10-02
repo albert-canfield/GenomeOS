@@ -341,3 +341,111 @@ def gate(
         "rule": "both conditions must hold; either one failing fails the column",
         "elements_compared": len(computed),
     }
+
+
+# ------------------------------------------------------- the producer's own rule, read from its code
+
+#: Where every term below comes from. The rule is taken from the code that PRODUCED the columns, not
+#: from a search for a rule that fits: the difference is not one of degree, and this records which was
+#: done. `mayasheth/chrom-annotate` is the annotator whose config_CRISPR.yml declares
+#: `RPM_assays: [CTCF, DHS, H3K27ac, H3K27me3, H3K4me1]` over the benchmark's own
+#: `chrom/chromStart/chromEnd` columns for the validation set, which is the held-out five cell types.
+PRODUCER = {
+    "repository": "mayasheth/chrom-annotate",
+    "commit": "91cda73ebe3a19153a582cab18cbf7ff70d85cfc",
+    "file": "workflow/scripts/neighborhoods.py",
+    "rpm_formula": "L579: df[feature_name + '.RPM'] = 1e6 * df[featurecount] / float(total_counts)",
+    "numerator": "L433-445 count_bam: pysam.AlignmentFile(bam).count(chr, start, end). pysam's "
+    "default read_callback='all' skips BAM_FUNMAP, BAM_FSECONDARY, BAM_FQCFAIL and BAM_FDUP, and does "
+    "NOT skip BAM_FSUPPLEMENTARY, so a duplicate is excluded from the numerator and a supplementary "
+    "alignment is counted",
+    "sex_chromosomes": "L425-431 double_sex_chrom_counts, called from run_count_reads: the count of "
+    "any region whose contig name ENDS in X or Y is multiplied by 2, 'to make it seem like they have "
+    "2 copies'",
+    "denominator": "L662-673 count_bam_mapped: `samtools idxstats`, summing column 3 over every "
+    "reference. That is mapped read-segments including duplicates, secondaries and supplementaries, "
+    "so the denominator is NOT the numerator's filter applied to the whole file",
+    "several_bams": "L596-602 average_features: df[feature + '.RPM'] = df[feature_RPM_cols].mean("
+    "axis=1). The per-BAM RPMs are AVERAGED; the counts are not pooled",
+    "files": "resources/metadata/epigenetic_datasets.tsv names them per biosample and assay. K562 "
+    "DNase-seq ENCSR000EOT: ENCFF205FNC, ENCFF860XAE. K562 H3K27ac ChIP-seq ENCSR000AKP: ENCFF790GFL, "
+    "ENCFF817HMW. Both pairs are ENCODE `unfiltered alignments`",
+    "region": "config/config_CRISPR.yml: for the `validation` set the chr/start/end columns are the "
+    "benchmark's own chrom, chromStart and chromEnd, so the region is the element span as published "
+    "and is not resized. `RPM_expanded_assays` is a SEPARATE set of columns (.expandedRegion) and is "
+    "not the column the frozen model reads",
+}
+
+#: The asymmetry is the producer's, and is implemented rather than corrected.
+THE_ASYMMETRY_IS_THEIRS = (
+    "the numerator excludes duplicates (pysam's count default) while the denominator counts them "
+    "(samtools idxstats). That is what the code does, so that is what is implemented. Making the two "
+    "agree would be a third rule of this lane's own invention, and the point of reading the producer's "
+    "source was to stop inventing rules"
+)
+
+
+def keep_numerator_producer(read: Any) -> bool:
+    """pysam `count()`'s default read_callback='all': drops unmapped, secondary, QC-fail, duplicate."""
+    return not (
+        read.is_unmapped
+        or read.is_secondary
+        or getattr(read, "is_qcfail", False)
+        or getattr(read, "is_duplicate", False)
+    )
+
+
+def keep_denominator_producer(read: Any) -> bool:
+    """`samtools idxstats` column 3: every mapped read-segment, duplicates and all."""
+    return not read.is_unmapped
+
+
+def doubles_on_sex_chromosome(chrom: str) -> bool:
+    """The producer's own test: the contig NAME ends in X or Y."""
+    return bool(chrom) and chrom[-1] in ("X", "Y")
+
+
+class ProducerCounter(Counter):
+    """`Counter` under the producer's rule: its two filters, and its sex-chromosome doubling.
+
+    Kept as a subclass rather than a flag on `Counter` so the first rule's result stays readable as
+    what it was. Two rules were run; both are on the record.
+    """
+
+    def add(self, read: Any) -> int:
+        self.reads_seen += 1
+        if keep_denominator_producer(read):
+            self.denominator += 1
+        else:
+            self.reads_rejected += 1
+        if not keep_numerator_producer(read):
+            return 0
+        chrom = read.reference_name
+        if chrom is None or chrom not in self._by_chrom:
+            if chrom is not None:
+                self.reads_on_unknown_chrom += 1
+            return 0
+        start, end = read.reference_start, read.reference_end
+        if end is None or end <= start:
+            return 0
+        return self._count_span(chrom, start, end)
+
+    def rpm(self) -> dict[tuple[str, int, int], float]:
+        """RPM with the producer's sex-chromosome doubling applied to the COUNT, as its code does."""
+        if self.denominator == 0:
+            raise ValueError("no mapped read, so reads per million has no denominator: a failed pass")
+        scale = 1e6 / self.denominator
+        return {k: (v * 2 if doubles_on_sex_chromosome(k[0]) else v) * scale for k, v in self.counts.items()}
+
+
+def mean_of_per_bam_rpm(
+    per_bam: list[dict[tuple[str, int, int], float]],
+) -> dict[tuple[str, int, int], float]:
+    """The producer's `average_features`: the MEAN of the per-BAM RPMs, element by element."""
+    if not per_bam:
+        raise ValueError("nothing to average")
+    keys = set(per_bam[0])
+    if any(set(d) != keys for d in per_bam):
+        raise ValueError("averaged passes must be over the same element set")
+    n = len(per_bam)
+    return {k: sum(d[k] for d in per_bam) / n for k in keys}

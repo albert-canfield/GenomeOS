@@ -61,6 +61,17 @@ UA = {"Accept": "application/json", "User-Agent": "genomeos"}
 REGISTRATION = Path("data/results/astroreg_calibration_registration.json")
 
 #: The experiments, as the registration names them. Nothing here is chosen by size.
+#: The BAMs the PRODUCER names, from mayasheth/chrom-annotate
+#: resources/metadata/epigenetic_datasets.tsv, taken exactly as that file lists them. Three of the four
+#: are ENCODE `unfiltered alignments`, which the first rule explicitly excluded; the DNase pair also
+#: MIXES a filtered paired-end BAM (ENCFF205FNC) with an unfiltered single-end one (ENCFF860XAE). That
+#: mixture is the producer's own, recorded in its metadata, and it is implemented rather than tidied:
+#: tidying it would be a rule of this lane's invention, which is the thing reading the source avoided.
+PRODUCER_BAMS = {
+    ("h3k27ac", "k562"): ("ENCSR000AKP", ("ENCFF790GFL", "ENCFF817HMW")),
+    ("dnase", "k562"): ("ENCSR000EOT", ("ENCFF205FNC", "ENCFF860XAE")),
+}
+
 EXPERIMENTS = {
     ("h3k27ac", "k562"): "ENCSR000AKP",
     ("h3k27ac", "astrocyte"): "ENCSR000AOQ",
@@ -197,10 +208,21 @@ def main() -> int:
     ap.add_argument("--cell", choices=("k562", "astrocyte"), required=True)
     ap.add_argument("--experiment", help="override only for the DNase arm, whose source is selected")
     ap.add_argument("--list-only", action="store_true", help="resolve and check the BAMs, stream none")
+    ap.add_argument(
+        "--rule",
+        choices=("first", "producer"),
+        default="first",
+        help="`producer` is the rule read out of mayasheth/chrom-annotate at the commit cited in "
+        "rpm.PRODUCER, over the BAMs its own metadata names. `first` is the rule registered before the "
+        "first gate, kept so that result stays readable as what it was",
+    )
     args = ap.parse_args()
 
     if args.cell == "astrocyte":
         return refuse_astrocyte_until_the_gate_passes()
+
+    if args.rule == "producer":
+        return run_producer_rule(args)
 
     experiment = args.experiment or EXPERIMENTS[(args.column, args.cell)]
     if experiment is None:
@@ -312,6 +334,198 @@ def main() -> int:
         else "GATE FAILS: the no-go stands and nothing is fetched for astrocytes"
     )
     return 0
+
+
+def producer_bam_meta(accession: str) -> dict[str, Any]:
+    """The portal record for one BAM the producer names, so what was read is on the record."""
+    f = portal(f"/files/{accession}/")
+    return {
+        "accession": accession,
+        "output_type": f.get("output_type"),
+        "assembly": f.get("assembly"),
+        "file_size": f.get("file_size"),
+        "biological_replicates": f.get("biological_replicates"),
+        "mapped_run_type": f.get("mapped_run_type"),
+        "href": f.get("href"),
+        "status": f.get("status"),
+    }
+
+
+def stream_producer(url: str, elements: list[tuple[str, int, int]], label: str) -> rpm.ProducerCounter:
+    """One sequential pass under the producer's two filters. Nothing is written to disk."""
+    import pysam
+
+    counter = rpm.ProducerCounter(elements)
+    t0 = time.time()
+    save = pysam.set_verbosity(0)
+    try:
+        af = pysam.AlignmentFile(url, "rb")
+    finally:
+        pysam.set_verbosity(save)
+    try:
+        for read in af:
+            counter.add(read)
+            if counter.reads_seen % 10_000_000 == 0:
+                el = time.time() - t0
+                print(
+                    f"    {label}: {counter.reads_seen:,} seen, {counter.denominator:,} mapped, "
+                    f"{counter.reads_seen / max(el, 1e-9):,.0f}/s, {el / 60:.1f} min",
+                    flush=True,
+                )
+    finally:
+        af.close()
+    print(
+        f"  {label}: {counter.reads_seen:,} seen, {counter.denominator:,} mapped (denominator), "
+        f"{sum(counter.counts.values()):,} element overlaps, {(time.time() - t0) / 60:.1f} min",
+        flush=True,
+    )
+    return counter
+
+
+def run_producer_rule(args) -> int:
+    """ONE run, BOTH columns, under the producer's documented rule. No third rule follows this."""
+    comparison = k562_heldout_elements()
+    columns = ("dnase", "h3k27ac")
+    per_column: dict[str, Any] = {}
+    all_pass = True
+    for col in columns:
+        experiment, accessions = PRODUCER_BAMS[(col, "k562")]
+        published = _published(comparison, COLUMN_OF[col])
+        elements = sorted(published)
+        print(
+            f"\n=== {COLUMN_OF[col]}: {experiment}, {len(accessions)} unfiltered BAM(s), "
+            f"{len(elements)} elements ==="
+        )
+        metas = [producer_bam_meta(a) for a in accessions]
+        for m in metas:
+            print(
+                f"   {m['accession']} {m['output_type']} {(m['file_size'] or 0) / 1e9:.2f}GB "
+                f"rep={m['biological_replicates']} {m['mapped_run_type']}"
+            )
+        if args.list_only:
+            continue
+        rpms, summaries = [], []
+        for m in metas:
+            url = (
+                f"{PORTAL}{m['href']}"
+                if m.get("href")
+                else (f"{PORTAL}/files/{m['accession']}/@@download/{m['accession']}.bam")
+            )
+            c = stream_producer(url, elements, m["accession"])
+            rpms.append(c.rpm())
+            summaries.append(c.summary() | {"accession": m["accession"]})
+        averaged = rpm.mean_of_per_bam_rpm(rpms)
+        computed = [averaged[e] for e in elements]
+        pub = [published[e] for e in elements]
+        verdict = rpm.gate(computed, pub, SPEARMAN_MIN, MEDIAN_RATIO_RANGE)
+        all_pass = all_pass and verdict["passes"]
+        per_column[COLUMN_OF[col]] = {
+            "experiment": experiment,
+            "bams": metas,
+            "per_bam": summaries,
+            "combination": "mean of the per-BAM RPMs, as average_features does",
+            "gate": verdict,
+            "elements_with_no_read": sum(1 for v in computed if v == 0),
+        }
+        print(json.dumps(verdict, indent=1, default=str))
+    if args.list_only:
+        print("--list-only: nothing streamed")
+        return 0
+
+    out = {
+        "status": "the SECOND calibration gate, under the producer's own documented rule. ONE run, "
+        "both columns. No AlphaGenome request, no money, nothing written to disk",
+        "lane": "lane-astro",
+        "rule": "producer",
+        "producer": rpm.PRODUCER,
+        "the_exposure": (
+            "this gate was registered AFTER the first one failed and after its numbers were seen, so "
+            "it is a RECONSTRUCTION CHECK and not a blind one. What protects it is provenance, not "
+            "blindness: every term is read out of the producer's source code and none was chosen "
+            "because it moved the first ratio toward 1.0"
+        ),
+        "asymmetry": rpm.THE_ASYMMETRY_IS_THEIRS,
+        "columns": per_column,
+        "both_columns_pass": all_pass,
+        "reading": (
+            "the gate PASSES on both columns: the frozen activity term is reconstructible from the "
+            "alignments under the producer's own rule, and the AstroREG activity route is open "
+            "subject to Albert's approval of the amended inputs"
+            if all_pass
+            else "the gate FAILS. Per the registration this is FINAL for the activity route: there is "
+            "no third rule, the AstroREG no-go stands, and no astrocyte alignment is fetched. The "
+            "finding is that the published columns are not reproduced by the documented rule of the "
+            "code that produced them"
+        ),
+        "requests_sent": 0,
+        "money_spent": 0,
+    }
+    out[mf.KEY] = _producer_manifest(per_column, comparison, all_pass)
+    path = save_result("astroreg_calibration_producer_rule_k562", out)
+    print(f"\n-> {path}")
+    print("BOTH GATES PASS" if all_pass else "GATE FAILS: final for the activity route, no third rule")
+    return 0
+
+
+def _producer_manifest(per_column, comparison, all_pass) -> dict[str, Any]:
+    names = [b["accession"] for c in per_column.values() for b in c["bams"]]
+    return {
+        "sources": [
+            {
+                "accession": "ENCODE unfiltered alignments named by mayasheth/chrom-annotate "
+                f"resources/metadata/epigenetic_datasets.tsv: {', '.join(names)}",
+                "version": "streamed over HTTPS and not stored",
+                "url": PORTAL,
+            },
+            {
+                "accession": "mayasheth/chrom-annotate, workflow/scripts/neighborhoods.py",
+                "version": "commit 91cda73ebe3a19153a582cab18cbf7ff70d85cfc; the rule is read from "
+                "this file and every term cites its line",
+                "url": "https://github.com/mayasheth/chrom-annotate",
+            },
+            {
+                "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark heldout_5_cell_types",
+                "version": "fetched 2026-09-16; pinned here by sha256",
+                "url": crispri.BASE_URL,
+            },
+        ],
+        "inputs": [
+            mf.input_entry(
+                crispri.KNOWLEDGE / crispri.HELDOUT,
+                partition=CRISPRI_SPLIT_OF[crispri.HELDOUT],
+                role="the K562 held-out elements and both published columns, the comparison the gate "
+                "is against; already-read development evidence",
+            ),
+        ],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "spearman_min": SPEARMAN_MIN,
+            "median_ratio_min": MEDIAN_RATIO_RANGE[0],
+            "median_ratio_max": MEDIAN_RATIO_RANGE[1],
+            "elements": comparison["elements"],
+            "bams_streamed": len(names),
+            "bytes_written_to_disk": 0,
+            "alphagenome_requests": 0,
+            "model_requests": 0,
+            "requests_sent": 0,
+            "money_spent": 0,
+            "both_columns_pass": all_pass,
+        },
+        "exclusions": [
+            "no AlphaGenome request is sent and this script has no code path that could send one",
+            "no BAM is written to disk: each is streamed once, sequentially, and discarded",
+            "no candidate rule was tried against the data: the rule is read from the producer's source "
+            "and no term was chosen because it improved the agreement",
+            "the correlation-based DNase source selection registered earlier was NOT used and no "
+            "candidate was ranked: the producer's own metadata names the experiment",
+            "no astrocyte alignment is read",
+        ],
+        "partitions": {
+            "k562_heldout": f"{comparison['elements']} elements, already-read development evidence",
+        },
+        "code_cleanliness": mf.code_cleanliness("scripts/astroreg_rpm_calibrate.py", OWN_CODE, ROOT),
+    }
 
 
 def _manifest(chosen, comparison, pooled, verdict) -> dict[str, Any]:

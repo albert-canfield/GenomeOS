@@ -361,3 +361,116 @@ class TestOneBamPerReplicate:
 
     def test_the_reason_is_recorded_in_the_module(self):
         assert "does not mean" in rpm.ONE_BAM_PER_REPLICATE
+
+
+class ProducerRead(FakeRead):
+    """A read with the two flags the producer's filters consult and the first rule ignored."""
+
+    def __init__(self, duplicate=False, qcfail=False, **kw):
+        super().__init__(**kw)
+        self.is_duplicate = duplicate
+        self.is_qcfail = qcfail
+
+
+class TestTheProducersOwnRule:
+    """The rule read out of mayasheth/chrom-annotate, not searched for.
+
+    Each test pins one term to the producer's code so a later reader can check the implementation
+    against the citation rather than against an intention.
+    """
+
+    E = ("chr1", 1_000, 1_500)
+    X = ("chrX", 1_000, 1_500)
+
+    def test_the_citation_names_repository_commit_and_file(self):
+        assert rpm.PRODUCER["repository"] == "mayasheth/chrom-annotate"
+        assert len(rpm.PRODUCER["commit"]) == 40
+        assert rpm.PRODUCER["file"].endswith("neighborhoods.py")
+        for term in ("rpm_formula", "numerator", "denominator", "sex_chromosomes", "several_bams"):
+            assert "L" in rpm.PRODUCER[term], f"{term} must cite a line"
+
+    def test_a_duplicate_leaves_the_numerator_but_stays_in_the_denominator(self):
+        """The producer's asymmetry: pysam count drops duplicates, idxstats counts them."""
+        c = rpm.ProducerCounter([self.E])
+        assert c.add(ProducerRead(start=1_100, end=1_136, duplicate=True)) == 0
+        assert c.counts[self.E] == 0, "a duplicate is not in the numerator"
+        assert c.denominator == 1, "a duplicate IS in the denominator"
+        assert "what the code does, so that is what is implemented" in rpm.THE_ASYMMETRY_IS_THEIRS
+
+    def test_a_qc_fail_read_is_dropped_from_the_numerator_only(self):
+        c = rpm.ProducerCounter([self.E])
+        assert c.add(ProducerRead(start=1_100, end=1_136, qcfail=True)) == 0
+        assert c.counts[self.E] == 0
+        assert c.denominator == 1
+
+    def test_a_supplementary_read_IS_counted_because_pysam_does_not_drop_it(self):
+        """BAM_FSUPPLEMENTARY is absent from read_callback='all', so it counts. Easy to get wrong."""
+        c = rpm.ProducerCounter([self.E])
+        assert c.add(ProducerRead(start=1_100, end=1_136, supplementary=True)) == 1
+        assert c.counts[self.E] == 1
+
+    def test_a_secondary_read_is_dropped_from_the_numerator(self):
+        c = rpm.ProducerCounter([self.E])
+        assert c.add(ProducerRead(start=1_100, end=1_136, secondary=True)) == 0
+        assert c.denominator == 1
+
+    def test_an_unmapped_read_is_in_neither(self):
+        c = rpm.ProducerCounter([self.E])
+        assert c.add(ProducerRead(start=1_100, end=1_136, unmapped=True)) == 0
+        assert c.denominator == 0
+
+    def test_read2_of_a_pair_is_counted_unlike_the_first_rule(self):
+        """The producer does not count fragments once; it counts read-segments."""
+        c = rpm.ProducerCounter([self.E])
+        assert c.add(ProducerRead(start=1_100, end=1_136, paired=True, read1=False)) == 1
+
+    def test_counts_on_chrX_and_chrY_are_doubled(self):
+        for chrom in ("chrX", "chrY"):
+            el = (chrom, 1_000, 1_500)
+            c = rpm.ProducerCounter([el])
+            c.add(ProducerRead(chrom=chrom, start=1_100, end=1_136))
+            for _ in range(999_999):
+                c.add(ProducerRead(chrom="chr1", start=10, end=46))
+            assert c.rpm()[el] == pytest.approx(2.0), f"{chrom} must be doubled"
+
+    def test_an_autosome_is_not_doubled(self):
+        c = rpm.ProducerCounter([self.E])
+        c.add(ProducerRead(start=1_100, end=1_136))
+        for _ in range(999_999):
+            c.add(ProducerRead(chrom="chr2", start=10, end=46))
+        assert c.rpm()[self.E] == pytest.approx(1.0)
+
+    def test_the_doubling_test_is_on_the_name_ending_as_the_producer_wrote_it(self):
+        assert rpm.doubles_on_sex_chromosome("chrX") is True
+        assert rpm.doubles_on_sex_chromosome("chrY") is True
+        assert rpm.doubles_on_sex_chromosome("chr1") is False
+        assert rpm.doubles_on_sex_chromosome("") is False
+
+    def test_several_bams_are_averaged_and_not_pooled(self):
+        a = {self.E: 10.0}
+        b = {self.E: 20.0}
+        assert rpm.mean_of_per_bam_rpm([a, b])[self.E] == pytest.approx(15.0)
+
+    def test_averaging_differs_from_pooling_when_depths_differ(self):
+        """The two combination rules give different answers, which is why the citation matters."""
+        shallow = rpm.ProducerCounter([self.E])
+        deep = rpm.ProducerCounter([self.E])
+        shallow.add(ProducerRead(start=1_100, end=1_136))
+        for _ in range(9):
+            shallow.add(ProducerRead(chrom="chr2", start=1, end=37))
+        for _ in range(3):
+            deep.add(ProducerRead(start=1_100, end=1_136))
+        for _ in range(997):
+            deep.add(ProducerRead(chrom="chr2", start=1, end=37))
+        averaged = rpm.mean_of_per_bam_rpm([shallow.rpm(), deep.rpm()])[self.E]
+        pooled = rpm.merge([shallow, deep])["rpm"][self.E]
+        assert averaged != pytest.approx(pooled)
+        assert averaged > pooled, "averaging lets the shallow pass carry equal weight"
+
+    def test_averaging_different_element_sets_is_refused(self):
+        with pytest.raises(ValueError, match="same element set"):
+            rpm.mean_of_per_bam_rpm([{self.E: 1.0}, {self.X: 1.0}])
+
+    def test_averaging_nothing_is_refused(self):
+        with pytest.raises(ValueError, match="nothing to average"):
+            rpm.mean_of_per_bam_rpm([])
