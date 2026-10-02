@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """Count the context-evidence state of every compiled rule, per state and per cell.
 
-    uv run --frozen python scripts/context_evidence_census.py [--chroms chr21,chr22]
+    uv run --frozen python scripts/context_evidence_census.py
+    uv run --frozen python scripts/context_evidence_census.py --chroms chr21 --result context_evidence_chr21
 
 The denominator is **every compiled rule**: each chromosome is compiled and the rule lines are read
 back from the compiled text, so the census counts the rules the compiler emits and cannot drift from
@@ -168,8 +169,21 @@ def rules_of(text: str) -> list[tuple[str, str]]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chroms", default=",".join(CHROMS))
+    ap.add_argument(
+        "--result",
+        default=RESULT,
+        help=(
+            "the result name to write. A run over fewer than all 24 chromosomes writes under a name "
+            "of its own, so a partial census can never overwrite the genome-wide one"
+        ),
+    )
     args = ap.parse_args()
     chroms = [c for c in args.chroms.split(",") if c]
+    name = args.result
+    if name == RESULT and tuple(chroms) != CHROMS:
+        raise SystemExit(
+            f"{RESULT} is the genome-wide census; a run over {len(chroms)} chromosomes needs --result"
+        )
 
     started = time.time()
     per_state: Counter[str] = Counter()
@@ -233,9 +247,18 @@ def main() -> None:
         ),
         "registration": "data/results/context_evidence_registration.json",
         "chromosomes": chroms,
+        "scope": (
+            "every compiled rule of all 24 chromosomes"
+            if tuple(chroms) == CHROMS
+            else f"the compiled rules of {len(chroms)} of 24 chromosomes: {', '.join(chroms)}"
+        ),
         "rules": total,
         "rules_on_the_record": RULES_ON_THE_RECORD,
-        "denominator_agrees_with_the_record": total == RULES_ON_THE_RECORD,
+        "denominator_agrees_with_the_record": (
+            total == RULES_ON_THE_RECORD
+            if tuple(chroms) == CHROMS
+            else "n/a: the record is the figure over all 24 chromosomes and this run covers fewer"
+        ),
         "per_state": {s: per_state[s] for s in ce.STATES},
         "not_assessable_by_reason": {r: per_reason[r] for r in ce.NOT_ASSESSABLE_REASONS},
         "assessable_rules": assessed,
@@ -328,8 +351,8 @@ def main() -> None:
         },
         "code_cleanliness": code_cleanliness(),
     }
-    path = save_result(RESULT, payload)
-    print(f"{RESULT}: {path}")
+    path = save_result(name, payload)
+    print(f"{name}: {path}")
     print(f"  rules {total:,} (on the record {RULES_ON_THE_RECORD:,})")
     for s in ce.STATES:
         print(f"  {s}: {per_state[s]:,}")
