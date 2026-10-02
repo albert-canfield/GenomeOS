@@ -17,11 +17,24 @@ is what this project has had to withdraw three times:
 - per block, the share carrying at least one element that moves a gene, inside length deciles, since a
   longer block holds more elements for no biological reason.
 
-The result is `constrained_unknown_targets`. It names genes but claims nothing about them. Since
+The result is `constrained_unknown_targets_v2`. It names genes but claims nothing about them. Since
 2026-09-27 it carries its own control (`matched_random_control`): the same block-level question asked
 of 50 random windows of each block's length outside the organiser's blocks, lifted from
 `attribution.unknown_scoring` and checked against its chr21 figures to the digit before any genome-wide
 figure is drawn. The 87% it used to quote was the locus benchmark's, a different instrument.
+
+Why the name carries a `_v2` since 2026-10-02. The 2026-09-27 file, `constrained_unknown_targets.json`,
+declared 193 inputs and the open-tracer counted 195 files opened for reading under `data/`. The two it
+did not declare are `data/results/unknown_chr21.json` and `data/results/budget_axes_chr21.json`, both
+opened by `lift_check` below through `attribution.unknown_scoring.unknown_blocks("chr21")`
+(`unknown_scoring.py:89`). The self-check is legitimate work -- the defect was the undeclared input and
+not the check, which stands unchanged. What made the omission worse than a plain gap is how a check
+behaved against it: both files are git-tracked, so a clean worktree holds them, the rebuild from the
+manifest ran to completion and reported 0 differences while their bytes were pinned by no sha256. A
+change to either would change this result and the rebuild would still have printed "0 differences".
+The remedy is a new name whose manifest declares every file `lift_check` opens (`LIFT_CHECK_INPUTS`,
+the closed list the tracer measured), not an edit to the 2026-09-27 file: that file's bytes are left
+exactly as they are and `result_manifest.supersedes` here names it and the undeclared read.
 """
 
 from __future__ import annotations
@@ -49,6 +62,35 @@ CHANCE_BAND = 5.0  # points either side of the random-window rate that read as "
 # that the check does not change with whatever result is on disk when it runs (review item R9).
 FIRST_RUN = "1d0a137"
 FIRST_RUN_PATH = "data/results/constrained_unknown_targets.json"
+
+#: The result this script writes. The 2026-09-27 run under the old name is kept beside it, unchanged.
+RESULT = "constrained_unknown_targets_v2"
+
+#: The file this result is written beside, and the date it was written.
+SUPERSEDED = "data/results/constrained_unknown_targets.json"
+SUPERSEDED_DATE = "2026-09-27"
+
+#: Every file `lift_check` opens for reading under data/, as the open-tracer recorded them, declared
+#: whether or not the chromosome loop happens to declare the same path. Two of these -- unknown_chr21
+#: and budget_axes_chr21 -- were the reads the 2026-09-27 manifest did not declare, and both are
+#: reached through `unknown_scoring.unknown_blocks`, which no declaration function inspected. The list
+#: is CLOSED and the paths are not guarded by `.exists()`: a missing input must fail the run loudly
+#: rather than shrink the declaration, which is the shape that let the gap through the first time.
+LIFT_CHECK_INPUTS = (
+    "data/knowledge/alphagenome/all_elements/chr21.json",
+    "data/results/budget_axes_chr21.json",
+    "data/results/budget_chr21.json",
+    "data/results/enhancer_targets_all_chr21.json",
+    "data/results/unknown_chr21.json",
+    "data/results/unknown_scoring_chr21.json",
+    "data/results/variation_chr21.json",
+)
+
+#: This script, whose import closure is the counting path, and the files this lane is answerable for.
+#: Everything else uncommitted in this shared checkout belongs to another lane, and
+#: `manifest.code_cleanliness` reports the two apart rather than together.
+ENTRY = "scripts/constrained_unknown_targets.py"
+OWN_CODE = frozenset({ENTRY})
 
 # Registered 2026-09-27, before the control below was run on any chromosome but chr21 (where the
 # unknown-scoring lane measured it). The 87% this script used to quote was the locus benchmark's,
@@ -450,7 +492,7 @@ def collect(chroms: list[str], control: bool = True, window: bool = True) -> dic
     }
     named = [r for r in real_unknown if r["targets"]]
     return {
-        "result": "constrained_unknown_targets",
+        "result": RESULT,
         "chromosomes": chroms,
         "min_log2": MIN_LOG2,
         "real_unknown": rate(real_unknown),
@@ -545,15 +587,28 @@ def manifest(chroms: list[str], control: bool, window: bool) -> dict[str, Any]:
     """The provenance contract (review item R9) for the real-unknown headline."""
     from genomeos.attribution.targets import ELEMENT_CACHE
 
-    inputs = []
+    # Keyed by path so a file the chromosome loop and the self-check both read is declared once and
+    # hashed once. Before 2026-10-02 the loop appended and the control appended, and the only guard
+    # against a repeat was the one `any(...)` below; the self-check's own reads were not declared at
+    # all. Declaring them by path makes the repeat harmless and the omission impossible to repeat.
+    declared: dict[str, dict[str, Any]] = {}
+
+    def declare(path: str | Path) -> None:
+        key = str(path)
+        if key not in declared:
+            declared[key] = mf.input_entry(path, partition=None)
+
     for c in chroms:
-        inputs += [mf.input_entry(p, partition=None) for p in organise.inputs(c)]
-        if not any(i["path"] == str(ELEMENTS / f"{c}.json") for i in inputs):
-            inputs.append(mf.input_entry(ELEMENTS / f"{c}.json", partition=None))
+        for p in organise.inputs(c):
+            declare(p)
+        declare(ELEMENTS / f"{c}.json")
         if window and (ELEMENT_CACHE / f"{c}.json.gz").exists():
-            inputs.append(mf.input_entry(ELEMENT_CACHE / f"{c}.json.gz", partition=None))
+            declare(ELEMENT_CACHE / f"{c}.json.gz")
     if control:
-        inputs.append(mf.input_entry(Path("data/results/unknown_scoring_chr21.json"), partition=None))
+        # The closed list the tracer measured, every one of them, whatever the chromosome loop did.
+        for path in LIFT_CHECK_INPUTS:
+            declare(path)
+    inputs = list(declared.values())
     return {
         "sources": [
             {
@@ -601,6 +656,25 @@ def manifest(chroms: list[str], control: bool, window: bool) -> dict[str, Any]:
             "counted as undrawable",
         ],
         "partitions": "n/a: arithmetic over model answers already on disk; nothing fitted, nothing held out",
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE),
+        "supersedes": {
+            "file": SUPERSEDED,
+            "date": SUPERSEDED_DATE,
+            "kept": "unchanged; this run is written beside it under a new name, not over it",
+            "why": (
+                "the 2026-09-27 file declared 193 inputs and the open-tracer counted 195 files opened "
+                "for reading under data/. The undeclared reads are data/results/unknown_chr21.json and "
+                "data/results/budget_axes_chr21.json, both opened by this script's lift_check through "
+                "attribution.unknown_scoring.unknown_blocks('chr21') (unknown_scoring.py:89), a "
+                "self-check whose inputs no declaration function inspected. Both are git-tracked, so a "
+                "clean worktree holds them and the rebuild from that manifest completed and reported 0 "
+                "differences while their bytes were pinned by no sha256: a change to either would have "
+                "changed the result and the rebuild would still have passed. This run declares every "
+                "file lift_check opens (LIFT_CHECK_INPUTS). The self-check was not weakened and no "
+                "quantity was refitted; the 2026-09-27 file is kept at data/results/"
+                "constrained_unknown_targets.json with its bytes untouched as the historical record"
+            ),
+        },
     }
 
 
@@ -627,7 +701,11 @@ def main(argv: list[str] | None = None) -> int:
     before = first_run() or before
     if before and not args.chroms:
         # the registered reproduction: every field the 2026-09-16 run wrote, bar its reading and timing
-        same = {k: before[k] == out.get(k) for k in before if k not in ("reading", "seconds", "date")}
+        # and bar `result`, which is the file's NAME and not one of its figures: this run writes under
+        # a new name beside the 2026-09-27 file (see the module docstring), and comparing the names
+        # would read as a moved figure when nothing measured had moved.
+        skip = ("reading", "seconds", "date", "result")
+        same = {k: before[k] == out.get(k) for k in before if k not in skip}
         out["reproduced_from_2026_09_16"] = {"fields": same, "all": all(same.values())}
         print(f"reproduced 2026-09-16 fields: {out['reproduced_from_2026_09_16']['all']}", flush=True)
     if args.no_save:
