@@ -1066,3 +1066,73 @@ what turned one stray kill into a confusing failure rather than a clean one, and
 cleanup should wait. A guard in the shared-checkout hook refusing an unanchored
 `pkill -f` is requested but not written: hooks are the owner's.
 
+
+## The verdict moved twice without the mechanism moving once (2026-10-02)
+
+`test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path`, in
+`tests/test_crispri_benchmark_v2.py` and `tests/test_crispri_published_v2.py`, asserted
+that `own_code_is_committed` was `True` and that
+`foreign_uncommitted_code_on_the_counting_path` was empty. Those assert **the state of
+the live checkout, not the behaviour of any code**. They were readiness checks for
+writing a result at that moment, filed as unit tests.
+
+In a checkout several sessions commit to, that makes the verdict a function of who else
+is editing. Measured, from a run neither the fixing lane nor the coordinator produced: a
+peer's status artefact shows 4,186 passed and exactly **two** failures, these two tests,
+tripped by that lane's own uncommitted files. While the fixing lane worked, the field read
+`['genomeos/attribution/compile.py', 'genomeos/attribution/direction_v2.py']` and
+`own_code_is_committed` was `False`; its own 219-test run passed in that state; then the
+peer committed and **the old assertion would have gone green with no change to any code it
+tests**. The verdict moved twice and the mechanism moved once in neither direction.
+
+**The cost was not the red itself.** The project's rule is "check.sh green on your own
+files before any commit". With four lanes, at least one always has uncommitted code on the
+counting path, so the rule is unachievable as literally stated, and every lane must decide
+for itself whether a red suite is its own fault — every time. That is a standing invitation
+to force past a red that *is* its fault. It also blocked a money-gating result for half an
+hour while its lane correctly waited on a peer.
+
+**The replacement, and why it is a tightening rather than a loss.** The two assertions
+became invariants that hold in any tree state: every file in the foreign-on-path list is in
+both the counting path and the foreign list; `own_uncommitted_code` is a subset of
+`OWN_CODE`; `own_code_is_committed == (own_uncommitted_code == [])`. Then a **hermetic**
+test in a temporary git repository covers the three states the live assertions only
+pretended to check, plus a fourth planting an uncommitted foreign file *off* the path,
+which must not be named — holding the field to being the filter it claims rather than a
+copy of the dirty list. The signal given up was a duplicate: `scripts/check_staged.py`
+refuses the commit of any staged result whose block has either value wrong, at publication,
+which is the point that matters.
+
+**Three things this teaches beyond the one test.**
+
+A test that reads the live working tree is testing the tree, not the code. The giveaway is
+that its verdict can change while nothing it covers changes — so when a failure appears and
+disappears without an edit to the thing under test, suspect the assertion before the
+mechanism.
+
+**Check how many copies exist, and do not change the ones that are not the defect.** Four
+copies of this test were found, not the two assumed. Two had the defect; two were already
+invariant-style. Three *further* sites assert the same two field values and were
+deliberately left alone, because each reads a **committed** `data/results/*.json` and
+asserts what that published file recorded at write time — a fixed historical fact in git,
+and the opposite of the defect. An over-eager reading of the ruling would have changed all
+seven and silently weakened three.
+
+**The replacement nearly passed for the wrong reason.** `manifest.is_code` returns true
+only for paths under `CODE_ROOTS = ("genomeos/", "scripts/", "tests/")`, so a planted
+`entry.py` at a temporary repository's root is not code to the revision stamp, and all
+three hermetic cases would have passed while testing nothing. Both planted files had to sit
+under `scripts/`. The counterfactual is what caught it: `inspect.getsource` of the real
+function with its one path-filter line replaced, asserting exactly one occurrence so a
+rewrite fails rather than passing vacuously, and shown **non-vacuous** by running the same
+claim against an unstripped copy, which passes. A new test built to satisfy the
+counterfactual rule was itself nearly worthless without one.
+
+**And a premise the coordinator got wrong, corrected by the lane.** The brief said
+`save_result`'s quarantine enforces these two values. It does not: `save_result` routes
+through `manifest.cleanliness_problems`, whose docstring says it is "Checked by key set,
+because that is what can be checked", and `genomeos/results.py` mentions neither value. The
+value-level refusal is `scripts/check_staged.py` alone, deliberately — "Writing such a
+result locally stays possible, deliberately: trial runs need it… The refusal belongs at the
+commit that publishes the file, not at the write." The conclusion survived; the mechanism
+named in support of it did not.
