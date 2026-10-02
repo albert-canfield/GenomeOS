@@ -214,8 +214,24 @@ def _stale(rec: dict[str, Any]) -> bool:
 
 
 def annotate_vep(variants: list[Variant], cache_dir: Path = CACHE, log=None) -> dict[str, dict[str, Any]]:
-    """Annotate through VEP, batch by batch, keeping a small per-variant cache."""
-    cache_dir.mkdir(parents=True, exist_ok=True)
+    """Annotate through VEP, batch by batch, keeping a small per-variant cache.
+
+    Two write events were removed on 2026-10-02 and neither changed what is annotated. The cache
+    lives under `data/knowledge`, which is one of the three stores `scripts/manifest_rebuild.py`
+    links into its worktree and HASHES to verify a result against, so a write handle held on it
+    during a rebuild is held on the bytes being checked:
+
+    - the append handle is taken only when there is a line to write. It used to be taken before
+      `todo` was looked at, so a run with nothing to add still held a write handle on the file.
+      Opening for append and writing nothing does not move an mtime, so what that did was EXPOSE the
+      store and not change it -- which is also why a refusal of such an open says a handle was held,
+      never that a byte moved;
+    - the directory is no longer created when it is already there. `Path.mkdir(exist_ok=True)` still
+      issues `os.mkdir` and swallows the error, so it was a write event on a protected store for no
+      effect at all, on every call, before any variant was looked at.
+
+    The cache is not disabled and nothing is narrowed: strictly fewer writes, same annotations.
+    """
     cache_file = cache_dir / "vep_cache.jsonl"
     cache: dict[str, dict[str, Any]] = {}
     if cache_file.exists():
@@ -226,18 +242,21 @@ def annotate_vep(variants: list[Variant], cache_dir: Path = CACHE, log=None) -> 
                 if not _stale(rec):
                     cache[k] = rec
     todo = [v for v in variants if v.alts and _key(v) not in cache]
-    with cache_file.open("a") as fh:
-        for i in range(0, len(todo), BATCH):
-            batch = todo[i : i + BATCH]
-            recs = vep_post([_vep_line(v) for v in batch])
-            by_input = {r.get("input"): r for r in recs}
-            for v in batch:
-                rec = by_input.get(_vep_line(v))
-                norm = normalise_vep(rec) if rec else {"gene": "", "consequence": "unannotated"}
-                cache[_key(v)] = norm
-                fh.write(f"{_key(v)}\t{json.dumps(norm)}\n")
-            if log:
-                print(f"VEP: {min(i + BATCH, len(todo))}/{len(todo)} annotated", file=log, flush=True)
+    if todo:
+        if not cache_dir.is_dir():
+            cache_dir.mkdir(parents=True, exist_ok=True)
+        with cache_file.open("a") as fh:
+            for i in range(0, len(todo), BATCH):
+                batch = todo[i : i + BATCH]
+                recs = vep_post([_vep_line(v) for v in batch])
+                by_input = {r.get("input"): r for r in recs}
+                for v in batch:
+                    rec = by_input.get(_vep_line(v))
+                    norm = normalise_vep(rec) if rec else {"gene": "", "consequence": "unannotated"}
+                    cache[_key(v)] = norm
+                    fh.write(f"{_key(v)}\t{json.dumps(norm)}\n")
+                if log:
+                    print(f"VEP: {min(i + BATCH, len(todo))}/{len(todo)} annotated", file=log, flush=True)
     return {_key(v): cache[_key(v)] for v in variants if v.alts}
 
 
