@@ -9,8 +9,12 @@ a test failing.
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pytest
 
+from genomeos import manifest as mf
 from genomeos.attribution import cell2, fresh
 from genomeos.attribution import increases as inc
 from genomeos.attribution import measured as ms
@@ -320,3 +324,46 @@ def test_the_registration_is_a_json_safe_payload() -> None:
     import json
 
     assert json.loads(json.dumps(inc.registration()))["lane"] == "lane-increase"
+
+
+# ---- the committed registration result ------------------------------------------------------------
+
+REGISTRATION = Path("data/results/increase_registration.json")
+
+
+def _registration() -> dict:
+    return json.loads(REGISTRATION.read_text())
+
+
+def test_the_registration_result_is_committed_and_carries_both_imported_floors() -> None:
+    floors = _registration()["floors"]
+    assert (floors["links"], floors["independent_loci"]) == (inc.POSITIVE_FLOOR, inc.LOCUS_FLOOR)
+    assert (floors["links"], floors["independent_loci"]) == (30, 20)
+
+
+def test_the_committed_registration_took_no_count() -> None:
+    payload = _registration()
+    assert payload["requests"] == 0
+    assert "ladder" in payload and "steps" in payload["ladder"]
+    # the ladder is registered as a list of step names, never as a step name mapped to a number
+    assert payload["ladder"]["steps"] == list(inc.LADDER_STEPS)
+    assert "verdict" not in payload
+
+
+def test_the_committed_registration_names_what_the_run_will_write() -> None:
+    assert _registration()["what_the_run_will_write"] == "data/results/increase_population.json"
+
+
+def test_the_committed_registration_carries_lane_repress2s_wording_unchanged() -> None:
+    follows = _registration()["follows_from"]
+    assert follows["registered_no_go_carried_verbatim"] == inc.INHERITED_NO_GO
+    assert follows["their_blind_ladder"]["and_in_the_rules_own_cell"] == 0
+    assert follows["commits"] == ["7a5dd8b", "fd07258", "37a256c", "e9cc033"]
+
+
+def test_the_committed_registrations_manifest_is_complete_with_its_cleanliness_block() -> None:
+    m = _registration()["result_manifest"]
+    assert m["complete"] is True
+    assert not m.get("problems")
+    assert set(mf.CLEANLINESS_KEYS) <= set(m["code_cleanliness"])
+    assert m["code_cleanliness"]["own_code_is_committed"] is True
