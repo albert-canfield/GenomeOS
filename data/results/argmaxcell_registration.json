@@ -1,0 +1,449 @@
+{
+  "result": "argmaxcell_registration",
+  "date": "2026-10-02",
+  "lane": "lane-argmaxcell",
+  "registered_in_its_own_commit": "this file is committed alone, before scripts/argmaxcell_count.py is run and before any count exists. A registration in the same commit as its result is a claim resting on a sentence; this one rests on the history, and the result commit names this file's sha",
+  "question": "A compiled rule's cell is an argmax over the scorer's tracks: `predicted_coding['tissue']` is `max_drop_tissue` or `max_rise_tissue`, the place the largest movement happened to fall. Does that argmax carry cell-type information at all? For element-gene pairs MEASURED in a named cell, at what rate is the compiled cell label equal to the measured cell, against the rate at which that label appears over every compiled rule genome-wide?",
+  "argmax_rule": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
+  "argmax_is_a_selection": "`direction_v2.ASSIGNED_CELL` is `predicted_coding['tissue']`, and `enhancer_target.predict_target` sets that field to `max_drop_tissue` or `max_rise_tissue` - the tissue of the larger of the biggest fall and the biggest rise over every track, chosen jointly with the gene. An argmax is a selection: the cell is where an extreme fell, not a context chosen before the values were read. `lane-clause1` measured this on 166 of 166 rows of its own population (150 by max_drop, 16 by max_rise, 0 otherwise), registration ba8c41f, result b4622ad. That count is carried here, not recomputed, and this lane's denominators are separate from its 166.",
+  "assigned_cell": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
+  "falsifier": "Stated before any count is taken. d = observed_rate - committed_base_rate, both over the arm's own denominator.\n(1) d <= -0.02: the argmax lands on the measured cell LESS often than the label's own genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it points away from it.\n(2) |d| < 0.02: NO cell-type information is detected. On this arm the compiled cell is the label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n(3) d >= +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this branch does not establish that the argmax carries cell-type information, because the benchmark's choice of which elements to test produces the same sign.\nA SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - the compiled cell names the measured cell on at least a quarter of the arm's elements, so a reader could use it; observed_rate < 0.25 - whatever d says, the label names the measured cell on a minority of elements and may not be read as the place the rule acts.\nAn arm with fewer than 30 elements reports its counts and NO rate reading at all. An interval is a Wilson 95% interval on the observed rate; whether it excludes the base rate is reported, and it is a binomial interval over elements, which is NOT a clustered interval and is labelled as such wherever it appears.",
+  "falsifier_thresholds": {
+    "tolerance_on_the_difference": 0.02,
+    "usable_rate": 0.25,
+    "minimum_elements_for_a_rate": 30
+  },
+  "confound_registered_before_any_count": "Registered before any count, and it makes the two readings asymmetric. The CRISPRi benchmark chose which elements to test, and it tested candidate elements in regions active in the cell it was testing. So the elements of the K562 arm are not a random draw from the compiled population: they are enriched for K562-active sequence before any model touched them. That enrichment pushes the observed rate UP. Therefore:\n- a difference at or near zero is NOT explained by the selection, because the selection pushes the other way, and it is clean evidence that the argmax carries no cell-type information;\n- a positive difference is explained by the selection at least as readily as by the model, and this lane cannot separate the two with the data it reads. A positive difference is therefore reported as a difference and MUST NOT be reported as the argmax carrying cell-type information.\nThis lane can refute the proposition and can fail to refute it. It cannot confirm it.",
+  "cross_arm_check": "The one check that bears on the confound without new data, reported for every pair of arms: the rate of `label == C` over the elements of arm A, for every arm cell C. If the argmax tracked the cell a measurement was taken in, arm A's own cell would stand out among the columns of row A. If instead each column is near that column's genome-wide base rate whatever the row, the compiled label is tracking the genome-wide label distribution and not the measured cell. This is a comparison of measured rates and sets no threshold of its own.",
+  "what_a_rate_at_the_base_rate_means": "stated here so it cannot be softened later: if the observed rate is at or near the base rate, a rule's `cell` is NOT evidence of where it acts. That is the finding and it will be written in those words. It is not a failure of the measurement and it is not an absence of regulation anywhere: it is a fact about what the cell label carries",
+  "base_rate_rule": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+  "base_rate_is_not_uniform": "The base rate is NOT 1/371. K562 is the single most frequent compiled label genome-wide, so its base rate is about twenty-three times what a uniform draw over the scorer's tracks would give. That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.",
+  "base_rates": {
+    "K562": {
+      "cell": "K562",
+      "labels": [
+        "K562"
+      ],
+      "rules_per_label": {
+        "K562": 27445
+      },
+      "rules_with_this_label": 27445,
+      "rules_total": 440589,
+      "rate": 0.062292,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "K562": "EFO:0002067"
+      }
+    },
+    "GM12878": {
+      "cell": "GM12878",
+      "labels": [
+        "GM12878"
+      ],
+      "rules_per_label": {
+        "GM12878": 6406
+      },
+      "rules_with_this_label": 6406,
+      "rules_total": 440589,
+      "rate": 0.01454,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "GM12878": "EFO:0002784"
+      }
+    },
+    "HCT116": {
+      "cell": "HCT116",
+      "labels": [
+        "HCT116"
+      ],
+      "rules_per_label": {
+        "HCT116": 594
+      },
+      "rules_with_this_label": 594,
+      "rules_total": 440589,
+      "rate": 0.001348,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "HCT116": "EFO:0002824"
+      }
+    },
+    "Jurkat": {
+      "cell": "Jurkat",
+      "labels": [
+        "Jurkat",
+        "Jurkat__Clone_E6_1"
+      ],
+      "rules_per_label": {
+        "Jurkat": 5,
+        "Jurkat__Clone_E6_1": 1127
+      },
+      "rules_with_this_label": 1132,
+      "rules_total": 440589,
+      "rate": 0.002569,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "Jurkat": "EFO:0002796",
+        "Jurkat__Clone_E6_1": "CLO:0007045"
+      }
+    },
+    "WTC11": {
+      "cell": "WTC11",
+      "labels": [
+        "WTC11"
+      ],
+      "rules_per_label": {
+        "WTC11": 96
+      },
+      "rules_with_this_label": 96,
+      "rules_total": 440589,
+      "rate": 0.000218,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "WTC11": "EFO:0009747"
+      }
+    }
+  },
+  "base_rate_census": {
+    "source": "data/results/context_evidence.json",
+    "rules": 440589,
+    "distinct_labels": 317,
+    "per_cell_sums_to_rules": true,
+    "checked_here": "the sum is recomputed by argmaxcell.census() and the registration refuses to be written if it does not equal the census's own `rules`"
+  },
+  "second_base_rate": "A second base rate is computed in the SAME streaming pass as the observed rate, from this lane's own reading of the element tables: the share of all attributed elements of all 24 chromosomes whose compiled label is the arm's cell. It exists to check the committed census rather than to replace it. The registered reading uses the COMMITTED base rate; the second is reported beside it with the difference, and a difference between the two is reported as a difference and not reconciled away.",
+  "population": "One arm per measured cell. An arm's population is every DISTINCT attributed element that overlaps at least one valid pair of the two cached ENCODE CRISPRi benchmark tables whose `CellType` is that cell. `attributed` is `genomeos.attribution.targets.attributed`'s own population - the elements of the three deletion runs that name a coding target gene, deduplicated by element id with the whole-chromosome run first - which is exactly the population `compile.compile_chromosome` emits one rule for, and therefore exactly the population the base rate is taken over. A pair is valid by the benchmark's own `ValidConnection` column, which `crispri.parse` applies; promoter and exon overlaps are already dropped there. Overlap is `OVERLAP_RULE`.",
+  "denominator": "DISTINCT ELEMENTS, not pairs. The compiled cell is a property of the element's rule and not of the pair, so counting an element once per tested gene would weight elements by how many genes the screen happened to assay near them. The pair-level figure is reported beside it as a secondary count and is never the headline. Both are stated with the arm's cell name.",
+  "denominator_is_separate": "This lane's denominators are its own and are added to nothing. They are NOT to be added to or compared with the 112, 93, 73, 67, 26, 19, 18, 14 or 10 of tonight's other lanes: several of those overlap, several are different populations, and two were wrongly added together earlier today. Every figure below is reported with the arm and the denominator it was taken over.",
+  "will_report": "per arm: the measured cell; the number of valid pairs in that cell; how many of them overlap an attributed element; the number of DISTINCT attributed elements they overlap (the denominator); how many of those elements carry the arm's cell as their compiled label (the numerator); the observed rate; its Wilson 95% interval; the registered base rate; the difference; and which of the three registered readings the difference selects. Plus, over the same elements, the ten most frequent compiled labels with each one's own genome-wide base rate (the CROSS_ARM check), and the cross-arm matrix of every arm's rate on every other arm's cell.",
+  "arms": [
+    "K562",
+    "GM12878",
+    "HCT116",
+    "Jurkat",
+    "WTC11"
+  ],
+  "overlap_rule": "`crispri.DeletionTable.overlapping`'s own rule, reimplemented over four scalars per element and asserted equal to it by test: an element overlaps [start, end) when element.end > start and element.start > start - 10000, searched from bisect_left(starts, end) - 1 downwards. 10000 is `crispri.REACH`, the longest element in the table, and is imported rather than restated.",
+  "label_rule": "An element's compiled label is `compile.context(predicted_coding['tissue'])`, which is `compile.ident` on a non-empty name and `unknown` on an absent one. The arm's cell is passed through the same function before comparison, so both sides of the equality are the string the compiler would write into `when: cell_type`. Two raw tissue names that differ only in characters `ident` replaces collapse to one label; that is a property of the census this base rate comes from, so the observed side must share it or the two would not be comparable.",
+  "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+  "labels_for_each_arm": {
+    "K562": [
+      "K562"
+    ],
+    "GM12878": [
+      "GM12878"
+    ],
+    "HCT116": [
+      "HCT116"
+    ],
+    "Jurkat": [
+      "Jurkat",
+      "Jurkat__Clone_E6_1"
+    ],
+    "WTC11": [
+      "WTC11"
+    ]
+  },
+  "interval_is_binomial": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+  "grouping": "No grouping is applied. Elements are counted individually and the interval is binomial over elements. If a later run groups them, `cell2.group`'s caveat travels with it: an operational grouping, NOT established biological independence.",
+  "counts_named_in_advance": [
+    "pairs_in_cell",
+    "pairs_on_an_attributed_element",
+    "elements",
+    "elements_whose_label_is_the_measured_cell",
+    "observed_rate",
+    "wilson95",
+    "committed_base_rate",
+    "difference",
+    "second_base_rate_this_run",
+    "label_distribution_top10",
+    "cross_arm_matrix",
+    "attributed_elements_streamed",
+    "chromosomes_streamed",
+    "max_rss_bytes"
+  ],
+  "refusals": [
+    "the committed census is absent or untracked: raise. A committed artefact's absence is a defect, not a difference, and a guard that skips on it would be measuring the machine",
+    "the census `per_cell` entries do not sum to its own `rules`: raise, because the base rate's denominator would then not be the population it claims",
+    "a compact element table named by a committed summary is not on this machine: raise. `targets.run_elements` already raises for this reason and the same rule holds here",
+    "resident memory passes RSS_CEILING_BYTES after any chromosome: raise, naming the chromosome and the figure. Never widen the ceiling to make a run pass",
+    "any call that would open a per-element archive or the cached-element loader: there is no such call, and the test suite asserts the module's source contains neither name",
+    "an arm with fewer than 30 elements: counts are reported and NO rate reading is"
+  ],
+  "read_discipline": "No archive is opened and the cached-element loader is never called. The compact per-chromosome element table is decoded ONE element at a time by `stream_table` with `json.JSONDecoder.raw_decode`, and four scalars per element are retained, so the parsed object graph of a 59 MB table is never held. One chromosome is in hand at a time and its text is released before the next is opened. `check_rss` raises at RSS_CEILING_BYTES after every chromosome. The ceiling is 2147483648 bytes and the run reports its own peak.",
+  "rss_ceiling_bytes": 2147483648,
+  "no_archive_is_opened": "no element answer is read through the cached-element loader and no chromosome archive is opened. That loader falls back to the archive and caches every archive it opens in a module-level dict that never evicts; a peer's inline loop over 93 elements reached 23 GB RSS tonight and drove free disk under the floor. The compact per-chromosome element table is read instead, one element at a time, and argmaxcell's own source is asserted by test to name no archive loader",
+  "exploration_preceded_this": "Stated plainly rather than implied. Before this registration was written this lane read: `genomeos/predict/enhancer_target.py` for CELLS, the cached-element loader and predict_target; `genomeos/attribution/direction_v2.py` for the assigned-cell field; `genomeos/attribution/targets.py` and `compile.py` for the attributed population and the label function; `genomeos/attribution/crispri.py` for the pair parser, the overlap rule and REACH; and the committed `data/results/context_evidence.json` for its `per_cell` block. From that last file it had SEEN the base rates before writing them down: K562 27,445/440,589 = 0.062292, HepG2 14,779 = 0.033544, GM12878 6,406 = 0.014540, IMR_90 2,942 = 0.006677, HCT116 594 = 0.001348, WTC11 96 = 0.000218, Jurkat 5 and Jurkat__Clone_E6_1 1,127 = 0.002569 together, and it had checked for a second spelling of every arm's line in the census's own label list before fixing LABELS_FOR. It had seen NO observed rate, NO arm denominator and NO element of any arm: not one CRISPRi pair had been joined to an element and not one element table had been opened when this was written. What this registration binds is the population, the denominator, the base rate and its formula, the falsifier, the confound and the count list, all of them before the observed side exists.",
+  "edits_no_rule": "No rule, threshold, clause or `.bio` file is changed by this lane, and none is proposed for change. This is a measurement. If the finding is that a rule's cell is not evidence of where it acts, that is a finding for Albert and the supervisor; changing the cell assignment would invalidate every count already taken under it.",
+  "validates_nothing": "This lane validates nothing about the direction rule in either direction. A peer's registered reading stands and is carried word for word: v2 can withhold a direction and never reverse one, and an unresolved class is NOT absence of regulation. Nothing measured here is evidence for or against v1's directions, and no reading below may be cited as such. The question here is about the CELL a rule names, not about the direction it calls.",
+  "name_match_is_not_a_confirmation": "Equality of two labels is equality of two strings. It does not establish that the scorer's track and the screen's cells are the same material, the same passage or the same laboratory, and no file this lane reads could establish any of that.",
+  "metadata_copy_limitation": "Carried word for word from the correction a peer established, because it bounds what any cell statement of this lane may say: the saved copy of the model client's track metadata carries NO biosample accession and NO experiment accession. `one biosample` is therefore unsupportable from it; `one biosample NAME` is the most that can be said, and a two-track cell's two tracks are polyA plus RNA-seq and total RNA-seq of one biosample name, `not known to be biological replicates` in `_cell_summary`'s own words. This lane reads that metadata copy not at all and makes no claim that needs it.",
+  "retention_is_not_this_question": "`enhancer_target.CELLS` is the four cell lines whose own track value is kept per gene. It bounds which cells a `by_cell` value exists for and so which rows clause (1) can reach - a peer's registered reading. It does NOT bound this question: the argmax tissue is over every track the scorer returned, so a compiled label may be any of the census's 317 and HCT116's 594 rules are assessable here although HCT116 carries no `by_cell` column at all.",
+  "retained_cells_today": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "cannot_establish": [
+    "whether the scorer's track for a cell name and the screen's cells of that name are the same material: no file read here carries an accession on either side",
+    "whether a compiled label that is NOT the measured cell is wrong: the element may act in both, and a screen in one cell measures nothing about the other",
+    "whether the argmax carries cell-type information when the observed rate is ABOVE the base rate: the benchmark's selection of tested elements produces the same sign (CONFOUND)",
+    "any direction, magnitude or effect: no outcome column of the benchmark tables is read, and no predicted value is read beyond the tissue field of the compact table",
+    "anything about the 98% non-coding space outside the attributed elements: an element with no predicted coding target emits no rule and is in neither the base rate nor any arm"
+  ],
+  "what_the_run_will_write": "data/results/argmaxcell.json",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed genome-wide context-evidence census of compiled rule cell labels",
+        "version": "the committed data/results/context_evidence.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "Gschwind et al. 2026, Nature, doi:10.1038/s41586-026-10781-4, Supplementary Table 3 (https://pmc.ncbi.nlm.nih.gov/articles/PMC13471189/)",
+        "version": "the two benchmark tables cached under data/knowledge/crispri on this machine, digested in inputs"
+      },
+      {
+        "accession": "the all-enhancer deletion sweep's compact per-chromosome element tables, each named by its committed enhancer_targets_all_<chrom> summary",
+        "version": "the tables on this machine. NOT digested here: 594 MB, and digesting them would be the heavy read this registration forbids"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/context_evidence.json",
+        "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+        "bytes": 184616,
+        "partition": "the committed genome-wide census of every compiled rule's `when: cell_type` label. The BASE RATE of every arm is read from its per_cell block and from nowhere else; this lane computes no part of it"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "a cached ENCODE CRISPRi benchmark table. Read for each valid pair's CellType, chrom, chromStart, chromEnd and measuredGeneSymbol only: no outcome column, no DHS or H3K27ac value and no power column is read"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "a cached ENCODE CRISPRi benchmark table. Read for each valid pair's CellType, chrom, chromStart, chromEnd and measuredGeneSymbol only: no outcome column, no DHS or H3K27ac value and no power column is read"
+      }
+    ],
+    "input_count": 3,
+    "assembly": "GRCh38: the assembly both benchmark tables and the deletion sweep are on. No coordinate of this registration's own is in any build",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the benchmark tables' own chromStart/chromEnd and the element tables' own start/end, both 0-based half-open, used only for the overlap test in OVERLAP_RULE. This registration itself reads no interval"
+    },
+    "parameters": {
+      "tolerance": 0.02,
+      "usable_rate": 0.25,
+      "minimum_elements_for_a_rate": 30,
+      "reach": 10000,
+      "arms": [
+        "K562",
+        "GM12878",
+        "HCT116",
+        "Jurkat",
+        "WTC11"
+      ],
+      "rss_ceiling_bytes": 2147483648,
+      "no_threshold_of_any_rule_is_set_or_moved": "MIN_EFFECT, the direction clauses and every magnitude floor stay exactly as committed. The only numbers this lane sets are its own reading thresholds, and they are set here before any figure exists"
+    },
+    "exclusions": [
+      "every benchmark pair whose ValidConnection is not TRUE: crispri.parse drops them, which also drops the promoter and exon overlaps",
+      "every element with no predicted coding target: it emits no compiled rule, so it is in neither the base rate nor any arm",
+      "every per-element archive and every cached-element loader call: none is made",
+      "every outcome, DHS, H3K27ac and power column of the benchmark tables"
+    ],
+    "partitions": {
+      "per_arm_elements": "the DISTINCT attributed elements overlapping that arm's pairs: this lane's headline denominator, one per arm",
+      "per_arm_pairs": "that arm's valid pairs: the secondary denominator, never the headline",
+      "the_census_440589": "the base rate's denominator, read from the committed census and computed by no code of this lane"
+    },
+    "code_cleanliness": {
+      "git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/argmaxcell.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/argmaxcell_register.py"
+      ],
+      "counting_path_count": 126,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/argmaxcell_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "code_cleanliness_git_sha": "32eedd1d2b894911702b2488b9305a5476ed6034",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 32eedd1"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 318,
+      "opens_under_data": 4,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
