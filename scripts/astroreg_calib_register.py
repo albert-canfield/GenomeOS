@@ -120,6 +120,41 @@ REPLICATE_RULE = (
     "number of BAMs pooled per experiment is recorded with the result"
 )
 
+#: The rule above is WRONG and is superseded, not revised. Kept verbatim above so the correction can
+#: be checked against what it corrects. Nothing had been counted under it: the defect was found by
+#: reading the portal's file metadata, before the first read was streamed.
+REPLICATE_RULE_AMENDMENT_1 = {
+    "supersedes": "the rule above, 'ALL of an experiment's released filtered GRCh38 alignments BAMs "
+    "are streamed and POOLED'",
+    "the_defect": "'released' does not mean 'one per replicate'. ENCSR000AKP, the K562 H3K27ac "
+    "experiment, publishes SEVEN released filtered GRCh38 alignment BAMs, and they are not seven "
+    "replicates: they are THREE biological replicates each reprocessed by up to three pipeline "
+    "versions. Biological replicate 1 appears as ENCFF301TVL (ENCODE3 GRCh38), ENCFF121RHF (ENCODE4 "
+    "v1.5.1) and ENCFF600THN (ENCODE4 v1.8.0); replicate 2 as ENCFF879BWC, ENCFF907MNY and "
+    "ENCFF704LGA by the same three pipelines; replicate 3 only as ENCFF232RQF (ENCODE4 v1.8.0, "
+    "technical replicates 3_1 and 3_2). Pooling all seven would have counted replicates 1 and 2 "
+    "THREE TIMES each and replicate 3 once",
+    "why_it_would_not_have_been_caught": "the same reads would have inflated the numerator and the "
+    "denominator together, so the RPM would have been wrong by the ratio between two differently "
+    "weighted replicate mixtures rather than by an obvious factor. It would have shifted the "
+    "comparison without making any single number look absurd, and the gate could have failed or "
+    "passed for a reason that had nothing to do with whether the feature is reconstructible",
+    "the_corrected_rule": "stream the filtered GRCh38 `alignments` BAMs of the experiment's RELEASED "
+    "analysis only, which is at most one per biological replicate, and pool those. ENCODE designates "
+    "exactly one analysis per experiment as released and archives the superseded ones, so this is "
+    "ENCODE's own designation and not a preference of this lane's. For ENCSR000AKP the released "
+    "analysis is ENCAN866TOS (ENCODE4 v1.8.0) and the BAMs are ENCFF600THN, ENCFF704LGA and "
+    "ENCFF232RQF, one per biological replicate",
+    "the_check_that_enforces_it": "the runner REFUSES to stream a set in which any biological "
+    "replicate appears more than once, and records the replicate of every BAM it streams. A rule is "
+    "worth less than the check that makes breaking it impossible, and this defect is exactly what an "
+    "unchecked rule looks like",
+    "applied_identically_to_astrocyte": "the same released-analysis restriction applies to ENCSR000AOQ "
+    "and ENCSR000EPM. It was not chosen for them and it is not relaxed for them",
+    "nothing_was_computed_under_the_superseded_rule": True,
+    "found_before": "any read was counted, any BAM was opened and any correlation was taken",
+}
+
 # --------------------------------------------------------------- which files, decided by measurement
 
 H3K27AC_K562 = {
@@ -372,6 +407,7 @@ def main() -> int:
         },
         "read_rule": READ_RULE,
         "replicate_rule": REPLICATE_RULE,
+        "replicate_rule_amendment_1": REPLICATE_RULE_AMENDMENT_1,
         "files": {
             "h3k27ac_k562": H3K27AC_K562,
             "dnase_k562_selection": DNASE_K562_SELECTION,
