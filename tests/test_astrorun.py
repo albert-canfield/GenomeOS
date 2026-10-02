@@ -8,6 +8,7 @@ stops at the cap, and that the ledger on disk holds exactly one line per charge.
 from __future__ import annotations
 
 import json
+import sys
 import threading
 from pathlib import Path
 
@@ -758,8 +759,14 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
             "committed": lambda p: True,
         }
 
-    def test_with_everything_satisfied_it_returns(self, authorised, good):
-        """The positive control: without it, a refusal proves nothing."""
+    def test_with_everything_satisfied_it_returns(self, authorised, good, monkeypatch):
+        """The positive control: without it, a refusal proves nothing.
+
+        Item (f), the supervisor's adapter-v2 requirement, is stubbed here because it is a different
+        condition from Albert's five and has its own planted tests. Stubbing it is what makes this a
+        test of HIS clauses rather than of the adapter.
+        """
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
         out = astrorun.may_send(**good)
         assert out["may_send"] is True
         assert out["cap"] == 1232
@@ -888,3 +895,87 @@ class TestAmendment2sRuleIsUnchangedSinceItWasRegistered:
         assert any("0f4c372" in k for k in where)
         assert any("230efc8" in k for k in where)
         assert "does NOT name the file" in where["data/results/astroreg2_registration.json at 0f4c372"]
+
+
+class TestItemFAdapterV2:
+    """Sign-off item (f), planted. It is the SUPERVISOR's requirement, not a clause of Albert's."""
+
+    def test_it_refuses_today_because_the_adapter_is_still_v1(self):
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_adapter_v2()
+        msg = str(exc.value)
+        assert "item (f)" in msg
+        assert "ADAPTER_V2" in msg, "the refusal names what it looked for"
+        assert "PAID FOR" in msg
+
+    def test_it_is_not_attributed_to_albert(self):
+        assert "not a clause of Albert's approval" in astrorun.ADAPTER_V2_IS_A_SUPERVISOR_REQUIREMENT
+        assert "adapter" not in " ".join(astrorun.ASTROREG2_CLAUSES.values()).lower()
+
+    def test_a_missing_module_refuses_rather_than_raising_an_import_error(self):
+        with pytest.raises(astrorun.SendRefusedError, match="not importable"):
+            astrorun.check_adapter_v2("genomeos.predict.no_such_adapter_module")
+
+    def test_a_module_exposing_everything_passes(self, monkeypatch):
+        """The positive control: a capability check that can never pass would prove nothing."""
+        import types
+
+        mod = types.ModuleType("fake_adapter_v2")
+        for name in astrorun.ADAPTER_V2_MUST_EXPOSE:
+            setattr(mod, name, True)
+        monkeypatch.setitem(sys.modules, "fake_adapter_v2", mod)
+        out = astrorun.check_adapter_v2("fake_adapter_v2")
+        assert out["exposes"] == list(astrorun.ADAPTER_V2_MUST_EXPOSE)
+
+    def test_one_missing_capability_is_enough_to_refuse(self, monkeypatch):
+        import types
+
+        mod = types.ModuleType("half_adapter")
+        for name in astrorun.ADAPTER_V2_MUST_EXPOSE[:-1]:
+            setattr(mod, name, True)
+        monkeypatch.setitem(sys.modules, "half_adapter", mod)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_adapter_v2("half_adapter")
+        assert astrorun.ADAPTER_V2_MUST_EXPOSE[-1] in str(exc.value)
+
+    def test_a_version_constant_alone_does_not_satisfy_it(self, monkeypatch):
+        """Checked by capability, because a version string can be set without the behaviour."""
+        import types
+
+        mod = types.ModuleType("version_only")
+        mod.ADAPTER_V2 = True
+        monkeypatch.setitem(sys.modules, "version_only", mod)
+        with pytest.raises(astrorun.SendRefusedError):
+            astrorun.check_adapter_v2("version_only")
+
+    def test_the_merge_wording_is_carried_verbatim(self):
+        assert astrorun.A_MERGE_IS_A_LOST_DISTINCTION == ("a merge is a LOST DISTINCTION, NOT A WRONG NUMBER")
+
+    def test_the_send_path_refuses_on_item_f_even_with_everything_else_satisfied(self, tmp_path, monkeypatch):
+        """PLANTED with Albert's authorisation recorded AND every clause of his satisfied."""
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        plan = [
+            {
+                "chrom": "chr1",
+                "element": f"E{i}",
+                "start": i,
+                "end": i + 1,
+                "serves_genes": ["G"],
+                "serves_labels": ["negative"],
+            }
+            for i in range(astrorun.ASTROREG2_CAP)
+        ]
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        reg = tmp_path / "reg.json"
+        reg.write_text("{}")
+        with pytest.raises(astrorun.SendRefusedError, match=r"item \(f\)"):
+            astrorun.may_send(
+                activity_result=act,
+                registration=reg,
+                ledger=tmp_path / "l.jsonl",
+                signoff='the supervisor wrote "dry run reviewed" at 2026-10-02T13:00:00',
+                plan=plan,
+                reviewed_digest=astrorun.plan_digest(plan),
+                committed=lambda p: True,
+            )

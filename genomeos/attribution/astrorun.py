@@ -516,6 +516,64 @@ ONE_RUN_IS_TERMINAL = (
 )
 
 
+#: Sign-off item (f). NOT one of Albert's clauses: it is the supervisor's requirement, and it is kept
+#: apart so a refusal does not attribute to Albert a condition he did not state.
+ADAPTER_V2_IS_A_SUPERVISOR_REQUIREMENT = (
+    "item (f) of the supervisor's sign-off checklist, not a clause of Albert's approval. His approval "
+    "names the activity precondition, the sign-off, one run, every request logged and the scope; this is "
+    "an additional condition the supervisor imposed, and conflating the two would misreport what he "
+    "agreed to"
+)
+
+WHY_ADAPTER_V2_BEFORE_SENDING = (
+    "the prediction chain keeps a summary and discards what the model returned: the adapter reads only "
+    "`gene_name` off the response's gene axis and the per-element writer keys by that bare string, so two "
+    "response rows under one gene name MERGE. Buying 1,232 NEW answers through that adapter would destroy "
+    "the gene identity and the per-track value multiset of data that has been PAID FOR -- permanently, "
+    "unrecoverably, in exchange for a summary. Paid data is the one kind this project cannot re-fetch for "
+    "free, so this is a refusal BEFORE the purchase rather than a repair after it"
+)
+
+#: The wording a merge must be reported in, carried verbatim from lane-generow.
+A_MERGE_IS_A_LOST_DISTINCTION = "a merge is a LOST DISTINCTION, NOT A WRONG NUMBER"
+
+#: What adapter v2 must expose for the send to proceed. Checked by CAPABILITY and not by a version
+#: string, and default-refusing: if the building lane names these differently the refusal fires and says
+#: exactly what it looked for, which is the safe direction to be wrong in.
+ADAPTER_MODULE = "genomeos.predict.alphagenome_adapter"
+ADAPTER_V2_MUST_EXPOSE = ("ADAPTER_V2", "gene_axis_fields", "per_track_values")
+
+
+def check_adapter_v2(module_name: str = ADAPTER_MODULE) -> dict[str, Any]:
+    """Refuse unless the adapter the runner would write through is v2. See item (f).
+
+    Looks for the capability rather than a declared version, because a version constant can be set
+    without the behaviour existing. Refuses by naming each thing it looked for and did not find, so a
+    naming disagreement with the lane building it surfaces as a refusal rather than as a silent pass.
+    """
+    import importlib
+
+    try:
+        mod = importlib.import_module(module_name)
+    except ModuleNotFoundError as e:
+        raise SendRefusedError(
+            f"item (f): the adapter module {module_name} is not importable ({e}), so the runner cannot "
+            f"be shown to write through adapter v2. {WHY_ADAPTER_V2_BEFORE_SENDING}"
+        ) from e
+    missing = [name for name in ADAPTER_V2_MUST_EXPOSE if not hasattr(mod, name)]
+    if missing:
+        raise SendRefusedError(
+            f"item (f): {module_name} does not expose {missing}, so it is not adapter v2 and the gene "
+            f"identity and per-track multiset of 1,232 paid answers would be discarded. "
+            f"{WHY_ADAPTER_V2_BEFORE_SENDING} {ADAPTER_V2_IS_A_SUPERVISOR_REQUIREMENT}"
+        )
+    return {
+        "module": module_name,
+        "exposes": list(ADAPTER_V2_MUST_EXPOSE),
+        "merge_reporting_rule": A_MERGE_IS_A_LOST_DISTINCTION,
+    }
+
+
 class SendRefusedError(RuntimeError):
     """A clause of Albert's approval is not satisfied, so nothing may be sent."""
 
@@ -617,6 +675,8 @@ def may_send(
 
     if run_already_completed(ledger):
         _refuse("one_run", f"the ledger already records a completed run. {ONE_RUN_IS_TERMINAL}")
+
+    check_adapter_v2()
 
     budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
     if budget.charged() != budget.sent:
