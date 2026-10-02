@@ -59,6 +59,9 @@ PERMITTED_COLUMNS = frozenset(
         "Gene",
         "GeneID",
         "Hit",
+        # the authors' own direction-of-effect label, the benchmark's `Regulated` construction
+        # (significant AND below zero). A published boolean, not a magnitude.
+        "Hit&Downregulated",
         "Tested",
         "Wellpowered",
         "WellPowered_at_FC_0.15",
