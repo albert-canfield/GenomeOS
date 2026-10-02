@@ -8,6 +8,10 @@ Why an emitter had to be built at all: `scripts/direction_v2.py` accumulates two
 `collections.Counter`s and writes no file, and no committed result carries the v2 class of any one
 assertion. Searched across `data/results`, each of the nine reason tokens of
 `attribution.direction_v2.UNRESOLVED_REASONS` appears in 0 files. A class that cannot be read
+Amended, additively: the tuple holds EIGHT tokens, not nine. The nine above came from the brief
+this lane was given and was typed rather than read; the search itself covered all eight and two
+further key names, so the premise check is unchanged and only the figure was wrong. The payload
+carries the corrected figure under `amendment_reason_count`, read from the tuple's own length.
 cannot be reported, and a per-assertion class may not be re-derived from a Counter total.
 
 This registration names the population, the denominator, the exhaustive class set, the per-row
@@ -140,6 +144,15 @@ def payload() -> dict[str, Any]:
             ),
         },
         "increment_3_is_not_this_population": rv.INCREMENT_3_IS_NOT_THIS_POPULATION,
+        "amendment_reason_count": (
+            f"direction_v2.UNRESOLVED_REASONS holds {len(dv.UNRESOLVED_REASONS)} reason tokens, "
+            f"not nine: {', '.join(dv.UNRESOLVED_REASONS)}. This lane's brief said nine and this "
+            "script's own docstring repeated it before being amended. The search that established "
+            "the premise covered all of them, plus the key names direction_rule_v2 and "
+            "unresolved_reason, and each appears in 0 of the 854 files of data/results, so the "
+            "premise is unchanged; the figure in the sentence was wrong and is read from the "
+            "tuple here so that it cannot drift again"
+        ),
         "classes": list(rv.CLASSES),
         "class_rule": rv.CLASS_RULE,
         "unresolved_reasons": list(dv.UNRESOLVED_REASONS),

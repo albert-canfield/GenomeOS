@@ -79,6 +79,8 @@ def test_no_committed_result_carried_a_v2_class() -> None:
         for p in results.glob("*.json")
         if p.name != "respmap_direction_v2.json" and "one_track_seen_twice" in p.read_text(errors="ignore")
     ]
+    # additive amendment: this lane's own registration names the reason set, as it must
+    hits = [h for h in hits if not h.startswith("respmap_direction_v2")]
     assert hits == [], f"a result now carries v2 reasons: {hits}"
 
 
@@ -276,3 +278,11 @@ def test_nothing_is_rescored_and_no_threshold_is_defined_here() -> None:
 def test_grouping_is_not_independence() -> None:
     joined = " ".join(rv.CANNOT_ESTABLISH)
     assert "NOT established biological independence" in joined
+
+
+def test_the_reason_count_is_read_and_not_typed() -> None:
+    """Amended additively: the brief said nine reason tokens and the tuple holds eight."""
+    assert len(dv.UNRESOLVED_REASONS) == 8
+    src = (ROOT / "scripts/respmap_v2_register.py").read_text()
+    assert "len(dv.UNRESOLVED_REASONS)" in src
+    assert "amendment_reason_count" in src
