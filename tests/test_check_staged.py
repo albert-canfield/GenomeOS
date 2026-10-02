@@ -203,3 +203,225 @@ def test_an_import_staged_with_its_module_passes(repo: Path, tmp_path: Path) -> 
     done = run_check(repo, index)
 
     assert done.returncode == 0, done.stdout
+
+
+# The false positive of 2026-10-02, and the hole its fix must not open.
+#
+# Git reports a line put inside an `if`/`else` as a removal plus an addition of the same stripped
+# content. The guard read only the removal, so the honest shape -- keep the peer's line, branch around
+# it -- was refused as a revert of the very line it preserves. That is not merely annoying: every false
+# refusal is pressure to reach for `--force`, and `--force` is the flag that can really lose a peer's
+# work. The fix subtracts what the same diff adds back, which makes the guard more precise rather than
+# weaker, so the tests below have to show BOTH halves: the false refusal gone, and every real removal
+# still refused -- including a replacement line that merely looks like the held one.
+
+CODE_BASE = """def register(payload):
+    path = RESULT
+    return path
+"""
+
+# the peer commit, inside the window: it adds exactly the two lines the tests below move or remove
+CODE_PEER = """def register(payload):
+    path = RESULT
+    p = save_result(RESULT, payload)
+    stamp = record_stamp(p)
+    return path
+"""
+
+HELD = "p = save_result(RESULT, payload)"
+PEER_SUBJECT = "save_result keeps the name it wrote"
+
+
+@pytest.fixture
+def code_repo(tmp_path: Path) -> Path:
+    """A python file whose last commit, minutes old, added the two lines the tests act on."""
+    repo = tmp_path / "code"
+    repo.mkdir()
+    git(repo, "init", "-q", "-b", "main")
+    git(repo, "config", "user.email", "peer@example.test")
+    git(repo, "config", "user.name", "A Peer")
+    source = repo / "reg.py"
+    source.write_text(CODE_BASE)
+    git(repo, "add", "reg.py")
+    git(repo, "commit", "-qm", "the register skeleton")
+    source.write_text(CODE_PEER)
+    git(repo, "add", "reg.py")
+    git(repo, "commit", "-qm", PEER_SUBJECT)
+    return repo
+
+
+def test_a_genuine_removal_of_a_peer_line_is_still_refused(code_repo: Path, tmp_path: Path) -> None:
+    """Shown to fire: the line is gone, nothing puts it back, and the refusal reads as it always did."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n    path = RESULT\n    stamp = record_stamp(path)\n    return path\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "REFUSED: this commit would undo work that is already in HEAD" in done.stdout
+    assert PEER_SUBJECT in done.stdout
+    assert HELD in done.stdout
+
+
+def test_force_still_reports_a_genuine_removal_without_refusing(code_repo: Path, tmp_path: Path) -> None:
+    """--force is unchanged by the subtraction: it still prints the finding and still exits 0."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n    path = RESULT\n    stamp = record_stamp(path)\n    return path\n",
+    )
+
+    done = run_check(code_repo, index, "--force")
+
+    assert done.returncode == 0, done.stdout
+    assert "REFUSED" in done.stdout
+    assert HELD in done.stdout
+
+
+def test_a_reindented_peer_line_passes(code_repo: Path, tmp_path: Path) -> None:
+    """The false positive: moving the held line into a branch indents it and preserves it entirely."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n"
+        "    path = RESULT\n"
+        '    if payload.get("name"):\n'
+        f"        {HELD}\n"
+        "    else:\n"
+        f"        {HELD}\n"
+        "    stamp = record_stamp(p)\n"
+        "    return path\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_a_peer_line_moved_elsewhere_at_a_new_indentation_passes(code_repo: Path, tmp_path: Path) -> None:
+    """Content, not position: the line leaves one function for another and is still in the file."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def stamped(p):\n"
+        "    if p:\n"
+        "        stamp = record_stamp(p)\n"
+        "    return None\n"
+        "\n"
+        "\n"
+        "def register(payload):\n"
+        "    path = RESULT\n"
+        f"    {HELD}\n"
+        "    return path\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_a_replacement_differing_only_in_a_variable_name_is_still_refused(
+    code_repo: Path, tmp_path: Path
+) -> None:
+    """The near-miss: if the subtraction matched loosely this would pass, and the guard would be gone."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n"
+        "    path = RESULT\n"
+        "    p = save_result(RESULT, data)\n"
+        "    stamp = record_stamp(p)\n"
+        "    return path\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert PEER_SUBJECT in done.stdout
+    assert HELD in done.stdout
+
+
+def test_a_replacement_with_a_comment_appended_is_still_refused(code_repo: Path, tmp_path: Path) -> None:
+    """The other near-miss: the held text is a prefix of the new line, and a prefix is not the line."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n"
+        "    path = RESULT\n"
+        f"    {HELD}  # the chosen name\n"
+        "    stamp = record_stamp(p)\n"
+        "    return path\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert PEER_SUBJECT in done.stdout
+
+
+def test_a_reindentation_does_not_cover_a_real_removal_in_the_same_diff(
+    code_repo: Path, tmp_path: Path
+) -> None:
+    """Per line, not per diff: one held line is re-indented, the other is deleted, and only that one
+    is named. A subtraction that waved the whole path through would report nothing here."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n"
+        "    path = RESULT\n"
+        '    if payload.get("name"):\n'
+        f"        {HELD}\n"
+        "    else:\n"
+        f"        {HELD}\n"
+        "    return path\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "removes 1 lines" in done.stdout
+    assert "stamp = record_stamp(p)" in done.stdout
+    assert HELD not in done.stdout  # preserved, so never named as taken out
+
+
+def test_the_subtraction_is_per_path_so_a_line_moved_to_another_file_is_still_refused(
+    code_repo: Path, tmp_path: Path
+) -> None:
+    """The scope of the change, pinned. Each path is judged by its own diff, so content that leaves
+    this file for a different one is still a removal from this file and still costs a look. That is
+    the conservative reading and it is deliberate: a cross-file move is exactly the shape where the
+    author should confirm the destination is really the same content, and `--force` says so in one
+    word. The subtraction excuses a removal only where the same path puts the same text back."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n    path = RESULT\n    stamp = record_stamp(p)\n    return path\n",
+    )
+    stage_blob(code_repo, index, "helper.py", f"def helped(payload):\n    {HELD}\n    return p\n")
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert "reg.py: removes" in done.stdout
+    assert PEER_SUBJECT in done.stdout

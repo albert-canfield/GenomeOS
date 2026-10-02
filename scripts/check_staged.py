@@ -16,10 +16,17 @@ by asking one question of the staged tree rather than trusting anyone's care:
 
     does this commit delete lines that a recent commit added?
 
-For every path that differs between HEAD and the index, it takes the lines the commit would remove and
-compares them against the lines each recent commit ADDED to that same path. An honest edit of your own
-text hits nothing. A stale-base staging hits the peer commit exactly, and is named with its sha, its
-subject and the lines themselves.
+For every path that differs between HEAD and the index, it takes the lines the commit would remove,
+SUBTRACTS the lines the same commit adds back, and compares what is left against the lines each recent
+commit ADDED to that same path. An honest edit of your own text hits nothing. A stale-base staging hits
+the peer commit exactly, and is named with its sha, its subject and the lines themselves.
+
+The subtraction is what makes the question "is this content gone", not "did a line move". Comparison is
+on the stripped text, so git reports a line put inside an `if`/`else` as a removal plus an addition of
+the same content; before 2026-10-02 only the removal was read and that honest shape was refused as a
+revert of the line it preserves. Content the diff puts back, at any indentation and anywhere in the
+file, is not undone. The subtraction is exact, so a line that merely resembles a held one -- a variable
+renamed, a comment appended -- is still a removal and is still refused.
 
 It is deliberately a stale-base detector and not a merge policeman. Deleting your own lines, or lines
 older than the window, is ordinary work and passes. Rewriting a line that a peer added minutes ago is
@@ -175,7 +182,15 @@ def check(index: str | None, since: str) -> list[str]:
             continue
         if status == "A":
             continue  # a file HEAD does not have cannot revert anything
-        _, removed = _diff_lines("HEAD", "--cached", "--", path)
+        put_back, removed = _diff_lines("HEAD", "--cached", "--", path)
+        # Git reports a moved or re-indented line as a removal plus an addition of the same text, and
+        # `meaningful` already compares stripped, so content this same diff puts back -- at any
+        # indentation, anywhere in the file -- is not undone and has nothing to protect. Without this
+        # subtraction, putting a peer's line inside an `if`/`else` was refused as a revert of it, and a
+        # false refusal is pressure to reach for `--force`, which is the flag that can really lose work.
+        # The subtraction is exact on the stripped text: a line that merely resembles a held one --
+        # a renamed variable, a comment appended -- is a different string and is still a removal.
+        removed -= put_back
         if not removed:
             continue
         for found in reverted_by(path, removed, since):
