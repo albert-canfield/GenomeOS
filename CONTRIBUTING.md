@@ -243,6 +243,49 @@ under another lane's commit.
 5. The engine (`genomeos/lang`, `ir`, `runtime`, `std`, `bio.py`) imports
    nothing from the genome, knowledge or web layers.
 
+## Message files, and retrying a refused call (2026-10-02)
+
+The commit message goes in a file named **`msg-<lane>-<purpose>-$(date +%s).txt`**,
+written in the **same call that commits**, with `-L <lane>` naming the lane.
+`commit_own.sh` refuses a basename without the lane and an epoch (exit 67), a file
+more than 30 minutes older than the oldest change it commits (68), and a first line
+already used by any of the last 200 commits (66).
+
+Five commits in this checkout have carried another lane's message. The scratchpad each
+session is told is "session-specific" is shared between every lane of a session and
+held some seventy `msg*.txt` files at once, so a generic name is a collision waiting.
+The epoch is the part that works: a lost write makes the retry name a file that does
+not exist, so the script stops rather than reading what was there.
+
+**If a compound write-then-commit call is refused, retry the IDENTICAL call, heredoc
+included — never the commit half alone.** That is exactly how the fifth bad commit
+happened: the hook refused the whole call, the heredoc never ran, and the retry's `-F`
+pointed at a five-hour-old file from another lane. Note that the hook's "this notice
+does not repeat" keys on the exact command text, so adding `--force` makes a new call
+and the notice fires once more; re-send that text unchanged too.
+
+## A new guard is shown to fire before it is trusted (2026-10-02)
+
+Plant something that **must** trip the check and something that **must not**, confirm
+both, delete the probe, and say in the commit message that this was done. A guard
+never shown to fire is not a guard.
+
+The near-miss is the half usually skipped and the half that catches a check written too
+broadly. The lane adding "no shell script pushes to main" planted the push line twice
+in one file, once as a comment and once executable, and showed the check reported only
+the executable line — without the commented copy it would not have known whether it had
+written a test or a grep for a string.
+
+## Line numbers in a written plan are labels, not addresses (2026-10-02)
+
+A clean-up list in docs/ROADMAP.md gave line numbers for every item. One intervening
+commit later every number but one was wrong: a refusal had moved from 251 to 238, a
+case from 93 to 54. Every item still existed and read as described, so the list was
+sound and only its addresses had rotted. **Match by content, and quote the line's text
+beside its number.** The same rule inside code: a function that prints its own file by
+line number breaks on any edit above it, and a test on the printed text holds where a
+test on the range does not.
+
 ## A result written in this shared checkout (2026-10-02)
 
 Several sessions work in one tree, so a lane's result manifest picks up every

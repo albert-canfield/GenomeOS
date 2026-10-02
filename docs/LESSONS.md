@@ -925,3 +925,30 @@ committed by the demonstration. The near-misses that must not trip: a message 20
 minutes older than the work (inside the slack) and a correctly named fresh file, both
 of which went through.
 
+## A count is not a measurement of the thing you want to count (2026-10-02)
+
+Twice in one night, in different hands.
+
+**Once as a count of zeros read as a contribution.** 3,528 rows of the CRISPRi
+benchmark carry a zero in the deletion column, and the coordinator concluded the pooled
+gain was "largely not a test of the deletion feature". Measurement refuted it:
+`activity+distance` alone scores **-0.0671** on K562 and **+0.0281** pooled,
+`dnase+distance` alone **-0.1227**. Neither clears zero, so the deletion features carry
+the advantage after all. A count of absent values says nothing about what the present
+ones contribute.
+
+**Once as a count of silence read as a count of error.** 198 of the 473
+measured-perturbation loci attach to no compiled element, and that figure was written
+into docs/ROADMAP.md and passed on as "what the model misses despite measurement". The
+diagnosis of those loci reports what the measurements there actually said: **98
+significant decreases, 8 increases and 593 well-powered nulls**, with only **66 of the
+198** holding a decrease. So 132 of them are places the screen tested and found
+nothing, where the model's silence agrees with the measurement. The located omission is
+66 loci, not 198 — a third of what was claimed.
+
+**The rule.** Before a count is quoted as evidence that something is wrong, get the
+outcome breakdown at its denominator. "The model says nothing here" and "the model is
+wrong here" are the same count only where the measurement said something at every
+place. Both errors above survived review for hours because the arithmetic was correct;
+what was wrong was the noun.
+
