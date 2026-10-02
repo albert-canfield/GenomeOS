@@ -1185,3 +1185,86 @@ RNA-seq), without which no level in molecules is human; none exists
 (lane-rates2). Today 199 K562 pairs could run on a human degradation constant,
 but their transcription rate would still be mouse, and a test of them would
 still need the time course. Nothing was built here.
+
+## The mesoderm the sign correction removed: a closed candidate list (registered 2026-10-02)
+
+Correcting a rule to match its literature source made the model worse against the measurement. At
+`5cbce26`, with `Tbxt activates SOX17` as Lolas et al. 2014 show (PNAS 111:4478, Fig. 1A ChIP-seq
+and Fig. 3A knockdown), the gastrulation model lost its mesoderm band entirely, 0.10 to 0.00, while
+the measured CS7 human range for mesoderm is 0.694 to 0.773. A program that became more faithful to
+a published result lost the germ layer the real embryo is mostly made of, and that has a forced
+consequence: something in the program was being compensated for by the wrong sign. Either another
+rule is also wrong in a direction that cancelled it, or a required species or input is absent, or
+the runtime semantics are wrong somewhere the existing tests did not reach.
+
+**The combination rule is eliminated in advance and no run is spent on it.** `93caf61`, `267cc88`
+and `a6fc5c4` record that mesoderm is absent under all four activator rules — mean 0.633/0.000/0.367,
+sum_capped 0.558/0.000/0.442, max 0.575/0.000/0.425, or 0.558/0.000/0.442 — that only SOX17 has two
+activators among the 41 hand-written programs, and that the averaging did not remove the band. The
+earlier attribution to activator averaging, `3f7b0f5`, is withdrawn.
+
+The candidate list is closed, fixed before any run, and may not grow between the single-component
+pass and the pairwise pass. It is written as committed code, `REGISTRATION` in
+`scripts/mesoderm_diagnosis.py`, and not as a data file, so it provably cannot grow without a commit
+saying so. It has ten entries: W1 and W2, the two limbs of
+the WNT3A-Brachyury loop (Yamaguchi et al. 1999, Genes Dev 13:3185; Martin & Kimelman 2008, Dev Cell
+15:121); F1 and F2, the two limbs of the FGF-Brachyury loop (Isaacs et al. 1994, EMBO J 13:4469;
+Ciruna & Rossant 2001, Dev Cell 1:37; Schulte-Merker & Smith 1995, Curr Biol 5:62); M1, a MIXL1
+mesendoderm node (Hart et al. 2002, Development 129:3597); E1, an EOMES node (Arnold et al. 2008,
+Development 135:501; Teo et al. 2011, Genes Dev 25:238; Costello et al. 2011, Nat Cell Biol 13:1084);
+A1, a NODAL antagonist (Perea-Gomez et al. 2002, Dev Cell 3:745), registered and **not runnable**
+because NODAL is not a modelled species here — its gene declares `max 0` and the runtime holds Nodal
+at a clamped external level in every Runge-Kutta stage, so no rule the module can state will move it;
+and R1, R2, R3, the three leave-one-out entries over rules already in the program (Lolas et al. 2014
+Fig. 3C; Thomson et al. 2011, Cell 145:875, twice).
+
+**Every entry cites a paper that says it acts in mesoderm specification, and the entries that could
+not are excluded and named.** X1, leaving out `Nodal activates SOX17`, is excluded because
+Kanai-Azuma et al. 2002 reports depletion of definitive gut endoderm and says nothing about
+mesoderm; it is kept as a characterisation run outside the list and cannot clear the bound. X2, the
+runtime's `a = 1.0` for a gene with no activators, is excluded because no paper about mesoderm
+specification can source a runtime convention; it is reported as arithmetic. X3, the module's
+unsourced thresholds, X4, the `expected_*` proportions, and X5, `nodal_max` and `decay_length`, are
+excluded as interventions: adjusting any of them is tuning a free number, refused at `8bb9123` and
+`19423bd`.
+
+**The bound is deliberately weak and is not the CS7 range.** Mesoderm share at or above 0.01 at the
+program's final stage, sustained over the last 10% of simulated time, under the default numbers —
+120 cells, so two cells, not floating-point dust. Clearing it means mesoderm becomes non-zero at
+all. Matching 0.694 to 0.773 would be tuning to the target and is not the goal.
+
+**No number is chosen per candidate.** Every added gene takes the `max: 10; basal: 0.05` that TBXT
+and SOX17 already carry, every added protein the `half_life: 2` all four already carry, every added
+activating rule the `strength: 1.0; threshold: 1.0; hill: 2` of the module's own `Nodal activates
+TBXT`, and every added inhibiting rule the `strength: 1.0; threshold: 2.0; hill: 3` of its
+`Tbxt inhibits SOX2`. Nothing is swept.
+
+**Method.** Leave-one-out and set-one-in over the closed list, every entry reported whether or not
+it helps. Then, only if no single component clears the bound, a pairwise pass over the same list:
+n = 10, n-choose-2 = 45, of which the nine pairs containing A1 are not runnable for A1's stated
+reason and 36 are run. Every pair reported. A two-component compensation is exactly what
+single-component runs miss, and it is this lane's leading hypothesis, because the program holds no
+positive feedback on TBXT at all and a sourced autoregulatory loop has two limbs.
+
+**What stays true whatever is found.** The sign correction at `5cbce26` stands and is not reverted:
+`Tbxt activates SOX17` in every run, and a test asserts that no entry removes or flips it. The CS7
+comparison stays falsified on all three layers, with `d55cb19`'s bound carried verbatim: "a sampled
+census of one embryo is not a 1-D axis, and the model names no stage." If the diagnosis lands on a
+threshold, `d55cb19`'s NODAL ceiling travels with it — no measured NODAL threshold maps to model
+units, and Dubrulle et al. 2015 argue induction kinetics rather than a clamped level set fates, so a
+threshold the model cannot source is a finding, not a fix. And whichever candidate restores the
+band, the result says the program lacked it; it does not say it specifies mesoderm. This diagnoses a
+program.
+
+**Disclosed, because it shaped the hypothesis before the list was closed.** On the unmodified
+committed module, with no candidate set in or left out, Tbxt's final level never exceeds its
+competitors anywhere along the gradient: at clamped Nodal 6.0, 4.0, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5 the
+final Tbxt reads 0.244, 0.274, 0.414, 0.775, 1.206, 0.256, 0.225, 0.215, and its highest value,
+1.206 at Nodal 2.0, stands against Sox2 5.667 and Sox17 4.013 at the same point.
+
+**Citations are unverified bibliography.** This lane is free: 0 model requests, no money, no
+network. Every citation above is given from the lane's own knowledge and was not fetched or re-read;
+volumes and pages are as recalled. The repository could not confirm them either — it holds WNT3A
+only as CellPhoneDB ligand-receptor pairs in `genomeos/std/signalling.bio` and EOMES, MIXL1 and
+WNT3A only as marker-gene names in `genomeos/lib/catalog.py`, and no regulatory citation for any of
+them.
