@@ -14256,6 +14256,173 @@ and under what discovery interface, remains audit A's and the reviewer's questio
 are not examined individually. Nothing is said about whether any of the 198 holds a real enhancer: a
 placement failure is a placement failure, not a proven absent element, and the converse holds too.
 
+## The repression calls: the measured layer cannot test one at all, and the mechanism registered for them is not refuted (2026-10-02, lane-repress2)
+
+Two routes had pointed at the compiler's repression calls and neither had held one against a
+measurement. The section above reports that of the assessable rules whose activity axis is
+`represses_target`, **25,943 of 30,480 (0.8511)** place their element in a cell where reader v1 does
+not detect it open, against **29,141 of 51,103 (0.5702)** for `activates_target`
+(`data/results/not_open_profile.json`, genome-wide over all 24 chromosomes). Separately the S4 trace
+found all four judged repressions wrong in direction, which is a count of four and never a rate.
+
+Everything below was registered first, in `data/results/repress2_registration.json` (commit `7a5dd8b`)
+and amendment 1 (`data/results/repress2_registration_amendment.json`, commit `fd07258`), both
+committed before any count was taken. No band, floor, grouping or state is set by this lane: the
+effect band is `not_open_profile`'s own `strength` with `enhancer_target.STRONG_EFFECT = 0.3`, the
+state is `context_evidence.state_for` unchanged, the locus convention and its 1 Mb span are `cell2`'s,
+the floors are `fresh.POSITIVE_FLOOR = 30` and `fresh.LOCUS_FLOOR = cell2.POOLED_LOCUS_FLOOR = 20`,
+and the four retained cell lines are `crispri.MODEL_CELLS`. The run re-enumerates the compiled rules
+itself and reads back the profile's 81,635 assessable rules, 30,480 on the repression axis and 51,103
+on the activation axis; it did, so the population here is the population there.
+
+**Two inherited results are suspended as not yet reproduced** and are labelled so wherever they are
+named: `data/results/context_evidence.json` and `data/results/context_evidence_baserate.json` each
+record grouped inputs through `manifest.files_entry`, which the old rebuild resolved by path, so a
+group was excused without a file being opened. Nothing in this lane reads either file. The state per
+rule comes from `context_evidence.state_for`, which is code and not a result, and every count below is
+taken in this lane's own run with each of its 869 inputs recorded by its own path, never as a group.
+
+### Gate 1: the measured layer holds no repression call to test, and the step it falls at is the cell
+
+Taken before any direction or sign of an outcome was read. A measured pair is eligible when its
+outcome is one of the two labels a significant pair takes, `significant_decrease` or
+`significant_increase`; the gate reads membership in that pair of labels and never which member, and a
+test swaps one for the other and asserts the count does not move.
+
+| population | eligible measured links | independent loci | floors 30 / 20 |
+| --- | --- | --- | --- |
+| `represses_target`, in the rule's own cell | **0** | **0** | no-go |
+| `represses_target`, any cell the screen measured | 4 | 4 | no-go |
+| `activates_target`, in the rule's own cell | 196 | 116 | at or above both |
+| `activates_target`, any cell the screen measured | 251 | 125 | at or above both |
+
+**The repression population is empty, so no direction is read on it and no rate is reported for it.**
+The floors are not lowered. The two cell-matching counts are reported side by side and never pooled: a
+rule is gated by `when: cell_type`, so a measurement in another cell is not a reading of that rule in
+its own cell.
+
+A bare zero says nothing about where it came from, so the run counts how many rules of each axis clear
+each step in turn. Every step reads a gene, a cell, or whether an outcome is one of the two
+significant labels, and none of them reads a sign.
+
+| step | `represses_target` | `activates_target` |
+| --- | --- | --- |
+| rules of this axis | 156,925 | 283,609 |
+| element carries a CRISPRi pair at all | 357 | 1,305 |
+| and a pair on the rule's own gene | 11 | 274 |
+| and in the cell the rule names | **0** | 196 |
+| and that pair is significant | **0** | 196 |
+
+The zero falls at the **cell**, not at significance and not at coverage. Eleven repression rules do
+have a measured pair on their own target gene; none of those measurements was taken in the cell the
+rule is gated on. Four of the eleven carry a significant pair in some other cell, which is the
+cell-ignored count of 4 above.
+
+Two structural facts behind this are worth stating, because a count that missed them would be wrong.
+First, the record holds only **212 measured rule links** in all (element × gene × cell,
+`data/results/response_map_coverage.json`), so a population too small to decide was an expected
+outcome of this count. Second, on a measured element the activity axis is not the direction of a
+measured link: `measured.rule_links` emits a link only from a pair the benchmark calls `Regulated`,
+which is `Significant AND EffectSize < 0`, so every compiled CRISPRi link's action is `activates`,
+while a significant *increase* raises no rule at all and reaches the program only as
+`represses_target` on the element's axis. The run bears this out exactly — of the 195 assessable
+measured-layer rules, **143 sit on a pure `activates_target` axis and none on a pure
+`represses_target` axis**, the remaining 52 holding a combined axis.
+
+### The registered mechanism: predicted, then tested, and not refuted
+
+Registered as a hypothesis before anything was computed: a compiled direction is the sign of the
+single most extreme of 371 AlphaGenome tracks, so where the element's true effect is small the sign is
+close to a coin flip and a rise in some unrelated tissue is read as `represses_target`. The prediction
+that follows is that repression calls concentrate where the effect is weak and where the reader does
+not detect the element open, as four strict comparisons; **the refutation condition was committed with
+it**: any one of the four not being a strict rise refutes the prediction, and a flat or falling share
+is reported as a refutation with no wording in which it reads as support. Two tests hold a flat table
+and a falling table to the refuted reading.
+
+Over the 81,440 assessable rules of the predicted layer, the repression share by effect band and
+reader state. Each denominator is that cell of the table and never the pooled set.
+
+| | `open_in_reader` | `not_open_in_reader` |
+| --- | --- | --- |
+| **strong** | 1,050 / 10,943 = **0.0960** [0.0906, 0.1016] | 3,245 / 8,248 = **0.3934** [0.3829, 0.4040] |
+| **weak** | 3,487 / 15,414 = **0.2262** [0.2197, 0.2329] | 22,698 / 46,835 = **0.4846** [0.4801, 0.4892] |
+
+All four registered comparisons are strict rises, and none of the intervals of a pair overlaps:
+
+| comparison | higher | lower | difference |
+| --- | --- | --- | --- |
+| weak above strong within `open_in_reader` | 0.2262 | 0.0960 | +0.1302 |
+| weak above strong within `not_open_in_reader` | 0.4846 | 0.3934 | +0.0912 |
+| not-open above open within **strong** | 0.3934 | 0.0960 | +0.2974 |
+| not-open above open within **weak** | 0.4846 | 0.2262 | +0.2584 |
+
+**The prediction as registered holds: the repression share rises along both axes.** Nearly half of the
+weak and not-detected-open rules are repression calls, against a tenth of the strong and
+detected-open ones. In the registered wording this is consistent with the mechanism and establishes it
+about no rule; a descriptive concentration is not a demonstration that the sign came from a maximum,
+and nothing here establishes that any rule is wrong. The openness axis remains a consistency check
+between two readings of the same ENCODE chromatin — `not_open_in_reader` means not detected open at
+the reader's registered call, never closed — so it is never independent evidence and never validation.
+
+### The 0-request internal check: cross-cell sign disagreement separates nothing
+
+Each attributed element already carries `predicted_coding_by_cell`, the same deletion sweep's signed
+value on K562, HepG2, GM12878 and IMR-90, so this costs no request. Every one of the 30,480 repression
+and 50,960 activation rules of the predicted layer has a value in all four.
+
+| cells agreeing with the compiled sign | `represses_target` | `activates_target` |
+| --- | --- | --- |
+| 4 of 4 | 9,072 (0.2976) | 15,570 (0.3055) |
+| 3 of 4 | 10,642 | 16,043 |
+| 2 of 4 | 7,316 | 12,426 |
+| 1 of 4 | 2,912 | 5,762 |
+| 0 of 4 | 538 | 1,159 |
+| **disagrees in all four** | **525 of 30,480 = 0.0172** | **1,146 of 50,960 = 0.0225** |
+
+A call that disagrees with the element's own sign in every retained cell is an **outlier, not a
+mechanism**, and the counts say so twice over: it is 1.72 per cent of repression calls, and it is
+*less* common there than among activation calls at 2.25 per cent. Agreement in all four is also
+indistinguishable between the two axes, 0.2976 against 0.3055. So cross-cell sign concordance does not
+separate repression calls from activation calls at all, and whatever is particular about the
+repression population is not a cross-cell sign flip. The rows at 0 of 4 exceed the outlier count by
+13 on each axis because a value of exactly zero has no sign and agrees with neither; those are counted under
+their own name. This is a check between two readings of the same model on the same element, so it is
+never independent evidence and never validation, and the compiled call's own tissue is in general not
+one of the four, so a disagreement may be the cell-specific answer being different rather than the
+call being wrong. No rule is marked wrong by it.
+
+### Reproduced
+
+Both scopes were rebuilt from their own manifests in a clean worktree at the recorded commit, with
+every input recorded by its own path and none as a group.
+
+* **chr21 scope** (`repress2_population_chr21.json`): **568 of 586 leaves compared, nothing
+  differing**, 41 of 41 inputs opened and hashed, 0 unchecked, 0 satisfied from machine-local paths,
+  `must_hold` clean. This is the reproduced citation.
+* **genome-wide** (`repress2_population.json`): **3,944 of 3,962 leaves compared**, 869 of 869 inputs
+  opened and hashed, 0 unchecked, and **no computed value differs**. One `must_hold` failure remains,
+  and it is not a number: at write time two files another lane was editing, `genomeos/manifest.py` and
+  `genomeos/results.py`, were uncommitted on the counting path, and the result records them by name.
+  Every figure above is byte-identical to a run taken before those edits appeared, which is why they
+  are reported rather than re-taken.
+
+The leaves not compared in either scope are the date, the manifest's own code stamp, the timing field
+and the model-dependency block, and the leaf counts reconcile in both.
+
+### What this does and does not settle
+
+It settles that **the measured perturbation layer cannot currently test a repression call**: zero
+links in the rule's own cell, four when the cell is ignored, against floors of 30 links and 20 loci
+that were imported and not chosen. It settles that the repression population is concentrated where
+the most-extreme-track account says it would be, with the refutation condition on the record before
+the table. It settles that cross-cell sign disagreement is not that account's signature.
+
+It settles nothing about whether any individual repression rule is right. No rule, compiled label or
+verdict was changed, nothing was deleted, nothing was refitted, no model request was made and no money
+was spent. The 0.8511 against 0.5702 asymmetry the lane began from is still unexplained in the sense
+that matters: it is now located, and it is still not measured.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
