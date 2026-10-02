@@ -1502,3 +1502,54 @@ handler exists for a condition the environment is supposed to produce, produce i
 loop, a real unreadable directory, a real over-long name — and if that cannot be done, say in the
 test that the branch is unreachable as written rather than letting a patched body stand in for the
 world.
+
+## The answer was on the next line, and a committed registration had already forbidden the method (2026-10-03)
+
+Two lanes were briefed that night on questions **already measured**, by the two sessions whose job
+was to stop exactly that. Both briefs cited a note and neither read the paragraph after it.
+
+**The mechanical cause is worth keeping, because it is not carelessness and a better pattern does not
+fix it.** `docs/ROADMAP.md` records the open question and its answer in consecutive paragraphs, and
+the text wraps:
+
+```
+  which of the two it is has never been measured.
+  That question is now measured, classes and thresholds committed before a single
+```
+
+Any single-line `grep` for the question's own phrasing lands on **"never been measured"** and the
+answer sits on the following line, outside the match. Both of us searched for the phrasing we
+remembered and both of us got the stale sentence. The lane that was sent to do the work found the
+answer on its second tool call, by grepping **all of `docs/`** rather than one file and by using
+`alias|synonym` rather than the question's wording — and then by **reading the section**.
+
+**The guard is not a cleverer regex. It is `grep -A5`, or reading the section.** A pattern tuned to
+the sentence you remember will keep finding the sentence you remember.
+
+**The second half is worse than the duplication.** The coordinator's brief defined a tolerance tier —
+"within 100 kb counts as the right place under another name" — and asked for it as a reported rate.
+The governing registration, committed before a single miss was classified, forbids exactly that, with
+its reason written down:
+
+> The distance classes are DESCRIPTION ONLY and feed no rate, ever. The reason is not taste: a rule
+> that admitted `within_10_kb` would score the nearest-gene baseline as a hit, and that baseline is
+> the control the whole fourth frame was drawn to beat. A benchmark whose hit rule tolerates distance
+> cannot then report that the model follows proximity.
+
+Had the lane complied, it would have broken a committed prohibition and produced a rate that flattered
+the model by scoring its own control as a hit. **It is the same act as using a track share as a
+control after the registration forbade it in writing** — eighth instance in one session of reasoning
+from a quantity without reading what governed it.
+
+**And the measurement, which the briefs were asking to redo:** of 98 strict misses, **15 overlap the
+published target's body, 11 more within 10 kb, 50 within 100 kb, 16 elsewhere** — so 76 of 98 name a
+gene inside 100 kb. The headline is neither of the two things the question posed: **the miss is
+overwhelmingly a NEIGHBOUR, not an alias.** And the control decides what to do about it: the
+tolerance moves the model 10 → 16 and moves the nearest-TSS-in-node baseline 10 → 15, so **the
+comparison the benchmark reports does not move.** Tolerating aliases lifts the proximity rule as much
+as it lifts the model, which is why no second rate was adopted.
+
+**One smaller thing the lane did right and should be the norm.** It ran no acceptance suite and said
+so rather than reporting a green: it had changed no file, so there was nothing to accept, and
+"running the suite to decorate a close-out would be a green with no change behind it." A green
+attached to no change is not evidence; it is furniture.
