@@ -127,8 +127,17 @@ def zero_rate(
     }
 
 
-def one_column(column: str, elements: list[tuple[str, int, int]], list_only: bool) -> dict[str, Any]:
-    """Stream one experiment's BAMs and average the per-BAM RPMs, as the producer's rule does."""
+def one_column(
+    column: str, elements: list[tuple[str, int, int]], list_only: bool, cached: dict | None = None
+) -> dict[str, Any]:
+    """Stream one experiment's BAMs and average the per-BAM RPMs, as the producer's rule does.
+
+    `cached` reuses a previous pass's per-replicate columns instead of re-streaming. The counts are a
+    deterministic function of the BAMs and the rule, so a reuse is the same arithmetic over the same
+    bytes; what it is NOT is a fresh read, so the result records that it came from a cached pass and how
+    many bytes were streamed when that pass was made. The alternative is re-streaming 9.72 GB to commit a
+    result whose numbers a peer's uncommitted file blocked, which buys nothing.
+    """
     experiment = EXPERIMENTS[column]
     chosen = select_bams(experiment)
     print(
@@ -142,6 +151,21 @@ def one_column(column: str, elements: list[tuple[str, int, int]], list_only: boo
         )
     if list_only:
         return {"chosen": chosen, "listed_only": True}
+    if cached is not None:
+        want = [b["accession"] for b in chosen["bams"]]
+        if list(cached.get("accessions") or []) != want:
+            raise SystemExit(
+                f"REFUSED: the cache for {column} was built over {cached.get('accessions')} and the "
+                f"selection is now {want}. A cache over different files is not this column"
+            )
+        per_bam = [
+            {tuple(k.split("|")[:1]) + tuple(int(x) for x in k.split("|")[1:]): v for k, v in d.items()}
+            for d in cached["per_bam_rpm"]
+        ]
+        summaries = cached["per_bam_summaries"]
+        cross = cached["cross"]
+        print(f"   reusing the cached pass for {column}: no bytes re-streamed")
+        return _finish(column, chosen, per_bam, summaries, cross, from_cache=True)
     per_bam, summaries, cross = [], [], []
     for b in chosen["bams"]:
         url = (
@@ -153,10 +177,17 @@ def one_column(column: str, elements: list[tuple[str, int, int]], list_only: boo
         per_bam.append(counter.rpm())
         summaries.append(counter.summary() | {"accession": b["accession"]})
         cross.append(metadata_mapped_reads(b["accession"]))
+    return _finish(column, chosen, per_bam, summaries, cross, from_cache=False)
+
+
+def _finish(column, chosen, per_bam, summaries, cross, from_cache: bool) -> dict[str, Any]:
     averaged = rpm.mean_of_per_bam_rpm(per_bam)
     computed = sum(s["denominator_reads_passing_the_filter"] for s in summaries)
     meta = sum(c["mapped_reads"] or 0 for c in cross)
     return {
+        "from_cache": from_cache,
+        "per_bam_rpm": per_bam,
+        "cross": cross,
         "chosen": chosen,
         "per_bam": summaries,
         "rpm": averaged,
@@ -278,6 +309,12 @@ def manifest(columns: dict[str, Any], pairs: list[dict], elements: list) -> dict
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--list-only", action="store_true", help="resolve and check the BAMs, stream none")
+    ap.add_argument(
+        "--reuse-cache",
+        action="store_true",
+        help="reuse a previous pass's per-replicate columns instead of re-streaming 9.72 GB. The counts "
+        "are deterministic given the BAMs, and the result records that it came from a cached pass",
+    )
     args = ap.parse_args()
     t0 = time.time()
 
@@ -288,7 +325,8 @@ def main() -> int:
     elements = sorted(label_of)
     print(f"{len(pairs)} screen pairs over {len(elements)} elements")
 
-    columns = {c: one_column(c, elements, args.list_only) for c in ("DHS.RPM", "H3K27ac.RPM")}
+    cache = json.loads(CACHE.read_text()) if (CACHE.exists() and args.reuse_cache) else {}
+    columns = {c: one_column(c, elements, args.list_only, cache.get(c)) for c in ("DHS.RPM", "H3K27ac.RPM")}
     if args.list_only:
         print("--list-only: nothing streamed")
         return 0
@@ -324,6 +362,7 @@ def main() -> int:
                 "per_bam": columns[c]["per_bam"],
                 "combination": columns[c]["combination"],
                 "metadata_cross_check": columns[c]["metadata_cross_check"],
+                "from_cached_pass": columns[c]["from_cache"],
                 "between_replicates": columns[c]["between_replicates"],
                 "zero_rate": zeros[c],
             }
@@ -363,7 +402,20 @@ def main() -> int:
 
     CACHE.parent.mkdir(parents=True, exist_ok=True)
     CACHE.write_text(
-        json.dumps({c: {"|".join(map(str, k)): v for k, v in columns[c]["rpm"].items()} for c in columns})
+        json.dumps(
+            {
+                c: {
+                    "accessions": [b["accession"] for b in columns[c]["chosen"]["bams"]],
+                    "per_bam_rpm": [
+                        {"|".join(map(str, k)): v for k, v in d.items()} for d in columns[c]["per_bam_rpm"]
+                    ],
+                    "per_bam_summaries": columns[c]["per_bam"],
+                    "cross": columns[c]["cross"],
+                    "averaged": {"|".join(map(str, k)): v for k, v in columns[c]["rpm"].items()},
+                }
+                for c in columns
+            }
+        )
     )
 
     print()
