@@ -1,0 +1,331 @@
+{
+  "result": "astroreg2_registration",
+  "date": "2026-10-02",
+  "status": "a registration, written before anything is computed. No gain computed, no score taken, no request sent, no money spent, no astrocyte value touched",
+  "lane": "lane-astro",
+  "registration": "AstroREG-2",
+  "supersedes_nothing": "the original registration stands and its calibration gate stands FAILED. This is a separate registration with a different gate, not a revision of that one",
+  "cites": {
+    "registration": "data/results/astroreg_registration.json",
+    "sha256": "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a"
+  },
+  "why_a_different_gate": "the registered endpoint is an AUPRC DIFFERENCE, which depends only on how pairs are RANKED. Activity enters the frozen model only through log_activity = log1p(sqrt(dhs * h3k27ac)) and activity_over_distance = log_activity - log(distance), both in log space, so a per-column factor becomes an additive shift on both features, and a shift common to every pair cannot move a ranking. The old gate measured the factor and refused it; this one measures whether the endpoint moves",
+  "and_why_that_argument_is_not_enough": "the shift log1p(cA) - log1p(A) would be the constant log c = -0.2436 if every pair had large activity. It does not: it runs from 0.0000 to -0.2402 across these pairs, so its SPREAD is as large as the constant it would otherwise be, and 37% of pairs lie below activity 1.0 where log1p is non-linear. A spread in the shift is exactly what moves a ranking, so the a priori argument that the endpoint is safe is NOT established by the algebra on this data. It has to be measured, and that is the gate",
+  "gate": {
+    "what_is_computed": "the deletion gain on the K562 HELD-OUT pairs TWICE, with the frozen weights unchanged: once with the PUBLISHED activity columns, once with the activity RECONSTRUCTED under amendment 2's rule and NO RESCALING of any kind",
+    "weights": "fitted once on the K562 TRAINING pairs with the PUBLISHED columns, and reused unchanged for both runs. Only the held-out pairs' activity differs between the two, which is what makes the comparison about the input and not about the fit",
+    "pass_requires_both": true,
+    "max_abs_gain_shift": 0.01,
+    "min_score_spearman": 0.99,
+    "rule": "PASS only if BOTH |gain_reconstructed - gain_published| <= 0.01 AND the Spearman of the per-pair scores between the two runs >= 0.99. Either one failing fails the gate. The endpoint tolerance alone could be met by two rankings that differ and happen to integrate to the same area; the rank agreement alone could be met while the gain still moved more than the tolerance allows",
+    "both_numbers_written_before_either_was_computed": true,
+    "no_rescaling": "the reconstructed columns enter exactly as computed. Fitting any factor, even one derived from K562, would make the astrocyte values depend on a K562 quantity and would be a refitting of the feature definition, which the claim forbids",
+    "on_failure": "the route CLOSES. If the reconstruction moves the gain by more than 0.01 or disagrees on ranking, then the reconstructed activity is not interchangeable with the published activity for this endpoint, no astrocyte value may be computed from it, and that is the result"
+  },
+  "history": {
+    "this_is_not_a_first_attempt": "AstroREG-2 was written AFTER two scale gates had failed and after both of their numbers had been seen. A reader must not be able to mistake it for a first attempt, so the figures are here rather than in a covering note",
+    "attempt_1": {
+      "rule": "this lane's own read rule, registered before it ran: ENCODE's FILTERED GRCh38 alignments, duplicates kept, supplementary dropped, one filter for numerator and denominator, counts pooled across replicates",
+      "result": "data/results/astroreg_calibration_h3k27ac_k562.json",
+      "h3k27ac_spearman": 0.9733140501519615,
+      "h3k27ac_median_ratio": 0.6070182726597586,
+      "verdict": "FAILED both conditions of the scale gate",
+      "what_it_established": "the denominator was right -- the computed total matched ENCODE's own published mapped-read figure exactly, 86,297,833 -- so the gap was located in the numerator"
+    },
+    "attempt_2": {
+      "rule": "the PRODUCER's own documented rule, read from mayasheth/chrom-annotate at commit 91cda73ebe3a19153a582cab18cbf7ff70d85cfc with a line cited for every term, over the BAMs its own metadata names. No candidate rule was tried against the data",
+      "result": "data/results/astroreg_calibration_producer_rule_k562.json",
+      "dhs_spearman": 0.99747,
+      "dhs_median_ratio": 0.7603,
+      "h3k27ac_spearman": 0.99385,
+      "h3k27ac_median_ratio": 0.808,
+      "verdict": "FAILED the scale condition on both columns while PASSING the rank condition on both",
+      "what_it_established": "the producer's documented rule reproduces the ORDERING of both columns almost exactly and leaves a residual multiplicative gap, 1.315x on DNase and 1.238x on H3K27ac. The two factors differ, so no single shared constant explains both"
+    },
+    "the_old_registration_is_final": "its gate failed and stays failed. AstroREG-2 does not reopen it, does not rescale anything to satisfy it, and must never be described as the old test passing",
+    "why_a_new_registration_rather_than_a_third_amendment": "the old gate asked whether a QUANTITY is reproduced. This asks whether the ENDPOINT is unchanged. A third amendment to a failed gate would be the thing a registration exists to prevent; a new registration with a different, pre-committed, falsifiable gate is not"
+  },
+  "still_blind": {
+    "not_computed_when_this_was_written": [
+      "the K562 ENDPOINT comparison: neither gain has been computed, with published or reconstructed activity, and the per-pair score correlation between the two runs is unknown",
+      "no astrocyte outcome has been read, no astrocyte activity has been reconstructed, and no astrocyte deletion value has been requested or computed"
+    ],
+    "what_was_already_seen": "the two scale gates' correlations and ratios, listed under `history`, and the published activity distribution quoted in the caveat below. Those are what make this a reconstruction check rather than a blind one, and they are disclosed rather than minimised",
+    "the_gate_can_genuinely_fail": "a third of the held-out pairs sit where log1p is non-linear and the per-element reconstruction carries real scatter, so the endpoint is not guaranteed to survive. If it moves by more than 0.01 the route closes. That is what distinguishes a gate from a formality"
+  },
+  "claim": {
+    "claim": "the deletion gain in cultured primary human astrocytes: AUPRC of 'activity + distance + deletion' minus AUPRC of 'activity + distance', both scored with the weights frozen on the K562 training pairs. Nothing is refitted on astrocyte data -- not the weights, not a threshold, not a feature definition",
+    "what_changed": "only the ROUTE to one of the claim's inputs: how the astrocyte activity term would be obtained. The endpoint, the arms, the labels, the interval rule, the three readings and the not_claimed list are the original's and are untouched",
+    "why_the_power_figure_carries_over": "a power figure describes a CLAIM -- its effect size, its prevalence, its number of positives and independent loci -- and none of those changed. 133 positives over 74 independent loci at 2.9% prevalence is still what is being tested, so the registered figure still describes it. Had the claim changed, the figure would have had to be recomputed; it did not, so it does not",
+    "required_quote": "exploratory (prevalence-matched power 0.79, conservative: simulated with ~27 positives against the test's 133)",
+    "required_quote_rule": "this exact form of words is what every quote of the class must use; the class may not travel without the figure and both limitations",
+    "travels_beside_it": {
+      "attenuation_0_5x_share": 0.81,
+      "rule": "the 0.5x figure travels beside the class in every quote of it",
+      "bar": "the 0.5x share may NOT be quoted as power at half the effect: shrinking the deletion arm scales the separation and the bootstrap spread together, so the shares stay nearly flat across 1x, 0.5x and 0.25x while the median achieved gain falls. It shows that the detectability of a proportionally smaller separation is similar, not that power survives a weaker true effect against unchanged noise"
+    },
+    "limitation_prevalence": "the first figure of 0.96 was computed at K562's own 6.5% prevalence and does not describe a test run at 2.9%; each resample is matched to the astrocyte prevalence by downsampling its POSITIVES, which is the direction that cannot invent data",
+    "limitation_sample_size": "the simulation keeps a mean of about 27 positives, because that is what 74 of K562's loci can supply at the matched prevalence, while the real test has 133. The figure is therefore CONSERVATIVE for sample size and that is a stated limitation, not grounds to reclassify"
+  },
+  "log1p_caveat": {
+    "pairs": 1918,
+    "implied_constant_activity_factor": 0.7837872160223079,
+    "log_of_that_factor": -0.24361770360439386,
+    "activity_quantiles": {
+      "min": 0.0,
+      "p05": 0.20855065396205305,
+      "p25": 0.689764106108023,
+      "median": 1.7352689422755194,
+      "p75": 4.912119571360514,
+      "p95": 29.783999655042233,
+      "max": 79.99576491716283
+    },
+    "share_below": {
+      "0.1": 0.01824817518248175,
+      "0.5": 0.16423357664233576,
+      "1.0": 0.36965589155370177,
+      "3.0": 0.627215849843587
+    },
+    "shift_range": {
+      "min": -0.24021767660059368,
+      "median": -0.14696880432793225,
+      "max": 0.0
+    },
+    "shift_spread": 0.24021767660059368,
+    "reading": "the shift log1p(cA) - log1p(A) would be the constant log c = -0.2436 if every pair had large activity. It does not: it runs from 0.0000 to -0.2402 across these pairs, so its SPREAD is as large as the constant it would otherwise be, and 37% of pairs lie below activity 1.0 where log1p is non-linear. A spread in the shift is exactly what moves a ranking, so the a priori argument that the endpoint is safe is NOT established by the algebra on this data. It has to be measured, and that is the gate"
+  },
+  "not_claimed": [
+    "not a demonstration that the reconstructed columns equal the published ones: they do not, and the gate that measured that failed. This asks only whether the endpoint is indifferent to the difference",
+    "not a licence to use the reconstruction for anything else: a quantity that leaves one AUPRC difference unchanged is not thereby validated for a threshold, a percentile, a regression coefficient or any claim about activity itself",
+    "not a replication of the K562 result, not independence of the genomic regions, not a cell-type-specific claim about astrocytes, and no claim at all until the comparison is registered before any score is computed -- the original's not_claimed list carries over in full",
+    "not an astrocyte result of any kind: this lane computes none"
+  ],
+  "requests_sent": 0,
+  "money_spent": 0,
+  "spending_approval": "Albert's approval named the ORIGINAL registration by hash and cannot carry to this one. If this gate passes, a new approval is required before any of the 1,322 is spent, and this lane spends none either way",
+  "left_undone": [
+    "the endpoint comparison itself: both gains, their difference and the per-pair score correlation are still to be computed",
+    "the residual scale factor between reconstructed and published activity is not explained and was not investigated; this registration asks whether it matters to the endpoint, not what it is",
+    "nothing is established about astrocytes by this file or by the run it registers"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/astroreg_registration.json",
+        "version": "the frozen original, sha256 43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a; cited, not amended, and its failed calibration gate is not reopened"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark heldout_5_cell_types and training_K562 (Gschwind et al. 2025)",
+        "version": "fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/astroreg_registration.json",
+        "sha256": "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a",
+        "bytes": 37734,
+        "partition": null,
+        "role": "the claim, the power figure and the not_claimed list are carried from it unchanged; its sha256 is recorded and no term of it is moved"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "role": "the K562 held-out pairs and their published activity columns, read here only to state the size of the comparison and where log1p is non-linear; already-read development evidence"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "max_abs_gain_shift": 0.01,
+      "min_score_spearman": 0.99,
+      "k562_heldout_pairs": 1918,
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "requests_sent": 0,
+      "money_spent": 0,
+      "astrocyte_values_computed": 0
+    },
+    "exclusions": [
+      "no gain is computed here, with published or reconstructed activity: this file is the design, written first",
+      "no AlphaGenome request is sent and this script has no code path that could send one",
+      "no astrocyte value of any kind is read or computed",
+      "no rescaling factor is fitted, here or in the run this registers",
+      "the failed calibration gate is not re-run and not reopened"
+    ],
+    "partitions": {
+      "k562_heldout": "the endpoint comparison set, already-read development evidence",
+      "k562_training": "where the frozen weights come from, unchanged between the two runs",
+      "astrocyte": "not touched by this lane at all"
+    },
+    "code_cleanliness": {
+      "git_sha": "37857d0704ef9e5afe9fe6a52a1e2628298a8e8a",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/astroreg2_register.py"
+      ],
+      "counting_path_count": 124,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "37857d0704ef9e5afe9fe6a52a1e2628298a8e8a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/astroreg2_registration.json"
+      ],
+      "argv": [
+        "scripts/astroreg2_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 209,
+      "opens_under_data": 4,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
