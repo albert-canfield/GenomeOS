@@ -1453,3 +1453,52 @@ no verdict. **What it does not close, recorded in the wrapper and asserted by a 
 commit can still weaken its own pre-push check**, because the hook runs the `pre-push.sh`
 of the commit being pushed. That is the commit review's case — a visible diff in a tracked
 file. **The wrapper closes the SILENT case.**
+
+## The handler could not be reached, and its plant proved it against a patched body (2026-10-02)
+
+A guard was fixed, planted, reviewed and committed, and **the branch it added could not fire.** It
+had been reasoned about rather than measured, by the person who asked for it.
+
+`genomeos/results.py: _is_registry` decided whether a write was going into the result registry, and
+the flag it returned gated **four** refusals. It read `results_dir.resolve() == RESULTS_DIR.resolve()`
+inside a `try`, with `except OSError: return False` — failing OPEN, so an exception turned all four
+refusals off at once. That was found, and the fix was `except OSError: return True`: a question that
+cannot be answered is treated as the registry, so the write refuses. It was planted both ways and it
+went in at `8560b82`.
+
+**Measured afterwards, on CPython 3.12 and APFS:**
+
+| condition | `Path.resolve()` non-strict | `os.path.samefile` |
+| --- | --- | --- |
+| symlink loop | **`RuntimeError`** | `OSError` errno 62 |
+| unsearchable parent | **returns, no raise** | `OSError` errno 13 |
+| 300-character name | **returns, no raise** | `OSError` errno 63 |
+
+`issubclass(RuntimeError, OSError)` is **False**. So on a symlink loop the writer *raised* instead of
+refusing, and on the other two `resolve` handed the path back unchanged and the spelling comparison
+answered `False` — the fail-open it was supposed to have closed. **The `except OSError` branch was
+unreachable through the filesystem.** It fired in exactly one place: a test that patched the module's
+source to raise.
+
+**That is the part worth keeping.** The counterfactual was real and it passed, so nothing looked
+wrong. But it was planted against a **patched body**, and what it proved was that the handler's logic
+was correct *if reached* — never that anything could reach it. A plant that constructs its own trigger
+tests the branch; it does not test the path to the branch. The question "can this condition actually
+arise from the thing the code touches?" was never asked, and it is a different question from "does
+the handler do the right thing".
+
+The fix is identity by file — `os.path.samefile`, which asks the filesystem which file a path names —
+and it closes the hole and makes the handler reachable **for the first time**, because `samefile`
+raises `OSError` for all three conditions where `resolve` raised the wrong class or nothing at all.
+A reader seeing `except OSError` merely moved would otherwise assume it had been widened.
+
+**Whose error it was.** The coordinator's, not the lane's: it pressed for `OSError -> True` after
+reasoning about the handler, and reviewed and approved a plant that patched the source rather than
+asking whether the filesystem could produce the exception. The lane that implemented the real fix
+measured all three conditions, found the gap, and reported it as a third hole nobody had briefed.
+
+**The rule: a plant that supplies its own trigger proves the branch, not the reachability.** When a
+handler exists for a condition the environment is supposed to produce, produce it — a real symlink
+loop, a real unreadable directory, a real over-long name — and if that cannot be done, say in the
+test that the branch is unreachable as written rather than letting a patched body stand in for the
+world.
