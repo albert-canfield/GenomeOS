@@ -246,15 +246,26 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
     assert block["counting_path_count"] == len(block["counting_path"]) > 1
     assert v2.ENTRY in block["counting_path"]
     assert "genomeos/attribution/crispri.py" in block["counting_path"]
-    assert block["own_code_is_committed"] is True, (
-        "this lane's own code is uncommitted, so no commit reproduces a result written now: "
-        f"{block['own_uncommitted_code']}"
-    )
-    assert block["foreign_uncommitted_code_on_the_counting_path"] == [], (
-        "another lane's uncommitted file is on this script's counting path, so the result could not be "
-        f"rebuilt from any commit: {block['foreign_uncommitted_code_on_the_counting_path']}"
-    )
+    # Until 2026-10-02 this test also asserted `own_code_is_committed is True` and
+    # `foreign_uncommitted_code_on_the_counting_path == []`. Those assert the state of this shared
+    # working tree, not the behaviour of any code: four lanes commit here, so the test went red for a
+    # peer's uncommitted file and green in a quiet moment, while the mechanism behind the fields was
+    # exercised neither way. Measured: in two consecutive full runs that assertion was the only red in
+    # about 4,160 tests, naming a different lane's file each time. What they stand on is now asserted
+    # as invariants that hold in any tree state, in the style of tests/test_context_evidence.py, and
+    # the three states they claimed to check are made deterministically in a planted repository in
+    # tests/test_code_cleanliness_hermetic.py, with a counterfactual that strips the foreign-on-path
+    # computation and must then fail.
+    #
+    # NO ENFORCEMENT MOVED, and the refusal that matters never lived here. scripts/check_staged.py
+    # refuses the commit of any staged data/results/*.json whose block has `own_code_is_committed`
+    # false or `foreign_uncommitted_code_on_the_counting_path` non-empty; save_result quarantines a
+    # block that did not come from the shared function at all, which it checks by key set and not by
+    # these two values. This test was a readiness check for writing a result, filed as a unit test.
+    for p in block["foreign_uncommitted_code_on_the_counting_path"]:
+        assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]
     assert set(block["own_uncommitted_code"]) <= v2.OWN_CODE
+    assert block["own_code_is_committed"] == (block["own_uncommitted_code"] == [])
     assert not set(block["foreign_uncommitted_code"]) & v2.OWN_CODE
 
 
