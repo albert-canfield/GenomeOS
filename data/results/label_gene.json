@@ -1,0 +1,497 @@
+{
+  "result": "label_gene",
+  "date": "2026-10-02",
+  "lane": "lane-labelgene",
+  "question": "A compiled rule line claims `when: cell_type = X`, which reads as a property of the ELEMENT. X is the argmax over the model's RNA-seq track names, so it is the tissue whose predicted EXPRESSION OF THE TARGET GENE changed most when the element was deleted. Is the label a property of the element, of the gene, or of the locus?",
+  "registered_at": "data/results/label_gene_registration.json, committed ALONE at 47835d1 (design code e13992a) before any concordance existed, and amended additively and still pre-count by data/results/label_gene_registration_amendment_1.json",
+  "structure": {
+    "verified_here": {
+      "rule_lines": 5176,
+      "predicted_rules": 5174,
+      "experimental_rules": 2,
+      "distinct_elements": 5174,
+      "genes": 193,
+      "genes_with_two_or_more_elements": 179
+    },
+    "coordinator_figures": {
+      "rule_lines": 5176,
+      "predicted_rules": 5174,
+      "experimental_rules": 2,
+      "distinct_elements": 5176,
+      "genes": 193,
+      "genes_with_two_or_more_elements": 180
+    },
+    "disagreements": {
+      "distinct_elements": {
+        "coordinator": 5176,
+        "verified_here": 5174
+      },
+      "genes_with_two_or_more_elements": {
+        "coordinator": 180,
+        "verified_here": 179
+      }
+    },
+    "element_blocks_in_the_file": 5374,
+    "elements_per_gene_mean": 26.8083,
+    "elements_per_gene_max": 153,
+    "every_element_appears_exactly_once": true,
+    "symmetric_test_cannot_be_run": ", registered in advance so that no later reading borrows it.\nEvery element of `data/organisms/human/noncoding_chr21.bio` appears in exactly one predicted\nrule, paired with exactly one gene. The SYMMETRIC test - within-ELEMENT label concordance across\none element's different target genes, which is what would directly establish an ELEMENT property\n- therefore CANNOT BE RUN on this population at all. A result at the control level here means\n\"NOT a gene property and not a locus property\". It does NOT mean \"an element property\". That\nsecond claim is a reading this data cannot deliver, and it may not be made from this lane's\nnumbers in any document."
+  },
+  "control_1": {
+    "value": 0.017291,
+    "rule": "CONTROL 1, the independent-draw control: the concordance expected if each element's label were drawn independently from chr21's OWN compiled label distribution over this population, i.e. sum of p squared over labels. It is NOT one over the track count. A label's genome-wide frequency already reflects properties of its tracks - scale, dynamic range, how often that track carries the extreme - before any cell information is supposed, so the track count would be a control against a uniform draw nobody claims. The argmaxcell registration says this in writing: \"that is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.\" Control 1 is quoted beside every ratio this lane reports.",
+    "is_a_committed_constant": "Control 1 is computed ONCE over the whole population and then held fixed through every bootstrap resample. It is the stated null, not a second estimate, so it contributes no width to any interval. This is an ASSUMPTION and it is printed beside every interval: an interval on a ratio to a fixed denominator is narrower than one that also carried the denominator's sampling error, and no reading of this lane may be quoted without this sentence.",
+    "distinct_labels": 253,
+    "one_over_the_label_count_for_comparison_only": 0.003953,
+    "top_labels": {
+      "K562": 371,
+      "placenta": 209,
+      "CD14_positive_monocyte": 179,
+      "HepG2": 154,
+      "Whole_Blood": 135,
+      "keratinocyte": 133,
+      "Karpas_422": 113,
+      "CD8_positive__alpha_beta_T_cell": 112,
+      "psoas_muscle": 109,
+      "GM23338": 99
+    }
+  },
+  "primary": {
+    "rule": "WITHIN-GENE LABEL CONCORDANCE: over the unordered PAIRS of elements that share one target gene, the share of pairs whose two rules carry the same `when: cell_type` label. Pooled over genes as (concordant pairs summed over genes) / (pairs summed over genes), so a gene with many elements carries more pairs - which is why the INTERVAL, and not the point, is clustered by gene.",
+    "within_gene_concordant_pairs": 10193,
+    "within_gene_pairs": 169514,
+    "within_gene_concordance_primary": 0.06013072666564413,
+    "within_gene_concordance_matched": 0.06013072666564414,
+    "different_gene_concordance_matched": 0.020936539836729114,
+    "different_gene_concordant_pairs": 218665,
+    "different_gene_pairs": 13213037,
+    "matched_weight_used": 1.0
+  },
+  "concentration": {
+    "within_gene_pairs": 169514,
+    "top_n": 5,
+    "top_genes": [
+      "TIAM1",
+      "PCBP3",
+      "DSCAM",
+      "KCNJ6",
+      "RIPK4"
+    ],
+    "top_gene_pairs": [
+      11628,
+      10878,
+      8385,
+      8001,
+      6786
+    ],
+    "share_of_pairs_from_the_top_genes": 0.269464,
+    "genes_with_at_least_one_pair": 179,
+    "no_threshold": "printed as a fact about the estimand; no reading turns on it"
+  },
+  "control_2": {
+    "rule": "A bin CONTRIBUTES to the matched comparison only if it holds at least 10 within-gene pairs AND at least 10 different-gene pairs over the FULL population. The set of contributing bins is fixed once on the full population and held through every resample, so the estimand does not move between resamples. The within-gene weight of a non-contributing bin is dropped and the remaining weights renormalised, and the DROPPED WEIGHT is reported. If the dropped weight exceeds 0.20 the matched comparison is INCONCLUSIVE BY RULE and prints no reading, because most of the within-gene distance distribution would then have no different-gene counterpart to compare against.",
+    "matching_rule": "STRATIFIED EXACT REWEIGHTING at bin resolution, and not a sampled match, because a sampled match throws away pairs and adds its own sampling noise. The bin edges are decade bins in base pairs, fixed here: [0, 1000, 10000, 100000, 1000000, 10000000, 'inf'], each bin half-open as (lower, upper] except the first, which includes 0. The TOLERANCE is the bin width itself: two pairs are 'matched in distance' when they fall in the same decade bin, and no finer claim of matching is made anywhere in this lane. The matched different-gene concordance is the within-bin different-gene concordance combined with weights equal to the WITHIN-GENE pair share of each bin, so the two arms are compared on one distance distribution. The within-gene arm is reported twice: the PRIMARY over all its own bins, and a reweighted within_matched over the contributing bins with exactly the weights the different-gene arm is given, and only that second figure is ever compared with the different-gene arm.",
+    "contributing": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "contributing_labels": [
+      "0-1kb",
+      "1kb-10kb",
+      "10kb-100kb",
+      "100kb-1Mb",
+      "1Mb-10Mb"
+    ],
+    "within_gene_pairs_per_bin": {
+      "0-1kb": 3646,
+      "1kb-10kb": 23427,
+      "10kb-100kb": 98070,
+      "100kb-1Mb": 43023,
+      "1Mb-10Mb": 1348,
+      ">10Mb": 0
+    },
+    "different_gene_pairs_per_bin": {
+      "0-1kb": 168,
+      "1kb-10kb": 1746,
+      "10kb-100kb": 57908,
+      "100kb-1Mb": 1100739,
+      "1Mb-10Mb": 7319765,
+      ">10Mb": 4732711
+    },
+    "dropped_within_gene_weight": 0.0,
+    "maximum_dropped_weight": 0.2,
+    "inconclusive_by_rule": false
+  },
+  "deciding_intervals": {
+    "within_matched_over_different_matched": {
+      "ratio": "within_matched / different_matched",
+      "ci95": [
+        2.012928,
+        4.055165
+      ],
+      "identical_resample_share": 0.0005,
+      "degenerate": false,
+      "resamples": 2000,
+      "band": "far_above",
+      "relative_half_width": 1.021118,
+      "band_half_width": 0.25,
+      "wider_than_the_band": true,
+      "instrument_assumptions": "GENES are the clusters; elements within a gene are NOT assumed independent. both arms from the SAME gene resample, so their common cluster draw cancels. A percentile bootstrap over whole genes, 2000 usable resamples, seed 20261002. The identical-resample share above is the share of resamples returning the modal value: at 1.0 the interval is degenerate and decides nothing, and the reading routes to a Wilson bound on the cluster count."
+    },
+    "within_matched_over_control_1": {
+      "ratio": "within_matched / control_1",
+      "ci95": [
+        2.941534,
+        4.12135
+      ],
+      "identical_resample_share": 0.0005,
+      "degenerate": false,
+      "resamples": 2000,
+      "band": "far_above",
+      "relative_half_width": 0.589908,
+      "band_half_width": 0.25,
+      "wider_than_the_band": true,
+      "instrument_assumptions": "GENES are the clusters; elements within a gene are NOT assumed independent. Control 1 is computed ONCE over the whole population and then held fixed through every bootstrap resample. It is the stated null, not a second estimate, so it contributes no width to any interval. This is an ASSUMPTION and it is printed beside every interval: an interval on a ratio to a fixed denominator is narrower than one that also carried the denominator's sampling error, and no reading of this lane may be quoted without this sentence.. A percentile bootstrap over whole genes, 2000 usable resamples, seed 20261002. The identical-resample share above is the share of resamples returning the modal value: at 1.0 the interval is degenerate and decides nothing, and the reading routes to a Wilson bound on the cluster count."
+    },
+    "different_matched_over_control_1": {
+      "ratio": "different_gene_matched / control_1",
+      "ci95": [
+        0.896331,
+        1.672779
+      ],
+      "identical_resample_share": 0.0005,
+      "degenerate": false,
+      "resamples": 2000,
+      "band": "crosses_a_band_edge",
+      "relative_half_width": 0.388224,
+      "band_half_width": 0.25,
+      "wider_than_the_band": true,
+      "instrument_assumptions": "GENES are the clusters; elements within a gene are NOT assumed independent. Control 1 is computed ONCE over the whole population and then held fixed through every bootstrap resample. It is the stated null, not a second estimate, so it contributes no width to any interval. This is an ASSUMPTION and it is printed beside every interval: an interval on a ratio to a fixed denominator is narrower than one that also carried the denominator's sampling error, and no reading of this lane may be quoted without this sentence.. A percentile bootstrap over whole genes, 2000 usable resamples, seed 20261002. The identical-resample share above is the share of resamples returning the modal value: at 1.0 the interval is degenerate and decides nothing, and the reading routes to a Wilson bound on the cluster count."
+    }
+  },
+  "primary_ratio_interval": {
+    "ratio": "within_primary / control_1",
+    "ci95": [
+      2.941534,
+      4.12135
+    ],
+    "identical_resample_share": 0.0005,
+    "degenerate": false,
+    "resamples": 2000,
+    "band": "far_above",
+    "relative_half_width": 0.589908,
+    "band_half_width": 0.25,
+    "wider_than_the_band": true,
+    "instrument_assumptions": "GENES are the clusters; elements within a gene are NOT assumed independent. Control 1 is computed ONCE over the whole population and then held fixed through every bootstrap resample. It is the stated null, not a second estimate, so it contributes no width to any interval. This is an ASSUMPTION and it is printed beside every interval: an interval on a ratio to a fixed denominator is narrower than one that also carried the denominator's sampling error, and no reading of this lane may be quoted without this sentence.. A percentile bootstrap over whole genes, 2000 usable resamples, seed 20261002. The identical-resample share above is the share of resamples returning the modal value: at 1.0 the interval is degenerate and decides nothing, and the reading routes to a Wilson bound on the cluster count."
+  },
+  "resampling": {
+    "resamples_requested": 2000,
+    "resamples_used": 2000,
+    "resamples_with_an_empty_contributing_bin": 0,
+    "seed": 20261002,
+    "clusters": 193,
+    "cluster_minimum": 10,
+    "met_minimum": true,
+    "cluster_rule": "GENES ARE THE CLUSTERS. One resample draws G genes with replacement from the G genes of the population, G being the number drawn each time. A WITHIN-GENE pair enters with the multiplicity of its gene. A DIFFERENT-GENE pair enters with the PRODUCT of its two genes' multiplicities - the dyadic cluster bootstrap - because such a pair is only observed when both of its genes are in the sample. Elements within a gene are NOT assumed independent; that is the whole reason for clustering."
+  },
+  "reading": {
+    "which": "c",
+    "in_the_registrations_own_words": "INCONCLUSIVE - THE DATA CANNOT TELL. At least one deciding interval crosses a band edge, so the registered rule selects no substantive reading. This is not 'no information'. ALSO: INCONCLUSIVE BY CONSTRUCTION - THE DATA CANNOT TELL. A deciding interval's achieved relative half-width exceeds the band's own half-width of 0.25, so by the registered power rule the comparison cannot separate 'at control' from 'far above' whatever its point estimate.",
+    "selected_by": "the three deciding intervals above, by the registered band rule and the registered floor and power rules, never by a point estimate. Every route is evaluated and all of them are reported, so the verdict is not whichever route was tested first",
+    "every_registered_route": {
+      "band_rule": {
+        "reads": "c",
+        "words": "INCONCLUSIVE - THE DATA CANNOT TELL. At least one deciding interval crosses a band edge, so the registered rule selects no substantive reading. This is not 'no information'."
+      },
+      "floor_rule": {
+        "fired": false,
+        "words": null
+      },
+      "power_rule": {
+        "fired": true,
+        "words": "INCONCLUSIVE BY CONSTRUCTION - THE DATA CANNOT TELL. A deciding interval's achieved relative half-width exceeds the band's own half-width of 0.25, so by the registered power rule the comparison cannot separate 'at control' from 'far above' whatever its point estimate."
+      },
+      "the_weakest_reading_any_route_selects_is_reported": "(c) wherever it is reached: a lane may not pick the route that reads better"
+    },
+    "links": {
+      "within_matched_far_above_different_matched": true,
+      "within_matched_far_above_control_1": true,
+      "different_matched_position_against_control_1": "crosses_a_band_edge",
+      "what_is_established_and_what_is_not": "stated as a fact about the three intervals and NOT as a reading, because the reading is (c) and may not be read upward from here: the two conditions clause (a) names are both at `far_above`, while the matched different-gene arm's own position against control 1 crosses a band edge, so the data cannot tell (a-i) from (a-ii) and the registered procedure returns (c).",
+      "a_defect_in_this_lanes_own_registration_disclosed_rather_than_resolved": "TWO registered clauses pull against each other on this outcome and neither is softened here. (i) READINGS['a'] names two conditions and says its sub-cases 'neither denies (a)'; (ii) READINGS['c'] says ANY deciding interval crossing a band edge reads (c), and the registered procedure read_the_comparison - committed at e13992a before any count - tests (ii) first. The procedure therefore returns (c) and this lane reports (c), taking the WEAKER reading by rule rather than the clause that reads better. Separately, the registered POWER rule is miscalibrated for a ratio far from 1: it compares an achieved half-width against the band's half-width of 0.25 without reference to where the interval sits, so it can fire on an interval nowhere near a band edge. It is applied as registered and not weakened; it is named here as a defect for the owner, and it changes nothing, because the band rule reaches (c) on its own."
+    },
+    "all_four_readings_as_registered": {
+      "a": "GENE PROPERTY. within_matched >> different_gene_matched AND within-gene >> control 1. The label travels with the target gene and not merely with the neighbourhood. Two sub-cases are reported and neither denies (a): (a-i) different_gene_matched ~ control 1, a gene property alone; (a-ii) different_gene_matched >> control 1 as well, the coordinator's literal chain within-gene >> matched different-gene >> control 1, which is a gene property WITH a regional component on top. A pure gene property would put the different-gene arm AT control 1, so requiring the second link of that chain would have denied the very reading it was written to describe; it is recorded as a sub-case instead.",
+      "a_prime": "LOCUS / REGIONAL PROPERTY. within_matched ~ different_gene_matched, and BOTH >> control 1. Neighbouring genes are often co-expressed, so this is a real third outcome and not a weak form of (a): the label is a property of the neighbourhood, not of the gene - and it is not evidence of an element property either.",
+      "b": "NOT A GENE PROPERTY AND NOT A LOCUS PROPERTY. Both arms ~ control 1. This is an equivalence result on the relative band and not a failure to reject: the comparison has excluded any ratio outside the band. It does NOT mean the label is an element property; see the registration's `cannot_be_answered` clause.",
+      "c": "INCONCLUSIVE. Any deciding interval crosses a band edge, or a comparison is inconclusive by rule (under MIN_CLUSTERS gene clusters, dropped matching weight above MAX_DROPPED_WEIGHT, or an achieved relative half-width wider than the band itself). Its words are THE DATA CANNOT TELL. Never 'no information': those are different claims and eliding them is how overstatements got into the record."
+    }
+  },
+  "power": {
+    "rule": "POWER PER COMPARISON, STATED IN GENES AND IN ADVANCE. (1) The number of gene clusters available, against the floor of 10; under the floor, no interval. (2) The ACHIEVED relative half-width of the deciding interval, against the band's own half-width 0.25 on the high side. If the achieved relative half-width exceeds that, the comparison cannot separate 'at control' from 'far above' at all and reads (c) by construction, whatever the point estimate. This is the rule that stops an underpowered null being presented as a finding. (3) The genes needed for a half-width of 0.25 at the observed design effect, so a reader can see how far short a comparison falls.",
+    "gene_clusters": 193,
+    "gene_clusters_informative_for_the_within_gene_arm": 179,
+    "cluster_floor": 10,
+    "band_half_width": 0.25,
+    "achieved_relative_half_width": {
+      "within_matched_over_different_matched": 1.021118,
+      "within_matched_over_control_1": 0.589908,
+      "different_matched_over_control_1": 0.388224
+    },
+    "wider_than_the_band": {
+      "within_matched_over_different_matched": true,
+      "within_matched_over_control_1": true,
+      "different_matched_over_control_1": true
+    }
+  },
+  "amendment_1_sensitivity": {
+    "labelled": "SENSITIVITY (AMENDMENT_1 item 2). It decides nothing.",
+    "within_gene_equal_weight": 0.07899461023558506,
+    "different_gene_equal_weight": 0.013229432309880577,
+    "genes_contributing": 179,
+    "genes_excluded_no_pairs_in_a_contributing_bin": 14,
+    "gene_pairs_contributing": 11307,
+    "gene_pairs_excluded_no_pairs_in_a_contributing_bin": 7221,
+    "rule": "AMENDED on the coordinator's direction. DISCLOSED HONESTLY: the direction arrived AFTER the registration file was committed at 47835d1, so this text is an APPEND and not part of that commit. It is nonetheless BLIND and pre-count, and git shows why rather than this sentence asserting it: at the moment this amendment is committed no concordance has been computed, scripts/label_gene_count.py does not exist in the tree, and no figure of this lane exists anywhere. An amendment written after the figures are seen is NOT a pre-registration; this one is written before any figure exists. It is purely ADDITIVE - no band, no floor, no reading and no threshold of the registration is changed, and nothing is made easier to reach.\nTHE DEFECT IT ADDRESSES IS THE ESTIMAND, NOT THE UNCERTAINTY. The primary pools PAIRS across genes, so a gene with k elements contributes k(k-1)/2 of them. At a mean near 27 elements a handful of large genes can dominate the number. The gene-clustered interval says how UNCERTAIN the estimate is; it does not change WHAT is estimated. Two things are therefore registered beside the primary:\n(1) THE CONCENTRATION, PRINTED: the share of all within-gene pairs contributed by the top 5 genes by pair count. One number and NO threshold, so a reader can see at a glance whether the primary is a statement about 180 genes or about five.\n(2) A GENE-EQUAL-WEIGHT CONCORDANCE, labelled a SENSITIVITY that DECIDES NOTHING: each gene's own distance-matched concordance averaged with equal weight over genes, and the SAME equal weighting applied to the matched different-gene arm - each GENE PAIR weighted equally - so the two arms stay comparable. A unit's distance reweighting uses the global within-gene bin weights restricted to the contributing bins in which that unit actually has pairs, renormalised; a unit with pairs in no contributing bin is EXCLUDED and counted. The reading is still selected by the PAIR-POOLED primary and by nothing else.\n(3) THE BINDING SENTENCE, registered here so it binds before either number is seen: IF THE PAIR-POOLED PRIMARY AND THE GENE-EQUAL-WEIGHT SENSITIVITY DISAGREE, THE RESULT MUST SAY SO IN THOSE WORDS, and may not report only whichever of the two reads better. They DISAGREE when the registered band of the gene-equal-weight ratio differs from the band of the pair-pooled ratio against the same control, or when the gene-equal-weight point estimate falls outside the pair-pooled ratio's own interval. Either condition is enough.",
+    "within_over_control_1": {
+      "ratio": "within_gene_equal_weight / control_1",
+      "ci95": [
+        3.580485,
+        5.736976
+      ],
+      "identical_resample_share": 0.0005,
+      "degenerate": false,
+      "resamples": 2000,
+      "band": "far_above",
+      "relative_half_width": 1.078246,
+      "band_half_width": 0.25,
+      "wider_than_the_band": true,
+      "instrument_assumptions": "GENES are the clusters; elements within a gene are NOT assumed independent. Control 1 is computed ONCE over the whole population and then held fixed through every bootstrap resample. It is the stated null, not a second estimate, so it contributes no width to any interval. This is an ASSUMPTION and it is printed beside every interval: an interval on a ratio to a fixed denominator is narrower than one that also carried the denominator's sampling error, and no reading of this lane may be quoted without this sentence.. A percentile bootstrap over whole genes, 2000 usable resamples, seed 20261002. The identical-resample share above is the share of resamples returning the modal value: at 1.0 the interval is degenerate and decides nothing, and the reading routes to a Wilson bound on the cluster count."
+    },
+    "different_over_control_1": {
+      "ratio": "different_gene_equal_weight / control_1",
+      "ci95": [
+        0.667074,
+        0.88434
+      ],
+      "identical_resample_share": 0.0005,
+      "degenerate": false,
+      "resamples": 2000,
+      "band": "crosses_a_band_edge",
+      "relative_half_width": 0.108633,
+      "band_half_width": 0.25,
+      "wider_than_the_band": false,
+      "instrument_assumptions": "GENES are the clusters; elements within a gene are NOT assumed independent. Control 1 is computed ONCE over the whole population and then held fixed through every bootstrap resample. It is the stated null, not a second estimate, so it contributes no width to any interval. This is an ASSUMPTION and it is printed beside every interval: an interval on a ratio to a fixed denominator is narrower than one that also carried the denominator's sampling error, and no reading of this lane may be quoted without this sentence.. A percentile bootstrap over whole genes, 2000 usable resamples, seed 20261002. The identical-resample share above is the share of resamples returning the modal value: at 1.0 the interval is degenerate and decides nothing, and the reading routes to a Wilson bound on the cluster count."
+    },
+    "disagreement": {
+      "bands_differ": false,
+      "equal_weight_point_outside_the_pooled_interval": true,
+      "disagree": true,
+      "statement": "THE PAIR-POOLED PRIMARY AND THE GENE-EQUAL-WEIGHT SENSITIVITY DISAGREE.",
+      "the_reading_is_still_the_pooled_one": "the registration selects the reading on the PAIR-POOLED primary and on nothing else; the sensitivity decides nothing either way"
+    }
+  },
+  "secondary_gtex": {
+    "labelled": "SECONDARY. Never the headline, and never read as evidence about biology.",
+    "rules_in_the_arm": 462,
+    "agree": 20,
+    "share": 0.04329004329004329,
+    "genes_in_the_arm": 106,
+    "clustered_ci95": [
+      0.020979,
+      0.070352
+    ],
+    "identical_resample_share": 0.004,
+    "degenerate": false,
+    "why_no_interval": null,
+    "wilson_unclustered_secondary": [
+      0.028196,
+      0.065917
+    ],
+    "expected_share_if_labels_were_drawn_from_this_population": 0.003901,
+    "how_the_expected_share_is_computed": "the mean over the arm's rules of the population frequency of that gene's top GTEx tissue as a compiled label. It is the chance level for THIS statistic, reported beside the observed share; it is not a registered band and decides nothing",
+    "control_1_quoted_beside_it": 0.017291,
+    "excluded_label_not_a_gtex_tissue": 4642,
+    "excluded_gene_not_in_the_gtex_matrix": 70,
+    "duplicated_symbols_dropped": [],
+    "training_exposure_caveat": "THE TRAINING-EXPOSURE CAVEAT, registered in advance and the strongest limitation on this whole lane: AlphaGenome's GTEx RNA-seq tracks were trained on this same GTEx RNA-seq. Agreement between a rule's argmax label and the gene's top GTEx tissue may therefore be RECALL OF SEEN DATA rather than biology, and the secondary arm cannot distinguish the two. No number from this arm may be read as evidence about biology, and this sentence must travel with it word for word. It must not be softened, shortened or moved to a footnote in any later document.",
+    "rule": "SECONDARY, AND LABELLED SECONDARY WHEREVER IT APPEARS: the share of rules whose label equals the target gene's top GTEx v8 median-TPM tissue, over the rules whose label is a GTEx tissue and whose gene is in the GTEx matrix. The declared input is data/cache/c5/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz, hashed in this registration. The label-to-column rule, fixed here: both strings are normalised by lowercasing, replacing every run of non-alphanumeric characters with a single underscore and stripping leading and trailing underscores; a label matches a GTEx column when the normalised forms are equal. A rule whose normalised label matches no column is EXCLUDED from the denominator and the excluded count is reported, because a non-GTEx label cannot agree or disagree with a GTEx ranking. Genes are matched on the gct `Description` symbol; a symbol appearing on more than one row is dropped and the count reported. This arm is clustered by gene like every other."
+  },
+  "degeneracy": {
+    "rule": "At 0 or n successes a cluster bootstrap is DEGENERATE: every resample returns the same rate and the interval decides nothing. Such a comparison is routed to a WILSON bound on an EFFECTIVE sample size and the degeneracy is NAMED in the result file. Because a degenerate arm cannot estimate its own design effect, the effective sample size is taken as the number of GENE CLUSTERS - the most conservative unit available - and that substitution is printed beside the bound. The IDENTICAL-RESAMPLE SHARE is reported for EVERY interval, degenerate or not, so a near-degenerate interval is visible to a reader without this lane inventing a threshold for 'near'.",
+    "within_gene_pair_counts_degenerate": false,
+    "different_gene_pair_counts_degenerate": false,
+    "identical_resample_share_per_interval": {
+      "within_matched_over_different_matched": 0.0005,
+      "within_matched_over_control_1": 0.0005,
+      "different_matched_over_control_1": 0.0005,
+      "within_primary_over_control_1": 0.0005,
+      "equal_weight_within_over_control_1": 0.0005,
+      "equal_weight_different_over_control_1": 0.0005,
+      "secondary_gtex": 0.004
+    },
+    "wilson_on_the_cluster_count_if_degenerate": [
+      0.034657,
+      0.106675
+    ],
+    "the_wilson_bound_is_only_the_reading_when_degenerate": "printed unconditionally so a reader can see it; it is the DECIDING bound only when the clustered bootstrap is degenerate, which the two flags above state"
+  },
+  "model_consequence_proposal_only": "PROPOSAL ONLY, carried for the owner and not recommended by this lane. If reading (a) holds, the cell context belongs on the GENE rather than on the element's rule: the rule line's `when: cell_type` would then be asserting of the element a fact about the target gene's expression profile. This lane makes NO recommendation about adopting that change - adoption is the owner's decision. Nothing in this lane touches a .bio file, the compiler, the IR, the grammar or the parser, and no such change is implemented here.",
+  "cannot_be_answered": ", registered in advance so that no later reading borrows it.\nEvery element of `data/organisms/human/noncoding_chr21.bio` appears in exactly one predicted\nrule, paired with exactly one gene. The SYMMETRIC test - within-ELEMENT label concordance across\none element's different target genes, which is what would directly establish an ELEMENT property\n- therefore CANNOT BE RUN on this population at all. A result at the control level here means\n\"NOT a gene property and not a locus property\". It does NOT mean \"an element property\". That\nsecond claim is a reading this data cannot deliver, and it may not be made from this lane's\nnumbers in any document.",
+  "peak_rss_bytes": 153436160,
+  "rss_ceiling_bytes": 4294967296,
+  "rss_rule": "The count script checks its own peak resident set size against a ceiling of 4 GiB and RAISES - it does not warn - if the ceiling is reached. It reads ONE committed element table, line by line; it opens no bulk chromosome archive and calls no cached-element loader, because an inline loop over 93 elements through such a loader reached 23 GB resident. The pair aggregation is over gene-by-gene-by-bin counters, never over a materialised list of pairs.",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "never_weakened": "No test, threshold, pin or registration is weakened, exempted or allowlisted by this lane. No .bio file, compiler, IR, grammar or parser file is touched.",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed compiled program data/organisms/human/noncoding_chr21.bio, generated by `genomeos budget --chrom chr21 --bio`",
+        "version": "sha256 778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192, re-checked against the registration"
+      },
+      {
+        "accession": "GTEx v8 GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm",
+        "version": "sha256 ee7201ff2f280b0de5657d4b08e9a240362d9757efed7f7bd5dba35a5f8617b8, SECONDARY arm only"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/organisms/human/noncoding_chr21.bio",
+        "sha256": "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192",
+        "bytes": 4979850,
+        "partition": "the whole committed chr21 non-coding program"
+      },
+      {
+        "path": "data/cache/c5/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+        "sha256": "ee7201ff2f280b0de5657d4b08e9a240362d9757efed7f7bd5dba35a5f8617b8",
+        "bytes": 6952331,
+        "partition": "GTEx v8 median TPM, SECONDARY arm only"
+      },
+      {
+        "path": "data/results/label_gene_registration.json",
+        "sha256": "00254339ce336e255f1d7b32f8f5b3cc843ae67be411c6e620507b32f1117631",
+        "bytes": 23783,
+        "partition": "this lane's registration at 47835d1"
+      },
+      {
+        "path": "data/results/label_gene_registration_amendment_1.json",
+        "sha256": "412ecc5ab1e3cbb401f75f64427bd271ce29c082bb0cbfd08bf0029ff22d77bf",
+        "bytes": 8976,
+        "partition": "AMENDMENT_1, additive and pre-count"
+      }
+    ],
+    "input_count": 4,
+    "assembly": "GRCh38: the assembly the element loci are on",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the element blocks' own `locus: chr21:start-end`, read only for the midpoint that defines element-to-element distance"
+    },
+    "parameters": {
+      "band_at_control": [
+        0.8,
+        1.25
+      ],
+      "band_far_above": 1.5,
+      "distance_bin_edges_bp": [
+        0,
+        1000,
+        10000,
+        100000,
+        1000000,
+        10000000,
+        "inf"
+      ],
+      "minimum_pairs_per_bin": 10,
+      "maximum_dropped_matching_weight": 0.2,
+      "minimum_clusters_genes": 10,
+      "bootstraps": 2000,
+      "seed": 20261002,
+      "rss_ceiling_bytes": 4294967296,
+      "every_one_of_them_fixed_before_this_run": "at 47835d1 and AMENDMENT_1; this script sets none of them"
+    },
+    "exclusions": [
+      "the two rule lines carrying `experimental`",
+      "every `_measured` element block",
+      "every gene carrying one element, from the within-gene arm only",
+      "every distance bin below the registered pair minimum in either arm",
+      "every rule whose normalised label matches no GTEx column, from the SECONDARY denominator only",
+      "every bulk chromosome archive and every cached-element loader call: none is made"
+    ],
+    "partitions": {
+      "within_gene_pairs": "169514",
+      "different_gene_pairs": "13213037",
+      "gene_clusters": "193",
+      "gtex_secondary_rules": "462"
+    },
+    "code_cleanliness": {
+      "git_sha": "9cc702104e660f5c1edd22c0a3173b8ba779b505",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/label_gene_count.py",
+        "form": "committed_repository_file",
+        "path": "scripts/label_gene_count.py",
+        "is_committed": true,
+        "declared_entry": "scripts/label_gene_count.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/label_gene.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/label_gene_count.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "9cc702104e660f5c1edd22c0a3173b8ba779b505",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/label_gene_count.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "9cc702104e660f5c1edd22c0a3173b8ba779b505",
+      "code_cleanliness_git_sha": "9cc702104e660f5c1edd22c0a3173b8ba779b505",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 9cc7021"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 140,
+      "opens_under_data": 9,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
