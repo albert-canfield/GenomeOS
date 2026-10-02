@@ -1202,3 +1202,103 @@ def amendment_1_payload() -> dict[str, Any]:
         "alphagenome_requests": 0,
         "money": "none: no request is sent and no key is read",
     }
+
+
+# ---------------------------------------------------------------------------
+# A POST-COUNT DISCLOSURE. It is not an amendment and changes no design.
+# ---------------------------------------------------------------------------
+
+DISCLOSURE_IS_NOT_AN_AMENDMENT = (
+    "THIS FILE IS A DISCLOSURE AND NOT AN AMENDMENT. It is written AFTER the result at 6ab0b1f and "
+    "it changes no band, no floor, no reading, no control and no label rule. Anything written "
+    "after the figures are seen cannot be a pre-registration, so nothing here is presented as "
+    "one. It exists because three facts about this lane are checkable from git but not from the "
+    "result file, and a reader should not have to reconstruct them."
+)
+
+RESULTS_PY_WINDOW = (
+    "THE STALE-STAMP WINDOW, disclosed per file with its sha and time. A peer's fix to "
+    "`genomeos/results.py` changed the behaviour of `_is_registry`, which gates four refusals in "
+    "save_result, and it sat UNCOMMITTED in this shared checkout for about an hour before landing "
+    "at d33146a (23:51). save_result is on the import closure of every result write, so a run in "
+    "that window executed the fixed code while its cleanliness block named a commit that did not "
+    "contain it.\n"
+    "(1) THE RESULT, data/results/label_gene.json, committed at 6ab0b1f (23:54): CLEAN. It was "
+    "computed in a worktree of 9cc7021 (23:52), which CONTAINS d33146a, so the results.py that "
+    "ran is the one the stamp's tree holds. The figures need no recount and none was hidden: this "
+    "is the only file of the lane that carries a figure at all.\n"
+    "(2) THE REGISTRATION, data/results/label_gene_registration.json, committed at 47835d1 "
+    "(23:37): ITS STAMP IS STALE AND IS NOT BEING FIXED. It was written from the shared checkout "
+    "while the peer's fix was uncommitted, so the fixed `_is_registry` ran while the block named "
+    "e13992a. The defect is real and it is disclosed rather than repaired, because the repair "
+    "would be rewriting a landed registration AFTER its figures are known, which destroys the one "
+    "property that makes a registration worth anything. A stale revision stamp on a file carrying "
+    "NO figure is the smaller fault, and this sentence is the record of the choice.\n"
+    "(3) THE AMENDMENT, data/results/label_gene_registration_amendment_1.json, committed at "
+    "f579926 (23:49): SELF-CONSISTENT BUT PRE-FIX. It was written in a worktree of 7f6ff93, which "
+    "does NOT contain d33146a, so the results.py that ran is the older committed one and the "
+    "stamp names a tree that holds it. It is not rewritten, for the same reason as (2), and it "
+    "carries no figure either."
+)
+
+LABEL_SET_IS_ENUMERATED_NOT_RESOLVED = (
+    "THE LABEL SET, and why no ontology is involved anywhere in this lane. The universe of labels "
+    "is the set of `when: cell_type` strings that the committed data/organisms/human/"
+    "noncoding_chr21.bio actually carries, enumerated from that file with each label's rule count, "
+    "and control 1 is the sum of p squared over exactly that enumeration. This lane resolves NO "
+    "CURIE, reads NO ontology file, and classifies no track into a tissue class, so the failure "
+    "mode the coordinator warns about - a UBERON-plus-CL rule leaving rows unclassifiable by "
+    "accident of which ontology file happens to be on the machine, and a descendant set that "
+    "moves with whichever version is resolved against - cannot arise here. The enumeration is "
+    "fixed by the input's own digest, which the registration declared and the count re-checked. "
+    "The result file reports the label count and the ranked labels; the enumeration is derivable "
+    "from the declared input alone, with no file that git does not track."
+)
+
+ORDERING_INSIDE_THE_REGISTRATION = (
+    "THE ORDERING, which is stronger here than the rule asks for. The coordinator's rule is: bands "
+    "first, then the label-set rule, then the control computed, then a disclosure of what was seen "
+    "before the registration was written - because until the bands are committed a control is an "
+    "input a band could be drawn around. In this lane the bands and the label-set rule were "
+    "committed at e13992a and 47835d1 (23:37) and NO CONTROL VALUE EXISTED ANYWHERE AT THAT "
+    "POINT: the registration fixes how control 1 is computed and contains no number for it, and "
+    "control 1 was first computed by the count at 23:52, fifteen minutes and six commits later. A "
+    "band could not have been drawn around a value that had not been computed.\n"
+    "WHAT WAS SEEN BEFORE THE REGISTRATION WAS WRITTEN, stated so a reader does not have to take "
+    "the above on trust: the line census of the input (5,176 rule lines, 5,174 predicted, 2 "
+    "experimental, 5,374 element blocks), the shape of an element block and a rule line, the two "
+    "input digests, the GTEx matrix's column header, and the coordinator's brief. NOT seen: any "
+    "label distribution, any value of control 1, any concordance, any interval, any GTEx "
+    "agreement rate, and the gene counts - 193 genes and 179 with two or more elements were first "
+    "computed by the count, and the second of them contradicts the brief."
+)
+
+
+def disclosure_payload() -> dict[str, Any]:
+    """The post-count disclosure, as the dict its own entry script commits."""
+    return {
+        "result": "label_gene_disclosure",
+        "date": "2026-10-02",
+        "lane": "lane-labelgene",
+        "is_not_an_amendment": DISCLOSURE_IS_NOT_AN_AMENDMENT,
+        "discloses_about": {
+            "registration": "data/results/label_gene_registration.json at 47835d1",
+            "amendment_1": "data/results/label_gene_registration_amendment_1.json at f579926",
+            "result": "data/results/label_gene.json at 6ab0b1f",
+        },
+        "results_py_stale_stamp_window": RESULTS_PY_WINDOW,
+        "label_set_is_enumerated_not_resolved": LABEL_SET_IS_ENUMERATED_NOT_RESOLVED,
+        "ordering_inside_the_registration": ORDERING_INSIDE_THE_REGISTRATION,
+        "no_design_changed": (
+            "the bands [0.80, 1.25] and 1.50, the cluster floor of 10, the distance bin edges, the "
+            "pair minimum, the dropped-weight limit, the four readings and (c)'s words are "
+            "exactly as committed at 47835d1, and the reading of the result at 6ab0b1f stays (c), "
+            "THE DATA CANNOT TELL."
+        ),
+        "band_at_control": list(BAND_AT_CONTROL),
+        "band_far_above": BAND_FAR_ABOVE,
+        "min_clusters_genes": MIN_CLUSTERS,
+        "reading_stays": "c",
+        "alphagenome_requests": 0,
+        "money": "none: no request is sent and no key is read",
+    }

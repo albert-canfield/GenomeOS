@@ -441,3 +441,37 @@ def test_the_gtex_normalisation_maps_a_compiled_label_onto_a_column_name() -> No
     assert lg.normalise_tissue("Small_Intestine_Terminal_Ileum") == lg.normalise_tissue(
         "Small Intestine - Terminal Ileum"
     )
+
+
+def test_the_disclosure_is_not_an_amendment_and_changes_no_design() -> None:
+    body = lg.disclosure_payload()
+    assert "THIS FILE IS A DISCLOSURE AND NOT AN AMENDMENT" in body["is_not_an_amendment"]
+    assert "cannot be a pre-registration" in body["is_not_an_amendment"]
+    assert body["band_at_control"] == [0.80, 1.25]
+    assert body["band_far_above"] == 1.50
+    assert body["min_clusters_genes"] == 10
+    assert body["reading_stays"] == "c"
+    # a disclosure may not smuggle a design change in under another name
+    assert "amendment_1" not in body
+    assert "readings" not in body
+
+
+def test_the_disclosure_names_every_file_and_its_stamp_state() -> None:
+    text = lg.RESULTS_PY_WINDOW
+    assert "d33146a" in text
+    assert "6ab0b1f" in text and "CLEAN" in text
+    assert "47835d1" in text and "ITS STAMP IS STALE AND IS NOT BEING FIXED" in text
+    assert "f579926" in text and "SELF-CONSISTENT BUT PRE-FIX" in text
+
+
+def test_the_disclosure_states_that_no_ontology_is_resolved() -> None:
+    text = lg.LABEL_SET_IS_ENUMERATED_NOT_RESOLVED
+    assert "resolves NO CURIE" in text
+    assert "reads NO ontology file" in text
+
+
+def test_the_disclosure_states_the_ordering_and_what_was_seen() -> None:
+    text = lg.ORDERING_INSIDE_THE_REGISTRATION
+    assert "NO CONTROL VALUE EXISTED ANYWHERE AT THAT POINT" in text
+    assert "NOT seen:" in text
+    assert "contradicts the brief" in text
