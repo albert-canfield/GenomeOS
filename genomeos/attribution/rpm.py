@@ -63,6 +63,47 @@ A_MEASURED_ZERO = (
 )
 
 
+#: Why one BAM per biological replicate is checked and not merely intended.
+ONE_BAM_PER_REPLICATE = (
+    "'released' does not mean 'one per replicate'. An ENCODE experiment keeps every pipeline version "
+    "it has ever run, so ENCSR000AKP publishes seven released filtered GRCh38 alignment BAMs that are "
+    "three biological replicates reprocessed three times. Pooling them would count two replicates "
+    "three times each, and because the duplicated reads inflate the numerator and the denominator "
+    "together it would reweight the replicate mixture without making any single number look absurd. "
+    "So the set is CHECKED, not just described: a replicate appearing twice is refused"
+)
+
+
+def check_one_bam_per_replicate(bams: list[dict[str, Any]]) -> dict[int, str]:
+    """Refuse a pooling set in which any biological replicate appears more than once.
+
+    `bams` are dicts with `accession` and `biological_replicates`. Returns the replicate-to-accession
+    map when the set is sound, so the caller records which replicate each pass came from.
+
+    A BAM naming no replicate is refused too: it cannot be shown not to duplicate another, and a file
+    whose provenance is unknown is exactly what this check exists to keep out of a pooled total.
+    """
+    seen: dict[int, str] = {}
+    for bam in sorted(bams, key=lambda b: str(b.get("accession"))):
+        reps = bam.get("biological_replicates")
+        if not reps:
+            raise ValueError(
+                f"{bam.get('accession')} names no biological replicate, so it cannot be shown not to "
+                f"duplicate another file in the pool. {ONE_BAM_PER_REPLICATE}"
+            )
+        for rep in reps:
+            if rep in seen:
+                raise ValueError(
+                    f"biological replicate {rep} appears in both {seen[rep]} and "
+                    f"{bam.get('accession')}: pooling them would count the same reads twice. "
+                    f"{ONE_BAM_PER_REPLICATE}"
+                )
+            seen[rep] = bam["accession"]
+    if not seen:
+        raise ValueError("no BAM to pool")
+    return seen
+
+
 class Read(Protocol):
     """What the counter needs of a read. pysam's AlignedSegment satisfies this."""
 

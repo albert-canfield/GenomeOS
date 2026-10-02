@@ -297,3 +297,67 @@ class TestTheRegisteredGate:
         published = [float(i) for i in range(1, 51)]
         computed = [p * 3 for p in published]
         assert rpm.gate(computed, published, 0.5, (2.0, 4.0))["passes"] is True
+
+
+class TestOneBamPerReplicate:
+    """The guard that stands between a pooled total and a silent threefold double count.
+
+    Shown to FIRE on the real shape that caused it: ENCSR000AKP's seven released filtered GRCh38
+    alignment BAMs, which are three biological replicates reprocessed by three pipeline versions.
+    """
+
+    #: The real seven, as the portal reports them.
+    SEVEN = [
+        {"accession": "ENCFF301TVL", "biological_replicates": [1]},  # ENCODE3
+        {"accession": "ENCFF121RHF", "biological_replicates": [1]},  # ENCODE4 v1.5.1
+        {"accession": "ENCFF600THN", "biological_replicates": [1]},  # ENCODE4 v1.8.0
+        {"accession": "ENCFF879BWC", "biological_replicates": [2]},
+        {"accession": "ENCFF907MNY", "biological_replicates": [2]},
+        {"accession": "ENCFF704LGA", "biological_replicates": [2]},
+        {"accession": "ENCFF232RQF", "biological_replicates": [3]},
+    ]
+
+    #: The released analysis alone, which is what the corrected rule selects.
+    RELEASED = [
+        {"accession": "ENCFF600THN", "biological_replicates": [1]},
+        {"accession": "ENCFF704LGA", "biological_replicates": [2]},
+        {"accession": "ENCFF232RQF", "biological_replicates": [3]},
+    ]
+
+    def test_the_real_seven_bams_are_refused(self):
+        with pytest.raises(ValueError, match="appears in both"):
+            rpm.check_one_bam_per_replicate(self.SEVEN)
+
+    def test_the_released_analysis_alone_is_accepted_and_maps_each_replicate(self):
+        assert rpm.check_one_bam_per_replicate(self.RELEASED) == {
+            1: "ENCFF600THN",
+            2: "ENCFF704LGA",
+            3: "ENCFF232RQF",
+        }
+
+    def test_the_refusal_names_both_files_so_the_duplicate_can_be_found(self):
+        with pytest.raises(ValueError) as exc:
+            rpm.check_one_bam_per_replicate(self.SEVEN)
+        msg = str(exc.value)
+        assert "ENCFF121RHF" in msg and "ENCFF301TVL" in msg
+
+    def test_a_bam_naming_no_replicate_is_refused_rather_than_assumed_unique(self):
+        with pytest.raises(ValueError, match="names no biological replicate"):
+            rpm.check_one_bam_per_replicate([{"accession": "ENCFFxxxxxx", "biological_replicates": []}])
+
+    def test_a_bam_pooling_two_replicates_still_conflicts_with_either_of_them(self):
+        """A pooled BAM plus one of its own replicates is the same double count, less obviously."""
+        with pytest.raises(ValueError, match="appears in both"):
+            rpm.check_one_bam_per_replicate(
+                [
+                    {"accession": "ENCFFaaaaaa", "biological_replicates": [1, 2]},
+                    {"accession": "ENCFFbbbbbb", "biological_replicates": [2]},
+                ]
+            )
+
+    def test_an_empty_set_is_refused(self):
+        with pytest.raises(ValueError, match="no BAM to pool"):
+            rpm.check_one_bam_per_replicate([])
+
+    def test_the_reason_is_recorded_in_the_module(self):
+        assert "does not mean" in rpm.ONE_BAM_PER_REPLICATE
