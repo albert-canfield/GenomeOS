@@ -187,10 +187,11 @@ def verdict(armed: dict[str, ac.Arm], readings: dict[str, Any]) -> dict[str, Any
     underpowered = [a for a, r in readings.items() if (r.get("power") or {}).get("underpowered")]
     if read and not unresolved:
         answer = (
-            "NO. On every arm with a rate, the compiled cell is the measured cell at or below that "
-            "label's own genome-wide frequency, so a rule's `cell` is NOT evidence of where it "
-            "acts. The confound pushes the other way - the benchmark tested elements active in the "
-            "cell it was testing - so this reading is not an artefact of the selection"
+            "NO. Every arm with a rate is an EQUIVALENCE result: its whole clustered interval on d "
+            "lies inside the tolerance, so each has excluded a difference larger than the "
+            "tolerance and a rule's `cell` is NOT evidence of where it acts. The confound pushes "
+            "the other way - the benchmark tested elements active in the cell it was testing - so "
+            "this reading is not an artefact of the selection"
         )
     elif unresolved and not no_info:
         answer = (
@@ -208,10 +209,16 @@ def verdict(armed: dict[str, ac.Arm], readings: dict[str, Any]) -> dict[str, Any
         )
     elif read:
         answer = (
-            f"SPLIT, and reported as split: {sorted(no_info)} show no cell-type information at or "
-            f"below the base rate, while {sorted(unresolved)} show a difference that the "
-            "benchmark's selection of tested elements explains as readily as the model does. "
-            "Neither set is pooled with the other and no arm's reading is carried to another arm"
+            f"SPLIT, and reported as split, with each arm named by the reading its own interval "
+            f"selected. Reading (2), an equivalence result - the whole clustered interval on d "
+            f"inside the tolerance, so a difference larger than the tolerance is EXCLUDED and the "
+            f"compiled cell is not evidence of where the rule acts: {sorted(no_info)}. Reading "
+            f"(3), a difference detected whose sign the benchmark's selection of tested elements "
+            f"explains as readily as the model does, so it establishes nothing about cell-type "
+            f"information: {sorted(detected)}. Reading (1), anti-correlated: {sorted(anti)}. "
+            f"Reading (4), THE DATA CANNOT TELL - which is not a null and must never be read as "
+            f"one: {sorted(cannot_tell)}. No set is pooled with another and no arm's reading is "
+            "carried to another arm"
         )
     else:
         answer = (
@@ -239,6 +246,33 @@ def verdict(armed: dict[str, ac.Arm], readings: dict[str, Any]) -> dict[str, Any
         "arms_below_the_element_floor": sorted(floor),
         "arms_declared_underpowered": sorted(underpowered),
         "arms_whose_label_clears_the_usability_threshold": sorted(usable),
+        "what_an_equivalence_result_excludes_on_a_small_base_rate": {
+            "the_limit": (
+                "stated because reading (2) is an ABSOLUTE equivalence against a tolerance of "
+                f"{ac.TOLERANCE}, and an arm whose base rate is far below that can satisfy it "
+                "while still carrying a large RELATIVE enrichment. On such an arm reading (2) "
+                "means `no difference larger than the tolerance` and does NOT mean `the label "
+                "carries nothing`. The multiple each arm's tolerance is of its own base rate is "
+                "below, so a reader can see which arms the reading is strong on and which it is "
+                "weak on without recomputing anything"
+            ),
+            "tolerance_as_a_multiple_of_the_base_rate": {
+                a: (
+                    round(ac.TOLERANCE / r["committed_base_rate"], 1)
+                    if r.get("committed_base_rate")
+                    else None
+                )
+                for a, r in read.items()
+            },
+            "observed_as_a_multiple_of_the_base_rate": {
+                a: (
+                    round(r["observed_rate"] / r["committed_base_rate"], 2)
+                    if r.get("committed_base_rate")
+                    else None
+                )
+                for a, r in read.items()
+            },
+        },
         "what_this_does_not_say": ac.VALIDATES_NOTHING,
         "cannot_establish": list(ac.CANNOT_ESTABLISH),
         "no_rule_is_changed_by_this": ac.NO_RECOMMENDATION,
