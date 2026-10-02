@@ -113,6 +113,7 @@ def answer_is_usable_note(note: dict[str, Any]) -> dict[str, Any]:
         "gene_name_present": bool(note.get("gene_name_present")),
         "effects": note.get("effects"),
         "effects_non_empty": bool(note.get("effects_non_empty")),
+        "full_vectors_kept": bool(note.get("full_vectors_kept")),
         "usable": bool(note.get("usable")),
     }
 
@@ -136,12 +137,26 @@ def answer_is_usable(hit: dict[str, Any]) -> dict[str, Any]:
     """
     genes = hit.get("genes") or []
     named = [g for g in genes if (g.get("gene") or "").strip()]
+    # Item (g), checked on the FIRST paid answers rather than at the end: an answer that kept four cell
+    # lines and discarded every brain track has been paid for and cannot be widened without paying
+    # again, so the pilot stop is the last moment this can be caught cheaply.
+    try:
+        vectors = astrorun.check_full_vectors_in_answer(hit)
+        kept = True
+        why = ""
+    except astrorun.VectorRefusedError as e:
+        vectors = {}
+        kept = False
+        why = str(e)
     return {
         "id": hit.get("id"),
         "gene_name_present": bool(named),
         "effects": len(genes),
         "effects_non_empty": len(genes) > 0,
-        "usable": bool(named) and len(genes) > 0,
+        "full_track_vectors": vectors,
+        "full_vectors_kept": kept,
+        "full_vectors_refusal": why,
+        "usable": bool(named) and len(genes) > 0 and kept,
     }
 
 

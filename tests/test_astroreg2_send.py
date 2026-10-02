@@ -37,8 +37,54 @@ def row(i: int) -> dict:
     }
 
 
+#: A small track axis for the stubs: two brain tracks and two cell lines, which is the shape of the
+#: problem item (g) is about -- a writer that kept only the cell lines would look fine on a stub.
+STUB_TRACKS = ("astrocyte", "brain cortex", "K562", "HepG2")
+
+
+def full_axis(rows: int = 1, tracks=STUB_TRACKS, values=None) -> dict:
+    """A gene axis that KEEPS the whole track vector, which is what a usable paid answer looks like."""
+    return {
+        "output": 0,
+        "rows": [
+            {
+                "row": gi,
+                "gene_name": "AAA",
+                "tracks_total": len(tracks),
+                astrorun.FULL_VECTOR_KEY: astrorun.full_vector_entry(
+                    values if values is not None else [0.1 * (gi + 1) * (ti + 1) for ti in range(len(tracks))]
+                ),
+            }
+            for gi in range(rows)
+        ],
+        "tracks_total": len(tracks),
+        "track_names": list(tracks),
+        "tracks_sha256": "0" * 64,
+    }
+
+
 def good_answer(element_id: str) -> dict:
-    return {"id": element_id, "genes": [{"gene": "AAA", "mean_log2fc": -0.4, "n_tracks": 3}]}
+    """A usable answer: named effects AND every gene row's whole track vector.
+
+    The vectors were added when item (g) landed. Before that, every stub here returned what the code
+    asked for -- four cell lines -- which is precisely why no stub could show the defect.
+    """
+    return {
+        "id": element_id,
+        "genes": [{"gene": "AAA", "mean_log2fc": -0.4, "n_tracks": 3}],
+        "model": {"gene_axis_outputs": [full_axis()]},
+    }
+
+
+def answer_without_full_vectors(element_id: str) -> dict:
+    """What the writer produced at 8c6622c: effects, and the brain tracks thrown away."""
+    axis = full_axis()
+    axis["rows"] = [{k: v for k, v in r.items() if k != astrorun.FULL_VECTOR_KEY} for r in axis["rows"]]
+    return {
+        "id": element_id,
+        "genes": [{"gene": "AAA", "mean_log2fc": -0.4, "n_tracks": 3}],
+        "model": {"gene_axis_outputs": [axis]},
+    }
 
 
 def nameless_answer(element_id: str) -> dict:
@@ -235,9 +281,17 @@ class TestThePilotCheckpoint:
         assert [c["id"] for c in out["unusable_answers"]] == ["EH38E0000012"]
 
     def test_an_answer_with_a_blank_gene_name_is_unusable(self):
-        assert sender.answer_is_usable({"id": "x", "genes": [{"gene": "  "}]})["usable"] is False
-        assert sender.answer_is_usable({"id": "x", "genes": []})["usable"] is False
-        assert sender.answer_is_usable({"id": "x", "genes": [{"gene": "AAA"}]})["usable"] is True
+        blank = {**good_answer("x"), "genes": [{"gene": "  "}]}
+        empty = {**good_answer("x"), "genes": []}
+        assert sender.answer_is_usable(blank)["usable"] is False
+        assert sender.answer_is_usable(empty)["usable"] is False
+        assert sender.answer_is_usable(good_answer("x"))["usable"] is True
+        # and item (g): named effects are not enough if the paid vector was discarded
+        thin = sender.answer_is_usable(answer_without_full_vectors("x"))
+        assert thin["usable"] is False
+        assert thin["full_vectors_kept"] is False
+        assert "carries no track_vector" in thin["full_vectors_refusal"]
+        assert "BOUGHT AND THROWN AWAY" in astrorun.WHY_THE_FULL_TRACK_VECTOR_IS_KEPT
 
     def test_the_pilot_rule_names_the_silent_fault_it_guards(self):
         assert "indistinguishable from 'no gene moved'" in sender.PILOT_RULE
@@ -1087,7 +1141,7 @@ class TestThePilotReadsTheWrittenEntry:
 
         root = tmp_path / "c"
         root.mkdir()
-        entry = {"id": "E1", "genes": [{"gene": "AAA", "mean_log2fc": -0.4, "n_tracks": 3}]}
+        entry = good_answer("E1")
         with gzip.open(root / "chr1.json.gz", "wt") as fh:
             json.dump({"E1": entry}, fh)
         got = sender.written_entry("chr1", "E1", root)

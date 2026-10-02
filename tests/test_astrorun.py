@@ -8,6 +8,7 @@ stops at the cap, and that the ledger on disk holds exactly one line per charge.
 from __future__ import annotations
 
 import json
+import math
 import sys
 import threading
 from pathlib import Path
@@ -829,6 +830,9 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         test of HIS clauses rather than of the adapter.
         """
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        # Item (g) likewise: the supervisor's, with its own planted tests, and it refuses while the
+        # recording path still keeps four cell lines. Stubbing it keeps this about Albert's clauses.
+        monkeypatch.setattr(astrorun, "check_adapter_writes_full_vectors", lambda *a, **k: {})
         out = astrorun.may_send(**good)
         assert out["may_send"] is True
         assert out["cap"] == 1232
@@ -1087,6 +1091,9 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
         monkeypatch.setattr(astrorun, "check_nothing_in_the_plan_is_already_cached", lambda *a, **k: None)
+        # Items (f) and (g) are the supervisor's and have their own planted tests; (g) refuses today,
+        # so stubbing it is what lets this class be about the run rule it is named for.
+        monkeypatch.setattr(astrorun, "check_adapter_writes_full_vectors", lambda *a, **k: {})
 
     def test_PLANTED_run_2_with_only_run_1s_approval_REFUSES(self, tmp_path, monkeypatch):
         """The hole itself: a fresh ledger used to make run 2 look like a run nobody had done yet."""
@@ -1227,6 +1234,240 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
         assert out["ledger"].endswith(astrorun.ledger_for_run(2).name)
         assert out["totals"]["total_authorised"] == 2 * self.CAP
         assert seen.get("run_id") == 2, "the sign-off check must be asked about THIS run"
+
+
+class TestItemGTheFullTrackVectorIsKept:
+    """Item (g): every gene row of every paid answer persists its WHOLE track vector.
+
+    The defect: the recording path keeps each row's value multiset for CELL_TRACKS -- K562, HepG2,
+    GM12878, IMR-90 -- and discards the rest of the axis. For 1,232 ASTROCYTE elements that buys every
+    brain-tissue value and throws it away to keep four non-neural lines, and paid data is the one kind
+    this project cannot re-fetch for free.
+
+    It is the cache-hit defect one layer out: there the run would have charged 1,232 and bought nothing,
+    here it would charge 1,232 and discard the part that answers the question it was authorised for.
+    Neither was visible to a stub, because a stub returns what the code asks for.
+    """
+
+    class Matrix:
+        """A stand-in for the response's X: rows x tracks, read by [gi, ti] like the real one."""
+
+        def __init__(self, rows, tracks):
+            self.values = [
+                [round(0.5 - 0.01 * (gi * tracks + ti), 4) for ti in range(tracks)] for gi in range(rows)
+            ]
+
+        def __getitem__(self, key):
+            gi, ti = key
+            return self.values[gi][ti]
+
+    def axis(self, rows=3, tracks=6):
+        """An axis as recorded_axis builds one: the four cell lines kept, the rest of the axis gone."""
+        return {
+            "output": 0,
+            "fields": ["gene_name", "gene_id"],
+            "rows": [
+                {
+                    "row": gi,
+                    "obs_index": f"ENSG{gi}",
+                    "gene_name": f"G{gi}",
+                    "gene_id": f"ENSG{gi}",
+                    "tracks_total": tracks,
+                    "values_emitted": tracks,
+                    "cell_values": {"K562": [0.1], "HepG2": [0.2]},
+                }
+                for gi in range(rows)
+            ],
+            "tracks_total": tracks,
+            "threshold": 0.0,
+        }
+
+    def names(self, tracks=6):
+        return ["astrocyte", "brain cortex", "brain cerebellum", "K562", "HepG2", "GM12878"][:tracks]
+
+    def test_the_vector_round_trips_and_comes_back_NAMED(self):
+        """(c): the values back out, one per track, in the response's own column order."""
+        axis = astrorun.with_full_track_vectors(self.axis(), self.Matrix(3, 6), self.names(), "a" * 64)
+        named = astrorun.named_track_values(axis, 1)
+        assert list(named) == self.names(), "names in column order"
+        assert len(named) == 6
+        assert named["astrocyte"] == pytest.approx(self.Matrix(3, 6).values[1][0])
+        assert named["GM12878"] == pytest.approx(self.Matrix(3, 6).values[1][5])
+
+    def test_PLANTED_a_TRUNCATED_vector_REFUSES_rather_than_returning_what_fits(self):
+        """A short vector is a partly discarded answer, and returning its prefix would hide that."""
+        full = astrorun.pack_track_vector([1.0, 2.0, 3.0, 4.0])
+        with pytest.raises(astrorun.VectorRefusedError, match="carries 4 values"):
+            astrorun.unpack_track_vector(full, expected=6)
+        # cut mid-float, which is what a truncated write looks like
+        import base64
+
+        raw = base64.b64decode(full)[:-3]
+        with pytest.raises(astrorun.VectorRefusedError, match="not a whole number of float64"):
+            astrorun.unpack_track_vector(base64.b64encode(raw).decode(), expected=4)
+
+    def test_PLANTED_a_row_without_a_vector_REFUSES_and_so_does_a_nameless_axis(self):
+        axis = astrorun.with_full_track_vectors(self.axis(), self.Matrix(3, 6), self.names(), "a" * 64)
+        stripped = dict(axis)
+        stripped["rows"] = [
+            {k: v for k, v in r.items() if k != astrorun.FULL_VECTOR_KEY} for r in axis["rows"]
+        ]
+        with pytest.raises(astrorun.VectorRefusedError, match="carries no track_vector"):
+            astrorun.named_track_values(stripped, 0)
+        nameless = {**axis, "track_names": []}
+        with pytest.raises(astrorun.VectorRefusedError, match="records no track names"):
+            astrorun.named_track_values(nameless, 0)
+
+    def test_PLANTED_the_REGISTERED_FROZEN_FEATURES_DO_NOT_MOVE_BY_ONE_BIT(self):
+        """(b) the hard constraint: this is additive persistence, not a change to what is computed.
+
+        The frozen deletion term reads an element answer's `genes` rows and their per-cell values
+        through crispri.deletion_values/deletion_drop. Those are computed before and after the vectors
+        are added and compared EXACTLY, not approximately: a feature that moved would be a different
+        feature from the one the weights were frozen on.
+        """
+        from genomeos.attribution import crispri
+
+        before = self.axis()
+        answer = {
+            "id": "E1",
+            "chrom": "chr1",
+            "genes": [{"gene": "G1", "mean_log2fc": -0.4, "n_tracks": 6, "by_cell": {"astrocyte": -0.7}}],
+            "predicted": {"gene": "G1"},
+            "predicted_by_cell": {"astrocyte": -0.7},
+            "model": {"gene_axis_outputs": [before]},
+        }
+        top_a, vals_a = crispri.deletion_values([answer], "G1", "astrocyte")
+        drop_a = crispri.deletion_drop(vals_a)
+
+        after = astrorun.with_full_track_vectors(before, self.Matrix(3, 6), self.names(), "a" * 64)
+        widened = {**answer, "model": {"gene_axis_outputs": [after]}}
+        top_b, vals_b = crispri.deletion_values([widened], "G1", "astrocyte")
+        drop_b = crispri.deletion_drop(vals_b)
+
+        assert (top_a, vals_a, drop_a) == (top_b, vals_b, drop_b), "the frozen feature must not move"
+        assert drop_b == 0.7
+        # and nothing the old axis carried was rewritten, removed or reordered
+        for row_before, row_after in zip(before["rows"], after["rows"], strict=True):
+            assert {k: v for k, v in row_after.items() if k != astrorun.FULL_VECTOR_KEY} == row_before
+            assert list(row_after)[: len(row_before)] == list(row_before), "appended, not reordered"
+        added = set(after) - set(before)
+        assert added == {"track_names", "tracks_sha256", "full_vector_note"}
+
+    def test_the_DISK_ESTIMATE_is_stated_and_checked_against_the_floor(self):
+        """(d): measured from the format, not assumed, and a refusal rather than a warning."""
+        est = astrorun.full_vector_disk_estimate(
+            1232,
+            astrorun.OBSERVED_ROWS_PER_ANSWER,
+            astrorun.OBSERVED_TRACKS_PER_ANSWER,
+            free_bytes=50 * 1024**3,
+        )
+        assert est["tracks"] == 371
+        assert est["rows_per_element"] == 29
+        # base64 of float64: 8 bytes a value, 4 characters a 3 bytes
+        assert est["bytes_per_row"] == math.ceil(8 * 371 / 3) * 4 + 40
+        assert 100 < est["mb_total"] < 200, est["mb_total"]
+        assert est["fits_above_the_floor"] is True
+        with pytest.raises(astrorun.VectorRefusedError) as exc:
+            astrorun.check_disk_for_full_vectors(1232, 29, 371, free_bytes=10 * 1024**3 + 1)
+        assert "would leave less than the 10 GB floor" in str(exc.value)
+        assert "refusal and not a warning" in str(exc.value)
+
+    def test_the_measured_row_size_matches_the_estimate(self):
+        """The estimate's own arithmetic, checked against a row actually written."""
+        axis = astrorun.with_full_track_vectors(
+            self.axis(rows=1, tracks=371), self.Matrix(1, 371), [f"t{i}" for i in range(371)], "a" * 64
+        )
+        written = len(json.dumps(axis["rows"][0][astrorun.FULL_VECTOR_KEY]))
+        est = astrorun.full_vector_disk_estimate(1, 1, 371, free_bytes=50 * 1024**3)
+        assert abs(written - est["bytes_per_row"]) <= 40, (written, est["bytes_per_row"])
+
+    def test_PLANTED_item_g_REFUSES_TODAY_because_the_adapter_still_keeps_four_cell_lines(self):
+        """Wired, and refusing: nothing can be bought until the recording path keeps the vector."""
+        with pytest.raises(astrorun.VectorRefusedError) as exc:
+            astrorun.check_adapter_writes_full_vectors()
+        said = str(exc.value)
+        assert "item (g)" in said
+        assert "keeps CELL_TRACKS only" in said
+        assert "every brain-tissue track would be bought and discarded" in said
+        assert "costs nothing while the response has not been received" in said
+
+    def test_NEAR_MISS_an_adapter_that_DOES_keep_the_vector_PASSES(self, tmp_path, monkeypatch):
+        """A guard that can never pass is the fixed-point defect again, so the positive control.
+
+        A module whose recorded_axis calls with_full_track_vectors satisfies item (g), which shows the
+        refusal above is about the recording path as it stands and not about an unreachable condition.
+        """
+        mod = tmp_path / "adapter_keeping_vectors.py"
+        mod.write_text(
+            "from genomeos.attribution import astrorun\n\n\n"
+            "def recorded_axis(output, adata, tissues, threshold=0.0):\n"
+            "    axis = {'output': output, 'rows': []}\n"
+            "    return astrorun.with_full_track_vectors(axis, adata, tissues, 'sha')\n"
+        )
+        monkeypatch.syspath_prepend(str(tmp_path))
+        out = astrorun.check_adapter_writes_full_vectors("adapter_keeping_vectors")
+        assert out["recorded_axis_keeps_the_full_vector"] is True
+
+    def test_PLANTED_item_g_is_WIRED_into_may_send_and_stops_it(self, tmp_path, monkeypatch):
+        """A mechanism not wired to what it protects is indistinguishable from one that is absent.
+
+        So the subject is the wiring: may_send is driven past every other clause and must refuse on
+        item (g). If the call were absent, this returns may_send True and the run buys 1,232 answers
+        that keep four cell lines.
+        """
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        reg = tmp_path / "reg.json"
+        reg.write_text("{}")
+        (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
+        plan = [
+            {"chrom": "chr21", "element": f"e{i}", "start": i, "end": i + 1, "serves_genes": ["G"]}
+            for i in range(2)
+        ]
+        monkeypatch.setattr(astrorun, "ASTROREG2_CAP", 2)
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {1: {"words": "<words>", "requests": 2, "consumed": False}},
+        )
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_nothing_in_the_plan_is_already_cached", lambda *a, **k: None)
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        with pytest.raises(astrorun.VectorRefusedError, match=r"item \(g\)"):
+            astrorun.may_send(
+                activity_result=act,
+                registration=reg,
+                run_id=1,
+                ledger_root=tmp_path,
+                signoff='the supervisor wrote "dry run reviewed" at 20:05',
+                plan=plan,
+                reviewed_digest=astrorun.plan_digest(plan),
+                committed=lambda p: True,
+            )
+
+    def test_may_send_also_checks_the_DISK_before_a_paid_run(self):
+        """The estimate is checked before the run, not discovered part way through it."""
+        import ast
+
+        tree = ast.parse((Path(astrorun.__file__)).read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "may_send")
+        called = {c.func.id for c in ast.walk(fn) if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)}
+        assert "check_adapter_writes_full_vectors" in called, "item (g)'s recording check"
+        assert "check_disk_for_full_vectors" in called, "item (g)'s disk check"
+
+    def test_item_g_is_labelled_the_supervisors_and_not_alberts(self):
+        """Like item (f): a refusal must not attribute to him a condition he did not state."""
+        assert "not a clause of Albert's approval" in astrorun.ITEM_G_IS_A_SUPERVISOR_REQUIREMENT
+        assert "SUPERVISOR" in astrorun.ITEM_G_IS_A_SUPERVISOR_REQUIREMENT.upper()
+
+    def test_the_vector_is_stored_LOSSLESSLY(self):
+        """float64, because a lossy store of data that cannot be re-fetched is the same mistake."""
+        values = [0.1234567890123456, -9.87654321098765e-8, 0.0, -0.0, 1e300]
+        back = astrorun.unpack_track_vector(astrorun.pack_track_vector(values), expected=5)
+        assert back == values, "equal, not close"
+        assert astrorun.FULL_VECTOR_DTYPE == "<f8"
 
 
 class TestItemFAdapterV2:

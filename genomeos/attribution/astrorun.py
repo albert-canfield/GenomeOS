@@ -57,6 +57,8 @@ evidence it rests on has to be produced before it will answer.
 from __future__ import annotations
 
 import json
+import shutil
+import sys
 import threading
 import time
 from pathlib import Path
@@ -1310,6 +1312,10 @@ def may_send(
         )
 
     check_adapter_v2(ADAPTER_MODULE)  # read at CALL time so the module under check is substitutable
+    # Item (g), the supervisor's: the recording path must keep every row's whole track vector, and
+    # the disk it needs must be there before a paid run starts rather than part way through one.
+    check_adapter_writes_full_vectors(ADAPTER_MODULE)
+    check_disk_for_full_vectors(len(plan), OBSERVED_ROWS_PER_ANSWER, OBSERVED_TRACKS_PER_ANSWER)
 
     budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
     if budget.charged() != budget.sent:
@@ -1463,3 +1469,269 @@ def requests_permitted(verdict: dict[str, Any]) -> int:
     deletion cache no registered claim can be made from.
     """
     return AUTHORISED_REQUESTS if verdict["go"] else 0
+
+
+# ---------------------------------- item (g): the full track vector of every paid answer is kept
+
+#: Sign-off item (g). NOT one of Albert's clauses: the SUPERVISOR's requirement, labelled like item
+#: (f) so a refusal never attributes to him a condition he did not state.
+ITEM_G_IS_A_SUPERVISOR_REQUIREMENT = (
+    "item (g) of the supervisor's sign-off checklist, not a clause of Albert's approval. His approval "
+    "names the activity precondition, the sign-off, one run, every request logged and the scope; this "
+    "is an additional condition the supervisor imposed, and conflating the two would misreport what he "
+    "agreed to"
+)
+
+WHY_THE_FULL_TRACK_VECTOR_IS_KEPT = (
+    "the recording path keeps each row's whole value multiset for CELL_TRACKS -- K562, HepG2, GM12878 "
+    "and IMR-90 -- plus extremes and a mean, and discards every other column. For 1,232 ASTROCYTE "
+    "screen elements that means every BRAIN-TISSUE track's value would be BOUGHT AND THROWN AWAY to "
+    "keep four non-neural cell lines. Paid data is the one kind this project cannot re-fetch for free, "
+    "so the full vector is persisted for every gene row of every paid answer. This is the cache-hit "
+    "defect one layer out: there the run would have charged 1,232 and bought nothing, here it would "
+    "charge 1,232 and discard the part that answers the question it was authorised for. Both were "
+    "invisible to every stub, because a stub returns what the code asks for -- and the code was asking "
+    "for four cell lines"
+)
+
+WIDENING_IS_FREE_ONLY_BEFORE_THE_RESPONSE_ARRIVES = (
+    "keeping more of a response costs nothing while the response has not been received, and a fresh "
+    "request once it has: a cached answer no longer holds what it dropped. The 1,232 responses do not "
+    "exist yet, which is why item (g) lands BEFORE the send rather than after it"
+)
+
+#: float64, not float32. A lossy store of data that cannot be re-fetched is the same mistake one layer
+#: down: the values would come back close to what was paid for rather than equal to it.
+FULL_VECTOR_DTYPE = "<f8"
+
+#: The key the full vector is written under, on each gene-axis row, beside the existing columns.
+FULL_VECTOR_KEY = "track_vector"
+
+#: The free disk this project will not go below, matching scripts/capacity_gate.py's own floor.
+DISK_FLOOR_BYTES = 10 * 1024**3
+
+
+class VectorRefusedError(SendRefusedError):
+    """A vector is absent, short, long or unreadable, so the answer does not record what was paid for."""
+
+
+def pack_track_vector(values: list[float]) -> str:
+    """One gene row's whole track vector as base64 float64, in the response's own column order."""
+    import array
+    import base64
+
+    buf = array.array("d", [float(v) for v in values])
+    if sys.byteorder != "little":  # the dtype is declared little-endian, so say so on either machine
+        buf.byteswap()
+    return base64.b64encode(buf.tobytes()).decode("ascii")
+
+
+def unpack_track_vector(blob: str, expected: int | None = None) -> list[float]:
+    """The vector back out, REFUSING a truncated or over-long one rather than returning what fits."""
+    import array
+    import base64
+
+    raw = base64.b64decode(blob.encode("ascii"), validate=True)
+    if len(raw) % 8:
+        raise VectorRefusedError(
+            f"a track vector of {len(raw)} bytes is not a whole number of float64 values, so it is "
+            "truncated and the answer does not record what was paid for"
+        )
+    buf = array.array("d")
+    buf.frombytes(raw)
+    if sys.byteorder != "little":
+        buf.byteswap()
+    out = list(buf)
+    if expected is not None and len(out) != int(expected):
+        raise VectorRefusedError(
+            f"a track vector carries {len(out)} values and the answer's own track count is {expected}: "
+            "a short vector is a partly discarded answer and a long one is not this response's axis. "
+            f"{WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        )
+    return out
+
+
+def full_vector_entry(values: list[float]) -> dict[str, Any]:
+    """The compact record written on a gene-axis row: the count, the dtype and the packed bytes."""
+    return {"n": len(values), "dtype": FULL_VECTOR_DTYPE, "b64": pack_track_vector(values)}
+
+
+def with_full_track_vectors(
+    axis: dict[str, Any], matrix: Any, track_names: list[str], tracks_sha256: str
+) -> dict[str, Any]:
+    """`axis` with every row's whole track vector added, and the axis's track names recorded once.
+
+    ADDITIVE and nothing else: no existing key is written, removed or reordered, so the registered
+    frozen features -- which read the effects and the per-cell values -- cannot move by one bit. The
+    names are kept once per answer rather than per row, bound to the `tracks_sha256` the adapter
+    computes from the response's own var axis, so 371 NAMED values come back out of one row.
+    """
+    out = dict(axis)
+    rows = []
+    for row in axis.get("rows", []):
+        gi = int(row.get("row", len(rows)))
+        values = [float(matrix[gi, ti]) for ti in range(len(track_names))]
+        rows.append({**row, FULL_VECTOR_KEY: full_vector_entry(values)})
+    out["rows"] = rows
+    out["track_names"] = list(track_names)
+    out["tracks_sha256"] = tracks_sha256
+    out["full_vector_note"] = WHY_THE_FULL_TRACK_VECTOR_IS_KEPT
+    return out
+
+
+def named_track_values(axis: dict[str, Any], row_index: int) -> dict[str, float]:
+    """One gene row's vector as {track name: value}, refusing unless the lengths agree."""
+    names = axis.get("track_names") or []
+    if not names:
+        raise VectorRefusedError(
+            "the answer records no track names, so its values cannot be named and a reader cannot tell "
+            f"a brain track from a cell line. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        )
+    for row in axis.get("rows", []):
+        if int(row.get("row", -1)) != int(row_index):
+            continue
+        entry = row.get(FULL_VECTOR_KEY)
+        if not entry:
+            raise VectorRefusedError(
+                f"gene row {row_index} carries no {FULL_VECTOR_KEY}, so this paid row's non-cell-line "
+                f"tracks are gone. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+            )
+        values = unpack_track_vector(entry["b64"], expected=len(names))
+        return dict(zip(names, values, strict=True))
+    raise VectorRefusedError(f"the answer has no gene row {row_index}")
+
+
+def check_full_vectors_in_answer(answer: dict[str, Any]) -> dict[str, Any]:
+    """Refuse unless EVERY gene row of EVERY output of this answer carries its whole track vector."""
+    model = answer.get("model") or {}
+    axes = model.get("gene_axis_outputs")
+    if not axes:
+        raise VectorRefusedError(
+            "the answer records no gene axis at all, so there is nothing to check and nothing was "
+            f"kept. {ITEM_G_IS_A_SUPERVISOR_REQUIREMENT}. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        )
+    rows = 0
+    for axis in axes:
+        names = axis.get("track_names") or []
+        total = axis.get("tracks_total")
+        if not names:
+            raise VectorRefusedError(
+                f"output {axis.get('output')} records no track names. {ITEM_G_IS_A_SUPERVISOR_REQUIREMENT}"
+            )
+        if total is not None and len(names) != int(total):
+            raise VectorRefusedError(
+                f"output {axis.get('output')} names {len(names)} tracks and counts {total}: the names "
+                "and the axis disagree, so a named value cannot be trusted to be that track's value"
+            )
+        if not axis.get("tracks_sha256"):
+            raise VectorRefusedError(
+                f"output {axis.get('output')} records no tracks_sha256, so the name list it was read "
+                "on cannot be identified later"
+            )
+        for row in axis.get("rows", []):
+            entry = row.get(FULL_VECTOR_KEY)
+            if not entry:
+                raise VectorRefusedError(
+                    f"output {axis.get('output')} row {row.get('row')} carries no {FULL_VECTOR_KEY}. "
+                    f"{WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+                )
+            unpack_track_vector(entry["b64"], expected=len(names))
+            rows += 1
+    return {"outputs": len(axes), "gene_rows_with_full_vectors": rows}
+
+
+def full_vector_disk_estimate(
+    elements: int, rows_per_element: float, tracks: int, free_bytes: int | None = None
+) -> dict[str, Any]:
+    """What keeping the full vectors costs on disk, measured from the format rather than assumed.
+
+    base64 of float64 is 4 characters per 3 bytes, so a row of `tracks` values is 8*tracks bytes
+    packed and ceil(8*tracks/3)*4 characters written, plus the row's existing columns.
+    """
+    import math
+
+    packed = 8 * int(tracks)
+    encoded = math.ceil(packed / 3) * 4
+    per_row = encoded + 40  # the {"n": .., "dtype": "<f8", "b64": ".."} wrapper, measured below in tests
+    per_answer = per_row * rows_per_element
+    total = int(per_answer * elements)
+    free = shutil.disk_usage(str(ROOT_FOR_BLOBS)).free if free_bytes is None else int(free_bytes)
+    return {
+        "elements": int(elements),
+        "rows_per_element": rows_per_element,
+        "tracks": int(tracks),
+        "bytes_per_row": per_row,
+        "bytes_per_answer": int(per_answer),
+        "bytes_total": total,
+        "mb_total": round(total / 1024**2, 1),
+        "free_bytes": free,
+        "free_gb": round(free / 1024**3, 2),
+        "floor_bytes": DISK_FLOOR_BYTES,
+        "fits_above_the_floor": free - total >= DISK_FLOOR_BYTES,
+    }
+
+
+def check_disk_for_full_vectors(
+    elements: int, rows_per_element: float, tracks: int, free_bytes: int | None = None
+) -> dict[str, Any]:
+    """Refuse to start a paid run that would leave the machine below the floor it already paged under."""
+    est = full_vector_disk_estimate(elements, rows_per_element, tracks, free_bytes)
+    if not est["fits_above_the_floor"]:
+        raise VectorRefusedError(
+            f"keeping the full track vectors for {elements} answers needs about {est['mb_total']} MB "
+            f"and {est['free_gb']} GB is free, which would leave less than the "
+            f"{DISK_FLOOR_BYTES // 1024**3} GB floor. The machine paged twice tonight, so this is a "
+            f"refusal and not a warning. {ITEM_G_IS_A_SUPERVISOR_REQUIREMENT}"
+        )
+    return est
+
+
+#: What one answer of the sweep carried, read from adapter v2's own note on the response it recorded:
+#: 29 gene-axis rows on a 371-track axis. Cited rather than assumed, and a test reads a cached sweep
+#: answer when one is on the machine so a drift in either number fails instead of passing quietly.
+OBSERVED_ROWS_PER_ANSWER = 29
+OBSERVED_TRACKS_PER_ANSWER = 371
+OBSERVED_SHAPE_SOURCE = (
+    "adapter v2's own note on the response it recorded: 29 gene-axis rows x 371 tracks, ~12.6 KiB at "
+    "the SUMMARY level. The full vector is materially larger, which is why the estimate is computed "
+    "from the format and checked against the floor rather than assumed to be small"
+)
+
+
+def check_adapter_writes_full_vectors(module_name: str = ADAPTER_MODULE) -> dict[str, Any]:
+    """Refuse unless the adapter the runner writes through keeps each row's WHOLE track vector.
+
+    Item (g). Checked on the module's SOURCE rather than by running it, because the thing that must be
+    true is that the recording path persists the vector -- and a stub response cannot show that: a stub
+    returns what the code asks for, and the code was asking for four cell lines.
+    """
+    import ast
+    import importlib.util
+
+    spec = importlib.util.find_spec(module_name)
+    origin = getattr(spec, "origin", None) if spec is not None else None
+    if not origin or not Path(origin).exists():
+        raise VectorRefusedError(
+            f"item (g): the adapter module {module_name} has no source file to read, so the runner "
+            f"cannot be shown to keep the full track vector. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        )
+    tree = ast.parse(Path(origin).read_text())
+    recorder = next(
+        (n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "recorded_axis"),
+        None,
+    )
+    if recorder is None:
+        raise VectorRefusedError(
+            f"item (g): {module_name} has no recorded_axis, so the gene-axis recording path is not "
+            f"where this check believes it is. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}"
+        )
+    body = ast.dump(recorder)
+    keeps = FULL_VECTOR_KEY in body or "with_full_track_vectors" in body
+    if not keeps:
+        raise VectorRefusedError(
+            f"item (g): {module_name}.recorded_axis keeps CELL_TRACKS only and writes no "
+            f"{FULL_VECTOR_KEY}, so for 1,232 astrocyte elements every brain-tissue track would be "
+            f"bought and discarded. {WHY_THE_FULL_TRACK_VECTOR_IS_KEPT}. "
+            f"{WIDENING_IS_FREE_ONLY_BEFORE_THE_RESPONSE_ARRIVES}"
+        )
+    return {"module": module_name, "recorded_axis_keeps_the_full_vector": True}
