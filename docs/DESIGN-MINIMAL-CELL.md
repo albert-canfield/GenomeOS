@@ -1268,3 +1268,103 @@ volumes and pages are as recalled. The repository could not confirm them either 
 only as CellPhoneDB ligand-receptor pairs in `genomeos/std/signalling.bio` and EOMES, MIXL1 and
 WNT3A only as marker-gene names in `genomeos/lib/catalog.py`, and no regulatory citation for any of
 them.
+
+## The result: the program lacked any repressor of SOX17 but the rule whose sign was wrong (2026-10-02)
+
+Twelve runs reported, from the closed list registered at `0790d51` before any of them: the ten
+entries, the baseline, and the X1 characterisation that is outside the list and cannot clear the
+bound. Result file `data/results/mesoderm_diagnosis_single.json`, written by committed code with
+`own_code_is_committed` true and nothing of another lane's on the counting path. Ecto / meso / endo
+at the final stage, with the sustained-tail minimum over the last 10% of simulated time:
+
+| run | ecto | meso | endo | tail min | bound |
+| --- | --- | --- | --- | --- | --- |
+| baseline | 0.633 | 0.000 | 0.367 | 0.0000 | no |
+| W1 Wnt3a activates TBXT | 0.625 | 0.000 | 0.375 | 0.0000 | no |
+| W2 Tbxt activates WNT3A | 0.633 | 0.000 | 0.367 | 0.0000 | no |
+| F1 Fgf4 activates TBXT | 0.625 | 0.000 | 0.375 | 0.0000 | no |
+| F2 Tbxt activates FGF4 | 0.633 | 0.000 | 0.367 | 0.0000 | no |
+| M1 MIXL1 node | 0.050 | 0.025 | 0.925 | 0.0167 | **clears** |
+| E1 EOMES node | 0.000 | 0.000 | 1.000 | 0.0000 | no |
+| A1 NODAL antagonist | — | — | — | — | no run |
+| R1 leave out Sox17 inhibits TBXT | 0.367 | **0.633** | 0.000 | 0.6333 | **clears** |
+| R2 leave out Sox2 inhibits TBXT | 0.283 | 0.000 | 0.717 | 0.0000 | no |
+| R3 leave out Tbxt inhibits SOX2 | 0.642 | 0.000 | 0.358 | 0.0000 | no |
+| X1 leave out Nodal activates SOX17 (outside the list) | 0.750 | 0.000 | 0.250 | 0.0000 | n/a |
+
+**The pairwise pass did not run.** Registered condition 4 runs it only if no single component clears
+the bound, and two did. n and n-choose-2 stay as registered, 10 and 45, and the list did not grow.
+
+**The two null controls came back exactly on the baseline**, 0.633 / 0.000 / 0.367 to the digit, as
+W2 and F2 were predicted to: nothing in the module reads Wnt3a or Fgf4, so the harness could not
+have been moving the fates by adding a species.
+
+**Baseline mesoderm is not a band that collapses; it is never there.** Over all 41 recorded samples
+of the 40 h run the mesoderm share is 0.000 at every one, not merely at the end.
+
+**Why the drive candidates changed nothing, as arithmetic.** At clamped Nodal 2.0, where Tbxt peaks,
+the three genes decompose like this (activator drive `a`, repression factor `rep`, transcription):
+
+| gene | a | activators | rep | repressed by | transcription |
+| --- | --- | --- | --- | --- | --- |
+| SOX2 | 1.0000 | 0 | 0.09037 | Tbxt 0.8202, Sox17 0.1102 | 1.4037 |
+| TBXT | 0.8000 | 1 | 0.02866 | Sox2 0.2601, Sox17 0.1102 | 0.2793 |
+| SOX17 | 0.0905 | 2 | **1.00000** | **nothing** | 0.9547 |
+
+TBXT's drive is already 0.80 of its maximum and its repression factor is 0.029. The binding
+constraint on TBXT is repression, not drive, so a sourced extra activator cannot restore the band:
+W1 and F1 moved mesoderm by nothing at all, and the mesoderm share they produced is 0.000 under the
+same bound that R1 clears at 0.633.
+
+**The compensation, named.** `rep = 1.00000` for SOX17 is not a rounding: SOX17 has no inhibitor in
+the program at all. The repression graph is Tbxt ⊣ SOX2, Sox2 ⊣ TBXT, Sox17 ⊣ TBXT, Sox17 ⊣ SOX2 —
+SOX17 is a sink that represses two genes and is repressed by none. Before `5cbce26`, `Tbxt inhibits
+SOX17` was SOX17's only brake, so **the program lacked any repressor of SOX17 other than the rule
+whose sign was wrong.** That is what was being compensated for. Correcting the sign did not merely
+remove the brake; it turned it into SOX17's second activator, while TBXT keeps two repressors, one of
+them SOX17 itself, so TBXT now drives its own repressor with nothing on the other side. The module's
+own header, "Mutual repression makes the choice sharp", is contradicted by its rule set: the
+repression is not mutual, and for SOX17 it was mutual only through the rule that was wrong.
+
+**R1 is the diagnosis and not a fix.** `Sox17 inhibits TBXT` is sourced by the same paper as the
+correction — Lolas et al. 2014, Fig. 3C, Sox17 overexpression lowers Brachyury — so the one
+single-component intervention that restores the band removes a cited rule. With its unsourced
+strengths, thresholds and Hill coefficients the program cannot hold both of Lolas 2014's results at
+once and still make mesoderm. That is a statement about this program, not about the embryo, which
+holds both and makes mesoderm anyway.
+
+**M1 clears the bound the other way round, and barely.** Its 0.025 comes with ectoderm collapsed to
+0.050 and endoderm raised to 0.925, and its tail runs 0.0417, 0.0417, 0.025, 0.0167, 0.025 — three
+cells, three, two and two of 120. A `Mixl1 ⊣ SOX2` term removes the ectoderm competitor where NODAL
+is present; it does not rescue TBXT against SOX17, whose share grows. Clearing the weak bound is all
+that is claimed for it.
+
+**E1 and R2 both went to endoderm, and the corrected sign is why.** E1's second route into SOX17
+takes endoderm to 1.000. R2, which lifts the Sox2 brake off TBXT, raises Tbxt — and a raised Tbxt
+now activates SOX17, so endoderm rises from 0.367 to 0.717 and mesoderm stays at 0.000. Lifting a
+brake off the mesoderm gene makes the model more endodermal; that is the corrected sign acting, and
+it is the clearest single sign that the missing term is on SOX17 and not on TBXT.
+
+**The pairs are bounded, by arithmetic and not by a run.** With W2 present, WNT3A's only activator is
+Tbxt, which stays near zero, so the Wnt3a term on TBXT is no larger than it was in W1 alone, where
+WNT3A ran unregulated at its full `max_rate`; W1 alone gave 0.000. The same holds for F1 and F2. The
+two-limb loops are therefore bounded above by a zero. This is an inference from the numbers above,
+not a measurement: the pairwise pass did not run, as registered.
+
+**The ceilings travel with the answer.** The CS7 comparison stays falsified on all three layers,
+carrying `d55cb19` verbatim: "a sampled census of one embryo is not a 1-D axis, and the model names
+no stage." Nothing here was tuned: no strength, threshold, Hill coefficient, basal, max, `nodal_max`
+or `decay_length` was varied in any run, the unsourced thresholds were excluded as X3 and are
+reported as a finding rather than adjusted, and `d55cb19`'s NODAL ceiling stands — no measured NODAL
+threshold maps to model units, and Dubrulle et al. 2015 argue induction kinetics rather than a
+clamped level set fates. The sign correction at `5cbce26` is untouched in every run above. And the
+finding is about a program: the program lacked a repressor of SOX17. It is not a claim that
+repressing SOX17 specifies mesoderm.
+
+**And the band that was lost rested on the module's weakest rule.** At `5cbce26^` SOX17 had exactly
+one inhibitor, `Tbxt inhibits SOX17`, carrying `evidence: inferred "mesoderm dampens endoderm";
+confidence: 0.4`, and its partner `Sox17 inhibits TBXT` carried `inferred "endoderm excludes mesoderm
+program"; confidence: 0.4`. The mutual-repression toggle that held the 0.10 mesoderm band was built
+out of two inferred rules at the module's lowest confidence, and the source contradicts one of them.
+So the 0.10 was not a result the program had earned, and losing it is not a regression in anything
+the program could show: `0.10 to 0.00` is a guess being withdrawn, not a measurement being lost.
