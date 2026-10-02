@@ -30,10 +30,16 @@ import time
 from pathlib import Path
 from typing import Any
 
+from genomeos import manifest as mf
 from genomeos.attribution.budget import TIERS, read_axes
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 COPY_MIN = 0.5  # duplicated fraction from which a block is read as a copy first
+TOP = 25  # candidates and largest copies kept in the result file; the manifest records it
+#: The code this lane is answerable for, for the one shared cleanliness block (genomeos/manifest.py).
+OWN_CODE = ("genomeos/attribution/organise.py",)
+#: How every input of this result is pinned: the file itself, by sha256, in the manifest's `inputs`.
+PINNED = "as the per-chromosome result file listed in inputs, pinned there by sha256"
 CASE_READING = {
     "syntax": "constrained across mammals and among people, unannotated: the sharpest candidate",
     "relaxed": "held across mammals, variable among people: a frame whose value varies, or lost function",
@@ -243,7 +249,7 @@ def _declared(chrom: str, results_dir: Path, budget: dict[str, Any] | None) -> d
     }
 
 
-def organise(chrom: str, results_dir: Path = RESULTS_DIR, top: int = 25) -> dict[str, Any]:
+def organise(chrom: str, results_dir: Path = RESULTS_DIR, top: int = TOP) -> dict[str, Any]:
     t0 = time.time()
     budget = read_axes(chrom, results_dir)
     rows = blocks(chrom, results_dir, budget)
@@ -343,7 +349,100 @@ def distil(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     }
 
 
+@mf.depends_on_models("alphagenome")
+def manifest(chrom: str, results_dir: Path = RESULTS_DIR, top: int = TOP) -> dict[str, Any]:
+    """The provenance contract for `organised_<chrom>` (review item R9), built HERE and THROUGH
+    `inputs()`, by the writer that owns the declaration.
+
+    Until 2026-10-02 `run_and_save` called `save_result` with no manifest argument and no
+    `result_manifest` key in the payload, so every `organised_<chrom>` in the registry was written on
+    the legacy allowlist's warning path: the contract was never met and nothing declared a single
+    input by sha256. `inputs()`, which exists for exactly this, was called only by three downstream
+    consumers (`scripts/clause2_matched_control.py`, `scripts/constrained_unknown_targets.py`,
+    `scripts/unknown_coverage.py`) and never by its own writer -- so the three results that READ this
+    one pinned its inputs while this one did not. A declaration that does not exist is a larger gap
+    than one that shrinks: a shrinking declaration is at least a claim the filesystem can be held
+    against, and an absent one leaves the reader with the result's own four-key `inputs` block, which
+    was built without consulting the filesystem at all (see `_declared`).
+
+    The sources are built from what `inputs()` found, not from a constant list, for the reason
+    `_declared` records: `blocks()` reads variation, duplication and the attribution runs tolerantly,
+    so naming a reading that is not on this machine would claim provenance for a reading no block
+    carries. The budget pair needs no condition because `inputs()` raises when both are absent.
+    """
+    from genomeos.attribution.targets import ORIGIN, RUNS
+
+    declared = inputs(chrom, results_dir)  # raises on an unresolvable pointer; the one reading
+    present = {p.name for p in declared}
+    sources: list[dict[str, Any]] = []
+
+    def source(stem: str, accession: str) -> None:
+        if f"{stem}.json" in present:
+            sources.append({"accession": accession, "version": PINNED})
+
+    source(
+        f"budget_axes_{chrom}",
+        f"Zoonomia cactus241way phyloP and the UNKNOWN block partition, restated under the R7 tier "
+        f"names (budget_axes_{chrom})",
+    )
+    source(
+        f"budget_{chrom}",
+        f"the stored budget this chromosome's blocks, classes and phyloP measurements come from "
+        f"(budget_{chrom})",
+    )
+    source(
+        f"variation_{chrom}",
+        f"gnomAD Gnocchi non-coding constraint per block, the human axis (area J, variation_{chrom})",
+    )
+    source(
+        f"duplication_{chrom}",
+        f"UCSC genomicSuperDups curated segmental duplications per block (duplication_{chrom})",
+    )
+    for r in RUNS:
+        source(
+            f"{r}_{chrom}",
+            f"the AlphaGenome attribution run over the {ORIGIN[r]} element set, with the local "
+            f"element table its summary points at where it has one ({r}_{chrom})",
+        )
+    return {
+        "sources": sources,
+        "inputs": [mf.input_entry(path, partition=None) for path in declared],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
+        "parameters": {
+            "copy_min_fraction": COPY_MIN,
+            "top": top,
+            "case_order": "syntax, relaxed, recent, unmeasured, tolerant; ties by mammal_fraction",
+            "join": "by (start, end) on the budget's blocks; nothing is recomputed here",
+            "copies_first": "a block at or above copy_min_fraction is read as a copy whatever its tier",
+        },
+        "exclusions": [
+            f"the result file carries the first {top} candidates and the {top} largest copies, not "
+            f"every block: blocks() returns the full join on demand from the same inputs",
+            "a per-chromosome reading that is not on this machine is a smaller join, not an excluded "
+            "block: which one is recorded in the result's inputs_optional_absent",
+        ],
+        "partitions": "n/a: no evaluation partition is involved; this is a join over one chromosome's "
+        "blocks, and no number here is fitted or held out",
+    }
+
+
 def run_and_save(chrom: str, results_dir: Path = RESULTS_DIR, **kw) -> dict[str, Any]:
+    """Organise the chromosome and write the result WITH the manifest this module builds.
+
+    `strict=True` is the point of this function. `organised_<chrom>` is on the legacy allowlist
+    (`data/results_legacy.txt`), so without it an incomplete manifest -- or no manifest at all, which
+    is what this writer passed until 2026-10-02 -- is a warning and the bytes are written anyway.
+    With it, `save_result` quarantines the result and raises `ManifestError`: a missing or incomplete
+    declaration is REFUSED, not warned about, and the refusal fires on the one writer that owns the
+    declaration rather than on the consumers downstream of it.
+
+    The manifest is built after the run, not before, so `inputs()` is asked about the files the run
+    has just read; both calls sit in one `save_result` tracing window, so every byte the manifest
+    declares is also reconciled against what the writer actually opened.
+    """
     out = organise(chrom, results_dir, **kw)
-    save_result(f"organised_{chrom}", out, results_dir)
+    m = manifest(chrom, results_dir, top=kw.get("top", TOP))
+    save_result(f"organised_{chrom}", out, results_dir, manifest=m, strict=True)
     return out

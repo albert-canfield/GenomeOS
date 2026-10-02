@@ -209,3 +209,128 @@ def test_the_declaration_raises_when_a_pointed_at_table_is_absent(tmp_path: Path
     _summary_with_pointer(tmp_path, "data/results/elements/absent_chr21.json.gz")
     with pytest.raises(FileNotFoundError, match="absent_chr21"):
         _declared("chr21", tmp_path, {"axes_source": "budget_chr21"})
+
+
+# --- site 4: the writer that owns the declaration must call it -----------------------------------
+#
+# `inputs()` and `_declared()` above were both reached only through their callers: until 2026-10-02
+# `run_and_save` called `save_result` with NO manifest argument and no `result_manifest` key, so
+# `inputs()` -- which exists to declare this result's dependencies -- was called by three downstream
+# scripts and never by the writer of the result it describes. `organised_<chrom>` is on the legacy
+# allowlist, so that write warned and went through. These tests plant the refusal: a missing manifest
+# must stop the write, not annotate it.
+
+
+def _organisable(d: Path, chrom: str = "chr21") -> None:
+    """A budget `organise()` can actually run over: one constrained_unknown block with the fields
+    `blocks()` reads. Planted, so the refusal tests below fail on the manifest and nothing else."""
+    doc = {
+        "chrom": chrom,
+        "blocks": [
+            {
+                "start": 0,
+                "end": 1000,
+                "length": 1000,
+                "class": "unknown",
+                "phylop": {"fraction_above": 0.4},
+                "elements": {"n": 2},
+                "guess": {"tier": "constrained_unknown", "confidence": 0.5},
+            }
+        ],
+        "by_tier": {},
+    }
+    (d / f"budget_{chrom}.json").write_text(json.dumps(doc))
+
+
+def test_run_and_save_refuses_a_result_with_no_manifest(tmp_path: Path, monkeypatch) -> None:
+    """PLANTED: the manifest builder returns None, which is exactly what the writer passed before
+    this change. The write must be REFUSED -- ManifestError, nothing in the results directory, the
+    computed result in the quarantine -- and not warned about."""
+    from genomeos import manifest as mf
+    from genomeos.results import quarantine_dir
+
+    _organisable(tmp_path)
+    _runs(tmp_path)
+    monkeypatch.setattr(organise, "manifest", lambda *a, **k: None)
+    with pytest.raises(mf.ManifestError) as e:
+        organise.run_and_save("chr21", tmp_path)
+    assert "manifest incomplete" in str(e.value), str(e.value)
+    assert not (tmp_path / "organised_chr21.json").exists(), "the bytes were written anyway"
+    assert (quarantine_dir(tmp_path) / "organised_chr21.json").exists(), "the compute was thrown away"
+
+
+def test_run_and_save_refuses_a_manifest_that_declares_no_inputs(tmp_path: Path, monkeypatch) -> None:
+    """PLANTED: a manifest with every other field and an empty `inputs`. The missing-manifest test
+    above would pass against a writer that merely passed some dict; this one fails unless the
+    declaration is really there."""
+    from genomeos import manifest as mf
+
+    _organisable(tmp_path)
+    _runs(tmp_path)
+    real = organise.manifest
+
+    def hollow(*a, **k):
+        return {**real(*a, **k), "inputs": []}
+
+    monkeypatch.setattr(organise, "manifest", hollow)
+    with pytest.raises(mf.ManifestError, match="inputs must be a non-empty list"):
+        organise.run_and_save("chr21", tmp_path)
+    assert not (tmp_path / "organised_chr21.json").exists()
+
+
+def test_run_and_save_builds_its_manifest_through_inputs(tmp_path: Path) -> None:
+    """The positive control, and the test that would have caught the gap: the result it writes must
+    declare, by sha256, every path `inputs()` returns -- the pointed-at element table included."""
+    _organisable(tmp_path)
+    _runs(tmp_path)
+    table = tmp_path / "elements_chr21.json.gz"
+    table.write_text(json.dumps([]))
+    _summary_with_pointer(tmp_path, str(table))
+
+    organise.run_and_save("chr21", tmp_path)
+    doc = json.loads((tmp_path / "organised_chr21.json").read_text())
+    m = doc["result_manifest"]
+    assert m["complete"] is True, m.get("problems")
+    declared = {i["path"]: i for i in m["inputs"]}
+    assert set(declared) == {str(p) for p in organise.inputs("chr21", tmp_path)}
+    assert str(table) in declared, "the only unrecoverable input was left out of the declaration"
+    assert all(i["sha256"] and "partition" in i for i in m["inputs"])
+    assert m["sources"] and all(s["accession"] and s["version"] for s in m["sources"])
+
+
+def test_run_and_save_sets_strict_so_the_legacy_allowlist_cannot_excuse_it(
+    tmp_path: Path, monkeypatch
+) -> None:
+    """`organised_<chrom>` is on the legacy allowlist, so in the registry an incomplete manifest is a
+    warning unless the writer asks for enforcement. This asserts the ask, because the two tests above
+    cannot: they run in a tmp directory, where `strict` is the ONLY thing that enforces anything."""
+    _organisable(tmp_path)
+    _runs(tmp_path)
+    seen: dict[str, object] = {}
+
+    def spy(name, payload, results_dir=None, manifest=None, strict=None, **k):
+        seen.update(name=name, manifest=manifest, strict=strict)
+        return tmp_path / f"{name}.json"
+
+    monkeypatch.setattr(organise, "save_result", spy)
+    organise.run_and_save("chr21", tmp_path)
+    assert seen["name"] == "organised_chr21"
+    assert seen["strict"] is True, "an incomplete declaration would only warn"
+    assert isinstance(seen["manifest"], dict) and seen["manifest"]["inputs"]
+
+
+def test_a_sources_entry_is_not_claimed_for_a_reading_that_is_absent(tmp_path: Path) -> None:
+    """The mirror defect, at the manifest this time: `blocks()` reads variation and duplication
+    through `or {}`, so a source for gnomAD Gnocchi on a chromosome without `variation_<chrom>` would
+    claim provenance for a reading no block carries."""
+    _organisable(tmp_path)
+    _runs(tmp_path)
+    without = organise.manifest("chr21", tmp_path)
+    assert not [s for s in without["sources"] if "Gnocchi" in s["accession"]]
+    assert not [s for s in without["sources"] if "genomicSuperDups" in s["accession"]]
+
+    (tmp_path / "variation_chr21.json").write_text(json.dumps({"blocks": []}))
+    (tmp_path / "duplication_chr21.json").write_text(json.dumps({"blocks": []}))
+    with_both = organise.manifest("chr21", tmp_path)
+    assert [s for s in with_both["sources"] if "Gnocchi" in s["accession"]]
+    assert [s for s in with_both["sources"] if "genomicSuperDups" in s["accession"]]
