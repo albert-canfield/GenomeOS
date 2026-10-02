@@ -343,3 +343,261 @@ def registration() -> dict[str, Any]:
         "recommendation": "",
         "recommendation_length": 0,
     }
+
+
+# ===================================================================================================
+# IMPLEMENTATION. Everything above this line was committed at `0d4247b` and written into
+# `data/results/rule_evidence_tier_proposal_registration.json` at `709aebc` before any of the
+# following existed. Nothing below changes a decision above; where a prediction came out false it is
+# recorded in `scripts/rule_evidence_tier_cost.py`'s output and reported, not quietly amended.
+# ===================================================================================================
+
+from collections.abc import Iterable  # noqa: E402
+from dataclasses import dataclass  # noqa: E402
+
+
+def is_tier(value: str) -> bool:
+    """True for the four tiers, False for `not_assessed` and for anything off the axis."""
+    return value in TIERS
+
+
+def rank(value: str) -> int:
+    """Position on the census's cascade: 0 is the most-grounded tier, `len(TIERS) - 1` the least.
+
+    `not_assessed` HAS NO RANK and raises, deliberately. It is not a worse tier than `U_unsourced`;
+    it is not a tier, and giving it a rank is exactly how it would start being compared with one.
+    """
+    if value == NOT_ASSESSED:
+        raise ValueError(
+            f"{NOT_ASSESSED!r} has no rank: it is the absence of a tier, not the lowest one. "
+            "A caller that needs to order it is comparing a finding with the lack of one."
+        )
+    if value not in TIERS:
+        raise ValueError(f"{value!r} is not on the axis; the axis is {list(AXIS_VALUES)}")
+    return TIERS.index(value)
+
+
+def floor(values: Iterable[str]) -> str:
+    """The lowest tier a set of marks rests on, or `NOT_ASSESSED` when that is undetermined.
+
+    Undetermined in two cases, and both return `NOT_ASSESSED` rather than a tier:
+
+    * any mark in the set is `NOT_ASSESSED` - one unsearched slot means the set's floor is unknown,
+      and reporting `U_unsourced` instead would claim a search nobody made;
+    * the set is EMPTY - nothing was marked, so nothing is known. An empty set returning the most
+      grounded tier is the vacuous-truth bug that would let an unmarked result read as measured.
+    """
+    vals = list(values)
+    off_axis = sorted({v for v in vals if v not in AXIS_VALUES})
+    if off_axis:
+        raise ValueError(f"not on the axis: {off_axis}; the axis is {list(AXIS_VALUES)}")
+    if not vals or NOT_ASSESSED in vals:
+        return NOT_ASSESSED
+    return max(vals, key=rank)
+
+
+@dataclass(frozen=True, slots=True)
+class SlotMark:
+    """One mark on one rule number. `adjudication` names WHO decided and under what registration.
+
+    The tier alone is not self-supporting: the census defines `M_measured_quoted` by an act of
+    fetching, so a mark asserts a class as adjudicated by a named adjudication (decision 1). An
+    empty `adjudication` on a mark that is not `NOT_ASSESSED` is a problem the coherence check
+    reports.
+    """
+
+    rule: str
+    field: str
+    tier: str = NOT_ASSESSED
+    adjudication: str = ""
+
+
+@dataclass(frozen=True, slots=True)
+class RuleMark:
+    """The rule-level mark: what the rule's own citation does for the interaction it states.
+
+    On the census's SECOND axis, not the tier axis, because the claim is the EXISTENCE of the
+    interaction and the four tiers are defined for the value of a quantity.
+    """
+
+    rule: str
+    interaction_standing: str = ""
+    adjudication: str = ""
+
+
+#: The coherence rules between the two levels, as registered in prediction P6. Each is derived from
+#: the census's OWN class definitions and not from the data it produced; both are validated against
+#: the census's 21 adjudications and each has a counterfactual in the suite.
+COHERENCE_RULES = {
+    "E_needs_a_source_for_the_interaction": (
+        "`E_existence_only` is defined as a fetched source supporting the EXISTENCE of the "
+        "interaction while stating no value. A slot may therefore not carry it on a rule whose "
+        "interaction standing is `no_source_cited` or `names_neither_factor`: there would be no "
+        "source for the existence for it to rest on."
+    ),
+    "U_needs_the_citation_not_to_establish_the_interaction": (
+        "`U_unsourced` is defined to include that the slot's own citation 'does not even establish "
+        "the interaction'. A slot may therefore not carry it on a rule whose standing is "
+        "`supports_declaration`; such a slot is `E_existence_only`."
+    ),
+    "a_tier_names_its_adjudication": (
+        "A mark that is not `not_assessed` asserts a class that was decided by someone, so it must "
+        "name the adjudication that decided it. A bare tier with no adjudication is the kind of "
+        "claim no artefact supports."
+    ),
+}
+
+
+def coherence_problems(
+    slot_marks: Iterable[SlotMark], rule_marks: Iterable[RuleMark]
+) -> list[dict[str, str]]:
+    """Every place the per-slot tier and the per-rule standing cannot both be true. Empty is good."""
+    standing = {m.rule: m.interaction_standing for m in rule_marks}
+    problems: list[dict[str, str]] = []
+    for m in slot_marks:
+        if m.tier not in AXIS_VALUES:
+            problems.append({"rule": m.rule, "field": m.field, "rule_broken": "off_the_axis", "tier": m.tier})
+            continue
+        st = standing.get(m.rule, "")
+        if m.tier == "E_existence_only" and st in ("no_source_cited", "names_neither_factor"):
+            problems.append(
+                {
+                    "rule": m.rule,
+                    "field": m.field,
+                    "rule_broken": "E_needs_a_source_for_the_interaction",
+                    "tier": m.tier,
+                    "interaction_standing": st,
+                }
+            )
+        if m.tier == "U_unsourced" and st == "supports_declaration":
+            problems.append(
+                {
+                    "rule": m.rule,
+                    "field": m.field,
+                    "rule_broken": "U_needs_the_citation_not_to_establish_the_interaction",
+                    "tier": m.tier,
+                    "interaction_standing": st,
+                }
+            )
+        if is_tier(m.tier) and not m.adjudication:
+            problems.append(
+                {
+                    "rule": m.rule,
+                    "field": m.field,
+                    "rule_broken": "a_tier_names_its_adjudication",
+                    "tier": m.tier,
+                    "interaction_standing": st,
+                }
+            )
+    return problems
+
+
+def result_floor(active_rule_ids: Iterable[str], slot_marks: Iterable[SlotMark]) -> dict[str, Any]:
+    """What a result computed from a program states: the lowest tier it rests on, over what fired.
+
+    `active_rule_ids` are the rules the computation actually used, so a rule gated out by `when`
+    does not drag a figure down and a rule that fired cannot be left out of the floor. Every
+    `TIERED_FIELDS` slot of every active rule is counted, and a slot with no mark counts as
+    `NOT_ASSESSED` - so a result over an unmarked program is UNDETERMINED, which is the state the
+    whole corpus is in on the day this is adopted.
+    """
+    ids = list(active_rule_ids)
+    marks = {(m.rule, m.field): m.tier for m in slot_marks}
+    per_slot = {(rid, f): marks.get((rid, f), NOT_ASSESSED) for rid in ids for f in TIERED_FIELDS}
+    counts = {v: 0 for v in AXIS_VALUES}
+    for v in per_slot.values():
+        counts[v] += 1
+    fl = floor(per_slot.values())
+    determined = fl != NOT_ASSESSED
+    return {
+        "rules_that_fired": len(ids),
+        "slots": len(per_slot),
+        "counts": counts,
+        "lowest_tier_it_rests_on": fl,
+        "determined": determined,
+        "statement": (
+            f"this figure rests on {counts[fl]} of {len(per_slot)} rule numbers at {fl}"
+            if determined
+            else (
+                f"the lowest tier this figure rests on is UNDETERMINED: {counts[NOT_ASSESSED]} of "
+                f"{len(per_slot)} rule numbers behind it have never been assessed"
+            )
+        ),
+    }
+
+
+def gate_survivors(active_rule_ids: Iterable[str], slot_marks: Iterable[SlotMark], at: str) -> list[str]:
+    """Which rules a hypothetical gate at tier `at` would leave integrable. Hypothetical: NOTHING in
+    this repository calls it on a real run, and the runtime does not import this module at all. It
+    exists so the cost of gating can be COUNTED instead of argued about (prediction P1)."""
+    keep = {t for t in TIERS if rank(t) <= rank(at)}
+    marks = {(m.rule, m.field): m.tier for m in slot_marks}
+    return [
+        rid
+        for rid in active_rule_ids
+        if all(marks.get((rid, f), NOT_ASSESSED) in keep for f in TIERED_FIELDS)
+    ]
+
+
+def census_slot_marks(adjudication: str = "4d4003d") -> tuple[list[SlotMark], list[RuleMark]]:
+    """The census's own 21 adjudications, read out of its findings module, as marks.
+
+    This is the only adjudication that exists. It is READ, never written back into any program, and
+    it is what the coherence rule is validated against: a rule derived from the census's class
+    definitions must hold on the census's own output or it is wrong (prediction P6).
+    """
+    from genomeos.lang import rule_number_sources_findings as rnf
+
+    slots = [
+        SlotMark(rule=rule, field=field, tier=rec["class"], adjudication=adjudication)
+        for (rule, field), rec in rnf.findings().items()
+    ]
+    rules = [
+        RuleMark(rule=f["rule"], interaction_standing=f["attribution"], adjudication=adjudication)
+        for f in rnf.attribution_findings()
+    ]
+    return slots, rules
+
+
+# --- NARROWED AFTER REGISTRATION, and named as narrowed with the reason ----------------------------
+#
+# The registration says a result states the lowest tier over "the rules that actually fired". The
+# code contradicts the obvious reading of that phrase, so it is narrowed here rather than left to be
+# read generously later.
+#
+# `genomeos/lang/parser.py` SYNTHESISES a rule from every `gene ... { produces: ... }` clause:
+# `data/demo/gastrulation.bio` writes 7 rules and compiles to 11, and the four extra carry
+# `strength` 1.0, `threshold` 1.0 and `hill` 2.0 from the `genomeos/ir/model.py` dataclass defaults -
+# twelve numbers no line of any program states. All four are in `Module.active_rules` and all four
+# therefore "fire". But `genomeos/runtime/grn.py` NEVER READS their numbers: for a PRODUCE rule it
+# keeps `r.source` alone (`self.produces[r.target].append(r.source)`), and translation is driven by
+# `translation_rate`, not by the rule's Hill function.
+#
+# Taking "the rules that fired" literally would therefore leave every floor in the corpus permanently
+# UNDETERMINED on twelve numbers the dynamics never touch - a false alarm rather than a false
+# certificate, but false either way, and a floor that is always undetermined says nothing. The
+# population is narrowed to the rules whose tiered fields are read. A test perturbs the synthesised
+# rules' three numbers and requires the trajectory not to move, so this rests on the runtime's
+# behaviour rather than on a reading of its source.
+#
+# The narrowing CUTS BOTH WAYS and is not a convenience: the hypothetical gate of P1 is applied over
+# the same narrowed population, so it does not get to pass four rules it never judged.
+
+#: The actions whose `strength`, `threshold` and `hill` the GRN runtime reads. Named by string so
+#: this module does not import the runtime - P4 requires the closure to stay one-way.
+TIERED_ACTIONS: tuple[str, ...] = ("ACTIVATE", "INHIBIT")
+
+TIERED_ACTIONS_WHY = (
+    "`genomeos/runtime/grn.py` reads a rule's strength, threshold and hill only for ACTIVATE and "
+    "INHIBIT. A PRODUCE rule contributes its source and nothing else, so its three numbers are "
+    "inert and giving them a tier would mark a number nothing reads. MODIFY, BIND and DEGRADE are "
+    "excluded for the same reason and not because they matter less: no path in the GRN runtime "
+    "reads their tiered fields either. If a runtime later reads them, this tuple is what has to "
+    "change, and it is one place."
+)
+
+
+def tiered_rules(rules: Iterable[Any]) -> list[Any]:
+    """The rules whose tiered numbers a GRN result rests on. Takes IR rules; duck-typed on `action`
+    so this module imports neither the runtime nor the IR."""
+    return [r for r in rules if getattr(r.action, "name", str(r.action)) in TIERED_ACTIONS]
