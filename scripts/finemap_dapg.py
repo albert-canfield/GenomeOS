@@ -1081,7 +1081,17 @@ def cost_registration_payload() -> dict[str, Any]:
             ),
             "no_bound_or_term_moved": (
                 "the byte bound, the fired request bound, the frame, the margin, the retained-hit rule, "
-                "the gene match, the control digest and both floors are byte-identical to bc1a595"
+                "the gene match, the control digest and both floors are byte-identical to bc1a595, and "
+                "that is enforced rather than asserted: `carry_forward_registered_terms` takes every key "
+                "the committed file already carries FROM it and only adds genuinely new ones"
+            ),
+            "one_term_would_have_moved_and_was_not_allowed_to": (
+                "`the_resume` is re-derived from the row files on disk, so regenerating this file after "
+                "the read had finished recomputed it from '11 chromosomes still to read' to 'none', "
+                "erasing the record of what the resume actually was. It is kept as registered and the "
+                "recomputed value is shown beside it under "
+                "`terms_that_would_have_moved_on_regeneration`. That is the whole reason the "
+                "carry-forward exists"
             ),
         },
         "whose_mistake_the_first_quantity_was": WHOSE_MISTAKE_THE_WRONG_QUANTITY_WAS,
@@ -1173,6 +1183,47 @@ def cost_registration_payload() -> dict[str, Any]:
     }
 
 
+def carry_forward_registered_terms(fresh_payload: dict[str, Any]) -> dict[str, Any]:
+    """Keep every term of an already-committed cost registration exactly as it was registered.
+
+    A registration describes what was authorised BEFORE the thing it authorises. Recomputing one of its
+    terms after the fact silently rewrites what was authorised: regenerating this file after the read had
+    finished turned `the_resume` from "11 chromosomes still to read" into "none", erasing the record of
+    what the resume actually was. So every key the committed file already carries is taken FROM it, only
+    genuinely new keys are added, and any key whose recomputed value would have DIFFERED is named in the
+    result rather than quietly replaced. That makes "nothing else moved" a mechanism instead of a claim.
+    """
+    path = ROOT / f"data/results/{COST_REGISTRATION}.json"
+    if not path.exists():
+        return fresh_payload
+    old = json.loads(path.read_text())
+    out: dict[str, Any] = {}
+    would_have_differed: dict[str, Any] = {}
+    for key, value in fresh_payload.items():
+        if key in old and key != "result_manifest":
+            if old[key] != value:
+                would_have_differed[key] = {
+                    "as_registered": old[key],
+                    "recomputed_now": value,
+                    "kept": "as_registered",
+                }
+            out[key] = old[key]
+        else:
+            out[key] = value
+    if would_have_differed:
+        out["terms_that_would_have_moved_on_regeneration"] = {
+            "why_this_is_here": (
+                "these keys are RE-DERIVED by the writer, so running it again after the read changed "
+                "them. They are kept as they were registered and the recomputed values are shown beside "
+                "them, because a registration whose terms drift when it is regenerated is not a record "
+                "of what was authorised"
+            ),
+            "keys": sorted(would_have_differed),
+            "detail": would_have_differed,
+        }
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--register", action="store_true", help="write the frame, controls and rule first")
@@ -1187,7 +1238,7 @@ def main() -> int:
     if not (args.register or args.read or args.count or args.register_cost):
         raise SystemExit("--register is required: nothing is read before the registration exists")
     if args.register_cost:
-        payload = cost_registration_payload()
+        payload = carry_forward_registered_terms(cost_registration_payload())
         path = save_result(COST_REGISTRATION, payload)
         print(f"{COST_REGISTRATION}: {path}")
         b, f, r = payload["the_new_bound"], payload["the_fired_bound"], payload["the_resume"]

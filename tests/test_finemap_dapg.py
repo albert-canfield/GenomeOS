@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import pathlib
 import sys
 from pathlib import Path
 
@@ -330,3 +331,57 @@ def test_the_bound_change_is_stated_to_be_independent_of_the_rows() -> None:
     e = fd.THE_EXPOSURE["did_the_bound_change_depend_on_anything_the_read_returned"]
     assert e.startswith("No")
     assert "knowable before a single row came back" in e
+
+
+def test_registered_terms_are_carried_forward_not_recomputed() -> None:
+    """Regenerating after the read turned `the_resume` from 11 pending chromosomes into none."""
+    fresh = {
+        "the_new_bound": {"bound_mb": 170.4},
+        "the_resume": {"chromosomes_still_to_read": []},
+        "the_exposure": {"the_answer": "no carrying or baseline figure was computed on the partial read"},
+    }
+    # the function must keep the registered value and name the drift
+    out = _carry(fd, fresh)
+    assert out["the_resume"]["chromosomes_still_to_read"] == ["chr20", "chr3"], "registered value kept"
+    assert out["the_exposure"] == fresh["the_exposure"], "a genuinely new key is added"
+    drift = out["terms_that_would_have_moved_on_regeneration"]
+    assert drift["keys"] == ["the_resume"]
+    assert drift["detail"]["the_resume"]["kept"] == "as_registered"
+
+
+def _carry(mod, fresh):
+    """Run carry_forward_registered_terms against a temporary committed file."""
+    import json
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as d:
+        results = pathlib.Path(d) / "data" / "results"
+        results.mkdir(parents=True)
+        (results / f"{mod.COST_REGISTRATION}.json").write_text(
+            json.dumps(
+                {
+                    "the_new_bound": {"bound_mb": 170.4},
+                    "the_resume": {"chromosomes_still_to_read": ["chr20", "chr3"]},
+                }
+            )
+        )
+        real = mod.ROOT
+        mod.ROOT = pathlib.Path(d)
+        try:
+            return mod.carry_forward_registered_terms(fresh)
+        finally:
+            mod.ROOT = real
+
+
+def test_carry_forward_is_a_no_op_before_the_first_commit() -> None:
+    """With no committed file there is nothing to preserve and the fresh payload stands."""
+    import tempfile
+
+    fresh = {"a": 1}
+    real = fd.ROOT
+    with tempfile.TemporaryDirectory() as d:
+        fd.ROOT = pathlib.Path(d)
+        try:
+            assert fd.carry_forward_registered_terms(fresh) == fresh
+        finally:
+            fd.ROOT = real
