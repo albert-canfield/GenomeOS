@@ -14532,6 +14532,139 @@ checkout held uncommitted on the scripts' own import closure at write time -
 cannot reproduce by construction. Every module that computes a count here is committed, and what
 this lane takes through `context_evidence` is one integer constant.
 
+## A repression population can be built after all: the 159 significant increases the extractor discards hold 48 links over 33 independent loci, which clears both imported floors (2026-10-02, lane-increase)
+
+lane-repress2 recorded a no-go in these words — **"the measured layer holds no repression
+call to test"** — and recorded why. `measured.rule_links` emits a link only from a pair the
+benchmark calls `Regulated`, which is `Significant AND EffectSize < 0`, so every compiled
+CRISPRi link's action is `activates` and **a significant increase raises no rule at all**.
+Their blind ladder put the zero at the cell: **156,925** repression-axis rules, **357** on an
+element a CRISPRi pair covers, **11** with a pair on the rule's own gene, **0** in the cell the
+rule is gated on (`data/results/repress2_population.json`, genome-wide). Of **195** assessable
+measured-layer rules, **143** are on a pure `activates_target` axis and **0** on a pure
+`represses_target` axis.
+
+This lane asked whether that is an accident of the one arm available to them or structural: how
+many significant increases exist, where they are, and whether they would clear the registered
+floors. **They would.** The answer is a go, and it is the first measured repression population
+the project has had.
+
+### Registered before the count
+
+`data/results/increase_registration.json`, committed in `e1c2671` before the first increase was
+counted, from `genomeos/attribution/increases.py` at `6ca8095`. It fixes the eligibility
+predicate (a cached pair is an increase when `measured.CrispriPair.outcome` is exactly
+`significant_increase`, read off the cached row's own field and never recomputed); the locus
+convention, imported from `cell2` — *"two measured positives are the same locus when they share
+the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome;
+the relation is chained within a chromosome … This is an operational grouping for deciding
+whether a stratum has enough distinct places in the genome to measure, **not established
+biological independence**"*; both floors, imported and not chosen — **30** links
+(`genomeos/attribution/fresh.py: POSITIVE_FLOOR = 30`) and **20** independent loci
+(`genomeos/attribution/cell2.py: POOLED_LOCUS_FLOOR = 20`, imported into `fresh.py` as
+`LOCUS_FLOOR`), which are the floors lane-repress2's own gate 1 was taken against; the two
+populations; and the reading of each outcome, written before the outcome was seen.
+
+The no-go reading was written so that a short count has no encouraging reading: it forbids
+*close*, *promising*, *nearly enough*, *a good start* and *enough for a pilot* by name, and says
+the margin is reported because a reader is owed it and not because a small margin is better than
+a large one. The go reading stops the lane at the verdict, because a feasibility count that rolls
+straight into the test it enables is how a floor gets moved after the outcome is seen.
+
+### The ladder, blind to direction at every position step
+
+Every step reports the exhaustive outcome breakdown at its own denominator, which is
+docs/LESSONS.md's *"A count is not a measurement of the thing you want to count"* applied in
+advance rather than after a review. The step tests read a gene, a cell, an element and membership
+in the two significant labels, never the sign of an effect.
+
+| step | pairs | decrease | increase |
+| --- | --- | --- | --- |
+| pairs in the benchmark | 14,734 | 661 | 159 |
+| and significant | 820 | 661 | 159 |
+| and on an attributed element | 260 | 212 | 48 |
+| and a rule on that element names the pair's own gene | 213 | 212 | 1 |
+| and a rule there is gated on the pair's own cell | 212 | 212 | 0 |
+
+The other 13,914 of the first row are **9,801** well-powered nulls and **4,113** underpowered
+ones; **0** rows are `ValidConnection` FALSE. The first two rows were checked against the two
+cached tables outside this code path: 4,378 + 10,356 = 14,734 rows, 274 + 546 = 820 `Significant`
+TRUE, and 84 + 75 = 159 of those with `EffectSize` at or above zero. Each step reconciles with the
+step above it in both the pair column and the increase column, and the tests assert that.
+
+This ladder is the mirror of lane-repress2's: theirs is anchored on a rule and walks towards a
+measurement, this one is anchored on a measurement and walks towards a rule, and the registration
+names the counterpart of every step. Their 357, 11 and 0 are the other side of the three rows
+above.
+
+### The verdict
+
+| population | links | independent loci | against 30 and 20 |
+| --- | --- | --- | --- |
+| the measured repression links a changed extractor would emit (P1) | **48** | **33** | **go** |
+| the increases that reach an existing `represses_target` rule (P2) | 0 | 0 | no-go |
+
+P1 is one link per (attributed element, gene, cell) carrying a significant increase, which mirrors
+exactly what `measured.rule_links` does with a regulated pair. The 48 increases on an attributed
+element give 48 links, so no element is counted twice, and **0** of them were contested by a
+regulated pair on the same (gene, cell), so the pre-registered contest rule excluded nothing. They
+sit in **14 chromosomes** and three cell types — K562 39, WTC11 6, HCT116 3 — and split 25
+training to 23 held-out. For scale beside them, the committed extractor emits **212** measured
+rules in all.
+
+P2 is zero, at or below lane-repress2's `and_in_the_rules_own_cell` of **0** as the registration
+said in advance it must be. The step it dies at is **the gene a compiled rule targets**: of the 48
+increases on an attributed element exactly **1** has any compiled rule on that element naming its
+own gene, and **0** have one gated on their own cell.
+
+### Data or code, fixed before the count
+
+The map from the killing step to data or code was registered before any number existed, because
+deciding it afterwards is how an inconvenient attribution gets re-read. Only the significance step
+is a property of the data. P2 dies at the gene step, which is **a property of this repository's
+code**: for a predicted rule the targeted gene is the one gene the deletion sweep's
+`predicted_coding` block names, out of every gene the screen measured against that element.
+
+The 212 of 212 that the decrease column keeps at the same two steps is **not** evidence against
+that attribution. A decrease on an attributed element *raises* the measured rule that then names
+its gene and its cell, so the decrease column there is the extractor's own construction and not
+independent coverage. Reading it as coverage would be the same error as reading a count of zeros
+as a contribution.
+
+### What this cannot establish
+
+A count of the measurements a changed extractor could reach is not a measurement of any repression
+call. Nothing here establishes that any compiled repression call is right or wrong, that any of
+these 48 increases is a repression mechanism, or that an element whose silencing raises a gene
+represses it: an increase on silencing is one screen's signed effect in one cell, and no mechanism
+is read from it. The 33 loci are `cell2`'s operational grouping and never established biological
+independence. P1 is a counterfactual: the links it counts do not exist in the compiled program and
+this lane did not create them. The floors are on counts, not on effect sizes, and the population is
+not large-effect: of the 40 links the result lists, the largest increase per link runs from 0.0102
+to 4.2101 with a median of 0.0987, and 20 of the 40 are at or above 0.10. 23 of the 48 increases
+are held-out rows, which the split audit of 2026-09-28 permits as evaluation and not as a feature
+or a fit.
+
+### What was not done, and what is proposed
+
+No extractor was changed. `measured.rule_links`, `measured.Layer.near`, `measured.reciprocal_overlap`
+and `not_open_profile.rules` were called exactly as committed, and P1 was counted beside the
+extractor rather than through a modified one. No direction was read, no repression call was tested,
+no rate was reported, no threshold or registered definition moved, 0 model requests were made and
+nothing was downloaded.
+
+The proposal this count supports, for a separate lane with its own registration: have the measured
+layer raise a link from a significant increase as well as from a `Regulated` pair, with the
+increase's own action, and leave the `activates` population untouched. The `inhibits` branch of
+`rule_links` already exists and is unreachable only because `regulated` gates the candidate set.
+The contest rule above says what to do where both a decrease and an increase sit on one
+(gene, cell): nothing, until a lane registers a reading for it.
+
+`data/results/increase_population.json` and its chr21-scoped copy both rebuild from their
+manifests: 243 of 243 and 13 of 13 inputs declared, opened and hashed with 0 absent, 1,843 of 1,851
+and 481 of 498 leaves compared, **0 differences and 0 must-hold failures** in each, with
+`foreign_uncommitted_code_on_the_counting_path` empty on both.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
