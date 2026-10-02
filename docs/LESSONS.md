@@ -1553,3 +1553,29 @@ as it lifts the model, which is why no second rate was adopted.
 so rather than reporting a green: it had changed no file, so there was nothing to accept, and
 "running the suite to decorate a close-out would be a green with no change behind it." A green
 attached to no change is not evidence; it is furniture.
+
+## A run hashed its own previous output as a declared input, then replaced it (2026-10-03)
+
+A census script's first write globbed its own output directory, hashed **the previous run's copy of
+its own result** as a declared input, and then overwrote that file. The manifest it produced named a
+path with a sha256 that the bytes at that path no longer matched — **an input pin that nobody,
+including the writer, could ever verify.**
+
+It is worth recording because nothing about it looks wrong while it is happening. The declaration is
+honest: those bytes really were read. The hash is correct for what was read. The only defect is the
+ORDER — the file is read, declared, and then replaced by the same process, so the declaration
+describes a state that the run itself destroyed. A reader checking the pin afterwards finds a
+mismatch and cannot tell it from a tampered input.
+
+**The fix is an exclusion with its reason on the artefact's own face:** the script excludes its own
+output name while writing it, states the exclusion in the result's `exclusions` and in an `itself`
+field, and a test asserts both halves. The bad file was deleted and regenerated from the committed
+script rather than patched.
+
+**The general form: a writer may not declare an input it is about to replace.** Any process whose
+output lives in the directory it reads has this hazard, and the project has several — censuses,
+organisers, anything that globs `data/results`. The cheap check is to ask, of every declared input,
+whether this run writes to that path.
+
+The lane found this in its own first write and fixed it before the result was committed, which is
+the only reason there is nothing to correct.
