@@ -77,6 +77,23 @@
     "excluded_underpowered": 1,
     "excluded_underpowered|increase_held_apart": 1
   },
+  "the_reviewed_list_digest": {
+    "sha256": "b96148cab7174cf10407aa07a2d26edf1c1972df5db2c00de3e682ccacf2b519",
+    "over": "each request's chrom, element, start, end and the gene and label sets it serves, in the list's order",
+    "rule": "a review of a list the sender could quietly regenerate differently is a review of nothing. So the sender rebuilds the list through plan_requests and the one filter, takes its digest, and REFUSES if it differs from the digest that was reviewed. The digest is over the list's own canonical content rather than the file's bytes, so a reformatting does not trip it and a changed, added or removed request does",
+    "how_a_sender_uses_it": "rebuild the list through plan_requests and the one filter, take this digest, and REFUSE if it differs. astrorun.check_is_the_reviewed_plan does exactly that and a planted one-element change is shown failing it in tests/test_astrorun.py"
+  },
+  "authorisation": {
+    "astroreg2_cap": 1232,
+    "original_cap": 1322,
+    "astroreg2_approval_recorded": false,
+    "state": "no AstroREG-2 approval is recorded. The approval on record names the ORIGINAL registration by hash and does not carry to it. the AstroREG-2 scope REFUSES to send while no approval of its own is recorded. Not a warning, a refusal: a warning can be read past, and the failure it would permit is spending real money under an approval that covers a different registration. Requiring Albert's actual words to be physically present in the code before anything can send is the only version of this that cannot drift, because there is nothing to forget and nothing to infer",
+    "rule": "the AstroREG-2 scope REFUSES to send while no approval of its own is recorded. Not a warning, a refusal: a warning can be read past, and the failure it would permit is spending real money under an approval that covers a different registration. Requiring Albert's actual words to be physically present in the code before anything can send is the only version of this that cannot drift, because there is nothing to forget and nothing to infer"
+  },
+  "send_blocked_by": [
+    "no AstroREG-2 approval is recorded in astrorun.ASTROREG2_AUTHORISATION, so the scope REFUSES to send. The approval on record names the ORIGINAL registration by hash"
+  ],
+  "may_this_list_be_sent": false,
   "requests": [
     {
       "chrom": "chr1",
@@ -29305,7 +29322,7 @@
       "screen_pairs": "all 7759 element-gene pairs of the published screen, every label, because the authorised total counts a covered pair of any label"
     },
     "code_cleanliness": {
-      "git_sha": "9162cb182146a7035dc3d04f48ce85c7c16f83ca",
+      "git_sha": "452e63585f815477469dd0da3bc844ebbf401e1b",
       "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
@@ -29449,7 +29466,7 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "9162cb182146a7035dc3d04f48ce85c7c16f83ca",
+      "git_sha": "452e63585f815477469dd0da3bc844ebbf401e1b",
       "dirty": true,
       "dirty_code_paths": [
         "genomeos/attribution/gene_row_locus.py",
@@ -29462,6 +29479,8 @@
         "tests/test_gene_row_locus.py"
       ],
       "dirty_result_paths": [
+        "data/results/astroreg2_astrocyte_activity.json",
+        "data/results/astroreg2_request_plan.json",
         "data/results/gene_row_locus.json"
       ],
       "argv": [
@@ -29470,7 +29489,7 @@
         "--scope",
         "astroreg2-1232",
         "--show",
-        "4"
+        "2"
       ],
       "python": "3.12.13"
     },
