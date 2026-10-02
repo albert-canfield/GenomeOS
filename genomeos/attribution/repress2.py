@@ -55,6 +55,7 @@ their file and their scope wherever they appear.
 
 from __future__ import annotations
 
+from collections import Counter
 from typing import Any
 
 from genomeos.attribution import cell2, fresh
@@ -315,10 +316,66 @@ def eligible_links(
     return out
 
 
+def _pairs_by_element(measured_rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    """Every cached CRISPRi pair of each measured element, by that element's own id.
+
+    `eligible_links` builds the same index inline and is deliberately left as it was committed: the
+    gate's body is what the blinding rests on, and it is not rewritten to share a helper with a
+    diagnostic added after it.
+    """
+    out: dict[str, list[dict[str, Any]]] = {}
+    for row in measured_rows:
+        pairs = (row["measured"].get("crispri") or {}).get("pairs") or []
+        if pairs:
+            out.setdefault(row["id"], []).extend(pairs)
+    return out
+
+
 def _element_id(rule: nop.Rule) -> str:
     """The attributed element a rule sits on. A measured rule's element carries the `_measured`
     suffix `not_open_profile.rules` gives it; the measured row's own id is the bare one."""
     return rule.element[: -len("_measured")] if rule.element.endswith("_measured") else rule.element
+
+
+#: The steps of the blind denominator ladder, in the order a rule has to clear them to be countable.
+#: A bare zero at the end of the gate says nothing about where it came from, so each step is counted.
+LADDER_STEPS = (
+    "rules_of_this_axis",
+    "element_carries_a_crispri_pair",
+    "and_a_pair_on_the_rules_own_gene",
+    "and_in_the_rules_own_cell",
+    "and_that_pair_is_significant",
+)
+LADDER_CALL = (
+    "rules, not links: how many rules of this axis clear each step in turn, so that a zero at the "
+    "end can be read as the step it fell at. Every step is blind - a gene, a cell and whether an "
+    "outcome is one of the two significant labels - and none of them reads a direction or a sign"
+)
+
+
+def ladder(rules: list[nop.Rule], measured_rows: list[dict[str, Any]], activity: str) -> Counter[str]:
+    """How many rules of one axis clear each step of LADDER_STEPS. Blind at every step."""
+    by_element = _pairs_by_element(measured_rows)
+    out: Counter[str] = Counter()
+    for r in rules:
+        if r.activity_axis != activity:
+            continue
+        out[LADDER_STEPS[0]] += 1
+        pairs = by_element.get(_element_id(r)) or []
+        if not pairs:
+            continue
+        out[LADDER_STEPS[1]] += 1
+        on_gene = [p for p in pairs if p["gene"] == r.gene]
+        if not on_gene:
+            continue
+        out[LADDER_STEPS[2]] += 1
+        in_cell = [p for p in on_gene if p["cell"] == r.cell]
+        if not in_cell:
+            continue
+        out[LADDER_STEPS[3]] += 1
+        if any(significant(p) for p in in_cell):
+            out[LADDER_STEPS[4]] += 1
+    return out
 
 
 def gate(keys: list[cell2.LocusKey], population: str) -> dict[str, Any]:

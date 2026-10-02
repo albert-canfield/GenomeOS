@@ -136,6 +136,35 @@ class TestTheJoin:
         assert keys[0]._fields == cell2.LocusKey._fields
 
 
+class TestTheBlindLadder:
+    def test_each_step_is_counted_and_the_steps_are_nested(self):
+        rules = [rule(element="E1"), rule(element="E2"), rule(element="E3"), rule(element="E4")]
+        rows = [
+            row("E2", [pair(gene="OTHER")]),
+            row("E3", [pair(gene="GENE1", cell="HepG2")]),
+            row("E4", [pair(gene="GENE1", cell="K562", outcome=ms.NULL_INFORMATIVE)]),
+        ]
+        c = rp.ladder(rules, rows, rp.REPRESSES)
+        assert c[rp.LADDER_STEPS[0]] == 4  # four rules of this axis
+        assert c[rp.LADDER_STEPS[1]] == 3  # three elements carry a pair at all
+        assert c[rp.LADDER_STEPS[2]] == 2  # two carry one on the rule's own gene
+        assert c[rp.LADDER_STEPS[3]] == 1  # one of those is in the rule's own cell
+        assert c[rp.LADDER_STEPS[4]] == 0  # and that one is not significant
+
+    def test_the_last_step_is_the_gates_own_predicate(self):
+        rules = [rule()]
+        rows = [row("E1", [pair()])]
+        c = rp.ladder(rules, rows, rp.REPRESSES)
+        assert c[rp.LADDER_STEPS[4]] == 1
+        assert len(rp.eligible_links(rules, rows, rp.REPRESSES, True)) == 1
+
+    def test_the_ladder_is_blind_to_the_direction(self):
+        rules = [rule()]
+        down = rp.ladder(rules, [row("E1", [pair(outcome=ms.DECREASE)])], rp.REPRESSES)
+        up = rp.ladder(rules, [row("E1", [pair(outcome=ms.INCREASE)])], rp.REPRESSES)
+        assert down == up
+
+
 class TestTheGateReading:
     def test_below_either_floor_is_a_no_go(self):
         keys = [
@@ -342,6 +371,12 @@ class TestTheRegistration:
         note = reg["limitations"]["measured_axis_is_not_the_link_direction"]
         assert "Regulated" in note
         assert "activates" in note
+
+    def test_it_carries_its_own_gate_and_check_keys_so_it_must_be_nested(self, reg):
+        """Spreading this payload over a result replaced the computed counts with these descriptions."""
+        assert "gate_1" in reg
+        assert "internal_check" in reg
+        assert "eligible_measured_links" not in reg["gate_1"]
 
     def test_it_names_the_four_comparisons(self, reg):
         assert len(reg["comparisons"]) == 4
