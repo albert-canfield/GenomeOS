@@ -34,7 +34,8 @@
       "lower_bound_above_zero": "the deletion gain is detected in cultured fetal astrocytes",
       "interval_covers_zero": "no gain detected",
       "upper_bound_below_zero": "the deletion feature lowers ranking here",
-      "never": "an interval covering zero is never reported as 'no effect': it is 'no gain detected'. The distinction is the whole difference between an absent effect and an underpowered test"
+      "never": "an interval covering zero is never reported as 'no effect': it is 'no gain detected'. The distinction is the whole difference between an absent effect and an underpowered test",
+      "null_must_also_state": "power at effects smaller than K562's is not established, so this result does not exclude a smaller deletion gain in astrocytes"
     },
     "power_rule": "resample the K562 held-out loci with replacement up to 74 loci, at K562's own observed gain, and report the share of resamples whose interval excludes zero. Classes from S8, fixed here: at or above 0.8 the test is confirmatory; 0.5 to 0.8 it is exploratory and is labelled so in every quote of it; below 0.5 the test is REFUSED and not run. The figure is computed before any astrocyte pair is scored, so it cannot be chosen after an outcome",
     "power_amendment_1": "the first power figure (0.96) was optimistic in two independent ways and is superseded, not revised. (a) PREVALENCE. It resampled K562 at K562's prevalence, 114 positives in 1,744 pairs = 6.5%. The astrocyte test runs at 133 in 4,580 = 2.9%, less than half. An AUPRC gain is prevalence-dependent -- both the attainable gain and its spread move with the positive rate -- so a figure computed at 6.5% does not describe a test run at 2.9%. Each resample is therefore matched to the astrocyte prevalence by downsampling its POSITIVES, keeping every negative, which is the direction that cannot invent data. (b) EFFECT SIZE. It assumed the full K562 gain transfers, the most favourable assumption available. Power is therefore also reported at 0.5x and 0.25x, by shrinking the deletion arm's score toward the no-deletion arm, score(k) = without + k * (with - without), and the ACHIEVED gain is reported at each k so that the attenuation is visible rather than asserted. The S8 class is set by the prevalence-matched figure at the FULL effect, and the 0.5x figure travels beside it in every quote of the class. Below 0.5 the test is refused and nothing is spent. This method was registered before it was run",
@@ -46,6 +47,7 @@
       0.25
     ],
     "attenuation_limitation": "the attenuation reduces the achieved gain as intended, but it does NOT answer the question it was asked. Shrinking the deletion arm toward the no-deletion arm scales the score separation, and the cluster bootstrap's spread scales with it, so the signal-to-noise ratio is close to preserved and the share of intervals excluding zero stays nearly flat across 1x, 0.5x and 0.25x even though the median achieved gain falls. The arm therefore shows that the DETECTABILITY of a proportionally smaller separation is similar; it does NOT show that power survives a weaker true effect against unchanged measurement noise, which is what a conventional effect-size sensitivity means. The 0.5x share may not be quoted as power at half the effect. A scheme that held the noise fixed while lowering the signal would be needed, and is not registered or run here",
+    "sample_size_limitation": "the simulation keeps a mean of about 27 positives, because matching the 2.9% prevalence by downsampling K562's positives is what 74 of K562's loci can supply, while the real test has 133 positives at that same prevalence. The figure is therefore CONSERVATIVE for sample size and the true power is probably higher. This is a stated limitation and is not grounds to reclassify: the method was registered before it ran and the class stands at what the registered method produced",
     "track_roster_rule": "the astrocyte deletion value uses the frozen K562 rule UNCHANGED -- whatever the legacy per-cell-name collapse did for K562, it does for astrocyte -- because the frozen K562 values came through that same rule and the two definitions must match. Whether `astrocyte` is one AlphaGenome track or several is not known at registration time: the cache records a winning track name, not the roster. So the FULL astrocyte track roster from the first response is written to the result BEFORE any pair is scored. If it is several tracks, that fact is recorded; it is not resolved by a new rule invented after the data are in view",
     "activity_inputs": {
       "h3k27ac": {
@@ -449,6 +451,9 @@
       "rule": "the 0.5x figure travels beside the class in every quote of it"
     },
     "attenuation_limitation": "the attenuation reduces the achieved gain as intended, but it does NOT answer the question it was asked. Shrinking the deletion arm toward the no-deletion arm scales the score separation, and the cluster bootstrap's spread scales with it, so the signal-to-noise ratio is close to preserved and the share of intervals excluding zero stays nearly flat across 1x, 0.5x and 0.25x even though the median achieved gain falls. The arm therefore shows that the DETECTABILITY of a proportionally smaller separation is similar; it does NOT show that power survives a weaker true effect against unchanged measurement noise, which is what a conventional effect-size sensitivity means. The 0.5x share may not be quoted as power at half the effect. A scheme that held the noise fixed while lowering the signal would be needed, and is not registered or run here",
+    "sample_size_limitation": "the simulation keeps a mean of about 27 positives, because matching the 2.9% prevalence by downsampling K562's positives is what 74 of K562's loci can supply, while the real test has 133 positives at that same prevalence. The figure is therefore CONSERVATIVE for sample size and the true power is probably higher. This is a stated limitation and is not grounds to reclassify: the method was registered before it ran and the class stands at what the registered method produced",
+    "required_quote": "exploratory (prevalence-matched power 0.79, conservative: simulated with ~27 positives against the test's 133)",
+    "required_quote_rule": "this exact form of words is what every quote of the class must use; the class may not travel without the figure and both limitations",
     "attenuation_shares_are_flat": "the three shares sit within a few points of one another while the median achieved gain falls, which is the limitation above showing itself in the numbers, not a finding that power is insensitive to effect size",
     "superseded": {
       "earlier_share": 0.96,
@@ -552,23 +557,14 @@
       "k562": "already-read development evidence, used only for the identity check and the power figure"
     },
     "code_cleanliness": {
-      "git_sha": "0eb05eb48af529e2a7e3db6692db20d5a6a8c75a",
+      "git_sha": "9baaec8a6e96e533f9e8a5b7f9f807050ea2dbea",
       "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
       "foreign_uncommitted_code": [
-        "genomeos/attribution/compile.py",
-        "genomeos/attribution/context_evidence.py",
-        "genomeos/ir/model.py",
-        "genomeos/lang/grammar.py",
-        "genomeos/lang/parser.py",
-        "scripts/context_evidence_census.py",
-        "scripts/context_evidence_register.py",
-        "tests/test_context_evidence.py"
+        "genomeos/attribution/context_evidence.py"
       ],
-      "foreign_uncommitted_code_on_the_counting_path": [
-        "genomeos/ir/model.py"
-      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
       "counting_path": [
         "genomeos/__init__.py",
         "genomeos/attribution/__init__.py",
@@ -619,26 +615,15 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered any number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "0eb05eb48af529e2a7e3db6692db20d5a6a8c75a",
+      "git_sha": "9baaec8a6e96e533f9e8a5b7f9f807050ea2dbea",
       "dirty": true,
       "dirty_code_paths": [
-        "genomeos/attribution/compile.py",
-        "genomeos/attribution/context_evidence.py",
-        "genomeos/ir/model.py",
-        "genomeos/lang/grammar.py",
-        "genomeos/lang/parser.py",
-        "scripts/context_evidence_census.py",
-        "scripts/context_evidence_register.py",
-        "tests/test_context_evidence.py"
+        "genomeos/attribution/context_evidence.py"
       ],
-      "untracked_code_paths": [
-        "genomeos/attribution/context_evidence.py",
-        "scripts/context_evidence_census.py",
-        "scripts/context_evidence_register.py",
-        "tests/test_context_evidence.py"
-      ],
+      "untracked_code_paths": [],
       "dirty_result_paths": [
-        "data/results/astroreg_registration.json"
+        "data/results/context_evidence_chr21.json",
+        "data/results/crispri_benchmark_v2.json"
       ],
       "argv": [
         "scripts/astroreg_register.py"
