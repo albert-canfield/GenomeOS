@@ -354,3 +354,32 @@ def test_the_compose_runtime_reports_itself_available_when_the_extra_is_installe
 
     assert compose.AVAILABLE is True
     assert extras_lock.missing_modules_for_extra("compose") == ()
+
+
+def test_a_module_name_the_filesystem_cannot_hold_is_not_a_file_rather_than_an_error():
+    """The scanner must answer "no" for an impossible name instead of taking the suite down.
+
+    On 2026-10-02 a long dotted-looking STRING inside tests/test_push_own.py was read as a dotted
+    module and statted, which raised OSError 63 (ENAMETOOLONG) on `scripts/push_own/…`. The scanner
+    died, so no tree could earn a green verdict and every push gated on a verdict matching its tree
+    was blocked. A scanner that cannot say "no" to an unaskable question takes everything with it.
+
+    The near-miss is the half that matters: an error on a path that COULD exist must still be raised,
+    so a permission or I/O fault cannot read as a clean miss.
+    """
+    import errno
+
+    # the real reproduction: the file that broke it, scanned end to end
+    extras_lock.read_module(Path(__file__).resolve().parent / "test_push_own.py")
+
+    # a name no filesystem will hold answers False
+    assert extras_lock._exists(Path(__file__).resolve().parent / ("x" * 400 + ".py")) is False
+
+    # and an error that is NOT about an impossible name is still raised
+    class Exploding(type(Path())):  # type: ignore[misc]
+        def is_file(self):
+            raise OSError(errno.EACCES, "permission denied")
+
+    with pytest.raises(OSError) as caught:
+        extras_lock._exists(Exploding(__file__))
+    assert caught.value.errno == errno.EACCES

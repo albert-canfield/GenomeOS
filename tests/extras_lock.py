@@ -36,6 +36,7 @@ no source accounts for is reported too, rather than assumed innocent.
 from __future__ import annotations
 
 import ast
+import errno
 import sys
 import tomllib
 from dataclasses import dataclass
@@ -242,8 +243,22 @@ def _exists(path: Path) -> bool:
 
     Without the listing check, `genomeos/genome/Genome.py` answers True on macOS and the walk follows a
     file no name in the tree spells (the same trap cd263bc fixed in the cleanliness counter).
+
+    A candidate is a module name turned into a path, and a module name is not always a legal one. On
+    2026-10-02 this raised `OSError` 63, ENAMETOOLONG, on `scripts/push_own/…`: a long dotted-looking
+    STRING inside tests/test_push_own.py was read as a dotted module and statted. The scanner then
+    died, so no tree could earn a green verdict and every push gated on one was blocked — a scanner
+    that cannot answer "no" for an impossible name takes the whole suite down with it. An unaskable
+    question is answered False, not raised: a name the filesystem cannot hold is not a file in it.
+    The errors are named rather than swallowed as a bare `except OSError`, so a permission or I/O
+    fault on a path that COULD exist still surfaces instead of reading as a clean miss.
     """
-    return path.is_file() and path.name in {entry.name for entry in path.parent.iterdir()}
+    try:
+        return path.is_file() and path.name in {entry.name for entry in path.parent.iterdir()}
+    except OSError as e:
+        if e.errno in (errno.ENAMETOOLONG, errno.ENOENT, errno.ENOTDIR, errno.EINVAL, errno.ELOOP):
+            return False
+        raise
 
 
 @lru_cache(maxsize=4096)
