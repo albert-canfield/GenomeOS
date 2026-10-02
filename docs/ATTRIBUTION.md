@@ -14490,8 +14490,16 @@ chr21's 5,176 rules looked like a token absent from an annotation that carries e
 (amendment 1). `ident` is not injective, so two symbols could be written as one token and the compiled
 text would not say which was meant; that is counted as its own cause and comes out at **0 of 83,343
 tokens** over all 24 chromosomes. Second, **4,340 rules name their target by a bare Ensembl id** rather
-than a symbol, which the project's own resolver skips entirely because it keys on symbols: for those
-rules `pilot_bio.gene_tss` returns no TSS at all, and they carry no distance in any reading built on it.
+than a symbol, which is how the deletion answer names a gene that has none - and for those rules the
+answer does record the id, so both sides are exact rather than recovered.
+
+**A claim in this lane's own registration is corrected here rather than left standing.** It said the
+direct id lookup is "the one extension beyond the project's resolver", because `pilot_bio.gene_tss`
+skips genes with no symbol. That reason is vacuous: **0 of GENCODE v50's 78,696 gene rows have an empty
+`gene_name`, and 35,293 of them carry their own versionless Ensembl id as that name**, so an unnamed
+gene is a named gene to `gene_tss` and it resolves every one of the 4,340. **0 rows carry another
+gene's id as their name**, so the two lookups cannot disagree. The extension changed no rule's
+outcome, and amendment 3 records the correction against the registration that made the claim.
 
 **The experimental layer, reported separately and never added in.** The 212 rules whose evidence is a
 CRISPRi screen have no deletion answer, so they are counted under their own cause. The screen does
@@ -14514,6 +14522,15 @@ chromosome*. That is a property of the symbol and not of the locus, so it does *
 measured locus and was not used to resolve any of the 547. Whether the scorer's own gene rows can be
 tied to a locus - which would settle all 547 and make the comparison able to fire - is a question for
 whoever owns the scoring chain, not a change this lane makes.
+
+**The rebuild.** The genome-wide result rebuilds in a clean worktree: **73 of 73 inputs opened
+and hashed against their recorded bytes, none absent and none differing, 2,676 leaves compared
+and every count identical**. The chr21 copy rebuilds the same way over 1,825 leaves with 4 of 4
+inputs. The only differences either reports are the two files of other lanes that this shared
+checkout held uncommitted on the scripts' own import closure at write time -
+`genomeos/manifest.py` and `genomeos/attribution/context_evidence.py` - which a clean worktree
+cannot reproduce by construction. Every module that computes a count here is committed, and what
+this lane takes through `context_evidence` is one integer constant.
 
 ## What comes next, in order
 

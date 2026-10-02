@@ -2206,7 +2206,7 @@
   "alphagenome_requests": 0,
   "network_requests": 0,
   "money": "none: every input was already on disk",
-  "seconds": 2.0,
+  "seconds": 2.1,
   "result_manifest": {
     "sources": [
       {
@@ -2255,7 +2255,7 @@
     },
     "parameters": {
       "mis_resolution": "a rule whose target token resolves, by the project's own symbol resolution, to a different Ensembl gene id from the gene the deletion answer measured. It says the rule names a gene the model never scored; it does NOT say the predicted relation is wrong, and nothing here establishes that any one rule is wrong",
-      "compiled_side": "genomeos.attribution.pilot_bio.gene_tss's own choice, with the gene_id it discards carried: among the GENCODE v50 genes of the element's chromosome whose gene_name is the rule's target token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token that is itself a versionless gene_id of that chromosome resolves to that gene directly, which gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own. Amendment 1: the compiled target is a BioLang identifier, not a symbol - compile.ident writes GENCODE's KRTAP10-1 as KRTAP10_1 - so a gene is looked up under its gene_name and under its ident, and a token matched by two distinct gene_names is refused rather than picked between.",
+      "compiled_side": "genomeos.attribution.pilot_bio.gene_tss's own choice, with the gene_id it discards carried: among the GENCODE v50 genes of the element's chromosome whose gene_name is the rule's target token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token that is itself a versionless gene_id of that chromosome resolves to that gene directly; those rules are counted on their own. Amendment 3: the registration justified that lookup by gene_tss skipping symbol-less genes, which is vacuous - GENCODE v50 has no gene with an empty gene_name and names 35,293 of them by their own id - so it is the exact lookup rather than an extension, and no rule's outcome turns on it. Amendment 1: the compiled target is a BioLang identifier, not a symbol - compile.ident writes GENCODE's KRTAP10-1 as KRTAP10_1 - so a gene is looked up under its gene_name and under its ident, and a token matched by two distinct gene_names is refused rather than picked between.",
       "measured_side": "the deletion answer records its target as a name and NO Ensembl gene id, so the id is recovered from two recorded things and never read: the element's own recorded window gene list (data/knowledge/alphagenome/elements/<chrom>.json.gz), which must name the target exactly once, and the window the method records, taken as the element midpoint plus or minus 500000 (not_open_profile.SCORER_HALF_WINDOW), inside which the gene's BODY must lie. Exactly one GENCODE v50 gene of that name with a body overlapping the window is the measured gene; none or several is an unresolvable cause and never a guess. A target token that is a versionless gene_id is read directly, because there the answer does record the id.",
       "half_window": 500000,
       "second_half_window": 524288,
@@ -2286,12 +2286,13 @@
       "by_cell": "the rule's own `when: cell_type` label, unchanged"
     },
     "code_cleanliness": {
-      "git_sha": "5521bf2cdde2ca749930564581581a0915d59bc2",
+      "git_sha": "f53c694920fc6fbfef766ab0c93087280e4c2098",
       "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
       "foreign_uncommitted_code": [
         "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/increases.py",
         "genomeos/manifest.py",
         "scripts/astroreg_register.py",
         "scripts/cell2_eligibility.py",
@@ -2299,6 +2300,8 @@
         "scripts/crispri_benchmark_v2.py",
         "scripts/crispri_published_v2.py",
         "scripts/fresh_crispri_eligibility.py",
+        "scripts/increase_population.py",
+        "scripts/increase_register.py",
         "scripts/placement_cause_198.py",
         "scripts/re2g_identity.py",
         "scripts/re2g_likeforlike.py",
@@ -2308,7 +2311,7 @@
         "tests/test_context_evidence.py",
         "tests/test_crispri_benchmark_v2.py",
         "tests/test_crispri_published_v2.py",
-        "tests/test_push_lock.py",
+        "tests/test_increases.py",
         "tests/test_re2g_paired.py"
       ],
       "foreign_uncommitted_code_on_the_counting_path": [
@@ -2440,10 +2443,11 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "5521bf2cdde2ca749930564581581a0915d59bc2",
+      "git_sha": "f53c694920fc6fbfef766ab0c93087280e4c2098",
       "dirty": true,
       "dirty_code_paths": [
         "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/increases.py",
         "genomeos/manifest.py",
         "scripts/astroreg_register.py",
         "scripts/cell2_eligibility.py",
@@ -2451,6 +2455,8 @@
         "scripts/crispri_benchmark_v2.py",
         "scripts/crispri_published_v2.py",
         "scripts/fresh_crispri_eligibility.py",
+        "scripts/increase_population.py",
+        "scripts/increase_register.py",
         "scripts/placement_cause_198.py",
         "scripts/re2g_identity.py",
         "scripts/re2g_likeforlike.py",
@@ -2460,17 +2466,17 @@
         "tests/test_context_evidence.py",
         "tests/test_crispri_benchmark_v2.py",
         "tests/test_crispri_published_v2.py",
-        "tests/test_push_lock.py",
+        "tests/test_increases.py",
         "tests/test_re2g_paired.py"
       ],
       "untracked_code_paths": [
+        "genomeos/attribution/increases.py",
+        "scripts/increase_population.py",
+        "scripts/increase_register.py",
         "tests/test_code_cleanliness_shared.py",
-        "tests/test_push_lock.py"
+        "tests/test_increases.py"
       ],
-      "dirty_result_paths": [
-        "data/results/gene_identity.json",
-        "data/results/gene_identity_chr21.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/gene_identity.py",
         "--chrom",
