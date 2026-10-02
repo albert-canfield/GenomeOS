@@ -281,3 +281,52 @@ def test_the_resume_skips_chromosomes_already_read() -> None:
     body = src[src.index("def read(") : src.index("def load_hits(")]
     assert "already read, not fetched again" in body
     assert "carried_mb" in body, "the byte bound must span both runs, not just this one"
+
+
+# --- the exposure statement -------------------------------------------------------------------------
+
+
+def test_the_exposure_answers_both_questions_asked() -> None:
+    """Was a carrying figure seen? Was an element-versus-baseline figure seen? Both must be answered."""
+    e = fd.THE_EXPOSURE
+    assert e["the_answer"] == "no carrying or baseline figure was computed on the partial read"
+    assert e["was_a_carrying_figure_computed_or_seen"].startswith("No")
+    assert e["was_an_element_versus_baseline_figure_computed_or_seen"].startswith("No")
+
+
+def test_the_exposure_claim_is_true_of_the_code_it_cites() -> None:
+    """The evidence is a mechanism, so the mechanism is checked rather than the sentence describing it."""
+    src = (ROOT / "scripts/finemap_dapg.py").read_text()
+    body = src[src.index("def read(") : src.index("def load_hits(")]
+    for forbidden in (
+        "symbols_of",
+        "rows_in",
+        "cell2.group",
+        "symbol_map",
+        "LINK_FLOOR",
+        "LOCUS_FLOOR",
+        "fisher_greater",
+    ):
+        assert forbidden not in body, (
+            f"the exposure statement says {forbidden} appears nowhere in read(), and it does"
+        )
+
+
+def test_the_exposure_discloses_the_prior_source_and_its_figures() -> None:
+    """14 and 0 came from the on-disk record before this read; a reader must not have to infer that."""
+    e = fd.THE_EXPOSURE["prior_exposure_from_a_DIFFERENT_source_disclosed"]
+    assert "finemap_coverage.json" in e
+    assert "14 of 1,505" in e and "0 carrying one" in e
+    assert "before this read was registered" in e
+
+
+def test_the_exposure_says_what_the_prior_figures_could_not_have_tuned() -> None:
+    e = fd.THE_EXPOSURE["what_that_prior_exposure_could_not_have_tuned"]
+    assert "fresh.POSITIVE_FLOOR" in e and "fresh.LOCUS_FLOOR" in e
+    assert "before this lane existed" in e
+
+
+def test_the_bound_change_is_stated_to_be_independent_of_the_rows() -> None:
+    e = fd.THE_EXPOSURE["did_the_bound_change_depend_on_anything_the_read_returned"]
+    assert e.startswith("No")
+    assert "knowable before a single row came back" in e

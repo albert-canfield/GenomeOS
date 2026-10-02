@@ -132,6 +132,67 @@ FIRED_RUN = {
     ),
 }
 
+#: What this lane had SEEN of the data when the cost bound changed. The coordinator required this in the
+#: registration itself rather than as a covering note, on the AstroREG-2 standard: a second attempt whose
+#: author has seen a first attempt's figures is admissible only if the record says so, so that a reader
+#: can never mistake it for a blind run. The bound changed between the two reads, which makes the
+#: question material however innocent the answer.
+THE_EXPOSURE = {
+    "the_answer": "no carrying or baseline figure was computed on the partial read",
+    "what_was_seen_of_the_partial_read_exhaustively": [
+        "per chromosome: the interval count, the rows the track returned, the rows kept at PIP >= 0.5, "
+        "the range requests and the megabytes",
+        "cumulative: 225 requests, 27.55 MB, 2,907 of 4,515 intervals, 335,935 rows scanned, 7,844 rows "
+        "kept at the threshold",
+        "nothing else",
+    ],
+    "was_a_carrying_figure_computed_or_seen": (
+        "No. Not how many elements carry a fine-mapped variant, and not how many carry one for the "
+        "element's own linked gene"
+    ),
+    "was_an_element_versus_baseline_figure_computed_or_seen": (
+        "No. The control windows were drawn and digested before the read and the rows retained in them "
+        "were never separated from the rows retained in element windows"
+    ),
+    "why_7844_is_not_a_carrying_figure": (
+        "it counts variant-gene-tissue ROWS inside windows, not elements, and it POOLS element windows "
+        "with control windows - the read writes one file per chromosome and never records which window a "
+        "row fell in. It cannot be turned into a carrying count, a gene-matched count or a control "
+        "comparison without the element attribution that was refused"
+    ),
+    "the_evidence_is_the_code_path_and_not_a_recollection": [
+        "`read` computes exactly four quantities: rows scanned, rows kept at the threshold, requests and "
+        "bytes. It resolves no gene, attributes no row to an element, and names no floor or control. The "
+        "names symbols_of, rows_in, cell2.group, symbol_map, LINK_FLOOR, LOCUS_FLOOR and fisher_greater "
+        "appear NOWHERE in its body, and it reads the element dict only to build intervals",
+        "the only code that computes a carrying, gene-matched or baseline figure is `count_payload`. It "
+        "was run TWICE against the partial read and REFUSED both times, on the absent read_summary.json, "
+        "before any element work",
+        "`test_the_completeness_check_runs_before_any_frame_work` replaces frame_with_keys and controls "
+        "with functions that RAISE if called, so count_payload cannot reach element work before the "
+        "completeness check. That is a mechanism and not a memory",
+    ],
+    "did_the_bound_change_depend_on_anything_the_read_returned": (
+        "No. The geometry argument uses only the NUMBER of disjoint intervals and their total span, both "
+        "fixed when the frame and controls were registered and both knowable before a single row came "
+        "back. No retained row, gene or count enters it"
+    ),
+    "prior_exposure_from_a_DIFFERENT_source_disclosed": (
+        "this lane's earlier published result data/results/finemap_coverage.json (committed at bffd488, "
+        "before this read was registered) reported, over the fine-mapped record ALREADY ON DISK and not "
+        "over this read: 14 of 1,505 elements carrying a variant at PIP >= 0.5 and 0 carrying one for the "
+        "element's own linked gene, over a subframe of 48 where a posterior survived. So this lane knew a "
+        "carrying figure on the same question, from a different and far smaller source, before designing "
+        "this read. It is named here so no reader mistakes this read for one designed in ignorance of it"
+    ),
+    "what_that_prior_exposure_could_not_have_tuned": (
+        "the floors. 30 gene-matched elements and 20 independent loci are fresh.POSITIVE_FLOOR and "
+        "fresh.LOCUS_FLOOR, held by identity in code, fixed before this lane existed and applied "
+        "unchanged by lane-reptest. Nor the margin, the PIP threshold, the frame or the control rule, all "
+        "of which are imported objects and not values this lane set"
+    ),
+}
+
 #: THE NEW BOUND, and the only one checked. Bytes, because bytes measure load for a scattered interval
 #: set and request count does not.
 BYTE_BOUND_MB = 170.4
@@ -999,6 +1060,29 @@ def cost_registration_payload() -> dict[str, Any]:
                 "bound is 170.4 and the run stops there whatever the projection said"
             ),
             "checked": "after every chromosome, on the cumulative figure across both runs",
+        },
+        "the_exposure": THE_EXPOSURE,
+        "amended_after_the_read": {
+            "what_was_added": (
+                "the `the_exposure` block and this note, and nothing else. Added at the coordinator's "
+                "direction AFTER the resumed read had finished"
+            ),
+            "the_version_the_read_actually_ran_against": (
+                "sha256 bcd09c5b9aeaceb7923add822a698fa2aaf33e0f7bb035c6e76529845c4f2fee, recorded by "
+                "the read itself in data/knowledge/gtex_dapg_crispri/read_summary.json as "
+                "`registration_sha256`, so a reader can check which bytes bounded the read rather than "
+                "taking this note's word for it"
+            ),
+            "first_committed_at": "bc1a595",
+            "why_it_is_not_presented_as_having_always_been_there": (
+                "it was not. A registration edited after the thing it registers is exactly the move this "
+                "project refuses, so the edit is declared, its scope is named, and the earlier bytes are "
+                "identified by a digest the read wrote down before this field existed"
+            ),
+            "no_bound_or_term_moved": (
+                "the byte bound, the fired request bound, the frame, the margin, the retained-hit rule, "
+                "the gene match, the control digest and both floors are byte-identical to bc1a595"
+            ),
         },
         "whose_mistake_the_first_quantity_was": WHOSE_MISTAKE_THE_WRONG_QUANTITY_WAS,
         "why_a_new_registration_and_not_an_amendment": (
