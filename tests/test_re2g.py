@@ -14,6 +14,15 @@ import pytest
 
 from genomeos.attribution import crispri, re2g
 
+#: The cluster floor is a rule of the shared `crispri` module, adopted 2026-10-02. While it is still
+#: uncommitted work in this shared checkout the two tests that assert it are skipped with this reason
+#: rather than failing a clean checkout that does not have the constant yet.
+CLUSTER_FLOOR = getattr(crispri, "MIN_CLUSTERS_FOR_AN_INTERVAL", None)
+needs_cluster_floor = pytest.mark.skipif(
+    CLUSTER_FLOOR is None,
+    reason="crispri.MIN_CLUSTERS_FOR_AN_INTERVAL is not in this checkout yet (shared, uncommitted)",
+)
+
 
 def pair(chrom: str, start: int, regulated: bool, weight: float = 1.0) -> crispri.Pair:
     return crispri.Pair(
@@ -31,7 +40,10 @@ def pair(chrom: str, start: int, regulated: bool, weight: float = 1.0) -> crispr
     )
 
 
-def synthetic(n_chrom: int = 8, per_chrom: int = 12) -> list[crispri.Pair]:
+#: At least `crispri.MIN_CLUSTERS_FOR_AN_INTERVAL` (10) chromosomes, so the fixture satisfies the precondition
+#: an interval is reported under. A fixture below it exercises the refusal path instead, which
+#: `test_below_the_cluster_floor_no_interval_and_no_reading_is_reported` covers on purpose.
+def synthetic(n_chrom: int = 12, per_chrom: int = 12) -> list[crispri.Pair]:
     rng = random.Random(7)
     out = []
     for c in range(n_chrom):
@@ -427,3 +439,34 @@ def test_the_second_registration_names_the_k562_pairs_as_its_only_registered_pop
 
 def test_the_second_registrations_falsifier_forbids_citing_the_h3k27ac_comparison_alone():
     assert "may not be cited alone" in re2g.SECOND_REGISTRATION["falsifier"]
+
+
+@needs_cluster_floor
+def test_below_the_cluster_floor_no_interval_and_no_reading_is_reported():
+    """A percentile bootstrap over too few chromosomes reports no ci95, so there is no reading either.
+
+    `crispri.MIN_CLUSTERS_FOR_AN_INTERVAL` is the shared rule; this lane's `reading()` already returns
+    None for a missing interval rather than borrowing one from the point estimate, and this pins the two
+    together. Restoring an interval below the floor would fail here.
+    """
+    few = synthetic(n_chrom=CLUSTER_FLOOR - 1)
+    rng = random.Random(11)
+    ours = [rng.random() for _ in few]
+    theirs = [rng.random() for _ in few]
+    out = re2g.paired_delta(ours, theirs, few, draws=60)
+    assert out["clusters"] < CLUSTER_FLOOR
+    assert out["enough_clusters"] is False
+    assert out["ci95"] is None
+    assert out["reading"] is None
+    assert "interval unreliable" in out["interval_unreliable"]
+    assert out["delta_auprc"] is not None  # the point estimate stands; only the interval is withheld
+
+
+@needs_cluster_floor
+def test_at_the_cluster_floor_an_interval_is_reported():
+    enough = synthetic(n_chrom=CLUSTER_FLOOR)
+    rng = random.Random(12)
+    out = re2g.paired_delta([rng.random() for _ in enough], [rng.random() for _ in enough], enough, draws=60)
+    assert out["enough_clusters"] is True
+    assert out["ci95"] is not None
+    assert out["reading"] in (re2g.READS_BETTER, re2g.NO_DIFFERENCE, re2g.READS_WORSE)
