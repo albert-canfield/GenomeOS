@@ -9,6 +9,13 @@ back from the compiled text, so the census counts the rules the compiler emits a
 them. No model is called and nothing is downloaded; the reading was registered first, in
 `data/results/context_evidence_registration.json`.
 
+    uv run python scripts/context_evidence_census.py
+    uv run python scripts/context_evidence_census.py --result context_evidence_v2 --supersedes
+
+`--result` changes the name written and nothing else; `--supersedes` records which committed result the
+run is written beside. The committed data/results/context_evidence.json is kept byte for byte: its sha256
+is a declared input of four other committed results.
+
 What the states mean, what they do not mean, and why `open_in_reader` is never validation is in
 `genomeos.attribution.context_evidence` and is copied into this result, so the result cannot be read
 without them.
@@ -17,6 +24,7 @@ without them.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 from collections import Counter, defaultdict
@@ -36,6 +44,8 @@ CHROMS = tuple(f"chr{c}" for c in [*range(1, 23), "X", "Y"])
 RULES_ON_THE_RECORD = 440_589
 #: Above this many input files the manifest records them as groups rather than one by one.
 INPUTS_PER_FILE_MAX = 200
+#: The input a census of many files used to declare to say that its groups could not be checked.
+INPUTS_AS_GROUPS = "inputs_recorded_as_groups"
 
 #: This lane's own files. Everything else uncommitted in this shared checkout belongs to another lane.
 #: This script, as the entry whose transitive import closure is the counting path of its results
@@ -89,6 +99,59 @@ def rules_of(text: str) -> list[tuple[str, str]]:
     return out
 
 
+#: Why this census is re-recorded under a name of its own rather than over the committed file. The
+#: committed manifest declares 13 inputs of which 12 are group labels with no member list, so a rebuild
+#: in a second environment has no path to open or hash: `files_entry` did not name the members of a group
+#: until 2026-10-02. The committed bytes cannot be replaced to fix it: the sha256 of
+#: data/results/context_evidence.json is a declared input of four other committed results
+#: (not_open_profile, not_open_profile_chr21, repress2_registration, repress2_registration_amendment),
+#: which new bytes under the same name would make unrebuildable.
+WHY_A_NEW_NAME = (
+    "re-recorded under a new name on 2026-10-02 so that every group of input files names its members, "
+    "each with its own sha256 and byte count, which is what a rebuild in a second environment needs to "
+    "open and hash them; no figure of the run differs. The committed result is kept unchanged because "
+    "its sha256 is a declared input of four other committed results"
+)
+#: The committed results that declare this one's sha256 as an input, which is why it is kept byte for byte.
+DECLARED_AS_AN_INPUT_BY = (
+    "data/results/not_open_profile.json",
+    "data/results/not_open_profile_chr21.json",
+    "data/results/repress2_registration.json",
+    "data/results/repress2_registration_amendment.json",
+)
+#: What the committed file would have declared had it been written by the code of 6a8c794 or later: a
+#: fourteenth input `inputs_recorded_as_groups`, sha256 "n/a", whose note said that
+#: scripts/manifest_rebuild.py "reports every group absent". That stopped being true at ebbded6, which
+#: opens and hashes a group member by member, and an input with no bytes behind it is now a named reason
+#: to refuse a verdict (manifest_rebuild.NOT_HASHED), so the entry is not written at all.
+THE_FOURTEENTH_INPUT_THAT_IS_NOT_WRITTEN = (
+    "the writer of 6a8c794 appended a fourteenth input `inputs_recorded_as_groups` with sha256 'n/a' "
+    "and a note saying scripts/manifest_rebuild.py 'reports every group absent'; the committed file at "
+    "data/results/context_evidence.json predates that writer and declares 13 inputs without it. The "
+    "note was untrue from ebbded6 onward, which opens and hashes a group one member at a time, and an "
+    "input whose sha256 is 'n/a' is itself a reason to refuse a verdict, so no such entry is written "
+    "here and every group names its members instead"
+)
+
+
+def supersedes() -> dict[str, Any]:
+    """The committed result this run is written beside, never over, with the bytes it is kept at."""
+    p = ROOT / RESULTS_DIR / f"{RESULT}.json"
+    entry = mf.input_entry(p, partition=None)
+    old = json.loads(p.read_text())
+    return {
+        "file": (RESULTS_DIR / f"{RESULT}.json").as_posix(),
+        "date": old.get("date"),
+        "sha256": entry["sha256"],
+        "bytes": entry["bytes"],
+        "inputs_it_declared": len(((old.get(mf.KEY) or {}).get("inputs")) or []),
+        "kept": "unchanged; this run is written beside it under a new name, not over it",
+        "why": WHY_A_NEW_NAME,
+        "declared_as_an_input_by": list(DECLARED_AS_AN_INPUT_BY),
+        "inputs_recorded_as_groups": THE_FOURTEENTH_INPUT_THAT_IS_NOT_WRITTEN,
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chroms", default=",".join(CHROMS))
@@ -98,6 +161,14 @@ def main() -> None:
         help=(
             "the result name to write. A run over fewer than all 24 chromosomes writes under a name "
             "of its own, so a partial census can never overwrite the genome-wide one"
+        ),
+    )
+    ap.add_argument(
+        "--supersedes",
+        action="store_true",
+        help=(
+            f"record, beside the manifest, that this run is written beside the committed {RESULT} "
+            f"rather than over it, with that file's date and sha256"
         ),
     )
     args = ap.parse_args()
@@ -246,6 +317,16 @@ def main() -> None:
     # A `files_entry` records a group of files under a label, and `scripts/manifest_rebuild.py` checks
     # each input by its `path`, so a label is reported absent whatever is on disk. Where the run reads
     # few enough files, each one is recorded by its own path instead and the rebuild can check them.
+    #
+    # Amended 2026-10-02: the paragraph above describes the world before ebbded6. A group now names
+    # every member with its own sha256 and byte count (`genomeos.manifest.files_entry`), and the
+    # rebuild opens and hashes them one file at a time, so a label is no longer unresolvable and the
+    # entry below - which said it was, under sha256 "n/a" - is written only in the case it actually
+    # describes: a group that names no member. That case no longer arises here, and the committed
+    # data/results/context_evidence.json declares 13 inputs without any such entry, having been written
+    # before 6a8c794 added it; what it said is carried into the `supersedes` note of a result written
+    # under another name. An input whose sha256 is "n/a" is itself a reason to refuse a verdict
+    # (manifest_rebuild.NOT_HASHED), so it is not declared where it would not be true.
     if len(every) <= INPUTS_PER_FILE_MAX:
         inputs += [mf.input_entry(p, partition=None) for p in every]
     else:
@@ -266,6 +347,12 @@ def main() -> None:
                 ),
             }
         )
+        # ... and taken back out again when every group did name its members, which is the only state
+        # `files_entry` can now produce. Written this way round, rather than by not appending it, so
+        # that the entry above keeps the shape and the indentation 6a8c794 gave it: it is a statement
+        # about a group that cannot be checked, and it stands only while one cannot be.
+        if all(e.get("members") for e in inputs if e.get("group")):
+            inputs = [e for e in inputs if e["path"] != INPUTS_AS_GROUPS]
     payload["result_manifest"] = {
         "sources": [
             {
@@ -299,6 +386,8 @@ def main() -> None:
         },
         "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }
+    if args.supersedes:
+        payload["result_manifest"]["supersedes"] = supersedes()
     path = save_result(name, payload)
     print(f"{name}: {path}")
     print(f"  rules {total:,} (on the record {RULES_ON_THE_RECORD:,})")
