@@ -1700,44 +1700,12 @@
       "one_track_seen_twice": "the 19 rows, reported apart and never pooled with the 93"
     },
     "code_cleanliness": {
-      "git_sha": "df90d86f0ef82be958929a61a035fec78e287d2b",
-      "dirty": true,
-      "entry_script": {
-        "argv0": "scripts/cellcover.py",
-        "form": "committed_repository_file",
-        "path": "scripts/cellcover.py",
-        "is_committed": true,
-        "declared_entry": "scripts/cellcover.py",
-        "declared_entry_matches_argv0": true,
-        "argv0_is_on_the_counting_path": true,
-        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
-        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
-      },
+      "git_sha": "6f945924755dd5a03a7b47a564bebb86b23c0507",
+      "dirty": false,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
-      "foreign_uncommitted_code": [
-        "genomeos/attribution/astrorun.py",
-        "genomeos/manifest.py",
-        "genomeos/results.py",
-        "scripts/astroreg2_send.py",
-        "scripts/entry_script_census.py",
-        "tests/planted_cleanliness.py",
-        "tests/test_code_cleanliness_hermetic.py",
-        "tests/test_code_cleanliness_shared.py",
-        "tests/test_context_evidence.py",
-        "tests/test_crispri_benchmark_v2.py",
-        "tests/test_crispri_published_v2.py",
-        "tests/test_entry_script_counted.py",
-        "tests/test_legacy_allowlist_exemption.py",
-        "tests/test_manifest_enforced.py",
-        "tests/test_results_cleanliness_refusal.py",
-        "tests/test_revision_race.py",
-        "tests/test_traced_inputs.py"
-      ],
-      "foreign_uncommitted_code_on_the_counting_path": [
-        "genomeos/manifest.py",
-        "genomeos/results.py"
-      ],
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
       "counting_path": [
         "genomeos/__init__.py",
         "genomeos/attribution/__init__.py",
@@ -1798,35 +1766,11 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "df90d86f0ef82be958929a61a035fec78e287d2b",
-      "dirty": true,
-      "dirty_code_paths": [
-        "genomeos/attribution/astrorun.py",
-        "genomeos/manifest.py",
-        "genomeos/results.py",
-        "scripts/astroreg2_send.py",
-        "scripts/entry_script_census.py",
-        "tests/planted_cleanliness.py",
-        "tests/test_code_cleanliness_hermetic.py",
-        "tests/test_code_cleanliness_shared.py",
-        "tests/test_context_evidence.py",
-        "tests/test_crispri_benchmark_v2.py",
-        "tests/test_crispri_published_v2.py",
-        "tests/test_entry_script_counted.py",
-        "tests/test_legacy_allowlist_exemption.py",
-        "tests/test_manifest_enforced.py",
-        "tests/test_results_cleanliness_refusal.py",
-        "tests/test_revision_race.py",
-        "tests/test_traced_inputs.py"
-      ],
-      "untracked_code_paths": [
-        "scripts/entry_script_census.py",
-        "tests/planted_cleanliness.py",
-        "tests/test_entry_script_counted.py"
-      ],
-      "dirty_result_paths": [
-        "data/results/engine_package.json"
-      ],
+      "git_sha": "6f945924755dd5a03a7b47a564bebb86b23c0507",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/cellcover.py"
       ],
@@ -1834,18 +1778,18 @@
     },
     "complete": true,
     "revision_stamps": {
-      "code_git_sha": "df90d86f0ef82be958929a61a035fec78e287d2b",
-      "code_cleanliness_git_sha": "df90d86f0ef82be958929a61a035fec78e287d2b",
+      "code_git_sha": "6f945924755dd5a03a7b47a564bebb86b23c0507",
+      "code_cleanliness_git_sha": "6f945924755dd5a03a7b47a564bebb86b23c0507",
       "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
       "comparable": true,
       "agree": true,
       "revision_race": false,
-      "reading": "no revision race: both stamps record df90d86"
+      "reading": "no revision race: both stamps record 6f94592"
     },
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
       "active": true,
-      "opens": 134,
+      "opens": 163,
       "opens_under_data": 6,
       "files_read": 3,
       "files_written": 0,
