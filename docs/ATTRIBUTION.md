@@ -15350,6 +15350,14 @@ C6orf62, PKHD1L1 at the rest). The fourteenth, `EH38E2779106` on chr1 linked to 
 only `ENSG00000272449`, which has no GENCODE symbol; it is named rather than counted as a non-match, so
 0 is a floor on matches and not a clean zero.
 
+That zero is not an artefact of the two gene sets failing to meet. 150 of the 1,239 element-linked
+genes do carry a fine-mapped variant somewhere on disk, covering 368 of the 1,505 elements — the genes
+are in the fine-mapped set and the variants simply are not in the elements. What that rules out is the
+explanation; it establishes nothing about the elements, since most of those 368 were never assessable
+in the first place and a fine-mapped variant for a gene may sit at its promoter or at another enhancer
+entirely. The three figures in this paragraph were computed outside the writer and are therefore not in
+`finemap_coverage.json` and not traced by its manifest.
+
 **What this costs the 96.** The floor quantity of the re-distillation is addable loci carrying a hit
 on a shown element, reached at 96. Under the gene match no element of the frame carries a fine-mapped
 eQTL for its linked gene, so that quantity is **0** under fine-mapping and no locus count derived from
