@@ -185,6 +185,20 @@ def manifest(recon, heldout, training, verdict) -> dict[str, Any]:
                 role="the K562 held-out pairs, their labels and their published activity columns: the "
                 "endpoint comparison set; already-read",
             ),
+            mf.files_entry(
+                "data/knowledge/alphagenome/all_elements/chr*.json",
+                sorted(crispri.ELEMENTS.glob("chr*.json")),
+                partition=None,
+                role="the swept registry element spans, read by crispri.DeletionTable's overlap test to "
+                "decide which pairs are covered. Identical in both runs",
+            ),
+            mf.files_entry(
+                "data/knowledge/alphagenome/elements/chr*.json.gz",
+                sorted(crispri.ELEMENT_CACHE.glob("chr*.json.gz")),
+                partition=None,
+                role="the per-element deletion cache, the source of the deletion features. Read twice "
+                "and identical both times, which is why the deletion arm is unchanged between the runs",
+            ),
         ],
         "assembly": "GRCh38",
         "coordinates": {"base": 0, "interval": "half-open"},
