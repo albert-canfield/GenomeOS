@@ -346,3 +346,23 @@ class TestTheRegistration:
     def test_it_names_the_four_comparisons(self, reg):
         assert len(reg["comparisons"]) == 4
         assert len(set(reg["comparisons"])) == 4
+
+    def test_the_two_suspended_results_carry_their_label(self, reg):
+        assert set(reg["suspended_inputs"]) == {
+            "data/results/context_evidence.json",
+            "data/results/context_evidence_baserate.json",
+        }
+        for label in reg["suspended_inputs"].values():
+            assert label == "suspended: not yet reproduced"
+        assert "files_entry" in reg["suspension_call"]
+
+    def test_it_says_no_figure_is_inherited_from_a_suspended_file(self, reg):
+        note = reg["not_inherited_from_a_suspended_file"]
+        assert "code and not a result" in note
+        assert "state_for" in note
+
+    def test_the_quoted_figures_name_their_file_and_scope(self, reg):
+        q = reg["quoted_from"]
+        assert q["file"] == "data/results/not_open_profile.json"
+        assert "24 chromosomes" in q["scope"]
+        assert "0.8511" in q["figures_quoted"]

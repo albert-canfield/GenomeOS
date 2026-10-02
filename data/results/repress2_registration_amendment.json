@@ -1,0 +1,135 @@
+{
+  "result": "repress2_registration_amendment",
+  "date": "2026-10-02",
+  "lane": "lane-repress2",
+  "amends": "data/results/repress2_registration.json",
+  "amends_commit": "7a5dd8b",
+  "status": "a labelling amendment to inherited figures, registered before any count was taken. It changes no gate, no floor, no band, no mechanism and no refutation condition: the design stands exactly as committed in 7a5dd8b, and nothing in this payload is a result",
+  "why_it_is_its_own_file": "written beside the registration rather than into it, so that nothing already on the record is rewritten. The two are read together, and scripts/repress_population.py carries both into its own result through repress2.registration()",
+  "suspended_inputs": {
+    "data/results/context_evidence.json": "suspended: not yet reproduced",
+    "data/results/context_evidence_baserate.json": "suspended: not yet reproduced"
+  },
+  "suspension_call": "both files record grouped inputs through manifest.files_entry, which the old scripts/manifest_rebuild.py resolved by path: a group was reported unavailable with no file opened and the result was excused rather than compared (12 of 13 inputs on context_evidence.json, standing for 873 files). The tool is fixed at ebbded6 but those two manifests predate its `members` field, so they cannot be checked from their manifests until their writer re-records them. The suspension is about reproducibility and not about any known error, and the label is 'suspended: not yet reproduced'",
+  "not_inherited_from_a_suspended_file": "no count, share or reading in this lane is read from either suspended file. The state per rule is genomeos.attribution.context_evidence.state_for, which is code and not a result, the rules are re-enumerated from the per-chromosome results on disk, and every count is taken in this lane's own run with each input digested by its own path",
+  "quoted_from": {
+    "file": "data/results/not_open_profile.json",
+    "scope": "genome-wide, all 24 chromosomes",
+    "records_its_inputs": "by their own paths, never as groups, so it is not suspended for that reason",
+    "figures_quoted": "25,943 of 30,480 assessable `represses_target` rules (0.8511) not_open_in_reader against 29,141 of 51,103 (0.5702) for `activates_target`",
+    "chr21_scoped_copy_reproduces": "data/results/not_open_profile_chr21.json rebuilds at 1,364 of 1,378 leaves with 64 of 64 inputs checked; quoted with its scope named where a reproduced citation is wanted"
+  },
+  "what_does_not_change": [
+    "the blinded eligibility count of gate 1 and the fields it may read",
+    "both floors: 20 independent loci and 30 eligible measured links, imported and not set here",
+    "the most-extreme-track mechanism, the prediction it makes and the four comparisons",
+    "the refutation condition, word for word",
+    "the three sets of reading words, and that nothing is labelled validation"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is made",
+  "code": {
+    "module": "genomeos/attribution/repress2.py",
+    "amendment": "scripts/repress_register_amendment.py",
+    "tests": "tests/test_repress2.py"
+  },
+  "frozen_inputs": [
+    {
+      "path": "data/results/repress2_registration.json",
+      "sha256": "b3b66c093422d1199a2f93183ac62cea5ee58fe7df2f3e5306a32ddaa7080d03",
+      "bytes": 16666
+    },
+    {
+      "path": "data/results/context_evidence.json",
+      "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+      "bytes": 184616
+    },
+    {
+      "path": "data/results/context_evidence_baserate.json",
+      "sha256": "2cc67f4fe78158c92c1c23269edcfccb0356539af241753440e6c555dc52d771",
+      "bytes": 20289
+    },
+    {
+      "path": "data/results/not_open_profile.json",
+      "sha256": "e0748db0ddf37ba25f9f3cd50f8a860386d4dc16d496da5d8024961f91cc0ca9",
+      "bytes": 267758
+    }
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this lane's own registration and the three results it stands beside",
+        "version": "the bytes on this machine, digested in frozen_inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/repress2_registration.json",
+        "sha256": "b3b66c093422d1199a2f93183ac62cea5ee58fe7df2f3e5306a32ddaa7080d03",
+        "bytes": 16666,
+        "partition": "the registration this amends, committed in 7a5dd8b"
+      },
+      {
+        "path": "data/results/context_evidence.json",
+        "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+        "bytes": 184616,
+        "partition": "suspended: not yet reproduced"
+      },
+      {
+        "path": "data/results/context_evidence_baserate.json",
+        "sha256": "2cc67f4fe78158c92c1c23269edcfccb0356539af241753440e6c555dc52d771",
+        "bytes": 20289,
+        "partition": "suspended: not yet reproduced"
+      },
+      {
+        "path": "data/results/not_open_profile.json",
+        "sha256": "e0748db0ddf37ba25f9f3cd50f8a860386d4dc16d496da5d8024961f91cc0ca9",
+        "bytes": 267758,
+        "partition": "by their own paths, never as groups, so it is not suspended for that reason"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "locus_floor": 20,
+      "link_floor": 30,
+      "aggregate_function": "none: nothing is aggregated",
+      "fill_value": 0
+    },
+    "exclusions": [
+      "nothing is excluded: no population is counted here"
+    ],
+    "partitions": {
+      "amendment": "a label on inherited figures, not a reading of any population"
+    },
+    "code": {
+      "git_sha": "56cb74eb54cda3217f0465ddf4604615ecea2bfc",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/repress2.py",
+        "genomeos/response_map2.py",
+        "scripts/context_evidence_census.py",
+        "scripts/placement_cause_198.py",
+        "scripts/repress_population.py",
+        "scripts/repress_register_amendment.py",
+        "tests/test_repress2.py",
+        "tests/test_response_map2.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/repress_population.py",
+        "scripts/repress_register_amendment.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/placement_cause_198.json"
+      ],
+      "argv": [
+        "scripts/repress_register_amendment.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

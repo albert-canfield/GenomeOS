@@ -40,6 +40,17 @@ at the reader's registered call*, never *closed* (`context_evidence.NOT_CLOSED`)
 peaks and AlphaGenome's training set are the same chromatin, so nothing here is independent evidence
 and nothing here is validation (`context_evidence.NOT_VALIDATION`). Every band, floor and grouping is
 imported from where the project already fixed it; this module introduces no threshold of its own.
+
+**Two inherited results are suspended as not yet reproduced** and `SUSPENDED_INPUTS` carries that
+label into every payload: `context_evidence.json` and `context_evidence_baserate.json` each record
+grouped inputs through `manifest.files_entry`, which the old rebuild resolved by path and so excused
+without opening a file (12 of 13 inputs on the first, standing for 873 files). The tool is fixed but
+their committed manifests predate the `members` field, so they cannot be checked from their manifests
+until their writer re-records them. Nothing in this lane reads either file: the state per rule comes
+from `context_evidence.state_for`, which is code and not a result, and every count here is taken in
+this lane's own run. The figures this lane quotes from `not_open_profile.json` are not suspended for
+that reason - that result records all 892 of its inputs by their own paths - and they are named with
+their file and their scope wherever they appear.
 """
 
 from __future__ import annotations
@@ -52,6 +63,48 @@ from genomeos.attribution import measured as ms
 from genomeos.attribution import not_open_profile as nop
 from genomeos.attribution.crispri import MODEL_CELLS
 from genomeos.attribution.crispri_direction import wilson
+
+# ---- what this lane inherits, and which of it is suspended --------------------------------------
+
+#: The two results whose committed manifests cannot be checked, with the label they must carry
+#: wherever a figure of theirs is quoted. Neither is read by this lane; both are listed so a reader
+#: can see that and does not have to check.
+SUSPENDED = "suspended: not yet reproduced"
+SUSPENDED_INPUTS = {
+    "data/results/context_evidence.json": SUSPENDED,
+    "data/results/context_evidence_baserate.json": SUSPENDED,
+}
+SUSPENSION_CALL = (
+    "both files record grouped inputs through manifest.files_entry, which the old "
+    "scripts/manifest_rebuild.py resolved by path: a group was reported unavailable with no file "
+    "opened and the result was excused rather than compared (12 of 13 inputs on "
+    "context_evidence.json, standing for 873 files). The tool is fixed at ebbded6 but those two "
+    "manifests predate its `members` field, so they cannot be checked from their manifests until "
+    "their writer re-records them. The suspension is about reproducibility and not about any known "
+    f"error, and the label is {SUSPENDED!r}"
+)
+#: Why the suspension does not reach any figure this lane reports.
+NOT_INHERITED_FROM_A_SUSPENDED_FILE = (
+    "no count, share or reading in this lane is read from either suspended file. The state per rule "
+    "is genomeos.attribution.context_evidence.state_for, which is code and not a result, the rules "
+    "are re-enumerated from the per-chromosome results on disk, and every count is taken in this "
+    "lane's own run with each input digested by its own path"
+)
+#: The one result this lane quotes a figure from, with its scope named. It is not suspended for the
+#: grouped-input reason: it records all 892 of its inputs by their own paths.
+QUOTED_FROM = {
+    "file": "data/results/not_open_profile.json",
+    "scope": "genome-wide, all 24 chromosomes",
+    "records_its_inputs": "by their own paths, never as groups, so it is not suspended for that reason",
+    "figures_quoted": (
+        "25,943 of 30,480 assessable `represses_target` rules (0.8511) not_open_in_reader against "
+        "29,141 of 51,103 (0.5702) for `activates_target`"
+    ),
+    "chr21_scoped_copy_reproduces": (
+        "data/results/not_open_profile_chr21.json rebuilds at 1,364 of 1,378 leaves with 64 of 64 "
+        "inputs checked; quoted with its scope named where a reproduced citation is wanted"
+    ),
+}
 
 # ---- the two activity axis values this lane separates -------------------------------------------
 
@@ -485,6 +538,10 @@ def registration() -> dict[str, Any]:
             "not_validation": CONCORDANCE_IS_NOT_VALIDATION,
         },
         "limitations": limitations(),
+        "suspended_inputs": dict(SUSPENDED_INPUTS),
+        "suspension_call": SUSPENSION_CALL,
+        "not_inherited_from_a_suspended_file": NOT_INHERITED_FROM_A_SUSPENDED_FILE,
+        "quoted_from": dict(QUOTED_FROM),
         "introduces_no_threshold": (
             "every band, floor, grouping and state in this lane is imported from where the project "
             "already fixed it: not_open_profile's effect band and enhancer_target.STRONG_EFFECT, "
@@ -499,6 +556,7 @@ def registration() -> dict[str, Any]:
         "code": {
             "module": "genomeos/attribution/repress2.py",
             "register": "scripts/repress_register.py",
+            "amendment": "scripts/repress_register_amendment.py",
             "run": "scripts/repress_population.py",
             "tests": "tests/test_repress2.py",
         },
