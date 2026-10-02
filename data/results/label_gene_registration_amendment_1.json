@@ -1,0 +1,120 @@
+{
+  "result": "label_gene_registration_amendment_1",
+  "date": "2026-10-02",
+  "lane": "lane-labelgene",
+  "amends": "data/results/label_gene_registration.json as committed at 47835d1, whose design code is e13992a. Nothing in that file is rewritten or withdrawn; this file adds to it.",
+  "amendment_1": "AMENDED on the coordinator's direction. DISCLOSED HONESTLY: the direction arrived AFTER the registration file was committed at 47835d1, so this text is an APPEND and not part of that commit. It is nonetheless BLIND and pre-count, and git shows why rather than this sentence asserting it: at the moment this amendment is committed no concordance has been computed, scripts/label_gene_count.py does not exist in the tree, and no figure of this lane exists anywhere. An amendment written after the figures are seen is NOT a pre-registration; this one is written before any figure exists. It is purely ADDITIVE - no band, no floor, no reading and no threshold of the registration is changed, and nothing is made easier to reach.\nTHE DEFECT IT ADDRESSES IS THE ESTIMAND, NOT THE UNCERTAINTY. The primary pools PAIRS across genes, so a gene with k elements contributes k(k-1)/2 of them. At a mean near 27 elements a handful of large genes can dominate the number. The gene-clustered interval says how UNCERTAIN the estimate is; it does not change WHAT is estimated. Two things are therefore registered beside the primary:\n(1) THE CONCENTRATION, PRINTED: the share of all within-gene pairs contributed by the top 5 genes by pair count. One number and NO threshold, so a reader can see at a glance whether the primary is a statement about 180 genes or about five.\n(2) A GENE-EQUAL-WEIGHT CONCORDANCE, labelled a SENSITIVITY that DECIDES NOTHING: each gene's own distance-matched concordance averaged with equal weight over genes, and the SAME equal weighting applied to the matched different-gene arm - each GENE PAIR weighted equally - so the two arms stay comparable. A unit's distance reweighting uses the global within-gene bin weights restricted to the contributing bins in which that unit actually has pairs, renormalised; a unit with pairs in no contributing bin is EXCLUDED and counted. The reading is still selected by the PAIR-POOLED primary and by nothing else.\n(3) THE BINDING SENTENCE, registered here so it binds before either number is seen: IF THE PAIR-POOLED PRIMARY AND THE GENE-EQUAL-WEIGHT SENSITIVITY DISAGREE, THE RESULT MUST SAY SO IN THOSE WORDS, and may not report only whichever of the two reads better. They DISAGREE when the registered band of the gene-equal-weight ratio differs from the band of the pair-pooled ratio against the same control, or when the gene-equal-weight point estimate falls outside the pair-pooled ratio's own interval. Either condition is enough.",
+  "additive_only": "the bands, the floors, the four readings and (c)'s words are exactly as registered at 47835d1 and are repeated here so a reader can check that none moved.",
+  "band_at_control": [
+    0.8,
+    1.25
+  ],
+  "band_far_above": 1.5,
+  "min_clusters_genes": 10,
+  "reading_c_words": "THE DATA CANNOT TELL",
+  "top_genes_for_concentration": 5,
+  "the_reading_is_selected_by_the_pooled_primary": "unchanged by this amendment: the registration selects (a), (a'), (b) or (c) on the PAIR-POOLED within-gene concordance and on nothing else. The gene-equal-weight figure is a SENSITIVITY and decides nothing.",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this lane's own registration, data/results/label_gene_registration.json",
+        "version": "as committed at 47835d1, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/label_gene_registration.json",
+        "sha256": "00254339ce336e255f1d7b32f8f5b3cc843ae67be411c6e620507b32f1117631",
+        "bytes": 23783,
+        "partition": "the registration this file amends, committed at 47835d1 and not rewritten by this amendment"
+      }
+    ],
+    "input_count": 1,
+    "assembly": "n/a: an amendment to a design; it reads no sequence and no interval",
+    "coordinates": "n/a: an amendment to a design; it reads no coordinate",
+    "parameters": {
+      "top_genes_for_concentration": 5,
+      "band_at_control": [
+        0.8,
+        1.25
+      ],
+      "band_far_above": 1.5,
+      "minimum_clusters_genes": 10,
+      "nothing_moved": "every band and floor above is identical to 47835d1's"
+    },
+    "exclusions": [
+      "nothing of the registration is withdrawn, weakened or exempted by this amendment",
+      "the gene-equal-weight figure is excluded from selecting the reading: it is a SENSITIVITY and decides nothing"
+    ],
+    "partitions": {
+      "amendment": "a design document; it carries no observation and no denominator"
+    },
+    "code_cleanliness": {
+      "git_sha": "7f6ff93c94b5402a7107f20657b84fd69665b066",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/label_gene_amend_1.py",
+        "form": "committed_repository_file",
+        "path": "scripts/label_gene_amend_1.py",
+        "is_committed": true,
+        "declared_entry": "scripts/label_gene_amend_1.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/label_gene.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/label_gene_amend_1.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "7f6ff93c94b5402a7107f20657b84fd69665b066",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/label_gene_amend_1.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "7f6ff93c94b5402a7107f20657b84fd69665b066",
+      "code_cleanliness_git_sha": "7f6ff93c94b5402a7107f20657b84fd69665b066",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 7f6ff93"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 136,
+      "opens_under_data": 1,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
