@@ -1,13 +1,21 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """The per-assertion direction-v2 emitter: the class comes from the rule, and the rule is unchanged.
 
-Every test here is on the classifier and on the wording it must carry. None of them reads the
-committed result, so a test passes or fails on the code and not on a number.
+Every test on the classifier is on the classifier and on the wording it must carry, and reads no
+result, so it passes or fails on the code and not on a number.
+
+Four tests do read trees, and the docstring that said none of them did is amended rather than kept:
+the historical premise is pinned to `ad07bf5^` by sha, a second pin shows the probe can see a
+carrier, the live claim is narrowed to "every carrier of a v2 reason descends from the v2 result",
+and the shapes that rule must tell apart are planted in a temporary directory. A committed result's
+absence fails here; it never skips.
 """
 
 from __future__ import annotations
 
 import json
+import subprocess
+from collections.abc import Callable
 from pathlib import Path
 
 import pytest
@@ -17,7 +25,9 @@ from genomeos.attribution import respmap_v2 as rv
 from genomeos.predict import enhancer_target as et
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "data/results/response_map_increment2.json"
+SOURCE_RELATIVE = "data/results/response_map_increment2.json"
+INCREMENT_3_RELATIVE = "data/results/response_map_increment3.json"
+SOURCE = ROOT / SOURCE_RELATIVE
 
 
 def assertion(
@@ -69,19 +79,255 @@ def test_direction_v2_script_writes_no_file() -> None:
         assert forbidden not in src, f"{forbidden} now appears; the emitter may be redundant"
 
 
-def test_no_committed_result_carried_a_v2_class() -> None:
-    """Had any result carried a reason token, the class could have been read instead of emitted."""
-    results = ROOT / "data/results"
-    if not results.is_dir():
-        pytest.skip("no result registry on this machine")
-    hits = [
-        p.name
-        for p in results.glob("*.json")
-        if p.name != "respmap_direction_v2.json" and "one_track_seen_twice" in p.read_text(errors="ignore")
+# ---- the premise this lane had to check, pinned to the tree it is about ------------------------
+
+#: The commit that built the per-assertion emitter. Its message IS the claim: no committed artefact
+#: carried the v2 class of a single published assertion, so the class is emitted and not inferred.
+EMITTER_COMMIT = "ad07bf5"
+#: The tree the claim is about: the one the emitter was written against, named by sha and not by
+#: "now", so the claim cannot be falsified by work done after it was true.
+TREE_THE_CLAIM_IS_ABOUT = f"{EMITTER_COMMIT}^"
+#: The commit that first committed this lane's own v2 result. Pinned for the opposite reason: it is
+#: a tree that HAS carriers, so the probe below is shown to see one rather than asserted to.
+FIRST_V2_RESULT_COMMIT = "230509a"
+#: Every result whose name starts with this is the registration itself or its own result: the root
+#: of the descent relation, not a descendant of it.
+V2_RESULT_STEM = "respmap_direction_v2"
+
+PINNED_NOT_LIVE = (
+    "amended additively, 2026-10-02. 'No committed result carried a v2 reason token' is a claim "
+    "about the tree the emitter was built against, and it is now pinned to that tree by sha. "
+    "Asserted against the live tree instead, it was a verdict that moved while nothing it covers "
+    "moved: cellcover.json, clause1.json and both of their registrations have since been committed, "
+    "every one of them digesting data/results/respmap_direction_v2.json among its manifest inputs, "
+    "and the assertion read four registered descendants as a defect and failed a push. The live "
+    "claim is narrowed, not dropped: a carrier must have a registered parent. docs/LESSONS.md, "
+    "'The verdict moved twice without the mechanism moving once'"
+)
+
+ABSENCE_IS_A_DEFECT = (
+    "a committed result's absence FAILS and does not skip. Three guards here skipped on it -- the "
+    "data/results directory, response_map_increment2.json and response_map_increment3.json, all "
+    "three in the commit -- and a stub may substitute a dependency's behaviour, never its "
+    "existence. tests/local_data.py's needs_local_data marker is for the git-IGNORED stores and "
+    "raises on a path git does not ignore, which is this same distinction asked the other way round"
+)
+
+
+def _git(*args: str) -> str:
+    """git's stdout. Exit 1 is a grep's 'no match'; anything above it is a refusal, never an answer.
+
+    Decoded with `errors="replace"` because the descent rule follows a manifest input wherever it
+    points and some committed inputs are gzip: measured, a parent named `*.json.gz` made this raise
+    UnicodeDecodeError past the JSON guard below, so a planted orphan failed the test with the wrong
+    reason. Undecodable bytes are not a JSON object, which is the answer `payload_in_tree` needs.
+    """
+    r = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, errors="replace")
+    if r.returncode not in (0, 1):
+        raise AssertionError(f"git {' '.join(args)} refused ({r.returncode}): {r.stderr.strip()[-300:]}")
+    return r.stdout
+
+
+def carriers_in_tree(revision: str) -> list[str]:
+    """The results in `revision`'s tree holding any v2 reason token, by path, read from the tuple.
+
+    All eight tokens, not the one the first version of this test grepped for: the tokens come from
+    `dv.UNRESOLVED_REASONS` and are never typed here.
+    """
+    patterns: list[str] = []
+    for token in dv.UNRESOLVED_REASONS:
+        patterns += ["-e", token]
+    out = _git("grep", "-l", "--fixed-strings", *patterns, revision, "--", "data/results")
+    return sorted(line.split(":", 1)[1] for line in out.splitlines() if ":" in line)
+
+
+def results_in_tree(revision: str) -> frozenset[str]:
+    """Every path under data/results that `revision` commits."""
+    return frozenset(
+        p for p in _git("ls-tree", "-r", "--name-only", revision, "--", "data/results").splitlines() if p
+    )
+
+
+def payload_in_tree(revision: str, path: str) -> dict | None:
+    """`path`'s JSON object in `revision`, or None when it is not an object this rule can read."""
+    try:
+        got = json.loads(_git("show", f"{revision}:{path}"))
+    except (json.JSONDecodeError, AssertionError):
+        return None
+    return got if isinstance(got, dict) else None
+
+
+def is_the_v2_result(path: str) -> bool:
+    """Whether `path` is the v2 result or its registration, which are the root and not descendants."""
+    return Path(path).name.startswith(V2_RESULT_STEM)
+
+
+def manifest_input_paths(payload: dict) -> list[str]:
+    """Every path `result_manifest.inputs` names, a group input's members included.
+
+    `inputs` and not the prose in `sources`: an input is digested by sha256, and that is what makes
+    naming a parent a registration rather than a mention.
+    """
+    out: list[str] = []
+    for entry in (payload.get("result_manifest") or {}).get("inputs") or []:
+        if not isinstance(entry, dict):
+            continue
+        if isinstance(entry.get("path"), str):
+            out.append(entry["path"])
+        for member in entry.get("members") or []:
+            if isinstance(member, dict) and isinstance(member.get("path"), str):
+                out.append(member["path"])
+    return out
+
+
+def carriers_from_nowhere(
+    carriers: list[str],
+    holds: Callable[[str], bool],
+    payload: Callable[[str], dict | None],
+) -> list[str]:
+    """Those `carriers` that are not registered descendants of the v2 result.
+
+    A descendant digests `respmap_direction_v2.json` or its registration among its manifest inputs,
+    directly or through another result that does. `holds` and `payload` are the only two questions
+    the rule asks of a tree, so the same rule runs against a git revision and against a plain
+    directory -- the second is how the test below is shown to be able to fail at all.
+    """
+
+    def descends(name: str, chain: frozenset[str]) -> bool:
+        if name in chain:
+            return False  # a cycle of results naming each other registers nothing
+        got = payload(name)
+        if got is None:
+            return False
+        for parent in manifest_input_paths(got):
+            if is_the_v2_result(parent):
+                return True
+            if holds(parent) and descends(parent, chain | {name}):
+                return True
+        return False
+
+    return sorted(c for c in carriers if not is_the_v2_result(c) and not descends(c, frozenset()))
+
+
+def must_be_committed(relative: str) -> Path:
+    """The path, or an AssertionError. A committed result's absence is a defect, not a difference."""
+    path = ROOT / relative
+    tracked = (
+        subprocess.run(
+            ["git", "ls-files", "--error-unmatch", relative], cwd=ROOT, capture_output=True
+        ).returncode
+        == 0
+    )
+    if not path.exists():
+        raise AssertionError(
+            f"{relative} is absent from this checkout and git tracks it: {tracked}. {ABSENCE_IS_A_DEFECT}"
+        )
+    assert tracked, (
+        f"{relative} is present but git does not track it, so nothing fixes it. {ABSENCE_IS_A_DEFECT}"
+    )
+    return path
+
+
+def test_no_committed_result_carried_a_v2_class_when_the_emitter_was_built() -> None:
+    """Had any result carried a reason token, the class could have been read instead of emitted.
+
+    The same claim as before, against the tree it was made about. Pinned, it is permanent.
+    """
+    assert carriers_in_tree(TREE_THE_CLAIM_IS_ABOUT) == []
+    assert "pinned to that tree by sha" in PINNED_NOT_LIVE
+
+
+def test_the_carrier_probe_sees_the_carriers_of_a_tree_that_has_them() -> None:
+    """Non-vacuity, pinned too: at 230509a exactly the v2 result and its registration carry a reason.
+
+    Without this, the pin above could pass because the probe found nothing anywhere.
+    """
+    assert carriers_in_tree(FIRST_V2_RESULT_COMMIT) == [
+        "data/results/respmap_direction_v2.json",
+        "data/results/respmap_direction_v2_registration.json",
     ]
-    # additive amendment: this lane's own registration names the reason set, as it must
-    hits = [h for h in hits if not h.startswith("respmap_direction_v2")]
-    assert hits == [], f"a result now carries v2 reasons: {hits}"
+
+
+def test_every_committed_carrier_of_a_v2_reason_descends_from_the_v2_result() -> None:
+    """The live claim, narrowed to what stays invariant while results land: a carrier has a parent.
+
+    A new result may carry a v2 reason -- four have -- but only by digesting the v2 result among its
+    manifest inputs, directly or through a result that does. One carrying a v2 reason from nowhere
+    is the defect the first version of this assertion was reaching for, and it is still caught.
+    """
+    assert must_be_committed("data/results").is_dir()
+    carriers = carriers_in_tree("HEAD")
+    assert carriers, "HEAD commits no carrier at all, so the v2 result is no longer committed"
+    orphans = carriers_from_nowhere(
+        carriers,
+        results_in_tree("HEAD").__contains__,
+        lambda name: payload_in_tree("HEAD", name),
+    )
+    assert orphans == [], f"a committed result carries a v2 reason from nowhere: {orphans}"
+
+
+def test_a_carrier_from_nowhere_is_caught_and_a_registered_descendant_is_not(tmp_path: Path) -> None:
+    """The narrowing, shown to be able to fail rather than asserted to be.
+
+    One orphan per reason token, so every one of the eight is searched; then the shapes the rule has
+    to tell apart: a direct child, a grandchild, a parent named inside a group input, two results
+    naming only each other, and one that mentions the v2 result in prose without digesting it.
+    """
+    bodies: dict[str, dict] = {f"orphan_{token}.json": {"note": token} for token in dv.UNRESOLVED_REASONS}
+    token = dv.UNRESOLVED_REASONS[3]
+    assert token == "one_track_seen_twice"  # the token the first version of this test grepped for
+    bodies["child.json"] = {
+        "note": token,
+        "result_manifest": {"inputs": [{"path": f"data/results/{V2_RESULT_STEM}.json", "sha256": "x"}]},
+    }
+    bodies["grandchild.json"] = {
+        "note": token,
+        "result_manifest": {"inputs": [{"path": "data/results/child.json", "sha256": "x"}]},
+    }
+    bodies["group_child.json"] = {
+        "note": token,
+        "result_manifest": {
+            "inputs": [
+                {
+                    "path": "a group",
+                    "group": True,
+                    "members": [{"path": f"data/results/{V2_RESULT_STEM}_registration.json"}],
+                }
+            ]
+        },
+    }
+    bodies["cycle_a.json"] = {
+        "note": token,
+        "result_manifest": {"inputs": [{"path": "data/results/cycle_b.json", "sha256": "x"}]},
+    }
+    bodies["cycle_b.json"] = {
+        "note": token,
+        "result_manifest": {"inputs": [{"path": "data/results/cycle_a.json", "sha256": "x"}]},
+    }
+    bodies["mentions_only.json"] = {
+        "note": token,
+        "result_manifest": {"sources": [{"version": f"the committed data/results/{V2_RESULT_STEM}.json"}]},
+    }
+    bodies["not_a_carrier.json"] = {"note": "no reason token here"}
+    for name, body in bodies.items():
+        (tmp_path / name).write_text(json.dumps(body))
+
+    def read(path: str) -> dict | None:
+        p = tmp_path / Path(path).name
+        return json.loads(p.read_text()) if p.exists() else None
+
+    carriers = sorted(
+        f"data/results/{p.name}"
+        for p in tmp_path.glob("*.json")
+        if any(t in p.read_text() for t in dv.UNRESOLVED_REASONS)
+    )
+    assert "data/results/not_a_carrier.json" not in carriers
+    assert len(carriers) == len(bodies) - 1
+    orphans = carriers_from_nowhere(carriers, lambda path: (tmp_path / Path(path).name).exists(), read)
+    assert orphans == sorted(
+        [f"data/results/orphan_{t}.json" for t in dv.UNRESOLVED_REASONS]
+        + ["data/results/cycle_a.json", "data/results/cycle_b.json", "data/results/mentions_only.json"]
+    )
 
 
 # ---- the class comes from the rule -------------------------------------------------------------
@@ -213,9 +459,7 @@ def test_only_predicted_assertions_are_in_the_population() -> None:
 
 
 def test_the_published_payload_fixes_the_denominator() -> None:
-    if not SOURCE.exists():
-        pytest.skip("the published response map is not on this machine")
-    payload = json.loads(SOURCE.read_text())
+    payload = json.loads(must_be_committed(SOURCE_RELATIVE).read_text())
     assert payload["counts"]["by_status"]["predicted"] == 166
     assert payload["counts"]["by_status"]["observed"] == 361
     assert payload["counts"]["assertions"] == 527
@@ -224,10 +468,7 @@ def test_the_published_payload_fixes_the_denominator() -> None:
 
 def test_increment_3_is_a_different_population() -> None:
     """The brief attached increment 2's counts to increment 3's name; the code records which is which."""
-    p = ROOT / "data/results/response_map_increment3.json"
-    if not p.exists():
-        pytest.skip("increment 3 is not on this machine")
-    counts = json.loads(p.read_text())["counts"]
+    counts = json.loads(must_be_committed(INCREMENT_3_RELATIVE).read_text())["counts"]
     assert counts["assertions"] == 574
     assert counts["by_status"]["predicted"] == 73
     assert counts["chains"] == 93
