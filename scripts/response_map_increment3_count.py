@@ -796,15 +796,17 @@ def main() -> None:
     ):
         for chrom in chroms:
             paths += sorted(RESULTS_DIR.glob(g.replace("chr*", chrom)))
-    paths.append(ROOT / EQTL_RESULT)
+    paths.append(Path(EQTL_RESULT))
     paths += sorted(eqtl.KNOWLEDGE.glob("hits_*.tsv"))
     p = eqtl.KNOWLEDGE / "distil_summary.json"
     if p.exists():
         paths.append(p)
     for group in OPENED_BESIDE_THE_RESULTS.values():
-        paths += [ROOT / x for x in group]
+        # repository-relative, so `manifest_rebuild.py` can check the bytes its own
+        # worktree reads rather than an absolute path outside the linked stores
+        paths += [Path(x) for x in group]
     for chrom in sorted(eqtl_chroms):
-        paths.append(ROOT / GENCODE.format(chrom=chrom))
+        paths.append(Path(GENCODE.format(chrom=chrom)))
     for q in paths:
         if q.as_posix() not in seen:
             seen.add(q.as_posix())

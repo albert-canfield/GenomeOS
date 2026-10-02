@@ -163,7 +163,7 @@ def main() -> None:
         if p.exists():
             inputs.append(mf.input_entry(p, partition=ms.CRISPRI_SPLIT_OF[f]))
     seen = {str(i["path"]) for i in inputs}
-    paths = [ROOT / rm3.COUNT_RESULT]
+    paths = [Path(rm3.COUNT_RESULT)]
     paths += [
         p
         for cell in ce.READER_TERMS
@@ -182,7 +182,9 @@ def main() -> None:
     if p.exists():
         paths.append(p)
     for group in OPENED_BESIDE_THE_RESULTS.values():
-        paths += [ROOT / x for x in group]
+        # repository-relative, so `manifest_rebuild.py` can check the bytes its own
+        # worktree reads rather than an absolute path outside the linked stores
+        paths += [Path(x) for x in group]
     for q in paths:
         if q.as_posix() not in seen:
             seen.add(q.as_posix())
