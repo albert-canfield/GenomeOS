@@ -264,6 +264,26 @@ pointed at a five-hour-old file from another lane. Note that the hook's "this no
 does not repeat" keys on the exact command text, so adding `--force` makes a new call
 and the notice fires once more; re-send that text unchanged too.
 
+## Never dispatch onto a path whose previous owner still holds work (2026-10-02)
+
+A lane marked itself **done**, then kept committing on the path it had handed over. The
+coordinator, reading the board, dispatched a second lane onto the same assignment. Two
+sessions ran one job in parallel for about 25 minutes on the same files: a 1.4 GB stream
+and two full `check.sh` runs on a machine with 16 GB of disk left, and **it was luck
+rather than design that they never wrote the same result file in the same second.** A
+collision there would have produced an interleaved or truncated result whose numbers
+could still have looked plausible.
+
+Two rules, and the first is the coordinator's:
+
+- **Before dispatching a lane onto a path, check that no previous owner has uncommitted
+  work there** — `git status` on the paths, not only the board's `done` flag. A board
+  entry records what a lane *says*; the working tree records what it is still doing.
+- **A lane that marks itself done stops committing.** If more work appears, it reopens
+  its entry before touching a file. Done is a claim about the tree, not a mood.
+
+The failure was the coordinator's, not either lane's: both did what they were asked.
+
 ## A guard with parts is stripped part by part (2026-10-02)
 
 The rule above says show what a guard prevents by removing it. A guard can be **two
