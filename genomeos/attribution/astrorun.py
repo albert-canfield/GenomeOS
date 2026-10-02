@@ -366,6 +366,37 @@ def plan_requests(pairs: list[dict[str, Any]], table: Any) -> list[dict[str, Any
     return out
 
 
+#: The labels the registered test actually scores. The other two registered classes -- the 25 increases
+#: held apart and the 3,154 non-hits excluded for not being WellPowered at fc 0.25 -- are never
+#: negatives and never positives, so an element whose only covered pairs carry those labels cannot
+#: enter either arm of the endpoint.
+SCORED_LABELS = ("positive", "negative")
+
+#: Why the sendable list is a FILTER of `plan_requests` and not a second enumeration.
+ONE_LIST_THEN_ONE_FILTER = (
+    "the sendable list is `plan_requests` filtered, in this one function, and a sender iterates THIS. "
+    "Re-deriving it from the pairs would be a second enumeration, and two enumerations drift. The "
+    "filter is also the only place the scored-label rule lives, so a report and a sender cannot "
+    "disagree about which requests are in scope"
+)
+
+
+def requests_serving_scored_pairs(
+    plan: list[dict[str, Any]], scored: tuple[str, ...] = SCORED_LABELS
+) -> list[dict[str, Any]]:
+    """The rows of `plan` that serve at least one pair the registered test scores, in the plan's order.
+
+    An element whose every covered pair is an increase held apart or an underpowered exclusion serves
+    neither arm of the endpoint, so buying it buys nothing the claim can use. This is a FILTER of the
+    single enumeration and never a re-derivation of it; see `ONE_LIST_THEN_ONE_FILTER`.
+
+    It does NOT change the authorised total. The original registration counted one request per registry
+    element overlapping a covered pair of ANY label, and that total is what Albert approved. Narrowing
+    it is a cheaper run than the one registered, which only he can authorise.
+    """
+    return [r for r in plan if any(lab in scored for lab in r["serves_labels"])]
+
+
 # ----------------------------------------------------------------- the activity-input gate
 
 #: The two numbers the frozen activity term is made of, and the one place they are read from.

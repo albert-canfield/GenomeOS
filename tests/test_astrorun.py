@@ -567,3 +567,44 @@ class TestTheActivityInputGate:
         assert astrorun.requests_permitted(v) == 0, (
             "a no-go may not buy a deletion cache no registered claim can be made from"
         )
+
+
+class TestTheSendableSubset:
+    """1,232 is a FILTER of the 1,322, in one function, so a sender and a report cannot disagree."""
+
+    def row(self, element, labels):
+        return {"chrom": "chr1", "element": element, "start": 1, "end": 2, "serves_labels": labels}
+
+    def test_a_row_serving_a_positive_or_a_negative_is_kept(self):
+        plan = [self.row("A", ["positive"]), self.row("B", ["negative"])]
+        assert [r["element"] for r in astrorun.requests_serving_scored_pairs(plan)] == ["A", "B"]
+
+    def test_a_row_serving_only_held_apart_or_excluded_labels_is_dropped(self):
+        plan = [
+            self.row("A", ["excluded_underpowered"]),
+            self.row("B", ["increase_held_apart"]),
+            self.row("C", ["excluded_underpowered", "increase_held_apart"]),
+        ]
+        assert astrorun.requests_serving_scored_pairs(plan) == []
+
+    def test_a_mixed_row_is_kept_because_it_serves_a_scored_pair_too(self):
+        plan = [self.row("A", ["excluded_underpowered", "negative"])]
+        assert len(astrorun.requests_serving_scored_pairs(plan)) == 1
+
+    def test_the_plan_order_is_preserved(self):
+        plan = [self.row(c, ["negative"]) for c in "DCBA"]
+        assert [r["element"] for r in astrorun.requests_serving_scored_pairs(plan)] == list("DCBA")
+
+    def test_the_filter_never_adds_a_row(self):
+        plan = [self.row("A", ["positive"]), self.row("B", ["excluded_underpowered"])]
+        assert len(astrorun.requests_serving_scored_pairs(plan)) <= len(plan)
+
+    def test_the_scored_labels_come_from_the_caller(self):
+        plan = [self.row("A", ["increase_held_apart"])]
+        assert len(astrorun.requests_serving_scored_pairs(plan, ("increase_held_apart",))) == 1
+
+    def test_it_says_it_is_a_filter_and_not_a_second_enumeration(self):
+        assert "second enumeration" in astrorun.ONE_LIST_THEN_ONE_FILTER
+
+    def test_narrowing_is_not_presented_as_changing_the_authorised_total(self):
+        assert "only he can authorise" in astrorun.requests_serving_scored_pairs.__doc__

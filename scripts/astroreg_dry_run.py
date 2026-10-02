@@ -80,9 +80,14 @@ OWN_CODE = (
     "tests/test_astrorun.py",
 )
 
-#: The labels the registered test actually scores. Elements that serve only other labels are counted
-#: and reported, never removed: the authorised total counts them.
-SCORED_LABELS = ("positive", "negative")
+#: The labels the registered test actually scores, from the one place that defines them.
+SCORED_LABELS = astrorun.SCORED_LABELS
+
+#: AstroREG-2's registration, whose scope is the 1,232 requests that serve a pair the test scores.
+ASTROREG2 = Path("data/results/astroreg2_registration.json")
+
+#: The number that scope enumerates. A list that does not match it is refused, not trimmed.
+ASTROREG2_REQUESTS = 1_232
 
 
 def refuse(message: str) -> int:
@@ -237,6 +242,89 @@ def manifest(chroms: list[str], plan: list[dict[str, Any]], pairs: list[dict[str
     }
 
 
+def astroreg2_scope(plan, pairs, summary, authorised, show) -> int:
+    """The 1,232 AstroREG-2 would send: the single enumeration, filtered in its one filter."""
+    if not ASTROREG2.exists():
+        return refuse(f"{ASTROREG2} is absent; AstroREG-2's scope is read from its registration")
+    reg_sha, _, _ = mf.sha256_of(ASTROREG2)
+    sendable = astrorun.requests_serving_scored_pairs(plan)
+    dropped = len(plan) - len(sendable)
+    if len(sendable) != ASTROREG2_REQUESTS:
+        return refuse(
+            f"the sendable list holds {len(sendable)} requests, not the {ASTROREG2_REQUESTS} this "
+            "scope enumerates. A list that does not match the number under review may not be sent: "
+            "the difference is an unauthorised request or a missing one, and either way the "
+            "enumeration and the scope disagree"
+        )
+    print(f"  {len(sendable)} requests serve a pair the test scores; {dropped} do not and are out")
+
+    payload = {
+        "status": "a dry run for AstroREG-2's scope. NOTHING WAS SENT: no AlphaGenome import, no "
+        "network, and no code path that could send a request",
+        "lane": "lane-astro",
+        "scope": "astroreg2-1232",
+        "why_1232_and_not_1322": (
+            f"the registered counting rule enumerates {authorised} requests, one per registry element "
+            f"overlapping a covered pair of ANY label. {dropped} of those serve NO pair the registered "
+            f"test scores: every pair they cover is one of the 25 increases held apart or one of the "
+            f"3,154 non-hits excluded for not being WellPowered at fc 0.25, and neither class enters "
+            f"either arm of the endpoint. Buying them buys nothing the claim can use, so AstroREG-2's "
+            f"scope is the remaining {len(sendable)}. This is stated here rather than left for a "
+            f"reader to subtract"
+        ),
+        "authorised_total_is_unchanged": "the ORIGINAL registration's authorised total is "
+        f"{authorised} and narrowing it is a cheaper run than the one approved. Only Albert can "
+        "authorise that, and his approval named the original registration by hash, so AstroREG-2 "
+        "needs its own approval whichever number it names",
+        "requests_enumerated_any_label": len(plan),
+        "requests_sendable": len(sendable),
+        "requests_dropped": dropped,
+        "requests_sent": 0,
+        "money_spent": 0,
+        "registration": {"path": str(ASTROREG2), "sha256": reg_sha, "committed_at": "0f4c372"},
+        "one_request_per": astrorun.ONE_REQUEST_PER,
+        "one_enumeration_only": astrorun.ONE_ENUMERATION_ONLY,
+        "one_list_then_one_filter": astrorun.ONE_LIST_THEN_ONE_FILTER,
+        "enumerated_by": "genomeos.attribution.astrorun.plan_requests, then filtered by "
+        "astrorun.requests_serving_scored_pairs. A sender iterates the SAME filtered list, so what is "
+        "reviewed here and what would be sent cannot drift",
+        "summary": summary,
+        "label_combinations_dropped": {
+            "|".join(sorted(set(r["serves_labels"]))): 1
+            for r in plan
+            if not any(lab in SCORED_LABELS for lab in r["serves_labels"])
+        },
+        "requests": sendable,
+    }
+    payload[mf.KEY] = manifest(
+        sorted({r["chrom"] for r in sendable}, key=lambda c: (len(c), c)), sendable, pairs
+    )
+    out = save_result("astroreg2_request_plan", payload)
+    print()
+    print(f"first {show} of {len(sendable)}:")
+    for r in sendable[:show]:
+        print(
+            f"  {r['chrom']}:{r['start']}-{r['end']}  {r['element']}  labels={','.join(r['serves_labels'])}"
+        )
+    print()
+    print(
+        json.dumps(
+            {
+                "scope": "astroreg2-1232",
+                "enumerated_any_label": len(plan),
+                "sendable": len(sendable),
+                "dropped": dropped,
+                "matches_the_scope": len(sendable) == ASTROREG2_REQUESTS,
+                "requests_sent": 0,
+                "money_spent": 0,
+            },
+            indent=1,
+        )
+    )
+    print(f"-> {out}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
@@ -246,6 +334,14 @@ def main() -> int:
         "that running it is always a deliberate statement that nothing is being sent",
     )
     ap.add_argument("--show", type=int, default=10, help="how many rows to print in full")
+    ap.add_argument(
+        "--scope",
+        choices=("authorised-1322", "astroreg2-1232"),
+        default="authorised-1322",
+        help="`authorised-1322` is the original registration's own total, one request per registry "
+        "element overlapping a covered pair of ANY label. `astroreg2-1232` is the subset that serves "
+        "at least one pair the registered test scores, which is what AstroREG-2 would send",
+    )
     args = ap.parse_args()
     if not args.dry_run:
         return refuse(
@@ -282,6 +378,9 @@ def main() -> int:
             "was approved"
         )
     print(f"  {len(plan)} requests, which matches the authorised {authorised} exactly")
+
+    if args.scope == "astroreg2-1232":
+        return astroreg2_scope(plan, pairs, summary, authorised, args.show)
 
     gate = the_gates_verdict()
     if gate is None:
