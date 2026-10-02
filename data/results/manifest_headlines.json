@@ -7,7 +7,8 @@
       "node_containment_measured": "c039ca9c325c2badf8fd94bd6f5f9dedf79fecb9b06bc816f4ee8b5c2faa4a61",
       "constrained_unknown_targets": "26c80da59bc78c183b460c240782556a2b3a2223735ff653e74219f4b4461a14",
       "crispri_published": "8787833d90dfe736219c096eed213a4dc8d806037b3ce224ceab6f2f3295d96b",
-      "unknown_coverage": "8a675d65648f030c6d0be0ea8400a523fbb284dbb4b6dead6dbb98d513122402"
+      "unknown_coverage": "8a675d65648f030c6d0be0ea8400a523fbb284dbb4b6dead6dbb98d513122402",
+      "constrained_unknown_targets_v2": "ce474f7512d733b0665a273a7b8fd049b61280f9a7a7984680a60a35f209deae"
     },
     "therapeutic_benchmark": "not given the block: none of its 22 inputs is an AlphaGenome file",
     "manifest_rebuild": "scripts/manifest_rebuild.py leaves model_dependencies out of the comparison, like code: it is recorded after the run and states the inputs' provenance"
@@ -64,7 +65,7 @@
       "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
     },
     {
-      "result": "constrained_unknown_targets",
+      "result": "constrained_unknown_targets_v2",
       "figure": "real unknown blocks with a mover against length-matched random windows",
       "quoted_as": "62.3% vs 86.0%",
       "quoted_in": "docs/ATTRIBUTION.md; ROADMAP 1.3",
@@ -80,15 +81,31 @@
       "argv": [
         "scripts/constrained_unknown_targets.py"
       ],
-      "rebuilt_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+      "rebuilt_at": "53a79c96b8f7c000549e236b3d8220102f3b81f5",
       "dirty": false,
       "manifest_complete": true,
-      "values_compared": 3059,
+      "values_compared": 4038,
       "differences": [],
       "status": "reproduced",
       "second_rerun_differences": [],
+      "comparison_reading": "0 differences AFTER SETTING ASIDE 1 leaves (1 timing fields); every set-aside path is listed above with its reason, and this is not the same claim as 0 differences.",
+      "second_rerun_comparison_reading": "0 differences AFTER SETTING ASIDE 1 leaves (1 timing fields); every set-aside path is listed above with its reason, and this is not the same claim as 0 differences.",
+      "rebuild_how": "scripts/manifest_rebuild.py at the sha above, twice, each in its own clean git worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline); the tool itself was run from a worktree at that committed sha, not from the shared checkout",
       "alphagenome_requests": 0,
-      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)"
+      "inputs_declared_and_checked": "218 of 218",
+      "traced_reads_against_declared_inputs": {
+        "files_read_under_data": 218,
+        "declared_inputs": 218,
+        "undeclared": [],
+        "declared_not_read": []
+      },
+      "committed_file": "the file the run wrote in a clean worktree at the sha above, committed byte for byte: nothing in it was added, restamped or adjusted by hand",
+      "supersedes": {
+        "result": "constrained_unknown_targets",
+        "file": "data/results/constrained_unknown_targets.json",
+        "kept": "unchanged: its bytes are the 2026-09-27 record, its sha256 is still the one this file's model_dependency_pass.sha256_now pins, and nothing was written into it",
+        "why": "the 2026-09-27 file declares 193 inputs and was rebuilt at 190a144 with 193 of 193 opened and matching their sha256 and 0 differences, while a tracer on that same run saw ONE read its manifest does not name: data/results/unknown_chr21.json, 355,767 bytes, the 194th read, recorded in tests/test_rebuild_write_guard.py. It comes in through this script's lift_check, which calls attribution.unknown_scoring.unknown_blocks('chr21') and loads it at unknown_scoring.py:91 -- a self-check whose inputs no declaration function inspects. The file is git-tracked, so a clean worktree holds it, the rebuild found it and reported a pass while its bytes were pinned by no sha256: a change to it would have changed the result and the rebuild would have printed the same pass. The same call also opens data/results/budget_axes_chr21.json, which is NOT a second omission in that file: the 24 budget_axes_chr*.json were added in 308484a (2026-09-28 03:25) and organise.inputs learned to name them in 690a71c (04:21), both after 190a144 (00:40), so it did not exist when that run was made. This run declares every file lift_check opens (LIFT_CHECK_INPUTS), 218 inputs in all against that file's 193. The self-check was not weakened and no quantity was refitted; the 2026-09-27 file is kept at data/results/constrained_unknown_targets.json with its bytes untouched as the historical record"
+      }
     },
     {
       "result": "therapeutic_benchmark",
