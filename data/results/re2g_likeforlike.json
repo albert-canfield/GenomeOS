@@ -137,8 +137,10 @@
           -0.2379,
           -0.0204
         ],
-        "reading": "ranks worse"
+        "reading": "ranks worse",
+        "label": "pre-specified secondary arm, registered in code at bdba855 within the registered K562 population, before any figure of it existed"
       },
+      "registered_population": true,
       "deletion_features_share": 0.182
     },
     "pooled_descriptive": {
@@ -153,7 +155,7 @@
       "met_minimum": true,
       "enough_clusters": true,
       "delta_auprc": 0.1,
-      "reading": "ranks better than ENCODE-rE2G on these pairs",
+      "reading": null,
       "seed": 0,
       "paired": "identical resamples; one seed shared by both models",
       "population": {
@@ -171,8 +173,11 @@
           -0.1438,
           0.0215
         ],
-        "reading": "no difference detected"
+        "reading": null,
+        "label": "no registered reading: descriptive context in re2g.SECOND_REGISTRATION, not a registered population"
       },
+      "registered_population": false,
+      "descriptive": "no registered reading: descriptive context in re2g.SECOND_REGISTRATION, not a registered population",
       "deletion_features_share": 0.1636
     },
     "gm12878_descriptive": {
@@ -200,8 +205,11 @@
         "auprc": 0.7853,
         "delta_auprc": 0.2572,
         "ci95": null,
-        "reading": null
+        "reading": null,
+        "label": "no registered reading: descriptive context in re2g.SECOND_REGISTRATION, not a registered population"
       },
+      "registered_population": false,
+      "descriptive": "no registered reading: descriptive context in re2g.SECOND_REGISTRATION, not a registered population",
       "deletion_features_share": 0.0133
     },
     "hct116": {
@@ -224,9 +232,16 @@
     }
   },
   "reading": {
-    "primary_k562": "no difference detected",
-    "pooled_descriptive": "ranks better than ENCODE-rE2G on these pairs"
+    "primary_k562": "no difference detected"
   },
+  "registered_populations": [
+    "primary_k562"
+  ],
+  "descriptive_populations": [
+    "pooled_descriptive",
+    "gm12878_descriptive"
+  ],
+  "why_descriptive_arms_carry_no_reading": "a registered reading word on a descriptive arm is lifted as a finding. The pooled arm of this comparison previously carried 'ranks better than ENCODE-rE2G on these pairs' three lines below a primary reading 'no difference detected', which is the overstatement this lane exists to have withdrawn. Only the output labels changed when this was fixed: no number moved, no threshold moved, and the analysis is the same one",
   "reading_must_travel_with": {
     "lower_bound": "the K562 primary interval's lower bound is -0.001, unrounded",
     "the_comparator_is_a_reconstruction": "ENCODE-rE2G as reconstructed from the portal prediction files, reproducing its published pooled weighted AUPRC 0.0168 low (0.5393 against 0.5562)",
@@ -279,14 +294,11 @@
     "why_this_is_not_an_amendment": "the additions implement the join rule the registration already fixed in words; no registered value, threshold, population, wording or convention was altered, which the comparison above checks rather than claims. Insertions only, no deletions"
   },
   "code_cleanliness": {
-    "git_sha": "948b1e6e646410446d0d7e7127cef94c161e795b",
-    "dirty": true,
+    "git_sha": "3865a09486ff46f32fdab25b9e2137c61a5bb463",
+    "dirty": false,
     "own_uncommitted_code": [],
     "own_code_is_committed": true,
-    "foreign_uncommitted_code": [
-      "genomeos/attribution/astroreg.py",
-      "genomeos/attribution/fresh.py"
-    ],
+    "foreign_uncommitted_code": [],
     "foreign_uncommitted_code_on_the_counting_path": [],
     "counting_path": [
       "genomeos/__init__.py",
@@ -413,21 +425,11 @@
       "gm12878_descriptive": "68 held-out GM12878 pairs, descriptive"
     },
     "code": {
-      "git_sha": "948b1e6e646410446d0d7e7127cef94c161e795b",
-      "dirty": true,
-      "dirty_code_paths": [
-        "genomeos/attribution/astroreg.py",
-        "genomeos/attribution/fresh.py"
-      ],
-      "untracked_code_paths": [
-        "genomeos/attribution/astroreg.py"
-      ],
-      "dirty_result_paths": [
-        "data/results/crispri_published_v2.json",
-        "data/results/re2g_identity.json",
-        "data/results/re2g_likeforlike.json",
-        "data/results/re2g_paired.json"
-      ],
+      "git_sha": "3865a09486ff46f32fdab25b9e2137c61a5bb463",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/re2g_likeforlike.py"
       ],
