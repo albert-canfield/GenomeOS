@@ -34,6 +34,8 @@ from __future__ import annotations
 import ast
 import contextlib
 import hashlib
+import os
+import posixpath
 import subprocess
 import sys
 from collections.abc import Iterable, Sequence
@@ -238,11 +240,316 @@ def files_entry(label: str, paths: Any, partition: str | None = None, **extra: A
 def _repo_relative(path: str | Path) -> str:
     """A path as the repository names it (relative to the working directory) when it lies inside it, so
     the digest of a set of files does not depend on where the checkout sits."""
-    import os
-
     with contextlib.suppress(ValueError, OSError):
         return str(Path(os.path.abspath(path)).relative_to(os.getcwd()))
     return str(path)
+
+
+# --- inputs are traced, not declared (2026-10-02, lane-tracer) ------------------------------------
+#
+# Until this section an input was whatever the writer SAID it read, and nothing compared that against
+# what the writer actually opened. The gap was not hypothetical. The 24 `enhancer_targets_all_chr*`
+# summaries declare `compiler_inputs:enhancer_targets_all_chr*.json` -- 24 files, 39,683 bytes in all,
+# about 1.6 KB each, because those files are POINTERS. The bytes the run reads are the roughly 1.4 GB
+# of data/knowledge/alphagenome/all_elements/chr*.json, declared nowhere and hashed nowhere.
+# `genomeos/attribution/targets.py:run_elements` takes a path out of an `elements_where` field of a
+# result file and opens whatever that field names, so the path lives in DATA, not in code: the chain
+# compile_chromosome -> _attributed -> attributed -> run_elements is plain in the source, and the file
+# it ends at cannot be found by reading the source at all.
+#
+# What makes that worse than a plain omission is how a check behaves against it. data/knowledge is
+# linked read-only into every checkout, so a rebuild from a clean worktree finds the tables, the run
+# completes, and `scripts/manifest_rebuild.py` reports success WITHOUT having hashed the largest thing
+# the run read. That is the failure docs/LESSONS.md records as "A verification tool can fail in the
+# direction that flatters", and it is why `reconciliation_problems` below feeds a REFUSAL and not a
+# warning: a new result whose traced reads exceed its declared inputs does not enter the registry.
+#
+# The record is kept by one `sys.addaudithook` on the "open" event. An audit hook cannot be removed
+# once installed, so there is exactly one, installed when this module is imported, and it does nothing
+# while no window is open. It records a file opened for READING under data/ -- a file the writer wrote
+# is that writer's output, not one of its inputs, so writes are kept apart and never reconciled -- and
+# it records it under one spelling, because a checkout links data/reference, data/knowledge and
+# data/cache and the same bytes can be reached through a link or through its target. Two spellings of
+# one file must not read as two inputs, nor as a mismatch.
+#
+# What the hook cannot see, and so what a reconciliation cannot establish:
+#   - a file read by a subprocess (an external binary, a `gunzip`): the hook is per interpreter;
+#   - a file read through a path that canonicalises neither to this checkout's data/ nor to one of its
+#     link targets -- another checkout's data/ directory, above all;
+#   - whether a declared directory's digest covered the exact bytes read: a file under a declared
+#     directory counts as declared by prefix, which is what `sha256_of` hashes but not proof that the
+#     directory held that file when it was hashed;
+#   - what a window missed when the working directory moved inside it, which the block below reports
+#     as `cwd_at_open` and `cwd_at_close` rather than leaving it to be assumed.
+
+#: The directory a result's inputs live under, as the repository names it.
+DATA_DIR = "data"
+
+#: Open flags that mean the file is being written. A file a writer wrote under data/ is its output.
+_WRITE_FLAGS = os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_APPEND | os.O_TRUNC
+
+#: Distinct raw path spellings whose canonical form is remembered. A bound, so a writer that opens
+#: millions of distinct paths cannot grow the trace without limit; past it the string work is redone.
+_CANONICAL_CACHE = 1 << 16
+
+
+def _is_write(mode: Any, flags: Any) -> bool:
+    """Whether an "open" audit event opened its file to write it. `mode` is the string `open` was
+    given, or None for `os.open`, where only the flags say."""
+    if isinstance(mode, str):
+        return any(c in mode for c in "wax+")
+    return bool(isinstance(flags, int) and flags & _WRITE_FLAGS)
+
+
+class _OpenTrace:
+    """The one record of what this process opened under data/, filled by one audit hook."""
+
+    def __init__(self) -> None:
+        self.installed = False
+        self.recording = False
+        self._inside = False
+        self.reads: dict[str, None] = {}  # an insertion-ordered set of repo-relative paths
+        self.writes: dict[str, None] = {}
+        self.opens = 0
+        self.opens_under_data = 0
+        self.cwd = ""
+        self._canonical: dict[str, str | None] = {}
+        self._prefixes: tuple[tuple[str, str], ...] = ()
+
+    def hook(self, event: str, args: tuple) -> None:
+        """The audit hook. It never raises: one that did would kill the writer it is watching."""
+        if event != "open" or not self.recording or self._inside:
+            return
+        self._inside = True
+        try:
+            path, mode, flags = args
+            rel = self.canonical(path)
+            self.opens += 1
+            if rel is None:
+                return
+            self.opens_under_data += 1
+            (self.writes if _is_write(mode, flags) else self.reads).setdefault(rel, None)
+        except Exception:  # noqa: BLE001 - an audit hook must not propagate anything to its process
+            pass
+        finally:
+            self._inside = False
+
+    def canonical(self, path: Any) -> str | None:
+        """One spelling for one file under data/, or None when the path is not under data/."""
+        if isinstance(path, bytes):
+            path = path.decode("utf-8", "surrogateescape")
+        elif not isinstance(path, str):
+            return None  # a file descriptor: the open that produced it was seen on its own
+        if path in self._canonical:
+            return self._canonical[path]
+        rel = self._resolve(path)
+        if len(self._canonical) < _CANONICAL_CACHE:
+            self._canonical[path] = rel
+        return rel
+
+    def _resolve(self, path: str) -> str | None:
+        # A relative path that already names data/ answers itself, with no syscall and independently
+        # of where the process stands, which is also how `_repo_relative` names a declared input.
+        norm = posixpath.normpath(path.replace(os.sep, "/"))
+        if not posixpath.isabs(norm) and (norm == DATA_DIR or norm.startswith(DATA_DIR + "/")):
+            return norm
+        # Otherwise the file may be reached through data/ itself or through one of the links under it.
+        absolute = os.path.abspath(path)
+        for spelling in dict.fromkeys((absolute, os.path.realpath(absolute))):
+            for base, rel in self._prefixes:
+                if spelling == base:
+                    return rel
+                if spelling.startswith(base + os.sep):
+                    return f"{rel}/{spelling[len(base) + 1 :].replace(os.sep, '/')}"
+        return None
+
+    def prefixes(self) -> None:
+        """The absolute spellings data/ can be reached by: data/ itself, and the target of every link
+        immediately under it (data/knowledge, data/reference and data/cache are links in a worktree)."""
+        data = os.path.abspath(DATA_DIR)
+        found = {data: DATA_DIR, os.path.realpath(data): DATA_DIR}
+        with contextlib.suppress(OSError):
+            for name in os.listdir(data):
+                found.setdefault(os.path.realpath(os.path.join(data, name)), f"{DATA_DIR}/{name}")
+        self._prefixes = tuple(sorted(found.items(), key=lambda kv: -len(kv[0])))
+
+
+_TRACE = _OpenTrace()
+
+
+def trace_begin() -> bool:
+    """Open a window: install the one audit hook if it is not in yet, forget what an earlier window
+    held, and record from here. Returns whether tracing is active."""
+    if not _TRACE.installed:
+        with contextlib.suppress(Exception):
+            sys.addaudithook(_TRACE.hook)
+            _TRACE.installed = True
+    _TRACE.reads.clear()
+    _TRACE.writes.clear()
+    _TRACE._canonical.clear()
+    _TRACE.opens = 0
+    _TRACE.opens_under_data = 0
+    _TRACE.cwd = os.getcwd()
+    _TRACE.prefixes()
+    _TRACE.recording = _TRACE.installed
+    return _TRACE.recording
+
+
+def traced_reads() -> list[str]:
+    """The files read under data/ since the window opened, as the repository names them."""
+    return list(_TRACE.reads)
+
+
+def trace_close() -> dict[str, Any]:
+    """What the open window holds, and a fresh window in its place. `save_result` calls this before it
+    reads anything itself, so a result is reconciled against the run that made it and nothing else."""
+    held = {
+        "active": _TRACE.recording,
+        "reads": list(_TRACE.reads),
+        "writes": list(_TRACE.writes),
+        "opens": _TRACE.opens,
+        "opens_under_data": _TRACE.opens_under_data,
+        "cwd_at_open": _TRACE.cwd,
+        "cwd_at_close": os.getcwd(),
+    }
+    trace_begin()
+    return held
+
+
+def declared_inputs(manifest: Any) -> tuple[set[str], set[str]]:
+    """What a manifest's `inputs` declare, as (files hashed by name, directories hashed as a tree).
+
+    A group entry (`files_entry`) names every member with its own sha256, so each member is declared
+    and hashed on its own and the entry's `path` is a label rather than a file. Any other entry's
+    `path` is a file, or a directory whose `sha256_of` digest covers the files under it.
+    """
+    files: set[str] = set()
+    dirs: set[str] = set()
+    raw = manifest.get("inputs") if isinstance(manifest, dict) else None
+    for entry in raw if isinstance(raw, list) else []:
+        if not isinstance(entry, dict):
+            continue
+        members = entry.get("members")
+        if entry.get("group") or isinstance(members, list):
+            for m in members if isinstance(members, list) else []:
+                if isinstance(m, dict) and m.get("path") and m.get("sha256"):
+                    files.add(_traced_spelling(m["path"]))
+            continue
+        path = entry.get("path")
+        if not isinstance(path, str) or not path:
+            continue
+        rel = _traced_spelling(path)
+        files.add(rel)
+        if Path(path).is_dir():
+            dirs.add(rel)
+    return files, dirs
+
+
+def _traced_spelling(path: str) -> str:
+    """A declared path as the trace would have recorded it, so the two sets are comparable.
+
+    Through the same canonicalisation the hook uses, because a writer may legitimately declare a file
+    by the spelling its link target gives it (data/knowledge is a link to a store outside the
+    checkout) while the hook recorded it through the link, or the other way about. Two spellings of one
+    file must not read as a mismatch, which is the whole reason the hook canonicalises at all.
+    """
+    rel = _TRACE.canonical(path)
+    return rel if rel is not None else posixpath.normpath(_repo_relative(path).replace(os.sep, "/"))
+
+
+def undeclared_reads(manifest: Any, reads: Iterable[str]) -> list[str]:
+    """The files read under data/ that the manifest's inputs neither name nor contain."""
+    files, dirs = declared_inputs(manifest)
+    return sorted(r for r in reads if r not in files and not any(r.startswith(d + "/") for d in dirs))
+
+
+def declared_not_read(manifest: Any, reads: Iterable[str]) -> list[str]:
+    """The inputs a manifest declares that were not opened at all in the window: an OVER-declaration.
+
+    Reported, never refused, and the choice is deliberate. The two faults are opposite in direction and
+    only one of them is a verification that passes by not looking. An undeclared read means bytes
+    entered a result with nothing pinning them, and a rebuild that re-reads them cannot tell; an
+    over-declaration means the record names more than the run used, which is a wrong record and not a
+    blind check -- the files it names are pinned, they simply were not needed. Refusing it would fire on
+    results that are honest: the committed `context_evidence` names 30 domains_chr*.json, 25
+    unknown_chr*.json and 25 ccres_chr*.bed.gz where the run reads 24 of each, because a later commit
+    narrowed the globs after the result was written.
+
+    And it would not even catch that one, which is the limit to state rather than to assume: a manifest
+    is built by hashing the files it declares, and hashing opens them, so a file declared but never used
+    is recorded here as read. What this list finds is a declared input that nothing in the window
+    opened, which means an entry whose digest was carried over from somewhere else rather than taken at
+    write time. The over-declaration whose files were hashed is invisible to the hook, and only reading
+    the writer's globs against its reads can find it.
+    """
+    files, dirs = declared_inputs(manifest)
+    read = set(reads)
+    covered = {d for d in dirs if any(r.startswith(d + "/") for r in read)}
+    return sorted(files - read - covered)
+
+
+#: What a reconciliation establishes and what it does not, carried by every result that gets one so a
+#: reader is not left to assume either.
+TRACE_NOTE = (
+    "Every file this writer opened for reading under data/ was recorded by an audit hook on the "
+    '"open" event, canonicalised through data/\'s links so one file has one spelling, and compared '
+    "against the inputs the manifest declares; a member of a declared group counts as declared and "
+    "hashed on its own, a file under a declared directory counts as declared by prefix. The hook is "
+    "per interpreter, so a file read by a subprocess is not in this record, nor is one reached "
+    "through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+)
+
+
+def traced_inputs(manifest: Any, held: dict[str, Any]) -> dict[str, Any]:
+    """What a writer actually read under data/, beside what its manifest declares."""
+    reads = held.get("reads") or []
+    return {
+        "hook": 'sys.addaudithook("open")',
+        "active": bool(held.get("active")),
+        "opens": held.get("opens"),
+        "opens_under_data": held.get("opens_under_data"),
+        "files_read": len(reads),
+        "files_written": len(held.get("writes") or []),
+        "undeclared": undeclared_reads(manifest, reads),
+        "declared_not_read": declared_not_read(manifest, reads),
+        "cwd_at_open": held.get("cwd_at_open"),
+        "cwd_at_close": held.get("cwd_at_close"),
+        "note": TRACE_NOTE,
+    }
+
+
+def reconciliation_problems(report: Any) -> list[str]:
+    """What a traced-inputs block says is wrong, as sentences; empty when the reads were all declared.
+
+    An inactive tracer is a problem of the same kind as an undeclared read, and for the same reason:
+    a result written with nothing watching cannot say that its declared inputs are what it read, and a
+    check that passes because it did not look is the one this project fears most.
+
+    `declared_not_read` is deliberately not one of these. An over-declaration is a wrong record, not a
+    blind check, and the reasoning is in `declared_not_read`.
+    """
+    if not isinstance(report, dict) or not report.get("active"):
+        return [
+            "the input tracer was not active, so what this writer read under data/ was not recorded "
+            "and cannot be reconciled with the declared inputs (genomeos.manifest.trace_begin)"
+        ]
+    missing = report.get("undeclared") or []
+    if not missing:
+        return []
+    return [
+        f"{len(missing)} file(s) read under data/ are not declared and hashed in inputs: "
+        + ", ".join(missing)
+        + " (declare each with genomeos.manifest.input_entry, or the set of them with files_entry, "
+        "which hashes every member on its own)"
+    ]
+
+
+# Tracing starts here, on import, and there is no switch to turn it off. A writer reaches this module
+# through `genomeos.results`, so the window is open before the writer has read anything; and a writer
+# that could ask not to be watched would be a writer that could pass the reconciliation by being
+# unobserved, which is the shape of failure this whole section exists to remove. The first window ends
+# at the first `save_result`, and each one after it begins where the last ended.
+trace_begin()
 
 
 def _not_applicable(v: Any) -> bool:

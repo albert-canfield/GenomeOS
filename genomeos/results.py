@@ -65,16 +65,38 @@ def save_result(
     allowlist into the registry. Outside the registry (tests, scratch) an incomplete result warns
     unless `strict=True`.
 
+    Since 2026-10-02 (lane-tracer) the declared inputs are also reconciled against what the writer
+    actually opened: an audit hook records every file read under data/ (genomeos/manifest.py, "inputs
+    are traced, not declared"), and a name that is not on the allowlist is refused when its traced
+    reads include a file its `inputs` neither name nor contain. The refusal names every undeclared
+    path. It exists because a declared input could be a POINTER at the bytes a run really read -- the
+    24 `enhancer_targets_all_chr*` summaries declare 39,683 bytes of pointer files and read about
+    1.4 GB of tables named by a field inside a result -- and because a rebuild from a clean checkout
+    does not notice: the linked tables are found, the run completes, and the rebuild reports success
+    without having hashed them. A legacy name warns and still writes, as it does for the rest of the
+    contract. Whether a tracer was watching at all is recorded in `result_manifest.traced_inputs`, so
+    an unwatched result is distinguishable from a clean one rather than reading the same.
+
     `compact=True` writes the JSON without whitespace (`separators=(",", ":")`), for the per-cell and
     per-site tables that were written compact before they came under the contract (item 12 S6
     follow-up, lane-contract); the values are the same either way.
     """
+    # The window closes before this function reads anything of its own, so what is reconciled is the
+    # run that made this result and nothing else.
+    held = mf.trace_close()
     p = results_dir / f"{name}.json"
     body = dict(payload)
     given = manifest if manifest is not None else body.pop(mf.KEY, None)
     body.pop(mf.KEY, None)
     registry = _is_registry(results_dir)
     legacy = registry and name in legacy_names()
+    # The next result's window starts here, not above, because reading the legacy allowlist is this
+    # function's own read and not the writer's: charged to the next result it would refuse a chain
+    # writer's second result for a file the enforcement machinery opened. Nothing under data/ is read
+    # after this point -- the revision stamp reads git and the cleanliness block reads code -- so the
+    # window the next result is answerable for holds that result's reads and nothing else. It is opened
+    # here rather than in a `finally` so that an unexpected failure below cannot leave it closed.
+    mf.trace_begin()
     enforce = True if registry and not legacy else bool(strict)
     stamped = mf.stamp(given)
     # A new name entering the registry must also carry the cleanliness block, from the one shared
@@ -87,6 +109,20 @@ def save_result(
         if unclean:
             stamped["problems"] = [*stamped.get("problems", []), *unclean]
             stamped["complete"] = False
+    # --- traced-input reconciliation (2026-10-02, lane-tracer) ------------------------------------
+    # A declared input is what the writer said it read; `traced_inputs` is what it opened. A new name
+    # whose reads exceed its declared inputs is refused on the path that was already here: quarantined
+    # with its reason, ManifestError naming where it went, nothing written to results_dir. A legacy
+    # name warns and still writes. The block is attached either way, including when the reads were all
+    # declared, so a result that was never traced does not read like one that reconciled cleanly.
+    stamped["traced_inputs"] = mf.traced_inputs(stamped, held)
+    mismatch = mf.reconciliation_problems(stamped["traced_inputs"])
+    if mismatch and enforce:
+        stamped["problems"] = [*stamped.get("problems", []), *mismatch]
+        stamped["complete"] = False
+    elif mismatch and legacy:
+        warnings.warn(f"{p}: {'; '.join(mismatch)}", ManifestWarning, stacklevel=2)
+    # --- end traced-input reconciliation ----------------------------------------------------------
     out = {"result": name, "date": time.strftime("%Y-%m-%d"), **body, mf.KEY: stamped}
     q = quarantine_dir(results_dir) / f"{name}.json"
     if not stamped["complete"] and enforce:
