@@ -414,3 +414,201 @@ def registration() -> dict[str, Any]:
         "adoption_cost": {},
         "prediction_outcomes": {},
     }
+
+
+# ====================================================================================================
+# IMPLEMENTATION. Everything above this line was committed at `ea3ef2e`, in a commit of its own,
+# before any of the following existed and before a single rule of any program was classified. Nothing
+# below changes a decision above; where a prediction came out false it is recorded as false in
+# `scripts/rule_cell_provenance_cost.py`'s output and reported, not quietly amended.
+# ====================================================================================================
+
+import ast  # noqa: E402
+import dataclasses  # noqa: E402
+import inspect  # noqa: E402
+from collections.abc import Iterable  # noqa: E402
+
+#: The quoted `evidence:` source a compiled PREDICTED rule carries, as `attribution.compile` writes
+#: it: `predicted "AlphaGenome deletion, <tissue>"`. Matched on the prefix, because the tissue name
+#: follows it on every rule and is the very thing whose provenance is in question.
+PREDICTED_SOURCE_PREFIX = "AlphaGenome deletion"
+
+
+def _crispri_source_prefix() -> str:
+    """The quoted source a compiled EXPERIMENTAL rule carries. Read from `attribution.measured`, not
+    copied, so a change to the screen's citation cannot leave a stale literal here."""
+    from genomeos.attribution.measured import SOURCES
+
+    return SOURCES["crispri"]
+
+
+class CellProvenanceUndecidableError(ValueError):
+    """The rule's cell provenance cannot be read off the rule. Raised, never guessed.
+
+    This exception IS the adoption cost. Every rule that raises it is a rule a human would have to
+    adjudicate; every rule that does not is one a machine can mark. `scripts/rule_cell_provenance_cost.py`
+    counts the two populations by running this function over the committed corpus, so the cost is
+    measured by the code rather than estimated.
+    """
+
+
+def is_class(value: str) -> bool:
+    """True for the three provenance classes, False for the absent-default and for anything off the axis."""
+    return value in CLASSES
+
+
+def rank(value: str) -> int:
+    """ALWAYS raises, for every value including the three classes. See NO_ORDER.
+
+    The sibling axis (`6150aa9`) is a cascade and ranks its tiers, with its default raising. This
+    axis is not a cascade: an argmax over tracks and a screen's choice of cell line are not two
+    points on one scale, and nothing in the project says which is "higher". A rank would invite a
+    comparison the axis cannot support, so the function exists and refuses rather than being absent
+    and leaving a reader to write their own.
+    """
+    raise TypeError(
+        f"cell provenance is not ordered, so {value!r} has no rank. {NO_ORDER}. "
+        f"Use `provenances_relied_on` for the set."
+    )
+
+
+def provenances_relied_on(marks: Iterable[str]) -> list[str]:
+    """The SET of provenances a population rests on, sorted, with the absent-default KEPT in it.
+
+    The absent-default is not dropped and is not collapsed into a class: a result that rests partly
+    on rules nobody classified says so in the same field that names the classes. An unknown value
+    raises; a silent pass-through would let a typo travel as a class.
+    """
+    out = set()
+    for m in marks:
+        if m not in AXIS_VALUES:
+            raise ValueError(f"{m!r} is not on the axis; the values are {list(AXIS_VALUES)}")
+        out.add(m)
+    return sorted(out)
+
+
+def check_no_observation_claim(records: Iterable[dict[str, Any]]) -> None:
+    """Refuse a provenance record whose argmax phrasing claims an observation.
+
+    Modelled on `attribution.increase_links.check_no_mechanism_claim`, for the same reason: the one
+    thing this mark exists to prevent is the sentence it could so easily be written as. A record for
+    the argmax class may not contain "observed in", "measured in", "acts in", "active in" or
+    "expressed in" anywhere in its text, whatever field carries it.
+    """
+    for rec in records:
+        if rec.get("cell_provenance") != ARGMAX_OF_PREDICTED_EFFECT:
+            continue
+        text = " ".join(str(v) for v in rec.values()).lower()
+        for bad in FORBIDDEN_OF_THE_ARGMAX_CLASS:
+            if bad in text:
+                raise ValueError(
+                    f"a record of class {ARGMAX_OF_PREDICTED_EFFECT} says {bad!r}, which turns a "
+                    f"selection over the model's track axis into an observation in the cell. "
+                    f"{PHRASES[ARGMAX_OF_PREDICTED_EFFECT]}"
+                )
+
+
+def names_a_cell(rule: Any) -> bool:
+    """Whether the rule is IN the population: its `when` names a cell other than `unknown`.
+
+    A rule gated on `measured.CONTEXT_UNKNOWN` names no cell, so there is no cell whose provenance
+    could be stated (decision 2). The runtime already refuses such a rule in every context -
+    `Rule.applies` returns False on it - and this proposal leaves that untouched.
+    """
+    from genomeos.attribution.measured import CONTEXT_UNKNOWN
+
+    cell = (rule.when or {}).get("cell_type")
+    return bool(cell) and cell != CONTEXT_UNKNOWN
+
+
+def provenance_of(rule: Any) -> str:
+    """The rule's cell provenance read off the rule itself, or `CellProvenanceUndecidableError`.
+
+    Only the two signatures `attribution.compile` writes are decidable from a rule alone, and they
+    are decided on the evidence KIND together with the quoted SOURCE - not on the kind alone, because
+    a hand-authored rule can carry `experimental` with a citation of its own and must not be mistaken
+    for a screen's measurement. Everything else raises; the caller adjudicates and says that it did.
+    """
+    if not names_a_cell(rule):
+        raise CellProvenanceUndecidableError(
+            f"rule {rule.id!r} names no cell (when={rule.when!r}), so it is outside the population"
+        )
+    kind = getattr(rule.evidence.kind, "value", rule.evidence.kind)
+    source = rule.evidence.source or ""
+    if kind == "predicted" and source.startswith(PREDICTED_SOURCE_PREFIX):
+        return ARGMAX_OF_PREDICTED_EFFECT
+    if kind == "experimental" and source.startswith(_crispri_source_prefix()):
+        return MEASURED_PERTURBATION_IN_THAT_CELL
+    raise CellProvenanceUndecidableError(
+        f"rule {rule.id!r} carries evidence {kind!r} {source[:60]!r}, which matches neither "
+        f"signature the compiler writes. A human must adjudicate this cell's provenance"
+    )
+
+
+class MarkedRule:
+    """A rule carrying `cell_provenance`, built WITHOUT editing `ir.model.Rule`.
+
+    `ir.model.Rule` is a `@dataclass(slots=True)`, so the mark cannot be set on an instance of it:
+    that is prediction P7 and the suite demonstrates the refusal. A subclass declaring no `__slots__`
+    of its own gets a `__dict__` and accepts the attribute, which is how the suite can run the real
+    runtime over marked rules without a line of the IR changing. It is a TEST INSTRUMENT and not the
+    proposed storage; the proposed storage is a field on `Rule` itself, which is Albert's commit.
+    """
+
+    def __init_subclass__(cls, **kw: Any) -> None:  # pragma: no cover - guard only
+        raise TypeError("MarkedRule is built by `mark` and is not a base class")
+
+
+def _marked_class() -> type:
+    """The `Rule` subclass that accepts the attribute, built once and reused."""
+    from genomeos.ir.model import Rule
+
+    global _MARKED
+    try:
+        return _MARKED
+    except NameError:
+        _MARKED = type("Rule_with_cell_provenance", (Rule,), {"__doc__": MarkedRule.__doc__})
+        return _MARKED
+
+
+def mark(rule: Any, provenance: str) -> Any:
+    """A copy of `rule` carrying `cell_provenance`, field for field identical otherwise."""
+    if provenance not in AXIS_VALUES:
+        raise ValueError(f"{provenance!r} is not on the axis; the values are {list(AXIS_VALUES)}")
+    fields = {f.name: getattr(rule, f.name) for f in dataclasses.fields(rule)}
+    out = _marked_class()(**fields)
+    out.cell_provenance = provenance
+    return out
+
+
+def provenance_mark(rule: Any) -> str:
+    """The mark a rule carries, or the absent-default. An unmarked rule reads as `not_assessed`."""
+    return getattr(rule, "cell_provenance", NOT_ASSESSED)
+
+
+def gate_survivors(rules: Iterable[Any], at: str) -> list[Any]:
+    """The rules a hypothetical gate at one class would leave integrable.
+
+    No gate is proposed (decision 4). This exists so the cost of one can be COUNTED on this axis's
+    own population rather than argued about, the way `6150aa9` counted it on the sibling's.
+    """
+    if at not in CLASSES:
+        raise ValueError(f"a gate can only be set at a class, not at {at!r}; classes are {list(CLASSES)}")
+    return [r for r in rules if provenance_mark(r) == at]
+
+
+def binds_the_default_as_a_literal() -> list[int]:
+    """The line numbers in THIS module where an assignment binds the absent-default as a string
+    literal. Must be empty: the import is the only way the value may arrive (see NOT_ASSESSED).
+
+    Walking the syntax tree rather than grepping, because the word appears in prose throughout this
+    file and prose is not a second declaration. Only an assignment whose value IS the literal counts.
+    """
+    tree = ast.parse(inspect.getsource(inspect.getmodule(provenance_of)))
+    out = []
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            value = node.value
+            if isinstance(value, ast.Constant) and value.value == NOT_ASSESSED:
+                out.append(node.lineno)
+    return out
