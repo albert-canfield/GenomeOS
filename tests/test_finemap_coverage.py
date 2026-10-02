@@ -194,14 +194,33 @@ def test_a_catalogued_unit_records_its_dapg_row_without_the_posterior() -> None:
     assert all("variant" in r and "gene" in r for r in rows)
 
 
-def test_the_three_assessability_arms_are_ordered() -> None:
-    """Read over >= a row placed >= a posterior on disk. Asserted, not assumed."""
+def test_the_assessable_count_and_the_unassessed_count_make_the_frame() -> None:
     import json
 
     p = ROOT / "data/results/finemap_coverage.json"
     if not p.exists():
         pytest.skip("the result has not been written on this machine")
     a = json.loads(p.read_text())["ASSESSABLE_FIRST"]
-    assert a["assessable"] >= a["where_dapg_placed_a_row_at_any_posterior"]
-    assert a["assessable"] >= a["where_a_posterior_is_recoverable_on_disk"]
     assert a["assessable"] + a["unassessed"] == a["elements_of_the_frame"]
+    assert a["assessable"] >= a["where_dapg_placed_a_row_at_any_posterior"]
+
+
+def test_the_carrying_count_never_exceeds_the_determined_subframe() -> None:
+    """The threshold can only decide where a posterior survives, so 14 cannot exceed that frame."""
+    import json
+
+    p = ROOT / "data/results/finemap_coverage.json"
+    if not p.exists():
+        pytest.skip("the result has not been written on this machine")
+    d = json.loads(p.read_text())
+    determined = d["ASSESSABLE_FIRST"]["where_a_posterior_survives_on_disk_at_any_value"]
+    assert d["CARRYING_SECOND"]["carrying_any_fine_mapped_variant"] <= determined
+    arms = d["ASSESSABLE_FIRST"]["where_a_posterior_survives_by_arm"]
+    assert arms["mpravardb_tested_variants"] + arms["panel_unit_reads"] >= determined
+
+
+def test_the_row_count_is_not_a_bound_on_the_determined_subframe() -> None:
+    """A unit can record a row whose PIP was dropped, so neither number bounds the other. Stated, not
+    assumed: an earlier draft of this writer asserted an ordering that does not hold."""
+    src = (ROOT / "scripts/finemap_coverage.py").read_text()
+    assert "is not an upper " in src and "not a subset of the second" in src

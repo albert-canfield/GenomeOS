@@ -258,7 +258,7 @@ def queried_upper_bound() -> tuple[Spans, Spans, Points]:
 
     The second span set is the units whose `eqtl` field is non-empty: where DAP-G placed a row at ANY
     posterior. The catalogue keeps only the variant and the gene and DROPS the PIP, so the imported
-    threshold cannot be applied there; that is why `queried_lower_bound` exists.
+    threshold cannot be applied there; that is what `determined` is for.
     """
     units = Spans()
     with_a_row = Spans()
@@ -282,37 +282,44 @@ def queried_upper_bound() -> tuple[Spans, Spans, Points]:
     return units.freeze(), with_a_row.freeze(), tested.freeze()
 
 
-def queried_lower_bound() -> Spans:
-    """The regions where a POSTERIOR, and not only a variant and a gene, is recoverable on disk.
+#: The arm each file of the fine-mapped record belongs to. The panel read DAP-G over its own unit
+#: intervals; MPRAVarDB's tested variants were read separately. Which arm a retained posterior came
+#: from decides nothing here, but a subframe carried entirely by one of them would be worth saying.
+MPRA_ARM = ("two_instrument_rows.json.gz",)
 
-    The panel's catalogues record which units DAP-G placed a row in but drop the PIP, so the imported
-    threshold can only be applied where an executor file retained the posterior itself. Every unit
-    those files name is such a unit. Units they read and found nothing at need not all appear, so this
-    is a floor on that subframe and not the subframe.
+
+def determined(files: tuple[str, ...] = PIP_FILES) -> Points:
+    """Every position where a POSTERIOR survives on disk, at ANY value, not only at or above 0.5.
+
+    This is the subframe the imported threshold can actually be applied over, and it is the
+    denominator the carrying count belongs to. A catalogued unit records which variant and gene DAP-G
+    named but DROPS the PIP, so an element near such a unit is neither above the threshold nor below
+    it: it is undetermined. Only where an executor file retained the posterior itself can 0.5 decide.
     """
-    s = Spans()
-    for f in ("replication_assembled.json.gz", "assembled.json.gz"):
-        p = EXECUTOR / f
-        if not p.exists():
-            continue
-        with gzip.open(p, "rt") as fh:
-            d = json.load(fh)
+    pts = Points()
 
-        def walk(o: Any) -> None:
-            if isinstance(o, dict):
-                u = o.get("unit")
-                if isinstance(u, str) and ":" in u and "-" in u:
-                    chrom, rest = u.split(":")
-                    a, b = rest.split("-")
-                    s.add(chrom, int(a), int(b))
-                for v in o.values():
-                    walk(v)
-            elif isinstance(o, list):
-                for v in o:
-                    walk(v)
+    def walk(o: Any, unit: str | None = None) -> None:
+        if isinstance(o, dict):
+            u = o["unit"] if isinstance(o.get("unit"), str) else unit
+            if o.get("pip") is not None and o.get("pos") is not None and u:
+                pts.add(u.split(":")[0], int(o["pos"]))
+            v = o.get("variant")
+            if isinstance(v, str) and ":" in v and o.get("pip") is not None:
+                c, q = v.split(":")[:2]
+                if q.isdigit():
+                    pts.add(c, int(q))
+            for x in o.values():
+                walk(x, u)
+        elif isinstance(o, list):
+            for x in o:
+                walk(x, unit)
 
-        walk(d)
-    return s.freeze()
+    for f in files:
+        q = EXECUTOR / f
+        if q.exists():
+            with gzip.open(q, "rt") as fh:
+                walk(json.load(fh))
+    return pts.freeze()
 
 
 # --------------------------------------------------------------------------- the count
@@ -322,11 +329,13 @@ def count(root: Path = ROOT) -> dict[str, Any]:
     els = elements(root)
     pts, var_genes, rows_by_file = fine_mapped()
     units, with_a_row, tested = queried_upper_bound()
-    floor_spans = queried_lower_bound()
+    any_posterior = determined()
+    mpra_posterior = determined(MPRA_ARM)
+    panel_posterior = determined(tuple(f for f in PIP_FILES if f not in MPRA_ARM))
 
     by_chrom = collections.Counter(v["chrom"] for v in els.values())
-    assessable_upper = assessable_units = assessable_mpra = assessable_floor = 0
-    with_a_dapg_row = 0
+    assessable_upper = assessable_units = assessable_mpra = 0
+    with_a_dapg_row = determined_n = determined_mpra = determined_panel = 0
     unassessable_by_chrom: collections.Counter[str] = collections.Counter()
     carriers: list[dict[str, Any]] = []
     for eid, v in sorted(els.items()):
@@ -335,8 +344,10 @@ def count(root: Path = ROOT) -> dict[str, Any]:
         m = bool(tested.inside(c, lo, hi))
         assessable_units += u
         assessable_mpra += m
-        assessable_floor += floor_spans.touches(c, lo, hi)
         with_a_dapg_row += with_a_row.touches(c, lo, hi)
+        determined_n += bool(any_posterior.inside(c, lo, hi))
+        determined_mpra += bool(mpra_posterior.inside(c, lo, hi))
+        determined_panel += bool(panel_posterior.inside(c, lo, hi))
         if u or m:
             assessable_upper += 1
         else:
@@ -383,13 +394,16 @@ def count(root: Path = ROOT) -> dict[str, Any]:
         "fine_mapped_by_chromosome": pts.by_chromosome,
         "units": units,
         "with_a_row": with_a_row,
+        "any_posterior": any_posterior,
         "tested": tested,
-        "floor_spans": floor_spans,
         "assessable_upper": assessable_upper,
         "assessable_units": assessable_units,
         "assessable_mpra": assessable_mpra,
-        "assessable_floor": assessable_floor,
         "with_a_dapg_row": with_a_dapg_row,
+        "determined": determined_n,
+        "determined_mpra_arm": determined_mpra,
+        "determined_panel_arm": determined_panel,
+        "n_posteriors_on_disk_any_value": any_posterior.n,
         "unassessable_by_chromosome": dict(sorted(unassessable_by_chrom.items())),
         "carriers": carriers,
         "matched": matched,
@@ -486,20 +500,27 @@ def payload(k: dict[str, Any]) -> dict[str, Any]:
             "unassessed_by_chromosome": k["unassessable_by_chromosome"],
             "elements_by_chromosome": k["elements_by_chromosome"],
             "where_dapg_placed_a_row_at_any_posterior": k["with_a_dapg_row"],
-            "where_a_posterior_is_recoverable_on_disk": k["assessable_floor"],
+            "where_a_posterior_survives_on_disk_at_any_value": k["determined"],
+            "where_a_posterior_survives_by_arm": {
+                "mpravardb_tested_variants": k["determined_mpra_arm"],
+                "panel_unit_reads": k["determined_panel_arm"],
+            },
+            "posteriors_on_disk_at_any_value": k["n_posteriors_on_disk_any_value"],
             "the_three_numbers_are_not_the_same_thing": (
-                "the assessable count is where the track was READ; the second is where DAP-G placed a "
-                "row at any PIP, which the catalogue records as a variant and a gene with the PIP "
-                "DROPPED; the third is where the posterior itself survives on disk, which is only "
-                "where an executor file retained it, and is the only subframe the imported threshold "
-                "can be applied over. The third is a floor, because a unit read and found empty need "
-                "not appear in those records"
+                "the first is where the track was READ, which is assessability. The second is where "
+                "DAP-G PLACED A ROW at any posterior, which a catalogued unit records as a variant and "
+                "a gene with the PIP DROPPED. The third is where the POSTERIOR ITSELF survives on "
+                "disk, which is only where an executor file retained it. The second is not an upper "
+                "bound on the third and the third is not a subset of the second: a unit can carry a "
+                "row whose PIP was dropped, and a retained posterior can sit at a position no "
+                "catalogued unit covers"
             ),
-            "a_frame_this_narrow_is_not_a_denominator": (
-                "the threshold can be applied over at most "
-                f"{k['assessable_floor']} of {n} elements, so no ratio of carriers to assessed "
-                "elements is reportable and none is given. That is the finding, not a limitation of "
-                "the reporting"
+            "the_denominator_the_carrying_count_belongs_to": (
+                f"{k['determined']} of {n}. Only there can the imported threshold decide: an element "
+                f"among the {k['with_a_dapg_row']} whose unit records a row but whose PIP was dropped "
+                "is neither above the threshold nor below it, it is UNDETERMINED. No ratio over the "
+                "1,505, and none over the 554, is reportable, and none is given. That is the finding, "
+                "not a limitation of the reporting"
             ),
         },
         "CARRYING_SECOND": {
@@ -532,8 +553,8 @@ def payload(k: dict[str, Any]) -> dict[str, Any]:
             "why_poor": (
                 f"{k['assessable_upper']} of {n} elements lie where DAP-G was read at all and "
                 f"{n - k['assessable_upper']} do not; DAP-G placed a row of any posterior at "
-                f"{k['with_a_dapg_row']} of them; the posterior itself survives on disk over at most "
-                f"{k['assessable_floor']}; {len(k['carriers'])} carry a variant at or above the "
+                f"{k['with_a_dapg_row']} of them; the posterior itself survives on disk for only "
+                f"{k['determined']}; {len(k['carriers'])} carry a variant at or above the "
                 f"imported threshold and {k['matched']} carry one for the element's own linked gene"
             ),
             "the_number_that_cannot_be_recomputed": (
