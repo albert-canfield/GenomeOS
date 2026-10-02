@@ -138,7 +138,42 @@ READINGS = {
         "an interval covering zero is never reported as 'no effect': it is 'no gain detected'. The "
         "distinction is the whole difference between an absent effect and an underpowered test"
     ),
+    #: Registered before any score, as a consequence of the attenuation arm not answering its
+    #: question. A null here is weaker than a null normally sounds, and must say so itself.
+    "null_must_also_state": (
+        "power at effects smaller than K562's is not established, so this result does not exclude a "
+        "smaller deletion gain in astrocytes"
+    ),
 }
+
+#: The sample-size limitation of the power figure, recorded on the reviewer's finding. It runs the
+#: other way from the prevalence correction: the prevalence match made the figure honest, this makes
+#: it conservative. Both are stated; neither reclassifies the test.
+SAMPLE_SIZE_LIMITATION = (
+    "the simulation keeps a mean of about 27 positives, because matching the 2.9% prevalence by "
+    "downsampling K562's positives is what 74 of K562's loci can supply, while the real test has 133 "
+    "positives at that same prevalence. The figure is therefore CONSERVATIVE for sample size and the "
+    "true power is probably higher. This is a stated limitation and is not grounds to reclassify: "
+    "the method was registered before it ran and the class stands at what the registered method "
+    "produced"
+)
+
+
+def power_quote(share: float, simulated_positives: float) -> str:
+    """The exact form of words every quote of the class must use.
+
+    Registered as a function so that the class, the figure and both limitations travel together and
+    a later summary cannot keep the class while dropping what qualifies it.
+    """
+    klass = power_class(share)["class"]
+    # half up, not banker's rounding: `f"{26.5:.0f}"` is "26", which would understate the simulated
+    # count and silently disagree with the registered form of words
+    simulated = int(simulated_positives + 0.5)
+    return (
+        f"{klass} (prevalence-matched power {share:.2f}, conservative: simulated with "
+        f"~{simulated} positives against the test's {REGISTERED_POSITIVES})"
+    )
+
 
 #: The power rule, by a registered method, computed before any astrocyte score exists. The S8 classes
 #: decide what the result may be called, and the class travels with every quote of it.
@@ -397,7 +432,8 @@ def reading(interval: dict[str, Any]) -> str:
         return READINGS["lower_bound_above_zero"]
     if hi < 0:
         return READINGS["upper_bound_below_zero"]
-    return READINGS["interval_covers_zero"]
+    # a null must carry what it does not establish, in the same breath
+    return f"{READINGS['interval_covers_zero']}; {READINGS['null_must_also_state']}"
 
 
 def power_class(share: float) -> dict[str, Any]:
@@ -498,6 +534,7 @@ def terms() -> dict[str, Any]:
         "k562_prevalence_note": K562_PREVALENCE_NOTE,
         "attenuations_reported": list(ATTENUATIONS),
         "attenuation_limitation": ATTENUATION_LIMITATION,
+        "sample_size_limitation": SAMPLE_SIZE_LIMITATION,
         "track_roster_rule": TRACK_ROSTER_RULE,
         "activity_inputs": ACTIVITY_INPUTS,
         "same_code_path": SAME_CODE_PATH,

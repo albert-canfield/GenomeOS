@@ -138,7 +138,14 @@ class TestReadings:
         )
 
     def test_an_interval_covering_zero_reads_as_no_gain_detected(self):
-        assert astroreg.reading({"ci95": [-0.05, 0.2]}) == "no gain detected"
+        out = astroreg.reading({"ci95": [-0.05, 0.2]})
+        assert out.startswith("no gain detected")
+
+    def test_a_null_also_states_what_it_does_not_exclude(self):
+        """Registered before any score: a null here is weaker than a null normally sounds."""
+        out = astroreg.reading({"ci95": [-0.05, 0.2]})
+        assert "power at effects smaller than K562's is not established" in out
+        assert "does not exclude a smaller deletion gain in astrocytes" in out
 
     def test_an_interval_covering_zero_is_never_no_effect(self):
         assert "no effect" not in astroreg.reading({"ci95": [-0.05, 0.2]})
@@ -153,7 +160,7 @@ class TestReadings:
 
     @pytest.mark.parametrize("lo,hi", [(0.0, 0.2), (-0.2, 0.0)])
     def test_a_bound_exactly_on_zero_is_not_read_as_detected(self, lo, hi):
-        assert astroreg.reading({"ci95": [lo, hi]}) == "no gain detected"
+        assert astroreg.reading({"ci95": [lo, hi]}).startswith("no gain detected")
 
 
 class TestPowerClasses:
@@ -361,3 +368,36 @@ class TestAttenuationLimitation:
         t = astroreg.terms()
         assert "attenuation_limitation" in t
         assert t["attenuation_limitation"] == astroreg.ATTENUATION_LIMITATION
+
+
+class TestRequiredQuote:
+    def test_the_quote_carries_class_figure_and_both_qualifiers(self):
+        q = astroreg.power_quote(0.79, 26.5)
+        assert q.startswith("exploratory")
+        assert "0.79" in q
+        assert "conservative" in q
+        assert "~27 positives against the test's 133" in q
+
+    def test_a_confirmatory_share_still_carries_the_conservative_note(self):
+        q = astroreg.power_quote(0.9, 26.5)
+        assert q.startswith("confirmatory")
+        assert "conservative" in q
+
+    def test_a_refused_share_is_named_as_refused_in_the_quote(self):
+        assert astroreg.power_quote(0.3, 26.5).startswith("refused")
+
+    def test_the_sample_size_limitation_runs_the_conservative_way_and_does_not_reclassify(self):
+        lim = astroreg.SAMPLE_SIZE_LIMITATION
+        assert "CONSERVATIVE" in lim
+        assert "true power is probably higher" in lim
+        assert "not grounds to reclassify" in lim
+
+    def test_terms_carries_the_sample_size_limitation(self):
+        assert "sample_size_limitation" in astroreg.terms()
+
+    def test_the_simulated_count_rounds_half_up_not_to_even(self):
+        """26.5 must read as ~27: banker's rounding would understate it and disagree with the
+        registered form of words."""
+        assert "~27 positives" in astroreg.power_quote(0.79, 26.5)
+        assert "~27 positives" in astroreg.power_quote(0.79, 27.4)
+        assert "~26 positives" in astroreg.power_quote(0.79, 26.4)

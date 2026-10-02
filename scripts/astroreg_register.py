@@ -509,6 +509,14 @@ def power_figure() -> dict:
             "rule": "the 0.5x figure travels beside the class in every quote of it",
         },
         "attenuation_limitation": astroreg.ATTENUATION_LIMITATION,
+        "sample_size_limitation": astroreg.SAMPLE_SIZE_LIMITATION,
+        "required_quote": astroreg.power_quote(
+            full["share_of_resamples_excluding_zero"], full["mean_positives_kept"] or 0.0
+        ),
+        "required_quote_rule": (
+            "this exact form of words is what every quote of the class must use; the class may not "
+            "travel without the figure and both limitations"
+        ),
         "attenuation_shares_are_flat": (
             "the three shares sit within a few points of one another while the median achieved gain "
             "falls, which is the limitation above showing itself in the numbers, not a finding that "
