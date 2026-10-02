@@ -243,7 +243,10 @@ def test_the_registration_is_committed_and_carries_the_falsifier_and_the_base_ra
     assert reg["amendment_timeline"] == ac.AMENDMENT_TIMELINE
     assert reg["reporting_code_changed_after_a_run"] == ac.REPORTING_CODE_CHANGED_AFTER_A_RUN
     assert reg["relative_bands_from_now_on"] == ac.RELATIVE_BANDS_FROM_NOW_ON
-    assert reg["amends"] == "data/results/argmaxcell_registration.json as committed at 67e14d7"
+    assert reg["amends"] == (
+        "data/results/argmaxcell_registration.json as committed at 67e14d7 (amendment 1) and at "
+        "18224ef (amendment 2)"
+    )
     assert reg["falsifier_thresholds"]["minimum_clusters_for_an_interval"] == ac.MIN_CLUSTERS
     assert reg["power_per_arm_stated_in_advance"]["K562"]["elements_needed_at_the_base_rate"] == 561
     assert reg["confound_registered_before_any_count"] == ac.CONFOUND
