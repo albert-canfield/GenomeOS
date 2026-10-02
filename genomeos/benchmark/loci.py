@@ -59,6 +59,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from genomeos.benchmark import loci_gene_input
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 # ---------------------------------------------------------------------------- vocabulary
@@ -1613,6 +1614,7 @@ def read_gene_input(
     results_dir: Path = RESULTS_DIR,
     responses: Any = None,
     coding: set[str] | None = None,
+    reading: str = loci_gene_input.GENE_INPUT_V1,
 ) -> dict[str, Any]:
     """The whole input: every already-scored element in the locus window, grouped by the gene it moves.
 
@@ -1621,25 +1623,28 @@ def read_gene_input(
     is added beside the layer and does not replace it: each element credits |effect| to every coding
     gene at the bar in its window. Elements the cache does not hold (stated intervals, VISTA and
     lentiMPRA rows) keep their compact credit there and are counted.
+
+    **`reading` is versioned and v1 is the default (2026-10-03).** `GENE_INPUT_V1` is the reading
+    above - the compact coding head alone - and its output is byte-identical to this reader as it
+    stood before the parameter existed, which `tests/test_loci_gene_input.py` checks against the
+    committed frames and not against the code. `GENE_INPUT_V2` is the repair section 25 of
+    docs/LOCI-BENCHMARK.md left undone: both stored heads of each element enter one ranking, as
+    `read_deletion` has done since 2026-09-21. It is OPT-IN, it is never the default, and when it is
+    asked for the v1 ranking travels beside it under `coding_head_*` so that every rate published
+    under v1 stays computable - the same shape as `read_deletion`'s `coding_first_*` and as the
+    `window_reading` above, which "is added beside the layer and does not replace it".
+    `loci_gene_input.REPAIR` carries the reason, quoted from section 25. No rate here is recomputed
+    by it: `score_locus` calls this reader with the default and nothing else in the tree asks for v2.
     """
     rows = _deletion_rows(ch.chrom, expect.window[0], expect.window[1], results_dir)
-    by_gene: dict[str, dict[str, Any]] = {}
-    for e in rows:
-        p = e.get("predicted_coding") or {}
-        if not p.get("gene"):
-            continue
-        g = by_gene.setdefault(p["gene"], {"gene": p["gene"], "elements": 0, "activating": 0, "summed": 0.0})
-        g["elements"] += 1
-        g["activating"] += int(p["action"] == "activates")
-        g["summed"] = round(g["summed"] + abs(p["log2_fold_change"]), 3)
-    ranked = sorted(by_gene.values(), key=lambda g: -g["summed"])
+    ranked = loci_gene_input.rank(loci_gene_input.credit_rows(rows, reading))
     mine = [g for g in ranked if g["gene"] in expect.targets]
     window = (
         _gene_input_window(ch.chrom, rows, expect, responses, coding)
         if responses is not None and coding is not None
         else None
     )
-    return {
+    out = {
         **({"window_reading": window} if window is not None else {}),
         "layer": "gene_input",
         "provenance": "derived",
@@ -1649,12 +1654,33 @@ def read_gene_input(
         "genes": ranked[:8],
         "published_targets": mine,
         "target": mine[0]["gene"] if mine else (ranked[0]["gene"] if ranked else None),
-        "rank_of_first_published_target": next(
-            (i + 1 for i, g in enumerate(ranked) if g["gene"] in expect.targets), None
-        ),
+        "rank_of_first_published_target": loci_gene_input.rank_of_first_target(ranked, expect.targets),
         "pending": None if rows else "no already-scored element anywhere in the locus window",
         "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene",
     }
+    if reading == loci_gene_input.GENE_INPUT_V1:
+        # a v1 reading carries NO version key: stamping one would change the dict and the committed
+        # frames would stop reading identically. The absence of `reading` IS v1.
+        return out
+    head = loci_gene_input.rank(loci_gene_input.credit_rows(rows, loci_gene_input.GENE_INPUT_V1))
+    out["reading"] = reading
+    out["naming_a_gene"] = sum(g["elements"] for g in ranked)
+    out["naming_a_coding_gene"] = sum(g["elements"] for g in head)
+    out["coding_head_genes"] = head[:8]
+    out["coding_head_target"] = head[0]["gene"] if head else None
+    out["coding_head_rank_of_first_published_target"] = loci_gene_input.rank_of_first_target(
+        head, expect.targets
+    )
+    out["coding_head_reading"] = (
+        "this reader as it stood until 2026-10-03: each element votes once for its compact coding"
+        " head. Reported beside the repaired ranking, never scored, so that every rate published"
+        " under v1 stays computable from the shipped reader"
+    )
+    out["evidence"] = (
+        "predicted: AlphaGenome deletions already computed, summed |log2| per gene over both stored"
+        " heads of each element, whatever the gene's biotype"
+    )
+    return out
 
 
 def _gene_input_window(
