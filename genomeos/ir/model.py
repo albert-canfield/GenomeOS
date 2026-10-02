@@ -333,6 +333,12 @@ class Rule:
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = UNSTATED
     threshold_unit: str = ""  # "" = an amount; "nM", "uM", ... = a concentration
+    #: Chromatin evidence for the cell `when` names, or the label saying why there is none: the
+    #: state the compiler read (open_in_reader, not_open_in_reader, not_assessable), then what
+    #: qualifies it. "" where no reading was taken at all, which is not the same as
+    #: `not_assessable`, a reading that was attempted and could not be taken. It records a
+    #: measurement beside the rule and changes nothing the rule does: `applies` does not read it.
+    context_evidence: str = ""
 
     def applies(self, context: dict[str, str]) -> bool:
         for key, wanted in self.when.items():

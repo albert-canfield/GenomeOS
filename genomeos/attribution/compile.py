@@ -41,6 +41,7 @@ import bisect
 import gzip
 import re
 import time
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -492,9 +493,20 @@ def link_pairs(row: dict) -> dict[tuple[str, str], int]:
 
 
 def _measured_blocks(
-    chrom: str, row: dict, domains: dict, ident_of: dict, sequence: dict | None = None
+    chrom: str,
+    row: dict,
+    domains: dict,
+    ident_of: dict,
+    sequence: dict | None = None,
+    context_state: Any = None,
 ) -> list[str]:
-    """One `<id>_measured` element and one rule per measured regulated link, all experimental."""
+    """One `<id>_measured` element and one rule per measured regulated link, all experimental.
+
+    `context_state(cell_label, start, end)` is the reader's chromatin state for the cell a rule
+    names (genomeos.attribution.context_evidence). None means no reading was taken, and then no
+    `context_evidence:` is written: an absent field says nothing was read, which is not the same as
+    `not_assessable`, a reading that was attempted and could not be taken.
+    """
     from genomeos.attribution import measured as ms
 
     axes = measured_axes(row, sequence)
@@ -522,9 +534,13 @@ def _measured_blocks(
     lines.append("}")
     for gene, action, strength, cell, split in ms.rule_links(row):
         mark = f", {ms.HELDOUT_MARK}" if split == ms.HELDOUT else ""
+        label = context(cell)
+        ctx = ""
+        if context_state is not None:
+            ctx = f"context_evidence: {context_state(label, row['start'], row['end'])}; "
         lines.append(
             f"rule {row['id']}_measured {action} {ident_of[gene]} {{ strength: {strength}; "
-            f"when: {ms.CONTEXT_KEY} = {context(cell)}; "
+            f"when: {ms.CONTEXT_KEY} = {label}; {ctx}"
             f'evidence: experimental "{_text(ms.SOURCES["crispri"])}, silenced in {_text(cell)}{mark}"; '
             f"confidence: {row['confidence']:.2f} }}"
         )
@@ -532,7 +548,25 @@ def _measured_blocks(
 
 
 def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any = None) -> str:
+    from genomeos.attribution import context_evidence as ce
     from genomeos.attribution.budget import read_axes
+
+    # The cell a rule names is asserted (R1); this reads reader v1's own chromatin for it, or labels
+    # why it cannot be read. The mapping is by ontology term and the mapping table lives on disk, so
+    # on a machine without it no state is written at all: an absent field says nothing was read.
+    context_state = None
+    context_counts: Counter[str] = Counter()
+    try:
+        ce_table = ce.mapping()
+    except FileNotFoundError:
+        ce_table = None
+    if ce_table is not None:
+        ce_readers = ce.Readers(results_dir)
+
+        def context_state(label: str, start: int, end: int) -> str:  # noqa: F811
+            v = ce.state_for(label, chrom, start, end, ce_readers, ce_table)
+            context_counts[v] += 1
+            return v
 
     # the R7 tier names and labels on each region's role line; every number as in budget_<chrom>
     budget = read_axes(chrom, results_dir)
@@ -694,9 +728,13 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
             lines += [f"  {p}" for p in props]
             lines.append("}")
             strength = round(min(1.0, abs(float(pc["log2_fold_change"]))), 3)
+            label = context(pc.get("tissue"))
+            ctx = ""
+            if context_state is not None:
+                ctx = f"context_evidence: {context_state(label, e['start'], e['end'])}; "
             lines.append(
                 f"rule {e['id']} {action} {ident(pc['gene'])} {{ strength: {strength}; "
-                f"when: cell_type = {context(pc.get('tissue'))}; "
+                f"when: cell_type = {label}; {ctx}"
                 f'evidence: predicted "AlphaGenome deletion, {_text(pc.get("tissue") or "strongest track")}" '
                 f"{_text(_effect_note(pc))} }}"
             )
@@ -740,7 +778,18 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
             "program states no experimental fact."
         )
     for r in measured_rows:
-        lines += _measured_blocks(chrom, r, domains, ident_of, sequence.get(r["id"]))
+        lines += _measured_blocks(chrom, r, domains, ident_of, sequence.get(r["id"]), context_state)
+    if context_state is not None:
+        total = sum(context_counts.values())
+        lines += [
+            "",
+            f"# ---- context evidence: the reader's chromatin for the cell each of these {total} rules",
+            "# names, or the label saying why there is none. The state is added beside the rule and",
+            "# gates nothing; no verdict moved and nothing was deleted.",
+            f"# {ce.NOT_CLOSED}.",
+            f"# {ce.NOT_VALIDATION}.",
+            *(f"# {v}: {n}" for v, n in sorted(context_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
+        ]
     return "\n".join(lines) + "\n"
 
 

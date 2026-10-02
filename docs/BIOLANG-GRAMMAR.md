@@ -106,6 +106,7 @@ May contain `transcript` blocks.
 | `threshold` | `number [M|mM|uM|nM|pM|fM]` | source level giving half-maximal effect: an amount, or v0.4 a concentration with a molar unit, divided by the absolute_volume of the compartment where the rule acts |
 | `hill` | `number` | cooperativity |
 | `when` | `k = v, k = v` | context in which the rule applies |
+| `context_evidence` | `text` | chromatin evidence for the cell `when` names, or the label saying why there is none: open_in_reader, not_open_in_reader, or not_assessable with its reason. A measurement recorded beside the rule by whatever compiled it; it gates nothing, and the engine neither reads it nor requires it |
 | `id` | `text` | explicit rule id |
 
 ### `param`
@@ -405,7 +406,7 @@ the file `records_unstated_confidence: true`; a file without that mark predates 
 - **Effect**: `target`, `op`, `value`, `unit`
 - **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `partition`, `evidence`, `confidence`
 - **Parameter**: `name`, `value`, `unit`, `evidence`, `confidence`
-- **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`
+- **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`, `context_evidence`
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`

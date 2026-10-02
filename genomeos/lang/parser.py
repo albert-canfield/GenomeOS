@@ -608,6 +608,8 @@ def _compile_block(b: Block, module: Module) -> None:
             rule.threshold_unit = unit
         if "when" in p:
             rule.when = _parse_when(p["when"])
+        if "context_evidence" in p:
+            rule.context_evidence = p["context_evidence"].strip()
         module.rules.append(rule)
     elif b.kind == "param":
         pm = _PARAM.match(b.header)

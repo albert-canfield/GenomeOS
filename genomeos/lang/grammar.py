@@ -97,6 +97,13 @@ BLOCKS: dict[str, dict] = {
             ),
             "hill": ("number", "cooperativity"),
             "when": ("k = v, k = v", "context in which the rule applies"),
+            "context_evidence": (
+                "text",
+                "chromatin evidence for the cell `when` names, or the label saying why there is "
+                "none: open_in_reader, not_open_in_reader, or not_assessable with its reason. A "
+                "measurement recorded beside the rule by whatever compiled it; it gates nothing, "
+                "and the engine neither reads it nor requires it",
+            ),
             "id": ("text", "explicit rule id"),
         },
     },
