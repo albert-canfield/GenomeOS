@@ -1,6 +1,6 @@
 {
   "result": "organised_chr7",
-  "date": "2026-09-12",
+  "date": "2026-10-02",
   "chrom": "chr7",
   "blocks": 1400,
   "with_human_axis": 1260,
@@ -281,8 +281,10 @@
       "duplicated_fraction": 0.0,
       "partners": 0,
       "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 1,
+      "targets": [
+        "NPVF"
+      ],
       "reading": "constrained across mammals and among people, unannotated: the sharpest candidate"
     },
     {
@@ -407,8 +409,10 @@
       "duplicated_fraction": 0.0,
       "partners": 0,
       "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 1,
+      "targets": [
+        "GRM8"
+      ],
       "reading": "held across mammals, variable among people: a frame whose value varies, or lost function"
     },
     {
@@ -443,8 +447,10 @@
       "duplicated_fraction": 0.0,
       "partners": 0,
       "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 1,
+      "targets": [
+        "NEUROD6"
+      ],
       "reading": "held across mammals, variable among people: a frame whose value varies, or lost function"
     },
     {
@@ -515,8 +521,10 @@
       "duplicated_fraction": 0.069,
       "partners": 2,
       "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 3,
+      "targets": [
+        "ABCB5"
+      ],
       "reading": "held across mammals, variable among people: a frame whose value varies, or lost function"
     },
     {
@@ -569,8 +577,10 @@
       "duplicated_fraction": 0.0,
       "partners": 0,
       "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 1,
+      "targets": [
+        "ETV1"
+      ],
       "reading": "free across mammals, constrained among people: recent function or selection"
     },
     {
@@ -625,8 +635,10 @@
       "duplicated_fraction": 0.5547,
       "partners": 5,
       "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 10,
+      "targets": [
+        "TAC1"
+      ],
       "reading": "copy: 55% of the block is a curated segmental duplication (5 partners); read the source first, attribute second"
     },
     {
@@ -859,8 +871,10 @@
       "duplicated_fraction": 0.7699,
       "partners": 2,
       "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 3,
+      "targets": [
+        "ZNF92"
+      ],
       "reading": "copy: 77% of the block is a curated segmental duplication (2 partners); read the source first, attribute second"
     },
     {
@@ -895,8 +909,10 @@
       "duplicated_fraction": 0.6967,
       "partners": 2,
       "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 5,
+      "targets": [
+        "SLC29A4"
+      ],
       "reading": "copy: 70% of the block is a curated segmental duplication (2 partners); read the source first, attribute second"
     },
     {
@@ -967,8 +983,10 @@
       "duplicated_fraction": 0.9925,
       "partners": 1,
       "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
+      "attributed_elements": 1,
+      "targets": [
+        "NUPR2"
+      ],
       "reading": "copy: 99% of the block is a curated segmental duplication (1 partner); read the source first, attribute second"
     },
     {
@@ -1063,13 +1081,30 @@
     }
   ],
   "inputs": {
-    "budget": "budget_chr7",
+    "budget": "budget_axes_chr7",
+    "budget_branch": "budget_axes_chr7",
+    "budget_pair_considered": [
+      "budget_axes_chr7",
+      "budget_chr7"
+    ],
     "variation": "variation_chr7",
     "duplication": "duplication_chr7",
     "elements": [
+      "enhancer_targets_all_chr7",
       "constrained_targets_chr7",
       "enhancer_targets_chr7"
-    ]
+    ],
+    "declared": [
+      "data/results/budget_axes_chr7.json",
+      "data/results/budget_chr7.json",
+      "data/results/variation_chr7.json",
+      "data/results/duplication_chr7.json",
+      "data/results/enhancer_targets_all_chr7.json",
+      "data/knowledge/alphagenome/all_elements/chr7.json",
+      "data/results/constrained_targets_chr7.json",
+      "data/results/enhancer_targets_chr7.json"
+    ],
+    "inputs_optional_absent": {}
   },
   "evidence": {
     "tier": "inferred: sequence class plus Zoonomia constraint (the budget)",
@@ -1077,6 +1112,260 @@
     "copy": "curated: UCSC genomicSuperDups, >= 1 kb at >= 90% identity; copy at >= 50% of the block"
   },
   "cost": {
-    "seconds": 0.03
+    "seconds": 1.27
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Zoonomia cactus241way phyloP and the UNKNOWN block partition, restated under the R7 tier names (budget_axes_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      },
+      {
+        "accession": "the stored budget this chromosome's blocks, classes and phyloP measurements come from (budget_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      },
+      {
+        "accession": "gnomAD Gnocchi non-coding constraint per block, the human axis (area J, variation_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      },
+      {
+        "accession": "UCSC genomicSuperDups curated segmental duplications per block (duplication_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      },
+      {
+        "accession": "the AlphaGenome attribution run over the all element set, with the local element table its summary points at where it has one (enhancer_targets_all_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      },
+      {
+        "accession": "the AlphaGenome attribution run over the constrained element set, with the local element table its summary points at where it has one (constrained_targets_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      },
+      {
+        "accession": "the AlphaGenome attribution run over the uniform element set, with the local element table its summary points at where it has one (enhancer_targets_chr7)",
+        "version": "as the per-chromosome result file listed in inputs, pinned there by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/budget_axes_chr7.json",
+        "sha256": "ce717d1e3be2f44415340cd7c347f9a8f945c6652d4ba64aa4adda3b1b5a900e",
+        "bytes": 819440,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr7.json",
+        "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+        "bytes": 869127,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr7.json",
+        "sha256": "10f765e2fa58a4fb7d4931bc3344a2a29e6e3fe52db7e74b6d6c83fdb39d7ef0",
+        "bytes": 859998,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr7.json",
+        "sha256": "b55814d3d0b5e19af6972eeb934dc1646e715d589c9e31fe5540d90035da6a5d",
+        "bytes": 316217,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "code_cleanliness": {
+      "git_sha": "2ebe9dfe8b9fffbc81dde0b18c6e9cdc66a35631",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/organise.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py"
+      ],
+      "counting_path_count": 39,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "parameters": {
+      "copy_min_fraction": 0.5,
+      "top": 25,
+      "case_order": "syntax, relaxed, recent, unmeasured, tolerant; ties by mammal_fraction",
+      "join": "by (start, end) on the budget's blocks; nothing is recomputed here",
+      "copies_first": "a block at or above copy_min_fraction is read as a copy whatever its tier"
+    },
+    "exclusions": [
+      "the result file carries the first 25 candidates and the 25 largest copies, not every block: blocks() returns the full join on demand from the same inputs",
+      "a per-chromosome reading that is not on this machine is a smaller join, not an excluded block: which one is recorded in the result's inputs_optional_absent"
+    ],
+    "partitions": "n/a: no evaluation partition is involved; this is a join over one chromosome's blocks, and no number here is fitted or held out",
+    "model_dependencies": [
+      {
+        "name": "AlphaGenome",
+        "what": "the 2026-09 all-element deletion sweep (scripts/enhancer_targets_all.py) and its per-element response cache (data/knowledge/alphagenome/elements/chr*.json.gz, all_elements/chr*.json)",
+        "client": {
+          "package": "alphagenome",
+          "version": "0.9.0",
+          "wheel_sha256": "a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4",
+          "evidence": "uv.lock [[package]] alphagenome, version 0.9.0 with this wheel hash since df1a184 (2026-09-10), the only commit that ever changed that entry, so every sweep run resolved it; the installed client says __version__ 0.9.0",
+          "version_in_lock_now": "0.9.0"
+        },
+        "api": {
+          "service": "google.gdm.gdmscience.alphagenome.v1main.DnaModelService",
+          "method": "ScoreVariant",
+          "address": "dns:///gdmscience.googleapis.com:443",
+          "evidence": "alphagenome 0.9.0 protos/dna_model_service.proto (package ...alphagenome.v1main) and dna_client.create's default address; neither alphagenome_adapter._live_scorer nor enhancer_targets_all.worker_scorer passes an address"
+        },
+        "scorer": {
+          "name": "variant_scorers.RECOMMENDED_VARIANT_SCORERS['RNA_SEQ']",
+          "repr": "GeneMaskLFCScorer(requested_output=RNA_SEQ)",
+          "window": "dna_client.SEQUENCE_LENGTH_1MB around the deleted element",
+          "evidence": "alphagenome_adapter._live_scorer, unchanged from d1d5652 (2026-09-11) through the sweep; the repr is the installed 0.9.0 client's"
+        },
+        "model_version": null,
+        "unpinned": "unpinned: no model version was requested. dna_client.create(api_key) and create(api_key, timeout=300) leave model_version None, so every ScoreVariantRequest carried an empty model_version and the server chose. No response message carries a model version (model_version is a request field only in dna_model_service.proto) and no cache file, result or job log records one, so which model answered cannot be established from disk",
+        "documented_default": "ALL_FOLDS, the distilled all-folds model, per the comment on alphagenome 0.9.0 dna_model.ModelVersion; a client document, not verified against the server",
+        "run_dates": {
+          "first": "2026-09-12",
+          "last": "2026-09-16",
+          "evidence": "answers are kept only with per-cell fields, added in 257dadd (2026-09-12 12:27; has_cells deletes older answers); chr21 committed 5701321 (2026-09-13 02:29); data/jobs/enhancer_targets_all_chain.log: started 2026-09-13 00:48, 'chain done: every chromosome scored' 2026-09-16 15:14; the 23 archives' mtimes 2026-09-13 10:23 to 2026-09-16 15:10; result files dated 2026-09-13 to 2026-09-16",
+          "later_answers": "3,209 per-element files outside the archives, written 2026-09-17 to 2026-09-21 by later deletion runs through the same unpinned client (file mtimes)"
+        },
+        "track_metadata": {
+          "stored": false,
+          "sha256": null,
+          "unpinned": "unpinned: the sweep never read output_metadata and kept per gene only its mean, largest drop, largest rise and four cell lines' values, so the track table it averaged over is not on disk. The one later read (2026-09-27, genomeos/attribution/crispri.py) kept three cell lines' track counts, not the table",
+          "observed": {
+            "elements_scanned": 966615,
+            "tracks_per_element_modal": 371,
+            "elements_at_modal": 919248,
+            "distinct_track_counts": 422,
+            "tissue_names": 316,
+            "tissue_names_sha256": "bdf63a526775766a713d2e197a5b216876388c7db6f9be7a34435b97c14a4f62",
+            "evidence": "track_fingerprint over every answer in elements/chr*.json.gz (963,406) and the 3,209 loose element files, read 2026-09-28"
+          }
+        }
+      }
+    ],
+    "code": {
+      "git_sha": "2ebe9dfe8b9fffbc81dde0b18c6e9cdc66a35631",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/organised_chr10.json",
+        "data/results/organised_chr11.json",
+        "data/results/organised_chr12.json",
+        "data/results/organised_chr13.json",
+        "data/results/organised_chr14.json",
+        "data/results/organised_chr15.json",
+        "data/results/organised_chr16.json",
+        "data/results/organised_chr17.json",
+        "data/results/organised_chr18.json",
+        "data/results/organised_chr19.json",
+        "data/results/organised_chr20.json",
+        "data/results/organised_chr21.json",
+        "data/results/organised_chr22.json",
+        "data/results/organised_chr8.json",
+        "data/results/organised_chr9.json",
+        "data/results/organised_chrY.json"
+      ],
+      "argv": [
+        "scripts/organise_regen.py",
+        "--chrom",
+        "chr7",
+        "--top",
+        "25"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "2ebe9dfe8b9fffbc81dde0b18c6e9cdc66a35631",
+      "code_cleanliness_git_sha": "2ebe9dfe8b9fffbc81dde0b18c6e9cdc66a35631",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 2ebe9df"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 126,
+      "opens_under_data": 30,
+      "files_read": 8,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
   }
 }
