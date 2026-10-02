@@ -38,6 +38,57 @@ def grant_run(monkeypatch, run=1, requests=None, consumed=False, words="<the run
     )
 
 
+class TestTheRunIsAboutTheTreeItNames:
+    """A test, not a belief: the code under test must come from the tree these tests came from.
+
+    THE INCIDENT. An acceptance run in a worktree, using the main checkout's venv, reported item (g)'s
+    no-skip test PASSED in a worktree that has no data/cache at all -- because the code it imported was
+    the MAIN checkout's, while the status file named the worktree's tree. Nothing in the status file
+    could show that.
+
+    THE MECHANISM, measured rather than reasoned about. `tests/` has no __init__.py, so pytest's
+    prepend import mode makes `<tree>/tests` sys.path[0] and the TREE ROOT is never on sys.path at all.
+    `import genomeos` therefore falls through to site-packages, where the main venv's editable install
+    `_editable_impl_genomeos.pth` names the main checkout, and the main checkout wins. Running the same
+    interpreter as `python -c` resolves to the worktree instead, because that form puts the working
+    directory on sys.path -- which is why the hazard is invisible to a `python -c` probe. Measured, one
+    variable apart:
+
+        pytest, no PYTHONPATH : sys.path[0]=<worktree>/tests, root on sys.path False -> MAIN's genomeos
+        pytest, PYTHONPATH=wt : sys.path[0]=<worktree>/tests, root on sys.path True  -> WORKTREE's
+        python -c             : sys.path[0]='',                                       -> WORKTREE's
+
+    PYTHONPATH=<tree> fixes it, but this assertion is what makes a wrong-tree run impossible to
+    publish, because it does not depend on anyone remembering the env var or on which theory of the
+    cause is right.
+    """
+
+    def test_the_imported_genomeos_comes_from_THIS_tree(self):
+        import genomeos
+
+        code = Path(genomeos.__file__).resolve().parents[1]
+        tests = Path(__file__).resolve().parents[1]
+        print(f"\ngenomeos.__file__ : {genomeos.__file__}")
+        print(f"tree under test   : {tests}")
+        assert code == tests, (
+            f"these tests are {tests} and the genomeos they import is {code}. The run would judge one "
+            "tree and report another, which is how an acceptance passes for a tree it never read. If "
+            "this is a worktree, export PYTHONPATH=<worktree>; see this class's docstring for the "
+            "measured mechanism"
+        )
+
+    def test_the_tree_under_test_is_the_one_the_verdict_would_name(self):
+        """The same question asked of the verdict's own notion of the repository."""
+        import genomeos
+        from genomeos.attribution import astrorun
+
+        assert Path(astrorun.ROOT_FOR_BLOBS).resolve() == Path(__file__).resolve().parents[1], (
+            "ROOT_FOR_BLOBS is where this module resolves paths from, so if it is not this tree then "
+            "every committed-file check in the send path is about another checkout"
+        )
+        assert Path(genomeos.__file__).resolve().parents[1] == Path(astrorun.ROOT_FOR_BLOBS).resolve()
+
+
 class TestTheAuthorisedNumber:
     def test_the_cap_is_the_number_albert_approved(self):
         assert astrorun.AUTHORISED_REQUESTS == 1322
