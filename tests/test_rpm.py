@@ -474,3 +474,58 @@ class TestTheProducersOwnRule:
     def test_averaging_nothing_is_refused(self):
         with pytest.raises(ValueError, match="nothing to average"):
             rpm.mean_of_per_bam_rpm([])
+
+
+class TestNoRescalingOfAnyKind:
+    """The registered term, enforced structurally rather than observed.
+
+    A ratio of 1.0 between the computed denominator and ENCODE's published total cannot be the evidence
+    that the published total was not used, because substituting it would also produce exactly 1.0. These
+    tests make the substitution impossible instead.
+    """
+
+    E = ("chr1", 1_000, 1_500)
+
+    def test_the_registered_term_is_carried_word_for_word(self):
+        assert "NO RESCALING of any kind" in rpm.NO_RESCALING_OF_ANY_KIND
+
+    def test_the_published_total_cannot_be_assigned_to_the_denominator(self):
+        """By planting the breach: assigning ENCODE's figure raises instead of taking effect."""
+        c = rpm.Counter([self.E])
+        c.add(FakeRead(start=1_100, end=1_136))
+        with pytest.raises(AttributeError):
+            c.denominator = 219_538_839
+        assert c.denominator == 1, "the count from this pass is untouched"
+
+    def test_the_producer_counter_denominator_is_equally_unassignable(self):
+        c = rpm.ProducerCounter([self.E])
+        c.add(ProducerRead(start=1_100, end=1_136))
+        with pytest.raises(AttributeError):
+            c.denominator = 10_925_509
+        assert c.denominator == 1
+
+    def test_only_add_can_move_the_denominator(self):
+        c = rpm.Counter([self.E])
+        assert c.denominator == 0
+        c.add(FakeRead(chrom="chr9", start=1, end=37))
+        assert c.denominator == 1
+        c.add(FakeRead(unmapped=True))
+        assert c.denominator == 1, "a rejected read does not move it either"
+
+    def test_rpm_is_computed_from_the_counted_denominator_and_nothing_else(self):
+        """The arithmetic is pinned, so any substituted denominator would change the number."""
+        c = rpm.Counter([self.E])
+        for _ in range(7):
+            c.add(FakeRead(start=1_100, end=1_136))
+        for _ in range(93):
+            c.add(FakeRead(chrom="chr9", start=1, end=37))
+        assert c.denominator == 100
+        assert c.rpm()[self.E] == pytest.approx(7 / 100 * 1e6)
+
+    def test_the_rpm_module_never_fetches_the_published_total(self):
+        """The metadata lookup lives in the runner; the counting module has no route to it."""
+        import inspect
+
+        src = inspect.getsource(rpm)
+        assert "metadata_mapped_reads" not in src
+        assert "urllib" not in src and "requests" not in src

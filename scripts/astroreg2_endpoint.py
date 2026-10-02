@@ -28,6 +28,7 @@ import argparse
 import gzip
 import json
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -63,7 +64,14 @@ OWN_CODE = (
     "tests/test_rpm.py",
 )
 
-CACHE = Path(".git/genomeos-rpm/recon-k562-heldout.json")
+#: Scratch for long streaming passes. NOT under `.git`: a linked worktree's `.git` is a FILE, so
+#: `mkdir`ing a directory inside it dies with NotADirectoryError and manifest_rebuild never reaches its
+#: comparison. A result that gates money has to rebuild in a clean worktree, so the scratch lives in the
+#: system temp dir instead, and NOT under `data/` either -- a cache there would be read back as an
+#: undeclared input under data/ on the next run. The location is recorded in the manifest.
+SCRATCH = Path(tempfile.gettempdir()) / "genomeos-rpm"
+
+CACHE = SCRATCH / "recon-k562-heldout.json"
 
 REGISTRATION = Path("data/results/astroreg2_registration.json")
 

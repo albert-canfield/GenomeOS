@@ -53,6 +53,16 @@ METADATA_IS_A_CROSS_CHECK = (
     "sets silently divided into one another is an error that looks like a result"
 )
 
+#: The registered term, carried word for word from astroreg2_registration at 0f4c372, gate.what_is_computed.
+NO_RESCALING_OF_ANY_KIND = (
+    "the registration requires the activity be reconstructed under amendment 2's rule 'and NO RESCALING "
+    "of any kind'. That is a registered term and it is carried here word for word. It is enforced "
+    "structurally rather than promised: `Counter.denominator` is a property with no setter, so the "
+    "published mapped-read total cannot be put there; it is fetched by the runner, printed BESIDE the "
+    "computed denominator with their ratio, and has no path into any number. A ratio of 1.0 is a CHECK "
+    "that the two agree and is not a scaling by one of them, and those are different things"
+)
+
 #: A measured zero is not a censored absence. The sentence the whole amendment turns on.
 A_MEASURED_ZERO = (
     "an element with no reads over it has RPM exactly 0, and that 0 is MEASURED: the alignments were "
@@ -143,7 +153,7 @@ class Counter:
         self.counts: dict[tuple[str, int, int], int] = {}
         self._by_chrom: dict[str, tuple[list[int], list[tuple[int, int, int]]]] = {}
         self._reach: dict[str, int] = {}
-        self.denominator = 0
+        self._denominator = 0
         self.reads_seen = 0
         self.reads_rejected = 0
         self.reads_on_unknown_chrom = 0
@@ -164,6 +174,19 @@ class Counter:
             )
             self._reach[chrom] = max(e - s for s, e in spans)
 
+    @property
+    def denominator(self) -> int:
+        """Reads passing the filter, countable only by `add`. There is deliberately NO setter.
+
+        The registration forbids rescaling of any kind, and the obvious way to breach that is to put
+        ENCODE's published mapped-read total here instead of the count from this pass. A ratio of 1.0
+        between the two cannot be the evidence against it, because a ratio of exactly 1.0 is also what
+        substituting the published total would produce -- the observation does not distinguish the
+        compliant case from the breach. A property with no setter does: assigning to it raises
+        AttributeError, so the substitution is not a thing this class can be made to do.
+        """
+        return self._denominator
+
     def __len__(self) -> int:
         return len(self.counts)
 
@@ -177,7 +200,7 @@ class Counter:
         if not keep(read):
             self.reads_rejected += 1
             return 0
-        self.denominator += 1
+        self._denominator += 1
         chrom = read.reference_name
         if chrom is None or chrom not in self._by_chrom:
             if chrom is not None:
@@ -415,7 +438,7 @@ class ProducerCounter(Counter):
     def add(self, read: Any) -> int:
         self.reads_seen += 1
         if keep_denominator_producer(read):
-            self.denominator += 1
+            self._denominator += 1
         else:
             self.reads_rejected += 1
         if not keep_numerator_producer(read):

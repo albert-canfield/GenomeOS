@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import tempfile
 import time
 import urllib.request
 from pathlib import Path
@@ -82,7 +83,14 @@ EXPERIMENTS = {
 COLUMN_OF = {"h3k27ac": "H3K27ac.RPM", "dnase": "DHS.RPM"}
 
 #: Where a long pass checkpoints itself, so a dropped connection costs one BAM and not the run.
-CHECKPOINTS = Path(".git/genomeos-rpm")
+#: Scratch for long streaming passes. NOT under `.git`: a linked worktree's `.git` is a FILE, so
+#: `mkdir`ing a directory inside it dies with NotADirectoryError and manifest_rebuild never reaches its
+#: comparison. A result that gates money has to rebuild in a clean worktree, so the scratch lives in the
+#: system temp dir instead, and NOT under `data/` either -- a cache there would be read back as an
+#: undeclared input under data/ on the next run. The location is recorded in the manifest.
+SCRATCH = Path(tempfile.gettempdir()) / "genomeos-rpm"
+
+CHECKPOINTS = SCRATCH
 
 OWN_CODE = (
     "genomeos/attribution/rpm.py",

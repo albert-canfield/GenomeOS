@@ -36,6 +36,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import tempfile
 import time
 from collections import defaultdict
 from pathlib import Path
@@ -72,7 +73,14 @@ EXPERIMENTS = {"DHS.RPM": "ENCSR000EPM", "H3K27ac.RPM": "ENCSR000AOQ"}
 #: The labels the registered test actually scores, kept apart in the report.
 SCORED = ("positive", "negative")
 
-CACHE = Path(".git/genomeos-rpm/recon-astrocyte.json")
+#: Scratch for long streaming passes. NOT under `.git`: a linked worktree's `.git` is a FILE, so
+#: `mkdir`ing a directory inside it dies with NotADirectoryError and manifest_rebuild never reaches its
+#: comparison. A result that gates money has to rebuild in a clean worktree, so the scratch lives in the
+#: system temp dir instead, and NOT under `data/` either -- a cache there would be read back as an
+#: undeclared input under data/ on the next run. The location is recorded in the manifest.
+SCRATCH = Path(tempfile.gettempdir()) / "genomeos-rpm"
+
+CACHE = SCRATCH / "recon-astrocyte.json"
 
 #: The peak-call censoring the original no-go measured, quoted so the comparison is exact.
 PEAK_CENSORING = {
@@ -249,6 +257,7 @@ def manifest(columns: dict[str, Any], pairs: list[dict], elements: list) -> dict
             "money_spent": 0,
             "deletion_values_read": 0,
             "auprc_computed": 0,
+            "scratch_directory": str(SCRATCH),
         },
         "exclusions": [
             "no AlphaGenome request is sent and this script has no code path that could send one",

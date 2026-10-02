@@ -715,3 +715,144 @@ class TestTheSenderProvesItSendsTheReviewedList:
 
     def test_the_reason_the_sender_recomputes_is_recorded(self):
         assert "a review of nothing" in astrorun.THE_REVIEWED_LIST_IS_THE_SENT_LIST
+
+
+class TestAlbertsConditionsAreEachTheirOwnRefusal:
+    """By PLANTING, with the authorisation string PRESENT in every test.
+
+    The failure this guards against is the one found twice already today: a guard that protects the
+    prose and lets the substance through. If any of these passed with the string recorded, Albert's
+    conditions would have become decoration.
+    """
+
+    DIGEST_SOURCE = [
+        {
+            "chrom": "chr1",
+            "element": f"E{i}",
+            "start": i,
+            "end": i + 1,
+            "serves_genes": ["G"],
+            "serves_labels": ["negative"],
+        }
+        for i in range(astrorun.ASTROREG2_CAP)
+    ]
+
+    @pytest.fixture
+    def authorised(self, monkeypatch):
+        """Albert's words recorded. Every other clause must still be checked."""
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+
+    @pytest.fixture
+    def good(self, tmp_path):
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        reg = tmp_path / "astroreg2_registration.json"
+        reg.write_text("{}")
+        return {
+            "activity_result": act,
+            "registration": reg,
+            "ledger": tmp_path / "l.jsonl",
+            "signoff": 'the supervisor wrote "dry run reviewed" at 2026-10-02T13:00:00',
+            "plan": self.DIGEST_SOURCE,
+            "reviewed_digest": astrorun.plan_digest(self.DIGEST_SOURCE),
+            "committed": lambda p: True,
+        }
+
+    def test_with_everything_satisfied_it_returns(self, authorised, good):
+        """The positive control: without it, a refusal proves nothing."""
+        out = astrorun.may_send(**good)
+        assert out["may_send"] is True
+        assert out["cap"] == 1232
+        assert sorted(out["clauses_checked"]) == ["activity", "logged", "one_run", "scope", "signoff"]
+
+    def test_the_slot_is_empty_and_the_relayed_text_is_kept_apart(self):
+        assert astrorun.ASTROREG2_AUTHORISATION is None
+        assert "I approve 1,232" in astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED
+        assert "not that person's approval" in astrorun.WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL
+
+    def test_without_the_authorisation_recorded_nothing_sends(self, good):
+        with pytest.raises(astrorun.NoAuthorisationError):
+            astrorun.may_send(**good)
+
+    def test_PLANTED_activity_result_absent(self, authorised, good, tmp_path):
+        good["activity_result"] = tmp_path / "missing.json"
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "under Amendment 2" in str(exc.value), "the refusal must quote the clause"
+        assert "not present" in str(exc.value)
+
+    def test_PLANTED_activity_result_present_but_not_committed(self, authorised, good):
+        good["committed"] = lambda p: False
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "NOT COMMITTED" in str(exc.value)
+        assert "under Amendment 2" in str(exc.value)
+
+    def test_PLANTED_activity_produced_under_a_different_rule(self, authorised, good):
+        wrong = dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT) | {"commit": "0" * 40}
+        Path(good["activity_result"]).write_text(json.dumps({"rule": {"producer": wrong}}))
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "different rule" in str(exc.value)
+        assert "0000000" in str(exc.value), "the refusal names what it found"
+
+    def test_PLANTED_activity_naming_no_rule_at_all(self, authorised, good):
+        Path(good["activity_result"]).write_text(json.dumps({"rule": {}}))
+        with pytest.raises(astrorun.SendRefusedError):
+            astrorun.may_send(**good)
+
+    def test_PLANTED_supervisor_signoff_absent(self, authorised, good):
+        good["signoff"] = None
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "dry run reviewed" in str(exc.value)
+        assert "may not be anticipated" in str(exc.value)
+
+    def test_PLANTED_signoff_paraphrased_rather_than_quoted(self, authorised, good):
+        good["signoff"] = "the supervisor approved the dry run"
+        with pytest.raises(astrorun.SendRefusedError):
+            astrorun.may_send(**good)
+
+    def test_PLANTED_a_second_run_after_a_completed_one(self, authorised, good):
+        astrorun.mark_run_complete(good["ledger"], requests=1232)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "One run" in str(exc.value)
+        assert "already records a completed run" in str(exc.value)
+
+    def test_a_completed_run_is_terminal_and_not_an_exhausted_counter(self, tmp_path):
+        """The two facts are different and a reset would look like the former."""
+        led = tmp_path / "l.jsonl"
+        b = astrorun.RequestBudget(led, cap=3)
+        b.take(chrom="chr1", element="e")
+        assert astrorun.run_already_completed(led) is False, "a partial run is not a completed one"
+        astrorun.mark_run_complete(led, requests=1)
+        assert astrorun.run_already_completed(led) is True
+        assert "terminal state and not as an exhausted counter" in astrorun.ONE_RUN_IS_TERMINAL
+
+    def test_PLANTED_the_list_is_the_wrong_length_for_the_approved_scope(self, authorised, good):
+        good["plan"] = self.DIGEST_SOURCE[:-1]
+        good["reviewed_digest"] = astrorun.plan_digest(good["plan"])
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "1231 requests and the approval names 1232" in str(exc.value)
+
+    def test_PLANTED_one_element_changed_so_it_is_not_the_reviewed_list(self, authorised, good):
+        tampered = [dict(r) for r in self.DIGEST_SOURCE]
+        tampered[5]["element"] = "E5-but-different"
+        good["plan"] = tampered
+        with pytest.raises(ValueError, match="not the reviewed"):
+            astrorun.may_send(**good)
+
+    def test_PLANTED_the_registration_the_approval_names_is_absent(self, authorised, good, tmp_path):
+        good["registration"] = tmp_path / "gone.json"
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "astroreg2_registration at 0f4c372" in str(exc.value)
+
+    def test_every_refusal_quotes_the_clause_it_enforces(self, authorised, good, tmp_path):
+        """A refusal saying only 'not authorised' teaches nothing and can be cleared by accident."""
+        good["signoff"] = None
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**good)
+        assert "Albert's approval is CONDITIONAL on" in str(exc.value)

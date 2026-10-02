@@ -444,6 +444,177 @@ def astroreg2_budget(ledger: Path | str) -> RequestBudget:
     return RequestBudget(ledger, cap=ASTROREG2_CAP)
 
 
+#: The text of Albert's AstroREG-2 approval AS RELAYED to this lane, recorded as relayed and NOT as the
+#: approval itself. It is kept apart from `ASTROREG2_AUTHORISATION` on purpose: see
+#: `WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL`.
+ASTROREG2_AUTHORISATION_AS_RELAYED = (
+    "Albert: I approve 1,232 AlphaGenome requests for AstroREG-2 as registered "
+    "(astroreg2_registration at 0f4c372): after the astrocyte activity is computed under Amendment 2's "
+    'rule and the supervisor writes "dry run reviewed". One run, every request logged.'
+)
+
+#: Why the relayed text does not populate the approval slot.
+WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL = (
+    "this lane received the text above through another agent, not from Albert. An agent's account of what "
+    "a person approved is not that person's approval, and transcribing it into the slot the send path "
+    "reads would manufacture a record of consent this lane cannot verify. So the slot stays empty and the "
+    "relayed text is kept beside it, labelled. Nothing is lost operationally: every other clause of the "
+    "approval is encoded and refuses on its own, and the supervisor sign-off is absent too, so the send "
+    "path refuses on several grounds at once. What is preserved is that the record does not assert "
+    "something about Albert that only a relay supports"
+)
+
+#: Each clause of the approval, quoted, so a refusal can name the clause it enforces rather than saying
+#: "not authorised", which teaches nothing and can be cleared by accident.
+ASTROREG2_CLAUSES = {
+    "scope": '"I approve 1,232 AlphaGenome requests for AstroREG-2 as registered '
+    '(astroreg2_registration at 0f4c372)"',
+    "activity": '"after the astrocyte activity is computed under Amendment 2\'s rule"',
+    "signoff": '"and the supervisor writes \\"dry run reviewed\\""',
+    "one_run": '"One run"',
+    "logged": '"every request logged"',
+}
+
+#: The rule the activity result must have been produced under, as astroreg2_registration at 0f4c372
+#: records it. Identified by CONTENT, not by a file existing.
+AMENDMENT_2_RULE_FINGERPRINT = {
+    "repository": "mayasheth/chrom-annotate",
+    "commit": "91cda73ebe3a19153a582cab18cbf7ff70d85cfc",
+    "file": "workflow/scripts/neighborhoods.py",
+}
+
+#: The registration the approval names, bound by content so its object cannot drift after the fact.
+ASTROREG2_REGISTRATION_COMMIT = "0f4c372"
+
+#: The ledger event that makes a completed run a TERMINAL state.
+RUN_COMPLETE_EVENT = "run_complete"
+
+ONE_RUN_IS_TERMINAL = (
+    "'One run' is enforced as a terminal state and not as an exhausted counter. A counter at its cap and "
+    "a run that has already happened are different facts, and a reset would look like the former while "
+    "being the latter. So a finished run appends an `event: run_complete` line and the send path refuses "
+    "BY NAME on finding one, whatever the count says"
+)
+
+
+class SendRefusedError(RuntimeError):
+    """A clause of Albert's approval is not satisfied, so nothing may be sent."""
+
+
+def _refuse(clause: str, detail: str) -> None:
+    raise SendRefusedError(
+        f"Albert's approval is CONDITIONAL on {ASTROREG2_CLAUSES[clause]} and that is not satisfied: {detail}"
+    )
+
+
+def mark_run_complete(ledger: Path | str, **row: Any) -> None:
+    """Record that the one authorised run has happened. Makes a second one refusable by name."""
+    path = Path(ledger)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a") as fh:
+        fh.write(
+            json.dumps({**row, "event": RUN_COMPLETE_EVENT, "t": time.strftime("%Y-%m-%dT%H:%M:%S")}) + "\n"
+        )
+
+
+def run_already_completed(ledger: Path | str) -> bool:
+    """Whether a run has already finished, read from the ledger by event NAME."""
+    path = Path(ledger)
+    if not path.exists():
+        return False
+    for line in path.read_text(errors="replace").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict) and row.get("event") == RUN_COMPLETE_EVENT:
+            return True
+    return False
+
+
+def may_send(
+    *,
+    activity_result: Path | str,
+    registration: Path | str,
+    ledger: Path | str,
+    signoff: str | None,
+    plan: list[dict[str, Any]],
+    reviewed_digest: str,
+    committed: Any = None,
+) -> dict[str, Any]:
+    """Every clause of Albert's approval as its own refusal. Returns only if ALL of them hold.
+
+    Recording the authorisation text does NOT by itself make this return: the approval is conditional,
+    and a guard that lifted on a non-empty string would convert a conditional approval into an
+    unconditional one, silently and in the direction of spending money.
+
+    `committed` is a predicate taking a path and saying whether it is committed, injected so the check
+    can be tested without a repository.
+    """
+    if not ASTROREG2_AUTHORISATION:
+        raise NoAuthorisationError(
+            f"no AstroREG-2 approval is recorded. {NO_AUTHORISATION_MEANS_NO_SEND} "
+            f"{WHY_THE_RELAYED_TEXT_IS_NOT_THE_APPROVAL}"
+        )
+
+    reg = Path(registration)
+    if not reg.exists():
+        _refuse("scope", f"the registration {reg} the approval names is not present")
+    if len(plan) != ASTROREG2_CAP:
+        _refuse(
+            "scope",
+            f"the list holds {len(plan)} requests and the approval names {ASTROREG2_CAP}",
+        )
+    check_is_the_reviewed_plan(plan, reviewed_digest)
+
+    act = Path(activity_result)
+    if not act.exists():
+        _refuse("activity", f"the astrocyte activity result {act} is not present")
+    if committed is not None and not committed(act):
+        _refuse(
+            "activity",
+            f"{act} is present but NOT COMMITTED. The clause requires the activity to have been "
+            "computed, and a result no commit holds is not a computation anyone can check",
+        )
+    body = json.loads(act.read_text())
+    found = (body.get("rule") or {}).get("producer") or {}
+    for key, want in AMENDMENT_2_RULE_FINGERPRINT.items():
+        got = found.get(key)
+        if got != want:
+            _refuse(
+                "activity",
+                f"the committed activity result records {key}={got!r}, not amendment 2's {want!r}. It "
+                "was produced under a different rule",
+            )
+
+    if not signoff or "dry run reviewed" not in signoff:
+        _refuse(
+            "signoff",
+            "no supervisor sign-off containing the words 'dry run reviewed' is recorded. It may not be "
+            "anticipated, paraphrased or represented by a flag: the actual text, or the refusal stands",
+        )
+
+    if run_already_completed(ledger):
+        _refuse("one_run", f"the ledger already records a completed run. {ONE_RUN_IS_TERMINAL}")
+
+    budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
+    if budget.charged() != budget.sent:
+        _refuse(
+            "logged",
+            f"the ledger records {budget.charged()} charges and the budget counts {budget.sent}: the "
+            "log and the money disagree, so not every request is logged",
+        )
+    return {
+        "may_send": True,
+        "cap": ASTROREG2_CAP,
+        "requests": len(plan),
+        "digest": reviewed_digest,
+        "clauses_checked": sorted(ASTROREG2_CLAUSES),
+    }
+
+
 # ------------------------------------------- the sender must prove it is sending the reviewed list
 
 #: Why the sender recomputes the list and compares a digest rather than trusting the reviewed file.
