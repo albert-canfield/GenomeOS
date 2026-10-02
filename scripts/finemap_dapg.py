@@ -1184,6 +1184,15 @@ def cost_registration_payload() -> dict[str, Any]:
     }
 
 
+#: The key `carry_forward_registered_terms` writes itself, excluded from its own comparison.
+DRIFT_KEY = "terms_that_would_have_moved_on_regeneration"
+
+#: Inside `result_manifest`, the fields that carry REGISTERED decisions rather than facts about the run.
+#: These are protected like any other registered term. `inputs`, `code`, `code_cleanliness`,
+#: `traced_inputs` and `sources` are NOT: they must describe the run that is writing, not an older one.
+PROTECTED_MANIFEST_FIELDS = ("parameters", "exclusions", "partitions")
+
+
 def carry_forward_registered_terms(fresh_payload: dict[str, Any]) -> dict[str, Any]:
     """Keep every term of an already-committed cost registration exactly as it was registered.
 
@@ -1214,19 +1223,41 @@ def carry_forward_registered_terms(fresh_payload: dict[str, Any]) -> dict[str, A
     old = json.loads(blob)
     out: dict[str, Any] = {}
     would_have_differed: dict[str, Any] = {}
-    for key, value in fresh_payload.items():
-        if key in old and key != "result_manifest":
-            if old[key] != value:
-                would_have_differed[key] = {
-                    "as_registered": old[key],
-                    "recomputed_now": value,
-                    "kept": "as_registered",
-                }
-            out[key] = old[key]
-        else:
-            out[key] = value
+
+    def protect(path: str, registered: Any, recomputed: Any) -> Any:
+        if registered != recomputed:
+            would_have_differed[path] = {
+                "as_registered": registered,
+                "recomputed_now": recomputed,
+                "kept": "as_registered",
+            }
+        return registered
+
+    # The UNION of both key sets, not just the fresh one: a registered term that newer code no longer
+    # emits would otherwise vanish without a word, which is the same silent-loss failure this function
+    # exists to stop. Such a key is restored AND flagged, with its recomputed value given as absent.
+    for key in list(fresh_payload) + [k for k in old if k not in fresh_payload]:
+        if key == DRIFT_KEY:
+            continue  # this function's own output, not a registered term
+        if key not in old:
+            out[key] = fresh_payload[key]
+            continue
+        if key not in fresh_payload:
+            out[key] = protect(key, old[key], "<absent: this writer no longer emits the key>")
+            continue
+        if key != "result_manifest":
+            out[key] = protect(key, old[key], fresh_payload[key])
+            continue
+        # The manifest is part registered decision and part fact about THIS run, so it is split rather
+        # than exempted wholesale. Exempting it wholesale left every floor and bound in
+        # `parameters` unprotected, which is the opposite of what this function is for.
+        merged = dict(fresh_payload[key])
+        for field in PROTECTED_MANIFEST_FIELDS:
+            if field in old[key] and field in merged:
+                merged[field] = protect(f"result_manifest.{field}", old[key][field], merged[field])
+        out[key] = merged
     if would_have_differed:
-        out["terms_that_would_have_moved_on_regeneration"] = {
+        out[DRIFT_KEY] = {
             "why_this_is_here": (
                 "these keys are RE-DERIVED by the writer, so running it again after the read changed "
                 "them. They are kept as they were registered and the recomputed values are shown beside "

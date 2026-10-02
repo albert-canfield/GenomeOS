@@ -398,3 +398,69 @@ def test_carry_forward_is_a_no_op_before_the_first_commit() -> None:
     finally:
         subprocess.run = real
     assert isinstance(types.SimpleNamespace(), object)
+
+
+# --- the carry-forward's two gaps, each proved closed by planting a real drift -----------------------
+
+
+def _carry_against(committed: dict, fresh: dict):
+    """Run the carry-forward with a stubbed committed blob."""
+    import json
+    import subprocess
+    import types
+
+    real = subprocess.run
+    subprocess.run = lambda cmd, *a, **k: types.SimpleNamespace(stdout=json.dumps(committed))
+    try:
+        return fd.carry_forward_registered_terms(fresh)
+    finally:
+        subprocess.run = real
+
+
+def test_a_registered_term_newer_code_stops_emitting_is_restored_and_flagged() -> None:
+    """Iterating only the fresh payload dropped such a key without a word - the same silent loss."""
+    out = _carry_against(
+        {"kept": 1, "forgotten": {"floor": 30}},
+        {"kept": 1},
+    )
+    assert "forgotten" in out, "a registered term vanished"
+    assert out["forgotten"] == {"floor": 30}
+    drift = out[fd.DRIFT_KEY]
+    assert "forgotten" in drift["keys"]
+    assert "absent" in str(drift["detail"]["forgotten"]["recomputed_now"])
+
+
+def test_a_floor_moved_inside_the_manifest_parameters_is_caught() -> None:
+    """Exempting result_manifest wholesale left every floor and bound in it unprotected."""
+    out = _carry_against(
+        {"result_manifest": {"parameters": {"gene_matched_floor": 30, "byte_bound_mb": 170.4}}},
+        {"result_manifest": {"parameters": {"gene_matched_floor": 5, "byte_bound_mb": 9999}}},
+    )
+    params = out["result_manifest"]["parameters"]
+    assert params["gene_matched_floor"] == 30, "a floor was allowed to move"
+    assert params["byte_bound_mb"] == 170.4, "a bound was allowed to move"
+    assert "result_manifest.parameters" in out[fd.DRIFT_KEY]["keys"]
+
+
+def test_the_runs_own_manifest_fields_are_not_frozen() -> None:
+    """inputs, code and the trace must describe the run that is writing, not an older one."""
+    out = _carry_against(
+        {"result_manifest": {"inputs": ["old"], "code": {"git_sha": "OLD"}, "parameters": {"a": 1}}},
+        {"result_manifest": {"inputs": ["new"], "code": {"git_sha": "NEW"}, "parameters": {"a": 1}}},
+    )
+    m = out["result_manifest"]
+    assert m["inputs"] == ["new"], "freezing inputs would make the manifest describe another run"
+    assert m["code"]["git_sha"] == "NEW"
+    assert fd.DRIFT_KEY not in out, "nothing registered moved, so nothing should be flagged"
+
+
+def test_the_drift_key_is_not_treated_as_a_registered_term() -> None:
+    """The function's own output must not be carried forward as if it were a registered decision."""
+    out = _carry_against({"a": 1, fd.DRIFT_KEY: {"keys": ["stale"]}}, {"a": 1})
+    assert fd.DRIFT_KEY not in out or out[fd.DRIFT_KEY].get("keys") != ["stale"]
+
+
+def test_protected_manifest_fields_are_the_registered_ones_only() -> None:
+    assert fd.PROTECTED_MANIFEST_FIELDS == ("parameters", "exclusions", "partitions")
+    for run_field in ("inputs", "code", "code_cleanliness", "traced_inputs", "sources"):
+        assert run_field not in fd.PROTECTED_MANIFEST_FIELDS
