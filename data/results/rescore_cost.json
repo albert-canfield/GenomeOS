@@ -1,0 +1,3736 @@
+{
+  "result": "rescore_cost",
+  "date": "2026-10-02",
+  "lane": "lane-rescore",
+  "question": "what it would cost, in model requests, to make the direction test on extractor v2's increase-derived links answerable, counted at zero requests over a population stated without reference to the no-go, with the two directions apart and the ceiling of the purchase against both imported floors",
+  "registered_in_code_before_this_costing": "genomeos/attribution/rescore_cost.py",
+  "registration": {
+    "lane": "lane-rescore",
+    "registered": "2026-10-02",
+    "what_this_is": "a costing of the two arms that lane-reptest's no-go leaves open, in model requests, taken at zero requests. It is not a purchase, not an authorisation to purchase, not a direction, not an agreement rate and not a test. No request is sent by this lane under any outcome",
+    "acts_on": {
+      "lane": "lane-reptest",
+      "result": "data/results/reptest_answerable.json",
+      "commits": {
+        "the answerability module, committed before the count": "365c87e",
+        "the answerability runner": "6877f01",
+        "the answerability result": "1734d95"
+      },
+      "figures": {
+        "increase_derived_links": 48,
+        "answerable_in_its_own_cell": 21,
+        "independent_loci_of_the_answerable_links": 13,
+        "the_gene_is_not_in_the_scorers_window_at_this_element": 18,
+        "the_cache_carries_no_track_of_this_cell": 9,
+        "the_element_is_absent_from_the_cache_archive": 0,
+        "the_gene_was_scored_but_carries_no_entry_on_this_cells_track": 0,
+        "the_cached_value_is_exactly_zero_so_it_carries_no_direction": 0
+      },
+      "no_go_carried_verbatim": "the answerable increase-derived links are below an imported floor: a NO-GO. No direction is read, no agreement rate is computed, no interval is taken, no registration of a test is written and no floor is moved. The answerable set is not widened by substituting a cell, a gene, an element or a second cache, and the two arms are not pooled to reach a floor. The count goes on the record with the margin it falls short by, because a reader is owed the margin and NOT because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot"
+    },
+    "follows_a_no_go_whose_outcome_was_never_read": "this costing follows a BLINDED FEASIBILITY NO-GO whose direction outcome was NEVER READ. lane-reptest stopped at the gate: no direction was taken, no agreement rate computed, no balanced accuracy formed and no interval drawn, on any arm, before or after the count. That is what makes a purchase of more data admissible rather than post-hoc - the scientific outcome does not exist to be chosen around. It is recorded here and not in a covering note, because a reader deciding whether to spend needs it beside the number",
+    "the_shortfall_may_not_be_bought": "the shortfall is not the population. A set defined as 'the links that were missing' is defined BY the count that refused the test, and buying it would choose a population by a feasibility outcome even though no scientific outcome was read. So the population costed here is stated by a rule that can be written down without reference to the no-go at all, and the rule is applied to every link it admits - including links that are already answerable and links in the other arm, which cost requests and do not help the arm that was short. Selecting WHICH links to buy by anything outcome-related, or buying only the gap, is what is refused",
+    "population_rule_cell_arm": "EVERY measured significant link the committed extractor emits under v2 whose own cell is not one of the cell tracks the finished sweep kept. The rule names no count, no arm, no floor and no outcome: it is a property of the cell, and it admits every link in such a cell whichever direction the measurement had. Both directions are costed and reported APART, because a purchase that mostly buys decreases is a different proposition from one that buys increases, and the arm that was short is the increase arm",
+    "cells_not_covered_is_computed_not_inherited": "which cells the sweep does not cover is computed from the links themselves against `direction_link.CACHED_CELLS`, and NOT read from `direction_link.CELLS_NOT_CACHED`. That constant is the pair of cells the increase arm happened to carry ('WTC11', 'HCT116') and it does not name every uncovered cell the measured population holds: the decrease arm also holds Jurkat, which the sweep covers no better. Inheriting the constant would have costed a population defined by the arm that was short, which is the thing this costing may not do",
+    "population_rule_window_arm": "EVERY measured significant link the extractor emits under v2 whose tested gene's transcription start lies outside the window the sweep scored at that link's own element. This rule is also statable without reference to the no-go - it is a geometric property of the element and the benchmark's own TSS - so the window arm is NOT refused on admissibility. It is refused on a service limit, which is a harder refusal: see `WINDOW_ARM_IS_CLOSED_ON_A_SERVICE_LIMIT`",
+    "window_arm_is_closed_on_a_service_limit": "the window arm cannot be bought at any price and for any population. The sweep already asks at 1,048,576 bases, the largest of the four widths the client accepts, and a request outside that set is refused by the client before it is sent. So there is no wider window to buy for any link, however the population is defined, and the cost of this arm is not a number of requests: it is NO AVAILABLE REQUEST. The population is still counted, because the size of what cannot be bought is the useful figure",
+    "the_registration_that_would_spend_this_is_a_new_one": "nothing here registers a purchase or a test. A purchase would need its own registration, with its population rule, its floors and its readings fixed BEFORE any request is sent, and this lane does not write it. This lane costs it",
+    "request_unit": "ONE MODEL REQUEST PER ELEMENT. One request deletes one element from its window and returns every gene in that window on every track the scorer's track table carries, so a request is per element and NOT per element per cell and NOT per element per gene. Which cell tracks are kept per gene is decided after the answer is in hand, by the `cells` argument of `aggregate`, so a cell the sweep did not keep costs that element's request again - one request, not one per cell. An element whose answer is already cached costs nothing, because `score_element` returns the cached answer without a request; an element whose cached answer lacks the cell wanted must be asked again, because the tracks the sweep did not keep were never written down",
+    "request_unit_read_from": {
+      "one request per element": "genomeos/predict/enhancer_target.py, module docstring: 'One request per element, about eight seconds'",
+      "the chain that produced the sweep counts it the same way": "scripts/enhancer_targets_all.py, module docstring: 'about 12,000 elements on chr21, one request each, cached per element'",
+      "a cached element costs no request": "genomeos/predict/enhancer_target.py, `score_element`: 'Cached per element id; a cached answer is returned without a request', and the body asks the scorer only when `load_cached` is None",
+      "one request carries every gene and every track": "genomeos/predict/alphagenome_adapter.py, `_live_scorer`: one `client.score_variant` call per scorer call, and the response is iterated over every gene and every track",
+      "the cells are a post-processing filter and not a request dimension": "genomeos/predict/enhancer_target.py, `aggregate(effects, cells=CELLS)`: the per-cell values are kept for the names in `cells` out of an answer that already holds all of them, and `CELLS` is the sweep's four",
+      "the HCT116 precedent used this unit on this code path": "scripts/crispri_hct116.py, module docstring: 'One deletion request per registry element overlapping a held-out HCT116 pair', with `KEPT_CELLS = (*CELLS, CELL)` - the cells widened, the unit unchanged"
+    },
+    "request_unit_is_checked_not_carried_over": "the AstroREG registration counted 'one request per registry element overlapping a covered pair'. That is the same unit - one request per element - with a different denominator, because it was counting elements selected by overlap with a screen pair. It is not carried over as a figure and its waste fraction is not transferred: this lane counts its own elements, reports how many of its requests serve no link the test could score, and names the two precedents beside its own figure rather than inheriting either one's ratio",
+    "window_used_by_the_sweep": 1048576,
+    "supported_sequence_lengths": [
+      16384,
+      131072,
+      524288,
+      1048576
+    ],
+    "max_supported_window": 1048576,
+    "window_is_at_the_maximum": "the committed scorer already asks at the widest window the service accepts. `AlphaGenomeAdapter._live_scorer` resizes the variant's reference interval to `dna_client.SEQUENCE_LENGTH_1MB` (1,048,576 bases), and that is the largest of the four lengths `dna_client.SUPPORTED_SEQUENCE_LENGTHS` holds; `dna_client` checks the width against that set and raises for any other. So 'score it at a wider window' is not a thing that can be bought: for a link whose tested gene lies outside the 1 Mb window there is no request to send at any price, and the cost of that arm is not a large number of requests but NO AVAILABLE REQUEST",
+    "window_centring": "`genome.Interval.resize` centres the new width on the interval's own centre, so the window the sweep scored at an element is [centre - width/2, centre + width/2) for width 1,048,576, where the centre is that of the variant's reference interval as `score_element` builds it: the element's bases with one anchor base before them, [start - 1, end). The window is computed here from the element's own scored interval as the cache recorded it, not from the row's interval, so the geometry is the run's and not a reconstruction of it",
+    "window_test_is_necessary_not_sufficient": "a TSS inside the window is what the window CAN reach; it is not a guarantee that the service's gene scorer would emit a row for that gene, and a TSS outside the window is what the window CANNOT reach. The rule is therefore used in one direction only: outside the widest supported window means no request can answer it, which is a statement about the service's accepted interval and not about the gene. Inside the window is reported as 'the window reaches it' and never as 'a request would answer it'",
+    "tss_is_the_benchmarks": "the gene's position is the benchmark's own `startTSS` for THAT pair, read through `crispri.Pair.tss`, and the distance is the benchmark's own `distanceToTSS` read through `crispri.Pair.distance`, both from the table the pair came from. No TSS is looked up elsewhere, no annotation is joined in, and the benchmark's distance is reported beside the offset this lane computes so a reader can see they agree",
+    "purchasability": {
+      "purchasable: one request per element, with this cell kept": "the sweep's record at this element already names the link's tested gene, and what is missing is only the link's own cell track, which the sweep did not keep. One request for this element with that cell among the kept cells would write a value for it. This is the HCT116 arm's own code path with the cells widened, which is how that arm was built",
+      "unpurchasable at any price: the gene lies outside the widest window the service accepts": "the tested gene's transcription start lies further from the element than the widest window the client accepts reaches, so no request can place that gene in the scorer's window. There is nothing to buy: this is not an expensive link, it is an unavailable one",
+      "not a purchase: the gene is inside the window the sweep already scored, under another symbol": "the tested gene's transcription start lies INSIDE the window the sweep already scored at this element, and the record names no gene by the benchmark's symbol. A request would not change that, because the window already reached the place. The record is reported with the symbols it does name, and whether the registered predicate may match a gene under a second symbol is a question about the predicate and not a cost. This lane does not amend the predicate, does not match an alias and does not count such a link as answerable"
+    },
+    "purchasability_is_exhaustive": "every one of the 27 links lane-reptest could not answer falls in exactly one of these three, and the result asserts they sum to 27 and to the two arms' counts separately. The arms are reported apart, and a purchasable count is never quoted as an answerable count",
+    "ceiling_rule": "the CEILING of a purchase is the answerable count that would follow if every purchasable link's request returned a value that is not exactly zero on that link's own cell track: the links lane-reptest already answers, plus one per purchasable link, and the independent loci of that set by the same imported rule. It is an upper bound and the gate is taken on it, because a ceiling that misses a floor settles the question without any purchase: no outcome of the requests can reach the floor",
+    "most_generous_ceiling_rule": "the MOST GENEROUS ceiling: every purchasable request returns a value that is not exactly zero on the right track, AND the naming gap is closed at no cost by a predicate that matched the tested gene under a current symbol as well as the benchmark's. Both halves are assumptions. The second would be an amendment to a registered predicate, which this lane does not make, does not recommend here and has no authority to make; it is added so that 'but what if you also fixed the symbols' is answered in the same result rather than later",
+    "ceiling_is_not_a_count": "the ceiling is not a count of answerable links and may not be quoted as one. It is what the answerable count could at most become: every purchasable request is assumed to return a value that is not exactly zero on the right track, which is not established for any of them and cannot be established without sending the request. lane-reptest's own count of links excluded for an exactly-zero value is 0 of 48, which is a fact about the links it could read and NOT a rate, a probability or a prediction about a link it could not",
+    "ceiling_readings": [
+      "the ceiling of the purchase is at or above both imported floors: the purchase COULD make the test answerable, and whether it does depends on what the requests return. Nothing here authorises the purchase, registers a test or reads a direction",
+      "the ceiling of the purchase is below an imported floor: buying every request that CAN be bought would leave the direction test still unanswerable. The purchase would buy a larger number that still cannot be tested, so the costing's answer is that the money does not buy the test. This is the headline of the costing and not a caveat on it. The margin is reported because a reader is owed it and NOT because a small margin is better than a large one; a ceiling short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot"
+    ],
+    "there_is_no_third": true,
+    "forbidden_of_a_short_ceiling": [
+      "close",
+      "promising",
+      "nearly enough",
+      "a good start",
+      "enough for a pilot"
+    ],
+    "floors_are_imported": "both floors are imported through `reptest`, which imports them from `genomeos.attribution.fresh.POSITIVE_FLOOR` and from `genomeos.attribution.fresh.LOCUS_FLOOR`, which is `genomeos.attribution.cell2.POOLED_LOCUS_FLOOR`. This lane compares a ceiling against them and does not move, recompute, reinterpret or pool its way around either one. A costing that lowered a floor would be costing a different question",
+    "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+    "precedent_sources": {
+      "HCT116 second cell type, delivered": "data/results/crispri_published_v2.json, second_cell_type_hct116: `requests.delivered_in_the_carried_run.sent` and `as_carried.covered_pairs`",
+      "WTC11 second cell type, costed and not bought": "data/results/crispri_published_v2.json, second_cell_type/cost/WTC11/requests_frozen_feature",
+      "AstroREG request plan, authorised and not sent": "data/results/astroreg_request_plan.json, `summary.requests`, `summary.requests_serving_at_least_one_scored_pair` and `summary.requests_serving_no_scored_pair`"
+    },
+    "precedents_are_read_not_quoted": "each precedent figure is read out of the result that records it, in the run that writes this costing, and the paths are declared inputs. None is typed in from a brief or from memory, because a comparison a reader cannot check is not a comparison",
+    "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+    "prohibition_is_enforced_by": "genomeos.attribution.increase_links.check_no_mechanism_claim, called on every link record this lane handles. It is not weakened, not reimplemented and not bypassed, and this lane adds no word list of its own",
+    "no_direction_is_read": "no direction, agreement rate, interval, control or test is computed here under any outcome. Whether a value exists and whether it is exactly zero is the answerability predicate's own question and is lane-reptest's; this lane reads neither a sign nor a value into any finding, and where it reports that a delivered value is not exactly zero it reports that fact and not the value, not the sign and not a comparison",
+    "count_is_not_coverage": "neither the 48 nor the answerable subset of them is a coverage figure. Each link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then took its gene and its cell FROM THAT MEASUREMENT: the population is the extractor's construction. An answerable count is smaller still and is a statement about what the cached deletion sweep holds, not about what the model covers. A reader may not read either number as coverage of the increase links, of the genes behind them or of anything else",
+    "budget": "0 model requests, no money, no downloads, no network. Every figure is read from disk or computed from what is on disk. A figure that cannot be established that way is NAMED as one that cannot, and never estimated: this lane counts what a purchase would cost and makes none",
+    "order": [
+      "1. the extractor's own v2 links, both directions, re-enumerated genome-wide and blind to every cached value",
+      "2. the two populations by their own rules: the cells the sweep does not cover, and the links whose tested gene lies outside the window the sweep scored",
+      "3. each link's tested gene's TSS, from the benchmark pairs behind that link",
+      "4. the window each would need, against the widest width the service accepts",
+      "5. the purchasability of each, exhaustive and disjoint, and the request count by element",
+      "6. the ceiling of the purchase against both imported floors, the arms apart",
+      "7. the precedents, read from the results that record them"
+    ]
+  },
+  "headline": "the ceiling of the purchase is below an imported floor: buying every request that CAN be bought would leave the direction test still unanswerable. The purchase would buy a larger number that still cannot be tested, so the costing's answer is that the money does not buy the test. This is the headline of the costing and not a caveat on it. The margin is reported because a reader is owed it and NOT because a small margin is better than a large one; a ceiling short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+  "follows_a_no_go_whose_outcome_was_never_read": "this costing follows a BLINDED FEASIBILITY NO-GO whose direction outcome was NEVER READ. lane-reptest stopped at the gate: no direction was taken, no agreement rate computed, no balanced accuracy formed and no interval drawn, on any arm, before or after the count. That is what makes a purchase of more data admissible rather than post-hoc - the scientific outcome does not exist to be chosen around. It is recorded here and not in a covering note, because a reader deciding whether to spend needs it beside the number",
+  "the_shortfall_may_not_be_bought": "the shortfall is not the population. A set defined as 'the links that were missing' is defined BY the count that refused the test, and buying it would choose a population by a feasibility outcome even though no scientific outcome was read. So the population costed here is stated by a rule that can be written down without reference to the no-go at all, and the rule is applied to every link it admits - including links that are already answerable and links in the other arm, which cost requests and do not help the arm that was short. Selecting WHICH links to buy by anything outcome-related, or buying only the gap, is what is refused",
+  "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+  "no_direction_is_read": "no direction, agreement rate, interval, control or test is computed here under any outcome. Whether a value exists and whether it is exactly zero is the answerability predicate's own question and is lane-reptest's; this lane reads neither a sign nor a value into any finding, and where it reports that a delivered value is not exactly zero it reports that fact and not the value, not the sign and not a comparison",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "population": {
+    "call": "the population counted here is every record `measured.rule_links_detail(row, 'v2')` returns whose `derived_from` is the increase label, over the rows `measured.rows` builds for each chromosome from `targets.attributed`. It is read out of the extractor and is not a join rebuilt beside it: lane-direction enumerated an equivalent population by hand from the cached pairs, and a count taken on a hand-rolled copy is a count about the copy. Whether the extractor's output and that hand-rolled population agree is reported as a comparison with both counts named, and it is not assumed in either direction. No compiled rule is consulted, no predicted value enters the eligibility step, and the extractor is called exactly as committed with no argument of its own changed",
+    "extractor": "v2",
+    "v2_links": 260,
+    "increase_derived_links": 48,
+    "decrease_derived_links": 212,
+    "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+    "count_is_not_coverage": "neither the 48 nor the answerable subset of them is a coverage figure. Each link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then took its gene and its cell FROM THAT MEASUREMENT: the population is the extractor's construction. An answerable count is smaller still and is a statement about what the cached deletion sweep holds, not about what the model covers. A reader may not read either number as coverage of the increase links, of the genes behind them or of anything else"
+  },
+  "inherited": {
+    "lane": "lane-reptest",
+    "result": "data/results/reptest_answerable.json",
+    "figures_as_read": {
+      "increase_derived_links": 48,
+      "answerable_in_its_own_cell": 21,
+      "independent_loci_of_the_answerable_links": 13,
+      "the_cache_carries_no_track_of_this_cell": 9,
+      "the_element_is_absent_from_the_cache_archive": 0,
+      "the_gene_is_not_in_the_scorers_window_at_this_element": 18,
+      "the_gene_was_scored_but_carries_no_entry_on_this_cells_track": 0,
+      "the_cached_value_is_exactly_zero_so_it_carries_no_direction": 0
+    },
+    "figures_as_registered": {
+      "increase_derived_links": 48,
+      "answerable_in_its_own_cell": 21,
+      "independent_loci_of_the_answerable_links": 13,
+      "the_gene_is_not_in_the_scorers_window_at_this_element": 18,
+      "the_cache_carries_no_track_of_this_cell": 9,
+      "the_element_is_absent_from_the_cache_archive": 0,
+      "the_gene_was_scored_but_carries_no_entry_on_this_cells_track": 0,
+      "the_cached_value_is_exactly_zero_so_it_carries_no_direction": 0
+    },
+    "figures_agree": true,
+    "increase_links_re_enumerated_here": 48,
+    "no_go_carried_verbatim": "the answerable increase-derived links are below an imported floor: a NO-GO. No direction is read, no agreement rate is computed, no interval is taken, no registration of a test is written and no floor is moved. The answerable set is not widened by substituting a cell, a gene, an element or a second cache, and the two arms are not pooled to reach a floor. The count goes on the record with the margin it falls short by, because a reader is owed the margin and NOT because a small margin is better than a large one. A count short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+    "answerable_increase_links_now": 21,
+    "independent_loci_now": 13
+  },
+  "request_unit": {
+    "unit": "ONE MODEL REQUEST PER ELEMENT. One request deletes one element from its window and returns every gene in that window on every track the scorer's track table carries, so a request is per element and NOT per element per cell and NOT per element per gene. Which cell tracks are kept per gene is decided after the answer is in hand, by the `cells` argument of `aggregate`, so a cell the sweep did not keep costs that element's request again - one request, not one per cell. An element whose answer is already cached costs nothing, because `score_element` returns the cached answer without a request; an element whose cached answer lacks the cell wanted must be asked again, because the tracks the sweep did not keep were never written down",
+    "read_from": {
+      "one request per element": "genomeos/predict/enhancer_target.py, module docstring: 'One request per element, about eight seconds'",
+      "the chain that produced the sweep counts it the same way": "scripts/enhancer_targets_all.py, module docstring: 'about 12,000 elements on chr21, one request each, cached per element'",
+      "a cached element costs no request": "genomeos/predict/enhancer_target.py, `score_element`: 'Cached per element id; a cached answer is returned without a request', and the body asks the scorer only when `load_cached` is None",
+      "one request carries every gene and every track": "genomeos/predict/alphagenome_adapter.py, `_live_scorer`: one `client.score_variant` call per scorer call, and the response is iterated over every gene and every track",
+      "the cells are a post-processing filter and not a request dimension": "genomeos/predict/enhancer_target.py, `aggregate(effects, cells=CELLS)`: the per-cell values are kept for the names in `cells` out of an answer that already holds all of them, and `CELLS` is the sweep's four",
+      "the HCT116 precedent used this unit on this code path": "scripts/crispri_hct116.py, module docstring: 'One deletion request per registry element overlapping a held-out HCT116 pair', with `KEPT_CELLS = (*CELLS, CELL)` - the cells widened, the unit unchanged"
+    },
+    "checked_not_carried_over": "the AstroREG registration counted 'one request per registry element overlapping a covered pair'. That is the same unit - one request per element - with a different denominator, because it was counting elements selected by overlap with a screen pair. It is not carried over as a figure and its waste fraction is not transferred: this lane counts its own elements, reports how many of its requests serve no link the test could score, and names the two precedents beside its own figure rather than inheriting either one's ratio",
+    "counted_over": "distinct element ids, never links"
+  },
+  "window": {
+    "used_by_the_sweep": 1048576,
+    "supported_sequence_lengths": [
+      16384,
+      131072,
+      524288,
+      1048576
+    ],
+    "max_supported_window": 1048576,
+    "the_sweep_already_asks_at_the_maximum": true,
+    "is_at_the_maximum": "the committed scorer already asks at the widest window the service accepts. `AlphaGenomeAdapter._live_scorer` resizes the variant's reference interval to `dna_client.SEQUENCE_LENGTH_1MB` (1,048,576 bases), and that is the largest of the four lengths `dna_client.SUPPORTED_SEQUENCE_LENGTHS` holds; `dna_client` checks the width against that set and raises for any other. So 'score it at a wider window' is not a thing that can be bought: for a link whose tested gene lies outside the 1 Mb window there is no request to send at any price, and the cost of that arm is not a large number of requests but NO AVAILABLE REQUEST",
+    "centring": "`genome.Interval.resize` centres the new width on the interval's own centre, so the window the sweep scored at an element is [centre - width/2, centre + width/2) for width 1,048,576, where the centre is that of the variant's reference interval as `score_element` builds it: the element's bases with one anchor base before them, [start - 1, end). The window is computed here from the element's own scored interval as the cache recorded it, not from the row's interval, so the geometry is the run's and not a reconstruction of it",
+    "tss_source": "the gene's position is the benchmark's own `startTSS` for THAT pair, read through `crispri.Pair.tss`, and the distance is the benchmark's own `distanceToTSS` read through `crispri.Pair.distance`, both from the table the pair came from. No TSS is looked up elsewhere, no annotation is joined in, and the benchmark's distance is reported beside the offset this lane computes so a reader can see they agree",
+    "necessary_not_sufficient": "a TSS inside the window is what the window CAN reach; it is not a guarantee that the service's gene scorer would emit a row for that gene, and a TSS outside the window is what the window CANNOT reach. The rule is therefore used in one direction only: outside the widest supported window means no request can answer it, which is a statement about the service's accepted interval and not about the gene. Inside the window is reported as 'the window reaches it' and never as 'a request would answer it'"
+  },
+  "cell_population": {
+    "population_rule": "EVERY measured significant link the committed extractor emits under v2 whose own cell is not one of the cell tracks the finished sweep kept. The rule names no count, no arm, no floor and no outcome: it is a property of the cell, and it admits every link in such a cell whichever direction the measurement had. Both directions are costed and reported APART, because a purchase that mostly buys decreases is a different proposition from one that buys increases, and the arm that was short is the increase arm",
+    "cells_not_covered_is_computed_not_inherited": "which cells the sweep does not cover is computed from the links themselves against `direction_link.CACHED_CELLS`, and NOT read from `direction_link.CELLS_NOT_CACHED`. That constant is the pair of cells the increase arm happened to carry ('WTC11', 'HCT116') and it does not name every uncovered cell the measured population holds: the decrease arm also holds Jurkat, which the sweep covers no better. Inheriting the constant would have costed a population defined by the arm that was short, which is the thing this costing may not do",
+    "cells_not_covered": [
+      "HCT116",
+      "Jurkat",
+      "WTC11"
+    ],
+    "cells_the_sweep_kept": [
+      "HepG2",
+      "IMR-90",
+      "K562",
+      "GM12878"
+    ],
+    "cells_not_cached_constant_names_only": [
+      "WTC11",
+      "HCT116"
+    ],
+    "links": 26,
+    "elements": 24,
+    "requests_under_the_unit": 24,
+    "requests_serving_no_link_the_test_could_score": 3,
+    "purchasability": {
+      "purchasable: one request per element, with this cell kept": 23,
+      "unpurchasable at any price: the gene lies outside the widest window the service accepts": 2,
+      "not a purchase: the gene is inside the window the sweep already scored, under another symbol": 1
+    },
+    "purchasability_sums_to_the_population": true,
+    "by_direction": {
+      "increase_derived": {
+        "links": 9,
+        "by_cell": {
+          "HCT116": 3,
+          "WTC11": 6
+        },
+        "purchasability": {
+          "purchasable: one request per element, with this cell kept": 7,
+          "unpurchasable at any price: the gene lies outside the widest window the service accepts": 2
+        },
+        "purchasable_links": 7,
+        "elements": 9,
+        "requests_if_this_direction_were_bought_alone": 9
+      },
+      "decrease_derived": {
+        "links": 17,
+        "by_cell": {
+          "HCT116": 4,
+          "Jurkat": 5,
+          "WTC11": 8
+        },
+        "purchasability": {
+          "not a purchase: the gene is inside the window the sweep already scored, under another symbol": 1,
+          "purchasable: one request per element, with this cell kept": 16
+        },
+        "purchasable_links": 16,
+        "elements": 15,
+        "requests_if_this_direction_were_bought_alone": 15
+      }
+    },
+    "directions_apart": "the two directions are reported apart because they are different propositions: the floors that refused the test are the increase arm's, so a request that makes a decrease link answerable costs the same and moves neither of them. The population rule admits both and the purchase would buy both; the costing refuses to pool them into one yield",
+    "what_this_is_not": "not a coverage figure and not an answerable count. neither the 48 nor the answerable subset of them is a coverage figure. Each link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then took its gene and its cell FROM THAT MEASUREMENT: the population is the extractor's construction. An answerable count is smaller still and is a statement about what the cached deletion sweep holds, not about what the model covers. A reader may not read either number as coverage of the increase links, of the genes behind them or of anything else",
+    "links_detail": [
+      {
+        "chrom": "chr2",
+        "element": "EH38E3353115",
+        "gene": "WBP1",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          74497875,
+          74498218
+        ],
+        "window_scored": [
+          73973758,
+          75022334
+        ],
+        "genes_in_window_of_the_scored_record": 58,
+        "tss": [
+          74458329
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -39717
+        ],
+        "benchmark_distance_to_tss": [
+          39651.0
+        ],
+        "window_width_needed": 79434,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr2/EH38E3353115.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr2",
+        "element": "EH38E3388449",
+        "gene": "SSFA2",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          181947329,
+          181947667
+        ],
+        "window_scored": [
+          181423209,
+          182471785
+        ],
+        "genes_in_window_of_the_scored_record": 16,
+        "tss": [
+          181891465
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -56032
+        ],
+        "benchmark_distance_to_tss": [
+          55742.0
+        ],
+        "window_width_needed": 112064,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": false,
+        "purchasability": "not a purchase: the gene is inside the window the sweep already scored, under another symbol"
+      },
+      {
+        "chrom": "chr2",
+        "element": "EH38E3399359",
+        "gene": "IGFBP2",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          216692108,
+          216692457
+        ],
+        "window_scored": [
+          216167994,
+          217216570
+        ],
+        "genes_in_window_of_the_scored_record": 28,
+        "tss": [
+          216632828
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -59454
+        ],
+        "benchmark_distance_to_tss": [
+          59399.0
+        ],
+        "window_width_needed": 118908,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr2/EH38E3399359.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr5",
+        "element": "EH38E3637278",
+        "gene": "IL6ST",
+        "cell": "Jurkat",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          56148479,
+          56148827
+        ],
+        "window_scored": [
+          55624364,
+          56672940
+        ],
+        "genes_in_window_of_the_scored_record": 27,
+        "tss": [
+          55994992
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -153660
+        ],
+        "benchmark_distance_to_tss": [
+          153726.0
+        ],
+        "window_width_needed": 307320,
+        "smallest_supported_window_that_would_contain_the_tss": 524288,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr5/EH38E3637278.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr6",
+        "element": "EH38E2461870",
+        "gene": "HMGA1",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          34852591,
+          34852940
+        ],
+        "window_scored": [
+          34328477,
+          35377053
+        ],
+        "genes_in_window_of_the_scored_record": 29,
+        "tss": [
+          34236873
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -615892
+        ],
+        "benchmark_distance_to_tss": [
+          615820.0
+        ],
+        "window_width_needed": 1231784,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false,
+        "purchasability": "unpurchasable at any price: the gene lies outside the widest window the service accepts"
+      },
+      {
+        "chrom": "chr8",
+        "element": "EH38E3858262",
+        "gene": "MYC",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          127216194,
+          127216543
+        ],
+        "window_scored": [
+          126692080,
+          127740656
+        ],
+        "genes_in_window_of_the_scored_record": 14,
+        "tss": [
+          127735818
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          519450
+        ],
+        "benchmark_distance_to_tss": [
+          519635.0
+        ],
+        "window_width_needed": 1038902,
+        "smallest_supported_window_that_would_contain_the_tss": 1048576,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": true,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr8/EH38E3858262.json",
+          "opened": true,
+          "names_this_gene": true,
+          "carries_this_cells_track": true,
+          "value_is_not_exactly_zero": true,
+          "no_value_is_taken_from_it": "the registered predicate names the sweep's own per-element cache and refuses this one, so this link is costed at one request regardless. What is recorded here is that the request has been delivered once already, which is a fact about money spent and not a value"
+        }
+      },
+      {
+        "chrom": "chr10",
+        "element": "EH38E2883927",
+        "gene": "PFKFB3",
+        "cell": "Jurkat",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          6348067,
+          6348416
+        ],
+        "window_scored": [
+          5823953,
+          6872529
+        ],
+        "genes_in_window_of_the_scored_record": 33,
+        "tss": [
+          6144934
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -203307
+        ],
+        "benchmark_distance_to_tss": [
+          145383.0
+        ],
+        "window_width_needed": 406614,
+        "smallest_supported_window_that_would_contain_the_tss": 524288,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr10/EH38E2883927.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr10",
+        "element": "EH38E2911872",
+        "gene": "PPIF",
+        "cell": "Jurkat",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          79323206,
+          79323552
+        ],
+        "window_scored": [
+          78799090,
+          79847666
+        ],
+        "genes_in_window_of_the_scored_record": 27,
+        "tss": [
+          79347469
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          24091
+        ],
+        "benchmark_distance_to_tss": [
+          24099.0
+        ],
+        "window_width_needed": 48184,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr10/EH38E2911872.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E2963878",
+        "gene": "RNASEH2C",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          65061157,
+          65061501
+        ],
+        "window_scored": [
+          64537040,
+          65585616
+        ],
+        "genes_in_window_of_the_scored_record": 94,
+        "tss": [
+          65720946
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          659618
+        ],
+        "benchmark_distance_to_tss": [
+          659606.0
+        ],
+        "window_width_needed": 1319238,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false,
+        "purchasability": "unpurchasable at any price: the gene lies outside the widest window the service accepts"
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1548639",
+        "gene": "CCND1",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          69293176,
+          69293525
+        ],
+        "window_scored": [
+          68769062,
+          69817638
+        ],
+        "genes_in_window_of_the_scored_record": 31,
+        "tss": [
+          69640854
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          347504
+        ],
+        "benchmark_distance_to_tss": [
+          347764.0
+        ],
+        "window_width_needed": 695010,
+        "smallest_supported_window_that_would_contain_the_tss": 1048576,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": true,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E1548639.json",
+          "opened": true,
+          "names_this_gene": true,
+          "carries_this_cells_track": true,
+          "value_is_not_exactly_zero": true,
+          "no_value_is_taken_from_it": "the registered predicate names the sweep's own per-element cache and refuses this one, so this link is costed at one request regardless. What is recorded here is that the request has been delivered once already, which is a fact about money spent and not a value"
+        }
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1548653",
+        "gene": "CCND1",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          69298482,
+          69298831
+        ],
+        "window_scored": [
+          68774368,
+          69822944
+        ],
+        "genes_in_window_of_the_scored_record": 31,
+        "tss": [
+          69640854
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          342198
+        ],
+        "benchmark_distance_to_tss": [
+          342435.0
+        ],
+        "window_width_needed": 684398,
+        "smallest_supported_window_that_would_contain_the_tss": 1048576,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": true,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E1548653.json",
+          "opened": true,
+          "names_this_gene": true,
+          "carries_this_cells_track": true,
+          "value_is_not_exactly_zero": true,
+          "no_value_is_taken_from_it": "the registered predicate names the sweep's own per-element cache and refuses this one, so this link is costed at one request regardless. What is recorded here is that the request has been delivered once already, which is a fact about money spent and not a value"
+        }
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1548926",
+        "gene": "CCND1",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          69588295,
+          69588640
+        ],
+        "window_scored": [
+          69064179,
+          70112755
+        ],
+        "genes_in_window_of_the_scored_record": 28,
+        "tss": [
+          69640854
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          52387
+        ],
+        "benchmark_distance_to_tss": [
+          52589.0
+        ],
+        "window_width_needed": 104776,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": true,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E1548926.json",
+          "opened": true,
+          "names_this_gene": true,
+          "carries_this_cells_track": true,
+          "value_is_not_exactly_zero": true,
+          "no_value_is_taken_from_it": "the registered predicate names the sweep's own per-element cache and refuses this one, so this link is costed at one request regardless. What is recorded here is that the request has been delivered once already, which is a fact about money spent and not a value"
+        }
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E2968890",
+        "gene": "CCND1",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          69636483,
+          69636830
+        ],
+        "window_scored": [
+          69112368,
+          70160944
+        ],
+        "genes_in_window_of_the_scored_record": 26,
+        "tss": [
+          69640854
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          4198
+        ],
+        "benchmark_distance_to_tss": [
+          4563.0
+        ],
+        "window_width_needed": 8398,
+        "smallest_supported_window_that_would_contain_the_tss": 16384,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": true,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E2968890.json",
+          "opened": true,
+          "names_this_gene": true,
+          "carries_this_cells_track": true,
+          "value_is_not_exactly_zero": true,
+          "no_value_is_taken_from_it": "the registered predicate names the sweep's own per-element cache and refuses this one, so this link is costed at one request regardless. What is recorded here is that the request has been delivered once already, which is a fact about money spent and not a value"
+        }
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E2969333",
+        "gene": "CCND1",
+        "cell": "HCT116",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          70080838,
+          70081186
+        ],
+        "window_scored": [
+          69556723,
+          70605299
+        ],
+        "genes_in_window_of_the_scored_record": 31,
+        "tss": [
+          69640854
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -440157
+        ],
+        "benchmark_distance_to_tss": [
+          439945.0
+        ],
+        "window_width_needed": 880314,
+        "smallest_supported_window_that_would_contain_the_tss": 1048576,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": true,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E2969333.json",
+          "opened": true,
+          "names_this_gene": true,
+          "carries_this_cells_track": true,
+          "value_is_not_exactly_zero": true,
+          "no_value_is_taken_from_it": "the registered predicate names the sweep's own per-element cache and refuses this one, so this link is costed at one request regardless. What is recorded here is that the request has been delivered once already, which is a fact about money spent and not a value"
+        }
+      },
+      {
+        "chrom": "chr12",
+        "element": "EH38E3001963",
+        "gene": "SLC2A3",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          7960735,
+          7961040
+        ],
+        "window_scored": [
+          7436599,
+          8485175
+        ],
+        "genes_in_window_of_the_scored_record": 70,
+        "tss": [
+          7936274
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -24613
+        ],
+        "benchmark_distance_to_tss": [
+          24529.0
+        ],
+        "window_width_needed": 49226,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr12/EH38E3001963.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr12",
+        "element": "EH38E3001992",
+        "gene": "SLC2A3",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          7995276,
+          7995620
+        ],
+        "window_scored": [
+          7471159,
+          8519735
+        ],
+        "genes_in_window_of_the_scored_record": 71,
+        "tss": [
+          7936274
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -59173
+        ],
+        "benchmark_distance_to_tss": [
+          59087.0
+        ],
+        "window_width_needed": 118346,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr12/EH38E3001992.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr16",
+        "element": "EH38E3176864",
+        "gene": "ITGAL",
+        "cell": "Jurkat",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          30458735,
+          30459085
+        ],
+        "window_scored": [
+          29934621,
+          30983197
+        ],
+        "genes_in_window_of_the_scored_record": 102,
+        "tss": [
+          30472658
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          13749
+        ],
+        "benchmark_distance_to_tss": [
+          13768.0
+        ],
+        "window_width_needed": 27500,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr16/EH38E3176864.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr16",
+        "element": "EH38E3176864",
+        "gene": "SEPHS2",
+        "cell": "Jurkat",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          30458735,
+          30459085
+        ],
+        "window_scored": [
+          29934621,
+          30983197
+        ],
+        "genes_in_window_of_the_scored_record": 102,
+        "tss": [
+          30446180
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -12729
+        ],
+        "benchmark_distance_to_tss": [
+          12916.0
+        ],
+        "window_width_needed": 25458,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr16/EH38E3176864.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr16",
+        "element": "EH38E1811946",
+        "gene": "PRSS8",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          31042286,
+          31042620
+        ],
+        "window_scored": [
+          30518164,
+          31566740
+        ],
+        "genes_in_window_of_the_scored_record": 103,
+        "tss": [
+          31135761
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          93309
+        ],
+        "benchmark_distance_to_tss": [
+          93376.0
+        ],
+        "window_width_needed": 186620,
+        "smallest_supported_window_that_would_contain_the_tss": 524288,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr16/EH38E1811946.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr16",
+        "element": "EH38E3177525",
+        "gene": "PRSS8",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          31130942,
+          31131292
+        ],
+        "window_scored": [
+          30606828,
+          31655404
+        ],
+        "genes_in_window_of_the_scored_record": 94,
+        "tss": [
+          31135761
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          4645
+        ],
+        "benchmark_distance_to_tss": [
+          4716.0
+        ],
+        "window_width_needed": 9292,
+        "smallest_supported_window_that_would_contain_the_tss": 16384,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr16/EH38E3177525.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr16",
+        "element": "EH38E3177546",
+        "gene": "PRSS8",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          31142210,
+          31142557
+        ],
+        "window_scored": [
+          30618095,
+          31666671
+        ],
+        "genes_in_window_of_the_scored_record": 92,
+        "tss": [
+          31135761
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -6622
+        ],
+        "benchmark_distance_to_tss": [
+          6631.0
+        ],
+        "window_width_needed": 13244,
+        "smallest_supported_window_that_would_contain_the_tss": 16384,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr16/EH38E3177546.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr17",
+        "element": "EH38E3206925",
+        "gene": "TMEM256",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          7356016,
+          7356360
+        ],
+        "window_scored": [
+          6831899,
+          7880475
+        ],
+        "genes_in_window_of_the_scored_record": 94,
+        "tss": [
+          7404136
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          47949
+        ],
+        "benchmark_distance_to_tss": [
+          47939.0
+        ],
+        "window_width_needed": 95900,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr17/EH38E3206925.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr17",
+        "element": "EH38E1844582",
+        "gene": "SAT2",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          7656940,
+          7657278
+        ],
+        "window_scored": [
+          7132820,
+          8181396
+        ],
+        "genes_in_window_of_the_scored_record": 105,
+        "tss": [
+          7627875
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -29233
+        ],
+        "benchmark_distance_to_tss": [
+          29260.0
+        ],
+        "window_width_needed": 58466,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr17/EH38E1844582.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr17",
+        "element": "EH38E1844582",
+        "gene": "TP53",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          7656940,
+          7657278
+        ],
+        "window_scored": [
+          7132820,
+          8181396
+        ],
+        "genes_in_window_of_the_scored_record": 105,
+        "tss": [
+          7687549
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          30441
+        ],
+        "benchmark_distance_to_tss": [
+          30412.0
+        ],
+        "window_width_needed": 60884,
+        "smallest_supported_window_that_would_contain_the_tss": 131072,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr17/EH38E1844582.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr20",
+        "element": "EH38E3438557",
+        "gene": "CEBPB",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          49888494,
+          49888811
+        ],
+        "window_scored": [
+          49364364,
+          50412940
+        ],
+        "genes_in_window_of_the_scored_record": 28,
+        "tss": [
+          50190734
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          302082
+        ],
+        "benchmark_distance_to_tss": [
+          301903.0
+        ],
+        "window_width_needed": 604166,
+        "smallest_supported_window_that_would_contain_the_tss": 1048576,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr20/EH38E3438557.json",
+          "opened": false
+        }
+      },
+      {
+        "chrom": "chr20",
+        "element": "EH38E2119495",
+        "gene": "CEBPB",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          50192777,
+          50193125
+        ],
+        "window_scored": [
+          49668662,
+          50717238
+        ],
+        "genes_in_window_of_the_scored_record": 36,
+        "tss": [
+          50190734
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -2216
+        ],
+        "benchmark_distance_to_tss": [
+          2396.0
+        ],
+        "window_width_needed": 4432,
+        "smallest_supported_window_that_would_contain_the_tss": 16384,
+        "the_scored_window_reaches_the_tss": true,
+        "gene_named_in_the_scored_record": true,
+        "purchasability": "purchasable: one request per element, with this cell kept",
+        "already_delivered_once": {
+          "second_cache_holds_this_element": false,
+          "path": "data/knowledge/alphagenome/elements_hct116/chr20/EH38E2119495.json",
+          "opened": false
+        }
+      }
+    ]
+  },
+  "window_population": {
+    "population_rule": "EVERY measured significant link the extractor emits under v2 whose tested gene's transcription start lies outside the window the sweep scored at that link's own element. This rule is also statable without reference to the no-go - it is a geometric property of the element and the benchmark's own TSS - so the window arm is NOT refused on admissibility. It is refused on a service limit, which is a harder refusal: see `WINDOW_ARM_IS_CLOSED_ON_A_SERVICE_LIMIT`",
+    "closed_on_a_service_limit": "the window arm cannot be bought at any price and for any population. The sweep already asks at 1,048,576 bases, the largest of the four widths the client accepts, and a request outside that set is refused by the client before it is sent. So there is no wider window to buy for any link, however the population is defined, and the cost of this arm is not a number of requests: it is NO AVAILABLE REQUEST. The population is still counted, because the size of what cannot be bought is the useful figure",
+    "links": 32,
+    "elements": 30,
+    "requests_available": 0,
+    "cost": "NO AVAILABLE REQUEST: the sweep already asks at the largest width the client accepts, 1,048,576 bases, so no wider request exists to send at any price",
+    "by_direction": {
+      "increase_derived": {
+        "links": 20,
+        "widths_above_the_service_maximum": 20,
+        "widths_at_or_below_the_service_maximum": 0
+      },
+      "decrease_derived": {
+        "links": 12,
+        "widths_above_the_service_maximum": 12,
+        "widths_at_or_below_the_service_maximum": 0
+      }
+    },
+    "window_width_needed": {
+      "n": 32,
+      "min": 1051730,
+      "median": 1478146,
+      "max": 3908336,
+      "above_the_service_maximum": 32,
+      "at_or_below_the_service_maximum": 0,
+      "all_widths": [
+        1051730,
+        1109160,
+        1117770,
+        1191538,
+        1231784,
+        1261214,
+        1319238,
+        1324158,
+        1336830,
+        1352768,
+        1352790,
+        1376528,
+        1390678,
+        1408202,
+        1411440,
+        1426798,
+        1478146,
+        1497418,
+        1515136,
+        1567370,
+        1606482,
+        1674560,
+        1702500,
+        1704722,
+        1725716,
+        1841016,
+        1877712,
+        1943126,
+        1944982,
+        1990718,
+        2443314,
+        3908336
+      ],
+      "one_width_does_not_fit_all": "the width is computed per link from that link's own element-to-TSS offset and the widths are listed in full, because a single figure would hide that most are beyond the service maximum and some are not"
+    },
+    "a_width_at_or_below_the_maximum_is_not_a_purchase": "a link the scored window did not reach whose TSS nonetheless lies within the largest accepted width is not a link a request would fix: the window already covered the place, so the gap is not the window. Those links are counted apart and are not costed as purchases",
+    "links_detail": [
+      {
+        "chrom": "chr1",
+        "element": "EH38E1334647",
+        "gene": "TMEM54",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          31928780,
+          31929117
+        ],
+        "window_scored": [
+          31404660,
+          32453236
+        ],
+        "genes_in_window_of_the_scored_record": 51,
+        "tss": [
+          32901438
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          972490
+        ],
+        "benchmark_distance_to_tss": [
+          972476.0
+        ],
+        "window_width_needed": 1944982,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr1",
+        "element": "EH38E2809371",
+        "gene": "PDZK1IP1",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          46522456,
+          46522804
+        ],
+        "window_scored": [
+          45998341,
+          47046917
+        ],
+        "genes_in_window_of_the_scored_record": 40,
+        "tss": [
+          47191043
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          668414
+        ],
+        "benchmark_distance_to_tss": [
+          667594.0
+        ],
+        "window_width_needed": 1336830,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr1",
+        "element": "EH38E2856408",
+        "gene": "C1orf53",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          198641546,
+          198641895
+        ],
+        "window_scored": [
+          198117432,
+          199166008
+        ],
+        "genes_in_window_of_the_scored_record": 17,
+        "tss": [
+          197902647
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -739073
+        ],
+        "benchmark_distance_to_tss": [
+          739097.0
+        ],
+        "window_width_needed": 1478146,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr2",
+        "element": "EH38E3324451",
+        "gene": "PDIA6",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          10283223,
+          10283573
+        ],
+        "window_scored": [
+          9759109,
+          10807685
+        ],
+        "genes_in_window_of_the_scored_record": 32,
+        "tss": [
+          10837976
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          554579
+        ],
+        "benchmark_distance_to_tss": [
+          529390.0
+        ],
+        "window_width_needed": 1109160,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr6",
+        "element": "EH38E2449027",
+        "gene": "GMPR",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          15299551,
+          15299901
+        ],
+        "window_scored": [
+          14775437,
+          15824013
+        ],
+        "genes_in_window_of_the_scored_record": 12,
+        "tss": [
+          16238580
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          938855
+        ],
+        "benchmark_distance_to_tss": [
+          938831.0
+        ],
+        "window_width_needed": 1877712,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr6",
+        "element": "EH38E2449567",
+        "gene": "JARID2",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          15922518,
+          15922866
+        ],
+        "window_scored": [
+          15398403,
+          16446979
+        ],
+        "genes_in_window_of_the_scored_record": 20,
+        "tss": [
+          15246296
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -676395
+        ],
+        "benchmark_distance_to_tss": [
+          676707.0
+        ],
+        "window_width_needed": 1352790,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": true
+      },
+      {
+        "chrom": "chr6",
+        "element": "EH38E2461870",
+        "gene": "HMGA1",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          34852591,
+          34852940
+        ],
+        "window_scored": [
+          34328477,
+          35377053
+        ],
+        "genes_in_window_of_the_scored_record": 29,
+        "tss": [
+          34236873
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -615892
+        ],
+        "benchmark_distance_to_tss": [
+          615820.0
+        ],
+        "window_width_needed": 1231784,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false,
+        "purchasability": "unpurchasable at any price: the gene lies outside the widest window the service accepts"
+      },
+      {
+        "chrom": "chr7",
+        "element": "EH38E2576769",
+        "gene": "POLR2J",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          101882965,
+          101883312
+        ],
+        "window_scored": [
+          101358850,
+          102407426
+        ],
+        "genes_in_window_of_the_scored_record": 21,
+        "tss": [
+          102478906
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          595768
+        ],
+        "benchmark_distance_to_tss": [
+          595860.0
+        ],
+        "window_width_needed": 1191538,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr8",
+        "element": "EH38E2656681",
+        "gene": "EIF3E",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          109065787,
+          109066093
+        ],
+        "window_scored": [
+          108541651,
+          109590227
+        ],
+        "genes_in_window_of_the_scored_record": 14,
+        "tss": [
+          108435332
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -630607
+        ],
+        "benchmark_distance_to_tss": [
+          817220.0
+        ],
+        "window_width_needed": 1261214,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr8",
+        "element": "EH38E3860253",
+        "gene": "MYC",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          129689428,
+          129689778
+        ],
+        "window_scored": [
+          129165314,
+          130213890
+        ],
+        "genes_in_window_of_the_scored_record": 22,
+        "tss": [
+          127735434
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -1954168
+        ],
+        "benchmark_distance_to_tss": [
+          1953458.0
+        ],
+        "window_width_needed": 3908336,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr8",
+        "element": "EH38E3870083",
+        "gene": "TSTA3",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          144375442,
+          144375789
+        ],
+        "window_scored": [
+          143851327,
+          144899903
+        ],
+        "genes_in_window_of_the_scored_record": 77,
+        "tss": [
+          143618047
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -757568
+        ],
+        "benchmark_distance_to_tss": [
+          758200.0
+        ],
+        "window_width_needed": 1515136,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr9",
+        "element": "EH38E2730815",
+        "gene": "DOLPP1",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          129743005,
+          129743354
+        ],
+        "window_scored": [
+          129218891,
+          130267467
+        ],
+        "genes_in_window_of_the_scored_record": 38,
+        "tss": [
+          129081100
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -662079
+        ],
+        "benchmark_distance_to_tss": [
+          662057.0
+        ],
+        "window_width_needed": 1324158,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1531563",
+        "gene": "APIP",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          33944762,
+          33945112
+        ],
+        "window_scored": [
+          33420648,
+          34469224
+        ],
+        "genes_in_window_of_the_scored_record": 24,
+        "tss": [
+          34916498
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          971562
+        ],
+        "benchmark_distance_to_tss": [
+          971424.0
+        ],
+        "window_width_needed": 1943126,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1531563",
+        "gene": "HIPK3",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          33944762,
+          33945112
+        ],
+        "window_scored": [
+          33420648,
+          34469224
+        ],
+        "genes_in_window_of_the_scored_record": 24,
+        "tss": [
+          33256672
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -688264
+        ],
+        "benchmark_distance_to_tss": [
+          687664.0
+        ],
+        "window_width_needed": 1376528,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E2960330",
+        "gene": "FTH1",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          61164268,
+          61164572
+        ],
+        "window_scored": [
+          60640131,
+          61688707
+        ],
+        "genes_in_window_of_the_scored_record": 51,
+        "tss": [
+          61967659
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          803240
+        ],
+        "benchmark_distance_to_tss": [
+          803228.0
+        ],
+        "window_width_needed": 1606482,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1542799",
+        "gene": "FTH1",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          62680884,
+          62681233
+        ],
+        "window_scored": [
+          62156770,
+          63205346
+        ],
+        "genes_in_window_of_the_scored_record": 77,
+        "tss": [
+          61967659
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -713399
+        ],
+        "benchmark_distance_to_tss": [
+          713322.0
+        ],
+        "window_width_needed": 1426798,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E2963878",
+        "gene": "RNASEH2C",
+        "cell": "WTC11",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": false,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          65061157,
+          65061501
+        ],
+        "window_scored": [
+          64537040,
+          65585616
+        ],
+        "genes_in_window_of_the_scored_record": 94,
+        "tss": [
+          65720946
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          659618
+        ],
+        "benchmark_distance_to_tss": [
+          659606.0
+        ],
+        "window_width_needed": 1319238,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false,
+        "purchasability": "unpurchasable at any price: the gene lies outside the widest window the service accepts"
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E2964002",
+        "gene": "DNAJC4",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          65150613,
+          65150961
+        ],
+        "window_scored": [
+          64626498,
+          65675074
+        ],
+        "genes_in_window_of_the_scored_record": 100,
+        "tss": [
+          64230278
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -920508
+        ],
+        "benchmark_distance_to_tss": [
+          920423.0
+        ],
+        "window_width_needed": 1841016,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1544977",
+        "gene": "FIBP",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          65362512,
+          65362838
+        ],
+        "window_scored": [
+          64838386,
+          65886962
+        ],
+        "genes_in_window_of_the_scored_record": 106,
+        "tss": [
+          65888538
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          525864
+        ],
+        "benchmark_distance_to_tss": [
+          525908.0
+        ],
+        "window_width_needed": 1051730,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": true
+      },
+      {
+        "chrom": "chr11",
+        "element": "EH38E1561171",
+        "gene": "TAF1D",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          93000533,
+          93000881
+        ],
+        "window_scored": [
+          92476418,
+          93524994
+        ],
+        "genes_in_window_of_the_scored_record": 21,
+        "tss": [
+          93784390
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          783684
+        ],
+        "benchmark_distance_to_tss": [
+          740752.0
+        ],
+        "window_width_needed": 1567370,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr12",
+        "element": "EH38E1614468",
+        "gene": "PCBP2",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          54304289,
+          54304638
+        ],
+        "window_scored": [
+          53780175,
+          54828751
+        ],
+        "genes_in_window_of_the_scored_record": 63,
+        "tss": [
+          53452102
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -852361
+        ],
+        "benchmark_distance_to_tss": [
+          852290.0
+        ],
+        "window_width_needed": 1704722,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr12",
+        "element": "EH38E1614468",
+        "gene": "PRR13",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          54304289,
+          54304638
+        ],
+        "window_scored": [
+          53780175,
+          54828751
+        ],
+        "genes_in_window_of_the_scored_record": 63,
+        "tss": [
+          53441605
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -862858
+        ],
+        "benchmark_distance_to_tss": [
+          862743.0
+        ],
+        "window_width_needed": 1725716,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr16",
+        "element": "EH38E3200826",
+        "gene": "PIEZO1",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          89489138,
+          89489486
+        ],
+        "window_scored": [
+          88965023,
+          90013599
+        ],
+        "genes_in_window_of_the_scored_record": 48,
+        "tss": [
+          88785210
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -704101
+        ],
+        "benchmark_distance_to_tss": [
+          704034.0
+        ],
+        "window_width_needed": 1408202,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr17",
+        "element": "EH38E3215004",
+        "gene": "TMEM97",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          27570222,
+          27570554
+        ],
+        "window_scored": [
+          27046099,
+          28094675
+        ],
+        "genes_in_window_of_the_scored_record": 42,
+        "tss": [
+          28319095
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          748708
+        ],
+        "benchmark_distance_to_tss": [
+          748730.0
+        ],
+        "window_width_needed": 1497418,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr17",
+        "element": "EH38E3227831",
+        "gene": "HOXB4",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          47742669,
+          47742994
+        ],
+        "window_scored": [
+          47218543,
+          48267119
+        ],
+        "genes_in_window_of_the_scored_record": 48,
+        "tss": [
+          48580110
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          837279
+        ],
+        "benchmark_distance_to_tss": [
+          835562.0
+        ],
+        "window_width_needed": 1674560,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr17",
+        "element": "EH38E3250909",
+        "gene": "LINC01970",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          81733756,
+          81734106
+        ],
+        "window_scored": [
+          81209642,
+          82258218
+        ],
+        "genes_in_window_of_the_scored_record": 85,
+        "tss": [
+          82292814
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          558884
+        ],
+        "benchmark_distance_to_tss": [
+          558895.0
+        ],
+        "window_width_needed": 1117770,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr19",
+        "element": "EH38E3283231",
+        "gene": "TIMM13",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          3133439,
+          3133789
+        ],
+        "window_scored": [
+          2609325,
+          3657901
+        ],
+        "genes_in_window_of_the_scored_record": 60,
+        "tss": [
+          2427893
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -705720
+        ],
+        "benchmark_distance_to_tss": [
+          705635.0
+        ],
+        "window_width_needed": 1411440,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr19",
+        "element": "EH38E3286960",
+        "gene": "NRTN",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          6674878,
+          6675228
+        ],
+        "window_scored": [
+          6150764,
+          7199340
+        ],
+        "genes_in_window_of_the_scored_record": 59,
+        "tss": [
+          5823802
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -851250
+        ],
+        "benchmark_distance_to_tss": [
+          851241.0
+        ],
+        "window_width_needed": 1702500,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr19",
+        "element": "EH38E3293646",
+        "gene": "KLF2",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          15629305,
+          15629655
+        ],
+        "window_scored": [
+          15105191,
+          16153767
+        ],
+        "genes_in_window_of_the_scored_record": 66,
+        "tss": [
+          16324817
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          695338
+        ],
+        "benchmark_distance_to_tss": [
+          695343.0
+        ],
+        "window_width_needed": 1390678,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr19",
+        "element": "EH38E1952947",
+        "gene": "PPP1R14A",
+        "cell": "K562",
+        "split": "heldout",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          38932840,
+          38933110
+        ],
+        "window_scored": [
+          38408686,
+          39457262
+        ],
+        "genes_in_window_of_the_scored_record": 59,
+        "tss": [
+          38256590
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          -676384
+        ],
+        "benchmark_distance_to_tss": [
+          676379.0
+        ],
+        "window_width_needed": 1352768,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chr22",
+        "element": "EH38E2157628",
+        "gene": "LIMK2",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_decrease",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          30216721,
+          30217043
+        ],
+        "window_scored": [
+          29692593,
+          30741169
+        ],
+        "genes_in_window_of_the_scored_record": 54,
+        "tss": [
+          31212239
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          995358
+        ],
+        "benchmark_distance_to_tss": [
+          1031491.0
+        ],
+        "window_width_needed": 1990718,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      },
+      {
+        "chrom": "chrX",
+        "element": "EH38E2753729",
+        "gene": "HDAC6",
+        "cell": "K562",
+        "split": "training",
+        "derived_from": "significant_increase",
+        "pairs_behind_the_link_with_a_tss": 1,
+        "cell_track_is_one_the_sweep_kept": true,
+        "element_record_in_the_sweeps_cache": true,
+        "scored_interval": [
+          47579548,
+          47579895
+        ],
+        "window_scored": [
+          47055433,
+          48104009
+        ],
+        "genes_in_window_of_the_scored_record": 43,
+        "tss": [
+          48801377
+        ],
+        "offsets_of_tss_from_the_window_centre": [
+          1221656
+        ],
+        "benchmark_distance_to_tss": [
+          1222308.0
+        ],
+        "window_width_needed": 2443314,
+        "smallest_supported_window_that_would_contain_the_tss": null,
+        "the_scored_window_reaches_the_tss": false,
+        "gene_named_in_the_scored_record": false
+      }
+    ]
+  },
+  "naming_gap_population": {
+    "population_rule": "every measured significant link the extractor emits under v2 whose tested gene's transcription start lies INSIDE the window the sweep scored at that element and whose cached record names no gene by the benchmark's symbol. The rule names no count and no outcome",
+    "links": 8,
+    "elements": 8,
+    "requests_available": 0,
+    "cost": "NO REQUEST WOULD HELP: the window already reached the place, so the gap is not the window and not the cell. It is a symbol that does not match, and a request returns the same symbols again",
+    "by_direction": {
+      "increase_derived": 1,
+      "decrease_derived": 7
+    },
+    "by_cell": {
+      "HCT116": 1,
+      "K562": 7
+    },
+    "it_is_not_an_answerable_link": "none of these is counted as answerable here. The registered predicate asks for a gene entry whose name is exactly the link's gene, and this lane neither amends that predicate nor matches an alias; it reports the count and the symbols the record does name so that the question can be put to whoever owns the predicate",
+    "links_detail": [
+      {
+        "chrom": "chr1",
+        "element": "EH38E2826117",
+        "gene": "TMEM56",
+        "cell": "K562",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          31694
+        ],
+        "genes_in_window_of_the_scored_record": 21
+      },
+      {
+        "chrom": "chr1",
+        "element": "EH38E2826135",
+        "gene": "TMEM56",
+        "cell": "K562",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          1526
+        ],
+        "genes_in_window_of_the_scored_record": 21
+      },
+      {
+        "chrom": "chr2",
+        "element": "EH38E3388449",
+        "gene": "SSFA2",
+        "cell": "HCT116",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          -56032
+        ],
+        "genes_in_window_of_the_scored_record": 16
+      },
+      {
+        "chrom": "chr3",
+        "element": "EH38E3539048",
+        "gene": "H1FX",
+        "cell": "K562",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          70397
+        ],
+        "genes_in_window_of_the_scored_record": 53
+      },
+      {
+        "chrom": "chr3",
+        "element": "EH38E3539088",
+        "gene": "H1FX",
+        "cell": "K562",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          10421
+        ],
+        "genes_in_window_of_the_scored_record": 53
+      },
+      {
+        "chrom": "chr3",
+        "element": "EH38E2237620",
+        "gene": "H1FX",
+        "cell": "K562",
+        "derived_from": "significant_increase",
+        "offsets_of_tss_from_the_window_centre": [
+          -374345
+        ],
+        "genes_in_window_of_the_scored_record": 48
+      },
+      {
+        "chrom": "chr15",
+        "element": "EH38E3148594",
+        "gene": "WDR61",
+        "cell": "K562",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          55437
+        ],
+        "genes_in_window_of_the_scored_record": 51
+      },
+      {
+        "chrom": "chr20",
+        "element": "EH38E3417463",
+        "gene": "C20orf27",
+        "cell": "K562",
+        "derived_from": "significant_decrease",
+        "offsets_of_tss_from_the_window_centre": [
+          -269808
+        ],
+        "genes_in_window_of_the_scored_record": 26
+      }
+    ]
+  },
+  "populations_overlap": {
+    "links_in_both": 2,
+    "what_it_means": "a link in an uncovered cell whose tested gene the scored window also fails to reach is in both populations and is purchasable in neither: the cell request would be sent and could not place that gene in the window. It is counted in both and costed as unpurchasable"
+  },
+  "cost": {
+    "requests_total": 24,
+    "what_the_requests_are_for": "every element carrying a link of the CELL population, whichever direction that link's measurement had and whether or not the link turns out purchasable. The population rule is applied as stated and the requests it implies are counted in full, because buying only the purchasable subset would be buying the gap",
+    "per_request_and_per_answerable_positive": {
+      "requests": 24,
+      "answerable_positives_at_the_ceiling": {
+        "increase_arm": 7,
+        "decrease_arm": 16,
+        "both_arms": 23
+      },
+      "requests_per_answerable_positive_at_the_ceiling": {
+        "increase_arm_only": 3.4286,
+        "decrease_arm_only": 1.5,
+        "both_arms_pooled": 1.0435,
+        "which_one_bears_on_the_decision": "the increase arm's. The floors that refused the test are the increase arm's answerable links and their loci, so a request that makes a decrease link answerable costs the same and moves neither of them. The pooled ratio is the flattering one and is given so that it cannot be quoted without the arm-by-arm figures beside it"
+      },
+      "independent_loci_at_most_added_to_the_increase_arm": 5,
+      "requests_per_locus_at_the_ceiling": 4.8,
+      "requests_serving_no_link_the_test_could_score": 3,
+      "what_these_are_not": "a yield. Every denominator is a CEILING, so each ratio is the best case per request and not an observed cost per answerable positive. A request that returns a value of exactly zero on the link's own cell track buys nothing, and whether any of these would is not established and cannot be without sending it"
+    },
+    "already_delivered_once_in_the_second_cache": {
+      "links": 6,
+      "elements": [
+        "EH38E1548639",
+        "EH38E1548653",
+        "EH38E1548926",
+        "EH38E2968890",
+        "EH38E2969333",
+        "EH38E3858262"
+      ],
+      "what_it_means": "the request has been delivered once already, into a cache the registered predicate refuses. The link is costed at one request all the same, because a re-score under that predicate must write into the sweep's own cache. This is money the project has already spent, not an answer it may use"
+    },
+    "window_population_requests": 0,
+    "window_population_cost": "NO AVAILABLE REQUEST: the sweep already asks at the largest width the client accepts, 1,048,576 bases, so no wider request exists to send at any price"
+  },
+  "ceiling": {
+    "answerable_links_now": 21,
+    "purchasable_links": 7,
+    "links_at_the_ceiling": 28,
+    "independent_loci_at_the_ceiling": 18,
+    "floors": {
+      "links_at_least": 30,
+      "independent_loci_at_least": 20,
+      "imported": "both floors are imported through `reptest`, which imports them from `genomeos.attribution.fresh.POSITIVE_FLOOR` and from `genomeos.attribution.fresh.LOCUS_FLOOR`, which is `genomeos.attribution.cell2.POOLED_LOCUS_FLOOR`. This lane compares a ceiling against them and does not move, recompute, reinterpret or pool its way around either one. A costing that lowered a floor would be costing a different question"
+    },
+    "ceiling_rule": "the CEILING of a purchase is the answerable count that would follow if every purchasable link's request returned a value that is not exactly zero on that link's own cell track: the links lane-reptest already answers, plus one per purchasable link, and the independent loci of that set by the same imported rule. It is an upper bound and the gate is taken on it, because a ceiling that misses a floor settles the question without any purchase: no outcome of the requests can reach the floor",
+    "ceiling_is_not_a_count": "the ceiling is not a count of answerable links and may not be quoted as one. It is what the answerable count could at most become: every purchasable request is assumed to return a value that is not exactly zero on the right track, which is not established for any of them and cannot be established without sending the request. lane-reptest's own count of links excluded for an exactly-zero value is 0 of 48, which is a fact about the links it could read and NOT a rate, a probability or a prediction about a link it could not",
+    "meets_both_floors_at_the_ceiling": false,
+    "short_by": [
+      "links at the ceiling 28, short of the imported floor 30 by 2",
+      "independent loci at the ceiling 18, short of the imported floor 20 by 2"
+    ],
+    "reading": "the ceiling of the purchase is below an imported floor: buying every request that CAN be bought would leave the direction test still unanswerable. The purchase would buy a larger number that still cannot be tested, so the costing's answer is that the money does not buy the test. This is the headline of the costing and not a caveat on it. The margin is reported because a reader is owed it and NOT because a small margin is better than a large one; a ceiling short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+    "what_follows": "the purchase would not make the test answerable, so there is nothing to authorise"
+  },
+  "most_generous_ceiling": {
+    "answerable_links_now": 21,
+    "purchasable_links": 8,
+    "links_at_the_ceiling": 29,
+    "independent_loci_at_the_ceiling": 19,
+    "floors": {
+      "links_at_least": 30,
+      "independent_loci_at_least": 20,
+      "imported": "both floors are imported through `reptest`, which imports them from `genomeos.attribution.fresh.POSITIVE_FLOOR` and from `genomeos.attribution.fresh.LOCUS_FLOOR`, which is `genomeos.attribution.cell2.POOLED_LOCUS_FLOOR`. This lane compares a ceiling against them and does not move, recompute, reinterpret or pool its way around either one. A costing that lowered a floor would be costing a different question"
+    },
+    "ceiling_rule": "the CEILING of a purchase is the answerable count that would follow if every purchasable link's request returned a value that is not exactly zero on that link's own cell track: the links lane-reptest already answers, plus one per purchasable link, and the independent loci of that set by the same imported rule. It is an upper bound and the gate is taken on it, because a ceiling that misses a floor settles the question without any purchase: no outcome of the requests can reach the floor",
+    "ceiling_is_not_a_count": "the ceiling is not a count of answerable links and may not be quoted as one. It is what the answerable count could at most become: every purchasable request is assumed to return a value that is not exactly zero on the right track, which is not established for any of them and cannot be established without sending the request. lane-reptest's own count of links excluded for an exactly-zero value is 0 of 48, which is a fact about the links it could read and NOT a rate, a probability or a prediction about a link it could not",
+    "meets_both_floors_at_the_ceiling": false,
+    "short_by": [
+      "links at the ceiling 29, short of the imported floor 30 by 1",
+      "independent loci at the ceiling 19, short of the imported floor 20 by 1"
+    ],
+    "reading": "the ceiling of the purchase is below an imported floor: buying every request that CAN be bought would leave the direction test still unanswerable. The purchase would buy a larger number that still cannot be tested, so the costing's answer is that the money does not buy the test. This is the headline of the costing and not a caveat on it. The margin is reported because a reader is owed it and NOT because a small margin is better than a large one; a ceiling short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or enough for a pilot",
+    "what_follows": "the purchase would not make the test answerable, so there is nothing to authorise",
+    "rule": "the MOST GENEROUS ceiling: every purchasable request returns a value that is not exactly zero on the right track, AND the naming gap is closed at no cost by a predicate that matched the tested gene under a current symbol as well as the benchmark's. Both halves are assumptions. The second would be an amendment to a registered predicate, which this lane does not make, does not recommend here and has no authority to make; it is added so that 'but what if you also fixed the symbols' is answered in the same result rather than later",
+    "naming_gap_increase_links_assumed_closed_at_no_cost": 1
+  },
+  "if_every_currently_unanswerable_increase_link_became_answerable": {
+    "links": 48,
+    "independent_loci": 33,
+    "clears_the_links_floor": true,
+    "clears_the_loci_floor": true,
+    "margin": [
+      "links 48 against the imported floor 30: +18",
+      "independent loci 33 against the imported floor 20: +13"
+    ],
+    "is_it_reachable": "no. The hypothetical clears both floors and is recorded for completeness, and it cannot be reached: the links the widest accepted window cannot reach are unpurchasable at any price and a link the window already reached is not a purchase. The CEILING is the figure that bears on a decision"
+  },
+  "what_cannot_be_established_without_a_request": {
+    "figure": "whether a purchasable element's request would return a value that is not exactly zero on that link's own cell track",
+    "why": "the sweep kept no value for that cell at that element, so there is nothing on disk to read. The ceiling therefore assumes every purchasable request returns a non-zero value, which is why it is a ceiling and not a count. It does not change the headline: the ceiling is an upper bound and the gate is taken on it",
+    "it_is_named_and_not_estimated": true
+  },
+  "precedents": {
+    "HCT116 second cell type, delivered": {
+      "requests": 705,
+      "covered_pairs": 363,
+      "requests_per_covered_pair": 1.9421,
+      "read_from": "data/results/crispri_published_v2.json, second_cell_type_hct116: `requests.delivered_in_the_carried_run.sent` and `as_carried.covered_pairs`"
+    },
+    "WTC11 second cell type, costed and not bought": {
+      "requests": 614,
+      "read_from": "data/results/crispri_published_v2.json, second_cell_type/cost/WTC11/requests_frozen_feature"
+    },
+    "AstroREG request plan, authorised and not sent": {
+      "requests": 1322,
+      "requests_serving_at_least_one_scored_pair": 1232,
+      "requests_serving_no_scored_pair": 90,
+      "read_from": "data/results/astroreg_request_plan.json, `summary.requests`, `summary.requests_serving_at_least_one_scored_pair` and `summary.requests_serving_no_scored_pair`"
+    },
+    "this costing, beside them": {
+      "requests": 24,
+      "answerable_positives_at_the_ceiling_increase_arm": 7,
+      "answerable_positives_at_the_ceiling_decrease_arm": 16,
+      "requests_serving_no_link_the_test_could_score": 3,
+      "share_of_the_WTC11_arm_costed_but_not_bought": 0.0391,
+      "what_it_would_buy": "a larger answerable count on the increase arm that is still below an imported floor, so no testable number: see the ceiling"
+    },
+    "precedents_are_read_not_quoted": "each precedent figure is read out of the result that records it, in the run that writes this costing, and the paths are declared inputs. None is typed in from a brief or from memory, because a comparison a reader cannot check is not a comparison"
+  },
+  "the_registration_that_would_spend_this_is_a_new_one": "nothing here registers a purchase or a test. A purchase would need its own registration, with its population rule, its floors and its readings fixed BEFORE any request is sent, and this lane does not write it. This lane costs it, and the decision is the owner's",
+  "seconds": 56.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.)",
+        "version": "the two benchmark tables cached under data/knowledge, digested in inputs; the startTSS and distanceToTSS columns are read and no annotation is joined in"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache, written with threshold=0.0",
+        "version": "the per-chromosome archives and loose per-element files this run opened, digested as a group; read for the scored interval and the gene names only"
+      },
+      {
+        "accession": "the partial second per-element cache under data/knowledge/alphagenome/elements_hct116",
+        "version": "the files this run opened, digested as a group; opened to count delivered requests and for nothing else"
+      },
+      {
+        "accession": "the attributed elements of the chromosomes this run covers",
+        "version": "re-enumerated in this run from the results on disk and the tables their `elements_where` fields point at, not read from one file"
+      },
+      {
+        "accession": "alphagenome 0.9.0, the version uv.lock pins (wheel sha256 a4f35884341ae85b5d2cf088dfe0304961de7ae4a590d4538653069673de32f4)",
+        "version": "`alphagenome/models/dna_client.py` SUPPORTED_SEQUENCE_LENGTHS, recorded as a committed literal and cited; the package is an optional extra and is not imported by this run"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+        "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+        "bytes": 462897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": null
+      },
+      {
+        "path": "data/results/astroreg_request_plan.json",
+        "sha256": "4766cbb4d594f00ff4e5f051fc88594ded9d013b17d2383e305d514cd0c08409",
+        "bytes": 595926,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": null
+      },
+      {
+        "path": "data/results/crispri_published_v2.json",
+        "sha256": "194ba52d08c40f9c9735a2d184ec9de26fd86b8bfd5f4b5d19d972ec8e44411d",
+        "bytes": 71186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": null
+      },
+      {
+        "path": "data/results/reptest_answerable.json",
+        "sha256": "3266e27ed172239bd778427e67b0ac8430d435d08a882bdefcf59c9edfa32fa0",
+        "bytes": 150928,
+        "partition": null
+      },
+      {
+        "path": "per_element_response_cache",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          }
+        ],
+        "sha256": "bb959176c7385b192231fd23a4858d729c899028e6d0fd8559e6c06ae86f178a",
+        "bytes": 774517807,
+        "files": 22,
+        "partition": "the finished deletion sweep's own per-element cache, read for the scored interval and which genes each record names, and for nothing else"
+      },
+      {
+        "path": "second_partial_cache_opened_to_count_delivered_requests",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E1548639.json",
+            "sha256": "69c5fd4e86341c3e94f64d1dc154e3eb00d605fc2089cd3c8dd2edbd381f2ccb",
+            "bytes": 10920
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E1548653.json",
+            "sha256": "7de6d6f84cb80b505ff49fe86af5ce12824bacbb710008cd7d3b3022fcc246c8",
+            "bytes": 10909
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E1548926.json",
+            "sha256": "114e86f3281715ce0f57cb1d1ee916678d41c059687b6a94d11ee409dc61d960",
+            "bytes": 9917
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E2968890.json",
+            "sha256": "b2895b0ebe97525d6e13bd18669165875ed2e49cc172a37106225d3ba30ec558",
+            "bytes": 9252
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements_hct116/chr11/EH38E2969333.json",
+            "sha256": "160355e58d1be67f087e9b827bf322a1abff782c156a90f2429f92c2b6356116",
+            "bytes": 10816
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements_hct116/chr8/EH38E3858262.json",
+            "sha256": "fa2dff84a8a6be52565e47bdf2acdc8ee5a73ecde2141d6d5348d32ff8b46212",
+            "bytes": 5383
+          }
+        ],
+        "sha256": "fd71ed674d0256672ed1a1c267e35674232179e0de9925918c8f2d23fa7942da",
+        "bytes": 57197,
+        "files": 6,
+        "partition": "the partial second cache, opened ONLY to count which purchasable elements already carry a delivered answer. No value, sign or comparison is taken from it and the registered predicate still refuses it"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "what_this_is": "a costing of the two arms that lane-reptest's no-go leaves open, in model requests, taken at zero requests. It is not a purchase, not an authorisation to purchase, not a direction, not an agreement rate and not a test. No request is sent by this lane under any outcome",
+      "follows_a_no_go_whose_outcome_was_never_read": "this costing follows a BLINDED FEASIBILITY NO-GO whose direction outcome was NEVER READ. lane-reptest stopped at the gate: no direction was taken, no agreement rate computed, no balanced accuracy formed and no interval drawn, on any arm, before or after the count. That is what makes a purchase of more data admissible rather than post-hoc - the scientific outcome does not exist to be chosen around. It is recorded here and not in a covering note, because a reader deciding whether to spend needs it beside the number",
+      "the_shortfall_may_not_be_bought": "the shortfall is not the population. A set defined as 'the links that were missing' is defined BY the count that refused the test, and buying it would choose a population by a feasibility outcome even though no scientific outcome was read. So the population costed here is stated by a rule that can be written down without reference to the no-go at all, and the rule is applied to every link it admits - including links that are already answerable and links in the other arm, which cost requests and do not help the arm that was short. Selecting WHICH links to buy by anything outcome-related, or buying only the gap, is what is refused",
+      "population_rule_cell_arm": "EVERY measured significant link the committed extractor emits under v2 whose own cell is not one of the cell tracks the finished sweep kept. The rule names no count, no arm, no floor and no outcome: it is a property of the cell, and it admits every link in such a cell whichever direction the measurement had. Both directions are costed and reported APART, because a purchase that mostly buys decreases is a different proposition from one that buys increases, and the arm that was short is the increase arm",
+      "population_rule_window_arm": "EVERY measured significant link the extractor emits under v2 whose tested gene's transcription start lies outside the window the sweep scored at that link's own element. This rule is also statable without reference to the no-go - it is a geometric property of the element and the benchmark's own TSS - so the window arm is NOT refused on admissibility. It is refused on a service limit, which is a harder refusal: see `WINDOW_ARM_IS_CLOSED_ON_A_SERVICE_LIMIT`",
+      "cells_not_covered_is_computed_not_inherited": "which cells the sweep does not cover is computed from the links themselves against `direction_link.CACHED_CELLS`, and NOT read from `direction_link.CELLS_NOT_CACHED`. That constant is the pair of cells the increase arm happened to carry ('WTC11', 'HCT116') and it does not name every uncovered cell the measured population holds: the decrease arm also holds Jurkat, which the sweep covers no better. Inheriting the constant would have costed a population defined by the arm that was short, which is the thing this costing may not do",
+      "window_arm_is_closed_on_a_service_limit": "the window arm cannot be bought at any price and for any population. The sweep already asks at 1,048,576 bases, the largest of the four widths the client accepts, and a request outside that set is refused by the client before it is sent. So there is no wider window to buy for any link, however the population is defined, and the cost of this arm is not a number of requests: it is NO AVAILABLE REQUEST. The population is still counted, because the size of what cannot be bought is the useful figure",
+      "extractor": "v2",
+      "request_unit": "ONE MODEL REQUEST PER ELEMENT. One request deletes one element from its window and returns every gene in that window on every track the scorer's track table carries, so a request is per element and NOT per element per cell and NOT per element per gene. Which cell tracks are kept per gene is decided after the answer is in hand, by the `cells` argument of `aggregate`, so a cell the sweep did not keep costs that element's request again - one request, not one per cell. An element whose answer is already cached costs nothing, because `score_element` returns the cached answer without a request; an element whose cached answer lacks the cell wanted must be asked again, because the tracks the sweep did not keep were never written down",
+      "request_unit_read_from": {
+        "one request per element": "genomeos/predict/enhancer_target.py, module docstring: 'One request per element, about eight seconds'",
+        "the chain that produced the sweep counts it the same way": "scripts/enhancer_targets_all.py, module docstring: 'about 12,000 elements on chr21, one request each, cached per element'",
+        "a cached element costs no request": "genomeos/predict/enhancer_target.py, `score_element`: 'Cached per element id; a cached answer is returned without a request', and the body asks the scorer only when `load_cached` is None",
+        "one request carries every gene and every track": "genomeos/predict/alphagenome_adapter.py, `_live_scorer`: one `client.score_variant` call per scorer call, and the response is iterated over every gene and every track",
+        "the cells are a post-processing filter and not a request dimension": "genomeos/predict/enhancer_target.py, `aggregate(effects, cells=CELLS)`: the per-cell values are kept for the names in `cells` out of an answer that already holds all of them, and `CELLS` is the sweep's four",
+        "the HCT116 precedent used this unit on this code path": "scripts/crispri_hct116.py, module docstring: 'One deletion request per registry element overlapping a held-out HCT116 pair', with `KEPT_CELLS = (*CELLS, CELL)` - the cells widened, the unit unchanged"
+      },
+      "window_used_by_the_sweep": 1048576,
+      "supported_sequence_lengths": [
+        16384,
+        131072,
+        524288,
+        1048576
+      ],
+      "max_supported_window": 1048576,
+      "window_is_at_the_maximum": "the committed scorer already asks at the widest window the service accepts. `AlphaGenomeAdapter._live_scorer` resizes the variant's reference interval to `dna_client.SEQUENCE_LENGTH_1MB` (1,048,576 bases), and that is the largest of the four lengths `dna_client.SUPPORTED_SEQUENCE_LENGTHS` holds; `dna_client` checks the width against that set and raises for any other. So 'score it at a wider window' is not a thing that can be bought: for a link whose tested gene lies outside the 1 Mb window there is no request to send at any price, and the cost of that arm is not a large number of requests but NO AVAILABLE REQUEST",
+      "window_centring": "`genome.Interval.resize` centres the new width on the interval's own centre, so the window the sweep scored at an element is [centre - width/2, centre + width/2) for width 1,048,576, where the centre is that of the variant's reference interval as `score_element` builds it: the element's bases with one anchor base before them, [start - 1, end). The window is computed here from the element's own scored interval as the cache recorded it, not from the row's interval, so the geometry is the run's and not a reconstruction of it",
+      "purchasability": [
+        "purchasable: one request per element, with this cell kept",
+        "unpurchasable at any price: the gene lies outside the widest window the service accepts",
+        "not a purchase: the gene is inside the window the sweep already scored, under another symbol"
+      ],
+      "purchasability_is_exhaustive": "every one of the 27 links lane-reptest could not answer falls in exactly one of these three, and the result asserts they sum to 27 and to the two arms' counts separately. The arms are reported apart, and a purchasable count is never quoted as an answerable count",
+      "ceiling_rule": "the CEILING of a purchase is the answerable count that would follow if every purchasable link's request returned a value that is not exactly zero on that link's own cell track: the links lane-reptest already answers, plus one per purchasable link, and the independent loci of that set by the same imported rule. It is an upper bound and the gate is taken on it, because a ceiling that misses a floor settles the question without any purchase: no outcome of the requests can reach the floor",
+      "ceiling_is_not_a_count": "the ceiling is not a count of answerable links and may not be quoted as one. It is what the answerable count could at most become: every purchasable request is assumed to return a value that is not exactly zero on the right track, which is not established for any of them and cannot be established without sending the request. lane-reptest's own count of links excluded for an exactly-zero value is 0 of 48, which is a fact about the links it could read and NOT a rate, a probability or a prediction about a link it could not",
+      "links_floor": 30,
+      "independent_loci_floor": 20,
+      "floors_are_imported": "both floors are imported through `reptest`, which imports them from `genomeos.attribution.fresh.POSITIVE_FLOOR` and from `genomeos.attribution.fresh.LOCUS_FLOOR`, which is `genomeos.attribution.cell2.POOLED_LOCUS_FLOOR`. This lane compares a ceiling against them and does not move, recompute, reinterpret or pool its way around either one. A costing that lowered a floor would be costing a different question",
+      "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "independent_locus_span": 1000000,
+      "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "aggregate_function": "a count per purchasability cause and a request count per distinct element; no rate, no mean, no interval and no direction is taken",
+      "fill_value": "none: a link whose cost cannot be established is named and not estimated",
+      "model_requests": 0,
+      "alphagenome_requests": 0
+    },
+    "exclusions": [
+      "no direction, agreement rate, interval, control or test is computed here under any outcome. Whether a value exists and whether it is exactly zero is the answerability predicate's own question and is lane-reptest's; this lane reads neither a sign nor a value into any finding, and where it reports that a delivered value is not exactly zero it reports that fact and not the value, not the sign and not a comparison",
+      "the shortfall is not the population. A set defined as 'the links that were missing' is defined BY the count that refused the test, and buying it would choose a population by a feasibility outcome even though no scientific outcome was read. So the population costed here is stated by a rule that can be written down without reference to the no-go at all, and the rule is applied to every link it admits - including links that are already answerable and links in the other arm, which cost requests and do not help the arm that was short. Selecting WHICH links to buy by anything outcome-related, or buying only the gap, is what is refused",
+      "a TSS inside the window is what the window CAN reach; it is not a guarantee that the service's gene scorer would emit a row for that gene, and a TSS outside the window is what the window CANNOT reach. The rule is therefore used in one direction only: outside the widest supported window means no request can answer it, which is a statement about the service's accepted interval and not about the gene. Inside the window is reported as 'the window reaches it' and never as 'a request would answer it'",
+      "the ceiling is not a count of answerable links and may not be quoted as one. It is what the answerable count could at most become: every purchasable request is assumed to return a value that is not exactly zero on the right track, which is not established for any of them and cannot be established without sending the request. lane-reptest's own count of links excluded for an exactly-zero value is 0 of 48, which is a fact about the links it could read and NOT a rate, a probability or a prediction about a link it could not",
+      "the link's cell is not one of the tracks the cached answers carry (('HepG2', 'IMR-90', 'K562', 'GM12878')). The sweep holds no track of ('WTC11', 'HCT116') at all, so no amount of reading what is on disk closes this gap and nothing is substituted for it. These links are absent from any test rather than negative in it",
+      "no floor is moved, recomputed, reinterpreted or pooled around",
+      "no value, sign or comparison is taken from the partial second cache",
+      "no pair is excluded for its magnitude: no effect-size bar is applied anywhere"
+    ],
+    "partitions": {
+      "increase_derived": "links the extractor derived from a significant increase under v2; action `inhibits`, outcome `increase on knockdown`, molecular role unresolved",
+      "decrease_derived": "links the extractor derived from a benchmark `Regulated` pair, which is a significant decrease only; v1's own links, unchanged under v2",
+      "cell_population": "EVERY measured significant link the committed extractor emits under v2 whose own cell is not one of the cell tracks the finished sweep kept. The rule names no count, no arm, no floor and no outcome: it is a property of the cell, and it admits every link in such a cell whichever direction the measurement had. Both directions are costed and reported APART, because a purchase that mostly buys decreases is a different proposition from one that buys increases, and the arm that was short is the increase arm",
+      "window_population": "EVERY measured significant link the extractor emits under v2 whose tested gene's transcription start lies outside the window the sweep scored at that link's own element. This rule is also statable without reference to the no-go - it is a geometric property of the element and the benchmark's own TSS - so the window arm is NOT refused on admissibility. It is refused on a service limit, which is a harder refusal: see `WINDOW_ARM_IS_CLOSED_ON_A_SERVICE_LIMIT`",
+      "naming_gap_population": "every link whose tested gene's TSS the scored window reaches and whose cached record names no gene by the benchmark's symbol; costed at no request, because the window already reached the place",
+      "training_and_heldout": "the benchmark's own split, one per table, as the extractor assigns it to a link"
+    },
+    "code_cleanliness": {
+      "git_sha": "06766d488b1da07938571466247435e3b9399c55",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/finemap_dapg.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/reptest.py",
+        "genomeos/attribution/rescore_cost.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/rescore_cost.py"
+      ],
+      "counting_path_count": 126,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "06766d488b1da07938571466247435e3b9399c55",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/finemap_dapg.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/rescore_cost.json"
+      ],
+      "argv": [
+        "scripts/rescore_cost.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 687,
+      "opens_under_data": 432,
+      "files_read": 134,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
