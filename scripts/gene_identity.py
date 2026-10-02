@@ -58,6 +58,7 @@ def run(chroms: list[str]) -> dict[str, Any]:
     distance_test_outcomes: Counter[str] = Counter()
     token_was_an_id = 0
     ambiguous_with_one_coding: Counter[str] = Counter()
+    by_loci: dict[str, Counter[str]] = defaultdict(Counter)
     window_records: dict[str, int] = {}
     examples: list[dict[str, Any]] = []
     crispri_rules: list[dict[str, Any]] = []
@@ -98,6 +99,14 @@ def run(chroms: list[str]) -> dict[str, Any]:
             by_activity[r.activity or "none"][out.outcome] += 1
             by_effect[r.effect_band or "no band"][out.outcome] += 1
             by_cell[r.cell][out.outcome] += 1
+            # Added after the genome-wide count, and marked as such where it is reported. A target
+            # name with one locus on its chromosome resolves to that locus on both sides whatever
+            # the window says, so `agree` is only a check that could have failed where the name has
+            # two or more. This is the denominator the headline figure has to be read against.
+            n_loci = len(symbols.get(r.target, ()))
+            by_loci["1" if n_loci == 1 else "2" if n_loci == 2 else "3 or more" if n_loci else "0"][
+                out.outcome
+            ] += 1
             compiled = gi.compiled_locus(r.target, symbols, ids)
             d = gi.compiled_distance(r, compiled)
             by_distance[gi.distance_band(d)][out.outcome] += 1
@@ -165,6 +174,7 @@ def run(chroms: list[str]) -> dict[str, Any]:
         "by_effect_band": {k: dict(sorted(v.items())) for k, v in sorted(by_effect.items())},
         "by_distance_band": {k: dict(sorted(v.items())) for k, v in sorted(by_distance.items())},
         "by_cell": {k: dict(sorted(v.items())) for k, v in sorted(by_cell.items())},
+        "by_loci_on_the_chromosome": {k: dict(sorted(v.items())) for k, v in sorted(by_loci.items())},
         "distance_test": {
             "rules": distance_test["rules"],
             "outcomes": dict(sorted(distance_test_outcomes.items())),
@@ -309,6 +319,33 @@ def main() -> None:
                 "about any one rule"
             ),
         },
+        "what_the_comparison_could_have_caught": {
+            "added_after_the_genome_wide_count": (
+                "this breakdown was added after the counts above were read, and amendment 2 records "
+                "it. It moved no definition, no threshold and no precedence; it is the denominator "
+                "the headline figure has to be read against, and leaving it out would have let a "
+                "count of zero read as much stronger than it is"
+            ),
+            "by_loci_of_that_name_on_the_chromosome": data["by_loci_on_the_chromosome"],
+            "why_it_matters": (
+                "where the rule's target name has exactly one locus on its chromosome, both sides "
+                "resolve to that locus whatever the window says, so `agree` there is a property of "
+                "the annotation and not a check that could have failed. The comparison can only "
+                "separate the two sides where the name has two or more loci, and the rules in those "
+                "rows are the ones the figure is about"
+            ),
+            "the_rules_a_differing_id_was_possible_for": sum(
+                v
+                for k, counts in data["by_loci_on_the_chromosome"].items()
+                if k not in ("0", "1")
+                for v in counts.values()
+            ),
+            "of_those_the_resolvable_ones": sum(
+                counts.get(gi.AGREE, 0) + counts.get(gi.DIFFER, 0)
+                for k, counts in data["by_loci_on_the_chromosome"].items()
+                if k not in ("0", "1")
+            ),
+        },
         "at_the_second_half_window": {
             "half_window": gi.SENSITIVITY_HALF_WINDOW,
             "outcomes": data["outcomes_at_the_second_half_window"],
@@ -332,6 +369,24 @@ def main() -> None:
                 "the distance test selecting names with a single locus. They are descriptive counts "
                 "over a population the registration already fixed and they moved no definition, no "
                 "threshold and no precedence; the amendment records them"
+            ),
+            "at_most_this_many_of_the_1678_can_carry_the_cause_it_names": (
+                data["distance_test"]["breakdown"].get("name_has_more_than_one_locus_on_the_chromosome", 0)
+            ),
+            "how_that_bound_is_argued": (
+                "lane-notopen's 1,678 is this distance test restricted to the rules in state "
+                "not_open_in_reader, computed with the same resolver and the same element midpoint, "
+                "so it is a subset of the rules this test selects. A rule can only carry the cause "
+                "that reading names - a repeated gene symbol resolved to another locus - if its "
+                "target name has more than one locus on its chromosome, and the breakdown above "
+                "counts those. The bound follows from the subset alone and needs no re-derivation of "
+                "the openness state, which this lane does not do"
+            ),
+            "what_the_bound_is_not": (
+                "it is a bound on how many of the 1,678 could carry that cause, not a claim about "
+                "any one of them, and not a claim that the 1,678 is wrong about the distances it "
+                "counted. The distances are the distances; what the bound bears on is the cause "
+                "offered for them"
             ),
             "the_two_populations": (
                 "the 1,678 is the distance test restricted to the 55,084 rules in state "
