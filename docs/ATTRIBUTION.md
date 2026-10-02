@@ -14423,6 +14423,98 @@ verdict was changed, nothing was deleted, nothing was refitted, no model request
 was spent. The 0.8511 against 0.5702 asymmetry the lane began from is still unexplained in the sense
 that matters: it is now located, and it is still not measured.
 
+## Does a compiled rule name the gene its deletion answer measured? 0 of 440,589 name a different one, and only 547 of them could have (2026-10-02, lane-identity)
+
+A compiled rule names its target by symbol - `rule EH38E2130399 activates TPTE` - and a symbol is not
+unique on a chromosome: GENCODE v50 carries twelve genes called `Y_RNA` on chr21 alone. The AlphaGenome
+deletion answer the rule is built from measured **one** gene, the one in the element's own 1 Mb window.
+So a rule whose symbol resolved to another locus of the same symbol would assert a relation between an
+element and a gene the model never scored. This asks that question directly, as Ensembl gene ids, over
+every rule the compiler emits. Registered first in `data/results/gene_identity_registration.json` with
+two amendments beside it; counted in `data/results/gene_identity.json`; 0 model requests, no network.
+
+**The measured side is recovered, not read, and that is the result's first limitation.** The cached
+answer records `{gene, action, log2_fold_change, tissue, strength, confidence, basis}` and **no Ensembl
+gene id**, where `gene` is a symbol or a bare versionless id for a gene with no symbol. The id comes
+from two things that *are* recorded: `data/knowledge/alphagenome/elements/<chrom>.json.gz` lists every
+gene the scorer read in each element's window, and the method records the window, taken as the element
+midpoint plus or minus `not_open_profile.SCORER_HALF_WINDOW` with gene-body overlap. Where those two do
+not pick out exactly one gene, the rule gets a named cause and never a guess. The compiled side is the
+project's own resolver, `pilot_bio.gene_tss`, with the `gene_id` it discards carried: a test holds the
+two to the same locus for every symbol GENCODE v50 gives chr21.
+
+**The counts, over all 440,589 rules of the 24 compiled programs:**
+
+| outcome | rules |
+| --- | --- |
+| names a different gene (`differ`) | **0** |
+| names the same gene (`agree`) | 439,803 |
+| cannot be compared, by named cause | 786 |
+| &nbsp;&nbsp;two or more annotated loci of that name in the scorer window | 547 |
+| &nbsp;&nbsp;a rule of the experimental layer, with no deletion answer | 205 |
+| &nbsp;&nbsp;no annotated locus of that name overlaps the scorer window | 27 |
+| &nbsp;&nbsp;the target token is absent from the chromosome's annotation | 7 |
+
+The three sum to 440,589 and nothing is in a residue. At the second half-window fixed in advance -
+524,288, half AlphaGenome's 2**20 bp interval - the 27 become `agree` and `differ` is still 0.
+
+**0 is not a test the compiled set passed. It is a test that could not fire.** Amendment 2 was written
+for this and the figure is reported with it: where a target name has exactly one locus on its
+chromosome, both sides resolve to that locus whatever the window says, so the agreement is a property
+of the annotation and not a check that could have failed. **440,035 of the 440,589 rules name a target
+with exactly one locus on its chromosome, 547 name one with two loci, and 7 name one the chromosome
+does not carry at all.** So the rules a
+differing id was possible for at all are the 547 - and all 547 are unresolvable, because both loci lie
+inside the scorer window and the window does not pick one out. **0 of the 547 rules a differing id was possible for are
+resolvable, so this comparison fired on no rule at all.** It establishes that no compiled rule was *caught*
+naming a different gene; it does not establish that none does.
+
+**The 1,678, reconciled rather than equated.** lane-notopen registered that *"1,678 rules carry a TSS
+further from the element than half the 1 Mb deletion window, so a repeated gene symbol resolved to
+another locus - a fault in the distance, not the rule"*, over the 55,084 rules in state
+`not_open_in_reader`. The same distance test over all 440,589 rules selects **11,444**, and the 1,678 is
+that test restricted to the openness state, computed with the same resolver and the same element
+midpoint, so it is a subset of the 11,444. Of those 11,444, **11,441 name a target with exactly one
+locus on the chromosome** and **11,402 have the compiled gene's own body reaching into the scorer
+window**: `NCAM2` on chr21 is one gene spanning 544 kb, and an element 908 kb from its TSS is still
+inside the window its body occupies. Only **3** of the 11,444 name a target whose name has more than one
+locus, so **at most 3 of the 1,678 can carry the cause that reading names.** The bound follows from the
+subset alone; this lane does not re-derive the openness state and does not identify the 1,678 rule by
+rule. It is a bound on how many could carry that cause, not a claim about any one of them, and the
+distances the 1,678 counted are not in question - what the bound bears on is the cause offered for them.
+
+**Two defects of the compiled text that this found on the way, neither of them a wrong rule.** First,
+a rule's target is not a gene symbol, it is a BioLang identifier: `compile.ident` replaces every
+non-word character with an underscore, so GENCODE's `KRTAP10-1` is written `KRTAP10_1` and 152 of
+chr21's 5,176 rules looked like a token absent from an annotation that carries every one of them
+(amendment 1). `ident` is not injective, so two symbols could be written as one token and the compiled
+text would not say which was meant; that is counted as its own cause and comes out at **0 of 83,343
+tokens** over all 24 chromosomes. Second, **4,340 rules name their target by a bare Ensembl id** rather
+than a symbol, which the project's own resolver skips entirely because it keys on symbols: for those
+rules `pilot_bio.gene_tss` returns no TSS at all, and they carry no distance in any reading built on it.
+
+**The experimental layer, reported separately and never added in.** The 212 rules whose evidence is a
+CRISPRi screen have no deletion answer, so they are counted under their own cause. The screen does
+record the Ensembl gene id it measured (`measuredGeneEnsemblId`), and against that **205 of the 212
+agree**; the other 7 are the rules whose token is absent from the chromosome's annotation, which is the
+same 7 as above.
+
+**What this cannot establish.** It is a count of symbol resolutions. It does **not** say the model's
+predictions are wrong by any proportion, it is not a measure of any feature's contribution, and it
+establishes about no single rule that the rule is wrong. The measured side is recovered from the record
+rather than read off it, so every figure here depends on the window being the one the method records.
+AlphaGenome scored with its own gene annotation and both sides are resolved against GENCODE v50, so
+where the two releases disagree about a name the rule lands in a cause that is a statement about the
+annotations and not about the rule. No compiled rule was deleted, rewritten or relabelled.
+
+**One repair is proposed and left to a ruling.** Of the 547 rules the window cannot resolve, 295 have
+exactly one protein_coding locus among their window candidates, and the compiled target comes from the
+`predicted_coding` block, which was chosen from the symbols that are protein_coding *somewhere on the
+chromosome*. That is a property of the symbol and not of the locus, so it does **not** identify the
+measured locus and was not used to resolve any of the 547. Whether the scorer's own gene rows can be
+tied to a locus - which would settle all 547 and make the comparison able to fire - is a question for
+whoever owns the scoring chain, not a change this lane makes.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

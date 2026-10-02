@@ -1,0 +1,2485 @@
+{
+  "result": "gene_identity_chr21",
+  "date": "2026-10-02",
+  "lane": "lane-identity",
+  "question": "for every compiled rule, does the target token resolve to the same Ensembl gene id as the gene the deletion answer measured?",
+  "status": "descriptive. The definitions, the precedence and both half-windows were fixed in data/results/gene_identity_registration.json before any of these counts was read, and none of them moved afterwards",
+  "registration": "data/results/gene_identity_registration.json",
+  "chromosomes": [
+    "chr21"
+  ],
+  "population": {
+    "rules": 5176,
+    "source": "every `rule` line of data/knowledge/compiled/noncoding_chr*.bio",
+    "reproduces_the_fixed_denominator": true,
+    "fixed_denominator": 5176
+  },
+  "counts": {
+    "differ": 0,
+    "agree": 5174,
+    "unresolvable": 2,
+    "unresolvable_by_cause": {
+      "rule_of_the_experimental_layer": 2
+    },
+    "sums_to_the_population": true,
+    "differ_share_of_the_resolvable": 0.0,
+    "population_of_that_share": "the 5174 resolvable rules: agree + differ",
+    "what_differ_means": "a rule whose target token resolves, by the project's own symbol resolution, to a different Ensembl gene id from the gene the deletion answer measured. It says the rule names a gene the model never scored; it does NOT say the predicted relation is wrong, and nothing here establishes that any one rule is wrong",
+    "what_differ_does_not_mean": "it is not a share of the model's predictions that are wrong, and it says nothing about any one rule"
+  },
+  "what_the_comparison_could_have_caught": {
+    "added_after_the_genome_wide_count": "this breakdown was added after the counts above were read, and amendment 2 records it. It moved no definition, no threshold and no precedence; it is the denominator the headline figure has to be read against, and leaving it out would have let a count of zero read as much stronger than it is",
+    "by_loci_of_that_name_on_the_chromosome": {
+      "1": {
+        "agree": 5174,
+        "rule_of_the_experimental_layer": 2
+      }
+    },
+    "why_it_matters": "where the rule's target name has exactly one locus on its chromosome, both sides resolve to that locus whatever the window says, so `agree` there is a property of the annotation and not a check that could have failed. The comparison can only separate the two sides where the name has two or more loci, and the rules in those rows are the ones the figure is about",
+    "the_rules_a_differing_id_was_possible_for": 0,
+    "of_those_the_resolvable_ones": 0
+  },
+  "at_the_second_half_window": {
+    "half_window": 524288,
+    "outcomes": {
+      "agree": 5174,
+      "rule_of_the_experimental_layer": 2
+    },
+    "differ": 0,
+    "agree": 5174,
+    "moved_from_the_registered_half_window": {
+      "agree": 0,
+      "rule_of_the_experimental_layer": 0
+    }
+  },
+  "the_1678": {
+    "imported_reading": "1,678 rules carry a TSS further from the element than half the 1 Mb deletion window, so a repeated gene symbol resolved to another locus - a fault in the distance, not the rule",
+    "imported_from": "data/results/not_open_profile.json, docs/ATTRIBUTION.md",
+    "its_population": "the 55,084 rules in state not_open_in_reader, out of the 81,635 assessable rules, out of the 440,589 rules the compiler emits",
+    "the_same_distance_test_over_this_whole_population": 115,
+    "its_outcomes_here": {
+      "agree": 115
+    },
+    "breakdown_of_those_rules": {
+      "compiled_gene_body_reaches_into_the_scorer_window": 115,
+      "name_has_one_locus_on_the_chromosome": 115
+    },
+    "the_breakdown_was_added_after_the_chr21_run": "`name_has_one_locus_on_the_chromosome` and the three figures beside it were added after the chr21 run, not fixed in the registration, because the chr21 run showed the distance test selecting names with a single locus. They are descriptive counts over a population the registration already fixed and they moved no definition, no threshold and no precedence; the amendment records them",
+    "at_most_this_many_of_the_1678_can_carry_the_cause_it_names": 0,
+    "how_that_bound_is_argued": "lane-notopen's 1,678 is this distance test restricted to the rules in state not_open_in_reader, computed with the same resolver and the same element midpoint, so it is a subset of the rules this test selects. A rule can only carry the cause that reading names - a repeated gene symbol resolved to another locus - if its target name has more than one locus on its chromosome, and the breakdown above counts those. The bound follows from the subset alone and needs no re-derivation of the openness state, which this lane does not do",
+    "what_the_bound_is_not": "it is a bound on how many of the 1,678 could carry that cause, not a claim about any one of them, and not a claim that the 1,678 is wrong about the distances it counted. The distances are the distances; what the bound bears on is the cause offered for them",
+    "the_two_populations": "the 1,678 is the distance test restricted to the 55,084 rules in state not_open_in_reader. This lane's distance-test figure is the same test over all 5176 rules and does not re-derive the openness state, so the 1,678 is a subset of it and is not equated with any count here"
+  },
+  "correlations": {
+    "by_activity": {
+      "activates_target": {
+        "differ": 0,
+        "agree": 3229,
+        "resolvable": 3229,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 2,
+        "population_of_that_share": "the 3229 resolvable rules of this level: agree + differ"
+      },
+      "represses_target": {
+        "differ": 0,
+        "agree": 1945,
+        "resolvable": 1945,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1945 resolvable rules of this level: agree + differ"
+      }
+    },
+    "by_effect_band": {
+      "strong": {
+        "differ": 0,
+        "agree": 1183,
+        "resolvable": 1183,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1183 resolvable rules of this level: agree + differ"
+      },
+      "weak": {
+        "differ": 0,
+        "agree": 3991,
+        "resolvable": 3991,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 2,
+        "population_of_that_share": "the 3991 resolvable rules of this level: agree + differ"
+      }
+    },
+    "by_distance_band": {
+      "5 to 50 kb": {
+        "differ": 0,
+        "agree": 2116,
+        "resolvable": 2116,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 2,
+        "population_of_that_share": "the 2116 resolvable rules of this level: agree + differ"
+      },
+      "50 to 250 kb": {
+        "differ": 0,
+        "agree": 1706,
+        "resolvable": 1706,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1706 resolvable rules of this level: agree + differ"
+      },
+      "beyond 250 kb": {
+        "differ": 0,
+        "agree": 468,
+        "resolvable": 468,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 468 resolvable rules of this level: agree + differ"
+      },
+      "under 5 kb": {
+        "differ": 0,
+        "agree": 884,
+        "resolvable": 884,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 884 resolvable rules of this level: agree + differ"
+      }
+    },
+    "by_cell": {
+      "A172": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "A375": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "A549": {
+        "differ": 0,
+        "agree": 8,
+        "resolvable": 8,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 8 resolvable rules of this level: agree + differ"
+      },
+      "A673": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "AG04450": {
+        "differ": 0,
+        "agree": 35,
+        "resolvable": 35,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 35 resolvable rules of this level: agree + differ"
+      },
+      "Adrenal_Gland": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "Artery_Aorta": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Artery_Tibial": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "BE2C": {
+        "differ": 0,
+        "agree": 12,
+        "resolvable": 12,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 12 resolvable rules of this level: agree + differ"
+      },
+      "BJ": {
+        "differ": 0,
+        "agree": 8,
+        "resolvable": 8,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 8 resolvable rules of this level: agree + differ"
+      },
+      "BLaER1": {
+        "differ": 0,
+        "agree": 17,
+        "resolvable": 17,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 17 resolvable rules of this level: agree + differ"
+      },
+      "B_cell": {
+        "differ": 0,
+        "agree": 18,
+        "resolvable": 18,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 18 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Amygdala": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Anterior_cingulate_cortex_BA24": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Cerebellar_Hemisphere": {
+        "differ": 0,
+        "agree": 23,
+        "resolvable": 23,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 23 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Cerebellum": {
+        "differ": 0,
+        "agree": 17,
+        "resolvable": 17,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 17 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Frontal_Cortex_BA9": {
+        "differ": 0,
+        "agree": 12,
+        "resolvable": 12,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 12 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Hippocampus": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Nucleus_accumbens_basal_ganglia": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Putamen_basal_ganglia": {
+        "differ": 0,
+        "agree": 9,
+        "resolvable": 9,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 9 resolvable rules of this level: agree + differ"
+      },
+      "Brain_Spinal_cord_cervical_c_1": {
+        "differ": 0,
+        "agree": 20,
+        "resolvable": 20,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 20 resolvable rules of this level: agree + differ"
+      },
+      "CD14_positive_monocyte": {
+        "differ": 0,
+        "agree": 179,
+        "resolvable": 179,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 179 resolvable rules of this level: agree + differ"
+      },
+      "CD4_positive__CD25_positive__alpha_beta_regulatory_T_cell": {
+        "differ": 0,
+        "agree": 38,
+        "resolvable": 38,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 38 resolvable rules of this level: agree + differ"
+      },
+      "CD4_positive__alpha_beta_T_cell": {
+        "differ": 0,
+        "agree": 27,
+        "resolvable": 27,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 27 resolvable rules of this level: agree + differ"
+      },
+      "CD4_positive__alpha_beta_memory_T_cell": {
+        "differ": 0,
+        "agree": 28,
+        "resolvable": 28,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 28 resolvable rules of this level: agree + differ"
+      },
+      "CD8_positive__alpha_beta_T_cell": {
+        "differ": 0,
+        "agree": 112,
+        "resolvable": 112,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 112 resolvable rules of this level: agree + differ"
+      },
+      "CD8_positive__alpha_beta_memory_T_cell": {
+        "differ": 0,
+        "agree": 52,
+        "resolvable": 52,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 52 resolvable rules of this level: agree + differ"
+      },
+      "Caki2": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "Calu3": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "Cells_Cultured_fibroblasts": {
+        "differ": 0,
+        "agree": 15,
+        "resolvable": 15,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 15 resolvable rules of this level: agree + differ"
+      },
+      "Cells_EBV_transformed_lymphocytes": {
+        "differ": 0,
+        "agree": 49,
+        "resolvable": 49,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 49 resolvable rules of this level: agree + differ"
+      },
+      "Colon_Transverse": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Esophagus_Mucosa": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "Fallopian_Tube": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "G401": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "GM12878": {
+        "differ": 0,
+        "agree": 76,
+        "resolvable": 76,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 1,
+        "population_of_that_share": "the 76 resolvable rules of this level: agree + differ"
+      },
+      "GM12891": {
+        "differ": 0,
+        "agree": 49,
+        "resolvable": 49,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 49 resolvable rules of this level: agree + differ"
+      },
+      "GM12892": {
+        "differ": 0,
+        "agree": 56,
+        "resolvable": 56,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 56 resolvable rules of this level: agree + differ"
+      },
+      "GM23248": {
+        "differ": 0,
+        "agree": 76,
+        "resolvable": 76,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 76 resolvable rules of this level: agree + differ"
+      },
+      "GM23338": {
+        "differ": 0,
+        "agree": 99,
+        "resolvable": 99,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 99 resolvable rules of this level: agree + differ"
+      },
+      "H1": {
+        "differ": 0,
+        "agree": 65,
+        "resolvable": 65,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 65 resolvable rules of this level: agree + differ"
+      },
+      "H4": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "H7": {
+        "differ": 0,
+        "agree": 16,
+        "resolvable": 16,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 16 resolvable rules of this level: agree + differ"
+      },
+      "H9": {
+        "differ": 0,
+        "agree": 19,
+        "resolvable": 19,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 19 resolvable rules of this level: agree + differ"
+      },
+      "HCT116": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "HFFc6": {
+        "differ": 0,
+        "agree": 51,
+        "resolvable": 51,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 51 resolvable rules of this level: agree + differ"
+      },
+      "HT1080": {
+        "differ": 0,
+        "agree": 21,
+        "resolvable": 21,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 21 resolvable rules of this level: agree + differ"
+      },
+      "HT_29": {
+        "differ": 0,
+        "agree": 27,
+        "resolvable": 27,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 27 resolvable rules of this level: agree + differ"
+      },
+      "HUES64": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "HeLa_S3": {
+        "differ": 0,
+        "agree": 23,
+        "resolvable": 23,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 23 resolvable rules of this level: agree + differ"
+      },
+      "Heart_Atrial_Appendage": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "HepG2": {
+        "differ": 0,
+        "agree": 154,
+        "resolvable": 154,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 154 resolvable rules of this level: agree + differ"
+      },
+      "IMR_90": {
+        "differ": 0,
+        "agree": 18,
+        "resolvable": 18,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 18 resolvable rules of this level: agree + differ"
+      },
+      "IgD_negative_memory_B_cell": {
+        "differ": 0,
+        "agree": 50,
+        "resolvable": 50,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 50 resolvable rules of this level: agree + differ"
+      },
+      "Jurkat__Clone_E6_1": {
+        "differ": 0,
+        "agree": 26,
+        "resolvable": 26,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 26 resolvable rules of this level: agree + differ"
+      },
+      "K562": {
+        "differ": 0,
+        "agree": 371,
+        "resolvable": 371,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 1,
+        "population_of_that_share": "the 371 resolvable rules of this level: agree + differ"
+      },
+      "Karpas_422": {
+        "differ": 0,
+        "agree": 113,
+        "resolvable": 113,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 113 resolvable rules of this level: agree + differ"
+      },
+      "Kidney_Medulla": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "LHCN_M2": {
+        "differ": 0,
+        "agree": 76,
+        "resolvable": 76,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 76 resolvable rules of this level: agree + differ"
+      },
+      "Liver": {
+        "differ": 0,
+        "agree": 29,
+        "resolvable": 29,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 29 resolvable rules of this level: agree + differ"
+      },
+      "Lung": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "M059J": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "MCF_10A": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "MCF_7": {
+        "differ": 0,
+        "agree": 8,
+        "resolvable": 8,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 8 resolvable rules of this level: agree + differ"
+      },
+      "MG63": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Minor_Salivary_Gland": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "Muscle_Skeletal": {
+        "differ": 0,
+        "agree": 16,
+        "resolvable": 16,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 16 resolvable rules of this level: agree + differ"
+      },
+      "NCI_H460": {
+        "differ": 0,
+        "agree": 18,
+        "resolvable": 18,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 18 resolvable rules of this level: agree + differ"
+      },
+      "Nerve_Tibial": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "OCI_LY7": {
+        "differ": 0,
+        "agree": 84,
+        "resolvable": 84,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 84 resolvable rules of this level: agree + differ"
+      },
+      "Ovary": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "PC_3": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "PC_9": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "PFSK_1": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "Panc1": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Peyer_s_patch": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "Purkinje_cell": {
+        "differ": 0,
+        "agree": 89,
+        "resolvable": 89,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 89 resolvable rules of this level: agree + differ"
+      },
+      "RPMI7951": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Right_ventricle_myocardium_inferior": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "Right_ventricle_myocardium_superior": {
+        "differ": 0,
+        "agree": 20,
+        "resolvable": 20,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 20 resolvable rules of this level: agree + differ"
+      },
+      "SJCRH30": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "SK_MEL_5": {
+        "differ": 0,
+        "agree": 30,
+        "resolvable": 30,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 30 resolvable rules of this level: agree + differ"
+      },
+      "SK_N_DZ": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "SK_N_SH": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Skin_Not_Sun_Exposed_Suprapubic": {
+        "differ": 0,
+        "agree": 27,
+        "resolvable": 27,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 27 resolvable rules of this level: agree + differ"
+      },
+      "Skin_Sun_Exposed_Lower_leg": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "Small_Intestine_Terminal_Ileum": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "Spleen": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "T_cell": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "Testis": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "Thyroid": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "U_87_MG": {
+        "differ": 0,
+        "agree": 19,
+        "resolvable": 19,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 19 resolvable rules of this level: agree + differ"
+      },
+      "Uterus": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "Whole_Blood": {
+        "differ": 0,
+        "agree": 135,
+        "resolvable": 135,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 135 resolvable rules of this level: agree + differ"
+      },
+      "adipose_tissue": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "adrenal_gland": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "airway_epithelial_cell": {
+        "differ": 0,
+        "agree": 14,
+        "resolvable": 14,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 14 resolvable rules of this level: agree + differ"
+      },
+      "amnion": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "aorta": {
+        "differ": 0,
+        "agree": 13,
+        "resolvable": 13,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 13 resolvable rules of this level: agree + differ"
+      },
+      "aortic_smooth_muscle_cell": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "articular_chondrocyte_of_knee_joint": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "ascending_aorta": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "bladder_microvascular_endothelial_cell": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "body_of_pancreas": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "brain": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "bronchial_epithelial_cell": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "bronchial_smooth_muscle_cell": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "camera_type_eye": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "cardiac_muscle_cell": {
+        "differ": 0,
+        "agree": 23,
+        "resolvable": 23,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 23 resolvable rules of this level: agree + differ"
+      },
+      "cardiac_septum": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "cardiac_ventricle_fibroblast": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "cerebellum": {
+        "differ": 0,
+        "agree": 13,
+        "resolvable": 13,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 13 resolvable rules of this level: agree + differ"
+      },
+      "chorion": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "colonic_mucosa": {
+        "differ": 0,
+        "agree": 37,
+        "resolvable": 37,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 37 resolvable rules of this level: agree + differ"
+      },
+      "common_myeloid_progenitor__CD34_positive": {
+        "differ": 0,
+        "agree": 64,
+        "resolvable": 64,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 64 resolvable rules of this level: agree + differ"
+      },
+      "dermis_blood_vessel_endothelial_cell": {
+        "differ": 0,
+        "agree": 28,
+        "resolvable": 28,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 28 resolvable rules of this level: agree + differ"
+      },
+      "dermis_lymphatic_vessel_endothelial_cell": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "diencephalon": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "dorsolateral_prefrontal_cortex": {
+        "differ": 0,
+        "agree": 11,
+        "resolvable": 11,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 11 resolvable rules of this level: agree + differ"
+      },
+      "ectodermal_cell": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "endodermal_cell": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "endothelial_cell": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "endothelial_cell_of_coronary_artery": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "endothelial_cell_of_umbilical_vein": {
+        "differ": 0,
+        "agree": 49,
+        "resolvable": 49,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 49 resolvable rules of this level: agree + differ"
+      },
+      "epithelial_cell_of_alveolus_of_lung": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "epithelial_cell_of_proximal_tubule": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "epithelial_cell_of_umbilical_artery": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "esophagus": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "esophagus_mucosa": {
+        "differ": 0,
+        "agree": 31,
+        "resolvable": 31,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 31 resolvable rules of this level: agree + differ"
+      },
+      "esophagus_muscularis_mucosa": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "esophagus_squamous_epithelium": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "fibroblast_of_lung": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "fibroblast_of_skin_of_abdomen": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "fibroblast_of_skin_of_back": {
+        "differ": 0,
+        "agree": 9,
+        "resolvable": 9,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 9 resolvable rules of this level: agree + differ"
+      },
+      "forelimb_muscle": {
+        "differ": 0,
+        "agree": 20,
+        "resolvable": 20,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 20 resolvable rules of this level: agree + differ"
+      },
+      "foreskin_fibroblast": {
+        "differ": 0,
+        "agree": 21,
+        "resolvable": 21,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 21 resolvable rules of this level: agree + differ"
+      },
+      "foreskin_keratinocyte": {
+        "differ": 0,
+        "agree": 60,
+        "resolvable": 60,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 60 resolvable rules of this level: agree + differ"
+      },
+      "foreskin_melanocyte": {
+        "differ": 0,
+        "agree": 27,
+        "resolvable": 27,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 27 resolvable rules of this level: agree + differ"
+      },
+      "frontal_cortex": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "gastrocnemius_medialis": {
+        "differ": 0,
+        "agree": 24,
+        "resolvable": 24,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 24 resolvable rules of this level: agree + differ"
+      },
+      "glomerular_endothelial_cell": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "glutamatergic_neuron": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "hair_follicle_dermal_papilla_cell": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "hair_follicular_keratinocyte": {
+        "differ": 0,
+        "agree": 19,
+        "resolvable": 19,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 19 resolvable rules of this level: agree + differ"
+      },
+      "heart": {
+        "differ": 0,
+        "agree": 45,
+        "resolvable": 45,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 45 resolvable rules of this level: agree + differ"
+      },
+      "heart_left_ventricle": {
+        "differ": 0,
+        "agree": 22,
+        "resolvable": 22,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 22 resolvable rules of this level: agree + differ"
+      },
+      "heart_right_ventricle": {
+        "differ": 0,
+        "agree": 30,
+        "resolvable": 30,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 30 resolvable rules of this level: agree + differ"
+      },
+      "hematopoietic_multipotent_progenitor_cell": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "hindlimb_muscle": {
+        "differ": 0,
+        "agree": 25,
+        "resolvable": 25,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 25 resolvable rules of this level: agree + differ"
+      },
+      "immature_natural_killer_cell": {
+        "differ": 0,
+        "agree": 47,
+        "resolvable": 47,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 47 resolvable rules of this level: agree + differ"
+      },
+      "keratinocyte": {
+        "differ": 0,
+        "agree": 133,
+        "resolvable": 133,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 133 resolvable rules of this level: agree + differ"
+      },
+      "kidney": {
+        "differ": 0,
+        "agree": 42,
+        "resolvable": 42,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 42 resolvable rules of this level: agree + differ"
+      },
+      "kidney_epithelial_cell": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "large_intestine": {
+        "differ": 0,
+        "agree": 9,
+        "resolvable": 9,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 9 resolvable rules of this level: agree + differ"
+      },
+      "left_colon": {
+        "differ": 0,
+        "agree": 30,
+        "resolvable": 30,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 30 resolvable rules of this level: agree + differ"
+      },
+      "left_kidney": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "left_lobe_of_liver": {
+        "differ": 0,
+        "agree": 61,
+        "resolvable": 61,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 61 resolvable rules of this level: agree + differ"
+      },
+      "left_lung": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "left_ventricle_myocardium_inferior": {
+        "differ": 0,
+        "agree": 51,
+        "resolvable": 51,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 51 resolvable rules of this level: agree + differ"
+      },
+      "left_ventricle_myocardium_superior": {
+        "differ": 0,
+        "agree": 17,
+        "resolvable": 17,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 17 resolvable rules of this level: agree + differ"
+      },
+      "liver": {
+        "differ": 0,
+        "agree": 39,
+        "resolvable": 39,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 39 resolvable rules of this level: agree + differ"
+      },
+      "lower_leg_skin": {
+        "differ": 0,
+        "agree": 36,
+        "resolvable": 36,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 36 resolvable rules of this level: agree + differ"
+      },
+      "lower_lobe_of_right_lung": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "luminal_epithelial_cell_of_mammary_gland": {
+        "differ": 0,
+        "agree": 9,
+        "resolvable": 9,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 9 resolvable rules of this level: agree + differ"
+      },
+      "lung": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "lung_microvascular_endothelial_cell": {
+        "differ": 0,
+        "agree": 12,
+        "resolvable": 12,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 12 resolvable rules of this level: agree + differ"
+      },
+      "mammary_epithelial_cell": {
+        "differ": 0,
+        "agree": 11,
+        "resolvable": 11,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 11 resolvable rules of this level: agree + differ"
+      },
+      "mammary_microvascular_endothelial_cell": {
+        "differ": 0,
+        "agree": 54,
+        "resolvable": 54,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 54 resolvable rules of this level: agree + differ"
+      },
+      "mammary_stem_cell": {
+        "differ": 0,
+        "agree": 20,
+        "resolvable": 20,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 20 resolvable rules of this level: agree + differ"
+      },
+      "melanocyte_of_skin": {
+        "differ": 0,
+        "agree": 12,
+        "resolvable": 12,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 12 resolvable rules of this level: agree + differ"
+      },
+      "mesangial_cell": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "mesenchymal_stem_cell": {
+        "differ": 0,
+        "agree": 8,
+        "resolvable": 8,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 8 resolvable rules of this level: agree + differ"
+      },
+      "mesenchymal_stem_cell_of_Wharton_s_jelly": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "mesenchymal_stem_cell_of_adipose": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "mesenchymal_stem_cell_of_the_bone_marrow": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "mesendoderm": {
+        "differ": 0,
+        "agree": 35,
+        "resolvable": 35,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 35 resolvable rules of this level: agree + differ"
+      },
+      "mesenteric_fat_pad": {
+        "differ": 0,
+        "agree": 8,
+        "resolvable": 8,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 8 resolvable rules of this level: agree + differ"
+      },
+      "mesodermal_cell": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "mesothelial_cell_of_epicardium": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "mole": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "mononuclear_cell": {
+        "differ": 0,
+        "agree": 9,
+        "resolvable": 9,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 9 resolvable rules of this level: agree + differ"
+      },
+      "motor_neuron": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "mucosa_of_descending_colon": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "muscle_of_arm": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "muscle_of_leg": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "myocyte": {
+        "differ": 0,
+        "agree": 44,
+        "resolvable": 44,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 44 resolvable rules of this level: agree + differ"
+      },
+      "myoepithelial_cell_of_mammary_gland": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "myometrial_cell": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "myotube": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "naive_B_cell": {
+        "differ": 0,
+        "agree": 33,
+        "resolvable": 33,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 33 resolvable rules of this level: agree + differ"
+      },
+      "naive_thymus_derived_CD4_positive__alpha_beta_T_cell": {
+        "differ": 0,
+        "agree": 80,
+        "resolvable": 80,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 80 resolvable rules of this level: agree + differ"
+      },
+      "naive_thymus_derived_CD8_positive__alpha_beta_T_cell": {
+        "differ": 0,
+        "agree": 53,
+        "resolvable": 53,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 53 resolvable rules of this level: agree + differ"
+      },
+      "nasal_cavity_respiratory_epithelium_epithelial_cell_of_viscerocranial_mucosa": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "natural_killer_cell": {
+        "differ": 0,
+        "agree": 11,
+        "resolvable": 11,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 11 resolvable rules of this level: agree + differ"
+      },
+      "neural_cell": {
+        "differ": 0,
+        "agree": 90,
+        "resolvable": 90,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 90 resolvable rules of this level: agree + differ"
+      },
+      "neural_crest_cell": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "neural_progenitor_cell": {
+        "differ": 0,
+        "agree": 19,
+        "resolvable": 19,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 19 resolvable rules of this level: agree + differ"
+      },
+      "neuronal_stem_cell": {
+        "differ": 0,
+        "agree": 8,
+        "resolvable": 8,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 8 resolvable rules of this level: agree + differ"
+      },
+      "neurosphere": {
+        "differ": 0,
+        "agree": 17,
+        "resolvable": 17,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 17 resolvable rules of this level: agree + differ"
+      },
+      "occipital_lobe": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "ovary": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "pancreas": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "pericardium_fibroblast": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "peripheral_blood_mononuclear_cell": {
+        "differ": 0,
+        "agree": 32,
+        "resolvable": 32,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 32 resolvable rules of this level: agree + differ"
+      },
+      "placenta": {
+        "differ": 0,
+        "agree": 209,
+        "resolvable": 209,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 209 resolvable rules of this level: agree + differ"
+      },
+      "placental_basal_plate": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "placental_epithelial_cell": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "placental_pericyte": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "posterior_vena_cava": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "progenitor_cell_of_endocrine_pancreas": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "psoas_muscle": {
+        "differ": 0,
+        "agree": 109,
+        "resolvable": 109,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 109 resolvable rules of this level: agree + differ"
+      },
+      "pulmonary_artery_endothelial_cell": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "regular_cardiac_myocyte": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "renal_cortex_interstitium": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "renal_cortical_epithelial_cell": {
+        "differ": 0,
+        "agree": 10,
+        "resolvable": 10,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 10 resolvable rules of this level: agree + differ"
+      },
+      "renal_pelvis": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "right_atrium_auricular_region": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "right_lobe_of_liver": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "right_renal_cortex_interstitium": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "sigmoid_colon": {
+        "differ": 0,
+        "agree": 15,
+        "resolvable": 15,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 15 resolvable rules of this level: agree + differ"
+      },
+      "skeletal_muscle_myoblast": {
+        "differ": 0,
+        "agree": 15,
+        "resolvable": 15,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 15 resolvable rules of this level: agree + differ"
+      },
+      "skeletal_muscle_satellite_cell": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "skin_of_body": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "small_intestine": {
+        "differ": 0,
+        "agree": 94,
+        "resolvable": 94,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 94 resolvable rules of this level: agree + differ"
+      },
+      "smooth_muscle_cell": {
+        "differ": 0,
+        "agree": 11,
+        "resolvable": 11,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 11 resolvable rules of this level: agree + differ"
+      },
+      "smooth_muscle_cell_of_bladder": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "smooth_muscle_cell_of_the_coronary_artery": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "smooth_muscle_cell_of_the_pulmonary_artery": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "smooth_muscle_cell_of_the_umbilical_artery": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "smooth_muscle_cell_of_trachea": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "spleen": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "stomach": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "subcutaneous_adipose_tissue": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "subcutaneous_preadipocyte": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "suprapubic_skin": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "temporal_lobe": {
+        "differ": 0,
+        "agree": 4,
+        "resolvable": 4,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 4 resolvable rules of this level: agree + differ"
+      },
+      "testis": {
+        "differ": 0,
+        "agree": 16,
+        "resolvable": 16,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 16 resolvable rules of this level: agree + differ"
+      },
+      "thoracic_aorta": {
+        "differ": 0,
+        "agree": 20,
+        "resolvable": 20,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 20 resolvable rules of this level: agree + differ"
+      },
+      "thoracic_aorta_endothelial_cell": {
+        "differ": 0,
+        "agree": 9,
+        "resolvable": 9,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 9 resolvable rules of this level: agree + differ"
+      },
+      "thymus": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "thyroid_gland": {
+        "differ": 0,
+        "agree": 5,
+        "resolvable": 5,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 5 resolvable rules of this level: agree + differ"
+      },
+      "tibial_nerve": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "tongue": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "tracheal_epithelial_cell": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "transverse_colon": {
+        "differ": 0,
+        "agree": 13,
+        "resolvable": 13,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 13 resolvable rules of this level: agree + differ"
+      },
+      "trophoblast": {
+        "differ": 0,
+        "agree": 6,
+        "resolvable": 6,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 6 resolvable rules of this level: agree + differ"
+      },
+      "trophoblast_cell": {
+        "differ": 0,
+        "agree": 28,
+        "resolvable": 28,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 28 resolvable rules of this level: agree + differ"
+      },
+      "umbilical_cord": {
+        "differ": 0,
+        "agree": 1,
+        "resolvable": 1,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 1 resolvable rules of this level: agree + differ"
+      },
+      "upper_lobe_of_left_lung": {
+        "differ": 0,
+        "agree": 7,
+        "resolvable": 7,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 7 resolvable rules of this level: agree + differ"
+      },
+      "upper_lobe_of_right_lung": {
+        "differ": 0,
+        "agree": 3,
+        "resolvable": 3,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 3 resolvable rules of this level: agree + differ"
+      },
+      "uterus": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "vagina": {
+        "differ": 0,
+        "agree": 2,
+        "resolvable": 2,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 2 resolvable rules of this level: agree + differ"
+      },
+      "vein_endothelial_cell": {
+        "differ": 0,
+        "agree": 22,
+        "resolvable": 22,
+        "differ_share_of_the_resolvable": 0.0,
+        "unresolvable_in_this_level": 0,
+        "population_of_that_share": "the 22 resolvable rules of this level: agree + differ"
+      }
+    },
+    "reported_descriptively": "these shares are reported as they came out. No cause is inferred from a difference between levels",
+    "the_activity_figures_this_is_read_beside": "0.8511 of the 30,480 assessable repressions against 0.5702 of the 51,103 assessable activations"
+  },
+  "per_chromosome": {
+    "chr21": {
+      "agree": 5174,
+      "rule_of_the_experimental_layer": 2
+    }
+  },
+  "target_token_was_itself_an_ensembl_id": 74,
+  "ambiguous_window_loci_by_type": {
+    "counts": {},
+    "what_it_is": "of the rules left unresolvable because two or more annotated loci of that name lie in the scorer window, how many have exactly one protein_coding locus among them. `predicted_coding` was chosen from the symbols that are protein_coding somewhere on the chromosome, which is a property of the SYMBOL and not of the locus, so this is reported as a count and is NOT used to resolve any of them"
+  },
+  "window_cache_records_per_chromosome": {
+    "chr21": 12139
+  },
+  "examples_of_differ": [],
+  "the_experimental_layer": {
+    "what_it_is": "the rules of the experimental layer have no deletion answer. The CRISPRi screen does record the Ensembl gene id of the gene it measured (`measuredGeneEnsemblId`, carried as holdout.Unit.gene_id), so the compiled side is compared against that instead. This is a different test on a different population and is never added into the counts above",
+    "rules": 2,
+    "outcomes": {
+      "agree": 2
+    },
+    "sums_to_the_rules": true
+  },
+  "what_this_cannot_establish": {
+    "a_count_is_not_a_contribution": "this is a count of symbol resolutions. It says how many rules name a target whose id differs from the id of the gene the deletion answer measured. It does NOT say the model's predictions are wrong by that proportion, it is not a measure of any feature's contribution, and it establishes about no single rule that the rule is wrong",
+    "the_measured_id_is_recovered_not_read": "the deletion answer records a gene NAME and no Ensembl gene id. The measured side is recovered from the element's recorded window gene list and the window the method records. Where that recovery does not pick out exactly one gene the rule is counted as unresolvable with its cause named, never resolved on a preference",
+    "two_annotations_are_not_one": "AlphaGenome scored with its own gene annotation and both sides here are resolved against GENCODE v50. Where the two releases disagree about a name, the rule lands in `target_absent_from_the_chromosome_annotation` or in `no_annotated_locus_of_that_name_overlaps_the_scorer_window`, which are statements about the annotations and not about the rule",
+    "a_differing_id_is_not_a_repair": "nothing here deletes, rewrites or relabels a compiled rule. If a repair is warranted it is proposed and left to a ruling",
+    "the_window_is_a_model_of_the_scorer": "the scorer's window is taken from the method it records, as the element midpoint plus or minus not_open_profile.SCORER_HALF_WINDOW, with gene-body overlap. Every count is reported again at a half-window of 524288 - half AlphaGenome's 2**20 bp interval - so no figure can be read as depending on the rounder number",
+    "correlation_is_not_cause": "where the differing share is reported by activity, by effect band or by distance it is reported descriptively. No cause is inferred and no axis is claimed to explain another"
+  },
+  "no_interval_is_reported": "these are exhaustive counts over a fixed rule set, not an estimate from a sample, so no confidence interval is computed and none would mean anything here",
+  "nothing_was_changed": "no compiled rule was deleted, rewritten or relabelled by this run. It reads the compiled programs and writes a count beside them",
+  "alphagenome_requests": 0,
+  "network_requests": 0,
+  "money": "none: every input was already on disk",
+  "seconds": 2.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GENCODE",
+        "version": "v50, data/reference/gencode_v50_chr*.gff3.gz"
+      },
+      {
+        "accession": "AlphaGenome deletion answers per element, as the project cached them",
+        "version": "data/knowledge/alphagenome/elements/chr*.json.gz, the per-element record of every gene the scorer read in the element's window"
+      },
+      {
+        "accession": "the compiled non-coding programs of the 24 chromosomes",
+        "version": "data/knowledge/compiled/noncoding_chr*.bio, read as they are on disk"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+        "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+        "bytes": 9769482,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/reference/gencode_v50_chr21.gff3.gz",
+        "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+        "bytes": 1858385,
+        "partition": null
+      },
+      {
+        "path": "data/results/gene_identity_registration.json",
+        "sha256": "a4d575feb5c8e95e41aaae4e5f2bac0c01390c6121d4760525d1249a75dc8e46",
+        "bytes": 62625,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "mis_resolution": "a rule whose target token resolves, by the project's own symbol resolution, to a different Ensembl gene id from the gene the deletion answer measured. It says the rule names a gene the model never scored; it does NOT say the predicted relation is wrong, and nothing here establishes that any one rule is wrong",
+      "compiled_side": "genomeos.attribution.pilot_bio.gene_tss's own choice, with the gene_id it discards carried: among the GENCODE v50 genes of the element's chromosome whose gene_name is the rule's target token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token that is itself a versionless gene_id of that chromosome resolves to that gene directly, which gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own. Amendment 1: the compiled target is a BioLang identifier, not a symbol - compile.ident writes GENCODE's KRTAP10-1 as KRTAP10_1 - so a gene is looked up under its gene_name and under its ident, and a token matched by two distinct gene_names is refused rather than picked between.",
+      "measured_side": "the deletion answer records its target as a name and NO Ensembl gene id, so the id is recovered from two recorded things and never read: the element's own recorded window gene list (data/knowledge/alphagenome/elements/<chrom>.json.gz), which must name the target exactly once, and the window the method records, taken as the element midpoint plus or minus 500000 (not_open_profile.SCORER_HALF_WINDOW), inside which the gene's BODY must lie. Exactly one GENCODE v50 gene of that name with a body overlapping the window is the measured gene; none or several is an unresolvable cause and never a guess. A target token that is a versionless gene_id is read directly, because there the answer does record the id.",
+      "half_window": 500000,
+      "second_half_window": 524288,
+      "effect_band_call": "the rule line's own `strength:`, banded at predict.enhancer_target.STRONG_EFFECT = 0.3: strong at or above, weak below. Clipping at 1 cannot move a value across 0.3, so this is the same band the cached prediction's `strength` field carries.",
+      "causes": {
+        "target_absent_from_the_chromosome_annotation": "the rule's target token is neither a gene_name, nor the compile.ident of a gene_name, nor a versionless gene_id of any gene on the element's own chromosome in GENCODE v50, so neither side resolves to an id. The annotation AlphaGenome scored with and GENCODE v50 are not guaranteed to be the same release",
+        "the_token_matches_two_or_more_symbols_in_the_annotation": "amendment 1. The compiler writes a rule's target through compile.ident, which replaces every non-word character with an underscore and is therefore not injective: KRTAP10-1 and a hypothetical KRTAP10_1 would both be written KRTAP10_1. Where a token is matched by two or more distinct GENCODE v50 gene_names on the chromosome, the compiled text does not say which symbol it meant and no id is recoverable from it. This is a second identity hazard, independent of a symbol repeating at two loci, and it is counted on its own",
+        "rule_of_the_experimental_layer": "the rule's evidence is a CRISPRi screen, not an AlphaGenome deletion answer, so there is no deletion answer to compare against. The screen records its own Ensembl gene id (holdout.Unit.gene_id, `measuredGeneEnsemblId`) and that is a different comparison, reported separately and never added into these counts",
+        "element_absent_from_the_window_cache": "the element has no per-element record in data/knowledge/alphagenome/elements/<chrom>.json.gz, so what the scorer read in its window is not on disk and the measured side cannot be recovered without a request, which this lane does not make",
+        "target_not_in_the_recorded_window_list": "the element's recorded window gene list does not contain the rule's target name at all, so the record does not say which gene the answer named and no id is recoverable from it",
+        "target_named_more_than_once_in_the_recorded_window_list": "the scorer's own record lists more than one gene under the rule's target name in this element's window, so the answer's `gene` field does not say which of them it measured and no id is recoverable from the record",
+        "no_annotated_locus_of_that_name_overlaps_the_scorer_window": "the name is in the recorded window list, but no GENCODE v50 gene of that name on this chromosome has a gene body overlapping the scorer window, so the measured gene cannot be placed in the annotation both sides are resolved against",
+        "two_or_more_annotated_loci_of_that_name_in_the_scorer_window": "two or more GENCODE v50 genes of that name have a gene body inside the scorer window, so the window does not pick one out and no id is recoverable"
+      },
+      "chromosomes": [
+        "chr21"
+      ]
+    },
+    "exclusions": [
+      "no rule is excluded: agree, differ and the named causes sum to the population",
+      "no new cut-off is introduced: the half-window, the effect band and the distance bands are imported from where the project already fixed them",
+      "the experimental layer's own comparison is reported separately and is never added into the deletion-answer counts"
+    ],
+    "partitions": {
+      "by_activity": "the element block's own `activity:` value as the compiler wrote it",
+      "by_effect_band": "the rule line's own `strength:`, banded at STRONG_EFFECT",
+      "by_distance_band": "executor._band over the compiled side's element-midpoint-to-TSS distance",
+      "by_cell": "the rule's own `when: cell_type` label, unchanged"
+    },
+    "code_cleanliness": {
+      "git_sha": "5521bf2cdde2ca749930564581581a0915d59bc2",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/manifest.py",
+        "scripts/astroreg_register.py",
+        "scripts/cell2_eligibility.py",
+        "scripts/context_evidence_census.py",
+        "scripts/crispri_benchmark_v2.py",
+        "scripts/crispri_published_v2.py",
+        "scripts/fresh_crispri_eligibility.py",
+        "scripts/placement_cause_198.py",
+        "scripts/re2g_identity.py",
+        "scripts/re2g_likeforlike.py",
+        "scripts/re2g_paired.py",
+        "scripts/response_map_coverage.py",
+        "tests/test_code_cleanliness_shared.py",
+        "tests/test_context_evidence.py",
+        "tests/test_crispri_benchmark_v2.py",
+        "tests/test_crispri_published_v2.py",
+        "tests/test_push_lock.py",
+        "tests/test_re2g_paired.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/manifest.py"
+      ],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/gene_identity.py"
+      ],
+      "counting_path_count": 118,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5521bf2cdde2ca749930564581581a0915d59bc2",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/manifest.py",
+        "scripts/astroreg_register.py",
+        "scripts/cell2_eligibility.py",
+        "scripts/context_evidence_census.py",
+        "scripts/crispri_benchmark_v2.py",
+        "scripts/crispri_published_v2.py",
+        "scripts/fresh_crispri_eligibility.py",
+        "scripts/placement_cause_198.py",
+        "scripts/re2g_identity.py",
+        "scripts/re2g_likeforlike.py",
+        "scripts/re2g_paired.py",
+        "scripts/response_map_coverage.py",
+        "tests/test_code_cleanliness_shared.py",
+        "tests/test_context_evidence.py",
+        "tests/test_crispri_benchmark_v2.py",
+        "tests/test_crispri_published_v2.py",
+        "tests/test_push_lock.py",
+        "tests/test_re2g_paired.py"
+      ],
+      "untracked_code_paths": [
+        "tests/test_code_cleanliness_shared.py",
+        "tests/test_push_lock.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/gene_identity.json",
+        "data/results/gene_identity_chr21.json"
+      ],
+      "argv": [
+        "scripts/gene_identity.py",
+        "--chrom",
+        "chr21",
+        "--result",
+        "gene_identity_chr21"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
