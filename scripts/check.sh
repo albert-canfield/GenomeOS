@@ -2,7 +2,17 @@
 # The check every commit to dev must pass, in the order CI runs it:
 # lint, format, the test suite, and the BioLang programs testing themselves.
 # Usage: scripts/check.sh            (whole project, what CI runs)
-#        scripts/check.sh FILE...    (lint and format only the given files, then the full tests)
+#        scripts/check.sh FILE...    (lint and format only the given .py files, then the full tests)
+#
+# A NON-PYTHON ARGUMENT IS REFUSED BY NAME AND DOES NOT KILL THE RUN. ruff is a Python linter and it
+# reads whatever path it is handed as Python: on 2026-10-02 a lane passed
+# data/results/manifest_headlines.json, ruff reported 96 errors in it, `set -e` stopped the run at the
+# ruff-check leg with no tests run at all, and a RED status file was written for the tree. Twice, from
+# nothing but an argument -- status-b17ef4d0b2800f21f64e34c4dbee62ea707cc180 and
+# status-f8a9cf884bdf2f665f9dde009400d718749dc560. Both named a .json among their scope_files and
+# neither was about the code. So the arguments are triaged first: .py and .pyi go to ruff, everything
+# else is named in a refusal line and in the verdict's note, and the tests run either way. The
+# refusal is not a leg and cannot be red: an argument is the caller's mistake, not the tree's.
 #
 # THE VERDICT IS A FILE, NOT AN EXIT CODE. Every run ends by writing a status file that names the
 # TREE IT JUDGED, its exit code and its pass/fail/error/skip counts; genomeos/verdict.py holds the
@@ -24,9 +34,32 @@ cd "$(dirname "$0")/.."
 started_at=$(date +%s)
 scope=project
 scope_args=()
+lint_args=()
+refused_args=()
 if [ "$#" -gt 0 ]; then
   scope=files
-  for f in "$@"; do scope_args+=(--scope-file "$f"); done
+  for f in "$@"; do
+    scope_args+=(--scope-file "$f")
+    case "$f" in
+      *.py | *.pyi) lint_args+=("$f") ;;
+      *) refused_args+=("$f") ;;
+    esac
+  done
+fi
+
+# Said in a line of its own AND carried into the verdict, for the same reason the shellcheck note is:
+# a check that quietly drops part of what it was asked to do makes its own green mean less than the
+# reader thinks. The caller is told what ruff was NOT given and why, by name.
+refusal_note=""
+if [ "${#refused_args[@]}" -gt 0 ]; then
+  refusal_note="not linted, ruff reads a path as Python and these are not: ${refused_args[*]}"
+  echo "check: REFUSED these lint arguments by name: ${refused_args[*]}" >&2
+  echo "check: ruff is a Python linter; a .json handed to it is reported as broken Python, not as" >&2
+  echo "check: broken JSON. For a JSON file: python3 -c 'import json,sys; json.load(open(sys.argv[1]))' FILE" >&2
+  echo "check: the run continues and the tests below are unaffected; this is not a verdict on the tree" >&2
+fi
+if [ "$#" -gt 0 ] && [ "${#lint_args[@]}" -eq 0 ]; then
+  echo "check: no .py argument was given, so NOTHING was linted in this run" >&2
 fi
 
 # Measured before the legs and measured again by `write` afterwards. Two readings, because one
@@ -40,6 +73,18 @@ leg=startup
 # Every command here is kept from failing the trap: `set -e` is in force inside a trap too, so a
 # write that goes wrong would otherwise replace the real exit code with its own and the caller
 # would be told the wrong thing by the very code meant to stop that happening.
+# The verdict's note carries every reason this run is less than it looks: a shellcheck that could not
+# run, and a lint argument refused by name. Joined here rather than in the `write` call, because an
+# unset variable inside a nested expansion inside a trap is how a trap starts replacing real exit
+# codes with its own.
+combined_note() {
+  local note="${shellcheck_note:-}"
+  if [ -n "${refusal_note:-}" ]; then
+    if [ -n "$note" ]; then note="$note; ${refusal_note}"; else note="${refusal_note}"; fi
+  fi
+  printf '%s' "$note"
+}
+
 finish() {
   local code=$1
   local failed_leg=""
@@ -52,21 +97,24 @@ finish() {
     --started-at "$started_at" \
     --pytest-log "$pytest_log" \
     --failed-leg "$failed_leg" \
-    --note "${shellcheck_note:-}" ||
+    --note "$(combined_note)" ||
     echo "check: WARNING the verdict file could not be written; treat this run as having no verdict" >&2
   return 0
 }
 trap 'finish "$?"' EXIT
 
+# `ruff check` with no paths lints the whole project, so an empty argument list must SKIP the legs
+# rather than fall through to them: a file-scoped run that quietly became a project lint is the same
+# class of lie as a green that linted nothing.
 leg=ruff-check
-if [ "$#" -gt 0 ]; then
-  uv run ruff check "$@"
-  leg=ruff-format
-  uv run ruff format --check "$@"
-else
+if [ "$#" -eq 0 ]; then
   uv run ruff check .
   leg=ruff-format
   uv run ruff format --check .
+elif [ "${#lint_args[@]}" -gt 0 ]; then
+  uv run ruff check "${lint_args[@]}"
+  leg=ruff-format
+  uv run ruff format --check "${lint_args[@]}"
 fi
 # The shell scripts carry the commit and push guards, and until 2026-10-02 nothing linted them:
 # ruff is given the file list, and a .sh path named there is read as Python and fails as one. Two
@@ -113,8 +161,9 @@ set -e
 leg=biolang
 uv run bio test data/demo genomeos/std data/organisms
 leg=report
-if [ -n "$shellcheck_note" ]; then
-  echo "check: green EXCEPT $shellcheck_note"
+report_note=$(combined_note)
+if [ -n "$report_note" ]; then
+  echo "check: green EXCEPT $report_note"
 else
   echo "check: green"
 fi

@@ -35,6 +35,19 @@ mean the run had one subject. Unequal hashes mean the tree moved mid-run, which 
 nine-minute hazard, and the file then says so instead of offering a verdict about a tree that
 no longer existed by the time the counts were printed.
 
+WHAT KIND OF RED, recorded in the file. A verdict that only says "red" cannot say whether the tree is
+at fault, and on 2026-10-02 five red files were caused by nothing in the tree: two by a `.json` handed
+to ruff as a lint argument, two by `git check-ignore` being unable to answer past a symlinked data
+store, and a fifth that refused a push for the same reason. Each read exactly like a real failure
+until somebody opened the log. So every file now carries `error_class`, and the list of classes with
+it, so a reader a month later needs neither the log nor this docstring: `test` is a failed assertion,
+`test_setup` is pytest red with errors and no failures -- tests that could not start -- `tooling` is a
+non-test leg, `tree_moved` is the hazard above, `unknown` is a red with nothing to attribute it to.
+It is a reading aid and nothing more: `require` still refuses anything that is not green, whatever
+class it is, because a red verdict of any class cannot answer for a push.
+The four false reds of 2026-10-02 are listed in docs/FALSE-RED-VERDICTS.md, with what the record
+holds and what it does not.
+
 HOW THE FILE IS WRITTEN. To a temporary path in the same directory, flushed and fsynced, and
 then `os.replace`d into position. A reader therefore sees either the previous complete file or
 the new complete file, never half of one, and a run that is killed before `write` leaves the
@@ -194,6 +207,48 @@ def decide(exit_code: int, tree_begin: str, tree_end: str, counts: dict[str, int
     return "green", f"{counts['passed']} passed, 0 failed, 0 errors, {counts.get('skipped', 0)} skipped"
 
 
+#: WHAT KIND OF THING MADE A RUN RED, recorded so a tooling-caused red is distinguishable from a test
+#: red IN THE RECORD ITSELF. Until 2026-10-02 it was not: five red status files that day were caused by
+#: nothing in the tree, and each read exactly like a real failure until somebody opened the log.
+#:
+#: Four of them were argument and environment faults -- two where a `.json` was handed to ruff as a
+#: lint argument (96 "errors" in a result file, the run dead at the ruff-check leg), and two where
+#: `git check-ignore` could not answer past a symlinked data store and 20 tests ERRORED at setup. The
+#: fifth refused a push. The distinction below is the one that separates them at a glance:
+#:
+#:   test        a test FAILED. Something the suite asserts about the code did not hold.
+#:   test_setup  pytest was red with ERRORS and NO failures: tests could not START. Fixtures,
+#:               collection, markers, missing data, a tool that could not answer -- nothing was
+#:               asserted wrongly, so this is where an environment or tooling fault lands.
+#:   tooling     a leg that is not a test refused or failed: lint, format, shellcheck, startup.
+#:   tree_moved  the working tree changed mid-run, so the counts belong to no one tree.
+#:   unknown     red or unreadable with nothing in the file to attribute it to. Never a pass.
+#:
+#: A run with BOTH failures and errors is `test`, deliberately: a real failure exists and must be
+#: fixed whatever else is wrong, and a class that hid it behind the errors would be the softer reading.
+ERROR_CLASSES = ("", "test", "test_setup", "tooling", "tree_moved", "unknown")
+
+#: Legs of scripts/check.sh that are not tests. `biolang` is absent on purpose: `bio test` is the
+#: BioLang programs testing themselves, so its red is a test red and is classified as one.
+NON_TEST_LEGS = ("startup", "ruff-check", "ruff-format", "shellcheck", "report")
+
+
+def classify(verdict: str, failed_leg: str, counts: dict[str, int] | None) -> str:
+    """Which of ERROR_CLASSES this verdict is. Empty for green; never empty for anything else."""
+    if verdict == "green":
+        return ""
+    if verdict == "tree_moved":
+        return "tree_moved"
+    if failed_leg in NON_TEST_LEGS and failed_leg:
+        return "tooling"
+    if counts:
+        if counts.get("failed", 0):
+            return "test"
+        if counts.get("errors", 0):
+            return "test_setup"
+    return "unknown"
+
+
 def _atomic_write_json(path: Path, payload: dict) -> None:
     """Either the old file or the whole new one: write beside the target, fsync, then rename.
 
@@ -244,6 +299,8 @@ def write_status(
         "schema": SCHEMA,
         "verdict": verdict,
         "reason": reason,
+        "error_class": classify(verdict, failed_leg, counts),
+        "error_classes": list(ERROR_CLASSES),
         "exit_code": exit_code,
         "tree_begin": tree_begin,
         "tree_end": tree_end,
@@ -386,6 +443,17 @@ def require(root: Path, tree: str, *, scope: str | None, out=None, err=None) -> 
             f"verdict: REFUSED: the verdict for {tree} is {status.get('verdict')!r}: {status.get('reason')}",
             file=err,
         )
+        # said here as well as in the file, because the reader of a refused push is the person who
+        # most needs to know whether the red is about the code at all
+        if status.get("error_class"):
+            print(
+                f"  error_class {status['error_class']!r}, failed_leg "
+                f"{status.get('failed_leg') or '(none)'!r}"
+                + (" -- NOT a test failure" if status["error_class"] != "test" else ""),
+                file=err,
+            )
+        if status.get("note"):
+            print(f"  note: {status['note']}", file=err)
         if status.get("pytest_log"):
             print(f"  the check's test output is in {status['pytest_log']}", file=err)
         return EXIT_REFUSED

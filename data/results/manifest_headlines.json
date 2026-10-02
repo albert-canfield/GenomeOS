@@ -39,7 +39,18 @@
       "second_rerun_differences": [],
       "alphagenome_requests": 0,
       "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)",
-      "manifest_rebuild_check": "scripts/manifest_rebuild.py on the committed file: a third checkout at 190a144, fresh environment, 96 of 96 inputs matching their sha256, 0 differences"
+      "manifest_rebuild_check": "scripts/manifest_rebuild.py on the committed file: a third checkout at 190a144, fresh environment, 96 of 96 inputs matching their sha256, 0 differences",
+      "fourth_pass_2026_10_02": {
+        "recorded_by": "lane-recordhygiene, 2026-10-02",
+        "recorded_why": "THIS PASS WAS NOWHERE IN THE REGISTRY. The row above carried only the 2026-09-28 check, and the 2026-10-02 rebuild lived on the work board alone. A gate pass that lives only on the work board does not exist: the board is retired after 48 hours and nothing reads it afterwards, so a reader of this registry would have concluded the result had not been re-checked.",
+        "verification_tool_at": "53f3b33f091cc6f7fa82854fd7c2145bb48dd3ab",
+        "inputs_declared_and_checked": "96 of 96",
+        "leaves": 3416,
+        "registered_reading": "node_containment_audit 96/96 3,416 leaves",
+        "registered_reading_source": "lane-promogate's work-board note, 2026-10-02, carried word for word; the total/compared/set-aside breakdown that node_containment_measured's row gives was not in that note and is not invented here",
+        "limitation": "vacuous: no set-aside class present",
+        "limitation_means": "this result has NO leaf in any set-aside class, so 'nothing was set aside' is true of it by construction and says nothing whatever about the cwd fix the set-aside machinery was changed for. The pass is a pass about this result's own inputs and leaves; it is NOT evidence that the comparison's set-aside handling is correct, and it must not be cited as such."
+      }
     },
     {
       "result": "node_containment_measured",
@@ -553,5 +564,92 @@
       "constrained_unknown_targets_v2": "rebuilt earlier on 2026-10-02 by another lane: 218 declared = 218 read, undeclared [], two independent verdicts at 218/218 over 4,038 leaves",
       "therapeutic_benchmark_v2": "owned and in flight by another lane, which landed the writer change at 1bfe12d and holds both scripts/therapeutic_benchmark.py and this file; this lane did not touch either, so its row is that lane's to write"
     }
-  }
+  },
+  "superseded_convention": "HOW A REGENERATED HEADLINE IS RECORDED, set by the supervisor on 2026-10-02 and written here because this is the file a future lane opens. The ACTIVE rows above are exactly what README and the docs rest on, so when a result is regenerated the row is RENAMED IN PLACE and the pointer moves with it in the same commit -- a reader of the active set must never be able to reach a figure the project no longer stands behind. AND every regeneration ALSO APPENDS to `superseded` below: the old registry row name, the new one, the sha256 of each file, the date of each, and the reason, so that the rename leaves a trail instead of erasing one. THE GATE NEVER READS `superseded`; history reads it. tests/test_headline_registry_matches_readme.py and tests/test_manifest_headlines.py build their sets from `rebuilt` and `pending` only, which is what makes the active set a statement about the present rather than a pile of everything ever registered. A superseded file's bytes are NEVER touched and NEVER restamped: it is kept on disk as the historical record, and its sha256 here is what makes that record checkable.",
+  "superseded": [
+    {
+      "registry_row_was": "therapeutic_benchmark",
+      "registry_row_now": "therapeutic_benchmark_v2",
+      "predecessor_was_a_registry_row": true,
+      "pointer_moved_in_commit": "6d195a1",
+      "superseded_on": "2026-10-02",
+      "old": {
+        "file": "data/results/therapeutic_benchmark.json",
+        "sha256": "6f95e0da2c47a0ddd7e3517ade662e797b66c9512fda859c5333b6ed3c3b0ad8",
+        "date": "2026-09-30",
+        "quoted_as": "10/10",
+        "quoted_in": "README status section; docs/THERAPEUTICS.md",
+        "writer_at": "5ab1b956b60123c29e95d90f0184d7a5694aaedb",
+        "kept": "unchanged on disk as the historical record; its bytes were not touched and it was not restamped",
+        "date_disagreement": "THE RECORD DISAGREES WITH ITSELF ABOUT THIS DATE and it is left disagreeing rather than picked. data/results/therapeutic_benchmark.json carries date 2026-09-30 in its own `date` field, which is what `date` above repeats; data/results/therapeutic_benchmark_v2.json result_manifest.supersedes calls the file it replaces the '2026-09-28 file', and its `why` says '2026-09-28' three times. The sha256 above is the file's and settles which bytes are meant whichever date is right; nothing here resolves which of the two dates the writer intended, and neither file's bytes were touched."
+      },
+      "new": {
+        "file": "data/results/therapeutic_benchmark_v2.json",
+        "sha256": "ed764d034cc4a84fc759c144b33b3c40ba2fa20715df1420d587a21df6770d34",
+        "date": "2026-10-02",
+        "quoted_as": "10/10",
+        "writer_at": "1bfe12d45b60c89f305057b6dabe834363f99109"
+      },
+      "figure_changed": false,
+      "figure_note": "the figure is the same 10/10 in both: this regeneration was about what the manifest DECLARES, not about the value. A supersession is not evidence that a number moved, and nothing here should be read as saying it did.",
+      "reason": "the 2026-09-28 file declares 24 inputs and the string 'vep' occurs nowhere in its manifest, while every case is annotated through cancer.tumour.annotate_vep, which reads the git-ignored data/knowledge/vep/vep_cache.jsonl; and its declaration shrank in silence -- KNOWLEDGE_READ was filtered by `if p.exists()`, so eight paths were named and seven declared, and ANOTHER FILE answered in place of the missing one (membership falls back to data/results/library_members.json, which the manifest does not mention at all). The full reason is in data/results/therapeutic_benchmark_v2.json result_manifest.supersedes.why, recorded there by the lane that made it and not restated here in shortened form.",
+      "reason_recorded_in": "data/results/therapeutic_benchmark_v2.json result_manifest.supersedes"
+    },
+    {
+      "registry_row_was": "constrained_unknown_targets",
+      "registry_row_now": "constrained_unknown_targets_v2",
+      "predecessor_was_a_registry_row": true,
+      "pointer_moved_in_commit": "bba1994",
+      "superseded_on": "2026-10-02",
+      "old": {
+        "file": "data/results/constrained_unknown_targets.json",
+        "sha256": "26c80da59bc78c183b460c240782556a2b3a2223735ff653e74219f4b4461a14",
+        "date": "2026-09-27",
+        "quoted_as": "62.3% vs 86.0%",
+        "quoted_in": "docs/ATTRIBUTION.md; ROADMAP 1.3",
+        "writer_at": "190a14427cad8a7ae38e116c3d87689dda4c6427",
+        "kept": "unchanged on disk as the historical record; its bytes were not touched and it was not restamped"
+      },
+      "new": {
+        "file": "data/results/constrained_unknown_targets_v2.json",
+        "sha256": "ce474f7512d733b0665a273a7b8fd049b61280f9a7a7984680a60a35f209deae",
+        "date": "2026-10-02",
+        "quoted_as": "62.3% vs 86.0%",
+        "writer_at": "53a79c96b8f7c000549e236b3d8220102f3b81f5"
+      },
+      "figure_changed": false,
+      "figure_note": "the figure is the same 62.3% vs 86.0% in both: this regeneration was about what the manifest DECLARES, not about the value.",
+      "reason": "the 2026-09-27 file declares 193 inputs and rebuilt with 193 of 193 matching their sha256 and 0 differences, while a tracer on that same run saw a 194th read its manifest does not name: data/results/unknown_chr21.json, 355,767 bytes, reached through lift_check -> unknown_scoring.unknown_blocks('chr21'). The file is git-tracked, so a clean worktree holds it and the rebuild reported a pass while its bytes were pinned by no sha256 -- a change to it would have changed the result and printed the same pass. The v2 run declares every file lift_check opens, 218 inputs against that file's 193. The full reason is in data/results/constrained_unknown_targets_v2.json result_manifest.supersedes.why.",
+      "reason_recorded_in": "data/results/constrained_unknown_targets_v2.json result_manifest.supersedes"
+    },
+    {
+      "registry_row_was": "crispri_benchmark",
+      "registry_row_now": "crispri_benchmark_v2",
+      "predecessor_was_a_registry_row": false,
+      "predecessor_note": "crispri_benchmark was NEVER a row in this registry: the active row was created as crispri_benchmark_v2 in f839a51 and no pointer moved. It is recorded here anyway because data/results/crispri_benchmark_v2.json result_manifest.supersedes names the file it replaces, and README's one CRISPRi sentence read the old file through docs/CRISPRI-RESULT.md -- so a reader of the active set has a predecessor to know about whether or not a registry row ever carried it. Found by tests/test_headline_supersession.py rather than by being told: the convention was applied to the two rows the supervisor named, and the test asked which others declare a supersession the registry does not record.",
+      "pointer_moved_in_commit": null,
+      "superseded_on": "2026-10-02",
+      "old": {
+        "file": "data/results/crispri_benchmark.json",
+        "sha256": "a04a191b512fb3f3cb6ff9cb9f36f70eda6163bdc1224bf5d1305201070b5e63",
+        "date": "2026-09-22",
+        "quoted_as": null,
+        "quoted_as_note": "NOT RECORDED, and not reconstructed here. This file was never a registry row, so no registered wording for its figure exists; README read it through docs/CRISPRI-RESULT.md. Inventing a `quoted_as` for it would be writing a registration after the fact, which is the one thing a registry must not contain.",
+        "quoted_in": "README, through docs/CRISPRI-RESULT.md",
+        "writer_at": null,
+        "kept": "unchanged on disk as the historical record; its bytes were not touched and it was not restamped"
+      },
+      "new": {
+        "file": "data/results/crispri_benchmark_v2.json",
+        "sha256": "f3f2ca2b8d2e84c0582056f3b82f2d9c1ace2e0d7f130dd83f8342d2933fc3ad",
+        "date": "2026-10-02",
+        "quoted_as": "+0.141 95% +0.079 to +0.232 on the 1,744 K562 held-out pairs a scored element covers",
+        "writer_at": "33dd8bff9997449575183399ba5491f9720da261"
+      },
+      "figure_changed": true,
+      "figure_note": "THE FIGURE DID MOVE HERE, unlike the two entries above: the method changed, so the two files' numbers are not two measurements of one thing. 2,000 chromosome resamples per interval in place of 200, every interval stating the clusters and draws it rests on, no interval at all below 10 clusters, and no deletion gain where a stratum carries no deletion value. The old number is deliberately not restated beside the new one, because a side-by-side invites reading the difference as a result when it is a change of method.",
+      "reason": "rebuilt under a new name on 2026-10-02: 2000 chromosome resamples per interval in place of 200, each interval stating the clusters and draws it rests on, no interval at all below 10 clusters, and no deletion gain where a stratum carries no deletion value; the committed result at data/results/crispri_benchmark.json (date 2026-09-22) is kept unchanged beside this one",
+      "reason_recorded_in": "data/results/crispri_benchmark_v2.json result_manifest.supersedes"
+    }
+  ]
 }
