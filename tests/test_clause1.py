@@ -443,3 +443,129 @@ def test_findings_name_the_denominator_and_make_no_recommendation():
     assert "1 rows" in f["the_argmax"] or "denominator of 1" in f["the_argmax"]
     assert f["clause_1_capable_cells"]["with_two_or_more_tracks"] == 1
     assert "not known" in f["what_clause_1_secures_on_these_counts"]
+
+
+# ---- the committed result, held against the registered rules ------------------------------------
+
+RESULT_PATH = Path(__file__).resolve().parents[1] / "data" / "results" / "clause1.json"
+
+
+def _result() -> dict:
+    if not RESULT_PATH.exists():
+        pytest.skip("data/results/clause1.json has not been written on this machine")
+    import json
+
+    with RESULT_PATH.open() as fh:
+        return json.load(fh)
+
+
+def test_the_result_reports_every_count_named_in_advance():
+    counts = _result()["counts"]
+    for name in c1.COUNTS_NAMED:
+        assert name in counts, name
+
+
+def test_the_result_rows_and_cells_reconcile():
+    d = _result()
+    counts = d["counts"]
+    assert len(d["per_row"]) == counts["rows_in_population"] == 166
+    assert len(d["per_cell"]) == counts["distinct_assigned_cells"]
+    assert counts["rows_satisfying_clause_1"] + counts["rows_not_satisfying_clause_1"] == 166
+    assert counts["rows_whose_cell_is_an_argmax"] + counts["rows_whose_cell_is_not_an_argmax"] == 166
+    assert sum(counts["cells_by_track_class"].values()) == counts["distinct_assigned_cells"]
+    assert sum(counts["clause_1_capable_cells_by_track_class"].values()) == counts["clause_1_capable_cells"]
+    assert sum(c["rows_in_population"] for c in d["per_cell"]) == 166
+    assert sum(c["rows_satisfying_clause_1"] for c in d["per_cell"]) == counts["rows_satisfying_clause_1"]
+
+
+def test_every_multi_track_cell_of_the_result_says_specimen_identity_is_not_established():
+    for cell in _result()["per_cell"]:
+        if cell["rna_seq_tracks"] >= 2:
+            assert cell["specimen_identity_established"] is False
+            assert "does NOT establish one physical specimen" in cell["established"]
+
+
+def test_the_result_never_claims_same_biosample_of_a_cell_or_a_finding():
+    """The copy carries no accession, so no per-cell row, per-row record or finding says it.
+
+    Where the phrase occurs it is always inside a sentence that denies the claim: the registered
+    NAME_MATCH_IS_NOT_A_CONFIRMATION, the quoted three-way question, and each multi-track cell's
+    own `established` sentence, which says in those words that it is not claimed.
+    """
+    import json
+
+    d = _result()
+    assert "same biosample" not in json.dumps(d["per_row"])
+    assert "same biosample" not in json.dumps(d["findings"])
+    for cell in d["per_cell"]:
+        if "same biosample" in cell["established"]:
+            assert "`same biosample` is not claimed" in cell["established"]
+    assert "never writes `same biosample`" in d["name_match_is_not_a_confirmation"]
+    assert "same biosample, different biosamples, undeterminable" in d["class_rule"]
+
+
+def test_no_resolved_row_of_the_result_has_a_cell_outside_the_retained_cells():
+    d = _result()
+    assert d["counts"]["resolved_rows_whose_cell_is_outside_retained_cells"] == 0
+    for r in d["per_row"]:
+        if r["v2_class_as_committed"].startswith("resolved"):
+            assert r["cell"] in CELLS
+
+
+def test_amendment_1_never_passes_on_a_one_track_cell_in_the_result():
+    d = _result()
+    assert d["counts"]["rows_passing_amendment_1_whose_cell_is_one_track_only"] == 0
+    for r in d["per_row"]:
+        if r["passes_amendment_1"]:
+            assert r["cell_track_class"] != c1.ONE_TRACK
+
+
+def test_a_row_passing_amendment_1_has_two_distinct_values():
+    for r in _result()["per_row"]:
+        if r["passes_amendment_1"]:
+            assert len(r["retained_values"]) >= 2
+            assert len(set(r["retained_values"])) >= 2
+
+
+def test_the_result_makes_no_recommendation_and_keeps_its_denominator_apart():
+    d = _result()
+    assert "NO recommendation" in d["no_recommendation"]
+    assert "not added" in d["denominator_is_separate"]
+    assert d["alphagenome_requests"] == 0
+
+
+def test_the_verdict_is_decided_by_the_figures_and_not_hard_coded():
+    """A population where amendment 1 passes on a one-track cell gets the other answer."""
+    mod = _count_module()
+    rows = c1.read_rows({"assertions": [row("K562", ("max_drop", "by_cell"), (-0.8, -0.7))]})
+    good_cells = c1.classify(
+        rows,
+        {
+            "K562": [
+                track("a", "polyA plus RNA-seq", "K562"),
+                track("b", "total RNA-seq", "K562", nonzero_mean="0.9"),
+            ]
+        },
+    )
+    good = c1.Tally(rows=rows, cells=good_cells, committed=c1.COMMITTED_V2_FIGURES).to_dict()
+    assert mod.verdict(good, good_cells)["does_clause_1_secure_its_stated_reason"].startswith("YES")
+
+    bad_cells = c1.classify(rows, {"K562": [track("a", "total RNA-seq", "K562")]})
+    bad = c1.Tally(rows=rows, cells=bad_cells, committed=c1.COMMITTED_V2_FIGURES).to_dict()
+    assert mod.verdict(bad, bad_cells)["does_clause_1_secure_its_stated_reason"].startswith("NO")
+
+
+def test_the_verdict_says_it_was_written_after_the_counts():
+    d = _result()
+    assert "written after the counts" in d["verdict"]["written_after_the_counts"]
+    assert "NOT registered as a prediction" in d["verdict"]["written_after_the_counts"]
+
+
+def test_the_verdict_on_the_committed_result_separates_the_words_from_what_they_invite():
+    v = _result()["verdict"]
+    assert (
+        v["does_clause_1_secure_its_stated_reason"] == "YES as to its words, NO as to what its words invite"
+    )
+    assert "holds literally" in v["as_to_its_words"]
+    assert "not secured by the clause" in v["as_to_what_its_words_invite"]
+    assert "only one biosample NAME" in v["the_reason_the_clause_does_not_state"]

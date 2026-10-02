@@ -134,6 +134,88 @@ def findings(tally: dict[str, Any], cells: list[c1.CellTracks]) -> dict[str, Any
     }
 
 
+def verdict(tally: dict[str, Any], cells: list[c1.CellTracks]) -> dict[str, Any]:
+    """The plain answer, derived from the counts and conditional on them.
+
+    Written AFTER the counts were taken, which `written_after_the_counts` says in the file itself.
+    It is a reading of the figures and was not registered as a prediction of them; the registration
+    fixed the classes, the rules and the count list and nothing more. Every branch below is decided
+    by a measured figure, so a different population would get a different sentence.
+    """
+    resolved = [
+        r for r in tally["rows_by_v2_class_as_committed"].items() if r[0].startswith("resolved") and r[1]
+    ]
+    n_resolved = sum(n for _, n in resolved)
+    amend = tally["rows_passing_amendment_1"]
+    on_multi = tally["rows_passing_amendment_1_whose_cell_is_one_biosample_name_several_assay_titles"]
+    on_one = tally["rows_passing_amendment_1_whose_cell_is_one_track_only"]
+    literal_secured = amend > 0 and on_one == 0 and on_multi == amend
+    capable = [c for c in cells if c.rows_satisfying_clause_1 > 0]
+    multi_incapable = [c for c in cells if len(c.tracks) >= 2 and c.rows_satisfying_clause_1 == 0]
+    return {
+        "written_after_the_counts": (
+            "this block was written after the counts above were taken and is a reading of them. It "
+            "was NOT registered as a prediction of any figure; what the registration fixed was the "
+            "classes, the rules, the count list and the refusals. Every sentence below is decided "
+            "by a measured figure and would read differently on different figures"
+        ),
+        "does_clause_1_secure_its_stated_reason": (
+            "YES as to its words, NO as to what its words invite"
+            if literal_secured
+            else "NO: see the figures, which do not support the literal reading either"
+        ),
+        "as_to_its_words": (
+            f"on this population clause (1)'s stated reason holds literally. All {amend} rows that "
+            f"pass amendment 1 - which is all {n_resolved} resolved rows - have an assigned cell "
+            "that carries two RNA-seq tracks in the client's own metadata, and their two retained "
+            f"values are numerically distinct; {on_one} such row has a one-track cell. One track "
+            "yields one value and both retained fields round to four places the same way, so two "
+            "distinct values cannot both have come from one track. No direction among the resolved "
+            "calls of this population therefore rests on one track"
+            if literal_secured
+            else "the literal reading is not supported on these figures; the counts above are the statement"
+        ),
+        "as_to_what_its_words_invite": (
+            f"all {on_multi} of those rows have an assigned cell whose tracks are ONE biosample "
+            "name under two assay titles - polyA plus RNA-seq and total RNA-seq - agreeing also on "
+            "ontology term, biosample type, life stage, endedness and modification status. So a "
+            "resolved call rests on two assays of material the metadata records under one "
+            "biosample name. Clause (1) does not require, and nothing in the cache would let a "
+            "rule check, that the two values come from independent material. Whether they are "
+            "replicates is not known, in _cell_summary's own words. The corroboration a reader may "
+            "take from `so that no direction rests on one track` is therefore not secured by the "
+            "clause, although the words themselves are"
+        ),
+        "the_reason_the_clause_does_not_state": (
+            "stated as the distinction it is and not as a defect found. `no direction rests on one "
+            "track` is a claim about tracks and it holds. `no direction rests on one biosample`, "
+            "`on one assay` or `on unreplicated evidence` are different claims, the clause makes "
+            "none of them, and this lane measured no figure that establishes any of them either "
+            "way: the metadata copy carries no accession, so even `one biosample` is not "
+            "established of these cells - only one biosample NAME"
+        ),
+        "the_reach_of_the_clause": (
+            f"{len(capable)} of {tally['distinct_assigned_cells']} assigned cells of this "
+            f"population can satisfy clause (1) at all, and {len(multi_incapable)} further cells "
+            "carry two tracks each and still cannot, because enhancer_target.aggregate writes a "
+            "by_cell value only for a cell in its four-name CELLS list and discards every other "
+            "track's value. So which rows clause (1) can reach is set by that hard-coded list and "
+            "not by the evidence the model emitted. This is a statement about retention, the same "
+            "reading lane-cellcover registered, and it is not a measurement of absence of "
+            "regulation anywhere"
+        ),
+        "cells_with_two_tracks_that_still_cannot_satisfy_clause_1": [c.cell for c in multi_incapable],
+        "the_argmax_answer": (
+            f"{tally['rows_whose_cell_is_an_argmax']} of {tally['rows_in_population']} rows - "
+            f"{tally['rows_whose_cell_is_argmax_of_max_drop_only']} by max_drop, "
+            f"{tally['rows_whose_cell_is_argmax_of_max_rise_only']} by max_rise, "
+            f"{tally['rows_whose_cell_is_argmax_of_both']} by both. The rule's cell is an argmax on "
+            "every row of this population, so it is never an independently assigned context here"
+        ),
+        "no_rule_is_changed_by_this": c1.NO_RECOMMENDATION,
+    }
+
+
 def payload() -> dict[str, Any]:
     rows, cells, v2, axis = rows_and_cells()
     cls_of = {c.cell: c.track_class for c in cells}
@@ -194,6 +276,7 @@ def payload() -> dict[str, Any]:
         "retained_cells_today": list(CELLS),
         "counts": tally,
         "findings": findings(tally, cells),
+        "verdict": verdict(tally, cells),
         "per_cell": [c.to_dict() for c in cells],
         "per_row": [row_record(r, cls_of) for r in rows],
         "alphagenome_requests": 0,
