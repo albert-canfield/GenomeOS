@@ -239,6 +239,10 @@ def test_the_registration_is_committed_and_carries_the_falsifier_and_the_base_ra
     assert reg["lane"] == "lane-argmaxcell"
     assert reg["falsifier"] == ac.FALSIFIER
     assert reg["amendment_1"] == ac.AMENDMENT_1
+    assert reg["amendment_2"] == ac.AMENDMENT_2
+    assert reg["amendment_timeline"] == ac.AMENDMENT_TIMELINE
+    assert reg["reporting_code_changed_after_a_run"] == ac.REPORTING_CODE_CHANGED_AFTER_A_RUN
+    assert reg["relative_bands_from_now_on"] == ac.RELATIVE_BANDS_FROM_NOW_ON
     assert reg["amends"] == "data/results/argmaxcell_registration.json as committed at 67e14d7"
     assert reg["falsifier_thresholds"]["minimum_clusters_for_an_interval"] == ac.MIN_CLUSTERS
     assert reg["power_per_arm_stated_in_advance"]["K562"]["elements_needed_at_the_base_rate"] == 561
@@ -515,6 +519,10 @@ def test_the_committed_result_carries_the_registered_words_unchanged() -> None:
     assert r["lane"] == "lane-argmaxcell"
     assert r["falsifier"] == ac.FALSIFIER
     assert r["amendment_1"] == ac.AMENDMENT_1
+    assert r["amendment_2"] == ac.AMENDMENT_2
+    assert r["amendment_timeline"] == ac.AMENDMENT_TIMELINE
+    assert r["reporting_code_changed_after_a_run"] == ac.REPORTING_CODE_CHANGED_AFTER_A_RUN
+    assert r["relative_bands_from_now_on"] == ac.RELATIVE_BANDS_FROM_NOW_ON
     assert r["confound_registered_before_any_count"] == ac.CONFOUND
     assert r["base_rate_rule"] == ac.BASE_RATE_RULE
     assert r["population"] == ac.POPULATION
@@ -577,7 +585,7 @@ def test_every_reading_two_arm_really_is_an_equivalence_result() -> None:
     r = _result()
     for cell in r["verdict"]["arms_with_no_cell_type_information_reading_2"]:
         read = r["per_arm"][cell]["reading"]
-        lo, hi = read["clustered_ci95_on_the_difference"]
+        lo, hi = read["deciding_ci95_on_the_difference"]
         assert lo >= -ac.TOLERANCE and hi <= ac.TOLERANCE, (cell, lo, hi)
         assert "EQUIVALENCE result" in read["detection"], cell
 
@@ -706,3 +714,76 @@ def test_near_degeneracy_is_reported_without_a_second_threshold() -> None:
     assert r["bootstrap_degenerate"] is False, "one success is not degeneracy"
     assert r["deciding_interval"] == "clustered_bootstrap"
     assert 0.0 < r["bootstrap_identical_share"] < 1.0
+
+
+# ---- the timeline, which a reader must get from the file and not from a hand-back ------------------
+
+
+def test_the_timeline_names_the_shas_and_both_halves() -> None:
+    tl = ac.AMENDMENT_TIMELINE
+    for sha in ("67e14d7", "21b80b1", "18224ef", "7a44d59", "d3d0686"):
+        assert sha in tl, sha
+    assert "22:20" in tl and "22:30" in tl and "22:31" in tl and "22:35" in tl
+    assert "The first count RAN before amendment 1 was written" in tl
+    assert "NOT blind" in tl
+    assert "must not be read as a pre-registration" in tl
+
+
+def test_the_timeline_names_the_blind_half_the_answer_rests_on() -> None:
+    tl = ac.AMENDMENT_TIMELINE
+    assert "USABLE = 0.25" in tl
+    assert "SELECTION CONFOUND" in tl
+    for rate in ("0.062292", "0.014540", "0.002569", "0.001348", "0.000218"):
+        assert rate in tl, rate
+    assert "no arm reaches 0.25" in tl
+
+
+def test_the_timeline_states_the_checkable_direction_and_what_the_amendments_cost() -> None:
+    tl = ac.AMENDMENT_TIMELINE
+    assert "can only turn a reading INCONCLUSIVE or leave it standing" in tl
+    assert "None can create a detection, widen one, or turn an inconclusive arm into a finding" in tl
+    assert "GM12878 at 4 of 45 and Jurkat at 1 of 41 would both have read (3) DETECTION" in tl
+
+
+def test_the_reporting_code_change_says_whether_output_had_been_seen() -> None:
+    d = ac.REPORTING_CODE_CHANGED_AFTER_A_RUN
+    assert "6c9a30e" in d and "22:33" in d
+    assert "The answer to the only question that matters about it is YES" in d
+    assert "AFTER this lane had seen the OUTPUT of a run" in d
+    assert "no threshold, no branch rule" in d
+    assert "`argmaxcell.reading` was not touched by it" in d
+
+
+def test_the_relative_band_rule_is_recorded_as_a_defect_of_this_registration() -> None:
+    r = ac.RELATIVE_BANDS_FROM_NOW_ON
+    assert "RELATIVE to" in r
+    assert "This lane's band is absolute (0.02) and carries no such reason, which is the defect" in r
+    assert "91.7 times WTC11's" in r
+
+
+def test_no_committed_reading_rests_on_a_degenerate_bootstrap() -> None:
+    """AMENDMENT_2, held against the committed file: a zero-width interval decides nothing."""
+    r = _result()
+    for cell, arm in r["per_arm"].items():
+        read = arm["reading"]
+        if not read.get("rate_reported"):
+            continue
+        if read["bootstrap_degenerate"]:
+            assert read["clustered_interval_decides_the_reading"] is False, cell
+            assert read["clustered_ci95_on_the_rate"] is None, cell
+            assert read["deciding_interval"] == "wilson_on_an_effective_sample_size", cell
+            assert read["effective_sample_size"] is not None, cell
+        else:
+            assert read["deciding_interval"] == "clustered_bootstrap", cell
+        band = read["deciding_ci95_on_the_rate"]
+        if band is not None:
+            assert band[1] > band[0] or read["reading"] == "(2)", cell
+
+
+def test_the_committed_result_names_the_design_effect_it_applied() -> None:
+    d = _result()["measured_design_effect"]
+    assert d["estimable_arms"], "at least one arm must be able to estimate one"
+    assert d["taken"] is not None and d["taken"] >= ac.MIN_DESIGN_EFFECT
+    assert d["taken_from"] in d["estimable_arms"]
+    for cell in ("WTC11",):
+        assert d["per_arm"][cell] is None, "a degenerate arm cannot estimate its own"

@@ -133,6 +133,9 @@ def payload() -> dict[str, Any]:
             }
             for cell, rate in rates.items()
         },
+        "amendment_timeline": ac.AMENDMENT_TIMELINE,
+        "reporting_code_changed_after_a_run": ac.REPORTING_CODE_CHANGED_AFTER_A_RUN,
+        "relative_bands_from_now_on": ac.RELATIVE_BANDS_FROM_NOW_ON,
         "confound_registered_before_any_count": ac.CONFOUND,
         "cross_arm_check": ac.CROSS_ARM,
         "what_a_rate_at_the_base_rate_means": (

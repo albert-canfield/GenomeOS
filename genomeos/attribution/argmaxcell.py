@@ -307,6 +307,65 @@ FALSIFIER = (
     "and unclustered wherever it appears, and decides nothing."
 )
 
+AMENDMENT_TIMELINE = (
+    "WHAT WAS KNOWN WHEN, with the shas, because a claim about when something was known is worth "
+    "nothing without them. `amendment_1` says it was made before any count of this lane was "
+    "COMMITTED. That is true and it is misleading by omission, so the omission is repaired here.\n"
+    "THE BLIND HALF, and it is the half the answer rests on. 67e14d7 (2026-10-02 22:20) fixed, "
+    "before a single CRISPRi pair had been joined to a single element and before any element table "
+    "had been opened: the population; the element denominator; the five base rates as numbers (K562 "
+    "0.062292, GM12878 0.014540, Jurkat 0.002569, HCT116 0.001348, WTC11 0.000218) and the formula "
+    "that produced them from the committed census; the usability threshold USABLE = 0.25; the "
+    "tolerance 0.02; the element floor 30; and the SELECTION CONFOUND, which is the reason a "
+    "positive difference may never be read as the argmax carrying cell-type information. The "
+    "headline finding - that no arm reaches 0.25, so a rule's cell may not be read as the place it "
+    "acts - rests on that threshold and on those base rates, and both were fixed at 67e14d7.\n"
+    "THE PART THAT IS NOT BLIND. The first count RAN before amendment 1 was written. Its result was "
+    "never committed and is not in the history, but the figures HAD BEEN SEEN when amendment 1 was "
+    "written at 21b80b1 (22:30) and committed into the registration at 18224ef (22:31). So "
+    "amendment 1 is NOT blind and must not be read as a pre-registration of the uncertainty rule. "
+    "Amendment 2, at d3d0686, came later still - after the committed result at 7a44d59 (22:35) - "
+    "and is post-hoc in its own first sentence.\n"
+    "WHAT CAN BE CHECKED INSTEAD OF TRUSTED: the DIRECTION of both amendments. Every change in "
+    "either can only turn a reading INCONCLUSIVE or leave it standing. None can create a detection, "
+    "widen one, or turn an inconclusive arm into a finding. Amendment 1 removed two detections and "
+    "no nulls; amendment 2 removed one null and no detections.\n"
+    "AND WHAT THEY COST, named so the gain is not left implicit. Under the ORIGINAL point rule of "
+    "67e14d7, GM12878 at 4 of 45 and Jurkat at 1 of 41 would both have read (3) DETECTION - two "
+    "detections published on 45 and 41 elements. Under amendment 1 both are (4), THE DATA CANNOT "
+    "TELL, inconclusive by rule at 9 and 5 resampling clusters. Under amendment 2 WTC11's 0 of 397 "
+    "stops being an equivalence null decided by a zero-width interval."
+)
+
+REPORTING_CODE_CHANGED_AFTER_A_RUN = (
+    "DISCLOSED because a reader who finds a code change between a registration and a result should "
+    "not have to guess at it. 6c9a30e (2026-10-02 22:33) changed sentence-GENERATING code in "
+    "scripts/argmaxcell_count.py after the amended registration at 18224ef and before the "
+    "committed result at 7a44d59. The answer to the only question that matters about it is YES: it "
+    "was written AFTER this lane had seen the OUTPUT of a run - the first run under amendment 1, "
+    "whose printed verdict is where the fault was found.\n"
+    "WHAT IT CHANGED. The verdict's split sentence said the reading-(2) arms were `at or below the "
+    "base rate`. That was FALSE for HCT116, whose 0.004032 is above its base rate of 0.001348; the "
+    "phrase was the point rule's wording left standing after amendment 1 made the reading an "
+    "interval equivalence. It now names each arm by the reading its own interval selected. The "
+    "same commit added, per arm, the tolerance and the observed rate as MULTIPLES of that arm's own "
+    "base rate, because reading (2) is an equivalence against an ABSOLUTE 0.02 and that is 14.8 "
+    "times HCT116's base rate and 91.7 times WTC11's.\n"
+    "WHAT IT DID NOT CHANGE: no threshold, no branch rule, no population, no denominator, no base "
+    "rate and no reading. It is a change to what the result SAYS about figures it had already "
+    "computed, and `argmaxcell.reading` was not touched by it."
+)
+
+RELATIVE_BANDS_FROM_NOW_ON = (
+    "ADOPTED on the supervisor's direction, and recorded here as a rule for the NEXT registration "
+    "rather than as a change to this one: an equivalence or tolerance band is stated RELATIVE to "
+    "its base rate, or it carries a stated reason why an absolute band is right. This lane's band "
+    "is absolute (0.02) and carries no such reason, which is the defect; the patch kept for THIS "
+    "result is the printed multiple of each arm's own base rate, so a reader can see that the band "
+    "is 0.3 times K562's base rate and 91.7 times WTC11's and therefore which arms the equivalence "
+    "reading is strong on. Nothing is regenerated for this beyond keeping those multiples."
+)
+
 CONFOUND = (
     "Registered before any count, and it makes the two readings asymmetric. The CRISPRi benchmark "
     "chose which elements to test, and it tested candidate elements in regions active in the cell "
