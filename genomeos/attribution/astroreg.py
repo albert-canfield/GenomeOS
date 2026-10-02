@@ -150,6 +150,97 @@ POWER_RULE = (
     "computed before any astrocyte pair is scored, so it cannot be chosen after an outcome"
 )
 
+#: Amendment 1, registered 2026-10-02 before the recomputation it describes, after the reviewer found
+#: the first power figure optimistic in two independent ways. The first figure, 0.96, kept K562's own
+#: prevalence and assumed the whole K562 gain transfers; neither holds for the test actually proposed.
+POWER_AMENDMENT_1 = (
+    "the first power figure (0.96) was optimistic in two independent ways and is superseded, not "
+    "revised. (a) PREVALENCE. It resampled K562 at K562's prevalence, 114 positives in 1,744 pairs "
+    "= 6.5%. The astrocyte test runs at 133 in 4,580 = 2.9%, less than half. An AUPRC gain is "
+    "prevalence-dependent -- both the attainable gain and its spread move with the positive rate -- "
+    "so a figure computed at 6.5% does not describe a test run at 2.9%. Each resample is therefore "
+    "matched to the astrocyte prevalence by downsampling its POSITIVES, keeping every negative, "
+    "which is the direction that cannot invent data. (b) EFFECT SIZE. It assumed the full K562 gain "
+    "transfers, the most favourable assumption available. Power is therefore also reported at 0.5x "
+    "and 0.25x, by shrinking the deletion arm's score toward the no-deletion arm, "
+    "score(k) = without + k * (with - without), and the ACHIEVED gain is reported at each k so that "
+    "the attenuation is visible rather than asserted. "
+    "The S8 class is set by the prevalence-matched figure at the FULL effect, and the 0.5x figure "
+    "travels beside it in every quote of the class. Below 0.5 the test is refused and nothing is "
+    "spent. This method was registered before it was run"
+)
+
+#: The two prevalences the amendment turns on, fixed from the label counts before the recomputation.
+ASTROCYTE_PREVALENCE = 133 / (133 + 4447)
+K562_PREVALENCE_NOTE = (
+    "K562's own prevalence is computed from the covered held-out K562 pairs at run time and reported "
+    "beside the astrocyte figure, so the size of the mismatch is on the record and not implied"
+)
+
+#: The attenuation factors reported. 1.0 sets the class; 0.5 travels beside it in every quote.
+ATTENUATIONS = (1.0, 0.5, 0.25)
+
+#: Term 3: what the deletion value does if `astrocyte` turns out to be several AlphaGenome tracks.
+#: Registered now so that no rule is invented at scoring time, when an outcome is visible.
+TRACK_ROSTER_RULE = (
+    "the astrocyte deletion value uses the frozen K562 rule UNCHANGED -- whatever the legacy "
+    "per-cell-name collapse did for K562, it does for astrocyte -- because the frozen K562 values "
+    "came through that same rule and the two definitions must match. Whether `astrocyte` is one "
+    "AlphaGenome track or several is not known at registration time: the cache records a winning "
+    "track name, not the roster. So the FULL astrocyte track roster from the first response is "
+    "written to the result BEFORE any pair is scored. If it is several tracks, that fact is "
+    "recorded; it is not resolved by a new rule invented after the data are in view"
+)
+
+#: Term 2: the activity term's inputs, provenanced. Read from the data files' own headers and
+#: confirmed against the ENCODE portal; both experiments are Homo sapiens astrocyte.
+ACTIVITY_INPUTS = {
+    "h3k27ac": {
+        "file_accession": "ENCFF970DKF",
+        "experiment": "ENCSR000AOQ",
+        "assay": "ChIP-seq",
+        "target": "H3K27ac-human",
+        "biosample": "Homo sapiens astrocyte",
+        "output_type": "replicated peaks",
+        "file_type": "bed narrowPeak",
+        "assembly": "GRCh38",
+        "status": "released",
+        "date_created": "2020-09-30T04:40:52.048936+00:00",
+        "portal_md5sum": "67285e9f88b12069df30875dbfe016d3",
+        "portal_file_size": 1_639_983,
+        "biological_replicates": [1, 2],
+        "local_derivation": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr*.bed.gz, 24 "
+        "chromosomes, each carrying the accession in its own first line",
+    },
+    "dnase": {
+        "file_accession": "ENCFF874OPW",
+        "experiment": "ENCSR000EPM",
+        "assay": "DNase-seq",
+        "target": None,
+        "biosample": "Homo sapiens astrocyte",
+        "output_type": "peaks",
+        "file_type": "bed narrowPeak",
+        "assembly": "GRCh38",
+        "status": "released",
+        "date_created": "2020-11-18T18:31:31.509548+00:00",
+        "portal_md5sum": "12869af50a461f22f4101a7bde0fe12d",
+        "portal_file_size": 3_221_892,
+        "biological_replicates": [1],
+        "local_derivation": "data/results/dnase_astrocyte_chr*.bed.gz, 24 chromosomes, each "
+        "carrying the accession in its own first line",
+    },
+    "correction": (
+        "an earlier left-undone item of this lane said these files carried no accession anywhere in "
+        "the repository. That was wrong: each per-chromosome file records its ENCODE accession in its "
+        "own first line. What was missing was a manifest entry, not the provenance"
+    ),
+    "why_it_matters": (
+        "the activity term is half the model: 'activity + distance' is one of the two arms the gain "
+        "is a difference between, so an unprovenanced activity input would leave the comparison "
+        "unauditable on the side that is not even being tested"
+    ),
+}
+
 #: Everything already read that touches this comparison. Stated so that a reader can discount the
 #: result correctly rather than being told it is clean.
 EXPOSURE = (
@@ -312,6 +403,34 @@ def power_class(share: float) -> dict[str, Any]:
     }
 
 
+def attenuate(with_d: list[float], without: list[float], k: float) -> list[float]:
+    """The deletion arm shrunk toward the no-deletion arm by `k`: `without + k * (with - without)`.
+
+    At k=1 it is the deletion arm unchanged; at k=0 the two arms are identical and the gain is nil.
+    This attenuates the *score separation*, which is why the achieved AUPRC gain is reported at each
+    k rather than assumed to scale with it.
+    """
+    return [b + k * (a - b) for a, b in zip(with_d, without, strict=True)]
+
+
+def match_prevalence(indices: list[int], labels: list[bool], target: float, rng: random.Random) -> list[int]:
+    """`indices` thinned to `target` prevalence by dropping POSITIVES, keeping every negative.
+
+    Downsampling positives is the only direction that cannot invent data: raising the negative count
+    would mean resampling negatives that are not there. If the subset is already at or below the
+    target prevalence it is returned unchanged, because thinning further would overshoot.
+    """
+    pos = [i for i in indices if labels[i]]
+    neg = [i for i in indices if not labels[i]]
+    if not neg or not pos:
+        return list(indices)
+    want = int(round(target * len(neg) / (1.0 - target)))
+    if want >= len(pos):
+        return list(indices)
+    kept = rng.sample(pos, max(want, 0))
+    return kept + neg
+
+
 def label_of(hit: bool, downregulated: bool, well_powered: bool) -> str:
     """One pair's registered class: positive, increase_held_apart, negative or excluded."""
     if hit and downregulated:
@@ -358,6 +477,12 @@ def terms() -> dict[str, Any]:
         "interval_rule": INTERVAL_RULE,
         "readings": READINGS,
         "power_rule": POWER_RULE,
+        "power_amendment_1": POWER_AMENDMENT_1,
+        "astrocyte_prevalence": ASTROCYTE_PREVALENCE,
+        "k562_prevalence_note": K562_PREVALENCE_NOTE,
+        "attenuations_reported": list(ATTENUATIONS),
+        "track_roster_rule": TRACK_ROSTER_RULE,
+        "activity_inputs": ACTIVITY_INPUTS,
         "same_code_path": SAME_CODE_PATH,
         "exposure": list(EXPOSURE),
         "not_claimed": list(NOT_CLAIMED),

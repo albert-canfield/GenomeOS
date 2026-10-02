@@ -21,6 +21,7 @@ from __future__ import annotations
 import ast
 import gzip
 import json
+import random
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -438,40 +439,80 @@ def power_figure() -> dict:
     for i, g in enumerate(loci):
         members[g].append(i)
     pool = sorted(members)
-    import random as _r
-
-    rng = _r.Random(0)
-    excludes, usable = 0, 0
+    k562_prevalence = sum(lab) / len(lab)
+    target = astroreg.ASTROCYTE_PREVALENCE
     draws = 200  # outer resamples; each carries its own inner interval
-    for _ in range(draws):
-        chosen = [rng.choice(pool) for _ in range(astroreg.REGISTERED_LOCI)]
-        idx = [i for c in chosen for i in members[c]]
-        if not any(lab[i] for i in idx):
-            continue
-        usable += 1
-        sub = astroreg.cluster_bootstrap(
-            [with_d[i] for i in idx],
-            [without[i] for i in idx],
-            [lab[i] for i in idx],
-            [c for c in chosen for _ in members[c]],
-            seed=usable,
-            n=200,
-        )
-        if "ci95" in sub and (sub["ci95"][0] > 0 or sub["ci95"][1] < 0):
-            excludes += 1
-    share = (excludes / usable) if usable else 0.0
+
+    arms: dict[str, dict] = {}
+    for k in astroreg.ATTENUATIONS:
+        attenuated = astroreg.attenuate(with_d, without, k)
+        rng = random.Random(0)  # the same draws at every k, so only the attenuation differs
+        excludes, usable, kept_pos, kept_n, gains = 0, 0, [], [], []
+        for _ in range(draws):
+            chosen = [rng.choice(pool) for _ in range(astroreg.REGISTERED_LOCI)]
+            idx, cl = [], []
+            for c in chosen:
+                for i in members[c]:
+                    idx.append(i)
+                    cl.append(c)
+            of_cluster = dict(zip(idx, cl, strict=True))
+            thinned = astroreg.match_prevalence(idx, lab, target, rng)
+            sub_lab = [lab[i] for i in thinned]
+            if not any(sub_lab):
+                continue
+            usable += 1
+            kept_pos.append(sum(sub_lab))
+            kept_n.append(len(thinned))
+            sub = astroreg.cluster_bootstrap(
+                [attenuated[i] for i in thinned],
+                [without[i] for i in thinned],
+                sub_lab,
+                [of_cluster[i] for i in thinned],
+                seed=usable,
+                n=200,
+            )
+            gains.append(sub["point"])
+            if "ci95" in sub and (sub["ci95"][0] > 0 or sub["ci95"][1] < 0):
+                excludes += 1
+        share = (excludes / usable) if usable else 0.0
+        gains.sort()
+        arms[f"{k:g}x"] = {
+            "attenuation": k,
+            "share_of_resamples_excluding_zero": share,
+            "usable_outer_draws": usable,
+            "intervals_excluding_zero": excludes,
+            "median_achieved_gain": (gains[len(gains) // 2] if gains else None),
+            "mean_positives_kept": (sum(kept_pos) / len(kept_pos)) if kept_pos else None,
+            "mean_pairs_kept": (sum(kept_n) / len(kept_n)) if kept_n else None,
+            "achieved_prevalence": ((sum(kept_pos) / sum(kept_n)) if kept_n and sum(kept_n) else None),
+        }
+
+    full = arms[f"{1.0:g}x"]
     return {
         "method": astroreg.POWER_RULE,
+        "amendment_1": astroreg.POWER_AMENDMENT_1,
         "k562_scope": scope,
         "k562_pairs": len(k562),
         "k562_positives": sum(lab),
+        "k562_prevalence": k562_prevalence,
+        "astrocyte_prevalence_target": target,
+        "prevalence_mismatch_ratio": (k562_prevalence / target) if target else None,
         "k562_independent_loci": len(set(loci)),
-        "k562_observed_gain": observed,
+        "k562_observed_gain_at_k562_prevalence": observed,
         "resampled_to_loci": astroreg.REGISTERED_LOCI,
         "outer_draws": draws,
-        "usable_outer_draws": usable,
-        "intervals_excluding_zero": excludes,
-        "verdict": astroreg.power_class(share),
+        "by_attenuation": arms,
+        "class_set_by": "the prevalence-matched figure at the full effect (1x)",
+        "verdict": astroreg.power_class(full["share_of_resamples_excluding_zero"]),
+        "travels_beside_the_class": {
+            "0.5x_share": arms[f"{0.5:g}x"]["share_of_resamples_excluding_zero"],
+            "rule": "the 0.5x figure travels beside the class in every quote of it",
+        },
+        "superseded": {
+            "earlier_share": 0.96,
+            "why": "computed at K562's own prevalence of 6.5% and at the full K562 gain; it does "
+            "not describe a test run at 2.9% prevalence",
+        },
         "alphagenome_requests": 0,
     }
 

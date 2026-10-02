@@ -246,3 +246,99 @@ class TestRegisteredTerms:
 
     def test_terms_carries_the_locus_reconciliation(self):
         assert "locus_reconciliation" in astroreg.terms()["eligibility"]
+
+
+class TestPrevalenceMatching:
+    def test_positives_are_thinned_to_the_target_and_negatives_are_kept(self):
+        import random
+
+        labels = [True] * 100 + [False] * 900
+        idx = list(range(1000))
+        out = astroreg.match_prevalence(idx, labels, 0.029, random.Random(0))
+        kept_pos = sum(1 for i in out if labels[i])
+        kept_neg = sum(1 for i in out if not labels[i])
+        assert kept_neg == 900, "every negative is kept"
+        assert abs(kept_pos / len(out) - 0.029) < 0.005
+
+    def test_an_already_sparse_subset_is_returned_unchanged(self):
+        """Thinning further would overshoot the target, so it is left alone."""
+        import random
+
+        labels = [True] * 2 + [False] * 998
+        idx = list(range(1000))
+        out = astroreg.match_prevalence(idx, labels, 0.5, random.Random(0))
+        assert sorted(out) == idx
+
+    def test_a_subset_with_no_negative_or_no_positive_is_returned_unchanged(self):
+        import random
+
+        assert astroreg.match_prevalence([0, 1], [True, True], 0.029, random.Random(0)) == [0, 1]
+        assert astroreg.match_prevalence([0, 1], [False, False], 0.029, random.Random(0)) == [0, 1]
+
+    def test_the_astrocyte_prevalence_is_the_one_the_labels_give(self):
+        assert abs(astroreg.ASTROCYTE_PREVALENCE - 133 / (133 + 4447)) < 1e-12
+        assert astroreg.ASTROCYTE_PREVALENCE < 0.03
+
+    def test_the_astrocyte_prevalence_is_less_than_half_of_k562s(self):
+        assert astroreg.ASTROCYTE_PREVALENCE * 2 < 114 / 1744
+
+
+class TestAttenuation:
+    def test_full_attenuation_leaves_the_deletion_arm_alone(self):
+        a, b = [0.9, 0.2, 0.5], [0.4, 0.4, 0.4]
+        assert astroreg.attenuate(a, b, 1.0) == a
+
+    def test_zero_attenuation_makes_the_two_arms_identical(self):
+        a, b = [0.9, 0.2, 0.5], [0.4, 0.4, 0.4]
+        assert astroreg.attenuate(a, b, 0.0) == b
+
+    def test_half_attenuation_is_the_midpoint(self):
+        assert astroreg.attenuate([1.0], [0.0], 0.5) == [0.5]
+
+    def test_the_registered_attenuations_include_the_full_and_the_half(self):
+        assert astroreg.ATTENUATIONS == (1.0, 0.5, 0.25)
+        assert 1.0 in astroreg.ATTENUATIONS and 0.5 in astroreg.ATTENUATIONS
+
+
+class TestAmendmentAndProvenance:
+    def test_the_amendment_names_both_optimisms_and_says_it_was_registered_first(self):
+        a = astroreg.POWER_AMENDMENT_1
+        assert "PREVALENCE" in a and "EFFECT SIZE" in a
+        assert "6.5%" in a and "2.9%" in a
+        assert "registered before it was run" in a
+
+    def test_the_amendment_supersedes_rather_than_revises_the_first_figure(self):
+        assert "superseded, not" in astroreg.POWER_AMENDMENT_1
+
+    def test_the_class_is_set_at_the_full_effect_and_the_half_travels_with_it(self):
+        assert "FULL effect" in astroreg.POWER_AMENDMENT_1
+        assert "travels beside it in every quote" in astroreg.POWER_AMENDMENT_1
+
+    def test_downsampling_direction_is_justified_as_the_one_that_invents_nothing(self):
+        assert "cannot invent data" in astroreg.POWER_AMENDMENT_1
+
+    def test_both_activity_inputs_are_provenanced_with_accession_and_hash(self):
+        for mark in ("h3k27ac", "dnase"):
+            d = astroreg.ACTIVITY_INPUTS[mark]
+            assert d["file_accession"].startswith("ENCFF")
+            assert d["experiment"].startswith("ENCSR")
+            assert d["biosample"] == "Homo sapiens astrocyte"
+            assert d["assembly"] == "GRCh38"
+            assert len(d["portal_md5sum"]) == 32
+
+    def test_the_earlier_wrong_left_undone_item_is_corrected_rather_than_dropped(self):
+        assert "That was wrong" in astroreg.ACTIVITY_INPUTS["correction"]
+
+    def test_the_activity_term_is_named_as_half_the_model(self):
+        assert "half the model" in astroreg.ACTIVITY_INPUTS["why_it_matters"]
+
+    def test_the_track_roster_rule_fixes_the_rule_before_the_data_are_seen(self):
+        r = astroreg.TRACK_ROSTER_RULE
+        assert "frozen K562 rule UNCHANGED" in r
+        assert "BEFORE any pair is scored" in r
+        assert "not resolved by a new rule invented after" in r
+
+    def test_terms_carries_the_amendment_the_roster_and_the_provenance(self):
+        t = astroreg.terms()
+        for key in ("power_amendment_1", "track_roster_rule", "activity_inputs", "attenuations_reported"):
+            assert key in t, key
