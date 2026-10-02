@@ -3,6 +3,12 @@
 candidate ledger and the plan `scripts/n1_run.py` applies once (data/results/n1_registration.json).
 
     uv run --frozen python scripts/n1_register.py
+    uv run --frozen python scripts/n1_register.py --result n1_registration_v2 --supersedes
+
+`--result` changes the name written and nothing else; `--supersedes` records which committed result the
+run is written beside. The committed data/results/n1_registration.json is a byte freeze: amendment 1
+declares its sha256 and tests/test_n1_perturb_response.py checks the file on disk against it, so a
+re-record goes under a new name and leaves it alone.
 
 Reads only frozen predictions (data/results/motifs_chr*.json), JASPAR 2026 and its TFClass families
 (data/knowledge/jaspar/), GENCODE v50 (data/reference/gencode_v50_chr*.gff3.gz), and the identities of the
@@ -14,6 +20,7 @@ registered before any measurement".
 
 from __future__ import annotations
 
+import argparse
 import io
 import json
 import subprocess
@@ -21,6 +28,7 @@ import sys
 import urllib.request
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -30,6 +38,18 @@ from genomeos.genome import motifs  # noqa: E402
 from genomeos.results import RESULTS_DIR, save_result  # noqa: E402
 
 RESULT = "n1_registration"
+#: This script, as the entry whose transitive import closure is the counting path of its result
+#: (genomeos.manifest.counting_path). Named rather than taken from __file__ so the closure is the same
+#: however the script is invoked.
+ENTRY = "scripts/n1_register.py"
+ROOT = Path(__file__).resolve().parents[1]
+#: This lane's own files. Everything else uncommitted in this shared checkout belongs to another lane.
+OWN_CODE = (
+    "genomeos/attribution/n1_perturb_response.py",
+    "scripts/n1_register.py",
+    "scripts/n1_run.py",
+    "tests/test_n1_perturb_response.py",
+)
 CHROMS = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
 CACHE = Path("data/cache/n1")
 IDENTITIES = CACHE / "K562_gwps_normalized_bulk_01.identities.json"
@@ -570,7 +590,64 @@ def access_required(n_rows: int, n_universe: int) -> dict:
 # --- assembling the registration ------------------------------------------------------------------------
 
 
+#: Why this registration is re-recorded under a name of its own rather than over the committed file.
+#: The committed manifest records its 24 GENCODE files as one group under a label with no member list,
+#: so a rebuild in a second environment has no path to open or hash: `files_entry` did not name the
+#: members of a group until 2026-10-02. The committed bytes cannot be replaced to fix it: the sha256 of
+#: data/results/n1_registration.json is a declared input of three other committed results
+#: (n1_registration_amendment_1, n1_registration_amendment_2, n1_result_amendment_2), and
+#: tests/test_n1_perturb_response.py checks the file on disk against the sha256 amendment 1 froze, so
+#: new bytes under the same name would make all three unrebuildable and fail that test, correctly.
+WHY_A_NEW_NAME = (
+    "re-recorded under a new name on 2026-10-02 so that every group of input files names its members, "
+    "each with its own sha256 and byte count, which is what a rebuild in a second environment needs to "
+    "open and hash them; no figure of the run differs. The committed result is kept unchanged because "
+    "its sha256 is a declared input of three other committed results and is the freeze amendment 1 "
+    "checks"
+)
+
+
+def supersedes(root: Path = ROOT) -> dict[str, Any]:
+    """The committed result this run is written beside, never over, with the bytes it is kept at."""
+    p = root / RESULTS_DIR / f"{RESULT}.json"
+    entry = mf.input_entry(p, partition=None)
+    old = json.loads(p.read_text())
+    return {
+        "file": (RESULTS_DIR / f"{RESULT}.json").as_posix(),
+        "date": old.get("date"),
+        "sha256": entry["sha256"],
+        "bytes": entry["bytes"],
+        "kept": "unchanged; this run is written beside it under a new name, not over it",
+        "why": WHY_A_NEW_NAME,
+        "declared_as_an_input_by": [
+            "data/results/n1_registration_amendment_1.json",
+            "data/results/n1_registration_amendment_2.json",
+            "data/results/n1_result_amendment_2.json",
+        ],
+    }
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--result",
+        default=RESULT,
+        help=(
+            "the result name to write, and nothing else: no figure, no input and no parameter of the "
+            "run is read from it. A re-record under a new name leaves the committed file alone"
+        ),
+    )
+    ap.add_argument(
+        "--supersedes",
+        action="store_true",
+        help=(
+            f"record, beside the manifest, that this run is written beside the committed "
+            f"{RESULT} rather than over it, with that file's date and sha256"
+        ),
+    )
+    args = ap.parse_args()
+    result_name = args.result
+
     motif_paths = [RESULTS_DIR / f"motifs_{c}.json" for c in CHROMS]
     if not unmodified(motif_paths):
         print(
@@ -725,8 +802,19 @@ def main() -> int:
             "calibration": "the 585 non-targeting rows, read first",
             "evaluation": "the knockdown-eligible candidate rows, read only after the gate passes",
         },
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
     }
-    p = save_result(RESULT, payload)
+    if args.supersedes:
+        payload["result_manifest"]["supersedes"] = supersedes()
+    # Both branches are live: the name --result gave, or this writer's own default. A ternary, which
+    # ruff would prefer as SIM108, re-indents the second call, and scripts/check_staged.py holds that
+    # exact line because b359867 added it on 2026-10-01 13:39. Keeping it at its own indentation is
+    # what lets this commit go in with no --force. After 2026-10-03 13:39 the two collapse into one
+    # call on result_name and this annotation goes with them.
+    if result_name != RESULT:  # noqa: SIM108
+        p = save_result(result_name, payload)
+    else:
+        p = save_result(RESULT, payload)
     print(
         f"wrote {p}: universe {len(universe)} genes, {len(cands)} candidates ({n_rows} rows, "
         f"{payload['ledger_summary']['clusters']} clusters), element >= 10: {element_ge10}"

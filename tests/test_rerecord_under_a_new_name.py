@@ -38,6 +38,7 @@ WRITERS = (
     "scripts/context_evidence_census.py",
     "scripts/context_evidence_baserate.py",
     "scripts/placement_audit.py",
+    "scripts/n1_register.py",
 )
 
 #: The fourth, which cannot be asked yet, and why. `p = save_result(RESULT, payload)` has to become
@@ -47,7 +48,6 @@ WRITERS = (
 #: move this path into WRITERS above and delete this constant: a list of three with no record of the
 #: fourth would read as though all four were done. It is not asserted on, because these checks read the
 #: working tree and the change is already sitting in it, uncommittable.
-WRITER_THAT_CANNOT_BE_ASKED_YET = "scripts/n1_register.py"
 
 
 def _parents(tree: ast.AST) -> dict[ast.AST, ast.AST]:
