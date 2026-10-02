@@ -1290,3 +1290,76 @@ K562, chosen for traceability; architecture review in `304a1c8`), not yet commit
 **The three measures, apart.** Software delivered: the rebuild, the evidence completeness report, the
 honest gate, the CI fix. Biology independently validated: unchanged. Release readiness: main unchanged
 at `7ff4e37`; the next snapshot needs the owner's decision.
+
+## 2026-10-02 (early morning) — what the model cannot be tested on, and five commits that carried the wrong message
+
+**Your decisions.** Two, and only two. The **1,322 AstroREG requests** (exploratory power 0.79,
+about 10 per positive, 1.9× HCT116, coverage 100% of positives against 99.5% of negatives;
+supervisor and coordinator both recommend yes). And a one-line convenience fix to
+`.claude/hooks/shared_checkout_guard.py`, which keys its "this notice does not repeat" on the exact
+command text, so adding `--force` re-fires it; keying on the staged paths would fix it. Hooks are
+yours. The brew install of shellcheck came off your list: a pinned PyPI wheel fetched on demand
+settles it, and it stays out of `pyproject.toml` because shellcheck is GPL-3.0 and this project's
+dependencies are permissive-only.
+
+**The night's best finding is a limit, not a result.** `measured.rule_links` emits a link only from
+a `Regulated` pair — significant **and** effect size below zero — so every CRISPRi link's action is
+`activates` and **a significant increase raises no rule at all**. Of 195 assessable measured-layer
+rules, 143 sit on a pure activates axis and **0 on a pure represses axis**. So the model makes
+repression calls that this project **cannot currently test**, because the extractor that builds the
+measured links discards the measurements that would test them. lane-repress2 found it while its own
+gate 1 returned a blind no-go: 0 eligible repression links and 0 independent loci in the rule's own
+cell against imported floors of 30 links and 20 loci, with the floor left where it was. Its blind
+ladder located the zero at the **cell**, not at coverage and not at significance — 156,925
+repression-axis rules, 357 on a covered element, 11 with a pair on the rule's own gene, 0 in the
+cell the rule is gated on. A lane is now counting whether the significant *increases* would form a
+population that clears the same floors, with two constraints: it may not change the extractor, and
+if the count clears it must stop at the verdict rather than roll into the test it enables.
+
+**Its registered mechanism survived its own refutation condition.** The prediction — that the
+repression share rises as the effect weakens and as openness falls — was committed, with the
+refutation wording, before the table. All four comparisons are strict rises with no interval of a
+pair overlapping: 0.0960 (strong, open), 0.3934 (strong, not-open), 0.2262 (weak, open), 0.4846
+(weak, not-open) over 81,440 assessable rules. **Consistent with the mechanism and establishes it
+about no rule**: a descriptive concentration is not a demonstration that a sign came from a maximum.
+Cross-cell sign disagreement **separates nothing** — 0.0172 of repression calls against 0.0225 of
+activation calls, so it is *less* common among repressions.
+
+**A figure we published was a third of what it claimed.** The 198 measured-perturbation loci that
+attach to no compiled element were described, in the roadmap and in a report to you, as "what the
+model misses despite measurement". The diagnosis of those same loci says what the measurements there
+actually were: **98 significant decreases, 8 increases and 593 well-powered nulls**, with only **66
+of the 198** holding a decrease. The other 132 are places the screen tested and **found nothing**,
+where the model's silence agrees with the measurement. The located omission is **66 loci and 98
+decreases**. The count was right; the noun was wrong. That is the second instance in one night of
+the same error — the first read 3,528 zero-valued columns as evidence the deletion feature was not
+being tested, which measurement refuted — so both are recorded as one pattern with one rule: get the
+outcome breakdown at a count's denominator before quoting it as evidence that something is wrong.
+
+**The 198 themselves are diagnosed.** 186 of 198 (93.9%) are a placement-rule or candidate-filter
+effect — a cCRE exists and the rule or the filter keeps it out — and **10 (5.1%) are real absence**,
+with nothing unclassifiable from what is on disk. So the omission is a property of the placement
+rule, not of the compiled element set failing to cover where the screens looked.
+
+**A published reproduction that does not travel.** `cell2_eligibility.json` publishes three
+counting-path entries that name no file — they are **class** names (`Genome.py`, `Annotation.py`,
+`Reactome.py`), admitted only because this Mac's filesystem folds case. A `counting_path` difference
+counts as a real difference, so that result reports **3 real differences on Linux CI** while its
+recorded note says 0. Nothing published is false about what was run; the claim simply does not
+leave this disk. Consequence: before the next snapshot to `main`, the six README-backing results
+must rebuild on a **case-sensitive** volume, not merely with every input checked.
+
+**Five commits carried another lane's message**, and the guard written after the first caught none of
+the four that followed, because it compared only against `HEAD` and the reused text was always older.
+Three refusals now check the message file — its name, its age, and whether its first line is already
+in the last 200 commits — and each was **shown to fire in the live tree** before the commit that
+added them, with the near-misses shown not to fire. The cause was never a shared file: the scratchpad
+each session is told is "session-specific" is shared between every lane and held some seventy
+`msg*.txt` files at once.
+
+**The three measures, apart.** Software delivered: the message guard, the promotion gate's dead push
+path removed, the 198 diagnosed, five manifests re-recorded with no figure moved, the push lock's
+takeover branch tested for the first time. Biology independently validated: **unchanged** — every
+result tonight is descriptive, diagnostic or a refusal, and nothing establishes that any one compiled
+rule is right or wrong. Release readiness: `main` unchanged; the next snapshot now additionally waits
+on the case-sensitive rebuild of all six.
