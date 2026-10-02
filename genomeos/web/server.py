@@ -2163,6 +2163,31 @@ class Api:
         except rm.RefusedError as e:
             raise ApiError(f"the response map refuses to serve: {e}", 500) from None
 
+    def evidence_response_map_2(self, page: str | None = None, per: str | None = None) -> dict:
+        """Increment 2 of the response map, one page of its loci, read from the committed result.
+
+        Increment 1 is assembled on the request because it is one example. This increment covers every
+        locus of the measured perturbation assay that carries all three inputs, and assembling it
+        reads the compiler's element tables of all 24 chromosomes and reader v1's peak sets, so it is
+        built by `scripts/response_map_increment2.py` and served from what that wrote. 110 loci do not
+        fit one screen: `response_map2.page` cuts them into pages, and every page carries the whole
+        count beside it so a page is never a truncation.
+        """
+        from genomeos import response_map2 as r2
+        from genomeos.results import load_result
+
+        payload = load_result(r2.RESULT, self.root / "data" / "results")
+        if not payload:
+            raise ApiError(
+                f"{r2.RESULT} is not in this checkout; run scripts/response_map_increment2.py", 404
+            )
+        try:
+            n = max(1, int(page or 1))
+            size = max(1, min(50, int(per or r2.PAGE)))
+        except ValueError:
+            raise ApiError("page and per are whole numbers", 400) from None
+        return r2.page(payload, n, size)
+
     def decompile(self, symbol: str, chrom: str) -> dict:
         """One gene read back as a program: every layer this project holds, and the ones it does not.
 
@@ -3519,6 +3544,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.evidence_discovery())
             if u.path == "/api/evidence/response-map":
                 return self._json(self.api.evidence_response_map(self._q(qs, "example", "globin_k562")))
+            if u.path == "/api/evidence/response-map-2":
+                return self._json(self.api.evidence_response_map_2(self._q(qs, "page"), self._q(qs, "per")))
             if u.path == "/api/decompile":
                 return self._json(self.api.decompile(self._q(qs, "symbol", ""), self._q(qs, "chrom", "")))
             if u.path == "/api/cells":

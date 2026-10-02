@@ -513,6 +513,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div id="rmap-dyn" style="margin-top:12px"></div>
     <div id="rmap-sources" style="margin-top:12px"></div>
   </div>
+  <div class="card" id="rmap2" style="margin-top:16px">
+    <h2><i class="ic">🧩</i>Response map, increment 2: every locus carrying all three inputs<span class="help" data-tip="Read-only. /api/evidence/response-map-2 pages the built loci of the measured perturbation assay; it introduces no validation and no evaluator verdict, and a reader state is a consistency check between two readings of the same ENCODE chromatin, never support for a rule.">?</span>
+      <span class="muted" id="rmap2-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="rmap2-head" style="font-size:12.5px"></div>
+    <div id="rmap2-recon" style="margin-top:12px"></div>
+    <div id="rmap2-paging" style="margin-top:12px"></div>
+    <div id="rmap2-loci" style="margin-top:8px"></div>
+  </div>
 </section>
 
 <!-- ================= AGEING ================= -->
@@ -2378,6 +2386,51 @@ async function loadResponseMap() {
 }
 document.querySelector('nav button[data-tab="evidence"]').addEventListener('click', () => setTimeout(loadResponseMap));
 if ($('#evidence').classList.contains('active')) setTimeout(loadResponseMap);
+// ---- response map, increment 2: every locus of the measured perturbation assay that carries all three
+// inputs. /api/evidence/response-map-2 serves one page of the built result and the page renders its fields;
+// nothing here counts, scores or judges. 110 loci do not fit one screen, so the server pages them and every
+// page carries the whole count: a page is never a truncation.
+let rmap2Page = 0;
+function rmap2Locus(x, byId) {
+  const notShown = Object.entries(x.pairs_in_this_locus_not_shown || {}).filter(([, n]) => n > 0)
+    .map(([k, n]) => `${k} ${fmt(n)}`).join('; ');
+  const rows = (x.assertions || []).map(id => byId[id]).filter(Boolean).map(rmapRow).join('');
+  return `<details style="margin:6px 0"><summary style="font-size:13px"><b class="mono">${escH(x.id)}</b>
+      <span class="muted">${escH(x.chrom)}:${fmt(x.start)}-${fmt(x.end)} · ${escH((x.cells || []).join(', '))} · ${escH((x.genes_measured || []).join(', '))}
+      · ${fmt(x.pairs_shown)} measured pair(s) shown · reader: ${escH((x.reader_states || []).join(', '))}${x.already_in_increment_1 ? ' · shown in increment 1' : ''}</span></summary>
+    ${rmapSmall(`compiled elements: ${(x.elements || []).join(', ')}`, true)}
+    ${rmapSmall(`pairs of this locus not shown: ${notShown || 'none'}`, true)}
+    <div class="scroll" style="max-height:420px"><table><tr><th>assertion and relation</th><th>subject → object</th><th>context</th><th>measurement, conflicts and uncertainty</th><th>source</th></tr>${rows}</table></div></details>`;
+}
+async function loadResponseMap2(page) {
+  try {
+    $('#rmap2-status').textContent = 'reading increment 2…';
+    const v = await api(`/api/evidence/response-map-2?page=${page || 1}`);
+    rmap2Page = v.page;
+    const n = v.counts || {}, bs = n.by_status || {}, r = v.reconciliation || {}, cov = v.coverage || {};
+    const byId = {}; (v.assertions || []).forEach(a => { byId[a.id] = a; });
+    $('#rmap2-head').innerHTML = `<div><b>${escH(v.title)}</b></div>${rmapSmall(v.header)}
+      ${rmapSmall(`Why these loci: ${v.why.chosen_for}`, true)}
+      ${rmapSmall(`${fmt(v.loci_total)} loci, ${fmt(v.assertions_total)} assertions: ${Object.entries(bs).map(([k, c]) => `${k} ${fmt(c)}`).join(' · ')}`)}
+      ${rmapSmall(`observed, by what measured it: ${Object.entries(n.observed_by_assay || {}).map(([k, c]) => `${k} ${fmt(c)}`).join(' · ')}`, true)}
+      ${rmapSmall(`Covers: ${cov.what_it_covers}`, true)}${rmapSmall(`Does not cover: ${cov.what_it_does_not_cover}`, true)}
+      ${rmapSmall(`A reader state is not validation: ${(v.conventions || {}).reader_state_is_not_validation}`, true)}
+      ${rmapSmall(`not_open_in_reader is shown at ${fmt((v.not_open_in_reader || {}).shown)} of the shown pairs, and means: ${(v.not_open_in_reader || {}).meaning}. It never means ${(v.not_open_in_reader || {}).never}`, true)}`;
+    $('#rmap2-recon').innerHTML = `<h3 style="font-size:14px;margin:0 0 6px">Reconciliation against the count taken before the build</h3>
+      ${rmapSmall(`${fmt(r.loci_built)} built of ${fmt(r.addable_loci_counted_before_the_build)} counted; reconciles: ${r.reconciles}`)}
+      ${rmapSmall(`excluded by cause: ${Object.entries(r.loci_excluded_by_cause || {}).map(([k, c]) => `${k} ${fmt(c)}`).join(' · ') || 'none'}`, true)}
+      ${rmapSmall(`already covered by increment 1: ${fmt(r.already_covered_by_increment_1)}; newly covered here: ${fmt(r.newly_covered_by_this_increment)}. ${r.the_ceiling_is_not_one_more}`, true)}`;
+    $('#rmap2-paging').innerHTML = `${rmapSmall(v.paging)}
+      <div style="margin-top:4px"><button id="rmap2-prev"${v.page <= 1 ? ' disabled' : ''}>← previous</button>
+      <button id="rmap2-next"${v.page >= v.pages ? ' disabled' : ''}>next →</button></div>`;
+    $('#rmap2-prev').onclick = () => loadResponseMap2(rmap2Page - 1);
+    $('#rmap2-next').onclick = () => loadResponseMap2(rmap2Page + 1);
+    $('#rmap2-loci').innerHTML = v.loci.map(x => rmap2Locus(x, byId)).join('');
+    $('#rmap2-status').textContent = `page ${fmt(v.page)} of ${fmt(v.pages)}, ${fmt(v.loci_total)} loci in all`;
+  } catch (e) { $('#rmap2-status').textContent = e.message; }
+}
+document.querySelector('nav button[data-tab="evidence"]').addEventListener('click', () => setTimeout(() => loadResponseMap2(rmap2Page || 1)));
+if ($('#evidence').classList.contains('active')) setTimeout(() => loadResponseMap2(1));
 async function loadProgress() {
   const p = await api('/api/progress');
   $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;
