@@ -5982,13 +5982,13 @@
         "partition": null
       },
       {
-        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/eqtl_crispri_frame_registration.json",
+        "path": "data/results/eqtl_crispri_frame_registration.json",
         "sha256": "a83343d378ddfb9ba77bde975a2126c55705292bf89aaec2852225ef46cda744",
         "bytes": 212273,
         "partition": null
       },
       {
-        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/response_map_increment4_count.json",
+        "path": "data/results/response_map_increment4_count.json",
         "sha256": "d1bbba8f413c7a117b7e030732666f242791cf731ec09cdea499428a48a4bf8a",
         "bytes": 246175,
         "partition": null
@@ -6049,12 +6049,14 @@
       "found": "what carries a retained hit, which is the measurement"
     },
     "code_cleanliness": {
-      "git_sha": "b8513f4b3ead0412d7638397d3b3cf4f92693fe2",
+      "git_sha": "901cbe0354daac09d13c9aa97bf957edec43a423",
       "dirty": true,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
       "foreign_uncommitted_code": [
-        "genomeos/attribution/reptest.py"
+        "genomeos/attribution/reptest.py",
+        "scripts/reptest_answerable.py",
+        "tests/test_reptest.py"
       ],
       "foreign_uncommitted_code_on_the_counting_path": [],
       "counting_path": [
@@ -6196,19 +6198,19 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "b8513f4b3ead0412d7638397d3b3cf4f92693fe2",
+      "git_sha": "901cbe0354daac09d13c9aa97bf957edec43a423",
       "dirty": true,
       "dirty_code_paths": [
-        "genomeos/attribution/reptest.py"
+        "genomeos/attribution/reptest.py",
+        "scripts/reptest_answerable.py",
+        "tests/test_reptest.py"
       ],
       "untracked_code_paths": [
-        "genomeos/attribution/reptest.py"
+        "genomeos/attribution/reptest.py",
+        "scripts/reptest_answerable.py",
+        "tests/test_reptest.py"
       ],
-      "dirty_result_paths": [
-        "data/results/astroreg_calibration_producer_rule_k562.json",
-        "data/results/eqtl_crispri_frame.json",
-        "data/results/response_map_increment4_count.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/eqtl_crispri_frame.py",
         "--count"
