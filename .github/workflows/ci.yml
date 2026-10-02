@@ -49,6 +49,14 @@ jobs:
         run: uv sync --extra compose
       - name: Lint
         run: uv run ruff check . && uv run ruff format --check .
+      # The shell scripts carry the commit and push guards and nothing linted them until
+      # 2026-10-02: ruff is given a file list, and a .sh path named there is read as Python and
+      # fails as one. GitHub's Ubuntu runners ship shellcheck, so this installs nothing. Locally
+      # scripts/check.sh uses the runner's equivalent, a pinned PyPI wheel fetched on demand and
+      # deliberately absent from pyproject: shellcheck is GPL-3.0 and this project's dependencies
+      # are permissive-only, so it stays a dev tool that is never shipped or locked.
+      - name: Lint the shell scripts
+        run: shellcheck scripts/*.sh
       - name: Cache reference data
         uses: actions/cache@v4
         with:

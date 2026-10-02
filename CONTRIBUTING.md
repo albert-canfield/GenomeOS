@@ -277,6 +277,18 @@ Kill a background job by its **own PID**. If a pattern is unavoidable, anchor it
 start of the command line (`pgrep -f '^bash scripts/check.sh'`) and make it specific
 enough that no peer's process can match.
 
+**The guard now enforces this** (2026-10-02, the owner's approval). Refused outright:
+`pkill`, `killall`, `kill` of pid `-1` or `0` in every spelling (`kill -9 -1`,
+`kill -- -1`, `kill -s TERM -1`, `kill 0`), and `pgrep -f` with an unanchored pattern.
+Allowed: `kill <pid>`, `kill -9 <pid>`, `kill -1 <pid>`, `kill -0 <pid>`,
+`pgrep -f ^anchored`, plain `pgrep`, and `ps`.
+
+**And the commit notice stopped repeating itself.** The shared-file notice is keyed on the
+file and a hash of its uncommitted diff, not on the command text, so re-running with
+`--force` or a renamed message file no longer fires it again — while a peer adding a hunk
+does, which is the case it exists for. Before this, adding `--force` made a new command
+string and cost two extra identical calls per commit.
+
 ## A new guard is shown to fire before it is trusted (2026-10-02)
 
 Plant something that **must** trip the check and something that **must not**, confirm

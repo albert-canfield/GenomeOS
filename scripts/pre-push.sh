@@ -17,7 +17,9 @@ root=$(git rev-parse --show-toplevel)
 lock="${TMPDIR:-/tmp}/genomeos-push.lock"
 tmp=""
 held=""
+announced=""
 
+# shellcheck disable=SC2329  # invoked by the trap below, which shellcheck cannot see
 cleanup() {
   if [ -n "$tmp" ]; then
     git -C "$root" worktree remove --force "$tmp" 2>/dev/null
@@ -45,13 +47,18 @@ while ! mkdir "$lock" 2>/dev/null; do
     echo "pre-push: process ${held:-unknown} has held the push lock for an hour; not waiting longer"
     exit 1
   fi
-  [ "$waited" -eq 0 ] && echo "pre-push: waiting for the check running in process ${held:-unknown}"
+  if [ "$waited" -eq 0 ] || [ "$held" != "$announced" ]; then
+    echo "pre-push: waiting for the check running in process ${held:-unknown}"
+    announced="$held"
+  fi
   sleep 5
   waited=$((waited + 5))
 done
 echo "$$" > "$lock/pid"
 
 status=0
+# shellcheck disable=SC2034  # git's pre-push protocol sends four fields per ref on stdin and they
+# are positional: local_ref and remote_sha are read because they are there, not because we use them
 while read -r local_ref local_sha remote_ref remote_sha; do
   case "$remote_ref" in refs/heads/dev|refs/heads/main) ;; *) continue ;; esac
   [ "$local_sha" = "0000000000000000000000000000000000000000" ] && continue
@@ -63,6 +70,18 @@ while read -r local_ref local_sha remote_ref remote_sha; do
       [ -d "$root/data/$d" ] && [ ! -e "$tmp/data/$d" ] && ln -s "$root/data/$d" "$tmp/data/$d"
     done
     (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" scripts/check.sh) || status=1
+    # Wait for anything still running IN the worktree before taking the directory away. On 2026-10-02
+    # a peer's `pkill -f "scripts/check.sh"` killed the check here; this line removed the worktree at
+    # once, and `bio test` -- a child of the killed check, still running -- lost its working directory.
+    # The push then reported red with pytest already green at 3,485 passed, on an absent TMPDIR path
+    # and then an absent RELATIVE path to a tracked, present file. The kill was the fault; removing the
+    # directory under a live child is what made it a puzzle instead of a message.
+    waited_for_children=0
+    while pgrep -f "^bash $tmp/scripts/check.sh" >/dev/null 2>&1 || pgrep -f "PYTHONPATH=$tmp" >/dev/null 2>&1; do
+      [ "$waited_for_children" -lt 60 ] || { echo "pre-push: something is still running in $tmp after ${waited_for_children}s; removing anyway" >&2; break; }
+      sleep 2
+      waited_for_children=$((waited_for_children + 2))
+    done
     git -C "$root" worktree remove --force "$tmp"
   else
     status=1
