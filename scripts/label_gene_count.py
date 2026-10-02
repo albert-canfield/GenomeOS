@@ -134,33 +134,73 @@ def payload() -> dict[str, Any]:
         series["within_matched"], series["different_matched"], "within_matched / different_matched"
     )
 
-    if bins["inconclusive_by_rule"] or draws["clusters"] < lg.MIN_CLUSTERS:
-        reading, words = (
-            "c",
-            (
-                "INCONCLUSIVE BY RULE - THE DATA CANNOT TELL. "
-                + (
-                    f"the dropped within-gene matching weight {bins['dropped_within_gene_weight']} "
-                    f"exceeds {lg.MAX_DROPPED_WEIGHT}"
-                    if bins["inconclusive_by_rule"]
-                    else f"{draws['clusters']} gene clusters is below the floor of {lg.MIN_CLUSTERS}"
-                )
-            ),
+    # Every registered route to a reading is evaluated and ALL of them are reported, so the verdict
+    # cannot be the one that happened to be tested first.
+    band_reading, band_words = lg.read_the_comparison(
+        within_vs_diff["band"], within_vs_control["band"], diff_vs_control["band"]
+    )
+    floor_fired = bins["inconclusive_by_rule"] or draws["clusters"] < lg.MIN_CLUSTERS
+    floor_words = (
+        None
+        if not floor_fired
+        else "INCONCLUSIVE BY RULE - THE DATA CANNOT TELL. "
+        + (
+            f"the dropped within-gene matching weight {bins['dropped_within_gene_weight']} "
+            f"exceeds {lg.MAX_DROPPED_WEIGHT}"
+            if bins["inconclusive_by_rule"]
+            else f"{draws['clusters']} gene clusters is below the floor of {lg.MIN_CLUSTERS}"
         )
-    elif any(r["wider_than_the_band"] for r in (within_vs_diff, within_vs_control, diff_vs_control)):
-        reading, words = (
-            "c",
-            (
-                "INCONCLUSIVE BY CONSTRUCTION - THE DATA CANNOT TELL. A deciding interval's achieved "
-                f"relative half-width exceeds the band's own half-width of "
-                f"{within_vs_diff['band_half_width']}, so the comparison cannot separate 'at control' "
-                "from 'far above' whatever its point estimate."
-            ),
+    )
+    power_fired = any(r["wider_than_the_band"] for r in (within_vs_diff, within_vs_control, diff_vs_control))
+    power_words = (
+        None
+        if not power_fired
+        else "INCONCLUSIVE BY CONSTRUCTION - THE DATA CANNOT TELL. A deciding interval's achieved "
+        f"relative half-width exceeds the band's own half-width of "
+        f"{within_vs_diff['band_half_width']}, so by the registered power rule the comparison "
+        "cannot separate 'at control' from 'far above' whatever its point estimate."
+    )
+    # The weakest reading any registered route selects is the one reported: a lane may not pick
+    # whichever route reads better, and (c) is the weaker reading wherever it is reached.
+    if floor_fired or power_fired or band_reading == "c":
+        reading = "c"
+        words = " ALSO: ".join(
+            w for w in (band_words if band_reading == "c" else None, floor_words, power_words) if w
         )
     else:
-        reading, words = lg.read_the_comparison(
-            within_vs_diff["band"], within_vs_control["band"], diff_vs_control["band"]
-        )
+        reading, words = band_reading, band_words
+    links = {
+        "within_matched_far_above_different_matched": within_vs_diff["band"] == "far_above",
+        "within_matched_far_above_control_1": within_vs_control["band"] == "far_above",
+        "different_matched_position_against_control_1": diff_vs_control["band"],
+        "what_is_established_and_what_is_not": (
+            "stated as a fact about the three intervals and NOT as a reading, because the reading "
+            "is (c) and may not be read upward from here: the two conditions clause (a) names are "
+            "both at `far_above`, while the matched different-gene arm's own position against "
+            "control 1 crosses a band edge, so the data cannot tell (a-i) from (a-ii) and the "
+            "registered procedure returns (c)."
+            if (
+                within_vs_diff["band"] == "far_above"
+                and within_vs_control["band"] == "far_above"
+                and reading == "c"
+            )
+            else "the three intervals' bands are printed above; no link is claimed beyond them"
+        ),
+        "a_defect_in_this_lanes_own_registration_disclosed_rather_than_resolved": (
+            "TWO registered clauses pull against each other on this outcome and neither is "
+            "softened here. (i) READINGS['a'] names two conditions and says its sub-cases "
+            "'neither denies (a)'; (ii) READINGS['c'] says ANY deciding interval crossing a band "
+            "edge reads (c), and the registered procedure read_the_comparison - committed at "
+            "e13992a before any count - tests (ii) first. The procedure therefore returns (c) and "
+            "this lane reports (c), taking the WEAKER reading by rule rather than the clause that "
+            "reads better. Separately, the registered POWER rule is miscalibrated for a ratio far "
+            "from 1: it compares an achieved half-width against the band's half-width of 0.25 "
+            "without reference to where the interval sits, so it can fire on an interval nowhere "
+            "near a band edge. It is applied as registered and not weakened; it is named here as "
+            "a defect for the owner, and it changes nothing, because the band rule reaches (c) on "
+            "its own."
+        ),
+    }
 
     equal = lg.gene_equal_weight(counts, keep)
     equal_within = lg.ratio_interval(
@@ -213,9 +253,20 @@ def payload() -> dict[str, Any]:
             "which": reading,
             "in_the_registrations_own_words": words,
             "selected_by": (
-                "the three deciding intervals above, by the registered band rule alone and never "
-                "by a point estimate"
+                "the three deciding intervals above, by the registered band rule and the "
+                "registered floor and power rules, never by a point estimate. Every route is "
+                "evaluated and all of them are reported, so the verdict is not whichever route "
+                "was tested first"
             ),
+            "every_registered_route": {
+                "band_rule": {"reads": band_reading, "words": band_words},
+                "floor_rule": {"fired": bool(floor_fired), "words": floor_words},
+                "power_rule": {"fired": bool(power_fired), "words": power_words},
+                "the_weakest_reading_any_route_selects_is_reported": (
+                    "(c) wherever it is reached: a lane may not pick the route that reads better"
+                ),
+            },
+            "links": links,
             "all_four_readings_as_registered": lg.READINGS,
         },
         "power": {
