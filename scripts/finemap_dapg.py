@@ -45,6 +45,7 @@ import collections
 import hashlib
 import json
 import random
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -1186,6 +1187,12 @@ def cost_registration_payload() -> dict[str, Any]:
 def carry_forward_registered_terms(fresh_payload: dict[str, Any]) -> dict[str, Any]:
     """Keep every term of an already-committed cost registration exactly as it was registered.
 
+    The previous terms are read from the COMMITTED blob with `git show`, never from the working tree:
+    reading the result file back would make the writer's own output an undeclared input of itself, which
+    the manifest contract refuses and did refuse - the first attempt at this was quarantined for exactly
+    that. Reading the commit is also the better provenance, because what must be preserved is what was
+    registered and published, not whatever is sitting in the checkout.
+
     A registration describes what was authorised BEFORE the thing it authorises. Recomputing one of its
     terms after the fact silently rewrites what was authorised: regenerating this file after the read had
     finished turned `the_resume` from "11 chromosomes still to read" into "none", erasing the record of
@@ -1193,10 +1200,18 @@ def carry_forward_registered_terms(fresh_payload: dict[str, Any]) -> dict[str, A
     genuinely new keys are added, and any key whose recomputed value would have DIFFERED is named in the
     result rather than quietly replaced. That makes "nothing else moved" a mechanism instead of a claim.
     """
-    path = ROOT / f"data/results/{COST_REGISTRATION}.json"
-    if not path.exists():
-        return fresh_payload
-    old = json.loads(path.read_text())
+    rel = f"data/results/{COST_REGISTRATION}.json"
+    try:
+        blob = subprocess.run(
+            ["git", "show", f"HEAD:{rel}"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return fresh_payload  # not committed yet: there is nothing registered to preserve
+    old = json.loads(blob)
     out: dict[str, Any] = {}
     would_have_differed: dict[str, Any] = {}
     for key, value in fresh_payload.items():

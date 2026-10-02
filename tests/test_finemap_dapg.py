@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import importlib.util
-import pathlib
 import sys
 from pathlib import Path
 
@@ -350,38 +349,52 @@ def test_registered_terms_are_carried_forward_not_recomputed() -> None:
 
 
 def _carry(mod, fresh):
-    """Run carry_forward_registered_terms against a temporary committed file."""
+    """Run carry_forward_registered_terms against a stubbed committed blob."""
     import json
-    import tempfile
+    import subprocess
+    import types
 
-    with tempfile.TemporaryDirectory() as d:
-        results = pathlib.Path(d) / "data" / "results"
-        results.mkdir(parents=True)
-        (results / f"{mod.COST_REGISTRATION}.json").write_text(
-            json.dumps(
-                {
-                    "the_new_bound": {"bound_mb": 170.4},
-                    "the_resume": {"chromosomes_still_to_read": ["chr20", "chr3"]},
-                }
-            )
-        )
-        real = mod.ROOT
-        mod.ROOT = pathlib.Path(d)
-        try:
-            return mod.carry_forward_registered_terms(fresh)
-        finally:
-            mod.ROOT = real
+    committed = json.dumps(
+        {
+            "the_new_bound": {"bound_mb": 170.4},
+            "the_resume": {"chromosomes_still_to_read": ["chr20", "chr3"]},
+        }
+    )
+    real = subprocess.run
+
+    def fake(cmd, *a, **kw):
+        assert cmd[:2] == ["git", "show"], "the previous terms must come from the commit, not the tree"
+        return types.SimpleNamespace(stdout=committed)
+
+    subprocess.run = fake
+    try:
+        return mod.carry_forward_registered_terms(fresh)
+    finally:
+        subprocess.run = real
+
+
+def test_carry_forward_reads_the_commit_and_not_the_working_tree() -> None:
+    """Reading its own output back made the writer an undeclared input of itself and was quarantined."""
+    src = (ROOT / "scripts/finemap_dapg.py").read_text()
+    body = src[src.index("def carry_forward_registered_terms(") : src.index("def main()")]
+    assert "git" in body and "show" in body
+    assert "read_text()" not in body, "the previous terms must not be read off disk"
 
 
 def test_carry_forward_is_a_no_op_before_the_first_commit() -> None:
-    """With no committed file there is nothing to preserve and the fresh payload stands."""
-    import tempfile
+    """With nothing committed there is nothing registered to preserve and the fresh payload stands."""
+    import subprocess
+    import types
 
     fresh = {"a": 1}
-    real = fd.ROOT
-    with tempfile.TemporaryDirectory() as d:
-        fd.ROOT = pathlib.Path(d)
-        try:
-            assert fd.carry_forward_registered_terms(fresh) == fresh
-        finally:
-            fd.ROOT = real
+    real = subprocess.run
+
+    def fake(cmd, *a, **kw):
+        raise subprocess.CalledProcessError(128, cmd)
+
+    subprocess.run = fake
+    try:
+        assert fd.carry_forward_registered_terms(fresh) == fresh
+    finally:
+        subprocess.run = real
+    assert isinstance(types.SimpleNamespace(), object)
