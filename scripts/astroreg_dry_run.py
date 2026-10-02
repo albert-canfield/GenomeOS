@@ -29,6 +29,14 @@ WHAT IT CHECKS, and refuses on:
 
 The list is written out in full so it can be diffed between runs: the enumeration is sorted and
 deterministic, so two dry runs over the same inputs produce the same bytes.
+
+It is written THROUGH `save_result`, with a manifest declaring every input it read, including the
+per-chromosome registry tables reached through `crispri.DeletionTable`. The first version of this
+script wrote the file into data/results itself and so put a file there with no manifest at all. That
+was a breach of the result contract, and the contract is the thing that makes a number in this
+project checkable, so it is fixed here rather than excused. Why the static guard on that contract did
+not refuse it is recorded in the commit message, because a guard that exists and did not fire is
+worth more attention than the one file it missed.
 """
 
 from __future__ import annotations
@@ -45,10 +53,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from astroreg_register import screen_pairs  # noqa: E402
+from astroreg_register import TABLE3, screen_pairs  # noqa: E402
 
 from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import astrorun, crispri  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 
 REGISTRATION = Path("data/results/astroreg_registration.json")
 REGISTRATION_SHA256 = "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a"
@@ -56,8 +65,20 @@ REGISTRATION_SHA256 = "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338ed
 #: The gate whose verdict governs whether the list below may be bought at all.
 GATE_RESULT = Path("data/results/astroreg_activity_nogo.json")
 
-#: Where the full list is written for review.
-DEFAULT_OUT = Path("data/results/astroreg_request_plan.json")
+#: The registry name this list is written under, through save_result and its manifest. The first
+#: version of this script wrote the file itself, which put a file into data/results with no manifest
+#: at all -- the exact breach the result contract exists to prevent. It goes through save_result now.
+RESULT = "astroreg_request_plan"
+
+#: This script, as the entry whose transitive import closure is the counting path of its result.
+ENTRY = "scripts/astroreg_dry_run.py"
+
+OWN_CODE = (
+    "genomeos/attribution/astrorun.py",
+    "scripts/astroreg_activity_gate.py",
+    "scripts/astroreg_dry_run.py",
+    "tests/test_astrorun.py",
+)
 
 #: The labels the registered test actually scores. Elements that serve only other labels are counted
 #: and reported, never removed: the authorised total counts them.
@@ -129,6 +150,93 @@ def describe(plan: list[dict[str, Any]], pairs: list[dict[str, Any]]) -> dict[st
     }
 
 
+def manifest(chroms: list[str], plan: list[dict[str, Any]], pairs: list[dict[str, Any]]) -> dict[str, Any]:
+    """What this list was built from. Declared because every traced read must be declared."""
+    element_tables = [crispri.ELEMENTS / f"{c}.json" for c in chroms]
+    return {
+        "sources": [
+            {
+                "accession": str(REGISTRATION),
+                "version": f"the frozen registration, sha256 {REGISTRATION_SHA256}; its authorised "
+                "total and its counting rule are read and checked, never moved",
+            },
+            {
+                "accession": "Green NFO, et al. CRISPRi screening in cultured human astrocytes. "
+                "Nature Neuroscience 2025;29(3):703-716 -- Supplementary Table 3",
+                "version": "publisher open-access supplementary store; pinned here by sha256",
+                "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-025-02154-3"
+                "/MediaObjects/41593_2025_2154_MOESM5_ESM.xlsx",
+            },
+            {
+                "accession": "the swept all-element deletion registry, "
+                f"{crispri.ELEMENTS} ({len(element_tables)} per-chromosome tables)",
+                "version": "this project's own sweep; read by overlap only, and no deletion value is "
+                "read from it here",
+            },
+        ],
+        "inputs": [
+            mf.input_entry(
+                REGISTRATION,
+                partition=None,
+                role="the authorised request total, the coverage table's "
+                "registry_elements_needed_total and the counting rule; its sha256 is checked and no "
+                "term is moved",
+            ),
+            mf.input_entry(
+                GATE_RESULT,
+                partition=None,
+                role="the activity gate's committed verdict, quoted rather than decided again: it is "
+                "what says whether this list may be bought",
+            ),
+            mf.input_entry(
+                TABLE3,
+                partition=None,
+                role="the screen's element coordinates and registered labels; no effect size, "
+                "p-value, FDR or score was read",
+            ),
+            mf.files_entry(
+                f"{crispri.ELEMENTS}/chr*.json",
+                element_tables,
+                partition=None,
+                role="the swept registry element spans, for the overlap test that decides which "
+                "elements a covered pair needs. Element ids and coordinates only; no deletion value",
+            ),
+        ],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "coordinates_note": (
+            "the registry tables and the overlap test are zero-based half-open. The screen states no "
+            "convention for its chrom:start-end strings; the only use made of them here is the same "
+            "overlap test crispri.annotate uses for `covered`, so this list is built by the condition "
+            "the registration's own coverage table counted with"
+        ),
+        "parameters": {
+            "authorised_requests": astrorun.AUTHORISED_REQUESTS,
+            "requests_enumerated": len(plan),
+            "one_request_per": astrorun.ONE_REQUEST_PER,
+            "chromosomes": chroms,
+            "screen_pairs": len(pairs),
+            "alphagenome_requests": 0,
+            "model_requests": 0,
+            "requests_sent": 0,
+            "money_spent": 0,
+        },
+        "exclusions": [
+            "no AlphaGenome request is sent: this script has no such import and no code path that "
+            "could send one, which tests/test_astrorun.py checks against its syntax tree",
+            "no deletion value is read from the registry: only each element's id and span",
+            "no effect size, fold change, p-value, FDR or expression level is read from the screen",
+            "no astrocyte activity value is read or constructed: whether one can be is the gate's "
+            "question and this list does not reopen it",
+        ],
+        "partitions": {
+            "screen_pairs": f"all {len(pairs)} element-gene pairs of the published screen, every "
+            "label, because the authorised total counts a covered pair of any label",
+        },
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
@@ -137,7 +245,6 @@ def main() -> int:
         help="enumerate and print the request list. The only mode this script has; required, so "
         "that running it is always a deliberate statement that nothing is being sent",
     )
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="where to write the full list")
     ap.add_argument("--show", type=int, default=10, help="how many rows to print in full")
     args = ap.parse_args()
     if not args.dry_run:
@@ -214,14 +321,15 @@ def main() -> int:
         else "the activity gate permits the run; the list above is what it would send",
         "element_registry": {
             "root": str(crispri.ELEMENTS),
-            "note": "read by overlap only, one chromosome held at a time. Not hashed here: this is a "
-            "review artefact and not a registry result, so it carries no manifest and no number of "
-            "its own that a later result could cite",
+            "note": "read by overlap only, one chromosome held at a time, for element ids and spans "
+            "and no deletion value. Declared and hashed in this result's manifest like any other "
+            "input: an earlier version of this script wrote the list into data/results itself, with "
+            "no manifest at all, and that was a breach of the result contract rather than a choice",
         },
         "requests": plan,
     }
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(payload, indent=1) + "\n")
+    payload[mf.KEY] = manifest(sorted({r["chrom"] for r in plan}, key=lambda c: (len(c), c)), plan, pairs)
+    out = save_result(RESULT, payload)
 
     print()
     print(f"first {args.show} of {len(plan)} requests:")
@@ -247,7 +355,7 @@ def main() -> int:
             indent=1,
         )
     )
-    print(f"({time.time() - t0:.0f} s) -> {args.out}")
+    print(f"({time.time() - t0:.0f} s) -> {out}")
     return 0
 
 
