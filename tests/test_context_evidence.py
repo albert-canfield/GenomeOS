@@ -401,6 +401,21 @@ def test_a_class_imported_from_a_module_is_not_mistaken_for_a_file():
     assert len({p.lower() for p in path}) == len(path)
 
 
+# SUPERSEDED at 8560b82, and kept rather than deleted: --force is denied to this session, so the
+# correction is APPENDED and nothing committed is removed. `code_cleanliness` now names the ENTRY
+# SCRIPT in `own_uncommitted_code` when the commit does not hold it, and under pytest `sys.argv[0]`
+# is the test runner, so the assertion below is now FALSE. `strict=True` means it must KEEP failing:
+# if the old claim ever holds again the suite reds rather than passing quietly. The correct assertion
+# is test_the_cleanliness_block_names_the_entry_script_in_the_uncommitted_files, below.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded at 8560b82: own_uncommitted_code now names the entry script, which under pytest "
+        "is the test runner. Replaced by "
+        "test_the_cleanliness_block_names_the_entry_script_in_the_uncommitted_files. Kept because "
+        "--force is denied, so the correction is additive; removal waits on a policy decision."
+    ),
+)
 def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path():
     block = ce.code_cleanliness(Path("scripts/context_evidence_census.py"), ("a.py",))
     assert set(block) >= {
@@ -417,6 +432,21 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
         assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]
 
 
+# SUPERSEDED at 8560b82 by the hermetic version below, and kept for the same reason: the correction
+# is additive because --force is denied. This test calls `code_cleanliness` TWICE and asserts the two
+# readings agree, so each call runs its own `git status`. In this shared checkout a peer saving a file
+# between them makes them disagree, and the verdict is then a statement about no tree either call
+# measured -- the `tree_moved` class, written up in docs/FALSE-RED-VERDICTS.md with its mechanism
+# planted. It happened once at 22:07 and then passed three times out of three on re-run, which is the
+# signature. Skipped rather than left running, because a check that reds at random is worse than no
+# check: the claim it makes is made hermetically below, over one snapshot of the tree.
+@pytest.mark.skip(
+    reason=(
+        "reads the live checkout twice; replaced by "
+        "test_the_census_script_s_own_closure_is_the_module_s_closure_hermetically. See "
+        "docs/FALSE-RED-VERDICTS.md, the tree_moved section. Removal waits on a policy decision."
+    )
+)
 def test_the_census_script_s_own_closure_is_the_module_s_closure():
     """The census was written with its own copy of the closure, before the module had one, and the
     result it has in the registry was stamped with that copy. The two must stay the same reading.
@@ -441,3 +471,120 @@ def test_the_census_script_s_own_closure_is_the_module_s_closure():
         theirs["foreign_uncommitted_code_on_the_counting_path"]
         == ours["foreign_uncommitted_code_on_the_counting_path"]
     )
+
+
+# --- the three replacements, appended 2026-10-02 (coordinator) -----------------------------------
+# Additive by necessity and not by preference: `commit_own.sh` refuses a commit that removes a line an
+# earlier commit added, the override is `--force`, and `--force` is denied to this session by the
+# harness. A harness denial is final, so the superseded tests above stay and these follow them. When
+# the policy question is settled, the two above should be deleted and these keep their names.
+
+
+def test_the_cleanliness_block_names_the_entry_script_in_the_uncommitted_files():
+    """What the xfailed test above asserted, corrected for the entry script being counted.
+
+    "a.py" is not a file this repository has, so it contributes nothing -- the original claim. Since
+    8560b82 the ENTRY SCRIPT is named in this field when the commit does not hold it, and under
+    pytest that is the test runner, so the one expected member is that and nothing else.
+
+    The FORM is asserted beside the equality, and that is the point of the second assertion: the
+    expected member is read off the block itself, so a block naming any path at all as both its
+    `argv0` and its only uncommitted file would satisfy the equality. An assertion keyed to a value
+    its own subject supplies is not an assertion. The plant below shows the equality alone passing
+    on an arbitrary path and the form line refusing it.
+    """
+    block = ce.code_cleanliness(Path("scripts/context_evidence_census.py"), ("a.py",))
+    assert set(block) >= {
+        "git_sha",
+        "dirty",
+        "own_uncommitted_code",
+        "own_code_is_committed",
+        "foreign_uncommitted_code",
+        "foreign_uncommitted_code_on_the_counting_path",
+        "counting_path",
+    }
+    assert block["own_uncommitted_code"] == [block["entry_script"]["argv0"]]
+    assert block["entry_script"]["form"] == "test_runner"
+    for p in block["foreign_uncommitted_code_on_the_counting_path"]:
+        assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]
+
+
+def test_PLANTED_the_equality_alone_admits_an_arbitrary_entry_script():
+    """The counterfactual for the form assertion above. Without it the check admits any path."""
+    arbitrary = {
+        "own_uncommitted_code": ["/private/tmp/anything/at/all.py"],
+        "entry_script": {
+            "argv0": "/private/tmp/anything/at/all.py",
+            "form": "committed_repository_file",
+        },
+    }
+    assert arbitrary["own_uncommitted_code"] == [arbitrary["entry_script"]["argv0"]], (
+        "the equality alone must PASS on an arbitrary path -- that is the defect it cannot see"
+    )
+    assert arbitrary["entry_script"]["form"] != "test_runner", (
+        "and the form assertion must be what refuses it"
+    )
+    real = {"own_uncommitted_code": [".venv/bin/pytest"], "entry_script": {"form": "test_runner"}}
+    assert real["entry_script"]["form"] == "test_runner", "a real pytest run must still satisfy both"
+
+
+def test_the_census_script_s_own_closure_is_the_module_s_closure_hermetically(monkeypatch):
+    """The skipped test's claim, made over ONE snapshot of the tree instead of two readings.
+
+    `code_revision` is called once and both calls are given that answer, so the only thing differing
+    between them is the entry's spelling -- which is what the test was ever about. A peer committing
+    mid-test can no longer change the verdict.
+    """
+    import importlib.util
+
+    from genomeos import manifest as mf
+
+    spec = importlib.util.spec_from_file_location("ce_census", "scripts/context_evidence_census.py")
+    census = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(census)
+    assert not hasattr(census, "counting_path"), "the census must not hold a second copy of the closure"
+    assert census.ENTRY == "scripts/context_evidence_census.py"
+    entry = Path("scripts/context_evidence_census.py").resolve()
+    snapshot = mf.code_revision(None)
+    monkeypatch.setattr(mf, "code_revision", lambda root=None: dict(snapshot))
+    theirs = ce.code_cleanliness(census.ENTRY, census.OWN_CODE)
+    ours = ce.code_cleanliness(entry, census.OWN_CODE)
+    assert theirs["counting_path"] == ours["counting_path"]
+    assert theirs["own_code_is_committed"] == ours["own_code_is_committed"]
+    assert (
+        theirs["foreign_uncommitted_code_on_the_counting_path"]
+        == ours["foreign_uncommitted_code_on_the_counting_path"]
+    )
+
+
+def test_two_readings_of_one_tree_disagree_when_it_moves_between_them(tmp_path):
+    """The race the skipped test was losing, planted so the hermetic fix has a checkable reason.
+
+    A peer saving a file on the counting path between two `code_cleanliness` calls leaves the
+    counting path IDENTICAL -- it comes from the imports -- and the uncommitted lists different. That
+    is the signature the one red carried, with the first assertion passing and the second failing, and
+    it is produced here deliberately rather than inferred from it.
+    """
+    import subprocess
+
+    from genomeos import manifest as mf
+
+    repo = tmp_path / "r"
+    (repo / "scripts").mkdir(parents=True)
+    (repo / "genomeos").mkdir()
+    (repo / "genomeos" / "peer.py").write_text("VALUE = 1\n")
+    (repo / "scripts" / "w.py").write_text("from genomeos import peer\n")
+    git = ["git", "-C", str(repo), "-c", "user.email=p@p", "-c", "user.name=p"]
+    subprocess.run(["git", "init", "-q", str(repo)], check=True, capture_output=True)
+    subprocess.run([*git, "add", "-A"], check=True, capture_output=True)
+    subprocess.run([*git, "commit", "-q", "-m", "p"], check=True, capture_output=True)
+
+    first = mf.code_cleanliness("scripts/w.py", ("scripts/w.py",), repo, argv0="scripts/w.py")
+    (repo / "genomeos" / "peer.py").write_text("VALUE = 2\n")  # the peer saves, mid-test
+    second = mf.code_cleanliness("scripts/w.py", ("scripts/w.py",), repo, argv0="scripts/w.py")
+
+    key = "foreign_uncommitted_code_on_the_counting_path"
+    assert first["counting_path"] == second["counting_path"], "the closure is not what moved"
+    assert first[key] == []
+    assert second[key] == ["genomeos/peer.py"]
+    assert first[key] != second[key], "two live reads of one moving tree are not one reading"
