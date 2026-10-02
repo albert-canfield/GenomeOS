@@ -347,7 +347,8 @@ class TestTheGuardIsAProtectionAndNotADiagnosis:
         src = Path(astrorun.__file__).read_text()
         assert src.count(self.GUARD_LINE) == 1, "the guard line has moved; this test must be updated"
         stripped = src.replace(self.GUARD_LINE, "self.sent = sent")
-        ns: dict = {}
+        # the module resolves a repository root from __file__, which exec does not provide by default
+        ns: dict = {"__file__": astrorun.__file__}
         exec(compile(stripped, "astrorun_without_the_resume_guard", "exec"), ns)
         return ns
 
@@ -760,8 +761,14 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
 
     @pytest.fixture
     def authorised(self, monkeypatch):
-        """Albert's words recorded. Every other clause must still be checked."""
+        """Albert's words recorded, and the blob check stubbed.
+
+        The blob check is the SUPERVISOR's requirement, not a clause of Albert's, and it refuses while
+        this lane holds changes to the signed files. Stubbing it keeps these tests about HIS clauses; it
+        has its own planted tests, including the one-character edit.
+        """
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
 
     @pytest.fixture
     def good(self, tmp_path):
@@ -829,6 +836,7 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         of it, a failing clause must still refuse -- here the sign-off, removed.
         """
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
         assert astrorun.ASTROREG2_AUTHORISATION, "this test is about a FILLED slot"
         good["signoff"] = None
         with pytest.raises(astrorun.SendRefusedError) as exc:
@@ -838,6 +846,7 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
     def test_a_filled_slot_does_not_mask_a_partial_run_either(self, good, monkeypatch):
         """The same masking risk on the clause that guards a double spend."""
         monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
         led = Path(good["ledger"])
         astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP).take(chrom="chr1", element="E0")
         with pytest.raises(astrorun.SendRefusedError, match="a partial run exists"):
@@ -1042,6 +1051,7 @@ class TestItemFAdapterV2:
         half.GENE_AXIS_COLUMNS_090 = (astrorun.ADAPTER_V2_MUST_RECORD_GENE_ID,)
         monkeypatch.setitem(sys.modules, "regressed_adapter", half)
         monkeypatch.setattr(astrorun, "ADAPTER_MODULE", "regressed_adapter")
+        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
         plan = [
             {

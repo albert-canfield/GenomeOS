@@ -48,6 +48,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import astrorun  # noqa: E402
 from genomeos.predict import enhancer_target  # noqa: E402
+from genomeos.predict.alphagenome_adapter import ALPHAGENOME_MODEL_VERSION  # noqa: E402
 
 RESULT = "astroreg2_send"
 ENTRY = "scripts/astroreg2_send.py"
@@ -66,7 +67,7 @@ ACTIVITY = Path("data/results/astroreg2_astrocyte_activity.json")
 #: save_result with a manifest. The project's own guard -- nothing under genomeos/ or scripts/ writes into
 #: data/results except through save_result -- was failing on this file, and the right answer was to move
 #: the file rather than to carve an exemption into a claim worth keeping absolute.
-LEDGER = Path("data/ledger/astroreg2_requests.jsonl")
+LEDGER = Path("data/ledgers/astroreg2.jsonl")
 
 #: The digest of the list the supervisor reviewed, as committed at cc5b097. The sender rebuilds the list
 #: and refuses on any difference, so the reviewed list and the sent list are the same object.
@@ -237,7 +238,46 @@ def main() -> int:
         return 0
 
     budget = astrorun.astroreg2_budget(LEDGER)
-    scorer, fetch = live_scorer_and_fetch()
+
+    # Built INLINE and exactly as the sweep that produced the frozen K562 values built it
+    # (scripts/enhancer_targets_all.py worker_scorer, verified at :98-107): the pinned client with the
+    # same timeout, and the scorer with threshold=0.0. The adapter's default is 0.05, and taking it would
+    # have censored every |effect| < 0.05 -- values the frozen cache CARRIES -- making the astrocyte
+    # deletion term a DIFFERENT FEATURE from the one the weights were frozen on. No helper is written for
+    # this: the line that failed before named a function that did not exist, and inventing it now would
+    # make the name real while leaving the habit intact.
+    from genomeos.genome import IndexedGenome, reference_fasta
+    from genomeos.predict import AlphaGenomeAdapter
+    from genomeos.predict.alphagenome_adapter import create_client
+
+    adapter = AlphaGenomeAdapter()
+    if not adapter.available:
+        print(
+            "REFUSED: no AlphaGenome key is available, so no request can be made. Reported rather than "
+            "defaulted: a sender that proceeded without one would look like a run that bought nothing"
+        )
+        return 2
+    adapter._client = create_client(  # noqa: SLF001 - the pinned version, as the sweep does
+        adapter.api_key, timeout=astrorun.FROZEN_CLIENT_TIMEOUT
+    )
+    scorer = adapter._live_scorer(  # noqa: SLF001 - the only route the adapter exposes
+        threshold=astrorun.FROZEN_SCORER_THRESHOLD
+    )
+    model_version = dict(getattr(adapter, "last_scan", {}) or {})
+
+    genomes: dict[str, Any] = {}
+
+    def fetch(locus: Any) -> str:
+        genome = genomes.get(locus.chrom)
+        if genome is None:
+            fasta = reference_fasta(locus.chrom)
+            if not fasta.exists():
+                raise FileNotFoundError(
+                    f"{locus.chrom} has no reference fasta at {fasta}; run `genomeos data fetch --chrom "
+                    f"{locus.chrom}` first. Not defaulted: a sequence this sender invented would be bought"
+                )
+            genome = genomes[locus.chrom] = IndexedGenome(str(fasta))
+        return genome.fetch(locus)
 
     def score(**kw: Any) -> dict[str, Any]:
         return enhancer_target.score_element(scorer, fetch, **kw)
@@ -250,6 +290,16 @@ def main() -> int:
         "gene-axis record and each named cell's value multiset. No client call was made from here"
     )
     out["ledger"] = str(LEDGER)
+    out["feature_definition"] = {
+        "scorer_threshold": astrorun.FROZEN_SCORER_THRESHOLD,
+        "client_timeout": astrorun.FROZEN_CLIENT_TIMEOUT,
+        "model_version": ALPHAGENOME_MODEL_VERSION,
+        "last_scan": model_version,
+        "why_recorded": astrorun.FROZEN_SCORER_PARAMETERS,
+        "note": "recorded beside the answers so a later reader can tell WHICH feature definition "
+        "produced them without reading the code. A threshold of 0.05 where the frozen feature used 0.0 "
+        "is a changed feature definition, which the registration forbids",
+    }
     out["charged_in_the_ledger"] = budget.charged()
     out[mf.KEY] = manifest(out, plan)
     from genomeos.results import save_result
@@ -257,53 +307,6 @@ def main() -> int:
     print(f"-> {save_result(RESULT, out)}")
     print(f"({time.time() - t0:.0f} s) sent {budget.sent} of {astrorun.ASTROREG2_CAP}")
     return 0
-
-
-def live_scorer_and_fetch() -> tuple[Any, Any]:
-    """The live scorer and a sequence fetcher, built from what the modules actually expose.
-
-    This replaces a call to `enhancer_target.live_scorer_and_fetch`, which this lane INVENTED: the name
-    never existed. `enhancer_target.Scorer` is a type alias, not a factory, and every test of this sender
-    substituted the entry point, so none could prove it resolved. The lesson is in the test added for it:
-    an existence-and-signature check for every live entry point a paid path names costs nothing and is the
-    only kind of test that could have caught this.
-
-    The scorer comes from `AlphaGenomeAdapter._live_scorer()`. That is a PRIVATE method and using it from
-    a script is not good; it is also the only route the adapter exposes, so it is used and flagged rather
-    than worked around. A public accessor belongs in the adapter and is not this lane's to add.
-
-    The fetcher dispatches by chromosome, because `IndexedGenome` is per-fasta and the list spans 23 of
-    them. All 23 reference fastas were verified present before this was written; a missing one raises by
-    name rather than being filled with a default.
-    """
-    from genomeos.genome import IndexedGenome, reference_fasta
-    from genomeos.predict import AlphaGenomeAdapter
-
-    adapter = AlphaGenomeAdapter()
-    if not adapter.available:
-        raise SystemExit(
-            "REFUSED: no AlphaGenome key is available, so no request can be made. This is reported "
-            "rather than defaulted: a sender that silently proceeded without a key would look like a "
-            "run that bought nothing"
-        )
-    scorer = adapter._live_scorer()  # noqa: SLF001 - the only route the adapter exposes; see above
-
-    genomes: dict[str, Any] = {}
-
-    def fetch(locus: Any) -> str:
-        chrom = locus.chrom
-        genome = genomes.get(chrom)
-        if genome is None:
-            fasta = reference_fasta(chrom)
-            if not fasta.exists():
-                raise FileNotFoundError(
-                    f"{chrom} has no reference fasta at {fasta}; run `genomeos data fetch --chrom "
-                    f"{chrom}` first. Not defaulted: a sequence this sender invented would be bought"
-                )
-            genome = genomes[chrom] = IndexedGenome(str(fasta))
-        return genome.fetch(locus)
-
-    return scorer, fetch
 
 
 def committed_in_git(path: Path) -> bool:

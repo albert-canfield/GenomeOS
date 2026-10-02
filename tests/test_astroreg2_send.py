@@ -120,8 +120,12 @@ class TestOnlyTheRecordingPathMaySend:
             "the sender must not import the vendor package; it reaches the model through the adapter "
             "and the recording path"
         )
-        assert "genomeos.predict.alphagenome_adapter.create_client" not in imported, (
-            "the client factory is not the sender's to call"
+        # create_client IS the sanctioned construction: the sweep that produced the frozen K562 values
+        # builds its client with it, and the sender must build the SAME pinned client or it is buying a
+        # different feature. What must not happen is a request bypassing score_element, which the
+        # planted direct-call test above is the guarantee of.
+        assert "genomeos.predict.alphagenome_adapter.create_client" in imported, (
+            "the sender must build the pinned client the same way the frozen sweep did"
         )
         assert "genomeos.predict.enhancer_target" in imported
 
@@ -295,6 +299,9 @@ class TestACrashRestartCannotRePay:
         # the activity result is a temp file, so the real git predicate cannot judge it; stubbing it is
         # what lets this test reach the PARTIAL-RUN clause rather than stopping at the activity clause
         monkeypatch.setattr(sender, "committed_in_git", lambda p: True)
+        # the blob check is about a DIFFERENT clause and now refuses first, since this lane changed both
+        # signed files; stubbing it is what lets this test reach the partial-run clause it is about
+        monkeypatch.setattr(astrorun, "check_signoff_blobs", lambda *a, **k: {})
         monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--send"])
         assert sender.main() == 2
         said = capsys.readouterr().out
@@ -508,8 +515,11 @@ class TestEveryLiveEntryPointResolves:
         missing = [f"{n}.{a}" for n, a in planted if n in mods and not hasattr(mods[n], a)]
         assert missing == ["enhancer_target.live_scorer_and_fetch"]
 
-    def test_the_senders_own_live_entry_point_exists_and_is_callable(self):
-        assert callable(sender.live_scorer_and_fetch)
+    def test_the_sender_defines_no_convenience_helper_of_its_own(self):
+        """Ruling: build from what exists. Inventing the name would make it real and keep the habit."""
+        assert not hasattr(sender, "live_scorer_and_fetch")
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        assert "create_client(" in src and "_live_scorer(" in src
 
     def test_score_element_is_the_real_recording_path_and_takes_what_the_sender_passes(self):
         """Signature, not just existence: the sender's keywords must be ones it accepts."""
@@ -548,10 +558,165 @@ class TestTheLedgerIsNotAResult:
     def test_the_ledger_is_outside_data_results(self):
         """A ledger is an append-only record of charges, not a computed value with a manifest."""
         assert "data/results" not in str(sender.LEDGER)
-        assert str(sender.LEDGER) == "data/ledger/astroreg2_requests.jsonl"
+        assert str(sender.LEDGER) == "data/ledgers/astroreg2.jsonl"
 
     def test_the_reason_it_is_not_a_result_is_recorded(self):
         src = (ROOT / "scripts/astroreg2_send.py").read_text()
         assert "is not" in src and "RESULT" in src
         assert "append-only record of charges" in src
         assert "cannot be reconstructed from outcomes" in src
+
+
+class TestTheFrozenFeatureParametersCannotDiverge:
+    """The third shape of today's lesson: the stub substituted behaviour, and the divergence was a
+    PARAMETER.
+
+    The frozen K562 values came from a sweep passing threshold=0.0 explicitly. The adapter DEFAULTS to
+    0.05. A sender taking that default would censor every |effect| < 0.05 -- values the frozen cache
+    carries -- making the astrocyte deletion term a different feature from the one the weights were frozen
+    on. No stub could catch it, so these tests read both call sites instead.
+    """
+
+    SWEEP = ROOT / "scripts/enhancer_targets_all.py"
+    SENDER = ROOT / "scripts/astroreg2_send.py"
+
+    def threshold_at(self, path, func_names):
+        """Every threshold= argument passed to _live_scorer in a file, by literal or by constant name."""
+        import ast
+
+        tree = ast.parse(path.read_text())
+        out = []
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr in func_names
+            ):
+                for kw in node.keywords:
+                    if kw.arg == "threshold":
+                        if isinstance(kw.value, ast.Constant):
+                            out.append(kw.value.value)
+                        elif isinstance(kw.value, ast.Attribute):
+                            out.append(f"{ast.unparse(kw.value)}")
+                        else:
+                            out.append(ast.unparse(kw.value))
+                else:
+                    if not any(kw.arg == "threshold" for kw in node.keywords):
+                        out.append("<DEFAULT>")
+        return out
+
+    def test_the_sweep_passes_the_frozen_threshold_explicitly(self):
+        got = self.threshold_at(self.SWEEP, {"_live_scorer"})
+        assert got, "the sweep must call _live_scorer somewhere"
+        assert all(v == astrorun.FROZEN_SCORER_THRESHOLD for v in got), (
+            f"the sweep that produced the FROZEN values passes {got}; the constant is "
+            f"{astrorun.FROZEN_SCORER_THRESHOLD}"
+        )
+
+    def test_the_sender_passes_the_same_constant_and_never_the_default(self):
+        got = self.threshold_at(self.SENDER, {"_live_scorer"})
+        assert got, "the sender must call _live_scorer"
+        assert "<DEFAULT>" not in got, (
+            "the sender takes the adapter's DEFAULT threshold of 0.05, which censors every |effect| "
+            "below it and changes the feature definition the weights were frozen on"
+        )
+        assert got == ["astrorun.FROZEN_SCORER_THRESHOLD"], got
+
+    def test_PLANTED_a_default_call_fails_this_check(self, tmp_path):
+        """A constant only one side uses is not a fix, so the check is shown failing on the defect."""
+        bad = tmp_path / "defaulted.py"
+        bad.write_text("adapter._live_scorer()\n")
+        assert self.threshold_at(bad, {"_live_scorer"}) == ["<DEFAULT>"]
+        good = tmp_path / "explicit.py"
+        good.write_text("adapter._live_scorer(threshold=0.0)\n")
+        assert self.threshold_at(good, {"_live_scorer"}) == [0.0]
+
+    def test_PLANTED_a_different_threshold_fails_this_check(self, tmp_path):
+        other = tmp_path / "other.py"
+        other.write_text("adapter._live_scorer(threshold=0.05)\n")
+        got = self.threshold_at(other, {"_live_scorer"})
+        assert got == [0.05]
+        assert not all(v == astrorun.FROZEN_SCORER_THRESHOLD for v in got)
+
+    def test_the_client_timeout_matches_the_sweeps(self):
+        """Ruling 2: prove the construction is the sweep's rather than asserting it."""
+        import re
+
+        sweep = self.SWEEP.read_text()
+        m = re.search(r"CALL_TIMEOUT\s*=\s*(\d+)", sweep)
+        assert m, "the sweep must define CALL_TIMEOUT"
+        assert int(m.group(1)) == astrorun.FROZEN_CLIENT_TIMEOUT
+        assert "timeout=CALL_TIMEOUT" in sweep
+        assert "timeout=astrorun.FROZEN_CLIENT_TIMEOUT" in self.SENDER.read_text()
+
+    def test_both_sides_build_the_client_through_create_client(self):
+        for path in (self.SWEEP, self.SENDER):
+            assert "create_client(" in path.read_text(), f"{path.name} must use the pinned factory"
+
+    def test_the_threshold_effect_is_demonstrated_not_assumed(self):
+        """The counterfactual the cache cannot supply: what the two thresholds DO to a small effect.
+
+        The cached answers store no raw response -- eight gene-row keys and no ninth -- so the stored
+        by_cell values cannot be re-derived through any scorer. What CAN be shown at zero cost is the
+        mechanism: a |effect| of 0.02 survives a 0.0 threshold and is dropped by a 0.05 one. That is the
+        whole of the defect, and it is why the sender must pass 0.0.
+        """
+        small = 0.02
+        assert abs(small) >= astrorun.FROZEN_SCORER_THRESHOLD, "kept by the frozen threshold"
+        assert abs(small) < 0.05, "dropped by the adapter's default, which is the defect"
+
+    def test_the_run_records_which_feature_definition_produced_the_answers(self):
+        src = self.SENDER.read_text()
+        for field in ("scorer_threshold", "client_timeout", "model_version"):
+            assert f'"{field}"' in src, f"the result must record {field}"
+
+
+class TestTheSignoffIsBoundToTheCodeItRead:
+    def test_both_signed_files_are_named(self):
+        assert set(astrorun.SUPERVISOR_SIGNOFF_BLOBS) == {
+            "scripts/astroreg2_send.py",
+            "genomeos/attribution/astrorun.py",
+        }
+
+    def test_it_refuses_now_because_this_lane_changed_both_files(self):
+        """Intended, not a defect: a sign-off does not carry to code the reviewer never read."""
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_blobs(root=astrorun.ROOT_FOR_BLOBS)
+        said = str(exc.value)
+        assert "RE-SIGN is required" in said
+        assert "not a missing authorisation" in said
+        assert "astroreg2_send.py" in said or "astrorun.py" in said
+
+    def test_matching_blobs_pass(self, tmp_path):
+        """The positive control: a check that can never pass would prove nothing."""
+        f = tmp_path / "x.py"
+        f.write_text("print(1)\n")
+        blob = astrorun.git_blob(f, root=astrorun.ROOT_FOR_BLOBS)
+        assert blob
+        assert astrorun.check_signoff_blobs({str(f): blob}, root=astrorun.ROOT_FOR_BLOBS)
+
+    def test_PLANTED_a_one_character_edit_refuses(self, tmp_path):
+        f = tmp_path / "x.py"
+        f.write_text("print(1)\n")
+        blob = astrorun.git_blob(f, root=astrorun.ROOT_FOR_BLOBS)
+        f.write_text("print(2)\n")  # one character
+        with pytest.raises(astrorun.SendRefusedError, match="RE-SIGN is required"):
+            astrorun.check_signoff_blobs({str(f): blob}, root=astrorun.ROOT_FOR_BLOBS)
+
+    def test_a_missing_signed_file_refuses_too(self, tmp_path):
+        with pytest.raises(astrorun.SendRefusedError):
+            astrorun.check_signoff_blobs({str(tmp_path / "gone.py"): "0" * 40}, root=astrorun.ROOT_FOR_BLOBS)
+
+    def test_the_refusal_names_which_file_differs(self, tmp_path):
+        a, b = tmp_path / "a.py", tmp_path / "b.py"
+        a.write_text("A\n")
+        b.write_text("B\n")
+        blobs = {
+            str(a): astrorun.git_blob(a, root=astrorun.ROOT_FOR_BLOBS),
+            str(b): astrorun.git_blob(b, root=astrorun.ROOT_FOR_BLOBS),
+        }
+        b.write_text("B2\n")
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_blobs(blobs, root=astrorun.ROOT_FOR_BLOBS)
+        said = str(exc.value)
+        assert "b.py" in said and "a.py" not in said.split("b.py")[0].split("required")[-1]

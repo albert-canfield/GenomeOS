@@ -404,6 +404,9 @@ def requests_serving_scored_pairs(
 #: use, and it is a DIFFERENT number under a DIFFERENT registration.
 ASTROREG2_CAP = 1_232
 
+#: Where blob checks resolve paths from. The repository root, two levels above this module.
+ROOT_FOR_BLOBS = Path(__file__).resolve().parents[2]
+
 #: Albert's approval for AstroREG-2, to be recorded here VERBATIM in his own words when he gives them.
 #: It is None because he has not given it. The approval already on record named the ORIGINAL
 #: registration by hash and does not carry: a runner that reused it would spend on the strength of an
@@ -640,6 +643,81 @@ def check_adapter_v2(module_name: str = ADAPTER_MODULE) -> dict[str, Any]:
     }
 
 
+# --------------------------------------- the frozen feature's scorer parameters, shared by both sides
+
+#: The threshold the FROZEN K562 deletion values were produced with. scripts/enhancer_targets_all.py's
+#: worker_scorer passes `threshold=0.0` EXPLICITLY, so every gene in the window is kept, uncensored.
+#: `AlphaGenomeAdapter._live_scorer` DEFAULTS to 0.05, and a sender taking that default would censor every
+#: |effect| < 0.05 -- values the frozen cache CARRIES. That would make the astrocyte deletion term a
+#: DIFFERENT FEATURE from the one the weights were frozen on, and the registration forbids exactly that:
+#: "Nothing is refitted on astrocyte data -- not the weights, not a threshold, not a feature definition".
+#: The gain would have been biased by construction and would have read like a result.
+FROZEN_SCORER_THRESHOLD = 0.0
+
+#: The client timeout the sweep gave its client, from scripts/enhancer_targets_all.py CALL_TIMEOUT.
+FROZEN_CLIENT_TIMEOUT = 300
+
+FROZEN_SCORER_PARAMETERS = (
+    "the sweep that produced the frozen K562 values built its client as create_client(api_key, "
+    "timeout=300) and its scorer as _live_scorer(threshold=0.0). Any sender buying values for the same "
+    "frozen feature must pass the SAME arguments, so they live here as constants and a test reads BOTH "
+    "call sites and asserts they agree. A default taken silently is how this diverged: no stub could "
+    "catch it, because the stub substitutes the behaviour and the divergence was in a PARAMETER"
+)
+
+# --------------------------------------------------- the sign-off is bound to the code it was given for
+
+#: The git blob shas of the two files the supervisor read, AT SIGN-OFF (HEAD 16791b4). A sign-off is for
+#: code someone actually reviewed, so it does not carry to code they did not. These are a PAIR OF FIELDS
+#: UPDATED BY A RE-SIGN, deliberately not something this lane's own commit can satisfy: after any change
+#: to either file the send REFUSES until the supervisor re-signs against the new blobs.
+SUPERVISOR_SIGNOFF_BLOBS = {
+    "scripts/astroreg2_send.py": "4ee9245ae147c3b9542b07bde393fc0dad57d679",
+    "genomeos/attribution/astrorun.py": "bc46e3992efadf7953dfb729ecad81570f3e12cf",
+}
+
+A_SIGNOFF_IS_FOR_THE_CODE_IT_READ = (
+    "the sign-off names a sender and a guard module by blob. If either file's bytes differ from the ones "
+    "signed, the send refuses and says WHICH file differs and that a re-sign is required -- not that an "
+    "authorisation is missing, which would be a different and misleading fact. This is what stops a "
+    "sign-off carrying over to code the reviewer never read, and it bites in the ordinary course of work: "
+    "the lane's own fixes invalidate it, which is the intended behaviour and not a defect"
+)
+
+
+def git_blob(path: Path | str, root: Path | None = None) -> str | None:
+    """The git blob sha of a file AS IT IS ON DISK, so an uncommitted edit changes it too."""
+    import subprocess
+
+    p = Path(path)
+    if not p.exists():
+        return None
+    r = subprocess.run(
+        ["git", "hash-object", str(p)],
+        cwd=str(root or Path.cwd()),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return r.stdout.strip() or None
+
+
+def check_signoff_blobs(blobs: dict[str, str] | None = None, root: Path | None = None) -> dict[str, str]:
+    """Refuse unless both signed files are byte-for-byte what the supervisor read. See the note above."""
+    want = blobs if blobs is not None else SUPERVISOR_SIGNOFF_BLOBS
+    differing = []
+    for path, signed in sorted(want.items()):
+        got = git_blob(path, root)
+        if got != signed:
+            differing.append(f"{path}: on disk {got}, signed {signed}")
+    if differing:
+        raise SendRefusedError(
+            "the supervisor's sign-off was given for different code and a RE-SIGN is required (this is "
+            f"not a missing authorisation): {'; '.join(differing)}. {A_SIGNOFF_IS_FOR_THE_CODE_IT_READ}"
+        )
+    return {p: s for p, s in want.items()}
+
+
 class SendRefusedError(RuntimeError):
     """A clause of Albert's approval is not satisfied, so nothing may be sent."""
 
@@ -767,6 +845,7 @@ def may_send(
                 "was produced under a different rule",
             )
 
+    check_signoff_blobs(root=ROOT_FOR_BLOBS)
     if not signoff or "dry run reviewed" not in signoff:
         _refuse(
             "signoff",
