@@ -1,0 +1,855 @@
+{
+  "result": "number_provenance_registration",
+  "date": "2026-10-02",
+  "question": "which numbers in the hand-authored BioLang corpus are traceable to a source that states a number, which inherit a default convention, and which are asserted - so that the model's qualitative/quantitative boundary is counted rather than asserted",
+  "why_now": "`d340e5c` and `53d9936` established by measurement that the gastrulation module cannot discriminate mechanisms and that its number convention, not its biology, is the cause: three different sourced repressors of SOX17 restore a band and agree to the digit, because the module's own `threshold 2.0; hill 3` makes any added inhibitor a switch rather than a brake.",
+  "population": {
+    "directories": [
+      "data/demo",
+      "genomeos/std"
+    ],
+    "rule": "every .bio program a person wrote in these two directories. Counts stay separable per file and the two directories are never pooled in a headline.",
+    "excluded": {
+      "data/knowledge/compiled/noncoding_chr*.bio": "machine-written from the attribution pipeline, hundreds of thousands of rules; every number in it comes from one generator, so a per-rule census would count the generator once per rule. Its provenance is the subject of the separate context-evidence census (data/results/context_evidence_census*.json), not of this one.",
+      "data/organisms/**/*.bio": "machine-written per-organism programs, the same reason.",
+      "build/biolang/*.bio": "build artefacts of the engine's own smoke tests, not authored biology."
+    }
+  },
+  "scoped_fields": [
+    {
+      "kind": "rule",
+      "field": "strength",
+      "tier": 1,
+      "language_default": 1.0,
+      "note": ""
+    },
+    {
+      "kind": "rule",
+      "field": "threshold",
+      "tier": 1,
+      "language_default": 1.0,
+      "note": ""
+    },
+    {
+      "kind": "rule",
+      "field": "hill",
+      "tier": 1,
+      "language_default": 2.0,
+      "note": ""
+    },
+    {
+      "kind": "gene",
+      "field": "max",
+      "tier": 1,
+      "language_default": "no number",
+      "note": "omitted: the engine reads 0 and warns `gene_parameter_missing`"
+    },
+    {
+      "kind": "gene",
+      "field": "basal",
+      "tier": 1,
+      "language_default": 0.0,
+      "note": ""
+    },
+    {
+      "kind": "protein",
+      "field": "half_life",
+      "tier": 1,
+      "language_default": "no number",
+      "note": "omitted: the IR holds UNKNOWN; no turnover is applied"
+    },
+    {
+      "kind": "protein",
+      "field": "initial",
+      "tier": 1,
+      "language_default": 0.0,
+      "note": ""
+    },
+    {
+      "kind": "param",
+      "field": "value",
+      "tier": 1,
+      "language_default": "no number",
+      "note": "a param exists only when written"
+    },
+    {
+      "kind": "timer",
+      "field": "duration",
+      "tier": 2,
+      "language_default": "no number",
+      "note": "required by the grammar"
+    },
+    {
+      "kind": "timer",
+      "field": "lengthening",
+      "tier": 2,
+      "language_default": 1.0,
+      "note": ""
+    },
+    {
+      "kind": "stage",
+      "field": "from",
+      "tier": 2,
+      "language_default": 0.0,
+      "note": ""
+    },
+    {
+      "kind": "stage",
+      "field": "to",
+      "tier": 2,
+      "language_default": "no number",
+      "note": "omitted: the stage has no end"
+    },
+    {
+      "kind": "compartment",
+      "field": "volume",
+      "tier": 2,
+      "language_default": "no number",
+      "note": ""
+    },
+    {
+      "kind": "compartment",
+      "field": "absolute_volume",
+      "tier": 2,
+      "language_default": "no number",
+      "note": ""
+    },
+    {
+      "kind": "pool",
+      "field": "size",
+      "tier": 2,
+      "language_default": "no number",
+      "note": ""
+    },
+    {
+      "kind": "pool",
+      "field": "regenerates",
+      "tier": 2,
+      "language_default": "no number",
+      "note": ""
+    },
+    {
+      "kind": "field",
+      "field": "diffusion",
+      "tier": 2,
+      "language_default": 0.2,
+      "note": ""
+    },
+    {
+      "kind": "field",
+      "field": "decay",
+      "tier": 2,
+      "language_default": 0.01,
+      "note": ""
+    },
+    {
+      "kind": "field",
+      "field": "source",
+      "tier": 2,
+      "language_default": "no number",
+      "note": ""
+    },
+    {
+      "kind": "signal",
+      "field": "threshold",
+      "tier": 2,
+      "language_default": 0.0,
+      "note": ""
+    },
+    {
+      "kind": "event",
+      "field": "rate",
+      "tier": 2,
+      "language_default": 0.0,
+      "note": ""
+    },
+    {
+      "kind": "regime",
+      "field": "threshold",
+      "tier": 2,
+      "language_default": 50.0,
+      "note": ""
+    },
+    {
+      "kind": "decision",
+      "field": "after",
+      "tier": 2,
+      "language_default": "no number",
+      "note": ""
+    },
+    {
+      "kind": "decision",
+      "field": "priority",
+      "tier": 2,
+      "language_default": 0.0,
+      "note": ""
+    }
+  ],
+  "tiers": {
+    "1": "the dynamics core: every numeric field of a rule, a gene or a protein, and every param value. These are the numbers genomeos/runtime/grn.py integrates.",
+    "2": "the rest of the declared numbers: timers, stages, compartments, pools, fields, signals, events, regimes, decisions. Own denominator, never pooled into tier 1's."
+  },
+  "out_of_scope_fields": {
+    "confidence": "a declaration's self-report about itself, not a quantity the engine integrates; classifying its provenance would be classifying an opinion about provenance.",
+    "locus / exons / cds / members": "genome coordinates. They are numbers, and GENCODE does state them, so counting them would fill the sourced class with annotation coordinates and hide the kinetic boundary this census is for.",
+    "seed / replicates / space / origin / placement / sense / cell_network / tempo (organism, regime)": "run control: how long to run, how many times, on what grid. Not biology, so no source could state them.",
+    "assert / test lines": "the bars a program sets itself. `19423bd` already established that gastrulation's three expected_* proportions cite no source; a bar is not a model number."
+  },
+  "classes": {
+    "S_quoted": "the field is written; the declaration's own evidence kind is experimental, curated or predicted; and the written value appears as a literal number in the evidence string once citation furniture is stripped. Every member is listed with the matched substring and is adjudicated by hand in the result: a match that falls in furniture is demoted to E.",
+    "S_derived": "the same, except the written value is an exact arithmetic transform of a number the evidence string quotes, AND the transform is written in that same string (for example an evidence string quoting `f(d) = d^2 / (0.01 + d^2)` for `threshold: 0.1`, where 0.01 = 0.1^2). Every member is listed with its arithmetic so a reader can check it.",
+    "E_existence_only": "the field is written; the declaration cites a source (evidence kind experimental, curated or predicted with a non-empty source) and that source supports the declaration's EXISTENCE; and no number equal to the written value is quoted anywhere in the evidence string. A citation that supports a rule's existence is not a citation for its strength. This class is expected to be the largest and may not collapse into either neighbour.",
+    "A_asserted_names_a_work": "the field is written and the declaration's evidence kind is `inferred` or `none` - which BioLang's own grammar defines as not measured - but its note names a publication, a database or a reported range. The number is asserted; the prose is context.",
+    "A_asserted_bare": "the field is written, the evidence kind is `inferred`, `none` or absent, and the note names no work at all.",
+    "D_language_default": "the field is NOT written and the language supplies a number for it (`genomeos/ir/model.py` dataclass defaults: rule strength 1.0, threshold 1.0, hill 2.0, gene basal 0.0, protein initial 0.0, field diffusion 0.2, decay 0.01, signal threshold 0.0, event rate 0.0, regime threshold 50.0, stage from 0.0, timer lengthening 1.0, decision priority 0).",
+    "D_no_number": "the field is NOT written and the language supplies no number: the IR holds UNKNOWN, or the engine warns and reads zero. Counted, and reported OUTSIDE the denominator of numbers, because no number exists to have a provenance.",
+    "N_non_numeric": "the field is written but its value is not a number (`regenerates: from Glycolysis, OXPHOS`). Counted and reported outside the denominator."
+  },
+  "cascade": [
+    "1. the field is not written -> D_language_default if the language supplies a number for it, else D_no_number.",
+    "2. the field is written but holds no number -> N_non_numeric.",
+    "3. the evidence kind is `inferred`, `none` or absent -> A_asserted_names_a_work if the source or note names a publication, a database or a reported range, else A_asserted_bare. An `inferred` declaration cannot be a source for its own number whatever it mentions, because BioLang's grammar defines the kind as not measured; this is decided here and not while counting.",
+    "4. the evidence kind claims a source -> S_quoted if the written value appears literally in the stripped evidence string, else S_derived if a stated transform of a quoted number, else E_existence_only."
+  ],
+  "convention_tags": {
+    "equals_language_default": "the written value is exactly what the language would have supplied had the field been left out.",
+    "repeated_in_file": "the same field carries this identical value on at least three declarations of the same kind in the same file. This is the tag that makes `the module's default convention` visible: gastrulation's four inhibiting rules all write `threshold: 2.0; hill: 3`, which is why `53d9936` found three different repressors agreeing to the digit."
+  },
+  "repeated_in_file_floor": 3,
+  "citation_furniture_stripped": [
+    "\\b(19|20)\\d{2}[a-z]?\\b",
+    "\\b\\d+\\s*:\\s*\\d+(?:\\s*[-\u2013]\\s*\\d+)?",
+    "\\b(?:Fig(?:ure)?s?|Table|Panel|Suppl\\w*|Extended Data)\\.?\\s*[A-Za-z]?\\d+[A-Za-z]?",
+    "\\b(?:v|version)\\s*\\.?\\s*\\d+(?:\\.\\d+)*",
+    "\\b[A-Z]{1,6}\\d{3,}(?:\\.\\d+)?\\b",
+    "\\bGENCODE\\s*\\d+\\b",
+    "\\bBNID\\s*\\d+\\b",
+    "\\bE-[A-Z]+-\\d+\\b",
+    "\\bCL:\\d+\\b",
+    "\\bdoi:[^\\s;]+",
+    "\\bPMC\\d+\\b",
+    "\\b\\d+\\s*e\\b"
+  ],
+  "why_furniture_is_stripped": "without it a `hill: 3` whose evidence string reads `Fig. 3C` would be counted as a quoted number and called sourced. It is not.",
+  "comments_are_context_only": "a comment above or inside a declaration is recorded and never promotes a class. A comment run above four rules belongs to all four, and attaching it to the first would be a convention invented while counting.",
+  "s_derived_procedure": "S_derived is the one class no matcher can decide, so the registration fixes its test and its candidate set instead of its members: a slot may be promoted to S_derived only if it classified E_existence_only AND its evidence string quotes at least one number after the strip, which `classify_slot` marks as `derivation_candidate`. Each promotion is one entry in `DERIVATIONS` carrying the arithmetic, committed with the result and printed in full. The table is empty here.",
+  "s_derived_candidates_at_registration": "unknown at registration by construction; the count of candidates is reported with the result.",
+  "reports": [
+    "the count per class, per file, per tier, with the denominator stated as written + D_language_default slots;",
+    "the D_no_number and N_non_numeric counts, outside that denominator;",
+    "the convention tags per class, per file;",
+    "every S_quoted and S_derived member in full, with its matched substring or arithmetic and a hand adjudication, because the sourced class is the one a reader must be able to audit;",
+    "for data/demo/gastrulation.bio alone, the per-rule table: the seven rules by name with each one's strength, threshold and Hill class;",
+    "which cited sources were fetched and which could not be, and what a fetched source does NOT claim;",
+    "every slot that could not be classified, with the reason."
+  ],
+  "denominator": "written slots + D_language_default slots, stated per file and per tier. D_no_number and N_non_numeric are counted and reported outside it.",
+  "exclusions": [
+    "no number is changed: no strength, threshold, Hill coefficient, basal or max is edited, and no program file is written to. The census reads.",
+    "no claim about correctness: the census says what a number rests on, never whether it is right. No validation, no accuracy figure, no verdict on any rule's truth.",
+    "no claim that a cited paper is wrong, and none that it is right. Where a source was fetched, what it states and what it does not state about a NUMBER is reported, and nothing more.",
+    "no tuning. `8bb9123` and `19423bd` refused fitting two free numbers to unsourced targets and this lane inherits the refusal.",
+    "S_quoted means the FILE quotes a number equal to the written value. It does not by itself mean the cited work states that number; only a fetch can say that, and the fetch is reported separately per source.",
+    "no number of this corpus is read as evidence about the machine-written corpora excluded above."
+  ],
+  "reported_not_edited": [
+    {
+      "file": "data/demo/gastrulation.bio",
+      "line": 3,
+      "text": "Mutual repression makes the choice sharp.",
+      "why_it_is_false": "the repression in the program is not mutual. SOX17 represses TBXT and SOX2 and is repressed by nothing: `d340e5c` measured SOX17's repression factor at exactly 1.00000. The header describes a circuit the file does not contain.",
+      "action": "reported, not edited: data/demo is a shared demo directory."
+    }
+  ],
+  "whichever_way_it_falls": "a census finding almost nothing sourced is the finished result, not a failure: it draws the qualitative boundary in counts and names the rules a measurement would have to supply before any mechanism claim is possible.",
+  "lane": "lane-qualbound",
+  "describes": [
+    "d340e5c - the gastrulation program has no mesoderm at all because nothing in it represses SOX17; SOX17's repression factor is exactly 1.00000",
+    "53d9936 / b1e8839 - three different sourced repressors of SOX17 restore a band and all three agree to the digit, because the module's own `threshold 2.0; hill 3` makes any added inhibitor a switch and not a brake",
+    "5cbce26 - the Tbxt-SOX17 sign correction, which stands",
+    "8bb9123 / 19423bd - tuning two free numbers to the unsourced expected_* proportions, refused"
+  ],
+  "what_the_run_will_write": "data/results/number_provenance_census.json",
+  "frozen_inputs": [
+    {
+      "path": "data/demo/celegans_lineage.bio",
+      "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+      "bytes": 4382
+    },
+    {
+      "path": "data/demo/cell_context.bio",
+      "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+      "bytes": 1659
+    },
+    {
+      "path": "data/demo/concentration_threshold.bio",
+      "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+      "bytes": 3525
+    },
+    {
+      "path": "data/demo/flag_organism.bio",
+      "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+      "bytes": 2920
+    },
+    {
+      "path": "data/demo/gastrulation.bio",
+      "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+      "bytes": 3765
+    },
+    {
+      "path": "data/demo/hoxd_order.bio",
+      "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+      "bytes": 3064
+    },
+    {
+      "path": "data/demo/lateral_inhibition.bio",
+      "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+      "bytes": 4042
+    },
+    {
+      "path": "data/demo/methylation_erosion.bio",
+      "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+      "bytes": 3260
+    },
+    {
+      "path": "data/demo/repressilator.bio",
+      "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+      "bytes": 2363
+    },
+    {
+      "path": "data/demo/segmentation_clock.bio",
+      "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+      "bytes": 1639
+    },
+    {
+      "path": "data/demo/stage2_pools.bio",
+      "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+      "bytes": 2117
+    },
+    {
+      "path": "data/demo/stage4_division.bio",
+      "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+      "bytes": 2322
+    },
+    {
+      "path": "genomeos/std/ageing.bio",
+      "sha256": "a1732381e5aa12b58da46ce96b00e537711a032b59e188a44d7a3dad4024570f",
+      "bytes": 907
+    },
+    {
+      "path": "genomeos/std/cell_types.bio",
+      "sha256": "40d862845df9b92cd81aadaa041ad627f16b0ee085b0061d0055fb77f1c93408",
+      "bytes": 842
+    },
+    {
+      "path": "genomeos/std/development.bio",
+      "sha256": "2ec2c5e109f858b42c74e4e5e93ea2e066be9b338dd466b04c2c22af7ab5b028",
+      "bytes": 943
+    },
+    {
+      "path": "genomeos/std/human_stages.bio",
+      "sha256": "7f33f6d770f767dca5581b628b83a04f892126af98a0d703dde3d69f31b266b9",
+      "bytes": 4213
+    },
+    {
+      "path": "genomeos/std/human_turnover.bio",
+      "sha256": "171bffc88359bc454569cb08a2e2f4c4b9770e3a17e69fcc34429cc50bf3cd31",
+      "bytes": 3288
+    },
+    {
+      "path": "genomeos/std/methylation.bio",
+      "sha256": "73a3a4e3700e2d6421cd8876765275610ddd5528198c5af1396bf3e082ce9be2",
+      "bytes": 3141
+    },
+    {
+      "path": "genomeos/std/signalling.bio",
+      "sha256": "ade53caa6c5a83bb3b46e1c4117bcc84c5e182e317fbe32e464bc38dbb24b199",
+      "bytes": 29470
+    }
+  ],
+  "population_size": 19,
+  "population_programs": [
+    "data/demo/celegans_lineage.bio",
+    "data/demo/cell_context.bio",
+    "data/demo/concentration_threshold.bio",
+    "data/demo/flag_organism.bio",
+    "data/demo/gastrulation.bio",
+    "data/demo/hoxd_order.bio",
+    "data/demo/lateral_inhibition.bio",
+    "data/demo/methylation_erosion.bio",
+    "data/demo/repressilator.bio",
+    "data/demo/segmentation_clock.bio",
+    "data/demo/stage2_pools.bio",
+    "data/demo/stage4_division.bio",
+    "genomeos/std/ageing.bio",
+    "genomeos/std/cell_types.bio",
+    "genomeos/std/development.bio",
+    "genomeos/std/human_stages.bio",
+    "genomeos/std/human_turnover.bio",
+    "genomeos/std/methylation.bio",
+    "genomeos/std/signalling.bio"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the hand-authored BioLang corpus of this repository: data/demo, genomeos/std",
+        "version": "the working tree at the code revision stamped below; every program digested by its own path in inputs"
+      },
+      {
+        "accession": "genomeos/ir/model.py dataclass defaults, read for the value the language supplies when a field is omitted",
+        "version": "the same code revision; the values are transcribed into number_provenance.SCOPE and a test asserts they still agree"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/celegans_lineage.bio",
+        "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+        "bytes": 4382,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/cell_context.bio",
+        "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+        "bytes": 1659,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/concentration_threshold.bio",
+        "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+        "bytes": 3525,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/flag_organism.bio",
+        "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+        "bytes": 2920,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/gastrulation.bio",
+        "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+        "bytes": 3765,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/hoxd_order.bio",
+        "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+        "bytes": 3064,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/lateral_inhibition.bio",
+        "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+        "bytes": 4042,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/methylation_erosion.bio",
+        "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+        "bytes": 3260,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/repressilator.bio",
+        "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+        "bytes": 2363,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/segmentation_clock.bio",
+        "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+        "bytes": 1639,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/stage2_pools.bio",
+        "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+        "bytes": 2117,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "data/demo/stage4_division.bio",
+        "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+        "bytes": 2322,
+        "partition": "hand-authored BioLang program in data/demo"
+      },
+      {
+        "path": "genomeos/std/ageing.bio",
+        "sha256": "a1732381e5aa12b58da46ce96b00e537711a032b59e188a44d7a3dad4024570f",
+        "bytes": 907,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/cell_types.bio",
+        "sha256": "40d862845df9b92cd81aadaa041ad627f16b0ee085b0061d0055fb77f1c93408",
+        "bytes": 842,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/development.bio",
+        "sha256": "2ec2c5e109f858b42c74e4e5e93ea2e066be9b338dd466b04c2c22af7ab5b028",
+        "bytes": 943,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/human_stages.bio",
+        "sha256": "7f33f6d770f767dca5581b628b83a04f892126af98a0d703dde3d69f31b266b9",
+        "bytes": 4213,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/human_turnover.bio",
+        "sha256": "171bffc88359bc454569cb08a2e2f4c4b9770e3a17e69fcc34429cc50bf3cd31",
+        "bytes": 3288,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/methylation.bio",
+        "sha256": "73a3a4e3700e2d6421cd8876765275610ddd5528198c5af1396bf3e082ce9be2",
+        "bytes": 3141,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      },
+      {
+        "path": "genomeos/std/signalling.bio",
+        "sha256": "ade53caa6c5a83bb3b46e1c4117bcc84c5e182e317fbe32e464bc38dbb24b199",
+        "bytes": 29470,
+        "partition": "hand-authored BioLang program in genomeos/std"
+      }
+    ],
+    "assembly": "n/a: no genomic interval is read. Genome coordinates are out of scope and the reason is in out_of_scope_fields.",
+    "coordinates": "n/a: the census addresses declarations by file and line, not by genomic position.",
+    "parameters": {
+      "population_directories": [
+        "data/demo",
+        "genomeos/std"
+      ],
+      "excluded_corpora": {
+        "data/knowledge/compiled/noncoding_chr*.bio": "machine-written from the attribution pipeline, hundreds of thousands of rules; every number in it comes from one generator, so a per-rule census would count the generator once per rule. Its provenance is the subject of the separate context-evidence census (data/results/context_evidence_census*.json), not of this one.",
+        "data/organisms/**/*.bio": "machine-written per-organism programs, the same reason.",
+        "build/biolang/*.bio": "build artefacts of the engine's own smoke tests, not authored biology."
+      },
+      "scoped_fields": [
+        {
+          "kind": "rule",
+          "field": "strength",
+          "tier": 1,
+          "language_default": 1.0,
+          "note": ""
+        },
+        {
+          "kind": "rule",
+          "field": "threshold",
+          "tier": 1,
+          "language_default": 1.0,
+          "note": ""
+        },
+        {
+          "kind": "rule",
+          "field": "hill",
+          "tier": 1,
+          "language_default": 2.0,
+          "note": ""
+        },
+        {
+          "kind": "gene",
+          "field": "max",
+          "tier": 1,
+          "language_default": "no number",
+          "note": "omitted: the engine reads 0 and warns `gene_parameter_missing`"
+        },
+        {
+          "kind": "gene",
+          "field": "basal",
+          "tier": 1,
+          "language_default": 0.0,
+          "note": ""
+        },
+        {
+          "kind": "protein",
+          "field": "half_life",
+          "tier": 1,
+          "language_default": "no number",
+          "note": "omitted: the IR holds UNKNOWN; no turnover is applied"
+        },
+        {
+          "kind": "protein",
+          "field": "initial",
+          "tier": 1,
+          "language_default": 0.0,
+          "note": ""
+        },
+        {
+          "kind": "param",
+          "field": "value",
+          "tier": 1,
+          "language_default": "no number",
+          "note": "a param exists only when written"
+        },
+        {
+          "kind": "timer",
+          "field": "duration",
+          "tier": 2,
+          "language_default": "no number",
+          "note": "required by the grammar"
+        },
+        {
+          "kind": "timer",
+          "field": "lengthening",
+          "tier": 2,
+          "language_default": 1.0,
+          "note": ""
+        },
+        {
+          "kind": "stage",
+          "field": "from",
+          "tier": 2,
+          "language_default": 0.0,
+          "note": ""
+        },
+        {
+          "kind": "stage",
+          "field": "to",
+          "tier": 2,
+          "language_default": "no number",
+          "note": "omitted: the stage has no end"
+        },
+        {
+          "kind": "compartment",
+          "field": "volume",
+          "tier": 2,
+          "language_default": "no number",
+          "note": ""
+        },
+        {
+          "kind": "compartment",
+          "field": "absolute_volume",
+          "tier": 2,
+          "language_default": "no number",
+          "note": ""
+        },
+        {
+          "kind": "pool",
+          "field": "size",
+          "tier": 2,
+          "language_default": "no number",
+          "note": ""
+        },
+        {
+          "kind": "pool",
+          "field": "regenerates",
+          "tier": 2,
+          "language_default": "no number",
+          "note": ""
+        },
+        {
+          "kind": "field",
+          "field": "diffusion",
+          "tier": 2,
+          "language_default": 0.2,
+          "note": ""
+        },
+        {
+          "kind": "field",
+          "field": "decay",
+          "tier": 2,
+          "language_default": 0.01,
+          "note": ""
+        },
+        {
+          "kind": "field",
+          "field": "source",
+          "tier": 2,
+          "language_default": "no number",
+          "note": ""
+        },
+        {
+          "kind": "signal",
+          "field": "threshold",
+          "tier": 2,
+          "language_default": 0.0,
+          "note": ""
+        },
+        {
+          "kind": "event",
+          "field": "rate",
+          "tier": 2,
+          "language_default": 0.0,
+          "note": ""
+        },
+        {
+          "kind": "regime",
+          "field": "threshold",
+          "tier": 2,
+          "language_default": 50.0,
+          "note": ""
+        },
+        {
+          "kind": "decision",
+          "field": "after",
+          "tier": 2,
+          "language_default": "no number",
+          "note": ""
+        },
+        {
+          "kind": "decision",
+          "field": "priority",
+          "tier": 2,
+          "language_default": 0.0,
+          "note": ""
+        }
+      ],
+      "tiers": {
+        "1": "the dynamics core: every numeric field of a rule, a gene or a protein, and every param value. These are the numbers genomeos/runtime/grn.py integrates.",
+        "2": "the rest of the declared numbers: timers, stages, compartments, pools, fields, signals, events, regimes, decisions. Own denominator, never pooled into tier 1's."
+      },
+      "classes": {
+        "S_quoted": "the field is written; the declaration's own evidence kind is experimental, curated or predicted; and the written value appears as a literal number in the evidence string once citation furniture is stripped. Every member is listed with the matched substring and is adjudicated by hand in the result: a match that falls in furniture is demoted to E.",
+        "S_derived": "the same, except the written value is an exact arithmetic transform of a number the evidence string quotes, AND the transform is written in that same string (for example an evidence string quoting `f(d) = d^2 / (0.01 + d^2)` for `threshold: 0.1`, where 0.01 = 0.1^2). Every member is listed with its arithmetic so a reader can check it.",
+        "E_existence_only": "the field is written; the declaration cites a source (evidence kind experimental, curated or predicted with a non-empty source) and that source supports the declaration's EXISTENCE; and no number equal to the written value is quoted anywhere in the evidence string. A citation that supports a rule's existence is not a citation for its strength. This class is expected to be the largest and may not collapse into either neighbour.",
+        "A_asserted_names_a_work": "the field is written and the declaration's evidence kind is `inferred` or `none` - which BioLang's own grammar defines as not measured - but its note names a publication, a database or a reported range. The number is asserted; the prose is context.",
+        "A_asserted_bare": "the field is written, the evidence kind is `inferred`, `none` or absent, and the note names no work at all.",
+        "D_language_default": "the field is NOT written and the language supplies a number for it (`genomeos/ir/model.py` dataclass defaults: rule strength 1.0, threshold 1.0, hill 2.0, gene basal 0.0, protein initial 0.0, field diffusion 0.2, decay 0.01, signal threshold 0.0, event rate 0.0, regime threshold 50.0, stage from 0.0, timer lengthening 1.0, decision priority 0).",
+        "D_no_number": "the field is NOT written and the language supplies no number: the IR holds UNKNOWN, or the engine warns and reads zero. Counted, and reported OUTSIDE the denominator of numbers, because no number exists to have a provenance.",
+        "N_non_numeric": "the field is written but its value is not a number (`regenerates: from Glycolysis, OXPHOS`). Counted and reported outside the denominator."
+      },
+      "cascade": [
+        "1. the field is not written -> D_language_default if the language supplies a number for it, else D_no_number.",
+        "2. the field is written but holds no number -> N_non_numeric.",
+        "3. the evidence kind is `inferred`, `none` or absent -> A_asserted_names_a_work if the source or note names a publication, a database or a reported range, else A_asserted_bare. An `inferred` declaration cannot be a source for its own number whatever it mentions, because BioLang's grammar defines the kind as not measured; this is decided here and not while counting.",
+        "4. the evidence kind claims a source -> S_quoted if the written value appears literally in the stripped evidence string, else S_derived if a stated transform of a quoted number, else E_existence_only."
+      ],
+      "convention_tags": {
+        "equals_language_default": "the written value is exactly what the language would have supplied had the field been left out.",
+        "repeated_in_file": "the same field carries this identical value on at least three declarations of the same kind in the same file. This is the tag that makes `the module's default convention` visible: gastrulation's four inhibiting rules all write `threshold: 2.0; hill: 3`, which is why `53d9936` found three different repressors agreeing to the digit."
+      },
+      "repeated_in_file_floor": 3,
+      "citation_furniture_stripped": [
+        "\\b(19|20)\\d{2}[a-z]?\\b",
+        "\\b\\d+\\s*:\\s*\\d+(?:\\s*[-\u2013]\\s*\\d+)?",
+        "\\b(?:Fig(?:ure)?s?|Table|Panel|Suppl\\w*|Extended Data)\\.?\\s*[A-Za-z]?\\d+[A-Za-z]?",
+        "\\b(?:v|version)\\s*\\.?\\s*\\d+(?:\\.\\d+)*",
+        "\\b[A-Z]{1,6}\\d{3,}(?:\\.\\d+)?\\b",
+        "\\bGENCODE\\s*\\d+\\b",
+        "\\bBNID\\s*\\d+\\b",
+        "\\bE-[A-Z]+-\\d+\\b",
+        "\\bCL:\\d+\\b",
+        "\\bdoi:[^\\s;]+",
+        "\\bPMC\\d+\\b",
+        "\\b\\d+\\s*e\\b"
+      ],
+      "comments_are_context_only": "a comment above or inside a declaration is recorded and never promotes a class. A comment run above four rules belongs to all four, and attaching it to the first would be a convention invented while counting.",
+      "s_derived_procedure": "S_derived is the one class no matcher can decide, so the registration fixes its test and its candidate set instead of its members: a slot may be promoted to S_derived only if it classified E_existence_only AND its evidence string quotes at least one number after the strip, which `classify_slot` marks as `derivation_candidate`. Each promotion is one entry in `DERIVATIONS` carrying the arithmetic, committed with the result and printed in full. The table is empty here.",
+      "denominator": "written slots + D_language_default slots, stated per file and per tier. D_no_number and N_non_numeric are counted and reported outside it.",
+      "reports": [
+        "the count per class, per file, per tier, with the denominator stated as written + D_language_default slots;",
+        "the D_no_number and N_non_numeric counts, outside that denominator;",
+        "the convention tags per class, per file;",
+        "every S_quoted and S_derived member in full, with its matched substring or arithmetic and a hand adjudication, because the sourced class is the one a reader must be able to audit;",
+        "for data/demo/gastrulation.bio alone, the per-rule table: the seven rules by name with each one's strength, threshold and Hill class;",
+        "which cited sources were fetched and which could not be, and what a fetched source does NOT claim;",
+        "every slot that could not be classified, with the reason."
+      ],
+      "model_requests": 0,
+      "money_spent": "none; no paid API is called. Web fetches of cited sources are free and are reported per source with what each one does and does not state about a number."
+    },
+    "exclusions": [
+      "no number is changed: no strength, threshold, Hill coefficient, basal or max is edited, and no program file is written to. The census reads.",
+      "no claim about correctness: the census says what a number rests on, never whether it is right. No validation, no accuracy figure, no verdict on any rule's truth.",
+      "no claim that a cited paper is wrong, and none that it is right. Where a source was fetched, what it states and what it does not state about a NUMBER is reported, and nothing more.",
+      "no tuning. `8bb9123` and `19423bd` refused fitting two free numbers to unsourced targets and this lane inherits the refusal.",
+      "S_quoted means the FILE quotes a number equal to the written value. It does not by itself mean the cited work states that number; only a fetch can say that, and the fetch is reported separately per source.",
+      "no number of this corpus is read as evidence about the machine-written corpora excluded above."
+    ],
+    "partitions": {
+      "S_quoted": "the field is written; the declaration's own evidence kind is experimental, curated or predicted; and the written value appears as a literal number in the evidence string once citation furniture is stripped. Every member is listed with the matched substring and is adjudicated by hand in the result: a match that falls in furniture is demoted to E.",
+      "S_derived": "the same, except the written value is an exact arithmetic transform of a number the evidence string quotes, AND the transform is written in that same string (for example an evidence string quoting `f(d) = d^2 / (0.01 + d^2)` for `threshold: 0.1`, where 0.01 = 0.1^2). Every member is listed with its arithmetic so a reader can check it.",
+      "E_existence_only": "the field is written; the declaration cites a source (evidence kind experimental, curated or predicted with a non-empty source) and that source supports the declaration's EXISTENCE; and no number equal to the written value is quoted anywhere in the evidence string. A citation that supports a rule's existence is not a citation for its strength. This class is expected to be the largest and may not collapse into either neighbour.",
+      "A_asserted_names_a_work": "the field is written and the declaration's evidence kind is `inferred` or `none` - which BioLang's own grammar defines as not measured - but its note names a publication, a database or a reported range. The number is asserted; the prose is context.",
+      "A_asserted_bare": "the field is written, the evidence kind is `inferred`, `none` or absent, and the note names no work at all.",
+      "D_language_default": "the field is NOT written and the language supplies a number for it (`genomeos/ir/model.py` dataclass defaults: rule strength 1.0, threshold 1.0, hill 2.0, gene basal 0.0, protein initial 0.0, field diffusion 0.2, decay 0.01, signal threshold 0.0, event rate 0.0, regime threshold 50.0, stage from 0.0, timer lengthening 1.0, decision priority 0).",
+      "D_no_number": "the field is NOT written and the language supplies no number: the IR holds UNKNOWN, or the engine warns and reads zero. Counted, and reported OUTSIDE the denominator of numbers, because no number exists to have a provenance.",
+      "N_non_numeric": "the field is written but its value is not a number (`regenerates: from Glycolysis, OXPHOS`). Counted and reported outside the denominator."
+    },
+    "code_cleanliness": {
+      "git_sha": "05678009dce8a525a8b20830026755d7ec4199fe",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg2_send.py",
+        "tests/test_astroreg2_send.py",
+        "tests/test_astrorun.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/number_provenance.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/number_provenance_register.py"
+      ],
+      "counting_path_count": 13,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "05678009dce8a525a8b20830026755d7ec4199fe",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/astrorun.py",
+        "scripts/astroreg2_send.py",
+        "tests/test_astroreg2_send.py",
+        "tests/test_astrorun.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json",
+        "data/results/number_provenance_registration.json"
+      ],
+      "argv": [
+        "scripts/number_provenance_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "05678009dce8a525a8b20830026755d7ec4199fe",
+      "code_cleanliness_git_sha": "05678009dce8a525a8b20830026755d7ec4199fe",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 0567800"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 60,
+      "opens_under_data": 12,
+      "files_read": 12,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "genomeos/std/ageing.bio",
+        "genomeos/std/cell_types.bio",
+        "genomeos/std/development.bio",
+        "genomeos/std/human_stages.bio",
+        "genomeos/std/human_turnover.bio",
+        "genomeos/std/methylation.bio",
+        "genomeos/std/signalling.bio"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
