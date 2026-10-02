@@ -990,6 +990,67 @@ def cleanliness_problems(manifest: Any) -> list[str]:
     return []
 
 
+#: The key the two revision stamps and their agreement are recorded under (2026-10-02).
+REVISION_STAMPS = "revision_stamps"
+
+
+def revision_stamps(manifest: Any) -> dict[str, Any]:
+    """The two revisions a result records, side by side, with a flag when they disagree.
+
+    A result carries HEAD twice, read at two different moments: the writer calls `code_cleanliness`
+    while it is computing, and `genomeos/results.py: save_result` calls `stamp` -> `code_revision` when
+    it writes. In the checkout several lanes share, HEAD can move between those two moments -- a peer
+    commits -- and the two stamps then name two different commits. Nothing in the result said so, and
+    `scripts/manifest_rebuild.py` builds its worktree at `code.git_sha`, so the cleanliness sha it
+    recomputes there cannot match the one recorded and the difference arrived unexplained. Measured on
+    `data/results/astroreg2_astrocyte_activity.json`: cleanliness 53f3b33, stamp 675e54a, peer commits.
+
+    So the fact is recorded rather than hidden: both shas, whether they agree, and `revision_race` when
+    they do not. Additive; no existing field changes meaning. A race is NOT an incompleteness and is
+    never a reason to refuse a write -- it is a reason for a reader to know which code the numbers came
+    from, and for a rebuild to run the decisive check (`git diff` over the counting path).
+
+    `agree` and `revision_race` are None when there is nothing to compare, which a legacy result
+    without a cleanliness block is: "cannot say" is not "they agree", and the two are counted apart.
+    """
+    code = manifest.get("code") if isinstance(manifest, dict) else None
+    clean = manifest.get("code_cleanliness") if isinstance(manifest, dict) else None
+    a = code.get("git_sha") if isinstance(code, dict) else None
+    b = clean.get("git_sha") if isinstance(clean, dict) else None
+    out: dict[str, Any] = {
+        "code_git_sha": a,
+        "code_cleanliness_git_sha": b,
+        "sampled": (
+            "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the "
+            "result is written. Both are HEAD of the same checkout at two moments"
+        ),
+    }
+    if not (isinstance(a, str) and a) or not (isinstance(b, str) and b):
+        missing = [n for n, v in (("code.git_sha", a), ("code_cleanliness.git_sha", b)) if not v]
+        out.update(
+            comparable=False,
+            agree=None,
+            revision_race=None,
+            reading=(
+                f"cannot say whether HEAD moved during the write: {', '.join(missing)} is absent. This "
+                f"is not a record that the two stamps agree"
+            ),
+        )
+        return out
+    out.update(
+        comparable=True,
+        agree=a == b,
+        revision_race=a != b,
+        reading=(
+            f"no revision race: both stamps record {a[:7]}"
+            if a == b
+            else f"revision race: the cleanliness block sampled {b[:7]} and the write stamped {a[:7]}, "
+            f"so HEAD moved while this result was being written"
+        ),
+    )
+    return out
+
+
 def stamp(manifest: dict[str, Any] | None, root: Path | None = None) -> dict[str, Any]:
     """The caller's manifest with the code revision the writer fills in and the verdict attached."""
     m = {k: v for k, v in (manifest or {}).items() if k not in ("complete", "problems")}

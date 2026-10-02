@@ -89,6 +89,12 @@ markers = [
     # Registered here rather than in a conftest hook so that the name is known wherever pytest reads
     # this file, including a run collected from outside tests/.
     "requires_extra(name): needs the named pyproject extra (uv sync --extra <name>)",
+    # A test that cannot run without git-ignored machine-local data names the store it needs and skips,
+    # naming it, where the store is absent (tests/conftest.py applies it; tests/local_data.py decides).
+    # The amended acceptance rule of 2026-10-02: the verdict is a worktree of the committed tree with the
+    # ignored stores linked read-only, so such a test RUNS there; where they are genuinely absent -- CI --
+    # it skips by name and never fails. A path git does not ignore raises rather than skipping.
+    "needs_local_data(*paths, how=None): needs the named git-ignored data store (data/cache, ...)",
 ]
 
 [tool.ruff]

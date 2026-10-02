@@ -17,7 +17,13 @@ rebuild with the reason:
    together is opened and hashed member by member, and an input the tool cannot resolve stops the
    rebuild by name. `inputs_declared`, `inputs_checked` and `inputs_unchecked` carry the denominator,
    so an input that was not opened cannot leave the list and read as one that matched;
-   `inputs_satisfied_from_machine_local_paths` says how much of the rebuild rested on this machine;
+   `inputs_satisfied_from_machine_local_paths` says how much of the rebuild rested on this machine.
+   Since 2026-10-02 the three symlinked stores are also protected by an audit hook in this process AND in
+   the rebuilt command's own (scripts/rebuild_write_guard.py, `write_guard` in the report): a symlink
+   carries its target's mode, so until then a rebuild could write to the only copy of an input store on
+   this machine, which was measured and not supposed. The hook is a Python-level guard and the report
+   says so; a clone at 0444 is the kernel-enforced one. A rebuild whose command did not arm it reports no
+   verdict. `copied_not_cloned` names any machine-local input whose `cp -c` fell back to a real copy;
 4. run `code.argv` in the worktree, in a fresh environment from the committed uv.lock (`--venv
    fresh`, offline) or the checkout's own (`--venv shared`);
 5. compare the rebuilt result with RESULT.json field by field, ignoring only `date` and the
@@ -45,15 +51,25 @@ rebuild with the reason:
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import shutil
 import subprocess
 import sys
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
 from genomeos import manifest as mf
+
+#: The write guard, loaded by path rather than imported: this script is itself loaded by path in the
+#: tests, so a bare `import rebuild_write_guard` would not resolve, and the worktree's own `genomeos`
+#: package is at an older revision and may predate the guard entirely.
+_GUARD_FILE = Path(__file__).resolve().parent / "rebuild_write_guard.py"
+_guard_spec = importlib.util.spec_from_file_location("rebuild_write_guard", _GUARD_FILE)
+guard = importlib.util.module_from_spec(_guard_spec)
+_guard_spec.loader.exec_module(guard)
 
 STORES = ("reference", "knowledge", "cache")
 IGNORED = ("date",)
@@ -308,6 +324,322 @@ def run_differences(found: list[str]) -> tuple[list[str], list[str]]:
     for d in found:
         (run if _base_path(d) in RUN_FIELDS else rest).append(d)
     return rest, run
+
+
+# --- the revision race, named and decided (2026-10-02, lane-raceandlocal) -------------------------
+#
+# A result records HEAD twice: `code_cleanliness.git_sha`, sampled while the writer computes, and
+# `code.git_sha`, stamped when `save_result` writes. In the checkout several lanes share, HEAD moves
+# between the two -- a peer commits -- and the result then names two commits. This rebuild builds its
+# worktree at `code.git_sha`, so the cleanliness sha it recomputes CANNOT equal the recorded one, and the
+# difference arrived in every such report with no explanation.
+#
+# An exemption for that leaf was proposed and REFUSED. Setting it aside would hide the one thing it
+# carries that nothing else does -- that HEAD moved during the write, which makes the result's provenance
+# genuinely ambiguous -- and the standing rule is that where a classification is uncertain the tool errs
+# toward COMPARING (docs/LESSONS.md, 2026-10-02). So the leaf stays compared, and the race is made
+# DECIDABLE instead: named, then settled by `git diff A B` restricted to the counting path.
+#
+# Benign is not silent. An empty diff is printed and named exactly like a non-empty one; the difference
+# is the verdict, and the verdict is computed by git rather than argued in a report.
+
+#: The leaves a revision race moves, by **exact path**. NOT an exemption list: none of these is set
+#: aside. They are named so a report can say which of its differences the race accounts for while still
+#: reporting every one of them, which is the whole difference between explaining a leaf and excusing it.
+#: Both spellings of the cleanliness container occur, since some results carry the block at the top level
+#: as well as inside the manifest. `revision_stamps` is here because its four moving leaves restate the
+#: one fact: a rebuild's worktree is clean and at `code.git_sha`, so it recomputes agreement every time.
+RACE_FIELDS = (
+    "/code_cleanliness/git_sha",
+    "/result_manifest/code_cleanliness/git_sha",
+    "/result_manifest/revision_stamps/code_cleanliness_git_sha",
+    "/result_manifest/revision_stamps/agree",
+    "/result_manifest/revision_stamps/revision_race",
+    "/result_manifest/revision_stamps/reading",
+)
+
+#: How many characters of a sha a report's prose uses. The full shas are always printed beside it.
+SHA_IN_PROSE = 7
+
+
+# --- the tool's own cleanliness (2026-10-02, the dirty-tool blind spot) ---------------------------
+#
+# Measured by a peer: the write guard above sat UNCOMMITTED in the working copy, 232 insertions against
+# HEAD, and a rebuild run in that state is judged by verification code nobody can reproduce. It is the
+# instrument-side twin of the stale code stamp found in a result the same morning.
+#
+# MUST_HOLD cannot catch it, and that is the point of a separate mechanism:
+# `foreign_uncommitted_code_on_the_counting_path` is read off the REBUILT result's manifest, which was
+# composed inside the worktree and knows nothing about the main checkout the tool itself ran from.
+# Nothing in the report said the tool was dirty.
+#
+# So the tool reports its own sha and the cleanliness of its OWN import closure, and refuses a verdict
+# when any file of that closure is uncommitted. A refusal and not a field, for the reason the unarmed
+# guard is a refusal: a verdict nobody can reproduce is worse than no verdict.
+
+#: The entry points whose import closures make up the verification tool. `rebuild_write_guard.py` is
+#: named EXPLICITLY because `counting_path` follows import STATEMENTS and this script loads the guard
+#: through `spec_from_file_location`, so the computed closure would not contain it -- the recursion the
+#: ruling warned about, and it really was missed by the import walk.
+#:
+#: The `sitecustomize.py` the parent generates for the child is NOT in the closure, and the choice is
+#: deliberate: it is not a source file of this tool but an OUTPUT of one, and its every byte is
+#: `guard.SITECUSTOMIZE`, which is in the closure through the guard. Pinning the generated copy as well
+#: would pin the same bytes twice and would make a temporary directory part of a committed closure.
+TOOL_ENTRIES = ("scripts/manifest_rebuild.py", "scripts/rebuild_write_guard.py")
+
+
+def tool_cleanliness(root: Path) -> dict[str, Any]:
+    """The verification tool's own revision and whether any file it runs on is uncommitted.
+
+    Computed from the SHARED `genomeos.manifest.code_cleanliness`, the one implementation, with
+    `own_code=()` so that every uncommitted file on the closure is reported rather than split into mine
+    and someone else's: for the tool it does not matter whose edit it is, only that the code which
+    produced the verdict is not in any commit.
+    """
+    closure: set[str] = set()
+    for entry in TOOL_ENTRIES:
+        closure.add(entry)
+        closure.update(mf.counting_path(entry, root))
+    block = mf.code_cleanliness(TOOL_ENTRIES[0], (), root)
+    uncommitted = sorted(p for p in (mf.code_revision(root).get("dirty_code_paths") or []) if p in closure)
+    return {
+        "git_sha": block.get("git_sha"),
+        "entries": list(TOOL_ENTRIES),
+        "closure_count": len(closure),
+        "closure_is_computed": (
+            "the union of the import closures of TOOL_ENTRIES (genomeos.manifest.counting_path) plus the "
+            "entries themselves. rebuild_write_guard.py is named rather than found, because it is loaded "
+            "by path and no import statement points at it"
+        ),
+        "uncommitted_code_on_the_tool_s_own_closure": uncommitted,
+        "tool_is_committed": not uncommitted,
+        "generated_sitecustomize_excluded_because": (
+            "it is an output of this tool, not a source of it; its bytes are guard.SITECUSTOMIZE, which "
+            "is on the closure through the guard"
+        ),
+    }
+
+
+# --- the reads the rebuild actually made (2026-10-02) ----------------------------------------------
+#
+# `manifest_rebuild` was BLIND BY CONSTRUCTION to any file a manifest did not name. Demonstrated end to
+# end on a live result: `constrained_unknown_targets` rebuilt at 193 of 193 inputs declared and checked,
+# 193 opened and hashed, 3,858 of 3,896 leaves compared, no must_hold failures, "0 differences AFTER
+# SETTING ASIDE 1 leaves" -- while a tracer on the same run saw a 194TH read,
+# `data/results/unknown_chr21.json`, pinned by no declared sha256. Two instruments disagreed about one
+# run and the flattering one was the clean bill of health.
+#
+# So the rebuilt command's own reads are RECORDED (scripts/rebuild_write_guard.py, by the one audit hook
+# that already refuses its writes) and reconciled against the declared inputs here.
+
+#: Reads every post-fe0880a writer makes because the FRAMEWORK makes them, not because the result needs
+#: them, exempt by **exact path** on the RUN_FIELDS pattern -- never a prefix, a suffix or a directory.
+#:
+#: `data/results_legacy.txt` is `genomeos/results.py: LEGACY_ALLOWLIST`, read by `save_result` itself on
+#: every registry write. Under the unamended rule it would flag some 1,100 results at once.
+#:
+#: THE EXEMPTION IS CONDITIONAL AND THE CONDITION IS PROVEN, not assumed: it holds only because that
+#: file can never change a result's VALUES, only whether `save_result` ADMITS it.
+#: `tests/test_legacy_allowlist_exemption.py` changes the allowlist in a temporary registry and re-runs
+#: a writer: the bytes come back identical, or the write is quarantined and nothing is written. If a
+#: value could move it would be an input and would have to be declared.
+#:
+#: WHAT IS GIVEN UP, stated rather than left to be inferred: a change to the legacy allowlist cannot
+#: alter a value, only admission. A rebuild is therefore blind to a result that was admitted because a
+#: name was added to that list, which is a change in what the registry ACCEPTS and not in what it says.
+FRAMEWORK_READS = ("data/results_legacy.txt",)
+
+
+def reads_against_declared(
+    worktree: Path, manifest: Any, recorded: list[str], stores: list[str]
+) -> dict[str, Any]:
+    """Which recorded reads the manifest declares, and which it does not.
+
+    Only reads under the rebuild's own `data/` are considered: the interpreter, the virtual environment
+    and the standard library are not a result's inputs. A read through a linked store resolves OUTSIDE
+    the worktree, so the store roots are passed in and matched too -- without them every store read
+    would be dropped as "not under data/" and the reconciliation would be vacuous.
+    """
+    declared_files, declared_dirs = mf.declared_inputs(manifest)
+    data = str((worktree / "data").resolve())
+    under: list[str] = []
+    for raw in recorded:
+        real = os.path.realpath(raw)
+        rel = None
+        if real == data or real.startswith(data + os.sep):
+            rel = os.path.relpath(real, str(worktree.resolve()))
+        else:
+            for store in stores:
+                if real == store or real.startswith(store + os.sep):
+                    rel = "data/" + os.path.relpath(real, os.path.dirname(store))
+                    break
+        if rel is not None:
+            under.append(rel.replace(os.sep, "/"))
+    under = sorted(set(under))
+    framework = [p for p in under if p in FRAMEWORK_READS]
+    rest = [p for p in under if p not in FRAMEWORK_READS]
+    undeclared = sorted(
+        p
+        for p in rest
+        if p not in declared_files
+        and not any(p == d or p.startswith(d.rstrip("/") + "/") for d in declared_dirs)
+    )
+    return {
+        "reads_under_data": under,
+        "reads_under_data_count": len(under),
+        "declared": sorted(declared_files),
+        "declared_directories": sorted(declared_dirs),
+        "framework_reads_ignored": framework,
+        "framework_reads_ignored_because": (
+            "read by save_result itself on every registry write, exempt by exact path. The loss, "
+            "measured and not assumed: a change to the legacy allowlist cannot alter a value, only "
+            "admission (tests/test_legacy_allowlist_exemption.py)"
+        )
+        if framework
+        else "nothing was exempted",
+        "read_but_not_declared": undeclared,
+        "every_read_is_declared": not undeclared,
+    }
+
+
+def guard_window(root: Path) -> dict[str, Any]:
+    """From which commit a rebuild verdict is covered by the write guard, and what is not covered.
+
+    The commit is read from git rather than written here, so the window cannot drift from the file.
+
+    The caveat is on every report on purpose. A verdict taken before the guard existed rests on the
+    stores not having been written by a rebuild, which the audit in `scripts/rebuild_write_guard.py`
+    could not establish and no audit of mtimes can: several of those directories are caches the results'
+    OWN writers populate, and a rebuild runs the result's own command, so a cache write by the original
+    run and one by a rebuild of that run are the same writer at the same path. The guard makes the
+    assumption evidenced from now on, not retrospectively.
+    """
+    sha = _git_output(root, "log", "--diff-filter=A", "--format=%H", "-1", "--", str(_GUARD_FILE))
+    return {
+        "covers_verdicts_from": sha or "not committed yet (this guard is uncommitted in this checkout)",
+        "earlier_verdicts": (
+            "a rebuild verdict taken before that commit is NOT covered: until then the three data stores "
+            "were symlinked into the worktree and writable through the link, and whether any rebuild "
+            "wrote to one cannot be established from mtimes -- a cache write by the original run and one "
+            "by a rebuild of that run are the same writer at the same path. 'Every modification is "
+            "explained by a known writer' was established by the audit; 'no rebuild ever wrote to an "
+            "input store' was not"
+        ),
+        "what_the_audit_could_not_see": [
+            "an mtime can be rewritten",
+            "a write that restored identical bytes leaves no trace in mtime or in content",
+            "attribution by path shows that a writer exists, not that it made that particular file",
+            "everything outside the three stores, data/results and data/organisms included",
+        ],
+    }
+
+
+def _git_output(root: Path, *args: str) -> str:
+    r = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else ""
+
+
+def race_name(before: str, after: str) -> str:
+    """The name a race is reported under: `revision race (A -> B)`, oldest stamp first.
+
+    Before is the cleanliness sha (sampled first, while the writer computed) and after is the write
+    stamp, so the arrow runs in the direction HEAD moved.
+    """
+    return f"revision race ({before[:SHA_IN_PROSE]} → {after[:SHA_IN_PROSE]})"
+
+
+def counting_path_diff(
+    root: Path, before: str, after: str, paths: Sequence[str]
+) -> tuple[list[str], list[str], str | None]:
+    """(argv, files that changed, why it could not be asked). The decisive check of a revision race.
+
+    `git diff --name-only A B -- <counting path>`: the files that differ between the two revisions, out of
+    the ones the result's own counting path names. Nothing else is consulted, and no verdict is reached by
+    reasoning about what a commit "probably" touched.
+
+    A missing counting path is a refusal and not a pass: a race whose counting path is unknown cannot be
+    called benign, so the reason comes back and the caller reports it instead of a verdict.
+    """
+    if not paths:
+        return (
+            [],
+            [],
+            (
+                "the result records no code_cleanliness.counting_path, so there is nothing to diff: a race "
+                "over an unknown counting path is not called benign"
+            ),
+        )
+    argv = ["git", "-C", str(root), "diff", "--name-only", before, after, "--", *paths]
+    r = subprocess.run(argv, capture_output=True, text=True)
+    if r.returncode:
+        return (
+            argv,
+            [],
+            (
+                f"git diff {before[:SHA_IN_PROSE]} {after[:SHA_IN_PROSE]} could not be run, so the race is "
+                f"undecided: {r.stderr.strip()[-300:]}"
+            ),
+        )
+    return argv, sorted(line for line in r.stdout.splitlines() if line.strip()), None
+
+
+def revision_race(original: Any, root: Path) -> dict[str, Any]:
+    """Whether this result's two revision stamps disagree, and if they do, whether it mattered.
+
+    Always reported, in all three states, because each is a different claim:
+
+    * no race -- both stamps record one revision;
+    * a race whose `git diff` over the counting path is EMPTY -- "benign race: the counting path is
+      identical at both revisions."; still named, still printed;
+    * a race whose diff is NON-EMPTY -- a real difference, with the changed files named. The code that
+      produced this result is not the code at the revision the rebuild runs.
+
+    A state that cannot be established says so and is never folded into "no race".
+    """
+    m = original.get(mf.KEY) if isinstance(original, dict) else None
+    stamps = mf.revision_stamps(m if isinstance(m, dict) else {})
+    after, before = stamps["code_git_sha"], stamps["code_cleanliness_git_sha"]
+    clean = (m or {}).get("code_cleanliness")
+    paths = list(clean.get("counting_path") or []) if isinstance(clean, dict) else []
+    out: dict[str, Any] = {
+        "stamps": stamps,
+        "counting_path_count": len(paths),
+        "recorded_revision_stamps_block": (m or {}).get(mf.REVISION_STAMPS) is not None,
+    }
+    if stamps["revision_race"] is None:
+        return {**out, "found": None, "verdict": stamps["reading"]}
+    if stamps["revision_race"] is False:
+        return {
+            **out,
+            "found": False,
+            "verdict": (
+                f"no revision race: both revision stamps record {after[:SHA_IN_PROSE]}, so the worktree "
+                f"this rebuild runs in is the revision the cleanliness block was sampled at"
+            ),
+        }
+    out["found"] = True
+    out["race"] = race_name(before, after)
+    argv, changed, why = counting_path_diff(root, before, after, paths)
+    out["git_diff_argv"] = argv
+    out["counting_path_files_changed"] = changed
+    if why:
+        out["verdict"] = f"{out['race']}: undecided. {why}"
+        return out
+    if not changed:
+        out["verdict"] = (
+            f"{out['race']}: benign race: the counting path is identical at both revisions. "
+            f"All {len(paths)} counting-path files are byte-identical between "
+            f"{before[:SHA_IN_PROSE]} and {after[:SHA_IN_PROSE]}, so HEAD moved on code that did not "
+            f"produce these numbers"
+        )
+        return out
+    out["verdict"] = (
+        f"{out['race']}: a REAL difference: {len(changed)} of the {len(paths)} counting-path files "
+        f"changed between the revisions: {', '.join(changed)}. The code that wrote this result is not "
+        f"the code at the revision this rebuild runs"
+    )
+    return out
 
 
 def must_hold_failures(original: dict[str, Any], rebuilt: dict[str, Any]) -> list[str]:
@@ -602,7 +934,7 @@ def git_ignored(root: Path, paths: list[str]) -> set[str]:
     return {line for line in r.stdout.splitlines() if line}
 
 
-def link_read_only(src: Path, dst: Path) -> None:
+def link_read_only(src: Path, dst: Path) -> bool:
     """Link one machine-local file into the worktree so the rebuild can read it and cannot write it.
 
     `cp -c` asks APFS for a clone: no bytes are copied, both sides share them until one is written, and the
@@ -614,13 +946,20 @@ def link_read_only(src: Path, dst: Path) -> None:
     rebuild cannot write a result into the directory it is reading its inputs from. On a filesystem with no
     clone support the fallback is a plain copy, read-only in the same way; a worktree copy that is still
     writable after the chmod is an error, not a warning.
+
+    Returns whether the clone succeeded. False means the fallback ran and the bytes really were copied,
+    which is what happens across a volume boundary; it is reported (`copied_not_cloned`) rather than left
+    silent, because a clone that costs nothing and a copy that costs the file's size read the same in a
+    report otherwise, and a rebuild that filled a disk would have had no way to say why.
     """
     dst.parent.mkdir(parents=True, exist_ok=True)
-    if subprocess.run(["cp", "-c", str(src), str(dst)], capture_output=True).returncode:
+    cloned = subprocess.run(["cp", "-c", str(src), str(dst)], capture_output=True).returncode == 0
+    if not cloned:
         shutil.copyfile(src, dst)
     dst.chmod(0o444)
     if dst.stat().st_mode & 0o222:
         raise OSError(f"{dst} is writable after chmod 0444: the rebuild could overwrite the input it reads")
+    return cloned
 
 
 def link_machine_local_inputs(
@@ -640,6 +979,9 @@ def link_machine_local_inputs(
         "absent_on_this_machine": [],
         "not_linked_because_git_does_not_ignore_it": [],
         "not_linked_because_it_is_the_output": [],
+        # a clone shares its bytes and costs nothing; the fallback copies them. Named so a rebuild that
+        # moved real gigabytes across a volume boundary can say so instead of looking like a clone.
+        "copied_not_cloned": [],
         "failures": [],
     }
     want = sorted(
@@ -667,9 +1009,13 @@ def link_machine_local_inputs(
         try:
             if src.is_dir():
                 for f in sorted(x for x in src.rglob("*") if x.is_file()):
-                    link_read_only(f, worktree / p / f.relative_to(src))
+                    if not link_read_only(f, worktree / p / f.relative_to(src)):
+                        out["copied_not_cloned"].append(
+                            {"path": str(f.relative_to(src)), "under": p, "bytes": f.stat().st_size}
+                        )
             else:
-                link_read_only(src, worktree / p)
+                if not link_read_only(src, worktree / p):
+                    out["copied_not_cloned"].append({"path": p, "bytes": src.stat().st_size})
         except OSError as e:
             out["failures"].append(f"{p}: {e}")
             continue
@@ -915,18 +1261,56 @@ def rebuild(
         "git_sha": sha,
         "argv": argv,
         "dirty_code_at_write": code.get("dirty_code_paths", []),
+        # named and decided before anything is built: the check is `git diff` over the two recorded
+        # revisions, so it costs nothing and is reported even when the rebuild stops below
+        "revision_race": revision_race(original, root),
+        # and the tool's own cleanliness, likewise before anything is built
+        "verification_tool": tool_cleanliness(root),
         "unavailable": [],
     }
+    if not report["verification_tool"]["tool_is_committed"]:
+        report["unavailable"].append(
+            "no verdict: the verification tool is uncommitted. "
+            + ", ".join(report["verification_tool"]["uncommitted_code_on_the_tool_s_own_closure"])
+            + " is on this tool's own import closure and is not in any commit, so a verdict here would "
+            "rest on verification code nobody can reproduce. Run this from a worktree at the committed "
+            "revision instead; nothing was built and no command was run"
+        )
+        return {**report, "rebuilt": False}
     if not sha or not argv:
         report["unavailable"].append("manifest has no git_sha or argv")
         return {**report, "rebuilt": False}
     wt = where / f"rebuild-{sha[:10]}"
+    # Outside the worktree on purpose: a file inside it would show up as an untracked path in the rebuilt
+    # result's own cleanliness block, which this tool would then have to explain away.
+    guard_dir = where / f"guard-{sha[:10]}"
+    # The stores this rebuild must not write to, by real path. data/results is protected by its clones at
+    # mode 0444 (link_read_only); these three are symlinked, and a symlink carries the target's mode, so
+    # until 2026-10-02 a write through one reached the only copy on this machine. Measured: an
+    # open-for-update of data/reference/HG002_chr1.vcf.gz through the link succeeded.
+    stores = [str((root / "data" / d).resolve()) for d in STORES if (root / "data" / d).is_dir()]
+    guard.arm(stores)
     subprocess.run(["git", "-C", str(root), "worktree", "add", "-q", "--detach", str(wt), sha], check=True)
     links: dict[str, Any] = {"linked": []}
     try:
         for d in STORES:
             if (root / "data" / d).is_dir() and not (wt / "data" / d).exists():
                 (wt / "data" / d).symlink_to(root / "data" / d)
+        report["write_guard"] = {
+            "protected_stores": stores,
+            "armed_in_this_process": list(guard.armed()),
+            "events_watched": ["open (writing mode or flag)", *sorted(guard.WATCHED)],
+            "how": (
+                "an audit hook raises PermissionError on a write whose real path resolves into one of "
+                "the stores, in this process and in the rebuilt command's own process"
+            ),
+            "window": guard_window(root),
+            "limit": (
+                "a Python-level guard only: a C library that opens a file itself (htslib, so pysam) is "
+                "invisible to an audit hook, as is any write by a subprocess the guard was not put into. "
+                "The clones at mode 0444 under data/results are kernel-enforced; this is not"
+            ),
+        }
         links = link_machine_local_inputs(wt, root, m.get("inputs"), output=f"data/results/{result.name}")
         found = check_inputs(wt, m.get("inputs"), root, machine_local=set(links["linked"]))
         report["inputs"] = found["entries"]
@@ -978,7 +1362,13 @@ def rebuild(
                     f"fresh environment: uv sync --offline failed: {sync.stderr[-400:]}"
                 )
                 return {**report, "rebuilt": False}
-        env["PYTHONPATH"] = str(wt)
+        # sitecustomize is written beside the worktree and put FIRST on the child's path, so CPython's
+        # `site` arms the guard before the result's writer runs its first line. An audit hook in this
+        # process does not reach a subprocess, and the subprocess is where the risk is: this parent only
+        # reads and hashes, while the rebuilt command is arbitrary committed code.
+        env.update(guard.write_sitecustomize(guard_dir, _GUARD_FILE))
+        env[guard.ENV_ROOTS] = os.pathsep.join(stores)
+        env["PYTHONPATH"] = os.pathsep.join([str(guard_dir), str(wt)])
         # The committed uv.lock is used as it is. Without UV_FROZEN `uv run` re-locks (the lock at
         # fe0880a still names genomeos 0.9.0 against pyproject's 1.0.0) and the rewritten lock makes
         # the second checkout dirty, which the rebuilt manifest then records as a one-byte difference.
@@ -986,6 +1376,43 @@ def rebuild(
         run = subprocess.run(["uv", "run", "python", *argv], cwd=wt, env=env, capture_output=True, text=True)
         report["exit"] = run.returncode
         report["stdout_tail"] = run.stdout[-1500:]
+        # evidence, not a hope: the child records its pid once the hook is armed. An unarmed child means
+        # the command ran with the stores writable, which is a reason to report no verdict rather than a
+        # detail -- the inputs the comparison rests on were not protected while the comparison was made.
+        armed_pids = guard.marker_pids(guard_dir)
+        report["write_guard"]["armed_in_the_run"] = bool(armed_pids)
+        report["write_guard"]["processes_that_armed_it"] = armed_pids
+        # what the run READ, from the same audit hook that refused its writes
+        recorded = guard.reads_recorded(guard_dir)
+        report["reads_recorded"] = recorded
+        report["reads_reconciled"] = reads_against_declared(wt, m, recorded["paths"], stores)
+        if not armed_pids:
+            report["unavailable"].append(
+                "the write guard did not arm in the rebuilt command's process, so the command ran with "
+                f"the data stores writable through the worktree's symlinks ({guard.MARKER} is absent "
+                f"from {guard_dir}): no verdict is reported"
+            )
+            return {**report, "rebuilt": False}
+        # No verdict unless reads were SEEN and the guard was IN FORCE. An unwritten record is not
+        # "no undeclared reads": that is exactly how a pool child that read nothing produced a result
+        # with 0 paths opened, satisfying "every read is declared" vacuously.
+        if not recorded["recorded"]:
+            report["unavailable"].append(
+                "no verdict: no read was recorded for this run, so nothing is known about what it "
+                f"opened. An empty read record is not a record of no reads (looked in {guard_dir} for "
+                f"{guard.READS_PREFIX}*.tsv)"
+            )
+            return {**report, "rebuilt": False}
+        if report["reads_reconciled"]["read_but_not_declared"]:
+            report["unavailable"].append(
+                "no verdict: the rebuilt command read "
+                + ", ".join(report["reads_reconciled"]["read_but_not_declared"][:20])
+                + " under data/, which this manifest's inputs neither name nor contain, so those bytes "
+                "are pinned by no sha256 and a comparison of fields says nothing about them. This is "
+                "the blindness measured on constrained_unknown_targets: 193 of 193 declared inputs "
+                "hashed and a 194th file read unpinned"
+            )
+            return {**report, "rebuilt": False}
         if run.returncode:
             report["unavailable"].append(f"the command failed: {run.stderr[-800:]}")
             return {**report, "rebuilt": False}
@@ -999,6 +1426,15 @@ def rebuild(
         rest, run = run_differences(found)
         real, env = environment_differences(rest, cwd_fields_recorded_absolute(original, rebuilt))
         report["differences"] = real
+        report["revision_race"]["differences_it_accounts_for"] = {
+            "paths": [d for d in real if _base_path(d) in RACE_FIELDS],
+            "set_aside": False,
+            "why_not": (
+                "the race explains this leaf, it does not excuse it: an exemption here would hide that "
+                "HEAD moved during the write, so the leaf is reported as a difference and the verdict "
+                "above says whether it mattered"
+            ),
+        }
         report["environment_fields_ignored"] = env
         report["run_fields_ignored"] = run
         report["must_hold_failures"] = must_hold_failures(original, rebuilt)
@@ -1045,9 +1481,13 @@ def rebuild(
         report["comparison_reading"] = comparison_reading(report["differences"], set_aside)
         return {**report, "rebuilt": True}
     finally:
+        # the hook cannot be uninstalled, so its roots are emptied: it stays in place and inert, which is
+        # what the rest of this process (a test session above all) must be left with
+        guard.disarm()
         if not keep:
             unlock_links(wt, links["linked"])
             subprocess.run(["git", "-C", str(root), "worktree", "remove", "--force", str(wt)], check=False)
+            shutil.rmtree(guard_dir, ignore_errors=True)
 
 
 def main(argv: list[str] | None = None) -> int:

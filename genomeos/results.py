@@ -77,6 +77,13 @@ def save_result(
     contract. Whether a tracer was watching at all is recorded in `result_manifest.traced_inputs`, so
     an unwatched result is distinguishable from a clean one rather than reading the same.
 
+    Since 2026-10-02 every write also records BOTH revision stamps and a flag when they disagree, as
+    `result_manifest.revision_stamps` (genomeos/manifest.py: revision_stamps). The writer's cleanliness
+    block reads HEAD while it computes and `stamp` reads it again here, so in a shared checkout a peer's
+    commit between the two leaves a result naming two revisions. The disagreement is recorded, never
+    silenced and never a reason to refuse the write: `scripts/manifest_rebuild.py` names the race and
+    decides it with `git diff` over the counting path.
+
     `compact=True` writes the JSON without whitespace (`separators=(",", ":")`), for the per-cell and
     per-site tables that were written compact before they came under the contract (item 12 S6
     follow-up, lane-contract); the values are the same either way.
@@ -109,6 +116,13 @@ def save_result(
         if unclean:
             stamped["problems"] = [*stamped.get("problems", []), *unclean]
             stamped["complete"] = False
+    # --- both revision stamps, with a flag when they disagree (2026-10-02) ------------------------
+    # A result carries HEAD twice: once from the writer's cleanliness block, once from the stamp above.
+    # In this shared checkout a peer can commit between the two, and then they name two different
+    # commits -- measured on astroreg2_astrocyte_activity (53f3b33 against 675e54a). Recorded here so
+    # the reader is told, and so a rebuild can name the race and run the decisive diff instead of
+    # inheriting an unexplained difference. Additive, and never a reason to refuse the write.
+    stamped[mf.REVISION_STAMPS] = mf.revision_stamps(stamped)
     # --- traced-input reconciliation (2026-10-02, lane-tracer) ------------------------------------
     # A declared input is what the writer said it read; `traced_inputs` is what it opened. A new name
     # whose reads exceed its declared inputs is refused on the path that was already here: quarantined

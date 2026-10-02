@@ -33,6 +33,11 @@ announced=""
 # shellcheck disable=SC2329  # invoked by the trap below, which shellcheck cannot see
 cleanup() {
   if [ -n "$tmp" ]; then
+    # the linked stores are at 0444 and their directories at 0555, so `rm -rf` is refused without this.
+    # A shell chmod rather than the linking script: a trap must not depend on uv being runnable, and an
+    # interrupted push would otherwise leave a read-only tree nothing could take away. Every entry under
+    # there is a clone of its own, so this touches nothing the machine keeps.
+    chmod -R u+w "$tmp" 2>/dev/null || true
     git -C "$root" worktree remove --force "$tmp" 2>/dev/null
     rm -rf "$tmp"
   fi
@@ -82,10 +87,28 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   expect_tree=$(git -C "$root" rev-parse "$local_sha^{tree}")
   echo "pre-push: checking $(git rev-parse --short "$local_sha") in a clean worktree (tree $expect_tree)"
   if git -C "$root" worktree add -q --detach "$tmp" "$local_sha"; then
-    # the local caches are shared read-only, so real-data tests run as they do here
-    for d in reference knowledge cache; do
-      [ -d "$root/data/$d" ] && [ ! -e "$tmp/data/$d" ] && ln -s "$root/data/$d" "$tmp/data/$d"
-    done
+    # The git-ignored stores are put here READ-ONLY -- APFS clones at mode 0444, not symlinks. Until
+    # 2026-10-02 these three lines were `ln -s`, and a symlink carries its TARGET's mode: the stores'
+    # directories are 0755, so every push verdict this project has ever taken was produced in a worktree
+    # whose input stores were WRITABLE. Measured, not reasoned:
+    # `open("$tmp/data/reference/HG002_chr1.vcf.gz", "r+b")` through the link succeeded, and a probe file
+    # created through such a link appeared in the real store. A verification run that can modify the
+    # inputs it verifies against can produce a clean verdict by changing what it compared to.
+    #
+    # A clone is a separate inode, so taking the write bits off takes them off this worktree's side only
+    # and never off the machine's one copy. Measured cost: 11.2 GB of stores, 47,716 entries, about 9
+    # seconds and 17 MB of disk -- a clone that silently became a real copy would show as minutes and
+    # gigabytes, which is why the script prints the figures rather than assuming them.
+    #
+    # Tree identity is preserved and CHECKED rather than assumed: .gitignore names the three stores
+    # WITHOUT a trailing slash, which matches a real directory as well as a symlink, so the worktree
+    # still hashes to the committed tree. `--check-tree` prints the hash before and after, and
+    # tests/test_link_stores_read_only.py asserts they are equal.
+    if ! (cd "$root" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" \
+          uv run python scripts/link_stores_read_only.py "$tmp" --check-tree); then
+      echo "pre-push: REFUSED: the data stores could not be linked read-only into $tmp" >&2
+      status=1
+    fi
     (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" scripts/check.sh) || status=1
     # And now the verdict itself, from the file. Run from the clean worktree so the reader is the
     # committed one and not whatever a peer has half-edited in the shared checkout; the status
@@ -119,6 +142,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
       sleep 2
       waited_for_children=$((waited_for_children + 2))
     done
+    chmod -R u+w "$tmp" 2>/dev/null || true  # the linked stores are read-only; see cleanup()
     git -C "$root" worktree remove --force "$tmp"
   else
     status=1

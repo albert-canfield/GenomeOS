@@ -275,6 +275,19 @@ def test_the_two_fields_the_rebuild_requires_are_present_under_their_exact_names
         assert field in block
 
 
+# `v2.manifest([], [])` sha256-pins the EPCrispr benchmark table, so it cannot be composed without it,
+# and it failed in a worktree of the committed tree because the table is git-ignored. The same store is
+# already guarded elsewhere in the suite (tests/test_increase_links.py) and at line 32 of this file on a
+# different input; it was missing here. Nothing below is weakened.
+#
+# ONLY the training_K562 table is named, and the narrowing is measured rather than assumed: a first
+# draft also named a training_HCT116 twin, which is NOT in this checkout, and the test PASSES here --
+# so naming it would have turned a running test into a silent skip. A marker that over-names is a
+# weakening by the back door, and the only way to tell is to run it where the store is.
+@pytest.mark.needs_local_data(
+    "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+    how="the EPCrispr benchmark table is distilled into data/knowledge/crispri",
+)
 def test_the_manifest_states_the_interval_rules_and_no_model_request() -> None:
     m = v2.manifest([], [])
     assert mf.validate({**m, "code": {"git_sha": "x", "dirty": False}}) == []

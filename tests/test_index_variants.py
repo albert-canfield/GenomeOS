@@ -34,7 +34,14 @@ def test_fai_roundtrip_on_demo(tmp_path):
     g.close()
 
 
-@pytest.mark.skipif(not CHR21.exists(), reason="fetch chr21 first")
+#: `needs_local_data` (2026-10-02). Until now the guard below sat on `_random_loci`, which is a private
+#: HELPER and not a test, so pytest never applied it: both tests opened CHR21 unguarded and both failed
+#: in a worktree of the committed tree. It stayed invisible because CI curl-fetches chr21 and this
+#: checkout has it, so only a bare worktree ever showed it. The marker is put on the two tests, where a
+#: marker does something, and the reason now names the path rather than the fetch alone.
+needs_chr21 = pytest.mark.needs_local_data(str(CHR21), how="fetch chr21 first")
+
+
 def _random_loci(n: int, count: int) -> list[Locus]:
     rng = random.Random(0)
     return [
@@ -42,6 +49,7 @@ def _random_loci(n: int, count: int) -> list[Locus]:
     ]
 
 
+@needs_chr21
 def test_indexed_fetch_matches_memory():
     """What an index is for: the same sequence as reading the chromosome, at any offset.
 
@@ -63,6 +71,7 @@ def test_indexed_fetch_matches_memory():
     idx.close()
 
 
+@needs_chr21
 def test_the_index_beats_a_full_parse_only_below_a_crossover():
     """The timing claim, measured rather than asserted — and the old bound was not true at its own scale.
 

@@ -149,11 +149,27 @@ def test_manifest_carries_every_required_field() -> None:
     assert all(k in m["code_cleanliness"] for k in mf.CLEANLINESS_KEYS)
 
 
+# `needs_local_data` (2026-10-02). The first two assertions below ask whether a declared input path
+# names a catalogue, and `fc._inputs()` can only name one when the glob over the git-ignored panel found
+# it, so both failed in a worktree of the committed tree. The third asks nothing of the stores at all, so
+# it is SPLIT OUT rather than skipped with them: marking the whole test would have stopped a pure-code
+# assertion running in CI, which is a loss of coverage dressed up as a gating fix. Neither assertion is
+# changed.
+@pytest.mark.needs_local_data(
+    "data/knowledge/human_panel/chr*/storage_catalogue.json.gz",
+    "data/knowledge/human_panel/executor/replication_assembled.json.gz",
+    how="the human panel is distilled into data/knowledge/human_panel",
+)
 def test_manifest_declares_the_pointer_tables_and_the_catalogues() -> None:
     """`response_map2.candidates` reaches 24 element tables through `elements_where`; they are declared."""
     paths = {i["path"] for i in fc._inputs()}
     assert any("storage_catalogue.json.gz" in p for p in paths), "the panel catalogues are undeclared"
     assert any("executor/replication_assembled.json.gz" in p for p in paths)
+
+
+def test_the_manifest_names_the_pointer_case() -> None:
+    """Split from the test above on 2026-10-02: this asks nothing of a machine-local store, so it keeps
+    running where the panel is absent."""
     assert "the_pointer_case" in fc.manifest()["inputs_opened_beside_the_declared_results"]
 
 

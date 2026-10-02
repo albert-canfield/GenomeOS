@@ -31,6 +31,16 @@ from genomeos.lang import parse
 
 CHROM = "chrT"
 
+#: `needs_local_data` (2026-10-02, the amended acceptance rule). Sixteen tests in this file FAILED in a
+#: worktree of the committed tree, every one of them because `ce.TRACK_METADATA` is git-ignored
+#: machine-local data and `mapping()` refuses to guess a cell-to-biosample mapping from names -- which is
+#: the module behaving correctly. The marker moves where they run; not one assertion below is weakened.
+#: The author of this file already guarded the two heavy tests at the bottom on the same table and missed
+#: the cheap ones, so the store was always the condition; it was only sometimes declared.
+needs_track_metadata = pytest.mark.needs_local_data(
+    str(ce.TRACK_METADATA), how="scripts/entex_feasibility.py writes it (AG_METADATA)"
+)
+
 # ---- (a) the names carry a measurement, never a verdict ---------------------------------------
 
 
@@ -50,6 +60,7 @@ def test_the_states_are_the_three_registered_ones_and_nothing_else():
         ce.value("supported")
 
 
+@needs_track_metadata
 def test_every_state_and_reason_has_a_reading_and_the_weakness_is_stated():
     for name in (*ce.STATES, *ce.NOT_ASSESSABLE_REASONS):
         assert ce.READING[name]
@@ -72,6 +83,7 @@ def peak_file(tmp_path: Path, cell: str, chrom: str, peaks: list[tuple[int, int,
             fh.write(f"{s}\t{e}\t{v:.2f}\n")
 
 
+@needs_track_metadata
 def test_open_not_open_and_outside_the_span_are_three_different_outputs(tmp_path):
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0), (5000, 5200, 4.0)])
     readers = ce.Readers(results_dir=tmp_path)
@@ -84,6 +96,7 @@ def test_open_not_open_and_outside_the_span_are_three_different_outputs(tmp_path
     )
 
 
+@needs_track_metadata
 def test_a_cell_with_no_reader_and_a_cell_whose_span_misses_the_locus_differ(tmp_path):
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0)])
     readers = ce.Readers(results_dir=tmp_path)
@@ -94,6 +107,7 @@ def test_a_cell_with_no_reader_and_a_cell_whose_span_misses_the_locus_differ(tmp
     assert never_looked != looked_elsewhere
 
 
+@needs_track_metadata
 def test_a_chromosome_the_biosample_has_no_peak_file_for_is_outside_its_measured_span(tmp_path):
     readers = ce.Readers(results_dir=tmp_path)  # no file at all
     assert ce.state_for("K562", CHROM, 1000, 1100, readers) == (
@@ -101,6 +115,7 @@ def test_a_chromosome_the_biosample_has_no_peak_file_for_is_outside_its_measured
     )
 
 
+@needs_track_metadata
 def test_an_unrecorded_context_is_reported_as_no_reader_and_never_as_not_open(tmp_path):
     """R1 writes `cell_type = unknown` where no cell was recorded. That is a never-looked state."""
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0)])
@@ -113,6 +128,7 @@ def test_an_unrecorded_context_is_reported_as_no_reader_and_never_as_not_open(tm
 # ---- (c) the mapping is by ontology term, through a registered table ---------------------------
 
 
+@needs_track_metadata
 def test_every_reader_biosample_carries_the_term_the_track_metadata_on_disk_gives_it():
     """The hand-written table cannot drift from the authority it claims to copy."""
     table = ce.mapping()
@@ -131,6 +147,7 @@ def test_the_registered_terms_are_well_formed_distinct_and_in_the_three_ontologi
     assert set(ce.term_to_reader().values()) == set(ce.READER_TERMS)
 
 
+@needs_track_metadata
 def test_two_different_names_for_one_term_both_reach_the_reader():
     """`Ovary` is a GTEx tissue name and `ovary` an ENCODE biosample name; the term is the same one."""
     assert ce.reader_for("Ovary")[0] == "ovary"
@@ -139,6 +156,7 @@ def test_two_different_names_for_one_term_both_reach_the_reader():
     assert ce.reader_for("H1_hESC")[0] == "H1"
 
 
+@needs_track_metadata
 def test_a_name_that_merely_contains_a_reader_s_name_does_not_map_to_it():
     """What a string comparison would get wrong: a different cell type with an overlapping name."""
     for label in ("foreskin_keratinocyte", "hair_follicular_keratinocyte", "regular_cardiac_myocyte"):
@@ -148,6 +166,7 @@ def test_a_name_that_merely_contains_a_reader_s_name_does_not_map_to_it():
         assert why
 
 
+@needs_track_metadata
 def test_a_cell_whose_label_resolves_to_more_than_one_term_is_not_assessable(tmp_path):
     csv_path = tmp_path / "metadata.csv"
     csv_path.write_text(
@@ -169,21 +188,29 @@ def test_a_cell_whose_label_resolves_to_more_than_one_term_is_not_assessable(tmp
     ce.mapping(ce.TRACK_METADATA)  # the module-level cache goes back to the real table
 
 
+# DELIBERATELY NOT MARKED. This is the only test in the suite that establishes the module refuses to
+# guess rather than guessing, and it refuses on a synthetic path, so it passes in a worktree with no
+# store at all. Marking it would skip the one assertion that must never be skipped. Only the last line
+# needs the real table, and that line restores the module-level cache: teardown, not a claim, so it is
+# conditioned rather than asserted and nothing above it changes.
 def test_the_mapping_refuses_to_guess_when_the_table_is_not_on_this_machine(tmp_path):
     with pytest.raises(FileNotFoundError, match="never guessed from names"):
         ce.mapping(tmp_path / "absent.csv")
-    ce.mapping(ce.TRACK_METADATA)
+    if ce.TRACK_METADATA.exists():
+        ce.mapping(ce.TRACK_METADATA)
 
 
 # ---- (d) reader v1's own call, no new cut-off --------------------------------------------------
 
 
+@needs_track_metadata
 def test_the_openness_call_is_reader_v1_s_registered_evidence_unchanged():
     assert reader.EVIDENCE in ce.OPENNESS_CALL
     assert "No new cut-off is introduced" in ce.OPENNESS_CALL
     assert ce.registration()["openness_call"] == ce.OPENNESS_CALL
 
 
+@needs_track_metadata
 def test_openness_is_peak_overlap_and_nothing_here_thresholds_a_signal_value(tmp_path):
     """A peak with the lowest signal in the file still opens the locus: no signal is thresholded."""
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 0.01), (5000, 5200, 900.0)])
@@ -194,6 +221,7 @@ def test_openness_is_peak_overlap_and_nothing_here_thresholds_a_signal_value(tmp
         assert forbidden not in source
 
 
+@needs_track_metadata
 def test_a_locus_touching_a_peak_edge_counts_as_overlapping_as_the_reader_s_index_does(tmp_path):
     # a far peak so the whole region is inside the file's measured span and the edge is what is tested
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0), (90_000, 90_200, 5.0)])
@@ -252,6 +280,7 @@ def round_trip(text: str) -> Module:
     return Module.from_dict(json.loads(json.dumps(parse(text).to_dict())))
 
 
+@needs_track_metadata
 def test_the_state_survives_compile_parse_bioir_json_and_parse(tmp_path):
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0)])
     # HepG2 was read over this element's region - its span brackets it - and called no peak on it
@@ -282,6 +311,7 @@ def test_the_written_state_parses_back_to_its_state_and_its_qualifiers():
         ce.parse_value("open in K562")
 
 
+@needs_track_metadata
 def test_the_state_is_added_beside_the_rule_and_deletes_nothing(tmp_path):
     """The only difference the reading makes to a program is the field it adds."""
     peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0)])
@@ -293,6 +323,7 @@ def test_the_state_is_added_beside_the_rule_and_deletes_nothing(tmp_path):
     assert with_state.replace("context_evidence: open_in_reader, K562; ", "") == without
 
 
+@needs_track_metadata
 def test_the_state_gates_nothing_a_rule_not_detected_open_still_applies_in_its_cell(tmp_path):
     peak_file(tmp_path, "HepG2", CHROM, [(100, 200, 5.0), (8000, 8200, 5.0)])
     readers = ce.Readers(results_dir=tmp_path)

@@ -70,6 +70,22 @@ def test_the_retained_rows_do_not_land_on_a_pinned_store() -> None:
 # --- the gene-density covariate ---------------------------------------------------------------------
 
 
+# `needs_local_data` (2026-10-02). `fd.gene_bodies` reads the per-chromosome GENCODE through
+# `annotation.default_gencode`, which is git-ignored machine-local data, so in a worktree of the
+# committed tree `longest` stayed 0 and the test FAILED on its own readiness line. The paths are the
+# four this test actually asks for, confirmed present in this checkout; the directory is data/reference
+# and not data/results, which a first draft had wrong.
+#
+# Both assertions below are kept exactly as they were. `longest > 0` was an in-test readiness guard
+# firing as a failure; it is now a skip where the store is absent, and still an assertion where it is
+# not -- because a store that is present and yields no protein-coding body IS a real failure.
+@pytest.mark.needs_local_data(
+    "data/reference/gencode_v50_chr16.gff3.gz",
+    "data/reference/gencode_v50_chr1.gff3.gz",
+    "data/reference/gencode_v50_chr2.gff3.gz",
+    "data/reference/gencode_v50_chrX.gff3.gz",
+    how="genomeos data fetch --chrom <C>",
+)
 def test_max_gene_bp_holds_against_the_annotation_on_disk() -> None:
     """The backward scan's bound, checked against real gene bodies rather than trusted."""
     longest = 0
