@@ -327,3 +327,60 @@ def test_every_rule_of_a_real_compiled_chromosome_carries_a_state():
         value = line.split("context_evidence: ", 1)[1].split(";", 1)[0]
         state, _rest = ce.parse_value(value)
         assert state in ce.STATES
+
+
+# ---- the rule enumeration, and the stamp that says which uncommitted code could have counted ----
+
+
+@pytest.mark.skipif(
+    not (Path("data/results/budget_chr21.json").exists() and ce.TRACK_METADATA.exists()),
+    reason="chr21's budget or the track metadata is not on this machine",
+)
+def test_the_rule_enumeration_is_the_compiler_s_own_rules_in_the_compiler_s_own_order():
+    """A reading that needs each rule's locus enumerates the rules itself; this holds it to the
+    compiler, so the base-rate comparison cannot be taken over a different set from the census."""
+    text = cp.compile_chromosome("chr21")
+    compiled = [
+        ln.split("when: cell_type = ", 1)[1].split(";", 1)[0].strip()
+        for ln in text.splitlines()
+        if ln.startswith("rule ")
+    ]
+    enumerated = ce.rule_loci("chr21")
+    assert [cell for cell, _s, _e in enumerated] == compiled
+    for _cell, start, end in enumerated:
+        assert 0 <= start < end
+
+
+def test_the_counting_path_is_the_import_closure_and_holds_only_files_that_exist():
+    path = ce.counting_path(Path("scripts/context_evidence_census.py"))
+    assert "scripts/context_evidence_census.py" in path
+    assert "genomeos/attribution/context_evidence.py" in path
+    assert "genomeos/attribution/compile.py" in path
+    assert len(path) > 10
+    for rel in path:
+        assert (ce.REPO_ROOT / rel).is_file()
+
+
+def test_a_class_imported_from_a_module_is_not_mistaken_for_a_file():
+    """cd263bc: on a case-insensitive filesystem a plain existence check answered yes for
+    `genomeos/genome/Genome.py`, which is the class a module exports and not a module of its own."""
+    path = ce.counting_path(Path("scripts/context_evidence_census.py"))
+    for not_a_file in ("genomeos/genome/Genome.py", "genomeos/genome/Annotation.py"):
+        assert not_a_file not in path
+    assert len({p.lower() for p in path}) == len(path)
+
+
+def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path():
+    block = ce.code_cleanliness(Path("scripts/context_evidence_census.py"), ("a.py",))
+    assert set(block) >= {
+        "git_sha",
+        "dirty",
+        "own_uncommitted_code",
+        "own_code_is_committed",
+        "foreign_uncommitted_code",
+        "foreign_uncommitted_code_on_the_counting_path",
+        "counting_path",
+    }
+    assert block["own_uncommitted_code"] == []  # "a.py" is not a file this repository has
+    for p in block["foreign_uncommitted_code_on_the_counting_path"]:
+        assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]

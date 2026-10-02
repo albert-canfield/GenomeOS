@@ -355,6 +355,128 @@ def state_for(
     return value(STATE_NOT_OPEN, biosample)
 
 
+# ---- the rules, enumerated the way the compiler emits them ------------------------------------
+
+
+def rule_loci(chrom: str, results_dir: Path | None = None, layer: Any = None) -> list[tuple[str, int, int]]:
+    """(cell label, start, end) for every rule `compile_chromosome` emits for this chromosome.
+
+    The compiled text carries each rule's cell but not its locus, so a reading that needs both - the
+    base-rate comparison, for one - enumerates the rules here instead. It mirrors the compiler block
+    for block, and `tests/test_context_evidence.py` holds it to the compiler's own output on chr21,
+    so the two cannot drift apart.
+    """
+    from genomeos.attribution import compile as cp
+    from genomeos.attribution.measured import rule_links
+
+    results_dir = results_dir if results_dir is not None else cp.RESULTS_DIR
+    out: list[tuple[str, int, int]] = []
+    elements = cp._attributed(chrom, results_dir)
+    for e in elements:
+        pc = e["predicted_coding"]
+        out.append((cp.context(pc.get("tissue")), e["start"], e["end"]))
+    _layer, measured_rows = cp._measured_rows(chrom, elements, results_dir, layer)
+    for row in measured_rows:
+        for _gene, _action, _strength, cell, _split in rule_links(row):
+            out.append((cp.context(cell), row["start"], row["end"]))
+    return out
+
+
+# ---- the stamp: which uncommitted code could have reached a count -----------------------------
+
+PACKAGE = "genomeos"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _is_file_exactly(root: Path, parts: list[str]) -> bool:
+    """A file at `parts` below `root`, spelled as the directories spell it (carried from cd263bc).
+
+    `Path.is_file` on a case-insensitive filesystem answers yes for `genomeos/genome/Genome.py` when
+    only `genome.py` is there, so `from genomeos.genome import Genome` - a class, not a module -
+    would otherwise put a file that does not exist on the closure, and the closure would differ
+    between this machine and a case-sensitive one.
+    """
+    node = root
+    for part in parts:
+        try:
+            if part not in {q.name for q in node.iterdir()}:
+                return False
+        except OSError:
+            return False
+        node = node / part
+    return node.is_file()
+
+
+def counting_path(entry: Path, root: Path | None = None) -> list[str]:
+    """Every module of this repository the entry script can reach by import, as the transitive
+    closure of the import statements in the files themselves. A hand-written list cannot be checked."""
+    import ast
+
+    root = root or REPO_ROOT
+    seen: dict[str, Path] = {}
+    queue = [Path(entry).resolve()]
+    while queue:
+        path = queue.pop()
+        try:
+            rel = path.relative_to(root).as_posix()
+        except ValueError:
+            continue
+        if rel in seen:
+            continue
+        seen[rel] = path
+        try:
+            tree = ast.parse(path.read_text())
+        except (OSError, SyntaxError):
+            continue
+        names: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names.update(a.name for a in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+                names.add(node.module)
+                names.update(f"{node.module}.{a.name}" for a in node.names)
+        for name in names:
+            if not (name == PACKAGE or name.startswith(PACKAGE + ".")):
+                continue
+            parts = name.split(".")
+            for candidate in ([*parts[:-1], f"{parts[-1]}.py"], [*parts, "__init__.py"]):
+                if _is_file_exactly(root, candidate):
+                    queue.append(root.joinpath(*candidate))
+    return sorted(seen)
+
+
+def code_cleanliness(entry: Path, own_code: tuple[str, ...]) -> dict[str, Any]:
+    """Which uncommitted code the stamp names, split into this lane's and other lanes', and whether
+    any of it is on the counting path. Read from git and from the imports at write time."""
+    from genomeos import manifest as mf
+
+    rev = mf.code_revision()
+    path = counting_path(entry)
+    dirty = list(rev["dirty_code_paths"])
+    own = [p for p in dirty if p in own_code]
+    foreign = [p for p in dirty if p not in own_code]
+    return {
+        "git_sha": rev["git_sha"],
+        "dirty": rev["dirty"],
+        "own_uncommitted_code": own,
+        "own_code_is_committed": not own,
+        "foreign_uncommitted_code": foreign,
+        "foreign_uncommitted_code_on_the_counting_path": [p for p in foreign if p in path],
+        "counting_path": path,
+        "counting_path_is_computed": (
+            "the transitive import closure of this script over the repository's own package, "
+            "computed from the files' import statements at write time, not a hand-written list"
+        ),
+        "note": (
+            "several sessions work in this one checkout. A file listed under "
+            "foreign_uncommitted_code belongs to another lane; this lane did not write it and did "
+            "not commit it. The counting path is the computed closure above, so a foreign file "
+            "outside it cannot have entered the count, and "
+            "foreign_uncommitted_code_on_the_counting_path names any that could"
+        ),
+    }
+
+
 def registration() -> dict[str, Any]:
     """Everything a result or a pre-registration states about this reading, from the code itself."""
     table = mapping()

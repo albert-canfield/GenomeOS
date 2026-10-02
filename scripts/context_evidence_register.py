@@ -29,6 +29,22 @@ from genomeos.results import save_result  # noqa: E402
 RESULT = "context_evidence_registration"
 CHROMS = tuple(f"chr{c}" for c in [*range(1, 23), "X", "Y"])
 RULES_ON_THE_RECORD = 440_589
+ENTRY = Path(__file__).resolve()
+
+#: This lane's own files. Everything else uncommitted in this shared checkout belongs to another lane.
+OWN_CODE = (
+    "genomeos/attribution/context_evidence.py",
+    "genomeos/attribution/compile.py",
+    "genomeos/lang/grammar.py",
+    "genomeos/lang/parser.py",
+    "genomeos/ir/model.py",
+    "scripts/context_evidence_register.py",
+    "scripts/context_evidence_census.py",
+    "scripts/context_evidence_baserate.py",
+    "tests/test_context_evidence.py",
+    "docs/BIOLANG-GRAMMAR.md",
+    "docs/ATTRIBUTION.md",
+)
 
 
 def peak_inventory(results_dir: Path) -> dict[str, Any]:
@@ -123,6 +139,7 @@ def main() -> None:
             "register": "scripts/context_evidence_register.py",
             "census": "scripts/context_evidence_census.py",
         },
+        "code_cleanliness": ce.code_cleanliness(ENTRY, OWN_CODE),
         "alphagenome_requests": 0,
         "money": "none: every input was already on disk",
     }
@@ -157,6 +174,7 @@ def main() -> None:
             "per_cell": "the rule's own `when: cell_type` label, every label counted",
             "per_biosample": "the reader biosample a label maps to by ontology term",
         },
+        "code_cleanliness": ce.code_cleanliness(ENTRY, OWN_CODE),
     }
     path = save_result(RESULT, payload)
     print(f"{RESULT}: {path}")
