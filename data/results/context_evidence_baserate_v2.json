@@ -1,0 +1,2133 @@
+{
+  "result": "context_evidence_baserate_v2",
+  "date": "2026-10-02",
+  "question": "over exactly the assessable rules of context_evidence.json, how often is the element open in the cell the compiler assigned, against how often it is open in the other reader biosamples?",
+  "status": "descriptive and NOT registered: context_evidence_registration.json fixed the states, the openness call, the mapping table and the denominator, and this changes none of them. It is the same reading taken in twelve more biosamples",
+  "why": "the elements are ENCODE registry cCREs, built from DNase over many biosamples, so any biosample opens some share of them whatever cell a rule names. The assigned cell's share is uninterpretable until the base rate is beside it",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "population": 81635,
+  "population_is": "every compiled rule whose cell maps to a reader biosample by ontology term and whose locus lies inside that biosample's measured span on its chromosome: the open_in_reader plus not_open_in_reader rules of context_evidence.json",
+  "assigned_cell": {
+    "open": 26551,
+    "not_open": 55084,
+    "share_open": 0.3252,
+    "population": "the 81635 assessable rules, each read in its own assigned cell"
+  },
+  "other_twelve_biosamples": {
+    "open": 175869,
+    "rule_cell_pairs_assessable": 979455,
+    "rule_cell_pairs_outside_a_measured_span": 165,
+    "mean_share_open": 0.1796,
+    "population": "the 979455 rule-and-biosample pairs made by reading each of the 81635 assessable rules in the twelve reader biosamples that are not its own; a pair whose locus lies outside that biosample's measured span is excluded and counted separately above"
+  },
+  "difference": 0.1456,
+  "tolerance": 0.02,
+  "tolerance_was_chosen": "before any share was computed, so the reading could not be softened once the numbers were in. It is not registered, because this comparison is not",
+  "reading": "the cell the compiler assigns carries information about where the element is actually open: the same rules are open in that cell more often than in the other reader biosamples",
+  "per_biosample_over_the_same_rules": {
+    "K562": {
+      "open": 20241,
+      "not_open": 61380,
+      "outside_its_measured_span": 14,
+      "share_open_of_the_whole_population": 0.2479,
+      "share_open_of_the_rules_it_could_read": 0.248,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "HepG2": {
+      "open": 14496,
+      "not_open": 67133,
+      "outside_its_measured_span": 6,
+      "share_open_of_the_whole_population": 0.1776,
+      "share_open_of_the_rules_it_could_read": 0.1776,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "GM12878": {
+      "open": 6752,
+      "not_open": 74840,
+      "outside_its_measured_span": 43,
+      "share_open_of_the_whole_population": 0.0827,
+      "share_open_of_the_rules_it_could_read": 0.0828,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "IMR-90": {
+      "open": 20437,
+      "not_open": 61192,
+      "outside_its_measured_span": 6,
+      "share_open_of_the_whole_population": 0.2503,
+      "share_open_of_the_rules_it_could_read": 0.2504,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "H1": {
+      "open": 13208,
+      "not_open": 68427,
+      "outside_its_measured_span": 0,
+      "share_open_of_the_whole_population": 0.1618,
+      "share_open_of_the_rules_it_could_read": 0.1618,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "SK-N-SH": {
+      "open": 14074,
+      "not_open": 67541,
+      "outside_its_measured_span": 20,
+      "share_open_of_the_whole_population": 0.1724,
+      "share_open_of_the_rules_it_could_read": 0.1724,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "astrocyte": {
+      "open": 19279,
+      "not_open": 62347,
+      "outside_its_measured_span": 9,
+      "share_open_of_the_whole_population": 0.2362,
+      "share_open_of_the_rules_it_could_read": 0.2362,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "hepatocyte": {
+      "open": 20406,
+      "not_open": 61225,
+      "outside_its_measured_span": 4,
+      "share_open_of_the_whole_population": 0.25,
+      "share_open_of_the_rules_it_could_read": 0.25,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "keratinocyte": {
+      "open": 6391,
+      "not_open": 75198,
+      "outside_its_measured_span": 46,
+      "share_open_of_the_whole_population": 0.0783,
+      "share_open_of_the_rules_it_could_read": 0.0783,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "cardiac muscle cell": {
+      "open": 23225,
+      "not_open": 58408,
+      "outside_its_measured_span": 2,
+      "share_open_of_the_whole_population": 0.2845,
+      "share_open_of_the_rules_it_could_read": 0.2845,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "CD14-positive monocyte": {
+      "open": 17091,
+      "not_open": 64537,
+      "outside_its_measured_span": 7,
+      "share_open_of_the_whole_population": 0.2094,
+      "share_open_of_the_rules_it_could_read": 0.2094,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "ovary": {
+      "open": 11707,
+      "not_open": 69923,
+      "outside_its_measured_span": 5,
+      "share_open_of_the_whole_population": 0.1434,
+      "share_open_of_the_rules_it_could_read": 0.1434,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    },
+    "testis": {
+      "open": 15113,
+      "not_open": 66519,
+      "outside_its_measured_span": 3,
+      "share_open_of_the_whole_population": 0.1851,
+      "share_open_of_the_rules_it_could_read": 0.1851,
+      "population": "the same 81635 assessable rules, every one of them read in this biosample whether or not any rule names it"
+    }
+  },
+  "per_assigned_cell": {
+    "K562": {
+      "rules_assigned_to_this_cell": 27445,
+      "open_in_this_cell": 8081,
+      "share_open_in_this_cell": 0.2944,
+      "open_in_the_other_twelve": 56525,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 329292,
+      "mean_share_open_in_the_other_twelve": 0.1717,
+      "difference": 0.1227
+    },
+    "CD14-positive monocyte": {
+      "rules_assigned_to_this_cell": 15540,
+      "open_in_this_cell": 6456,
+      "share_open_in_this_cell": 0.4154,
+      "open_in_the_other_twelve": 37126,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 186431,
+      "mean_share_open_in_the_other_twelve": 0.1991,
+      "difference": 0.2163
+    },
+    "HepG2": {
+      "rules_assigned_to_this_cell": 14779,
+      "open_in_this_cell": 5301,
+      "share_open_in_this_cell": 0.3587,
+      "open_in_the_other_twelve": 29756,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 177333,
+      "mean_share_open_in_the_other_twelve": 0.1678,
+      "difference": 0.1909
+    },
+    "GM12878": {
+      "rules_assigned_to_this_cell": 6406,
+      "open_in_this_cell": 1627,
+      "share_open_in_this_cell": 0.254,
+      "open_in_the_other_twelve": 14130,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 76868,
+      "mean_share_open_in_the_other_twelve": 0.1838,
+      "difference": 0.0702
+    },
+    "keratinocyte": {
+      "rules_assigned_to_this_cell": 5359,
+      "open_in_this_cell": 1487,
+      "share_open_in_this_cell": 0.2775,
+      "open_in_the_other_twelve": 11718,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 64306,
+      "mean_share_open_in_the_other_twelve": 0.1822,
+      "difference": 0.0953
+    },
+    "H1": {
+      "rules_assigned_to_this_cell": 3747,
+      "open_in_this_cell": 1042,
+      "share_open_in_this_cell": 0.2781,
+      "open_in_the_other_twelve": 7375,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 44961,
+      "mean_share_open_in_the_other_twelve": 0.164,
+      "difference": 0.1141
+    },
+    "IMR-90": {
+      "rules_assigned_to_this_cell": 2942,
+      "open_in_this_cell": 1130,
+      "share_open_in_this_cell": 0.3841,
+      "open_in_the_other_twelve": 6978,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 35298,
+      "mean_share_open_in_the_other_twelve": 0.1977,
+      "difference": 0.1864
+    },
+    "testis": {
+      "rules_assigned_to_this_cell": 2152,
+      "open_in_this_cell": 507,
+      "share_open_in_this_cell": 0.2356,
+      "open_in_the_other_twelve": 4724,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 25803,
+      "mean_share_open_in_the_other_twelve": 0.1831,
+      "difference": 0.0525
+    },
+    "cardiac muscle cell": {
+      "rules_assigned_to_this_cell": 1865,
+      "open_in_this_cell": 561,
+      "share_open_in_this_cell": 0.3008,
+      "open_in_the_other_twelve": 3830,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 22378,
+      "mean_share_open_in_the_other_twelve": 0.1712,
+      "difference": 0.1296
+    },
+    "ovary": {
+      "rules_assigned_to_this_cell": 603,
+      "open_in_this_cell": 136,
+      "share_open_in_this_cell": 0.2255,
+      "open_in_the_other_twelve": 1441,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 7223,
+      "mean_share_open_in_the_other_twelve": 0.1995,
+      "difference": 0.026
+    },
+    "SK-N-SH": {
+      "rules_assigned_to_this_cell": 347,
+      "open_in_this_cell": 83,
+      "share_open_in_this_cell": 0.2392,
+      "open_in_the_other_twelve": 1074,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 4163,
+      "mean_share_open_in_the_other_twelve": 0.258,
+      "difference": -0.0188
+    },
+    "hepatocyte": {
+      "rules_assigned_to_this_cell": 241,
+      "open_in_this_cell": 75,
+      "share_open_in_this_cell": 0.3112,
+      "open_in_the_other_twelve": 486,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 2892,
+      "mean_share_open_in_the_other_twelve": 0.168,
+      "difference": 0.1432
+    },
+    "astrocyte": {
+      "rules_assigned_to_this_cell": 209,
+      "open_in_this_cell": 65,
+      "share_open_in_this_cell": 0.311,
+      "open_in_the_other_twelve": 706,
+      "rule_cell_pairs_assessable_in_the_other_twelve": 2507,
+      "mean_share_open_in_the_other_twelve": 0.2816,
+      "difference": 0.0294
+    }
+  },
+  "no_interval_is_reported": "these are exhaustive counts over a fixed rule set, not an estimate from a sample, so no confidence interval is computed and none would mean anything here",
+  "not_validation": "a consistency check between two readings of the same ENCODE chromatin, not validation: reader v1's openness comes from ENCODE peaks and AlphaGenome was trained on ENCODE, so open_in_reader is never independent evidence that the rule is right and must never be quoted as validation",
+  "what_this_tests": "whether the cell the compiler assigns is informative about where the element is open. It does not test whether the rule is right, and open_in_reader is still a consistency check between two readings of the same ENCODE chromatin",
+  "code_cleanliness": {
+    "git_sha": "847b607e72b55f1a4978fb6bccb82a23975cc925",
+    "dirty": true,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
+    "foreign_uncommitted_code": [
+      "genomeos/attribution/direction_link.py",
+      "scripts/direction_link_register.py",
+      "scripts/n1_register.py",
+      "tests/test_direction_link.py"
+    ],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+    "counting_path": [
+      "genomeos/__init__.py",
+      "genomeos/attribution/__init__.py",
+      "genomeos/attribution/bigwig.py",
+      "genomeos/attribution/budget.py",
+      "genomeos/attribution/compile.py",
+      "genomeos/attribution/constraint.py",
+      "genomeos/attribution/context_evidence.py",
+      "genomeos/attribution/crispri.py",
+      "genomeos/attribution/measured.py",
+      "genomeos/attribution/mpra.py",
+      "genomeos/attribution/targets.py",
+      "genomeos/attribution/variation.py",
+      "genomeos/attribution/vista.py",
+      "genomeos/certainty.py",
+      "genomeos/coords.py",
+      "genomeos/genome/__init__.py",
+      "genomeos/genome/anatomy.py",
+      "genomeos/genome/annotation.py",
+      "genomeos/genome/bgzf.py",
+      "genomeos/genome/domains.py",
+      "genomeos/genome/epigenome.py",
+      "genomeos/genome/fasta.py",
+      "genomeos/genome/fetch.py",
+      "genomeos/genome/genome.py",
+      "genomeos/genome/index.py",
+      "genomeos/genome/motifs.py",
+      "genomeos/genome/reader.py",
+      "genomeos/genome/regulation.py",
+      "genomeos/genome/regulatory.py",
+      "genomeos/genome/repeats.py",
+      "genomeos/genome/sequence.py",
+      "genomeos/genome/signals.py",
+      "genomeos/genome/unknown.py",
+      "genomeos/genome/variants.py",
+      "genomeos/ir/__init__.py",
+      "genomeos/ir/model.py",
+      "genomeos/knowledge/__init__.py",
+      "genomeos/knowledge/across.py",
+      "genomeos/knowledge/cells.py",
+      "genomeos/knowledge/go.py",
+      "genomeos/knowledge/homology.py",
+      "genomeos/knowledge/ligand_receptor.py",
+      "genomeos/knowledge/obo.py",
+      "genomeos/knowledge/profiling.py",
+      "genomeos/knowledge/reactome.py",
+      "genomeos/knowledge/satmut.py",
+      "genomeos/lang/__init__.py",
+      "genomeos/lang/grammar.py",
+      "genomeos/lang/located.py",
+      "genomeos/lang/parser.py",
+      "genomeos/lib/__init__.py",
+      "genomeos/lib/catalog.py",
+      "genomeos/lib/membership.py",
+      "genomeos/manifest.py",
+      "genomeos/predict/__init__.py",
+      "genomeos/predict/alphagenome_adapter.py",
+      "genomeos/predict/enhancer_target.py",
+      "genomeos/results.py",
+      "genomeos/runtime/__init__.py",
+      "genomeos/runtime/cell.py",
+      "genomeos/runtime/central_dogma.py",
+      "genomeos/runtime/grn.py",
+      "genomeos/runtime/located.py",
+      "genomeos/runtime/methylation.py",
+      "genomeos/runtime/uncertainty.py",
+      "genomeos/runtime/variant_effect.py",
+      "genomeos/version.py",
+      "scripts/context_evidence_baserate.py"
+    ],
+    "counting_path_count": 68,
+    "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+    "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+  },
+  "alphagenome_requests": 0,
+  "money": "none: every input was already on disk",
+  "seconds": 29.9,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE DNase-seq narrowPeak, GRCh38, released, 13 biosamples",
+        "version": "as reader v1 cached them under data/results/dnase_*_chr*.bed.gz"
+      },
+      {
+        "accession": "AlphaGenome output track metadata",
+        "version": "data/cache/entex/alphagenome_track_metadata_copy.csv"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": null
+      },
+      {
+        "path": "reader_v1_dnase_peak_sets",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr1.bed.gz",
+            "sha256": "dd5afa2aebd9c17254def8fd4a28c799cd96794e942aba9130a2e0d6bf05de55",
+            "bytes": 167369
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr10.bed.gz",
+            "sha256": "21d21ed2fc05042b74ef74aa1138d3b29ff55c253092fda83d99a1afc2654ec8",
+            "bytes": 84838
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr11.bed.gz",
+            "sha256": "0b66e5d72c346b2283c5520de1944c98fa341f495796a884c22acc2cd36af491",
+            "bytes": 89012
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr12.bed.gz",
+            "sha256": "abde371c16c17d3155425a25978809a71d6ba0af63e50e93c0ab583463fe1aff",
+            "bytes": 90268
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr13.bed.gz",
+            "sha256": "498d602d4d7d3b91205657d3d2ecd549350a6d09b18b0e40791b168fbae5990e",
+            "bytes": 41909
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr14.bed.gz",
+            "sha256": "ed09c6c20ac18266a8e3b5d17b765cbc8580cdfdc338727b7370580be2ba4f94",
+            "bytes": 56462
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr15.bed.gz",
+            "sha256": "b262c8db74568863cd0fbde2904300d0e357f6aca44ba49e14734507988dca35",
+            "bytes": 57278
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr16.bed.gz",
+            "sha256": "83b0100a8765e8b81ae14bfaa9d975311ec7ae9ec9aba705409d2d6f6c553703",
+            "bytes": 57686
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr17.bed.gz",
+            "sha256": "b160feaffacda88513bb2c87e5e9259f0442af7ed8877ea6d7b1e77d0f0d435e",
+            "bytes": 84096
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr18.bed.gz",
+            "sha256": "d5b4a4148a167aea77d1e1103b842dea41487dbd199b3835aa7d1512af8f4761",
+            "bytes": 35544
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr19.bed.gz",
+            "sha256": "af7eb0ea5141802d603213ff4d03dc2ae71f4203e715359d1d3db2e5aec40c07",
+            "bytes": 69193
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr2.bed.gz",
+            "sha256": "fde51d5abd51321fa0ca1adcfa19f73f86c154675dcfb089977a51a580e548c4",
+            "bytes": 140425
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr20.bed.gz",
+            "sha256": "2232c553a94881c081d0a63bf91ad78468db4f31f16057bac71b6bb05fc5c483",
+            "bytes": 48124
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr21.bed.gz",
+            "sha256": "fe5e2266d2e24ab581c43d7c74adb365022a7f4d230de6fe2671cb4c022a8e59",
+            "bytes": 22361
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr22.bed.gz",
+            "sha256": "7a2f465b45f6b0a35c16acca2239ba0a5519af090111a0c8b58c3ee74cfba848",
+            "bytes": 34948
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr3.bed.gz",
+            "sha256": "9cd8c9c55dfe42eb45b96c2f849f21cc8cf44b3845d4306376c594845eb2f597",
+            "bytes": 112916
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr4.bed.gz",
+            "sha256": "5ce4ce02745d6efad854cfcf5c4c0894f44c0ca78a2b6f165136327202d1c4ab",
+            "bytes": 80400
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr5.bed.gz",
+            "sha256": "237d58dfff127af65a7ca539421e3bf288e06526d1c06b0c26775c27cdb58a1e",
+            "bytes": 93028
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr6.bed.gz",
+            "sha256": "c70d7cdbf93506914c795717a5f06063387c931a6cd6ffffef9024a41c692393",
+            "bytes": 107745
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr7.bed.gz",
+            "sha256": "f324fb703fc297130e186a610fbfd13071e9d2e8f6ec969970d53ab857a2d44d",
+            "bytes": 85420
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr8.bed.gz",
+            "sha256": "6a624576236b576498b57b7567a4067aa951cce0ea0c73ba1153b044f28c90fc",
+            "bytes": 79747
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr9.bed.gz",
+            "sha256": "44f3f321c811adacb162e3df2f574afb40866a0309de072085b282c0ca52cc73",
+            "bytes": 75022
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chrX.bed.gz",
+            "sha256": "e2b17712ec4bd0a1c2208ef377e7492def23716ea8ae87de47186bae848b2d5c",
+            "bytes": 55645
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chrY.bed.gz",
+            "sha256": "9c2aa404705901a6372a87bc7b88da28bfa6634cc87d389c3cf9480d9428d097",
+            "bytes": 2893
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr1.bed.gz",
+            "sha256": "84f5b99ee0063f42c23f88ec72c7f303162cc5f1a2302b0a53efc43ad84cdec4",
+            "bytes": 64108
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr10.bed.gz",
+            "sha256": "bd183f7a171155332f67d013115f4b9ff9dd28448e3265dac5aab8a36e2e9608",
+            "bytes": 33344
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr11.bed.gz",
+            "sha256": "ca57b5804beea723b738b644ed86e8deb7a6a42ff38204b000db44db44cc153a",
+            "bytes": 33519
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr12.bed.gz",
+            "sha256": "406d88a2717abf7df4db0d10db8ec87b108e88ea7d9e067bb022a6773e8d41d1",
+            "bytes": 36095
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr13.bed.gz",
+            "sha256": "ae4a06e5f4177f75fe16f193111ed4a4cd06b8c51ea7af3fdf5424db6ebf3b3b",
+            "bytes": 17552
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr14.bed.gz",
+            "sha256": "dd9d9905c4b616b92a7c2b863d92e922b7033da72de564b4ecd0e23e0207e926",
+            "bytes": 23243
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr15.bed.gz",
+            "sha256": "f9fd4c36bbdabbc5d870483d1ae54d85140200881dd39eed9cbe499942fce8d5",
+            "bytes": 22852
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr16.bed.gz",
+            "sha256": "6916e04b3c3223d44c09615f374ac917a91c64d4a0162512e9277ebcf8ce8dc2",
+            "bytes": 23085
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr17.bed.gz",
+            "sha256": "862c5bec1650e01c908b529a0e40998fdce153fa607a6d5197eda43d785888d4",
+            "bytes": 29253
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr18.bed.gz",
+            "sha256": "174d1f5ac9b73541a8cfbc0951e4da9473de25f4823f86e228c94caac8219944",
+            "bytes": 15610
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr19.bed.gz",
+            "sha256": "21cee7216f39c76ca837ac2294626fc5cc3bddc4b7109aa229b03ab7845e972c",
+            "bytes": 24685
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr2.bed.gz",
+            "sha256": "e02c610a990f7a5de6cd08cd12c1f22658a59472593ca62ff42d32ec39aa0ec5",
+            "bytes": 54999
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr20.bed.gz",
+            "sha256": "6d16a0657eec49da61e4c61c57cec01670755f9ad1d61ab8a59a848cc31b5cac",
+            "bytes": 18219
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr21.bed.gz",
+            "sha256": "f383e15521805c90895b02ae5cbb5dd583d22c57028c098fe34b72ee57daf9dc",
+            "bytes": 7453
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr22.bed.gz",
+            "sha256": "8c4e9f66bcdab913b9a03922d887c605d41d61ae589c4dea421ec4bfe041b1ee",
+            "bytes": 13170
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr3.bed.gz",
+            "sha256": "24e0c0ac8d6e2cedaa797afbcb73a895e101ad3beafd74debe7c6258fd0a58ed",
+            "bytes": 46118
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr4.bed.gz",
+            "sha256": "b58f5b9469f759d40f28e4e01a36e4702d401ec29de85c9a0ee84d202ac03b06",
+            "bytes": 34163
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr5.bed.gz",
+            "sha256": "10e300a2dfb16609fd6c5b6f18164bb6d4f579aba020e6d44407d5548edf534f",
+            "bytes": 39353
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr6.bed.gz",
+            "sha256": "492dd3999eb056e28ebe95ccd0aa1195921e65ff732503cf665a52312f11f18f",
+            "bytes": 45031
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr7.bed.gz",
+            "sha256": "3eba046ce11694fd80b65d7398fc0035febf00bab1a9e4f6aa8f30760bb7fa8f",
+            "bytes": 35029
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr8.bed.gz",
+            "sha256": "cfaf67ffe58379232727cc777a745a69569dac64185992f9a0b37c563fe391f5",
+            "bytes": 31578
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr9.bed.gz",
+            "sha256": "ed25e7b3ecfeeec54aa7680eda8970c791f7dfbc8b9d07b760e49f7c8bece950",
+            "bytes": 27758
+          },
+          {
+            "path": "data/results/dnase_GM12878_chrX.bed.gz",
+            "sha256": "c0821517e89ad5aec48ed1a6f3e2dec17d7dd420648258decd94073255603e39",
+            "bytes": 21796
+          },
+          {
+            "path": "data/results/dnase_GM12878_chrY.bed.gz",
+            "sha256": "7a9f897719a620cc2c107566cf5a3ece493c1bc98f2a1569b0cb787254e67bea",
+            "bytes": 164
+          },
+          {
+            "path": "data/results/dnase_H1_chr1.bed.gz",
+            "sha256": "c92366549ea70cdec23d921fea40d9eefe029a24198ce11a11c3d67e99fb42a8",
+            "bytes": 176062
+          },
+          {
+            "path": "data/results/dnase_H1_chr10.bed.gz",
+            "sha256": "bc00a7cc792e4dd44ff7775e5b933f912e999edddcd4639471e1846c1cccf882",
+            "bytes": 105352
+          },
+          {
+            "path": "data/results/dnase_H1_chr11.bed.gz",
+            "sha256": "bad72094e3a96ff06f2d2e288d77bf36f03f92953f57e68017273f6a446e7d5d",
+            "bytes": 102727
+          },
+          {
+            "path": "data/results/dnase_H1_chr12.bed.gz",
+            "sha256": "fef4427a03ca9513e95ee81c318101334b789ba4958d013c57496c6ed8ab3ca6",
+            "bytes": 86841
+          },
+          {
+            "path": "data/results/dnase_H1_chr13.bed.gz",
+            "sha256": "3801d3b93798b57fbdb6e639fd932fb60661f37c338aa3326ab41c305ccc5900",
+            "bytes": 50697
+          },
+          {
+            "path": "data/results/dnase_H1_chr14.bed.gz",
+            "sha256": "975669b4bf25b4d861dd9572cba1d9e655cb2fe42be96433aa729269dcce0168",
+            "bytes": 64671
+          },
+          {
+            "path": "data/results/dnase_H1_chr15.bed.gz",
+            "sha256": "6e2ae7ef4fb6cecbacda3f1840b66688ee8c941b3739d7aea6f71f1f4c4050f6",
+            "bytes": 72586
+          },
+          {
+            "path": "data/results/dnase_H1_chr16.bed.gz",
+            "sha256": "557d579813052f818072f8cb43b33d973ac58637700ae159de0804c51ee99e79",
+            "bytes": 66958
+          },
+          {
+            "path": "data/results/dnase_H1_chr17.bed.gz",
+            "sha256": "cd3b63e101010220191e78129c6e44e2a07e66b6447a3d4d6e74defa5eadc0f7",
+            "bytes": 87137
+          },
+          {
+            "path": "data/results/dnase_H1_chr18.bed.gz",
+            "sha256": "9aa68e3f3341c98333a4c9d4a65c906e6d115c25542e351fe0a894dbd9b1a14f",
+            "bytes": 44215
+          },
+          {
+            "path": "data/results/dnase_H1_chr19.bed.gz",
+            "sha256": "afafb20b819084647156213b4f7d914e2f42e3a94401bb384739c61cf44c9fcd",
+            "bytes": 72777
+          },
+          {
+            "path": "data/results/dnase_H1_chr2.bed.gz",
+            "sha256": "4820c87755704caf5097faf664fd39a78f617cb437443bce20ba2774b1762a1b",
+            "bytes": 166360
+          },
+          {
+            "path": "data/results/dnase_H1_chr20.bed.gz",
+            "sha256": "bfbe8fc4b2b6d3a528d606cadabce6c556abed62439e28c3020cbcf58dd021ff",
+            "bytes": 58208
+          },
+          {
+            "path": "data/results/dnase_H1_chr21.bed.gz",
+            "sha256": "bcb757ade8367a7c91a4f3044ba5406e5a2aa6e8b5fe9af0146dcb4e2f1cb6d1",
+            "bytes": 23407
+          },
+          {
+            "path": "data/results/dnase_H1_chr22.bed.gz",
+            "sha256": "59a5b417d8c2a4fa6bf1714347053ba1aa22b3117a2e98a69352885f83ef53c2",
+            "bytes": 45366
+          },
+          {
+            "path": "data/results/dnase_H1_chr3.bed.gz",
+            "sha256": "f2578f63938f1cb26f8243e3ab4fe6bd453d3f5cc4e6d78920741f25df0c7c49",
+            "bytes": 116639
+          },
+          {
+            "path": "data/results/dnase_H1_chr4.bed.gz",
+            "sha256": "2ab9e70374091a9e2d285feec21cddacf6ab675cd120d5b387300cb19da1ee18",
+            "bytes": 83825
+          },
+          {
+            "path": "data/results/dnase_H1_chr5.bed.gz",
+            "sha256": "70ae7de6f8edf29fd7dd77bd259a618ff2ce696838844c3b212da3d155acc69f",
+            "bytes": 100978
+          },
+          {
+            "path": "data/results/dnase_H1_chr6.bed.gz",
+            "sha256": "274f6fc522002215e0628b61ffcc423d12c19cf5b69786385cd0ed146c63f9c2",
+            "bytes": 105546
+          },
+          {
+            "path": "data/results/dnase_H1_chr7.bed.gz",
+            "sha256": "d61241a5ab9374de8e5928bc74eb66bec922a2ef72267baef24c4d3283b0cc54",
+            "bytes": 108628
+          },
+          {
+            "path": "data/results/dnase_H1_chr8.bed.gz",
+            "sha256": "5a07eea18a4961f0e58185979bb408768058e7ef86450f88d40b2289878a4201",
+            "bytes": 85865
+          },
+          {
+            "path": "data/results/dnase_H1_chr9.bed.gz",
+            "sha256": "d46e9c35eff983599e7a4df519b06563798221211f171e3cf9c210459247b9c0",
+            "bytes": 85569
+          },
+          {
+            "path": "data/results/dnase_H1_chrX.bed.gz",
+            "sha256": "daabe516969763eb6d81839349a16d12aec14205baca435ebe38e158feabe5cd",
+            "bytes": 48517
+          },
+          {
+            "path": "data/results/dnase_H1_chrY.bed.gz",
+            "sha256": "01b7fe5690c017b9f2974a9fbe7e4484040dd1417ca9c96c2bb5217fb11dd95f",
+            "bytes": 2711
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr1.bed.gz",
+            "sha256": "1e1c421d846b4822864876353f9c47196016e656ca66145e57c44c59389ceaf8",
+            "bytes": 142026
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr10.bed.gz",
+            "sha256": "ba9bdd09804fd9af998a3fdcb9b2cc11700e55c66d11997bc1365d703659bebc",
+            "bytes": 73813
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr11.bed.gz",
+            "sha256": "995a3b611ba122d0bf07c20368e8a0cea05cdf3c8b55d084693997cd09f04bd4",
+            "bytes": 74285
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr12.bed.gz",
+            "sha256": "df7a2d04d6582777fecac5b72474e35ee8c1beeea5d8c4ee4f63c9984136518f",
+            "bytes": 75044
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr13.bed.gz",
+            "sha256": "1a62287ce844550d40a8614b2484f65f2f5bcbd885c9a1f709104be9d7bf8bfd",
+            "bytes": 40317
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr14.bed.gz",
+            "sha256": "03329343f77a8b23ac360e26312554f96ab733f36eb168599812e3487af5d056",
+            "bytes": 54294
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr15.bed.gz",
+            "sha256": "60b61422ab7ff07ffec03d26904c0e60276a0e3c414c4c6257b91927ad3cffda",
+            "bytes": 48569
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr16.bed.gz",
+            "sha256": "ff32c08a5047749215ebb28dbf9eddf64e28557f9dfdd13ba6990f1c6b09f301",
+            "bytes": 59194
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr17.bed.gz",
+            "sha256": "ded92764d78702042d9112389c6a0e51ed50cd3fafe488078f544721b1945606",
+            "bytes": 72185
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr18.bed.gz",
+            "sha256": "17ccb9f4ceca58a199a9d55506420f8a76ed410c90618648551a2faaf5bfe585",
+            "bytes": 34666
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr19.bed.gz",
+            "sha256": "5a8e4ca862f182a3e59996eb2a05b1424ff911bf95e083eac67e29c01298e817",
+            "bytes": 53069
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr2.bed.gz",
+            "sha256": "536474fe1b88ebe05d63dc303a6e189042940e683fb0c55b51936f53c1025f77",
+            "bytes": 135980
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr20.bed.gz",
+            "sha256": "74a92a5bb339b8402092b078940bb2e46f52131403a69361527921241f2f9963",
+            "bytes": 49667
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr21.bed.gz",
+            "sha256": "413bb8f9ee36c88fac027beb2538b12cd27f5cdff9e60b1ced83c4df0b52c9fd",
+            "bytes": 16542
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr22.bed.gz",
+            "sha256": "8a9aaea0f008e02e77cebc53ce85330a665e26dbb90dd25f1ed2ae70543a4184",
+            "bytes": 30121
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr3.bed.gz",
+            "sha256": "f9db9dca55e86af992a2fafce64ddd53124173a47456cc38270f70ad3eda3663",
+            "bytes": 100103
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr4.bed.gz",
+            "sha256": "1aed61f38af2a0880448643467572023999c8584d32bd147a9c7c936c9183eef",
+            "bytes": 74094
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr5.bed.gz",
+            "sha256": "783b461c300488e776e2f20b80e0b26295856a518307deab1c0047fcebeb3dd4",
+            "bytes": 81467
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr6.bed.gz",
+            "sha256": "93f1203b7bd5a5ad8da4a59b483e7a033714640a32cbab4e62e67e855c785815",
+            "bytes": 99833
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr7.bed.gz",
+            "sha256": "6201dc9617c9b19a8fc0ad4eb09137129078e2e1dc5e12a88cd2c55e362a6974",
+            "bytes": 78238
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr8.bed.gz",
+            "sha256": "ae8f68f8abc39b0b7a36a454a6ba44d8fe3e9581084fd29ecbbc7c8d4d9a4113",
+            "bytes": 67548
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr9.bed.gz",
+            "sha256": "1308a3e7b4d729489038ae8c23fcc7acd16dd74873702bdcaa737050b4f157dc",
+            "bytes": 64066
+          },
+          {
+            "path": "data/results/dnase_HepG2_chrX.bed.gz",
+            "sha256": "968112c32e0276c565d09d522fe1b5fff71f4ac1a4c8b261ac994b7faddc3a00",
+            "bytes": 46473
+          },
+          {
+            "path": "data/results/dnase_HepG2_chrY.bed.gz",
+            "sha256": "636c959300b3582e9f5422f8dd6734bc9bfcfb5f2d24d9fa29711b975a2d18fc",
+            "bytes": 2668
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr1.bed.gz",
+            "sha256": "8776efdda87cff582cbfd5adda68589c2c200ce462e713a21bc8d090237f6e46",
+            "bytes": 250822
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr10.bed.gz",
+            "sha256": "fea41eafa97094852273eca7701d6db28ccb216123484093ab820529cf7107d3",
+            "bytes": 127949
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr11.bed.gz",
+            "sha256": "83302079f386f7dc647dcf2811c02913df1c654107d39bf01d4b929edfaba097",
+            "bytes": 135774
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr12.bed.gz",
+            "sha256": "447c983b83b3943e60334ab8dc2950f7a7f82e54a99e8aa51340de012ca23acb",
+            "bytes": 133033
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr13.bed.gz",
+            "sha256": "435edf8207f1bf4e73aa232f33d4f02d070c45f58b61783d4b2ee261cfdb0525",
+            "bytes": 80637
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr14.bed.gz",
+            "sha256": "b471d7ac2496e247aa20f9f852da30fefde9131719b35750d17635d91364b41a",
+            "bytes": 85355
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr15.bed.gz",
+            "sha256": "dd4174d30cdfb8992d981a7791cc5a896f58ec8e39cd887841091fdf98428b24",
+            "bytes": 89504
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr16.bed.gz",
+            "sha256": "f23f7ea9bc0158cc4701b1bcfb73c4c70972ee0635748c2e17ac8b7b85ad0b47",
+            "bytes": 73352
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr17.bed.gz",
+            "sha256": "2f1138e23170e4d05d5dd19a53eaa0c23c75504c94cd1790f3fd4b7fd4ee8571",
+            "bytes": 101535
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr18.bed.gz",
+            "sha256": "0718121fd8dc2c33cec5ed8bc29d7f57c1f8b2309e38029cf0ae0d2ce99ea848",
+            "bytes": 64100
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr19.bed.gz",
+            "sha256": "c28a326297d1f01dad0e50b10f2541d1c8bc77acd35cab4c477e0195139a73a1",
+            "bytes": 63303
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr2.bed.gz",
+            "sha256": "8bb766a88c72549efed0e9f486195df015fe5a4440d5990b292d28768717287d",
+            "bytes": 237739
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr20.bed.gz",
+            "sha256": "c5d6665898023675c128fe13dea476ccffccc4c4018cbae0f0af7b84d9028f18",
+            "bytes": 61771
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr21.bed.gz",
+            "sha256": "1358f5f0e7f1429f8e65641fae84b4e30459f0be0b560509d929387d16793e37",
+            "bytes": 31329
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr22.bed.gz",
+            "sha256": "5f89860da9fe473e1ece2143211941a3751738eacf5d760cdfc40ae07e753792",
+            "bytes": 41749
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr3.bed.gz",
+            "sha256": "9888829f777e6bc80ab5ab8d630d124bb122c850e6da027dc7403b88c00d59bd",
+            "bytes": 185694
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr4.bed.gz",
+            "sha256": "34875b79cb31bb5215a8cbb2a080662366536eef4395b610528dabeae2c6171a",
+            "bytes": 154211
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr5.bed.gz",
+            "sha256": "a3f8dfb1648c3350633e61f25eff2abf75e8edb43e9cb9d9cc35cea348db90da",
+            "bytes": 162178
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr6.bed.gz",
+            "sha256": "abe715a16ddad199a7533927ee82fb97b288f9f767a16ddb97470f01bd4d7fa4",
+            "bytes": 172712
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr7.bed.gz",
+            "sha256": "484546dc3b6174a846ccd92d56004750bf97d8c807d939fac2ac1669a7451f77",
+            "bytes": 137543
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr8.bed.gz",
+            "sha256": "35879822c630820a866f8ced82e826f2ef74c11352391d9b90e28d926b08727a",
+            "bytes": 130768
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr9.bed.gz",
+            "sha256": "578e7570f83d1867fcaf5320bbba07bc3990b31b18962b461233d625a6996a10",
+            "bytes": 113347
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chrX.bed.gz",
+            "sha256": "4bde29f68207db7e2715be559cf0a385edf1688b855d310421430e683ca6da9f",
+            "bytes": 75547
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chrY.bed.gz",
+            "sha256": "91cd4a445390ea5bda3c1d3df6683eaa3dc5a8197804f8ebb339a9f432f3c0c7",
+            "bytes": 974
+          },
+          {
+            "path": "data/results/dnase_K562_chr1.bed.gz",
+            "sha256": "36a647d32f677bc295184062dcbe858127b476d08df2dcad7703ee73bfd521e7",
+            "bytes": 519927
+          },
+          {
+            "path": "data/results/dnase_K562_chr10.bed.gz",
+            "sha256": "f2d78dd195cc760b8fd7cfd02ef882ab50bfa2c55dd9bfb9e5a114d2f96a5bc8",
+            "bytes": 183876
+          },
+          {
+            "path": "data/results/dnase_K562_chr11.bed.gz",
+            "sha256": "92ec88e60cb7652484386dfae145b0fd18adb8b681c5421cc17d35fc3fa9df79",
+            "bytes": 213547
+          },
+          {
+            "path": "data/results/dnase_K562_chr12.bed.gz",
+            "sha256": "a0e9ab4c31f966d7d4b886066c76ce69ccd043b98a708c781b89fed5193aa23b",
+            "bytes": 214752
+          },
+          {
+            "path": "data/results/dnase_K562_chr13.bed.gz",
+            "sha256": "cb24bcfc636948ba6e5f8fae46a3e11a96a5e5560f4da7cadad86a5f08877267",
+            "bytes": 55981
+          },
+          {
+            "path": "data/results/dnase_K562_chr14.bed.gz",
+            "sha256": "84be39c92693d37da0c1ddeed847dbdc62af182ccd2ba1ef8fbd43f7266edf5c",
+            "bytes": 97417
+          },
+          {
+            "path": "data/results/dnase_K562_chr15.bed.gz",
+            "sha256": "20ebf12eb0614dfa73dd5b6da884f8cf20d03d3e77b17961448fdc5644292ad9",
+            "bytes": 136503
+          },
+          {
+            "path": "data/results/dnase_K562_chr16.bed.gz",
+            "sha256": "2cee644d38b168917f9cff83ef73b28644bfedaf28ddb7fa6f8ee148fda956ad",
+            "bytes": 196308
+          },
+          {
+            "path": "data/results/dnase_K562_chr17.bed.gz",
+            "sha256": "5157662c96a5cbc820601a7fbc8f528acdf4ae9225b8c081459c3a8f728f8c40",
+            "bytes": 250480
+          },
+          {
+            "path": "data/results/dnase_K562_chr18.bed.gz",
+            "sha256": "7f0ebaed5b70b26580a551902417627dde97d4206370e1b29dca0d0fdf1f7bd1",
+            "bytes": 75474
+          },
+          {
+            "path": "data/results/dnase_K562_chr19.bed.gz",
+            "sha256": "c75ee4b48b30c173653cfc4cd0ab6b300624ff07b2dacc538d27dcf077859b4d",
+            "bytes": 275775
+          },
+          {
+            "path": "data/results/dnase_K562_chr2.bed.gz",
+            "sha256": "3d0508f563407e887639a559fad5b9117c7d2bd34163be9f3c2fbdf2ac710da3",
+            "bytes": 285479
+          },
+          {
+            "path": "data/results/dnase_K562_chr20.bed.gz",
+            "sha256": "d4a575d62f97d1250674dc77278dc864f7dc45eb3ec46986abc47f212433296c",
+            "bytes": 118189
+          },
+          {
+            "path": "data/results/dnase_K562_chr21.bed.gz",
+            "sha256": "51b47ea1224b57628a625b07491c6a7d8662049e1b37fa7ff6e4cbea38edf3fb",
+            "bytes": 44572
+          },
+          {
+            "path": "data/results/dnase_K562_chr22.bed.gz",
+            "sha256": "7b7359f470a3716c91160685da9d0c7d7efd7a47552616327f2f2e31be0b6fcd",
+            "bytes": 127604
+          },
+          {
+            "path": "data/results/dnase_K562_chr3.bed.gz",
+            "sha256": "3a6ec5d7d5a7de5904821e25d5bd90fb0a0ffc8aa923485fdecad0d19650c641",
+            "bytes": 236865
+          },
+          {
+            "path": "data/results/dnase_K562_chr4.bed.gz",
+            "sha256": "407e3684b834b16fc4f0898c4cb131e0bc946c07db2f49588286db03782f48f5",
+            "bytes": 160576
+          },
+          {
+            "path": "data/results/dnase_K562_chr5.bed.gz",
+            "sha256": "56700214d2573316ec87a3364d1aaa4fbb72997ab6f4d4a2f9c2cfb18b45b384",
+            "bytes": 202265
+          },
+          {
+            "path": "data/results/dnase_K562_chr6.bed.gz",
+            "sha256": "805997e083f78d5422ccb2a153333d5c02a13e09a8f724e56345be2661c90d6f",
+            "bytes": 268936
+          },
+          {
+            "path": "data/results/dnase_K562_chr7.bed.gz",
+            "sha256": "925c1e1f44e78135756e739c2df1f2e0d382c35dde9e3d9f0e8a95e9f2b3ec7d",
+            "bytes": 269752
+          },
+          {
+            "path": "data/results/dnase_K562_chr8.bed.gz",
+            "sha256": "2a25e954638b423455460e9940225f1ae1777b78180c64469b39f108f268c960",
+            "bytes": 169749
+          },
+          {
+            "path": "data/results/dnase_K562_chr9.bed.gz",
+            "sha256": "0ec07651a6b834b207630107a52f579a1d0a81ca68925b158998ba90b9815a67",
+            "bytes": 164570
+          },
+          {
+            "path": "data/results/dnase_K562_chrX.bed.gz",
+            "sha256": "31d1cadb6cf2c7724e9d3deb2ad2c5edc4fe1ac1d3077b928b436ee534db7af5",
+            "bytes": 101126
+          },
+          {
+            "path": "data/results/dnase_K562_chrY.bed.gz",
+            "sha256": "fbf8ff34e1eeecd0c8bb4624d33e097f152a21ab37be28ac828f359cc5ae3d10",
+            "bytes": 1821
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr1.bed.gz",
+            "sha256": "5810ce1ffd7ef41fa7ec3d560d89a076324b972194eb503b6d146d94aefc03d4",
+            "bytes": 176045
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr10.bed.gz",
+            "sha256": "28d4dc5b94ee207ad82206c76009fc28758b8a26bafea0a077016d21b2874e7a",
+            "bytes": 98748
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr11.bed.gz",
+            "sha256": "398ad8611b494b5dc6c15a54be0d0c364a1e0402de0f657d3994c30dba2f9172",
+            "bytes": 109616
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr12.bed.gz",
+            "sha256": "c70787db347f856f61673f207d19453d0dda3092d2340fb4a9e99c90d235bbda",
+            "bytes": 90152
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr13.bed.gz",
+            "sha256": "7ba43981ecf211387cc952b0bc1a852da1de0f447c7e3d198ad38f6abca47ac3",
+            "bytes": 50000
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr14.bed.gz",
+            "sha256": "209890722d93099ac623f598bbe6c802ea0cedf3b97249d92056c013508368af",
+            "bytes": 61996
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr15.bed.gz",
+            "sha256": "f5de687ab0c37f7c54c22d030f851859faad5ff37c6b65f7b6b59ec03a70c6d8",
+            "bytes": 63265
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr16.bed.gz",
+            "sha256": "957e2431e05486cea1194142cbc002dad1fc3ef4882617cb21a8201a7d8a2eec",
+            "bytes": 71515
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr17.bed.gz",
+            "sha256": "00670c8e792b3a7810b2dbf80f19c426edfb03aad514fad7baef21faf6af0ccf",
+            "bytes": 105382
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr18.bed.gz",
+            "sha256": "f00c5406bd610702b1551fe3ea6914b663eb91dad522a485cb25c0dfcd995496",
+            "bytes": 40897
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr19.bed.gz",
+            "sha256": "844e70c077b9a7bb1aad8443cb136e7a8be8e94f398c719a5c186546c824be7e",
+            "bytes": 90049
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr2.bed.gz",
+            "sha256": "2007292072af5f6d2c8ba1b0612a9881ca4faf08ac5902fabc5f04814695e5fb",
+            "bytes": 164561
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr20.bed.gz",
+            "sha256": "6c79556b80e0d400ebb5d97a76dc04496274537fa35be55ca2ae53dd6e5ff40d",
+            "bytes": 55532
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr21.bed.gz",
+            "sha256": "b4ad8774d727769c7db3bb522a6947e0e2d6b4bd907d3e7c479a93943a4f45cd",
+            "bytes": 22747
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr22.bed.gz",
+            "sha256": "eab0e1c59248e85fd3c488e2d07b5fb79a708e6276a3e1b5ea81712c4d2f7fbf",
+            "bytes": 45328
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr3.bed.gz",
+            "sha256": "90fdbd0f1ab86251102ba9c3be7ff71ecc3ff2cfd21437e45bb1c0005505fdcf",
+            "bytes": 117660
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr4.bed.gz",
+            "sha256": "de1690523c7a11f9c103bfe62c01c7ab2213e6f4922918ca7e35bab0751a51ff",
+            "bytes": 90261
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr5.bed.gz",
+            "sha256": "3e3d51e953e42729082ec5e6e887537f45cc6e549c15088136f0ec70c4df1f59",
+            "bytes": 103566
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr6.bed.gz",
+            "sha256": "cbc52a51d4b53a23b0451c5860640b50d3f0ee8783ecc631cd46d37c8c04497e",
+            "bytes": 99675
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr7.bed.gz",
+            "sha256": "c0980bf88c942c717e95a9d9e2aead8a7125e35e62310708f89a5222ee116a59",
+            "bytes": 126087
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr8.bed.gz",
+            "sha256": "1111aef3d32b855850a49524b65900353fb0c7e7111fb7873dea5f9d1ed0528d",
+            "bytes": 86123
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr9.bed.gz",
+            "sha256": "d13a380f50d7654ccc4cc358954e3ac571e1ffaa4ee744dbf3f66c9ab0e497be",
+            "bytes": 88309
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chrX.bed.gz",
+            "sha256": "dbdeaf85cb137a5d77700d686e3a99dc424799717d2685a17e7688e75cbdcb37",
+            "bytes": 53843
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chrY.bed.gz",
+            "sha256": "a781cbe9a9b5013254272478cbb351bf0ced6adc50dd26fec15d8df206f3e0b7",
+            "bytes": 350
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr1.bed.gz",
+            "sha256": "63b053f39243e6b75f4f6fbf1f5d3f3f579dac5d19f929482e0e9eecc60d2b4f",
+            "bytes": 227404
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr10.bed.gz",
+            "sha256": "f972b28ac9d0cd699fed84bbbfbfd7604e70579ef7f883a76a2d272aeed80229",
+            "bytes": 122330
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr11.bed.gz",
+            "sha256": "697020b45fd192344da3b0f1bf9fc4e7f9e82581bcd8ff4ec910f9ed1d8666f0",
+            "bytes": 124146
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr12.bed.gz",
+            "sha256": "b3878201fc98fa4ddf415f56b67fd430e4ebcf8cd64fac37653b1e267f87c0e5",
+            "bytes": 126854
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr13.bed.gz",
+            "sha256": "63f8566de6bff90488ed6dc73aec0e48521bff65a854928cdd7e052a659bff76",
+            "bytes": 80143
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr14.bed.gz",
+            "sha256": "558642924e97d7420d1c12bca19b34ac3e8ea90c542d80ec24316a1e6a3fe0b6",
+            "bytes": 79219
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr15.bed.gz",
+            "sha256": "9faeb488c08fcab645a8611e17a5f91163feba617a34459ffebad2877d137a03",
+            "bytes": 79547
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr16.bed.gz",
+            "sha256": "9dfda6f4347fcb0b436dc50011d81ae53afa8cf9b343f1dfa8d7f3cd0be4155c",
+            "bytes": 69048
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr17.bed.gz",
+            "sha256": "6a6b9206cf0c38cd344b33d7454b3a9f72ff7f12d63ef97eed9f6e74c81e1c6c",
+            "bytes": 87155
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr18.bed.gz",
+            "sha256": "46909d1b5d5a18557bfc07da375c2cce4241ceea110d216ddb73d88c7ca6c73c",
+            "bytes": 64663
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr19.bed.gz",
+            "sha256": "09896f6c64a54922448ef906d0a9e00f1a8d129bd29d6a8a2aee453923842505",
+            "bytes": 54126
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr2.bed.gz",
+            "sha256": "faef9c1753f3d542f462e5da229b3636add4f42d8558d2fe54faa0a7506bfacb",
+            "bytes": 224486
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr20.bed.gz",
+            "sha256": "6b814348669dcfeb05d12b7b158630739e6e30b3702aa5f6ded6a5aef186c5f4",
+            "bytes": 56216
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr21.bed.gz",
+            "sha256": "4172bdf12c916ddc59c012aff81dcd6dba61cc81d1cd8efa0613f8683000d387",
+            "bytes": 29772
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr22.bed.gz",
+            "sha256": "4db994626d4d0a4c193a4baa5566bea94647e513c2d15ffae7f259ea68ceb2fe",
+            "bytes": 36543
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr3.bed.gz",
+            "sha256": "4abd8b2037278b6215b3e5576989f6e0e0d58d044b15aff3076c38048ffe4b0c",
+            "bytes": 184356
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr4.bed.gz",
+            "sha256": "7c52c406f3906d7a54414342af4203aa302e1ac15f28b49bca342374e14ed468",
+            "bytes": 156349
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr5.bed.gz",
+            "sha256": "688c76cdd6a01bc38a7f871bc06116be9307bd2d1b21d6fe9e7604d3e6b4c6c7",
+            "bytes": 161094
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr6.bed.gz",
+            "sha256": "1177bc85413b21296e94a56b2162ec50d3b1f6187bb7148dbad4c82f823bb6f9",
+            "bytes": 160722
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr7.bed.gz",
+            "sha256": "1ce83b970e44e30779ee231f5b3633a03d771231fc564347ce8165b55038819f",
+            "bytes": 133654
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr8.bed.gz",
+            "sha256": "9fce479ad5d23d78b0e2296848869806d12d101aa3de315af991cc366b649132",
+            "bytes": 127696
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr9.bed.gz",
+            "sha256": "a162a514cbabda1ecb3be7b548415809fa9fff7a77bc894b30fa429cc978c1e2",
+            "bytes": 106444
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chrX.bed.gz",
+            "sha256": "a5067a4d151fae1f16c9355c928345fb3dda608cc0cc31926c2ba1dbb45d9950",
+            "bytes": 76580
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chrY.bed.gz",
+            "sha256": "363d97ec02cdf2e658766d495855e2ecdfcb00cb027fe68c31e6f125a9f4f3c7",
+            "bytes": 677
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr1.bed.gz",
+            "sha256": "4eba1d0fc739618e990177e421f34d56f4509841f9814230b25f2784ca53dfb4",
+            "bytes": 262427
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr10.bed.gz",
+            "sha256": "33db02095980ec65c22cbd1f3b787d78a4ce41d1f9139839c3076722963ac383",
+            "bytes": 139609
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr11.bed.gz",
+            "sha256": "5e83ffedc0de0e4f9a93cbb02824a0e4f53a0704ce04d78c954232b0d9b2296a",
+            "bytes": 142716
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr12.bed.gz",
+            "sha256": "9c961fea8bfbbd66b24cf22233d9d0a9bb6c3b0b5688559597d3c7137a0bd231",
+            "bytes": 140677
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr13.bed.gz",
+            "sha256": "e1744c22902e24066db0d4b2dc72e03282a96aa7da1f20d673ffe16721e05b3a",
+            "bytes": 85335
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr14.bed.gz",
+            "sha256": "89ba5b1751a02dc8755ebb78679e4d1d18f342c788f61bf5255a5bd299be657b",
+            "bytes": 89089
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr15.bed.gz",
+            "sha256": "e6da2a56df3939c16439cf0ab3328d0d15a7dc52ab565679c413954f20db0e3c",
+            "bytes": 92358
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr16.bed.gz",
+            "sha256": "f7a7ec081e3815cb986cf3dfb07b02db2988cd119a71321893eea19c5f7afc44",
+            "bytes": 77583
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr17.bed.gz",
+            "sha256": "6fb87cecdec75d5886f75aad8f18f4c90a6222d14a5bae98360abad75cf485d3",
+            "bytes": 109251
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr18.bed.gz",
+            "sha256": "ff0953bc13614d747a6bd697ef43e4aa99ba710542cdeba70b5858a59d23b5a1",
+            "bytes": 71259
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr19.bed.gz",
+            "sha256": "e501a4715415c7e06f92442a42b746aa4690734158d3ebeb8f56393d7113df3c",
+            "bytes": 75029
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr2.bed.gz",
+            "sha256": "2ae905704e26443be215846bce963fc777011e6e4455858cb47b64ceb2196800",
+            "bytes": 238944
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr20.bed.gz",
+            "sha256": "896f9981cb03a858b2e1ca099faa704856a04c2c2086a50b61b7222afb4b46a2",
+            "bytes": 70433
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr21.bed.gz",
+            "sha256": "bee45380afec587096b0194933df22a3dce362a8032d05ae29103fdecc76a54f",
+            "bytes": 32669
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr22.bed.gz",
+            "sha256": "d6bd5af55102c944912804ba15e1433b0078bf7aca298ddb8155bda90c15a3b2",
+            "bytes": 44785
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr3.bed.gz",
+            "sha256": "4514b98c347aab4f2a4e01f45bb526b49360577c621dae205275b4ac8125d17b",
+            "bytes": 194169
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr4.bed.gz",
+            "sha256": "9e4af4cc5ea43add9805296f2a7bd16625b7ad0900c10d56b13d541d876c231b",
+            "bytes": 160183
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr5.bed.gz",
+            "sha256": "2f2b6782168689617670eb3303575d9b1547081c2c386a3fdbe0fa6e298735cf",
+            "bytes": 168818
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr6.bed.gz",
+            "sha256": "f180cb8acc3719d2c7cb214f3f125db24ea8401fca8aefb5f22e85d08b33583d",
+            "bytes": 180199
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr7.bed.gz",
+            "sha256": "17e0a51d619c16edc14cf5dce63707f0a1b3518a8eeda1e09698f49e2cce13dc",
+            "bytes": 149299
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr8.bed.gz",
+            "sha256": "c8e315185b59252feff7c38b79599d1206027e3f91731f1533f36f7806954578",
+            "bytes": 137744
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr9.bed.gz",
+            "sha256": "69ee4537ec73fb54f4a458d37b767892f5e80079a868a63447c0aeecbcd58d1c",
+            "bytes": 124672
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chrX.bed.gz",
+            "sha256": "71107228855e9f22ec89342809cbf956ac00d7e148d088ae7b461f70d2045062",
+            "bytes": 89106
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chrY.bed.gz",
+            "sha256": "daae03ef40edaade7641d124f4c1c9ac380fc9cae41f566597b9c6113ec9ba40",
+            "bytes": 4061
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr1.bed.gz",
+            "sha256": "f1ea30d5248241cffc2f41a9a41a7b2a60f4de30c19d7cd4693df63aa8453454",
+            "bytes": 210694
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr10.bed.gz",
+            "sha256": "97683c8022919359fc11be0182b3fd3f81de7a38abe76c0c6fed92fa64910aba",
+            "bytes": 108949
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr11.bed.gz",
+            "sha256": "a213f8bf049cb765396caf1d432743b54d3bec0df121383ebfbefb0ff3efab6b",
+            "bytes": 120240
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr12.bed.gz",
+            "sha256": "11de8021cccf1f0fbb87fd429624d9df4560616c4d120264057b8f508e4fee58",
+            "bytes": 112428
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr13.bed.gz",
+            "sha256": "55503c236c370ff58c5d84640974be46c604a83b706805a9aaac39ff641cc865",
+            "bytes": 62036
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr14.bed.gz",
+            "sha256": "0f11b8b44d42d25d16da52ad22baed3650494dd4bf2edee3e0ccadd3d055c7d1",
+            "bytes": 76062
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr15.bed.gz",
+            "sha256": "c8fd623fc25ea4e6fa08f64c75353cfb0beb00e91e7a855709ce0ea1c31c0892",
+            "bytes": 73471
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr16.bed.gz",
+            "sha256": "3849c2a42313e6e048741864550d7da12564f78eadf43e2b1b0e2a43a99b3e3a",
+            "bytes": 77119
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr17.bed.gz",
+            "sha256": "0c4d8d5c73ad26694808643723597e0a87f75fbbbf5c61a560366df7cafbcdd0",
+            "bytes": 99618
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr18.bed.gz",
+            "sha256": "a6478311b483f3e52145c8b7444bea95e56b7c8735d9ca1d46ce240292319b62",
+            "bytes": 53604
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr19.bed.gz",
+            "sha256": "4e3b0ee0fa2527a4db260f3bfd5ecd039cbb5b186df32342082315f86c1fbf86",
+            "bytes": 76723
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr2.bed.gz",
+            "sha256": "8d6f30190e0271200a6723d5844b7299b8004a5299a69aa3e4f0b6f7b14aaed3",
+            "bytes": 188816
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr20.bed.gz",
+            "sha256": "9ec6336675622283641b49ead1a2f8149bc690af786e164f10b7021ef95af2af",
+            "bytes": 63319
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr21.bed.gz",
+            "sha256": "582fa92fbe00e0d7b2dafc9e424ca66158879b693036aaaea12f026a9d0b5e50",
+            "bytes": 27804
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr22.bed.gz",
+            "sha256": "9ba8aafd8fca427624d7ceef6709247a4e2040b1c96856baa53729de1f49cc9f",
+            "bytes": 47515
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr3.bed.gz",
+            "sha256": "305158a2ec1d29a3635ee71e4db2459db63f74b7e2c9da916b02bf9cb0c207b3",
+            "bytes": 151313
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr4.bed.gz",
+            "sha256": "804c394a45d6708467360feb67a22b2ea5a0e0cdf3d025e9e035158589607c1b",
+            "bytes": 122763
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr5.bed.gz",
+            "sha256": "70cc7f53d6f0aabefedbb6b213df73e2e5b5d1205d49befbf6b5b2d3d6a08797",
+            "bytes": 132963
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr6.bed.gz",
+            "sha256": "0d137aae3bfa6f7642411b76db2dd9d13493f6521801984fae6199da758f6bcf",
+            "bytes": 135331
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr7.bed.gz",
+            "sha256": "07a21b870b85d800b43982fe08f866d859c04b3cf854f29d43c200194d6a9dff",
+            "bytes": 117110
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr8.bed.gz",
+            "sha256": "be6afc999a7015d5adcddd6c47258e133722f9cbb81e9daa979583bc47ebc358",
+            "bytes": 110028
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chr9.bed.gz",
+            "sha256": "26ef024c89125a6ac286382a13028134fb0b3eb9166ee0e6c6ca30383fdb4030",
+            "bytes": 103360
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chrX.bed.gz",
+            "sha256": "7f61bad4e1fb62f97239ebb3f8fad471e629780293290187b2ed93df1238566f",
+            "bytes": 73476
+          },
+          {
+            "path": "data/results/dnase_hepatocyte_chrY.bed.gz",
+            "sha256": "a69f76cb0edb884f3ef8dec0186f569f2eda411b122c4b492e062d86a0001642",
+            "bytes": 781
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr1.bed.gz",
+            "sha256": "b85cc685abcad4dd63caf980dc8b5b7cee7e799a9d0c50d1c2a5ebbc7bb15114",
+            "bytes": 72522
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr10.bed.gz",
+            "sha256": "6e69cf28ef7aa6901b7db207057d7e8b2a72edd59e766ba5f7ed23888a308b0b",
+            "bytes": 35471
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr11.bed.gz",
+            "sha256": "acdbcddef39505f0298cd2bd22d81cca733401e292cbb1747125e91ecedf059e",
+            "bytes": 39013
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr12.bed.gz",
+            "sha256": "293d10140f5d20511d31c5c6df217acd5a5c64e828e5db3bd1b9a1af93635e28",
+            "bytes": 38874
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr13.bed.gz",
+            "sha256": "3a77eab17f1b3c5bd7cf62867c42af8fded4ea2e1349b0b267cd376f3ece8313",
+            "bytes": 19169
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr14.bed.gz",
+            "sha256": "e1837edec8f7cd91d97355465c9d5102eb01a285289e48c3b3239b4b1ee1f0f3",
+            "bytes": 23208
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr15.bed.gz",
+            "sha256": "1d7e1db48e8d66c67a8f1ed27ebeb70069f4f5bbf4f5e797d39488c438b6e368",
+            "bytes": 24606
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr16.bed.gz",
+            "sha256": "a5d1babbdd83ba7c313a6ef049631d8db49864bb144be03ec6cb280bb985dfc4",
+            "bytes": 22619
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr17.bed.gz",
+            "sha256": "99b4de938f3fe68dfd72be499cfe1dccfad40c77ab464898d27eb2634dc85e1d",
+            "bytes": 28956
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr18.bed.gz",
+            "sha256": "08593c8e12200b525fffa7217f059cada56e7c205259dfe77ebecf058a97b230",
+            "bytes": 18522
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr19.bed.gz",
+            "sha256": "6c3c512cf1f0acec2c5e2a2365b16974edcdffcf3d3cc89b3434a65860fb245b",
+            "bytes": 22573
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr2.bed.gz",
+            "sha256": "9dade5530b5fc9a7e97402c0f743dcaaf600d0c0ecd8d9d9b68fdac7630b4b79",
+            "bytes": 63968
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr20.bed.gz",
+            "sha256": "017f53979b737849fa163c5412b53ec5a1be7de7cfe6bd4eb1d8ec171eee3fbe",
+            "bytes": 20061
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr21.bed.gz",
+            "sha256": "33801c9a0399e16f37445e6ebb78e3f8e32412374ddbfc07014758a7311e0dc6",
+            "bytes": 8249
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr22.bed.gz",
+            "sha256": "72dc065ab69ede2be0b265cb3f355404024079a7a13d93bf9e5d49e61442ff1c",
+            "bytes": 12527
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr3.bed.gz",
+            "sha256": "6bdd8b225b4e0976ad5f3c94938b2bb46eee5f28f8e083fcc196293e52bb41a1",
+            "bytes": 50692
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr4.bed.gz",
+            "sha256": "b62c819a30c6ee0f3f4383c0c8c158c03f26c2b85f3c225cd04a18536b336e5b",
+            "bytes": 40240
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr5.bed.gz",
+            "sha256": "1a662997ab327395fd0469b03ba4bcb10cbe7f9cd79f9e819ae150b04aa5e33b",
+            "bytes": 43148
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr6.bed.gz",
+            "sha256": "3925753eb3753950a83b808fe153142bbdeed12b85819443bf630fd2616f2f44",
+            "bytes": 47785
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr7.bed.gz",
+            "sha256": "7e1daa8ad8a9909448e6fd6bbfbe36db847a9cbb62a10f9faaa7788083b835bc",
+            "bytes": 37437
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr8.bed.gz",
+            "sha256": "0ea742352c5c449cfc529bb410d84f6293b42969d8aaf4f6ddf8520502142097",
+            "bytes": 34005
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr9.bed.gz",
+            "sha256": "96f1a91d58dba136c9a14f820cb1df6e1f87f1b7c8b7e2aae80eabac9e28c3e0",
+            "bytes": 32016
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chrX.bed.gz",
+            "sha256": "68c5e309fb5bb0b41c12886cb30b7404d6e1d82e734219e5d88fceb4d381a1ad",
+            "bytes": 22918
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chrY.bed.gz",
+            "sha256": "f02143ef19287777ff411af1a0865272562e166e75a335a7caebec8910698793",
+            "bytes": 192
+          },
+          {
+            "path": "data/results/dnase_ovary_chr1.bed.gz",
+            "sha256": "858e8b1a6b3f920fcff9b08bd98644267103d8fce9061b23336fe164f24e63a6",
+            "bytes": 179418
+          },
+          {
+            "path": "data/results/dnase_ovary_chr10.bed.gz",
+            "sha256": "11c552867fa49b99c214bb1a5ed462d27fe0238ea0b72f09ac319a0f3a4b17bc",
+            "bytes": 120482
+          },
+          {
+            "path": "data/results/dnase_ovary_chr11.bed.gz",
+            "sha256": "46c52e8c7c24b78aa98b476e30be271e4c52b4a3d1d81c47fc79c8c7a4f40137",
+            "bytes": 113451
+          },
+          {
+            "path": "data/results/dnase_ovary_chr12.bed.gz",
+            "sha256": "a1bfaeb64cb701c894984852bde912b8f18e08fcd93d8acc0023e792a6ba272e",
+            "bytes": 83062
+          },
+          {
+            "path": "data/results/dnase_ovary_chr13.bed.gz",
+            "sha256": "ea8e98f8b19f2616cfd5b7984db2d92d61833541820eeb01acbf4445b74f2397",
+            "bytes": 49963
+          },
+          {
+            "path": "data/results/dnase_ovary_chr14.bed.gz",
+            "sha256": "324734ca820aa1caf61f66c76636933b5fb23e25260b4eba73b233b0678f77b9",
+            "bytes": 69210
+          },
+          {
+            "path": "data/results/dnase_ovary_chr15.bed.gz",
+            "sha256": "55c006af4d5a90e0b9c7e4ca3959896d76a15a667ff5b802e38a45386e2e892e",
+            "bytes": 74983
+          },
+          {
+            "path": "data/results/dnase_ovary_chr16.bed.gz",
+            "sha256": "3e5ae6232f65d4d73e57e9327015f772c4da633bd0e034eaba4ff615750c6774",
+            "bytes": 75159
+          },
+          {
+            "path": "data/results/dnase_ovary_chr17.bed.gz",
+            "sha256": "07cd7cea2af6ab2b0a99f473a70bfb029cf15bfbf87baebf7863e92db82ae8c8",
+            "bytes": 95683
+          },
+          {
+            "path": "data/results/dnase_ovary_chr18.bed.gz",
+            "sha256": "2aae09d0507a05c3937826f3333d74ee5db70d56fda35e5a5bcf10b3fbd8f292",
+            "bytes": 42410
+          },
+          {
+            "path": "data/results/dnase_ovary_chr19.bed.gz",
+            "sha256": "012e2535f8c8853ae1114f620a3bf1400ed805f996410b8d486d1ea26122990a",
+            "bytes": 67030
+          },
+          {
+            "path": "data/results/dnase_ovary_chr2.bed.gz",
+            "sha256": "dfea99185df6922e0e8bd5e5eee89fa46812e1555ff0e45d18b4c8b8688d11a7",
+            "bytes": 176765
+          },
+          {
+            "path": "data/results/dnase_ovary_chr20.bed.gz",
+            "sha256": "a9576e50ab66f87975332bbcf57bf0d046b243ed07bacdd35e3256a8e78e0383",
+            "bytes": 62147
+          },
+          {
+            "path": "data/results/dnase_ovary_chr21.bed.gz",
+            "sha256": "e7b5de75c448354b3a493680e21eb7cb9745e128330c36d862000623433ffb28",
+            "bytes": 34344
+          },
+          {
+            "path": "data/results/dnase_ovary_chr22.bed.gz",
+            "sha256": "77a484f7d1ea42c0647b540d0822500227ecb32038a1921a2dafdcefdd16045e",
+            "bytes": 60019
+          },
+          {
+            "path": "data/results/dnase_ovary_chr3.bed.gz",
+            "sha256": "0d845fb5484d1388b34497e3db483c6fe1d9b8be9b730d91c862a90d78abb32e",
+            "bytes": 111352
+          },
+          {
+            "path": "data/results/dnase_ovary_chr4.bed.gz",
+            "sha256": "e2178d7cb2c69259b455204c6fbf1caa0b080f8b241126b77d3c91d0aee96dfe",
+            "bytes": 86233
+          },
+          {
+            "path": "data/results/dnase_ovary_chr5.bed.gz",
+            "sha256": "b8cff0d233c54492184d5893aa3c133e532ae711f4d73170fe6a6acc7578b4bc",
+            "bytes": 105606
+          },
+          {
+            "path": "data/results/dnase_ovary_chr6.bed.gz",
+            "sha256": "72af92ab7f0fe48ca35077b15b8c9ea79de35152406628b6f2b126e8197f3bd0",
+            "bytes": 94268
+          },
+          {
+            "path": "data/results/dnase_ovary_chr7.bed.gz",
+            "sha256": "b355bfa2ea354884c293e632b911af5439200598d8cfcda71b8420ef0d479694",
+            "bytes": 111992
+          },
+          {
+            "path": "data/results/dnase_ovary_chr8.bed.gz",
+            "sha256": "5cb6be8b10324f9a1cc51dc8f3bd39927dbd975cbfb05bb906f1f373e150d7cb",
+            "bytes": 93085
+          },
+          {
+            "path": "data/results/dnase_ovary_chr9.bed.gz",
+            "sha256": "cc27e6abb56bb7f246d8ea4fbfab44e9acb3b807f41dd436971aeb722004051b",
+            "bytes": 95024
+          },
+          {
+            "path": "data/results/dnase_ovary_chrX.bed.gz",
+            "sha256": "30458fb0df69d2f26eb91d693895781383fa433adc1718f311463cfb0847524c",
+            "bytes": 63311
+          },
+          {
+            "path": "data/results/dnase_ovary_chrY.bed.gz",
+            "sha256": "be5ab6e1004253e1b93e52208050d5f66a172afcc33ecd53053757cd9d995d09",
+            "bytes": 1269
+          },
+          {
+            "path": "data/results/dnase_testis_chr1.bed.gz",
+            "sha256": "9249e8b54537473114eeaae9595f743c3b2e3087c955635e19b4fa622f5d7c68",
+            "bytes": 177677
+          },
+          {
+            "path": "data/results/dnase_testis_chr10.bed.gz",
+            "sha256": "d098999e18ac270b20dc8b0988d08f5cff01b1485e832769cc0f6bedb6fcc3c6",
+            "bytes": 94585
+          },
+          {
+            "path": "data/results/dnase_testis_chr11.bed.gz",
+            "sha256": "a20fc4b09ca58b883ba70431e7c85ce7e36ac1443b7de280c69b8b309207dacb",
+            "bytes": 99762
+          },
+          {
+            "path": "data/results/dnase_testis_chr12.bed.gz",
+            "sha256": "475c04da30322bf0d8498facacb26f6295973e232cc62b426b1d19599cae8cf9",
+            "bytes": 90202
+          },
+          {
+            "path": "data/results/dnase_testis_chr13.bed.gz",
+            "sha256": "cbb0109ec5b2c7cca54e10d06e2347bfbf45c80db8b012a0363977eac6faa9e6",
+            "bytes": 48606
+          },
+          {
+            "path": "data/results/dnase_testis_chr14.bed.gz",
+            "sha256": "d398d6dceae0b2616035ffd477345737644520d4fca2495c49b01a63b0573315",
+            "bytes": 65540
+          },
+          {
+            "path": "data/results/dnase_testis_chr15.bed.gz",
+            "sha256": "885f49c21cc4a7bda727da8f06afa43e470c47698c3fd748c6de44c89fe38308",
+            "bytes": 67607
+          },
+          {
+            "path": "data/results/dnase_testis_chr16.bed.gz",
+            "sha256": "04f2b34c7b49a11a7c943d76560b11666f75eabb7f1156bf922499da996dcf39",
+            "bytes": 67655
+          },
+          {
+            "path": "data/results/dnase_testis_chr17.bed.gz",
+            "sha256": "29153e613b2d2233e4c0dfadc52f8d6c83c7cdd289903593587976fe1cbd6b52",
+            "bytes": 88028
+          },
+          {
+            "path": "data/results/dnase_testis_chr18.bed.gz",
+            "sha256": "36c2f30f75b15c848fcfaf1f78b6c6d0a5dd44e159f0c940227388b4afe64154",
+            "bytes": 46084
+          },
+          {
+            "path": "data/results/dnase_testis_chr19.bed.gz",
+            "sha256": "351001821908a1576d25360c1c43edf52005a07059a7c48d2a5a677c46917f78",
+            "bytes": 72353
+          },
+          {
+            "path": "data/results/dnase_testis_chr2.bed.gz",
+            "sha256": "7398b57b855a2f15fe40b7f450523dc1d3104084f05f626145925ecaea0a9c96",
+            "bytes": 162557
+          },
+          {
+            "path": "data/results/dnase_testis_chr20.bed.gz",
+            "sha256": "62ea6822aee4cb8b2a920701e931fcedc32c402529a7dac5918e43887b8808cb",
+            "bytes": 57409
+          },
+          {
+            "path": "data/results/dnase_testis_chr21.bed.gz",
+            "sha256": "d6acc141a76c5fe9d7f70be92f0437a409c5a6ac8dc49195d745fadef5e6a233",
+            "bytes": 27234
+          },
+          {
+            "path": "data/results/dnase_testis_chr22.bed.gz",
+            "sha256": "19d18eab59189c03b4de9057df392943b661e483dea02793d2e1ea010960a9b2",
+            "bytes": 46965
+          },
+          {
+            "path": "data/results/dnase_testis_chr3.bed.gz",
+            "sha256": "1a768eff8da9c29a8e8ca14f6fc2c1b5f25001fb22c7892a0c5eb264ff923a31",
+            "bytes": 120227
+          },
+          {
+            "path": "data/results/dnase_testis_chr4.bed.gz",
+            "sha256": "0306d9d0ad112c56e0496ba8051f7da5fbb0a7c0a5da86eedcf933cd76565854",
+            "bytes": 88140
+          },
+          {
+            "path": "data/results/dnase_testis_chr5.bed.gz",
+            "sha256": "b4b36989f8599312d274a8991005522214f7fc657f5729ac60e8ca056e68d99c",
+            "bytes": 104837
+          },
+          {
+            "path": "data/results/dnase_testis_chr6.bed.gz",
+            "sha256": "e277a5cc8c2d9554f2ad9e984a40cd4d1cb855c780213c5befea232f94b251e0",
+            "bytes": 107163
+          },
+          {
+            "path": "data/results/dnase_testis_chr7.bed.gz",
+            "sha256": "d99107e3b3ccd884095d3bc884fd513a69494694857b500950a4c34a99116278",
+            "bytes": 99561
+          },
+          {
+            "path": "data/results/dnase_testis_chr8.bed.gz",
+            "sha256": "5170c06a91016c90b808b5c556c219b563a7aba13c9b80f63267766947f2160e",
+            "bytes": 90300
+          },
+          {
+            "path": "data/results/dnase_testis_chr9.bed.gz",
+            "sha256": "dc59b0aa570e50df918713c2cc4f1b68ebdc40299db3b0470f7032f7b46de55d",
+            "bytes": 90971
+          },
+          {
+            "path": "data/results/dnase_testis_chrX.bed.gz",
+            "sha256": "6aafe4b61be3336b6d9f59311daac70551ea7ee404995776f39e4472ffa70a5e",
+            "bytes": 59341
+          },
+          {
+            "path": "data/results/dnase_testis_chrY.bed.gz",
+            "sha256": "b4cecbe3fc7e34798cc7dea176a9e91f0a7279f326fd5352132cfb87be815028",
+            "bytes": 4253
+          }
+        ],
+        "sha256": "aac5e0bf32cb3e2f41f1ae66b6cf778a5ddec3eb80a777c3b074559ca981c602",
+        "bytes": 27697843,
+        "files": 312,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
+      "measured_span": "a biosample's measured span on a chromosome is the interval from the first peak's start to the last peak's end in its cached narrowPeak file for that chromosome. Beyond it no read was placed, so an absent peak there is not a negative call. This is a statement about coverage, not a threshold on signal.",
+      "tolerance": 0.02,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [
+      "a rule not assessable in its own assigned cell is not in the population",
+      "a rule-and-biosample pair outside that biosample's measured span is excluded from that biosample's share and counted separately"
+    ],
+    "partitions": {
+      "assigned_cell": "each rule read in the cell the compiler assigned it",
+      "other_twelve": "the same rules read in the twelve reader biosamples that are not its own",
+      "per_biosample": "the same rules read in each of the thirteen, one biosample at a time"
+    },
+    "code_cleanliness": {
+      "git_sha": "847b607e72b55f1a4978fb6bccb82a23975cc925",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/direction_link.py",
+        "scripts/direction_link_register.py",
+        "scripts/n1_register.py",
+        "tests/test_direction_link.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/context_evidence_baserate.py"
+      ],
+      "counting_path_count": 68,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "supersedes": {
+      "file": "data/results/context_evidence_baserate.json",
+      "date": "2026-10-02",
+      "sha256": "2cc67f4fe78158c92c1c23269edcfccb0356539af241753440e6c555dc52d771",
+      "bytes": 20289,
+      "kept": "unchanged; this run is written beside it under a new name, not over it",
+      "why": "re-recorded under a new name on 2026-10-02 so that every group of input files names its members, each with its own sha256 and byte count, which is what a rebuild in a second environment needs to open and hash them; no figure of the run differs. The committed result is kept unchanged because its sha256 is a declared input of four other committed results",
+      "declared_as_an_input_by": [
+        "data/results/not_open_profile.json",
+        "data/results/not_open_profile_chr21.json",
+        "data/results/repress2_registration.json",
+        "data/results/repress2_registration_amendment.json"
+      ],
+      "element_tables_behind_the_pointer_files": "the 24 compiler_inputs:enhancer_targets_all_chr*.json files declared above are 1.6 KB pointers: genomeos.attribution.targets.run_elements opens the path in each one's `elements_where` field, data/knowledge/alphagenome/all_elements/<chrom>.json, about 1.4 GB in all, and no manifest here declares those tables. Naming the members of every group does not close that gap, and a rebuild in a clean worktree passes without hashing them because data/knowledge is linked read-only. Raised to the supervisor as its own item on 2026-10-02"
+    },
+    "code": {
+      "git_sha": "847b607e72b55f1a4978fb6bccb82a23975cc925",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/direction_link.py",
+        "scripts/direction_link_register.py",
+        "scripts/n1_register.py",
+        "tests/test_direction_link.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/direction_link.py",
+        "scripts/direction_link_register.py",
+        "tests/test_direction_link.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/context_evidence_v2.json",
+        "data/results/direction_link_registration.json",
+        "data/results/placement_audit_v2.json"
+      ],
+      "argv": [
+        "scripts/context_evidence_baserate.py",
+        "--result",
+        "context_evidence_baserate_v2",
+        "--supersedes"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
