@@ -375,7 +375,8 @@ def manifest(chroms: list[str], pairs: list[dict]) -> dict[str, Any]:
             ),
         ],
         "assembly": "GRCh38",
-        "coordinates": (
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "coordinates_note": (
             "half-open, zero-based for the peak files as the narrowPeak derivations store them. The "
             "screen states no convention for its chrom:start-end strings; the only use made of them "
             "here is an overlap test against peak calls, whose outcome a one-base shift cannot "
