@@ -296,9 +296,16 @@ def astroreg2_scope(plan, pairs, summary, authorised, show) -> int:
         },
         "requests": sendable,
     }
-    payload[mf.KEY] = manifest(
-        sorted({r["chrom"] for r in sendable}, key=lambda c: (len(c), c)), sendable, pairs
+    man = manifest(sorted({r["chrom"] for r in sendable}, key=lambda c: (len(c), c)), sendable, pairs)
+    man["inputs"].append(
+        mf.input_entry(
+            ASTROREG2,
+            partition=None,
+            role="AstroREG-2's registration: the scope is read from it rather than from a flag, and "
+            "its sha256 is recorded so the list can be tied to the terms it was enumerated under",
+        )
     )
+    payload[mf.KEY] = man
     out = save_result("astroreg2_request_plan", payload)
     print()
     print(f"first {show} of {len(sendable)}:")
