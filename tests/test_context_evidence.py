@@ -384,3 +384,23 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
     assert block["own_uncommitted_code"] == []  # "a.py" is not a file this repository has
     for p in block["foreign_uncommitted_code_on_the_counting_path"]:
         assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]
+
+
+def test_the_census_script_s_own_closure_is_the_module_s_closure():
+    """The census was written with its own copy of the closure, before the module had one, and the
+    result it has in the registry was stamped with that copy. The two must stay the same reading."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("ce_census", "scripts/context_evidence_census.py")
+    census = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(census)
+    entry = Path("scripts/context_evidence_census.py").resolve()
+    assert census.counting_path(entry) == ce.counting_path(entry)
+    theirs = census.code_cleanliness()
+    ours = ce.code_cleanliness(entry, census.OWN_CODE)
+    assert theirs["counting_path"] == ours["counting_path"]
+    assert theirs["own_code_is_committed"] == ours["own_code_is_committed"]
+    assert (
+        theirs["foreign_uncommitted_code_on_the_counting_path"]
+        == ours["foreign_uncommitted_code_on_the_counting_path"]
+    )
