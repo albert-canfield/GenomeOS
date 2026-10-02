@@ -1,20 +1,18 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Fast-forward main to a dev sha, only if CI's `test` job passed on that exact sha.
+# Check a dev sha against CI's `test` job on that exact sha; this script never moves main.
 #
-# Usage: scripts/promote_main.sh [--dry-run | --push] [--remote NAME] SHA
-#        scripts/promote_main.sh [--dry-run | --push] [--remote NAME] --latest-green
 # Usage: scripts/promote_main.sh [--dry-run | --prepare] [--remote NAME] SHA
 #        scripts/promote_main.sh [--dry-run] [--remote NAME] --latest-green
 #        scripts/promote_main.sh --verify [--remote NAME] SHA
-# (2026-09-29: the three lines above replace the two before them, whose --push is retired and refused.)
+# (2026-09-29: --push was retired and refused; 2026-10-02: its two usage lines, which stood above
+# these three until the checkout guard's window for b50c873 expired, were removed.)
 #
-# A dry run is the default: it makes every check and prints the push it would make. --push makes
-# it, and is for the coordinator on the owner's go, at most once a day (CONTRIBUTING.md, "Release
-# checks"). --latest-green picks the newest sha between main and the tip of dev that has a green
-# CI run; the daily scheduled run on dev is what usually provides one, and
-# `gh workflow run ci.yml --ref dev` asks for one on dev's current tip.
+# A dry run is the default: it makes every check and prints what it found, and pushes nothing
+# (CONTRIBUTING.md, "Release checks"). --latest-green picks the newest sha between main and the
+# tip of dev that has a green CI run; the daily scheduled run on dev is what usually provides
+# one, and `gh workflow run ci.yml --ref dev` asks for one on dev's current tip.
 #
 # Refuses, changing nothing, when the sha is not on the remote's dev, when main is not its
 # ancestor (not a fast-forward), or when the most recent completed `test` check run that GitHub
@@ -32,36 +30,40 @@
 #
 # 2026-09-29, later, beside both notes above (lane-gate): the gate now reads the event of the `test`
 # run it relies on and keeps two findings apart. "CI pre-check passed": that run concluded success.
-# "Eligible for protected promotion": that run was also triggered by `pull_request` or `push`. GitHub's
+# "Qualifying CI event": that run was also triggered by `pull_request` or `push`. GitHub's
 # documentation ("Troubleshooting required status checks", section "Checks from some workflow jobs are
 # not evaluated") evaluates checks for pull requests and rulesets only from runs triggered by push,
 # pull_request, pull_request_review, pull_request_target, deployment or deployment_status; that the
 # same rule decided the refused direct push of 9a59faf is an inference, not established. A green
-# `workflow_dispatch` or `schedule` run on dev is therefore a pre-check only; eligibility comes from
-# the pull request's own run.
+# `workflow_dispatch` or `schedule` run on dev is therefore a pre-check only.
 # 2026-09-29, later still (lane-gate, the reviewer's correction): the paragraph above overclaims.
 # A `pull_request` or `push` run makes the event a qualifying CI event only; protected promotion
 # eligibility is not established by it: the exact revision, the required checks and the protection
 # rules decide, and GitHub's decision is authoritative. The same holds for the pull request's own
-# run. The wording "eligible for protected promotion" in the output and in its test was committed
-# in 3a893fc and is held by the checkout guard until 2026-10-01 22:39 BST; a line printed after it
-# says this. Reword both after that.
+# run. The wording "eligible for protected promotion" was committed in 3a893fc and was held by the
+# checkout guard until 2026-10-01 22:39 BST; on 2026-10-02, after that window, the output and its
+# test say "qualifying CI event" instead, and the correction printed after that line is unchanged.
 #
 # --push is retired, and refused before the arguments are read: sessions never push to main. Its case
-# in the argument loop, the first usage() definition, usage lines 6-7 and the push block at the end
-# stay, unreachable or unused, only because they fall inside the checkout guard's two-day window for
-# b50c873; they can be removed after 2026-09-30 23:03. In its place, --prepare SHA makes the same
-# checks, then pushes one branch, promote-<first 7 characters of SHA>, at exactly that sha (refusing if
-# the branch already exists at another sha), and prints the compare URL for the owner to open and
+# in the argument loop, the first usage() definition, the two usage lines and the push block at the
+# end were unreachable or unused from 2026-09-29 and stayed only because they fell inside the
+# checkout guard's two-day window for b50c873; they were removed on 2026-10-02, after that window
+# expired at 2026-09-30 23:03. The refusal they followed, `refuse "no mode pushes to main"`, is kept
+# against that same note, which allowed removing it too: a fall-through must refuse, not exit 0.
+# In its place, --prepare SHA makes the same checks, then pushes one branch,
+# promote-<first 7 characters of SHA>, at exactly that sha (refusing if the branch already exists
+# at another sha), and prints the compare URL for the owner to open and
 # merge the pull request, and the --verify command for after the merge. It never opens a pull request,
 # never merges and never touches main. --verify SHA fetches main and checks that its file tree is
 # SHA's and that SHA is its ancestor; it asks nothing of GitHub's API.
 set -euo pipefail
 
-usage() { sed -n '6,7p' "$0" | sed 's/^# //' >&2; }
-# 2026-09-29: this definition replaces the one above, which prints the retired --push usage;
-# bash keeps the last definition.
-usage() { sed -n '8,10p' "$0" | sed 's/^# //' >&2; }
+# 2026-09-29: a second definition shadowed one that printed the retired --push usage, because bash
+# keeps the last definition; 2026-10-02: the dead first definition and the two --push usage lines
+# were removed, and this range was recomputed to the three usage lines that remain.
+# The range is line numbers: tests/test_promote_main.py pins what --help prints to the usage text,
+# so moving those lines cannot leave this printing the wrong ones unnoticed.
+usage() { sed -n '6,8p' "$0" | sed 's/^# //' >&2; }
 refuse() {
   echo "promote_main: refused: $*" >&2
   exit 1
@@ -89,8 +91,8 @@ fi
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) mode=dry ;;
-    # unreachable since 2026-09-29 (refused above); remove after 2026-09-30 23:03
-    --push) mode=push ;;
+    # 2026-10-02: the `--push) mode=push ;;` case stood here, unreachable since 2026-09-29 because
+    # --push is refused above; it was removed once the guard's window for b50c873 had expired.
     --remote)
       [ $# -ge 2 ] || { usage; exit 2; }
       remote="$2"
@@ -212,17 +214,17 @@ ahead=$(git rev-list --count "$main_sha..$sha")
 echo "promote_main: $remote/main $(git rev-parse --short "$main_sha") -> $short, $ahead commits; test green at $completed ($url)"
 case "$event" in
   pull_request | push)
-    echo "promote_main: eligible for protected promotion: the \`test\` run relied on was triggered by $event (GitHub's documentation evaluates checks for pull requests and rulesets from runs of this event)"
+    echo "promote_main: qualifying CI event: the \`test\` run relied on was triggered by $event (GitHub's documentation evaluates checks for pull requests and rulesets from runs of this event)"
     echo "promote_main: that is a qualifying CI event only; protected promotion eligibility is not established: the exact revision, the required checks and the protection rules decide, and GitHub's decision is authoritative"
     ;;
   *)
     echo "promote_main: CI pre-check passed: the \`test\` run relied on was triggered by $event, a pre-check only; it does not make the sha eligible for protected promotion"
-    echo "promote_main: eligibility comes from the pull request's own run. GitHub's documentation evaluates checks for pull requests and rulesets only from runs triggered by push, pull_request, pull_request_review, pull_request_target, deployment or deployment_status; that the same rule refused the direct push of 9a59faf is an inference, not established"
+    echo "promote_main: GitHub's documentation evaluates checks for pull requests and rulesets only from runs triggered by push, pull_request, pull_request_review, pull_request_target, deployment or deployment_status; that the same rule refused the direct push of 9a59faf is an inference, not established"
     echo "promote_main: the pull request's own run would be a qualifying CI event only; protected promotion eligibility is not established: the exact revision, the required checks and the protection rules decide, and GitHub's decision is authoritative"
     ;;
 esac
 if [ "$mode" = dry ]; then
-  echo "promote_main: dry run; would run: git push $remote $sha:refs/heads/main"
+  echo "promote_main: dry run; no push was made and $remote/main was not touched. Until 2026-09-29 this line printed the git command the script would have run"
   echo "promote_main: that push is no longer made: --push is retired (2026-09-29). Instead, on the owner's go, scripts/promote_main.sh --prepare $sha pushes branch promote-${sha:0:7} at that sha and nothing else, for a pull request the owner opens and merges"
   exit 0
 fi
@@ -246,10 +248,9 @@ if [ "$mode" = prepare ]; then
 fi
 
 # Unreachable since 2026-09-29: every mode has exited above, and --push is refused before the
-# arguments are read. The four lines after this refusal stay only because they fall inside the
-# checkout guard's window for b50c873; remove them, and this refusal, after 2026-09-30 23:03.
+# arguments are read. Four lines followed this refusal -- a push of the sha to refs/heads/main, a
+# fetch, a check of the result and an echo -- and stayed only because they fell inside the checkout
+# guard's window for b50c873; they were removed on 2026-10-02, after that window expired at
+# 2026-09-30 23:03. This refusal is deliberately kept, against the window note, which allowed
+# removing it too: a future fall-through must refuse here, not exit 0 having done nothing.
 refuse "no mode pushes to main"
-git push "$remote" "$sha:refs/heads/main"
-git fetch -q "$remote" main
-[ "$(git rev-parse "refs/remotes/$remote/main")" = "$sha" ] || refuse "pushed, but $remote/main is not at $short"
-echo "promote_main: $remote/main is at $short"

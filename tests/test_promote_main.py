@@ -169,7 +169,10 @@ def test_a_green_sha_is_let_through_as_a_dry_run_by_default(repo):
     for args in ([repo.c], ["--dry-run", repo.c]):
         r = repo.run(*args)
         assert r.returncode == 0, r.stderr
-        assert f"would run: git push origin {repo.c}:refs/heads/main" in r.stdout
+        # 2026-10-02: the gate no longer prints a push of main, so the sha it chose is read from
+        # the --prepare line it points at instead of from a push it would run
+        assert "dry run; no push was made" in r.stdout
+        assert f"--prepare {repo.c}" in r.stdout
         assert "2 commits" in r.stdout
     assert repo.remote_main() == repo.a, "a dry run moves nothing"
 
@@ -233,7 +236,8 @@ def test_latest_green_takes_the_newest_green_sha_between_main_and_dev(repo):
     repo.check(repo.b, "success", "2026-09-28T10:00:00Z")
     r = repo.run("--latest-green")
     assert r.returncode == 0, r.stderr
-    assert f"would run: git push origin {repo.b}:refs/heads/main" in r.stdout
+    assert "dry run; no push was made" in r.stdout
+    assert f"--prepare {repo.b}" in r.stdout, "B is the newest green sha between main and dev"
     assert repo.remote_main() == repo.a
 
 
@@ -271,6 +275,9 @@ def test_a_green_manual_or_scheduled_run_is_a_pre_check_only(repo, event):
     assert f"triggered by {event}" in r.stdout
     assert "CI pre-check passed" in r.stdout
     assert "a pre-check only; it does not make the sha eligible" in r.stdout
+    # 2026-10-02: the qualifying-event line is the one this branch must not print; until the
+    # rewording it was headed "eligible for protected promotion:", which the gate no longer says
+    assert "qualifying CI event:" not in r.stdout
     assert "eligible for protected promotion:" not in r.stdout
     assert "is an inference, not established" in r.stdout
     assert f"actions/runs?head_sha={repo.c}" in _gh_calls(repo)
@@ -302,11 +309,13 @@ def test_the_pull_request_s_own_run_is_named_a_qualifying_ci_event_only(repo):
 
 
 @pytest.mark.parametrize("event", ["pull_request", "push"])
-def test_a_green_pull_request_or_push_run_is_eligible(repo, event):
+def test_a_green_pull_request_or_push_run_is_headed_a_qualifying_ci_event(repo, event):
+    """2026-10-02: the head of that line said "eligible for protected promotion", which overclaimed."""
     repo.check_event(repo.c, "success", "2026-09-28T10:00:00Z", event)
     r = repo.run(repo.c)
     assert r.returncode == 0, r.stderr
-    assert f"eligible for protected promotion: the `test` run relied on was triggered by {event}" in r.stdout
+    assert f"qualifying CI event: the `test` run relied on was triggered by {event}" in r.stdout
+    assert "eligible for protected promotion" not in r.stdout
     assert "pre-check only" not in r.stdout
 
 
@@ -438,6 +447,35 @@ def test_help_prints_the_new_usage_only(repo):
     r = repo.run("--help")
     assert r.returncode == 0
     assert "--prepare" in r.stderr and "--verify" in r.stderr and "--push" not in r.stderr
+
+
+def test_help_prints_the_usage_text_itself_whatever_its_line_numbers(repo):
+    """usage() prints header lines BY NUMBER (sed -n 'A,Bp'), so deleting a header line silently
+    shifts what it prints. Pin the text, not the range: this fails if the range ever drifts."""
+    r = repo.run("--help")
+    assert r.returncode == 0
+    assert r.stderr == (
+        "Usage: scripts/promote_main.sh [--dry-run | --prepare] [--remote NAME] SHA\n"
+        "       scripts/promote_main.sh [--dry-run] [--remote NAME] --latest-green\n"
+        "       scripts/promote_main.sh --verify [--remote NAME] SHA\n"
+    )
+
+
+def test_no_shell_script_has_an_executable_push_to_main():
+    """No scripts/*.sh pushes to refs/heads/main: sessions never move main (CONTRIBUTING.md,
+    "Release checks"). Every .sh in scripts/ is covered, so a new one is checked without being
+    listed here; comments are stripped first, so a comment recording the retired push is fine, and
+    so is a message that names one, since a line that only prints cannot push."""
+    offenders = []
+    for script in sorted(SCRIPT.parent.glob("*.sh")):
+        for number, line in enumerate(script.read_text().splitlines(), start=1):
+            words = line.split("#", 1)[0].replace("'", " ").replace('"', " ").split()
+            if "push" not in words or words[0] in ("echo", "printf", "refuse"):
+                continue
+            after = words[words.index("push") + 1 :]
+            if any("refs/heads/main" in word or word.split(":")[-1] == "main" for word in after):
+                offenders.append(f"{script.name}:{number}: {line.strip()}")
+    assert offenders == [], "shell scripts push to main: " + "; ".join(offenders)
 
 
 def test_promote_sh_is_retired_and_runs_nothing(tmp_path):

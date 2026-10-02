@@ -84,20 +84,21 @@ After this date:
   `origin/dev`, contains `origin/main` (a fast-forward), and whose most
   recent completed `test` check run by GitHub Actions concluded `success`
   (not `skipped` or `neutral`, which the branch rule would accept).
-  `scripts/promote_main.sh` checks exactly that and is a dry run unless
-  given `--push`:
+  `scripts/promote_main.sh` checks exactly that, and no session moves
+  `main`: the script is a dry run unless given `--prepare`, which pushes a
+  frozen branch and never `main`:
 
   ```
   scripts/promote_main.sh --latest-green     # the newest green sha between main and dev, dry run
   gh workflow run ci.yml --ref dev           # none green: test dev's tip now, then look again
-  scripts/promote_main.sh --push SHA         # the coordinator, on the owner's go, once a day at most
-  # 2026-09-29: --push is retired and refuses; the line above stays until its clean-up. Instead:
+  # 2026-09-29: --push is retired and refuses; 2026-10-02: its line here was removed. Instead:
   scripts/promote_main.sh --prepare SHA      # on the owner's go: pushes branch promote-<first 7 of SHA> at SHA, nothing else
   scripts/promote_main.sh --verify SHA       # after the owner merges: main has SHA's file tree and SHA as an ancestor
   ```
 
-  The push still goes through the pre-push hook, so the promoted sha is
-  checked locally as well; the hook stays, as one check of two.
+  The `--prepare` push of the frozen branch still goes through the pre-push
+  hook, so the chosen sha is checked locally as well; the hook stays, as one
+  check of two.
 
   *2026-09-29, beside the above: passing this gate does not establish that
   GitHub will accept the push. With `enforce_admins` on, `--push 9a59faf`
@@ -113,11 +114,10 @@ After this date:
 
   *2026-09-29, later, beside both: the gate now reads the event of the
   `test` run it relies on and reports two different things. "CI pre-check
-  passed": that run concluded `success`. "Eligible for protected
-  promotion": that run was also triggered by `pull_request` or `push`. A
-  green `workflow_dispatch` or `schedule` run on `dev` is a pre-check only;
-  it does not make the sha eligible, and eligibility comes from the pull
-  request's own run. GitHub's documentation ("Troubleshooting required
+  passed": that run concluded `success`. "Qualifying CI event": that run was
+  also triggered by `pull_request` or `push`. A green `workflow_dispatch` or
+  `schedule` run on `dev` is a pre-check only; it does not make the sha
+  eligible. GitHub's documentation ("Troubleshooting required
   status checks", section "Checks from some workflow jobs are not
   evaluated") evaluates checks for pull requests and rulesets only from
   runs triggered by `push`, `pull_request`, `pull_request_review`,
@@ -139,10 +139,11 @@ After this date:
   protected promotion eligibility not established. The exact revision, the
   required checks and the protection rules decide, and GitHub's decision
   is authoritative; the same holds for the pull request's own run. The
-  gate's output still says "eligible for protected promotion" on that
-  branch, followed by a line saying it is a qualifying CI event only; the
-  wording is held by the checkout guard until 2026-10-01 22:39 BST and is
-  reworded after that. Direct pushes to `main` stay refused, and promotion
+  gate's output said "eligible for protected promotion" on that branch,
+  followed by a line saying it is a qualifying CI event only; that wording
+  was held by the checkout guard until 2026-10-01 22:39 BST and was reworded
+  to "qualifying CI event" on 2026-10-02, the line after it unchanged.
+  Direct pushes to `main` stay refused, and promotion
   stays the owner's: the owner opens and merges the pull request.*
 - **Recommended branch rule for `main`** (the owner's setting; no session
   changes it): keep `test` from GitHub Actions as the required check and
