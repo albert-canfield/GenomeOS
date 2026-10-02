@@ -262,21 +262,21 @@
     "what_this_count_is_not": "not a count of loci that would become addable: the response map needs a compiled rule and a reader state as well, neither of which is read here. It is also not stable under adoption, because a pair that attaches takes the element's interval into the locus key, so the grouping itself would change; the figure is counted on the frozen grouping"
   },
   "cost": {
-    "wall_seconds": 12.3,
-    "cpu_seconds": 12.2,
+    "wall_seconds": 12.8,
+    "cpu_seconds": 12.7,
     "downloads": 0,
     "requests": 0,
     "peak_memory_is_not_recorded": "peak memory is a property of the machine, not of the count, and it differs by a megabyte between two runs of the same code on the same inputs. It is left out so that a difference a manifest rebuild reports is always a real one"
   },
   "code_cleanliness": {
-    "git_sha": "f3bad5fdba8de5073db7d240fa0a1fe0515382b1",
+    "git_sha": "31d05b1ef607cd7ada529fed110e228a8d788134",
     "dirty": true,
     "own_uncommitted_code": [],
     "own_code_is_committed": true,
     "foreign_uncommitted_code": [
       "genomeos/attribution/repress2.py",
+      "scripts/context_evidence_register.py",
       "scripts/repress_population.py",
-      "scripts/repress_register_amendment.py",
       "tests/test_repress2.py"
     ],
     "foreign_uncommitted_code_on_the_counting_path": [],
@@ -1235,8 +1235,8 @@
       },
       {
         "path": "data/results/placement_audit.json",
-        "sha256": "e4f327409225cd92bd3d53cccf32985bb6ef26ebb149edf8f54a94a7a451118d",
-        "bytes": 68369,
+        "sha256": "ad2aff63037c2538df208297749e3a49a9b502fd10282b78a6594d6fcc00bbb7",
+        "bytes": 62587,
         "partition": null
       },
       {
@@ -1284,24 +1284,22 @@
       "heldout": "the CRISPRi benchmark's held-out file; read as measurement, reported apart"
     },
     "code": {
-      "git_sha": "f3bad5fdba8de5073db7d240fa0a1fe0515382b1",
+      "git_sha": "31d05b1ef607cd7ada529fed110e228a8d788134",
       "dirty": true,
       "dirty_code_paths": [
         "genomeos/attribution/repress2.py",
+        "scripts/context_evidence_register.py",
         "scripts/repress_population.py",
-        "scripts/repress_register_amendment.py",
         "tests/test_repress2.py"
       ],
       "untracked_code_paths": [
-        "scripts/repress_population.py",
-        "scripts/repress_register_amendment.py"
+        "scripts/repress_population.py"
       ],
       "dirty_result_paths": [
-        "data/results/context_evidence.json",
-        "data/results/context_evidence_baserate.json",
-        "data/results/placement_audit.json",
-        "data/results/placement_cause_198.json",
-        "data/results/repress2_registration_amendment.json"
+        "data/results/context_contrast_feasibility.json",
+        "data/results/context_evidence_registration.json",
+        "data/results/repress2_population.json",
+        "data/results/repress2_population_chr21.json"
       ],
       "argv": [
         "scripts/placement_cause_198.py"
