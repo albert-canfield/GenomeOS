@@ -69,10 +69,13 @@ def run(chroms: list[str]) -> dict[str, Any]:
             raise SystemExit(f"no GENCODE v50 annotation on disk for {chrom}: {gi.annotation_path(chrom)}")
         symbols, ids = gi.by_symbol(rows), gi.by_id(rows)
         rules = list(gi.rules(chrom))
+        names: dict[str, frozenset[str]] = {}
         wanted: dict[str, set[str]] = defaultdict(set)
         for r in rules:
             if r.source == gi.SOURCE_PREDICTED:
-                wanted[r.element].add(r.target)
+                if r.target not in names:
+                    names[r.target] = gi.recorded_names(r.target, symbols, ids)
+                wanted[r.element] |= names[r.target]
         counts, seen, in_cache = gi.window_gene_counts(chrom, {k: frozenset(v) for k, v in wanted.items()})
         window_records[chrom] = seen
         here: Counter[str] = Counter()
@@ -83,7 +86,8 @@ def run(chroms: list[str]) -> dict[str, Any]:
             elif r.element not in in_cache:
                 occ = None
             else:
-                occ = counts.get(r.element, Counter()).get(r.target, 0)
+                got = counts.get(r.element, Counter())
+                occ = sum(got.get(n, 0) for n in names[r.target])
             out = gi.classify(r, symbols, ids, occ)
             out2 = gi.classify(r, symbols, ids, occ, half_window=gi.SENSITIVITY_HALF_WINDOW)
             outcomes[out.outcome] += 1
@@ -100,6 +104,23 @@ def run(chroms: list[str]) -> dict[str, Any]:
             if d is not None and d > gi.HALF_WINDOW:
                 distance_test["rules"] += 1
                 distance_test_outcomes[out.outcome] += 1
+                # Added after the chr21 run, and said so where it is reported: the chr21 run showed
+                # this test selecting names with one locus on the chromosome, so how many loci the
+                # name has is counted rather than left to be assumed from the distance.
+                loci = len(symbols.get(r.target, ()))
+                distance_test[
+                    "name_has_one_locus_on_the_chromosome"
+                    if loci == 1
+                    else "name_has_more_than_one_locus_on_the_chromosome"
+                    if loci > 1
+                    else "name_has_no_locus_on_the_chromosome"
+                ] += 1
+                if (
+                    compiled is not None
+                    and compiled.end > r.midpoint - gi.HALF_WINDOW
+                    and compiled.start < r.midpoint + gi.HALF_WINDOW
+                ):
+                    distance_test["compiled_gene_body_reaches_into_the_scorer_window"] += 1
             if out.outcome == "two_or_more_annotated_loci_of_that_name_in_the_scorer_window":
                 cand = gi.window_candidates(r.target, r.midpoint, symbols)
                 ambiguous_with_one_coding[
@@ -147,6 +168,7 @@ def run(chroms: list[str]) -> dict[str, Any]:
         "distance_test": {
             "rules": distance_test["rules"],
             "outcomes": dict(sorted(distance_test_outcomes.items())),
+            "breakdown": {k: v for k, v in sorted(distance_test.items()) if k != "rules"},
         },
         "target_token_was_itself_an_ensembl_id": token_was_an_id,
         "ambiguous_window_loci_by_type": dict(sorted(ambiguous_with_one_coding.items())),
@@ -303,6 +325,14 @@ def main() -> None:
             "its_population": gi.imported_readings()["lane_notopen_1678_population"],
             "the_same_distance_test_over_this_whole_population": data["distance_test"]["rules"],
             "its_outcomes_here": data["distance_test"]["outcomes"],
+            "breakdown_of_those_rules": data["distance_test"]["breakdown"],
+            "the_breakdown_was_added_after_the_chr21_run": (
+                "`name_has_one_locus_on_the_chromosome` and the three figures beside it were added "
+                "after the chr21 run, not fixed in the registration, because the chr21 run showed "
+                "the distance test selecting names with a single locus. They are descriptive counts "
+                "over a population the registration already fixed and they moved no definition, no "
+                "threshold and no precedence; the amendment records them"
+            ),
             "the_two_populations": (
                 "the 1,678 is the distance test restricted to the 55,084 rules in state "
                 "not_open_in_reader. This lane's distance-test figure is the same test over all "

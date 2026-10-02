@@ -97,9 +97,18 @@ DIFFER = "differ"
 #: about the rule: a rule counted here is not a rule in doubt, it is a rule this test cannot reach.
 CAUSES: dict[str, str] = {
     "target_absent_from_the_chromosome_annotation": (
-        "the rule's target token is neither a gene_name nor a versionless gene_id of any gene on the "
-        "element's own chromosome in GENCODE v50, so neither side resolves to an id. The annotation "
-        "AlphaGenome scored with and GENCODE v50 are not guaranteed to be the same release"
+        "the rule's target token is neither a gene_name, nor the compile.ident of a gene_name, nor a "
+        "versionless gene_id of any gene on the element's own chromosome in GENCODE v50, so neither "
+        "side resolves to an id. The annotation AlphaGenome scored with and GENCODE v50 are not "
+        "guaranteed to be the same release"
+    ),
+    "the_token_matches_two_or_more_symbols_in_the_annotation": (
+        "amendment 1. The compiler writes a rule's target through compile.ident, which replaces every "
+        "non-word character with an underscore and is therefore not injective: KRTAP10-1 and a "
+        "hypothetical KRTAP10_1 would both be written KRTAP10_1. Where a token is matched by two or "
+        "more distinct GENCODE v50 gene_names on the chromosome, the compiled text does not say which "
+        "symbol it meant and no id is recoverable from it. This is a second identity hazard, "
+        "independent of a symbol repeating at two loci, and it is counted on its own"
     ),
     "rule_of_the_experimental_layer": (
         "the rule's evidence is a CRISPRi screen, not an AlphaGenome deletion answer, so there is no "
@@ -193,11 +202,30 @@ def annotation(chrom: str, reference: Path = REFERENCE) -> tuple[GeneRow, ...]:
 
 
 def by_symbol(rows: Iterable[GeneRow]) -> dict[str, tuple[GeneRow, ...]]:
+    """Every gene under the token a compiled rule could name it by: its gene_name and its ident.
+
+    Amendment 1. The compiled rule's target is not a gene symbol, it is a BioLang identifier:
+    `compile.ident` replaces every non-word character with an underscore, so GENCODE's `KRTAP10-1` is
+    written `KRTAP10_1` and an exact match on the symbol finds nothing. A gene is therefore indexed
+    under its own name *and* under `ident(name)`, which leaves the raw-symbol lookup exactly as it
+    was - `pilot_bio.gene_tss`'s symbols still find their own genes - and lets a compiled token find
+    the gene the compiler wrote it from. Because `ident` is not injective, a token may collect two
+    distinct symbols; `compiled_locus` refuses such a token rather than picking between them.
+    """
+    from genomeos.attribution.compile import ident
+
     out: dict[str, list[GeneRow]] = {}
     for g in rows:
-        if g.symbol:
-            out.setdefault(g.symbol, []).append(g)
+        if not g.symbol:
+            continue
+        for key in {g.symbol, ident(g.symbol)}:
+            out.setdefault(key, []).append(g)
     return {k: tuple(v) for k, v in out.items()}
+
+
+def symbols_of(token: str, symbols: Mapping[str, tuple[GeneRow, ...]]) -> frozenset[str]:
+    """The distinct GENCODE gene_names a compiled token matches. More than one is unresolvable."""
+    return frozenset(g.symbol for g in symbols.get(token, ()))
 
 
 def by_id(rows: Iterable[GeneRow]) -> dict[str, GeneRow]:
@@ -212,19 +240,26 @@ COMPILED_RESOLUTION = (
     "token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because "
     "holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token "
     "that is itself a versionless gene_id of that chromosome resolves to that gene directly, which "
-    "gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own."
+    "gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own. "
+    "Amendment 1: the compiled target is a BioLang identifier, not a symbol - compile.ident writes "
+    "GENCODE's KRTAP10-1 as KRTAP10_1 - so a gene is looked up under its gene_name and under its "
+    "ident, and a token matched by two distinct gene_names is refused rather than picked between."
 )
 
 
 def compiled_locus(
     token: str, symbols: Mapping[str, tuple[GeneRow, ...]], ids: Mapping[str, GeneRow]
 ) -> GeneRow | None:
-    """The gene the project's own symbol resolution returns for a rule's target token, or None."""
+    """The gene the project's own symbol resolution returns for a rule's target token, or None.
+
+    None both when the token matches no gene and when it matches two distinct symbols; `classify`
+    tells those two apart by `symbols_of` and counts them under their own causes.
+    """
     direct = ids.get(token)
     if direct is not None:
         return direct
     cand = symbols.get(token)
-    if not cand:
+    if not cand or len(symbols_of(token, symbols)) > 1:
         return None
     return min(cand, key=lambda g: (0 if g.coding else 1, g.tss))
 
@@ -241,6 +276,19 @@ MEASURED_RESOLUTION = (
     "gene; none or several is an unresolvable cause and never a guess. A target token that is a "
     "versionless gene_id is read directly, because there the answer does record the id."
 )
+
+
+def recorded_names(
+    token: str, symbols: Mapping[str, tuple[GeneRow, ...]], ids: Mapping[str, GeneRow]
+) -> frozenset[str]:
+    """Which names the recorded window gene list could carry for this rule's target token.
+
+    The cache records AlphaGenome's own gene names, which are GENCODE gene_names - with their hyphens
+    - or a bare versionless Ensembl id for a gene with no symbol. The compiled token is the ident of
+    one of those, so the names to look for are the gene_names the token matches plus the token itself.
+    """
+    del ids  # the token already carries a bare id when the gene has no symbol
+    return frozenset({token, *symbols_of(token, symbols)})
 
 
 def window_candidates(
@@ -447,7 +495,12 @@ def classify(
     compiled = compiled_locus(rule.target, symbols, ids)
     token_is_id = rule.target in ids
     if compiled is None:
-        return Outcome("target_absent_from_the_chromosome_annotation", None, None, token_is_id)
+        cause = (
+            "the_token_matches_two_or_more_symbols_in_the_annotation"
+            if len(symbols_of(rule.target, symbols)) > 1
+            else "target_absent_from_the_chromosome_annotation"
+        )
+        return Outcome(cause, None, None, token_is_id)
     if rule.source == SOURCE_MEASURED:
         return Outcome("rule_of_the_experimental_layer", compiled.gene_id, None, token_is_id)
     if occurrences is None:

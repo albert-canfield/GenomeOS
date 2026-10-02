@@ -311,7 +311,9 @@ def test_the_registration_fixes_the_definitions_before_any_count() -> None:
     reg = json.loads((RESULTS / "gene_identity_registration.json").read_text())
     assert reg["alphagenome_requests"] == 0 and reg["network_requests"] == 0
     assert reg["mis_resolution"] == gi.MIS_RESOLUTION
-    assert set(reg["unresolvable_symbols"]["causes"]) == set(gi.CAUSES)
+    # The registration is never edited. Amendment 1 added one cause, so the registration
+    # names a subset and the amendment carries the rest.
+    assert set(reg["unresolvable_symbols"]["causes"]) <= set(gi.CAUSES)
     assert reg["population"]["expected_total"] == 440589
     assert reg["sensitivity_fixed_in_advance"]["half_window"] == gi.HALF_WINDOW
     assert "before any count over the compiled programs was read" in reg["status"]
@@ -332,3 +334,55 @@ def test_the_result_sums_to_its_population_with_every_cause_named() -> None:
     assert res["the_1678"]["imported_reading"] == gi.imported_readings()["lane_notopen_1678"]
     assert "is not equated with any count here" in res["the_1678"]["the_two_populations"]
     assert "establishes about no single rule" in " ".join(res["what_this_cannot_establish"].values())
+
+
+# ---- amendment 1: the compiled target is a BioLang identifier, not a gene symbol -----------------
+
+
+def test_a_gene_is_found_under_its_name_and_under_its_ident() -> None:
+    """GENCODE's KRTAP10-1 is written KRTAP10_1 by compile.ident, and 152 chr21 rules carry such a
+    token. Both spellings must find the one gene."""
+    g = row("ENSG1", "KRTAP10-1", "protein_coding", 1_000_000, 1_000_500)
+    symbols = gi.by_symbol((g,))
+    assert gi.compiled_locus("KRTAP10-1", symbols, gi.by_id((g,))) is g
+    assert gi.compiled_locus("KRTAP10_1", symbols, gi.by_id((g,))) is g
+
+
+def test_a_token_matching_two_distinct_symbols_is_refused_and_not_picked_between() -> None:
+    a = row("ENSG1", "A-1", "protein_coding", 1_000_000, 1_000_500)
+    b = row("ENSG2", "A_1", "protein_coding", 1_002_000, 1_002_500)
+    symbols, ids = gi.by_symbol((a, b)), gi.by_id((a, b))
+    assert gi.symbols_of("A_1", symbols) == frozenset({"A-1", "A_1"})
+    assert gi.compiled_locus("A_1", symbols, ids) is None
+    out = gi.classify(rule("A_1"), symbols, ids, occurrences=1)
+    assert out.outcome == "the_token_matches_two_or_more_symbols_in_the_annotation"
+    assert out.compiled_id is None and out.measured_id is None
+
+
+def test_the_ident_fallback_does_not_disturb_a_token_with_one_symbol() -> None:
+    a = row("ENSG1", "A-1", "protein_coding", 1_000_000, 1_000_500)
+    symbols, ids = gi.by_symbol((a,)), gi.by_id((a,))
+    assert gi.symbols_of("A_1", symbols) == frozenset({"A-1"})
+    out = gi.classify(rule("A_1"), symbols, ids, occurrences=1)
+    assert out.outcome == gi.AGREE and out.compiled_id == "ENSG1"
+
+
+def test_the_recorded_names_to_look_for_are_the_real_symbols_and_the_token() -> None:
+    """The cache records AlphaGenome's names, which carry the hyphen the compiled token has lost."""
+    a = row("ENSG1", "A-1", "protein_coding", 1_000_000, 1_000_500)
+    symbols, ids = gi.by_symbol((a,)), gi.by_id((a,))
+    assert gi.recorded_names("A_1", symbols, ids) == frozenset({"A_1", "A-1"})
+    assert gi.recorded_names("ENSG9", {}, {}) == frozenset({"ENSG9"})
+
+
+AMENDMENT = RESULTS / "gene_identity_registration_amendment_1.json"
+
+
+@pytest.mark.skipif(not AMENDMENT.exists(), reason="amendment 1 not written yet")
+def test_amendment_one_accounts_for_every_cause_the_registration_does_not_name() -> None:
+    reg = json.loads((RESULTS / "gene_identity_registration.json").read_text())
+    am = json.loads(AMENDMENT.read_text())
+    assert am["amends"] == "gene_identity_registration"
+    assert set(reg["unresolvable_symbols"]["causes"]) | set(am["causes_added"]) == set(gi.CAUSES)
+    assert am["counts_already_read_when_this_was_written"]
+    assert am["definitions_that_did_not_move"]
