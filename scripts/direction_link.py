@@ -400,6 +400,29 @@ def main() -> None:
             "taken": False,
             "why": dl.GATE_NO_GO,
             "short_by": {a: gates[a]["short_by"] for a in dl.ARMS},
+            "the_rates_in_arms_are_on_the_record_not_read_as_a_result": (
+                "the per-arm agreement rates under `arms` are the counts the registration says go on "
+                "the record. Under a gate no-go they are NOT read as a result: no interval over "
+                "independent loci was taken, no sign shuffle was run, no balanced accuracy was "
+                "computed and the comparison between the arms was not made. Quoting either rate, or "
+                "the gap between them, as a finding of this lane would be reading the result the gate "
+                "refused"
+            ),
+            "statistics_not_computed": [
+                "balanced accuracy",
+                "the cluster bootstrap intervals over independent loci",
+                "the sign-shuffled control and its one-sided p",
+                "the difference between the arms, its baseline and its excess",
+            ],
+            "answered_against_measured": (
+                "the two imported floors are applied here to ANSWERED links, and lane-increase applied "
+                "them to measured links. Its population was 48 increase links over 33 independent "
+                "loci; of those 48, 21 are answerable in their own cell from the cached answers and "
+                "they fall over 13 independent loci. 9 of the 27 that are not answerable have a cell "
+                "the cache carries no track of at all, and 18 have an element whose cached window "
+                "carries no entry for their own gene. Neither floor is moved and neither count is "
+                "pooled with the other arm to reach one"
+            ),
         }
     else:
         d = dl.difference(by_arm)

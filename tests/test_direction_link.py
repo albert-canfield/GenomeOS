@@ -482,3 +482,89 @@ def test_the_cache_reader_asks_for_nothing_when_nothing_is_wanted(tmp_path):
     _archive(path, n_elements=5)
     assert cached_records(path, set()) == {}
     assert cached_records(tmp_path / "absent.json.gz", {"EH38E1000000"}) == {}
+
+
+# ---- the committed result -------------------------------------------------------------------------
+
+RESULT = Path("data/results/direction_link.json")
+
+
+@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+def test_the_committed_result_reconciles_with_the_population_it_follows_from():
+    r = json.loads(RESULT.read_text())
+    e = r["eligibility"]
+    assert e["links"] == 260
+    assert e["by_arm"] == {"decreases": 212, "increases": 48}
+    assert e["contested"] == dl.INHERITED_FIGURES["contested_by_a_regulated_pair"] == 0
+    # the two arms are lane-increase's own two counts at the same ladder step
+    assert e["by_arm"]["increases"] == dl.INHERITED_FIGURES["significant_increases_on_an_attributed_element"]
+    assert e["by_arm"]["decreases"] == dl.INHERITED_FIGURES["significant_decreases_on_an_attributed_element"]
+    assert e["by_arm_and_cell"]["increases"] == dl.INHERITED_FIGURES["increase_links_by_cell"]
+
+
+@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+def test_the_answerability_breakdown_is_exhaustive_at_its_own_denominator():
+    a = json.loads(RESULT.read_text())["answerability"]
+    assert a["cell_read"] == "K562"
+    assert a["breakdown_reconciles"] is True
+    assert a["answered"] + a["predicted_zero_excluded"] + a["absent"] == a["links_in_the_cell_read"]
+    assert a["answered"] == 195 and a["absent"] == 35 and a["predicted_zero_excluded"] == 0
+    for arm, n in (("decreases", 191), ("increases", 39)):
+        b = a["by_arm"][arm]
+        assert b["in_the_cell_read"] == n
+        assert b["answered"] + b["predicted_zero_excluded"] + b["absent"] == n
+
+
+@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+def test_no_cell_the_cache_does_not_carry_entered_any_denominator():
+    a = json.loads(RESULT.read_text())["answerability"]
+    out = a["unanswerable_because_the_cache_carries_no_such_cell"]
+    assert out["links"] == 26
+    # the run met a third uncached cell on the decrease arm that the increase population does not hold
+    assert set(out["by_arm_and_cell"]["decreases"]) == {"HCT116", "Jurkat", "WTC11"}
+    assert set(out["by_arm_and_cell"]["increases"]) == {"HCT116", "WTC11"}
+    for arm in dl.ARMS:
+        for cell in out["by_arm_and_cell"][arm]:
+            assert cell not in dl.CACHED_CELLS
+    assert "nothing_substituted" in out
+    # and a cached cell other than the one registered as primary is counted, not pooled in
+    assert a["links_in_another_cached_cell_not_read"]["by_arm_and_cell"]["decreases"] == {"GM12878": 4}
+
+
+@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+def test_the_gate_refused_the_comparison_and_nothing_was_computed_past_it():
+    r = json.loads(RESULT.read_text())
+    g = r["gate"]
+    assert g["both_arms_meet_both_floors"] is False
+    assert g["reading"] == dl.GATE_NO_GO
+    assert g["per_arm"]["decreases"]["meets_both_floors"] is True
+    assert g["per_arm"]["increases"]["short_by"] == [
+        "answered links 21, short of 30 by 9",
+        "independent loci 13, short of 20 by 7",
+    ]
+    c = r["comparison"]
+    assert c["taken"] is False
+    assert c["why"] == dl.GATE_NO_GO
+    for absent in ("balanced_accuracy", "control", "bootstrap", "difference_between_the_arms"):
+        assert absent not in c, "the gate refused the comparison, so none of it may be in the result"
+    note = c["the_rates_in_arms_are_on_the_record_not_read_as_a_result"]
+    assert "they are NOT read as a result" in note
+    assert "no sign shuffle was run" in note
+    assert c["statistics_not_computed"]
+
+
+@pytest.mark.skipif(not RESULT.exists(), reason="the test has not been run")
+def test_the_result_carries_the_floors_the_locus_rule_and_what_it_cannot_establish():
+    r = json.loads(RESULT.read_text())
+    for arm in dl.ARMS:
+        assert r["gate"]["per_arm"][arm]["floors"] == {"links": 30, "independent_loci": 20}
+        assert (
+            "not established biological independence"
+            in (r["gate"]["per_arm"][arm]["not_biological_independence"])
+        )
+    assert r["requests"] == 0
+    assert r["cannot_establish"] == dl.CANNOT_ESTABLISH
+    assert r["locus_convention"]["span"] == 1_000_000
+    assert r["prior_direction_lanes"]["registered_verdict_carried_verbatim"].startswith(
+        "balanced accuracy 0.6221"
+    )
