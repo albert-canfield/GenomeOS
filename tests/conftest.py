@@ -11,6 +11,7 @@ The fixture reopens the window rather than switching the tracer off, so every te
 hook live and a test can open its own window inside this one.
 """
 
+import extras_lock
 import pytest
 
 from genomeos import manifest as mf
@@ -21,3 +22,20 @@ def trace_window_per_test():
     mf.trace_begin()
     yield
     mf.trace_begin()
+
+
+# `requires_extra` (2026-10-02, lane-bare), registered in pyproject's `markers` and given its meaning
+# here. A test that genuinely needs an optional extra says which one, and skips by that declaration
+# where the extra is not installed. It must never pass because some other extra happened to drag the
+# package in -- seven tests did exactly that on pandas, which eight locked packages pull in -- and never
+# fail for want of it: tests/extras_lock.py and the `test-bare` CI job are the other two halves. An
+# unknown extra name raises rather than skipping, because a marker naming an extra pyproject does not
+# provide would otherwise skip, or run, for no stated reason.
+def pytest_runtest_setup(item):
+    for mark in item.iter_markers("requires_extra"):
+        for extra in mark.args:
+            missing = extras_lock.missing_modules_for_extra(extra)
+            if missing:
+                pytest.skip(
+                    f"needs the {extra!r} extra (uv sync --extra {extra}): cannot import {', '.join(missing)}"
+                )

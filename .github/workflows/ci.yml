@@ -80,6 +80,61 @@ jobs:
       - name: BioLang programs test themselves
         run: uv run bio test data/demo genomeos/std data/organisms
 
+  # The same suite on an environment holding only what the project declares (2026-10-02). Ten tests
+  # passed, for as long as they existed, only because somebody had once installed pandas and openpyxl
+  # into one checkout by hand. `test` above could not see it: it installs `--extra compose`, and eight
+  # locked packages pull pandas in behind that one flag, so seven of the ten were green for a reason
+  # unrelated to this project declaring pandas; openpyxl arrives only with biolearn in the `clocks`
+  # extra, which no job installs, so the other three had never run in CI at all. The pre-push hook could
+  # not see it either, because its clean worktree borrows this checkout's .venv (scripts/pre-push.sh,
+  # UV_NO_SYNC=1) -- the very environment the hand-installed packages were in. So CI is the place.
+  #
+  # `uv sync --frozen` and nothing else: the lock, the default dev group, no extra. A test that
+  # genuinely needs an extra says so with `@pytest.mark.requires_extra("<name>")` and skips here by that
+  # declaration, naming the extra (tests/conftest.py); `-rs` prints every skip, so what this job does
+  # not run is on the record rather than invisible, and tests/test_extra_only_imports.py fails on an
+  # import-time import of an extra-only package that carries no such marker. The reference data is
+  # fetched exactly as `test` fetches it, from the same cache key, because the one difference between
+  # the two jobs has to be the installed packages. Linting is not repeated: `test` does that.
+  #
+  # Not a required check. That is main's branch protection, which is the owner's alone, and the request
+  # goes on his list once this job has run green twice.
+  test-bare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install what the project declares, and nothing else
+        run: uv sync --frozen
+      - name: Cache reference data
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/reference/chrM.fa.gz
+            data/reference/chr21.fa.gz
+            data/knowledge/go-basic.obo
+            data/knowledge/goa_human.gaf.gz
+            data/knowledge/cl-basic.obo
+          key: refdata-v1
+      - name: Fetch small reference data (~60 MB; distilled summaries cover the rest)
+        run: |
+          mkdir -p data/reference data/knowledge
+          [ -s data/reference/chrM.fa.gz ] || curl -sL --fail -o data/reference/chrM.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chrM.fa.gz
+          [ -s data/reference/chr21.fa.gz ] || curl -sL --fail -o data/reference/chr21.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr21.fa.gz
+          [ -s data/knowledge/go-basic.obo ] || curl -sL --fail -o data/knowledge/go-basic.obo https://current.geneontology.org/ontology/go-basic.obo
+          [ -s data/knowledge/goa_human.gaf.gz ] || curl -sL --fail -o data/knowledge/goa_human.gaf.gz https://current.geneontology.org/annotations/goa_human.gaf.gz
+          [ -s data/knowledge/cl-basic.obo ] || curl -sL --fail -o data/knowledge/cl-basic.obo http://purl.obolibrary.org/obo/cl/cl-basic.obo
+      - name: Test
+        run: uv run --no-sync pytest -q -rs
+      # pyproject's rule, enforced where it can be: "the engine and the CLI must import with no
+      # third-party package present". `bio` is an entry point of that engine, and here it has nothing
+      # but the dev group to import from.
+      - name: BioLang programs test themselves
+        run: uv run --no-sync bio test data/demo genomeos/std data/organisms
+
   # The readers that reach the outside world are gated behind env vars, so they run nowhere: three
   # tests that read Zoonomia and gnomAD Gnocchi by HTTP range and UniProt/AlphaFold by API. Those are
   # exactly the readers that rot silently when a URL or a file format changes, which has happened to

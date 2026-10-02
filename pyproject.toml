@@ -83,6 +83,13 @@ artifacts = ["LICENSE", "LICENSE-APACHE", "NOTICE", "LICENSING.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    # A test that cannot run without an optional extra declares which one and skips, naming it, where
+    # the extra is not installed (tests/conftest.py applies it; tests/extras_lock.py reads the lock).
+    # Registered here rather than in a conftest hook so that the name is known wherever pytest reads
+    # this file, including a run collected from outside tests/.
+    "requires_extra(name): needs the named pyproject extra (uv sync --extra <name>)",
+]
 
 [tool.ruff]
 line-length = 110
