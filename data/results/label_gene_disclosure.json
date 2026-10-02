@@ -1,0 +1,136 @@
+{
+  "result": "label_gene_disclosure",
+  "date": "2026-10-02",
+  "lane": "lane-labelgene",
+  "is_not_an_amendment": "THIS FILE IS A DISCLOSURE AND NOT AN AMENDMENT. It is written AFTER the result at 6ab0b1f and it changes no band, no floor, no reading, no control and no label rule. Anything written after the figures are seen cannot be a pre-registration, so nothing here is presented as one. It exists because three facts about this lane are checkable from git but not from the result file, and a reader should not have to reconstruct them.",
+  "discloses_about": {
+    "registration": "data/results/label_gene_registration.json at 47835d1",
+    "amendment_1": "data/results/label_gene_registration_amendment_1.json at f579926",
+    "result": "data/results/label_gene.json at 6ab0b1f"
+  },
+  "results_py_stale_stamp_window": "THE STALE-STAMP WINDOW, disclosed per file with its sha and time. A peer's fix to `genomeos/results.py` changed the behaviour of `_is_registry`, which gates four refusals in save_result, and it sat UNCOMMITTED in this shared checkout for about an hour before landing at d33146a (23:51). save_result is on the import closure of every result write, so a run in that window executed the fixed code while its cleanliness block named a commit that did not contain it.\n(1) THE RESULT, data/results/label_gene.json, committed at 6ab0b1f (23:54): CLEAN. It was computed in a worktree of 9cc7021 (23:52), which CONTAINS d33146a, so the results.py that ran is the one the stamp's tree holds. The figures need no recount and none was hidden: this is the only file of the lane that carries a figure at all.\n(2) THE REGISTRATION, data/results/label_gene_registration.json, committed at 47835d1 (23:37): ITS STAMP IS STALE AND IS NOT BEING FIXED. It was written from the shared checkout while the peer's fix was uncommitted, so the fixed `_is_registry` ran while the block named e13992a. The defect is real and it is disclosed rather than repaired, because the repair would be rewriting a landed registration AFTER its figures are known, which destroys the one property that makes a registration worth anything. A stale revision stamp on a file carrying NO figure is the smaller fault, and this sentence is the record of the choice.\n(3) THE AMENDMENT, data/results/label_gene_registration_amendment_1.json, committed at f579926 (23:49): SELF-CONSISTENT BUT PRE-FIX. It was written in a worktree of 7f6ff93, which does NOT contain d33146a, so the results.py that ran is the older committed one and the stamp names a tree that holds it. It is not rewritten, for the same reason as (2), and it carries no figure either.",
+  "label_set_is_enumerated_not_resolved": "THE LABEL SET, and why no ontology is involved anywhere in this lane. The universe of labels is the set of `when: cell_type` strings that the committed data/organisms/human/noncoding_chr21.bio actually carries, enumerated from that file with each label's rule count, and control 1 is the sum of p squared over exactly that enumeration. This lane resolves NO CURIE, reads NO ontology file, and classifies no track into a tissue class, so the failure mode the coordinator warns about - a UBERON-plus-CL rule leaving rows unclassifiable by accident of which ontology file happens to be on the machine, and a descendant set that moves with whichever version is resolved against - cannot arise here. The enumeration is fixed by the input's own digest, which the registration declared and the count re-checked. The result file reports the label count and the ranked labels; the enumeration is derivable from the declared input alone, with no file that git does not track.",
+  "ordering_inside_the_registration": "THE ORDERING, which is stronger here than the rule asks for. The coordinator's rule is: bands first, then the label-set rule, then the control computed, then a disclosure of what was seen before the registration was written - because until the bands are committed a control is an input a band could be drawn around. In this lane the bands and the label-set rule were committed at e13992a and 47835d1 (23:37) and NO CONTROL VALUE EXISTED ANYWHERE AT THAT POINT: the registration fixes how control 1 is computed and contains no number for it, and control 1 was first computed by the count at 23:52, fifteen minutes and six commits later. A band could not have been drawn around a value that had not been computed.\nWHAT WAS SEEN BEFORE THE REGISTRATION WAS WRITTEN, stated so a reader does not have to take the above on trust: the line census of the input (5,176 rule lines, 5,174 predicted, 2 experimental, 5,374 element blocks), the shape of an element block and a rule line, the two input digests, the GTEx matrix's column header, and the coordinator's brief. NOT seen: any label distribution, any value of control 1, any concordance, any interval, any GTEx agreement rate, and the gene counts - 193 genes and 179 with two or more elements were first computed by the count, and the second of them contradicts the brief.",
+  "no_design_changed": "the bands [0.80, 1.25] and 1.50, the cluster floor of 10, the distance bin edges, the pair minimum, the dropped-weight limit, the four readings and (c)'s words are exactly as committed at 47835d1, and the reading of the result at 6ab0b1f stays (c), THE DATA CANNOT TELL.",
+  "band_at_control": [
+    0.8,
+    1.25
+  ],
+  "band_far_above": 1.5,
+  "min_clusters_genes": 10,
+  "reading_stays": "c",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "this lane's own registration, amendment and result",
+        "version": "as committed at 47835d1, f579926 and 6ab0b1f, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/label_gene_registration.json",
+        "sha256": "00254339ce336e255f1d7b32f8f5b3cc843ae67be411c6e620507b32f1117631",
+        "bytes": 23783,
+        "partition": "a file of this lane that this disclosure is about"
+      },
+      {
+        "path": "data/results/label_gene_registration_amendment_1.json",
+        "sha256": "412ecc5ab1e3cbb401f75f64427bd271ce29c082bb0cbfd08bf0029ff22d77bf",
+        "bytes": 8976,
+        "partition": "a file of this lane that this disclosure is about"
+      },
+      {
+        "path": "data/results/label_gene.json",
+        "sha256": "641cabd23b01d274deedea893826ea9f797bac0f00c08b462df7e524a7c06b56",
+        "bytes": 38328,
+        "partition": "a file of this lane that this disclosure is about"
+      }
+    ],
+    "input_count": 3,
+    "assembly": "n/a: a disclosure about this lane's own files; it reads no sequence",
+    "coordinates": "n/a: a disclosure about this lane's own files; it reads no coordinate",
+    "parameters": {
+      "band_at_control": [
+        0.8,
+        1.25
+      ],
+      "band_far_above": 1.5,
+      "minimum_clusters_genes": 10,
+      "nothing_moved": "every band and floor above is identical to 47835d1's, and the reading of the result stays (c)"
+    },
+    "exclusions": [
+      "no design change: this file amends nothing and may not be read as a registration",
+      "no recount: the result at 6ab0b1f was already computed in a worktree of a tree containing d33146a"
+    ],
+    "partitions": {
+      "disclosure": "carries no observation and no denominator"
+    },
+    "code_cleanliness": {
+      "git_sha": "aec1272ae314a3b2752a6b1f66e672f0cbc6abfd",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/label_gene_disclose.py",
+        "form": "committed_repository_file",
+        "path": "scripts/label_gene_disclose.py",
+        "is_committed": true,
+        "declared_entry": "scripts/label_gene_disclose.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/label_gene.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/label_gene_disclose.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "aec1272ae314a3b2752a6b1f66e672f0cbc6abfd",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/label_gene_disclose.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "aec1272ae314a3b2752a6b1f66e672f0cbc6abfd",
+      "code_cleanliness_git_sha": "aec1272ae314a3b2752a6b1f66e672f0cbc6abfd",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record aec1272"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 138,
+      "opens_under_data": 3,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
