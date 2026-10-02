@@ -50,7 +50,10 @@ from astroreg_calib_register import (  # noqa: E402
     k562_heldout_elements,
 )
 
-from genomeos.attribution import rpm  # noqa: E402
+from genomeos import manifest as mf  # noqa: E402
+from genomeos.attribution import crispri, rpm  # noqa: E402
+from genomeos.attribution.measured import CRISPRI_SPLIT_OF  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 
 PORTAL = "https://www.encodeproject.org"
 UA = {"Accept": "application/json", "User-Agent": "genomeos"}
@@ -69,6 +72,13 @@ COLUMN_OF = {"h3k27ac": "H3K27ac.RPM", "dnase": "DHS.RPM"}
 
 #: Where a long pass checkpoints itself, so a dropped connection costs one BAM and not the run.
 CHECKPOINTS = Path(".git/genomeos-rpm")
+
+OWN_CODE = (
+    "genomeos/attribution/rpm.py",
+    "scripts/astroreg_calib_register.py",
+    "scripts/astroreg_rpm_calibrate.py",
+    "tests/test_rpm.py",
+)
 
 
 def portal(path: str) -> dict[str, Any]:
@@ -262,15 +272,107 @@ def main() -> int:
         "read_rule": rpm.READ_RULE,
     }
     print(json.dumps({k: v for k, v in out.items() if k != "files"}, indent=1, default=str))
+    out["status"] = (
+        "the registered calibration gate, run once on the K562 held-out elements. No AlphaGenome "
+        "request was sent, no money was spent, and no BAM was written to disk"
+    )
+    out["lane"] = "lane-astro"
+    out["registration"] = {
+        "path": str(REGISTRATION),
+        "spearman_min": SPEARMAN_MIN,
+        "median_ratio_range": list(MEDIAN_RATIO_RANGE),
+        "both_written_before_this_ran": True,
+    }
+    out["reading"] = (
+        "the gate PASSES for this column: the frozen feature is reconstructible from the alignments "
+        "to the registered tolerance"
+        if verdict["passes"]
+        else "the gate FAILS for this column. Under the read rule registered before this ran, the "
+        "published column is NOT reproduced to the registered tolerance. By the registration's own "
+        "terms the AstroREG no-go STANDS and no astrocyte alignment is fetched. What is established "
+        "is that the column is not recoverable UNDER THIS RULE; since the benchmark documents no "
+        "read rule, that is as much a finding about the documentation as about the column, and it is "
+        "NOT a licence to try other rules until one passes -- a rule chosen after seeing this number "
+        "would be fitted to it"
+    )
+    out["not_claimed"] = [
+        "not a demonstration that the published column is wrong: it is a demonstration that this "
+        "registered rule does not reproduce it",
+        "not an identification of the rule that would reproduce it, and no such rule was searched for",
+        "not a result about astrocytes: no astrocyte alignment was read",
+    ]
+    out[mf.KEY] = _manifest(chosen, comparison, pooled, verdict)
+    path = save_result(f"astroreg_calibration_{args.column}_{args.cell}", out)
     dest = CHECKPOINTS / f"calibration-{args.column}-{args.cell}.json"
     dest.write_text(json.dumps(out, indent=1, default=str))
-    print(f"-> {dest}  (an intermediate, not a registry result)")
+    print(f"-> {path}")
     print(
         "GATE PASSES"
         if verdict["passes"]
         else "GATE FAILS: the no-go stands and nothing is fetched for astrocytes"
     )
     return 0
+
+
+def _manifest(chosen, comparison, pooled, verdict) -> dict[str, Any]:
+    """What this number was computed from. The alignments are SOURCES: they are streamed, never stored."""
+    return {
+        "sources": [
+            {
+                "accession": f"ENCODE {chosen['experiment']} ({chosen['analysis_title']}), filtered "
+                f"GRCh38 alignments: {', '.join(b['accession'] for b in chosen['bams'])}",
+                "version": f"{chosen['total_bytes'] / 1e9:.2f} GB streamed over HTTPS and not stored; "
+                "one BAM per biological replicate from the released analysis",
+                "url": PORTAL,
+            },
+            {
+                "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark heldout_5_cell_types "
+                "(Gschwind et al. 2025)",
+                "version": "fetched 2026-09-16; pinned here by sha256",
+                "url": crispri.BASE_URL,
+            },
+        ],
+        "inputs": [
+            mf.input_entry(
+                crispri.KNOWLEDGE / crispri.HELDOUT,
+                partition=CRISPRI_SPLIT_OF[crispri.HELDOUT],
+                role="the K562 held-out elements and the published column this is compared against; "
+                "already-read development evidence",
+            ),
+        ],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "spearman_min": SPEARMAN_MIN,
+            "median_ratio_min": MEDIAN_RATIO_RANGE[0],
+            "median_ratio_max": MEDIAN_RATIO_RANGE[1],
+            "elements": verdict["elements_compared"],
+            "pooled_denominator": pooled["denominator"],
+            "bams_streamed": len(chosen["bams"]),
+            "bytes_written_to_disk": 0,
+            "alphagenome_requests": 0,
+            "model_requests": 0,
+            "requests_sent": 0,
+            "money_spent": 0,
+        },
+        "exclusions": [
+            "no AlphaGenome request is sent and this script has no code path that could send one",
+            "no BAM is written to disk: each is streamed once, sequentially, and discarded",
+            "no MAPQ threshold and no duplicate rule are applied, because the benchmark states none",
+            "no astrocyte alignment is read, and none may be until this gate passes",
+            "no alternative read rule was tried: the rule was registered before the run and a second "
+            "rule chosen after seeing this number would be fitted to it",
+        ],
+        "partitions": {
+            "k562_heldout": f"{comparison['elements']} elements, already-read development evidence",
+        },
+        "reproducibility": (
+            "the published column and the element set are pinned by sha256; the alignments are a "
+            "network source streamed by accession and are not stored, so a rebuild re-streams them "
+            "from ENCODE rather than reading bytes from this machine"
+        ),
+        "code_cleanliness": mf.code_cleanliness("scripts/astroreg_rpm_calibrate.py", OWN_CODE, ROOT),
+    }
 
 
 def _published(comparison: dict[str, Any], column: str) -> dict[tuple[str, int, int], float]:
