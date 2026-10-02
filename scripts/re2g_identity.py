@@ -137,18 +137,14 @@ def main() -> None:
         },
     }
     for block in ("pooled_4378", "k562_1918"):
-        for name, v in against_headline[block].items():
+        for v in against_headline[block].values():
             v["equal"] = v["headline"] == v["ours"]
     against_headline["all_equal"] = all(
         v["equal"] for block in ("pooled_4378", "k562_1918") for v in against_headline[block].values()
     )
 
     answered = {
-        cell: sum(
-            1
-            for p in heldout_a
-            if p.cell == cell and p.features.get("deletion_answered") == 1.0
-        )
+        cell: sum(1 for p in heldout_a if p.cell == cell and p.features.get("deletion_answered") == 1.0)
         for cell in sorted({p.cell for p in heldout_a})
     }
     in_model_cells = [p for p in heldout_a if p.cell in crispri.MODEL_CELLS]
@@ -202,9 +198,7 @@ def main() -> None:
             ),
             "pairs_with_the_top_target_flag": sum(1 for p in heldout_a if p.features["top_target"] > 0),
             "pairs_where_both_columns_are_zero": sum(
-                1
-                for p in heldout_a
-                if p.features["deletion_drop"] == 0 and p.features["top_target"] == 0
+                1 for p in heldout_a if p.features["deletion_drop"] == 0 and p.features["top_target"] == 0
             ),
             "of_pairs": len(heldout_a),
         },
