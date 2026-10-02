@@ -1,0 +1,1891 @@
+{
+  "result": "argmaxcell",
+  "date": "2026-10-02",
+  "lane": "lane-argmaxcell",
+  "registration": "data/results/argmaxcell_registration.json, committed in a commit of its own before any count of this lane existed",
+  "question": "A compiled rule's cell is an argmax over the scorer's tracks: `predicted_coding['tissue']` is `max_drop_tissue` or `max_rise_tissue`, the place the largest movement happened to fall. Does that argmax carry cell-type information at all? For element-gene pairs MEASURED in a named cell, at what rate is the compiled cell label equal to the measured cell, against the rate at which that label appears over every compiled rule genome-wide?",
+  "argmax_rule": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
+  "argmax_is_a_selection": "`direction_v2.ASSIGNED_CELL` is `predicted_coding['tissue']`, and `enhancer_target.predict_target` sets that field to `max_drop_tissue` or `max_rise_tissue` - the tissue of the larger of the biggest fall and the biggest rise over every track, chosen jointly with the gene. An argmax is a selection: the cell is where an extreme fell, not a context chosen before the values were read. `lane-clause1` measured this on 166 of 166 rows of its own population (150 by max_drop, 16 by max_rise, 0 otherwise), registration ba8c41f, result b4622ad. That count is carried here, not recomputed, and this lane's denominators are separate from its 166.",
+  "population": "One arm per measured cell. An arm's population is every DISTINCT attributed element that overlaps at least one valid pair of the two cached ENCODE CRISPRi benchmark tables whose `CellType` is that cell. `attributed` is `genomeos.attribution.targets.attributed`'s own population - the elements of the three deletion runs that name a coding target gene, deduplicated by element id with the whole-chromosome run first - which is exactly the population `compile.compile_chromosome` emits one rule for, and therefore exactly the population the base rate is taken over. A pair is valid by the benchmark's own `ValidConnection` column, which `crispri.parse` applies; promoter and exon overlaps are already dropped there. Overlap is `OVERLAP_RULE`.",
+  "denominator": "DISTINCT ELEMENTS, not pairs. The compiled cell is a property of the element's rule and not of the pair, so counting an element once per tested gene would weight elements by how many genes the screen happened to assay near them. The pair-level figure is reported beside it as a secondary count and is never the headline. Both are stated with the arm's cell name.",
+  "denominator_is_separate": "This lane's denominators are its own and are added to nothing. They are NOT to be added to or compared with the 112, 93, 73, 67, 26, 19, 18, 14 or 10 of tonight's other lanes: several of those overlap, several are different populations, and two were wrongly added together earlier today. Every figure below is reported with the arm and the denominator it was taken over.",
+  "falsifier": "Stated before any count was taken (67e14d7) and AMENDED before any count was committed (AMENDMENT_1, which only tightens). d = observed_rate - committed_base_rate, both over the arm's own denominator, and every branch below is decided by the CLUSTERED interval on d and never by the point estimate.\n(1) upper bound of d < -0.02: the argmax lands on the measured cell LESS often than the label's own genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it points away from it.\n(2) the WHOLE interval on d inside +/-0.02: NO cell-type information. This is an equivalence result and not a failure to reject: the arm has excluded any difference larger than the tolerance. On this arm the compiled cell is the label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n(3) lower bound of d > +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this branch does not establish that the argmax carries cell-type information, because the benchmark's choice of which elements to test produces the same sign.\n(4) the interval crosses a tolerance bound: INCONCLUSIVE. THE DATA CANNOT TELL. This is not `no information` and may never be reported as one, and it is not a detection either.\nA SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - the compiled cell names the measured cell on at least a quarter of the arm's elements, so a reader could use it; observed_rate < 0.25 - whatever the interval says, the label names the measured cell on a minority of elements and may not be read as the place the rule acts.\nAn arm with fewer than 30 elements reports its counts and NO rate reading at all. An arm whose clusters number fewer than 10 prints NO interval and is INCONCLUSIVE BY RULE. The Wilson interval over elements is reported beside the clustered one as secondary, labelled binomial and unclustered wherever it appears, and decides nothing.",
+  "amendment_1": "AMENDED on the coordinator's direction after the registration at 67e14d7 and BEFORE any count of this lane is committed. Additive: TOLERANCE 0.02, USABLE 0.25 and MIN_ELEMENTS 30 are unchanged, and no reading is made easier to reach.\nTHE DEFECT IT FIXES, in the coordinator's own terms: the registered readings were selected by the POINT estimate of d against a +/-0.02 band. At 30 elements and a rate near 0.06 the standard error is about 0.043, more than twice the band, so on a small arm reading (2) - `NO cell-type information is detected, stated plainly` - would fire from noise. An underpowered null presented as a finding is the one outcome this lane must not produce.\n(a) A reading is now decided by the INTERVAL and never by the point. (3) detected only if the interval's LOWER bound on d exceeds +0.02; (1) anti-correlated only if its UPPER bound is below -0.02; (2) no information only if the WHOLE interval lies inside +/-0.02, which makes it an equivalence result and not a failure to reject.\n(b) A NEW reading (4) INCONCLUSIVE when the interval crosses a tolerance bound. Its words are `the data cannot tell`, never `no information`: those are different claims and eliding the difference is what produced several of tonight's overstatements.\n(c) The DECIDING interval is CLUSTERED - by chromosome, or by locus when chromosomes do not give at least 10 clusters. Under 10 clusters no interval is printed and the arm is inconclusive BY RULE and not by judgement. The Wilson interval over elements is kept beside it as SECONDARY and stays labelled as the binomial, unclustered interval it is.\n(d) POWER IS STATED PER ARM: the elements an arm needs for a +/-0.02 half-width, and whether it has them. An arm that does not is declared underpowered as a property of the arm.\nDISCLOSED, because the record must not read better than it was: when this amendment was written the un-amended run had ALREADY completed in a worktree at 67e14d7 and its figures had been seen. They are named in the amendment's commit message. The amendment is therefore NOT blind, and the one thing that can be checked rather than trusted is its direction: every change here can only turn a reading into INCONCLUSIVE or leave it standing. None of them can create a detection, widen a detection, or convert an inconclusive arm into a finding.",
+  "confound_registered_before_any_count": "Registered before any count, and it makes the two readings asymmetric. The CRISPRi benchmark chose which elements to test, and it tested candidate elements in regions active in the cell it was testing. So the elements of the K562 arm are not a random draw from the compiled population: they are enriched for K562-active sequence before any model touched them. That enrichment pushes the observed rate UP. Therefore:\n- a difference at or near zero is NOT explained by the selection, because the selection pushes the other way, and it is clean evidence that the argmax carries no cell-type information;\n- a positive difference is explained by the selection at least as readily as by the model, and this lane cannot separate the two with the data it reads. A positive difference is therefore reported as a difference and MUST NOT be reported as the argmax carrying cell-type information.\nThis lane can refute the proposition and can fail to refute it. It cannot confirm it.",
+  "base_rate_rule": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+  "base_rate_is_not_uniform": "The base rate is NOT 1/371. K562 is the single most frequent compiled label genome-wide, so its base rate is about twenty-three times what a uniform draw over the scorer's tracks would give. That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.",
+  "base_rates": {
+    "K562": {
+      "cell": "K562",
+      "labels": [
+        "K562"
+      ],
+      "rules_per_label": {
+        "K562": 27445
+      },
+      "rules_with_this_label": 27445,
+      "rules_total": 440589,
+      "rate": 0.062292,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "K562": "EFO:0002067"
+      }
+    },
+    "GM12878": {
+      "cell": "GM12878",
+      "labels": [
+        "GM12878"
+      ],
+      "rules_per_label": {
+        "GM12878": 6406
+      },
+      "rules_with_this_label": 6406,
+      "rules_total": 440589,
+      "rate": 0.01454,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "GM12878": "EFO:0002784"
+      }
+    },
+    "HCT116": {
+      "cell": "HCT116",
+      "labels": [
+        "HCT116"
+      ],
+      "rules_per_label": {
+        "HCT116": 594
+      },
+      "rules_with_this_label": 594,
+      "rules_total": 440589,
+      "rate": 0.001348,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "HCT116": "EFO:0002824"
+      }
+    },
+    "Jurkat": {
+      "cell": "Jurkat",
+      "labels": [
+        "Jurkat",
+        "Jurkat__Clone_E6_1"
+      ],
+      "rules_per_label": {
+        "Jurkat": 5,
+        "Jurkat__Clone_E6_1": 1127
+      },
+      "rules_with_this_label": 1132,
+      "rules_total": 440589,
+      "rate": 0.002569,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "Jurkat": "EFO:0002796",
+        "Jurkat__Clone_E6_1": "CLO:0007045"
+      }
+    },
+    "WTC11": {
+      "cell": "WTC11",
+      "labels": [
+        "WTC11"
+      ],
+      "rules_per_label": {
+        "WTC11": 96
+      },
+      "rules_with_this_label": 96,
+      "rules_total": 440589,
+      "rate": 0.000218,
+      "how": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
+      "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+      "source": "data/results/context_evidence.json",
+      "ontology_terms": {
+        "WTC11": "EFO:0009747"
+      }
+    }
+  },
+  "per_arm": {
+    "K562": {
+      "cell": "K562",
+      "labels": [
+        "K562"
+      ],
+      "pairs_in_cell": 12274,
+      "pairs_of_this_arm_seen": 12274,
+      "pairs_on_an_attributed_element": 6947,
+      "pairs_whose_element_carries_the_measured_cell": 1311,
+      "pair_level_rate_is_secondary": "reported because a reader will ask for it; it is NOT the headline, because the compiled cell belongs to the element and a pair count weights an element by how many genes the screen happened to assay near it (DENOMINATOR)",
+      "pair_level_rate": 0.188715,
+      "elements": 3228,
+      "elements_whose_label_is_the_measured_cell": 612,
+      "observed_rate": 0.189591,
+      "reading": {
+        "rate_reported": true,
+        "reading": "(3)",
+        "observed_rate": 0.189591,
+        "committed_base_rate": 0.062292,
+        "difference_point_estimate": 0.127299,
+        "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
+        "tolerance": 0.02,
+        "clustered_ci95_on_the_rate": [
+          0.15038,
+          0.236864
+        ],
+        "clustered_ci95_on_the_difference": [
+          0.088088,
+          0.174572
+        ],
+        "clustered_by": "chromosome",
+        "cluster_grouping_caveat": null,
+        "clustered_interval_provenance": {
+          "clusters": 23,
+          "cluster_minimum": 10,
+          "resamples_requested": 2000,
+          "resamples_minimum": 1000,
+          "seed": 20261002,
+          "method": "percentile bootstrap over whole clusters, resampled with replacement",
+          "met_minimum": true
+        },
+        "why_no_interval": null,
+        "clustered_interval_decides_the_reading": true,
+        "wilson95_secondary": [
+          0.176441,
+          0.203479
+        ],
+        "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+        "wilson95_excludes_the_base_rate": true,
+        "detection": "a difference IS detected: the clustered interval's lower bound on d is above the registered tolerance. It does NOT establish that the argmax carries cell-type information: the benchmark chose elements active in the cell it was testing, which produces this sign on its own, and this lane cannot separate the two (CONFOUND)",
+        "argmax_carries_cell_type_information": null,
+        "power": {
+          "elements": 3228,
+          "committed_base_rate": 0.062292,
+          "elements_needed_at_the_base_rate": 561,
+          "has_them_at_the_base_rate": true,
+          "observed_rate": 0.189591,
+          "elements_needed_at_the_observed_rate": 1476,
+          "has_them_at_the_observed_rate": true,
+          "underpowered": false,
+          "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+        },
+        "usable": false,
+        "usability": "observed rate 0.1896 is below the registered 0.25: whatever the interval says, the compiled cell names the measured cell on a MINORITY of this arm's elements and may not be read as the place the rule acts"
+      },
+      "power": {
+        "elements": 3228,
+        "committed_base_rate": 0.062292,
+        "elements_needed_at_the_base_rate": 561,
+        "has_them_at_the_base_rate": true,
+        "observed_rate": 0.189591,
+        "elements_needed_at_the_observed_rate": 1476,
+        "has_them_at_the_observed_rate": true,
+        "underpowered": false,
+        "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+      },
+      "clusters": {
+        "kind": "chromosome",
+        "count": 23,
+        "minimum": 10
+      },
+      "label_distribution_top10": [
+        {
+          "label": "K562",
+          "elements": 612,
+          "share_of_arm": 0.189591,
+          "genome_wide_base_rate": 0.062292,
+          "ratio_to_base_rate": 3.044
+        },
+        {
+          "label": "CD14_positive_monocyte",
+          "elements": 148,
+          "share_of_arm": 0.045849,
+          "genome_wide_base_rate": 0.035271,
+          "ratio_to_base_rate": 1.3
+        },
+        {
+          "label": "placenta",
+          "elements": 122,
+          "share_of_arm": 0.037794,
+          "genome_wide_base_rate": 0.0324,
+          "ratio_to_base_rate": 1.166
+        },
+        {
+          "label": "Whole_Blood",
+          "elements": 110,
+          "share_of_arm": 0.034077,
+          "genome_wide_base_rate": 0.025704,
+          "ratio_to_base_rate": 1.326
+        },
+        {
+          "label": "HepG2",
+          "elements": 73,
+          "share_of_arm": 0.022615,
+          "genome_wide_base_rate": 0.033544,
+          "ratio_to_base_rate": 0.674
+        },
+        {
+          "label": "naive_thymus_derived_CD4_positive__alpha_beta_T_cell",
+          "elements": 59,
+          "share_of_arm": 0.018278,
+          "genome_wide_base_rate": 0.018049,
+          "ratio_to_base_rate": 1.013
+        },
+        {
+          "label": "GM23248",
+          "elements": 54,
+          "share_of_arm": 0.016729,
+          "genome_wide_base_rate": 0.015663,
+          "ratio_to_base_rate": 1.068
+        },
+        {
+          "label": "LHCN_M2",
+          "elements": 52,
+          "share_of_arm": 0.016109,
+          "genome_wide_base_rate": 0.01269,
+          "ratio_to_base_rate": 1.269
+        },
+        {
+          "label": "CD8_positive__alpha_beta_T_cell",
+          "elements": 47,
+          "share_of_arm": 0.01456,
+          "genome_wide_base_rate": 0.020137,
+          "ratio_to_base_rate": 0.723
+        },
+        {
+          "label": "small_intestine",
+          "elements": 47,
+          "share_of_arm": 0.01456,
+          "genome_wide_base_rate": 0.022711,
+          "ratio_to_base_rate": 0.641
+        }
+      ]
+    },
+    "GM12878": {
+      "cell": "GM12878",
+      "labels": [
+        "GM12878"
+      ],
+      "pairs_in_cell": 68,
+      "pairs_of_this_arm_seen": 68,
+      "pairs_on_an_attributed_element": 33,
+      "pairs_whose_element_carries_the_measured_cell": 4,
+      "pair_level_rate_is_secondary": "reported because a reader will ask for it; it is NOT the headline, because the compiled cell belongs to the element and a pair count weights an element by how many genes the screen happened to assay near it (DENOMINATOR)",
+      "pair_level_rate": 0.121212,
+      "elements": 45,
+      "elements_whose_label_is_the_measured_cell": 4,
+      "observed_rate": 0.088889,
+      "reading": {
+        "rate_reported": true,
+        "reading": "(4)",
+        "observed_rate": 0.088889,
+        "committed_base_rate": 0.01454,
+        "difference_point_estimate": 0.074349,
+        "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
+        "tolerance": 0.02,
+        "clustered_ci95_on_the_rate": null,
+        "clustered_ci95_on_the_difference": null,
+        "clustered_by": "locus",
+        "cluster_grouping_caveat": "an operational grouping, NOT established biological independence",
+        "clustered_interval_provenance": {
+          "clusters": 9,
+          "cluster_minimum": 10,
+          "resamples_requested": 2000,
+          "resamples_minimum": 1000,
+          "seed": 20261002,
+          "method": "percentile bootstrap over whole clusters, resampled with replacement",
+          "met_minimum": true
+        },
+        "why_no_interval": "9 resampling clusters is below the floor of 10, so no interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement",
+        "clustered_interval_decides_the_reading": true,
+        "wilson95_secondary": [
+          0.035111,
+          0.207336
+        ],
+        "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+        "wilson95_excludes_the_base_rate": true,
+        "detection": "INCONCLUSIVE BY RULE: THE DATA CANNOT TELL. 9 resampling clusters is below the floor of 10, so no interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement. This is NOT `no cell-type information` and may never be reported as one; it is also not a detection. The point estimate and the counts are reported and decide nothing",
+        "argmax_carries_cell_type_information": null,
+        "power": {
+          "elements": 45,
+          "committed_base_rate": 0.01454,
+          "elements_needed_at_the_base_rate": 138,
+          "has_them_at_the_base_rate": false,
+          "observed_rate": 0.088889,
+          "elements_needed_at_the_observed_rate": 778,
+          "has_them_at_the_observed_rate": false,
+          "underpowered": true,
+          "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+        },
+        "usable": false,
+        "usability": "observed rate 0.0889 is below the registered 0.25: whatever the interval says, the compiled cell names the measured cell on a MINORITY of this arm's elements and may not be read as the place the rule acts"
+      },
+      "power": {
+        "elements": 45,
+        "committed_base_rate": 0.01454,
+        "elements_needed_at_the_base_rate": 138,
+        "has_them_at_the_base_rate": false,
+        "observed_rate": 0.088889,
+        "elements_needed_at_the_observed_rate": 778,
+        "has_them_at_the_observed_rate": false,
+        "underpowered": true,
+        "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+      },
+      "clusters": {
+        "kind": "locus",
+        "count": 9,
+        "minimum": 10
+      },
+      "label_distribution_top10": [
+        {
+          "label": "CD14_positive_monocyte",
+          "elements": 5,
+          "share_of_arm": 0.111111,
+          "genome_wide_base_rate": 0.035271,
+          "ratio_to_base_rate": 3.15
+        },
+        {
+          "label": "GM12878",
+          "elements": 4,
+          "share_of_arm": 0.088889,
+          "genome_wide_base_rate": 0.01454,
+          "ratio_to_base_rate": 6.114
+        },
+        {
+          "label": "K562",
+          "elements": 3,
+          "share_of_arm": 0.066667,
+          "genome_wide_base_rate": 0.062292,
+          "ratio_to_base_rate": 1.07
+        },
+        {
+          "label": "Whole_Blood",
+          "elements": 3,
+          "share_of_arm": 0.066667,
+          "genome_wide_base_rate": 0.025704,
+          "ratio_to_base_rate": 2.594
+        },
+        {
+          "label": "naive_thymus_derived_CD4_positive__alpha_beta_T_cell",
+          "elements": 3,
+          "share_of_arm": 0.066667,
+          "genome_wide_base_rate": 0.018049,
+          "ratio_to_base_rate": 3.694
+        },
+        {
+          "label": "CD4_positive__CD25_positive__alpha_beta_regulatory_T_cell",
+          "elements": 2,
+          "share_of_arm": 0.044444,
+          "genome_wide_base_rate": 0.009705,
+          "ratio_to_base_rate": 4.579
+        },
+        {
+          "label": "CD8_positive__alpha_beta_memory_T_cell",
+          "elements": 2,
+          "share_of_arm": 0.044444,
+          "genome_wide_base_rate": 0.011557,
+          "ratio_to_base_rate": 3.846
+        },
+        {
+          "label": "T_cell",
+          "elements": 2,
+          "share_of_arm": 0.044444,
+          "genome_wide_base_rate": 0.002826,
+          "ratio_to_base_rate": 15.728
+        },
+        {
+          "label": "naive_B_cell",
+          "elements": 2,
+          "share_of_arm": 0.044444,
+          "genome_wide_base_rate": 0.007917,
+          "ratio_to_base_rate": 5.614
+        },
+        {
+          "label": "neural_cell",
+          "elements": 2,
+          "share_of_arm": 0.044444,
+          "genome_wide_base_rate": 0.022595,
+          "ratio_to_base_rate": 1.967
+        }
+      ]
+    },
+    "HCT116": {
+      "cell": "HCT116",
+      "labels": [
+        "HCT116"
+      ],
+      "pairs_in_cell": 396,
+      "pairs_of_this_arm_seen": 396,
+      "pairs_on_an_attributed_element": 151,
+      "pairs_whose_element_carries_the_measured_cell": 1,
+      "pair_level_rate_is_secondary": "reported because a reader will ask for it; it is NOT the headline, because the compiled cell belongs to the element and a pair count weights an element by how many genes the screen happened to assay near it (DENOMINATOR)",
+      "pair_level_rate": 0.006623,
+      "elements": 248,
+      "elements_whose_label_is_the_measured_cell": 1,
+      "observed_rate": 0.004032,
+      "reading": {
+        "rate_reported": true,
+        "reading": "(2)",
+        "observed_rate": 0.004032,
+        "committed_base_rate": 0.001348,
+        "difference_point_estimate": 0.002684,
+        "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
+        "tolerance": 0.02,
+        "clustered_ci95_on_the_rate": [
+          0.0,
+          0.017986
+        ],
+        "clustered_ci95_on_the_difference": [
+          -0.001348,
+          0.016638
+        ],
+        "clustered_by": "locus",
+        "cluster_grouping_caveat": "an operational grouping, NOT established biological independence",
+        "clustered_interval_provenance": {
+          "clusters": 14,
+          "cluster_minimum": 10,
+          "resamples_requested": 2000,
+          "resamples_minimum": 1000,
+          "seed": 20261002,
+          "method": "percentile bootstrap over whole clusters, resampled with replacement",
+          "met_minimum": true
+        },
+        "why_no_interval": null,
+        "clustered_interval_decides_the_reading": true,
+        "wilson95_secondary": [
+          0.000712,
+          0.022483
+        ],
+        "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+        "wilson95_excludes_the_base_rate": false,
+        "detection": "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the whole clustered interval on d lies inside the registered tolerance, so this arm has excluded any difference larger than it. The rate at which the compiled cell is the measured cell is that label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts. The confound pushes the other way, so this reading is not explained by the benchmark's selection of tested elements",
+        "argmax_carries_cell_type_information": false,
+        "power": {
+          "elements": 248,
+          "committed_base_rate": 0.001348,
+          "elements_needed_at_the_base_rate": 13,
+          "has_them_at_the_base_rate": true,
+          "observed_rate": 0.004032,
+          "elements_needed_at_the_observed_rate": 39,
+          "has_them_at_the_observed_rate": true,
+          "underpowered": false,
+          "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+        },
+        "usable": false,
+        "usability": "observed rate 0.0040 is below the registered 0.25: whatever the interval says, the compiled cell names the measured cell on a MINORITY of this arm's elements and may not be read as the place the rule acts"
+      },
+      "power": {
+        "elements": 248,
+        "committed_base_rate": 0.001348,
+        "elements_needed_at_the_base_rate": 13,
+        "has_them_at_the_base_rate": true,
+        "observed_rate": 0.004032,
+        "elements_needed_at_the_observed_rate": 39,
+        "has_them_at_the_observed_rate": true,
+        "underpowered": false,
+        "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+      },
+      "clusters": {
+        "kind": "locus",
+        "count": 14,
+        "minimum": 10
+      },
+      "label_distribution_top10": [
+        {
+          "label": "CD4_positive__alpha_beta_memory_T_cell",
+          "elements": 14,
+          "share_of_arm": 0.056452,
+          "genome_wide_base_rate": 0.009587,
+          "ratio_to_base_rate": 5.888
+        },
+        {
+          "label": "K562",
+          "elements": 10,
+          "share_of_arm": 0.040323,
+          "genome_wide_base_rate": 0.062292,
+          "ratio_to_base_rate": 0.647
+        },
+        {
+          "label": "naive_thymus_derived_CD8_positive__alpha_beta_T_cell",
+          "elements": 10,
+          "share_of_arm": 0.040323,
+          "genome_wide_base_rate": 0.009372,
+          "ratio_to_base_rate": 4.303
+        },
+        {
+          "label": "keratinocyte",
+          "elements": 9,
+          "share_of_arm": 0.03629,
+          "genome_wide_base_rate": 0.012168,
+          "ratio_to_base_rate": 2.982
+        },
+        {
+          "label": "CD14_positive_monocyte",
+          "elements": 8,
+          "share_of_arm": 0.032258,
+          "genome_wide_base_rate": 0.035271,
+          "ratio_to_base_rate": 0.915
+        },
+        {
+          "label": "placenta",
+          "elements": 7,
+          "share_of_arm": 0.028226,
+          "genome_wide_base_rate": 0.0324,
+          "ratio_to_base_rate": 0.871
+        },
+        {
+          "label": "CD8_positive__alpha_beta_T_cell",
+          "elements": 6,
+          "share_of_arm": 0.024194,
+          "genome_wide_base_rate": 0.020137,
+          "ratio_to_base_rate": 1.201
+        },
+        {
+          "label": "HFFc6",
+          "elements": 6,
+          "share_of_arm": 0.024194,
+          "genome_wide_base_rate": 0.00981,
+          "ratio_to_base_rate": 2.466
+        },
+        {
+          "label": "HepG2",
+          "elements": 6,
+          "share_of_arm": 0.024194,
+          "genome_wide_base_rate": 0.033544,
+          "ratio_to_base_rate": 0.721
+        },
+        {
+          "label": "T_cell",
+          "elements": 6,
+          "share_of_arm": 0.024194,
+          "genome_wide_base_rate": 0.002826,
+          "ratio_to_base_rate": 8.562
+        }
+      ]
+    },
+    "Jurkat": {
+      "cell": "Jurkat",
+      "labels": [
+        "Jurkat",
+        "Jurkat__Clone_E6_1"
+      ],
+      "pairs_in_cell": 75,
+      "pairs_of_this_arm_seen": 75,
+      "pairs_on_an_attributed_element": 31,
+      "pairs_whose_element_carries_the_measured_cell": 2,
+      "pair_level_rate_is_secondary": "reported because a reader will ask for it; it is NOT the headline, because the compiled cell belongs to the element and a pair count weights an element by how many genes the screen happened to assay near it (DENOMINATOR)",
+      "pair_level_rate": 0.064516,
+      "elements": 41,
+      "elements_whose_label_is_the_measured_cell": 1,
+      "observed_rate": 0.02439,
+      "reading": {
+        "rate_reported": true,
+        "reading": "(4)",
+        "observed_rate": 0.02439,
+        "committed_base_rate": 0.002569,
+        "difference_point_estimate": 0.021821,
+        "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
+        "tolerance": 0.02,
+        "clustered_ci95_on_the_rate": null,
+        "clustered_ci95_on_the_difference": null,
+        "clustered_by": "locus",
+        "cluster_grouping_caveat": "an operational grouping, NOT established biological independence",
+        "clustered_interval_provenance": {
+          "clusters": 5,
+          "cluster_minimum": 10,
+          "resamples_requested": 2000,
+          "resamples_minimum": 1000,
+          "seed": 20261002,
+          "method": "percentile bootstrap over whole clusters, resampled with replacement",
+          "met_minimum": true
+        },
+        "why_no_interval": "5 resampling clusters is below the floor of 10, so no interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement",
+        "clustered_interval_decides_the_reading": true,
+        "wilson95_secondary": [
+          0.004319,
+          0.125951
+        ],
+        "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+        "wilson95_excludes_the_base_rate": true,
+        "detection": "INCONCLUSIVE BY RULE: THE DATA CANNOT TELL. 5 resampling clusters is below the floor of 10, so no interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement. This is NOT `no cell-type information` and may never be reported as one; it is also not a detection. The point estimate and the counts are reported and decide nothing",
+        "argmax_carries_cell_type_information": null,
+        "power": {
+          "elements": 41,
+          "committed_base_rate": 0.002569,
+          "elements_needed_at_the_base_rate": 25,
+          "has_them_at_the_base_rate": true,
+          "observed_rate": 0.02439,
+          "elements_needed_at_the_observed_rate": 229,
+          "has_them_at_the_observed_rate": false,
+          "underpowered": true,
+          "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+        },
+        "usable": false,
+        "usability": "observed rate 0.0244 is below the registered 0.25: whatever the interval says, the compiled cell names the measured cell on a MINORITY of this arm's elements and may not be read as the place the rule acts"
+      },
+      "power": {
+        "elements": 41,
+        "committed_base_rate": 0.002569,
+        "elements_needed_at_the_base_rate": 25,
+        "has_them_at_the_base_rate": true,
+        "observed_rate": 0.02439,
+        "elements_needed_at_the_observed_rate": 229,
+        "has_them_at_the_observed_rate": false,
+        "underpowered": true,
+        "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+      },
+      "clusters": {
+        "kind": "locus",
+        "count": 5,
+        "minimum": 10
+      },
+      "label_distribution_top10": [
+        {
+          "label": "CD14_positive_monocyte",
+          "elements": 4,
+          "share_of_arm": 0.097561,
+          "genome_wide_base_rate": 0.035271,
+          "ratio_to_base_rate": 2.766
+        },
+        {
+          "label": "naive_thymus_derived_CD4_positive__alpha_beta_T_cell",
+          "elements": 3,
+          "share_of_arm": 0.073171,
+          "genome_wide_base_rate": 0.018049,
+          "ratio_to_base_rate": 4.054
+        },
+        {
+          "label": "CD4_positive__CD25_positive__alpha_beta_regulatory_T_cell",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.009705,
+          "ratio_to_base_rate": 5.026
+        },
+        {
+          "label": "CD8_positive__alpha_beta_memory_T_cell",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.011557,
+          "ratio_to_base_rate": 4.221
+        },
+        {
+          "label": "GM12878",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.01454,
+          "ratio_to_base_rate": 3.355
+        },
+        {
+          "label": "GM12892",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.009288,
+          "ratio_to_base_rate": 5.252
+        },
+        {
+          "label": "HT_29",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.006387,
+          "ratio_to_base_rate": 7.638
+        },
+        {
+          "label": "naive_B_cell",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.007917,
+          "ratio_to_base_rate": 6.162
+        },
+        {
+          "label": "naive_thymus_derived_CD8_positive__alpha_beta_T_cell",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.009372,
+          "ratio_to_base_rate": 5.205
+        },
+        {
+          "label": "neural_cell",
+          "elements": 2,
+          "share_of_arm": 0.04878,
+          "genome_wide_base_rate": 0.022595,
+          "ratio_to_base_rate": 2.159
+        }
+      ]
+    },
+    "WTC11": {
+      "cell": "WTC11",
+      "labels": [
+        "WTC11"
+      ],
+      "pairs_in_cell": 1921,
+      "pairs_of_this_arm_seen": 1921,
+      "pairs_on_an_attributed_element": 1254,
+      "pairs_whose_element_carries_the_measured_cell": 0,
+      "pair_level_rate_is_secondary": "reported because a reader will ask for it; it is NOT the headline, because the compiled cell belongs to the element and a pair count weights an element by how many genes the screen happened to assay near it (DENOMINATOR)",
+      "pair_level_rate": 0.0,
+      "elements": 397,
+      "elements_whose_label_is_the_measured_cell": 0,
+      "observed_rate": 0.0,
+      "reading": {
+        "rate_reported": true,
+        "reading": "(2)",
+        "observed_rate": 0.0,
+        "committed_base_rate": 0.000218,
+        "difference_point_estimate": -0.000218,
+        "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
+        "tolerance": 0.02,
+        "clustered_ci95_on_the_rate": [
+          0.0,
+          0.0
+        ],
+        "clustered_ci95_on_the_difference": [
+          -0.000218,
+          -0.000218
+        ],
+        "clustered_by": "chromosome",
+        "cluster_grouping_caveat": null,
+        "clustered_interval_provenance": {
+          "clusters": 12,
+          "cluster_minimum": 10,
+          "resamples_requested": 2000,
+          "resamples_minimum": 1000,
+          "seed": 20261002,
+          "method": "percentile bootstrap over whole clusters, resampled with replacement",
+          "met_minimum": true
+        },
+        "why_no_interval": null,
+        "clustered_interval_decides_the_reading": true,
+        "wilson95_secondary": [
+          0.0,
+          0.009583
+        ],
+        "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+        "wilson95_excludes_the_base_rate": false,
+        "detection": "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the whole clustered interval on d lies inside the registered tolerance, so this arm has excluded any difference larger than it. The rate at which the compiled cell is the measured cell is that label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts. The confound pushes the other way, so this reading is not explained by the benchmark's selection of tested elements",
+        "argmax_carries_cell_type_information": false,
+        "power": {
+          "elements": 397,
+          "committed_base_rate": 0.000218,
+          "elements_needed_at_the_base_rate": 3,
+          "has_them_at_the_base_rate": true,
+          "observed_rate": 0.0,
+          "elements_needed_at_the_observed_rate": 1,
+          "has_them_at_the_observed_rate": true,
+          "underpowered": false,
+          "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+        },
+        "usable": false,
+        "usability": "observed rate 0.0000 is below the registered 0.25: whatever the interval says, the compiled cell names the measured cell on a MINORITY of this arm's elements and may not be read as the place the rule acts"
+      },
+      "power": {
+        "elements": 397,
+        "committed_base_rate": 0.000218,
+        "elements_needed_at_the_base_rate": 3,
+        "has_them_at_the_base_rate": true,
+        "observed_rate": 0.0,
+        "elements_needed_at_the_observed_rate": 1,
+        "has_them_at_the_observed_rate": true,
+        "underpowered": false,
+        "how": "`AMENDMENT_1` (d): the elements an arm needs for a +/-half_width interval at a given rate.\n\n    z^2 p (1-p) / half_width^2, the normal-approximation sample size. It is reported at TWO rates\n    and the reason is stated rather than left for a reader to notice: at the BASE rate - which is\n    what the coordinator asked for, and which is the width of the null the arm is testing against -\n    and at the arm's OBSERVED rate, which is the width the arm's own interval actually has. For a\n    cell whose base rate is near zero the first number is small and the second is not, and quoting\n    only the first would make an arm look powered that is not.\n    "
+      },
+      "clusters": {
+        "kind": "chromosome",
+        "count": 12,
+        "minimum": 10
+      },
+      "label_distribution_top10": [
+        {
+          "label": "K562",
+          "elements": 19,
+          "share_of_arm": 0.047859,
+          "genome_wide_base_rate": 0.062292,
+          "ratio_to_base_rate": 0.768
+        },
+        {
+          "label": "placenta",
+          "elements": 19,
+          "share_of_arm": 0.047859,
+          "genome_wide_base_rate": 0.0324,
+          "ratio_to_base_rate": 1.477
+        },
+        {
+          "label": "Purkinje_cell",
+          "elements": 13,
+          "share_of_arm": 0.032746,
+          "genome_wide_base_rate": 0.016973,
+          "ratio_to_base_rate": 1.929
+        },
+        {
+          "label": "HepG2",
+          "elements": 12,
+          "share_of_arm": 0.030227,
+          "genome_wide_base_rate": 0.033544,
+          "ratio_to_base_rate": 0.901
+        },
+        {
+          "label": "CD14_positive_monocyte",
+          "elements": 10,
+          "share_of_arm": 0.025189,
+          "genome_wide_base_rate": 0.035271,
+          "ratio_to_base_rate": 0.714
+        },
+        {
+          "label": "H9",
+          "elements": 9,
+          "share_of_arm": 0.02267,
+          "genome_wide_base_rate": 0.00727,
+          "ratio_to_base_rate": 3.118
+        },
+        {
+          "label": "Whole_Blood",
+          "elements": 9,
+          "share_of_arm": 0.02267,
+          "genome_wide_base_rate": 0.025704,
+          "ratio_to_base_rate": 0.882
+        },
+        {
+          "label": "neural_cell",
+          "elements": 9,
+          "share_of_arm": 0.02267,
+          "genome_wide_base_rate": 0.022595,
+          "ratio_to_base_rate": 1.003
+        },
+        {
+          "label": "small_intestine",
+          "elements": 9,
+          "share_of_arm": 0.02267,
+          "genome_wide_base_rate": 0.022711,
+          "ratio_to_base_rate": 0.998
+        },
+        {
+          "label": "LHCN_M2",
+          "elements": 8,
+          "share_of_arm": 0.020151,
+          "genome_wide_base_rate": 0.01269,
+          "ratio_to_base_rate": 1.588
+        }
+      ]
+    }
+  },
+  "cross_arm_matrix": {
+    "columns": [
+      {
+        "cell": "K562",
+        "labels": [
+          "K562"
+        ],
+        "genome_wide_base_rate": 0.062292
+      },
+      {
+        "cell": "GM12878",
+        "labels": [
+          "GM12878"
+        ],
+        "genome_wide_base_rate": 0.01454
+      },
+      {
+        "cell": "HCT116",
+        "labels": [
+          "HCT116"
+        ],
+        "genome_wide_base_rate": 0.001348
+      },
+      {
+        "cell": "Jurkat",
+        "labels": [
+          "Jurkat",
+          "Jurkat__Clone_E6_1"
+        ],
+        "genome_wide_base_rate": 0.002569
+      },
+      {
+        "cell": "WTC11",
+        "labels": [
+          "WTC11"
+        ],
+        "genome_wide_base_rate": 0.000218
+      }
+    ],
+    "rows": [
+      {
+        "arm": "K562",
+        "elements": 3228,
+        "rate_of_each_column": {
+          "K562": 0.189591,
+          "GM12878": 0.010533,
+          "HCT116": 0.00031,
+          "Jurkat": 0.003098,
+          "WTC11": 0.00031
+        }
+      },
+      {
+        "arm": "GM12878",
+        "elements": 45,
+        "rate_of_each_column": {
+          "K562": 0.066667,
+          "GM12878": 0.088889,
+          "HCT116": 0.0,
+          "Jurkat": 0.022222,
+          "WTC11": 0.0
+        }
+      },
+      {
+        "arm": "HCT116",
+        "elements": 248,
+        "rate_of_each_column": {
+          "K562": 0.040323,
+          "GM12878": 0.020161,
+          "HCT116": 0.004032,
+          "Jurkat": 0.008065,
+          "WTC11": 0.0
+        }
+      },
+      {
+        "arm": "Jurkat",
+        "elements": 41,
+        "rate_of_each_column": {
+          "K562": 0.02439,
+          "GM12878": 0.04878,
+          "HCT116": 0.0,
+          "Jurkat": 0.02439,
+          "WTC11": 0.0
+        }
+      },
+      {
+        "arm": "WTC11",
+        "elements": 397,
+        "rate_of_each_column": {
+          "K562": 0.047859,
+          "GM12878": 0.005038,
+          "HCT116": 0.002519,
+          "Jurkat": 0.002519,
+          "WTC11": 0.0
+        }
+      }
+    ],
+    "what_it_is": "The one check that bears on the confound without new data, reported for every pair of arms: the rate of `label == C` over the elements of arm A, for every arm cell C. If the argmax tracked the cell a measurement was taken in, arm A's own cell would stand out among the columns of row A. If instead each column is near that column's genome-wide base rate whatever the row, the compiled label is tracking the genome-wide label distribution and not the measured cell. This is a comparison of measured rates and sets no threshold of its own."
+  },
+  "second_base_rate": {
+    "attributed_elements_streamed": 440377,
+    "distinct_labels_seen": 316,
+    "per_arm": {
+      "K562": {
+        "labels": [
+          "K562"
+        ],
+        "elements_with_this_label": 27254,
+        "rate": 0.061888
+      },
+      "GM12878": {
+        "labels": [
+          "GM12878"
+        ],
+        "elements_with_this_label": 6402,
+        "rate": 0.014538
+      },
+      "HCT116": {
+        "labels": [
+          "HCT116"
+        ],
+        "elements_with_this_label": 590,
+        "rate": 0.00134
+      },
+      "Jurkat": {
+        "labels": [
+          "Jurkat",
+          "Jurkat__Clone_E6_1"
+        ],
+        "elements_with_this_label": 1127,
+        "rate": 0.002559
+      },
+      "WTC11": {
+        "labels": [
+          "WTC11"
+        ],
+        "elements_with_this_label": 88,
+        "rate": 0.0002
+      }
+    },
+    "what_it_is": "A second base rate is computed in the SAME streaming pass as the observed rate, from this lane's own reading of the element tables: the share of all attributed elements of all 24 chromosomes whose compiled label is the arm's cell. It exists to check the committed census rather than to replace it. The registered reading uses the COMMITTED base rate; the second is reported beside it with the difference, and a difference between the two is reported as a difference and not reconciled away."
+  },
+  "base_rate_agreement": {
+    "committed_census_rules": 440589,
+    "attributed_elements_streamed": 440377,
+    "difference": -212,
+    "what_a_difference_means": "the committed census counted RULE lines emitted by compile_chromosome and this run counted the attributed ELEMENTS those lines are written from, one rule per element. A difference is reported as a difference and is not reconciled away: it would mean the two populations are not identical, and in that case the registered reading still uses the COMMITTED base rate, which is the one fixed in advance"
+  },
+  "per_chromosome": {
+    "chr1": {
+      "attributed_elements": 43681,
+      "pairs": 1251
+    },
+    "chr2": {
+      "attributed_elements": 32917,
+      "pairs": 644
+    },
+    "chr3": {
+      "attributed_elements": 27682,
+      "pairs": 900
+    },
+    "chr4": {
+      "attributed_elements": 20646,
+      "pairs": 114
+    },
+    "chr5": {
+      "attributed_elements": 22772,
+      "pairs": 327
+    },
+    "chr6": {
+      "attributed_elements": 23769,
+      "pairs": 714
+    },
+    "chr7": {
+      "attributed_elements": 22596,
+      "pairs": 478
+    },
+    "chr8": {
+      "attributed_elements": 18552,
+      "pairs": 1223
+    },
+    "chr9": {
+      "attributed_elements": 19272,
+      "pairs": 110
+    },
+    "chr10": {
+      "attributed_elements": 21023,
+      "pairs": 260
+    },
+    "chr11": {
+      "attributed_elements": 25731,
+      "pairs": 1894
+    },
+    "chr12": {
+      "attributed_elements": 22814,
+      "pairs": 762
+    },
+    "chr13": {
+      "attributed_elements": 9711,
+      "pairs": 11
+    },
+    "chr14": {
+      "attributed_elements": 13385,
+      "pairs": 147
+    },
+    "chr15": {
+      "attributed_elements": 14474,
+      "pairs": 67
+    },
+    "chr16": {
+      "attributed_elements": 14799,
+      "pairs": 539
+    },
+    "chr17": {
+      "attributed_elements": 21608,
+      "pairs": 830
+    },
+    "chr18": {
+      "attributed_elements": 9250,
+      "pairs": 253
+    },
+    "chr19": {
+      "attributed_elements": 17265,
+      "pairs": 2795
+    },
+    "chr20": {
+      "attributed_elements": 12702,
+      "pairs": 246
+    },
+    "chr21": {
+      "attributed_elements": 5174,
+      "pairs": 98
+    },
+    "chr22": {
+      "attributed_elements": 9612,
+      "pairs": 105
+    },
+    "chrX": {
+      "attributed_elements": 10817,
+      "pairs": 966
+    },
+    "chrY": {
+      "attributed_elements": 125,
+      "pairs": 0
+    }
+  },
+  "pairs_per_table": {
+    "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz": 10356,
+    "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz": 4378
+  },
+  "pairs_per_cell_in_the_benchmark_tables": {
+    "K562": 12274,
+    "GM12878": 68,
+    "HCT116": 396,
+    "Jurkat": 75,
+    "WTC11": 1921
+  },
+  "verdict": {
+    "written_after_the_counts": "this block was written after the counts and is a reading of them. The branch each arm takes was fixed BEFORE them, by FALSIFIER under AMENDMENT_1, and is applied by `argmaxcell.reading` from the CLUSTERED interval; nothing here chooses a sentence that a figure did not select",
+    "does_the_argmax_carry_cell_type_information": "SPLIT, and reported as split, with each arm named by the reading its own interval selected. Reading (2), an equivalence result - the whole clustered interval on d inside the tolerance, so a difference larger than the tolerance is EXCLUDED and the compiled cell is not evidence of where the rule acts: ['HCT116', 'WTC11']. Reading (3), a difference detected whose sign the benchmark's selection of tested elements explains as readily as the model does, so it establishes nothing about cell-type information: ['K562']. Reading (1), anti-correlated: []. Reading (4), THE DATA CANNOT TELL - which is not a null and must never be read as one: ['GM12878', 'Jurkat']. No set is pooled with another and no arm's reading is carried to another arm",
+    "arms_with_no_cell_type_information_reading_2": [
+      "HCT116",
+      "WTC11"
+    ],
+    "reading_2_is_an_equivalence_result": "an arm is in the list above only because its WHOLE clustered interval on d lies inside the tolerance, so it has EXCLUDED a difference larger than the tolerance. An arm that merely failed to show one is in `arms_the_data_cannot_tell_reading_4` and the two lists must never be merged",
+    "arms_anti_correlated_reading_1": [],
+    "arms_where_a_difference_is_detected_but_not_attributable_reading_3": [
+      "K562"
+    ],
+    "arms_the_data_cannot_tell_reading_4": [
+      "GM12878",
+      "Jurkat"
+    ],
+    "arms_below_the_element_floor": [],
+    "arms_declared_underpowered": [
+      "GM12878",
+      "Jurkat"
+    ],
+    "arms_whose_label_clears_the_usability_threshold": [],
+    "what_an_equivalence_result_excludes_on_a_small_base_rate": {
+      "the_limit": "stated because reading (2) is an ABSOLUTE equivalence against a tolerance of 0.02, and an arm whose base rate is far below that can satisfy it while still carrying a large RELATIVE enrichment. On such an arm reading (2) means `no difference larger than the tolerance` and does NOT mean `the label carries nothing`. The multiple each arm's tolerance is of its own base rate is below, so a reader can see which arms the reading is strong on and which it is weak on without recomputing anything",
+      "tolerance_as_a_multiple_of_the_base_rate": {
+        "K562": 0.3,
+        "GM12878": 1.4,
+        "HCT116": 14.8,
+        "Jurkat": 7.8,
+        "WTC11": 91.7
+      },
+      "observed_as_a_multiple_of_the_base_rate": {
+        "K562": 3.04,
+        "GM12878": 6.11,
+        "HCT116": 2.99,
+        "Jurkat": 9.49,
+        "WTC11": 0.0
+      }
+    },
+    "what_this_does_not_say": "This lane validates nothing about the direction rule in either direction. A peer's registered reading stands and is carried word for word: v2 can withhold a direction and never reverse one, and an unresolved class is NOT absence of regulation. Nothing measured here is evidence for or against v1's directions, and no reading below may be cited as such. The question here is about the CELL a rule names, not about the direction it calls.",
+    "cannot_establish": [
+      "whether the scorer's track for a cell name and the screen's cells of that name are the same material: no file read here carries an accession on either side",
+      "whether a compiled label that is NOT the measured cell is wrong: the element may act in both, and a screen in one cell measures nothing about the other",
+      "whether the argmax carries cell-type information when the observed rate is ABOVE the base rate: the benchmark's selection of tested elements produces the same sign (CONFOUND)",
+      "any direction, magnitude or effect: no outcome column of the benchmark tables is read, and no predicted value is read beyond the tissue field of the compact table",
+      "anything about the 98% non-coding space outside the attributed elements: an element with no predicted coding target emits no rule and is in neither the base rate nor any arm"
+    ],
+    "no_rule_is_changed_by_this": "No rule, threshold, clause or `.bio` file is changed by this lane, and none is proposed for change. This is a measurement. If the finding is that a rule's cell is not evidence of where it acts, that is a finding for Albert and the supervisor; changing the cell assignment would invalidate every count already taken under it."
+  },
+  "label_rule": "An element's compiled label is `compile.context(predicted_coding['tissue'])`, which is `compile.ident` on a non-empty name and `unknown` on an absent one. The arm's cell is passed through the same function before comparison, so both sides of the equality are the string the compiler would write into `when: cell_type`. Two raw tissue names that differ only in characters `ident` replaces collapse to one label; that is a property of the census this base rate comes from, so the observed side must share it or the two would not be comparable.",
+  "alias_rule": "An arm's cell is matched against the SET of compiled labels that name that cell line, not against one string, and the same set fixes the base rate and the numerator so the two stay comparable. The set is LABELS_FOR, and it is one label for every arm but Jurkat. Jurkat has two, `Jurkat` (5 rules, EFO:0002796) and `Jurkat__Clone_E6_1` (1,127 rules, CLO:0007045), because the benchmark spells the line `Jurkat` while the model's own track name carries the clone; `crispri.PREREGISTERED_PUBLISHED` already names CLO:0007045 as the term the model's output_metadata gives Jurkat. Testing one spelling would have measured the spelling. GM12891 and GM12892 are deliberately NOT in the GM12878 set: they are other individuals of the same trio with their own ontology terms, and merging them would merge three people. A label the census does not carry contributes 0 rules and is reported as 0, never as absent.",
+  "overlap_rule": "`crispri.DeletionTable.overlapping`'s own rule, reimplemented over four scalars per element and asserted equal to it by test: an element overlaps [start, end) when element.end > start and element.start > start - 10000, searched from bisect_left(starts, end) - 1 downwards. 10000 is `crispri.REACH`, the longest element in the table, and is imported rather than restated.",
+  "interval_is_binomial": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
+  "grouping": "No grouping is applied. Elements are counted individually and the interval is binomial over elements. If a later run groups them, `cell2.group`'s caveat travels with it: an operational grouping, NOT established biological independence.",
+  "name_match_is_not_a_confirmation": "Equality of two labels is equality of two strings. It does not establish that the scorer's track and the screen's cells are the same material, the same passage or the same laboratory, and no file this lane reads could establish any of that.",
+  "metadata_copy_limitation": "Carried word for word from the correction a peer established, because it bounds what any cell statement of this lane may say: the saved copy of the model client's track metadata carries NO biosample accession and NO experiment accession. `one biosample` is therefore unsupportable from it; `one biosample NAME` is the most that can be said, and a two-track cell's two tracks are polyA plus RNA-seq and total RNA-seq of one biosample name, `not known to be biological replicates` in `_cell_summary`'s own words. This lane reads that metadata copy not at all and makes no claim that needs it.",
+  "retention_is_not_this_question": "`enhancer_target.CELLS` is the four cell lines whose own track value is kept per gene. It bounds which cells a `by_cell` value exists for and so which rows clause (1) can reach - a peer's registered reading. It does NOT bound this question: the argmax tissue is over every track the scorer returned, so a compiled label may be any of the census's 317 and HCT116's 594 rules are assessable here although HCT116 carries no `by_cell` column at all.",
+  "validates_nothing": "This lane validates nothing about the direction rule in either direction. A peer's registered reading stands and is carried word for word: v2 can withhold a direction and never reverse one, and an unresolved class is NOT absence of regulation. Nothing measured here is evidence for or against v1's directions, and no reading below may be cited as such. The question here is about the CELL a rule names, not about the direction it calls.",
+  "no_recommendation": "No rule, threshold, clause or `.bio` file is changed by this lane, and none is proposed for change. This is a measurement. If the finding is that a rule's cell is not evidence of where it acts, that is a finding for Albert and the supervisor; changing the cell assignment would invalidate every count already taken under it.",
+  "cannot_establish": [
+    "whether the scorer's track for a cell name and the screen's cells of that name are the same material: no file read here carries an accession on either side",
+    "whether a compiled label that is NOT the measured cell is wrong: the element may act in both, and a screen in one cell measures nothing about the other",
+    "whether the argmax carries cell-type information when the observed rate is ABOVE the base rate: the benchmark's selection of tested elements produces the same sign (CONFOUND)",
+    "any direction, magnitude or effect: no outcome column of the benchmark tables is read, and no predicted value is read beyond the tissue field of the compact table",
+    "anything about the 98% non-coding space outside the attributed elements: an element with no predicted coding target emits no rule and is in neither the base rate nor any arm"
+  ],
+  "read_discipline": "No archive is opened and the cached-element loader is never called. The compact per-chromosome element table is decoded ONE element at a time by `stream_table` with `json.JSONDecoder.raw_decode`, and four scalars per element are retained, so the parsed object graph of a 59 MB table is never held. One chromosome is in hand at a time and its text is released before the next is opened. `check_rss` raises at RSS_CEILING_BYTES after every chromosome. The ceiling is 2147483648 bytes and the run reports its own peak.",
+  "rss": {
+    "ceiling_bytes": 2147483648,
+    "peak_bytes": 313704448,
+    "peak_mib": 299.2,
+    "no_archive_was_opened": "no per-element archive and no cached-element loader call. The peak above is the measured figure for streaming all 24 compact tables one at a time"
+  },
+  "alphagenome_requests": 0,
+  "money": "none: no request was sent and no key was read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed genome-wide context-evidence census of compiled rule cell labels",
+        "version": "the committed data/results/context_evidence.json on this machine"
+      },
+      {
+        "accession": "Gschwind et al. 2026, Nature, doi:10.1038/s41586-026-10781-4, Supplementary Table 3 (https://pmc.ncbi.nlm.nih.gov/articles/PMC13471189/)",
+        "version": "the two benchmark tables cached under data/knowledge/crispri"
+      },
+      {
+        "accession": "the all-enhancer deletion sweep's compact per-chromosome element tables and the 72 committed run summaries that name them",
+        "version": "the tables and summaries on this machine, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/context_evidence.json",
+        "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+        "bytes": 184616,
+        "partition": "the committed genome-wide census of compiled rule cell labels: the BASE RATE of every arm, read from its per_cell block and computed by no code of this lane"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "a cached ENCODE CRISPRi benchmark table, read for each valid pair's CellType, chrom, chromStart, chromEnd and gene only"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "a cached ENCODE CRISPRi benchmark table, read for each valid pair's CellType, chrom, chromStart, chromEnd and gene only"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements",
+        "sha256": "f27d2c56ab54283b359e1aa8fe064a5109b7d1eea1792b44304f4f7365eeb82c",
+        "bytes": 622783785,
+        "partition": "the all-enhancer sweep's 24 compact per-chromosome element tables: the attributed elements and their predicted_coding tissue. Declared as the directory, one digest over every table the run streams. NOT the per-element archives, which are not opened",
+        "files": 24
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr1.json",
+        "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+        "bytes": 1680,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr1.json",
+        "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+        "bytes": 80409,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr1.json",
+        "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+        "bytes": 231503,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr2.json",
+        "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+        "bytes": 1677,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr2.json",
+        "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+        "bytes": 88553,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr2.json",
+        "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+        "bytes": 228771,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr3.json",
+        "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+        "bytes": 1655,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr3.json",
+        "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+        "bytes": 87015,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr3.json",
+        "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+        "bytes": 231751,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr4.json",
+        "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+        "bytes": 1663,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr4.json",
+        "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+        "bytes": 92315,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr4.json",
+        "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+        "bytes": 232560,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr5.json",
+        "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+        "bytes": 1643,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr5.json",
+        "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+        "bytes": 80937,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr5.json",
+        "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+        "bytes": 225597,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr6.json",
+        "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+        "bytes": 1708,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr6.json",
+        "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+        "bytes": 91754,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr6.json",
+        "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+        "bytes": 227287,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr7.json",
+        "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+        "bytes": 1668,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr7.json",
+        "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+        "bytes": 91280,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr7.json",
+        "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+        "bytes": 223619,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr8.json",
+        "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+        "bytes": 1663,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr8.json",
+        "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+        "bytes": 88507,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr8.json",
+        "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+        "bytes": 225706,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr9.json",
+        "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+        "bytes": 1661,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr9.json",
+        "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+        "bytes": 81094,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr9.json",
+        "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+        "bytes": 235646,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr10.json",
+        "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+        "bytes": 1719,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr10.json",
+        "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+        "bytes": 82872,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr10.json",
+        "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+        "bytes": 226154,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr11.json",
+        "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+        "bytes": 1651,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr11.json",
+        "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+        "bytes": 93050,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr11.json",
+        "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+        "bytes": 235882,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr12.json",
+        "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+        "bytes": 1645,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr12.json",
+        "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+        "bytes": 93749,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr12.json",
+        "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+        "bytes": 236541,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr13.json",
+        "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+        "bytes": 1654,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr13.json",
+        "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+        "bytes": 93299,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr13.json",
+        "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+        "bytes": 232682,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr14.json",
+        "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+        "bytes": 1657,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr14.json",
+        "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+        "bytes": 86812,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr14.json",
+        "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+        "bytes": 226799,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr15.json",
+        "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+        "bytes": 1660,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr15.json",
+        "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+        "bytes": 76206,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr15.json",
+        "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+        "bytes": 235302,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr16.json",
+        "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+        "bytes": 1627,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr16.json",
+        "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+        "bytes": 83816,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr16.json",
+        "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+        "bytes": 226186,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr17.json",
+        "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+        "bytes": 1649,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr17.json",
+        "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+        "bytes": 88799,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr17.json",
+        "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+        "bytes": 233113,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr18.json",
+        "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+        "bytes": 1703,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr18.json",
+        "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+        "bytes": 89764,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr18.json",
+        "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+        "bytes": 231108,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr19.json",
+        "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+        "bytes": 1643,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr19.json",
+        "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+        "bytes": 101189,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr19.json",
+        "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+        "bytes": 233210,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr20.json",
+        "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+        "bytes": 1640,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr20.json",
+        "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+        "bytes": 93809,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr20.json",
+        "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+        "bytes": 227506,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr22.json",
+        "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+        "bytes": 1608,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chr22.json",
+        "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+        "bytes": 96441,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chr22.json",
+        "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+        "bytes": 230906,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrX.json",
+        "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+        "bytes": 1673,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chrX.json",
+        "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+        "bytes": 90048,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chrX.json",
+        "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+        "bytes": 226730,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chrY.json",
+        "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+        "bytes": 1517,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/constrained_targets_chrY.json",
+        "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+        "bytes": 5788,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      },
+      {
+        "path": "data/results/enhancer_targets_chrY.json",
+        "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+        "bytes": 207535,
+        "partition": "a committed deletion-run summary read through load_result: the pointer at a compact table, or a sampled run's inline elements"
+      }
+    ],
+    "input_count": 76,
+    "assembly": "GRCh38: the assembly both benchmark tables and the deletion sweep are on",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the benchmark tables' own chromStart/chromEnd and the element tables' own start/end, compared only by OVERLAP_RULE"
+    },
+    "parameters": {
+      "tolerance": 0.02,
+      "usable_rate": 0.25,
+      "minimum_elements_for_a_rate": 30,
+      "reach": 10000,
+      "arms": [
+        "K562",
+        "GM12878",
+        "HCT116",
+        "Jurkat",
+        "WTC11"
+      ],
+      "rss_ceiling_bytes": 2147483648,
+      "minimum_clusters_for_an_interval": 10,
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20261002,
+      "locus_span": 1000000,
+      "no_threshold_of_any_rule_is_set_or_moved": "MIN_EFFECT, the direction clauses and every magnitude floor stay exactly as committed"
+    },
+    "exclusions": [
+      "every benchmark pair whose ValidConnection is not TRUE",
+      "every benchmark pair whose CellType is not one of the arms",
+      "every element with no predicted coding target: it emits no compiled rule",
+      "every per-element archive and every cached-element loader call",
+      "every outcome, DHS, H3K27ac and power column of the benchmark tables"
+    ],
+    "partitions": {
+      "per_arm_elements": "the DISTINCT attributed elements overlapping that arm's pairs: the headline denominator, one per arm, never pooled across arms",
+      "per_arm_pairs": "that arm's valid pairs: the secondary denominator",
+      "the_census_440589": "the base rate's denominator, from the committed census"
+    },
+    "code_cleanliness": {
+      "git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/argmaxcell.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/argmaxcell_count.py"
+      ],
+      "counting_path_count": 127,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/argmaxcell_count.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "code_cleanliness_git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 6c9a30e"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 561,
+      "opens_under_data": 198,
+      "files_read": 99,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
