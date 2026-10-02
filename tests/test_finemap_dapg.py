@@ -198,3 +198,47 @@ def test_the_cost_precedent_and_its_stop_rule_are_stated() -> None:
     assert fd.PRECEDENT_MB == 170.4
     src = (ROOT / "scripts/finemap_dapg.py").read_text()
     assert "must therefore be a FRACTION of" in src
+
+
+# --- the count refuses a partial read --------------------------------------------------------------
+
+
+def test_the_count_refuses_a_read_that_did_not_finish(tmp_path, monkeypatch) -> None:
+    """Counting over the chromosomes that happen to sort first is the error this refusal exists for."""
+    monkeypatch.setattr(fd, "KNOWLEDGE", tmp_path)
+    (tmp_path / "hits_chr1.tsv").write_text("chrom\tpos\tvariant\tgene\ttissue\tpip\n")
+    (tmp_path / "hits_chr2.tsv").write_text("chrom\tpos\tvariant\tgene\ttissue\tpip\n")
+    with pytest.raises(fd.RefusedError) as e:
+        fd.read_is_complete()
+    assert "did not finish" in str(e.value)
+    assert "chr1, chr2" in str(e.value), "the refusal names which chromosomes it has"
+
+
+def test_the_completeness_check_runs_before_any_frame_work(tmp_path, monkeypatch) -> None:
+    """A refusal that costs three minutes of element tables to reach is one someone works around."""
+    monkeypatch.setattr(fd, "KNOWLEDGE", tmp_path)
+    (tmp_path / "hits_chr1.tsv").write_text("chrom\tpos\tvariant\tgene\ttissue\tpip\n")
+
+    def explode() -> None:  # pragma: no cover - must never be reached
+        raise AssertionError("the frame was read before the read was known to be complete")
+
+    monkeypatch.setattr(fd, "frame_with_keys", explode)
+    monkeypatch.setattr(fd, "controls", explode)
+    with pytest.raises(fd.RefusedError):
+        fd.count_payload()
+
+
+def test_read_is_complete_returns_the_summary_when_it_is_there(tmp_path, monkeypatch) -> None:
+    import json
+
+    monkeypatch.setattr(fd, "KNOWLEDGE", tmp_path)
+    (tmp_path / "hits_chr1.tsv").write_text("chrom\tpos\tvariant\tgene\ttissue\tpip\n")
+    (tmp_path / "read_summary.json").write_text(json.dumps({"intervals": 7}))
+    assert fd.read_is_complete()["intervals"] == 7
+
+
+def test_the_cost_bound_is_checked_after_every_chromosome_not_at_the_end() -> None:
+    """A bound only checked once the work is done is not a bound."""
+    src = (ROOT / "scripts/finemap_dapg.py").read_text()
+    body = src[src.index("def read(") : src.index("def load_hits(")]
+    assert body.index('if cost["requests"] >= PRECEDENT_REQUESTS') < body.index("summary = {")

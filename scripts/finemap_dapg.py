@@ -66,7 +66,7 @@ from genomeos.attribution import executor as ex  # noqa: E402
 from genomeos.attribution import human_panel as hp  # noqa: E402
 from genomeos.attribution import measured as ms  # noqa: E402
 from genomeos.attribution import wiring as wr  # noqa: E402
-from genomeos.results import save_result  # noqa: E402
+from genomeos.results import RESULTS_DIR, save_result  # noqa: E402
 
 REGISTRATION = "finemap_dapg_registration"
 RESULT = "finemap_dapg"
@@ -581,12 +581,281 @@ def load_hits() -> dict[str, list[dict[str, Any]]]:
     return out
 
 
+# --------------------------------------------------------------------------- the count
+
+
+def frame_with_keys() -> tuple[dict[str, dict[str, Any]], dict[str, list[Any]]]:
+    """The frame and each element's `cell2.LocusKey`s, in one pass over the candidates.
+
+    `finemap_coverage.elements` builds the same dict and drops the keys; the locus grouping needs them.
+    This is not a second frame: the element ids and intervals it produces feed `controls`, whose digest
+    the registration pinned, so a frame that differed here would be REFUSED by the digest check rather
+    than silently counted.
+    """
+    from genomeos.attribution import context_evidence as ce
+
+    cands, _counted = rm2.candidates(list(rm2.CHROMS), RESULTS_DIR, ce.Readers(), ce.mapping())
+    els: dict[str, dict[str, Any]] = {}
+    keys: dict[str, list[Any]] = collections.defaultdict(list)
+    for c in cands:
+        if c.element is None:
+            continue
+        eid = c.element["id"]
+        rec = els.setdefault(
+            eid,
+            {
+                "chrom": c.pair.chrom,
+                "start": c.element["start"],
+                "end": c.element["end"],
+                "genes": set(),
+                "statuses": set(),
+            },
+        )
+        rec["genes"].add(c.pair.gene)
+        rec["statuses"].add(c.status)
+        keys[eid].append(c.key)
+    return els, dict(keys)
+
+
+def rows_in(rows: list[dict[str, Any]], lo: int, hi: int) -> list[dict[str, Any]]:
+    pos = [r["pos"] for r in rows]
+    return rows[bisect.bisect_left(pos, lo) : bisect.bisect_right(pos, hi)]
+
+
+def symbols_of(rows: list[dict[str, Any]], smap: dict[str, set[str]]) -> set[str]:
+    """Gene symbols a set of retained rows names, through the one Ensembl-to-symbol resolution."""
+    out: set[str] = set()
+    for r in rows:
+        g = r["gene"]
+        if not g:
+            continue
+        if g.startswith("ENSG"):
+            out |= smap.get(g.split(".")[0], set())
+        else:
+            out.add(g)
+    return out
+
+
+def read_is_complete() -> dict[str, Any]:
+    """The read's own summary, or a refusal. Checked BEFORE the frame pass, not after.
+
+    `read` writes this file last, so its absence means the run stopped part way. The check is first
+    because a refusal that costs three minutes of element tables to reach is a refusal someone
+    eventually works around.
+    """
+    done = KNOWLEDGE / "read_summary.json"
+    if not done.exists():
+        have = sorted(q.stem[len("hits_") :] for q in KNOWLEDGE.glob("hits_*.tsv"))
+        raise RefusedError(
+            f"the read did not finish: {done} is absent and only {len(have)} chromosomes have rows "
+            f"({', '.join(have)}). `read` writes that file last, so its absence means the run stopped "
+            "part way - here on the registered cost bound. Counting over the chromosomes that happen "
+            "to sort first is the error the executor's own registration names: a claim that holds on "
+            "the chromosomes scored first and nowhere else has caught this project four times. The "
+            "count REFUSES rather than reporting a figure over half a genome"
+        )
+    return json.loads(done.read_text())
+
+
+def count_payload() -> dict[str, Any]:
+    summary = read_is_complete()
+    reg = _registered()
+    els, keys = frame_with_keys()
+    ctrl, info = controls(els)
+    if info["digest"] != reg["the_baseline"]["digest"]:
+        raise RefusedError(
+            "the control windows do not match the registration: "
+            f"{reg['the_baseline']['digest']} registered, {info['digest']} now"
+        )
+    hits = load_hits()
+    smap = c3.symbol_map({v["chrom"] for v in els.values()})
+
+    carrying: list[str] = []
+    matched: list[str] = []
+    ctrl_windows = 0
+    ctrl_carrying = 0
+    ctrl_matched = 0
+    elements_with_a_matched_control_hit: list[str] = []
+    unresolved: set[str] = set()
+    for eid in sorted(els):
+        v = els[eid]
+        rows = hits.get(v["chrom"], [])
+        own = rows_in(rows, v["start"] - MARGIN, v["end"] + MARGIN)
+        if own:
+            carrying.append(eid)
+        linked = set(v["genes"])
+        names = symbols_of(own, smap)
+        for r in own:
+            g = r["gene"]
+            if g.startswith("ENSG") and not smap.get(g.split(".")[0]):
+                unresolved.add(g)
+        if names & linked:
+            matched.append(eid)
+        for lo, hi in ctrl.get(eid, []):
+            ctrl_windows += 1
+            crows = rows_in(rows, lo - MARGIN, hi + MARGIN)
+            if crows:
+                ctrl_carrying += 1
+            if symbols_of(crows, smap) & linked:
+                ctrl_matched += 1
+                if eid not in elements_with_a_matched_control_hit:
+                    elements_with_a_matched_control_hit.append(eid)
+
+    matched_keys = [k for eid in matched for k in keys.get(eid, [])]
+    loci = len(set(cell2.group(matched_keys))) if matched_keys else 0
+    clears = len(matched) >= LINK_FLOOR and loci >= LOCUS_FLOOR
+
+    baseline: dict[str, Any]
+    if not clears:
+        baseline = {
+            "computed": False,
+            "why_not": (
+                f"the gene-matched count is {len(matched)} against a floor of {LINK_FLOOR} and its "
+                f"independent loci are {loci} against a floor of {LOCUS_FLOOR}. The floors were "
+                "registered before the read and neither moves after the count is seen. A "
+                "matched-window excess over a population this small is a number nobody can read"
+            ),
+            "control_windows_read_anyway": ctrl_windows,
+            "control_windows_with_a_gene_matched_hit": ctrl_matched,
+            "why_they_are_still_reported": (
+                "the controls were drawn and read before the count, so withholding them now would be "
+                "choosing what to show after seeing it. They are reported as a descriptive figure and "
+                "NOT as an excess, because an excess over a population that misses its floor is not a "
+                "quantity this lane is permitted to publish"
+            ),
+        }
+    else:
+        el_share = len(matched) / len(els)
+        ct_share = ctrl_matched / ctrl_windows if ctrl_windows else None
+        p = ex.fisher_greater(len(matched), len(els), ctrl_matched, ctrl_windows)
+        baseline = {
+            "computed": True,
+            "the_reportable_quantity_is_the_excess": (
+                "the raw gene-matched count is not the result and is not reported as one"
+            ),
+            "elements_with_a_gene_matched_hit": len(matched),
+            "elements": len(els),
+            "element_share": round(el_share, 4),
+            "control_windows_with_a_gene_matched_hit": ctrl_matched,
+            "control_windows": ctrl_windows,
+            "control_share": round(ct_share, 4) if ct_share is not None else None,
+            "EXCESS": round(el_share - (ct_share or 0.0), 4),
+            "one_sided_fisher_p": p,
+            "the_control_borrows_the_element_gene": (
+                "a control window counts as carrying only when a retained row in it is for the SAME "
+                "element's linked gene, which is the executor's own control rule - its controls borrow "
+                "the unit's gene rather than taking one of their own"
+            ),
+        }
+
+    return {
+        "result": RESULT,
+        "date": "2026-10-02",
+        "question": reg["question"],
+        "registered_at": f"data/results/{REGISTRATION}.json",
+        "registered_sha256": summary["registration_sha256"],
+        "the_read": summary,
+        "ASSESSABLE_FIRST": {
+            "elements_of_the_frame": len(els),
+            "assessed": len(els),
+            "assessed_by_construction": ASSESSED_BY_CONSTRUCTION,
+            "what_the_read_changed": (
+                "data/results/finemap_coverage.json found the posterior survived on disk for 48 of "
+                "the 1,505. The read puts a DAP-G query over every one of them, so the frame a "
+                "fine-mapped variant could be SEEN over is now the whole 1,505 and 0 are unassessed"
+            ),
+            "what_1505_is_a_denominator_for": (
+                "the question 'does a fine-mapped cis-eQTL lie inside this element'. Every element "
+                "was queried, so a 0 here is a measured absence and not a gap"
+            ),
+            "what_1505_is_NOT_a_denominator_for": (
+                "the question 'is this element the cause of its gene's expression'. The read answers "
+                "where a posterior lies, not what an element does, and no ratio below should be read "
+                "as the second"
+            ),
+            "the_limit_the_read_cannot_remove": reg["the_two_figures_kept_apart"][
+                "the_limit_the_read_cannot_remove"
+            ],
+        },
+        "CARRYING_SECOND": {
+            "carrying_any_fine_mapped_variant": len(carrying),
+            "carrying_one_for_the_element_own_linked_gene": len(matched),
+            "gene_rule": reg["conditions"]["a_gene_match_is_mandatory"],
+            "gene_ids_that_could_not_be_resolved_to_a_symbol": sorted(unresolved)[:50],
+            "n_unresolved_gene_ids": len(unresolved),
+            "unresolved_note": (
+                "`scripts/eqtl_targets.py symbol_map` leaves a gene whose GENCODE record carries no "
+                "symbol as its own Ensembl id, so the gene-matched count is a FLOOR. Each unresolved "
+                "id is named rather than counted as a non-match"
+            ),
+            "the_raw_count_is_not_the_result": (
+                "with a dense track a window of any kind catches something, so the carrying count is "
+                "reported only beside the matched-window baseline below, never alone"
+            ),
+        },
+        "floors": {
+            "gene_matched_elements_at_least": LINK_FLOOR,
+            "reached": len(matched),
+            "independent_loci_at_least": LOCUS_FLOOR,
+            "loci_reached": loci,
+            "both_imported_from": reg["conditions"]["floors"]["imported_from"]
+            + " and "
+            + reg["conditions"]["floors"]["loci_imported_from"],
+            "clears_both": clears,
+        },
+        "the_baseline": baseline,
+        "what_the_1262_may_be_called": (
+            f"{LD_TAGGED_LABEL}. The re-distillation counted GTEx's significant single-tissue set, "
+            "which has no posterior in it. Nothing here says 1,262 is wrong as a count of what it "
+            "counted"
+        ),
+        "nothing_is_built": (
+            "no response-map increment is built in this lane whatever these numbers say. The "
+            "deepening arm needs its own registration and its own decision, which the coordinator "
+            "has withheld"
+        ),
+        "alphagenome_requests": 0,
+        "money": "none: a range read of a public UCSC bigBed is not a paid call",
+        "result_manifest": {
+            "sources": reg["result_manifest"]["sources"],
+            "inputs": _count_inputs(),
+            "inputs_opened_beside_the_declared_results": reg["result_manifest"][
+                "inputs_opened_beside_the_declared_results"
+            ],
+            "assembly": "GRCh38",
+            "coordinates": {"base": 0, "interval": "half-open"},
+            "parameters": reg["result_manifest"]["parameters"],
+            "exclusions": reg["result_manifest"]["exclusions"],
+            "partitions": reg["result_manifest"]["partitions"],
+            "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
+        },
+    }
+
+
+def _count_inputs() -> list[dict[str, Any]]:
+    """Everything the count opens under data/: the coverage writer's set, plus the rows and this
+    lane's own registration."""
+    seen: set[str] = set()
+    out: list[dict[str, Any]] = []
+    for entry in fc._inputs():
+        seen.add(entry["path"])
+        out.append(entry)
+    extra = sorted(KNOWLEDGE.glob("hits_*.tsv")) + [KNOWLEDGE / "read_summary.json"]
+    extra.append(Path("data/results") / f"{REGISTRATION}.json")
+    for q in extra:
+        if q.exists() and q.as_posix() not in seen:
+            seen.add(q.as_posix())
+            out.append(mf.input_entry(q, partition=None))
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--register", action="store_true", help="write the frame, controls and rule first")
     ap.add_argument("--read", action="store_true", help="read the track by range over the registered set")
+    ap.add_argument("--count", action="store_true", help="assessable first, then carrying, then the baseline")
     args = ap.parse_args()
-    if not (args.register or args.read):
+    if not (args.register or args.read or args.count):
         raise SystemExit("--register is required: nothing is read before the registration exists")
     if args.read:
         from genomeos.jobs import heartbeat
@@ -596,6 +865,31 @@ def main() -> int:
             print(msg, flush=True)
 
         print(json.dumps(read(progress), indent=1))
+        return 0
+    if args.count:
+        if not any(KNOWLEDGE.glob("hits_*.tsv")):
+            raise RefusedError(f"no retained rows under {KNOWLEDGE}: run --read first")
+        payload = count_payload()
+        path = save_result(RESULT, payload)
+        print(f"{RESULT}: {path}")
+        a, c, f = payload["ASSESSABLE_FIRST"], payload["CARRYING_SECOND"], payload["floors"]
+        print(f"  ASSESSED {a['assessed']} of {a['elements_of_the_frame']} BY CONSTRUCTION, 0 unassessed")
+        print(
+            f"  CARRYING any {c['carrying_any_fine_mapped_variant']}, "
+            f"for the element's own gene {c['carrying_one_for_the_element_own_linked_gene']}"
+        )
+        print(
+            f"  floors {f['gene_matched_elements_at_least']}/{f['independent_loci_at_least']}: "
+            f"reached {f['reached']}/{f['loci_reached']}, clears {f['clears_both']}"
+        )
+        b = payload["the_baseline"]
+        if b["computed"]:
+            print(
+                f"  EXCESS {b['EXCESS']} (elements {b['element_share']} vs controls {b['control_share']}), "
+                f"one-sided Fisher p {b['one_sided_fisher_p']}"
+            )
+        else:
+            print("  no baseline: the floors were missed, and that is the result")
         return 0
     els = frame()
     ctrl, info = controls(els)
