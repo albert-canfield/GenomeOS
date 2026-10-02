@@ -279,9 +279,37 @@ def test_the_retained_hit_rule_sets_no_cutoff_of_its_own(frame_mod):
     assert "sets no cut-off of its own" in frame_mod.RETAINED_HIT_RULE
 
 
-def test_retained_and_attached_are_separate_quantities(frame_mod):
-    """The distillation keeps a hit in the margin; the attachment counts only inside the element."""
+def test_retained_rows_and_attachments_are_separate_units(frame_mod):
+    """A row inside two overlapping elements attaches twice, so rows and attachments differ.
+
+    The first version of this block subtracted a row count from an attachment count and published a
+    margin-only figure of -1,220. Only rows may be subtracted from rows.
+    """
     src = (ROOT / "scripts/eqtl_crispri_frame.py").read_text()
-    assert '"records_retained_by_the_distillation"' in src
-    assert '"records_retained_in_the_margin_but_not_attached"' in src
-    assert "widened to raise the number" in src
+    assert '"attachments_element_by_record"' in src
+    assert '"distinct_rows_attached_inside_an_element"' in src
+    assert '"distinct_rows_retained_by_the_distillation"' in src
+    assert '"distinct_rows_retained_in_the_margin_only"' in src
+    assert "is not widened to raise" in src
+    # the defect is named in the file, so the next reader does not have to rediscover why
+    assert "-1,220" in src
+
+
+def test_a_row_in_two_overlapping_elements_counts_once_as_a_row_and_twice_as_an_attachment():
+    """The arithmetic the -1,220 came from, in isolation, with the two units kept apart."""
+    row = {"tissue": "Lung", "pos": 1_000, "gene_id": "ENSG1", "slope": -0.4}
+    hits_by_chrom = {"chr1": [row]}
+    # two overlapping compiled elements both contain position 1,000
+    with_hit = {"E1": [row], "E2": [row]}
+    att_iv = {"E1": ("chr1", 900, 1_100), "E2": ("chr1", 950, 1_050)}
+
+    def key(chrom, h):
+        return (h["tissue"], chrom, h["pos"], h["gene_id"])
+
+    attachments = sum(len(v) for v in with_hit.values())
+    retained_rows = {key(c, h) for c, v in hits_by_chrom.items() for h in v}
+    attached_rows = {key(att_iv[e][0], h) for e, v in with_hit.items() for h in v}
+    assert attachments == 2
+    assert len(retained_rows) == len(attached_rows) == 1
+    assert len(retained_rows) - len(attached_rows) == 0  # and never negative
+    assert retained_rows - attached_rows == set()
