@@ -15040,6 +15040,89 @@ adds one more: **nothing here is evidence about the astrocyte deletion value in 
 The registration's note that 224 chr21 rows name `astrocyte` as a winning track is evidence that the
 track exists and was never read as a value.
 
+## A second extractor raises a link from a significant increase: v1 stays byte-identical at 212 links and v2 adds 48 `inhibits` links, so the project now has a repression population to test (2026-10-02, lane-inhibits)
+
+lane-repress2 registered that **the measured layer holds no repression call to test**, and lane-increase
+showed that this describes the measured layer *as it is built* rather than anything structural: the
+measurements exist and clear both imported floors, and the extractor discards them before the program
+sees them. This lane makes them reachable. It builds the population and stops: **no direction is read,
+no repression call is tested, no rate is reported and no interval is taken.**
+
+**The premise, checked rather than taken on trust.** `measured.rule_links` builds its candidate set from
+pairs the benchmark calls `Regulated`, and the `inhibits` branch three lines below it has been written
+since the function was first committed. Of the 14,734 valid pairs in the two cached benchmark tables,
+**661 are `Regulated TRUE` and every one of them has an effect size below zero**, so no pair has ever
+arrived at that branch; 820 pairs are significant, 661 decreases and 159 increases. The branch was dead
+code, not a missing feature, and `tests/test_increase_links.py` now asserts the premise against the
+tables so that it cannot quietly stop being true.
+
+**The registration precedes the code.** `genomeos/attribution/increase_links.py` at `5dfc1fd` and
+`data/results/increase_links_registration.json` at `b423d8d` fix the eligibility predicate, the version
+rule and its default, the conflict rule, the R2 wording, both imported floors and the by-construction
+statement. `genomeos/attribution/measured.py` changed only afterwards. The registration result was
+written with `own_code_is_committed` true and `foreign_uncommitted_code_on_the_counting_path` empty.
+
+**The extractor is versioned, not replaced, and v1 stays the default.** The shape is the judge's
+versioned target rule in `correctness` (`RULE_V1`/`RULE_V2`/`RULE_V3`, `RULES`, `DEFAULT_RULE`), with one
+deliberate difference: there the new rule *became* the default because the old reading was wrong; here
+v1 stays the default because the old reading is right and merely incomplete. Every committed call site
+passes one argument and therefore still gets v1, which is what keeps `# test: rules == 5176` and every
+result built on the measured layer from moving under anyone. **v1 is byte-identical**, shown by capturing
+its genome-wide output before the change and again after: 212 links both times, sha256
+`1e40fcb0a74c437612e4a9dbc0103daa9b3e00f4f4aa531cb5786b20a8c636e2` both times.
+
+**v2 is additive, by count and by content.** Over 19,072 rows carrying a measured block:
+
+| | links | actions |
+|---|---|---|
+| v1 (the default) | 212 | 212 `activates`, 0 `inhibits` |
+| v2 (explicit) | 260 | 212 `activates`, **48 `inhibits`** |
+
+The 48 new links are exactly lane-increase's 48 increases on an attributed element, reached
+independently here. **0 v1 links were removed and on 0 rows did v1's output fail to appear unchanged, in
+order, inside v2's.** The new links break down as 39 K562, 6 WTC11 and 3 HCT116, and as 25 training and
+23 held-out, the held-out ones being evaluation only under the split audit. Both arms take their
+strength and split from the same function and their action from the same line, so **v2 introduces no new
+direction rule**; it reaches a branch that was already written.
+
+**The conflict rule, registered while it is still free.** A (gene, cell) carrying both a significant
+decrease and a significant increase emits **no rule at all** — not an `activates` rule, not an `inhibits`
+rule — and both observations go to an inspectable conflicts list with their element, effect sizes, splits
+and datasets. It is never resolved by choosing a sign, by taking the larger magnitude or by preferring
+the training pair, because two significant measurements of opposite sign are a disagreement between
+measurements. **It refuses 0 (gene, cell) pairs today**, which is precisely why it is registered now
+rather than when it first bites; a count of 0 is not a finding that the measurements agree about
+direction. Suppressing a conflicted v1 link is the one way v2 could remove one, and the additivity test
+asserts the conflicts list is empty at the same time as it asserts additivity, so the day the rule first
+bites is the day that test says so.
+
+**The R2 wording is binding in code, not only in prose.** An increase-derived link records the measured
+**net direction**: action `inhibits`, evidence status `observed`, outcome **"increase on knockdown"**, and
+a molecular role left `None`, which is the value that says the R7 axes leave it unresolved. The reason is
+substantive: an increase under CRISPRi can be indirect, through KRAB spread onto a neighbouring promoter
+or competition between promoters for a shared enhancer, so the net direction is what was measured and the
+mechanism is not. `increase_links.check_no_mechanism_claim` refuses a silencer or repressor role and any
+text naming a repression mechanism, and `rule_links_detail` runs it before returning. Shown by removal:
+neutering the guard fails exactly the three tests that plant a silencer label, a repressor label and the
+text "the element represses the gene", and nothing else.
+
+**What these links are not, stated by the links themselves.** Every record carries a `by_construction`
+field, because a reader should not have to infer the property from a count that looks like coverage: a
+link exists because a measurement was made on an element the program had **already** attributed, and the
+link then takes its gene and its cell *from that measurement*. The decrease arm's 212 of 212 follows from
+how the extractor is built and is **not model coverage**; the 48 new links have the same property by
+construction. Counting either as coverage would repeat the error `docs/LESSONS.md` records under "A count
+is not a measurement of the thing you want to count".
+
+**What this does not establish.** Nothing here says any of these 48 elements represses its gene, that any
+element is a silencer or a repressor, or that any compiled repression call is right or wrong — no
+compiled rule is consulted. The floors, 30 links (`fresh.POSITIVE_FLOOR`) and 20 loci
+(`fresh.LOCUS_FLOOR`, which is `cell2.POOLED_LOCUS_FLOOR`), are recorded and **applied by nobody here**:
+no gate is taken. Testing this population is a later registration with its own floors, and the gap it
+must watch is already on the record — the link-level direction test had **21 answerable** links of 48
+measured, so a count of what exists is not a count of what can be answered. 0 model requests, no money,
+nothing downloaded.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
