@@ -788,13 +788,19 @@ a later reader is not misled by `git log`:
 | --- | --- | --- |
 | `ec8536d` | lane-re2g restamping its registration | **only** lane-rebuild's `docs/ATTRIBUTION.md` section |
 | `dd5a223` | lane-re2g's identity-check loop fix | **only** lane-rebuild's `docs/ATTRIBUTION.md` section |
-| `cc677e8` | lane-mrfix's grouped-input fix | **only** lane-map2's five files (`response_map2.py`, `web/server.py`, `web/static/index.html`, `scripts/response_map_increment2.py`, `tests/test_response_map2.py`) |
+| `cc677e8` → relabelled `a3f1c04` | lane-mrfix's grouped-input fix | **only** lane-map2's five files (`response_map2.py`, `web/server.py`, `web/static/index.html`, `scripts/response_map_increment2.py`, `tests/test_response_map2.py`). **Corrected on the machine before it was pushed**: identical tree, same parent, `update-ref` with the old value pinned, so nothing was rewritten that anyone else had |
 
-**How it happens.** `commit_own.sh` is handed a shared file while another lane's hunk in
-it is pending, or a lane's `commit_own.sh` call is refused by the guard at the moment a
-peer's staged tree is in the private index. The content committed was correct and
-complete each time, and each lane verified its own text byte for byte afterwards; only
-the message was wrong. No work was lost.
+**How it happens, and the first explanation here was wrong.** The cause is the **shared
+scratchpad**, not a shared file. Lanes write their commit message to a file and pass it to
+`commit_own.sh -F`. When the guard refuses a call that both writes the heredoc *and*
+commits, the heredoc never runs — so the message file is never written. If a **stale file
+of the same name** is already there from another lane, the next call finds it and commits
+that lane's text. `msg1.txt` is the name that collided. The content committed was correct
+and complete each time, and each lane verified its own text byte for byte afterwards; only
+the message was wrong, and no work was lost.
+
+The same refusal-then-rewrite sequence hit this coordinator repeatedly tonight; it escaped
+the collision only because its message files carried distinctive names.
 
 **What makes it less likely.** Lanes now stage a shared document by section
 (`scripts/stage_section.py`) rather than handing the whole file to `commit_own.sh`. The
