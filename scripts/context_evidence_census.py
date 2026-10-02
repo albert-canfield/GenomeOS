@@ -35,6 +35,8 @@ from genomeos.results import RESULTS_DIR, save_result  # noqa: E402
 RESULT = "context_evidence"
 CHROMS = tuple(f"chr{c}" for c in [*range(1, 23), "X", "Y"])
 RULES_ON_THE_RECORD = 440_589
+#: Above this many input files the manifest records them as groups rather than one by one.
+INPUTS_PER_FILE_MAX = 200
 
 #: This lane's own files. Everything else uncommitted in this shared checkout belongs to another lane.
 OWN_CODE = (
@@ -310,14 +312,39 @@ def main() -> None:
     peaks = sorted(
         p.as_posix()
         for cell in ce.READER_TERMS
-        for chrom in CHROMS
+        for chrom in chroms
         if (p := RESULTS_DIR / reader.peaks_path(cell, chrom).name).exists()
     )
-    inputs.append(mf.files_entry("reader_v1_dnase_peak_sets", peaks, partition=None))
+    groups = {"reader_v1_dnase_peak_sets": peaks}
     for glob in INPUT_GLOBS:
-        found = sorted(p.as_posix() for p in RESULTS_DIR.glob(glob))
-        if found:
-            inputs.append(mf.files_entry(f"compiler_inputs:{glob}", found, partition=None))
+        for chrom in chroms:
+            found = sorted(p.as_posix() for p in RESULTS_DIR.glob(glob.replace("chr*", chrom)))
+            if found:
+                groups.setdefault(f"compiler_inputs:{glob}", []).extend(found)
+    every = sorted({p for v in groups.values() for p in v})
+    # A `files_entry` records a group of files under a label, and `scripts/manifest_rebuild.py` checks
+    # each input by its `path`, so a label is reported absent whatever is on disk. Where the run reads
+    # few enough files, each one is recorded by its own path instead and the rebuild can check them.
+    if len(every) <= INPUTS_PER_FILE_MAX:
+        inputs += [mf.input_entry(p, partition=None) for p in every]
+    else:
+        for label, found in groups.items():
+            if found:
+                inputs.append(mf.files_entry(label, sorted(set(found)), partition=None))
+        inputs.append(
+            {
+                "path": "inputs_recorded_as_groups",
+                "sha256": "n/a",
+                "partition": None,
+                "note": (
+                    f"{len(every)} files over {len(chroms)} chromosomes, too many to record one by "
+                    "one, so each group above carries one sha256 over its files in sorted path "
+                    "order. scripts/manifest_rebuild.py checks an input by its path and a group's "
+                    "label is not one, so it reports every group absent; a run over fewer "
+                    "chromosomes records each file by its own path"
+                ),
+            }
+        )
     payload["result_manifest"] = {
         "sources": [
             {
