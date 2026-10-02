@@ -106,8 +106,14 @@ What exists, measured separately, because these are different claims:
 - **Software correctness**: the test suite checks that the code reproduces its
   own rules and recorded figures. That is consistency, not prediction.
 - **Independent prediction**: one result so far — an AlphaGenome deletion
-  feature on held-out CRISPRi pairs, in the range of ENCODE-rE2G, in one
-  cell type ([docs/CRISPRI-RESULT.md](docs/CRISPRI-RESULT.md)).
+  feature adds to a simpler model on held-out CRISPRi pairs in K562
+  (**+0.136, 95% +0.073 to +0.227**, on all 1,918 held-out K562 pairs,
+  `crispri_published_v2.json`; on the 1,744 of them a scored element covers,
+  **+0.141 [+0.079, +0.232]**, `crispri_benchmark_v2.json` — two populations,
+  not one figure twice);
+  against ENCODE-rE2G on matched inputs, **no difference detected** (paired,
+  on the same pairs). In one cell type
+  ([docs/CRISPRI-RESULT.md](docs/CRISPRI-RESULT.md)).
 
 The genome is not decoded: an annotation is not a function, little of the
 unknown is measured, and less is predicted on evidence the model did not see.

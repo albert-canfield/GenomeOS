@@ -39,7 +39,7 @@ resampling whole chromosomes.
 |---|---|---|
 | activity + distance | 0.550 | 1,744 pairs, 114 regulated |
 | + predicted deletion | **0.691** | same |
-| gain | **+0.141 [+0.082, +0.231]** | |
+| gain | **+0.141 [+0.082, +0.231]** at 200 draws (2026-09-22); **rebuilt 2026-10-02 at 2,000 draws over 22 clusters: +0.141 [+0.079, +0.232]** on the same 1,744 covered K562 held-out pairs, so the reading does not flip | |
 
 **Beside the published models, on the same pairs and with the benchmark's own estimator.** The
 estimator reproduces the paper's distance-to-TSS figure exactly on both sets: 0.4359 and 0.3631.
