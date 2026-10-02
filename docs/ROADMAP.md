@@ -5033,6 +5033,22 @@ ambition in §1 before it is started.
 
 ## 8. How the work is organised (several sessions, one checkout)
 
+- **At least 2 of every 4 lane slots are MODEL lanes** (correct, or complete) —
+  work that adds or repairs something the model can be held to. A VERIFICATION
+  lane takes a slot only when it blocks a model result or a promotion, or when
+  it fixes a defect found in published figures. Tooling for its own sake waits
+  in §7. Set 2026-10-02, after a night in which almost every lane was
+  verification: a rebuild that passed without hashing the largest thing it read,
+  17 published results reading an undeclared table, 10 tests passing on
+  hand-installed packages, and a verdict that could read green about a tree that
+  no longer existed. That work was worth doing and the proportion still was not
+  right, so the ratio is written down rather than left to judgement.
+- **The order of model work** as it stood at that date: AstroREG once its
+  calibration and the owner's answer are in; then a registered test of the
+  increase-derived links, with the links answerable IN THEIR OWN CELL counted
+  before any direction is read (the direction test fell from 48 measured to 21
+  answerable, and only noticed because it counted); then response-map
+  increment 4 on the next assay its count names.
 - All work on `dev`; Albert alone opens pull requests to `main`, by hand;
   no session or script opens or merges one. No attribution trailers.
 - The cycle: finish the piece, `scripts/check.sh` green (lint, format, the

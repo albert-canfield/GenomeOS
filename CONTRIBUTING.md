@@ -264,6 +264,44 @@ pointed at a five-hour-old file from another lane. Note that the hook's "this no
 does not repeat" keys on the exact command text, so adding `--force` makes a new call
 and the notice fires once more; re-send that text unchanged too.
 
+## A guard with parts is stripped part by part (2026-10-02)
+
+The rule above says show what a guard prevents by removing it. A guard can be **two
+mechanisms wearing one name**, and stripping it whole credits the wrong half.
+
+The case: `push_own.sh` refuses a push whose check verdict is for another tree, by a
+per-tree status **filename** and by comparing the recorded `tree_begin`/`tree_end`
+**fields**. Stripped whole, a stale green is accepted — so the binding is a protection.
+Strip only the field comparison and the stale green is **still refused**, so for that harm
+the field comparison is a *diagnosis* and the filename is the guard. But the field
+comparison stops something of its own: a green verdict file **copied under a name it did
+not earn**. Both parts stay; each is credited only with the harm its own removal lets
+through, and a part that stops nothing alone is called a diagnosis.
+
+## A verdict names the tree it judged; an exit code names nothing (2026-10-02)
+
+**Never ask for, or report, "check.sh green".** The acceptance is *a status-file verdict
+naming the tree that was committed* — a worktree run with `tree_begin == tree_end ==` the
+committed tree — quoted with that hash.
+
+In a checkout several sessions work in, a project-wide verdict is essentially
+**unobtainable**: one run began on `94848ca` and ended on `9d4006e`, so its 3,797 passes
+belonged to neither tree in full. `tree_moved` is the **correct answer** there, not a
+failure to retry, and it is why the push hook runs its check in an isolated worktree.
+
+**Harness-reported exit codes are hearsay.** Three runs that exited 1 or were killed
+outright were reported as "exit code 0" while the status file said otherwise. The log line
+or the status file is the fact. Anything that rested on a background exit code alone is
+re-read from its log before it is quoted again.
+
+## A script that may be running is never edited in place (2026-10-02)
+
+bash reads a script **incrementally as it executes**, and every lane runs
+`scripts/check.sh`. Write the new version to a temp file beside the target and `mv` it into
+position, so a run in flight sees either the old file or the complete new one. A lane that
+edited it in place had two runs survive and said so plainly: that was bash's buffering,
+which is luck and not safety.
+
 ## Kill by PID; never `pkill -f` in this checkout (2026-10-02)
 
 `-f` matches the whole command line of **every process on the machine**, so a pattern
