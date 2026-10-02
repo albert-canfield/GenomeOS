@@ -11,9 +11,9 @@ resolved v2 calls, that every one of those rules' cells is an ARGMAX over the mo
 (registration `ba8c41f`, result `b4622ad`, `data/results/clause1.json`). Read its counts there;
 they are not restated here and this lane re-derives none of them. Its registration also states the
 code fact this proposal rests on, which is checkable without any sweep: `direction_v2.ASSIGNED_CELL`
-is `predicted_coding['tissue']`, and `genomeos.predict.enhancer_target.predict_target` sets that
+is `predicted_coding['tissue']`, and `genomeos/predict/enhancer_target.py's `predict_target`` sets that
 field to `max_drop_tissue` or `max_rise_tissue` - the tissue of the larger of the biggest drop and
-the biggest rise over all tracks, chosen jointly with the gene. `genomeos.attribution.compile` then
+the biggest rise over all tracks, chosen jointly with the gene. `genomeos/attribution/compile.py` then
 writes `context(pc.get("tissue"))` into `when: cell_type` on the rule line. So the cell on such a
 rule is the place an extreme fell, and the compiled text says nothing that tells a reader so.
 
@@ -137,7 +137,7 @@ DECISIONS: dict[str, str] = {
     "1_the_values": (
         "three classes, each occurring in the committed corpus and each found by following the code "
         "that writes `when: cell_type`: the two rule-emitting sites in "
-        "`genomeos.attribution.compile` (the predicted element rule and the `<id>_measured` rule) "
+        "`genomeos/attribution/compile.py` (the predicted element rule and the `<id>_measured` rule) "
         "and the hand-authored programs git tracks. No class is on the axis because it would be "
         "tidy. A fourth kind is CODE-REACHABLE and is deliberately NOT a class: see decision 2."
     ),
@@ -187,7 +187,7 @@ STORAGE_OPTIONS: dict[str, str] = {
         "a `cell_provenance:` property on the rule, parsed into a field on `ir.model.Rule` beside "
         "`context_evidence`, defaulting to `NOT_ASSESSED`. A reader of the program sees the mark "
         "next to the cell. Costs an entry in `genomeos.lang.grammar.BLOCKS['rule']['props']`, a "
-        "field on `ir.model.Rule`, two lines in `genomeos.attribution.compile`, and a regeneration "
+        "field on `ir.model.Rule`, two lines in `genomeos/attribution/compile.py`, and a regeneration "
         "of docs/BIOLANG-GRAMMAR.md."
     ),
     "a_side_car_record_keyed_by_rule_id": (
@@ -228,7 +228,7 @@ PREDICTIONS: tuple[dict[str, str], ...] = (
     {
         "id": "P1",
         "claim": (
-            "`genomeos.attribution.compile` has exactly two sites that emit a `rule` line, and the "
+            "`genomeos/attribution/compile.py` has exactly two sites that emit a `rule` line, and the "
             "class of the cell each writes is fixed by the site: the predicted element rule writes "
             "`predict_target`'s argmax tissue, and the `<id>_measured` rule writes the cell "
             "`measured.rule_links` took from the screen. No third route puts a cell on a compiled "
@@ -309,7 +309,7 @@ PREDICTIONS: tuple[dict[str, str], ...] = (
 # --- 6. WHAT THIS LANE HAD ALREADY SEEN, DECLARED BEFORE IT COUNTS ANYTHING -------------------------
 
 NOT_BLIND = (
-    "before this registration was written this lane had read `genomeos.attribution.compile`'s two "
+    "before this registration was written this lane had read `genomeos/attribution/compile.py`'s two "
     "rule-emitting sites, `predict.enhancer_target.predict_target`, `measured.rule_links`, "
     "`ir.model.Rule`, `lang.parser._check_keys`, `genomeos.lang.rule_evidence_tier` and "
     "`data/results/clause1_registration.json`; it had counted `rule` lines and `when: cell_type` "
@@ -423,6 +423,25 @@ def registration() -> dict[str, Any]:
 # `scripts/rule_cell_provenance_cost.py`'s output and reported, not quietly amended.
 # ====================================================================================================
 
+#: THIS MODULE IS AN UNADOPTED PROPOSAL, and it sits inside the Apache-2.0 engine because
+#: `genomeos/lang/` is where a language proposal about rules belongs. Nothing in the engine calls it:
+#: its only callers are `tests/test_rule_cell_provenance.py` and
+#: `scripts/rule_cell_provenance_cost.py`, both application-side. Adopting the proposal means a
+#: commit to `genomeos/ir/model.py`, `genomeos/lang/grammar.py` and `genomeos/attribution/compile.py`,
+#: and that commit is Albert's.
+#:
+#: WHETHER AN UNADOPTED PROPOSAL SHOULD SHIP INSIDE THE PACKAGED ENGINE at the 2.0 milestone is NOT
+#: decided here and is not this module's to decide: it is a question for Albert's package. What is
+#: recorded here is only that it is unadopted, so the question can be asked of a file that says so.
+#: One measured fact belongs with it: this file carries an `AGPL-3.0-or-later` SPDX header and
+#: `scripts/package_engine.py` copies `genomeos/lang/` into the Apache package, as do the two
+#: neighbours it is built on. That is reported, not resolved.
+UNADOPTED = (
+    "an unadopted proposal. No engine module calls it; adopting it is a commit to the IR, the grammar "
+    "and the compiler, and that commit is Albert's. Whether it should ship inside the packaged engine "
+    "is a question for the package and is not decided here"
+)
+
 import ast  # noqa: E402
 import dataclasses  # noqa: E402
 import inspect  # noqa: E402
@@ -434,12 +453,38 @@ from collections.abc import Iterable  # noqa: E402
 PREDICTED_SOURCE_PREFIX = "AlphaGenome deletion"
 
 
-def _crispri_source_prefix() -> str:
-    """The quoted source a compiled EXPERIMENTAL rule carries. Read from `attribution.measured`, not
-    copied, so a change to the screen's citation cannot leave a stale literal here."""
-    from genomeos.attribution.measured import SOURCES
+@dataclasses.dataclass(frozen=True)
+class CorpusVocabulary:
+    """The two application-side strings this module needs, INJECTED and never imported.
 
-    return SOURCES["crispri"]
+    THE LICENSING BOUNDARY IS WHY THIS EXISTS, and it is worth writing down because two of this
+    project's rules collided here. "Import a value, never copy its literal" said to read the CRISPRi
+    citation from the application module that owns it. `genomeos/lang/` is part of the Apache-2.0
+    engine, so doing that made the engine import the AGPL-3.0 application, against LICENSING.md
+    decision D40 (Albert's split of 2026-09-11) - a legal boundary, not a style rule, and
+    `tests/test_engine_boundary.py` failed on it exactly as it should have. Both rules are right, so
+    the resolution is structural rather than a choice between them: the engine takes the values as a
+    PARAMETER and the application-side caller supplies them from the module that owns them. Nothing
+    is copied and nothing crosses the boundary. The boundary test is untouched: no exemption, no
+    allowlist, no per-file skip.
+
+    `unrecorded_cell` is the application's `measured.CONTEXT_UNKNOWN` and `measured_source_prefix` is
+    its `measured.SOURCES["crispri"]`. `scripts/rule_cell_provenance_cost.py` is the one place that
+    reads them, and a test there asserts each value IS that object, so "import, never copy" still
+    holds where the import is legal.
+    """
+
+    unrecorded_cell: str
+    measured_source_prefix: str
+
+    def __post_init__(self) -> None:
+        for name in ("unrecorded_cell", "measured_source_prefix"):
+            value = getattr(self, name)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(
+                    f"{name} must be a non-empty string supplied by the application side; got "
+                    f"{value!r}. This module may not import it: see the class docstring and D40"
+                )
 
 
 class CellProvenanceUndecidableError(ValueError):
@@ -508,20 +553,19 @@ def check_no_observation_claim(records: Iterable[dict[str, Any]]) -> None:
                 )
 
 
-def names_a_cell(rule: Any) -> bool:
-    """Whether the rule is IN the population: its `when` names a cell other than `unknown`.
+def names_a_cell(rule: Any, vocabulary: CorpusVocabulary) -> bool:
+    """Whether the rule is IN the population: its `when` names a cell other than the unrecorded one.
 
-    A rule gated on `measured.CONTEXT_UNKNOWN` names no cell, so there is no cell whose provenance
-    could be stated (decision 2). The runtime already refuses such a rule in every context -
-    `Rule.applies` returns False on it - and this proposal leaves that untouched.
+    A rule gated on the application's `measured.CONTEXT_UNKNOWN` names no cell, so there is no cell
+    whose provenance could be stated (decision 2). The runtime already refuses such a rule in every
+    context - `Rule.applies` returns False on it - and this proposal leaves that untouched. The value
+    arrives in `vocabulary` because this module may not import it; see `CorpusVocabulary`.
     """
-    from genomeos.attribution.measured import CONTEXT_UNKNOWN
-
     cell = (rule.when or {}).get("cell_type")
-    return bool(cell) and cell != CONTEXT_UNKNOWN
+    return bool(cell) and cell != vocabulary.unrecorded_cell
 
 
-def provenance_of(rule: Any) -> str:
+def provenance_of(rule: Any, vocabulary: CorpusVocabulary) -> str:
     """The rule's cell provenance read off the rule itself, or `CellProvenanceUndecidableError`.
 
     Only the two signatures `attribution.compile` writes are decidable from a rule alone, and they
@@ -529,7 +573,7 @@ def provenance_of(rule: Any) -> str:
     a hand-authored rule can carry `experimental` with a citation of its own and must not be mistaken
     for a screen's measurement. Everything else raises; the caller adjudicates and says that it did.
     """
-    if not names_a_cell(rule):
+    if not names_a_cell(rule, vocabulary):
         raise CellProvenanceUndecidableError(
             f"rule {rule.id!r} names no cell (when={rule.when!r}), so it is outside the population"
         )
@@ -537,7 +581,7 @@ def provenance_of(rule: Any) -> str:
     source = rule.evidence.source or ""
     if kind == "predicted" and source.startswith(PREDICTED_SOURCE_PREFIX):
         return ARGMAX_OF_PREDICTED_EFFECT
-    if kind == "experimental" and source.startswith(_crispri_source_prefix()):
+    if kind == "experimental" and source.startswith(vocabulary.measured_source_prefix):
         return MEASURED_PERTURBATION_IN_THAT_CELL
     raise CellProvenanceUndecidableError(
         f"rule {rule.id!r} carries evidence {kind!r} {source[:60]!r}, which matches neither "
@@ -597,18 +641,28 @@ def gate_survivors(rules: Iterable[Any], at: str) -> list[Any]:
     return [r for r in rules if provenance_mark(r) == at]
 
 
-def binds_the_default_as_a_literal() -> list[int]:
-    """The line numbers in THIS module where an assignment binds the absent-default as a string
-    literal. Must be empty: the import is the only way the value may arrive (see NOT_ASSESSED).
+def binds_as_a_literal(value: str) -> list[int]:
+    """The line numbers in THIS module where an assignment binds `value` as a string literal.
 
-    Walking the syntax tree rather than grepping, because the word appears in prose throughout this
-    file and prose is not a second declaration. Only an assignment whose value IS the literal counts.
+    Walking the syntax tree rather than grepping, because these words appear in prose throughout this
+    file and prose is not a declaration. Only an assignment whose value IS the literal counts.
+
+    It polices two different rules with one instrument. For the absent-default the import is the only
+    way the value may arrive (see NOT_ASSESSED), and `is` cannot show that on its own because the
+    value is an identifier-shaped string CPython interns. For an injected application string the
+    module must hold no copy at all, and there `is` IS evidence - but the walk is kept anyway, since a
+    stale copy sitting unused in the engine would still be a copy of AGPL-side text.
     """
     tree = ast.parse(inspect.getsource(inspect.getmodule(provenance_of)))
     out = []
     for node in ast.walk(tree):
         if isinstance(node, (ast.Assign, ast.AnnAssign)):
-            value = node.value
-            if isinstance(value, ast.Constant) and value.value == NOT_ASSESSED:
+            bound = node.value
+            if isinstance(bound, ast.Constant) and bound.value == value:
                 out.append(node.lineno)
     return out
+
+
+def binds_the_default_as_a_literal() -> list[int]:
+    """`binds_as_a_literal` for the absent-default. Must be empty."""
+    return binds_as_a_literal(NOT_ASSESSED)

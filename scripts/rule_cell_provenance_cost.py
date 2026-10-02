@@ -42,6 +42,29 @@ from genomeos.lang.parser import parse_file  # noqa: E402
 COMPILED = "data/organisms/human/noncoding_chr21.bio"
 
 
+def vocabulary() -> cp.CorpusVocabulary:
+    """The application-side strings the engine module takes as a parameter. THE ONLY PLACE they cross.
+
+    `genomeos/lang/rule_cell_provenance.py` is part of the Apache-2.0 engine and may not import the
+    AGPL-3.0 application (LICENSING.md decision D40, Albert's split of 2026-09-11). It used to, in
+    order to honour the other rule this project holds - import a value, never copy its literal - and
+    `tests/test_engine_boundary.py` failed on it, correctly. The two rules are reconciled here and not
+    traded against each other: this file is application-side, so the import is legal, and it hands the
+    values to the engine as data. Nothing is copied.
+
+    `tests/test_rule_cell_provenance.py` asserts that each value IS the object this reads, by identity
+    against `measured.SOURCES["crispri"]` and `measured.CONTEXT_UNKNOWN`, and - because one of those
+    is an identifier-shaped string that CPython interns, where identity would pass for the wrong
+    reason - also that no assignment in the engine module binds either string as a literal.
+    """
+    from genomeos.attribution import measured
+
+    return cp.CorpusVocabulary(
+        unrecorded_cell=measured.CONTEXT_UNKNOWN,
+        measured_source_prefix=measured.SOURCES["crispri"],
+    )
+
+
 #: Every registered prediction's outcome, with the figure that settled it and the test that measured
 #: it. They live here and NOT in `rule_cell_provenance.registration()`, which was committed with
 #: these fields empty so that the commit filling them is visibly later than the commit registering
@@ -165,6 +188,7 @@ def count() -> dict[str, object]:
     outside_population = 0
     rules_total = 0
     programs_with_a_cell_gated_rule: list[str] = []
+    vocab = vocabulary()
 
     for relative in _tracked_bio():
         path = ROOT / relative
@@ -180,14 +204,14 @@ def count() -> dict[str, object]:
             rules_total += 1
             if rule.id not in written:
                 synthesised += 1
-                if cp.names_a_cell(rule):
+                if cp.names_a_cell(rule, vocab):
                     synthesised_naming_a_cell += 1
-            if not cp.names_a_cell(rule):
+            if not cp.names_a_cell(rule, vocab):
                 outside_population += 1
                 continue
             has_cell = True
             try:
-                klass = cp.provenance_of(rule)
+                klass = cp.provenance_of(rule, vocab)
             except cp.CellProvenanceUndecidableError:
                 human.append({"program": relative, "rule": rule.id})
                 continue

@@ -53,6 +53,12 @@ ADJUDICATED = {"Nkx2-5 activates MYH6": cp.AUTHOR_DECLARED}
 
 
 @cache
+def _vocab():
+    """The injected vocabulary, from the one application-side place that reads it."""
+    return _cost().vocabulary()
+
+
+@cache
 def _cost():
     """The cost report as a module. Imported by path so the test does not depend on `scripts` being
     an importable package."""
@@ -75,7 +81,7 @@ def _parsed(relative: str):
 def _cell_gated_rule(relative: str):
     """The program's one rule that names a cell. `rules[0]` is a rule the parser synthesised from a
     `gene ... { produces: ... }` clause and it names none, which is prediction P8."""
-    return next(r for r in _parsed(relative).rules if cp.names_a_cell(r))
+    return next(r for r in _parsed(relative).rules if cp.names_a_cell(r, _vocab()))
 
 
 def _written_rule_headers(relative: str) -> set[str]:
@@ -294,10 +300,49 @@ def test_the_compiler_emits_a_rule_line_from_exactly_two_sites() -> None:
     assert sorted(sites) == ["_measured_blocks", "compile_chromosome"], sites
 
 
-def test_the_two_signatures_are_read_from_the_code_and_not_copied_as_literals() -> None:
-    assert cp._crispri_source_prefix() == SOURCES["crispri"]
-    source = Path(cp.__file__).read_text()
-    assert SOURCES["crispri"] not in source
+def test_the_injected_values_ARE_the_application_objects_and_the_engine_holds_no_copy() -> None:
+    """D40: the engine may not import the application, and this project also says import a value and
+    never copy its literal. Both hold at once because the value is INJECTED: the identity is asserted
+    here, on the application side, where the import is legal.
+
+    `measured_source_prefix` is a long string with spaces and parentheses, so `is` is real evidence
+    for it. `unrecorded_cell` is `"unknown"`, which CPython interns, so identity there would pass for
+    the wrong reason - and for both the engine module is required to bind no literal copy, checked by
+    walking its syntax tree.
+    """
+    vocab = _vocab()
+    assert vocab.measured_source_prefix is SOURCES["crispri"]
+    assert vocab.unrecorded_cell is CONTEXT_UNKNOWN
+    assert cp.binds_as_a_literal(SOURCES["crispri"]) == []
+    assert cp.binds_as_a_literal(CONTEXT_UNKNOWN) == []
+    assert SOURCES["crispri"] not in Path(cp.__file__).read_text()
+
+
+def test_the_engine_module_imports_nothing_outside_the_engine() -> None:
+    """The invariant at this lane, using the boundary test's OWN helper so it cannot drift from it.
+
+    `tests/test_engine_boundary.py` is untouched by this fix: no exemption, no allowlist, no per-file
+    skip. This test adds a second, narrower check in the file that broke it, so the next change to
+    this module fails here first.
+    """
+    from tests.test_engine_boundary import ALLOWED, imported_genomeos_names
+
+    imported = imported_genomeos_names(Path(cp.__file__))
+    assert imported - ALLOWED == set(), imported
+
+
+def test_the_vocabulary_refuses_a_value_the_application_did_not_supply() -> None:
+    for bad in (
+        {"unrecorded_cell": "", "measured_source_prefix": "x"},
+        {"unrecorded_cell": "u", "measured_source_prefix": "  "},
+    ):
+        with pytest.raises(ValueError, match="non-empty string supplied by the application side"):
+            cp.CorpusVocabulary(**bad)
+
+
+def test_the_module_says_it_is_an_unadopted_proposal() -> None:
+    assert "unadopted proposal" in cp.UNADOPTED
+    assert "is a question for the package and is not decided here" in cp.UNADOPTED
 
 
 # --- P2 and P6: the committed compiled program --------------------------------------------------------
@@ -308,7 +353,7 @@ def _compiled_classes() -> dict[str, int]:
     rules = _parsed(COMPILED).rules
     counts: dict[str, int] = {}
     for r in rules:
-        counts[cp.provenance_of(r)] = counts.get(cp.provenance_of(r), 0) + 1
+        counts[cp.provenance_of(r, _vocab())] = counts.get(cp.provenance_of(r, _vocab()), 0) + 1
     counts["_rules"] = len(rules)
     return counts
 
@@ -339,7 +384,7 @@ def test_a_gate_at_the_measured_class_leaves_under_one_per_cent_integrable() -> 
     is reused here.
     """
     rules = _parsed(COMPILED).rules
-    marked = [cp.mark(r, cp.provenance_of(r)) for r in rules]
+    marked = [cp.mark(r, cp.provenance_of(r, _vocab())) for r in rules]
     survivors = cp.gate_survivors(marked, cp.MEASURED_PERTURBATION_IN_THAT_CELL)
     assert 0 < len(survivors) / len(rules) < 0.01
 
@@ -357,16 +402,16 @@ def test_no_rule_of_the_committed_compiled_program_is_gated_on_an_unrecorded_cel
     """P4. `compile.context` can write it; the committed program has none of it."""
     rules = _parsed(COMPILED).rules
     assert [r.id for r in rules if r.when.get("cell_type") == CONTEXT_UNKNOWN] == []
-    assert all(cp.names_a_cell(r) for r in rules)
+    assert all(cp.names_a_cell(r, _vocab()) for r in rules)
 
 
 def test_a_rule_with_no_recorded_cell_is_outside_the_population_and_already_runs_nowhere() -> None:
     rule = _bare_rule()
     rule.when = {"cell_type": CONTEXT_UNKNOWN}
-    assert not cp.names_a_cell(rule)
+    assert not cp.names_a_cell(rule, _vocab())
     assert rule.applies({"cell_type": "K562"}) is False  # the runtime's existing refusal, untouched
     with pytest.raises(cp.CellProvenanceUndecidableError, match="outside the population"):
-        cp.provenance_of(rule)
+        cp.provenance_of(rule, _vocab())
 
 
 # --- P3: the hand-authored corpus, and the one adjudication ------------------------------------------
@@ -378,10 +423,10 @@ def test_the_hand_authored_corpus_carries_cell_gated_rules_that_no_signature_cla
     undecidable = []
     for relative in HAND_AUTHORED:
         for rule in _parsed(relative).rules:
-            if not cp.names_a_cell(rule):
+            if not cp.names_a_cell(rule, _vocab()):
                 continue
             with pytest.raises(cp.CellProvenanceUndecidableError, match="must adjudicate"):
-                cp.provenance_of(rule)
+                cp.provenance_of(rule, _vocab())
             undecidable.append(rule.id)
     assert undecidable == sorted(ADJUDICATED)
     assert set(ADJUDICATED.values()) == {cp.AUTHOR_DECLARED}
@@ -410,7 +455,7 @@ def test_every_rule_the_parser_synthesises_names_no_cell() -> None:
             if rule.id in written:
                 continue
             synthesised += 1
-            assert not cp.names_a_cell(rule), (relative, rule.id, rule.when)
+            assert not cp.names_a_cell(rule, _vocab()), (relative, rule.id, rule.when)
     assert synthesised > 0
 
 
@@ -453,7 +498,7 @@ def test_the_class_is_separable_today_so_the_mark_adds_words_and_not_a_distincti
     assert kinds == {"predicted", "experimental"}
     by_kind = {k: set() for k in kinds}
     for r in rules:
-        by_kind[r.evidence.kind.value].add(cp.provenance_of(r))
+        by_kind[r.evidence.kind.value].add(cp.provenance_of(r, _vocab()))
     assert by_kind == {
         "predicted": {cp.ARGMAX_OF_PREDICTED_EFFECT},
         "experimental": {cp.MEASURED_PERTURBATION_IN_THAT_CELL},
