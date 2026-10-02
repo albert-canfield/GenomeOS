@@ -428,3 +428,46 @@ class TestTheCommittedMap:
         for a in built["assertions"]:
             assert "verdict" not in a
             assert a["kind"] == "evidence"
+
+    def test_every_assay_says_what_its_observations_found_at_its_own_denominator(self, built):
+        """A count of observations is not a measurement of what they say, so both are on the map."""
+        block = built["outcomes_by_assay"]
+        counts = built["counts"]["observed_by_assay"]
+        assert set(block["measured"]) == set(counts)
+        for assay, got in block["measured"].items():
+            assert got["observations"] == counts[assay]
+            assert sum(got["what_they_found"].values()) == got["observations"]
+            assert got["what_they_found"], f"{assay}: counted but never said what it found"
+            assert got["outcome_field"]
+
+    def test_the_predicted_arm_is_reported_apart_and_never_as_observed(self, built):
+        pred = built["outcomes_by_assay"]["predicted"]
+        assert pred["is_a_measurement"] is False
+        assert pred["assertions"] == built["counts"]["by_status"]["predicted"]
+        assert sum(pred["what_the_compiler_said"].values()) == pred["assertions"]
+        assert pred["basis"] and all("predicted" in b for b in pred["basis"])
+        measured = built["outcomes_by_assay"]["measured"]
+        assert all(m["status"] == "observed" for m in measured.values())
+        assert sum(m["observations"] for m in measured.values()) == (built["counts"]["by_status"]["observed"])
+
+    def test_the_crispri_arm_says_its_positives_were_chosen_by_the_selection(self, built):
+        """Reading this arm as the screen's direction mix would be reading a selection as a result."""
+        note = built["outcomes_by_assay"]["the_crispri_arm_holds_only_positives_by_construction"]
+        assert "no_measured_rule_the_screen_measured_no_regulation" in note
+        assert built["counted"]["by_status"]["no_measured_rule_the_screen_measured_no_regulation"] > 0
+
+
+def test_an_outcome_a_kind_does_not_record_is_refused_rather_than_pooled():
+    """A kind whose outcome field is unknown must stop the block, not vanish into a total."""
+    with pytest.raises(rm.RefusedError):
+        rm3._outcome_of({"id": "z9|whatever", "measurement": {}})
+
+
+def test_the_reporter_outcome_is_the_declared_aggregation_and_says_so():
+    a = {
+        "id": "m3|chr1:1-201|peak|K562",
+        "measurement": {"value": -0.5},
+        "aggregated_label": {"label": "silent", "is_the_observation": False},
+    }
+    assert rm3._outcome_of(a) == "silent"
+    assert "NOT a reading of the tile" in rm3.OUTCOME_FIELD["m3|"]
