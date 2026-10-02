@@ -664,17 +664,30 @@ def build(
                     "note": CHAIN_NOTE,
                 }
             )
+        shown_keys = [cands[i].key for i in idx if cands[i].status == STATUS_ADDABLE]
         loci.append(
             {
                 "id": lid,
                 "chrom": keys[0].chrom,
                 "chromosomes": sorted({k.chrom for k in keys}),
-                "start": min(k.start for k in keys),
-                "end": max(k.end for k in keys),
-                "cells": sorted({k.cell for k in keys}),
-                "genes_measured": sorted(
-                    {cands[i].key.gene for i in idx if cands[i].status == STATUS_ADDABLE}
+                # the span of the pairs this locus shows, which is what `id` is made of. The grouping
+                # also holds pairs that are not shown, and their span is wider: both are reported, so
+                # the interval beside a locus is never read as covering more than the map shows.
+                "start": min(k.start for k in shown_keys),
+                "end": max(k.end for k in shown_keys),
+                "span_over_every_pair_grouped_here": [
+                    min(k.start for k in keys),
+                    max(k.end for k in keys),
+                ],
+                "span_note": (
+                    "`start` and `end` are the span of the shown pairs. The 1 Mb grouping chains, so "
+                    "the group can reach much further than the pairs the map shows at it; "
+                    "`span_over_every_pair_grouped_here` is that wider interval, and neither is "
+                    "established biological independence"
                 ),
+                "cells": sorted({k.cell for k in shown_keys}),
+                "cells_of_every_pair_grouped_here": sorted({k.cell for k in keys}),
+                "genes_measured": sorted({k.gene for k in shown_keys}),
                 "elements": sorted({b["candidate"].element["id"] for b in built}),
                 "assertions": ids,
                 "chains": [f"chain|{b['pert']['id']}" for b in built],

@@ -268,6 +268,18 @@ def test_a_chain_runs_from_the_measured_interval_through_the_element_to_the_gene
 
 
 @needs_inputs
+def test_a_locus_span_is_the_span_of_the_pairs_it_shows_and_the_wider_group_is_reported_apart(payload):
+    """The 1 Mb grouping chains, so a group can reach far past the pairs the map shows at it. The
+    interval printed beside a locus must be the shown one, or a reader takes it for coverage."""
+    for x in payload["loci"]:
+        wide = x["span_over_every_pair_grouped_here"]
+        assert wide[0] <= x["start"] and x["end"] <= wide[1]
+        assert x["id"] == f"locus|{'+'.join(x['chromosomes'])}:{x['start']}-{x['end']}"
+        assert set(x["cells"]) <= set(x["cells_of_every_pair_grouped_here"])
+        assert "neither is established biological independence" in x["span_note"]
+
+
+@needs_inputs
 def test_the_pages_show_every_locus_and_truncate_nothing(payload):
     seen: list[str] = []
     pages = None
