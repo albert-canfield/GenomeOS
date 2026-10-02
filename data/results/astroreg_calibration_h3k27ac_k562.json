@@ -1,0 +1,287 @@
+{
+  "result": "astroreg_calibration_h3k27ac_k562",
+  "date": "2026-10-02",
+  "column": "H3K27ac.RPM",
+  "cell": "k562",
+  "files": {
+    "experiment": "ENCSR000AKP",
+    "analysis": "/analyses/ENCAN866TOS/",
+    "analysis_title": "ENCODE4 v1.8.0 GRCh38",
+    "bams": [
+      {
+        "accession": "ENCFF232RQF",
+        "biological_replicates": [
+          3
+        ],
+        "technical_replicates": [
+          "3_1",
+          "3_2"
+        ],
+        "file_size": 2455019320,
+        "mapped_run_type": "single-ended",
+        "mapped_read_length": 36,
+        "href": "/files/ENCFF232RQF/@@download/ENCFF232RQF.bam"
+      },
+      {
+        "accession": "ENCFF600THN",
+        "biological_replicates": [
+          1
+        ],
+        "technical_replicates": [
+          "1_1"
+        ],
+        "file_size": 465061663,
+        "mapped_run_type": "single-ended",
+        "mapped_read_length": 36,
+        "href": "/files/ENCFF600THN/@@download/ENCFF600THN.bam"
+      },
+      {
+        "accession": "ENCFF704LGA",
+        "biological_replicates": [
+          2
+        ],
+        "technical_replicates": [
+          "2_1"
+        ],
+        "file_size": 226787968,
+        "mapped_run_type": "single-ended",
+        "mapped_read_length": 36,
+        "href": "/files/ENCFF704LGA/@@download/ENCFF704LGA.bam"
+      }
+    ],
+    "biological_replicates": [
+      1,
+      2,
+      3
+    ],
+    "total_bytes": 3146868951,
+    "selection_rule": "the released analysis only, one BAM per biological replicate, checked"
+  },
+  "pooled_denominator": 86297833,
+  "per_pass_denominator": [
+    70711586,
+    10668892,
+    4917355
+  ],
+  "metadata_cross_check": {
+    "per_file": [
+      {
+        "accession": "ENCFF232RQF",
+        "mapped_reads": 70711586,
+        "from": "['ChipAlignmentQualityMetric']:mapped_reads"
+      },
+      {
+        "accession": "ENCFF600THN",
+        "mapped_reads": 10668892,
+        "from": "['ChipAlignmentQualityMetric']:mapped_reads"
+      },
+      {
+        "accession": "ENCFF704LGA",
+        "mapped_reads": 4917355,
+        "from": "['ChipAlignmentQualityMetric']:mapped_reads"
+      }
+    ],
+    "metadata_total_mapped_reads": 86297833,
+    "computed_over_metadata": 1.0,
+    "rule": "ENCODE publishes a mapped-read total in each alignment's quality metrics. It is printed beside the computed denominator with their ratio, and it is NEVER used as the denominator, because it was counted under ENCODE's filters and the numerator here is counted under these. Two filter sets silently divided into one another is an error that looks like a result"
+  },
+  "gate": {
+    "spearman": 0.9733140501519615,
+    "spearman_min": 0.98,
+    "spearman_passes": false,
+    "median_ratio": 0.6070182726597586,
+    "elements_used": 693,
+    "elements_excluded_published_not_positive": 10,
+    "p05": 0.32673534594229703,
+    "p95": 2.0303480613640215,
+    "median_ratio_range": [
+      0.9,
+      1.1
+    ],
+    "median_ratio_passes": false,
+    "passes": false,
+    "rule": "both conditions must hold; either one failing fails the column",
+    "elements_compared": 703
+  },
+  "elements_with_no_read": 0,
+  "read_rule": "a read is counted when it is not unmapped, not secondary and not supplementary. Duplicates are whatever the filtered BAM delivers, because excluding them would be a rule the benchmark does not state. A paired-end fragment is counted ONCE, by counting read1 only. Overlap means any base: a read overlaps an element when its reference span intersects the element's span by at least one base, both half-open",
+  "status": "the registered calibration gate, run once on the K562 held-out elements. No AlphaGenome request was sent, no money was spent, and no BAM was written to disk",
+  "lane": "lane-astro",
+  "registration": {
+    "path": "data/results/astroreg_calibration_registration.json",
+    "spearman_min": 0.98,
+    "median_ratio_range": [
+      0.9,
+      1.1
+    ],
+    "both_written_before_this_ran": true
+  },
+  "reading": "the gate FAILS for this column. Under the read rule registered before this ran, the published column is NOT reproduced to the registered tolerance. By the registration's own terms the AstroREG no-go STANDS and no astrocyte alignment is fetched. What is established is that the column is not recoverable UNDER THIS RULE; since the benchmark documents no read rule, that is as much a finding about the documentation as about the column, and it is NOT a licence to try other rules until one passes -- a rule chosen after seeing this number would be fitted to it",
+  "not_claimed": [
+    "not a demonstration that the published column is wrong: it is a demonstration that this registered rule does not reproduce it",
+    "not an identification of the rule that would reproduce it, and no such rule was searched for",
+    "not a result about astrocytes: no astrocyte alignment was read"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE ENCSR000AKP (ENCODE4 v1.8.0 GRCh38), filtered GRCh38 alignments: ENCFF232RQF, ENCFF600THN, ENCFF704LGA",
+        "version": "3.15 GB streamed over HTTPS and not stored; one BAM per biological replicate from the released analysis",
+        "url": "https://www.encodeproject.org"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark heldout_5_cell_types (Gschwind et al. 2025)",
+        "version": "fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "role": "the K562 held-out elements and the published column this is compared against; already-read development evidence"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "spearman_min": 0.98,
+      "median_ratio_min": 0.9,
+      "median_ratio_max": 1.1,
+      "elements": 703,
+      "pooled_denominator": 86297833,
+      "bams_streamed": 3,
+      "bytes_written_to_disk": 0,
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "requests_sent": 0,
+      "money_spent": 0
+    },
+    "exclusions": [
+      "no AlphaGenome request is sent and this script has no code path that could send one",
+      "no BAM is written to disk: each is streamed once, sequentially, and discarded",
+      "no MAPQ threshold and no duplicate rule are applied, because the benchmark states none",
+      "no astrocyte alignment is read, and none may be until this gate passes",
+      "no alternative read rule was tried: the rule was registered before the run and a second rule chosen after seeing this number would be fitted to it"
+    ],
+    "partitions": {
+      "k562_heldout": "703 elements, already-read development evidence"
+    },
+    "reproducibility": "the published column and the element set are pinned by sha256; the alignments are a network source streamed by accession and are not stored, so a rebuild re-streams them from ENCODE rather than reading bytes from this machine",
+    "code_cleanliness": {
+      "git_sha": "8d750db5c1cd0d01cd90fa62c9512f3d3948196a",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/rpm.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/astroreg_calib_register.py",
+        "scripts/astroreg_rpm_calibrate.py"
+      ],
+      "counting_path_count": 68,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "8d750db5c1cd0d01cd90fa62c9512f3d3948196a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/astroreg_rpm_calibrate.py",
+        "--column",
+        "h3k27ac",
+        "--cell",
+        "k562"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 135,
+      "opens_under_data": 3,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
