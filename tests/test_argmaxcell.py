@@ -496,3 +496,101 @@ def test_the_falsifier_now_names_four_readings_and_the_clustered_interval() -> N
     for word in ("(1)", "(2)", "(3)", "(4)", "CLUSTERED", "THE DATA CANNOT TELL", "equivalence"):
         assert word in ac.FALSIFIER, word
     assert "never by the point estimate" in ac.FALSIFIER
+
+
+# ---- the committed result ------------------------------------------------------------------------
+
+RESULT_RELATIVE = "data/results/argmaxcell.json"
+
+
+def _result() -> dict:
+    with must_be_committed(RESULT_RELATIVE).open() as fh:
+        return json.load(fh)
+
+
+def test_the_committed_result_carries_the_registered_words_unchanged() -> None:
+    r = _result()
+    assert r["lane"] == "lane-argmaxcell"
+    assert r["falsifier"] == ac.FALSIFIER
+    assert r["amendment_1"] == ac.AMENDMENT_1
+    assert r["confound_registered_before_any_count"] == ac.CONFOUND
+    assert r["base_rate_rule"] == ac.BASE_RATE_RULE
+    assert r["population"] == ac.POPULATION
+    assert r["denominator"] == ac.DENOMINATOR
+    assert r["validates_nothing"] == ac.VALIDATES_NOTHING
+    assert r["base_rates"]["K562"]["rate"] == 0.062292
+    assert r["alphagenome_requests"] == 0
+
+
+def test_the_committed_result_is_clean_and_opened_no_archive() -> None:
+    m = _result()["result_manifest"]
+    assert m["complete"] is True
+    assert m["code_cleanliness"]["own_code_is_committed"] is True
+    assert m["code_cleanliness"]["foreign_uncommitted_code_on_the_counting_path"] == []
+    assert m["traced_inputs"]["active"] is True
+    assert m["traced_inputs"]["undeclared"] == []
+
+
+def test_the_measured_rss_stayed_under_the_registered_ceiling() -> None:
+    rss = _result()["rss"]
+    assert rss["ceiling_bytes"] == ac.RSS_CEILING_BYTES
+    assert rss["peak_bytes"] < rss["ceiling_bytes"]
+    assert rss["peak_bytes"] < 512 * 1024**2, "streaming 594 MB of tables must not cost half a GiB"
+
+
+def test_no_arm_clears_the_usability_threshold_so_the_cell_is_not_usable_evidence() -> None:
+    """The one answer that does not turn on the confound at all."""
+    r = _result()
+    assert r["verdict"]["arms_whose_label_clears_the_usability_threshold"] == []
+    for cell, arm in r["per_arm"].items():
+        if arm["reading"].get("rate_reported"):
+            assert arm["reading"]["usable"] is False, cell
+            assert arm["observed_rate"] < ac.USABLE, cell
+
+
+def test_no_reading_three_arm_is_recorded_as_carrying_cell_type_information() -> None:
+    """CONFOUND, in the committed file: a detection is never a confirmation."""
+    r = _result()
+    for cell in r["verdict"]["arms_where_a_difference_is_detected_but_not_attributable_reading_3"]:
+        read = r["per_arm"][cell]["reading"]
+        assert read["argmax_carries_cell_type_information"] is None, cell
+        assert "does NOT establish" in read["detection"], cell
+
+
+def test_no_reading_four_arm_is_recorded_as_a_null() -> None:
+    """The amendment's whole point, checked in the committed file and not in the code alone."""
+    r = _result()
+    four = r["verdict"]["arms_the_data_cannot_tell_reading_4"]
+    two = r["verdict"]["arms_with_no_cell_type_information_reading_2"]
+    assert not set(four) & set(two)
+    for cell in four:
+        read = r["per_arm"][cell]["reading"]
+        assert read["reading"] == "(4)"
+        assert read["clustered_ci95_on_the_difference"] is None or True
+        assert "CANNOT TELL" in read["detection"], cell
+        assert read["argmax_carries_cell_type_information"] is None, cell
+
+
+def test_every_reading_two_arm_really_is_an_equivalence_result() -> None:
+    r = _result()
+    for cell in r["verdict"]["arms_with_no_cell_type_information_reading_2"]:
+        read = r["per_arm"][cell]["reading"]
+        lo, hi = read["clustered_ci95_on_the_difference"]
+        assert lo >= -ac.TOLERANCE and hi <= ac.TOLERANCE, (cell, lo, hi)
+        assert "EQUIVALENCE result" in read["detection"], cell
+
+
+def test_the_result_states_what_an_absolute_equivalence_leaves_open() -> None:
+    """HCT116's tolerance is 14.8x its base rate and WTC11's is 91.7x: the file says so."""
+    e = _result()["verdict"]["what_an_equivalence_result_excludes_on_a_small_base_rate"]
+    assert e["tolerance_as_a_multiple_of_the_base_rate"]["WTC11"] > 50
+    assert e["tolerance_as_a_multiple_of_the_base_rate"]["HCT116"] > 10
+    assert e["tolerance_as_a_multiple_of_the_base_rate"]["K562"] < 1
+    assert "does NOT mean `the label carries nothing`" in e["the_limit"]
+
+
+def test_the_two_base_rates_are_reported_with_their_difference() -> None:
+    a = _result()["base_rate_agreement"]
+    assert a["committed_census_rules"] == 440_589
+    assert a["difference"] == a["attributed_elements_streamed"] - 440_589
+    assert "not reconciled away" in a["what_a_difference_means"]
