@@ -317,10 +317,13 @@ def test_a_subdirectory_of_the_registry_that_does_not_exist_yet_is_a_registry_wr
     `data/results` itself, so the write is a registry write and refuses -- and the `mkdir` 104 lines
     down never runs, so no result directory is created under the tracked registry.
 
-    What the refusal DOES create, and it is a finding rather than this lane's doing: `quarantine_dir`
-    is `results_dir.parent / "quarantine" / results_dir.name`, so the quarantine for a registry
-    SUBdirectory lands at `data/results/quarantine/newsub/` -- inside the registry, under a
-    `.gitignore` of its own. Named here instead of asserted away."""
+    What the refusal DOES create was a finding of this lane's rather than its doing, and it is now
+    CLOSED (2026-10-03, lane-quarantine, tests/test_quarantine_outside_registry.py): `quarantine_dir`
+    was `results_dir.parent / "quarantine" / results_dir.name`, so the quarantine for a registry
+    SUBdirectory landed at `data/results/quarantine/newsub/` -- inside the registry, under a
+    `.gitignore` of its own. It now splits the path at the registry and mirrors the rest under the one
+    quarantine, `data/quarantine/results/newsub/`, so the assertion below is `rglob` over the whole
+    registry rather than a glob of its top level."""
     sub = tree / "newsub"
     assert not sub.exists()
 
@@ -330,7 +333,9 @@ def test_a_subdirectory_of_the_registry_that_does_not_exist_yet_is_a_registry_wr
 
     assert str(sub) in str(e.value), "the refusal names the path"
     assert not sub.exists(), "no result directory is created inside the registry"
-    assert list(tree.glob("*.json")) == [], "and no result entered the registry"
+    assert list(tree.rglob("*")) == [], "and nothing at all entered the registry, at any depth"
+    kept = json.loads((results.quarantine_dir(sub) / "brand_new.json").read_text())
+    assert kept["value"] == 7, "the compute is kept, outside the registry"
 
 
 def test_the_old_body_wrote_into_a_new_registry_subdirectory_unenforced(old, tree, tmp_path):

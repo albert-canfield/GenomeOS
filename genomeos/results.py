@@ -22,7 +22,9 @@ from genomeos import manifest as mf
 
 RESULTS_DIR = Path("data/results")
 #: Item 12 S6 (docs/DATA.md, "The result registry"): a failed new result is written to
-#: <results_dir's parent>/QUARANTINE/<results_dir's name>, never into the registry.
+#: <results_dir's parent>/QUARANTINE/<results_dir's name>, never into the registry -- and since
+#: 2026-10-03 a path BELOW the registry is split at the registry and mirrored under the one
+#: quarantine (`quarantine_dir`), because the parent of a registry subdirectory is the registry.
 QUARANTINE = "quarantine"
 #: The explicit list of the result names written before the contract (fe0880a), generated once from
 #: git history by scripts/manifest_legacy.py and never extended by code.
@@ -243,8 +245,83 @@ def legacy_names(path: Path | None = None) -> frozenset[str]:
 
 
 def quarantine_dir(results_dir: Path) -> Path:
-    """Where a failed result meant for `results_dir` goes: data/quarantine/results for the registry."""
-    return results_dir.parent / QUARANTINE / results_dir.name
+    """Where a failed result meant for `results_dir` goes: data/quarantine/results for the registry.
+
+    NEVER INSIDE THE REGISTRY, for any input (2026-10-03, lane-quarantine). This was
+    `results_dir.parent / QUARANTINE / results_dir.name`, which is right for the registry itself --
+    `data/results` -> `data/quarantine/results`, the rule docs/DATA.md states -- and wrong for
+    anything BELOW it, because the parent of a registry subdirectory is the registry:
+
+        data/results/newsub   ->   data/results/quarantine/newsub
+
+    bytes that failed their manifest contract placed inside the tracked registry those refusals exist
+    to keep them out of, under a `.gitignore` of their own so `git status` would never mention them.
+    Reachable since `d33146a` made `_is_registry` read a path under the registry AS the registry
+    (identity by file, plus the nearest-existing-ancestor walk), which is what first routed a
+    subdirectory write down the refusal path; `git ls-files data/results` and
+    `find data/results -mindepth 1 -type d` report no subdirectory today, so it was a closed door
+    rather than a live leak, which is when to shut it.
+
+    THE MAPPING SPLITS `results_dir` AT THE REGISTRY and mirrors the part below it under the one
+    quarantine: `data/results/a/b` -> `data/quarantine/results/a/b`. The split is made at the
+    ancestor AS `results_dir` SPELLS IT (`_registry_anchor`), so the registry's own answer is
+    character for character what the one-liner returned for every spelling of it, absolute or
+    relative, `data/RESULTS` included -- that path is depended upon by docs/DATA.md,
+    `scripts/manifest_census.py` and `data/quarantine/results/` on disk. A directory that is not the
+    registry and has nothing to do with it is untouched: `tmp_path/"results"`, how the whole test
+    suite writes, still quarantines beside itself at `tmp_path/"quarantine"/"results"`.
+
+    REFUSING INSTEAD (raising rather than writing, on the ground that a quarantine inside the thing it
+    protects is not a quarantine) was the alternative and was rejected: the quarantine exists so that
+    "hours of compute are kept and the run still fails" (`save_result`), and refusing would throw the
+    payload away for exactly the writes new enough to be aiming at a subdirectory, add a third refusal
+    shape to `save_result`, and give this function -- which `scripts/manifest_census.py` calls for a
+    path it does not control -- a way to raise.
+    """
+    anchor, below = _registry_anchor(results_dir)
+    out = anchor.parent / QUARANTINE / anchor.name
+    for part in below:
+        out = out / part
+    return out
+
+
+def _registry_anchor(results_dir: Path) -> tuple[Path, tuple[str, ...]]:
+    """`results_dir` split at the registry: the ancestor that IS the registry, spelled as
+    `results_dir` spells it, and the parts below it.
+
+    `(results_dir, ())` when no ancestor is the registry, and also when `results_dir` IS the registry
+    -- which is why `quarantine_dir` reduces to its old expression in both of those cases instead of
+    merely agreeing with it.
+
+    Identity is by FILE, as `_is_registry` decides it, so a case variant on a case-insensitive volume,
+    a symlink and a `./` detour all split at the same place. An ancestor the filesystem cannot answer
+    for is CLIMBED PAST rather than stopping the walk (`data/results/<unsearchable>/sub` still splits
+    at `data/results`), with spelling as the only thing left to compare for that one candidate. The
+    walk is lexical, so the acknowledged limit of `_is_registry` holds here too: a path spelled with
+    `..` that climbs out of the registry splits at the registry, which sends the quarantine out of the
+    registry rather than into it -- the safe direction."""
+    for candidate in (results_dir, *results_dir.parents):
+        try:
+            same = os.path.samefile(candidate, RESULTS_DIR)
+        except OSError:
+            same = candidate == RESULTS_DIR
+        if same:
+            return candidate, results_dir.relative_to(candidate).parts
+    return results_dir, ()
+
+
+def _quarantine_root(q: Path) -> Path:
+    """The quarantine directory itself, where the `.gitignore` holding `*` belongs.
+
+    `q.parent.parent` was that directory while every quarantine path was exactly one level deep; with
+    the mirror in `quarantine_dir` it can be deeper, and an ignore file written beside a mirrored
+    subdirectory would leave the rest of the quarantine uncovered. The nearest ancestor NAMED
+    `QUARANTINE` is the root for both shapes, and for the one-level case it is `q.parent.parent`
+    exactly."""
+    for candidate in q.parents:
+        if candidate.name == QUARANTINE:
+            return candidate
+    return q.parent.parent
 
 
 _QUARANTINE_IGNORE = (
@@ -254,7 +331,7 @@ _QUARANTINE_IGNORE = (
 
 
 def _quarantine(q: Path, out: dict[str, Any], meant_for: Path, problems: list[str], registry: bool) -> None:
-    root = q.parent.parent
+    root = _quarantine_root(q)
     q.parent.mkdir(parents=True, exist_ok=True)
     ignore = root / ".gitignore"
     if not ignore.exists():

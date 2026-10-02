@@ -1164,8 +1164,15 @@ still only warns unless `strict=True`. A later complete write of the same name r
 quarantined copy.
 
 **The quarantine** is `data/quarantine/results/` (the rule is `<results_dir's parent>/quarantine/
-<results_dir's name>`, so a test's directory gets its own). It is **git-ignored**, by a
-`.gitignore` holding `*` that the writer creates in `data/quarantine/`: a quarantined file is a
+<results_dir's name>`, so a test's directory gets its own). Since 2026-10-03 a `results_dir` BELOW
+the registry is split at the registry and the part below it is mirrored under that one quarantine --
+`data/results/newsub` goes to `data/quarantine/results/newsub`, not to `data/results/quarantine/
+newsub`, which is where the rule as stated above sent it, since the parent of a registry
+subdirectory is the registry itself. `d33146a` made a path under the registry a registry write, so
+the refusal path became reachable for subdirectories; `data/results` has no subdirectory today, so
+that was a closed door rather than a leak. The registry's own answer is unchanged, character for
+character, and so is any directory that has nothing to do with the registry. It is **git-ignored**,
+by a `.gitignore` holding `*` that the writer creates in `data/quarantine/`: a quarantined file is a
 computation that failed its contract, and tracking it would let the next `git add` publish
 unvalidated numbers; its reason is per-machine run state, like `data/jobs/`. The self-ignoring
 directory needs no edit to the shared root `.gitignore` and holds in worktrees and test
