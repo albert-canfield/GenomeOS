@@ -15388,6 +15388,71 @@ unit intervals, so 1,505 element intervals is a fraction of that, by range and n
 file. No network request was made to establish this; it is read off results already on disk. 0 model
 requests, no money.
 
+## The localised question is answered in the negative: with DAP-G read over every one of the 1,505 elements, 130 carry a fine-mapped variant and 15 carry one for their own linked gene across 12 loci, missing both registered floors (2026-10-02, lane-finemap)
+
+`data/results/finemap_dapg.json`, registered at `finemap_dapg_registration` (d3a124b) and
+`finemap_dapg_cost_registration` (bc1a595) **before** the read. No baseline was computed, nothing was
+built, and that is the result.
+
+**ASSESSABLE FIRST, and it is not a result.** The read puts a DAP-G query over every element of the
+frame, so all **1,505 are assessed and 0 unassessed** — against 48 before, which is what
+`finemap_coverage` could reach from the record already on disk. The re-distillation's own sentence
+applies and is carried in full: *"every element of the frame is assessed BY CONSTRUCTION, because the
+frame is built from them. That is not a result and may not be reported as one: the figure that is a
+measurement is how many of them carry a retained hit, and the two are kept apart below for exactly that
+reason."* So 1,505 is the honest denominator for **"does a fine-mapped cis-eQTL lie inside this
+element"** — a zero there is now a measured absence and not a gap — and is **not** a denominator for
+"is this element the cause". One limit stays **named and not counted**: DAP-G fine-maps per gene, so an
+element whose linked gene GTEx never tested cannot carry a hit for it, and no ratio below is adjusted
+for that.
+
+**CARRYING SECOND.** Of the 1,505, at PIP ≥ 0.5 within the imported margin of 500:
+
+| | of 1,505 |
+| --- | --- |
+| carrying any fine-mapped variant | **130** |
+| carrying one whose gene **is the element's own linked gene** | **15** |
+| independent loci those 15 fall in (`cell2.group`, an operational grouping and **not** established biological independence) | **12** |
+
+Gene names come off the track as symbols, so 0 Ensembl ids went unresolved and the gene-matched count
+carries no floor caveat this time.
+
+**Both registered floors are missed: 15 against 30, and 12 against 20.** They are
+`fresh.POSITIVE_FLOOR` and `fresh.LOCUS_FLOOR` (which is `cell2.POOLED_LOCUS_FLOOR`), the pair
+lane-reptest applied, fixed before this lane existed and held by identity in code rather than copied.
+So **no matched-window baseline was computed, and that is the result** — an excess over a population
+this small is a number nobody can read.
+
+The 3,010 control windows were drawn, digested and read before the count, so withholding them now would
+be choosing what to show after seeing it: **21 of 3,010 carry a gene-matched hit against 15 of 1,505
+elements**, 0.70% and 1.0%. That is reported as a descriptive figure and **not as an excess**, because
+an excess over a population that misses its floor is not a quantity this lane is permitted to publish.
+It is recorded because it points the same way as the headline: there is nothing here that density does
+not already produce.
+
+**What this does to the 1,262.** The re-distillation reported 1,262 of 1,505 elements carrying a
+retained cis-eQTL and 96 addable loci over a floor of 20, counted over GTEx's **significant
+single-tissue** set, which has no posterior in it — an `LD-tagged association, not localised`. Read
+against the fine-mapped posterior with the gene match enforced, the same frame yields **15 elements and
+12 loci**. Nothing here says 1,262 is wrong as a count of what it counted; it says what it counted is
+not localisation. **The localised question is now answered in the negative rather than left open, which
+is the one thing the LD-tagged 1,262 could never do.**
+
+**The read, and a bound that fired.** GTEx v8 DAP-G (UCSC `gtexEqtlDapg`) read BY HTTP RANGE through
+`human_panel.track_rows`, the same call the panel already uses, never downloaded: 4,515 intervals over
+22 chromosomes, 11,085 rows retained at PIP ≥ 0.5, 676 KB on disk. The first registration bounded the
+read at 222 range requests and 170.4 MB; the **request half fired at 225** after 11 of 22 chromosomes
+with bytes at 27.55 MB. It was **not relaxed and not amended** — it stands fired — and a **new**
+registration bounded the resumed read in **bytes** at the same 170.4 MB with no request ceiling. The
+finished read cost **379 requests and 44.18 MB**, 26% of the byte bound. The reason bytes are the right
+quantity is a fact about the two interval sets and holds regardless of any row returned: requests scale
+with the number of **disjoint** intervals, bytes with their **total span**; the 222 figure came from the
+panel's contiguous 200-base tiles over 386 Mb, which merge into a handful of enormous spans, while
+4,515 scattered 1–8 kb windows need a request each. The wrong quantity was a mis-citation in the
+instruction this lane was given and then repeated, not a claim the panel results make.
+
+0 model requests, no money: a range read of a public UCSC bigBed is not a paid call.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
