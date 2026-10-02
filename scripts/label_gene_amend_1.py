@@ -55,12 +55,8 @@ def payload() -> dict[str, Any]:
         ],
         "inputs": entries,
         "input_count": len(entries),
-        "assembly": mf.NOT_APPLICABLE,
-        "coordinates": {
-            "base": mf.NOT_APPLICABLE,
-            "interval": mf.NOT_APPLICABLE,
-            "note": "an amendment to a design; it reads no coordinate",
-        },
+        "assembly": "n/a: an amendment to a design; it reads no sequence and no interval",
+        "coordinates": "n/a: an amendment to a design; it reads no coordinate",
         "parameters": {
             "top_genes_for_concentration": lg.TOP_GENES_FOR_CONCENTRATION,
             "band_at_control": list(lg.BAND_AT_CONTROL),
