@@ -1,0 +1,234 @@
+{
+  "result": "repress2_registration",
+  "date": "2026-10-02",
+  "lane": "lane-repress2",
+  "status": "registered before any count, any table and any direction was read; nothing in this payload is a result",
+  "question": "do the compiler's repression calls hold against a measured population, and is the repression population concentrated where the most-extreme-track mechanism says it should be",
+  "gate_1": {
+    "what_is_counted": "measured pairs with a significant signed effect attached to a rule of each activity axis, and the independent loci they fall in",
+    "call": "a measured pair is eligible when measured.CrispriPair.outcome is one of the two labels a significant pair takes, ('significant_decrease', 'significant_increase'). The gate reads membership in that pair of labels and never which member, so it is taken without reading a direction or a sign. This is the same two-sided significance crispri_direction.signed uses, read off the cached row's own outcome field rather than recomputed",
+    "blinded_fields": [
+      "gene",
+      "cell",
+      "chrom",
+      "start",
+      "end",
+      "outcome_is_one_of_the_two_significant_labels"
+    ],
+    "significant_outcome_labels": [
+      "significant_decrease",
+      "significant_increase"
+    ],
+    "floors": "independent loci at least 20 (fresh.LOCUS_FLOOR, which is cell2.POOLED_LOCUS_FLOOR) and eligible measured links at least 30 (fresh.POSITIVE_FLOOR). Both are imported from where the project fixed them before this lane existed; neither is set here and neither may be moved after a count",
+    "locus_floor": 20,
+    "link_floor": 30,
+    "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+    "independent_locus_span": 1000000,
+    "readings": [
+      "at or above both registered floors: this population can carry a direction reading",
+      "below a registered floor: a no-go. The count goes on the record, no direction is read on this population, no rate is reported and the floor is not moved"
+    ],
+    "below_the_floor": "the count goes on the record as a no-go and the lane continues only as the descriptive part. The floor is not lowered and no rate is reported",
+    "cell_matching": "reported both ways and never pooled: a rule is gated by `when: cell_type`, so a measurement in another cell is not a reading of that rule in its own cell"
+  },
+  "mechanism": "a compiled direction is the sign of the single most extreme of 371 AlphaGenome tracks (the S4 trace, 641909e): the element's `predicted_coding` block keeps the largest |log2 fold change| over the tracks and the compiler reads `activates` or `represses` off that one value's sign. Where the element's true effect is small, which track is the most extreme is close to arbitrary and its sign is close to a coin flip, so a rise in some unrelated tissue is read as `represses_target`. On this account a large part of the repression population is not a repression mechanism at all but the sign of a small number chosen by a maximum",
+  "prediction": "if that is what is happening, repression calls concentrate where the effect is weak and where the reader does not detect the element open. Over the assessable rules of the predicted layer, crossed by effect band (not_open_profile's own `strength`: strong at or above enhancer_target.STRONG_EFFECT, weak below) and by reader state (context_evidence.state_for: open_in_reader against not_open_in_reader), the repression share rises along both axes: weak above strong at each reader state, and not_open above open in each band. That is four strict comparisons, and the prediction is their conjunction",
+  "refutation": "a repression share that does not rise as the effect weakens and as openness falls refutes the prediction. Concretely: the prediction is refuted if any one of its four comparisons - weak vs strong within open_in_reader, weak vs strong within not_open_in_reader, not_open vs open within the strong band, not_open vs open within the weak band - is not a strict rise in the repression share. A flat or falling share is a refutation and is reported as one; there is no wording in which it reads as support. Each share is reported with its Wilson 95% interval and the population it was counted over, so a rise inside the noise can be seen for what it is, but the reading is decided on the four directions as registered above and on nothing else",
+  "prediction_readings": [
+    "the repression share rises along both axes, as the mechanism predicts: all four registered comparisons are strict rises. This is consistent with the mechanism and establishes it about no rule; a descriptive concentration is not a demonstration that the sign came from a maximum",
+    "the repression share does not rise along at least one axis, so the prediction as registered does not hold and the mechanism is refuted on this population. A refuted mechanism is a result"
+  ],
+  "comparisons": [
+    "weak_above_strong_within_open_in_reader",
+    "weak_above_strong_within_not_open_in_reader",
+    "not_open_above_open_within_strong",
+    "not_open_above_open_within_weak"
+  ],
+  "activity_call": "the element's own `activity:` axis, read off the compiled element by not_open_profile.axis_value, which reads compile.element_axes and compile.measured_axes unchanged. A rule counts as a repression rule only when that axis is exactly 'represses_target' and as an activation rule only when it is exactly 'activates_target'; a rule whose axis holds more than one term is counted in its own row and is in neither population",
+  "effect_band_call": "`strength` as genomeos.predict.enhancer_target already writes it on the cached prediction: strong at or above STRONG_EFFECT = 0.3 in |log2 fold change| of the predicted expression move on deleting the element, weak below. It is an effect-size band and never a certainty; this module reads the field and does not recompute it.",
+  "strong_effect": 0.3,
+  "effect_bands": [
+    "strong",
+    "weak"
+  ],
+  "state_call": "genomeos.attribution.context_evidence.state_for, imported unchanged, with its own mapping table and reader v1's own openness call. No threshold, mapping or registered definition is changed here",
+  "internal_check": {
+    "call": "the compiled call's sign is the sign of the element's predicted_coding log2 fold change, which is what the compiler reads the direction off. Beside it, the element's own predicted_coding_by_cell holds the same sweep's signed value on each of ['K562', 'HepG2', 'GM12878', 'IMR-90']. A cell agrees when its value has the same sign; a value of exactly zero has no sign and agrees with neither, and is counted under its own name. Only rules of the predicted layer are counted: a measured rule carries the screen's effect size and no AlphaGenome effect of its own",
+    "retained_cells": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR-90"
+    ],
+    "field": "predicted_coding_by_cell",
+    "outlier": "a call that disagrees with the element's own sign in every one of the four retained cells is an outlier of this reading: the one track the maximum selected points one way and all four retained lines point the other. It is counted as an outlier and not as a mechanism",
+    "not_validation": "this is a consistency check between two readings of the same model on the same element - the most extreme track against four named cell lines of the same sweep - so it is never independent evidence and never validation. The compiled call's own tissue is in general not one of the four, so a disagreement may be the cell-specific answer being different rather than the call being wrong, and no rule is marked wrong by this count"
+  },
+  "limitations": {
+    "not_closed": "not_open_in_reader means not detected open at the reader's registered threshold, not closed: a narrowPeak set is a call set, and absence is absence of a call",
+    "not_validation": "a consistency check between two readings of the same ENCODE chromatin, not validation: reader v1's openness comes from ENCODE peaks and AlphaGenome was trained on ENCODE, so open_in_reader is never independent evidence that the rule is right and must never be quoted as validation",
+    "descriptive_only": "the effect-band by reader-state table is descriptive. It locates where repression calls sit; it establishes about no rule that the rule is wrong, and it moves no verdict.",
+    "concordance_is_not_validation": "this is a consistency check between two readings of the same model on the same element - the most extreme track against four named cell lines of the same sweep - so it is never independent evidence and never validation. The compiled call's own tissue is in general not one of the four, so a disagreement may be the cell-specific answer being different rather than the call being wrong, and no rule is marked wrong by this count",
+    "measured_axis_is_not_the_link_direction": "on a measured element the activity axis and the rule direction are different things: measured.rule_links emits a link only from a pair the benchmark calls Regulated, which is Significant AND EffectSize < 0, so every compiled CRISPRi link's action is `activates`, while a significant increase raises no rule and reaches the program only as `represses_target` on the element's activity axis. Counts are therefore reported per rule source as well as per axis, and no count here reads a measured element's axis as the direction of a measured link",
+    "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+    "four_is_a_count": "the S4 trace's four judged repressions, all wrong in direction, are a count of four and never a rate. Nothing here turns them into one."
+  },
+  "introduces_no_threshold": "every band, floor, grouping and state in this lane is imported from where the project already fixed it: not_open_profile's effect band and enhancer_target.STRONG_EFFECT, context_evidence.state_for, cell2's locus rule and span, fresh.LOCUS_FLOOR and fresh.POSITIVE_FLOOR, crispri.MODEL_CELLS. This lane sets no value of its own",
+  "changes_nothing": "no rule, no compiled label and no verdict is changed, nothing is deleted and nothing is refitted",
+  "alphagenome_requests": 0,
+  "money": "none: no request is made",
+  "code": {
+    "module": "genomeos/attribution/repress2.py",
+    "register": "scripts/repress_register.py",
+    "run": "scripts/repress_population.py",
+    "tests": "tests/test_repress2.py"
+  },
+  "describes": [
+    "data/results/not_open_profile.json",
+    "data/results/context_evidence.json",
+    "data/results/context_evidence_baserate.json"
+  ],
+  "what_the_run_will_write": "data/results/repress2_population.json",
+  "order": [
+    "1. gate 1: the blinded eligibility count, before any direction is read",
+    "2. if below a floor, record the no-go with the count and continue only as the descriptive part",
+    "3. the registered prediction, tested as the repression share by effect band and reader state",
+    "4. the 0-request internal check: sign concordance across the four retained cells"
+  ],
+  "frozen_inputs": [
+    {
+      "path": "data/results/not_open_profile.json",
+      "sha256": "e0748db0ddf37ba25f9f3cd50f8a860386d4dc16d496da5d8024961f91cc0ca9",
+      "bytes": 267758
+    },
+    {
+      "path": "data/results/context_evidence.json",
+      "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+      "bytes": 184616
+    },
+    {
+      "path": "data/results/context_evidence_baserate.json",
+      "sha256": "2cc67f4fe78158c92c1c23269edcfccb0356539af241753440e6c555dc52d771",
+      "bytes": 20289
+    },
+    {
+      "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+      "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+      "bytes": 403465
+    },
+    {
+      "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+      "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+      "bytes": 996546
+    },
+    {
+      "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+      "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+      "bytes": 373837
+    }
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the compiled non-coding programs of the 24 chromosomes, as genomeos.attribution.compile emits them",
+        "version": "the attributed element results on this machine, digested in frozen_inputs"
+      },
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.), as genomeos.attribution.measured already caches it",
+        "version": "the assay cache on this machine; the run digests the layer it reads"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/not_open_profile.json",
+        "sha256": "e0748db0ddf37ba25f9f3cd50f8a860386d4dc16d496da5d8024961f91cc0ca9",
+        "bytes": 267758,
+        "partition": "the reading this lane describes"
+      },
+      {
+        "path": "data/results/context_evidence.json",
+        "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+        "bytes": 184616,
+        "partition": "the reading this lane describes"
+      },
+      {
+        "path": "data/results/context_evidence_baserate.json",
+        "sha256": "2cc67f4fe78158c92c1c23269edcfccb0356539af241753440e6c555dc52d771",
+        "bytes": 20289,
+        "partition": "the reading this lane describes"
+      },
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": "the reader mapping table"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "independent_locus_span": 1000000,
+      "locus_floor": 20,
+      "link_floor": 30,
+      "strong_effect": 0.3,
+      "retained_cells": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "aggregate_function": "count",
+      "fill_value": 0
+    },
+    "exclusions": [
+      "no rule is excluded: every rule the compiler emits is enumerated and the ones outside a reported population are counted in their own row",
+      "a rule whose activity axis holds more than one term is in neither the repression nor the activation population and is counted separately"
+    ],
+    "partitions": {
+      "gate_1_cell_matched": "the measured pair's cell equals the rule's own `when: cell_type`",
+      "gate_1_cell_ignored": "element and gene only, reported beside it and never pooled with it",
+      "descriptive": "the assessable rules of the predicted layer, by effect band and reader state"
+    },
+    "code": {
+      "git_sha": "5fefcf1a20426845fd82af219992f37959effea7",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/repress2.py",
+        "scripts/placement_cause_198.py",
+        "scripts/repress_register.py",
+        "tests/test_placement_cause_198.py",
+        "tests/test_repress2.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/repress2.py",
+        "scripts/placement_cause_198.py",
+        "scripts/repress_register.py",
+        "tests/test_placement_cause_198.py",
+        "tests/test_repress2.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/placement_cause_198.json"
+      ],
+      "argv": [
+        "scripts/repress_register.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
