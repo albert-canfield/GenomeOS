@@ -1,0 +1,526 @@
+{
+  "result": "astroreg_registration",
+  "date": "2026-10-02",
+  "terms": {
+    "what_is_registered": "the design of a first test of the frozen model's deletion feature in a cell context this project has never scored, on a set whose outcomes it has never read. Written before any astrocyte score exists and before any request is bought",
+    "eligibility": {
+      "source": "data/results/fresh_crispri_eligibility.json",
+      "pairs": 7759,
+      "eligibility_hits": 158,
+      "eligibility_loci": 86,
+      "registered_positives": 133,
+      "registered_increases_held_apart": 25,
+      "registered_loci": 74,
+      "chromosomes": 22,
+      "locus_reconciliation": "the eligibility lane reported 158 positives over 86 independent loci, counting every pair the authors call a hit. The label rule registered here is narrower: a positive is a significant DECREASE, so 25 increases are held apart and the positive class is 133 pairs over 74 loci on 22 chromosomes. Both floors still clear (133 against 30, 74 against 20). Every interval and the power figure are sized on 74; 86 is the eligibility figure and may not be quoted for this test",
+      "locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "locus_rule_is_not": "established biological independence"
+    },
+    "feasibility_gate": {
+      "astrocyte_track_exposed": "AlphaGenome returned an astrocyte output: `astrocyte` is an exact winning-track name in the sweep's own per-element cache, on 224 of chr21's 348,033 gene rows (0.0644%), over 218 of its 12,158 elements (1.79%), among 316 distinct winning names and 371 tracks scored per window. crispri.MODEL_CELLS governs which four cell lines' values are RETAINED per gene, not which tracks the model exposes: the astrocyte values were computed and discarded at write time, the same defect as the per-cell collapse fixed at 6c44443. So the earlier no-go was about the wrong thing -- the input is not missing from the model, it is missing from the cache",
+      "cache_reuse_refused": "a value survives there only because it was the most extreme of the 371 tracks in its window, so reusing them would import selection on a correlate of the outcome. The 224 rows are counted as evidence that the track exists and are never read as values; every astrocyte deletion value used by the test must come from a fresh request on the same code path",
+      "rule": "if an input the frozen model needs is missing, the model is not applied and no substitute is put in its place: a no-go is recorded instead"
+    },
+    "build": "GRCh38/hg38, confirmed against the project's own GENCODE table on five of the screen's measured genes before any join: HSPB1 within 8 bp of the annotated TSS, FTH1 6 bp, ATP2B4 102 bp, with RHOC and CRABP2 inside the gene body, against roughly 500 kb of displacement had it been hg19. No liftover is needed and no pair is lost to one",
+    "labels": {
+      "positive": "the authors' own call of a significant DECREASE: Supplementary Table 3F's `Hit&Downregulated`. This is the benchmark's construction (significant AND effect below zero), so the positive class means the same thing in both cell contexts",
+      "primary_negative": "a pair the authors do NOT call a hit AND which they flag `WellPowered_at_FC_0.25`. The 0.25 power convention is the one the frozen model was scored under on the K562 benchmark, so an underpowered non-hit is not evidence of absence and is excluded rather than counted as a negative",
+      "sensitivity_negative": "the same rule at `WellPowered_at_FC_0.15`, reported as a sensitivity analysis beside the primary and never in place of it",
+      "increases_held_apart": "a pair the authors call a hit whose change is an INCREASE is neither a positive nor a negative. It is counted and reported separately and is never folded into the negatives, because an enhancer whose silencing raises a gene is a different phenomenon from one the model is asked to rank"
+    },
+    "primary_claim": "the deletion gain in cultured primary human astrocytes: AUPRC of 'activity + distance + deletion' minus AUPRC of 'activity + distance', both scored with the weights frozen on the K562 training pairs. Nothing is refitted on astrocyte data -- not the weights, not a threshold, not a feature definition. The gain is the only primary quantity; an AUPRC on its own is not a claim",
+    "interval_rule": "a cluster bootstrap at 2000 draws over the 74 registered independent loci, AND the chromosome bootstrap over 22 clusters. Both are reported and the WIDER of the two is the interval that is quoted, because the weaker guarantee must govern the published tail. crispri.MIN_CLUSTERS_FOR_AN_INTERVAL applies to each: below 10 clusters there is no ci95 at all, only 'interval unreliable: N clusters'. The locus grouping is cell2's operational convention and is not established biological independence, so the chromosome interval is the more conservative of the two and is expected to be the wider",
+    "readings": {
+      "lower_bound_above_zero": "the deletion gain is detected in cultured fetal astrocytes",
+      "interval_covers_zero": "no gain detected",
+      "upper_bound_below_zero": "the deletion feature lowers ranking here",
+      "never": "an interval covering zero is never reported as 'no effect': it is 'no gain detected'. The distinction is the whole difference between an absent effect and an underpowered test"
+    },
+    "power_rule": "resample the K562 held-out loci with replacement up to 74 loci, at K562's own observed gain, and report the share of resamples whose interval excludes zero. Classes from S8, fixed here: at or above 0.8 the test is confirmatory; 0.5 to 0.8 it is exploratory and is labelled so in every quote of it; below 0.5 the test is REFUSED and not run. The figure is computed before any astrocyte pair is scored, so it cannot be chosen after an outcome",
+    "same_code_path": "the astrocyte deletion value is computed by exactly the function that produced the frozen K562 values: crispri.annotate with `cells` extended to include astrocyte, nothing else changed, weights frozen. crispri._annotate_one reaches the deletion features through `if p.cell in cells`, so `cells` is a membership gate and nothing more: extending the tuple cannot alter the value of any pair whose cell was already in it. That is why adding astrocyte leaves every K562 pair untouched, and the identity check recomputes 20 K562 pairs through the extended path to show it rather than assert it",
+    "exposure": [
+      "the screen's labels have never been read here: established by grep over docs/, genomeos/, scripts/, tests/ and the knowledge READMEs for Voineagu, AstroREG, PsychENCODE, EGrf, CROP-seq, NHA, the DOI stem and PMID 41413662, with no hit, and the study is absent from the project's CRISPRi exposure ledger",
+      "astrocyte CHROMATIN features have already been read here: the node reader lanes hold astrocyte DNase for 24 chromosomes and the epigenome store holds astrocyte H3K27ac for 24 chromosomes. These are the activity term's own inputs, so the activity arm is not naive to this cell type",
+      "AlphaGenome was trained on ENCODE tracks genome-wide, which include astrocyte chromatin. The labels are unseen; the genomic regions are not",
+      "the elements were selected on PsychENCODE astrocyte activity, which flatters the activity term in both arms equally and so leaves the gain comparison less affected",
+      "the frozen K562 values came through the same legacy per-cell collapse as this arm would (one track per cell name, pre-6c44443), so the two definitions match and the identity check below is the precedent for saying so"
+    ],
+    "not_claimed": [
+      "not a replication of the K562 result: a different assay readout (single-cell CROP-seq against the benchmark's mixed FlowFISH and scRNA-seq screens), a different element selection (PsychENCODE astrocyte enhancers), a different hit threshold and a different cell lineage, so a difference cannot be attributed to the cell type",
+      "not independence of the genomic regions: the locus grouping is cell2's operational convention, and AlphaGenome was trained on ENCODE tracks genome-wide, which include astrocyte chromatin; the labels are unseen, the regions are not",
+      "not a cell-type-specific claim about astrocytes: two donor lines of cultured fetal-derived astrocytes are not primary brain tissue",
+      "no claim at all until the comparison is registered before any score is computed"
+    ],
+    "cost_framing": "the figure Albert sees is the cost of the information, not the volume: the total requests needed, the covered share of positives and of negatives, and the expected requests per positive, each quoted against the HCT116 precedent of 705 requests for 363 covered pairs. 133 positives over 74 loci is what the money buys",
+    "hct116_precedent": {
+      "requests": 705,
+      "covered_pairs": 363,
+      "regulated": 34
+    },
+    "requests_sent_by_this_lane": 0,
+    "money_spent_by_this_lane": 0
+  },
+  "label_counts": {
+    "positive": 133,
+    "increase_held_apart": 25,
+    "negative": 4447,
+    "excluded_underpowered": 3154
+  },
+  "label_counts_note": "positives are the authors' significant decreases; increases are held apart; a non-hit that is not WellPowered at fc 0.25 is excluded rather than counted as a negative",
+  "identity_check": {
+    "pairs_compared": 20,
+    "cells_frozen": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR-90"
+    ],
+    "cells_extended": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR-90",
+      "astrocyte"
+    ],
+    "feature_leaves_compared": 160,
+    "pairs_that_differ": 0,
+    "differences": [],
+    "unchanged": true,
+    "why": "the astrocyte deletion value is computed by exactly the function that produced the frozen K562 values: crispri.annotate with `cells` extended to include astrocyte, nothing else changed, weights frozen. crispri._annotate_one reaches the deletion features through `if p.cell in cells`, so `cells` is a membership gate and nothing more: extending the tuple cannot alter the value of any pair whose cell was already in it. That is why adding astrocyte leaves every K562 pair untouched, and the identity check recomputes 20 K562 pairs through the extended path to show it rather than assert it"
+  },
+  "coverage": {
+    "per_chromosome": {
+      "chr1": {
+        "pairs": 830,
+        "covered_pairs": 830,
+        "elements": 105,
+        "covered_elements": 105,
+        "registry_elements_needed": 143,
+        "astrocyte_value_cached": 0
+      },
+      "chr2": {
+        "pairs": 487,
+        "covered_pairs": 487,
+        "elements": 81,
+        "covered_elements": 81,
+        "registry_elements_needed": 119,
+        "astrocyte_value_cached": 0
+      },
+      "chr3": {
+        "pairs": 307,
+        "covered_pairs": 302,
+        "elements": 57,
+        "covered_elements": 56,
+        "registry_elements_needed": 77,
+        "astrocyte_value_cached": 0
+      },
+      "chr4": {
+        "pairs": 161,
+        "covered_pairs": 161,
+        "elements": 28,
+        "covered_elements": 28,
+        "registry_elements_needed": 35,
+        "astrocyte_value_cached": 0
+      },
+      "chr5": {
+        "pairs": 148,
+        "covered_pairs": 147,
+        "elements": 26,
+        "covered_elements": 25,
+        "registry_elements_needed": 30,
+        "astrocyte_value_cached": 0
+      },
+      "chr6": {
+        "pairs": 456,
+        "covered_pairs": 456,
+        "elements": 58,
+        "covered_elements": 58,
+        "registry_elements_needed": 86,
+        "astrocyte_value_cached": 0
+      },
+      "chr7": {
+        "pairs": 267,
+        "covered_pairs": 267,
+        "elements": 34,
+        "covered_elements": 34,
+        "registry_elements_needed": 49,
+        "astrocyte_value_cached": 0
+      },
+      "chr8": {
+        "pairs": 185,
+        "covered_pairs": 185,
+        "elements": 44,
+        "covered_elements": 44,
+        "registry_elements_needed": 61,
+        "astrocyte_value_cached": 0
+      },
+      "chr9": {
+        "pairs": 562,
+        "covered_pairs": 556,
+        "elements": 61,
+        "covered_elements": 59,
+        "registry_elements_needed": 79,
+        "astrocyte_value_cached": 0
+      },
+      "chrX": {
+        "pairs": 19,
+        "covered_pairs": 19,
+        "elements": 5,
+        "covered_elements": 5,
+        "registry_elements_needed": 7,
+        "astrocyte_value_cached": 0
+      },
+      "chr10": {
+        "pairs": 428,
+        "covered_pairs": 424,
+        "elements": 69,
+        "covered_elements": 68,
+        "registry_elements_needed": 86,
+        "astrocyte_value_cached": 0
+      },
+      "chr11": {
+        "pairs": 1004,
+        "covered_pairs": 1004,
+        "elements": 74,
+        "covered_elements": 74,
+        "registry_elements_needed": 107,
+        "astrocyte_value_cached": 0
+      },
+      "chr12": {
+        "pairs": 293,
+        "covered_pairs": 293,
+        "elements": 33,
+        "covered_elements": 33,
+        "registry_elements_needed": 45,
+        "astrocyte_value_cached": 0
+      },
+      "chr13": {
+        "pairs": 118,
+        "covered_pairs": 112,
+        "elements": 31,
+        "covered_elements": 30,
+        "registry_elements_needed": 46,
+        "astrocyte_value_cached": 0
+      },
+      "chr14": {
+        "pairs": 246,
+        "covered_pairs": 246,
+        "elements": 32,
+        "covered_elements": 32,
+        "registry_elements_needed": 45,
+        "astrocyte_value_cached": 0
+      },
+      "chr15": {
+        "pairs": 273,
+        "covered_pairs": 265,
+        "elements": 43,
+        "covered_elements": 42,
+        "registry_elements_needed": 66,
+        "astrocyte_value_cached": 0
+      },
+      "chr16": {
+        "pairs": 345,
+        "covered_pairs": 332,
+        "elements": 26,
+        "covered_elements": 25,
+        "registry_elements_needed": 32,
+        "astrocyte_value_cached": 0
+      },
+      "chr17": {
+        "pairs": 309,
+        "covered_pairs": 309,
+        "elements": 33,
+        "covered_elements": 33,
+        "registry_elements_needed": 51,
+        "astrocyte_value_cached": 0
+      },
+      "chr18": {
+        "pairs": 46,
+        "covered_pairs": 46,
+        "elements": 13,
+        "covered_elements": 13,
+        "registry_elements_needed": 17,
+        "astrocyte_value_cached": 0
+      },
+      "chr19": {
+        "pairs": 759,
+        "covered_pairs": 759,
+        "elements": 43,
+        "covered_elements": 43,
+        "registry_elements_needed": 58,
+        "astrocyte_value_cached": 0
+      },
+      "chr20": {
+        "pairs": 110,
+        "covered_pairs": 110,
+        "elements": 22,
+        "covered_elements": 22,
+        "registry_elements_needed": 27,
+        "astrocyte_value_cached": 0
+      },
+      "chr21": {
+        "pairs": 15,
+        "covered_pairs": 15,
+        "elements": 4,
+        "covered_elements": 4,
+        "registry_elements_needed": 5,
+        "astrocyte_value_cached": 0
+      },
+      "chr22": {
+        "pairs": 391,
+        "covered_pairs": 391,
+        "elements": 35,
+        "covered_elements": 35,
+        "registry_elements_needed": 51,
+        "astrocyte_value_cached": 0
+      }
+    },
+    "by_label": {
+      "positive": {
+        "total": 133,
+        "covered": 133,
+        "covered_share": 1.0
+      },
+      "negative": {
+        "total": 4447,
+        "covered": 4423,
+        "covered_share": 0.994603103215651
+      },
+      "excluded_underpowered": {
+        "total": 3154,
+        "covered": 3135,
+        "covered_share": 0.9939759036144579
+      },
+      "increase_held_apart": {
+        "total": 25,
+        "covered": 25,
+        "covered_share": 1.0
+      }
+    },
+    "coverage_bias": {
+      "positive_covered_share": 1.0,
+      "negative_covered_share": 0.994603103215651,
+      "difference_positive_minus_negative": 0.005396896784348959,
+      "reading": "the covered shares of positives and negatives are within one percentage point",
+      "controls_that_apply": "the coverage-indicator control and the coverage-matched arm already in use for the K562 result apply here unchanged, and both are required of any run of this design"
+    },
+    "astrocyte_values_already_cached": 0,
+    "astrocyte_values_already_cached_note": "counted as presence only; no cached value was read as a number. Expected to be nil, because the sweep retained four cell lines' values per gene and astrocyte is not one",
+    "registry_elements_needed_total": 1322,
+    "covered_positive_loci": 74
+  },
+  "requests": {
+    "total_requests_needed": 1322,
+    "one_request_per": "registry element overlapping a covered pair, as the HCT116 arm counted it",
+    "covered_share_of_positives": 1.0,
+    "covered_positives": 133,
+    "total_positives": 133,
+    "covered_share_of_negatives": 0.994603103215651,
+    "covered_negatives": 4423,
+    "total_negatives": 4447,
+    "expected_requests_per_positive": 9.93984962406015,
+    "covered_independent_loci_among_positives": 74,
+    "against_hct116_precedent": {
+      "hct116_requests": 705,
+      "hct116_covered_pairs": 363,
+      "hct116_requests_per_covered_pair": 1.9421487603305785,
+      "ours_requests_per_covered_positive": 9.93984962406015,
+      "ratio_of_totals": 1.875177304964539
+    },
+    "framing": "the figure Albert sees is the cost of the information, not the volume: the total requests needed, the covered share of positives and of negatives, and the expected requests per positive, each quoted against the HCT116 precedent of 705 requests for 363 covered pairs. 133 positives over 74 loci is what the money buys",
+    "requests_sent": 0
+  },
+  "power": {
+    "method": "resample the K562 held-out loci with replacement up to 74 loci, at K562's own observed gain, and report the share of resamples whose interval excludes zero. Classes from S8, fixed here: at or above 0.8 the test is confirmatory; 0.5 to 0.8 it is exploratory and is labelled so in every quote of it; below 0.5 the test is REFUSED and not run. The figure is computed before any astrocyte pair is scored, so it cannot be chosen after an outcome",
+    "k562_scope": "held-out K562",
+    "k562_pairs": 1744,
+    "k562_positives": 114,
+    "k562_independent_loci": 136,
+    "k562_observed_gain": {
+      "point": 0.14074586141954792,
+      "clusters": 136,
+      "requested_draws": 2000,
+      "enough_clusters": true,
+      "kept_draws": 2000,
+      "dropped_draws_with_no_positive": 0,
+      "ci95": [
+        0.08361398281094135,
+        0.20033863237661415
+      ]
+    },
+    "resampled_to_loci": 74,
+    "outer_draws": 200,
+    "usable_outer_draws": 200,
+    "intervals_excluding_zero": 192,
+    "verdict": {
+      "share": 0.96,
+      "class": "confirmatory",
+      "run": true
+    },
+    "alphagenome_requests": 0
+  },
+  "left_undone": [
+    "no astrocyte pair is scored and no request is sent: the design is registered, not run",
+    "the ENCODE accessions of the astrocyte DNase and H3K27ac files already on disk are not recorded anywhere in the repository; they are present but unprovenanced",
+    "whether AlphaGenome's astrocyte output is one track or several is not established; the cache records a winning name, not the roster",
+    "the coverage table's requests assume one request per registry element overlapping a covered pair, the HCT116 counting rule; a cheaper rule may exist and is not explored here"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Green NFO, et al. CRISPRi screening in cultured human astrocytes. Nature Neuroscience 2025;29(3):703-716 -- Supplementary Table 3",
+        "version": "publisher open-access supplementary store; pinned here by sha256",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-025-02154-3/MediaObjects/41593_2025_2154_MOESM5_ESM.xlsx"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark training_K562 and heldout_5_cell_types (Gschwind et al.)",
+        "version": "fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      },
+      {
+        "accession": "data/results/fresh_crispri_eligibility.json",
+        "version": "this lane's committed eligibility result; its counts are carried, not re-derived"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/fresh/astro_MOESM5.xlsx",
+        "sha256": "e09bb1434329999d07505916606b93216b60927c070f4174875c14cea512680c",
+        "bytes": 36185183,
+        "partition": null,
+        "role": "the screen's hit calls, direction labels, power flags, element coordinates and measured gene symbols; no effect size, p-value, FDR or score was read"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training",
+        "role": "the K562 pairs the frozen weights are fitted on, for the identity check and the power figure; already-read development evidence"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "role": "the held-out pairs, for the power figure's K562 scope; already-read"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": "n/a: the screen states no convention for its chrom:start-end strings. The uses made of them here are the 1 Mb locus grouping and an overlap test against the registry, neither of whose outcome a one-base shift can change; the build itself is confirmed hg38 (see terms.build)",
+    "parameters": {
+      "registered_loci": 74,
+      "registered_positives": 133,
+      "independent_locus_span_bp": 1000000,
+      "bootstraps": 2000,
+      "min_clusters_for_an_interval": 10,
+      "identity_check_pairs": 20,
+      "model_cells_frozen": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "permitted_columns": [
+        "Coord",
+        "Enh",
+        "Enhancer",
+        "EnhancerCoord",
+        "Gene",
+        "GeneID",
+        "GeneSymbol",
+        "GeneTSS",
+        "Hit",
+        "Hit&Downregulated",
+        "LinkedGene",
+        "Pair",
+        "Tested",
+        "WellPowered_at_FC_0.15",
+        "WellPowered_at_FC_0.25",
+        "Wellpowered"
+      ],
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "astrocyte_pairs_scored": 0,
+      "money_spent": 0
+    },
+    "exclusions": [
+      "no effect size, fold change, p-value, FDR, Z statistic or expression level was read from the screen: fresh.permit refuses the column before the workbook is opened",
+      "the 224 cached rows whose winning track is astrocyte are NOT reused as values; astroreg.CACHE_REUSE_REFUSED gives the reason",
+      "no astrocyte pair is scored and no model request is made: this is a registration",
+      "a hit whose change is an increase is neither a positive nor a negative and is never folded into the negatives",
+      "a non-hit that is not WellPowered at fc 0.25 is excluded rather than counted as a negative"
+    ],
+    "partitions": {
+      "screen_pairs": "all 7759 element-gene pairs of the published screen",
+      "k562": "already-read development evidence, used only for the identity check and the power figure"
+    },
+    "code_cleanliness": {
+      "git_sha": "dd5a223dd93eb447b2af1b23a9418a16ad18573e",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astroreg.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/version.py",
+        "scripts/astroreg_register.py"
+      ],
+      "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time; every path component is matched against what its directory actually lists, so the closure is the same on a case-sensitive filesystem (carried from cd263bc)",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered any number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "dd5a223dd93eb447b2af1b23a9418a16ad18573e",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/astroreg_register.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
