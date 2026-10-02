@@ -14665,6 +14665,127 @@ manifests: 243 of 243 and 13 of 13 inputs declared, opened and hashed with 0 abs
 and 481 of 498 leaves compared, **0 differences and 0 must-hold failures** in each, with
 `foreign_uncommitted_code_on_the_counting_path` empty on both.
 
+## The direction test at the link level: the decrease arm's 174 answerable links clear both floors, the increase arm's 21 do not, and the comparison is refused by the lane's own gate (2026-10-02, lane-direction)
+
+lane-increase established that a repression population could be built from the increases the committed
+extractor discards, and registered the finding in these words: *"at or above both registered floors: a
+measured repression population could be built from the increases the committed extractor discards. This
+lane stops here. It reads no direction, reports no rate, tests no repression call..."* — 48 links over 33
+independent loci against floors of 30 links and 20 loci. Behind it stands lane-repress2's registered
+no-go, also word for word: *"the measured layer holds no repression call to test"*. This lane was given
+the next question: among the measured significant effects on attributed elements — 212 decreases and 48
+increases — does the model's predicted deletion direction for the link's own gene and cell match the
+measured sign more often for decreases than for increases, and above a sign-shuffled control.
+
+A measured increase on knockdown is **an increase on knockdown**. Nothing below calls one a silencer, a
+repressor or evidence of a repression mechanism (review item R2), and this test is about sign agreement
+and not mechanism. The test is at the **link level** and not the rule level because a rule-level test is
+impossible on this population: of the 48 increases exactly **one** has a compiled rule naming its own
+gene and **zero** have one gated on its own cell, so the model's direction calls are read straight out of
+the cached deletion answers and no compiled rule is consulted anywhere.
+
+**The registration precedes the first direction read.** Code `b3705c5`, registration
+`data/results/direction_link_registration.json` at `0779c97` with its stamp clean; the first predicted
+value was read afterwards, by `scripts/direction_link.py`. Both floors are imported from
+`fresh.POSITIVE_FLOOR` and `fresh.LOCUS_FLOOR`, the locus convention from
+`cell2.INDEPENDENT_LOCUS_RULE` with its own sentence that it is an operational grouping and **not
+established biological independence**, and neither floor nor any predicate, seed or shuffle count moved
+after an outcome was seen.
+
+**What the registration had to settle first, because the statistic the question names cannot carry it.**
+Writing the control's unit test, with no value yet read, showed that the difference between the two arms'
+agreement rates is, up to the arm sizes, the sign shuffle's own baseline. The algebra is exact and is
+pinned by a test over two hundred arm-size and agreement combinations: with `n_d` answered decrease links
+of which `a` agree and `n_u` answered increase links of which `b` agree, the excess of the difference over
+the shuffled baseline is identically
+
+    2 * (balanced_accuracy - 0.5) * (n_u - n_d) / (n_d + n_u)
+
+Two consequences were written down before the run. When the arms are the same size the excess is exactly
+zero, so the whole difference between them **is** the baseline a model earns for merely preferring one
+sign. And when the decreases arm is the larger one — 212 against 48 here — the factor `(n_u - n_d)` is
+negative, so a positive excess requires balanced accuracy **below** 0.5: a one-sided test of the
+difference against its own sign shuffle is a test of the model doing worse than chance. The same algebra
+shows each arm's agreement against its own shuffled chance level differs from the other's only by that
+arm-size factor, and the two sum to `2 * (balanced_accuracy - 0.5)`: with one marginal sign rate there is
+exactly **one** skill number on this population. So the difference between the arms is registered as a
+description of the asymmetry, never as evidence that the model reads direction better on one sign, and
+the reading was registered to be taken on balanced accuracy against 0.5 — carrying
+`crispri_direction_both.py`'s own registered reason verbatim: *"its chance level is 0.5 for any class
+mix, and a constant-sign caller — of either sign — scores exactly 0.5 on it by construction."*
+
+**What the cached answers carry, and what nothing stands in for.** The sweep's per-element response cache
+carries exactly the `HepG2`, `IMR-90`, `K562` and `GM12878` tracks. It carries no `WTC11` and no
+`HCT116`, so of the 48 increase links 39 are K562 and answerable in their own cell while 6 WTC11 and 3
+HCT116 are not. No other cell, gene, pooled value or second cache stands in for them — including the
+separate partial `data/knowledge/alphagenome/elements_hct116` cache, which does carry an HCT116 track
+over five chromosomes and is named in the registration, not read, so that mixing a second cache into one
+arm of a comparison is not done by another route. Those links are **absent from the test rather than
+negative in it**. The run then met a third uncached cell the increase population does not hold, `Jurkat`,
+on the decrease arm; the registered predicate is membership in the cached tracks, so its 5 links were
+excluded by the rule and not by a judgement, and the registration's illustrative list of two uncached
+cells is narrower than the population turned out to be.
+
+**The eligibility join reconciles with the population it follows from.** 260 eligible links — 212
+decreases and 48 increases, by arm and by cell, with **0** contested, matching lane-increase's own two
+counts at the same ladder step and its own 0 contested. Both arms are taken at that one step,
+`and_on_an_attributed_element`, where no compiled rule is consulted: the 212-of-212 the decrease column
+keeps at lane-increase's last two ladder steps is the extractor's own construction and not model
+coverage, and this arm does not inherit that reading.
+
+**The answerability pass, with its exhaustive breakdown at its own denominator.** 230 links are in the
+cell read. 195 answered, 0 excluded for an exactly-zero predicted value, 35 absent because the element's
+cached window carries no entry for that gene — and the breakdown reconciles with its denominator on each
+arm separately: decreases 174 answered and 17 absent of 191, increases 21 answered and 18 absent of 39.
+26 further links are unanswerable because the cache carries no track of their cell at all (decreases: 8
+WTC11, 5 Jurkat, 4 HCT116; increases: 6 WTC11, 3 HCT116), and 4 decrease links in GM12878 are in a cached
+cell that is not the one registered as primary and are counted rather than pooled in.
+
+**The gate, on each arm separately against both imported floors.**
+
+| arm | answered links | independent loci | both floors |
+| --- | --- | --- | --- |
+| decreases | 174 | 112 | met |
+| increases | 21 | 13 | answered links short of 30 by 9; independent loci short of 20 by 7 |
+
+**The reading, in the words registered before the run: a gate no-go.** *"an arm is below an imported
+floor: a no-go. The comparison between the arms is not made, no agreement rate is read as a result, no
+floor is moved, the two arms are not pooled to reach a floor and no answered set is widened by
+substituting a cell, a gene or another cache. The counts go on the record with the margin each falls
+short by, because a reader is owed it and not because a small margin is better than a large one. A count
+short of a floor is reported as a no-go and NEVER as close, promising, nearly enough, a good start or
+enough for a pilot."* So **balanced accuracy was not computed, neither cluster bootstrap interval over
+independent loci was taken, the sign shuffle was not run and no one-sided p exists**, and the result file
+lists those four absences by name rather than leaving a reader to infer them. The two per-arm agreement
+rates the file does carry are the counts that go on the record and are not read as a result; quoting
+either, or the gap between them, as a finding of this lane would be reading the result the gate refused.
+
+**The one thing the two gates say together.** They apply the same two imported floors to different nouns.
+lane-increase's population is 48 increase links over 33 independent loci, **measured**; of those 48, 21
+are **answerable** in their own cell from the cached answers, over 13 independent loci. Of the 27 that
+are not, 9 have a cell the cache carries no track of and 18 have an element whose cached window carries
+no entry for their own gene. A count of measurements that clears a floor is not a count of answerable
+comparisons, and this is the same distinction docs/LESSONS.md records under *"A count is not a
+measurement of the thing you want to count"*, one step further along.
+
+**What this result cannot establish.** It establishes nothing about any repression mechanism, any
+silencer or repressor, or any compiled repression call — no compiled rule was consulted. It is not a
+verdict on the deletion model's direction in general: one cell, one assay, and only links on an
+attributed element under the committed overlap rule. The locus counts are cell2's operational grouping
+and never established biological independence. The arms are not balanced and are not matched on
+magnitude, chromosome, gene, split or dataset. The floors are on counts and not on effect sizes, and no
+magnitude bar was applied. A refused comparison is a refused comparison, not a measured absence of a
+difference. And the 31 links in cells the cache carries no track of are absent from the test: this lane
+says nothing whatever about direction in a cell the cached answers do not carry. The project's earlier
+direction lanes measured a different population — held-out in-reach pairs, K562 and GM12878 — and their
+registered verdict stands as they wrote it, *"balanced accuracy 0.6221 is above chance but under 0.65;
+direction is faintly readable and not usable. UNDECIDABLE..."*; nothing here confirms or contradicts it,
+by construction.
+
+Code `b3705c5` and `d65e803`; registration `0779c97`; result `data/results/direction_link.json`. 0 model
+requests, no money, no download, no network: the per-element cache is streamed in chunks rather than
+loaded, so peak memory is one record and not one chromosome.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
