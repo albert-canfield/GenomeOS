@@ -13600,6 +13600,139 @@ this result and is unchanged. The headline +0.141 [+0.082, +0.231] in `docs/CRIS
 `data/results/crispri_benchmark.json`, a different result on the 1,744 covered K562 held-out pairs that
 still rests on 200 draws and is not rebuilt here.
 
+## The paired comparison against ENCODE-rE2G, run: the like-for-like test detects no difference
+
+**The binding result first, because the positive figure below is withdrawn by it.** On the 1,918 held-out
+K562 pairs, the frozen `dnase + distance + deletion` model against ENCODE-rE2G reads
+**"no difference detected"**: delta **+0.0593**, interval **[−0.001, 0.1485]**, 22 chromosome clusters,
+2,000 of 2,000 draws kept. That is the like-for-like comparison — our feature set matched to the
+comparator's input, so DNase is read by both and H3K27ac by neither — and it was registered in full
+(`re2g.SECOND_REGISTRATION`) and committed before any figure of it was computed. By its own
+pre-registered falsifier, **README may not say the deletion model ranks better than ENCODE-rE2G**, and
+the H3K27ac comparison below **may not be cited alone**. `data/results/re2g_likeforlike.json`.
+
+**The gate passed before anything was compared.** ENCODE-rE2G was reconstructed from the five ENCODE
+portal `element gene links` files that Supplementary Table 12 names, one per benchmark biosample
+(K562 `ENCFF970QAX`, GM12878 `ENCFF260CIO`, HCT116 `ENCFF407YWT`, Jurkat `ENCFF681NXF`, WTC11
+`ENCFF071ZZU`; 1,569,167,142 bytes, every file matching the portal's recorded md5). Joined by the
+benchmark's own rule at the tag the paper's data availability names (`v1.0.0`, commit `50587422`,
+byte-identical to main): same cell type and same target gene, any overlap of one base by the pipeline's
+own inclusive test, several overlaps aggregated by the documented default `sum`, and an unpredicted pair
+kept at `fill_value` 0 — 422 of 4,378 pairs. Those scores reproduce the published pooled weighted AUPRC
+at **0.5393 against 0.556151, a miss of 0.0168**, inside the registered tolerance of 0.02.
+
+**The H3K27ac comparison, as registered, with its qualifiers.** The frozen
+`activity + distance + deletion` model, whose activity term is `sqrt(DNase × H3K27ac)`:
+
+| population | delta | 95% interval | clusters | draws | reading |
+|---|---|---|---|---|---|
+| **primary, held-out K562**, 1,918 pairs, 118 positives, 100.79 weighted | **+0.0689** | [**+0.0022**, 0.1605] | 22 | 2,000 of 2,000 | "ranks better than ENCODE-rE2G on these pairs" |
+| secondary, all held-out pairs pooled, 4,378 pairs, 190 positives, 157.39 weighted | +0.1376 | [0.0734, 0.2067] | 22 | 2,000 of 2,000 | "ranks better than ENCODE-rE2G on these pairs" |
+| GM12878, 68 pairs, 16 positives, 14.30 weighted | +0.2713 | **none reported** | 7 | 1,997 of 2,000 | **none** |
+| HCT116 (396 pairs), Jurkat (75), WTC11 (1,921) | **null** | null | — | — | **"feature unavailable"** |
+
+**That reading never travels alone.** Three qualifiers belong in the same sentence wherever it is quoted,
+and the result carries them as `reading_must_travel_with`: the lower bound is **+0.0022**, unrounded; the
+comparator is a **reconstruction** that falls **0.0168** short of rE2G's published pooled figure, so the
+bound is about an eighth of the shortfall; and **all 190 held-out positives carry H3K27ac** at the tested
+element (52 "H3K27ac", 138 "High H3K27ac", none in "No H3K27ac", "CTCF element" or "H3K27me3 element")
+while 1,438 of the non-regulated pairs lack it, where our activity term reads H3K27ac and ENCODE-rE2G's
+published held-out model reads DNase only. The benchmark's own positive selection hands an
+H3K27ac-reading model a separation the comparator cannot use, and the primary's lower bound sits well
+inside it. Remove H3K27ac and the advantage stops clearing zero, which is exactly what the like-for-like
+comparison above shows.
+
+**GM12878 reports no interval and therefore no reading.** Seven chromosome clusters is below
+`crispri.MIN_CLUSTERS_FOR_AN_INTERVAL` (10, adopted 2026-10-02, `57681b2`), so no `ci95` is reported at
+all rather than a caveat beside a number. Its earlier figure, **"+0.2713 [0.0418, 0.5293], ranks
+better"**, is **withdrawn**; no interval was hand-written to replace it. The point estimate stands,
+because it does not depend on the resampling. K562 and the pooled set have 22 clusters and are unaffected.
+
+**A count of zeroes does not measure a contribution, and this is the lane's main lesson.** On 3,528 of
+the 4,378 pooled pairs both deletion columns are exactly zero, which invites the conclusion that the
+pooled delta is not really a test of the deletion feature. Both the coordinator and this lane drew that
+conclusion, and it is wrong. Measured by removing the columns and scoring against the same comparator on
+the identical pairs: `activity + distance` alone gives **−0.0671** [−0.1768, 0.0291] on K562 and
+**+0.0281** [−0.0506, 0.1004] pooled, and `dnase + distance` alone gives **−0.1227** [−0.2379, −0.0204]
+on K562 — **ranks worse**. Not one of those intervals clears zero. The deletion features carry the
+advantage on both populations. A column that is zero on most pairs can still carry the ranking, because
+what it does where it fires is lift those pairs past the rest; the share of pairs a feature is non-zero
+on is not a measurement of what it contributes, and only the comparison with the feature removed is.
+Asked plainly, because a referee will: does a two-feature activity-and-distance model rank at or above
+ENCODE-rE2G as reconstructed? On the K562 primary **no**, the point estimate is below zero; pooled,
+**not detectably**, the interval covers zero.
+
+**The model scored here is the frozen headline model, checked rather than asserted**
+(`data/results/re2g_identity.json`). Pair by pair on all 1,918 K562 pairs and on all 4,378: **zero** pairs
+differ in either deletion column or in the model score, between this lane's derivation and a second one
+calling the library's steps in the order `crispri.score_published` calls them. Every model's weighted
+AUPRC equals the committed headline's — K562 `distance` 0.4083, `activity + distance` 0.5911,
+`activity + distance + deletion` **0.7272**; pooled **0.677**. Stated rather than worked around:
+`crispri_published.json` records aggregate AUPRCs and no per-pair column, so the pair-level comparison is
+between two derivations and the file-level one is on the AUPRCs. A cross-check falls out of the
+decomposition: the K562 deletion share is a difference of two deltas against a common comparator, so the
+comparator cancels and it is the deletion gain, **+0.136**, against the headline's independently derived
+`arm1_all_pairs.gain` of **0.1361**.
+
+**Two coverage rules, named, and not confused with each other.** *Cell membership*
+(`crispri.annotate`'s `cells`, default `MODEL_CELLS`) decides whether the two deletion columns are
+computed at all: 1,986 pairs with, **2,392** without, matching the headline's own record exactly. The
+*answered* rule (`deletion_answered`, not a model column, read by no scorer) decides whether the sweep
+actually returned a value: **1,213**. The 773-pair gap is pairs in a model cell line whose columns were
+computed but whose gene the sweep was silent about, so both columns are 0.0. **The frozen model applied
+cell membership.** On the K562 primary the three kinds of zero are kept apart, because a value never
+looked at is not a measured value: answered with a drop **808 pairs / 97 positives**, answered with no
+drop **344 / 6**, never answered though the element is in the registry **592 / 11**, and no overlapping
+registry element **174 / 4**. That 174 is the **coverage** count and reconciles exactly with the
+headline's `uncovered_pairs`; the **answered** count is a different quantity at 766, and comparing the
+two to each other would be the error rather than the finding.
+
+**HCT116, Jurkat and WTC11 carry no deletion value at all.** `crispri.annotate` computes the columns only
+when the pair's own cell line is one the sweep scored, taking the branch `(0.0, [])` otherwise: HCT116
+**0 of 396**, Jurkat **0 of 75**, WTC11 **0 of 1,921** have a value answered, a drop above zero or a
+top-target flag. No feature derived from other cell types is applied to those strata. An earlier draft of
+this work reported "3,849 pairs with a deletion value", which was element *coverage* mislabelled and
+overstated the feature's reach more than threefold; the figures that rested on it, including "1,863
+pairs" and "3,849 with, 529 without", are withdrawn.
+
+**Independence and exposure, all four stated whatever the numbers are.** (a) ENCODE-rE2G was trained on
+K562 CRISPR pairs from the same compendium, and these held-out pairs were held out by its own authors.
+(b) Our weights were fitted on 9,237 covered training pairs and frozen before the held-out pairs were
+scored. (c) This held-out set has already been scored by this project, so it is a **reused benchmark**: a
+comparison of two frozen models, not fresh validation. (d) The deletion feature comes from a model
+trained on ENCODE K562 tracks (features, not labels); whether its training saw these CRISPR outcomes
+**is not established**, and is not claimed either way. A fifth exposure, not among the registered four
+and not quantified: DNase is a **shared input** in both comparisons, and H3K27ac is
+**selection-correlated** in the first. Nothing of ENCODE-rE2G was refitted, reweighted or adjusted at any
+point; the like-for-like comparison was achieved by changing our features, never theirs.
+
+**What is left undone, named rather than implied.** HCT116's prediction set is **chosen, not
+established**: Supplementary Table 12 lists sixteen HCT116 rE2G annotations and this work used
+`HCT116_ENCSR000ENM`. The gate passing is weak evidence for that choice, not proof, and the residual
+0.0168 of the reconstruction may live there. `max` aggregation was computed as the pre-declared
+sensitivity, but the gate was judged on `sum` alone as registered, so no verdict rests on it. No figure
+here is a measurement of the deletion feature outside K562 and GM12878.
+
+**Tests.** `tests/test_re2g.py` and `tests/test_re2g_paired.py`: the gate refuses outside its tolerance
+and a gate that could not be run is not a pass; the reading is the three registered strings and nothing
+else, and a missing interval yields no reading rather than one borrowed from the point estimate; a model
+scored against itself gives a delta of exactly zero in every draw, which only holds if one resample
+serves both models, so an unpaired bootstrap fails it; swapping the models negates the delta and reverses
+the interval on one seed; the three strata without the feature report null and the reason; the cluster
+floor is asserted in both directions; the join matches only within the same cell type and gene, sums
+several overlaps and maxes them on request, and refuses an unknown aggregation; the three kinds of zero
+stay apart; the coverage reconciliation compares coverage with coverage; the import closure lists only
+files spelled as their directories spell them; and the paired result leads with the notice that withdraws
+its own positive, without copying the figure that would let the two results drift apart.
+
+**A process failure worth more than the result, recorded as shared.** This lane linted its files against
+a narrower selection than `scripts/check.sh` applies and committed while the full check was still
+running, which put a lint error on `dev` and blocked every session's push until it was fixed
+(`20ddd52`). The coordinator made the same class of mistake an hour later, with a wait loop whose
+`pgrep` pattern matched the waiting shell itself, so nine waiters waited on each other while no check
+ran. Neither was a knowledge gap; both were an ordering gap. The rule taken from it is an order, not a
+check: the full check goes green **before** the commit, not beside it.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

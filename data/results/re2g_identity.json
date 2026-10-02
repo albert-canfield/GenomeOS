@@ -1,0 +1,197 @@
+{
+  "result": "re2g_identity",
+  "date": "2026-10-02",
+  "status": "identity check of the model this lane scored against the frozen headline model",
+  "lane": "lane-re2g",
+  "pair_level_two_derivations": {
+    "primary_k562": {
+      "pairs_compared": 1918,
+      "deletion_values_differing": 0,
+      "scores_differing": 0
+    },
+    "all_heldout": {
+      "pairs_compared": 4378,
+      "deletion_values_differing": 0,
+      "scores_differing": 0
+    },
+    "what_was_compared": "the per-pair top_target and deletion_drop columns and the per-pair model score, between this lane's derivation and a second one that calls the library's steps in the order crispri.score_published calls them; equal within 1e-12"
+  },
+  "against_the_committed_headline": {
+    "note": "data/results/crispri_published.json records aggregate AUPRCs and no per-pair column, so a pair-level diff against the committed file is not possible. This compares the weighted AUPRC of each model on each population at the four decimals the file records",
+    "pooled_4378": {
+      "distance": {
+        "headline": 0.3631,
+        "ours": 0.3631,
+        "equal": true
+      },
+      "activity + distance": {
+        "headline": 0.5674,
+        "ours": 0.5674,
+        "equal": true
+      },
+      "activity + distance + deletion": {
+        "headline": 0.677,
+        "ours": 0.677,
+        "equal": true
+      }
+    },
+    "k562_1918": {
+      "distance": {
+        "headline": 0.4083,
+        "ours": 0.4083,
+        "equal": true
+      },
+      "activity + distance": {
+        "headline": 0.5911,
+        "ours": 0.5911,
+        "equal": true
+      },
+      "activity + distance + deletion": {
+        "headline": 0.7272,
+        "ours": 0.7272,
+        "equal": true
+      }
+    },
+    "all_equal": true
+  },
+  "coverage_rules_reconciled": {
+    "rule_1_cell_membership": {
+      "name": "cell membership (crispri.annotate's `cells` argument, default crispri.MODEL_CELLS)",
+      "what_it_decides": "whether the two deletion columns are computed for a pair at all. A pair whose own cell line is not in MODEL_CELLS takes the branch (0.0, []) and both columns are zero",
+      "pairs_with": 1986,
+      "pairs_without": 2392,
+      "headline_reports_without": 2392,
+      "agrees_with_the_headline": true
+    },
+    "rule_2_answered": {
+      "name": "answered (the non-model column `deletion_answered`, set when the sweep returned any value for this gene in this pair's own cell)",
+      "what_it_decides": "whether the sweep actually had something to say about the pair, so that a drop of zero can be told apart from a table that was silent",
+      "pairs_answered": 1213,
+      "by_cell": {
+        "GM12878": 61,
+        "HCT116": 0,
+        "Jurkat": 0,
+        "K562": 1152,
+        "WTC11": 0
+      }
+    },
+    "the_gap": {
+      "pairs": 773,
+      "what_they_are": "pairs in a model cell line for which the deletion columns were computed but the sweep returned no value, so top_target and deletion_drop are both 0.0. The headline's cell-membership count includes them among the pairs 'with a deletion value'; the answered count does not",
+      "by_cell": {
+        "K562": 766,
+        "GM12878": 7
+      }
+    },
+    "which_rule_the_frozen_model_applied": "cell membership. The frozen model's two columns exist for every pair in a model cell line and are zero elsewhere; `deletion_answered` is not a model column and no scorer reads it. So this lane's 'ours' IS the frozen headline model, not a different feature join, which the AUPRC comparison above checks at four decimals on both populations rather than asserts",
+    "where_the_feature_is_actually_non_zero": {
+      "pairs_with_a_predicted_drop_above_zero": 849,
+      "pairs_with_the_top_target_flag": 48,
+      "pairs_where_both_columns_are_zero": 3528,
+      "of_pairs": 4378
+    }
+  },
+  "code_cleanliness": {
+    "git_sha": "948b1e6e646410446d0d7e7127cef94c161e795b",
+    "dirty": false,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
+    "foreign_uncommitted_code": [],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+    "counting_path": [
+      "genomeos/__init__.py",
+      "genomeos/attribution/__init__.py",
+      "genomeos/attribution/bigwig.py",
+      "genomeos/attribution/crispri.py",
+      "genomeos/attribution/re2g.py",
+      "genomeos/coords.py",
+      "genomeos/genome/__init__.py",
+      "genomeos/genome/epigenome.py",
+      "genomeos/genome/reader.py",
+      "genomeos/manifest.py",
+      "genomeos/results.py",
+      "genomeos/version.py",
+      "scripts/re2g_paired.py"
+    ],
+    "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+    "the_registrations_own_dirt": {
+      "result": "data/results/re2g_registration.json",
+      "named": [
+        "genomeos/attribution/experiment_value.py",
+        "tests/test_experiment_value.py"
+      ],
+      "whose": "lane-s8, untracked in this shared checkout when the registration was stamped",
+      "since": "committed at bee8f20",
+      "why_it_could_not_enter": "neither path is on the counting path computed above, and the registration reads no value from either; the registration writes no measurement at all"
+    }
+  },
+  "verdict": "the model scored by scripts/re2g_paired.py is the frozen headline model: no pair differs in either deletion column or in its score between two independent derivations, and every model's weighted AUPRC equals the committed headline's on both populations",
+  "alphagenome_requests": 0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "EngreitzLab/CRISPR_comparison training and held-out benchmark tables",
+        "version": "v1.0.0"
+      },
+      {
+        "accession": "data/results/crispri_published.json (this project's committed headline)",
+        "version": "2026-09-27"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "held-out",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz"
+      },
+      {
+        "path": "data/results/crispri_published.json",
+        "sha256": "d84e06a761388f1bf21eae295b23258ec46b5fd73dcfa7c236625845c63b24f5",
+        "bytes": 34744,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "tolerance": 1e-12,
+      "model": "activity + distance + deletion"
+    },
+    "exclusions": [
+      "nothing excluded: both derivations run on the published pair sets whole"
+    ],
+    "partitions": {
+      "primary_k562": 1918,
+      "all_heldout": 4378
+    },
+    "code": {
+      "git_sha": "948b1e6e646410446d0d7e7127cef94c161e795b",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/crispri_published_v2.json",
+        "data/results/re2g_identity.json",
+        "data/results/re2g_likeforlike.json",
+        "data/results/re2g_paired.json"
+      ],
+      "argv": [
+        "scripts/re2g_identity.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
