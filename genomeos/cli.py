@@ -4642,7 +4642,16 @@ def cmd_work(args: argparse.Namespace) -> int:
             print(f"{verb} {len(names)}: {', '.join(names)}" if names else "nothing to retire")
         if args.action == "start":
             if not args.task:
-                raise ValueError("start needs a task")
+                # --files takes any number of values, so a task written AFTER it is swallowed as
+                # another filename and `start` sees none. On 2026-10-02 four lane briefs carried
+                # `--files a,b "the task"` in that order and every one of them failed here. The
+                # exit status was 2 and said so; what cost the hour was reading the message through
+                # a pipe, which replaced it with the pipe's own success.
+                raise ValueError(
+                    "start needs a task. If you passed one, put it BEFORE --files: --files takes "
+                    "any number of values and swallowed it. Working order: work start --who NAME "
+                    '"the task" --area X --files a.py,b.py'
+                )
             work.start(root, args.who, args.task, args.area, args.files, args.next)
         elif args.action == "update":
             work.update(root, args.who, args.note, args.task, args.area, args.files, args.next, args.state)
