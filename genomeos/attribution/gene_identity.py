@@ -23,9 +23,12 @@ on ``chrom``, a protein-coding gene preferred when a symbol repeats", over
 behind the distance that lane-notopen's 1,678 came from, so :func:`compiled_locus` reproduces its
 choice exactly and carries the ``gene_id`` of the row it picks, which ``gene_tss`` throws away.
 A target token that is itself a versionless Ensembl id - the deletion answer names a gene with no
-symbol by its id, as GENCODE does - is resolved as that id, which ``gene_tss`` cannot do because it
-skips symbol-less genes. That one extension beyond the project's resolver is named here, registered,
-and counted on its own.
+symbol by its id, as GENCODE does - is resolved as that id directly. The registration called this "the
+one extension beyond the project's resolver", on the grounds that ``gene_tss`` skips symbol-less genes.
+**Amendment 3 corrects that reason:** 0 of GENCODE v50's 78,696 gene rows have an empty ``gene_name``
+and 35,293 carry their own versionless id as that name, so ``gene_tss`` resolves those tokens too, and
+0 rows carry another gene's id as their name, so the two lookups cannot disagree. The direct lookup is
+kept because it is the exact one, and it changes no rule's outcome.
 
 **The measured side** is the gene the deletion answer measured. **The answer does not record an
 Ensembl gene id.** ``data/knowledge/alphagenome/all_elements/<chrom>.json`` records
@@ -239,8 +242,11 @@ COMPILED_RESOLUTION = (
     "among the GENCODE v50 genes of the element's chromosome whose gene_name is the rule's target "
     "token, a protein_coding gene is preferred, and among equal types the lowest TSS wins, because "
     "holdout.genes is sorted by (chrom, tss) and gene_tss keeps the first of each symbol. A token "
-    "that is itself a versionless gene_id of that chromosome resolves to that gene directly, which "
-    "gene_tss cannot do because it skips genes with no symbol; those rules are counted on their own. "
+    "that is itself a versionless gene_id of that chromosome resolves to that gene directly; those "
+    "rules are counted on their own. Amendment 3: the registration justified that lookup by gene_tss "
+    "skipping symbol-less genes, which is vacuous - GENCODE v50 has no gene with an empty gene_name "
+    "and names 35,293 of them by their own id - so it is the exact lookup rather than an extension, "
+    "and no rule's outcome turns on it. "
     "Amendment 1: the compiled target is a BioLang identifier, not a symbol - compile.ident writes "
     "GENCODE's KRTAP10-1 as KRTAP10_1 - so a gene is looked up under its gene_name and under its "
     "ident, and a token matched by two distinct gene_names is refused rather than picked between."
