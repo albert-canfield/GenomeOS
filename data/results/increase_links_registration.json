@@ -1,0 +1,355 @@
+{
+  "result": "increase_links_registration",
+  "date": "2026-10-02",
+  "lane": "lane-inhibits",
+  "registered": "2026-10-02",
+  "what_is_registered": "a second version of the measured-layer extractor, which raises a link from a significant increase so that the project can later test its own repression calls",
+  "acts_on": {
+    "lane": "lane-increase",
+    "files": [
+      "data/results/increase_population.json",
+      "data/results/increase_registration.json",
+      "data/results/repress2_population.json"
+    ],
+    "commits": {
+      "increase_registration, committed before any count": "e1c2671",
+      "genomeos/attribution/increases.py": "6ca8095"
+    },
+    "registered_go_carried_verbatim": "at or above both registered floors: a measured repression population could be built from the increases the committed extractor discards. This lane stops here. It reads no direction, reports no rate, tests no repression call and draws no conclusion about whether the compiled program's repression calls are right: a feasibility count that rolls straight into the test it enables is how a floor gets moved after the outcome is seen. The test is registered as its own lane, and this lane's remaining deliverable is a written proposal naming the extractor change the count shows is worth making",
+    "and_behind_it": {
+      "lane": "lane-repress2",
+      "registered_no_go_carried_verbatim": "below a registered floor: a no-go. The count goes on the record, no direction is read on this population, no rate is reported and the floor is not moved"
+    },
+    "figures": {
+      "valid_benchmark_pairs": 14734,
+      "significant_pairs": 820,
+      "significant_decreases": 661,
+      "significant_increases": 159,
+      "increases_on_an_attributed_element": 48,
+      "increase_links_over_independent_loci": 33,
+      "decreases_on_an_attributed_element": 212,
+      "increase_links_contested_by_a_regulated_pair": 0,
+      "assessable_measured_layer_rules": 195,
+      "on_a_pure_activates_axis": 143,
+      "on_a_pure_represses_axis": 0
+    },
+    "structural_cause": "on a measured element the activity axis and the rule direction are different things: measured.rule_links emits a link only from a pair the benchmark calls Regulated, which is Significant AND EffectSize < 0, so every compiled CRISPRi link's action is `activates`, while a significant increase raises no rule and reaches the program only as `represses_target` on the element's activity axis. Counts are therefore reported per rule source as well as per axis, and no count here reads a measured element's axis as the direction of a measured link",
+    "cause_in_code": "genomeos/attribution/measured.py: `rule_links` builds its candidate set as `{(p['gene'], p['cell']) for p in c['pairs'] if p['regulated']}`, and `regulated` is set in `parse_crispri` from `r.get('Regulated') == 'TRUE'`, which the benchmark awards a significant decrease only (`DECREASE`/`INCREASE` on `CrispriPair.outcome`). The `action` line below it reads `'activates' if strongest['effect_size'] < 0 else 'inhibits'`, so the `inhibits` branch exists but is unreachable: every pair that reaches it is regulated and therefore has a negative effect size. The increase is not lost from the program - `Layer.for_element` records it as `genes_increased` on the measured block, kept apart from `genes_not_regulated` since review item R2 - it is only never raised to a rule"
+  },
+  "extractor_is_versioned_not_replaced": {
+    "versions": [
+      "v1",
+      "v2"
+    ],
+    "default": "v1",
+    "rule": {
+      "v1": "v1 (the committed extractor, unchanged and byte-identical): one link per (gene, cell) carrying a pair the benchmark calls `Regulated`, which is a significant decrease only. Its action is `activates`, its strength is the largest |EffectSize| among the regulated pairs of that (gene, cell) preferring training pairs, and its split is `training` if any regulated training pair exists and `heldout` otherwise. A significant increase raises nothing. This is the version a call that names none uses, and every count pinned on it therefore stands",
+      "v2": "v2 (from 2026-10-02, selected explicitly and never the default): v1's links, plus one link per (gene, cell) carrying a pair whose outcome is a significant increase, with action `inhibits`, strength and split taken by v1's own rules applied to the increase pairs of that (gene, cell), MINUS every (gene, cell) the conflict rule refuses. v2 adds a population and changes no rule v1 states: on a row with no conflict its output is v1's output followed by the new links, identical to v1's in count and content on the shared part. v2 reaches the `inhibits` branch that has been written in `rule_links` all along and introduces no new direction rule"
+    },
+    "precedent": "the judge's versioned target rule in genomeos.attribution.correctness (v1, v2, v3 with RULES and DEFAULT_RULE, each version keeping the values it registered), whose shape this follows. It differs in one respect, on purpose: there the new rule became the default because the old reading was wrong, here v1 stays the default because the old reading is right and merely incomplete",
+    "why_v1_stays_the_default": "every pinned count rests on v1 and none of them may move silently. chr21 carries `# test: rules == 5176` and a BioLang program asserts it, and every result built on the measured layer would shift under everyone if the default moved. v1 is byte-identical and selected by every call that names no version, which is all of them",
+    "downstream_names": "a compiled program or downstream result made under v2 carries a NEW NAME and never overwrites a v1 one: the suffix `_v2` on the result name, `extractor: v2` in the manifest parameters, and `extractor_v2` on the compiled evidence source. No such program or result is built by this lane, so the names are registered before anything can claim them rather than after"
+  },
+  "eligibility_predicate": "a (gene, cell) on a measured row is an increase-derived link candidate when at least one of that row's cached CRISPRi pairs for that gene and that cell has `outcome` exactly 'significant_increase', read off the cached row's own `outcome` field and never recomputed, exactly as lane-increase's predicate does for a pair. That is the whole eligibility predicate and it is fixed here before the extractor changes. The overlap rule, the reach and the cell gating are the committed ones and are not touched: the candidate set is widened at the sign and nowhere else. A link is one (gene, cell) as review item R1 requires, so two cells that measured the same gene are two links and never the stronger of the two",
+  "strength_and_split": "an increase-derived link takes its strength and split by v1's own rules applied to its own pairs: strength is min(1.0, |EffectSize|) of the increase pair with the largest |EffectSize| among the training increase pairs of that (gene, cell) if any exist and among all of them otherwise, rounded to three places; split is `training` if any increase training pair exists and `heldout` otherwise, so a held-out measurement never sets a compiled number. No new magnitude rule is introduced, and the strength is a magnitude with no sign in it: the sign lives in the action",
+  "increase_derived_link_records": "an increase-derived link records the MEASURED NET DIRECTION: action 'inhibits', evidence status 'observed', outcome 'increase on knockdown', molecular role unresolved (the R7 axes leave it unresolved and this lane does not resolve it). The reason is substantive and not a formality: an increase on CRISPRi can be indirect - KRAB spread onto a neighbouring promoter, competition between promoters for a shared enhancer - so the net direction is what was measured and the mechanism is not. The link says the gene went up when the element was silenced; it does not say the element represses the gene, and nothing downstream may read it as though it did",
+  "binding_wording_r2": "a measured increase on knockdown is 'an increase on knockdown'. It is never a silencer, never a repressor and never evidence of a repression mechanism. This test is about sign agreement, not mechanism",
+  "forbidden_of_an_increase_link": [
+    "silencer",
+    "repressor",
+    "represses",
+    "repression",
+    "represser"
+  ],
+  "prohibition_is_enforced_by": "genomeos.attribution.increase_links.check_no_mechanism_claim, which raises on a molecular role or on any text naming a repression mechanism. tests/test_increase_links.py plants a silencer label and a repressor label and asserts the refusal, so the test fails if the prohibition is ever weakened",
+  "conflict_rule": "a (gene, cell) carrying BOTH a significant decrease and a significant increase emits NO RULE under v2 - not an `activates` rule, not an `inhibits` rule, nothing. Both observations go into a separate conflicts list with their element, their effect sizes, their splits and their datasets, and the list is counted and reported. The conflict is NEVER resolved by choosing a sign, by taking the larger magnitude, by preferring the training pair, by preferring the earlier dataset or by any other tie-break: two significant measurements of opposite sign on one gene in one cell are a disagreement between measurements, and a rule emitted from either would state as observed a direction the data does not agree on. Suppressing the v1 `activates` link of a conflicted (gene, cell) is the one place v2 can remove a link v1 emitted; it removes 0 today, the conflicts list makes any future removal visible and counted rather than silent, and the additivity check in `test_increase_links` asserts the conflicts list is empty at the same time as it asserts v2 is v1 plus the new links, so the day the rule first bites is the day that test says so",
+  "conflict_is_not_a_finding": "a conflict count of 0 is not a finding that the measurements agree about direction: it is a count of (gene, cell) pairs where the benchmark holds significant observations of both signs, over the small population that reaches an attributed element at all. It is reported as the count it is",
+  "no_existing_link_may_change": "v1's output is byte-identical, and on data holding no conflict v2's output is v1's output plus the new links, equal in count and in content on the shared part. Both are asserted by test against the genome-wide v1 output captured before the extractor changed. If either fails the lane stops: the repression links are additive or they are wrong",
+  "floors": {
+    "link_floor": 30,
+    "link_floor_imported_from": "genomeos.attribution.fresh.POSITIVE_FLOOR",
+    "locus_floor": 20,
+    "locus_floor_imported_from": "genomeos.attribution.fresh.LOCUS_FLOOR, which is genomeos.attribution.cell2.POOLED_LOCUS_FLOOR",
+    "not_applied_here": "no gate is taken by this lane and no floor is compared against anything. The floors are recorded because the lane that tests this population must use these and not choose its own"
+  },
+  "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+  "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor",
+  "by_construction": "this link exists because a significant increase was measured on an element the compiled program had already attributed, and the link then takes its gene and its cell FROM THAT MEASUREMENT. Its presence is the extractor's own construction and is NOT evidence that the model covered this gene, predicted this cell or said anything about this link: a completeness like the decrease arm's 212 of 212 follows from how the extractor is built and never from model coverage. Counting these links as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'",
+  "decrease_arm_is_not_model_coverage": "the 212-of-212 that the decrease column keeps at lane-increase's last two ladder steps is the EXTRACTOR'S OWN CONSTRUCTION and not model coverage: a significant decrease on an attributed element raises the measured rule that then names its gene and its cell, so the decreases survive those two steps by definition. Reading it as coverage would repeat the error docs/LESSONS.md records under 'A count is not a measurement of the thing you want to count'. This lane's decrease arm therefore does NOT sit at those steps: it is taken at the same step as the increase arm, `and_on_an_attributed_element`, where no compiled rule is consulted at all, so the two arms share one eligibility rule and the comparison between them is not a comparison of two different gates",
+  "outcome_breakdown_rule": "every count this lane reports carries the exhaustive outcome breakdown at its own denominator. The reason is on the record twice: 198 loci where the model says nothing were once quoted as 198 places it is wrong when 66 held a measured decrease, and 48 measured links cleared a floor while only 21 were answerable. A count is not a measurement of the thing you want",
+  "what_this_lane_does_not_do": [
+    "no direction is read, no repression call is tested, no rate is reported and no interval is taken by this lane. The population is built and the lane stops. A later registration with its own floors tests it, and the gap it must watch is concrete: the direction test already on the record had 21 ANSWERABLE links of 48 MEASURED, so a count of what exists is not a count of what can be answered"
+  ],
+  "budget": "0 model requests, no money, no downloads, no network",
+  "order": [
+    "1. this registration, committed before genomeos/attribution/measured.py changes",
+    "2. the extractor versioned: v1 byte-identical and the default, v2 added and explicit",
+    "3. the proofs: v1 unchanged genome-wide, v2 = v1 + the new links, the conflicts list and its count, and the R2 refusal shown on a planted silencer and repressor label",
+    "4. stop. No direction is read and no repression call is tested here"
+  ],
+  "what_the_change_will_touch": "genomeos/attribution/measured.py",
+  "frozen_inputs": [
+    {
+      "path": "data/results/increase_population.json",
+      "sha256": "32f766a2bc8cf41b58f8c4042bfa27cfb4d5208ec7ee18c4ceb20f524a29873d",
+      "bytes": 115834
+    },
+    {
+      "path": "data/results/increase_registration.json",
+      "sha256": "573053f6bbc8c720e1e69729c83708925756c26b468243537de4c5d5bf2aeae3",
+      "bytes": 33468
+    },
+    {
+      "path": "data/results/repress2_population.json",
+      "sha256": "17ec03a85d12c6653591a2915e4bd35d19317816c8cd873393bf4ba3a50409f6",
+      "bytes": 229267
+    },
+    {
+      "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+      "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+      "bytes": 996546
+    },
+    {
+      "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+      "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+      "bytes": 373837
+    }
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.), as genomeos.attribution.measured already caches it",
+        "version": "the two benchmark tables on this machine, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/increase_population.json",
+        "sha256": "32f766a2bc8cf41b58f8c4042bfa27cfb4d5208ec7ee18c4ceb20f524a29873d",
+        "bytes": 115834,
+        "partition": "the reading this lane acts on"
+      },
+      {
+        "path": "data/results/increase_registration.json",
+        "sha256": "573053f6bbc8c720e1e69729c83708925756c26b468243537de4c5d5bf2aeae3",
+        "bytes": 33468,
+        "partition": "the reading this lane acts on"
+      },
+      {
+        "path": "data/results/repress2_population.json",
+        "sha256": "17ec03a85d12c6653591a2915e4bd35d19317816c8cd873393bf4ba3a50409f6",
+        "bytes": 229267,
+        "partition": "the reading this lane acts on"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "eligibility_predicate": "a (gene, cell) on a measured row is an increase-derived link candidate when at least one of that row's cached CRISPRi pairs for that gene and that cell has `outcome` exactly 'significant_increase', read off the cached row's own `outcome` field and never recomputed, exactly as lane-increase's predicate does for a pair. That is the whole eligibility predicate and it is fixed here before the extractor changes. The overlap rule, the reach and the cell gating are the committed ones and are not touched: the candidate set is widened at the sign and nowhere else. A link is one (gene, cell) as review item R1 requires, so two cells that measured the same gene are two links and never the stronger of the two",
+      "extractor_versions": [
+        "v1",
+        "v2"
+      ],
+      "extractor_default": "v1",
+      "action_of_an_increase_derived_link": "inhibits",
+      "evidence_status_of_an_increase_derived_link": "observed",
+      "outcome_of_an_increase_derived_link": "increase on knockdown",
+      "molecular_role_of_an_increase_derived_link": "unresolved",
+      "conflict_rule": "a (gene, cell) carrying BOTH a significant decrease and a significant increase emits NO RULE under v2 - not an `activates` rule, not an `inhibits` rule, nothing. Both observations go into a separate conflicts list with their element, their effect sizes, their splits and their datasets, and the list is counted and reported. The conflict is NEVER resolved by choosing a sign, by taking the larger magnitude, by preferring the training pair, by preferring the earlier dataset or by any other tie-break: two significant measurements of opposite sign on one gene in one cell are a disagreement between measurements, and a rule emitted from either would state as observed a direction the data does not agree on. Suppressing the v1 `activates` link of a conflicted (gene, cell) is the one place v2 can remove a link v1 emitted; it removes 0 today, the conflicts list makes any future removal visible and counted rather than silent, and the additivity check in `test_increase_links` asserts the conflicts list is empty at the same time as it asserts v2 is v1 plus the new links, so the day the rule first bites is the day that test says so",
+      "link_floor": 30,
+      "locus_floor": 20,
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "aggregate_function": "count",
+      "fill_value": 0
+    },
+    "exclusions": [
+      "a (gene, cell) carrying BOTH a significant decrease and a significant increase emits NO RULE under v2 - not an `activates` rule, not an `inhibits` rule, nothing. Both observations go into a separate conflicts list with their element, their effect sizes, their splits and their datasets, and the list is counted and reported. The conflict is NEVER resolved by choosing a sign, by taking the larger magnitude, by preferring the training pair, by preferring the earlier dataset or by any other tie-break: two significant measurements of opposite sign on one gene in one cell are a disagreement between measurements, and a rule emitted from either would state as observed a direction the data does not agree on. Suppressing the v1 `activates` link of a conflicted (gene, cell) is the one place v2 can remove a link v1 emitted; it removes 0 today, the conflicts list makes any future removal visible and counted rather than silent, and the additivity check in `test_increase_links` asserts the conflicts list is empty at the same time as it asserts v2 is v1 plus the new links, so the day the rule first bites is the day that test says so",
+      "no pair is excluded by this registration beyond what the committed extractor already excludes: the benchmark's own invalid rows (ValidConnection FALSE) stay out of every count, as measured.parse_crispri already returns them separately, and are never read as measured negatives"
+    ],
+    "partitions": {
+      "v1": "v1 (the committed extractor, unchanged and byte-identical): one link per (gene, cell) carrying a pair the benchmark calls `Regulated`, which is a significant decrease only. Its action is `activates`, its strength is the largest |EffectSize| among the regulated pairs of that (gene, cell) preferring training pairs, and its split is `training` if any regulated training pair exists and `heldout` otherwise. A significant increase raises nothing. This is the version a call that names none uses, and every count pinned on it therefore stands",
+      "v2": "v2 (from 2026-10-02, selected explicitly and never the default): v1's links, plus one link per (gene, cell) carrying a pair whose outcome is a significant increase, with action `inhibits`, strength and split taken by v1's own rules applied to the increase pairs of that (gene, cell), MINUS every (gene, cell) the conflict rule refuses. v2 adds a population and changes no rule v1 states: on a row with no conflict its output is v1's output followed by the new links, identical to v1's in count and content on the shared part. v2 reaches the `inhibits` branch that has been written in `rule_links` all along and introduces no new direction rule",
+      "conflicts": "a (gene, cell) carrying BOTH a significant decrease and a significant increase emits NO RULE under v2 - not an `activates` rule, not an `inhibits` rule, nothing. Both observations go into a separate conflicts list with their element, their effect sizes, their splits and their datasets, and the list is counted and reported. The conflict is NEVER resolved by choosing a sign, by taking the larger magnitude, by preferring the training pair, by preferring the earlier dataset or by any other tie-break: two significant measurements of opposite sign on one gene in one cell are a disagreement between measurements, and a rule emitted from either would state as observed a direction the data does not agree on. Suppressing the v1 `activates` link of a conflicted (gene, cell) is the one place v2 can remove a link v1 emitted; it removes 0 today, the conflicts list makes any future removal visible and counted rather than silent, and the additivity check in `test_increase_links` asserts the conflicts list is empty at the same time as it asserts v2 is v1 plus the new links, so the day the rule first bites is the day that test says so"
+    },
+    "code_cleanliness": {
+      "git_sha": "5dfc1fd86d0ee8d0b8b2c1542c6902f84afd9527",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/increase_links_register.py"
+      ],
+      "counting_path_count": 124,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5dfc1fd86d0ee8d0b8b2c1542c6902f84afd9527",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/increase_links_registration.json"
+      ],
+      "argv": [
+        "scripts/increase_links_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 264,
+      "opens_under_data": 5,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS/.claude/worktrees/agent-a2d7da09f08f348cf",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS/.claude/worktrees/agent-a2d7da09f08f348cf",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
