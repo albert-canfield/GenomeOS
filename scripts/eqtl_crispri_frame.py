@@ -377,7 +377,7 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
             "with the new frame indexed against those elements"
         ),
         "registered_at": f"data/results/{REGISTRATION}.json",
-        "registered_sha256": mf.input_entry(ROOT / f"data/results/{REGISTRATION}.json")["sha256"],
+        "registered_sha256": mf.input_entry(f"data/results/{REGISTRATION}.json")["sha256"],
         "frame_rule": FRAME_RULE,
         "retained_hit_rule": RETAINED_HIT_RULE,
         "assessed": {
@@ -532,8 +532,11 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
         ],
         "inputs": _inputs()
         + [
-            mf.input_entry(ROOT / f"data/results/{REGISTRATION}.json"),
-            mf.input_entry(ROOT / "data/results/response_map_increment4_count.json"),
+            # repository-relative, never `ROOT / ...`: scripts/manifest_rebuild.py resolves an
+            # input inside its OWN worktree, and an absolute path names a file outside the linked
+            # stores, which it refuses to check -- so the result stops being rebuildable at all.
+            mf.input_entry(f"data/results/{REGISTRATION}.json"),
+            mf.input_entry("data/results/response_map_increment4_count.json"),
         ],
         "inputs_opened_beside_the_declared_results": {
             "why_they_are_listed": (

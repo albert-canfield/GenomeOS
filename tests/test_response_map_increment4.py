@@ -331,3 +331,38 @@ def test_the_attachment_window_is_the_registered_one_and_not_the_bare_element(i4
     assert c3.EQTL_MARGIN == frame_mod.MARGIN == 500
     assert "widened by 500 bases each side" in i4.WITHDRAWN["the_rule_that_gives_6"]
     assert "not about a tolerance" in i4.WITHDRAWN["the_window_is_not_what_separates_92_from_6"]
+
+
+def test_no_input_is_declared_with_an_absolute_path(frame_mod, i4):
+    """An absolute input path is refused by the rebuild as "outside the linked stores".
+
+    The frame result's first version declared two of its inputs as `ROOT / ...`, and
+    scripts/manifest_rebuild.py reported 979 of 981 checked and `rebuilt: false` -- the result could
+    not be rebuilt at all. Every declaration must be repository-relative.
+    """
+    for mod in (frame_mod, i4):
+        src = Path(mod.__file__).read_text()
+        assert "mf.input_entry(ROOT /" not in src, f"{mod.__file__} declares an absolute input"
+
+
+def test_declared_inputs_of_both_results_are_relative():
+    """The artefact check, beside the source check above, and unconditional on purpose.
+
+    An earlier version of this test skipped unless the result's stamped sha was HEAD, to stay green
+    in the window between committing the writer and regenerating the result. That made it run in a
+    one-step window and never again, which is no guard at all. Both results are relative from
+    e6cdc6c on, so the only way this goes red is that an absolute declaration came back -- which is
+    exactly what should go red.
+    """
+    import json
+
+    checked = 0
+    for name in ("eqtl_crispri_frame", "response_map_increment4_count"):
+        p = ROOT / f"data/results/{name}.json"
+        if not p.exists():  # the results are git-ignored in a clean worktree
+            continue
+        checked += 1
+        for i in json.loads(p.read_text())["result_manifest"]["inputs"]:
+            assert not str(i["path"]).startswith("/"), (name, i["path"])
+    if not checked:
+        pytest.skip("neither result is in this checkout")
