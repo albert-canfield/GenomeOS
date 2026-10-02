@@ -1624,7 +1624,153 @@ def rule_lines(row: dict[str, Any]) -> list[tuple[str, str, float, str]]:
     return [link[:4] for link in rule_links(row)]
 
 
-def rule_links(row: dict[str, Any]) -> list[tuple[str, str, float, str, str]]:
+# ==================================================================================================
+# The extractor, versioned (registered 2026-10-02 in `genomeos.attribution.increase_links`, committed
+# at 5dfc1fd before this function changed, result b423d8d). The shape is the judge's versioned target
+# rule in `correctness` (RULE_V1/RULE_V2/RULE_V3, RULES, DEFAULT_RULE): each version keeps what it
+# registered and a caller selects one by name.
+#
+# It differs from the judge in one respect, on purpose. There the new rule BECAME the default, because
+# the old reading was wrong. Here v1 STAYS the default, because the old reading is right and merely
+# incomplete: it emits every link a significant decrease raises, and no caller of it is mistaken. Were
+# the default to move, every pinned count would move with it in silence -- chr21 carries
+# `# test: rules == 5176` and a BioLang program asserts it, and every result built on the measured
+# layer would shift under everyone. So v2 is reached only by naming it, and `increase_links` registers
+# what the two names mean.
+# ==================================================================================================
+EXTRACTOR_V1, EXTRACTOR_V2 = "v1", "v2"
+EXTRACTORS = (EXTRACTOR_V1, EXTRACTOR_V2)
+#: the version a call uses when it names none, which is every committed call site.
+DEFAULT_EXTRACTOR = EXTRACTOR_V1
+
+
+def _link(pairs: list[dict[str, Any]], gene: str) -> tuple[str, str, float, str, str]:
+    """One (gene, cell) link from the pairs that raise it, by the rule v1 has always used.
+
+    This is v1's own body, moved into a function and changed in no respect, so that the increase arm
+    v2 adds cannot drift from it: both arms take their strength and split here, and both take their
+    action from the one line below, which is why v2 introduces no new direction rule. The `inhibits`
+    branch of that line has been written since the function was first committed and was reached by
+    nothing, because every pair v1 passes in is `regulated` and the benchmark awards that to a
+    significant decrease only.
+    """
+    train = [p for p in pairs if p.get("split", TRAINING) == TRAINING]
+    split = TRAINING if train else HELDOUT
+    strongest = max(train or pairs, key=lambda p: abs(p["effect_size"]))
+    # the screen silences the element: a gene that falls was being activated by it
+    action = "activates" if strongest["effect_size"] < 0 else "inhibits"
+    return (gene, action, round(min(1.0, abs(strongest["effect_size"])), 3), strongest["cell"], split)
+
+
+def _candidates(c: dict[str, Any]) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
+    """The two candidate sets of one measured block: (gene, cell) with a significant decrease, and
+    (gene, cell) with a significant increase. The decrease set is v1's, built exactly as v1 builds it.
+
+    The increase set reads the cached pair's own `outcome` field and never recomputes it, which is
+    lane-increase's registered predicate applied to a (gene, cell) instead of to a pair. The candidate
+    set is widened at the SIGN and nowhere else: the overlap rule, the reach and the cell gating are
+    the committed ones and are untouched.
+    """
+    decreased = sorted({(p["gene"], p["cell"]) for p in c["pairs"] if p["regulated"]})
+    increased = sorted({(p["gene"], p["cell"]) for p in c["pairs"] if p["outcome"] == INCREASE})
+    return decreased, increased
+
+
+def _pairs_for(c: dict[str, Any], gene: str, cell: str, origin: str) -> list[dict[str, Any]]:
+    """The pairs of one (gene, cell) that raise a link of the given origin, decrease or increase.
+
+    One place, so the decrease arm, the increase arm and the detail record cannot select differently.
+    """
+    return [
+        p
+        for p in c["pairs"]
+        if p["gene"] == gene
+        and p["cell"] == cell
+        and (p["regulated"] if origin == DECREASE else p["outcome"] == INCREASE)
+    ]
+
+
+def rule_link_conflicts(row: dict[str, Any]) -> list[dict[str, Any]]:
+    """Every (gene, cell) on this row holding BOTH a significant decrease and a significant increase.
+
+    Such a (gene, cell) emits NO RULE under v2 -- not an `activates` rule, not an `inhibits` rule,
+    nothing -- and both observations are listed here instead, with their element, their effect sizes,
+    their splits and their datasets, so the disagreement is inspectable rather than absorbed.
+
+    The conflict is NEVER resolved by choosing a sign: not by the larger magnitude, not by preferring
+    the training pair, not by the earlier dataset. Two significant measurements of opposite sign on one
+    gene in one cell are a disagreement between measurements, and a rule emitted from either would
+    state as observed a direction the data does not agree on. The rule costs 0 links of 48 on today's
+    data, which is why it is registered now rather than when it first bites.
+
+    A count of 0 here is not a finding that the measurements agree about direction: it is a count of
+    (gene, cell) pairs holding significant observations of both signs, over the small population that
+    reaches an attributed element at all.
+    """
+    c = row["measured"].get("crispri")
+    if not c:
+        return []
+    decreased, increased = _candidates(c)
+    out = []
+    for gene, cell in sorted(set(decreased) & set(increased)):
+        observations = [
+            {
+                "outcome": p["outcome"],
+                "effect_size": p["effect_size"],
+                "split": p.get("split", TRAINING),
+                "dataset": p.get("dataset", ""),
+                "p_adjusted": p.get("p_adjusted"),
+            }
+            for p in _pairs_for(c, gene, cell, DECREASE) + _pairs_for(c, gene, cell, INCREASE)
+        ]
+        out.append(
+            {
+                "gene": gene,
+                "cell": cell,
+                "element": {
+                    "chrom": row.get("chrom", ""),
+                    "start": row.get("start"),
+                    "end": row.get("end"),
+                },
+                "element_id": row.get("id", ""),
+                "emits": "no rule",
+                "observations": sorted(observations, key=lambda o: (o["outcome"], o["effect_size"])),
+            }
+        )
+    return out
+
+
+def _links_with_origin(
+    row: dict[str, Any], extractor: str
+) -> list[tuple[str, str, tuple[str, str, float, str, str], str]]:
+    """(gene, cell, link, derived_from) for one row under one extractor. The single place both
+    candidate sets are turned into links, so `rule_links` and `rule_links_detail` cannot disagree."""
+    if extractor not in EXTRACTORS:
+        raise ValueError(f"unknown extractor {extractor!r}; the versions are {EXTRACTORS}")
+    c = row["measured"].get("crispri")
+    if not c:
+        return []
+    decreased, increased = _candidates(c)
+    conflicted = set(decreased) & set(increased) if extractor == EXTRACTOR_V2 else set()
+    out = []
+    for gene, cell in decreased:
+        if (gene, cell) in conflicted:
+            continue
+        out.append((gene, cell, _link(_pairs_for(c, gene, cell, DECREASE), gene), DECREASE))
+    if extractor == EXTRACTOR_V1:
+        return out
+    # v2 only, and appended after v1's links so that on a row with no conflict the output is v1's
+    # output followed by the new ones, identical to v1's on the shared part
+    for gene, cell in increased:
+        if (gene, cell) in conflicted:
+            continue
+        out.append((gene, cell, _link(_pairs_for(c, gene, cell, INCREASE), gene), INCREASE))
+    return out
+
+
+def rule_links(
+    row: dict[str, Any], extractor: str = DEFAULT_EXTRACTOR
+) -> list[tuple[str, str, float, str, str]]:
     """`rule_lines` with the split of the pairs each link rests on: (gene, action, strength, cell, split).
 
     A link with any regulated training pair takes its action and strength from the training pairs
@@ -1634,20 +1780,59 @@ def rule_links(row: dict[str, Any]) -> list[tuple[str, str, float, str, str]]:
     Since R1 (2026-09-28) a link is one (gene, cell): the split rule above applies within each cell,
     and two cells that measured the same gene are two links, never the stronger of the two. The
     returned cell is the one the compiler gates the rule on (`when: cell_type = <cell>`).
+
+    `extractor` selects the version, and it defaults to v1, which is what every committed call site
+    gets. Under v1 this returns exactly what it has always returned, byte for byte, and a significant
+    increase raises nothing. Under v2 it also returns one `inhibits` link per (gene, cell) holding a
+    significant increase, less any (gene, cell) the conflict rule refuses; see
+    `genomeos.attribution.increase_links` for the registration and `rule_link_conflicts` for the
+    refusals. An increase-derived link records the measured NET DIRECTION and no mechanism: it is an
+    increase on knockdown, never a silencer and never a repressor.
     """
-    c = row["measured"].get("crispri")
-    if not c:
-        return []
+    return [link for _gene, _cell, link, _origin in _links_with_origin(row, extractor)]
+
+
+def rule_links_detail(row: dict[str, Any], extractor: str = DEFAULT_EXTRACTOR) -> list[dict[str, Any]]:
+    """`rule_links` with each link's derivation and the record review item R2 requires of it.
+
+    The tuple `rule_links` returns has no room for an evidence status, an outcome or a molecular role,
+    and those are exactly what an increase-derived link must carry and must not overstate. So they live
+    here: `derived_from` says which measurement raised the link, `outcome` is the phrase the project
+    registered for it, and `molecular_role` is None, which is the value that says the R7 axes leave it
+    unresolved -- not a role, not an empty string standing in for one, and never inferred from a sign.
+
+    `by_construction` is on every record because the property is true of every link this extractor
+    emits and a reader should not have to infer it from a count that looks like coverage: the link
+    exists because a measurement was made on an element the program had already attributed, and it
+    then takes its gene and its cell from that measurement.
+
+    `increase_links.check_no_mechanism_claim` refuses a record that claims a mechanism, and
+    `tests/test_increase_links.py` plants a silencer and a repressor label to show the refusal is real.
+    """
+    from genomeos.attribution import increase_links as il
+
     out = []
-    linked = sorted({(p["gene"], p["cell"]) for p in c["pairs"] if p["regulated"]})
-    for gene, cell in linked:
-        hit = [p for p in c["pairs"] if p["gene"] == gene and p["cell"] == cell and p["regulated"]]
-        train = [p for p in hit if p.get("split", TRAINING) == TRAINING]
-        split = TRAINING if train else HELDOUT
-        strongest = max(train or hit, key=lambda p: abs(p["effect_size"]))
-        # the screen silences the element: a gene that falls was being activated by it
-        action = "activates" if strongest["effect_size"] < 0 else "inhibits"
+    for gene, cell, link, origin in _links_with_origin(row, extractor):
+        _g, action, strength, link_cell, split = link
+        hit = _pairs_for(row["measured"]["crispri"], gene, cell, origin)
+        strongest = max(hit, key=lambda p: abs(p["effect_size"]))
         out.append(
-            (gene, action, round(min(1.0, abs(strongest["effect_size"])), 3), strongest["cell"], split)
+            {
+                "gene": gene,
+                "cell": link_cell,
+                "action": action,
+                "strength": strength,
+                "split": split,
+                "extractor": extractor,
+                "derived_from": origin,
+                "evidence_status": il.EVIDENCE_STATUS,
+                "outcome": il.OUTCOME_TEXT if origin == INCREASE else "decrease on knockdown",
+                "molecular_role": il.MOLECULAR_ROLE,
+                "effect_size": strongest["effect_size"],
+                "pairs_behind_the_link": len(hit),
+                "element_id": row.get("id", ""),
+                "by_construction": il.BY_CONSTRUCTION,
+            }
         )
+    il.check_no_mechanism_claim(out)
     return out
