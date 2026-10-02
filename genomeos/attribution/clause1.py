@@ -344,6 +344,9 @@ REFUSALS = (
     "cells it classified",
 )
 
+#: `cellcover.Axis`, re-exported so a caller need not import two modules for one axis.
+Axis_t = cc.Axis
+
 V2_RESULT = cc.V2_RESULT
 TRACK_METADATA = cc.TRACK_METADATA
 

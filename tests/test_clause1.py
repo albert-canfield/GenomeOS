@@ -384,3 +384,62 @@ def test_metadata_columns_reads_only_the_header(tmp_path: Path):
         w.writerow(["name", "Assay title"])
         w.writerow(["x", "total RNA-seq"])
     assert c1.metadata_columns(p) == ("name", "Assay title")
+
+
+# ---- the counting script's own helpers ---------------------------------------------------------
+
+
+def _count_module():
+    import importlib.util
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "clause1_count.py"
+    spec = importlib.util.spec_from_file_location("clause1_count", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_axis_type_is_cellcovers_own():
+    assert c1.Axis_t is c1.cc.Axis
+
+
+def test_row_record_reports_the_committed_class_as_committed():
+    mod = _count_module()
+    r = c1.read_rows(
+        {
+            "assertions": [
+                row(
+                    "K562",
+                    ("max_drop", "by_cell"),
+                    (-0.8, -0.7),
+                    v2_class="resolved_agrees_with_published",
+                )
+            ]
+        }
+    )[0]
+    rec = mod.row_record(r, {"K562": c1.ONE_BIOSAMPLE_NAME_SEVERAL_ASSAY_TITLES})
+    assert rec["v2_class_as_committed"] == "resolved_agrees_with_published"
+    assert rec["satisfies_clause_1"] is True and rec["passes_amendment_1"] is True
+    assert rec["cell_is_an_argmax"] is True and rec["argmax_kind"] == "max_drop_only"
+    assert rec["cell_track_class"] == c1.ONE_BIOSAMPLE_NAME_SEVERAL_ASSAY_TITLES
+
+
+def test_findings_name_the_denominator_and_make_no_recommendation():
+    mod = _count_module()
+    rows = c1.read_rows({"assertions": [row("K562", ("max_drop", "by_cell"), (-0.8, -0.7))]})
+    cells = c1.classify(
+        rows,
+        {
+            "K562": [
+                track("a", "polyA plus RNA-seq", "K562"),
+                track("b", "total RNA-seq", "K562", nonzero_mean="0.9"),
+            ]
+        },
+    )
+    tally = c1.Tally(rows=rows, cells=cells, committed={}).to_dict()
+    f = mod.findings(tally, cells)
+    assert "proposes no change to the clause" in f["what_clause_1_secures_on_these_counts"]
+    assert "1 rows" in f["the_argmax"] or "denominator of 1" in f["the_argmax"]
+    assert f["clause_1_capable_cells"]["with_two_or_more_tracks"] == 1
+    assert "not known" in f["what_clause_1_secures_on_these_counts"]
