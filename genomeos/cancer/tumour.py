@@ -213,13 +213,39 @@ def _stale(rec: dict[str, Any]) -> bool:
     return any(k not in rec for k in VEP_FIELDS)
 
 
-def annotate_vep(variants: list[Variant], cache_dir: Path = CACHE, log=None) -> dict[str, dict[str, Any]]:
+def _read_cache(path: Path, into: dict[str, dict[str, Any]]) -> None:
+    """Fold one cache file's live records into `into`. A file that is not there is not an error."""
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        if line.strip():
+            k, _, rest = line.partition("\t")
+            rec = json.loads(rest)
+            if not _stale(rec):
+                into[k] = rec
+
+
+def annotate_vep(
+    variants: list[Variant],
+    cache_dir: Path = CACHE,
+    log=None,
+    append_to: Path | None = None,
+) -> dict[str, dict[str, Any]]:
     """Annotate through VEP, batch by batch, keeping a small per-variant cache.
 
-    Two write events were removed on 2026-10-02 and neither changed what is annotated. The cache
-    lives under `data/knowledge`, which is one of the three stores `scripts/manifest_rebuild.py`
-    links into its worktree and HASHES to verify a result against, so a write handle held on it
-    during a rebuild is held on the bytes being checked:
+    The cache is READ from `cache_dir` and new annotations are APPENDED to `append_to`, which
+    defaults to `cache_dir` so that an unchanged call behaves exactly as it did.
+
+    Why the write has its own argument. `cache_dir` defaults under `data/knowledge`, one of the three
+    stores `scripts/manifest_rebuild.py` links into its worktree and HASHES in order to verify a
+    result against them. A writer that appends there while a rebuild is hashing it is writing into
+    the bytes being checked, and a caller that must not do that -- a published result's writer above
+    all -- says so AT THE CALL SITE by passing `append_to`, not through ambient state. Reading still
+    comes from the store, so the cache is not disabled and no request is paid for twice; it is only
+    the new lines that go elsewhere, and `append_to` is read back as well so a later batch of the
+    same run sees what an earlier one wrote.
+
+    Two write events were also removed on 2026-10-02 and neither changed what is annotated:
 
     - the append handle is taken only when there is a line to write. It used to be taken before
       `todo` was looked at, so a run with nothing to add still held a write handle on the file.
@@ -229,23 +255,19 @@ def annotate_vep(variants: list[Variant], cache_dir: Path = CACHE, log=None) -> 
     - the directory is no longer created when it is already there. `Path.mkdir(exist_ok=True)` still
       issues `os.mkdir` and swallows the error, so it was a write event on a protected store for no
       effect at all, on every call, before any variant was looked at.
-
-    The cache is not disabled and nothing is narrowed: strictly fewer writes, same annotations.
     """
     cache_file = cache_dir / "vep_cache.jsonl"
+    out_dir = cache_dir if append_to is None else Path(append_to)
+    out_file = out_dir / "vep_cache.jsonl"
     cache: dict[str, dict[str, Any]] = {}
-    if cache_file.exists():
-        for line in cache_file.read_text().splitlines():
-            if line.strip():
-                k, _, rest = line.partition("\t")
-                rec = json.loads(rest)
-                if not _stale(rec):
-                    cache[k] = rec
+    _read_cache(cache_file, cache)
+    if out_file != cache_file:
+        _read_cache(out_file, cache)
     todo = [v for v in variants if v.alts and _key(v) not in cache]
     if todo:
-        if not cache_dir.is_dir():
-            cache_dir.mkdir(parents=True, exist_ok=True)
-        with cache_file.open("a") as fh:
+        if not out_dir.is_dir():
+            out_dir.mkdir(parents=True, exist_ok=True)
+        with out_file.open("a") as fh:
             for i in range(0, len(todo), BATCH):
                 batch = todo[i : i + BATCH]
                 recs = vep_post([_vep_line(v) for v in batch])

@@ -1139,11 +1139,17 @@ def rank_variants(
     chroms: set[str] | None = None,
     knowledge: dict[str, Any] | None = None,
     log: Any = None,
+    vep_append_to: Any = None,
 ) -> list[TumourVariant]:
     """Annotate and grade a tumour's variants with the existing cancer pipeline.
 
     With a matched normal the shared variants are subtracted first, which is
     what makes the remainder genuinely somatic rather than estimated.
+
+    `vep_append_to` is passed straight to `annotate_vep` as its `append_to`: the directory new VEP
+    annotations are written to, which defaults to the cache's own directory under `data/knowledge`.
+    A caller that must not write into that store -- a published result's writer, whose rebuild hashes
+    it -- names a directory here instead. Reading is unaffected.
     """
     from genomeos.cancer.tumour import annotate_vep, grade
     from genomeos.genome.variants import iter_vcf
@@ -1154,7 +1160,7 @@ def rank_variants(
         variants = somatic(normal_vcf, tumour_vcf, chroms)
     else:
         variants = list(iter_vcf(tumour_vcf, chroms, pass_only=False))
-    vep = annotate_vep(variants, log=log)
+    vep = annotate_vep(variants, log=log, append_to=vep_append_to)
     ranked = grade(variants, vep, knowledge)
     if normal_vcf:
         for v in ranked:
@@ -1180,14 +1186,20 @@ def analyse_vcf(
     scan_expression: int = 0,
     hla_predictor: str = "",
     log: Any = None,
+    vep_append_to: Any = None,
 ) -> dict[str, Any]:
-    """End to end: a tumour VCF in, a therapeutic target analysis out."""
+    """End to end: a tumour VCF in, a therapeutic target analysis out.
+
+    `vep_append_to` is handed to `rank_variants` and on to `annotate_vep`: where new VEP annotations
+    are written, the cache's own directory under `data/knowledge` by default. A published result's
+    writer names a run-local directory so that its own rebuild is not hashing bytes it wrote.
+    """
     from genomeos.results import load_result
 
     from .providers import PatientRnaProvider, Providers
 
     knowledge = knowledge if knowledge is not None else load_result("cancer_msk_impact_2017")
-    ranked = rank_variants(tumour_vcf, normal_vcf, chroms, knowledge, log)
+    ranked = rank_variants(tumour_vcf, normal_vcf, chroms, knowledge, log, vep_append_to)
     alterations = patient_alterations(cnv, sv, cna_format)
     profile = PatientProfile(
         sample_id=Path(tumour_vcf).stem,

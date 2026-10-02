@@ -56,15 +56,47 @@ fraction. It was pre-registered, with its predictions and falsifiers, before it
 was run.
 
 Run: `uv run python scripts/therapeutic_benchmark.py`
-Writes: data/results/therapeutic_benchmark.json
+Writes: data/results/therapeutic_benchmark_v2.json
+
+Why the name carries a `_v2` since 2026-10-02, and it is about the record and not the figures. The
+2026-09-28 file, `therapeutic_benchmark.json`, declares 24 inputs and the string `vep` occurs nowhere
+in its manifest -- while every case is annotated through `cancer.tumour.annotate_vep`, which reads
+`data/knowledge/vep/vep_cache.jsonl`. That file is git-IGNORED, so it exists only on the machine that
+made the result: a rebuild anywhere else would not find it and would annotate live instead, and the
+manifest did not say so. It is now declared and hashed like any other input, as the FILE and not the
+directory -- `data/knowledge/vep` also holds `lookup_cache.jsonl`, which `genome/lookup.py` appends
+to from the CLI and the web server, so a directory digest would be moved by any gene lookup and would
+fail this rebuild for a wholly unrelated reason.
+
+Two further things the old manifest did not say, both fixed here:
+
+- its declaration SHRANK in silence. `KNOWLEDGE_READ` was filtered by `if p.exists()`, and
+  `data/knowledge/Ensembl2Reactome.txt` is in that tuple and is not on this machine, so the writer's
+  own list named eight knowledge paths and the manifest declared seven with nothing recording the
+  drop. A missing input now RAISES with its path (`REQUIRED_KNOWLEDGE`), except for the one input
+  that is genuinely optional in the code -- `lib/membership.py` falls back to a distilled store when
+  Ensembl2Reactome is absent -- which is named in `OPTIONAL_KNOWLEDGE` and recorded as absent, with
+  the fallback, under `inputs_optional_absent`. A conditional input is declared by saying which
+  branch ran, not by disappearing;
+- this run is NOT offline-reproducible and the manifest now says it in those words.
+  `network_sources` lists every live endpoint by name and URL, because the registered `argv` reads
+  cBioPortal, Open Targets, the Human Protein Atlas and Ensembl REST, none of which publishes a
+  version a request can pin. That is a property of the instrument, stated rather than hidden.
+
+New VEP annotations no longer go into the store this result declares. `run_case` passes
+`vep_append_to`, a run-local directory discarded at the end, so the benchmark cannot grow its own
+pinned input while a rebuild is hashing it. The cache is still READ from the store, so nothing is
+fetched twice that was fetched before.
 """
 
 from __future__ import annotations
 
 import sys
+import tempfile
 import time
 from itertools import groupby
 from pathlib import Path
+from typing import Any
 
 from genomeos import manifest as mf
 from genomeos.results import save_result
@@ -74,6 +106,15 @@ from genomeos.therapeutics.scoring import UNMEASURED_TIER
 
 DEMO = Path("data/demo")
 BENCH = DEMO / "benchmark"
+
+#: The result this script writes, and the 2026-09-28 file it is written beside, unchanged.
+RESULT = "therapeutic_benchmark_v2"
+SUPERSEDED = "data/results/therapeutic_benchmark.json"
+SUPERSEDED_DATE = "2026-09-28"
+
+#: This script, whose import closure is the counting path, and the files this lane answers for.
+ENTRY = "scripts/therapeutic_benchmark.py"
+OWN_CODE = frozenset({ENTRY})
 
 #: Each case: the alteration, the gene an oncologist would name, and what is
 #: actually approved for it. `modality` is the class of the approved drug, and
@@ -416,7 +457,7 @@ def quantities_in_this_tumour(candidates: list) -> list[dict]:
     return out
 
 
-def run_case(case: dict, net: bool, log) -> dict:
+def run_case(case: dict, net: bool, log, vep_append_to: Path | None = None) -> dict:
     folder = DEMO / case.get("dir", "benchmark")
     vcf = folder / case["vcf"]
     cnv = str(folder / case["cnv"]) if case.get("cnv") else None
@@ -433,6 +474,10 @@ def run_case(case: dict, net: bool, log) -> dict:
         net=net,
         indirect=True,
         log=None,
+        # New VEP annotations go here instead of into data/knowledge/vep, which this result declares
+        # and its rebuild hashes. The cache is still READ from the store; only the writes move, and
+        # the caller says so at the call site rather than through any ambient setting.
+        vep_append_to=vep_append_to,
     )
     gene = case["gene"]
     ranked = [c.gene for c in a["candidates"]]
@@ -547,16 +592,134 @@ def run_case(case: dict, net: bool, log) -> dict:
     return out
 
 
-KNOWLEDGE_READ = (
+#: The per-variant VEP cache every case is annotated from, declared as the FILE and not as the
+#: directory holding it: `data/knowledge/vep` also holds `lookup_cache.jsonl`, which
+#: `genomeos/genome/lookup.py` appends to from the CLI and the web server, so a directory digest
+#: would be moved by any gene lookup and would fail this result's rebuild for an unrelated reason.
+#: It is git-ignored, so it lives only on the machine that made the result -- which is exactly why it
+#: has to be declared and hashed rather than left out.
+VEP_CACHE = Path("data/knowledge/vep/vep_cache.jsonl")
+
+#: The knowledge this run reads and cannot do without. A path missing from here RAISES with its name
+#: (`declare_knowledge`). Until 2026-10-02 the whole list was filtered by `if p.exists()`, so a
+#: missing input left the declaration one entry shorter and said nothing: the writer named eight
+#: paths and the manifest declared seven.
+REQUIRED_KNOWLEDGE = (
     Path("data/knowledge/therapeutics"),
     Path("data/knowledge/proteins"),
     Path("data/knowledge/expression"),
     Path("data/knowledge/pathways"),
     Path("data/knowledge/go-basic.obo"),
     Path("data/knowledge/goa_human.gaf.gz"),
-    Path("data/knowledge/Ensembl2Reactome.txt"),
+    VEP_CACHE,
     Path("data/cache/gencode_genes.tsv"),
 )
+
+#: The knowledge that is genuinely optional IN THE CODE, each with the fallback that runs without it
+#: AND the file that fallback reads instead.
+#:
+#: Why the second half matters, and it was found by the tracer refusing this result rather than by
+#: reading the source. `genomeos/lib/membership.py:98` tests for Ensembl2Reactome and, when it is
+#: absent, calls `Membership.distilled()`, which loads `data/results/library_members.json`. So the
+#: missing input is not merely missing: another file ANSWERS IN ITS PLACE, and that substitution is
+#: deliberate and documented -- `genomeos/storage.py` distils `library_members` FROM
+#: Ensembl2Reactome.txt and says "the 183 MB Reactome mapping is then disposable".
+#:
+#: The 2026-09-28 manifest declared NEITHER. `if p.exists()` dropped the discarded file from the
+#: declaration and nothing named the distilled one, so the manifest listed the input that is gone and
+#: omitted the input that is read. A declaration that shrinks does not just record a smaller run; it
+#: can hide a substitution, which is worse, because the record then names the wrong file.
+#:
+#: So an optional input is declared when it is there, and when it is not, its fallback's input is
+#: declared in its place and the swap is recorded under `inputs_optional_absent`. One of the two is
+#: always declared and hashed; if neither is on the machine, `declare_knowledge` raises.
+OPTIONAL_KNOWLEDGE = {
+    Path("data/knowledge/Ensembl2Reactome.txt"): {
+        "fallback": (
+            "genomeos/lib/membership.py:98 falls back to the distilled membership store "
+            "(Membership.distilled()) when this file is absent; pathway membership is then read from "
+            "that store rather than from the lowest-level Reactome mapping. genomeos/storage.py "
+            "distils that store FROM this file and records the raw mapping as disposable afterwards"
+        ),
+        "fallback_input": Path("data/results/library_members.json"),
+        "fallback_of_last_resort": (
+            "if neither is on the machine, Membership.distilled() reads the copy shipped inside the "
+            "package at genomeos/lib/data/members.json.gz, which is pinned by the commit rather than "
+            "by a manifest input; declare_knowledge raises before that can happen silently"
+        ),
+    },
+}
+
+#: The live services the registered argv reads. None publishes a version a request can pin, so this
+#: result is not offline-reproducible and `manifest()` says so in those words rather than leaving a
+#: reader to infer it from the source list.
+NETWORK_SOURCES = (
+    {
+        "name": "cBioPortal REST",
+        "url": "https://www.cbioportal.org/api",
+        "for": "cohort frequencies and medians",
+    },
+    {
+        "name": "Open Targets GraphQL",
+        "url": "https://api.platform.opentargets.org/api/v4/graphql",
+        "for": "target-disease association and tractability",
+    },
+    {
+        "name": "Human Protein Atlas",
+        "url": "https://www.proteinatlas.org",
+        "for": "healthy-tissue expression",
+    },
+    {
+        "name": "Ensembl REST",
+        "url": "https://rest.ensembl.org",
+        "for": "VEP annotation, paralogues and transcript sequence",
+    },
+    {
+        "name": "UniProt / InterPro / PDB / AlphaFold / Reactome / STRING",
+        "url": "various, through the federated protein compiler",
+        "for": "protein localisation, topology and structure",
+    },
+)
+
+
+def declare_knowledge() -> tuple[list[dict], dict[str, Any]]:
+    """The knowledge inputs, and which branch ran for every input that is optional in the code.
+
+    A required path that is not there raises `FileNotFoundError` naming it, and so does an optional
+    path whose fallback's input is missing too. That is the whole point: a declaration that shrinks
+    when an input is missing reports a smaller run rather than a failed one, and nothing downstream
+    can tell the difference -- it can also name the file that is GONE while omitting the file that
+    answered in its place, which is how `data/results/library_members.json` went unhashed under a
+    README figure.
+    """
+    missing = [str(p) for p in REQUIRED_KNOWLEDGE if not p.exists()]
+    if missing:
+        raise FileNotFoundError(
+            "declared knowledge inputs are not on this machine, so this result cannot be written "
+            f"with an honest manifest: {', '.join(missing)}"
+        )
+    entries = [mf.input_entry(p, partition=None) for p in REQUIRED_KNOWLEDGE]
+    absent: dict[str, Any] = {}
+    for path, how in OPTIONAL_KNOWLEDGE.items():
+        if path.exists():
+            entries.append(mf.input_entry(path, partition=None))
+            continue
+        stand_in = how["fallback_input"]
+        if not stand_in.exists():
+            raise FileNotFoundError(
+                f"{path} is absent and so is the input its fallback reads, {stand_in}: "
+                f"{how['fallback_of_last_resort']}"
+            )
+        entries.append(mf.input_entry(stand_in, partition=None))
+        absent[str(path)] = {
+            "declared_instead": str(stand_in),
+            "fallback": how["fallback"],
+            "note": (
+                "this input is not on this machine; the file above answered in its place and is "
+                "declared and hashed above. Which branch ran is part of the record"
+            ),
+        }
+    return entries, absent
 
 
 def manifest(net: bool) -> dict:
@@ -573,7 +736,8 @@ def manifest(net: bool) -> dict:
         p = Path("data/results") / f"{name}.json"
         if p.exists():
             inputs.append(mf.input_entry(p, partition=None))
-    inputs += [mf.input_entry(p, partition=None) for p in KNOWLEDGE_READ if p.exists()]
+    knowledge_inputs, optional_absent = declare_knowledge()
+    inputs += knowledge_inputs
     return {
         "sources": [
             {
@@ -616,6 +780,63 @@ def manifest(net: bool) -> dict:
         "partitions": "n/a: a retrospective benchmark of nine known targets; nothing is fitted to them",
         "partitions_note": "the tenth case, registered 2026-09-28, is on the same terms: it was "
         "chosen from a public cohort, registered with its predictions, and nothing is fitted to it",
+        "inputs_optional_absent": optional_absent,
+        "network_sources": [dict(e) for e in NETWORK_SOURCES] if net else [],
+        "offline_reproducible": not net,
+        "offline_reproducible_note": (
+            "this result is NOT offline-reproducible as its registered argv runs it. The providers "
+            "answer from the local knowledge stores first and fetch what a store lacks from the live "
+            "services in network_sources, none of which publishes a version a request can pin; the "
+            "stores' sha256 after the run is the only pin there is. A rebuild therefore reproduces "
+            "the figures only insofar as those services answer as they did, which is a property of "
+            "the instrument and is stated here rather than left to be inferred from the source list. "
+            "Running with --offline is a DIFFERENT parameterisation (parameters.network false), not a "
+            "like-for-like rebuild of this one"
+        )
+        if net
+        else (
+            "run with --offline: no live service was read, so this parameterisation is "
+            "offline-reproducible and is not the one the registry's argv records"
+        ),
+        "vep_cache_appends": (
+            "new VEP annotations are written to a run-local directory that is discarded when the run "
+            "ends (run_case passes vep_append_to), never into data/knowledge/vep. The cache is still "
+            "READ from the store and declared above by sha256, so nothing is fetched twice and this "
+            "result cannot grow the input its own rebuild hashes"
+        ),
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE),
+        "supersedes": {
+            "file": SUPERSEDED,
+            "date": SUPERSEDED_DATE,
+            "kept": "unchanged; this run is written beside it under a new name, not over it",
+            "why": (
+                "the 2026-09-28 file declares 24 inputs and the string 'vep' occurs nowhere in its "
+                "manifest, while every case is annotated through cancer.tumour.annotate_vep, which "
+                "reads data/knowledge/vep/vep_cache.jsonl. That file is git-ignored, so it exists "
+                "only on the machine that made the result: a rebuild elsewhere would not find it and "
+                "would annotate live instead, and the manifest did not say so. The same writer also "
+                "opened it for append on every call before looking at whether there was anything to "
+                "add, which held a write handle on a store a rebuild hashes -- an exposure and not a "
+                "change, since an append that writes nothing leaves the bytes and the mtime alone. "
+                "And its declaration shrank in silence, in the way that is worse than being short: "
+                "KNOWLEDGE_READ was filtered by if p.exists() and data/knowledge/Ensembl2Reactome.txt "
+                "is in that tuple and is not on this machine, so eight paths were named and seven "
+                "declared -- but the missing file does not merely go unrecorded, ANOTHER FILE ANSWERS "
+                "IN ITS PLACE. genomeos/lib/membership.py:98 falls back to Membership.distilled(), "
+                "which reads data/results/library_members.json, and genomeos/storage.py distils that "
+                "store FROM Ensembl2Reactome.txt and records the raw mapping as disposable "
+                "afterwards. The 2026-09-28 manifest declared NEITHER: it named the input that is "
+                "gone and omitted the input that is read, and the string library_members does not "
+                "occur in it at all. That read was found by the open-tracer refusing this result, not "
+                "by reading the source. This run declares the cache as a file, raises on a missing "
+                "required input, declares an absent optional input's fallback input in its place and "
+                "records the swap under inputs_optional_absent, writes new annotations to a "
+                "run-local directory, and states that it is not offline-reproducible. No figure was "
+                "refitted and no quantity re-derived; the 2026-09-28 file is kept at "
+                "data/results/therapeutic_benchmark.json with its bytes untouched as the historical "
+                "record"
+            ),
+        },
     }
 
 
@@ -623,7 +844,9 @@ def main() -> int:
     net = "--offline" not in sys.argv
     log = sys.stdout
     print(f"therapeutic benchmark: {len(CASES)} cases, network={'on' if net else 'off'}", file=log)
-    rows = [run_case(c, net, log) for c in CASES]
+    # Discarded when the run ends: this benchmark must not grow the input store its rebuild hashes.
+    with tempfile.TemporaryDirectory(prefix="genomeos-vep-appends-") as vep_appends:
+        rows = [run_case(c, net, log, Path(vep_appends)) for c in CASES]
     recovered = sum(1 for r in rows if r["recovered"])
     passed = sum(1 for r in rows if r["pass"])
     sane = sum(1 for r in rows if r.get("mechanism_sane"))
@@ -640,7 +863,7 @@ def main() -> int:
         r["gene"] for r in rows if any(g["changed_the_order"] for g in r.get("magnitude_tiebreaks") or [])
     ]
     result = {
-        "result": "therapeutic_benchmark",
+        "result": RESULT,
         "cases": len(rows),
         "targets_recovered": recovered,
         "verdicts_correct": passed,
@@ -788,7 +1011,7 @@ def main() -> int:
         "these fields removes nothing a previous commit recorded; the re-run took 1.0-1.1 seconds "
         "per case."
     )
-    save_result("therapeutic_benchmark", result, manifest=manifest(net))
+    save_result(RESULT, result, manifest=manifest(net))
     print(
         f"\n{recovered}/{len(rows)} targets recovered; {passed}/{len(rows)} verdicts correct; "
         f"{result['surface_cases_recovered']}/{len(surface_cases)} approved antibody targets "
