@@ -346,12 +346,14 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
     neg = sum(1 for v in with_hit.values() for h in v if h["slope"] < 0)
     pos = records - neg
 
-    # THREE quantities, in two different units, and the first version of this block subtracted one
-    # unit from the other and published -1,220. The distillation RETAINS a distinct row inside the
-    # element widened by MARGIN, because a variant a few hundred bases out is in linkage with it.
-    # Increment 3's attachment ATTACHES a row only inside the element ITSELF, and a row inside two
-    # overlapping compiled elements attaches TWICE, so `records` above is in attachments and not in
-    # rows. Only rows may be subtracted from rows.
+    # TWO UNITS, and the first version of this block subtracted one from the other and published
+    # -1,220. `increment3_count.hits_in` widens the element by EQTL_MARGIN itself, so the window it
+    # attaches in is the SAME window the distillation retained under -- which is increment 3's
+    # registered wording, "inside the compiled element widened by 500 bases each side". An earlier
+    # draft of this comment said the attachment was the element ITSELF; that was wrong, and the
+    # margin-only figure of 0 below is that identity rather than a finding. What does differ is the
+    # unit: a row inside two overlapping compiled elements attaches TWICE, so `records` above is in
+    # ATTACHMENTS and the three figures below are in ROWS. Only rows may be subtracted from rows.
     def row_key(chrom: str, h: dict[str, Any]) -> tuple[str, str, int, str]:
         return (h["tissue"], chrom, h["pos"], h["gene_id"])
 
@@ -398,17 +400,20 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
             "distinct_rows_attached_inside_an_element": len(attached_rows),
             "distinct_rows_retained_by_the_distillation": len(retained_rows),
             "distinct_rows_retained_in_the_margin_only": in_the_margin_only,
-            "three_figures_in_two_units": (
-                f"the distillation retains a distinct row inside the element widened by MARGIN = "
-                f"{MARGIN} bases, because a variant a few hundred bases out is in linkage with it. "
-                "Increment 3's attachment counts a row only inside the element ITSELF, and that "
-                "imported rule is the one every locus figure here uses - it is not widened to raise "
-                "a number. A row inside two overlapping compiled elements attaches TWICE, so "
-                "`attachments_element_by_record` is in ATTACHMENTS and the other three are in ROWS. "
-                "The slope split below is of attachments, at the same denominator as the "
-                "attachment figure. The first version of this block subtracted a row count from an "
-                "attachment count and published a margin-only figure of -1,220, which is how the "
-                "two units came to be named separately here"
+            "two_units_and_one_window": (
+                "the attachment window is increment 3's registered one, imported and not chosen: "
+                "'a retained hit whose variant position falls inside the compiled element widened "
+                f"by {MARGIN} bases each side, which is the margin the retained set was distilled "
+                "under (scripts/eqtl_targets.MARGIN)'. It is therefore the SAME window the "
+                "distillation retained under, so distinct_rows_attached_inside_an_element equals "
+                "distinct_rows_retained_by_the_distillation and the margin-only figure is 0 BY "
+                "CONSTRUCTION - an identity between two imported rules, and not a finding. What "
+                "does differ is the UNIT: a row inside two overlapping compiled elements attaches "
+                "TWICE, so attachments_element_by_record is in ATTACHMENTS and the other three are "
+                "in ROWS, and the slope split is of attachments at that same denominator. The "
+                "first version of this block subtracted a row count from an attachment count and "
+                "published a margin-only figure of -1,220; a smaller overlap would have made it "
+                "positive and plausible, which is why the units are named here"
             ),
             "slope_negative": neg,
             "slope_positive": pos,
@@ -430,10 +435,12 @@ def count_payload(f: dict[str, Any], iv: eqtl.Intervals) -> dict[str, Any]:
             "shown_elements": len(f["shown_iv"]),
             "shown_elements_carrying_a_hit": len(shown_hit),
             "the_rule_that_counts": (
-                "increment 3's own attachment: a retained hit inside an element one of the built "
-                "chains stands on. The ANY-element figure is reported beside it and is NOT the "
-                "same quantity - 86 of the 92 the grouping offered were a different element within "
-                "1 Mb, which is the number this lane withdrew before quoting it"
+                "increment 3's own attachment, carried in its registered wording: a retained hit "
+                f"whose variant position falls inside the compiled element widened by {MARGIN} "
+                "bases each side - and, for the figure that counts, inside an element one of the "
+                "BUILT CHAINS stands on. The ANY-element figure is reported beside it and is NOT "
+                "the same quantity: 86 of the 92 the grouping offered were a different element "
+                "within 1 Mb, which is the number this lane withdrew before quoting it"
             ),
         },
         "the_floor": {

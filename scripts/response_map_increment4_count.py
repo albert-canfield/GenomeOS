@@ -111,9 +111,17 @@ WITHDRAWN = {
         "observation of the same locus"
     ),
     "the_rule_that_gives_6": (
-        "increment 3's own attachment rule: a retained hit whose variant position falls inside the "
-        "compiled element the chain stands on. Applied to the 166 shown elements it gives 6 loci, "
-        "which is what increment 3 built"
+        "increment 3's own attachment rule, in its registered wording: 'a retained hit whose "
+        "variant position falls inside the compiled element widened by 500 bases each side, which "
+        "is the margin the retained set was distilled under (scripts/eqtl_targets.MARGIN), imported "
+        "and not chosen here'. The element it must fall in is one the chain stands on. Applied to "
+        "the 166 shown elements it gives 6 loci, which is what increment 3 built"
+    ),
+    "the_window_is_not_what_separates_92_from_6": (
+        "both figures use the same 500-base window, because `hits_in` widens the element by the "
+        "distil margin itself. What separates them is WHICH ELEMENT the hit must fall in - one the "
+        "chain stands on, or any element at the locus - so the overstatement is about attachment "
+        "and not about a tolerance"
     ),
     "the_shape_it_is": (
         "the same shape as the 198 loci quoted as 198 places the model is wrong when 66 held a "
@@ -281,6 +289,12 @@ def arms(root: Path = ROOT) -> dict[str, Any]:
         ),
         "frame_intervals": frame_n,
         "elements_with_at_least_one_retained_hit": len(at_hit),
+        "attachment_rule": (
+            "increment 3's own, imported and not chosen: 'a retained hit whose variant position "
+            "falls inside the compiled element widened by 500 bases each side, which is the margin "
+            "the retained set was distilled under (scripts/eqtl_targets.MARGIN)'. `hits_in` applies "
+            "that widening itself, so every figure on this arm is at that window"
+        ),
         "retained_records_on_them": sum(len(v) for v in at_hit.values()),
         "slope_negative": slope_neg,
         "slope_positive": slope_pos,

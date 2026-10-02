@@ -290,7 +290,9 @@ def test_retained_rows_and_attachments_are_separate_units(frame_mod):
     assert '"distinct_rows_attached_inside_an_element"' in src
     assert '"distinct_rows_retained_by_the_distillation"' in src
     assert '"distinct_rows_retained_in_the_margin_only"' in src
-    assert "is not widened to raise" in src
+    # the window is one window, so the margin-only figure is 0 by construction and says so
+    assert "BY " in src and "CONSTRUCTION" in src
+    assert "not a finding" in src
     # the defect is named in the file, so the next reader does not have to rediscover why
     assert "-1,220" in src
 
@@ -313,3 +315,19 @@ def test_a_row_in_two_overlapping_elements_counts_once_as_a_row_and_twice_as_an_
     assert len(retained_rows) == len(attached_rows) == 1
     assert len(retained_rows) - len(attached_rows) == 0  # and never negative
     assert retained_rows - attached_rows == set()
+
+
+def test_the_attachment_window_is_the_registered_one_and_not_the_bare_element(i4, frame_mod):
+    """`hits_in` widens by the distil margin itself, so the window is the element plus 500 each side.
+
+    An earlier draft of both writers said the attachment was "the element ITSELF". It is not, and
+    the margin-only figure of 0 in the re-distillation is that identity rather than a finding.
+    """
+    c3 = _load("response_map_increment3_count")
+    rows = [{"pos": 1_000, "tissue": "Lung", "gene_id": "G", "slope": 0.1, "pval": 1e-9}]
+    # a variant 400 bases outside the element still attaches, because the rule carries the margin
+    assert c3.hits_in(rows, 1_400, 1_500) == rows
+    assert c3.hits_in(rows, 1_501, 1_600) == []  # 501 out: past the margin
+    assert c3.EQTL_MARGIN == frame_mod.MARGIN == 500
+    assert "widened by 500 bases each side" in i4.WITHDRAWN["the_rule_that_gives_6"]
+    assert "not about a tolerance" in i4.WITHDRAWN["the_window_is_not_what_separates_92_from_6"]
