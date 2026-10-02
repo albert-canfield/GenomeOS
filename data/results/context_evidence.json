@@ -1,0 +1,5294 @@
+{
+  "result": "context_evidence",
+  "date": "2026-10-02",
+  "question": "for every compiled rule, is the element open in the cell the rule's `when:` names, at reader v1's own call, or is there a reason no reading can be taken?",
+  "registration": "data/results/context_evidence_registration.json",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "rules": 440589,
+  "rules_on_the_record": 440589,
+  "denominator_agrees_with_the_record": true,
+  "per_state": {
+    "open_in_reader": 26551,
+    "not_open_in_reader": 55084,
+    "not_assessable": 358954
+  },
+  "not_assessable_by_reason": {
+    "no_reader_for_this_cell": 358949,
+    "region_outside_measured_span": 5
+  },
+  "assessable_rules": 81635,
+  "open_share_of_assessable_rules": 0.3252,
+  "open_share_population": "the rules whose cell maps to a reader biosample and whose locus lies inside that biosample's measured span on the chromosome: open_in_reader + not_open_in_reader",
+  "no_interval_is_reported": "these are exhaustive counts over every compiled rule, not an estimate from a sample, so no confidence interval is computed and none would mean anything here",
+  "per_reader_biosample": {
+    "CD14-positive monocyte": {
+      "not_open_in_reader": 9084,
+      "open_in_reader": 6456
+    },
+    "GM12878": {
+      "not_open_in_reader": 4779,
+      "open_in_reader": 1627
+    },
+    "H1": {
+      "not_open_in_reader": 2705,
+      "open_in_reader": 1042,
+      "region_outside_measured_span": 1
+    },
+    "HepG2": {
+      "not_open_in_reader": 9478,
+      "open_in_reader": 5301
+    },
+    "IMR-90": {
+      "not_open_in_reader": 1812,
+      "open_in_reader": 1130
+    },
+    "K562": {
+      "not_open_in_reader": 19364,
+      "open_in_reader": 8081
+    },
+    "SK-N-SH": {
+      "not_open_in_reader": 264,
+      "open_in_reader": 83,
+      "region_outside_measured_span": 1
+    },
+    "astrocyte": {
+      "not_open_in_reader": 144,
+      "open_in_reader": 65
+    },
+    "cardiac muscle cell": {
+      "not_open_in_reader": 1304,
+      "open_in_reader": 561
+    },
+    "hepatocyte": {
+      "not_open_in_reader": 166,
+      "open_in_reader": 75
+    },
+    "keratinocyte": {
+      "not_open_in_reader": 3872,
+      "open_in_reader": 1487,
+      "region_outside_measured_span": 2
+    },
+    "ovary": {
+      "not_open_in_reader": 467,
+      "open_in_reader": 136,
+      "region_outside_measured_span": 1
+    },
+    "testis": {
+      "not_open_in_reader": 1645,
+      "open_in_reader": 507
+    }
+  },
+  "per_cell": {
+    "K562": {
+      "rules": 27445,
+      "ontology_term": "EFO:0002067",
+      "reader_biosample": "K562",
+      "open_in_reader": 8081,
+      "not_open_in_reader": 19364,
+      "not_assessable": 0
+    },
+    "CD14_positive_monocyte": {
+      "rules": 15540,
+      "ontology_term": "CL:0001054",
+      "reader_biosample": "CD14-positive monocyte",
+      "open_in_reader": 6456,
+      "not_open_in_reader": 9084,
+      "not_assessable": 0
+    },
+    "HepG2": {
+      "rules": 14779,
+      "ontology_term": "EFO:0001187",
+      "reader_biosample": "HepG2",
+      "open_in_reader": 5301,
+      "not_open_in_reader": 9478,
+      "not_assessable": 0
+    },
+    "placenta": {
+      "rules": 14275,
+      "ontology_term": "UBERON:0001987",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 14275,
+      "not_assessable_because": "UBERON:0001987 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Whole_Blood": {
+      "rules": 11325,
+      "ontology_term": "UBERON:0013756",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 11325,
+      "not_assessable_because": "UBERON:0013756 is not one of the thirteen biosamples reader v1 read"
+    },
+    "psoas_muscle": {
+      "rules": 10222,
+      "ontology_term": "UBERON:0008450",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 10222,
+      "not_assessable_because": "UBERON:0008450 is not one of the thirteen biosamples reader v1 read"
+    },
+    "small_intestine": {
+      "rules": 10006,
+      "ontology_term": "UBERON:0002108",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 10006,
+      "not_assessable_because": "UBERON:0002108 is not one of the thirteen biosamples reader v1 read"
+    },
+    "neural_cell": {
+      "rules": 9955,
+      "ontology_term": "CL:0002319",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 9955,
+      "not_assessable_because": "CL:0002319 is not one of the thirteen biosamples reader v1 read"
+    },
+    "CD8_positive__alpha_beta_T_cell": {
+      "rules": 8872,
+      "ontology_term": "CL:0000625",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 8872,
+      "not_assessable_because": "CL:0000625 is not one of the thirteen biosamples reader v1 read"
+    },
+    "naive_thymus_derived_CD4_positive__alpha_beta_T_cell": {
+      "rules": 7952,
+      "ontology_term": "CL:0000895",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 7952,
+      "not_assessable_because": "CL:0000895 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Purkinje_cell": {
+      "rules": 7478,
+      "ontology_term": "CL:0000121",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 7478,
+      "not_assessable_because": "CL:0000121 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Karpas_422": {
+      "rules": 7475,
+      "ontology_term": "EFO:0005719",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 7475,
+      "not_assessable_because": "EFO:0005719 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_lobe_of_liver": {
+      "rules": 7120,
+      "ontology_term": "UBERON:0001115",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 7120,
+      "not_assessable_because": "UBERON:0001115 is not one of the thirteen biosamples reader v1 read"
+    },
+    "GM23248": {
+      "rules": 6901,
+      "ontology_term": "EFO:0005723",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 6901,
+      "not_assessable_because": "EFO:0005723 is not one of the thirteen biosamples reader v1 read"
+    },
+    "common_myeloid_progenitor__CD34_positive": {
+      "rules": 6802,
+      "ontology_term": "CL:0001059",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 6802,
+      "not_assessable_because": "CL:0001059 is not one of the thirteen biosamples reader v1 read"
+    },
+    "GM12878": {
+      "rules": 6406,
+      "ontology_term": "EFO:0002784",
+      "reader_biosample": "GM12878",
+      "open_in_reader": 1627,
+      "not_open_in_reader": 4779,
+      "not_assessable": 0
+    },
+    "endothelial_cell_of_umbilical_vein": {
+      "rules": 6215,
+      "ontology_term": "CL:0002618",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 6215,
+      "not_assessable_because": "CL:0002618 is not one of the thirteen biosamples reader v1 read"
+    },
+    "GM23338": {
+      "rules": 5689,
+      "ontology_term": "EFO:0007950",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 5689,
+      "not_assessable_because": "EFO:0007950 is not one of the thirteen biosamples reader v1 read"
+    },
+    "LHCN_M2": {
+      "rules": 5591,
+      "ontology_term": "EFO:0005714",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 5591,
+      "not_assessable_because": "EFO:0005714 is not one of the thirteen biosamples reader v1 read"
+    },
+    "keratinocyte": {
+      "rules": 5361,
+      "ontology_term": "CL:0000312",
+      "reader_biosample": "keratinocyte",
+      "open_in_reader": 1487,
+      "not_open_in_reader": 3872,
+      "not_assessable": 2
+    },
+    "OCI_LY7": {
+      "rules": 5173,
+      "ontology_term": "EFO:0006711",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 5173,
+      "not_assessable_because": "EFO:0006711 is not one of the thirteen biosamples reader v1 read"
+    },
+    "CD8_positive__alpha_beta_memory_T_cell": {
+      "rules": 5092,
+      "ontology_term": "CL:0000909",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 5092,
+      "not_assessable_because": "CL:0000909 is not one of the thirteen biosamples reader v1 read"
+    },
+    "myocyte": {
+      "rules": 4699,
+      "ontology_term": "CL:0000187",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4699,
+      "not_assessable_because": "CL:0000187 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mammary_microvascular_endothelial_cell": {
+      "rules": 4539,
+      "ontology_term": "CL:2000071",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4539,
+      "not_assessable_because": "CL:2000071 is not one of the thirteen biosamples reader v1 read"
+    },
+    "heart": {
+      "rules": 4361,
+      "ontology_term": "UBERON:0000948",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4361,
+      "not_assessable_because": "UBERON:0000948 is not one of the thirteen biosamples reader v1 read"
+    },
+    "kidney": {
+      "rules": 4334,
+      "ontology_term": "UBERON:0002113",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4334,
+      "not_assessable_because": "UBERON:0002113 is not one of the thirteen biosamples reader v1 read"
+    },
+    "HFFc6": {
+      "rules": 4322,
+      "ontology_term": "EFO:0009318",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4322,
+      "not_assessable_because": "EFO:0009318 is not one of the thirteen biosamples reader v1 read"
+    },
+    "liver": {
+      "rules": 4289,
+      "ontology_term": "UBERON:0002107",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4289,
+      "not_assessable_because": "UBERON:0002107 is not one of the thirteen biosamples reader v1 read"
+    },
+    "CD4_positive__CD25_positive__alpha_beta_regulatory_T_cell": {
+      "rules": 4276,
+      "ontology_term": "CL:0000792",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4276,
+      "not_assessable_because": "CL:0000792 is not one of the thirteen biosamples reader v1 read"
+    },
+    "CD4_positive__alpha_beta_memory_T_cell": {
+      "rules": 4224,
+      "ontology_term": "CL:0000897",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4224,
+      "not_assessable_because": "CL:0000897 is not one of the thirteen biosamples reader v1 read"
+    },
+    "IgD_negative_memory_B_cell": {
+      "rules": 4212,
+      "ontology_term": "CL:0001053",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4212,
+      "not_assessable_because": "CL:0001053 is not one of the thirteen biosamples reader v1 read"
+    },
+    "naive_thymus_derived_CD8_positive__alpha_beta_T_cell": {
+      "rules": 4129,
+      "ontology_term": "CL:0000900",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4129,
+      "not_assessable_because": "CL:0000900 is not one of the thirteen biosamples reader v1 read"
+    },
+    "GM12892": {
+      "rules": 4092,
+      "ontology_term": "EFO:0002786",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 4092,
+      "not_assessable_because": "EFO:0002786 is not one of the thirteen biosamples reader v1 read"
+    },
+    "H1": {
+      "rules": 3748,
+      "ontology_term": "EFO:0003042",
+      "reader_biosample": "H1",
+      "open_in_reader": 1042,
+      "not_open_in_reader": 2705,
+      "not_assessable": 1
+    },
+    "peripheral_blood_mononuclear_cell": {
+      "rules": 3584,
+      "ontology_term": "CL:2000001",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3584,
+      "not_assessable_because": "CL:2000001 is not one of the thirteen biosamples reader v1 read"
+    },
+    "foreskin_keratinocyte": {
+      "rules": 3581,
+      "ontology_term": "CL:1001606",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3581,
+      "not_assessable_because": "CL:1001606 is not one of the thirteen biosamples reader v1 read"
+    },
+    "immature_natural_killer_cell": {
+      "rules": 3572,
+      "ontology_term": "CL:0000823",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3572,
+      "not_assessable_because": "CL:0000823 is not one of the thirteen biosamples reader v1 read"
+    },
+    "naive_B_cell": {
+      "rules": 3488,
+      "ontology_term": "CL:0000788",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3488,
+      "not_assessable_because": "CL:0000788 is not one of the thirteen biosamples reader v1 read"
+    },
+    "GM12891": {
+      "rules": 3373,
+      "ontology_term": "EFO:0002785",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3373,
+      "not_assessable_because": "EFO:0002785 is not one of the thirteen biosamples reader v1 read"
+    },
+    "dermis_blood_vessel_endothelial_cell": {
+      "rules": 3323,
+      "ontology_term": "CL:2000010",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3323,
+      "not_assessable_because": "CL:2000010 is not one of the thirteen biosamples reader v1 read"
+    },
+    "H9": {
+      "rules": 3203,
+      "ontology_term": "EFO:0003045",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3203,
+      "not_assessable_because": "EFO:0003045 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_ventricle_myocardium_inferior": {
+      "rules": 3190,
+      "ontology_term": "NTR:0000493",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3190,
+      "not_assessable_because": "NTR:0000493 is not one of the thirteen biosamples reader v1 read"
+    },
+    "colonic_mucosa": {
+      "rules": 3166,
+      "ontology_term": "UBERON:0000317",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3166,
+      "not_assessable_because": "UBERON:0000317 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Cerebellar_Hemisphere": {
+      "rules": 3054,
+      "ontology_term": "UBERON:0002245",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3054,
+      "not_assessable_because": "UBERON:0002245 is not one of the thirteen biosamples reader v1 read"
+    },
+    "CD4_positive__alpha_beta_T_cell": {
+      "rules": 3010,
+      "ontology_term": "CL:0000624",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 3010,
+      "not_assessable_because": "CL:0000624 is not one of the thirteen biosamples reader v1 read"
+    },
+    "IMR_90": {
+      "rules": 2942,
+      "ontology_term": "EFO:0001196",
+      "reader_biosample": "IMR-90",
+      "open_in_reader": 1130,
+      "not_open_in_reader": 1812,
+      "not_assessable": 0
+    },
+    "heart_left_ventricle": {
+      "rules": 2829,
+      "ontology_term": "UBERON:0002084",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2829,
+      "not_assessable_because": "UBERON:0002084 is not one of the thirteen biosamples reader v1 read"
+    },
+    "HT_29": {
+      "rules": 2814,
+      "ontology_term": "EFO:0001193",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2814,
+      "not_assessable_because": "EFO:0001193 is not one of the thirteen biosamples reader v1 read"
+    },
+    "foreskin_melanocyte": {
+      "rules": 2698,
+      "ontology_term": "CL:2000045",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2698,
+      "not_assessable_because": "CL:2000045 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Liver": {
+      "rules": 2649,
+      "ontology_term": "UBERON:0001114",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2649,
+      "not_assessable_because": "UBERON:0001114 is not one of the thirteen biosamples reader v1 read"
+    },
+    "esophagus_mucosa": {
+      "rules": 2619,
+      "ontology_term": "UBERON:0002469",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2619,
+      "not_assessable_because": "UBERON:0002469 is not one of the thirteen biosamples reader v1 read"
+    },
+    "hair_follicular_keratinocyte": {
+      "rules": 2596,
+      "ontology_term": "CL:2000092",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2596,
+      "not_assessable_because": "CL:2000092 is not one of the thirteen biosamples reader v1 read"
+    },
+    "B_cell": {
+      "rules": 2496,
+      "ontology_term": "CL:0000236",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2496,
+      "not_assessable_because": "CL:0000236 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_colon": {
+      "rules": 2448,
+      "ontology_term": "UBERON:0008971",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2448,
+      "not_assessable_because": "UBERON:0008971 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesendoderm": {
+      "rules": 2359,
+      "ontology_term": "NTR:0000856",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2359,
+      "not_assessable_because": "NTR:0000856 is not one of the thirteen biosamples reader v1 read"
+    },
+    "heart_right_ventricle": {
+      "rules": 2322,
+      "ontology_term": "UBERON:0002080",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2322,
+      "not_assessable_because": "UBERON:0002080 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Spinal_cord_cervical_c_1": {
+      "rules": 2280,
+      "ontology_term": "UBERON:0006469",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2280,
+      "not_assessable_because": "UBERON:0006469 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mammary_stem_cell": {
+      "rules": 2271,
+      "ontology_term": "CL:0002451",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2271,
+      "not_assessable_because": "CL:0002451 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Right_ventricle_myocardium_superior": {
+      "rules": 2167,
+      "ontology_term": "NTR:0000492",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2167,
+      "not_assessable_because": "NTR:0000492 is not one of the thirteen biosamples reader v1 read"
+    },
+    "SK_MEL_5": {
+      "rules": 2151,
+      "ontology_term": "EFO:0005720",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2151,
+      "not_assessable_because": "EFO:0005720 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_ventricle_myocardium_superior": {
+      "rules": 2120,
+      "ontology_term": "NTR:0000494",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 2120,
+      "not_assessable_because": "NTR:0000494 is not one of the thirteen biosamples reader v1 read"
+    },
+    "AG04450": {
+      "rules": 1945,
+      "ontology_term": "EFO:0006270",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1945,
+      "not_assessable_because": "EFO:0006270 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Muscle_Skeletal": {
+      "rules": 1887,
+      "ontology_term": "UBERON:0011907",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1887,
+      "not_assessable_because": "UBERON:0011907 is not one of the thirteen biosamples reader v1 read"
+    },
+    "cardiac_muscle_cell": {
+      "rules": 1865,
+      "ontology_term": "CL:0000746",
+      "reader_biosample": "cardiac muscle cell",
+      "open_in_reader": 561,
+      "not_open_in_reader": 1304,
+      "not_assessable": 0
+    },
+    "gastrocnemius_medialis": {
+      "rules": 1764,
+      "ontology_term": "UBERON:0011907",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1764,
+      "not_assessable_because": "UBERON:0011907 is not one of the thirteen biosamples reader v1 read"
+    },
+    "testis": {
+      "rules": 1751,
+      "ontology_term": "UBERON:0000473",
+      "reader_biosample": "testis",
+      "open_in_reader": 393,
+      "not_open_in_reader": 1358,
+      "not_assessable": 0
+    },
+    "lower_leg_skin": {
+      "rules": 1713,
+      "ontology_term": "UBERON:0004264",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1713,
+      "not_assessable_because": "UBERON:0004264 is not one of the thirteen biosamples reader v1 read"
+    },
+    "HT1080": {
+      "rules": 1700,
+      "ontology_term": "EFO:0002059",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1700,
+      "not_assessable_because": "EFO:0002059 is not one of the thirteen biosamples reader v1 read"
+    },
+    "NCI_H460": {
+      "rules": 1589,
+      "ontology_term": "EFO:0003044",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1589,
+      "not_assessable_because": "EFO:0003044 is not one of the thirteen biosamples reader v1 read"
+    },
+    "sigmoid_colon": {
+      "rules": 1566,
+      "ontology_term": "UBERON:0001159",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1566,
+      "not_assessable_because": "UBERON:0001159 is not one of the thirteen biosamples reader v1 read"
+    },
+    "HeLa_S3": {
+      "rules": 1563,
+      "ontology_term": "EFO:0002791",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1563,
+      "not_assessable_because": "EFO:0002791 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mammary_epithelial_cell": {
+      "rules": 1557,
+      "ontology_term": "CL:0002327",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1557,
+      "not_assessable_because": "CL:0002327 is not one of the thirteen biosamples reader v1 read"
+    },
+    "trophoblast_cell": {
+      "rules": 1486,
+      "ontology_term": "CL:0000351",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1486,
+      "not_assessable_because": "CL:0000351 is not one of the thirteen biosamples reader v1 read"
+    },
+    "ascending_aorta": {
+      "rules": 1426,
+      "ontology_term": "UBERON:0001496",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1426,
+      "not_assessable_because": "UBERON:0001496 is not one of the thirteen biosamples reader v1 read"
+    },
+    "foreskin_fibroblast": {
+      "rules": 1369,
+      "ontology_term": "CL:1001608",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1369,
+      "not_assessable_because": "CL:1001608 is not one of the thirteen biosamples reader v1 read"
+    },
+    "T_cell": {
+      "rules": 1245,
+      "ontology_term": "CL:0000084",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1245,
+      "not_assessable_because": "CL:0000084 is not one of the thirteen biosamples reader v1 read"
+    },
+    "neural_progenitor_cell": {
+      "rules": 1226,
+      "ontology_term": "CL:0011020",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1226,
+      "not_assessable_because": "CL:0011020 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesenteric_fat_pad": {
+      "rules": 1194,
+      "ontology_term": "UBERON:0015143",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1194,
+      "not_assessable_because": "UBERON:0015143 is not one of the thirteen biosamples reader v1 read"
+    },
+    "forelimb_muscle": {
+      "rules": 1189,
+      "ontology_term": "UBERON:0003662",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1189,
+      "not_assessable_because": "UBERON:0003662 is not one of the thirteen biosamples reader v1 read"
+    },
+    "skeletal_muscle_myoblast": {
+      "rules": 1182,
+      "ontology_term": "CL:0000515",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1182,
+      "not_assessable_because": "CL:0000515 is not one of the thirteen biosamples reader v1 read"
+    },
+    "renal_cortical_epithelial_cell": {
+      "rules": 1180,
+      "ontology_term": "CL:0002584",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1180,
+      "not_assessable_because": "CL:0002584 is not one of the thirteen biosamples reader v1 read"
+    },
+    "H7": {
+      "rules": 1173,
+      "ontology_term": "EFO:0005904",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1173,
+      "not_assessable_because": "EFO:0005904 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mononuclear_cell": {
+      "rules": 1148,
+      "ontology_term": "CL:0000842",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1148,
+      "not_assessable_because": "CL:0000842 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Jurkat__Clone_E6_1": {
+      "rules": 1127,
+      "ontology_term": "CLO:0007045",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1127,
+      "not_assessable_because": "CLO:0007045 is not one of the thirteen biosamples reader v1 read"
+    },
+    "airway_epithelial_cell": {
+      "rules": 1121,
+      "ontology_term": "CL:0002368",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1121,
+      "not_assessable_because": "CL:0002368 is not one of the thirteen biosamples reader v1 read"
+    },
+    "hematopoietic_multipotent_progenitor_cell": {
+      "rules": 1095,
+      "ontology_term": "CL:0000837",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1095,
+      "not_assessable_because": "CL:0000837 is not one of the thirteen biosamples reader v1 read"
+    },
+    "vein_endothelial_cell": {
+      "rules": 1094,
+      "ontology_term": "CL:0002543",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1094,
+      "not_assessable_because": "CL:0002543 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Frontal_Cortex_BA9": {
+      "rules": 1064,
+      "ontology_term": "UBERON:0009834",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1064,
+      "not_assessable_because": "UBERON:0009834 is not one of the thirteen biosamples reader v1 read"
+    },
+    "myotube": {
+      "rules": 1061,
+      "ontology_term": "CL:0002372",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1061,
+      "not_assessable_because": "CL:0002372 is not one of the thirteen biosamples reader v1 read"
+    },
+    "glutamatergic_neuron": {
+      "rules": 1054,
+      "ontology_term": "CL:0000679",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1054,
+      "not_assessable_because": "CL:0000679 is not one of the thirteen biosamples reader v1 read"
+    },
+    "hindlimb_muscle": {
+      "rules": 1022,
+      "ontology_term": "UBERON:0003663",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1022,
+      "not_assessable_because": "UBERON:0003663 is not one of the thirteen biosamples reader v1 read"
+    },
+    "U_87_MG": {
+      "rules": 1020,
+      "ontology_term": "EFO:0005237",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 1020,
+      "not_assessable_because": "EFO:0005237 is not one of the thirteen biosamples reader v1 read"
+    },
+    "lung_microvascular_endothelial_cell": {
+      "rules": 978,
+      "ontology_term": "CL:2000016",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 978,
+      "not_assessable_because": "CL:2000016 is not one of the thirteen biosamples reader v1 read"
+    },
+    "neurosphere": {
+      "rules": 975,
+      "ontology_term": "NTR:0000427",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 975,
+      "not_assessable_because": "NTR:0000427 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Cerebellum": {
+      "rules": 973,
+      "ontology_term": "UBERON:0002037",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 973,
+      "not_assessable_because": "UBERON:0002037 is not one of the thirteen biosamples reader v1 read"
+    },
+    "BLaER1": {
+      "rules": 953,
+      "ontology_term": "EFO:0030018",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 953,
+      "not_assessable_because": "EFO:0030018 is not one of the thirteen biosamples reader v1 read"
+    },
+    "natural_killer_cell": {
+      "rules": 921,
+      "ontology_term": "CL:0000623",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 921,
+      "not_assessable_because": "CL:0000623 is not one of the thirteen biosamples reader v1 read"
+    },
+    "subcutaneous_adipose_tissue": {
+      "rules": 921,
+      "ontology_term": "UBERON:0002190",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 921,
+      "not_assessable_because": "UBERON:0002190 is not one of the thirteen biosamples reader v1 read"
+    },
+    "transverse_colon": {
+      "rules": 902,
+      "ontology_term": "UBERON:0001157",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 902,
+      "not_assessable_because": "UBERON:0001157 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Cells_EBV_transformed_lymphocytes": {
+      "rules": 879,
+      "ontology_term": "EFO:0000572",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 879,
+      "not_assessable_because": "EFO:0000572 is not one of the thirteen biosamples reader v1 read"
+    },
+    "epithelial_cell_of_umbilical_artery": {
+      "rules": 876,
+      "ontology_term": "CL:0010002",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 876,
+      "not_assessable_because": "CL:0010002 is not one of the thirteen biosamples reader v1 read"
+    },
+    "smooth_muscle_cell": {
+      "rules": 819,
+      "ontology_term": "CL:0000192",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 819,
+      "not_assessable_because": "CL:0000192 is not one of the thirteen biosamples reader v1 read"
+    },
+    "melanocyte_of_skin": {
+      "rules": 785,
+      "ontology_term": "CL:1000458",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 785,
+      "not_assessable_because": "CL:1000458 is not one of the thirteen biosamples reader v1 read"
+    },
+    "adrenal_gland": {
+      "rules": 779,
+      "ontology_term": "UBERON:0002369",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 779,
+      "not_assessable_because": "UBERON:0002369 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_lung": {
+      "rules": 751,
+      "ontology_term": "CL:0002553",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 751,
+      "not_assessable_because": "CL:0002553 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_skin_of_back": {
+      "rules": 740,
+      "ontology_term": "CL:0011022",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 740,
+      "not_assessable_because": "CL:0011022 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Calu3": {
+      "rules": 723,
+      "ontology_term": "EFO:0002819",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 723,
+      "not_assessable_because": "EFO:0002819 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Artery_Tibial": {
+      "rules": 706,
+      "ontology_term": "UBERON:0007610",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 706,
+      "not_assessable_because": "UBERON:0007610 is not one of the thirteen biosamples reader v1 read"
+    },
+    "esophagus": {
+      "rules": 703,
+      "ontology_term": "UBERON:0001043",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 703,
+      "not_assessable_because": "UBERON:0001043 is not one of the thirteen biosamples reader v1 read"
+    },
+    "thoracic_aorta_endothelial_cell": {
+      "rules": 701,
+      "ontology_term": "CL:0002545",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 701,
+      "not_assessable_because": "CL:0002545 is not one of the thirteen biosamples reader v1 read"
+    },
+    "subcutaneous_preadipocyte": {
+      "rules": 694,
+      "ontology_term": "CL:0002583",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 694,
+      "not_assessable_because": "CL:0002583 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Caki2": {
+      "rules": 686,
+      "ontology_term": "EFO:0002150",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 686,
+      "not_assessable_because": "EFO:0002150 is not one of the thirteen biosamples reader v1 read"
+    },
+    "MCF_7": {
+      "rules": 683,
+      "ontology_term": "EFO:0001203",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 683,
+      "not_assessable_because": "EFO:0001203 is not one of the thirteen biosamples reader v1 read"
+    },
+    "cardiac_ventricle_fibroblast": {
+      "rules": 681,
+      "ontology_term": "CL:2000066",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 681,
+      "not_assessable_because": "CL:2000066 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Peyer_s_patch": {
+      "rules": 670,
+      "ontology_term": "UBERON:0001211",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 670,
+      "not_assessable_because": "UBERON:0001211 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesenchymal_stem_cell_of_adipose": {
+      "rules": 647,
+      "ontology_term": "CL:0002570",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 647,
+      "not_assessable_because": "CL:0002570 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_kidney": {
+      "rules": 644,
+      "ontology_term": "UBERON:0004538",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 644,
+      "not_assessable_because": "UBERON:0004538 is not one of the thirteen biosamples reader v1 read"
+    },
+    "MCF_10A": {
+      "rules": 636,
+      "ontology_term": "EFO:0001200",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 636,
+      "not_assessable_because": "EFO:0001200 is not one of the thirteen biosamples reader v1 read"
+    },
+    "luminal_epithelial_cell_of_mammary_gland": {
+      "rules": 627,
+      "ontology_term": "CL:0002326",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 627,
+      "not_assessable_because": "CL:0002326 is not one of the thirteen biosamples reader v1 read"
+    },
+    "dermis_lymphatic_vessel_endothelial_cell": {
+      "rules": 623,
+      "ontology_term": "CL:2000011",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 623,
+      "not_assessable_because": "CL:2000011 is not one of the thirteen biosamples reader v1 read"
+    },
+    "lung": {
+      "rules": 623,
+      "ontology_term": "UBERON:0002048",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 623,
+      "not_assessable_because": "UBERON:0002048 is not one of the thirteen biosamples reader v1 read"
+    },
+    "BE2C": {
+      "rules": 619,
+      "ontology_term": "EFO:0005725",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 619,
+      "not_assessable_because": "EFO:0005725 is not one of the thirteen biosamples reader v1 read"
+    },
+    "aorta": {
+      "rules": 613,
+      "ontology_term": "UBERON:0000947",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 613,
+      "not_assessable_because": "UBERON:0000947 is not one of the thirteen biosamples reader v1 read"
+    },
+    "pulmonary_artery_endothelial_cell": {
+      "rules": 602,
+      "ontology_term": "CL:1001568",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 602,
+      "not_assessable_because": "CL:1001568 is not one of the thirteen biosamples reader v1 read"
+    },
+    "cerebellum": {
+      "rules": 601,
+      "ontology_term": "UBERON:0002037",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 601,
+      "not_assessable_because": "UBERON:0002037 is not one of the thirteen biosamples reader v1 read"
+    },
+    "frontal_cortex": {
+      "rules": 599,
+      "ontology_term": "UBERON:0001870",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 599,
+      "not_assessable_because": "UBERON:0001870 is not one of the thirteen biosamples reader v1 read"
+    },
+    "HCT116": {
+      "rules": 594,
+      "ontology_term": "EFO:0002824",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 594,
+      "not_assessable_because": "EFO:0002824 is not one of the thirteen biosamples reader v1 read"
+    },
+    "neural_crest_cell": {
+      "rules": 593,
+      "ontology_term": "CL:0011012",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 593,
+      "not_assessable_because": "CL:0011012 is not one of the thirteen biosamples reader v1 read"
+    },
+    "bronchial_epithelial_cell": {
+      "rules": 585,
+      "ontology_term": "CL:0002328",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 585,
+      "not_assessable_because": "CL:0002328 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_skin_of_abdomen": {
+      "rules": 582,
+      "ontology_term": "CL:2000013",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 582,
+      "not_assessable_because": "CL:2000013 is not one of the thirteen biosamples reader v1 read"
+    },
+    "dorsolateral_prefrontal_cortex": {
+      "rules": 579,
+      "ontology_term": "UBERON:0009834",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 579,
+      "not_assessable_because": "UBERON:0009834 is not one of the thirteen biosamples reader v1 read"
+    },
+    "SK_N_DZ": {
+      "rules": 578,
+      "ontology_term": "EFO:0005721",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 578,
+      "not_assessable_because": "EFO:0005721 is not one of the thirteen biosamples reader v1 read"
+    },
+    "large_intestine": {
+      "rules": 575,
+      "ontology_term": "UBERON:0000059",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 575,
+      "not_assessable_because": "UBERON:0000059 is not one of the thirteen biosamples reader v1 read"
+    },
+    "right_lobe_of_liver": {
+      "rules": 527,
+      "ontology_term": "UBERON:0001114",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 527,
+      "not_assessable_because": "UBERON:0001114 is not one of the thirteen biosamples reader v1 read"
+    },
+    "smooth_muscle_cell_of_the_coronary_artery": {
+      "rules": 514,
+      "ontology_term": "CL:0002592",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 514,
+      "not_assessable_because": "CL:0002592 is not one of the thirteen biosamples reader v1 read"
+    },
+    "brain": {
+      "rules": 511,
+      "ontology_term": "UBERON:0000955",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 511,
+      "not_assessable_because": "UBERON:0000955 is not one of the thirteen biosamples reader v1 read"
+    },
+    "bladder_microvascular_endothelial_cell": {
+      "rules": 504,
+      "ontology_term": "CL:2000040",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 504,
+      "not_assessable_because": "CL:2000040 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Skin_Not_Sun_Exposed_Suprapubic": {
+      "rules": 496,
+      "ontology_term": "UBERON:0036149",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 496,
+      "not_assessable_because": "UBERON:0036149 is not one of the thirteen biosamples reader v1 read"
+    },
+    "tracheal_epithelial_cell": {
+      "rules": 489,
+      "ontology_term": "CL:0000307",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 489,
+      "not_assessable_because": "CL:0000307 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Hippocampus": {
+      "rules": 453,
+      "ontology_term": "UBERON:0001954",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 453,
+      "not_assessable_because": "UBERON:0001954 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Adrenal_Gland": {
+      "rules": 441,
+      "ontology_term": "UBERON:0002369",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 441,
+      "not_assessable_because": "UBERON:0002369 is not one of the thirteen biosamples reader v1 read"
+    },
+    "endodermal_cell": {
+      "rules": 440,
+      "ontology_term": "CL:0000223",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 440,
+      "not_assessable_because": "CL:0000223 is not one of the thirteen biosamples reader v1 read"
+    },
+    "right_renal_cortex_interstitium": {
+      "rules": 440,
+      "ontology_term": "UBERON:0018118",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 440,
+      "not_assessable_because": "UBERON:0018118 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesenchymal_stem_cell": {
+      "rules": 439,
+      "ontology_term": "CL:0000134",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 439,
+      "not_assessable_because": "CL:0000134 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Kidney_Medulla": {
+      "rules": 434,
+      "ontology_term": "UBERON:0001293",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 434,
+      "not_assessable_because": "UBERON:0001293 is not one of the thirteen biosamples reader v1 read"
+    },
+    "thyroid_gland": {
+      "rules": 426,
+      "ontology_term": "UBERON:0002046",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 426,
+      "not_assessable_because": "UBERON:0002046 is not one of the thirteen biosamples reader v1 read"
+    },
+    "neuronal_stem_cell": {
+      "rules": 422,
+      "ontology_term": "CL:0000047",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 422,
+      "not_assessable_because": "CL:0000047 is not one of the thirteen biosamples reader v1 read"
+    },
+    "BJ": {
+      "rules": 418,
+      "ontology_term": "EFO:0002779",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 418,
+      "not_assessable_because": "EFO:0002779 is not one of the thirteen biosamples reader v1 read"
+    },
+    "SJCRH30": {
+      "rules": 413,
+      "ontology_term": "EFO:0005722",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 413,
+      "not_assessable_because": "EFO:0005722 is not one of the thirteen biosamples reader v1 read"
+    },
+    "placental_epithelial_cell": {
+      "rules": 412,
+      "ontology_term": "CL:0002577",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 412,
+      "not_assessable_because": "CL:0002577 is not one of the thirteen biosamples reader v1 read"
+    },
+    "A673": {
+      "rules": 411,
+      "ontology_term": "EFO:0002106",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 411,
+      "not_assessable_because": "EFO:0002106 is not one of the thirteen biosamples reader v1 read"
+    },
+    "spleen": {
+      "rules": 411,
+      "ontology_term": "UBERON:0002106",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 411,
+      "not_assessable_because": "UBERON:0002106 is not one of the thirteen biosamples reader v1 read"
+    },
+    "glomerular_endothelial_cell": {
+      "rules": 408,
+      "ontology_term": "CL:0002188",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 408,
+      "not_assessable_because": "CL:0002188 is not one of the thirteen biosamples reader v1 read"
+    },
+    "A549": {
+      "rules": 407,
+      "ontology_term": "EFO:0001086",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 407,
+      "not_assessable_because": "EFO:0001086 is not one of the thirteen biosamples reader v1 read"
+    },
+    "hair_follicle_dermal_papilla_cell": {
+      "rules": 404,
+      "ontology_term": "CL:0000346",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 404,
+      "not_assessable_because": "CL:0000346 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Testis": {
+      "rules": 401,
+      "ontology_term": "UBERON:0000473",
+      "reader_biosample": "testis",
+      "open_in_reader": 114,
+      "not_open_in_reader": 287,
+      "not_assessable": 0
+    },
+    "progenitor_cell_of_endocrine_pancreas": {
+      "rules": 397,
+      "ontology_term": "CL:0002351",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 397,
+      "not_assessable_because": "CL:0002351 is not one of the thirteen biosamples reader v1 read"
+    },
+    "trophoblast": {
+      "rules": 397,
+      "ontology_term": "UBERON:0000088",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 397,
+      "not_assessable_because": "UBERON:0000088 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mole": {
+      "rules": 387,
+      "ontology_term": "UBERON:1000010",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 387,
+      "not_assessable_because": "UBERON:1000010 is not one of the thirteen biosamples reader v1 read"
+    },
+    "placental_basal_plate": {
+      "rules": 377,
+      "ontology_term": "NTR:0003013",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 377,
+      "not_assessable_because": "NTR:0003013 is not one of the thirteen biosamples reader v1 read"
+    },
+    "endothelial_cell": {
+      "rules": 376,
+      "ontology_term": "CL:0000115",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 376,
+      "not_assessable_because": "CL:0000115 is not one of the thirteen biosamples reader v1 read"
+    },
+    "occipital_lobe": {
+      "rules": 371,
+      "ontology_term": "UBERON:0002021",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 371,
+      "not_assessable_because": "UBERON:0002021 is not one of the thirteen biosamples reader v1 read"
+    },
+    "uterus": {
+      "rules": 368,
+      "ontology_term": "UBERON:0000995",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 368,
+      "not_assessable_because": "UBERON:0000995 is not one of the thirteen biosamples reader v1 read"
+    },
+    "nasal_cavity_respiratory_epithelium_epithelial_cell_of_viscerocranial_mucosa": {
+      "rules": 362,
+      "ontology_term": "CL:2000094",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 362,
+      "not_assessable_because": "CL:2000094 is not one of the thirteen biosamples reader v1 read"
+    },
+    "right_cardiac_atrium": {
+      "rules": 361,
+      "ontology_term": "UBERON:0002078",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 361,
+      "not_assessable_because": "UBERON:0002078 is not one of the thirteen biosamples reader v1 read"
+    },
+    "temporal_lobe": {
+      "rules": 361,
+      "ontology_term": "UBERON:0001871",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 361,
+      "not_assessable_because": "UBERON:0001871 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Cells_Cultured_fibroblasts": {
+      "rules": 356,
+      "ontology_term": "EFO:0002009",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 356,
+      "not_assessable_because": "EFO:0002009 is not one of the thirteen biosamples reader v1 read"
+    },
+    "SK_N_SH": {
+      "rules": 348,
+      "ontology_term": "EFO:0003072",
+      "reader_biosample": "SK-N-SH",
+      "open_in_reader": 83,
+      "not_open_in_reader": 264,
+      "not_assessable": 1
+    },
+    "pancreas": {
+      "rules": 342,
+      "ontology_term": "UBERON:0001264",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 342,
+      "not_assessable_because": "UBERON:0001264 is not one of the thirteen biosamples reader v1 read"
+    },
+    "thymus": {
+      "rules": 342,
+      "ontology_term": "UBERON:0002370",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 342,
+      "not_assessable_because": "UBERON:0002370 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Ovary": {
+      "rules": 340,
+      "ontology_term": "UBERON:0000992",
+      "reader_biosample": "ovary",
+      "open_in_reader": 72,
+      "not_open_in_reader": 267,
+      "not_assessable": 1
+    },
+    "smooth_muscle_cell_of_the_pulmonary_artery": {
+      "rules": 335,
+      "ontology_term": "CL:0002591",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 335,
+      "not_assessable_because": "CL:0002591 is not one of the thirteen biosamples reader v1 read"
+    },
+    "myoepithelial_cell_of_mammary_gland": {
+      "rules": 329,
+      "ontology_term": "CL:0002324",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 329,
+      "not_assessable_because": "CL:0002324 is not one of the thirteen biosamples reader v1 read"
+    },
+    "chorion": {
+      "rules": 324,
+      "ontology_term": "UBERON:0003124",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 324,
+      "not_assessable_because": "UBERON:0003124 is not one of the thirteen biosamples reader v1 read"
+    },
+    "placental_pericyte": {
+      "rules": 317,
+      "ontology_term": "CL:2000078",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 317,
+      "not_assessable_because": "CL:2000078 is not one of the thirteen biosamples reader v1 read"
+    },
+    "stomach": {
+      "rules": 316,
+      "ontology_term": "UBERON:0000945",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 316,
+      "not_assessable_because": "UBERON:0000945 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Putamen_basal_ganglia": {
+      "rules": 314,
+      "ontology_term": "UBERON:0001874",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 314,
+      "not_assessable_because": "UBERON:0001874 is not one of the thirteen biosamples reader v1 read"
+    },
+    "esophagus_muscularis_mucosa": {
+      "rules": 310,
+      "ontology_term": "UBERON:0004648",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 310,
+      "not_assessable_because": "UBERON:0004648 is not one of the thirteen biosamples reader v1 read"
+    },
+    "bronchial_smooth_muscle_cell": {
+      "rules": 307,
+      "ontology_term": "CL:0002598",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 307,
+      "not_assessable_because": "CL:0002598 is not one of the thirteen biosamples reader v1 read"
+    },
+    "MG63": {
+      "rules": 299,
+      "ontology_term": "EFO:0002234",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 299,
+      "not_assessable_because": "EFO:0002234 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesenchymal_stem_cell_of_the_bone_marrow": {
+      "rules": 299,
+      "ontology_term": "CL:0002540",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 299,
+      "not_assessable_because": "CL:0002540 is not one of the thirteen biosamples reader v1 read"
+    },
+    "PFSK_1": {
+      "rules": 297,
+      "ontology_term": "EFO:0005234",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 297,
+      "not_assessable_because": "EFO:0005234 is not one of the thirteen biosamples reader v1 read"
+    },
+    "smooth_muscle_cell_of_the_umbilical_artery": {
+      "rules": 296,
+      "ontology_term": "CL:0002594",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 296,
+      "not_assessable_because": "CL:0002594 is not one of the thirteen biosamples reader v1 read"
+    },
+    "HUES64": {
+      "rules": 292,
+      "ontology_term": "EFO:0007089",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 292,
+      "not_assessable_because": "EFO:0007089 is not one of the thirteen biosamples reader v1 read"
+    },
+    "lower_lobe_of_right_lung": {
+      "rules": 290,
+      "ontology_term": "UBERON:0002171",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 290,
+      "not_assessable_because": "UBERON:0002171 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Adipose_Subcutaneous": {
+      "rules": 276,
+      "ontology_term": "UBERON:0002190",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 276,
+      "not_assessable_because": "UBERON:0002190 is not one of the thirteen biosamples reader v1 read"
+    },
+    "epithelial_cell_of_proximal_tubule": {
+      "rules": 268,
+      "ontology_term": "CL:0002306",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 268,
+      "not_assessable_because": "CL:0002306 is not one of the thirteen biosamples reader v1 read"
+    },
+    "dermis_microvascular_lymphatic_vessel_endothelial_cell": {
+      "rules": 265,
+      "ontology_term": "CL:2000041",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 265,
+      "not_assessable_because": "CL:2000041 is not one of the thirteen biosamples reader v1 read"
+    },
+    "ovary": {
+      "rules": 264,
+      "ontology_term": "UBERON:0000992",
+      "reader_biosample": "ovary",
+      "open_in_reader": 64,
+      "not_open_in_reader": 200,
+      "not_assessable": 0
+    },
+    "PC_3": {
+      "rules": 258,
+      "ontology_term": "EFO:0002074",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 258,
+      "not_assessable_because": "EFO:0002074 is not one of the thirteen biosamples reader v1 read"
+    },
+    "muscle_of_trunk": {
+      "rules": 254,
+      "ontology_term": "UBERON:0001774",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 254,
+      "not_assessable_because": "UBERON:0001774 is not one of the thirteen biosamples reader v1 read"
+    },
+    "PC_9": {
+      "rules": 249,
+      "ontology_term": "EFO:0002847",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 249,
+      "not_assessable_because": "EFO:0002847 is not one of the thirteen biosamples reader v1 read"
+    },
+    "esophagus_squamous_epithelium": {
+      "rules": 245,
+      "ontology_term": "UBERON:0006920",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 245,
+      "not_assessable_because": "UBERON:0006920 is not one of the thirteen biosamples reader v1 read"
+    },
+    "hepatocyte": {
+      "rules": 241,
+      "ontology_term": "CL:0000182",
+      "reader_biosample": "hepatocyte",
+      "open_in_reader": 75,
+      "not_open_in_reader": 166,
+      "not_assessable": 0
+    },
+    "Fallopian_Tube": {
+      "rules": 238,
+      "ontology_term": "UBERON:0003889",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 238,
+      "not_assessable_because": "UBERON:0003889 is not one of the thirteen biosamples reader v1 read"
+    },
+    "adipose_tissue": {
+      "rules": 238,
+      "ontology_term": "UBERON:0001013",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 238,
+      "not_assessable_because": "UBERON:0001013 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesangial_cell": {
+      "rules": 236,
+      "ontology_term": "CL:0000650",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 236,
+      "not_assessable_because": "CL:0000650 is not one of the thirteen biosamples reader v1 read"
+    },
+    "skeletal_muscle_satellite_cell": {
+      "rules": 225,
+      "ontology_term": "CL:0000594",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 225,
+      "not_assessable_because": "CL:0000594 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Right_ventricle_myocardium_inferior": {
+      "rules": 223,
+      "ontology_term": "NTR:0000491",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 223,
+      "not_assessable_because": "NTR:0000491 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_lung": {
+      "rules": 221,
+      "ontology_term": "UBERON:0002168",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 221,
+      "not_assessable_because": "UBERON:0002168 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mucosa_of_descending_colon": {
+      "rules": 221,
+      "ontology_term": "UBERON:0004992",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 221,
+      "not_assessable_because": "UBERON:0004992 is not one of the thirteen biosamples reader v1 read"
+    },
+    "upper_lobe_of_right_lung": {
+      "rules": 217,
+      "ontology_term": "UBERON:0002170",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 217,
+      "not_assessable_because": "UBERON:0002170 is not one of the thirteen biosamples reader v1 read"
+    },
+    "astrocyte": {
+      "rules": 209,
+      "ontology_term": "CL:0000127",
+      "reader_biosample": "astrocyte",
+      "open_in_reader": 65,
+      "not_open_in_reader": 144,
+      "not_assessable": 0
+    },
+    "renal_pelvis": {
+      "rules": 209,
+      "ontology_term": "UBERON:0001224",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 209,
+      "not_assessable_because": "UBERON:0001224 is not one of the thirteen biosamples reader v1 read"
+    },
+    "smooth_muscle_cell_of_trachea": {
+      "rules": 209,
+      "ontology_term": "CL:0002600",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 209,
+      "not_assessable_because": "CL:0002600 is not one of the thirteen biosamples reader v1 read"
+    },
+    "M059J": {
+      "rules": 208,
+      "ontology_term": "EFO:0005697",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 208,
+      "not_assessable_because": "EFO:0005697 is not one of the thirteen biosamples reader v1 read"
+    },
+    "tibial_nerve": {
+      "rules": 206,
+      "ontology_term": "UBERON:0001323",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 206,
+      "not_assessable_because": "UBERON:0001323 is not one of the thirteen biosamples reader v1 read"
+    },
+    "endocrine_pancreas": {
+      "rules": 202,
+      "ontology_term": "UBERON:0000016",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 202,
+      "not_assessable_because": "UBERON:0000016 is not one of the thirteen biosamples reader v1 read"
+    },
+    "cardiac_septum": {
+      "rules": 200,
+      "ontology_term": "UBERON:0002099",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 200,
+      "not_assessable_because": "UBERON:0002099 is not one of the thirteen biosamples reader v1 read"
+    },
+    "body_of_pancreas": {
+      "rules": 196,
+      "ontology_term": "UBERON:0001150",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 196,
+      "not_assessable_because": "UBERON:0001150 is not one of the thirteen biosamples reader v1 read"
+    },
+    "cardiac_atrium_fibroblast": {
+      "rules": 193,
+      "ontology_term": "CL:2000067",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 193,
+      "not_assessable_because": "CL:2000067 is not one of the thirteen biosamples reader v1 read"
+    },
+    "ectodermal_cell": {
+      "rules": 193,
+      "ontology_term": "CL:0000221",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 193,
+      "not_assessable_because": "CL:0000221 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Nerve_Tibial": {
+      "rules": 182,
+      "ontology_term": "UBERON:0001323",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 182,
+      "not_assessable_because": "UBERON:0001323 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Colon_Sigmoid": {
+      "rules": 178,
+      "ontology_term": "UBERON:0001159",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 178,
+      "not_assessable_because": "UBERON:0001159 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Colon_Transverse": {
+      "rules": 176,
+      "ontology_term": "UBERON:0001157",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 176,
+      "not_assessable_because": "UBERON:0001157 is not one of the thirteen biosamples reader v1 read"
+    },
+    "muscle_of_arm": {
+      "rules": 175,
+      "ontology_term": "UBERON:0001499",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 175,
+      "not_assessable_because": "UBERON:0001499 is not one of the thirteen biosamples reader v1 read"
+    },
+    "urinary_bladder": {
+      "rules": 174,
+      "ontology_term": "UBERON:0001255",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 174,
+      "not_assessable_because": "UBERON:0001255 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Spleen": {
+      "rules": 172,
+      "ontology_term": "UBERON:0002106",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 172,
+      "not_assessable_because": "UBERON:0002106 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_skin_of_scalp": {
+      "rules": 172,
+      "ontology_term": "NTR:0000524",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 172,
+      "not_assessable_because": "NTR:0000524 is not one of the thirteen biosamples reader v1 read"
+    },
+    "right_atrium_auricular_region": {
+      "rules": 172,
+      "ontology_term": "UBERON:0006631",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 172,
+      "not_assessable_because": "UBERON:0006631 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Cortex": {
+      "rules": 164,
+      "ontology_term": "UBERON:0001870",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 164,
+      "not_assessable_because": "UBERON:0001870 is not one of the thirteen biosamples reader v1 read"
+    },
+    "chorionic_villus": {
+      "rules": 162,
+      "ontology_term": "UBERON:0007106",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 162,
+      "not_assessable_because": "UBERON:0007106 is not one of the thirteen biosamples reader v1 read"
+    },
+    "thoracic_aorta": {
+      "rules": 161,
+      "ontology_term": "UBERON:0001515",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 161,
+      "not_assessable_because": "UBERON:0001515 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Panc1": {
+      "rules": 159,
+      "ontology_term": "EFO:0002713",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 159,
+      "not_assessable_because": "EFO:0002713 is not one of the thirteen biosamples reader v1 read"
+    },
+    "diencephalon": {
+      "rules": 158,
+      "ontology_term": "UBERON:0001894",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 158,
+      "not_assessable_because": "UBERON:0001894 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Pancreas": {
+      "rules": 156,
+      "ontology_term": "UBERON:0001150",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 156,
+      "not_assessable_because": "UBERON:0001150 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Thyroid": {
+      "rules": 152,
+      "ontology_term": "UBERON:0002046",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 152,
+      "not_assessable_because": "UBERON:0002046 is not one of the thirteen biosamples reader v1 read"
+    },
+    "spinal_cord": {
+      "rules": 151,
+      "ontology_term": "UBERON:0002240",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 151,
+      "not_assessable_because": "UBERON:0002240 is not one of the thirteen biosamples reader v1 read"
+    },
+    "tongue": {
+      "rules": 147,
+      "ontology_term": "UBERON:0001723",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 147,
+      "not_assessable_because": "UBERON:0001723 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Cervix_Ectocervix": {
+      "rules": 146,
+      "ontology_term": "UBERON:0012249",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 146,
+      "not_assessable_because": "UBERON:0012249 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Esophagus_Mucosa": {
+      "rules": 142,
+      "ontology_term": "UBERON:0006920",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 142,
+      "not_assessable_because": "UBERON:0006920 is not one of the thirteen biosamples reader v1 read"
+    },
+    "muscle_of_leg": {
+      "rules": 142,
+      "ontology_term": "UBERON:0001383",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 142,
+      "not_assessable_because": "UBERON:0001383 is not one of the thirteen biosamples reader v1 read"
+    },
+    "myometrial_cell": {
+      "rules": 141,
+      "ontology_term": "CL:0002366",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 141,
+      "not_assessable_because": "CL:0002366 is not one of the thirteen biosamples reader v1 read"
+    },
+    "muscle_of_back": {
+      "rules": 140,
+      "ontology_term": "UBERON:0002324",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 140,
+      "not_assessable_because": "UBERON:0002324 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Caco_2": {
+      "rules": 139,
+      "ontology_term": "EFO:0001099",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 139,
+      "not_assessable_because": "EFO:0001099 is not one of the thirteen biosamples reader v1 read"
+    },
+    "skeletal_muscle_tissue": {
+      "rules": 139,
+      "ontology_term": "UBERON:0001134",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 139,
+      "not_assessable_because": "UBERON:0001134 is not one of the thirteen biosamples reader v1 read"
+    },
+    "endothelial_cell_of_coronary_artery": {
+      "rules": 138,
+      "ontology_term": "CL:2000018",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 138,
+      "not_assessable_because": "CL:2000018 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Minor_Salivary_Gland": {
+      "rules": 137,
+      "ontology_term": "UBERON:0006330",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 137,
+      "not_assessable_because": "UBERON:0006330 is not one of the thirteen biosamples reader v1 read"
+    },
+    "upper_lobe_of_left_lung": {
+      "rules": 135,
+      "ontology_term": "UBERON:0008952",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 135,
+      "not_assessable_because": "UBERON:0008952 is not one of the thirteen biosamples reader v1 read"
+    },
+    "A172": {
+      "rules": 134,
+      "ontology_term": "EFO:0002101",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 134,
+      "not_assessable_because": "EFO:0002101 is not one of the thirteen biosamples reader v1 read"
+    },
+    "camera_type_eye": {
+      "rules": 131,
+      "ontology_term": "UBERON:0000019",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 131,
+      "not_assessable_because": "UBERON:0000019 is not one of the thirteen biosamples reader v1 read"
+    },
+    "vagina": {
+      "rules": 130,
+      "ontology_term": "UBERON:0000996",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 130,
+      "not_assessable_because": "UBERON:0000996 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Heart_Left_Ventricle": {
+      "rules": 128,
+      "ontology_term": "UBERON:0006566",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 128,
+      "not_assessable_because": "UBERON:0006566 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesodermal_cell": {
+      "rules": 127,
+      "ontology_term": "CL:0000222",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 127,
+      "not_assessable_because": "CL:0000222 is not one of the thirteen biosamples reader v1 read"
+    },
+    "A375": {
+      "rules": 125,
+      "ontology_term": "EFO:0002103",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 125,
+      "not_assessable_because": "EFO:0002103 is not one of the thirteen biosamples reader v1 read"
+    },
+    "prostate_gland": {
+      "rules": 123,
+      "ontology_term": "UBERON:0002367",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 123,
+      "not_assessable_because": "UBERON:0002367 is not one of the thirteen biosamples reader v1 read"
+    },
+    "parietal_lobe": {
+      "rules": 119,
+      "ontology_term": "UBERON:0001872",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 119,
+      "not_assessable_because": "UBERON:0001872 is not one of the thirteen biosamples reader v1 read"
+    },
+    "amnion": {
+      "rules": 114,
+      "ontology_term": "UBERON:0000305",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 114,
+      "not_assessable_because": "UBERON:0000305 is not one of the thirteen biosamples reader v1 read"
+    },
+    "H4": {
+      "rules": 112,
+      "ontology_term": "EFO:0002184",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 112,
+      "not_assessable_because": "EFO:0002184 is not one of the thirteen biosamples reader v1 read"
+    },
+    "T_helper_17_cell": {
+      "rules": 107,
+      "ontology_term": "CL:0000899",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 107,
+      "not_assessable_because": "CL:0000899 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Artery_Aorta": {
+      "rules": 106,
+      "ontology_term": "UBERON:0001496",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 106,
+      "not_assessable_because": "UBERON:0001496 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_dermis": {
+      "rules": 103,
+      "ontology_term": "CL:0002551",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 103,
+      "not_assessable_because": "CL:0002551 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Kidney_Cortex": {
+      "rules": 102,
+      "ontology_term": "UBERON:0001225",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 102,
+      "not_assessable_because": "UBERON:0001225 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Anterior_cingulate_cortex_BA24": {
+      "rules": 98,
+      "ontology_term": "UBERON:0009835",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 98,
+      "not_assessable_because": "UBERON:0009835 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Caudate_basal_ganglia": {
+      "rules": 97,
+      "ontology_term": "UBERON:0001873",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 97,
+      "not_assessable_because": "UBERON:0001873 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Pituitary": {
+      "rules": 96,
+      "ontology_term": "UBERON:0000007",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 96,
+      "not_assessable_because": "UBERON:0000007 is not one of the thirteen biosamples reader v1 read"
+    },
+    "WTC11": {
+      "rules": 96,
+      "ontology_term": "EFO:0009747",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 96,
+      "not_assessable_because": "EFO:0009747 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Amygdala": {
+      "rules": 95,
+      "ontology_term": "UBERON:0001876",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 95,
+      "not_assessable_because": "UBERON:0001876 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Nucleus_accumbens_basal_ganglia": {
+      "rules": 95,
+      "ontology_term": "UBERON:0001882",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 95,
+      "not_assessable_because": "UBERON:0001882 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Stomach": {
+      "rules": 94,
+      "ontology_term": "UBERON:0000945",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 94,
+      "not_assessable_because": "UBERON:0000945 is not one of the thirteen biosamples reader v1 read"
+    },
+    "posterior_vena_cava": {
+      "rules": 94,
+      "ontology_term": "UBERON:0001072",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 94,
+      "not_assessable_because": "UBERON:0001072 is not one of the thirteen biosamples reader v1 read"
+    },
+    "right_renal_pelvis": {
+      "rules": 90,
+      "ontology_term": "UBERON:0018116",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 90,
+      "not_assessable_because": "UBERON:0018116 is not one of the thirteen biosamples reader v1 read"
+    },
+    "skin_of_body": {
+      "rules": 90,
+      "ontology_term": "UBERON:0002097",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 90,
+      "not_assessable_because": "UBERON:0002097 is not one of the thirteen biosamples reader v1 read"
+    },
+    "pericardium_fibroblast": {
+      "rules": 88,
+      "ontology_term": "CL:2000068",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 88,
+      "not_assessable_because": "CL:2000068 is not one of the thirteen biosamples reader v1 read"
+    },
+    "umbilical_cord": {
+      "rules": 87,
+      "ontology_term": "UBERON:0002331",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 87,
+      "not_assessable_because": "UBERON:0002331 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesothelial_cell_of_epicardium": {
+      "rules": 86,
+      "ontology_term": "CL:0011019",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 86,
+      "not_assessable_because": "CL:0011019 is not one of the thirteen biosamples reader v1 read"
+    },
+    "smooth_muscle_cell_of_bladder": {
+      "rules": 84,
+      "ontology_term": "CL:0002597",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 84,
+      "not_assessable_because": "CL:0002597 is not one of the thirteen biosamples reader v1 read"
+    },
+    "suprapubic_skin": {
+      "rules": 82,
+      "ontology_term": "UBERON:0036149",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 82,
+      "not_assessable_because": "UBERON:0036149 is not one of the thirteen biosamples reader v1 read"
+    },
+    "kidney_epithelial_cell": {
+      "rules": 81,
+      "ontology_term": "CL:0002518",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 81,
+      "not_assessable_because": "CL:0002518 is not one of the thirteen biosamples reader v1 read"
+    },
+    "gastroesophageal_sphincter": {
+      "rules": 80,
+      "ontology_term": "UBERON:0004550",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 80,
+      "not_assessable_because": "UBERON:0004550 is not one of the thirteen biosamples reader v1 read"
+    },
+    "sciatic_nerve": {
+      "rules": 80,
+      "ontology_term": "UBERON:0001322",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 80,
+      "not_assessable_because": "UBERON:0001322 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Esophagus_Muscularis": {
+      "rules": 77,
+      "ontology_term": "UBERON:0004648",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 77,
+      "not_assessable_because": "UBERON:0004648 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Small_Intestine_Terminal_Ileum": {
+      "rules": 76,
+      "ontology_term": "UBERON:0001211",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 76,
+      "not_assessable_because": "UBERON:0001211 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Esophagus_Gastroesophageal_Junction": {
+      "rules": 71,
+      "ontology_term": "UBERON:0004550",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 71,
+      "not_assessable_because": "UBERON:0004550 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Daoy": {
+      "rules": 69,
+      "ontology_term": "EFO:0005698",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 69,
+      "not_assessable_because": "EFO:0005698 is not one of the thirteen biosamples reader v1 read"
+    },
+    "G401": {
+      "rules": 69,
+      "ontology_term": "EFO:0002179",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 69,
+      "not_assessable_because": "EFO:0002179 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Hypothalamus": {
+      "rules": 68,
+      "ontology_term": "UBERON:0001898",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 68,
+      "not_assessable_because": "UBERON:0001898 is not one of the thirteen biosamples reader v1 read"
+    },
+    "articular_chondrocyte_of_knee_joint": {
+      "rules": 68,
+      "ontology_term": "CL:2000007",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 68,
+      "not_assessable_because": "CL:2000007 is not one of the thirteen biosamples reader v1 read"
+    },
+    "chondrocyte": {
+      "rules": 64,
+      "ontology_term": "CL:0000138",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 64,
+      "not_assessable_because": "CL:0000138 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_renal_pelvis": {
+      "rules": 64,
+      "ontology_term": "UBERON:0018115",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 64,
+      "not_assessable_because": "UBERON:0018115 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Heart_Atrial_Appendage": {
+      "rules": 62,
+      "ontology_term": "UBERON:0006631",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 62,
+      "not_assessable_because": "UBERON:0006631 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_the_aortic_adventitia": {
+      "rules": 62,
+      "ontology_term": "CL:0002547",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 62,
+      "not_assessable_because": "CL:0002547 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Adipose_Visceral_Omentum": {
+      "rules": 61,
+      "ontology_term": "UBERON:0010414",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 61,
+      "not_assessable_because": "UBERON:0010414 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Skin_Sun_Exposed_Lower_leg": {
+      "rules": 61,
+      "ontology_term": "UBERON:0004264",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 61,
+      "not_assessable_because": "UBERON:0004264 is not one of the thirteen biosamples reader v1 read"
+    },
+    "regular_cardiac_myocyte": {
+      "rules": 59,
+      "ontology_term": "CL:0002098",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 59,
+      "not_assessable_because": "CL:0002098 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Prostate": {
+      "rules": 58,
+      "ontology_term": "UBERON:0002367",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 58,
+      "not_assessable_because": "UBERON:0002367 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Lung": {
+      "rules": 56,
+      "ontology_term": "UBERON:0008952",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 56,
+      "not_assessable_because": "UBERON:0008952 is not one of the thirteen biosamples reader v1 read"
+    },
+    "osteocyte": {
+      "rules": 55,
+      "ontology_term": "CL:0000137",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 55,
+      "not_assessable_because": "CL:0000137 is not one of the thirteen biosamples reader v1 read"
+    },
+    "metanephros": {
+      "rules": 51,
+      "ontology_term": "UBERON:0000081",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 51,
+      "not_assessable_because": "UBERON:0000081 is not one of the thirteen biosamples reader v1 read"
+    },
+    "bronchus_fibroblast_of_lung": {
+      "rules": 50,
+      "ontology_term": "CL:2000093",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 50,
+      "not_assessable_because": "CL:2000093 is not one of the thirteen biosamples reader v1 read"
+    },
+    "osteoblast": {
+      "rules": 50,
+      "ontology_term": "CL:0000062",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 50,
+      "not_assessable_because": "CL:0000062 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Brain_Substantia_nigra": {
+      "rules": 49,
+      "ontology_term": "UBERON:0002038",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 49,
+      "not_assessable_because": "UBERON:0002038 is not one of the thirteen biosamples reader v1 read"
+    },
+    "aortic_smooth_muscle_cell": {
+      "rules": 46,
+      "ontology_term": "CL:0002539",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 46,
+      "not_assessable_because": "CL:0002539 is not one of the thirteen biosamples reader v1 read"
+    },
+    "renal_cortex_interstitium": {
+      "rules": 43,
+      "ontology_term": "UBERON:0005270",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 43,
+      "not_assessable_because": "UBERON:0005270 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Uterus": {
+      "rules": 38,
+      "ontology_term": "UBERON:0000995",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 38,
+      "not_assessable_because": "UBERON:0000995 is not one of the thirteen biosamples reader v1 read"
+    },
+    "ureter": {
+      "rules": 37,
+      "ontology_term": "UBERON:0000056",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 37,
+      "not_assessable_because": "UBERON:0000056 is not one of the thirteen biosamples reader v1 read"
+    },
+    "RPMI7951": {
+      "rules": 34,
+      "ontology_term": "EFO:0005712",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 34,
+      "not_assessable_because": "EFO:0005712 is not one of the thirteen biosamples reader v1 read"
+    },
+    "SJSA1": {
+      "rules": 34,
+      "ontology_term": "EFO:0002330",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 34,
+      "not_assessable_because": "EFO:0002330 is not one of the thirteen biosamples reader v1 read"
+    },
+    "uterine_smooth_muscle_cell": {
+      "rules": 33,
+      "ontology_term": "CL:0002601",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 33,
+      "not_assessable_because": "CL:0002601 is not one of the thirteen biosamples reader v1 read"
+    },
+    "epithelial_cell_of_alveolus_of_lung": {
+      "rules": 32,
+      "ontology_term": "CL:0010003",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 32,
+      "not_assessable_because": "CL:0010003 is not one of the thirteen biosamples reader v1 read"
+    },
+    "breast_epithelium": {
+      "rules": 31,
+      "ontology_term": "UBERON:0008367",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 31,
+      "not_assessable_because": "UBERON:0008367 is not one of the thirteen biosamples reader v1 read"
+    },
+    "type_B_pancreatic_cell": {
+      "rules": 30,
+      "ontology_term": "CL:0000169",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 30,
+      "not_assessable_because": "CL:0000169 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Breast_Mammary_Tissue": {
+      "rules": 29,
+      "ontology_term": "UBERON:0008367",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 29,
+      "not_assessable_because": "UBERON:0008367 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mucosa_of_gallbladder": {
+      "rules": 25,
+      "ontology_term": "UBERON:0005033",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 25,
+      "not_assessable_because": "UBERON:0005033 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Cervix_Endocervix": {
+      "rules": 23,
+      "ontology_term": "UBERON:0000458",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 23,
+      "not_assessable_because": "UBERON:0000458 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Artery_Coronary": {
+      "rules": 22,
+      "ontology_term": "UBERON:0001621",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 22,
+      "not_assessable_because": "UBERON:0001621 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_renal_cortex_interstitium": {
+      "rules": 21,
+      "ontology_term": "UBERON:0018117",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 21,
+      "not_assessable_because": "UBERON:0018117 is not one of the thirteen biosamples reader v1 read"
+    },
+    "lower_lobe_of_left_lung": {
+      "rules": 19,
+      "ontology_term": "UBERON:0008953",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 19,
+      "not_assessable_because": "UBERON:0008953 is not one of the thirteen biosamples reader v1 read"
+    },
+    "left_cardiac_atrium": {
+      "rules": 18,
+      "ontology_term": "UBERON:0002079",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 18,
+      "not_assessable_because": "UBERON:0002079 is not one of the thirteen biosamples reader v1 read"
+    },
+    "mesenchymal_stem_cell_of_Wharton_s_jelly": {
+      "rules": 16,
+      "ontology_term": "CL:0002568",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 16,
+      "not_assessable_because": "CL:0002568 is not one of the thirteen biosamples reader v1 read"
+    },
+    "omental_fat_pad": {
+      "rules": 16,
+      "ontology_term": "UBERON:0010414",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 16,
+      "not_assessable_because": "UBERON:0010414 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Vagina": {
+      "rules": 15,
+      "ontology_term": "UBERON:0000996",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 15,
+      "not_assessable_because": "UBERON:0000996 is not one of the thirteen biosamples reader v1 read"
+    },
+    "motor_neuron": {
+      "rules": 15,
+      "ontology_term": "CL:0000100",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 15,
+      "not_assessable_because": "CL:0000100 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Bladder": {
+      "rules": 10,
+      "ontology_term": "UBERON:0001255",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 10,
+      "not_assessable_because": "UBERON:0001255 is not one of the thirteen biosamples reader v1 read"
+    },
+    "fibroblast_of_villous_mesenchyme": {
+      "rules": 10,
+      "ontology_term": "CL:0002558",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 10,
+      "not_assessable_because": "CL:0002558 is not one of the thirteen biosamples reader v1 read"
+    },
+    "right_lung": {
+      "rules": 9,
+      "ontology_term": "UBERON:0002167",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 9,
+      "not_assessable_because": "UBERON:0002167 is not one of the thirteen biosamples reader v1 read"
+    },
+    "Jurkat": {
+      "rules": 5,
+      "ontology_term": "EFO:0002796",
+      "reader_biosample": null,
+      "open_in_reader": 0,
+      "not_open_in_reader": 0,
+      "not_assessable": 5,
+      "not_assessable_because": "EFO:0002796 is not one of the thirteen biosamples reader v1 read"
+    }
+  },
+  "cells_without_a_reading": {
+    "counts": {
+      "no_registered_ontology_term": 0,
+      "term_is_not_one_of_the_thirteen_biosamples": 302,
+      "label_resolves_to_more_than_one_term": 0
+    },
+    "rules": {
+      "no_registered_ontology_term": 0,
+      "term_is_not_one_of_the_thirteen_biosamples": 358949,
+      "label_resolves_to_more_than_one_term": 0
+    },
+    "cells": {
+      "no_registered_ontology_term": [],
+      "term_is_not_one_of_the_thirteen_biosamples": [
+        {
+          "cell": "placenta",
+          "rules": 14275,
+          "ontology_term": "UBERON:0001987",
+          "why": "UBERON:0001987 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Whole_Blood",
+          "rules": 11325,
+          "ontology_term": "UBERON:0013756",
+          "why": "UBERON:0013756 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "psoas_muscle",
+          "rules": 10222,
+          "ontology_term": "UBERON:0008450",
+          "why": "UBERON:0008450 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "small_intestine",
+          "rules": 10006,
+          "ontology_term": "UBERON:0002108",
+          "why": "UBERON:0002108 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "neural_cell",
+          "rules": 9955,
+          "ontology_term": "CL:0002319",
+          "why": "CL:0002319 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "CD8_positive__alpha_beta_T_cell",
+          "rules": 8872,
+          "ontology_term": "CL:0000625",
+          "why": "CL:0000625 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "naive_thymus_derived_CD4_positive__alpha_beta_T_cell",
+          "rules": 7952,
+          "ontology_term": "CL:0000895",
+          "why": "CL:0000895 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Purkinje_cell",
+          "rules": 7478,
+          "ontology_term": "CL:0000121",
+          "why": "CL:0000121 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Karpas_422",
+          "rules": 7475,
+          "ontology_term": "EFO:0005719",
+          "why": "EFO:0005719 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_lobe_of_liver",
+          "rules": 7120,
+          "ontology_term": "UBERON:0001115",
+          "why": "UBERON:0001115 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "GM23248",
+          "rules": 6901,
+          "ontology_term": "EFO:0005723",
+          "why": "EFO:0005723 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "common_myeloid_progenitor__CD34_positive",
+          "rules": 6802,
+          "ontology_term": "CL:0001059",
+          "why": "CL:0001059 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "endothelial_cell_of_umbilical_vein",
+          "rules": 6215,
+          "ontology_term": "CL:0002618",
+          "why": "CL:0002618 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "GM23338",
+          "rules": 5689,
+          "ontology_term": "EFO:0007950",
+          "why": "EFO:0007950 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "LHCN_M2",
+          "rules": 5591,
+          "ontology_term": "EFO:0005714",
+          "why": "EFO:0005714 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "OCI_LY7",
+          "rules": 5173,
+          "ontology_term": "EFO:0006711",
+          "why": "EFO:0006711 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "CD8_positive__alpha_beta_memory_T_cell",
+          "rules": 5092,
+          "ontology_term": "CL:0000909",
+          "why": "CL:0000909 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "myocyte",
+          "rules": 4699,
+          "ontology_term": "CL:0000187",
+          "why": "CL:0000187 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mammary_microvascular_endothelial_cell",
+          "rules": 4539,
+          "ontology_term": "CL:2000071",
+          "why": "CL:2000071 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "heart",
+          "rules": 4361,
+          "ontology_term": "UBERON:0000948",
+          "why": "UBERON:0000948 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "kidney",
+          "rules": 4334,
+          "ontology_term": "UBERON:0002113",
+          "why": "UBERON:0002113 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "HFFc6",
+          "rules": 4322,
+          "ontology_term": "EFO:0009318",
+          "why": "EFO:0009318 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "liver",
+          "rules": 4289,
+          "ontology_term": "UBERON:0002107",
+          "why": "UBERON:0002107 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "CD4_positive__CD25_positive__alpha_beta_regulatory_T_cell",
+          "rules": 4276,
+          "ontology_term": "CL:0000792",
+          "why": "CL:0000792 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "CD4_positive__alpha_beta_memory_T_cell",
+          "rules": 4224,
+          "ontology_term": "CL:0000897",
+          "why": "CL:0000897 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "IgD_negative_memory_B_cell",
+          "rules": 4212,
+          "ontology_term": "CL:0001053",
+          "why": "CL:0001053 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "naive_thymus_derived_CD8_positive__alpha_beta_T_cell",
+          "rules": 4129,
+          "ontology_term": "CL:0000900",
+          "why": "CL:0000900 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "GM12892",
+          "rules": 4092,
+          "ontology_term": "EFO:0002786",
+          "why": "EFO:0002786 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "peripheral_blood_mononuclear_cell",
+          "rules": 3584,
+          "ontology_term": "CL:2000001",
+          "why": "CL:2000001 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "foreskin_keratinocyte",
+          "rules": 3581,
+          "ontology_term": "CL:1001606",
+          "why": "CL:1001606 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "immature_natural_killer_cell",
+          "rules": 3572,
+          "ontology_term": "CL:0000823",
+          "why": "CL:0000823 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "naive_B_cell",
+          "rules": 3488,
+          "ontology_term": "CL:0000788",
+          "why": "CL:0000788 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "GM12891",
+          "rules": 3373,
+          "ontology_term": "EFO:0002785",
+          "why": "EFO:0002785 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "dermis_blood_vessel_endothelial_cell",
+          "rules": 3323,
+          "ontology_term": "CL:2000010",
+          "why": "CL:2000010 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "H9",
+          "rules": 3203,
+          "ontology_term": "EFO:0003045",
+          "why": "EFO:0003045 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_ventricle_myocardium_inferior",
+          "rules": 3190,
+          "ontology_term": "NTR:0000493",
+          "why": "NTR:0000493 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "colonic_mucosa",
+          "rules": 3166,
+          "ontology_term": "UBERON:0000317",
+          "why": "UBERON:0000317 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Cerebellar_Hemisphere",
+          "rules": 3054,
+          "ontology_term": "UBERON:0002245",
+          "why": "UBERON:0002245 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "CD4_positive__alpha_beta_T_cell",
+          "rules": 3010,
+          "ontology_term": "CL:0000624",
+          "why": "CL:0000624 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "heart_left_ventricle",
+          "rules": 2829,
+          "ontology_term": "UBERON:0002084",
+          "why": "UBERON:0002084 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "HT_29",
+          "rules": 2814,
+          "ontology_term": "EFO:0001193",
+          "why": "EFO:0001193 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "foreskin_melanocyte",
+          "rules": 2698,
+          "ontology_term": "CL:2000045",
+          "why": "CL:2000045 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Liver",
+          "rules": 2649,
+          "ontology_term": "UBERON:0001114",
+          "why": "UBERON:0001114 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "esophagus_mucosa",
+          "rules": 2619,
+          "ontology_term": "UBERON:0002469",
+          "why": "UBERON:0002469 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "hair_follicular_keratinocyte",
+          "rules": 2596,
+          "ontology_term": "CL:2000092",
+          "why": "CL:2000092 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "B_cell",
+          "rules": 2496,
+          "ontology_term": "CL:0000236",
+          "why": "CL:0000236 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_colon",
+          "rules": 2448,
+          "ontology_term": "UBERON:0008971",
+          "why": "UBERON:0008971 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesendoderm",
+          "rules": 2359,
+          "ontology_term": "NTR:0000856",
+          "why": "NTR:0000856 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "heart_right_ventricle",
+          "rules": 2322,
+          "ontology_term": "UBERON:0002080",
+          "why": "UBERON:0002080 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Spinal_cord_cervical_c_1",
+          "rules": 2280,
+          "ontology_term": "UBERON:0006469",
+          "why": "UBERON:0006469 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mammary_stem_cell",
+          "rules": 2271,
+          "ontology_term": "CL:0002451",
+          "why": "CL:0002451 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Right_ventricle_myocardium_superior",
+          "rules": 2167,
+          "ontology_term": "NTR:0000492",
+          "why": "NTR:0000492 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "SK_MEL_5",
+          "rules": 2151,
+          "ontology_term": "EFO:0005720",
+          "why": "EFO:0005720 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_ventricle_myocardium_superior",
+          "rules": 2120,
+          "ontology_term": "NTR:0000494",
+          "why": "NTR:0000494 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "AG04450",
+          "rules": 1945,
+          "ontology_term": "EFO:0006270",
+          "why": "EFO:0006270 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Muscle_Skeletal",
+          "rules": 1887,
+          "ontology_term": "UBERON:0011907",
+          "why": "UBERON:0011907 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "gastrocnemius_medialis",
+          "rules": 1764,
+          "ontology_term": "UBERON:0011907",
+          "why": "UBERON:0011907 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "lower_leg_skin",
+          "rules": 1713,
+          "ontology_term": "UBERON:0004264",
+          "why": "UBERON:0004264 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "HT1080",
+          "rules": 1700,
+          "ontology_term": "EFO:0002059",
+          "why": "EFO:0002059 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "NCI_H460",
+          "rules": 1589,
+          "ontology_term": "EFO:0003044",
+          "why": "EFO:0003044 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "sigmoid_colon",
+          "rules": 1566,
+          "ontology_term": "UBERON:0001159",
+          "why": "UBERON:0001159 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "HeLa_S3",
+          "rules": 1563,
+          "ontology_term": "EFO:0002791",
+          "why": "EFO:0002791 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mammary_epithelial_cell",
+          "rules": 1557,
+          "ontology_term": "CL:0002327",
+          "why": "CL:0002327 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "trophoblast_cell",
+          "rules": 1486,
+          "ontology_term": "CL:0000351",
+          "why": "CL:0000351 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "ascending_aorta",
+          "rules": 1426,
+          "ontology_term": "UBERON:0001496",
+          "why": "UBERON:0001496 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "foreskin_fibroblast",
+          "rules": 1369,
+          "ontology_term": "CL:1001608",
+          "why": "CL:1001608 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "T_cell",
+          "rules": 1245,
+          "ontology_term": "CL:0000084",
+          "why": "CL:0000084 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "neural_progenitor_cell",
+          "rules": 1226,
+          "ontology_term": "CL:0011020",
+          "why": "CL:0011020 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesenteric_fat_pad",
+          "rules": 1194,
+          "ontology_term": "UBERON:0015143",
+          "why": "UBERON:0015143 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "forelimb_muscle",
+          "rules": 1189,
+          "ontology_term": "UBERON:0003662",
+          "why": "UBERON:0003662 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "skeletal_muscle_myoblast",
+          "rules": 1182,
+          "ontology_term": "CL:0000515",
+          "why": "CL:0000515 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "renal_cortical_epithelial_cell",
+          "rules": 1180,
+          "ontology_term": "CL:0002584",
+          "why": "CL:0002584 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "H7",
+          "rules": 1173,
+          "ontology_term": "EFO:0005904",
+          "why": "EFO:0005904 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mononuclear_cell",
+          "rules": 1148,
+          "ontology_term": "CL:0000842",
+          "why": "CL:0000842 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Jurkat__Clone_E6_1",
+          "rules": 1127,
+          "ontology_term": "CLO:0007045",
+          "why": "CLO:0007045 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "airway_epithelial_cell",
+          "rules": 1121,
+          "ontology_term": "CL:0002368",
+          "why": "CL:0002368 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "hematopoietic_multipotent_progenitor_cell",
+          "rules": 1095,
+          "ontology_term": "CL:0000837",
+          "why": "CL:0000837 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "vein_endothelial_cell",
+          "rules": 1094,
+          "ontology_term": "CL:0002543",
+          "why": "CL:0002543 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Frontal_Cortex_BA9",
+          "rules": 1064,
+          "ontology_term": "UBERON:0009834",
+          "why": "UBERON:0009834 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "myotube",
+          "rules": 1061,
+          "ontology_term": "CL:0002372",
+          "why": "CL:0002372 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "glutamatergic_neuron",
+          "rules": 1054,
+          "ontology_term": "CL:0000679",
+          "why": "CL:0000679 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "hindlimb_muscle",
+          "rules": 1022,
+          "ontology_term": "UBERON:0003663",
+          "why": "UBERON:0003663 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "U_87_MG",
+          "rules": 1020,
+          "ontology_term": "EFO:0005237",
+          "why": "EFO:0005237 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "lung_microvascular_endothelial_cell",
+          "rules": 978,
+          "ontology_term": "CL:2000016",
+          "why": "CL:2000016 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "neurosphere",
+          "rules": 975,
+          "ontology_term": "NTR:0000427",
+          "why": "NTR:0000427 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Cerebellum",
+          "rules": 973,
+          "ontology_term": "UBERON:0002037",
+          "why": "UBERON:0002037 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "BLaER1",
+          "rules": 953,
+          "ontology_term": "EFO:0030018",
+          "why": "EFO:0030018 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "natural_killer_cell",
+          "rules": 921,
+          "ontology_term": "CL:0000623",
+          "why": "CL:0000623 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "subcutaneous_adipose_tissue",
+          "rules": 921,
+          "ontology_term": "UBERON:0002190",
+          "why": "UBERON:0002190 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "transverse_colon",
+          "rules": 902,
+          "ontology_term": "UBERON:0001157",
+          "why": "UBERON:0001157 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Cells_EBV_transformed_lymphocytes",
+          "rules": 879,
+          "ontology_term": "EFO:0000572",
+          "why": "EFO:0000572 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "epithelial_cell_of_umbilical_artery",
+          "rules": 876,
+          "ontology_term": "CL:0010002",
+          "why": "CL:0010002 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "smooth_muscle_cell",
+          "rules": 819,
+          "ontology_term": "CL:0000192",
+          "why": "CL:0000192 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "melanocyte_of_skin",
+          "rules": 785,
+          "ontology_term": "CL:1000458",
+          "why": "CL:1000458 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "adrenal_gland",
+          "rules": 779,
+          "ontology_term": "UBERON:0002369",
+          "why": "UBERON:0002369 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_lung",
+          "rules": 751,
+          "ontology_term": "CL:0002553",
+          "why": "CL:0002553 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_skin_of_back",
+          "rules": 740,
+          "ontology_term": "CL:0011022",
+          "why": "CL:0011022 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Calu3",
+          "rules": 723,
+          "ontology_term": "EFO:0002819",
+          "why": "EFO:0002819 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Artery_Tibial",
+          "rules": 706,
+          "ontology_term": "UBERON:0007610",
+          "why": "UBERON:0007610 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "esophagus",
+          "rules": 703,
+          "ontology_term": "UBERON:0001043",
+          "why": "UBERON:0001043 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "thoracic_aorta_endothelial_cell",
+          "rules": 701,
+          "ontology_term": "CL:0002545",
+          "why": "CL:0002545 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "subcutaneous_preadipocyte",
+          "rules": 694,
+          "ontology_term": "CL:0002583",
+          "why": "CL:0002583 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Caki2",
+          "rules": 686,
+          "ontology_term": "EFO:0002150",
+          "why": "EFO:0002150 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "MCF_7",
+          "rules": 683,
+          "ontology_term": "EFO:0001203",
+          "why": "EFO:0001203 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "cardiac_ventricle_fibroblast",
+          "rules": 681,
+          "ontology_term": "CL:2000066",
+          "why": "CL:2000066 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Peyer_s_patch",
+          "rules": 670,
+          "ontology_term": "UBERON:0001211",
+          "why": "UBERON:0001211 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesenchymal_stem_cell_of_adipose",
+          "rules": 647,
+          "ontology_term": "CL:0002570",
+          "why": "CL:0002570 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_kidney",
+          "rules": 644,
+          "ontology_term": "UBERON:0004538",
+          "why": "UBERON:0004538 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "MCF_10A",
+          "rules": 636,
+          "ontology_term": "EFO:0001200",
+          "why": "EFO:0001200 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "luminal_epithelial_cell_of_mammary_gland",
+          "rules": 627,
+          "ontology_term": "CL:0002326",
+          "why": "CL:0002326 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "dermis_lymphatic_vessel_endothelial_cell",
+          "rules": 623,
+          "ontology_term": "CL:2000011",
+          "why": "CL:2000011 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "lung",
+          "rules": 623,
+          "ontology_term": "UBERON:0002048",
+          "why": "UBERON:0002048 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "BE2C",
+          "rules": 619,
+          "ontology_term": "EFO:0005725",
+          "why": "EFO:0005725 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "aorta",
+          "rules": 613,
+          "ontology_term": "UBERON:0000947",
+          "why": "UBERON:0000947 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "pulmonary_artery_endothelial_cell",
+          "rules": 602,
+          "ontology_term": "CL:1001568",
+          "why": "CL:1001568 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "cerebellum",
+          "rules": 601,
+          "ontology_term": "UBERON:0002037",
+          "why": "UBERON:0002037 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "frontal_cortex",
+          "rules": 599,
+          "ontology_term": "UBERON:0001870",
+          "why": "UBERON:0001870 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "HCT116",
+          "rules": 594,
+          "ontology_term": "EFO:0002824",
+          "why": "EFO:0002824 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "neural_crest_cell",
+          "rules": 593,
+          "ontology_term": "CL:0011012",
+          "why": "CL:0011012 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "bronchial_epithelial_cell",
+          "rules": 585,
+          "ontology_term": "CL:0002328",
+          "why": "CL:0002328 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_skin_of_abdomen",
+          "rules": 582,
+          "ontology_term": "CL:2000013",
+          "why": "CL:2000013 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "dorsolateral_prefrontal_cortex",
+          "rules": 579,
+          "ontology_term": "UBERON:0009834",
+          "why": "UBERON:0009834 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "SK_N_DZ",
+          "rules": 578,
+          "ontology_term": "EFO:0005721",
+          "why": "EFO:0005721 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "large_intestine",
+          "rules": 575,
+          "ontology_term": "UBERON:0000059",
+          "why": "UBERON:0000059 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "right_lobe_of_liver",
+          "rules": 527,
+          "ontology_term": "UBERON:0001114",
+          "why": "UBERON:0001114 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "smooth_muscle_cell_of_the_coronary_artery",
+          "rules": 514,
+          "ontology_term": "CL:0002592",
+          "why": "CL:0002592 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "brain",
+          "rules": 511,
+          "ontology_term": "UBERON:0000955",
+          "why": "UBERON:0000955 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "bladder_microvascular_endothelial_cell",
+          "rules": 504,
+          "ontology_term": "CL:2000040",
+          "why": "CL:2000040 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Skin_Not_Sun_Exposed_Suprapubic",
+          "rules": 496,
+          "ontology_term": "UBERON:0036149",
+          "why": "UBERON:0036149 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "tracheal_epithelial_cell",
+          "rules": 489,
+          "ontology_term": "CL:0000307",
+          "why": "CL:0000307 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Hippocampus",
+          "rules": 453,
+          "ontology_term": "UBERON:0001954",
+          "why": "UBERON:0001954 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Adrenal_Gland",
+          "rules": 441,
+          "ontology_term": "UBERON:0002369",
+          "why": "UBERON:0002369 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "endodermal_cell",
+          "rules": 440,
+          "ontology_term": "CL:0000223",
+          "why": "CL:0000223 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "right_renal_cortex_interstitium",
+          "rules": 440,
+          "ontology_term": "UBERON:0018118",
+          "why": "UBERON:0018118 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesenchymal_stem_cell",
+          "rules": 439,
+          "ontology_term": "CL:0000134",
+          "why": "CL:0000134 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Kidney_Medulla",
+          "rules": 434,
+          "ontology_term": "UBERON:0001293",
+          "why": "UBERON:0001293 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "thyroid_gland",
+          "rules": 426,
+          "ontology_term": "UBERON:0002046",
+          "why": "UBERON:0002046 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "neuronal_stem_cell",
+          "rules": 422,
+          "ontology_term": "CL:0000047",
+          "why": "CL:0000047 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "BJ",
+          "rules": 418,
+          "ontology_term": "EFO:0002779",
+          "why": "EFO:0002779 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "SJCRH30",
+          "rules": 413,
+          "ontology_term": "EFO:0005722",
+          "why": "EFO:0005722 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "placental_epithelial_cell",
+          "rules": 412,
+          "ontology_term": "CL:0002577",
+          "why": "CL:0002577 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "A673",
+          "rules": 411,
+          "ontology_term": "EFO:0002106",
+          "why": "EFO:0002106 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "spleen",
+          "rules": 411,
+          "ontology_term": "UBERON:0002106",
+          "why": "UBERON:0002106 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "glomerular_endothelial_cell",
+          "rules": 408,
+          "ontology_term": "CL:0002188",
+          "why": "CL:0002188 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "A549",
+          "rules": 407,
+          "ontology_term": "EFO:0001086",
+          "why": "EFO:0001086 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "hair_follicle_dermal_papilla_cell",
+          "rules": 404,
+          "ontology_term": "CL:0000346",
+          "why": "CL:0000346 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "progenitor_cell_of_endocrine_pancreas",
+          "rules": 397,
+          "ontology_term": "CL:0002351",
+          "why": "CL:0002351 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "trophoblast",
+          "rules": 397,
+          "ontology_term": "UBERON:0000088",
+          "why": "UBERON:0000088 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mole",
+          "rules": 387,
+          "ontology_term": "UBERON:1000010",
+          "why": "UBERON:1000010 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "placental_basal_plate",
+          "rules": 377,
+          "ontology_term": "NTR:0003013",
+          "why": "NTR:0003013 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "endothelial_cell",
+          "rules": 376,
+          "ontology_term": "CL:0000115",
+          "why": "CL:0000115 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "occipital_lobe",
+          "rules": 371,
+          "ontology_term": "UBERON:0002021",
+          "why": "UBERON:0002021 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "uterus",
+          "rules": 368,
+          "ontology_term": "UBERON:0000995",
+          "why": "UBERON:0000995 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "nasal_cavity_respiratory_epithelium_epithelial_cell_of_viscerocranial_mucosa",
+          "rules": 362,
+          "ontology_term": "CL:2000094",
+          "why": "CL:2000094 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "right_cardiac_atrium",
+          "rules": 361,
+          "ontology_term": "UBERON:0002078",
+          "why": "UBERON:0002078 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "temporal_lobe",
+          "rules": 361,
+          "ontology_term": "UBERON:0001871",
+          "why": "UBERON:0001871 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Cells_Cultured_fibroblasts",
+          "rules": 356,
+          "ontology_term": "EFO:0002009",
+          "why": "EFO:0002009 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "pancreas",
+          "rules": 342,
+          "ontology_term": "UBERON:0001264",
+          "why": "UBERON:0001264 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "thymus",
+          "rules": 342,
+          "ontology_term": "UBERON:0002370",
+          "why": "UBERON:0002370 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "smooth_muscle_cell_of_the_pulmonary_artery",
+          "rules": 335,
+          "ontology_term": "CL:0002591",
+          "why": "CL:0002591 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "myoepithelial_cell_of_mammary_gland",
+          "rules": 329,
+          "ontology_term": "CL:0002324",
+          "why": "CL:0002324 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "chorion",
+          "rules": 324,
+          "ontology_term": "UBERON:0003124",
+          "why": "UBERON:0003124 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "placental_pericyte",
+          "rules": 317,
+          "ontology_term": "CL:2000078",
+          "why": "CL:2000078 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "stomach",
+          "rules": 316,
+          "ontology_term": "UBERON:0000945",
+          "why": "UBERON:0000945 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Putamen_basal_ganglia",
+          "rules": 314,
+          "ontology_term": "UBERON:0001874",
+          "why": "UBERON:0001874 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "esophagus_muscularis_mucosa",
+          "rules": 310,
+          "ontology_term": "UBERON:0004648",
+          "why": "UBERON:0004648 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "bronchial_smooth_muscle_cell",
+          "rules": 307,
+          "ontology_term": "CL:0002598",
+          "why": "CL:0002598 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "MG63",
+          "rules": 299,
+          "ontology_term": "EFO:0002234",
+          "why": "EFO:0002234 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesenchymal_stem_cell_of_the_bone_marrow",
+          "rules": 299,
+          "ontology_term": "CL:0002540",
+          "why": "CL:0002540 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "PFSK_1",
+          "rules": 297,
+          "ontology_term": "EFO:0005234",
+          "why": "EFO:0005234 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "smooth_muscle_cell_of_the_umbilical_artery",
+          "rules": 296,
+          "ontology_term": "CL:0002594",
+          "why": "CL:0002594 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "HUES64",
+          "rules": 292,
+          "ontology_term": "EFO:0007089",
+          "why": "EFO:0007089 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "lower_lobe_of_right_lung",
+          "rules": 290,
+          "ontology_term": "UBERON:0002171",
+          "why": "UBERON:0002171 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Adipose_Subcutaneous",
+          "rules": 276,
+          "ontology_term": "UBERON:0002190",
+          "why": "UBERON:0002190 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "epithelial_cell_of_proximal_tubule",
+          "rules": 268,
+          "ontology_term": "CL:0002306",
+          "why": "CL:0002306 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "dermis_microvascular_lymphatic_vessel_endothelial_cell",
+          "rules": 265,
+          "ontology_term": "CL:2000041",
+          "why": "CL:2000041 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "PC_3",
+          "rules": 258,
+          "ontology_term": "EFO:0002074",
+          "why": "EFO:0002074 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "muscle_of_trunk",
+          "rules": 254,
+          "ontology_term": "UBERON:0001774",
+          "why": "UBERON:0001774 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "PC_9",
+          "rules": 249,
+          "ontology_term": "EFO:0002847",
+          "why": "EFO:0002847 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "esophagus_squamous_epithelium",
+          "rules": 245,
+          "ontology_term": "UBERON:0006920",
+          "why": "UBERON:0006920 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Fallopian_Tube",
+          "rules": 238,
+          "ontology_term": "UBERON:0003889",
+          "why": "UBERON:0003889 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "adipose_tissue",
+          "rules": 238,
+          "ontology_term": "UBERON:0001013",
+          "why": "UBERON:0001013 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesangial_cell",
+          "rules": 236,
+          "ontology_term": "CL:0000650",
+          "why": "CL:0000650 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "skeletal_muscle_satellite_cell",
+          "rules": 225,
+          "ontology_term": "CL:0000594",
+          "why": "CL:0000594 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Right_ventricle_myocardium_inferior",
+          "rules": 223,
+          "ontology_term": "NTR:0000491",
+          "why": "NTR:0000491 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_lung",
+          "rules": 221,
+          "ontology_term": "UBERON:0002168",
+          "why": "UBERON:0002168 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mucosa_of_descending_colon",
+          "rules": 221,
+          "ontology_term": "UBERON:0004992",
+          "why": "UBERON:0004992 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "upper_lobe_of_right_lung",
+          "rules": 217,
+          "ontology_term": "UBERON:0002170",
+          "why": "UBERON:0002170 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "renal_pelvis",
+          "rules": 209,
+          "ontology_term": "UBERON:0001224",
+          "why": "UBERON:0001224 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "smooth_muscle_cell_of_trachea",
+          "rules": 209,
+          "ontology_term": "CL:0002600",
+          "why": "CL:0002600 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "M059J",
+          "rules": 208,
+          "ontology_term": "EFO:0005697",
+          "why": "EFO:0005697 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "tibial_nerve",
+          "rules": 206,
+          "ontology_term": "UBERON:0001323",
+          "why": "UBERON:0001323 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "endocrine_pancreas",
+          "rules": 202,
+          "ontology_term": "UBERON:0000016",
+          "why": "UBERON:0000016 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "cardiac_septum",
+          "rules": 200,
+          "ontology_term": "UBERON:0002099",
+          "why": "UBERON:0002099 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "body_of_pancreas",
+          "rules": 196,
+          "ontology_term": "UBERON:0001150",
+          "why": "UBERON:0001150 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "cardiac_atrium_fibroblast",
+          "rules": 193,
+          "ontology_term": "CL:2000067",
+          "why": "CL:2000067 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "ectodermal_cell",
+          "rules": 193,
+          "ontology_term": "CL:0000221",
+          "why": "CL:0000221 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Nerve_Tibial",
+          "rules": 182,
+          "ontology_term": "UBERON:0001323",
+          "why": "UBERON:0001323 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Colon_Sigmoid",
+          "rules": 178,
+          "ontology_term": "UBERON:0001159",
+          "why": "UBERON:0001159 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Colon_Transverse",
+          "rules": 176,
+          "ontology_term": "UBERON:0001157",
+          "why": "UBERON:0001157 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "muscle_of_arm",
+          "rules": 175,
+          "ontology_term": "UBERON:0001499",
+          "why": "UBERON:0001499 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "urinary_bladder",
+          "rules": 174,
+          "ontology_term": "UBERON:0001255",
+          "why": "UBERON:0001255 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Spleen",
+          "rules": 172,
+          "ontology_term": "UBERON:0002106",
+          "why": "UBERON:0002106 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_skin_of_scalp",
+          "rules": 172,
+          "ontology_term": "NTR:0000524",
+          "why": "NTR:0000524 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "right_atrium_auricular_region",
+          "rules": 172,
+          "ontology_term": "UBERON:0006631",
+          "why": "UBERON:0006631 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Cortex",
+          "rules": 164,
+          "ontology_term": "UBERON:0001870",
+          "why": "UBERON:0001870 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "chorionic_villus",
+          "rules": 162,
+          "ontology_term": "UBERON:0007106",
+          "why": "UBERON:0007106 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "thoracic_aorta",
+          "rules": 161,
+          "ontology_term": "UBERON:0001515",
+          "why": "UBERON:0001515 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Panc1",
+          "rules": 159,
+          "ontology_term": "EFO:0002713",
+          "why": "EFO:0002713 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "diencephalon",
+          "rules": 158,
+          "ontology_term": "UBERON:0001894",
+          "why": "UBERON:0001894 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Pancreas",
+          "rules": 156,
+          "ontology_term": "UBERON:0001150",
+          "why": "UBERON:0001150 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Thyroid",
+          "rules": 152,
+          "ontology_term": "UBERON:0002046",
+          "why": "UBERON:0002046 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "spinal_cord",
+          "rules": 151,
+          "ontology_term": "UBERON:0002240",
+          "why": "UBERON:0002240 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "tongue",
+          "rules": 147,
+          "ontology_term": "UBERON:0001723",
+          "why": "UBERON:0001723 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Cervix_Ectocervix",
+          "rules": 146,
+          "ontology_term": "UBERON:0012249",
+          "why": "UBERON:0012249 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Esophagus_Mucosa",
+          "rules": 142,
+          "ontology_term": "UBERON:0006920",
+          "why": "UBERON:0006920 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "muscle_of_leg",
+          "rules": 142,
+          "ontology_term": "UBERON:0001383",
+          "why": "UBERON:0001383 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "myometrial_cell",
+          "rules": 141,
+          "ontology_term": "CL:0002366",
+          "why": "CL:0002366 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "muscle_of_back",
+          "rules": 140,
+          "ontology_term": "UBERON:0002324",
+          "why": "UBERON:0002324 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Caco_2",
+          "rules": 139,
+          "ontology_term": "EFO:0001099",
+          "why": "EFO:0001099 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "skeletal_muscle_tissue",
+          "rules": 139,
+          "ontology_term": "UBERON:0001134",
+          "why": "UBERON:0001134 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "endothelial_cell_of_coronary_artery",
+          "rules": 138,
+          "ontology_term": "CL:2000018",
+          "why": "CL:2000018 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Minor_Salivary_Gland",
+          "rules": 137,
+          "ontology_term": "UBERON:0006330",
+          "why": "UBERON:0006330 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "upper_lobe_of_left_lung",
+          "rules": 135,
+          "ontology_term": "UBERON:0008952",
+          "why": "UBERON:0008952 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "A172",
+          "rules": 134,
+          "ontology_term": "EFO:0002101",
+          "why": "EFO:0002101 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "camera_type_eye",
+          "rules": 131,
+          "ontology_term": "UBERON:0000019",
+          "why": "UBERON:0000019 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "vagina",
+          "rules": 130,
+          "ontology_term": "UBERON:0000996",
+          "why": "UBERON:0000996 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Heart_Left_Ventricle",
+          "rules": 128,
+          "ontology_term": "UBERON:0006566",
+          "why": "UBERON:0006566 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesodermal_cell",
+          "rules": 127,
+          "ontology_term": "CL:0000222",
+          "why": "CL:0000222 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "A375",
+          "rules": 125,
+          "ontology_term": "EFO:0002103",
+          "why": "EFO:0002103 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "prostate_gland",
+          "rules": 123,
+          "ontology_term": "UBERON:0002367",
+          "why": "UBERON:0002367 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "parietal_lobe",
+          "rules": 119,
+          "ontology_term": "UBERON:0001872",
+          "why": "UBERON:0001872 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "amnion",
+          "rules": 114,
+          "ontology_term": "UBERON:0000305",
+          "why": "UBERON:0000305 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "H4",
+          "rules": 112,
+          "ontology_term": "EFO:0002184",
+          "why": "EFO:0002184 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "T_helper_17_cell",
+          "rules": 107,
+          "ontology_term": "CL:0000899",
+          "why": "CL:0000899 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Artery_Aorta",
+          "rules": 106,
+          "ontology_term": "UBERON:0001496",
+          "why": "UBERON:0001496 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_dermis",
+          "rules": 103,
+          "ontology_term": "CL:0002551",
+          "why": "CL:0002551 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Kidney_Cortex",
+          "rules": 102,
+          "ontology_term": "UBERON:0001225",
+          "why": "UBERON:0001225 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Anterior_cingulate_cortex_BA24",
+          "rules": 98,
+          "ontology_term": "UBERON:0009835",
+          "why": "UBERON:0009835 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Caudate_basal_ganglia",
+          "rules": 97,
+          "ontology_term": "UBERON:0001873",
+          "why": "UBERON:0001873 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Pituitary",
+          "rules": 96,
+          "ontology_term": "UBERON:0000007",
+          "why": "UBERON:0000007 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "WTC11",
+          "rules": 96,
+          "ontology_term": "EFO:0009747",
+          "why": "EFO:0009747 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Amygdala",
+          "rules": 95,
+          "ontology_term": "UBERON:0001876",
+          "why": "UBERON:0001876 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Nucleus_accumbens_basal_ganglia",
+          "rules": 95,
+          "ontology_term": "UBERON:0001882",
+          "why": "UBERON:0001882 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Stomach",
+          "rules": 94,
+          "ontology_term": "UBERON:0000945",
+          "why": "UBERON:0000945 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "posterior_vena_cava",
+          "rules": 94,
+          "ontology_term": "UBERON:0001072",
+          "why": "UBERON:0001072 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "right_renal_pelvis",
+          "rules": 90,
+          "ontology_term": "UBERON:0018116",
+          "why": "UBERON:0018116 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "skin_of_body",
+          "rules": 90,
+          "ontology_term": "UBERON:0002097",
+          "why": "UBERON:0002097 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "pericardium_fibroblast",
+          "rules": 88,
+          "ontology_term": "CL:2000068",
+          "why": "CL:2000068 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "umbilical_cord",
+          "rules": 87,
+          "ontology_term": "UBERON:0002331",
+          "why": "UBERON:0002331 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesothelial_cell_of_epicardium",
+          "rules": 86,
+          "ontology_term": "CL:0011019",
+          "why": "CL:0011019 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "smooth_muscle_cell_of_bladder",
+          "rules": 84,
+          "ontology_term": "CL:0002597",
+          "why": "CL:0002597 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "suprapubic_skin",
+          "rules": 82,
+          "ontology_term": "UBERON:0036149",
+          "why": "UBERON:0036149 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "kidney_epithelial_cell",
+          "rules": 81,
+          "ontology_term": "CL:0002518",
+          "why": "CL:0002518 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "gastroesophageal_sphincter",
+          "rules": 80,
+          "ontology_term": "UBERON:0004550",
+          "why": "UBERON:0004550 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "sciatic_nerve",
+          "rules": 80,
+          "ontology_term": "UBERON:0001322",
+          "why": "UBERON:0001322 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Esophagus_Muscularis",
+          "rules": 77,
+          "ontology_term": "UBERON:0004648",
+          "why": "UBERON:0004648 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Small_Intestine_Terminal_Ileum",
+          "rules": 76,
+          "ontology_term": "UBERON:0001211",
+          "why": "UBERON:0001211 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Esophagus_Gastroesophageal_Junction",
+          "rules": 71,
+          "ontology_term": "UBERON:0004550",
+          "why": "UBERON:0004550 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Daoy",
+          "rules": 69,
+          "ontology_term": "EFO:0005698",
+          "why": "EFO:0005698 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "G401",
+          "rules": 69,
+          "ontology_term": "EFO:0002179",
+          "why": "EFO:0002179 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Hypothalamus",
+          "rules": 68,
+          "ontology_term": "UBERON:0001898",
+          "why": "UBERON:0001898 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "articular_chondrocyte_of_knee_joint",
+          "rules": 68,
+          "ontology_term": "CL:2000007",
+          "why": "CL:2000007 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "chondrocyte",
+          "rules": 64,
+          "ontology_term": "CL:0000138",
+          "why": "CL:0000138 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_renal_pelvis",
+          "rules": 64,
+          "ontology_term": "UBERON:0018115",
+          "why": "UBERON:0018115 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Heart_Atrial_Appendage",
+          "rules": 62,
+          "ontology_term": "UBERON:0006631",
+          "why": "UBERON:0006631 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_the_aortic_adventitia",
+          "rules": 62,
+          "ontology_term": "CL:0002547",
+          "why": "CL:0002547 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Adipose_Visceral_Omentum",
+          "rules": 61,
+          "ontology_term": "UBERON:0010414",
+          "why": "UBERON:0010414 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Skin_Sun_Exposed_Lower_leg",
+          "rules": 61,
+          "ontology_term": "UBERON:0004264",
+          "why": "UBERON:0004264 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "regular_cardiac_myocyte",
+          "rules": 59,
+          "ontology_term": "CL:0002098",
+          "why": "CL:0002098 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Prostate",
+          "rules": 58,
+          "ontology_term": "UBERON:0002367",
+          "why": "UBERON:0002367 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Lung",
+          "rules": 56,
+          "ontology_term": "UBERON:0008952",
+          "why": "UBERON:0008952 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "osteocyte",
+          "rules": 55,
+          "ontology_term": "CL:0000137",
+          "why": "CL:0000137 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "metanephros",
+          "rules": 51,
+          "ontology_term": "UBERON:0000081",
+          "why": "UBERON:0000081 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "bronchus_fibroblast_of_lung",
+          "rules": 50,
+          "ontology_term": "CL:2000093",
+          "why": "CL:2000093 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "osteoblast",
+          "rules": 50,
+          "ontology_term": "CL:0000062",
+          "why": "CL:0000062 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Brain_Substantia_nigra",
+          "rules": 49,
+          "ontology_term": "UBERON:0002038",
+          "why": "UBERON:0002038 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "aortic_smooth_muscle_cell",
+          "rules": 46,
+          "ontology_term": "CL:0002539",
+          "why": "CL:0002539 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "renal_cortex_interstitium",
+          "rules": 43,
+          "ontology_term": "UBERON:0005270",
+          "why": "UBERON:0005270 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Uterus",
+          "rules": 38,
+          "ontology_term": "UBERON:0000995",
+          "why": "UBERON:0000995 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "ureter",
+          "rules": 37,
+          "ontology_term": "UBERON:0000056",
+          "why": "UBERON:0000056 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "RPMI7951",
+          "rules": 34,
+          "ontology_term": "EFO:0005712",
+          "why": "EFO:0005712 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "SJSA1",
+          "rules": 34,
+          "ontology_term": "EFO:0002330",
+          "why": "EFO:0002330 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "uterine_smooth_muscle_cell",
+          "rules": 33,
+          "ontology_term": "CL:0002601",
+          "why": "CL:0002601 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "epithelial_cell_of_alveolus_of_lung",
+          "rules": 32,
+          "ontology_term": "CL:0010003",
+          "why": "CL:0010003 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "breast_epithelium",
+          "rules": 31,
+          "ontology_term": "UBERON:0008367",
+          "why": "UBERON:0008367 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "type_B_pancreatic_cell",
+          "rules": 30,
+          "ontology_term": "CL:0000169",
+          "why": "CL:0000169 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Breast_Mammary_Tissue",
+          "rules": 29,
+          "ontology_term": "UBERON:0008367",
+          "why": "UBERON:0008367 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mucosa_of_gallbladder",
+          "rules": 25,
+          "ontology_term": "UBERON:0005033",
+          "why": "UBERON:0005033 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Cervix_Endocervix",
+          "rules": 23,
+          "ontology_term": "UBERON:0000458",
+          "why": "UBERON:0000458 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Artery_Coronary",
+          "rules": 22,
+          "ontology_term": "UBERON:0001621",
+          "why": "UBERON:0001621 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_renal_cortex_interstitium",
+          "rules": 21,
+          "ontology_term": "UBERON:0018117",
+          "why": "UBERON:0018117 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "lower_lobe_of_left_lung",
+          "rules": 19,
+          "ontology_term": "UBERON:0008953",
+          "why": "UBERON:0008953 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "left_cardiac_atrium",
+          "rules": 18,
+          "ontology_term": "UBERON:0002079",
+          "why": "UBERON:0002079 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "mesenchymal_stem_cell_of_Wharton_s_jelly",
+          "rules": 16,
+          "ontology_term": "CL:0002568",
+          "why": "CL:0002568 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "omental_fat_pad",
+          "rules": 16,
+          "ontology_term": "UBERON:0010414",
+          "why": "UBERON:0010414 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Vagina",
+          "rules": 15,
+          "ontology_term": "UBERON:0000996",
+          "why": "UBERON:0000996 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "motor_neuron",
+          "rules": 15,
+          "ontology_term": "CL:0000100",
+          "why": "CL:0000100 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Bladder",
+          "rules": 10,
+          "ontology_term": "UBERON:0001255",
+          "why": "UBERON:0001255 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "fibroblast_of_villous_mesenchyme",
+          "rules": 10,
+          "ontology_term": "CL:0002558",
+          "why": "CL:0002558 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "right_lung",
+          "rules": 9,
+          "ontology_term": "UBERON:0002167",
+          "why": "UBERON:0002167 is not one of the thirteen biosamples reader v1 read"
+        },
+        {
+          "cell": "Jurkat",
+          "rules": 5,
+          "ontology_term": "EFO:0002796",
+          "why": "EFO:0002796 is not one of the thirteen biosamples reader v1 read"
+        }
+      ],
+      "label_resolves_to_more_than_one_term": []
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "rules": 43700,
+      "open_in_reader": 2725,
+      "not_open_in_reader": 5024,
+      "not_assessable": 35951
+    },
+    "chr2": {
+      "rules": 32929,
+      "open_in_reader": 1933,
+      "not_open_in_reader": 4559,
+      "not_assessable": 26437
+    },
+    "chr3": {
+      "rules": 27692,
+      "open_in_reader": 1647,
+      "not_open_in_reader": 3695,
+      "not_assessable": 22350
+    },
+    "chr4": {
+      "rules": 20653,
+      "open_in_reader": 1256,
+      "not_open_in_reader": 3011,
+      "not_assessable": 16386
+    },
+    "chr5": {
+      "rules": 22779,
+      "open_in_reader": 1294,
+      "not_open_in_reader": 3069,
+      "not_assessable": 18416
+    },
+    "chr6": {
+      "rules": 23780,
+      "open_in_reader": 1567,
+      "not_open_in_reader": 3203,
+      "not_assessable": 19010
+    },
+    "chr7": {
+      "rules": 22604,
+      "open_in_reader": 1271,
+      "not_open_in_reader": 3003,
+      "not_assessable": 18330
+    },
+    "chr8": {
+      "rules": 18561,
+      "open_in_reader": 1146,
+      "not_open_in_reader": 2520,
+      "not_assessable": 14895
+    },
+    "chr9": {
+      "rules": 19278,
+      "open_in_reader": 1108,
+      "not_open_in_reader": 2445,
+      "not_assessable": 15725
+    },
+    "chr10": {
+      "rules": 21033,
+      "open_in_reader": 1236,
+      "not_open_in_reader": 2740,
+      "not_assessable": 17057
+    },
+    "chr11": {
+      "rules": 25768,
+      "open_in_reader": 1510,
+      "not_open_in_reader": 3283,
+      "not_assessable": 20975
+    },
+    "chr12": {
+      "rules": 22823,
+      "open_in_reader": 1313,
+      "not_open_in_reader": 2683,
+      "not_assessable": 18827
+    },
+    "chr13": {
+      "rules": 9711,
+      "open_in_reader": 568,
+      "not_open_in_reader": 1455,
+      "not_assessable": 7688
+    },
+    "chr14": {
+      "rules": 13387,
+      "open_in_reader": 762,
+      "not_open_in_reader": 1663,
+      "not_assessable": 10962
+    },
+    "chr15": {
+      "rules": 14478,
+      "open_in_reader": 815,
+      "not_open_in_reader": 1712,
+      "not_assessable": 11951
+    },
+    "chr16": {
+      "rules": 14807,
+      "open_in_reader": 866,
+      "not_open_in_reader": 1413,
+      "not_assessable": 12528
+    },
+    "chr17": {
+      "rules": 21619,
+      "open_in_reader": 1400,
+      "not_open_in_reader": 2120,
+      "not_assessable": 18099
+    },
+    "chr18": {
+      "rules": 9251,
+      "open_in_reader": 542,
+      "not_open_in_reader": 1320,
+      "not_assessable": 7389
+    },
+    "chr19": {
+      "rules": 17282,
+      "open_in_reader": 1145,
+      "not_open_in_reader": 1429,
+      "not_assessable": 14708
+    },
+    "chr20": {
+      "rules": 12708,
+      "open_in_reader": 749,
+      "not_open_in_reader": 1449,
+      "not_assessable": 10510
+    },
+    "chr21": {
+      "rules": 5176,
+      "open_in_reader": 280,
+      "not_open_in_reader": 767,
+      "not_assessable": 4129
+    },
+    "chr22": {
+      "rules": 9613,
+      "open_in_reader": 591,
+      "not_open_in_reader": 1032,
+      "not_assessable": 7990
+    },
+    "chrX": {
+      "rules": 10832,
+      "open_in_reader": 823,
+      "not_open_in_reader": 1469,
+      "not_assessable": 8540
+    },
+    "chrY": {
+      "rules": 125,
+      "open_in_reader": 4,
+      "not_open_in_reader": 20,
+      "not_assessable": 101
+    }
+  },
+  "states": {
+    "open_in_reader": "the element's locus overlaps a DNase narrowPeak of the reader biosample this rule's cell maps to by ontology term",
+    "not_open_in_reader": "no DNase narrowPeak of that biosample overlaps the locus: not detected open at the reader's registered call, which is not the same as closed",
+    "not_assessable": "no reading was taken; the reason is carried with the state"
+  },
+  "not_assessable_reasons": {
+    "no_reader_for_this_cell": "reader v1 never read this cell: its label carries no single registered ontology term, or that term is not one of the thirteen biosamples",
+    "region_outside_measured_span": "the cell has a reader, but that biosample's peak set for this chromosome covers nothing at this locus: no file, no peak in it, or a locus beyond its outermost peak"
+  },
+  "state_names_carry_no_verdict": {
+    "rule": "no state or reason name may contain any of these stems",
+    "forbidden_stems": [
+      "support",
+      "contradict",
+      "validat",
+      "confirm",
+      "refut",
+      "verif",
+      "consistent",
+      "agree",
+      "disagree",
+      "correct",
+      "wrong",
+      "true",
+      "false",
+      "good",
+      "bad",
+      "pass",
+      "fail"
+    ],
+    "tested_by": "tests/test_context_evidence.py"
+  },
+  "not_closed": "not_open_in_reader means not detected open at the reader's registered threshold, not closed: a narrowPeak set is a call set, and absence is absence of a call",
+  "not_validation": "a consistency check between two readings of the same ENCODE chromatin, not validation: reader v1's openness comes from ENCODE peaks and AlphaGenome was trained on ENCODE, so open_in_reader is never independent evidence that the rule is right and must never be quoted as validation",
+  "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
+  "measured_span": "a biosample's measured span on a chromosome is the interval from the first peak's start to the last peak's end in its cached narrowPeak file for that chromosome. Beyond it no read was placed, so an absent peak there is not a negative call. This is a statement about coverage, not a threshold on signal.",
+  "mapping": {
+    "by": "ontology term (EFO, CL or UBERON), never by comparing cell names",
+    "rule_side_authority": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+    "rule_side_columns": [
+      "biosample_name",
+      "gtex_tissue",
+      "ontology_curie"
+    ],
+    "metadata_rows": 2841,
+    "labels_with_one_term": 752,
+    "labels_per_ontology": {
+      "CL": 233,
+      "CLO": 52,
+      "EFO": 188,
+      "NTR": 18,
+      "UBERON": 261
+    },
+    "ontologies_a_reader_biosample_can_be_named_in": [
+      "EFO",
+      "CL",
+      "UBERON"
+    ],
+    "labels_with_more_than_one_term": 0,
+    "ambiguous_labels": {},
+    "reader_biosamples": {
+      "K562": "EFO:0002067",
+      "HepG2": "EFO:0001187",
+      "GM12878": "EFO:0002784",
+      "IMR-90": "EFO:0001196",
+      "H1": "EFO:0003042",
+      "SK-N-SH": "EFO:0003072",
+      "astrocyte": "CL:0000127",
+      "hepatocyte": "CL:0000182",
+      "keratinocyte": "CL:0000312",
+      "cardiac muscle cell": "CL:0000746",
+      "CD14-positive monocyte": "CL:0001054",
+      "ovary": "UBERON:0000992",
+      "testis": "UBERON:0000473"
+    },
+    "ambiguous_is": "not_assessable, no_reader_for_this_cell"
+  },
+  "denominator": "every compiled rule, counted as the compiler emits it",
+  "alphagenome_requests": 0,
+  "reading": {
+    "moves": "honest: an asserted cell context becomes an evidenced or a labelled one",
+    "secondary": "correct: a not_open_in_reader rule is a located candidate defect, a place where the program asserts activity in a cell whose own chromatin shows no open element",
+    "does_not_move": "complete: no rule is added, none is removed, and no part of the genome becomes attributed that was not attributed before",
+    "never": "open_in_reader is never reported as validation, support or confirmation of a rule, and not_open_in_reader is never reported as the element being closed or the rule being contradicted"
+  },
+  "code_cleanliness": {
+    "git_sha": "8a096e4c1f84e7b840e66a682672a6ee50f5c83d",
+    "dirty": false,
+    "own_uncommitted_code": [],
+    "own_code_is_committed": true,
+    "foreign_uncommitted_code": [],
+    "foreign_uncommitted_code_on_the_counting_path": [],
+    "counting_path": [
+      "genomeos/__init__.py",
+      "genomeos/attribution/__init__.py",
+      "genomeos/attribution/bigwig.py",
+      "genomeos/attribution/budget.py",
+      "genomeos/attribution/compile.py",
+      "genomeos/attribution/constraint.py",
+      "genomeos/attribution/context_evidence.py",
+      "genomeos/attribution/crispri.py",
+      "genomeos/attribution/measured.py",
+      "genomeos/attribution/mpra.py",
+      "genomeos/attribution/targets.py",
+      "genomeos/attribution/variation.py",
+      "genomeos/attribution/vista.py",
+      "genomeos/certainty.py",
+      "genomeos/coords.py",
+      "genomeos/genome/__init__.py",
+      "genomeos/genome/annotation.py",
+      "genomeos/genome/bgzf.py",
+      "genomeos/genome/domains.py",
+      "genomeos/genome/epigenome.py",
+      "genomeos/genome/fetch.py",
+      "genomeos/genome/genome.py",
+      "genomeos/genome/motifs.py",
+      "genomeos/genome/reader.py",
+      "genomeos/genome/regulation.py",
+      "genomeos/genome/regulatory.py",
+      "genomeos/genome/repeats.py",
+      "genomeos/genome/sequence.py",
+      "genomeos/genome/unknown.py",
+      "genomeos/ir/__init__.py",
+      "genomeos/ir/model.py",
+      "genomeos/knowledge/__init__.py",
+      "genomeos/knowledge/across.py",
+      "genomeos/knowledge/homology.py",
+      "genomeos/knowledge/profiling.py",
+      "genomeos/knowledge/satmut.py",
+      "genomeos/lib/membership.py",
+      "genomeos/manifest.py",
+      "genomeos/predict/enhancer_target.py",
+      "genomeos/results.py",
+      "genomeos/runtime/__init__.py",
+      "genomeos/version.py",
+      "scripts/context_evidence_census.py"
+    ],
+    "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+    "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+  },
+  "money": "none: every input was already on disk",
+  "seconds": 166.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE DNase-seq narrowPeak, GRCh38, released, 13 biosamples",
+        "version": "as reader v1 cached them under data/results/dnase_*_chr*.bed.gz"
+      },
+      {
+        "accession": "AlphaGenome output track metadata",
+        "version": "data/cache/entex/alphagenome_track_metadata_copy.csv"
+      },
+      {
+        "accession": "the compiled non-coding programs of the 24 chromosomes",
+        "version": "recompiled in this run from the results on disk, not read from a file"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": null
+      },
+      {
+        "path": "reader_v1_dnase_peak_sets",
+        "sha256": "aac5e0bf32cb3e2f41f1ae66b6cf778a5ddec3eb80a777c3b074559ca981c602",
+        "bytes": 27697843,
+        "files": 312,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:budget_chr*.json",
+        "sha256": "cfa7d178dc445b3efea1c274b19c1d98c8a84263b42a7c7d5e14090d90c4366f",
+        "bytes": 16609227,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:budget_axes_chr*.json",
+        "sha256": "a2c51b05f2873832547ec07c9a678f2c9b28bded90a20c53f669270ec9eef99b",
+        "bytes": 15690683,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:variation_chr*.json",
+        "sha256": "ee846c78f9235542c3e95548873296df335f67adf67761a28010a7b4b1bac571",
+        "bytes": 17137196,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:duplication_chr*.json",
+        "sha256": "0e1162c76c0dcd8598342dfb7ea85eb08b9168bb49ceecc55c9c3eed4a034696",
+        "bytes": 5970928,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:domains_chr*.json",
+        "sha256": "c7faa6bfe1a82f5cf409034f6edb7d29c54d40314cdbbf1877f4c1d43367e4ab",
+        "bytes": 8990615,
+        "files": 30,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:unknown_chr*.json",
+        "sha256": "92f89fc3aa7090c52b86f8b5032b1f104ca22f1965a9fe283675054a5dae4822",
+        "bytes": 21345170,
+        "files": 25,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:reader_*_chr*.json",
+        "sha256": "471668d618f65741464060f95d8141654d5441ed7d870f6f9683fef429bcf89b",
+        "bytes": 52389965,
+        "files": 313,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:ccres_chr*.bed.gz",
+        "sha256": "6babe906b9acc2f76bcaf0b63009b9c352da0fa6a4ba8d86adb8a67d5bdee508",
+        "bytes": 12014557,
+        "files": 25,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:enhancer_targets_chr*.json",
+        "sha256": "fb1e2d5600b3907b8bda414a905b748f07a488fa930ed211a0f33c4b2e36f389",
+        "bytes": 5538582,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:enhancer_targets_all_chr*.json",
+        "sha256": "0b733d54ebcd501d5e925f24c53ecea678584f5c1cdb7f14b08df6bd26c398a8",
+        "bytes": 39683,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "compiler_inputs:constrained_targets_chr*.json",
+        "sha256": "1a30b78ca9f1f6b53534282e03ee5169dfafdfcfcb4e868f3b0ab210383dd717",
+        "bytes": 2069436,
+        "files": 24,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "openness_call": "reader v1's own call, unchanged: experimental: ENCODE DNase-seq narrowPeak (GRCh38, released), as genomeos.genome.reader loads it. The reader tests a promoter window for an overlapping peak; this tests the element's own interval for one, which is the element-level call genomeos.attribution.closure has used since it was written ('an element is active in the cell when it overlaps a DNase peak there'). No new cut-off is introduced and no signal value is thresholded.",
+      "measured_span": "a biosample's measured span on a chromosome is the interval from the first peak's start to the last peak's end in its cached narrowPeak file for that chromosome. Beyond it no read was placed, so an absent peak there is not a negative call. This is a statement about coverage, not a threshold on signal.",
+      "states": [
+        "open_in_reader",
+        "not_open_in_reader",
+        "not_assessable"
+      ],
+      "not_assessable_reasons": [
+        "no_reader_for_this_cell",
+        "region_outside_measured_span"
+      ],
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ]
+    },
+    "exclusions": [
+      "no rule is excluded: the denominator is every rule the compiler emits",
+      "no new cut-off is introduced; reader v1's registered call is used unchanged"
+    ],
+    "partitions": {
+      "per_state": "the three states, with the two reasons under not_assessable",
+      "per_cell": "the rule's own `when: cell_type` label, every label counted",
+      "per_biosample": "the reader biosample a label maps to by ontology term"
+    },
+    "code_cleanliness": {
+      "git_sha": "8a096e4c1f84e7b840e66a682672a6ee50f5c83d",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/version.py",
+        "scripts/context_evidence_census.py"
+      ],
+      "counting_path_is_computed": "the transitive import closure of this script over the repository's own package, computed from the files' import statements at write time, not a hand-written list",
+      "note": "several sessions work in this one checkout. A file listed under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered the count, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "8a096e4c1f84e7b840e66a682672a6ee50f5c83d",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/astroreg_registration.json"
+      ],
+      "argv": [
+        "scripts/context_evidence_census.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}
