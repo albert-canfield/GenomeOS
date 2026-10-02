@@ -856,3 +856,35 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         with pytest.raises(astrorun.SendRefusedError) as exc:
             astrorun.may_send(**good)
         assert "Albert's approval is CONDITIONAL on" in str(exc.value)
+
+
+class TestAmendment2sRuleIsUnchangedSinceItWasRegistered:
+    """Item (b): shown by hash, not asserted.
+
+    The rule is registered across TWO files and a reader should not be told it is in one: 0f4c372 names
+    the repository, the commit and the no-rescaling term; 230efc8 carries the term-by-term citations and
+    the file name. Both are recorded.
+    """
+
+    def test_the_cited_rule_still_hashes_to_what_the_registration_recorded(self):
+        import hashlib
+
+        from genomeos.attribution import rpm
+
+        got = hashlib.sha256(json.dumps(rpm.PRODUCER, sort_keys=True).encode()).hexdigest()
+        assert got == astrorun.AMENDMENT_2_CITATIONS_SHA256, (
+            "rpm.PRODUCER has changed since amendment 2 was registered. The send path binds to this "
+            "rule, so a change here is a change to what Albert's condition means"
+        )
+
+    def test_the_fingerprint_the_send_path_binds_to_is_a_subset_of_the_cited_rule(self):
+        from genomeos.attribution import rpm
+
+        for key, want in astrorun.AMENDMENT_2_RULE_FINGERPRINT.items():
+            assert rpm.PRODUCER[key] == want
+
+    def test_where_the_rule_is_registered_is_recorded_for_both_files(self):
+        where = astrorun.AMENDMENT_2_RULE_REGISTERED_IN
+        assert any("0f4c372" in k for k in where)
+        assert any("230efc8" in k for k in where)
+        assert "does NOT name the file" in where["data/results/astroreg2_registration.json at 0f4c372"]

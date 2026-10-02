@@ -486,6 +486,25 @@ AMENDMENT_2_RULE_FINGERPRINT = {
 #: The registration the approval names, bound by content so its object cannot drift after the fact.
 ASTROREG2_REGISTRATION_COMMIT = "0f4c372"
 
+#: WHERE amendment 2's rule is actually registered, established by reading both files rather than
+#: assumed. It is spread across two registrations and a reader should not be told it is in one.
+AMENDMENT_2_RULE_REGISTERED_IN = {
+    "data/results/astroreg2_registration.json at 0f4c372": "names the repository "
+    "(mayasheth/chrom-annotate), the commit (91cda73ebe3a19153a582cab18cbf7ff70d85cfc) and the "
+    "'NO RESCALING of any kind' term. It does NOT name the file, and it carries no term-by-term "
+    "citation block",
+    "data/results/astroreg_calibration_registration.json at 230efc8": "carries amendment_2_citations, "
+    "the full term-by-term set with a line cited for each of the RPM formula, the numerator, the "
+    "sex-chromosome doubling, the denominator and the several-BAM combination, plus the file name",
+    "note": "the approval's clause says 'computed under Amendment 2's rule'. Two of the three "
+    "fingerprint values the send path binds to are anchored in 0f4c372 and all three are in 230efc8, so "
+    "the rule is registered across the pair and the send path's fingerprint is checked against both",
+}
+
+#: sha256 of `rpm.PRODUCER` as the registration at 230efc8 records it, verified equal term for term with
+#: no key added or missing. Pinned so an edit to the cited rule fails a test instead of passing quietly.
+AMENDMENT_2_CITATIONS_SHA256 = "77ff2a0a790d6b5baeacc10fa7ab2965a4ced14e6e64b5598401117c6c97c7db"
+
 #: The ledger event that makes a completed run a TERMINAL state.
 RUN_COMPLETE_EVENT = "run_complete"
 
