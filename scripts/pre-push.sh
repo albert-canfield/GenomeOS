@@ -4,6 +4,17 @@
 # session's half-edited files in this checkout neither block nor pass the push.
 # Skip once with GENOMEOS_SKIP_CHECK=1 only for a documentation-only push.
 #
+# THE VERDICT IS READ FROM THE FILE THE CHECK WROTE, NOT FROM ITS EXIT CODE. The exit
+# code is still required to be 0 -- that refusal is untouched -- but on its own it is not
+# evidence: on 2026-10-02 a `scripts/check.sh ... | tail` reported 0 over four real
+# failures, and a backgrounded check returned 0 while its log said `19 failed`, because a
+# pipeline's `$?` belongs to the last command and a background launch's to the launcher.
+# Worse, an exit code says nothing about WHICH TREE it judged, and this check takes nine
+# to twelve minutes in a checkout several sessions commit to. So below, the status file
+# written by scripts/check.sh must exist, must name THE TREE OF THE COMMIT BEING PUSHED in
+# both its before and after readings, must be project-scoped, and must say green. No file
+# means no verdict, and a missing verdict is not a pass.
+#
 # One push's check at a time. On 2026-10-02 three pushes failed with a missing
 # temporary directory: several sessions push the same checkout, each adding and
 # removing a worktree under one shared TMPDIR, and the checkout still carries
@@ -63,13 +74,39 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   case "$remote_ref" in refs/heads/dev|refs/heads/main) ;; *) continue ;; esac
   [ "$local_sha" = "0000000000000000000000000000000000000000" ] && continue
   tmp=$(mktemp -d "${TMPDIR:-/tmp}/genomeos-push.XXXXXX")
-  echo "pre-push: checking $(git rev-parse --short "$local_sha") in a clean worktree"
+  # The tree of the commit being pushed, which is what the verdict must name. A clean worktree
+  # of this commit hashes to exactly this, so the comparison is an identity and not a tolerance:
+  # if the link lines below ever materialise something .gitignore does not cover, the hashes stop
+  # matching and this refuses, naming the paths the two trees differ in, rather than quietly
+  # allowing a difference nobody looked at.
+  expect_tree=$(git -C "$root" rev-parse "$local_sha^{tree}")
+  echo "pre-push: checking $(git rev-parse --short "$local_sha") in a clean worktree (tree $expect_tree)"
   if git -C "$root" worktree add -q --detach "$tmp" "$local_sha"; then
     # the local caches are shared read-only, so real-data tests run as they do here
     for d in reference knowledge cache; do
       [ -d "$root/data/$d" ] && [ ! -e "$tmp/data/$d" ] && ln -s "$root/data/$d" "$tmp/data/$d"
     done
     (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" scripts/check.sh) || status=1
+    # And now the verdict itself, from the file. Run from the clean worktree so the reader is the
+    # committed one and not whatever a peer has half-edited in the shared checkout; the status
+    # directory is the common .git either way, so both see the same files. No pipe anywhere here:
+    # `v=$(cmd)` keeps the command's own exit status, which `cmd | tail` does not, and BOTH the
+    # status and the printed token are required, so a shell that reads only one is still safe.
+    # If the reader cannot run at all it exits non-zero and this refuses: it fails closed.
+    if v=$(cd "$tmp" && python3 -m genomeos.verdict require --tree "$expect_tree" --scope project 2>&1); then
+      case "$v" in
+        "GENOMEOS_VERDICT_OK $expect_tree "*) echo "pre-push: verdict read from the status file: $v" ;;
+        *)
+          echo "pre-push: REFUSED: the verdict reader exited 0 without naming this tree:" >&2
+          echo "$v" >&2
+          status=1
+          ;;
+      esac
+    else
+      echo "$v" >&2
+      echo "pre-push: REFUSED: no green verdict exists for the tree being pushed ($expect_tree)." >&2
+      status=1
+    fi
     # Wait for anything still running IN the worktree before taking the directory away. On 2026-10-02
     # a peer's `pkill -f "scripts/check.sh"` killed the check here; this line removed the worktree at
     # once, and `bio test` -- a child of the killed check, still running -- lost its working directory.

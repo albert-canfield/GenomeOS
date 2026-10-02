@@ -33,6 +33,15 @@
 # has just watched pass, in this invocation. The skip is never set from a flag, never read from the
 # environment, and never applied to a sha this run did not check -- so it cannot become a way to push
 # something unchecked. If the first attempt's check went red, there is no retry at all.
+#
+# "Watched pass" USED TO MEAN an exit code and a grep of captured output, and both of those have been
+# caught lying in one night: a guard piped into `tail` exited 0 over a REFUSED, and a backgrounded
+# check returned 0 while its log said `19 failed`. So the retry no longer rests on having watched
+# anything. It requires the status file scripts/check.sh writes, and requires it to name THE TREE OF
+# THE SHA BEING PUSHED -- which is the only thing that makes "the same sha" a fact rather than an
+# assumption in a checkout where local dev moves during a nine-minute check. The same requirement is
+# applied BEFORE the first push whenever GENOMEOS_SKIP_CHECK is already set in the environment, since
+# that is the one way to reach the remote with no check having run at all.
 set -euo pipefail
 
 remote=origin
@@ -51,6 +60,36 @@ done
 [ -n "$sha" ] || sha=$(git rev-parse HEAD)
 sha=$(git rev-parse "$sha")
 short=$(git rev-parse --short "$sha")
+tree=$(git rev-parse "$sha^{tree}")
+
+# The verdict, read from the file scripts/check.sh writes and never from an exit code. No pipe:
+# `v=$(cmd)` keeps the command's own status, and both the status and the printed token are required,
+# so a reader that consults only one of them is still safe. It fails closed -- if the reader cannot
+# run, there is no verdict, and a missing verdict is not a pass.
+require_verdict() {
+  local why=$1 v
+  if v=$(python3 -m genomeos.verdict require --tree "$tree" --scope project 2>&1); then
+    case "$v" in
+      "GENOMEOS_VERDICT_OK $tree "*)
+        echo "push_own: $why: the status file's verdict is for this exact tree: $v"
+        return 0
+        ;;
+    esac
+    echo "push_own: REFUSED ($why): the verdict reader exited 0 without naming tree $tree:" >&2
+    echo "$v" >&2
+    return 1
+  fi
+  echo "$v" >&2
+  echo "push_own: REFUSED ($why): no green project-wide verdict exists for $short's tree $tree." >&2
+  echo "  Run scripts/check.sh on that tree; a verdict for another tree does not answer for this one." >&2
+  return 1
+}
+
+if [ "${GENOMEOS_SKIP_CHECK:-0}" = "1" ]; then
+  echo "push_own: GENOMEOS_SKIP_CHECK is set in the environment, so scripts/pre-push.sh will not check"
+  echo "  anything. The verdict must then already exist for this tree, in writing."
+  require_verdict "the check is being skipped" || exit 1
+fi
 
 attempt() {
   # unredirected on the terminal AND captured, so the check's output is visible while it runs and
@@ -94,5 +133,8 @@ if ! git merge-base --is-ancestor "$tip" "$sha"; then
 fi
 echo "push_own: $remote/$branch is at $(git rev-parse --short "$tip"), an ancestor of $short, so the retry is a"
 echo "  fast-forward carrying exactly the tree the check passed. Retrying without re-running the check."
+# The retry skips the check, so the claim in the line above is now required in writing rather than
+# inferred from the first attempt's exit code and output.
+require_verdict "the retry skips the check" || exit 1
 GENOMEOS_SKIP_CHECK=1 git push "$remote" "$sha:refs/heads/$branch"
 echo "push_own: $short is on $remote/$branch"

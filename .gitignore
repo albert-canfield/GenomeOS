@@ -10,11 +10,14 @@ build/
 
 # Downloaded datasets and generated artefacts never go in the repository.
 # Fetch them with scripts/fetch_reference.sh (see docs/DATA.md).
-data/reference/
-data/knowledge/
+# No trailing slash on these three: scripts/pre-push.sh links them into its temporary worktree
+# as SYMLINKS, and `data/reference/` matches a directory only, so the links counted as untracked
+# content and the clean worktree no longer hashed to the commit it was checked out at.
+data/reference
+data/knowledge
 # imported personal genomes (genomeos individual import) never leave the machine
 data/individuals/
-data/cache/
+data/cache
 # A twin holds a named person's measured biological state: chronological age,
 # telomere length, epigenetic age, their variants and modifiers. Only the
 # open-consent public test subject is tracked; anyone else's twin stays local,

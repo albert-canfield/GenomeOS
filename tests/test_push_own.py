@@ -21,10 +21,14 @@ someone would otherwise add --force.
 
 import os
 import subprocess
+import time
 
 import pytest
 
-SCRIPT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts", "push_own.sh")
+from genomeos import verdict
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SCRIPT = os.path.join(REPO_ROOT, "scripts", "push_own.sh")
 CANNOT_LOCK = "cannot lock ref"
 
 
@@ -75,9 +79,40 @@ def arm_hook(ours, peer, ref_to_push):
     hook.chmod(0o755)
 
 
+def write_green_verdict(ours, sha, scope="project"):
+    """Give push_own.sh the verdict it now requires, for the tree of one sha.
+
+    Since 2026-10-02 the retry no longer rests on having watched an exit code: it reads the status
+    file scripts/check.sh writes and requires it to name the tree of the sha being pushed. So a test
+    of the retry has to supply one, and supplying it for the RIGHT tree is part of what is tested.
+
+    Call this while the working tree IS at `sha`, which is how a real check comes to be green: the
+    verdict's two tree readings must agree, and they are taken from the working tree. The log goes
+    under .git so writing it does not itself move the tree.
+    """
+    tree = git(ours, "rev-parse", f"{sha}^{{tree}}").stdout.strip()
+    log = ours / ".git" / "verdict-pytest.log"
+    log.write_text("3758 passed, 1 skipped in 400.11s\n")
+    payload = verdict.write_status(
+        ours,
+        exit_code=0,
+        tree_begin=tree,
+        scope=scope,
+        scope_files=[],
+        started_at=time.time(),
+        pytest_log=log,
+    )
+    assert payload["verdict"] == "green", payload
+    return tree
+
+
 def run_push(ours, sha):
+    # PYTHONPATH, because push_own.sh reads the verdict with `python3 -m genomeos.verdict` and these
+    # repositories are synthetic: in the real checkout the package is simply there beside the script.
+    env = dict(os.environ)
+    env["PYTHONPATH"] = REPO_ROOT + os.pathsep + env.get("PYTHONPATH", "")
     return subprocess.run(
-        ["bash", SCRIPT, "--sha", sha], cwd=ours, capture_output=True, text=True, timeout=120
+        ["bash", SCRIPT, "--sha", sha], cwd=ours, env=env, capture_output=True, text=True, timeout=120
     )
 
 
@@ -85,6 +120,7 @@ def test_a_remote_that_moved_to_an_ancestor_is_retried_as_a_fast_forward(world):
     bare, ours, peer = world
     mid = commit(ours, "mid.txt")  # the commit the peer will push from under us
     tip = commit(ours, "tip.txt")  # what we are pushing
+    write_green_verdict(ours, tip)  # the check passed on exactly this tree, in writing
     git(peer, "fetch", "-q", "ours", "dev")
     git(peer, "update-ref", "refs/heads/dev", mid)
     arm_hook(ours, peer, "refs/heads/dev")
@@ -120,3 +156,77 @@ def test_the_sha_is_pushed_not_the_branch_name(world):
     assert r.returncode == 0, (r.stdout, r.stderr)
     assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == checked
     assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() != later
+
+
+def test_a_green_verdict_for_another_tree_does_not_let_the_retry_through(world):
+    """The nine-minute hazard, at the place it would actually do harm.
+
+    The check passes, and then the tree moves: a peer commits, or this session commits again, and the
+    sha now being pushed carries different content. The verdict sitting in the directory is green,
+    complete and honest -- and it is about something else. The retry skips the check, so if that
+    verdict were accepted the push would carry a tree nothing was ever run on.
+
+    Reproduced the way it happens rather than by writing a file by hand: the verdict is taken while
+    the working tree is at `mid`, and only then is `tip` committed on top.
+    """
+    bare, ours, peer = world
+    mid = commit(ours, "mid.txt")
+    stale_tree = write_green_verdict(ours, mid)  # green, and about mid, which is about to be stale
+    tip = commit(ours, "tip.txt")  # the tree moves, as it does in a checkout several sessions share
+    assert git(ours, "rev-parse", f"{tip}^{{tree}}").stdout.strip() != stale_tree
+    git(peer, "fetch", "-q", "ours", "dev")
+    git(peer, "update-ref", "refs/heads/dev", mid)
+    arm_hook(ours, peer, "refs/heads/dev")
+
+    r = run_push(ours, tip)
+    # the race really happened and the fast-forward really was available, so this cannot pass vacuously
+    assert CANNOT_LOCK in r.stdout, (r.stdout, r.stderr)
+    assert "an ancestor of" in r.stdout, (r.stdout, r.stderr)
+    # and the retry was refused on the verdict alone
+    assert r.returncode == 1, (r.stdout, r.stderr)
+    assert "REFUSED" in r.stderr, (r.stdout, r.stderr)
+    assert stale_tree in r.stderr, "the refusal must name the tree the verdict actually judged"
+    # nothing reached the remote: it is still at the peer's commit
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == mid
+
+
+def test_no_verdict_at_all_stops_the_retry(world):
+    """A missing verdict is not a pass, and the retry is the one path with no check behind it."""
+    bare, ours, peer = world
+    mid = commit(ours, "mid.txt")
+    tip = commit(ours, "tip.txt")
+    git(peer, "fetch", "-q", "ours", "dev")
+    git(peer, "update-ref", "refs/heads/dev", mid)
+    arm_hook(ours, peer, "refs/heads/dev")
+    r = run_push(ours, tip)
+    assert CANNOT_LOCK in r.stdout, (r.stdout, r.stderr)
+    assert "an ancestor of" in r.stdout, (r.stdout, r.stderr)
+    assert r.returncode == 1, (r.stdout, r.stderr)
+    assert "no check verdict exists" in r.stderr, (r.stdout, r.stderr)
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == mid
+
+
+def test_a_skipped_check_is_refused_before_the_push_when_there_is_no_verdict(world):
+    """GENOMEOS_SKIP_CHECK means nothing checks the push, so the verdict must already exist."""
+    bare, ours, peer = world
+    base = git(ours, "rev-parse", "refs/heads/dev").stdout.strip()
+    tip = commit(ours, "tip.txt")
+    env = dict(os.environ)
+    env["PYTHONPATH"] = REPO_ROOT + os.pathsep + env.get("PYTHONPATH", "")
+    env["GENOMEOS_SKIP_CHECK"] = "1"
+    r = subprocess.run(
+        ["bash", SCRIPT, "--sha", tip], cwd=ours, env=env, capture_output=True, text=True, timeout=120
+    )
+    assert r.returncode == 1, (r.stdout, r.stderr)
+    assert "no check verdict exists" in r.stderr, (r.stdout, r.stderr)
+    # refused BEFORE the push, not after it: the remote never moved
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == base
+
+    # ... and with the verdict in writing, the same push goes through
+    write_green_verdict(ours, tip)
+    r = subprocess.run(
+        ["bash", SCRIPT, "--sha", tip], cwd=ours, env=env, capture_output=True, text=True, timeout=120
+    )
+    assert r.returncode == 0, (r.stdout, r.stderr)
+    assert "the status file's verdict is for this exact tree" in r.stdout, (r.stdout, r.stderr)
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == tip
