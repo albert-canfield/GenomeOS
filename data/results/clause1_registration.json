@@ -1,0 +1,289 @@
+{
+  "result": "clause1_registration",
+  "date": "2026-10-02",
+  "lane": "lane-clause1",
+  "question": "does direction rule v2's clause (1) secure its own stated reason? The clause requires two retained values for the rule's assigned cell `so that no direction rests on one track`, and amendment 1 requires the two to be numerically distinct. This lane counts three things and argues none of them: (a) for every cell that can satisfy clause (1) in this population, whether the tracks carrying its label are one biosample name under several assay titles, several biosample names, or undeterminable from the client's own saved track metadata; (b) how often the rule's assigned cell is an argmax over the track axis rather than a context chosen independently of the values read; (c) whether two assay titles of one biosample name differ numerically, so that amendment 1's distinctness test can be satisfied by them",
+  "population": "the 166 assertion rows of the committed data/results/respmap_direction_v2.json - every assertion of the published increment-2 response map whose status is `predicted`, as that committed result records them. The rows are READ and never re-derived: no element answer is opened, no archive is loaded and no direction is recomputed. The cell denominator is the distinct assigned cells among those 166 rows",
+  "denominator_is_separate": "this lane's counts are not added to lane-propb's 112, 93 or 19, nor to the 26, 67, 14 or 10 of other lanes. Several of those overlap and may not be summed. Every count below names the denominator it is taken over - 166 rows, or the distinct cells of those rows - and the two reason counts this lane reads from the committed v2 result (93 and 19) are quoted as that result's figures and are not re-counted as this lane's own",
+  "exploration_preceded_this": "stated against this lane's own interest. Before writing this file, this lane read the committed data/results/respmap_direction_v2.json header fields and one sample row, the committed data/results/cellcover.json prose fields, the column header of the saved track metadata copy, and the source of direction_v2.retained_values, direction_v2.SIGN_RULE_V2, direction_v2.AMENDMENT_1, enhancer_target.aggregate, enhancer_target.predict_target, enhancer_target._cell_summary and cellcover.rna_axis. It had therefore already seen these figures: 166 rows, 54 resolved, 0 opposite, 112 unresolved, 93 one_value_only, 19 one_track_seen_twice, 73 `cells_that_are_cached_tracks`, 371 distinct RNA-seq track names, lane-cellcover's 59 cells split 44 one-track and 15 two-track, and amendment 1's chr21 figure of 271 of 619. So this registration is NOT a prediction of any figure and no reader may treat it as one. What it binds is the class set, the rule by which each class is established, the count list and the refusals, so that the committed program's output can be held against written rules rather than against this lane's recollection. The separate commit this file gets before the run audits the order of the RULE, not the order of the figures",
+  "edits_no_rule": "this lane changes no clause, no amendment and no threshold of genomeos/attribution/direction_v2.py or of any other rule. The module is imported and read. If the answer is that clause (1) does not secure its stated reason, that is a finding for Albert and the supervisor and not a licence to change the rule: changing it would invalidate every count already taken under it",
+  "clause_1_quoted": "SIGN_RULE_V2 clause (1), quoted from direction_v2: `at least two values are retained for that cell name, so that no direction rests on one track - which is the defect v1 has`. The words after the comma are the clause's stated reason",
+  "sign_rule_v2": "v2 resolves the direction of a rule only when all three hold of its assigned cell's retained values: (1) at least two values are retained for that cell name, so that no direction rests on one track - which is the defect v1 has; (2) every retained value has the same sign, no value is exactly zero, and predict.enhancer_target's signs_disagree is false of them; (3) the largest |value| is at least MAGNITUDE_FLOOR. The resolved direction is that common sign: negative - the target falls on deleting the element - resolves to `activates`, positive to `inhibits`, the same two tokens and the same convention the compiler already writes. In every other case v2 returns UNRESOLVED",
+  "amendment_1": "amendment 1, 2026-10-02, against this lane's own first implementation and not against the registration. SIGN_RULE_V2 clause (1) says `at least two values are retained for that cell name, so that no direction rests on one track - which is the defect v1 has`, and the first implementation did not secure the reason it gives: on a legacy row by_cell[cell] can be the very track the maximum selected, so two retained fields can carry one track. Measured on chr21, 271 of 619 resolved calls had two numerically identical values. The implementation now requires the two retained values to be numerically distinct and records `one_track_seen_twice` otherwise. The cache records no track identity - predict.enhancer_target says in those words that none is invented, a value arrives with its cell name and nothing else - so two distinct tracks that happen to carry the same rounded value are refused too, which errs towards unresolved and is the direction this rule errs in. This amendment can only move a call from resolved to unresolved and never the other way, so it cannot have been chosen to produce a resolution, and it moves no threshold: MAGNITUDE_FLOOR is still the imported MIN_EFFECT and consistency is still unanimity. Both counts are reported, before it and after it",
+  "cell_evidence": "v2 reads only the values the cached deletion answer retains for that one cell name on the target gene's own row, and no value from any other cell: the tracks of other cells are not evidence about this rule's action in this cell. Three values can be retained per gene row and no more - max_drop_log2fc when max_drop_tissue is that cell, max_rise_log2fc when max_rise_tissue is that cell, and by_cell[cell] when the cell is one of predict.enhancer_target.CELLS ['K562', 'HepG2', 'GM12878', 'IMR-90']. Each is a signed log2 fold change of the target gene on deleting the element, from the same sweep, named by its cell",
+  "assigned_cell": "the rule's assigned cell is the biosample name of the track the v1 maximum selected, predicted_coding['tissue']: it is what compile.context() writes into `when: cell_type` on the rule line, so it is the cell in which the rule asserts its action. When the field is missing or blank the compiler writes measured.CONTEXT_UNKNOWN and v2 resolves nothing",
+  "track_label_rule": "a track's label is cellcover.track_label, imported and not restated: the gtex_tissue when the metadata row carries one that is not empty and not the string `nan`, else the biosample_name. This is predict.alphagenome_adapter.tissue_names' own rule, so a cell label on a compiled rule is a track label by construction. A cell is matched to tracks by EQUALITY of that label, character for character. No ontology lookup, no synonym table and no judgement resolves a row",
+  "name_match_is_not_a_confirmation": "the saved metadata copy carries no biosample accession and no experiment accession - its columns are name, strand, Assay title, ontology_curie, biosample_name, biosample_type, biosample_life_stage, gtex_tissue, data_source, endedness, genetically_modified, nonzero_mean, output, histone_mark - so two rows that agree on biosample_name CANNOT be established from it to be one physical specimen. They could be two specimens of one cell line or two donors of one tissue. This lane therefore never writes `same biosample`: the class is `one_biosample_name_several_assay_titles`, the per-cell record names every field that was compared, and `specimen_identity_established` is false on every multi-track cell. The run REFUSES if the copy ever gains a column whose name contains `accession`, because then this limitation would no longer be the honest one",
+  "metadata_copy_limitation": "the track metadata is read from the copy a peer session saved to disk (data/cache/entex/alphagenome_track_metadata_copy.csv, the same authority attribution.context_evidence uses for its label-to-term mapping). Re-fetching it is a request this lane may not make. That the copy is the client's CURRENT output_metadata, and not a superseded one, is therefore NOT ESTABLISHED here; the 371 == 371 agreement with the sweep's own cached n_tracks is the only check this lane can run on it, and it is reported as that. A cell whose track count changed after the copy was saved would be mispriced, and no figure here detects that",
+  "track_classes": [
+    "absent_from_the_metadata_copy",
+    "one_track_only",
+    "one_biosample_name_several_assay_titles",
+    "one_biosample_name_one_assay_title",
+    "several_biosample_names"
+  ],
+  "class_rule": "a cell's class is decided by the saved copy's RNA-seq rows whose label equals the cell label, and by nothing else. 0 such rows is `absent_from_the_metadata_copy`; exactly 1 is `one_track_only`; 2 or more with one distinct biosample_name and 2 or more distinct `Assay title` values is `one_biosample_name_several_assay_titles`; 2 or more with one biosample_name and one `Assay title` is `one_biosample_name_one_assay_title`; 2 or more with 2 or more distinct biosample_names is `several_biosample_names`. The classes are exhaustive and mutually exclusive by construction and a test asserts both. `one_track_only` is a FOURTH answer that the three the question offered - same biosample, different biosamples, undeterminable - does not contain, and it is reported as its own class rather than folded into any of them",
+  "per_cell_fields": [
+    "cell",
+    "rows_in_population",
+    "rna_seq_tracks",
+    "track_class",
+    "established_how",
+    "established",
+    "specimen_identity_established",
+    "track_names",
+    "assay_titles",
+    "biosample_names",
+    "ontology_curies",
+    "biosample_types",
+    "biosample_life_stages",
+    "endedness",
+    "genetically_modified",
+    "nonzero_means",
+    "nonzero_means_pairwise_distinct",
+    "in_retained_cells",
+    "rows_satisfying_clause_1",
+    "rows_resolved",
+    "rows_one_track_seen_twice"
+  ],
+  "established_per_cell": "every per-cell row carries `established_how` - `client_track_metadata` when at least one RNA-seq row of the copy carries the label by equality, `absent` when none does - and a prose `established` naming the fields that were compared on that cell's tracks and what the comparison did and did not settle. The difference between a label match and a specimen identity is visible per row, in `specimen_identity_established`, which is false on every multi-track cell for the reason NAME_MATCH_IS_NOT_A_CONFIRMATION gives",
+  "clause_1_satisfied_rule": "a ROW satisfies clause (1) when the committed result records two or more entries in its `retained_values`, which is exactly the test direction_v2._v2 applies (`len(values) < 2` is `one_value_only`). A CELL can satisfy clause (1) in this population when at least one row assigned to it satisfies it. Satisfying clause (1) is not resolving: amendment 1, the zero test, the sign test and the magnitude floor all come after it, and a row can satisfy clause (1) and still be unresolved",
+  "argmax_rule": "the rule's assigned cell is an ARGMAX on a row when the committed row's `retained_values` carries the field `max_drop` or the field `max_rise`, because direction_v2.retained_values retains `max_drop` exactly when the gene row's `max_drop_tissue` equals the cell and `max_rise` exactly when `max_rise_tissue` equals it. Those two fields are the tissue of the minimum and of the maximum over the whole track axis, as enhancer_target.aggregate writes them. The measurement is taken from the committed rows; it is not re-derived from any element answer, and nothing is loaded",
+  "argmax_is_a_selection": "stated before any count, because it follows from the code and not from the data. direction_v2.ASSIGNED_CELL says the assigned cell is `predicted_coding['tissue']`, and enhancer_target.predict_target sets that field to `max_drop_tissue` or `max_rise_tissue` - the tissue of the larger of the biggest drop and the biggest rise over all tracks, jointly with the gene. So on every rule the compiler wrote from predict_target, the cell is the place an extreme fell and not a context chosen before the values were read. The count below tests whether the committed rows agree with that reading of the code; a figure below 166 would mean some row's cell is not an argmax and the code's own account is incomplete",
+  "outside_retained_cells_cannot_resolve": "arithmetic, registered before the count. For a cell outside predict.enhancer_target.CELLS no `by_cell` value is ever written (aggregate writes one only `if tissue in cells`), so such a cell can reach two retained values only by being BOTH `max_drop_tissue` and `max_rise_tissue`. aggregate starts min and max at 0.0 and lowers min only on a negative value and raises max only on a positive one, so both fields naming one cell means one retained value is below zero and the other above it - which direction_v2 records as `signs_disagree_in_cell`. Therefore no cell outside CELLS can ever RESOLVE under v2, however many tracks it has, and every resolved call's cell is one of ['K562', 'HepG2', 'GM12878', 'IMR-90']. The run reports the measured count of resolved rows whose cell is outside CELLS and REFUSES if it is not 0",
+  "distinctness_rule": "whether two assay titles of one biosample name differ numerically is established two ways and both are reported. (a) From the client's own metadata: the `nonzero_mean` column is a number per track, and the run reports, per multi-track cell, whether its tracks' nonzero_mean values are pairwise distinct. Distinct nonzero_mean values establish that the tracks are different columns of the model's output, not one column seen twice. (b) From the committed rows: among rows whose assigned cell is a multi-track cell, how many carry two numerically distinct retained values - that is, pass amendment 1 - and how many are recorded `one_track_seen_twice`. The two together say whether amendment 1's distinctness test CAN be satisfied by two assay titles of one biosample name. Neither is a measurement of replication and neither establishes a specimen identity",
+  "readings_carried_unstrengthened": {
+    "withholds_never_reverses": "under SIGN_RULE_V2 v2 can WITHHOLD a direction and can never reverse one: v1's own selected value is itself one of the assigned cell's retained values and v2 resolves only when every retained value shares one sign, so a resolved v2 call always carries v1's sign. Carried word for word from the committed v2 result and not strengthened here",
+    "unresolved_is_not_absence": "unresolved means the sign rule did not resolve. It never means the element has no action, it is not a measurement of absence, and it is not a failure of the rule to produce an output: an unresolved call is the correct output of v2 wherever one cell's retained values do not carry a sign. It is recorded as molecular action unknown",
+    "not_known_to_be_replication": "enhancer_target._cell_summary's own words about a cell's several emitted values: `the tracks are not known to be biological replicates, so it is not a validated cell-level effect`. Nothing in this lane's counts makes them replicates, and no count here is evidence that they are or are not",
+    "cell2_group_not_biological_independence": "attribution.cell2's grouping is an operational grouping, NOT established biological independence. It is neither used nor needed here: every cell is counted on its own label and no cell is merged with another",
+    "cache_is_legacy": "every cached deletion answer in data/knowledge/alphagenome/elements is pre-BY_CELL_SCHEMA 2: 0 of the 24 chromosome archives carries by_cell_summary, so a cell's full multiset of emitted values is not on disk and cannot be recovered by loading or repacking (the schema-2 note in predict.enhancer_target says so in those words). by_cell holds the last emitted value per cell name, which is order-dependent and was not chosen as a replicate. v2 therefore resolves on at most three retained values per cell and reports unresolved wherever fewer than two are retained; a resolved v2 call on a legacy row can rest on one order-dependent value beside the selected extreme, and that is a limitation of the cache and not a strength of the rule"
+  },
+  "no_recommendation": "this lane makes NO recommendation about clause (1), amendment 1 or any threshold, and proposes no change to any of them. It reports what the clause does and does not secure and stops there. No published number is touched, no direction is recomputed, no result of another lane is rewritten, and no count here supersedes one",
+  "validates_nothing": "no count here says a v2 call is right or wrong. Nothing here is a validation of v1 or of v2, nothing here is an accuracy figure, and the three classes are a description of the model's track axis as the saved metadata records it - not a measurement of biology",
+  "cannot_establish": [
+    "whether two tracks that agree on biosample_name are one physical specimen: the saved metadata copy carries no biosample or experiment accession (NAME_MATCH_IS_NOT_A_CONFIRMATION)",
+    "whether any two tracks of one cell label are biological replicates: _cell_summary says in its own words that they are not known to be",
+    "whether the saved track metadata copy is the client's current output_metadata: re-fetching it is a request this lane may not make (METADATA_COPY_LIMITATION)",
+    "which of a cell's tracks a given retained value came from: the cache records no track identity, and AMENDMENT_1 says in its own words that none is invented",
+    "whether a different assigned cell would resolve any row: that needs values this lane does not have and requests it may not make",
+    "whether clause (1) would be better or worse if it were written differently: this lane edits no rule and tests no alternative"
+  ],
+  "counts_named_in_advance": [
+    "rows_in_population",
+    "rows_satisfying_clause_1",
+    "rows_not_satisfying_clause_1",
+    "rows_by_v2_class_as_committed",
+    "rows_by_unresolved_reason_as_committed",
+    "distinct_assigned_cells",
+    "clause_1_capable_cells",
+    "cells_by_track_class",
+    "clause_1_capable_cells_by_track_class",
+    "rows_whose_cell_is_an_argmax",
+    "rows_whose_cell_is_argmax_of_max_drop_only",
+    "rows_whose_cell_is_argmax_of_max_rise_only",
+    "rows_whose_cell_is_argmax_of_both",
+    "rows_whose_cell_is_not_an_argmax",
+    "resolved_rows_whose_cell_is_outside_retained_cells",
+    "multi_track_cells_whose_nonzero_means_are_pairwise_distinct",
+    "rows_passing_amendment_1",
+    "rows_passing_amendment_1_whose_cell_is_one_biosample_name_several_assay_titles",
+    "rows_passing_amendment_1_whose_cell_is_one_track_only",
+    "rows_recorded_one_track_seen_twice_by_track_class"
+  ],
+  "refusals": [
+    "the program refuses rather than reporting if the committed v2 result's counts.denominator is not 166, or its by_class and unresolved_by_reason counts are not the committed 54 / 0 / 112 and 93 / 19: the population is lane-propb's and is read, never re-derived",
+    "the program refuses if the committed result's assertion list is not 166 rows long, or if any row lacks `cell`, `retained_values` or `v2_class`",
+    "the program refuses if the saved metadata copy's distinct RNA-seq track-name count is not 371: every per-cell class is grounded on that axis and must not be reported without it",
+    "the program refuses if the saved metadata copy carries any column whose name contains `accession`, because NAME_MATCH_IS_NOT_A_CONFIRMATION would then be the wrong limitation and the `undeterminable` reading would be understated",
+    "the program refuses if any row's assigned cell is the empty string or the compiler's context-unknown token: such a row names no cell to classify",
+    "the program refuses if the measured count of resolved rows whose cell is outside predict.enhancer_target.CELLS is not 0, because OUTSIDE_RETAINED_CELLS_CANNOT_RESOLVE says it is 0 by arithmetic and a non-zero count would mean this lane has misread the code",
+    "the program refuses if the track classes are not exhaustive and mutually exclusive over the cells it classified"
+  ],
+  "committed_v2_figures_checked_first": {
+    "denominator": 166,
+    "by_class": {
+      "resolved_agrees_with_published": 54,
+      "resolved_opposite_to_published": 0,
+      "unresolved": 112
+    },
+    "unresolved_by_reason": {
+      "one_value_only": 93,
+      "one_track_seen_twice": 19
+    }
+  },
+  "retained_cells_today": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "values_needed_by_clause_1": 2,
+  "expected_axis_width": 371,
+  "what_the_run_will_write": "data/results/clause1.json",
+  "requests": {
+    "alphagenome_requests": 0,
+    "money": "none: no request is sent and no key is read",
+    "network": "none: every input is already on this machine"
+  },
+  "no_archive_is_opened": "no element answer is read through load_cached or any archive loader. A peer's inline loop over 93 elements reached 23 GB RSS tonight because that loader falls back to whole chromosome archives. Everything this lane needs is in the two committed inputs digested above, and the run opens nothing else",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed direction-rule-v2 classification of the published increment-2 response map",
+        "version": "the committed data/results/respmap_direction_v2.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "the model client's track metadata (output_metadata) as a peer session saved it to disk",
+        "version": "the saved copy on this machine, digested in inputs; whether it is the client's current table is not established (metadata_copy_limitation)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/respmap_direction_v2.json",
+        "sha256": "45ec9560b9888b89e20a92a21762c24297589c912781073a29a42d47b2061388",
+        "bytes": 163707,
+        "partition": "the committed v2 classification of the published response map; its 166 predicted rows are this lane's whole population and are read, never re-derived"
+      },
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": "the saved copy of the model client's own track metadata, read for its RNA-seq rows only; re-fetching it is a request this lane may not make"
+      }
+    ],
+    "input_count": 2,
+    "assembly": "GRCh38: the assembly the cached deletion sweep and the response map were written on. No coordinate of this registration's own is in GRCh38 or any build",
+    "coordinates": "n/a: no interval is read, written or compared. A row is identified by its assertion id and a cell by its label",
+    "parameters": {
+      "values_needed_by_clause_1": 2,
+      "expected_axis_width": 371,
+      "rna_output": "rna_seq",
+      "track_classes": [
+        "absent_from_the_metadata_copy",
+        "one_track_only",
+        "one_biosample_name_several_assay_titles",
+        "one_biosample_name_one_assay_title",
+        "several_biosample_names"
+      ],
+      "retained_cells_today": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "IMR-90"
+      ],
+      "forbidden_column_fragment": "accession",
+      "no_threshold_set_here": "no magnitude, consistency or confidence threshold is set or moved. MAGNITUDE_FLOOR stays the imported MIN_EFFECT and consistency stays unanimity; this lane reads values only to ask whether two of them are equal"
+    },
+    "exclusions": [
+      "every assertion of the published response map whose status is not `predicted`: they are outside the v2 result this lane reads and so outside this population",
+      "every metadata row whose output is not rna_seq: the deletion sweep's scorer is the RNA_SEQ gene scorer, so no other output is a column a cell's value could come from",
+      "every cached element answer and every chromosome archive: none is opened (no_archive_is_opened)"
+    ],
+    "partitions": {
+      "the_166_rows": "this lane's row denominator, read from the committed v2 result",
+      "the_distinct_assigned_cells": "this lane's cell denominator, the distinct cells of those 166 rows"
+    },
+    "code_cleanliness": {
+      "git_sha": "fde55840e2fd267171b58a2e3e4281bbad82aaa9",
+      "dirty": false,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/cellcover.py",
+        "genomeos/attribution/clause1.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/clause1_register.py"
+      ],
+      "counting_path_count": 54,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "fde55840e2fd267171b58a2e3e4281bbad82aaa9",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/clause1_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "fde55840e2fd267171b58a2e3e4281bbad82aaa9",
+      "code_cleanliness_git_sha": "fde55840e2fd267171b58a2e3e4281bbad82aaa9",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record fde5584"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 168,
+      "opens_under_data": 2,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
