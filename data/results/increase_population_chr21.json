@@ -1,0 +1,736 @@
+{
+  "result": "increase_population_chr21",
+  "date": "2026-10-02",
+  "lane": "lane-increase",
+  "registered_before_this_run": "data/results/increase_registration.json",
+  "follows_from": "data/results/repress2_population.json",
+  "chromosomes": [
+    "chr21"
+  ],
+  "attributed_elements_enumerated": 5174,
+  "rules_enumerated": 5176,
+  "ladder": {
+    "call": "pairs, not links: how many cached CRISPRi pairs clear each step in turn, so that a zero or a short count at the end can be read as the step it fell at. A pair is counted once at each step however many elements or rules satisfy it, and it clears a step when any one of them does. Every step is blind - a gene, a cell, an element and membership in the two significant labels - and none of them reads the sign of an effect; the outcome breakdown is reported at each step's own denominator beside the count",
+    "overlap_rule": "a pair is on an attributed element when the element and the pair's tested interval reciprocally overlap at measured.RECIPROCAL_OVERLAP = 0.5 or more, computed by measured.reciprocal_overlap over the candidates measured.Layer.near returns at measured.REACH = 200000. This is the committed rule measured.rows applies and it is not varied here; it is the same join lane-repress2's `element_carries_a_crispri_pair` step took",
+    "rules": "the compiled rules are genomeos.attribution.not_open_profile.rules unchanged, which mirrors compile.compile_chromosome block for block, so this run and lane-repress2's cannot describe different rules. A rule's cell is the context its `when: cell_type` names and a rule's gene is the gene it targets; both are read as the compiler wrote them",
+    "breakdown_call": "every step of the ladder reports the count of each of ['significant_decrease', 'significant_increase', 'not_significant_well_powered', 'not_significant_underpowered', 'missing'] at its own denominator, so no count of this lane's can be quoted under a noun the breakdown does not support. This is docs/LESSONS.md, 'A count is not a measurement of the thing you want to count' (2026-10-02), applied in advance rather than after a review",
+    "mirrors_lane_repress2": {
+      "pairs_in_the_benchmark": "no counterpart: lane-repress2's ladder starts at the rules of one axis, this one at the benchmark rows, and the two denominators are different populations by construction",
+      "and_significant": "lane-repress2's last step, `and_that_pair_is_significant`, applied first here: the same predicate (repress2.significant, membership in the two significant labels) on the same cached outcome field",
+      "and_on_an_attributed_element": "the other side of their `element_carries_a_crispri_pair` (357 for the repression axis): the same join, the same committed reciprocal-overlap rule, read from the pair instead of from the rule",
+      "and_a_rule_on_that_element_names_the_pairs_own_gene": "the other side of their `and_a_pair_on_the_rules_own_gene` (11 for the repression axis)",
+      "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell": "the other side of their `and_in_the_rules_own_cell` (0 for the repression axis), which is where their population died"
+    },
+    "steps": {
+      "pairs_in_the_benchmark": {
+        "pairs": 98,
+        "outcome_breakdown": {
+          "significant_decrease": 7,
+          "significant_increase": 2,
+          "not_significant_well_powered": 89,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        }
+      },
+      "and_significant": {
+        "pairs": 9,
+        "outcome_breakdown": {
+          "significant_decrease": 7,
+          "significant_increase": 2,
+          "not_significant_well_powered": 0,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        }
+      },
+      "and_on_an_attributed_element": {
+        "pairs": 3,
+        "outcome_breakdown": {
+          "significant_decrease": 2,
+          "significant_increase": 1,
+          "not_significant_well_powered": 0,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        }
+      },
+      "and_a_rule_on_that_element_names_the_pairs_own_gene": {
+        "pairs": 2,
+        "outcome_breakdown": {
+          "significant_decrease": 2,
+          "significant_increase": 0,
+          "not_significant_well_powered": 0,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        }
+      },
+      "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell": {
+        "pairs": 2,
+        "outcome_breakdown": {
+          "significant_decrease": 2,
+          "significant_increase": 0,
+          "not_significant_well_powered": 0,
+          "not_significant_underpowered": 0,
+          "missing": 0
+        }
+      }
+    },
+    "reconciles": [
+      {
+        "step": "and_significant",
+        "pairs": 9,
+        "step_above": "pairs_in_the_benchmark",
+        "pairs_above": 98,
+        "at_or_below_the_step_above": true,
+        "lost_here": 89,
+        "increases_here": 2,
+        "increases_above": 2,
+        "increases_at_or_below_the_step_above": true
+      },
+      {
+        "step": "and_on_an_attributed_element",
+        "pairs": 3,
+        "step_above": "and_significant",
+        "pairs_above": 9,
+        "at_or_below_the_step_above": true,
+        "lost_here": 6,
+        "increases_here": 1,
+        "increases_above": 2,
+        "increases_at_or_below_the_step_above": true
+      },
+      {
+        "step": "and_a_rule_on_that_element_names_the_pairs_own_gene",
+        "pairs": 2,
+        "step_above": "and_on_an_attributed_element",
+        "pairs_above": 3,
+        "at_or_below_the_step_above": true,
+        "lost_here": 1,
+        "increases_here": 0,
+        "increases_above": 1,
+        "increases_at_or_below_the_step_above": true
+      },
+      {
+        "step": "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell",
+        "pairs": 2,
+        "step_above": "and_a_rule_on_that_element_names_the_pairs_own_gene",
+        "pairs_above": 2,
+        "at_or_below_the_step_above": true,
+        "lost_here": 0,
+        "increases_here": 0,
+        "increases_above": 0,
+        "increases_at_or_below_the_step_above": true
+      }
+    ],
+    "activity_axis_column": {
+      "and_a_rule_on_that_element_names_the_pairs_own_gene": {
+        "represses_target": {
+          "pairs": 0,
+          "outcome_breakdown": {
+            "significant_decrease": 0,
+            "significant_increase": 0,
+            "not_significant_well_powered": 0,
+            "not_significant_underpowered": 0,
+            "missing": 0
+          }
+        },
+        "activates_target": {
+          "pairs": 2,
+          "outcome_breakdown": {
+            "significant_decrease": 2,
+            "significant_increase": 0,
+            "not_significant_well_powered": 0,
+            "not_significant_underpowered": 0,
+            "missing": 0
+          }
+        }
+      },
+      "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell": {
+        "represses_target": {
+          "pairs": 0,
+          "outcome_breakdown": {
+            "significant_decrease": 0,
+            "significant_increase": 0,
+            "not_significant_well_powered": 0,
+            "not_significant_underpowered": 0,
+            "missing": 0
+          }
+        },
+        "activates_target": {
+          "pairs": 2,
+          "outcome_breakdown": {
+            "significant_decrease": 2,
+            "significant_increase": 0,
+            "not_significant_well_powered": 0,
+            "not_significant_underpowered": 0,
+            "missing": 0
+          }
+        }
+      }
+    },
+    "activity_axis_column_call": "of the pairs that cleared this step, how many had at least one matching compiled rule whose activity axis is exactly 'represses_target', and how many exactly 'activates_target'. A pair can appear in both columns when two rules match it, so the columns do not sum to the step. The 'represses_target' column of these two steps is the other side of lane-repress2's `and_a_pair_on_the_rules_own_gene` (11) and `and_in_the_rules_own_cell` (0)",
+    "benchmark_rows_the_benchmark_itself_marks_invalid": 0,
+    "invalid_rows_call": "ValidConnection FALSE: promoter or exon overlaps the benchmark says are not a test of an enhancer-to-gene link. measured.parse_crispri returns them as a count and they are in no denominator above; they are not measured negatives"
+  },
+  "where_the_increases_are": {
+    "call": "every significant increase of the benchmark, by the field named. `on_an_attributed_element` is the same count restricted to the third ladder step",
+    "by_cell": {
+      "K562": 2
+    },
+    "by_chromosome": {
+      "chr21": 2
+    },
+    "by_split": {
+      "heldout": 2
+    },
+    "by_dataset": {
+      "K562_DC_TAP": 2
+    },
+    "on_an_attributed_element": {
+      "by_cell": {
+        "K562": 1
+      },
+      "by_chromosome": {
+        "chr21": 1
+      },
+      "by_split": {
+        "heldout": 1
+      }
+    }
+  },
+  "populations": {
+    "order": [
+      "measured_repression_links_a_changed_extractor_would_emit",
+      "increases_that_reach_an_existing_represses_target_rule"
+    ],
+    "never_pooled": "P1 and P2 are gated separately and are never pooled, with each other or with lane-repress2's activation populations, to reach a floor. They answer different questions: P1 whether a measured repression population could be built at all, P2 whether a measured increase can reach a repression call the compiled program already makes",
+    "per_population": {
+      "measured_repression_links_a_changed_extractor_would_emit": {
+        "population": "measured_repression_links_a_changed_extractor_would_emit",
+        "what_it_is": "one link per (attributed element, gene, cell) for which that element's overlapping cached pairs hold a pair whose outcome is 'significant_increase' on that gene in that cell. This mirrors measured.rule_links exactly: that function emits one link per (gene, cell) carrying a pair the benchmark calls Regulated, and this counts one link per (gene, cell) carrying a significant increase. It is the population a changed extractor could reach, counted without changing one",
+        "links": 1,
+        "independent_loci": 1,
+        "floors": {
+          "links": 30,
+          "independent_loci": 20
+        },
+        "meets_both_floors": false,
+        "reading": "below a registered floor: a no-go. The compiled program's repression calls cannot be tested against a measured repression population, and this count is the reason they cannot, not a step towards a population that could. The count goes on the record, no floor is moved, no population is pooled with another to reach a floor, no direction is read and no rate is reported. A count short of a floor is reported as a no-go and never as close, promising, nearly enough, a good start or enough for a pilot; a short count has no encouraging reading here, and the margin it falls short by is reported because a reader is owed it and not because a small margin is better than a large one",
+        "short_by": [
+          "links 1, short of 30 by 29",
+          "independent loci 1, short of 20 by 19"
+        ],
+        "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+        "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+      },
+      "increases_that_reach_an_existing_represses_target_rule": {
+        "population": "increases_that_reach_an_existing_represses_target_rule",
+        "what_it_is": "one link per (attributed element, gene, cell) at the last ladder step for which at least one compiled rule on that element, gene and cell has an activity axis of exactly 'represses_target'. This is lane-repress2's gate 1 population with the direction of the measurement now admitted: the increases that would test a repression call the compiled program already makes",
+        "links": 0,
+        "independent_loci": 0,
+        "floors": {
+          "links": 30,
+          "independent_loci": 20
+        },
+        "meets_both_floors": false,
+        "reading": "below a registered floor: a no-go. The compiled program's repression calls cannot be tested against a measured repression population, and this count is the reason they cannot, not a step towards a population that could. The count goes on the record, no floor is moved, no population is pooled with another to reach a floor, no direction is read and no rate is reported. A count short of a floor is reported as a no-go and never as close, promising, nearly enough, a good start or enough for a pilot; a short count has no encouraging reading here, and the margin it falls short by is reported because a reader is owed it and not because a small margin is better than a large one",
+        "short_by": [
+          "links 0, short of 30 by 30",
+          "independent loci 0, short of 20 by 20"
+        ],
+        "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+        "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+      }
+    },
+    "measured_repression_links_a_changed_extractor_would_emit": {
+      "contest_rule": "a (gene, cell) of the same element that carries a regulated pair as well as a significant increase is **not** in P1. The committed extractor already emits an `activates` link there, so the direction at that (gene, cell) is contested by the measurement itself and a repression population built on it would be testing a disagreement rather than a repression. Such a (gene, cell) is counted in its own row, `contested_by_a_regulated_pair`, and is in neither population. This rule is fixed here, before any count, and is not relaxed if P1 falls short",
+      "split_rule": "a pair is counted whatever its evaluation partition, and the training/held-out breakdown is reported beside the count. The committed extractor already admits a link found only in held-out pairs and marks it with measured.HELDOUT_MARK, so excluding them here would make the counterfactual narrower than the thing it is a counterfactual of. No feature, fit or label is built on anything in this lane, so the split audit's bar is not engaged",
+      "increases_behind_the_links_by_split": {
+        "heldout": 1
+      },
+      "links_by_cell": {
+        "K562": 1
+      },
+      "contested_by_a_regulated_pair": 0,
+      "contested_rows": [],
+      "contested_rows_shown": 0,
+      "first_links": [
+        {
+          "element": "EH38E3463502",
+          "chrom": "chr21",
+          "start": 45150971,
+          "end": 45151255,
+          "gene": "SUMO3",
+          "cell": "K562",
+          "increases": 1,
+          "largest_effect_size": 0.0598,
+          "splits": [
+            "heldout"
+          ]
+        }
+      ],
+      "first_links_shown": 1
+    },
+    "increases_that_reach_an_existing_represses_target_rule": {
+      "reconciles_with": "P2's link count must be at or below lane-repress2's `and_in_the_rules_own_cell` for 'represses_target', which is 0 genome-wide in data/results/repress2_population.json, because P2 adds a direction filter to a population their step already counted. A larger number means the two enumerations disagree, and it is reported as a discrepancy to be resolved and never as a population. This reconciliation is registered before the count",
+      "lane_repress2_and_in_the_rules_own_cell": 0,
+      "at_or_below_it": true,
+      "of_those_links_contested_by_a_regulated_pair": 0
+    }
+  },
+  "verdict": {
+    "go_or_no_go": "no-go",
+    "reading": "below a registered floor: a no-go. The compiled program's repression calls cannot be tested against a measured repression population, and this count is the reason they cannot, not a step towards a population that could. The count goes on the record, no floor is moved, no population is pooled with another to reach a floor, no direction is read and no rate is reported. A count short of a floor is reported as a no-go and never as close, promising, nearly enough, a good start or enough for a pilot; a short count has no encouraging reading here, and the margin it falls short by is reported because a reader is owed it and not because a small margin is better than a large one",
+    "populations_at_or_above_both_floors": [],
+    "floors_quoted_from_the_code_that_defines_them": {
+      "links": 30,
+      "links_defined_in": "genomeos/attribution/fresh.py: POSITIVE_FLOOR = 30",
+      "independent_loci": 20,
+      "independent_loci_defined_in": "genomeos/attribution/cell2.py: POOLED_LOCUS_FLOOR = 20, imported into genomeos/attribution/fresh.py as LOCUS_FLOOR"
+    },
+    "what_follows": "stop at the verdict and report. The no-go lane-repress2 recorded, 'the measured layer holds no repression call to test', is then structural: it is not an accident of the one arm they took, because the measurements a changed extractor could reach do not make a testable population either. Nothing is re-counted under a different predicate to find a population, and the floors stand",
+    "the_step_that_killed_the_population": {
+      "step": "and_significant",
+      "data_or_code": "a property of the data: the measurements that exist",
+      "why": "how many pairs the screens called significant, and how many of those were increases, is the benchmark's own content. No code in this repository decides it",
+      "increases_at_this_step": 2,
+      "link_floor": 30
+    },
+    "data_or_code": "the step a population falls short at is attributed to the data or to this repository's code by ATTRIBUTION_OF_STEPS, which is fixed before the count. A population short at `and_significant` is a property of the data and the no-go is final for this benchmark; a population short at any later step is a property of this repository's code and names what would have to change. The distinction is the value of the lane and it is not decided after the number is seen"
+  },
+  "cannot_establish": "a count of the measurements a changed extractor could reach is not a measurement of any repression call. Whatever it says, nothing here establishes that any compiled repression call is right or wrong, that any of these increases is a repression mechanism, or that an element whose silencing raises a gene represses it: an increase on silencing is one screen's signed effect in one cell and this lane reads no mechanism from it. A locus count is cell2's operational grouping and never established biological independence. P1 is a counterfactual: the links it counts do not exist in the compiled program and this lane does not create them. Clearing a floor would say that a population exists to test, never that a test of it would come out one way; falling short of a floor would say that this benchmark cannot carry the test, never that the repression calls are right. No assay other than the CRISPRi benchmark is read, so nothing here is a statement about repression evidence in general",
+  "no_extractor_changed": "no extractor is changed by this lane. `measured.rule_links`, `measured.parse_crispri`, `measured.Layer.for_element` and `measured.rows` are imported and called exactly as committed, and the overlap rule, the eligibility rule and the compiled rule enumeration are the committed ones. The count below is of what a changed extractor could reach; if it says such a change is worth making, the deliverable is a written proposal and not an edit",
+  "the_cause_in_code": "genomeos/attribution/measured.py: `rule_links` builds its candidate set as `{(p['gene'], p['cell']) for p in c['pairs'] if p['regulated']}`, and `regulated` is set in `parse_crispri` from `r.get('Regulated') == 'TRUE'`, which the benchmark awards a significant decrease only (`DECREASE`/`INCREASE` on `CrispriPair.outcome`). The `action` line below it reads `'activates' if strongest['effect_size'] < 0 else 'inhibits'`, so the `inhibits` branch exists but is unreachable: every pair that reaches it is regulated and therefore has a negative effect size. The increase is not lost from the program - `Layer.for_element` records it as `genes_increased` on the measured block, kept apart from `genes_not_regulated` since review item R2 - it is only never raised to a rule",
+  "registration_as_committed": {
+    "result": "increase_registration",
+    "lane": "lane-increase",
+    "question": "can a repression population be built at all, given that a significant increase raises no measured rule",
+    "follows_from": {
+      "lane": "lane-repress2",
+      "commits": [
+        "7a5dd8b",
+        "fd07258",
+        "37a256c",
+        "e9cc033"
+      ],
+      "registered_no_go_carried_verbatim": "the measured layer holds no repression call to test",
+      "their_gate_1_reading": "below a registered floor: a no-go. The count goes on the record, no direction is read on this population, no rate is reported and the floor is not moved",
+      "their_blind_ladder": {
+        "scope": "genome-wide, all 24 chromosomes",
+        "file": "data/results/repress2_population.json",
+        "activity_axis": "represses_target",
+        "rules_of_this_axis": 156925,
+        "element_carries_a_crispri_pair": 357,
+        "and_a_pair_on_the_rules_own_gene": 11,
+        "and_in_the_rules_own_cell": 0,
+        "and_that_pair_is_significant": 0,
+        "gate_1_reading": "below a registered floor: a no-go. The count goes on the record, no direction is read on this population, no rate is reported and the floor is not moved"
+      },
+      "their_measured_layer_count": {
+        "file": "data/results/repress2_population.json",
+        "assessable_measured_layer_rules": 195,
+        "on_a_pure_activates_target_axis": 143,
+        "on_a_pure_represses_target_axis": 0,
+        "the_rest": "52 rules whose activity axis holds more than one term: 25 'activates_target, active_in_reporter', 19 'activates_target, inactive_in_reporter', 4 'activates_target, represses_target' and 4 'activates_target, represses_target, inactive_in_reporter'"
+      },
+      "the_structural_cause_they_recorded": "on a measured element the activity axis and the rule direction are different things: measured.rule_links emits a link only from a pair the benchmark calls Regulated, which is Significant AND EffectSize < 0, so every compiled CRISPRi link's action is `activates`, while a significant increase raises no rule and reaches the program only as `represses_target` on the element's activity axis. Counts are therefore reported per rule source as well as per axis, and no count here reads a measured element's axis as the direction of a measured link"
+    },
+    "the_cause_in_code": "genomeos/attribution/measured.py: `rule_links` builds its candidate set as `{(p['gene'], p['cell']) for p in c['pairs'] if p['regulated']}`, and `regulated` is set in `parse_crispri` from `r.get('Regulated') == 'TRUE'`, which the benchmark awards a significant decrease only (`DECREASE`/`INCREASE` on `CrispriPair.outcome`). The `action` line below it reads `'activates' if strongest['effect_size'] < 0 else 'inhibits'`, so the `inhibits` branch exists but is unreachable: every pair that reaches it is regulated and therefore has a negative effect size. The increase is not lost from the program - `Layer.for_element` records it as `genes_increased` on the measured block, kept apart from `genes_not_regulated` since review item R2 - it is only never raised to a rule",
+    "no_extractor_changed": "no extractor is changed by this lane. `measured.rule_links`, `measured.parse_crispri`, `measured.Layer.for_element` and `measured.rows` are imported and called exactly as committed, and the overlap rule, the eligibility rule and the compiled rule enumeration are the committed ones. The count below is of what a changed extractor could reach; if it says such a change is worth making, the deliverable is a written proposal and not an edit",
+    "eligibility_predicate": "a cached CRISPRi pair is an increase when measured.CrispriPair.outcome is exactly 'significant_increase', read off the cached row's own outcome field and never recomputed. That is the whole eligibility predicate and it is fixed here before any count. The ladder's position steps - the element, the gene and the cell - are applied to every significant pair without reading which of ('significant_decrease', 'significant_increase') it is, and the direction enters only as the breakdown reported at each step's own denominator",
+    "outcome_breakdown_at_every_denominator": "every step of the ladder reports the count of each of ['significant_decrease', 'significant_increase', 'not_significant_well_powered', 'not_significant_underpowered', 'missing'] at its own denominator, so no count of this lane's can be quoted under a noun the breakdown does not support. This is docs/LESSONS.md, 'A count is not a measurement of the thing you want to count' (2026-10-02), applied in advance rather than after a review",
+    "independent_locus": {
+      "rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "span": 1000000,
+      "imported_from": "genomeos.attribution.cell2.INDEPENDENT_LOCUS_RULE",
+      "not_biological_independence": "the grouping is cell2's, operational and not established biological independence: two links it calls one locus may be two regulatory events and two it calls separate may share a domain, a TAD or a trans factor"
+    },
+    "floors": {
+      "call": "independent loci at least 20 (fresh.LOCUS_FLOOR, which is cell2.POOLED_LOCUS_FLOOR) and links at least 30 (fresh.POSITIVE_FLOOR). Both are imported from where the project fixed them before this lane existed, both are the floors lane-repress2's gate 1 was taken against, neither is set here and neither may be moved after a count",
+      "links": 30,
+      "links_imported_from": "genomeos.attribution.fresh.POSITIVE_FLOOR",
+      "independent_loci": 20,
+      "independent_loci_imported_from": "genomeos.attribution.fresh.LOCUS_FLOOR, which is genomeos.attribution.cell2.POOLED_LOCUS_FLOOR",
+      "neither_chosen_here": true
+    },
+    "ladder": {
+      "call": "pairs, not links: how many cached CRISPRi pairs clear each step in turn, so that a zero or a short count at the end can be read as the step it fell at. A pair is counted once at each step however many elements or rules satisfy it, and it clears a step when any one of them does. Every step is blind - a gene, a cell, an element and membership in the two significant labels - and none of them reads the sign of an effect; the outcome breakdown is reported at each step's own denominator beside the count",
+      "steps": [
+        "pairs_in_the_benchmark",
+        "and_significant",
+        "and_on_an_attributed_element",
+        "and_a_rule_on_that_element_names_the_pairs_own_gene",
+        "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell"
+      ],
+      "mirrors_lane_repress2": {
+        "pairs_in_the_benchmark": "no counterpart: lane-repress2's ladder starts at the rules of one axis, this one at the benchmark rows, and the two denominators are different populations by construction",
+        "and_significant": "lane-repress2's last step, `and_that_pair_is_significant`, applied first here: the same predicate (repress2.significant, membership in the two significant labels) on the same cached outcome field",
+        "and_on_an_attributed_element": "the other side of their `element_carries_a_crispri_pair` (357 for the repression axis): the same join, the same committed reciprocal-overlap rule, read from the pair instead of from the rule",
+        "and_a_rule_on_that_element_names_the_pairs_own_gene": "the other side of their `and_a_pair_on_the_rules_own_gene` (11 for the repression axis)",
+        "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell": "the other side of their `and_in_the_rules_own_cell` (0 for the repression axis), which is where their population died"
+      },
+      "overlap_rule": "a pair is on an attributed element when the element and the pair's tested interval reciprocally overlap at measured.RECIPROCAL_OVERLAP = 0.5 or more, computed by measured.reciprocal_overlap over the candidates measured.Layer.near returns at measured.REACH = 200000. This is the committed rule measured.rows applies and it is not varied here; it is the same join lane-repress2's `element_carries_a_crispri_pair` step took",
+      "rules": "the compiled rules are genomeos.attribution.not_open_profile.rules unchanged, which mirrors compile.compile_chromosome block for block, so this run and lane-repress2's cannot describe different rules. A rule's cell is the context its `when: cell_type` names and a rule's gene is the gene it targets; both are read as the compiler wrote them"
+    },
+    "populations": {
+      "order": [
+        "measured_repression_links_a_changed_extractor_would_emit",
+        "increases_that_reach_an_existing_represses_target_rule"
+      ],
+      "measured_repression_links_a_changed_extractor_would_emit": {
+        "call": "one link per (attributed element, gene, cell) for which that element's overlapping cached pairs hold a pair whose outcome is 'significant_increase' on that gene in that cell. This mirrors measured.rule_links exactly: that function emits one link per (gene, cell) carrying a pair the benchmark calls Regulated, and this counts one link per (gene, cell) carrying a significant increase. It is the population a changed extractor could reach, counted without changing one",
+        "contest_rule": "a (gene, cell) of the same element that carries a regulated pair as well as a significant increase is **not** in P1. The committed extractor already emits an `activates` link there, so the direction at that (gene, cell) is contested by the measurement itself and a repression population built on it would be testing a disagreement rather than a repression. Such a (gene, cell) is counted in its own row, `contested_by_a_regulated_pair`, and is in neither population. This rule is fixed here, before any count, and is not relaxed if P1 falls short",
+        "split_rule": "a pair is counted whatever its evaluation partition, and the training/held-out breakdown is reported beside the count. The committed extractor already admits a link found only in held-out pairs and marks it with measured.HELDOUT_MARK, so excluding them here would make the counterfactual narrower than the thing it is a counterfactual of. No feature, fit or label is built on anything in this lane, so the split audit's bar is not engaged"
+      },
+      "increases_that_reach_an_existing_represses_target_rule": {
+        "call": "one link per (attributed element, gene, cell) at the last ladder step for which at least one compiled rule on that element, gene and cell has an activity axis of exactly 'represses_target'. This is lane-repress2's gate 1 population with the direction of the measurement now admitted: the increases that would test a repression call the compiled program already makes",
+        "reconciles_with": "P2's link count must be at or below lane-repress2's `and_in_the_rules_own_cell` for 'represses_target', which is 0 genome-wide in data/results/repress2_population.json, because P2 adds a direction filter to a population their step already counted. A larger number means the two enumerations disagree, and it is reported as a discrepancy to be resolved and never as a population. This reconciliation is registered before the count"
+      },
+      "never_pooled": "P1 and P2 are gated separately and are never pooled, with each other or with lane-repress2's activation populations, to reach a floor. They answer different questions: P1 whether a measured repression population could be built at all, P2 whether a measured increase can reach a repression call the compiled program already makes"
+    },
+    "readings_before_the_outcome_was_seen": {
+      "go": "at or above both registered floors: a measured repression population could be built from the increases the committed extractor discards. This lane stops here. It reads no direction, reports no rate, tests no repression call and draws no conclusion about whether the compiled program's repression calls are right: a feasibility count that rolls straight into the test it enables is how a floor gets moved after the outcome is seen. The test is registered as its own lane, and this lane's remaining deliverable is a written proposal naming the extractor change the count shows is worth making",
+      "no_go": "below a registered floor: a no-go. The compiled program's repression calls cannot be tested against a measured repression population, and this count is the reason they cannot, not a step towards a population that could. The count goes on the record, no floor is moved, no population is pooled with another to reach a floor, no direction is read and no rate is reported. A count short of a floor is reported as a no-go and never as close, promising, nearly enough, a good start or enough for a pilot; a short count has no encouraging reading here, and the margin it falls short by is reported because a reader is owed it and not because a small margin is better than a large one",
+      "there_is_no_third": true,
+      "what_follows": {
+        "go": "stop at the verdict and report. The repression test is a separate lane with its own registration; the proposal naming the extractor change is this lane's",
+        "no_go": "stop at the verdict and report. The no-go lane-repress2 recorded, 'the measured layer holds no repression call to test', is then structural: it is not an accident of the one arm they took, because the measurements a changed extractor could reach do not make a testable population either. Nothing is re-counted under a different predicate to find a population, and the floors stand"
+      }
+    },
+    "data_or_code_attribution": {
+      "call": "the step a population falls short at is attributed to the data or to this repository's code by ATTRIBUTION_OF_STEPS, which is fixed before the count. A population short at `and_significant` is a property of the data and the no-go is final for this benchmark; a population short at any later step is a property of this repository's code and names what would have to change. The distinction is the value of the lane and it is not decided after the number is seen",
+      "per_step": {
+        "and_significant": {
+          "data_or_code": "a property of the data: the measurements that exist",
+          "why": "how many pairs the screens called significant, and how many of those were increases, is the benchmark's own content. No code in this repository decides it"
+        },
+        "and_on_an_attributed_element": {
+          "data_or_code": "a property of this repository's code: a choice this repository made and could revisit",
+          "why": "which elements the attribution layer emits, and the reciprocal-overlap rule (measured.RECIPROCAL_OVERLAP = 0.5) that decides whether a tested interval is a measurement *of* one of them. A different element set or a weaker overlap bar (measured.ELIGIBILITY_RULE is the weaker one the project already defines) would give a different count"
+        },
+        "and_a_rule_on_that_element_names_the_pairs_own_gene": {
+          "data_or_code": "a property of this repository's code: a choice this repository made and could revisit",
+          "why": "which gene a compiled rule targets: for a predicted rule the one gene the deletion sweep's `predicted_coding` block names, out of every gene the screen measured against that element"
+        },
+        "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell": {
+          "data_or_code": "a property of this repository's code: a choice this repository made and could revisit",
+          "why": "the `when: cell_type` gate the compiler writes on a rule, and the context compile.context derives for a predicted rule from the one most extreme track's tissue. This is the step lane-repress2's repression population died at"
+        },
+        "the_contest_rule": {
+          "data_or_code": "a property of this repository's code: a choice this repository made and could revisit",
+          "why": "P1_CONTEST_RULE, this lane's own pre-registered exclusion of a (gene, cell) whose measurement is contested by a regulated pair on the same element"
+        },
+        "the_extractor": {
+          "data_or_code": "a property of this repository's code: a choice this repository made and could revisit",
+          "why": "CAUSE_IN_CODE: that `measured.rule_links` raises no rule from a significant increase. This is the step that makes P1 a counterfactual at all, so it is attributed to code by construction and is not the finding of this count"
+        }
+      }
+    },
+    "cannot_establish": "a count of the measurements a changed extractor could reach is not a measurement of any repression call. Whatever it says, nothing here establishes that any compiled repression call is right or wrong, that any of these increases is a repression mechanism, or that an element whose silencing raises a gene represses it: an increase on silencing is one screen's signed effect in one cell and this lane reads no mechanism from it. A locus count is cell2's operational grouping and never established biological independence. P1 is a counterfactual: the links it counts do not exist in the compiled program and this lane does not create them. Clearing a floor would say that a population exists to test, never that a test of it would come out one way; falling short of a floor would say that this benchmark cannot carry the test, never that the repression calls are right. No assay other than the CRISPRi benchmark is read, so nothing here is a statement about repression evidence in general",
+    "requests": 0,
+    "money": "none: every input is already on disk",
+    "strong_effect_for_reference": 0.3
+  },
+  "reading": {
+    "moves": "the significant increases of the CRISPRi benchmark are counted along the ladder registered before the count, and the two populations a changed extractor could reach are gated against both imported floors",
+    "does_not_move": "no extractor changed, no threshold or registered definition changed, no verdict moved, no compiled label changed, no rule was deleted and nothing was refitted. No repression call is established to be right or wrong by anything here"
+  },
+  "requests": 0,
+  "money": "none: every input was already on disk",
+  "seconds": 0.8,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.)",
+        "version": "the two benchmark tables cached under data/knowledge, digested in inputs"
+      },
+      {
+        "accession": "the compiled non-coding programs of the chromosomes this run covers",
+        "version": "re-enumerated in this run from the results on disk, not read from a file"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_axes_chr21.json",
+        "sha256": "9f8112afa28902a6ef81caadad58d37cf709a3d1fbd35d2ca221d7b6aab08049",
+        "bytes": 263928,
+        "partition": null
+      },
+      {
+        "path": "data/results/budget_chr21.json",
+        "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+        "bytes": 275463,
+        "partition": null
+      },
+      {
+        "path": "data/results/ccres_chr21.bed.gz",
+        "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+        "bytes": 150095,
+        "partition": null
+      },
+      {
+        "path": "data/results/constrained_targets_chr21.json",
+        "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+        "bytes": 111930,
+        "partition": null
+      },
+      {
+        "path": "data/results/domains_chr21.json",
+        "sha256": "6bad711ecf1a3b11de1b1667b0b8ee9f9da25031a768147e13b412bfeae18ace",
+        "bytes": 105501,
+        "partition": null
+      },
+      {
+        "path": "data/results/duplication_chr21.json",
+        "sha256": "4efb8a6d42ed89a7cd436e3100f2fef0bb7d068d8c5060ae742fe5e34c6814cf",
+        "bytes": 118130,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_all_chr21.json",
+        "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+        "bytes": 1619,
+        "partition": null
+      },
+      {
+        "path": "data/results/enhancer_targets_chr21.json",
+        "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+        "bytes": 266488,
+        "partition": null
+      },
+      {
+        "path": "data/results/increase_registration.json",
+        "sha256": "573053f6bbc8c720e1e69729c83708925756c26b468243537de4c5d5bf2aeae3",
+        "bytes": 33468,
+        "partition": null
+      },
+      {
+        "path": "data/results/unknown_chr21.json",
+        "sha256": "28f6f18a43bcbc0ddd9cab5044586fe99290689d0df00dcd8beed4a1ecb1c4fd",
+        "bytes": 355767,
+        "partition": null
+      },
+      {
+        "path": "data/results/variation_chr21.json",
+        "sha256": "f68d07ae0c32f653b5c20abf1c74e7bb35df2a661bda11be17d588ba40ed5f5e",
+        "bytes": 348031,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "eligibility_predicate": "a cached CRISPRi pair is an increase when measured.CrispriPair.outcome is exactly 'significant_increase', read off the cached row's own outcome field and never recomputed. That is the whole eligibility predicate and it is fixed here before any count. The ladder's position steps - the element, the gene and the cell - are applied to every significant pair without reading which of ('significant_decrease', 'significant_increase') it is, and the direction enters only as the breakdown reported at each step's own denominator",
+      "independent_locus_rule": "two measured positives are the same locus when they share the measured gene, or when their elements lie within 1 Mb of one another on the same chromosome; the relation is chained within a chromosome, so a run of elements each within 1 Mb of the next is one locus however far its ends are apart. This is an operational grouping for deciding whether a stratum has enough distinct places in the genome to measure, not established biological independence",
+      "independent_locus_span": 1000000,
+      "locus_floor": 20,
+      "link_floor": 30,
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "ladder_steps": [
+        "pairs_in_the_benchmark",
+        "and_significant",
+        "and_on_an_attributed_element",
+        "and_a_rule_on_that_element_names_the_pairs_own_gene",
+        "and_a_rule_on_that_element_and_gene_is_gated_on_the_pairs_own_cell"
+      ],
+      "populations": [
+        "measured_repression_links_a_changed_extractor_would_emit",
+        "increases_that_reach_an_existing_represses_target_rule"
+      ],
+      "chromosomes": [
+        "chr21"
+      ],
+      "aggregate_function": "count",
+      "fill_value": 0
+    },
+    "exclusions": [
+      "a (gene, cell) of the same element that carries a regulated pair as well as a significant increase is **not** in P1. The committed extractor already emits an `activates` link there, so the direction at that (gene, cell) is contested by the measurement itself and a repression population built on it would be testing a disagreement rather than a repression. Such a (gene, cell) is counted in its own row, `contested_by_a_regulated_pair`, and is in neither population. This rule is fixed here, before any count, and is not relaxed if P1 falls short",
+      "the benchmark's own invalid rows (ValidConnection FALSE) are in no ladder denominator and are reported in their own row, as measured.parse_crispri returns them",
+      "no rule is excluded from the enumeration: every rule the compiler emits is indexed"
+    ],
+    "partitions": {
+      "ladder": "cached CRISPRi pairs, blind to direction at every step",
+      "P1": "one link per (attributed element, gene, cell) for which that element's overlapping cached pairs hold a pair whose outcome is 'significant_increase' on that gene in that cell. This mirrors measured.rule_links exactly: that function emits one link per (gene, cell) carrying a pair the benchmark calls Regulated, and this counts one link per (gene, cell) carrying a significant increase. It is the population a changed extractor could reach, counted without changing one",
+      "P2": "one link per (attributed element, gene, cell) at the last ladder step for which at least one compiled rule on that element, gene and cell has an activity axis of exactly 'represses_target'. This is lane-repress2's gate 1 population with the direction of the measurement now admitted: the increases that would test a repression call the compiled program already makes",
+      "training_and_heldout": "a pair is counted whatever its evaluation partition, and the training/held-out breakdown is reported beside the count. The committed extractor already admits a link found only in held-out pairs and marks it with measured.HELDOUT_MARK, so excluding them here would make the counterfactual narrower than the thing it is a counterfactual of. No feature, fit or label is built on anything in this lane, so the split audit's bar is not engaged"
+    },
+    "code_cleanliness": {
+      "git_sha": "8e15da2d5c2ffc50219485b12af9dd631d87eebb",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/n1_register.py",
+        "scripts/push_own.sh",
+        "tests/test_push_own.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/increase_population.py"
+      ],
+      "counting_path_count": 122,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "8e15da2d5c2ffc50219485b12af9dd631d87eebb",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/n1_register.py",
+        "scripts/push_own.sh",
+        "tests/test_push_own.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/push_own.sh",
+        "tests/test_push_own.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/increase_population.json",
+        "data/results/increase_population_chr21.json"
+      ],
+      "argv": [
+        "scripts/increase_population.py",
+        "--chroms",
+        "chr21",
+        "--result",
+        "increase_population_chr21"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true
+  }
+}

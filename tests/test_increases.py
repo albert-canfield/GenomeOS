@@ -367,3 +367,95 @@ def test_the_committed_registrations_manifest_is_complete_with_its_cleanliness_b
     assert not m.get("problems")
     assert set(mf.CLEANLINESS_KEYS) <= set(m["code_cleanliness"])
     assert m["code_cleanliness"]["own_code_is_committed"] is True
+
+
+# ---- the committed count ---------------------------------------------------------------------------
+
+POPULATION = Path("data/results/increase_population.json")
+
+
+def _population() -> dict:
+    return json.loads(POPULATION.read_text())
+
+
+def test_the_ladder_reconciles_step_by_step_and_so_does_its_increase_column() -> None:
+    for row in _population()["ladder"]["reconciles"]:
+        assert row["at_or_below_the_step_above"] is True, row["step"]
+        assert row["increases_at_or_below_the_step_above"] is True, row["step"]
+        assert row["pairs"] + row["lost_here"] == row["pairs_above"], row["step"]
+
+
+def test_every_ladder_steps_breakdown_sums_to_its_own_denominator() -> None:
+    for step, v in _population()["ladder"]["steps"].items():
+        assert sum(v["outcome_breakdown"].values()) == v["pairs"], step
+        assert set(v["outcome_breakdown"]) == set(ms.OUTCOMES), step
+
+
+def test_the_first_two_steps_are_the_benchmarks_own_row_and_significance_counts() -> None:
+    """14,734 valid rows and 820 significant, verified against the tables outside this code path."""
+    steps = _population()["ladder"]["steps"]
+    assert steps["pairs_in_the_benchmark"]["pairs"] == 14_734
+    assert steps["and_significant"]["pairs"] == 820
+    b = steps["and_significant"]["outcome_breakdown"]
+    assert (b[ms.DECREASE], b[inc.INCREASE]) == (661, 159)
+    assert b[ms.DECREASE] + b[inc.INCREASE] == 820
+
+
+def test_the_committed_count_clears_both_floors_on_p1_and_is_a_go() -> None:
+    d = _population()
+    g = d["populations"]["per_population"][inc.P1]
+    assert (g["links"], g["independent_loci"]) == (48, 33)
+    assert g["links"] >= inc.POSITIVE_FLOOR and g["independent_loci"] >= inc.LOCUS_FLOOR
+    assert g["meets_both_floors"] is True
+    assert g["reading"] == inc.GO
+    assert d["verdict"]["go_or_no_go"] == "go"
+    assert d["verdict"]["populations_at_or_above_both_floors"] == [inc.P1]
+
+
+def test_p1s_links_are_the_increases_that_reached_the_element_step() -> None:
+    d = _population()
+    at_element = d["ladder"]["steps"][inc.LADDER_STEPS[2]]["outcome_breakdown"][inc.INCREASE]
+    assert d["populations"]["per_population"][inc.P1]["links"] == at_element
+    assert d["populations"][inc.P1]["contested_by_a_regulated_pair"] == 0
+
+
+def test_p2_is_a_no_go_and_reconciles_with_lane_repress2s_zero() -> None:
+    d = _population()
+    g = d["populations"]["per_population"][inc.P2]
+    assert (g["links"], g["independent_loci"]) == (0, 0)
+    assert g["meets_both_floors"] is False
+    assert g["reading"] == inc.NO_GO
+    assert d["populations"][inc.P2]["at_or_below_it"] is True
+    assert d["populations"][inc.P2]["lane_repress2_and_in_the_rules_own_cell"] == 0
+
+
+def test_no_increase_reaches_a_rule_gated_on_its_own_cell() -> None:
+    """The step that kills P2, and the other side of lane-repress2's own zero."""
+    steps = _population()["ladder"]["steps"]
+    assert steps[inc.LADDER_STEPS[4]]["outcome_breakdown"][inc.INCREASE] == 0
+    assert steps[inc.LADDER_STEPS[3]]["outcome_breakdown"][inc.INCREASE] == 1
+
+
+def test_the_verdict_quotes_both_floors_from_the_code_that_defines_them() -> None:
+    f = _population()["verdict"]["floors_quoted_from_the_code_that_defines_them"]
+    assert f["links"] == 30 and "fresh.py: POSITIVE_FLOOR = 30" in f["links_defined_in"]
+    assert (
+        f["independent_loci"] == 20
+        and "cell2.py: POOLED_LOCUS_FLOOR = 20" in f["independent_loci_defined_in"]
+    )
+
+
+def test_the_count_changed_no_extractor_and_made_no_request() -> None:
+    d = _population()
+    assert d["requests"] == 0
+    assert d["no_extractor_changed"] is not None
+    assert "no extractor changed" in d["reading"]["does_not_move"]
+
+
+def test_the_counts_manifest_is_complete_with_its_cleanliness_block() -> None:
+    m = _population()["result_manifest"]
+    assert m["complete"] is True
+    assert not m.get("problems")
+    assert set(mf.CLEANLINESS_KEYS) <= set(m["code_cleanliness"])
+    assert m["code_cleanliness"]["own_code_is_committed"] is True
+    assert m["code_cleanliness"]["foreign_uncommitted_code_on_the_counting_path"] == []
