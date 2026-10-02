@@ -45,6 +45,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from genomeos.attribution.direction_v2 import ACTIVATES as _ACTIVATES
+from genomeos.attribution.direction_v2 import DIRECTION_RULE_DEFAULT, compiled_action
 from genomeos.certainty import Certainty
 from genomeos.genome.repeats import INTERSPERSED as _INTERSPERSED
 from genomeos.predict.enhancer_target import MODEL_SCORE_NAME as LINK_SCORE_NAME
@@ -207,14 +209,27 @@ def axis_lines(axes: dict[str, list[list[str]]]) -> list[str]:
     return [f"{k}: {', '.join('|'.join(g) for g in axes[k])}" for k in AXIS_ORDER if axes.get(k)]
 
 
-def element_axes(e: dict, ccre: dict[str, tuple[str, bool]], rep: _Interspersed | None) -> dict:
+def element_axes(
+    e: dict,
+    ccre: dict[str, tuple[str, bool]],
+    rep: _Interspersed | None,
+    *,
+    chrom: str | None = None,
+    direction_version: int = DIRECTION_RULE_DEFAULT,
+) -> dict:
     """The five axes of a predicted element (R7): sequence facts from the registry and RepeatMasker,
-    the direction from the prediction, and a repression left as unresolved alternatives."""
+    the direction from the prediction, and a repression left as unresolved alternatives.
+
+    The direction is read through `attribution/direction_v2.compiled_action`, the one seam the two
+    rule versions meet at. `direction_version` defaults to v1, which is the committed rule and
+    returns exactly what `pc.get("action") != "activates"` returned here; `chrom` is unused by v1 and
+    opens no file. v2 needs the cell's own values and so needs `chrom`.
+    """
     cls, ctcf = ccre.get(e["id"], (None, False))
     frac, top = rep.cover(e["start"], e["end"]) if rep else (None, "")
     roles = [[r] for r in registry_roles(cls, ctcf)]
     pc = e["predicted_coding"]
-    represses = pc.get("action") != "activates"
+    represses = compiled_action(pc, direction_version, chrom=chrom, element_id=e["id"]) != _ACTIVATES
     if represses:
         roles.append(list(REPRESSION_ALTERNATIVES))
     relation = [["predicted_deletion_target"]]
@@ -547,7 +562,12 @@ def _measured_blocks(
     return lines
 
 
-def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any = None) -> str:
+def compile_chromosome(
+    chrom: str,
+    results_dir: Path = RESULTS_DIR,
+    layer: Any = None,
+    direction_version: int = DIRECTION_RULE_DEFAULT,
+) -> str:
     from genomeos.attribution import context_evidence as ce
     from genomeos.attribution.budget import read_axes
 
@@ -703,7 +723,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         lines += ["", f"# ---- attributed elements ({len(elements)}): deletion in AlphaGenome names the gene"]
         for e in elements:
             pc = e["predicted_coding"]
-            action = "activates" if pc.get("action") == "activates" else "inhibits"
+            action = compiled_action(pc, direction_version, chrom=chrom, element_id=e["id"])
             basis = (
                 f"predicted, deleting the element moves {pc['gene']} by {pc['log2_fold_change']:+.2f} log2 "
                 f"in {pc.get('tissue') or 'the strongest track'} ({pc.get('strength') or 'weak'})"
@@ -712,7 +732,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
                 basis += f", constrained {e['constrained_fraction'] * 100:.0f}% of bases (Zoonomia)"
             if e.get("verdict_coding"):
                 basis += f", {e['verdict_coding']}"
-            axes = element_axes(e, ccre, rep)
+            axes = element_axes(e, ccre, rep, chrom=chrom, direction_version=direction_version)
             sequence[e["id"]] = axes
             props = [f"class: {derived_class(axes)}", f"locus: {chrom}:{e['start']}-{e['end']}"]
             if e.get("domain") in domains:
