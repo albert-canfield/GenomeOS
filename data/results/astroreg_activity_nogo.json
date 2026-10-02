@@ -1,0 +1,780 @@
+{
+  "result": "astroreg_activity_nogo",
+  "date": "2026-10-02",
+  "status": "a gate on one input, decided before any money was spent. No AlphaGenome request was sent, no astrocyte pair was scored, nothing was bought",
+  "lane": "lane-astro",
+  "question": "can the frozen model's activity term be supplied for the astrocyte pairs in the units its weights were fitted on, so that the registered primary claim can be computed from the 1,322 requests Albert authorised",
+  "authorisation": "I approve the 1,322 AlphaGenome requests for the AstroREG test as registered (astroreg_registration.json at e58bcee, exploratory, prevalence-matched power 0.79). Run it once, under the registration, with every request logged.",
+  "authorised_requests": 1322,
+  "requests_sent": 0,
+  "money_spent": 0,
+  "registration": {
+    "path": "data/results/astroreg_registration.json",
+    "sha256": "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a",
+    "byte_identical_to_the_authorised_copy": true,
+    "primary_claim": "the deletion gain in cultured primary human astrocytes: AUPRC of 'activity + distance + deletion' minus AUPRC of 'activity + distance', both scored with the weights frozen on the K562 training pairs. Nothing is refitted on astrocyte data -- not the weights, not a threshold, not a feature definition. The gain is the only primary quantity; an AUPRC on its own is not a claim",
+    "feasibility_rule": "if an input the frozen model needs is missing, the model is not applied and no substitute is put in its place: a no-go is recorded instead",
+    "not_claimed": [
+      "not a replication of the K562 result: a different assay readout (single-cell CROP-seq against the benchmark's mixed FlowFISH and scRNA-seq screens), a different element selection (PsychENCODE astrocyte enhancers), a different hit threshold and a different cell lineage, so a difference cannot be attributed to the cell type",
+      "not independence of the genomic regions: the locus grouping is cell2's operational convention, and AlphaGenome was trained on ENCODE tracks genome-wide, which include astrocyte chromatin; the labels are unseen, the regions are not",
+      "not a cell-type-specific claim about astrocytes: two donor lines of cultured fetal-derived astrocytes are not primary brain tissue",
+      "no claim at all until the comparison is registered before any score is computed"
+    ]
+  },
+  "frozen_activity_term": {
+    "columns": [
+      "DHS.RPM",
+      "H3K27ac.RPM"
+    ],
+    "units": "reads per million mapped reads in the element, as EPCrisprBenchmark publishes them per pair (crispri.parse reads DHS.RPM and H3K27ac.RPM; crispri._annotate_one forms sqrt(dhs * h3k27ac), then log_activity = log1p(activity) and activity_over_distance = log_activity - log(distance))",
+    "read_in_exactly_one_place": "genomeos/attribution/crispri.py, crispri.parse (dhs=float(r['DHS.RPM'] or 0), h3k27ac=float(r['H3K27ac.RPM'] or 0))",
+    "features_that_depend_on_it": [
+      "log_activity",
+      "activity_over_distance"
+    ],
+    "in_both_arms": "'activity + distance + deletion' and 'activity + distance' both carry log_activity and activity_over_distance, so the term is in the minuend and the subtrahend of the only registered claim"
+  },
+  "a_benchmark_supplies_it": {
+    "per_file": {
+      "EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz": {
+        "K562": {
+          "pairs": 10356,
+          "with_both": 10356,
+          "share_with_both": 1.0
+        }
+      },
+      "EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz": {
+        "GM12878": {
+          "pairs": 68,
+          "with_both": 68,
+          "share_with_both": 1.0
+        },
+        "HCT116": {
+          "pairs": 396,
+          "with_both": 396,
+          "share_with_both": 1.0
+        },
+        "Jurkat": {
+          "pairs": 75,
+          "with_both": 75,
+          "share_with_both": 1.0
+        },
+        "K562": {
+          "pairs": 1918,
+          "with_both": 1918,
+          "share_with_both": 1.0
+        },
+        "WTC11": {
+          "pairs": 1921,
+          "with_both": 1921,
+          "share_with_both": 1.0
+        }
+      }
+    },
+    "k562_training_distribution": {
+      "DHS.RPM": {
+        "n": 10356,
+        "min": 0.0,
+        "p05": 0.5071,
+        "p25": 1.6074,
+        "median": 3.6253,
+        "p75": 7.5684,
+        "p95": 21.1901,
+        "max": 66.7473,
+        "mean": 6.1359,
+        "exactly_zero": 10
+      },
+      "H3K27ac.RPM": {
+        "n": 10356,
+        "min": 0.0,
+        "p05": 0.1199,
+        "p25": 0.5944,
+        "median": 1.9877,
+        "p75": 6.3461,
+        "p95": 23.241,
+        "max": 110.3645,
+        "mean": 5.5181,
+        "exactly_zero": 155
+      }
+    },
+    "reading": "the benchmark hands the frozen model both activity columns for every pair of every cell type it covers, which is the input the HCT116 arm had and an astrocyte pair does not"
+  },
+  "b_the_screen_does_not": {
+    "workbook": "data/cache/fresh/astro_MOESM5.xlsx",
+    "sheets": [
+      "Legend",
+      "3A_EnhancerGenePairDE",
+      "3B_NegativeControlsDE",
+      "3C_PositiveControlsDE",
+      "3D_NanostringProbes",
+      "3E_NanostringResults",
+      "3F_PowerCalculations"
+    ],
+    "sheet_that_could_carry_activity": null,
+    "reading": "Supplementary Table 3 holds pair differential expression, negative and positive controls, Nanostring probes and results, and power calculations. There is no chromatin or activity sheet, so neither frozen activity column can be read from the screen itself, whatever the permitted-column list allowed"
+  },
+  "c_what_is_on_disk_instead": {
+    "dnase": {
+      "registered_file_accession": "ENCFF874OPW",
+      "registered_experiment": "ENCSR000EPM",
+      "files": 23,
+      "files_whose_first_line_records_an_accession": 23,
+      "accessions_found_in_first_lines": [
+        "ENCFF874OPW"
+      ],
+      "matches_the_registration": true,
+      "one_example_first_line": "# ENCFF874OPW astrocyte DNase-seq narrowPeak, chr1, signalValue",
+      "units": "narrowPeak column 7, signalValue (the peak caller's signal for a DNase peak)",
+      "in_frozen_units": false,
+      "written_by": "genomeos.genome.reader.fetch_peaks (float(f[6]))"
+    },
+    "h3k27ac": {
+      "registered_file_accession": "ENCFF970DKF",
+      "registered_experiment": "ENCSR000AOQ",
+      "files": 23,
+      "files_whose_first_line_records_an_accession": 23,
+      "accessions_found_in_first_lines": [
+        "ENCFF970DKF"
+      ],
+      "matches_the_registration": true,
+      "one_example_first_line": "# ENCFF970DKF (ENCSR000AOQ) astrocyte H3K27ac replicated peaks, chr1",
+      "units": "narrowPeak column 7, signalValue (fold change over control for a ChIP-seq replicated peak)",
+      "in_frozen_units": false,
+      "written_by": "genomeos.genome.epigenome.fetch_mark_peaks"
+    },
+    "no_rpm_anywhere": "nothing in this repository computes reads per million: `DHS.RPM` and `H3K27ac.RPM` are read from the benchmark's own columns and never derived. The epigenome layer's continuous track is `fold change over control`, not RPM, and it holds no DNase profile for any biosample (its marks are ['H3K27ac', 'H3K27me3', 'H3K4me1', 'H3K4me3', 'H3K9me3']), so there is no depth-normalised astrocyte coverage to normalise either. What continuous astrocyte signal there is is counted separately under `c2_the_continuous_track_does_not_rescue_it`, because a censoring argument that ignored it would be answerable",
+    "accession_finding": "the ENCODE accessions ARE recorded in the repository: every one of these per-chromosome files carries its accession in its own first line. The registration's left_undone entry saying they 'are not recorded anywhere in the repository' is the stale one, and terms.activity_inputs is correct; terms.activity_inputs.correction already says so inside the same frozen artefact, so the two disagree with each other and the correction is right"
+  },
+  "c2_the_continuous_track_does_not_rescue_it": {
+    "store": "data/knowledge/epigenome/signal",
+    "units": "fold change over control",
+    "bin_bp": 200,
+    "marks_the_store_can_hold": [
+      "H3K27ac",
+      "H3K27me3",
+      "H3K4me1",
+      "H3K4me3",
+      "H3K9me3"
+    ],
+    "dnase_profiles_in_the_store": 0,
+    "astrocyte_chromosomes_per_mark": {
+      "H3K27ac": 24,
+      "H3K27me3": 24,
+      "H3K4me1": 24,
+      "H3K4me3": 24,
+      "H3K9me3": 24
+    },
+    "astrocyte_h3k27ac_chromosomes": 24,
+    "biosamples_with_any_continuous_track": 11,
+    "in_frozen_units": false,
+    "reading": "an uncensored continuous astrocyte H3K27ac track IS on disk, 24 chromosomes of 200 bp-binned fold change over control, so the censoring defect could be avoided for one of the two columns. It changes nothing, on two counts measured here. UNITS: fold change over control is not reads per million, and the frozen weight was fitted on reads per million, so the substitution is still a different feature. DNASE: the signal store holds only ['H3K27ac', 'H3K27me3', 'H3K4me1', 'H3K4me3', 'H3K9me3'] and no DNase profile for any of its 11 biosamples, so DHS.RPM has no continuous astrocyte source to be rescaled from at all -- its only candidate on disk remains a censored peak call. The missing input is missing in every form the repository holds"
+  },
+  "d_and_it_is_censored": {
+    "by_label": {
+      "all labels": {
+        "elements": 957,
+        "no_dnase_peak": 95,
+        "no_h3k27ac_peak": 477,
+        "neither": 73,
+        "share_with_no_h3k27ac_peak": 0.4984
+      },
+      "excluded_underpowered": {
+        "elements": 387,
+        "no_dnase_peak": 48,
+        "no_h3k27ac_peak": 223,
+        "neither": 38,
+        "share_with_no_h3k27ac_peak": 0.5762
+      },
+      "increase_held_apart": {
+        "elements": 23,
+        "no_dnase_peak": 1,
+        "no_h3k27ac_peak": 8,
+        "neither": 1,
+        "share_with_no_h3k27ac_peak": 0.3478
+      },
+      "negative": {
+        "elements": 425,
+        "no_dnase_peak": 38,
+        "no_h3k27ac_peak": 227,
+        "neither": 31,
+        "share_with_no_h3k27ac_peak": 0.5341
+      },
+      "positive": {
+        "elements": 122,
+        "no_dnase_peak": 8,
+        "no_h3k27ac_peak": 19,
+        "neither": 3,
+        "share_with_no_h3k27ac_peak": 0.1557
+      }
+    },
+    "astrocyte_peak_signal_at_the_screens_elements": {
+      "dnase": {
+        "n": 952,
+        "min": 0.09,
+        "p05": 0.24,
+        "p25": 0.55,
+        "median": 1.23,
+        "p75": 3.11,
+        "p95": 8.97,
+        "max": 26.4,
+        "mean": 2.5037,
+        "exactly_zero": 0
+      },
+      "h3k27ac": {
+        "n": 533,
+        "min": 2.843,
+        "p05": 4.558,
+        "p25": 7.006,
+        "median": 12.374,
+        "p75": 23.256,
+        "p95": 50.545,
+        "max": 86.067,
+        "mean": 18.0855,
+        "exactly_zero": 0
+      }
+    },
+    "reading": "an element overlapping no called peak can be given no value but zero, and zero in the frozen feature means log_activity = 0 and activity_over_distance = -log(distance). That is a number invented for the arm the gain is subtracted by, not a measurement of it. The benchmark's own K562 elements carry a continuous low tail instead, and the share that is exactly zero is reported beside this"
+  },
+  "verdict": {
+    "frozen_activity_columns": [
+      "DHS.RPM",
+      "H3K27ac.RPM"
+    ],
+    "frozen_activity_units": "reads per million mapped reads in the element, as EPCrisprBenchmark publishes them per pair (crispri.parse reads DHS.RPM and H3K27ac.RPM; crispri._annotate_one forms sqrt(dhs * h3k27ac), then log_activity = log1p(activity) and activity_over_distance = log_activity - log(distance))",
+    "found": {
+      "DHS.RPM": {
+        "source": "ENCFF874OPW astrocyte DNase narrowPeak (the registration's own activity input)",
+        "units": "narrowPeak column 7, signalValue (the peak caller's signal for a DNase peak)",
+        "in_frozen_units": false,
+        "why_not": "a peak signalValue is not reads per million, and no element outside a called peak carries any value at all"
+      },
+      "H3K27ac.RPM": {
+        "source": "ENCFF970DKF astrocyte H3K27ac replicated-peak narrowPeak (the registration's own activity input)",
+        "units": "narrowPeak column 7, signalValue (fold change over control for a ChIP-seq replicated peak)",
+        "in_frozen_units": false,
+        "why_not": "fold change over control is not reads per million, and no element outside a called peak carries any value at all. The continuous astrocyte H3K27ac track on disk lifts the censoring half of that and not the units half: it is also fold change over control"
+      }
+    },
+    "columns_not_in_frozen_units": [
+      "DHS.RPM",
+      "H3K27ac.RPM"
+    ],
+    "go": false,
+    "registered_rule": "if an input the frozen model needs is missing, the model is not applied and no substitute is put in its place: a no-go is recorded instead",
+    "reading": "an input the frozen model needs is missing in its own units for DHS.RPM, H3K27ac.RPM, so by the registration's own rule the model is not applied, no substitute is put in its place, and this no-go is recorded instead",
+    "why_a_peak_call_is_not_the_input": "a narrowPeak file differs from the benchmark's RPM in two independent ways. (1) UNITS: column seven is signalValue -- fold change over control for the ChIP-seq peaks, the peak caller's signal for the DNase peaks -- and a weight fitted on reads per million applied to it is a different feature. (2) CENSORING: a peak call carries no value outside a called peak, so an element in no peak can only be given zero, while the benchmark's RPM is defined for every element and descends to zero continuously. Rescaling can address the first defect and cannot address the second, because the values that are missing were never measured into the file"
+  },
+  "requests_permitted": 0,
+  "decision": "NO-GO. The run is not made and nothing is spent. This is the registration's own feasibility rule applied, not a new rule and not a term moved: the frozen model needs DHS.RPM and H3K27ac.RPM, the astrocyte side has neither, and the only candidates on disk are a peak signalValue and a fold change over control, which would be substitutes for a missing input",
+  "what_the_money_would_and_would_not_have_bought": "the 1,322 requests would have bought exactly what they were costed for, an astrocyte deletion value per registry element. They would not have bought the registered claim, because the gain is a difference between two arms that both need an activity term the astrocyte side cannot supply. Spending first and discovering this afterwards would have left a cache and no reading",
+  "what_would_clear_it": [
+    "an activity input in the frozen units for astrocyte: a depth-normalised coverage of the two ENCODE experiments, from which reads per million in an element is computable. That is a different file from either registered accession and is not on disk, so it is an amendment to the registration's activity_inputs, which only the registering lane and Albert may make",
+    "or a registered second claim that does not contain an activity term at all, whose arms are both scorable from what is on disk. That is a new registration written before any astrocyte score exists, not a reading of this one"
+  ],
+  "not_claimed": [
+    "not a replication of the K562 result: a different assay readout (single-cell CROP-seq against the benchmark's mixed FlowFISH and scRNA-seq screens), a different element selection (PsychENCODE astrocyte enhancers), a different hit threshold and a different cell lineage, so a difference cannot be attributed to the cell type",
+    "not independence of the genomic regions: the locus grouping is cell2's operational convention, and AlphaGenome was trained on ENCODE tracks genome-wide, which include astrocyte chromatin; the labels are unseen, the regions are not",
+    "not a cell-type-specific claim about astrocytes: two donor lines of cultured fetal-derived astrocytes are not primary brain tissue",
+    "no claim at all until the comparison is registered before any score is computed"
+  ],
+  "left_undone": [
+    "no AlphaGenome request was sent, so nothing is known about the astrocyte deletion value beyond the registration's feasibility gate: the track exists and 224 chr21 rows name it as a winning track",
+    "whether a depth-normalised astrocyte coverage exists on the ENCODE portal for these two experiments is not established here; no portal request was made",
+    "the registration's stale left_undone entry is reported and NOT edited: the artefact is frozen and the wording is the registering lane's to correct"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/astroreg_registration.json",
+        "version": "the frozen registration, sha256 43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a; its terms are quoted, never moved"
+      },
+      {
+        "accession": "Green NFO, et al. CRISPRi screening in cultured human astrocytes. Nature Neuroscience 2025;29(3):703-716 -- Supplementary Table 3",
+        "version": "publisher open-access supplementary store; pinned here by sha256",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-025-02154-3/MediaObjects/41593_2025_2154_MOESM5_ESM.xlsx"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison, EPCrisprBenchmark training_K562 and heldout_5_cell_types (Gschwind et al.)",
+        "version": "fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      },
+      {
+        "accession": "ENCODE ENCFF874OPW (ENCSR000EPM) astrocyte DNase-seq peaks and ENCFF970DKF (ENCSR000AOQ) astrocyte H3K27ac replicated peaks",
+        "version": "released GRCh38 narrowPeak; each per-chromosome derivation records its accession in its own first line, and this result checks that it does"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/astroreg_registration.json",
+        "sha256": "43f2edfab0636e0f07a035aedf5ddf7c57aa1dfcee8d39ea32e9338edd522c7a",
+        "bytes": 37734,
+        "partition": null,
+        "role": "the frozen registration: its feasibility rule and activity_inputs are read and its sha256 is checked; no term is moved"
+      },
+      {
+        "path": "data/cache/fresh/astro_MOESM5.xlsx",
+        "sha256": "e09bb1434329999d07505916606b93216b60927c070f4174875c14cea512680c",
+        "bytes": 36185183,
+        "partition": null,
+        "role": "the screen's element coordinates and registered labels, and the workbook's sheet names; no effect size, p-value, FDR or score was read"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training",
+        "role": "the frozen activity columns DHS.RPM and H3K27ac.RPM, for the availability count and the K562 distribution; already-read development evidence"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "role": "the same two columns per held-out cell type, the comparison the astrocyte side is measured against; already-read"
+      },
+      {
+        "path": "data/results/dnase_astrocyte_chr*.bed.gz",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/dnase_astrocyte_chr1.bed.gz",
+            "sha256": "63b053f39243e6b75f4f6fbf1f5d3f3f579dac5d19f929482e0e9eecc60d2b4f",
+            "bytes": 227404
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr10.bed.gz",
+            "sha256": "f972b28ac9d0cd699fed84bbbfbfd7604e70579ef7f883a76a2d272aeed80229",
+            "bytes": 122330
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr11.bed.gz",
+            "sha256": "697020b45fd192344da3b0f1bf9fc4e7f9e82581bcd8ff4ec910f9ed1d8666f0",
+            "bytes": 124146
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr12.bed.gz",
+            "sha256": "b3878201fc98fa4ddf415f56b67fd430e4ebcf8cd64fac37653b1e267f87c0e5",
+            "bytes": 126854
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr13.bed.gz",
+            "sha256": "63f8566de6bff90488ed6dc73aec0e48521bff65a854928cdd7e052a659bff76",
+            "bytes": 80143
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr14.bed.gz",
+            "sha256": "558642924e97d7420d1c12bca19b34ac3e8ea90c542d80ec24316a1e6a3fe0b6",
+            "bytes": 79219
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr15.bed.gz",
+            "sha256": "9faeb488c08fcab645a8611e17a5f91163feba617a34459ffebad2877d137a03",
+            "bytes": 79547
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr16.bed.gz",
+            "sha256": "9dfda6f4347fcb0b436dc50011d81ae53afa8cf9b343f1dfa8d7f3cd0be4155c",
+            "bytes": 69048
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr17.bed.gz",
+            "sha256": "6a6b9206cf0c38cd344b33d7454b3a9f72ff7f12d63ef97eed9f6e74c81e1c6c",
+            "bytes": 87155
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr18.bed.gz",
+            "sha256": "46909d1b5d5a18557bfc07da375c2cce4241ceea110d216ddb73d88c7ca6c73c",
+            "bytes": 64663
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr19.bed.gz",
+            "sha256": "09896f6c64a54922448ef906d0a9e00f1a8d129bd29d6a8a2aee453923842505",
+            "bytes": 54126
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr2.bed.gz",
+            "sha256": "faef9c1753f3d542f462e5da229b3636add4f42d8558d2fe54faa0a7506bfacb",
+            "bytes": 224486
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr20.bed.gz",
+            "sha256": "6b814348669dcfeb05d12b7b158630739e6e30b3702aa5f6ded6a5aef186c5f4",
+            "bytes": 56216
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr21.bed.gz",
+            "sha256": "4172bdf12c916ddc59c012aff81dcd6dba61cc81d1cd8efa0613f8683000d387",
+            "bytes": 29772
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr22.bed.gz",
+            "sha256": "4db994626d4d0a4c193a4baa5566bea94647e513c2d15ffae7f259ea68ceb2fe",
+            "bytes": 36543
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr3.bed.gz",
+            "sha256": "4abd8b2037278b6215b3e5576989f6e0e0d58d044b15aff3076c38048ffe4b0c",
+            "bytes": 184356
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr4.bed.gz",
+            "sha256": "7c52c406f3906d7a54414342af4203aa302e1ac15f28b49bca342374e14ed468",
+            "bytes": 156349
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr5.bed.gz",
+            "sha256": "688c76cdd6a01bc38a7f871bc06116be9307bd2d1b21d6fe9e7604d3e6b4c6c7",
+            "bytes": 161094
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr6.bed.gz",
+            "sha256": "1177bc85413b21296e94a56b2162ec50d3b1f6187bb7148dbad4c82f823bb6f9",
+            "bytes": 160722
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr7.bed.gz",
+            "sha256": "1ce83b970e44e30779ee231f5b3633a03d771231fc564347ce8165b55038819f",
+            "bytes": 133654
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr8.bed.gz",
+            "sha256": "9fce479ad5d23d78b0e2296848869806d12d101aa3de315af991cc366b649132",
+            "bytes": 127696
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chr9.bed.gz",
+            "sha256": "a162a514cbabda1ecb3be7b548415809fa9fff7a77bc894b30fa429cc978c1e2",
+            "bytes": 106444
+          },
+          {
+            "path": "data/results/dnase_astrocyte_chrX.bed.gz",
+            "sha256": "a5067a4d151fae1f16c9355c928345fb3dda608cc0cc31926c2ba1dbb45d9950",
+            "bytes": 76580
+          }
+        ],
+        "sha256": "3dde988641e87225c7256a812e19815390d965d4c7ee5807d95fa3358c1d4394",
+        "bytes": 2568547,
+        "files": 23,
+        "partition": null,
+        "role": "ENCFF874OPW astrocyte DNase narrowPeak per chromosome: signalValue and the accession in each first line"
+      },
+      {
+        "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr*.bed.gz",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr1.bed.gz",
+            "sha256": "a6b3a6d2d712581ae90c279d2fa6f0a9e19e7ae192e7148bbfc2ac789faab720",
+            "bytes": 61063
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr10.bed.gz",
+            "sha256": "ad84403ed7f9532c478c9696782c73140ebdd0ff65c046fae136321970845405",
+            "bytes": 32913
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr11.bed.gz",
+            "sha256": "7748a6e44850681a7aec5b4d31b560c4933bbdfca49f859131587dc134695720",
+            "bytes": 33560
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr12.bed.gz",
+            "sha256": "5beb87cf8a1d61a783be8c825e61cba0eb343b00f2a9e8e898fdffd022e92935",
+            "bytes": 34274
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr13.bed.gz",
+            "sha256": "91a8aee4f2c9cd526b75dc1b85769095f53a113298632b19b851429d42626be8",
+            "bytes": 18642
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr14.bed.gz",
+            "sha256": "ac93e1e49001c886df7c4ecfe6bba173d0d42c24047037027f1e7bfc0de47f6e",
+            "bytes": 20790
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr15.bed.gz",
+            "sha256": "2cf227fae1fdb3f46b0f79bd55a862bf5498723e69d338e6e82b80e81874c8bf",
+            "bytes": 22125
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr16.bed.gz",
+            "sha256": "342c5c000bfb5e3e78f38f7969389c9a10984f0c1d257c367fc8e7d7cb672196",
+            "bytes": 21591
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr17.bed.gz",
+            "sha256": "80f71c8758c45d3952cc747b23b11ce41d186da375887f1d39b5e866de18ce92",
+            "bytes": 28109
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr18.bed.gz",
+            "sha256": "db003199cec624573ed1a8acd52245de5adf3e9bcd9a46f1294f86d633e04c2b",
+            "bytes": 14898
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr19.bed.gz",
+            "sha256": "9083e4f6f14b4ae62d441f67ded0ef39be4c11d5d5d5563639e3073de06f01ef",
+            "bytes": 20578
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr2.bed.gz",
+            "sha256": "9f874493dedf176a503c680f87a879a9a8ffef98dee5ceb44aee42281fa89be1",
+            "bytes": 55753
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr20.bed.gz",
+            "sha256": "8a5105a198653fafe7bb60a11a9cb1d282d61c8894efa95599cbff42eaa5ea7f",
+            "bytes": 15910
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr21.bed.gz",
+            "sha256": "9b17674055c8703ad8518bc4f9145627e00c25944cd098cb8f20596a8de02dae",
+            "bytes": 8141
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr22.bed.gz",
+            "sha256": "d6e5f746bdb629bed906cc4cabfa68cf97acb6515763f808f86377471a76ec13",
+            "bytes": 11925
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr3.bed.gz",
+            "sha256": "2bf07e9e66c5de8f805f8a61341288bca35f5c31228cb3161ce77bbc33050229",
+            "bytes": 45090
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr4.bed.gz",
+            "sha256": "08b6857f0de53ec4d130a262d041a267b198d37a4780a53cd377e6a286ff729e",
+            "bytes": 34779
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr5.bed.gz",
+            "sha256": "2ed1209a229aa9b1741453046689d98c4cf45d25f47b6b596119cdac4429d402",
+            "bytes": 40066
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr6.bed.gz",
+            "sha256": "bd51e6aef44df38b3397bc9bcd4487ae8673e044c5f9e0b8bafdfb1c4feb871e",
+            "bytes": 39543
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr7.bed.gz",
+            "sha256": "c503bfbb8ad4008354b21aeb3131b2d6a7d9091c787c075935bac26bcb14b91f",
+            "bytes": 33286
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr8.bed.gz",
+            "sha256": "8422af1301c125844d94ce383219e3e001eb8b204d063d8c044180891a5d3d13",
+            "bytes": 30716
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chr9.bed.gz",
+            "sha256": "7b04feaa7ce916754608b7e6001b49a09bf58a44391cec79efa8f06275e832c5",
+            "bytes": 27054
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/astrocyte_H3K27ac_chrX.bed.gz",
+            "sha256": "51b9fb1b0aca9756b1f2fb0cc184508addc293ed32ddc8962484e43614505cbc",
+            "bytes": 18998
+          }
+        ],
+        "sha256": "c8a69d9f2a61ed954369a30994c34853739f590c0303b02e2d189d672ea8022e",
+        "bytes": 669804,
+        "files": 23,
+        "partition": null,
+        "role": "ENCFF970DKF astrocyte H3K27ac replicated-peak narrowPeak per chromosome: signalValue and the accession in each first line"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "coordinates_note": "half-open, zero-based for the peak files as the narrowPeak derivations store them. The screen states no convention for its chrom:start-end strings; the only use made of them here is an overlap test against peak calls, whose outcome a one-base shift cannot change for any element this result counts",
+    "parameters": {
+      "frozen_activity_columns": [
+        "DHS.RPM",
+        "H3K27ac.RPM"
+      ],
+      "authorised_requests": 1322,
+      "requests_permitted_by_this_gate": 0,
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ],
+      "screen_pairs": 7759,
+      "alphagenome_requests": 0,
+      "model_requests": 0,
+      "astrocyte_pairs_scored": 0,
+      "money_spent": 0
+    },
+    "exclusions": [
+      "no AlphaGenome request is sent and this script has no code path that could send one",
+      "no astrocyte deletion value is computed, requested or read",
+      "no effect size, fold change, p-value, FDR or expression level is read from the screen",
+      "no substitute activity value is constructed: the whole point of the result is that constructing one is what the registration forbids",
+      "the continuous signal store is counted by file name only: no profile is opened and no value is read from one, because the question asked of it is which biosamples and marks it covers and in what units, not what it says at any element",
+      "the 1.4 GB all-element deletion table is not read: coverage is the registration's already-recorded figure and the activity question applies to covered and uncovered pairs alike"
+    ],
+    "partitions": {
+      "screen_pairs": "all 7759 element-gene pairs of the published screen",
+      "k562": "already-read development evidence, used only for the activity-column availability count and the K562 distribution"
+    },
+    "code_cleanliness": {
+      "git_sha": "33db1eb7e88738ee6663bbe290f3cb2b0eb10fc1",
+      "dirty": true,
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/verdict.py",
+        "scripts/check.sh",
+        "scripts/pre-push.sh",
+        "scripts/push_own.sh",
+        "tests/conftest.py",
+        "tests/extras_lock.py",
+        "tests/test_extra_only_imports.py",
+        "tests/test_verdict.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astroreg.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/astroreg_activity_gate.py",
+        "scripts/astroreg_register.py"
+      ],
+      "counting_path_count": 71,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "33db1eb7e88738ee6663bbe290f3cb2b0eb10fc1",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/verdict.py",
+        "scripts/check.sh",
+        "scripts/pre-push.sh",
+        "scripts/push_own.sh",
+        "tests/conftest.py",
+        "tests/extras_lock.py",
+        "tests/test_extra_only_imports.py",
+        "tests/test_verdict.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/verdict.py",
+        "tests/extras_lock.py",
+        "tests/test_extra_only_imports.py",
+        "tests/test_verdict.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/astroreg_activity_nogo.json",
+        "data/results/response_map_increment3.json"
+      ],
+      "argv": [
+        "scripts/astroreg_activity_gate.py"
+      ],
+      "python": "3.14.3"
+    },
+    "complete": true,
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 287,
+      "opens_under_data": 149,
+      "files_read": 50,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "cwd_at_close": "/Users/AlbertCanfield/SITES DEV/GenomeOS",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
