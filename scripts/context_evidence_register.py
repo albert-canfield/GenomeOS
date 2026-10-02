@@ -145,6 +145,21 @@ def main() -> None:
     }
 
     inputs = [mf.input_entry(ce.TRACK_METADATA, partition=None)]
+    # The cached peak sets are inputs, not environment. `peak_sets_cached_before_the_run` is not merely
+    # a description of what happened to be on disk: it counts the peaks inside each cached file, and
+    # `peak_inventory` registers that count as the denominator of every `region_outside_measured_span`
+    # rather than letting it be inferred from an outcome. So thirty-nine figures of this result are read
+    # from these bytes, and until 2026-10-02 the manifest declared one input and named none of them.
+    # Recorded as a group, so every file carries its own sha256 and a second environment is told exactly
+    # which bytes the registration rests on.
+    peaks = sorted(
+        p.as_posix()
+        for cell in ce.READER_TERMS
+        for chrom in CHROMS
+        if (p := results_dir / reader.peaks_path(cell, chrom).name).exists()
+    )
+    if peaks:
+        inputs.append(mf.files_entry("reader_v1_dnase_peak_sets", peaks, partition=None))
     payload["result_manifest"] = {
         "sources": [
             {
