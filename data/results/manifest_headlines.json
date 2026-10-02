@@ -8,7 +8,8 @@
       "constrained_unknown_targets": "26c80da59bc78c183b460c240782556a2b3a2223735ff653e74219f4b4461a14",
       "crispri_published": "8787833d90dfe736219c096eed213a4dc8d806037b3ce224ceab6f2f3295d96b",
       "unknown_coverage": "8a675d65648f030c6d0be0ea8400a523fbb284dbb4b6dead6dbb98d513122402",
-      "constrained_unknown_targets_v2": "ce474f7512d733b0665a273a7b8fd049b61280f9a7a7984680a60a35f209deae"
+      "constrained_unknown_targets_v2": "ce474f7512d733b0665a273a7b8fd049b61280f9a7a7984680a60a35f209deae",
+      "therapeutic_benchmark_v2": "ed764d034cc4a84fc759c144b33b3c40ba2fa20715df1420d587a21df6770d34"
     },
     "therapeutic_benchmark": "not given the block: none of its 22 inputs is an AlphaGenome file",
     "manifest_rebuild": "scripts/manifest_rebuild.py leaves model_dependencies out of the comparison, like code: it is recorded after the run and states the inputs' provenance"
@@ -108,7 +109,7 @@
       }
     },
     {
-      "result": "therapeutic_benchmark",
+      "result": "therapeutic_benchmark_v2",
       "figure": "targets recovered, verdicts correct, mechanisms defensible",
       "quoted_as": "10/10",
       "quoted_in": "README status section; docs/THERAPEUTICS.md",
@@ -122,23 +123,94 @@
       "argv": [
         "scripts/therapeutic_benchmark.py"
       ],
-      "rebuilt_at": "5ab1b956b60123c29e95d90f0184d7a5694aaedb",
+      "rebuilt_at": "1bfe12d45b60c89f305057b6dabe834363f99109",
       "dirty": false,
       "manifest_complete": true,
-      "values_compared": 324,
+      "values_compared": 761,
       "differences": [],
       "status": "reproduced",
       "second_rerun_differences": [],
+      "comparison_reading": "0 differences AFTER SETTING ASIDE 11 leaves (1 run fields, 10 timing fields); every set-aside path is listed above with its reason, and this is not the same claim as 0 differences. One class set aside is KNOWN-LOSSY: run fields (the tracer's total `opens`), whose exemption will hide a genuine change in the set of files this writer opens outside data/.",
+      "second_rerun_comparison_reading": "0 differences AFTER SETTING ASIDE 11 leaves (1 run fields, 10 timing fields); every set-aside path is listed above with its reason, and this is not the same claim as 0 differences. One class set aside is KNOWN-LOSSY: run fields (the tracer's total `opens`), whose exemption will hide a genuine change in the set of files this writer opens outside data/.",
+      "files_opened_and_hashed": 20617,
+      "set_aside_and_why": {
+        "timing_fields": [
+          "/rows[0]/seconds",
+          "/rows[1]/seconds",
+          "/rows[2]/seconds",
+          "/rows[3]/seconds",
+          "/rows[4]/seconds",
+          "/rows[5]/seconds",
+          "/rows[6]/seconds",
+          "/rows[7]/seconds",
+          "/rows[8]/seconds",
+          "/rows[9]/seconds"
+        ],
+        "run_fields": [
+          "/result_manifest/traced_inputs/opens: 21780 vs 21778"
+        ],
+        "known_lossy": "the run-field exemption is the tool's own KNOWN-LOSSY class: it sets aside the tracer's total `opens` count (21,780 against 21,778 here) and that exemption will hide a genuine change in the set of files this writer opens OUTSIDE data/. Recorded, not presented as nothing"
+      },
+      "rebuild_how": "scripts/manifest_rebuild.py at the sha above, twice, each in its own clean git worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline); the tool itself was run from a worktree at that committed sha, not from the shared checkout",
       "alphagenome_requests": 0,
-      "difference_explained": "the first rerun (42e786f) differed from the committed file in one key, ordering_rules_measured, added by hand in 2805552 and written by no run. 65d2d23 makes the script write that exact wording; the rerun at 65d2d23 equals the committed file in every value (date and timings aside)",
-      "committed_file": "the committed lines kept, result_manifest added from the rebuild (its date and timings are the committed run's)",
-      "rebuild_2026_09_30": {
-        "why": "the tenth case (registered eb18c40, run 64f0afe) had no usable copy of its result, so the result is a fresh run: item 7 of the 2026-09-30 rebuild (docs/ROADMAP.md item 12, b317fa2)",
-        "how": "scripts/therapeutic_benchmark.py run twice at 5ab1b95 in clean git worktrees with data/reference, data/knowledge and data/cache linked, first with the checkout's environment, then with a fresh one from the committed uv.lock (uv sync --frozen --offline); public services on, no model requests; the second run's file is the committed one",
-        "second_rerun_differences": [],
-        "alphagenome_requests": 0,
-        "against_the_committed_nine_case_file": "rows 1-9 equal in all 288 fields they share with it (32 each) except seconds, and each gains rank_without_gate, magnitude_tiebreaks and quantities_in_this_tumour, which the tenth case's code writes for every row; the tenth row, its two inputs, two sources and six top-level keys are added; of the shared inputs only data/knowledge/therapeutics has different bytes",
-        "earlier_pass_fields": "values_compared, differences, status, difference_explained and committed_file describe the 2026-09-28 pass at 65d2d23"
+      "inputs_declared_and_checked": "26 of 26",
+      "traced_reads_against_declared_inputs": {
+        "files_read_under_data": 20617,
+        "declared_inputs": 26,
+        "undeclared": [],
+        "declared_not_read": [],
+        "how_most_reads_are_covered": "26 inputs cover 20,617 reads because four of them are DIRECTORIES (data/knowledge/therapeutics, proteins, expression and pathways): a file under one of them counts as declared by prefix, and its bytes are pinned by that directory's tree digest rather than by an sha256 of its own. The rebuild opened and hashed all 20,617 (files_opened_and_hashed), so the digests were checked member by member and not merely at the top. What that establishes is that the trees are as they were hashed; it does not establish that a directory held exactly these files when the digest was taken, and saying so is the difference between this and a per-file pin"
+      },
+      "offline_reproducible": false,
+      "offline_reproducible_note": "this result is NOT offline-reproducible as its registered argv runs it. The providers answer from the local knowledge stores first and fetch what a store lacks from the live services in network_sources, none of which publishes a version a request can pin; the stores' sha256 after the run is the only pin there is. A rebuild therefore reproduces the figures only insofar as those services answer as they did, which is a property of the instrument and is stated here rather than left to be inferred from the source list. Running with --offline is a DIFFERENT parameterisation (parameters.network false), not a like-for-like rebuild of this one",
+      "network_sources": [
+        {
+          "name": "cBioPortal REST",
+          "url": "https://www.cbioportal.org/api",
+          "for": "cohort frequencies and medians"
+        },
+        {
+          "name": "Open Targets GraphQL",
+          "url": "https://api.platform.opentargets.org/api/v4/graphql",
+          "for": "target-disease association and tractability"
+        },
+        {
+          "name": "Human Protein Atlas",
+          "url": "https://www.proteinatlas.org",
+          "for": "healthy-tissue expression"
+        },
+        {
+          "name": "Ensembl REST",
+          "url": "https://rest.ensembl.org",
+          "for": "VEP annotation, paralogues and transcript sequence"
+        },
+        {
+          "name": "UniProt / InterPro / PDB / AlphaFold / Reactome / STRING",
+          "url": "various, through the federated protein compiler",
+          "for": "protein localisation, topology and structure"
+        }
+      ],
+      "committed_file": "the file the run wrote in a clean worktree at the sha above, committed byte for byte: nothing in it was added, restamped or adjusted by hand",
+      "supersedes": {
+        "result": "therapeutic_benchmark",
+        "file": "data/results/therapeutic_benchmark.json",
+        "kept": "unchanged: its bytes are the 2026-09-28 record and nothing was written into it. Its own earlier rebuild history stays in the git history of this file",
+        "why": "the 2026-09-28 file declares 24 inputs and the string 'vep' occurs nowhere in its manifest, while every case is annotated through cancer.tumour.annotate_vep, which reads data/knowledge/vep/vep_cache.jsonl. That file is git-ignored, so it exists only on the machine that made the result: a rebuild elsewhere would not find it and would annotate live instead, and the manifest did not say so. The same writer also opened it for append on every call before looking at whether there was anything to add, which held a write handle on a store a rebuild hashes -- an exposure and not a change, since an append that writes nothing leaves the bytes and the mtime alone. And its declaration shrank in silence, in the way that is worse than being short: KNOWLEDGE_READ was filtered by if p.exists() and data/knowledge/Ensembl2Reactome.txt is in that tuple and is not on this machine, so eight paths were named and seven declared -- but the missing file does not merely go unrecorded, ANOTHER FILE ANSWERS IN ITS PLACE. genomeos/lib/membership.py:98 falls back to Membership.distilled(), which reads data/results/library_members.json, and genomeos/storage.py distils that store FROM Ensembl2Reactome.txt and records the raw mapping as disposable afterwards. The 2026-09-28 manifest declared NEITHER: it named the input that is gone and omitted the input that is read, and the string library_members does not occur in it at all. That read was found by the open-tracer refusing this result, not by reading the source. This run declares the cache as a file, raises on a missing required input, declares an absent optional input's fallback input in its place and records the swap under inputs_optional_absent, writes new annotations to a run-local directory, and states that it is not offline-reproducible. No figure was refitted and no quantity re-derived; the 2026-09-28 file is kept at data/results/therapeutic_benchmark.json with its bytes untouched as the historical record",
+        "its_own_rebuild_record": {
+          "rebuilt_at": "5ab1b956b60123c29e95d90f0184d7a5694aaedb",
+          "values_compared": 324,
+          "status": "reproduced",
+          "difference_explained": "the first rerun (42e786f) differed from the committed file in one key, ordering_rules_measured, added by hand in 2805552 and written by no run. 65d2d23 makes the script write that exact wording; the rerun at 65d2d23 equals the committed file in every value (date and timings aside)",
+          "rebuild_2026_09_30": {
+            "why": "the tenth case (registered eb18c40, run 64f0afe) had no usable copy of its result, so the result is a fresh run: item 7 of the 2026-09-30 rebuild (docs/ROADMAP.md item 12, b317fa2)",
+            "how": "scripts/therapeutic_benchmark.py run twice at 5ab1b95 in clean git worktrees with data/reference, data/knowledge and data/cache linked, first with the checkout's environment, then with a fresh one from the committed uv.lock (uv sync --frozen --offline); public services on, no model requests; the second run's file is the committed one",
+            "second_rerun_differences": [],
+            "alphagenome_requests": 0,
+            "against_the_committed_nine_case_file": "rows 1-9 equal in all 288 fields they share with it (32 each) except seconds, and each gains rank_without_gate, magnitude_tiebreaks and quantities_in_this_tumour, which the tenth case's code writes for every row; the tenth row, its two inputs, two sources and six top-level keys are added; of the shared inputs only data/knowledge/therapeutics has different bytes",
+            "earlier_pass_fields": "values_compared, differences, status, difference_explained and committed_file describe the 2026-09-28 pass at 65d2d23"
+          }
+        },
+        "its_own_rebuild_record_note": "carried here verbatim rather than dropped with the row: the 2026-09-28 and 2026-09-30 rebuilds of the superseded file are part of its record, and the file is still on disk"
       }
     },
     {
