@@ -9,8 +9,28 @@
   "population": "One arm per measured cell. An arm's population is every DISTINCT attributed element that overlaps at least one valid pair of the two cached ENCODE CRISPRi benchmark tables whose `CellType` is that cell. `attributed` is `genomeos.attribution.targets.attributed`'s own population - the elements of the three deletion runs that name a coding target gene, deduplicated by element id with the whole-chromosome run first - which is exactly the population `compile.compile_chromosome` emits one rule for, and therefore exactly the population the base rate is taken over. A pair is valid by the benchmark's own `ValidConnection` column, which `crispri.parse` applies; promoter and exon overlaps are already dropped there. Overlap is `OVERLAP_RULE`.",
   "denominator": "DISTINCT ELEMENTS, not pairs. The compiled cell is a property of the element's rule and not of the pair, so counting an element once per tested gene would weight elements by how many genes the screen happened to assay near them. The pair-level figure is reported beside it as a secondary count and is never the headline. Both are stated with the arm's cell name.",
   "denominator_is_separate": "This lane's denominators are its own and are added to nothing. They are NOT to be added to or compared with the 112, 93, 73, 67, 26, 19, 18, 14 or 10 of tonight's other lanes: several of those overlap, several are different populations, and two were wrongly added together earlier today. Every figure below is reported with the arm and the denominator it was taken over.",
-  "falsifier": "Stated before any count was taken (67e14d7) and AMENDED before any count was committed (AMENDMENT_1, which only tightens). d = observed_rate - committed_base_rate, both over the arm's own denominator, and every branch below is decided by the CLUSTERED interval on d and never by the point estimate.\n(1) upper bound of d < -0.02: the argmax lands on the measured cell LESS often than the label's own genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it points away from it.\n(2) the WHOLE interval on d inside +/-0.02: NO cell-type information. This is an equivalence result and not a failure to reject: the arm has excluded any difference larger than the tolerance. On this arm the compiled cell is the label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n(3) lower bound of d > +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this branch does not establish that the argmax carries cell-type information, because the benchmark's choice of which elements to test produces the same sign.\n(4) the interval crosses a tolerance bound: INCONCLUSIVE. THE DATA CANNOT TELL. This is not `no information` and may never be reported as one, and it is not a detection either.\nA SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - the compiled cell names the measured cell on at least a quarter of the arm's elements, so a reader could use it; observed_rate < 0.25 - whatever the interval says, the label names the measured cell on a minority of elements and may not be read as the place the rule acts.\nAn arm with fewer than 30 elements reports its counts and NO rate reading at all. An arm whose clusters number fewer than 10 prints NO interval and is INCONCLUSIVE BY RULE. The Wilson interval over elements is reported beside the clustered one as secondary, labelled binomial and unclustered wherever it appears, and decides nothing.",
+  "falsifier": "Stated before any count was taken (67e14d7) and AMENDED before any count was committed (AMENDMENT_1, which only tightens). d = observed_rate - committed_base_rate, both over the arm's own denominator, and every branch below is decided by the DECIDING interval on d and never by the point estimate. The deciding interval is the CLUSTERED bootstrap, except on an arm at 0 or n successes, where that bootstrap is degenerate and AMENDMENT_2 routes the reading to a Wilson bound on an effective sample size instead.\n(1) upper bound of d < -0.02: the argmax lands on the measured cell LESS often than the label's own genome-wide frequency. The label is not evidence of where the rule acts, and on this arm it points away from it.\n(2) the WHOLE interval on d inside +/-0.02: NO cell-type information. This is an equivalence result and not a failure to reject: the arm has excluded any difference larger than the tolerance. On this arm the compiled cell is the label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts - and that is the finding, stated plainly.\n(3) lower bound of d > +0.02: a difference IS detected. Read with CONFOUND, which says in advance that this branch does not establish that the argmax carries cell-type information, because the benchmark's choice of which elements to test produces the same sign.\n(4) the interval crosses a tolerance bound: INCONCLUSIVE. THE DATA CANNOT TELL. This is not `no information` and may never be reported as one, and it is not a detection either.\nA SECOND, separate threshold, on usability rather than on detection: observed_rate >= 0.25 - the compiled cell names the measured cell on at least a quarter of the arm's elements, so a reader could use it; observed_rate < 0.25 - whatever the interval says, the label names the measured cell on a minority of elements and may not be read as the place the rule acts.\nAn arm with fewer than 30 elements reports its counts and NO rate reading at all. An arm whose clusters number fewer than 10 prints NO interval and is INCONCLUSIVE BY RULE. The Wilson interval over elements is reported beside the clustered one as secondary, labelled binomial and unclustered wherever it appears, and decides nothing.",
   "amendment_1": "AMENDED on the coordinator's direction after the registration at 67e14d7 and BEFORE any count of this lane is committed. Additive: TOLERANCE 0.02, USABLE 0.25 and MIN_ELEMENTS 30 are unchanged, and no reading is made easier to reach.\nTHE DEFECT IT FIXES, in the coordinator's own terms: the registered readings were selected by the POINT estimate of d against a +/-0.02 band. At 30 elements and a rate near 0.06 the standard error is about 0.043, more than twice the band, so on a small arm reading (2) - `NO cell-type information is detected, stated plainly` - would fire from noise. An underpowered null presented as a finding is the one outcome this lane must not produce.\n(a) A reading is now decided by the INTERVAL and never by the point. (3) detected only if the interval's LOWER bound on d exceeds +0.02; (1) anti-correlated only if its UPPER bound is below -0.02; (2) no information only if the WHOLE interval lies inside +/-0.02, which makes it an equivalence result and not a failure to reject.\n(b) A NEW reading (4) INCONCLUSIVE when the interval crosses a tolerance bound. Its words are `the data cannot tell`, never `no information`: those are different claims and eliding the difference is what produced several of tonight's overstatements.\n(c) The DECIDING interval is CLUSTERED - by chromosome, or by locus when chromosomes do not give at least 10 clusters. Under 10 clusters no interval is printed and the arm is inconclusive BY RULE and not by judgement. The Wilson interval over elements is kept beside it as SECONDARY and stays labelled as the binomial, unclustered interval it is.\n(d) POWER IS STATED PER ARM: the elements an arm needs for a +/-0.02 half-width, and whether it has them. An arm that does not is declared underpowered as a property of the arm.\nDISCLOSED, because the record must not read better than it was: when this amendment was written the un-amended run had ALREADY completed in a worktree at 67e14d7 and its figures had been seen. They are named in the amendment's commit message. The amendment is therefore NOT blind, and the one thing that can be checked rather than trusted is its direction: every change here can only turn a reading into INCONCLUSIVE or leave it standing. None of them can create a detection, widen a detection, or convert an inconclusive arm into a finding.",
+  "amendment_2": "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 are unchanged.\nTHE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every resample returns the same rate, so the interval has zero width and is estimating nothing. 7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm rested on a zero-width interval. The file did not say the interval was degenerate, and a reader could not have told it from a narrow one.\nTHE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by test, in both directions.\nTHE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own intracluster correlation and an assumption would decide the reading. It is taken from the arms of this same result that CAN estimate one - 0 < k < n and a clustered interval - as (clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the most conservative there is, one observation per cluster (n_eff = clusters), which is intracluster correlation of 1. Every value, the arm it came from and the one taken are reported.\nDISCLOSED, and this is the part that is a correction rather than a confirmation. Before committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, and reading (2) survives - which is what the coordinator's direction expected. The measured design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near 39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The rule above was chosen because measuring the design effect is the right method and assuming independence is the thing clustering exists to doubt - not because of which answer it gives - and the outcome it gives is reported as a contradiction of the expectation that prompted it. It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never towards a finding.\nALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-degenerate and will score high without triggering the rule, which is reported so a reader can see the near case rather than have this lane invent a second threshold for it.",
+  "measured_design_effect": {
+    "per_arm": {
+      "K562": 10.231,
+      "GM12878": null,
+      "HCT116": 1.0,
+      "Jurkat": null,
+      "WTC11": null
+    },
+    "estimable_arms": [
+      "HCT116",
+      "K562"
+    ],
+    "taken": 10.231,
+    "taken_from": "K562",
+    "rule": "(clustered width / Wilson width)^2 per estimable arm, floored at 1.0, largest taken. An arm can estimate one when 0 < k < n and its clusters reach 10. With none estimable the fallback is one observation per cluster, which is intracluster correlation of 1 (AMENDMENT_2)"
+  },
+  "amendment_timeline": "WHAT WAS KNOWN WHEN, with the shas, because a claim about when something was known is worth nothing without them. `amendment_1` says it was made before any count of this lane was COMMITTED. That is true and it is misleading by omission, so the omission is repaired here.\nTHE BLIND HALF, and it is the half the answer rests on. 67e14d7 (2026-10-02 22:20) fixed, before a single CRISPRi pair had been joined to a single element and before any element table had been opened: the population; the element denominator; the five base rates as numbers (K562 0.062292, GM12878 0.014540, Jurkat 0.002569, HCT116 0.001348, WTC11 0.000218) and the formula that produced them from the committed census; the usability threshold USABLE = 0.25; the tolerance 0.02; the element floor 30; and the SELECTION CONFOUND, which is the reason a positive difference may never be read as the argmax carrying cell-type information. The headline finding - that no arm reaches 0.25, so a rule's cell may not be read as the place it acts - rests on that threshold and on those base rates, and both were fixed at 67e14d7.\nTHE PART THAT IS NOT BLIND. The first count RAN before amendment 1 was written. Its result was never committed and is not in the history, but the figures HAD BEEN SEEN when amendment 1 was written at 21b80b1 (22:30) and committed into the registration at 18224ef (22:31). So amendment 1 is NOT blind and must not be read as a pre-registration of the uncertainty rule. Amendment 2, at d3d0686, came later still - after the committed result at 7a44d59 (22:35) - and is post-hoc in its own first sentence.\nWHAT CAN BE CHECKED INSTEAD OF TRUSTED: the DIRECTION of both amendments. Every change in either can only turn a reading INCONCLUSIVE or leave it standing. None can create a detection, widen one, or turn an inconclusive arm into a finding. Amendment 1 removed two detections and no nulls; amendment 2 removed one null and no detections.\nAND WHAT THEY COST, named so the gain is not left implicit. Under the ORIGINAL point rule of 67e14d7, GM12878 at 4 of 45 and Jurkat at 1 of 41 would both have read (3) DETECTION - two detections published on 45 and 41 elements. Under amendment 1 both are (4), THE DATA CANNOT TELL, inconclusive by rule at 9 and 5 resampling clusters. Under amendment 2 WTC11's 0 of 397 stops being an equivalence null decided by a zero-width interval.",
+  "reporting_code_changed_after_a_run": "DISCLOSED because a reader who finds a code change between a registration and a result should not have to guess at it. 6c9a30e (2026-10-02 22:33) changed sentence-GENERATING code in scripts/argmaxcell_count.py after the amended registration at 18224ef and before the committed result at 7a44d59. The answer to the only question that matters about it is YES: it was written AFTER this lane had seen the OUTPUT of a run - the first run under amendment 1, whose printed verdict is where the fault was found.\nWHAT IT CHANGED. The verdict's split sentence said the reading-(2) arms were `at or below the base rate`. That was FALSE for HCT116, whose 0.004032 is above its base rate of 0.001348; the phrase was the point rule's wording left standing after amendment 1 made the reading an interval equivalence. It now names each arm by the reading its own interval selected. The same commit added, per arm, the tolerance and the observed rate as MULTIPLES of that arm's own base rate, because reading (2) is an equivalence against an ABSOLUTE 0.02 and that is 14.8 times HCT116's base rate and 91.7 times WTC11's.\nWHAT IT DID NOT CHANGE: no threshold, no branch rule, no population, no denominator, no base rate and no reading. It is a change to what the result SAYS about figures it had already computed, and `argmaxcell.reading` was not touched by it.",
+  "relative_bands_from_now_on": "ADOPTED on the supervisor's direction, and recorded here as a rule for the NEXT registration rather than as a change to this one: an equivalence or tolerance band is stated RELATIVE to its base rate, or it carries a stated reason why an absolute band is right. This lane's band is absolute (0.02) and carries no such reason, which is the defect; the patch kept for THIS result is the printed multiple of each arm's own base rate, so a reader can see that the band is 0.3 times K562's base rate and 91.7 times WTC11's and therefore which arms the equivalence reading is strong on. Nothing is regenerated for this beyond keeping those multiples.",
   "confound_registered_before_any_count": "Registered before any count, and it makes the two readings asymmetric. The CRISPRi benchmark chose which elements to test, and it tested candidate elements in regions active in the cell it was testing. So the elements of the K562 arm are not a random draw from the compiled population: they are enriched for K562-active sequence before any model touched them. That enrichment pushes the observed rate UP. Therefore:\n- a difference at or near zero is NOT explained by the selection, because the selection pushes the other way, and it is clean evidence that the argmax carries no cell-type information;\n- a positive difference is explained by the selection at least as readily as by the model, and this lane cannot separate the two with the data it reads. A positive difference is therefore reported as a difference and MUST NOT be reported as the argmax carrying cell-type information.\nThis lane can refute the proposition and can fail to refute it. It cannot confirm it.",
   "base_rate_rule": "base_rate(cell) = census['per_cell'][label]['rules'] / census['rules'], where census is the COMMITTED data/results/context_evidence.json and label is `compile.context(cell)` - the same function the compiler used to write the `when: cell_type` value the census counted. The census denominator is 440,589: every rule `compile.compile_chromosome` emits over the 24 chromosomes, counted as the compiler emits it, and its own `per_cell` entries sum to exactly that. No part of this base rate is computed by this lane and none of it is derived from the measured pairs, so it cannot have been chosen after seeing an observed figure.",
   "base_rate_is_not_uniform": "The base rate is NOT 1/371. K562 is the single most frequent compiled label genome-wide, so its base rate is about twenty-three times what a uniform draw over the scorer's tracks would give. That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.",
@@ -132,6 +152,20 @@
         "difference_point_estimate": 0.127299,
         "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
         "tolerance": 0.02,
+        "deciding_interval": "clustered_bootstrap",
+        "deciding_ci95_on_the_rate": [
+          0.15038,
+          0.236864
+        ],
+        "deciding_ci95_on_the_difference": [
+          0.088088,
+          0.174572
+        ],
+        "bootstrap_degenerate": false,
+        "bootstrap_identical_share": 0.001,
+        "effective_sample_size": null,
+        "effective_successes": null,
+        "design_effect_applied": null,
         "clustered_ci95_on_the_rate": [
           0.15038,
           0.236864
@@ -149,17 +183,20 @@
           "resamples_minimum": 1000,
           "seed": 20261002,
           "method": "percentile bootstrap over whole clusters, resampled with replacement",
-          "met_minimum": true
+          "met_minimum": true,
+          "identical_share": 0.001,
+          "degenerate": false
         },
         "why_no_interval": null,
         "clustered_interval_decides_the_reading": true,
+        "amendment_2": "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 are unchanged.\nTHE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every resample returns the same rate, so the interval has zero width and is estimating nothing. 7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm rested on a zero-width interval. The file did not say the interval was degenerate, and a reader could not have told it from a narrow one.\nTHE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by test, in both directions.\nTHE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own intracluster correlation and an assumption would decide the reading. It is taken from the arms of this same result that CAN estimate one - 0 < k < n and a clustered interval - as (clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the most conservative there is, one observation per cluster (n_eff = clusters), which is intracluster correlation of 1. Every value, the arm it came from and the one taken are reported.\nDISCLOSED, and this is the part that is a correction rather than a confirmation. Before committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, and reading (2) survives - which is what the coordinator's direction expected. The measured design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near 39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The rule above was chosen because measuring the design effect is the right method and assuming independence is the thing clustering exists to doubt - not because of which answer it gives - and the outcome it gives is reported as a contradiction of the expectation that prompted it. It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never towards a finding.\nALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-degenerate and will score high without triggering the rule, which is reported so a reader can see the near case rather than have this lane invent a second threshold for it.",
         "wilson95_secondary": [
           0.176441,
           0.203479
         ],
         "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
         "wilson95_excludes_the_base_rate": true,
-        "detection": "a difference IS detected: the clustered interval's lower bound on d is above the registered tolerance. It does NOT establish that the argmax carries cell-type information: the benchmark chose elements active in the cell it was testing, which produces this sign on its own, and this lane cannot separate the two (CONFOUND)",
+        "detection": "a difference IS detected: the deciding interval's lower bound on d is above the registered tolerance. It does NOT establish that the argmax carries cell-type information: the benchmark chose elements active in the cell it was testing, which produces this sign on its own, and this lane cannot separate the two (CONFOUND)",
         "argmax_carries_cell_type_information": null,
         "power": {
           "elements": 3228,
@@ -286,6 +323,14 @@
         "difference_point_estimate": 0.074349,
         "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
         "tolerance": 0.02,
+        "deciding_interval": "clustered_bootstrap",
+        "deciding_ci95_on_the_rate": null,
+        "deciding_ci95_on_the_difference": null,
+        "bootstrap_degenerate": false,
+        "bootstrap_identical_share": null,
+        "effective_sample_size": null,
+        "effective_successes": null,
+        "design_effect_applied": null,
         "clustered_ci95_on_the_rate": null,
         "clustered_ci95_on_the_difference": null,
         "clustered_by": "locus",
@@ -301,6 +346,7 @@
         },
         "why_no_interval": "9 resampling clusters is below the floor of 10, so no interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement",
         "clustered_interval_decides_the_reading": true,
+        "amendment_2": "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 are unchanged.\nTHE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every resample returns the same rate, so the interval has zero width and is estimating nothing. 7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm rested on a zero-width interval. The file did not say the interval was degenerate, and a reader could not have told it from a narrow one.\nTHE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by test, in both directions.\nTHE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own intracluster correlation and an assumption would decide the reading. It is taken from the arms of this same result that CAN estimate one - 0 < k < n and a clustered interval - as (clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the most conservative there is, one observation per cluster (n_eff = clusters), which is intracluster correlation of 1. Every value, the arm it came from and the one taken are reported.\nDISCLOSED, and this is the part that is a correction rather than a confirmation. Before committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, and reading (2) survives - which is what the coordinator's direction expected. The measured design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near 39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The rule above was chosen because measuring the design effect is the right method and assuming independence is the thing clustering exists to doubt - not because of which answer it gives - and the outcome it gives is reported as a contradiction of the expectation that prompted it. It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never towards a finding.\nALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-degenerate and will score high without triggering the rule, which is reported so a reader can see the near case rather than have this lane invent a second threshold for it.",
         "wilson95_secondary": [
           0.035111,
           0.207336
@@ -434,6 +480,20 @@
         "difference_point_estimate": 0.002684,
         "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
         "tolerance": 0.02,
+        "deciding_interval": "clustered_bootstrap",
+        "deciding_ci95_on_the_rate": [
+          0.0,
+          0.017986
+        ],
+        "deciding_ci95_on_the_difference": [
+          -0.001348,
+          0.016638
+        ],
+        "bootstrap_degenerate": false,
+        "bootstrap_identical_share": 0.359,
+        "effective_sample_size": null,
+        "effective_successes": null,
+        "design_effect_applied": null,
         "clustered_ci95_on_the_rate": [
           0.0,
           0.017986
@@ -451,17 +511,20 @@
           "resamples_minimum": 1000,
           "seed": 20261002,
           "method": "percentile bootstrap over whole clusters, resampled with replacement",
-          "met_minimum": true
+          "met_minimum": true,
+          "identical_share": 0.359,
+          "degenerate": false
         },
         "why_no_interval": null,
         "clustered_interval_decides_the_reading": true,
+        "amendment_2": "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 are unchanged.\nTHE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every resample returns the same rate, so the interval has zero width and is estimating nothing. 7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm rested on a zero-width interval. The file did not say the interval was degenerate, and a reader could not have told it from a narrow one.\nTHE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by test, in both directions.\nTHE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own intracluster correlation and an assumption would decide the reading. It is taken from the arms of this same result that CAN estimate one - 0 < k < n and a clustered interval - as (clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the most conservative there is, one observation per cluster (n_eff = clusters), which is intracluster correlation of 1. Every value, the arm it came from and the one taken are reported.\nDISCLOSED, and this is the part that is a correction rather than a confirmation. Before committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, and reading (2) survives - which is what the coordinator's direction expected. The measured design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near 39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The rule above was chosen because measuring the design effect is the right method and assuming independence is the thing clustering exists to doubt - not because of which answer it gives - and the outcome it gives is reported as a contradiction of the expectation that prompted it. It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never towards a finding.\nALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-degenerate and will score high without triggering the rule, which is reported so a reader can see the near case rather than have this lane invent a second threshold for it.",
         "wilson95_secondary": [
           0.000712,
           0.022483
         ],
         "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
         "wilson95_excludes_the_base_rate": false,
-        "detection": "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the whole clustered interval on d lies inside the registered tolerance, so this arm has excluded any difference larger than it. The rate at which the compiled cell is the measured cell is that label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts. The confound pushes the other way, so this reading is not explained by the benchmark's selection of tested elements",
+        "detection": "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the whole deciding interval on d lies inside the registered tolerance, so this arm has excluded any difference larger than it. The rate at which the compiled cell is the measured cell is that label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts. The confound pushes the other way, so this reading is not explained by the benchmark's selection of tested elements",
         "argmax_carries_cell_type_information": false,
         "power": {
           "elements": 248,
@@ -589,6 +652,14 @@
         "difference_point_estimate": 0.021821,
         "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
         "tolerance": 0.02,
+        "deciding_interval": "clustered_bootstrap",
+        "deciding_ci95_on_the_rate": null,
+        "deciding_ci95_on_the_difference": null,
+        "bootstrap_degenerate": false,
+        "bootstrap_identical_share": null,
+        "effective_sample_size": null,
+        "effective_successes": null,
+        "design_effect_applied": null,
         "clustered_ci95_on_the_rate": null,
         "clustered_ci95_on_the_difference": null,
         "clustered_by": "locus",
@@ -604,6 +675,7 @@
         },
         "why_no_interval": "5 resampling clusters is below the floor of 10, so no interval is printed and this arm is INCONCLUSIVE BY RULE rather than by judgement",
         "clustered_interval_decides_the_reading": true,
+        "amendment_2": "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 are unchanged.\nTHE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every resample returns the same rate, so the interval has zero width and is estimating nothing. 7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm rested on a zero-width interval. The file did not say the interval was degenerate, and a reader could not have told it from a narrow one.\nTHE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by test, in both directions.\nTHE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own intracluster correlation and an assumption would decide the reading. It is taken from the arms of this same result that CAN estimate one - 0 < k < n and a clustered interval - as (clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the most conservative there is, one observation per cluster (n_eff = clusters), which is intracluster correlation of 1. Every value, the arm it came from and the one taken are reported.\nDISCLOSED, and this is the part that is a correction rather than a confirmation. Before committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, and reading (2) survives - which is what the coordinator's direction expected. The measured design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near 39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The rule above was chosen because measuring the design effect is the right method and assuming independence is the thing clustering exists to doubt - not because of which answer it gives - and the outcome it gives is reported as a contradiction of the expectation that prompted it. It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never towards a finding.\nALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-degenerate and will score high without triggering the rule, which is reported so a reader can see the near case rather than have this lane invent a second threshold for it.",
         "wilson95_secondary": [
           0.004319,
           0.125951
@@ -731,20 +803,28 @@
       "observed_rate": 0.0,
       "reading": {
         "rate_reported": true,
-        "reading": "(2)",
+        "reading": "(4)",
         "observed_rate": 0.0,
         "committed_base_rate": 0.000218,
         "difference_point_estimate": -0.000218,
         "point_estimate_decides_nothing": "carried because a reader will want it; under AMENDMENT_1 the branch is chosen by the clustered interval alone",
         "tolerance": 0.02,
-        "clustered_ci95_on_the_rate": [
+        "deciding_interval": "wilson_on_an_effective_sample_size",
+        "deciding_ci95_on_the_rate": [
           0.0,
-          0.0
+          0.089667
         ],
-        "clustered_ci95_on_the_difference": [
+        "deciding_ci95_on_the_difference": [
           -0.000218,
-          -0.000218
+          0.089449
         ],
+        "bootstrap_degenerate": true,
+        "bootstrap_identical_share": 1.0,
+        "effective_sample_size": 39,
+        "effective_successes": 0,
+        "design_effect_applied": 10.231,
+        "clustered_ci95_on_the_rate": null,
+        "clustered_ci95_on_the_difference": null,
         "clustered_by": "chromosome",
         "cluster_grouping_caveat": null,
         "clustered_interval_provenance": {
@@ -754,18 +834,21 @@
           "resamples_minimum": 1000,
           "seed": 20261002,
           "method": "percentile bootstrap over whole clusters, resampled with replacement",
-          "met_minimum": true
+          "met_minimum": true,
+          "identical_share": 1.0,
+          "degenerate": true
         },
-        "why_no_interval": null,
-        "clustered_interval_decides_the_reading": true,
+        "why_no_interval": "the cluster bootstrap is DEGENERATE at 0 of 397 successes: every resample returns the same rate, so it has zero width and estimates nothing. It decides nothing here. The reading is decided by a Wilson bound on an effective sample size of 39 = 397 / design effect 10.231 (AMENDMENT_2)",
+        "clustered_interval_decides_the_reading": false,
+        "amendment_2": "AMENDED a second time on the coordinator's direction, after the result at 7a44d59, and this amendment is POST-HOC and says so. It changes WHICH INSTRUMENT decides a reading on one shape of arm. No threshold moves: TOLERANCE 0.02, USABLE 0.25, MIN_ELEMENTS 30 and MIN_CLUSTERS 10 are unchanged.\nTHE DEFECT. At 0 successes, or at n successes, a cluster bootstrap is DEGENERATE: every resample returns the same rate, so the interval has zero width and is estimating nothing. 7a44d59 published WTC11's deciding interval as [0.0, 0.0] from 12 clusters and 2,000 resamples with `clustered_interval_decides_the_reading: true`, so reading (2) for that arm rested on a zero-width interval. The file did not say the interval was degenerate, and a reader could not have told it from a narrow one.\nTHE RULE, stated generally rather than for the arm that exposed it: at 0 or n successes a cluster bootstrap decides nothing. The reading is then decided by a WILSON bound computed on an EFFECTIVE sample size, n_eff = n / design_effect, and the degenerate case is NAMED in the file (`bootstrap_degenerate`, `deciding_interval`) rather than silently passed through. An arm with 0 < k < n still routes to the CLUSTERED interval, unchanged. Both routings are planted by test, in both directions.\nTHE DESIGN EFFECT IS MEASURED, NOT ASSUMED, because a degenerate arm cannot estimate its own intracluster correlation and an assumption would decide the reading. It is taken from the arms of this same result that CAN estimate one - 0 < k < n and a clustered interval - as (clustered width / Wilson width)^2, floored at MIN_DESIGN_EFFECT so it can never narrow an interval, and the LARGEST such value is applied: a 0-success arm offers no evidence that its own clustering is weaker than its siblings'. When no arm can estimate one the fallback is the most conservative there is, one observation per cluster (n_eff = clusters), which is intracluster correlation of 1. Every value, the arm it came from and the one taken are reported.\nDISCLOSED, and this is the part that is a correction rather than a confirmation. Before committing this rule I computed what three candidate choices imply for WTC11's 0 of 397. Independence (design effect 1) keeps the Wilson upper bound at 0.009583, below the tolerance, and reading (2) survives - which is what the coordinator's direction expected. The measured design effect from this result's own estimable arms is about 10.2 from K562, giving n_eff near 39 and a Wilson upper bound near 0.067, so reading (2) does NOT survive and WTC11 becomes (4), THE DATA CANNOT TELL. Intracluster correlation of 1 gives n_eff = 12 and the same answer. The rule above was chosen because measuring the design effect is the right method and assuming independence is the thing clustering exists to doubt - not because of which answer it gives - and the outcome it gives is reported as a contradiction of the expectation that prompted it. It is also the conservative direction amendment 1 established: towards INCONCLUSIVE, never towards a finding.\nALSO ADDED, and it moves nothing: `bootstrap_identical_share`, the share of resamples that returned the modal rate. A fully degenerate arm scores 1.0; HCT116's 1 of 248 is near-degenerate and will score high without triggering the rule, which is reported so a reader can see the near case rather than have this lane invent a second threshold for it.",
         "wilson95_secondary": [
           0.0,
           0.009583
         ],
         "wilson95_is": "a Wilson 95% interval over ELEMENTS, assuming independent elements. It is NOT a clustered interval: elements of one locus are not independent, so it is narrower than a chromosome- or locus-clustered interval would be. It is reported because the readings turn on a difference from a base rate and a reader is entitled to the sampling width; it is labelled here and wherever it is printed, and no reading of this lane rests on it alone.",
         "wilson95_excludes_the_base_rate": false,
-        "detection": "NO cell-type information, as an EQUIVALENCE result and not a failure to reject: the whole clustered interval on d lies inside the registered tolerance, so this arm has excluded any difference larger than it. The rate at which the compiled cell is the measured cell is that label's background frequency and nothing more, so a rule's `cell` is NOT evidence of where it acts. The confound pushes the other way, so this reading is not explained by the benchmark's selection of tested elements",
-        "argmax_carries_cell_type_information": false,
+        "detection": "INCONCLUSIVE: THE DATA CANNOT TELL. The deciding interval on d crosses a tolerance bound, so this arm neither detects a difference larger than the tolerance nor excludes one. This is NOT `no cell-type information` and may never be reported as one",
+        "argmax_carries_cell_type_information": null,
         "power": {
           "elements": 397,
           "committed_base_rate": 0.000218,
@@ -1128,10 +1211,9 @@
   },
   "verdict": {
     "written_after_the_counts": "this block was written after the counts and is a reading of them. The branch each arm takes was fixed BEFORE them, by FALSIFIER under AMENDMENT_1, and is applied by `argmaxcell.reading` from the CLUSTERED interval; nothing here chooses a sentence that a figure did not select",
-    "does_the_argmax_carry_cell_type_information": "SPLIT, and reported as split, with each arm named by the reading its own interval selected. Reading (2), an equivalence result - the whole clustered interval on d inside the tolerance, so a difference larger than the tolerance is EXCLUDED and the compiled cell is not evidence of where the rule acts: ['HCT116', 'WTC11']. Reading (3), a difference detected whose sign the benchmark's selection of tested elements explains as readily as the model does, so it establishes nothing about cell-type information: ['K562']. Reading (1), anti-correlated: []. Reading (4), THE DATA CANNOT TELL - which is not a null and must never be read as one: ['GM12878', 'Jurkat']. No set is pooled with another and no arm's reading is carried to another arm",
+    "does_the_argmax_carry_cell_type_information": "SPLIT, and reported as split, with each arm named by the reading its own interval selected. Reading (2), an equivalence result - the whole clustered interval on d inside the tolerance, so a difference larger than the tolerance is EXCLUDED and the compiled cell is not evidence of where the rule acts: ['HCT116']. Reading (3), a difference detected whose sign the benchmark's selection of tested elements explains as readily as the model does, so it establishes nothing about cell-type information: ['K562']. Reading (1), anti-correlated: []. Reading (4), THE DATA CANNOT TELL - which is not a null and must never be read as one: ['GM12878', 'Jurkat', 'WTC11']. No set is pooled with another and no arm's reading is carried to another arm",
     "arms_with_no_cell_type_information_reading_2": [
-      "HCT116",
-      "WTC11"
+      "HCT116"
     ],
     "reading_2_is_an_equivalence_result": "an arm is in the list above only because its WHOLE clustered interval on d lies inside the tolerance, so it has EXCLUDED a difference larger than the tolerance. An arm that merely failed to show one is in `arms_the_data_cannot_tell_reading_4` and the two lists must never be merged",
     "arms_anti_correlated_reading_1": [],
@@ -1140,7 +1222,8 @@
     ],
     "arms_the_data_cannot_tell_reading_4": [
       "GM12878",
-      "Jurkat"
+      "Jurkat",
+      "WTC11"
     ],
     "arms_below_the_element_floor": [],
     "arms_declared_underpowered": [
@@ -1195,8 +1278,8 @@
   "read_discipline": "No archive is opened and the cached-element loader is never called. The compact per-chromosome element table is decoded ONE element at a time by `stream_table` with `json.JSONDecoder.raw_decode`, and four scalars per element are retained, so the parsed object graph of a 59 MB table is never held. One chromosome is in hand at a time and its text is released before the next is opened. `check_rss` raises at RSS_CEILING_BYTES after every chromosome. The ceiling is 2147483648 bytes and the run reports its own peak.",
   "rss": {
     "ceiling_bytes": 2147483648,
-    "peak_bytes": 313704448,
-    "peak_mib": 299.2,
+    "peak_bytes": 315146240,
+    "peak_mib": 300.5,
     "no_archive_was_opened": "no per-element archive and no cached-element loader call. The peak above is the measured figure for streaming all 24 compact tables one at a time"
   },
   "alphagenome_requests": 0,
@@ -1714,7 +1797,7 @@
       "the_census_440589": "the base rate's denominator, from the committed census"
     },
     "code_cleanliness": {
-      "git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "git_sha": "6a9f368bae10d211780e671bd2f86fdccb602536",
       "dirty": false,
       "own_uncommitted_code": [],
       "own_code_is_committed": true,
@@ -1854,7 +1937,7 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "git_sha": "6a9f368bae10d211780e671bd2f86fdccb602536",
       "dirty": false,
       "dirty_code_paths": [],
       "untracked_code_paths": [],
@@ -1866,13 +1949,13 @@
     },
     "complete": true,
     "revision_stamps": {
-      "code_git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
-      "code_cleanliness_git_sha": "6c9a30e3c6aff8cc4215829f29eff535eb85ec78",
+      "code_git_sha": "6a9f368bae10d211780e671bd2f86fdccb602536",
+      "code_cleanliness_git_sha": "6a9f368bae10d211780e671bd2f86fdccb602536",
       "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
       "comparable": true,
       "agree": true,
       "revision_race": false,
-      "reading": "no revision race: both stamps record 6c9a30e"
+      "reading": "no revision race: both stamps record 6a9f368"
     },
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
