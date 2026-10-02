@@ -314,7 +314,7 @@ def test_the_registration_fixes_the_definitions_before_any_count() -> None:
     assert set(reg["unresolvable_symbols"]["causes"]) == set(gi.CAUSES)
     assert reg["population"]["expected_total"] == 440589
     assert reg["sensitivity_fixed_in_advance"]["half_window"] == gi.HALF_WINDOW
-    assert "no count over the compiled programs was read" in reg["status"]
+    assert "before any count over the compiled programs was read" in reg["status"]
     annotation = reg["inputs_named_by_sha256"]["annotation"]
     assert annotation and all(len(e["sha256"]) == 64 for e in annotation)
 

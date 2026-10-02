@@ -18,7 +18,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.attribution import context_evidence as ce  # noqa: E402
 from genomeos.attribution import gene_identity as gi  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
@@ -165,7 +164,7 @@ def main() -> None:
             "count": "scripts/gene_identity.py",
             "tests": "tests/test_gene_identity.py",
         },
-        "code_cleanliness": ce.code_cleanliness(Path(__file__).resolve(), OWN_CODE),
+        "code_cleanliness": mf.code_cleanliness(Path(__file__).resolve(), OWN_CODE),
         "inputs_named_by_sha256": {
             "annotation": annotation,
             "compiled_programs": programs,
@@ -175,6 +174,45 @@ def main() -> None:
                 "rebuild of any result of this lane stops at the inputs rather than rebuilding them"
             ),
         },
+    }
+    payload["result_manifest"] = {
+        "sources": [
+            {"accession": "GENCODE", "version": "v50, data/reference/gencode_v50_chr*.gff3.gz"},
+            {
+                "accession": "AlphaGenome deletion answers per element, as the project cached them",
+                "version": (
+                    "data/knowledge/alphagenome/elements/chr*.json.gz, the per-element record of "
+                    "every gene the scorer read in the element's window"
+                ),
+            },
+            {
+                "accession": "the compiled non-coding programs of the 24 chromosomes",
+                "version": "data/knowledge/compiled/noncoding_chr*.bio, read as they are on disk",
+            },
+        ],
+        "inputs": sorted(annotation + programs + window, key=lambda e: e["path"]),
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "parameters": {
+            "mis_resolution": gi.MIS_RESOLUTION,
+            "compiled_side": gi.COMPILED_RESOLUTION,
+            "measured_side": gi.MEASURED_RESOLUTION,
+            "half_window": gi.HALF_WINDOW,
+            "second_half_window": gi.SENSITIVITY_HALF_WINDOW,
+            "effect_band_call": gi.EFFECT_BAND_CALL,
+            "causes": gi.CAUSES,
+            "chromosomes": list(gi.CHROMS),
+        },
+        "exclusions": [
+            "nothing is excluded here: this file fixes definitions and counts nothing",
+            "no new cut-off is introduced: the half-window, the effect band and the distance bands "
+            "are imported from where the project already fixed them",
+        ],
+        "partitions": {
+            "none": "this registration partitions nothing; the breakdowns it fixes are listed under "
+            "`correlations` and are computed by the run it registers"
+        },
+        "code_cleanliness": mf.code_cleanliness(Path(__file__).resolve(), OWN_CODE),
     }
     path = save_result(RESULT, payload)
     print(f"wrote {path}")

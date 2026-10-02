@@ -26,7 +26,6 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.attribution import context_evidence as ce  # noqa: E402
 from genomeos.attribution import gene_identity as gi  # noqa: E402
 from genomeos.results import load_result, save_result  # noqa: E402
 
@@ -403,7 +402,7 @@ def main() -> None:
             "by_distance_band": "executor._band over the compiled side's element-midpoint-to-TSS distance",
             "by_cell": "the rule's own `when: cell_type` label, unchanged",
         },
-        "code_cleanliness": ce.code_cleanliness(Path(__file__).resolve(), OWN_CODE),
+        "code_cleanliness": mf.code_cleanliness(Path(__file__).resolve(), OWN_CODE),
     }
 
     path = save_result(args.result, payload)
