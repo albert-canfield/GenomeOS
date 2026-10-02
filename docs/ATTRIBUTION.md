@@ -13642,6 +13642,12 @@ comparator's input, so DNase is read by both and H3K27ac by neither — and it w
 (`re2g.SECOND_REGISTRATION`) and committed before any figure of it was computed. By its own
 pre-registered falsifier, **README may not say the deletion model ranks better than ENCODE-rE2G**, and
 the H3K27ac comparison below **may not be cited alone**. `data/results/re2g_likeforlike.json`.
+That comparison registers the K562 primary and nothing else, so its pooled and GM12878 arms are
+descriptive context and carry **no reading word at all** — only their point estimate and interval — and
+the result's reading block holds the registered population alone. A descriptive arm briefly carried the
+registered wording "ranks better than ENCODE-rE2G on these pairs" three lines below a primary that reads
+"no difference detected"; that was the very overstatement this lane exists to have withdrawn, it is
+fixed, and a test now fails if any population the registration does not register carries a reading word.
 
 **The gate passed before anything was compared.** ENCODE-rE2G was reconstructed from the five ENCODE
 portal `element gene links` files that Supplementary Table 12 names, one per benchmark biosample
@@ -13686,7 +13692,8 @@ pooled delta is not really a test of the deletion feature. Both the coordinator 
 conclusion, and it is wrong. Measured by removing the columns and scoring against the same comparator on
 the identical pairs: `activity + distance` alone gives **−0.0671** [−0.1768, 0.0291] on K562 and
 **+0.0281** [−0.0506, 0.1004] pooled, and `dnase + distance` alone gives **−0.1227** [−0.2379, −0.0204]
-on K562 — **ranks worse**. Not one of those intervals clears zero. The deletion features carry the
+on K562 — **"ranks worse"**, a pre-specified secondary arm registered in code at `bdba855` before any
+figure of it existed, on the registered K562 population. Not one of those intervals clears zero. The deletion features carry the
 advantage on both populations. A column that is zero on most pairs can still carry the ranking, because
 what it does where it fires is lift those pairs past the rest; the share of pairs a feature is non-zero
 on is not a measurement of what it contributes, and only the comparison with the feature removed is.
