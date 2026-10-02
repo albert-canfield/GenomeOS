@@ -408,6 +408,21 @@ def main() -> None:
     )
 
     payload: dict[str, Any] = {
+        # First key on purpose. The positive figure below is withdrawn by the like-for-like comparison,
+        # and no reader should meet the positive before the thing that withdraws it.
+        "read_this_first": (
+            "THE BINDING RESULT OF THIS LANE IS NOT IN THIS FILE. The like-for-like comparison "
+            "(data/results/re2g_likeforlike.json, registered in advance as re2g.SECOND_REGISTRATION) "
+            "matches our feature set to the comparator's input and reads NO DIFFERENCE DETECTED on the "
+            "K562 primary; that file carries the figure and its interval, which are deliberately not "
+            "copied here so the two cannot drift apart. By its own pre-registered falsifier, "
+            "README MAY NOT SAY THE DELETION MODEL RANKS BETTER THAN ENCODE-rE2G, and the comparison in "
+            "this file MAY NOT BE CITED ALONE. The reason is that this file's activity term reads "
+            "H3K27ac, which all 190 held-out positives carry and which the comparator's published "
+            "held-out model does not read, so the benchmark's own positive selection favours our side "
+            "here. Everything below is reported as registered and is true of these pairs; it is not "
+            "evidence that this project's model is the better model of enhancer-gene regulation"
+        ),
         "lane": "lane-re2g",
         "registration": "data/results/re2g_registration.json",
         "claim": re2g.CLAIM,
@@ -553,6 +568,16 @@ def main() -> None:
         "carried by the deletion features on both populations, which is the opposite of what the count "
         "of zero-valued columns suggests and is why it was measured. Every figure here still inherits "
         "the shared-input qualifications in shared_inputs"
+    )
+    decomposition["a_count_of_zeroes_does_not_measure_a_contribution"] = (
+        "Both the coordinator and this lane first argued from the 3,528 pooled pairs whose deletion "
+        "columns are zero to the conclusion that the pooled delta was largely not a test of the deletion "
+        "feature. The inference does not hold, and measuring it gives the opposite answer: with the "
+        "deletion columns removed, the remaining model does not clear zero against the same comparator "
+        "on either population. A column that is zero on most pairs can still carry the ranking, because "
+        "what it does on the pairs where it fires is to lift them past the rest. The lesson kept here is "
+        "that the share of pairs a feature is non-zero on is not a measurement of what the feature "
+        "contributes, and only the comparison with the feature removed is"
     )
     decomposition["cross_check_against_the_headlines_own_deletion_gain"] = {
         "ours_k562_deletion_share": decomposition["primary_k562"]["deletion_features_share"],

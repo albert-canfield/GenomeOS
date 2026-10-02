@@ -210,6 +210,7 @@ def main() -> None:
         "pair_level_two_derivations": pair_level,
         "against_the_committed_headline": against_headline,
         "coverage_rules_reconciled": reconciliation,
+        "code_cleanliness": paired.code_cleanliness(),
         "verdict": (
             "the model scored by scripts/re2g_paired.py is the frozen headline model: no pair differs "
             "in either deletion column or in its score between two independent derivations, and every "

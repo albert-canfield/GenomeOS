@@ -160,3 +160,32 @@ def test_the_coverage_arms_key_is_read_where_the_committed_file_really_keeps_it(
     assert "coverage_arms_k562_heldout" in payload
     assert "coverage_arms_k562_heldout" not in payload["heldout_published_pairs"]
     assert payload["coverage_arms_k562_heldout"]["arm1_all_pairs"]["uncovered_pairs"] == 174
+
+
+def test_the_paired_result_leads_with_the_notice_that_withdraws_its_own_positive(paired):
+    """The first key a reader meets must be the one pointing at the binding, negative comparison."""
+    import json
+
+    path = ROOT / "data/results/re2g_paired.json"
+    if not path.is_file():
+        pytest.skip("re2g_paired.json has not been generated in this checkout")
+    payload = json.loads(path.read_text())
+    assert next(iter(payload)) in ("result", "date", "read_this_first")
+    notice = payload["read_this_first"]
+    assert "MAY NOT SAY THE DELETION MODEL RANKS BETTER" in notice
+    assert "MAY NOT BE CITED ALONE" in notice
+    assert "re2g_likeforlike.json" in notice
+    # the figure itself is not copied in, so the two results cannot drift apart
+    assert "0.0593" not in notice
+
+
+def test_the_like_for_like_result_leads_with_its_own_binding_outcome():
+    import json
+
+    path = ROOT / "data/results/re2g_likeforlike.json"
+    if not path.is_file():
+        pytest.skip("re2g_likeforlike.json has not been generated in this checkout")
+    payload = json.loads(path.read_text())
+    notice = payload["read_this_first"]
+    assert "THE BINDING RESULT OF THIS LANE" in notice
+    assert payload["paired_delta"]["primary_k562"]["reading"] in notice

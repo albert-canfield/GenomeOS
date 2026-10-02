@@ -138,6 +138,19 @@ def main() -> None:
 
     primary = out["primary_k562"]
     payload: dict[str, Any] = {
+        # First key on purpose: this is the lane's binding outcome and it is a negative one.
+        "read_this_first": (
+            f"THE BINDING RESULT OF THIS LANE. On the registered primary population, the 1,918 held-out "
+            f"K562 pairs, the frozen 'dnase + distance + deletion' model against ENCODE-rE2G reads "
+            f'"{primary["reading"]}": {primary["delta_auprc"]:+}, interval {primary["ci95"]}, '
+            f"{primary['clusters']} chromosome clusters, {primary['resamples']} of "
+            f"{primary['draws_requested']} draws kept. This is the like-for-like comparison, so by its "
+            "pre-registered falsifier README MAY NOT SAY THE DELETION MODEL RANKS BETTER THAN "
+            "ENCODE-rE2G, and the H3K27ac comparison in re2g_paired.json may not be cited alone. The "
+            "H3K27ac comparison reads 'ranks better than ENCODE-rE2G on these pairs' on the same pairs "
+            "with a lower bound of +0.0022; the difference between the two is H3K27ac, which all 190 "
+            "held-out positives carry and the comparator's held-out model does not read"
+        ),
         "status": (
             "the like-for-like comparison: our feature set matched to the comparator's input, so DNase "
             "is shared and H3K27ac is read by neither model. This is the comparison that may be cited "
