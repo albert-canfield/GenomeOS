@@ -167,11 +167,39 @@ After this date:
 
 1. **Finish the piece of work.** A feature with its tests, or a data job with
    its result file, or a document. Not a half-state.
-2. **Check locally, the way CI does**: `scripts/check.sh` runs lint, format,
-   the whole test suite and `bio test` on every program. It must print
-   `check: green`. Lint and format only your own files when others are
-   editing the checkout (`scripts/check.sh path/to/your_file.py ...`); the
-   tests always run in full.
+2. **Check what you own, and let the push check the tree.** A lane's
+   acceptance is **its own targeted tests plus lint on its own files**, run
+   in a worktree of its committed tree:
+
+   ```
+   git worktree add --detach .claude/worktrees/mine <your commit>
+   uv run pytest -q tests/test_your_file.py
+   uv run ruff format --check genomeos/x.py tests/test_x.py
+   uv run ruff check genomeos/x.py tests/test_x.py
+   ```
+
+   **The full verdict on the committed tree comes from the coordinator's next
+   push check**, which already runs `scripts/check.sh` in a clean worktree of
+   the pushed sha and reads the status file — **and a red push still blocks**,
+   so nothing reaches `origin/dev` on a lane's targeted green alone. A lane
+   runs the full `scripts/check.sh` itself **only** for a **paid path** (a run
+   that spends money or a model key) or for a **verification tool**; everything
+   else is the push's job.
+
+   **This replaces "`scripts/check.sh` green before every commit", which asked
+   every lane for a project-wide verdict.** On 2026-10-02 the acceptance rule in
+   force was "a status-file verdict of the committed tree", and satisfying it had
+   three lanes running the whole ~4,500-test suite at once: the machine paged —
+   swapouts rising 90,000 to 114,000 per sample, 14 GB of swap on disk, free disk
+   under the 10 GB floor — the capacity gate began refusing the heavy jobs real
+   work needed, and a hygiene rule finished by **holding a release**. The runs
+   that remain now **queue**: `scripts/check.sh` takes a machine-wide lock so one
+   full suite runs at a time (`scripts/suite_lock.sh`, the push lock's algorithm
+   and wording, pinned by `tests/test_suite_lock.py`).
+
+   `scripts/check.sh path/to/your_file.py ...` narrows **the lint only** — the
+   pytest leg is the whole suite either way — so it is not a light run and it is
+   not a lane's acceptance.
 3. **Commit to `dev`** with a plain message that says what changed and what
    it proved. No attribution trailers. In a shared checkout commit through a
    private index with explicit paths (below), never `git add -A`.
@@ -189,7 +217,8 @@ After this date:
    milestone moves.
 
 ```
-scripts/check.sh                               # green before every commit
+uv run pytest -q tests/test_your_file.py       # your targeted tests, not the suite
+uv run ruff check genomeos/x.py tests/test_x.py   # your own files, not the project
 export GIT_INDEX_FILE=/tmp/idx-$$; git read-tree HEAD
 git add path/to/your/files                     # explicit paths only
 TREE=$(git write-tree); OLD=$(git rev-parse HEAD)
@@ -300,14 +329,29 @@ through, and a part that stops nothing alone is called a diagnosis.
 
 ## A verdict names the tree it judged; an exit code names nothing (2026-10-02)
 
-**Never ask for, or report, "check.sh green".** The acceptance is *a status-file verdict
-naming the tree that was committed* — a worktree run with `tree_begin == tree_end ==` the
-committed tree — quoted with that hash.
+**Never ask for, or report, "check.sh green".** A verdict is *a status-file reading naming
+the tree it judged* — `tree_begin == tree_end ==` that tree — quoted with the hash. An exit
+code names no tree at all.
+
+**Whose verdict it is, since 2026-10-02.** A lane reports the status-file reading of **its
+own targeted tests** on its committed tree, and it is **not asked for a project-wide one**;
+the project-wide verdict belongs to **the push check**, which runs in an isolated worktree of
+the sha being pushed and refuses the push when it is red or absent (see step 2 of the cycle
+above). Asking every lane for the project-wide verdict is what put three full suites on the
+machine at once and paged it.
 
 In a checkout several sessions work in, a project-wide verdict is essentially
-**unobtainable**: one run began on `94848ca` and ended on `9d4006e`, so its 3,797 passes
-belonged to neither tree in full. `tree_moved` is the **correct answer** there, not a
-failure to retry, and it is why the push hook runs its check in an isolated worktree.
+**unobtainable** from the checkout itself: one run began on `94848ca` and ended on
+`9d4006e`, so its 3,797 passes belonged to neither tree in full. `tree_moved` is the
+**correct answer** there, not a failure to retry, and it is why the push hook runs its check
+in an isolated worktree.
+
+**And the status file is keyed by TREE ALONE**, so two checks of the *same* tree write the
+same path and **the later writer destroys the earlier verdict** — demonstrated twice on
+2026-10-02. The suite lock makes that **rarer, not impossible**: the two runs no longer
+overlap, but the second still writes the same path the moment the first has released, and a
+run that goes ahead without the lock (an unusable `TMPDIR`, or a holder past the cap) says so
+in the verdict's own `note` rather than quietly. Nothing about the lock closes the collision.
 
 **Harness-reported exit codes are hearsay.** Three runs that exited 1 or were killed
 outright were reported as "exit code 0" while the status file said otherwise. The log line

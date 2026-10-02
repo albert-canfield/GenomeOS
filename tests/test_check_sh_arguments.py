@@ -33,6 +33,12 @@ import pytest
 from genomeos import verdict
 
 CHECK_SH = Path("scripts/check.sh").resolve()
+
+#: scripts/check.sh SOURCES this to take the machine-wide suite lock, so a harness that copies the
+#: one script and not the other gets `No such file or directory` and `set -e` kills the run before
+#: any leg: all twelve tests below failed that way the moment the lock was added. Copied, not
+#: stubbed, so these runs queue by the real rule -- with a TMPDIR of their own, see `harness`.
+SUITE_LOCK_SH = Path("scripts/suite_lock.sh").resolve()
 REPO_ROOT = Path.cwd().resolve()
 
 #: The exact argument that produced the two false reds, used verbatim so the planted case is the
@@ -77,8 +83,9 @@ def harness(tmp_path: Path) -> dict:
     """A throwaway repo holding the real check.sh, with stubs on PATH and its own status directory."""
     repo = tmp_path / "repo"
     (repo / "scripts").mkdir(parents=True)
-    (repo / "scripts" / "check.sh").write_bytes(CHECK_SH.read_bytes())
-    (repo / "scripts" / "check.sh").chmod(0o755)
+    for src in (CHECK_SH, SUITE_LOCK_SH):
+        (repo / "scripts" / src.name).write_bytes(src.read_bytes())
+        (repo / "scripts" / src.name).chmod(0o755)
     (repo / "data" / "results").mkdir(parents=True)
     (repo / "data" / "results" / "manifest_headlines.json").write_text('{"ok": true}\n')
     (repo / "keep.py").write_text("x = 1\n")
@@ -99,7 +106,14 @@ def harness(tmp_path: Path) -> dict:
         PYTHONPATH=str(REPO_ROOT),
         GENOMEOS_CHECK_STATUS_DIR=str(status_dir),
         RECORD=str(record),
+        # Since 2026-10-02 scripts/check.sh takes "$TMPDIR/genomeos-suite.lock" so that one full
+        # suite runs on the machine at a time (scripts/suite_lock.sh). A TMPDIR of its own is what
+        # keeps these runs off the REAL lock: inheriting it, this file would block for twelve
+        # minutes behind a peer's check and the lock would be a test dependency instead of a lock.
+        # tests/test_push_lock.py isolates TMPDIR for the push lock for the same reason.
+        TMPDIR=str(tmp_path / "tmp"),
     )
+    (tmp_path / "tmp").mkdir()
     return {"repo": repo, "env": env, "status_dir": status_dir, "record": record}
 
 

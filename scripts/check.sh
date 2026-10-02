@@ -4,6 +4,15 @@
 # Usage: scripts/check.sh            (whole project, what CI runs)
 #        scripts/check.sh FILE...    (lint and format only the given .py files, then the full tests)
 #
+# ONE OF THESE RUNS AT A TIME ON THE MACHINE, AND BOTH FORMS COUNT. `check.sh FILE...` narrows the
+# LINT ONLY -- the pytest leg below is the whole suite either way -- so it is not a light run and it
+# is not a lane's acceptance. On 2026-10-02 three of these ran at once because the acceptance rule
+# then in force asked every lane for a project-wide verdict: the machine paged (swapouts rising
+# 90,000 to 114,000 per sample, 14 GB of swap on disk, free disk under the 10 GB floor), the capacity
+# gate began refusing the heavy jobs real work needed, and a hygiene rule ended up holding a release.
+# So runs QUEUE here, by the same lock scripts/pre-push.sh uses for one push's check at a time, and
+# CONTRIBUTING.md now asks a lane for its TARGETED tests instead. See scripts/suite_lock.sh.
+#
 # A NON-PYTHON ARGUMENT IS REFUSED BY NAME AND DOES NOT KILL THE RUN. ruff is a Python linter and it
 # reads whatever path it is handed as Python: on 2026-10-02 a lane passed
 # data/results/manifest_headlines.json, ruff reported 96 errors in it, `set -e` stopped the run at the
@@ -30,6 +39,18 @@
 # to be mistaken for this one's.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+# Taken HERE, before started_at and tree_begin are measured: a wait of half an hour must not be
+# reported as this run's duration, and must not widen the window in which the tree can move
+# underneath the run. The lock is never a red -- every path in suite_lock_acquire returns 0 and an
+# unobtainable lock becomes a loud line plus a note in the verdict -- because a check that exits
+# non-zero over a lock writes a red status file about nothing in the tree.
+# shellcheck source=scripts/suite_lock.sh
+. scripts/suite_lock.sh
+suite_lock_acquire "${*:-whole project}"
+# The real trap is installed further down, once finish() exists; until then this one is here so a
+# run killed in the next few lines does not leave its lock for the next run to reclaim.
+trap suite_lock_release EXIT
 
 started_at=$(date +%s)
 scope=project
@@ -73,15 +94,18 @@ leg=startup
 # Every command here is kept from failing the trap: `set -e` is in force inside a trap too, so a
 # write that goes wrong would otherwise replace the real exit code with its own and the caller
 # would be told the wrong thing by the very code meant to stop that happening.
-# The verdict's note carries every reason this run is less than it looks: a shellcheck that could not
-# run, and a lint argument refused by name. Joined here rather than in the `write` call, because an
-# unset variable inside a nested expansion inside a trap is how a trap starts replacing real exit
-# codes with its own.
+# The verdict's note carries every reason this run is less than it looks: a run that was not
+# serialised against the other full suites on the machine, a shellcheck that could not run, and a
+# lint argument refused by name. Joined here rather than in the `write` call, because an unset
+# variable inside a nested expansion inside a trap is how a trap starts replacing real exit codes
+# with its own.
 combined_note() {
-  local note="${shellcheck_note:-}"
-  if [ -n "${refusal_note:-}" ]; then
-    if [ -n "$note" ]; then note="$note; ${refusal_note}"; else note="${refusal_note}"; fi
-  fi
+  local note=""
+  local extra
+  for extra in "${SUITE_LOCK_NOTE:-}" "${shellcheck_note:-}" "${refusal_note:-}"; do
+    [ -n "$extra" ] || continue
+    if [ -n "$note" ]; then note="$note; $extra"; else note="$extra"; fi
+  done
   printf '%s' "$note"
 }
 
@@ -99,8 +123,13 @@ finish() {
     --failed-leg "$failed_leg" \
     --note "$(combined_note)" ||
     echo "check: WARNING the verdict file could not be written; treat this run as having no verdict" >&2
+  # After the verdict is written, never before: the next run in the queue should find the status
+  # file this one earned. Only this process's own lock is removed; suite_lock_release decides that
+  # from the pid file, so an interrupted peer's lock is left where it is.
+  suite_lock_release
   return 0
 }
+# Replaces the lock-only trap set above; bash keeps one EXIT trap, and this one does both.
 trap 'finish "$?"' EXIT
 
 # `ruff check` with no paths lints the whole project, so an empty argument list must SKIP the legs
