@@ -12,6 +12,7 @@ The legacy allowlist is respected: the names written before the contract keep wo
 
 import json
 
+import planted_cleanliness
 import pytest
 
 from genomeos import manifest as mf
@@ -83,7 +84,12 @@ def test_a_cleanliness_block_built_by_hand_is_refused_by_key_set(registry, tmp_p
 
 def test_a_complete_manifest_with_the_shared_block_writes(registry, tmp_path):
     m = full(tmp_path)
-    m["code_cleanliness"] = mf.code_cleanliness("tests/test_results_cleanliness_refusal.py", ())
+    # 2026-10-02: the entry script is counted now (genomeos.manifest.entry_script), so under pytest
+    # `sys.argv[0]` is a test runner and no in-process call can return a passing block. This
+    # scaffolding block is built in a planted repository whose entry script really is committed and
+    # clean, which is what it always meant to assert, instead of naming a file of this shared
+    # checkout and reddening when a peer edits it (tests/planted_cleanliness.py).
+    m["code_cleanliness"] = planted_cleanliness.planted_clean_block(tmp_path, "refusal_clean")
     p = save_result("brand_new", {"value": 1}, registry, manifest=m)
     assert p.exists() and json.loads(p.read_text())[mf.KEY]["complete"] is True
 

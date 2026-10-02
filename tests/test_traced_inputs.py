@@ -29,6 +29,7 @@ import tempfile
 import types
 from pathlib import Path
 
+import planted_cleanliness
 import pytest
 
 from genomeos import manifest as mf
@@ -108,7 +109,17 @@ def contract(reg, declare_table=False, extra_inputs=()):
         "parameters": {"min_effect": 0.1},
         "exclusions": [],
         "partitions": "n/a: a compilation, not an evaluation",
-        "code_cleanliness": mf.code_cleanliness("tests/test_traced_inputs.py", (), root=REPO_ROOT),
+        # Until 2026-10-02 this read `mf.code_cleanliness("tests/test_traced_inputs.py", (),
+        # root=REPO_ROOT)`. The ENTRY SCRIPT is counted now (genomeos.manifest.entry_script), and
+        # under pytest `sys.argv[0]` is the test runner, which is not the code that computed
+        # anything: such a block is `test_runner`, never certified, and `save_result` refuses it.
+        # These tests simulate a REAL writer standing in a planted checkout, and a real writer
+        # runs from a committed script, so the block is built in that planted repository with a
+        # committed entry script (tests/planted_cleanliness.py) instead of being read against this
+        # shared checkout through a runner. The simulation is closer to the real thing than it was,
+        # and nothing is excused: the refusal itself is planted both ways, with a counterfactual,
+        # in tests/test_entry_script_counted.py.
+        "code_cleanliness": planted_cleanliness.planted_clean_block(reg.parent.parent),
     }
 
 

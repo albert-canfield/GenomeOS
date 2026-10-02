@@ -65,6 +65,18 @@ def save_result(
     allowlist into the registry. Outside the registry (tests, scratch) an incomplete result warns
     unless `strict=True`.
 
+    Since 2026-10-02 (lane-entrypoint) EVERY write into the registry, legacy name or not, is refused
+    when the ENTRY SCRIPT is not committed: `sys.argv[0]` outside the repository, untracked, modified,
+    `-c`, stdin, a test runner, or any form that cannot be classified (genomeos/manifest.py:
+    ENTRY_FORMS, entry_script_problems). A cleanliness block carrying no `entry_script` at all is
+    refused on the same footing, because the 24 `organised_chr*.json` results written by a script in
+    /private/tmp all lacked the field while asserting `own_code_is_committed: True`
+    (working tree at d4d0449, 19:41; superseded by e1def2e, 20:41), and nothing in them
+    names the code that made the bytes. Outside the registry the fact is RECORDED and not refused,
+    even under `strict=True`: no published result is strict-but-not-registry, and refusing there would
+    cost every writer in the project its success-path test, since under pytest `sys.argv[0]` is the
+    runner. `own_code_is_committed` is false for such a write either way, so nothing is certified.
+
     Since 2026-10-02 (lane-tracer) the declared inputs are also reconciled against what the writer
     actually opened: an audit hook records every file read under data/ (genomeos/manifest.py, "inputs
     are traced, not declared"), and a name that is not on the allowlist is refused when its traced
@@ -116,6 +128,56 @@ def save_result(
         if unclean:
             stamped["problems"] = [*stamped.get("problems", []), *unclean]
             stamped["complete"] = False
+    # --- the entry script must be committed (2026-10-02, lane-entrypoint) -------------------------
+    # Measured defect: `data/results/organised_chr21.json` and 23 siblings were written at 19:41-19:42
+    # by `/private/tmp/.../scratchpad/write.py`, a script OUTSIDE this repository, and every one of
+    # them asserted `own_code_is_committed: True`
+    # (working tree at d4d0449, 19:41; superseded by e1def2e, 20:41): the bytes are in no commit either
+    # side, the cause is recorded in `2ebe9df`, and the scratchpad
+    # script is the live artefact). The cleanliness block compared git's dirty list
+    # against the paths the caller DECLARED and never looked at the script that was running, so
+    # nothing in the manifest described the code that produced the bytes and no rebuild could run.
+    # `mf.entry_script_problems` reads the `entry_script` sub-block the shared cleanliness function
+    # now fills from `sys.argv[0]`, and the ABSENCE of that sub-block is refused too: the 24 results
+    # all lack it, and reading its absence as a pass would be the same defect with an extra step.
+    # The refusal takes the path that was already here: quarantined with its reason, ManifestError
+    # naming where it went, nothing written to results_dir.
+    #
+    # WHERE IT FIRES, and this is a deliberate departure from the brief's wording ("a strict
+    # save_result refuses"), measured rather than reasoned about. The condition is `registry`, NOT
+    # `enforce`:
+    #
+    #   * EVERY write into the result registry is checked, legacy name or not. That is STRONGER than
+    #     `enforce`, which for a legacy registry name is `bool(strict)` -- and `organised_chr*`, the
+    #     24 names this check exists for, are legacy. A registry write is what publishing is.
+    #   * A write outside the registry -- a test's `tmp_path`, a scratch directory -- records the fact
+    #     and does not refuse, even under `strict=True`. No published result is ever
+    #     strict-but-not-registry, so nothing that gets published escapes; what it buys is that a
+    #     writer can still be driven from a test. Measured when `enforce` was the condition: nine
+    #     tests across tests/test_traced_inputs.py, tests/test_organise_inputs.py and
+    #     tests/test_attribution.py went red, all of them positive controls that run a real writer
+    #     into a temporary directory, because under pytest `sys.argv[0]` is the runner. Refusing
+    #     there costs every writer in the project its success-path test and protects nothing.
+    #
+    # NOTHING IS CERTIFIED EITHER WAY: `code_cleanliness` records `entry_script.form` as `test_runner`
+    # and `own_code_is_committed` as FALSE for such a write, so a scratch result cannot be read as
+    # having come from committed code, and `scripts/check_staged.py` refuses to let one be committed.
+    # The exemption has its counterfactual, not an argument: tests/test_entry_script_counted.py
+    # plants the same write twice, into the registry and into a scratch directory, and the first must
+    # refuse while the second must still record the false verdict.
+    entry_refusal = False
+    if registry:
+        unentered = mf.entry_script_problems(stamped)
+        if unentered:
+            stamped["problems"] = [*stamped.get("problems", []), *unentered]
+            stamped["complete"] = False
+            # A legacy name only WARNS about the rest of the contract; this one refuses, because the
+            # names written by a script outside the repository are legacy names. Carried in its own
+            # flag rather than by raising `enforce`, so that a legacy name's traced-input mismatch
+            # below keeps warning exactly as it did -- one rule's strictness must not quietly become
+            # another's.
+            entry_refusal = True
+    # --- end the entry script must be committed ---------------------------------------------------
     # --- both revision stamps, with a flag when they disagree (2026-10-02) ------------------------
     # A result carries HEAD twice: once from the writer's cleanliness block, once from the stamp above.
     # In this shared checkout a peer can commit between the two, and then they name two different
@@ -139,9 +201,15 @@ def save_result(
     # --- end traced-input reconciliation ----------------------------------------------------------
     out = {"result": name, "date": time.strftime("%Y-%m-%d"), **body, mf.KEY: stamped}
     q = quarantine_dir(results_dir) / f"{name}.json"
-    if not stamped["complete"] and enforce:
+    if not stamped["complete"] and (enforce or entry_refusal):
         _quarantine(q, out, p, stamped["problems"], registry)
-        why = "a name not on the legacy allowlist must carry the contract" if registry else "strict"
+        why = (
+            f"the entry script must be committed for any write into the registry ({results_dir})"
+            if entry_refusal
+            else "a name not on the legacy allowlist must carry the contract"
+            if registry
+            else "strict"
+        )
         raise mf.ManifestError(
             f"{p}: manifest incomplete: {'; '.join(stamped['problems'])} (nothing written to "
             f"{results_dir}; quarantined at {q}; {why})"
@@ -205,10 +273,28 @@ def _quarantine(q: Path, out: dict[str, Any], meant_for: Path, problems: list[st
 
 
 def _is_registry(results_dir: Path) -> bool:
+    """Whether `results_dir` is the result registry. A path that cannot be classified counts AS the
+    registry, which is the strict answer and since 2026-10-02 the only safe one.
+
+    Until then this returned False on an OSError, and the flag only chose between severities of
+    warning, so failing open cost little. It now gates FOUR decisions in `save_result`, all of which
+    go off together on that one exception: `legacy` (line 110), `enforce` (118, where a registry write
+    stops being enforced at all and becomes a function of whatever the caller passed as `strict` -- a
+    guard keyed to something the caller supplies is not a guard), the requirement to carry a
+    cleanliness block at all (125), and the entry-script refusal (165). So an unclassifiable path is
+    treated as the registry: a false-loud refusal gets read, a false-silent pass does not, and the
+    refusal names the path so the reader can see which one could not be resolved.
+
+    The try/except stays, because `resolve` can raise -- ELOOP on a symlink loop, ENAMETOOLONG -- and
+    crashing every writer is worse than refusing one. tests/test_entry_script_counted.py plants it:
+    `resolve` made to raise on a registry write must refuse, and a scratch directory that resolves
+    normally must still write while recording the false verdict, so the fix cannot quietly have broken
+    every test writer instead.
+    """
     try:
         return results_dir.resolve() == RESULTS_DIR.resolve()
     except OSError:
-        return False
+        return True
 
 
 def load_result(name: str, results_dir: Path = RESULTS_DIR) -> dict[str, Any] | None:

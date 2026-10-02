@@ -15,6 +15,14 @@ an entry script that imports a module, and the three states are made by what is 
 by what any lane happens to be editing. The invariants that do hold in every tree state stayed in the
 two suites, in the style of `tests/test_context_evidence.py`.
 
+`argv0=ENTRY` is passed on every call since 2026-10-02, when the ENTRY SCRIPT came under the same
+check (`genomeos.manifest.entry_script`). Without it the block would be read against `sys.argv[0]`,
+which under pytest is a test runner, and all five cases below would return the same verdict for a
+reason that has nothing to do with the planted repository -- the exact failure this file exists to
+end, one step further out. Passing it keeps each case's verdict a consequence of what is committed in
+the planted repository, and the entry-script check has its own planted repository and its own
+counterfactual in `tests/test_entry_script_counted.py`.
+
 Nothing here touches enforcement, and the refusal that matters never lived in a unit test.
 `scripts/check_staged.py` refuses the commit of any staged `data/results/*.json` whose block has
 `own_code_is_committed` false or `foreign_uncommitted_code_on_the_counting_path` non-empty, which is
@@ -109,7 +117,7 @@ def test_the_counting_path_of_the_planted_repository_holds_both_files(tmp_path: 
 
 def test_an_uncommitted_foreign_module_on_the_path_is_named(tmp_path: Path) -> None:
     repo = _planted_repo(tmp_path, (ENTRY,))
-    block = mf.code_cleanliness(ENTRY, OWN, repo)
+    block = mf.code_cleanliness(ENTRY, OWN, repo, argv0=ENTRY)
     _the_planted_module_is_named(block)
     assert block["own_uncommitted_code"] == []
     assert block["own_code_is_committed"] is True
@@ -120,7 +128,7 @@ def test_an_uncommitted_foreign_module_off_the_path_is_not_named(tmp_path: Path)
     """The `on_the_counting_path` field is the filter it says it is, not a copy of the dirty list."""
     repo = _planted_repo(tmp_path, (ENTRY, MODULE))
     (repo / "scripts" / "planted_elsewhere.py").write_text("VALUE = 2\n")
-    block = mf.code_cleanliness(ENTRY, OWN, repo)
+    block = mf.code_cleanliness(ENTRY, OWN, repo, argv0=ENTRY)
     assert block["foreign_uncommitted_code"] == ["scripts/planted_elsewhere.py"]
     assert block["foreign_uncommitted_code_on_the_counting_path"] == []
 
@@ -130,7 +138,7 @@ def test_an_uncommitted_foreign_module_off_the_path_is_not_named(tmp_path: Path)
 
 def test_with_everything_committed_the_block_is_clean(tmp_path: Path) -> None:
     repo = _planted_repo(tmp_path, (ENTRY, MODULE))
-    block = mf.code_cleanliness(ENTRY, OWN, repo)
+    block = mf.code_cleanliness(ENTRY, OWN, repo, argv0=ENTRY)
     assert block["foreign_uncommitted_code_on_the_counting_path"] == []
     assert block["own_code_is_committed"] is True
     assert block["own_uncommitted_code"] == []
@@ -143,7 +151,7 @@ def test_with_everything_committed_the_block_is_clean(tmp_path: Path) -> None:
 
 def test_an_uncommitted_entry_script_is_the_writing_lane_s_own(tmp_path: Path) -> None:
     repo = _planted_repo(tmp_path, (MODULE,))
-    block = mf.code_cleanliness(ENTRY, OWN, repo)
+    block = mf.code_cleanliness(ENTRY, OWN, repo, argv0=ENTRY)
     assert block["own_code_is_committed"] is False
     assert block["own_uncommitted_code"] == [ENTRY]
     assert block["foreign_uncommitted_code"] == []
@@ -154,7 +162,7 @@ def test_a_modified_committed_entry_script_counts_the_same_as_an_untracked_one(t
     """Case (c) by the other route: committed and then edited, which is how a lane actually gets there."""
     repo = _planted_repo(tmp_path, (ENTRY, MODULE))
     (repo / ENTRY).write_text(ENTRY_SOURCE + "print('edited')\n")
-    block = mf.code_cleanliness(ENTRY, OWN, repo)
+    block = mf.code_cleanliness(ENTRY, OWN, repo, argv0=ENTRY)
     assert block["own_code_is_committed"] is False
     assert block["own_uncommitted_code"] == [ENTRY]
 

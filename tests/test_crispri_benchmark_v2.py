@@ -264,7 +264,19 @@ def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_p
     # these two values. This test was a readiness check for writing a result, filed as a unit test.
     for p in block["foreign_uncommitted_code_on_the_counting_path"]:
         assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]
-    assert set(block["own_uncommitted_code"]) <= v2.OWN_CODE
+    # 2026-10-02: the ENTRY SCRIPT is counted in this block now (genomeos.manifest.entry_script), and
+    # when the commit does not hold it the script is NAMED here -- the lane ran it, so it is the lane's
+    # own uncommitted code whatever OWN_CODE declared, which is precisely how 24 results asserted
+    # `own_code_is_committed: True` while the bytes came from /private/tmp
+    # (working tree at d4d0449, 19:41; superseded by e1def2e, 20:41).
+    # Under pytest `sys.argv[0]`
+    # is a test runner, so the one member beyond OWN_CODE is that and nothing else; the claim is
+    # otherwise unchanged and `own_code_is_committed == (own_uncommitted_code == [])` still holds below.
+    # The widened set is keyed to a value the SUBJECT supplies, so the containment alone would admit
+    # a block naming ANY path at all -- a guard keyed to what the caller hands it is not a guard. The
+    # form is asserted beside it, so the one admitted member must really be a test runner.
+    assert block["entry_script"]["form"] == "test_runner"
+    assert set(block["own_uncommitted_code"]) <= v2.OWN_CODE | {block["entry_script"]["argv0"]}
     assert block["own_code_is_committed"] == (block["own_uncommitted_code"] == [])
     assert not set(block["foreign_uncommitted_code"]) & v2.OWN_CODE
 

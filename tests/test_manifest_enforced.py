@@ -29,7 +29,21 @@ import manifest_legacy as ml  # noqa: E402
 #: supervisor's `save_result` cleanliness rule). The rule is checkable only by key set, so a key-complete
 #: stub serves here and keeps these tests off git; what the shared function actually returns is tested in
 #: tests/test_results_cleanliness_refusal.py and tests/test_code_cleanliness_shared.py.
-CLEAN = dict.fromkeys(mf.CLEANLINESS_KEYS, None)
+#: Since 2026-10-02 the ENTRY SCRIPT is counted too, and `mf.entry_script_problems` refuses the
+#: ABSENCE of the sub-block as well as a bad verdict -- the 24 results that prompted that check all
+#: lack the field while asserting their code was committed, so reading its absence as a pass would be
+#: the same defect with an extra step. A key-complete stub must therefore say which script ran, and it
+#: states the clean verdict because these tests are about the allowlist and the quarantine. What the
+#: shared function actually returns, and that the refusal fires, are tested against a planted
+#: repository in tests/test_entry_script_counted.py, with a counterfactual that strips the refusal.
+CLEAN = {
+    **dict.fromkeys(mf.CLEANLINESS_KEYS, None),
+    mf.ENTRY_SCRIPT_KEY: {
+        "argv0": "scripts/stub.py",
+        "form": mf.ENTRY_FORM_CLEAN,
+        "is_committed": True,
+    },
+}
 
 
 def full(tmp_path: Path) -> dict:

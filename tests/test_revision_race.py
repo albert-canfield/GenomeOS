@@ -28,6 +28,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+import planted_cleanliness
 import pytest
 
 from genomeos import manifest as mf
@@ -247,7 +248,12 @@ def _full(tmp_path: Path) -> dict[str, Any]:
         "parameters": {"threshold": 0.5},
         "exclusions": [],
         "partitions": {"heldout": "the test"},
-        "code_cleanliness": mf.code_cleanliness("scripts/manifest_rebuild.py", ()),
+        # 2026-10-02: the entry script is counted now (genomeos.manifest.entry_script), so under pytest
+        # `sys.argv[0]` is a test runner and no in-process call can return a passing block. This
+        # scaffolding block is built in a planted repository whose entry script really is committed and
+        # clean, which is what it always meant to assert, instead of naming a file of this shared
+        # checkout and reddening when a peer edits it (tests/planted_cleanliness.py).
+        "code_cleanliness": planted_cleanliness.planted_clean_block(tmp_path, "race_clean"),
     }
 
 

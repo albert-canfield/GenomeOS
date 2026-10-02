@@ -105,7 +105,10 @@ def test_every_caller_returns_the_same_keys(blocks):
     """What the copies drifted on first. One implementation means one key set."""
     assert set(blocks) == set(CALLERS), "every caller must be reachable"
     for name, block in blocks.items():
-        assert set(block) == set(mf.CLEANLINESS_KEYS), name
+        # mf.ALL_CLEANLINESS_KEYS, not CLEANLINESS_KEYS: since 2026-10-02 the function also returns
+        # `entry_script`, and the two constants answer two different questions (genomeos/manifest.py).
+        # Still exact set equality, so a caller returning one key more or less still fails.
+        assert set(block) == set(mf.ALL_CLEANLINESS_KEYS), name
 
 
 def test_every_caller_returns_the_same_wording_for_the_fields_that_do_not_vary(blocks):
@@ -233,7 +236,11 @@ def test_a_module_outside_the_repository_stays_off_the_counting_path(tmp_path):
 
 def test_the_cleanliness_block_sets_the_uncommitted_files_against_the_counting_path():
     block = mf.code_cleanliness("scripts/context_evidence_census.py", ("a.py",), ROOT)
-    assert block["own_uncommitted_code"] == []  # "a.py" is not a file this repository has
+    # "a.py" is not a file this repository has, so it contributes nothing -- the original claim. Since
+    # 2026-10-02 the ENTRY SCRIPT is named here too, and under pytest `sys.argv[0]` is the test
+    # runner, so the one expected member is that and nothing else.
+    assert block["own_uncommitted_code"] == [block["entry_script"]["argv0"]]
+    assert block["entry_script"]["form"] == "test_runner"
     assert block["counting_path_count"] == len(block["counting_path"])
     for p in block["foreign_uncommitted_code_on_the_counting_path"]:
         assert p in block["counting_path"] and p in block["foreign_uncommitted_code"]
