@@ -1190,3 +1190,70 @@ a reason to count, not to fix twice.
 **A report must print the set-aside leaf's VALUE, not only its path.** A path alone cannot
 show that a leaf set aside as a reading is not one:
 `/key_vocabulary/…/schema_keys/seconds` reads as a timing until its 963,406 sits beside it.
+
+## Two instruments on one run, and the flattering one was the clean bill of health (2026-10-02)
+
+`data/results/constrained_unknown_targets.json` is a result README relies on. Rebuilt
+with the committed tool at `53f3b33`, it came back: **193 of 193 inputs declared and
+checked, 0 unchecked, 193 files opened and hashed, 3,858 of 3,896 leaves compared, no
+`must_hold` failures**, and the reading *"0 differences AFTER SETTING ASIDE 1 leaves (1
+timing fields)"* — the one set-aside leaf a genuine `/seconds` = 236.7 wall-clock
+reading. By every figure the rebuild produces, that result is reproducible.
+
+An open-tracer watching the same run recorded **195 reads under `data/` against 193
+declared**. The undeclared one is `data/results/unknown_chr21.json`, reached at
+`scripts/constrained_unknown_targets.py:344-346` where a **self-check** calls
+`unknown_scoring.unknown_blocks("chr21")`, which loads it at
+`genomeos/attribution/unknown_scoring.py:89`.
+
+**The two instruments disagree about the same run, and the one that reads as a clean bill
+of health is the one that is wrong.** The file is git-**tracked** and 355,767 bytes, so a
+clean worktree has it and the rebuild runs green — while its bytes are pinned by **no
+declared sha256**. So a change to that file would change the result, and the rebuild would
+still print "0 differences".
+
+**The rule this establishes, measured on a live gate result rather than inferred from
+code: a passing `manifest_rebuild` is not sufficient evidence for a published result,
+because it is blind by construction to any file the manifest does not name.** "Rebuilt, 0
+differences" means *"the declared inputs reproduce the file"*, not *"the result is
+reproducible"*. The subset check has to run beside it, and a result's own report should not
+be able to say the stronger thing.
+
+**Three shapes of the hazard were found, and the one that was being described for months
+was not among them.** The standing account was that `targets.run_elements` reads
+`elements_where` out of a result file, so a pointer file names a table no grep can see. At
+`190a1442`, `organise.inputs` **does** follow `elements_where` and declares the table it
+points at. The real shapes:
+
+1. **A declaration that silently shrinks.** `inputs()` appends the pointed-at table only
+   `if w.exists()`, so a missing input is dropped from the declaration without a word —
+   worse than never following the pointer, because the declaration still claims
+   completeness.
+2. **A code path no declaration function inspects** — here a self-check helper. No amount
+   of care inside `inputs()` can see it, which is why the answer is a tracer at write time
+   rather than a better declaration function.
+3. **An undeclared input that is machine-local.** `therapeutic_benchmark` reads
+   `data/knowledge/vep/vep_cache.jsonl`, git-ignored, declared nowhere in its 24-input
+   manifest, under a README figure. Unlike (1) and (2) this one cannot even be rebuilt
+   elsewhere: another machine would miss the cache and diverge.
+
+**And the tracer that found all this had two defects of its own, both of which had already
+produced a pass it had not earned** — the only direction of error that matters in an
+instrument:
+
+- it patched `builtins.open` alone, so `io.open` and therefore all of `pathlib` and pandas
+  were invisible: **25 reads recorded where there were 3,259**, and one declared input
+  reported "never read" when it had been read 3,258 times. `sys.addaudithook` on the
+  `"open"` event sees them all, which is why it is the instrument and a list of entry
+  points to patch is not;
+- it dumped its record once per run at `atexit`, so under `--workers 2` **a pool child
+  that read nothing overwrote the record**, and a result came back with **0 paths opened**
+  — which satisfies "every read is declared" **vacuously**. Fixed by one append-only
+  record written with `os.write`, and by withholding `verdict` **by name** unless reads
+  were actually seen.
+
+In the lane's own words: *"Had I not re-run after the first fix, I would have reported two
+false passes."* An instrument's silence is not evidence; a verdict it cannot justify should
+be withheld rather than defaulted to a pass. State the limit too — an audit hook cannot see
+a C library opening a file directly, so htslib and pysam reads are invisible, and the claim
+is about Python-level reads only.
