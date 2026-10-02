@@ -13,7 +13,8 @@ file under genomeos/ and scripts/ with a static taint analysis, so the guard tes
 
 - a *results path* is a string naming data/results, the registry constant `RESULTS_DIR`, a path
   joined from "data" and "results", a parameter named `results_dir`, a `--flag` whose default is a
-  results path (read back as `args.flag`), or anything built from one of those by path operations
+  results path *in any form, a literal or a name* (read back as `args.flag`), or anything built from
+  one of those by path operations
   (`/`, `Path(...)`, `str(...)`, `os.path.join`, f-strings, `.with_suffix`, `.glob`, a `for` over
   one, a container holding one, a local or imported function that returns one);
 - a *sink* is a call that writes to its target: `.write_text`, `.write_bytes`, `open(..., "w"|"a"|
@@ -134,6 +135,7 @@ class FileAnalysis:
         self.labels: dict[tuple[str, str], set[str]] = {}
         self.attr_labels: dict[str, set[str]] = {}
         self.arg_dests: set[str] = set()
+        self.arg_defaults: list[tuple[_Scope, ast.AST, str]] = []  # scope, `default=` expression, dest
         self.scopes: dict[ast.AST, _Scope] = {}
         self.assigns: list[tuple[_Scope, ast.AST, ast.AST, str]] = []  # scope, target, value, how
         self.calls: list[tuple[_Scope, ast.Call]] = []
@@ -203,7 +205,7 @@ class FileAnalysis:
                 self.returns.setdefault(scope.name, []).append((scope, child.value))
             elif isinstance(child, ast.Call):
                 self.calls.append((scope, child))
-                self._argparse(child)
+                self._argparse(child, scope)
             self._visit(child, scope, prefix)
 
     def _assign(self, scope: _Scope, target: ast.AST, value: ast.AST, how: str) -> None:
@@ -219,18 +221,24 @@ class FileAnalysis:
             scope.local.add(target.id)
         self.assigns.append((scope, target, value, how))
 
-    def _argparse(self, c: ast.Call) -> None:
+    def _argparse(self, c: ast.Call, scope: _Scope) -> None:
+        """Record a flag's `default=` expression with its destination and its scope. Whether that
+        expression is a results path is NOT decided here: collection runs before the propagation pass,
+        so a `default=` that is a bare NAME has no label yet, and resolving a name needs the enclosing
+        scope. `_resolve_arg_dests` asks in `propagate` instead, where every name has its label."""
         f = c.func
-        if isinstance(f, ast.Attribute) and f.attr == "add_argument":
-            default = next((k.value for k in c.keywords if k.arg == "default"), None)
-            if default is not None and self._results(default, None):
-                dest = next((_const(k.value) for k in c.keywords if k.arg == "dest"), None)
-                if dest is None:
-                    flags = [s for s in (_const(a) for a in c.args) if s]
-                    long = next((s for s in flags if s.startswith("--")), flags[0] if flags else "")
-                    dest = long.lstrip("-").replace("-", "_")
-                if dest:
-                    self.arg_dests.add(dest)
+        if not (isinstance(f, ast.Attribute) and f.attr == "add_argument"):
+            return
+        default = next((k.value for k in c.keywords if k.arg == "default"), None)
+        if default is None:
+            return
+        dest = next((_const(k.value) for k in c.keywords if k.arg == "dest"), None)
+        if dest is None:
+            flags = [s for s in (_const(a) for a in c.args) if s]
+            long = next((s for s in flags if s.startswith("--")), flags[0] if flags else "")
+            dest = long.lstrip("-").replace("-", "_")
+        if dest:
+            self.arg_defaults.append((scope, default, dest))
 
     # --- labels -----------------------------------------------------------------------------------
     def _lookup(self, scope: _Scope | None, name: str) -> set[str]:
@@ -411,8 +419,35 @@ class FileAnalysis:
                 return (".".join([dotted, *rest]), f.attr)
         return None
 
-    def propagate(self) -> bool:
+    def _resolve_arg_dests(self) -> bool:
+        """Which argparse destinations read back a results path, decided with the labels of the pass
+        this runs in. A `default=` is an ordinary expression and gets no special treatment: a name is
+        resolved here exactly as a name on the right of an assignment is, in its own scope, and a dest
+        found in one round taints `args.<dest>` in the next because `propagate` runs to a fixpoint.
+
+        WHAT EACH PART STOPS, measured by removing it alone (tests/test_results_writers_guard.py):
+
+        - running in the propagation pass instead of during collection. Remove it (decide in
+          `_argparse` again) and three positives plus the reconstructed writer fail: a `default=` that
+          is a NAME has no label yet while the tree is being walked, so it resolved to nothing. This is
+          the part that stops the breach that happened -- data/results/astroreg_request_plan.json at
+          723d802, written outside save_result through `default=DEFAULT_OUT`, with the census finding 13
+          sites and none of them that one.
+        - passing the enclosing scope instead of None. Remove it alone and exactly one positive fails,
+          a default that is a name LOCAL to the enclosing function; the module constant is still caught,
+          because `_lookup` falls back to ("<module>", name) with no scope at all. So this part is NOT
+          what caught the astroreg shape and must not be credited with it: it is a guard against a
+          different harm, a function-local default, and it stops nothing without the part above.
+        """
         changed = False
+        for scope, default, dest in self.arg_defaults:
+            if dest not in self.arg_dests and self._results(default, scope):
+                self.arg_dests.add(dest)
+                changed = True
+        return changed
+
+    def propagate(self) -> bool:
+        changed = self._resolve_arg_dests()
         for scope, target, value, _how in self.assigns:
             lab = self.label(value, scope)
             if not lab:
