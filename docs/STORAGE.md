@@ -292,7 +292,7 @@ Verified from `docs.github.com` on 2026-09-27. Nothing below is remembered.
 | repository on-disk | **10 GB** | recommendation | 69.2 MiB | 148× |
 | per push | **2 GiB** | **enforced** | 12.01 MiB worst day | 170× |
 | push rate | 6 per minute | enforced | one per commit cycle | — |
-| directory width | **3,000 entries** | recommendation | **691 in `data/results`** | **165 days** |
+| directory width | **3,000 entries** | recommendation | **877 in `data/results`** (1,522 on disk incl. git-ignored) | **152 days at 14/day, 54 at 39/day** |
 | directory depth | 50 | recommendation | 3 | — |
 | branches | 5,000 | recommendation | 2 | — |
 | files per repository | **none stated** | — | 1,365 | — |
@@ -340,9 +340,15 @@ is 16× away and the per-push limit 170× away.
 **The first thing that will break is not a size limit at all — it is the daily merge's diff.** GitHub
 renders at most 300 files and 20,000 lines in one diff, and a single commit here has already touched
 106 files while a working day runs to 104 commits. The pull request will merge correctly and refuse to
-show itself. **Second, in about 165 days, `data/results` crosses the 3,000-entry directory-width
-recommendation**: 691 tracked entries today, growing 14 a day over the last fortnight and 39 a day
-while the sweeps ran. That one is real but gradual, and the fix is a shallow split of the directory,
+show itself. **Second, `data/results` crosses the 3,000-entry directory-width recommendation in
+152 days at the slower of this document's own two rates and 54 at the faster**: re-measured
+2026-10-03 at **877 tracked entries**, up from the 691 recorded here on 2026-09-27 — about 31 a day
+over those six days, which sits nearer the sweep rate than the fortnight rate. The 165 days this
+paragraph gave is spent, and the number was not wrong when written: the rate was. **1,522 entries
+sit in the directory on disk**, the rest git-ignored; the GitHub recommendation is about the tracked
+tree, so 877 is the figure against the limit and 1,522 is the figure a filesystem reader meets.
+The two growing 14 a day over a fortnight and 39 a day while the sweeps ran are this document's own
+measurements and are left as the rates the projection uses. That one is real but gradual, and the fix is a shallow split of the directory,
 which is a path change across modules and belongs in a plan of its own.
 
 **One thing is tracked that arguably should not be.** `data/results/ccres_chr*.bed.gz` — 25 files
