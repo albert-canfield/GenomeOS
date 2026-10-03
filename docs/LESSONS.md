@@ -1715,3 +1715,39 @@ These three landed on the same day three other entries about machine-dependent t
 The class was already known. The instances were not, because nothing in the suite looks for them —
 which is the argument for running the suite somewhere that has none of this machine's data, rather
 than for being more careful.
+
+## A narrative sentence about a number is not the number (2026-10-03)
+
+Eleven current-state claims in one document were stale on one afternoon, and four lanes were dispatched
+on them: one refused work that was free, three sent to work finished days earlier. None was found by a
+failing test. Every one of the eleven was **correct as of the date it was written**.
+
+The fixes were tried in order and the first two were not enough, which is the useful part:
+
+1. **Correct the row.** Four rows were corrected individually. A fifth, sixth and seventh were then found
+   in the same table.
+2. **A header saying "read the area's own section before taking a row."** True advice, and it was already
+   in place when the last of the four wrong dispatches went out. A convention that has to be remembered
+   is weaker than a shape that cannot drift — and the shape was available: the sibling table in the same
+   document **did not go stale in a single row**, because it is maintained by APPENDED rows beneath the
+   row they update, while the drifting one was written once and frozen. That table is now append-only.
+3. **Reading the area was not enough either.** An audit commissioned to catch the other ten was told to
+   read the area sections rather than the table, did exactly that, and produced an eleventh stale item.
+   The sentence it relied on — "stands at 2 and a surface score still reads the annotation rather than
+   the alteration" — was written **six days before the work that met it**. The pin it describes is
+   `BURIED_SURFACE_TARGETS = 0` in a test file. **One grep settles it.**
+
+**So: prose in a document is evidence about its own date and nothing else.** Check the machine-checkable
+value — the pin in a test, the field in a committed result, the constant in the module, a commit
+confirmed an ancestor of HEAD. A row's own wording is never evidence about itself.
+
+**And STALE IS NOT WRONG.** The storage headroom read "165 days" at 691 tracked entries; it is 877 now,
+so the figure is spent — but it was right when written and the *rate* is what moved. Say "stale as a
+current-state claim, correct as of its date", leave the dated sentence where it is, and supersede it with
+a dated row. That is the same additive practice this project uses for a superseded assertion, applied to
+prose, and it is what lets a projection's author be corrected without the record being rewritten.
+
+The reason this is not a lesson about carelessness: the coordinator made it twice, once immediately after
+correcting the same class, and the supervising session made it once while ordering the audit built to
+stop it — naming a lane from an earlier message rather than from the committed queue. Reading prose as
+current state is the DEFAULT behaviour, not a lapse. Only going to the value defeats it.
