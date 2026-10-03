@@ -39,6 +39,7 @@ import ast
 import errno
 import sys
 import tomllib
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -184,24 +185,66 @@ def extras_for_module(module: str) -> tuple[str, ...]:
     return _module_extras().get(module, ())
 
 
-def missing_modules_for_extra(extra: str) -> tuple[str, ...]:
-    """The modules of an extra's own requirements that this interpreter cannot import.
+def _importable(module: str) -> bool:
+    """Whether THIS ENVIRONMENT provides a top-level module, asked of the finders and not of sys.modules.
+
+    `importlib.util.find_spec`, which this used until 2026-10-03, answers from `sys.modules` BEFORE it
+    asks the filesystem, and a pytest session is one process. So the answer moved with whatever an
+    earlier test had put there, in both directions, and both were measured on this machine:
+
+      * a `types.ModuleType("alphagenome")` -- exactly what tests/test_adapter_gene_axis.py and
+        tests/test_model_version_pin.py build to stand in for the uninstalled client -- has
+        `__spec__` None, so `find_spec` raised `ValueError: alphagenome.__spec__ is None`, the
+        `except (ImportError, ValueError)` below read that as absent, and `missing_modules_for_extra`
+        reported the INSTALLED `predict` extra missing. Five tests in tests/test_astrorun.py then
+        skipped and the suite stayed green: measured 173 passed / 6 skipped against 178 passed /
+        1 skipped. A skip is how a test disappears quietly, which is the failure this whole module
+        was written against.
+      * a stub carrying a real spec went the other way: `compose` read as PRESENT with
+        process_bigraph not installed, so a test that must skip would run against the stand-in --
+        the 2026-10-02 defect itself, a pass for a reason unrelated to the project declaring
+        anything.
+
+    Both stub sites use `monkeypatch.setitem` today, so they restore and the gate (which runs in
+    `pytest_runtest_setup`, before a test's fixtures) never sees them. The dependence was therefore
+    LATENT and not active -- the same word the 900 MB and 4 GiB `ru_maxrss` ceilings earned the same
+    day, which were also safe only by the order the files happened to run in.
+
+    The finders are asked in `sys.meta_path` order, which is what an actual `import` would consult
+    after the `sys.modules` shortcut, so a module provided by an editable install's own finder still
+    answers True. The residual blind spot, named rather than closed: a test that installs a
+    MetaPathFinder of its own and leaves it there moves this answer too. Nothing in this suite does;
+    `importlib.machinery.PathFinder` alone would be narrower but would miss editable installs.
+    """
+    for finder in sys.meta_path:
+        try:
+            spec = finder.find_spec(module, None)
+        except (ImportError, AttributeError, TypeError, ValueError):
+            continue
+        if spec is not None:
+            return True
+    return False
+
+
+def missing_modules_for_extra(extra: str, present: Callable[[str], bool] | None = None) -> tuple[str, ...]:
+    """The modules of an extra's own requirements that this environment does not provide.
 
     Only the extra's direct requirements are checked, not its whole closure: those are what pyproject
     names, and an extra is here when what it names can be imported. Empty means the extra is installed.
-    """
-    from importlib.util import find_spec
 
+    `present` is the reading, INJECTED so that a test can prove this answers about what it was handed
+    rather than about the process it happens to run in. A real call passes nothing and gets
+    `_importable`, which is the live environment: tests/conftest.py's skip gate calls this with the
+    extra alone, and tests/test_extra_only_imports.py pins that it does. A guard keyed to what its
+    caller supplies would be no guard, so the default is the only reading production ever gets.
+    """
+    reading = _importable if present is None else present
     if extra not in known_extras():
         raise LookupError(f"no extra named {extra!r} in {LOCK.name}; pyproject provides {known_extras()}")
     missing = []
     for requirement in _by_name()[PROJECT]["optional-dependencies"][extra]:
         for module in sorted(modules_of(requirement["name"])):
-            try:
-                present = find_spec(module) is not None
-            except (ImportError, ValueError):
-                present = False
-            if not present:
+            if not reading(module):
                 missing.append(module)
     return tuple(missing)
 

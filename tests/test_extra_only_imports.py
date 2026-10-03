@@ -28,6 +28,7 @@ from __future__ import annotations
 import subprocess
 import sys
 import tomllib
+import types
 from pathlib import Path
 
 import extras_lock
@@ -307,6 +308,117 @@ def test_a_marker_naming_an_extra_pyproject_does_not_provide_raises():
     """A typo in an extra name must not read as "skipped", which is how a test disappears quietly."""
     with pytest.raises(LookupError):
         extras_lock.missing_modules_for_extra("compsoe")
+
+
+#: Where this tree really does leave a `types.ModuleType` under an extra's own module name, so the
+#: plant below is a reachable state and not an invented one. Both sites use `monkeypatch.setitem`, so
+#: today they restore and the gate -- which runs in `pytest_runtest_setup`, before a test's fixtures --
+#: never sees them: the dependence is LATENT, which is what the 900 MB ru_maxrss ceiling was until the
+#: suite grew past it. The names are pinned so that a site moving to a plain assignment is a red here.
+STUB_SITES = ("tests/test_adapter_gene_axis.py", "tests/test_model_version_pin.py")
+
+
+def test_the_module_name_the_stub_sites_use_is_one_an_extra_installs():
+    """The pollution the next two tests plant is written in this tree, under a name an extra owns."""
+    assert extras_lock.extras_for_module("alphagenome") == ("predict",)
+    for site in STUB_SITES:
+        source = (ROOT / site).read_text()
+        assert 'types.ModuleType("alphagenome")' in source, site
+        assert "sys.modules" in source, site
+        assert "monkeypatch.setitem(sys.modules" in source, (
+            f"{site} no longer restores its stub, so the gate can now meet it between tests"
+        )
+
+
+def test_the_skip_gate_judges_the_reading_it_is_handed_and_not_the_running_process():
+    """The injection is WIRED, in both directions, for every extra pyproject provides.
+
+    A gate that took the parameter and then read the process anyway would pass whichever plant the
+    machine happened to agree with, so the pair is run on EVERY extra: a reading of "everything is
+    here" must empty the answer and a reading of "nothing is here" must name every module the extra
+    asks for. No single process agrees with both on any extra, whatever is installed, so a gate that
+    passed both is judging what it was handed. An extra that named no module would satisfy the second
+    plant vacuously, which is why the count is asserted before the plants and not after.
+    """
+    for extra in extras_lock.known_extras():
+        asked = extras_lock._by_name()[extras_lock.PROJECT]["optional-dependencies"][extra]
+        every = sorted(m for r in asked for m in extras_lock.modules_of(r["name"]))
+        assert every, f"{extra} names no module, so neither plant says anything"
+        assert extras_lock.missing_modules_for_extra(extra, lambda _m: True) == ()
+        assert extras_lock.missing_modules_for_extra(extra, lambda _m: False) == tuple(every)
+
+    # and the unknown name still raises before any reading is taken: a typo must not read as a skip
+    with pytest.raises(LookupError):
+        extras_lock.missing_modules_for_extra("compsoe", lambda _m: True)
+
+
+def test_a_module_an_earlier_test_stubbed_does_not_make_an_installed_extra_read_as_absent(
+    tmp_path, monkeypatch
+):
+    """The ordering defect of 2026-10-03, as the two readings answering the same question differently.
+
+    `importlib.util.find_spec` consults `sys.modules` before the filesystem, so a `types.ModuleType`
+    left there by an earlier test raises ValueError, which the gate read as "absent" and turned into a
+    skip of a test the environment could perfectly well run. The site that builds such a stub, under a
+    name the `predict` extra owns, is pinned above.
+
+    The module is REAL and its own: a file on `sys.path`, so the environment genuinely provides it and
+    the only thing the stub changes is `sys.modules`. Stubbing an installed library instead would
+    answer the same question while displacing something this test stands on, and picking one that the
+    suite has not imported yet would make this test's own result depend on the order of the suite.
+
+    The old reading is EXERCISED rather than described, so this cannot pass by agreeing with itself:
+    the plant is a plant only if `find_spec` really does change its answer.
+    """
+    import importlib.util
+
+    name = "a_module_this_environment_really_provides"
+    (tmp_path / f"{name}.py").write_text("VALUE = 1\n")
+    monkeypatch.syspath_prepend(str(tmp_path))
+    assert extras_lock._importable(name) is True, "the finders see a file on sys.path"
+
+    monkeypatch.setitem(sys.modules, name, types.ModuleType(name))
+    with pytest.raises(ValueError, match="__spec__"):
+        importlib.util.find_spec(name)
+    assert extras_lock._importable(name) is True, "and still answer about the environment"
+
+
+def test_a_stub_carrying_a_spec_does_not_make_an_absent_module_read_as_present(monkeypatch):
+    """The other direction, which is the 2026-10-02 defect itself: a pass owed to a stand-in.
+
+    A stub built with `module_from_spec` satisfies `find_spec`, so a `requires_extra` test would have
+    RUN with the library absent and measured the stand-in. The finders are asked about the
+    environment, so they say absent whatever is in `sys.modules`.
+    """
+    import importlib.util
+
+    name = "nobody_declares_this_either"
+    spec = importlib.util.spec_from_loader(name, loader=None)
+    monkeypatch.setitem(sys.modules, name, importlib.util.module_from_spec(spec))
+
+    assert importlib.util.find_spec(name) is not None, "the old reading is satisfied by the stub"
+    assert extras_lock._importable(name) is False
+
+
+def test_the_skip_gate_in_conftest_takes_the_live_reading_and_is_told_nothing(monkeypatch):
+    """A guard keyed to what its caller supplies is not a guard, so the call site is pinned.
+
+    The injection exists for the tests above. If tests/conftest.py ever passed a reading of its own,
+    every `requires_extra` decision in this suite would be whatever that argument said, and the two
+    plants above would be measuring a function nothing calls.
+    """
+    source = (TESTS / "conftest.py").read_text()
+    assert "extras_lock.missing_modules_for_extra(extra)\n" in source, source
+
+    seen: list[str] = []
+
+    def watched(module: str) -> bool:
+        seen.append(module)
+        return True
+
+    monkeypatch.setattr(extras_lock, "_importable", watched)
+    assert extras_lock.missing_modules_for_extra("compose") == ()
+    assert seen == ["process_bigraph"], "a call with no argument gets the module default, nothing else"
 
 
 def test_the_marker_is_registered_so_pytest_does_not_warn_about_it(tmp_path):
