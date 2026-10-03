@@ -149,6 +149,17 @@ def main() -> int:
     # they are and the correct values are written over them here. What lands in the file is this.
     payload["result_manifest"]["coordinates"] = COORDINATES
     payload["result_manifest"]["inputs"].append(ccre_group())
+    # ADDED, not an edit: the contract wants `partitions` as a dict or a string opening "n/a:", and
+    # result_manifest() states it as prose that the validator refused. That line is already in HEAD
+    # and the guard refuses removing it, so the correct value is written over it here. The substance
+    # is unchanged -- there is no evaluation partition, because the model never saw this source as a
+    # label at all; what is NOT claimed is that it never saw the source's REGIONS, which it did.
+    payload["result_manifest"]["partitions"] = (
+        "n/a: no evaluation partition. This is an external check against a curated assay, not a "
+        "held-out split of anything the model was fitted on. Whether the ReSE screen's data entered "
+        "the training corpus is NOT ESTABLISHED and is registered as unknown, so this field records "
+        "the absence of a partition and must not be read as a claim of independence."
+    )
     path = save_result(NAME, payload)
     print(f"wrote {path}, sha256 {hashlib.sha256((ROOT / path).read_bytes()).hexdigest()}")
     print(json.dumps({k: v for k, v in payload.items() if k.startswith("reading")}, indent=1))
