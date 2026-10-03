@@ -63,6 +63,21 @@ MEMBERS: tuple[dict[str, str], ...] = (
         ),
     },
     {
+        "path": "tests/test_onetarget2.py",
+        "category": "one-target census drift",
+        "why": (
+            "`test_the_real_census_passes_every_guard` refuses any module under `genomeos/` that "
+            "reads the compact element head and is in no census list. It is cross-cutting by "
+            "construction: the lane that ADDS such a module is never the lane that owns this file, "
+            "so its targeted set cannot contain it. On 2026-10-03 two lanes in one hour each "
+            "committed a red they could not see this way (`attribution/silenceragree.py` at "
+            "`88c0c8b`, `attribution/silencerdoctrine.py` at `5ad0a34`), and the second was found "
+            "only because a push gate had already been spent on the first. Costs about 30 seconds, "
+            "which is the dearest member here and still two orders cheaper than the push cycle it "
+            "saves"
+        ),
+    },
+    {
         "path": "tests/test_results_writers_guard.py",
         "category": "the write guard",
         "why": (

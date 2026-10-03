@@ -57,9 +57,10 @@ SCOPE_COUNTS = {
     "census_modules": 20,
     "identity": 18,
     "invariant": 2,
-    # 5 as registered 2026-10-03; 6 since the coordinator's ruling the same day on
-    # attribution/silenceragree.py, recorded in RECORD_ONLY below and in the prose amendment.
-    "record_only": 6,
+    # 5 as registered 2026-10-03; 7 after the coordinator's two rulings the same day, on
+    # attribution/silenceragree.py and attribution/silencerdoctrine.py. Both are in RECORD_ONLY
+    # below and both are named in the prose amendment.
+    "record_only": 7,
     "already_moved": 9,
     "excluded_by_name": 9,
     "identity_free_today": 11,
@@ -75,11 +76,15 @@ ROW_SAYS_FIVE_THE_TREE_SAYS_OTHERWISE = (
     "read a head and cannot move (class `invariant`), making a census of 20; beside them 5 modules "
     "read a head without being a live consumer of one (class `record`) and 9 have already been "
     "moved, each under its own registration. **Amended 2026-10-03, the sentence above kept as "
-    "written: the record count is 6, not 5. `attribution/silenceragree.py` was ruled record-only "
-    "that day, on the same ground as `respmap_v2.py` -- it audits the published head rather than "
-    "consuming it, and re-reading the window would measure a quantity the project does not "
-    "publish. The ruling does not move any figure of this registration's own wave, which is still "
-    "18.** `scripts/` holds 24 further head-reading entry points, "
+    "written: the record count is 7, not 5, after two rulings in one hour. (1) "
+    "`attribution/silenceragree.py`, on the same ground as `respmap_v2.py` -- it audits the "
+    "published head rather than consuming it, and re-reading the window would measure a quantity "
+    "the project does not publish. (2) `attribution/silencerdoctrine.py`, on the same ground as "
+    "`benchmark/loci_noncoding.py` -- its head reads are the evidence for a guard, not a "
+    "consumer's input. Neither ruling moves any figure of this registration's own wave, which is "
+    "still 18. The rate is the point: two modules in one hour, so this count is expected to keep "
+    "moving and the guard on it is what makes each move a decision.** `scripts/` holds 24 "
+    "further head-reading entry points, "
     "named below and OUT of this registration's scope. So the real figure for this wave is 18, not "
     "5. Of those 18, two are frozen inside the paid study's 52-file import closure "
     "(`genome/motifs.py`, `genome/regulation.py`) and a third closure file, "
@@ -469,6 +474,14 @@ RECORD_ONLY: tuple[dict[str, str], ...] = (
         "module": "genomeos/attribution/respmap_v2.py",
         "why": "it reads the head out of a PUBLISHED assertion's own quote, to audit what was "
         "published. Re-reading the window there would change the audit's subject",
+    },
+    {
+        "module": "genomeos/attribution/silencerdoctrine.py",
+        "why": "it is the GUARD over the predicted key and over prose about it, written 2026-10-03. "
+        "Its head reads ARE the evidence, not a consumer -- the same ground as "
+        "benchmark/loci_noncoding.py: it recomputes the shipped count from the committed element "
+        "rows precisely to assert that the count counts a DIRECTION, so reading the window instead "
+        "would destroy the thing it checks",
     },
     {
         "module": "genomeos/attribution/silenceragree.py",
