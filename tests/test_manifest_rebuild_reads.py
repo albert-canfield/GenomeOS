@@ -25,6 +25,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos import manifest as mf
 
@@ -306,8 +307,13 @@ def test_the_nine_committed_results_that_declare_an_absolute_input_are_measured_
     rebuild of one succeeds depends on its inputs' bytes and its command, which this does not run.
     """
     results = Path("data/results")
-    if not results.is_dir():
-        pytest.skip("data/results is git-ignored: this measurement needs the registry on this machine")
+    # data/results is git-ignored by PATTERN with `!` re-includes and 880 of its files are committed,
+    # so the directory is in every checkout of this commit: a skip keyed on its absence could never
+    # fire, and it would have made a measurement over the COMMITTED registry read as though it were
+    # conditional on a machine that happens to hold one -- the opposite of what this measures
+    tp.must_be_present(
+        results, was="data/results is git-ignored: this measurement needs the registry on this machine"
+    )
     absolute: dict[str, list[str]] = {}
     for f in sorted(results.glob("*.json")):
         try:
