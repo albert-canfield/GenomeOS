@@ -1869,6 +1869,7 @@ useless as a *count* is depth-invariant as a *membership*.
   third to fourth — **the fix made the ranking look worse and is still right.**
   The duplicate is fixed and pinned (`BURIED_SURFACE_TARGETS` at 2, may fall
   and never rise); **the scoring is recorded and not fixed**, because teaching
+  *Superseded as a current-state claim 2026-10-03, correct as of its own date: `BURIED_SURFACE_TARGETS` is **0**, and has been since 2026-09-27 — `tests/test_therapeutic_benchmark.py:207` reads `BURIED_SURFACE_TARGETS = 0  # was 2; the evidence tier, 2026-09-27`, with `outranked_by_hypotheses` empty on all 10 rows of both committed results. This sentence, written 2026-09-21, produced a wrong lane dispatch on 2026-10-03 because the WAVE ROW was corrected and the SOURCE SENTENCE was not. **When a number moves, grep the document for the NUMBER, not for the row.***
   the score to read the alteration changes every case's numbers and is a
   decision rather than a side effect of adding a case. It is the next thing
   this area should be asked for.
@@ -5041,6 +5042,7 @@ changed sequence is the junction and GenomeOS does not reconstruct it. What is o
 modality rather than a route: no small molecules, and five of nine cases pass by saying so.
 **What remains open is the preference question above, untouched: `BURIED_SURFACE_TARGETS` stands at
 2 and a surface score still reads the annotation rather than the alteration.** LESSONS.md carries
+  *Superseded as a current-state claim 2026-10-03, correct as of its own date: `BURIED_SURFACE_TARGETS` is **0**, and has been since 2026-09-27 — `tests/test_therapeutic_benchmark.py:207` reads `BURIED_SURFACE_TARGETS = 0  # was 2; the evidence tier, 2026-09-27`, with `outranked_by_hypotheses` empty on all 10 rows of both committed results. This sentence, written 2026-09-21, produced a wrong lane dispatch on 2026-10-03 because the WAVE ROW was corrected and the SOURCE SENTENCE was not. **When a number moves, grep the document for the NUMBER, not for the row.***
 the transferable half, which is not about fusions: a defect left open because "this project holds no
 such measurement" is a statement about what was looked for, and here looking cost one request
 parameter.
