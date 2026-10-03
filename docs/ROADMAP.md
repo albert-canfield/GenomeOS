@@ -4322,6 +4322,19 @@ entire sweep. What is next, in order of what it decides:
    then R6–R7, then the joint engine R8, with R9 alongside. Consequences for the rest of this section:
    v0.4 stage 4 (partitioning division) and the E2/E3 widening wait behind R1–R5; lane-joint's pretest
    becomes the first step of R8, not a wave-3 lane of its own.
+   ***SPENT, 2026-10-03: this sentence is stale and it dispatched a duplicate lane before being caught.**
+   R1–R9 are all done or closed, so nothing waits behind R1–R5 any longer. And **v0.4 stage 4 was already
+   built on 2026-09-28** — see the wave-3 row above, `lane-v04`, `4ff3cd4` registered and `73af2d5` built,
+   with `partition` at `lang/grammar.py:127`, its refusal at `lang/parser.py:563-570`, `PARTITION_MODES` at
+   `ir/model.py:267-288`, `runtime/division.py`, and 24 tests green. So this line contradicted a done row
+   TWELVE LINES ABOVE IT on the same page for five days. The coordinator read R1–R9 as complete and then
+   took this sentence's list of what waited at face value, WITHOUT CHECKING WHETHER THE WAITING ITEMS WERE
+   STILL WAITING: the precondition was verified and the consequent was not. Of the two it names, only the
+   E2/E3 widening is genuinely open, and that one is Albert's because its own row says it spends quota.
+   The next unbuilt v0.4 stage is **stage 3** (core metabolism, mitochondrial copies, heteroplasmy), the only
+   "not started" row in BIOLANG-v0.4-ECONOMY.md §9 — and stage 4's own §9.4 names what it would close: the
+   demo's resource checkpoint refuses EVERY division, because a pool is a standing stock and a cost is a
+   draw over a cycle, and nothing converts between them until stage 3 supplies ATP over time.*
 
    | # | Item (review's priority) | Code it names | Acceptance (the review's) | Lane, order |
    | --- | --- | --- | --- | --- |
