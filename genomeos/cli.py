@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -4687,8 +4688,47 @@ def cmd_serve(args: argparse.Namespace) -> int:
     return 0
 
 
+class StableParser(argparse.ArgumentParser):
+    """A parser whose positional matching does not depend on which CPython is running it.
+
+    `genomeos work start --who NAME "the task"` parses on this machine and FAILED on CI at 2355bad with
+    `genomeos: error: unrecognized arguments: a task`. The cause is neither the shared board nor the
+    suite it was found in: it is argparse. `work` declares two optional positionals, `action` and
+    `task`, and an option may sit between them. Before CPython added the guard below,
+    `_match_arguments_partial` consumed BOTH positionals the moment it matched one argument string --
+    handing `task` nothing -- so the real task string was left over and the top-level parser rejected
+    it. The guard is: where the next argument string is an OPTION, a trailing positional is left
+    pending instead of being consumed with nothing, which is what lets the task reach `task`.
+
+    Measured 2026-10-03 against this exact parser shape, both orders, nothing else varied:
+
+      Python 3.9.6   `work start --who X "a task"` -> action='start' task=None, 'a task' UNRECOGNISED
+      Python 3.12.13 `work start --who X "a task"` -> action='start' task='a task'
+
+    `requires-python` is >=3.12 and this machine runs 3.12.13, so the project does not choose the micro
+    version its users or CI get, and the first reading is the CI message word for word. The parse is
+    therefore made the same everywhere rather than left to the interpreter: this is CPython's own fix,
+    carried by the project's parser class. `add_subparsers` defaults `parser_class` to `type(self)`, so
+    every subcommand's parser is this class too -- tests/test_cli_argument_order.py checks that it
+    reaches `work`, and restores the pre-guard matcher to show what it is holding back.
+    """
+
+    def _match_arguments_partial(self, actions, arg_strings_pattern):
+        for i in range(len(actions), 0, -1):
+            pattern = "".join(self._get_nargs_pattern(action) for action in actions[:i])
+            match = re.match(pattern, arg_strings_pattern)
+            if match is None:
+                continue
+            counts = [len(string) for string in match.groups()]
+            if match.end() < len(arg_strings_pattern) and arg_strings_pattern[match.end()] == "O":
+                while counts and not counts[-1]:
+                    del counts[-1]
+            return counts
+        return []
+
+
 def build_parser() -> argparse.ArgumentParser:
-    ap = argparse.ArgumentParser(
+    ap = StableParser(
         prog="genomeos", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     ap.add_argument("--version", action="version", version=f"genomeos {__version__}")
