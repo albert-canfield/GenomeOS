@@ -101,6 +101,59 @@ attempt() {
   return "$st"
 }
 
+# THE SUCCESS CLAIM IS READ BACK FROM THE REMOTE, AND NEVER INFERRED FROM THE PUSH RETURNING.
+#
+# This script's job is "the sha that was checked is now on the remote". Until 2026-10-03 the last
+# word on that was `git push` exiting 0, and then an `echo` -- so the line a caller reads, and the
+# status it is handed, both rested on a command having returned rather than on the remote's ref. That
+# is the same inference the retry path already refuses to make about the verdict, where the comment
+# says naming the tree of the sha being pushed is "the only thing that makes 'the same sha' a fact
+# rather than an assumption". The outcome gets the same standard.
+#
+# It is not a theoretical gap: measured against a local throwaway bare remote, `git push` printed
+#   a9aee0c..8329557  8329557... -> dev
+# and exited 0 while refs/heads/dev on that remote was 72782e3 -- and the script printed
+# "push_own: 8329557 is on origin/dev" and exited 0. A push's exit status says the server accepted a
+# ref update at the moment it was asked; it does not say the branch still carries that sha when
+# anybody looks, and a peer force-push or a server-side hook can part the two. So the remote is
+# asked, with `git ls-remote` against the remote itself rather than the remote-TRACKING ref, which is
+# only this checkout's memory of a past fetch and would make the claim circular.
+#
+# Fails closed, like require_verdict above it: no readable ref, no answer, or an answer that is some
+# other sha are all refusals, and the refusal prints what is actually there. `a=$(cmd)` keeps the
+# command's own status -- no pipe -- and the ref name is matched EXACTLY rather than trusted from
+# `ls-remote`'s pattern matching, so a differently-named ref can never answer for this branch.
+confirm_on_remote() {
+  local why=$1 listing h r found=""
+  if ! listing=$(git ls-remote "$remote" "refs/heads/$branch" 2>&1); then
+    echo "push_own: REFUSED to claim the push landed ($why): $remote could not be read back:" >&2
+    echo "$listing" >&2
+    echo "  The push returned, but nothing here establishes that $short is on $remote/$branch." >&2
+    echo "  Check it by hand before relying on it: git ls-remote $remote refs/heads/$branch" >&2
+    return 1
+  fi
+  while IFS="$(printf '\t')" read -r h r; do
+    if [ "$r" = "refs/heads/$branch" ]; then found=$h; fi
+  done <<EOF
+$listing
+EOF
+  if [ -z "$found" ]; then
+    echo "push_own: REFUSED to claim the push landed ($why): $remote has no refs/heads/$branch." >&2
+    echo "  The push returned, so this is not a rejection; it is the remote not carrying the branch." >&2
+    return 1
+  fi
+  if [ "$found" != "$sha" ]; then
+    echo "push_own: REFUSED to claim the push landed ($why): $remote/$branch is at" >&2
+    echo "  $found, not $sha." >&2
+    echo "  git reported the push succeeded, which means the server accepted a ref update -- not that" >&2
+    echo "  the branch carries this sha now. It does not. Nothing was retried and nothing was forced:" >&2
+    echo "  fetch, read what is there, and push again." >&2
+    return 1
+  fi
+  echo "push_own: $short IS on $remote/$branch: read back from the remote as $found"
+  return 0
+}
+
 # Full path with six X's, not `mktemp -t <prefix>`. GNU mktemp -- which is what CI runs --
 # REFUSES a -t template with fewer than three trailing X's: `mktemp: too few X's in template
 # 'genomeos-push'`, which is verbatim what the run of 2026-10-02 12:08 UTC printed. BSD mktemp, which
@@ -113,7 +166,7 @@ trap 'rm -f "$out"' EXIT
 
 echo "push_own: pushing $short to $remote/$branch (the sha, not the branch name)"
 if attempt git push "$remote" "$sha:refs/heads/$branch"; then
-  echo "push_own: $short is on $remote/$branch"
+  confirm_on_remote "the push reported success" || exit 1
   exit 0
 fi
 
@@ -143,5 +196,13 @@ echo "  fast-forward carrying exactly the tree the check passed. Retrying withou
 # The retry skips the check, so the claim in the line above is now required in writing rather than
 # inferred from the first attempt's exit code and output.
 require_verdict "the retry skips the check" || exit 1
-GENOMEOS_SKIP_CHECK=1 git push "$remote" "$sha:refs/heads/$branch"
-echo "push_own: $short is on $remote/$branch"
+# `attempt`, not a bare `git push`: under `set -e` a failed retry would abort with the right status
+# but the last line of this script would then be an `echo`, so a success claim and a zero status both
+# rested on `echo` returning. The two lines below make the status the push's and the claim the
+# remote's, and the script now ends on an explicit `exit` on every path rather than on an `echo`.
+attempt env GENOMEOS_SKIP_CHECK=1 git push "$remote" "$sha:refs/heads/$branch" || {
+  echo "push_own: the retry failed. $short is NOT on $remote/$branch; read the output above." >&2
+  exit 1
+}
+confirm_on_remote "the retry reported success" || exit 1
+exit 0

@@ -230,3 +230,129 @@ def test_a_skipped_check_is_refused_before_the_push_when_there_is_no_verdict(wor
     assert r.returncode == 0, (r.stdout, r.stderr)
     assert "the status file's verdict is for this exact tree" in r.stdout, (r.stdout, r.stderr)
     assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == tip
+
+
+# --- the outcome, not the exit code of the thing that was supposed to produce it ------------------
+#
+# On 2026-10-03 push_own.sh was reported as EXITING 0 ON A FAILED PUSH, twice at the terminal: git
+# printed `error: failed to push some refs`, the script printed its own correct diagnosis, and the
+# caller was handed 0. Reproduced against a local throwaway bare remote, the script exits 1 on that
+# path and always has -- `test_a_push_refused_by_the_check_exits_non_zero` below is that path, and it
+# passed before anything was changed. The 0 came from the INVOCATION: `push_own.sh 2>&1 | tail -N`
+# hands back tail's status and `push_own.sh ... &` hands back the launcher's, both measured at 0 over
+# the same red, with the remote unmoved. No script can defend its own status against either, which is
+# why the rest of these tests do not try to: they make the CLAIM a fact about the remote, so a
+# swallowed status is no longer the only thing standing between a reader and the truth.
+#
+# None of these skips, so the standing invariant about skip guards keyed on tracked paths does not
+# arise; each one is planted, and each was shown to fail against the script as it stood.
+
+
+def arm_red_check(ours):
+    """A pre-push hook that refuses exactly as the real one did in the reported transcript.
+
+    A tree with no green verdict is the cheapest faithful reproduction there is: it needs no network
+    and none of the real check's nine minutes, and the lines it prints are the lines that were read.
+    """
+    hook = ours / ".git" / "hooks" / "pre-push"
+    hook.write_text(
+        "#!/bin/sh\n"
+        '[ "${GENOMEOS_SKIP_CHECK:-0}" = "1" ] && exit 0\n'
+        'echo "pre-push: REFUSED: no green verdict exists for the tree being pushed." >&2\n'
+        'echo "pre-push: red; fix and push again (see CONTRIBUTING.md)"\n'
+        "exit 1\n"
+    )
+    hook.chmod(0o755)
+
+
+def test_a_push_refused_by_the_check_exits_non_zero(world):
+    """The reported finding, as its own planted case. Nothing covered this path before."""
+    bare, ours, peer = world
+    base = git(bare, "rev-parse", "refs/heads/dev").stdout.strip()
+    tip = commit(ours, "tip.txt")
+    arm_red_check(ours)
+    r = run_push(ours, tip)
+    assert "failed to push some refs" in r.stdout, (r.stdout, r.stderr)
+    assert "not the ref-lock race" in r.stderr, (r.stdout, r.stderr)
+    assert r.returncode != 0, ("a failed push must not hand back 0", r.stdout, r.stderr)
+    # and no claim was made either: the status is not the only thing a reader has
+    assert "is on origin/dev" not in r.stdout.lower(), (r.stdout, r.stderr)
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == base
+
+
+def test_a_push_that_exits_zero_without_moving_the_branch_is_refused(world):
+    """`git push` returning 0 is not the fact this script exists to establish.
+
+    The push's exit status says the server accepted a ref update when it was asked. It does not say
+    the branch carries that sha afterwards, and the two really can part: here a server-side hook moves
+    `dev` elsewhere once the push is accepted, which is the shape a peer force-push also has. Before
+    2026-10-03 this printed `push_own: <sha> is on origin/dev` and exited 0 with the remote at another
+    commit entirely -- measured, not reasoned.
+    """
+    bare, ours, peer = world
+    tip = commit(ours, "tip.txt")
+    elsewhere = commit(ours, "elsewhere.txt")
+    git(ours, "push", "-q", "origin", f"{elsewhere}:refs/heads/parked")  # the bare repo needs the object
+    hook = bare / "hooks" / "post-receive"
+    hook.write_text(f"#!/bin/sh\ngit update-ref refs/heads/dev {elsewhere}\nexit 0\n")
+    hook.chmod(0o755)
+
+    r = run_push(ours, tip)
+    # the push really did succeed, so this cannot pass vacuously
+    assert "-> dev" in r.stdout, (r.stdout, r.stderr)
+    assert r.returncode != 0, (r.stdout, r.stderr)
+    assert "REFUSED to claim the push landed" in r.stderr, (r.stdout, r.stderr)
+    assert elsewhere in r.stderr, "the refusal must name what is actually on the remote"
+    assert "is on origin/dev" not in r.stdout.lower(), (r.stdout, r.stderr)
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == elsewhere
+
+
+def test_a_successful_push_still_exits_zero_and_says_it_read_the_remote_back(world):
+    """The other direction, which is not optional: a fix that makes everything fail is not a fix."""
+    bare, ours, peer = world
+    tip = commit(ours, "tip.txt")
+    r = run_push(ours, tip)
+    assert r.returncode == 0, (r.stdout, r.stderr)
+    assert f"IS on origin/dev: read back from the remote as {tip}" in r.stdout, (r.stdout, r.stderr)
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == tip
+
+
+def test_a_retry_that_fails_is_not_reported_as_a_push(world):
+    """The retry path used to end on an `echo`, so its claim rested on that echo.
+
+    The race is real here -- a peer moves the remote to an ancestor mid-flight, the verdict names the
+    pushed tree, the retry is the fast-forward the script says it is -- and only the retry's own push
+    is refused.
+
+    WHAT THIS DOES AND DOES NOT PROVE, because the measurement was taken rather than assumed. Run
+    against the version this replaced, the STATUS was already non-zero: `set -e` aborted on the failed
+    retry before the trailing `echo` could run, so no credit for a status fix is owed here. What that
+    version did NOT do is say anything -- it died silently, with its last printed line still promising
+    a fast-forward retry, and a reader of the output alone had no sentence to go on. The two
+    assertions below are therefore about the claim and not about `set -e`: a refusal is printed, and
+    no line says the sha landed.
+    """
+    bare, ours, peer = world
+    mid = commit(ours, "mid.txt")
+    tip = commit(ours, "tip.txt")
+    write_green_verdict(ours, tip)
+    git(peer, "fetch", "-q", "ours", "dev")
+    git(peer, "update-ref", "refs/heads/dev", mid)
+    arm_hook(ours, peer, "refs/heads/dev")
+    # ... and now make the retry itself fail, which the armed hook cannot do: it exits 0 on the skip
+    hook = ours / ".git" / "hooks" / "pre-push"
+    hook.write_text(
+        hook.read_text().replace(
+            '[ "${GENOMEOS_SKIP_CHECK:-0}" = "1" ] && exit 0',
+            '[ "${GENOMEOS_SKIP_CHECK:-0}" = "1" ] && { echo "the retry is refused too" >&2; exit 1; }',
+        )
+    )
+    hook.chmod(0o755)
+
+    r = run_push(ours, tip)
+    assert CANNOT_LOCK in r.stdout, (r.stdout, r.stderr)
+    assert "an ancestor of" in r.stdout, "the retry must really have been attempted"
+    assert r.returncode != 0, (r.stdout, r.stderr)
+    assert "the retry failed" in r.stderr, (r.stdout, r.stderr)
+    assert "is on origin/dev" not in r.stdout.lower(), (r.stdout, r.stderr)
+    assert git(bare, "rev-parse", "refs/heads/dev").stdout.strip() == mid
