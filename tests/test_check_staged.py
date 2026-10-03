@@ -939,6 +939,25 @@ def test_a_directory_hold_is_noticed_even_though_it_does_not_refuse(
     assert "inside tests/, held on the work board by lane-kinetics" in done.stdout
 
 
+def test_a_file_only_you_hold_is_not_noticed(shared_repo: Path, tmp_path: Path) -> None:
+    """Your own entry says nothing about the file being shared, and the notice ends "a peer's
+    included", which is not true of a file only you hold. Three such notices went out on the commit
+    that added the notice and five on the next one, which is how a notice gets ignored."""
+    hold(shared_repo, "lane-mine", ["tests/test_kinetics.py"])
+    index = private_index(shared_repo, tmp_path)
+    stage_worktree(
+        shared_repo,
+        index,
+        "tests/test_kinetics.py",
+        "def test_one():\n    assert True\n\n\ndef test_two():\n    assert True\n",
+    )
+
+    done = run_check(shared_repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "NOTICE" not in done.stdout
+
+
 def test_a_file_neither_listed_nor_held_is_not_noticed(shared_repo: Path, tmp_path: Path) -> None:
     index = private_index(shared_repo, tmp_path)
     stage_worktree(shared_repo, index, "tests/test_kinetics.py", "def test_one():\n    assert 1\n")

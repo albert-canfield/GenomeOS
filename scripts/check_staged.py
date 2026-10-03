@@ -85,7 +85,8 @@ working copy this commit stages (`whole_copy_notices`). A file counts as shared 
 the list below, or a live lane holds it. The list alone was the hook's whole test on 2026-10-03 and
 it has eight entries, none of them a test file, which is the second reason nothing fired that day.
 Being held is the other way, so the list stops being the only way a file can be shared -- and the
-list stays, because a file can be shared without anyone holding it today. The notice goes quiet by
+list stays, because a file can be shared without anyone holding it today. Held means held by a lane
+OTHER than you, for the reason given at `whole_copy_notices`. The notice goes quiet by
 itself when you do the right thing: it fires only while the index for that path is byte-identical to
 the working copy, so staging the HEAD copy plus your own hunk silences it.
 
@@ -494,7 +495,7 @@ def staged_held_by_a_live_lane(index: str | None, lane: str, message_name: str) 
     return problems
 
 
-def whole_copy_notices(index: str | None) -> list[str]:
+def whole_copy_notices(index: str | None, lane: str, message_name: str) -> list[str]:
     """Shared files whose whole working copy this commit stages, with every uncommitted hunk in it.
 
     Not a refusal. Most whole-copy stagings of a shared file are honest -- all the hunks are yours --
@@ -506,7 +507,12 @@ def whole_copy_notices(index: str | None) -> list[str]:
     """
     notices: list[str] = []
     root = _repo_root()
-    board = live_board(root)
+    # Your own entry is left out of the board here: you know you hold the file, and the sentence
+    # this builds ends "a peer's included", which is not true of a file only you hold. Three such
+    # notices went out on the commit that wrote this function, and five on the next one, which is
+    # how a notice gets ignored. So "held" above means held by a live lane OTHER than you, the same
+    # test the refusal uses.
+    board = [e for e in live_board(root) if not is_me(str(e.get("who") or ""), lane, message_name)]
     if index:
         os.environ["GIT_INDEX_FILE"] = index
     # --- the whole-copy condition ---
@@ -802,7 +808,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = ap.parse_args(argv)
 
-    notices = whole_copy_notices(args.index)
+    notices = whole_copy_notices(args.index, args.lane, args.message_name)
     held = staged_held_by_a_live_lane(args.index, args.lane, args.message_name)
     taken = staged_whose_hold_was_taken(args.index, args.lane, args.message_name)
     problems = check(args.index, args.since)
