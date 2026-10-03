@@ -157,6 +157,11 @@ class Ledger:
             self.progress(f"{now - self.t0:7.1f} s  {stage}")
 
     def summary(self) -> dict[str, Any]:
+        # `peak_memory_gb` is REPORTED, never compared against a ceiling, and it is this PROCESS's
+        # monotonic high-water: valid as a cost figure only in a process that does nothing
+        # substantial before the run it reports on, which is true of the compress scripts and false
+        # of a pytest session. Do not promote it to a guard on this reading; a ceiling that needs to
+        # fire inside a test takes the figure as a parameter (genomeos/attribution/label_gene.py).
         rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         rss_bytes = rss if sys.platform == "darwin" else rss * 1024
         return {

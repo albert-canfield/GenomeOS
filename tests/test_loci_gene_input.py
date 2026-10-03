@@ -21,6 +21,11 @@ Three things are proved here and they are deliberately not the same thing.
 Every input is a tracked file under `data/results` or is built in the test. No git-ignored store is
 required, no bulk chromosome archive is opened, no cached-element loader is called, 0 AlphaGenome
 requests are spent and no rate is computed anywhere in this file.
+
+That last claim is also GUARDED, by `_under_the_ceiling`, and the guard's figure changed on
+2026-10-03: it was this process's peak resident set and it is now the bytes this test read from
+`data/`. `READ_CEILING_BYTES` carries the whole reason. Two tests exist only to plant that guard,
+and one of them reads two further tracked results (`PLANT_OVERSHOOT`) on purpose, to make it fire.
 """
 
 from __future__ import annotations
@@ -28,14 +33,15 @@ from __future__ import annotations
 import json
 import os
 import random
-import resource
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import guard_injection as gj
 import pytest
 
+from genomeos import manifest as mf
 from genomeos.benchmark import loci as lb
 from genomeos.benchmark import loci_gene_input as gi
 from genomeos.benchmark import loci_miss
@@ -92,21 +98,120 @@ V2_ONLY_KEYS = (
     "coding_head_reading",
 )
 
-#: Registered before the comparison was run: this file reads the six frames (about 4.3 MB of JSON)
-#: and `loci_deletions.json` (1.8 MB) one at a time and holds no chromosome table at all, so its
-#: own peak resident set has no business exceeding this. The check RAISES; it does not warn.
-RSS_CEILING_MB = 900
+#: 12 MiB. THE CEILING THIS REPLACES, and why it had to move (2026-10-03, lane-rssceiling).
+#:
+#: It was registered as `RSS_CEILING_MB = 900`, read live from
+#: `resource.getrusage(resource.RUSAGE_SELF).ru_maxrss`, with the reasoning: "this file reads the
+#: six frames (about 4.3 MB of JSON) and `loci_deletions.json` (1.8 MB) one at a time and holds no
+#: chromosome table at all, so its own peak resident set has no business exceeding this."
+#:
+#: The reasoning was right and the INSTRUMENT could not carry it. `ru_maxrss` is the PROCESS
+#: high-water and it is MONOTONIC - measured on this machine, 15.6 MB before allocating 300 MB,
+#: 330.2 MB after, and still 330.2 MB after freeing it. A pytest session is one process, so the
+#: figure this file read was every earlier test's peak and none of its own: in a full-suite run the
+#: process had already reached 4,406 MB and three tests here failed for memory they never
+#: allocated, while all 58 tests in the file passed when run alone. A before-and-after delta is not
+#: the repair either: if an earlier test peaked higher the high-water does not move, the delta reads
+#: 0, and the guard becomes one that cannot fire. And unlike a script, this file has no run in which
+#: the live reading would ever be valid - it only ever runs inside a shared session.
+#:
+#: So the ceiling is on BYTES READ FROM data/, which is what the 23 GB incident was actually made of
+#: (`enhancer_target.load_cached` falling back to whole-chromosome archives) and which IS
+#: attributable: `tests/conftest.py` reopens the manifest's open-trace window for every test, so the
+#: figure belongs to the test in front of it. Measured here: 6,012,663 bytes over 11 tracked result
+#: files - the six frames, `loci_deletions.json` and the four interval files - so this ceiling is
+#: just under twice what the file reads. It is breached by 21 of the 24 per-chromosome compact
+#: element tables the sweep writes (13.3 MB chr22 up to 59.1 MB chr1) and NOT by chrY (0.46 MB) or
+#: chr21 (7.8 MB), so it is a guard against the bulk read and not a complete interdiction; the
+#: complete interdiction is TRACKED_ROW_SOURCES, which keeps those tables off the results path at
+#: all. The check RAISES; it does not warn.
+READ_CEILING_BYTES = 12 * 1024 * 1024
 
 
-def _rss_mb() -> float:
-    rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return rss / 1e6 if rss > 1e7 else rss / 1024  # Darwin reports bytes, Linux kibibytes
+def _bytes_read_under_data() -> int:
+    """The size of every file under data/ this test has opened, from its own open-trace window.
+
+    An EMPTY window raises rather than returning 0. Every call site here has already read tracked
+    results, so an empty window means the audit hook is not recording and the ceiling would be
+    passing without measuring anything - which is the "guard that cannot fire" defect this check
+    was moved to escape, and it must not be reintroduced by the measurement failing quietly.
+    """
+    read = mf.traced_reads()
+    if not read:
+        raise AssertionError(
+            "the per-test open trace is empty, so this ceiling would pass without measuring "
+            "anything; a guard that cannot fire is the defect it replaced"
+        )
+    return sum(Path(p).stat().st_size for p in read if Path(p).exists())
 
 
-def _under_the_ceiling(where: str) -> None:
-    got = _rss_mb()
-    if got > RSS_CEILING_MB:
-        raise AssertionError(f"{where}: peak RSS {got:.0f} MB over the registered {RSS_CEILING_MB} MB")
+def _under_the_ceiling(where: str, figure: int | None = None, ceiling: int = READ_CEILING_BYTES) -> int:
+    """RAISE - never warn - if the bytes read from data/ pass the registered ceiling.
+
+    `figure` is the number of bytes to judge; None measures the live trace window, which is what
+    every real call site does. A test injects a figure to prove the guard fires without reading a
+    large file to do it, and `ceiling` lets a plant state the ceiling it means rather than reach
+    into this module's global.
+    """
+    got = _bytes_read_under_data() if figure is None else int(figure)
+    if got > ceiling:
+        raise AssertionError(f"{where}: {got} bytes read from data/ over the registered {ceiling}")
+    return got
+
+
+def _guard(ceiling: int, figure: int | None) -> int:
+    return _under_the_ceiling("a plant", figure, ceiling)
+
+
+def test_the_read_ceiling_fires_and_judges_the_figure_it_is_handed() -> None:
+    """Three plants on the relocated ceiling, each checked against an unwired copy of the guard.
+
+    The live measurement is taken first, so the window is not empty and plant 3 has a real figure
+    to disagree with. The unwired copy is the one-line defect: it accepts the figure and then reads
+    the machine anyway. Both obvious plants pass for it on most machines, so a suite without plant 3
+    cannot tell a wired guard from an assumed-wired one.
+    """
+    _saved_gene_input_readings()
+    live = _bytes_read_under_data()
+    assert live > 4_000_000, f"the six frames are 4.1 MB of JSON; a window of {live} is not them"
+    assert live <= READ_CEILING_BYTES, "the registered ceiling is already breached by the frames"
+    kw = {"ceiling": READ_CEILING_BYTES, "over": 60 * 1024 * 1024, "under": 1024}
+    assert gj.wiring_problems(_guard, live=live, **kw) == []
+    caught = gj.wiring_problems(gj.unwired(_bytes_read_under_data), live=live, **kw)
+    assert caught, "the plants pass for a guard that ignores the injection, so they prove nothing"
+    assert any("plant 3" in p for p in caught), caught
+
+
+#: Two TRACKED results this file otherwise has no use for, read as bytes by the plant below purely
+#: to put the measured figure over the ceiling: 7,172,274 + 6,398,244 = 13,570,518 bytes against a
+#: 12,582,912-byte ceiling (13,638,258 with the one frame the plant reads first, measured). Tracked
+#: on purpose, so the plant fires in CI as well as here; neither is
+#: parsed and neither is a chromosome archive, so the file's read discipline is untouched.
+PLANT_OVERSHOOT = ("discovery_review", "origin_genome_wide")
+
+
+def test_the_read_ceiling_fires_on_a_real_read_past_it() -> None:
+    """The guard FIRES on a real read, not only on an injected figure.
+
+    This plant exists at all only because the ceiling was relocated. The resident-memory ceiling it
+    replaced could not be planted this way: in a session whose high-water is already 4,406 MB a
+    genuine 300 MB allocation does not move the figure by one byte, so a guard on it cannot be shown
+    to fire on real work - the defect this project has written up as a guard that cannot fire.
+    """
+    absent = [s for s in PLANT_OVERSHOOT if not (RESULTS / f"{s}.json").exists()]
+    if absent:
+        pytest.skip(f"tracked results absent from this checkout: {', '.join(absent)}")
+    mf.trace_begin()
+    _frame("loci_noncoding")
+    before = _under_the_ceiling("one frame alone")
+    assert before < READ_CEILING_BYTES
+    for stem in PLANT_OVERSHOOT:
+        (RESULTS / f"{stem}.json").read_bytes()
+    with pytest.raises(AssertionError) as e:
+        _under_the_ceiling("after reading two further tracked results")
+    assert "over the registered" in str(e.value)
+    assert _bytes_read_under_data() > before, "the trace did not grow, so nothing was measured"
+    mf.trace_begin()
 
 
 def _frame(stem: str) -> dict[str, Any]:

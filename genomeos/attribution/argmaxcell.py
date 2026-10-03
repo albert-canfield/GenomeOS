@@ -736,19 +736,35 @@ def overlapping(
 
 
 def max_rss_bytes() -> int:
-    """Peak resident set size of this process, in BYTES on every platform.
+    """Peak resident set size of this PROCESS, in BYTES on every platform.
 
     macOS reports `ru_maxrss` in bytes and Linux in kilobytes; the unit is normalised here rather
     than left to the caller, because a ceiling compared against the wrong unit is a ceiling that
     never fires.
+
+    THIS CHECK IS VALID ONLY IN A PROCESS THAT DOES NOTHING SUBSTANTIAL BEFORE THE WORK IT GUARDS -
+    which is true of `scripts/argmaxcell_count.py`, a fresh interpreter that checks after each
+    chromosome, and FALSE of a pytest session. `ru_maxrss` is a MONOTONIC HIGH-WATER: measured on
+    this machine, 15.6 MB before allocating 300 MB, 330.2 MB after, and still 330.2 MB after
+    freeing it. So it cannot attribute a byte to the work in front of it, and a test reading it
+    live inherits every earlier test's peak - a full suite reached 4,406 MB, over this 2 GiB
+    ceiling, and this file's test survived only by running early in the alphabet. A test passes
+    `peak=` instead (`check_rss`); do not reuse this live reading inside one. A before-and-after
+    DELTA is not the alternative: if an earlier test peaked higher the high-water does not move,
+    the delta reads 0, and the guard becomes one that cannot fire.
     """
     raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return int(raw) if sys.platform == "darwin" else int(raw) * 1024
 
 
-def check_rss(where: str, ceiling: int = RSS_CEILING_BYTES) -> int:
-    """The peak, or a RuntimeError naming it. Raises; never warns and never widens the ceiling."""
-    peak = max_rss_bytes()
+def check_rss(where: str, ceiling: int = RSS_CEILING_BYTES, peak: int | None = None) -> int:
+    """The peak, or a RuntimeError naming it. Raises; never warns and never widens the ceiling.
+
+    `peak` is the figure in bytes to judge. None means read this process live, which is what the
+    count script does and the only context `max_rss_bytes` is valid in; a test injects the figure
+    it means to test, because the live reading there is the whole session's high-water.
+    """
+    peak = max_rss_bytes() if peak is None else int(peak)
     if peak > ceiling:
         raise RuntimeError(
             f"resident memory reached {peak} bytes after {where}, over the registered ceiling of "

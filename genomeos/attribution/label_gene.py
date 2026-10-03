@@ -560,7 +560,19 @@ def cluster_multiplicities(count: int, rng: random.Random) -> list[int]:
 
 
 def peak_rss_bytes() -> int:
-    """This process's peak resident set size in bytes, from resource.getrusage."""
+    """This PROCESS's peak resident set size in bytes, from resource.getrusage.
+
+    THIS CHECK IS VALID ONLY IN A PROCESS THAT DOES NOTHING SUBSTANTIAL BEFORE THE WORK IT GUARDS -
+    which is true of `scripts/label_gene_count.py`, a fresh interpreter whose only job is the count,
+    and FALSE of a pytest session. `ru_maxrss` is a MONOTONIC HIGH-WATER: measured on this machine,
+    15.6 MB before allocating 300 MB, 330.2 MB after, and still 330.2 MB after freeing it. So it
+    cannot attribute a byte to the work in front of it, and a test reading it live inherits every
+    earlier test's peak - in a full suite the process had already peaked at 4,406 MB and this
+    4 GiB ceiling was breached by a test that allocated none of it. A test passes `peak=` instead
+    (`check_rss`); do not reuse this live reading inside one. A before-and-after DELTA is not the
+    alternative: if an earlier test peaked higher the high-water does not move, the delta reads 0,
+    and the guard becomes one that cannot fire.
+    """
     import resource
     import sys
 
@@ -568,9 +580,14 @@ def peak_rss_bytes() -> int:
     return int(peak) if sys.platform == "darwin" else int(peak) * 1024
 
 
-def check_rss(ceiling: int = RSS_CEILING_BYTES) -> int:
-    """RAISE - never warn - if peak RSS has reached the registered ceiling."""
-    peak = peak_rss_bytes()
+def check_rss(ceiling: int = RSS_CEILING_BYTES, peak: int | None = None) -> int:
+    """RAISE - never warn - if peak RSS has reached the registered ceiling.
+
+    `peak` is the figure in bytes to judge. None means read this process live, which is what the
+    count script does and the only context `peak_rss_bytes` is valid in; a test injects the figure
+    it means to test, because the live reading there is the whole session's high-water.
+    """
+    peak = peak_rss_bytes() if peak is None else int(peak)
     if peak >= ceiling:
         raise MemoryError(
             f"peak RSS {peak} bytes reached the registered ceiling of {ceiling} bytes; "

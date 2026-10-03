@@ -12,6 +12,7 @@ import json
 import math
 from pathlib import Path
 
+import guard_injection as gj
 import pytest
 
 from genomeos.attribution import label_gene as lg
@@ -145,12 +146,65 @@ def test_wilson_bound_is_available_for_the_degenerate_route() -> None:
     assert low is not None and low[0] == 0.0 and 0.0 < low[1] < 0.2
 
 
+def _guard(ceiling: int, figure: int | None) -> int:
+    return lg.check_rss(ceiling=ceiling, peak=figure)
+
+
 def test_the_rss_check_raises_and_does_not_warn() -> None:
+    """The guard still FIRES, and on the live reading too, so the count script is unchanged.
+
+    `ceiling=1` with no injection is judged against the process's real high-water - memory this
+    process genuinely allocated - so this is the live path firing on a real over-allocation, not
+    an injected one. It is also the one direction a test can state about the live reading without
+    depending on the session's history: the high-water is always over 1 byte.
+    """
     with pytest.raises(MemoryError):
         lg.check_rss(ceiling=1)
-    assert lg.check_rss() > 0
     assert "RAISES - it does not warn" in lg.RSS_RULE
     assert lg.RSS_CEILING_BYTES == 4 * 1024**3
+
+
+def test_the_live_reading_fires_at_the_memory_the_process_really_allocated() -> None:
+    """A ceiling pinned AT the live high-water is breached by that same really-resident memory.
+
+    This is the live path's real-over-allocation plant. It does not allocate anything new, because
+    it cannot: in a full suite the high-water is already thousands of megabytes and a fresh 300 MB
+    allocation would not move it at all. That is precisely why the test-side figure is injected.
+    """
+    live = lg.peak_rss_bytes()
+    assert live > 8 * 1024**2, "a python process holding less than 8 MB means the unit is wrong"
+    with pytest.raises(MemoryError) as e:
+        lg.check_rss(ceiling=live)
+    assert "reached the registered ceiling" in str(e.value)
+    # a megabyte of slack, not one byte: the high-water is read again inside the call and pytest's
+    # own assertion machinery allocates in between, so an exact +1 would be a flake, not a guard.
+    assert lg.check_rss(ceiling=live + 1024**2) >= live
+
+
+def test_the_rss_guard_judges_the_figure_it_is_handed_and_not_the_live_process() -> None:
+    """The injection is WIRED, proved by plants that fail against an unwired copy of the guard.
+
+    The suite-red this replaced was a guard reading `RUSAGE_SELF` live from inside a pytest process
+    whose high-water had reached 4,406 MB from earlier tests: a 4 GiB ceiling breached by a test
+    that allocated none of it. An injected 5 GB must still refuse and an injected 100 MB must still
+    pass WHATEVER the session has peaked at, which is what these three plants state.
+    """
+    live = lg.peak_rss_bytes()
+    assert (
+        gj.wiring_problems(
+            _guard, ceiling=lg.RSS_CEILING_BYTES, over=5_000_000_000, under=100 * 1024**2, live=live
+        )
+        == []
+    )
+    caught = gj.wiring_problems(
+        gj.unwired(lg.peak_rss_bytes),
+        ceiling=lg.RSS_CEILING_BYTES,
+        over=5_000_000_000,
+        under=100 * 1024**2,
+        live=live,
+    )
+    assert caught, "the plants pass for a guard that ignores the injection, so they prove nothing"
+    assert any("plant 3" in p for p in caught), caught
 
 
 def test_the_label_to_gtex_column_rule_is_the_registered_one() -> None:

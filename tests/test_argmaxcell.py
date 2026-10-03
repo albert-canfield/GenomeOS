@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import guard_injection as gj
 import pytest
 
 from genomeos.attribution import argmaxcell as ac
@@ -145,13 +146,45 @@ def test_module_source_names_no_archive_loader() -> None:
     assert ac.source_opens_no_archive()
 
 
+def _guard(ceiling: int, figure: int | None) -> int:
+    return ac.check_rss("a test", ceiling=ceiling, peak=figure)
+
+
 def test_rss_is_reported_in_bytes_and_the_ceiling_raises() -> None:
+    """The live path still FIRES, on memory the process really did allocate.
+
+    The second assertion used to read `check_rss("a test", ceiling=RSS_CEILING_BYTES) == peak`,
+    which is a latent suite-red: `max_rss_bytes` is the process high-water, a full suite reaches
+    4,406 MB, and this ceiling is 2 GiB. It passed only because `test_argmaxcell.py` runs early in
+    the alphabet. A ceiling pinned one byte above the live reading says the same thing about the
+    guard and nothing at all about the session's history.
+    """
     peak = ac.max_rss_bytes()
     assert peak > 8 * 1024**2, "a python process holding less than 8 MB means the unit is wrong"
-    assert ac.check_rss("a test", ceiling=ac.RSS_CEILING_BYTES) == peak
+    # a megabyte of slack, not one byte: the high-water is read again inside the call and pytest's
+    # own assertion machinery allocates in between, so an exact +1 would be a flake, not a guard.
+    assert ac.check_rss("a test", ceiling=peak + 1024**2) >= peak
+    with pytest.raises(RuntimeError) as e:
+        ac.check_rss("a test", ceiling=peak - 1)
+    assert "over the registered ceiling" in str(e.value)
     with pytest.raises(RuntimeError) as e:
         ac.check_rss("a test", ceiling=1)
     assert "stops" in str(e.value) and "Widening the ceiling" in str(e.value)
+
+
+def test_the_rss_guard_judges_the_figure_it_is_handed_and_not_the_live_process() -> None:
+    """The injection is WIRED, proved by plants that fail against an unwired copy of the guard.
+
+    `RUSAGE_SELF.ru_maxrss` is a monotonic high-water, so a ceiling read live from inside a pytest
+    session is judging every earlier test's peak. The count script is a fresh process and keeps the
+    live reading; a test hands the guard the figure it means to test.
+    """
+    live = ac.max_rss_bytes()
+    kw = {"ceiling": ac.RSS_CEILING_BYTES, "over": 5_000_000_000, "under": 100 * 1024**2}
+    assert gj.wiring_problems(_guard, live=live, **kw) == []
+    caught = gj.wiring_problems(gj.unwired(ac.max_rss_bytes), live=live, **kw)
+    assert caught, "the plants pass for a guard that ignores the injection, so they prove nothing"
+    assert any("plant 3" in p for p in caught), caught
 
 
 def test_the_ceiling_is_two_gibibytes() -> None:
