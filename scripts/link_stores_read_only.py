@@ -4,6 +4,14 @@
     uv run python scripts/link_stores_read_only.py WORKTREE            # link
     uv run python scripts/link_stores_read_only.py WORKTREE --unlock   # before removing the worktree
 
+TO REMOVE SUCH A WORKTREE, use `scripts/remove_worktree.py` and not `rm`. `git worktree remove` cannot
+delete a worktree whose clones are at 0444 -- MEASURED 2026-10-03, git 2.50.0: exit 255,
+`error: failed to delete '<wt>': Permission denied` -- and the failed attempt deregisters the worktree
+first, so `--force` then answers `fatal: is not a working tree` and what is on disk is an orphan git
+can no longer touch. That dead end is what made a lane fall back to `chmod -R u+w` and `rm -rf` on
+2026-10-02. The remover unlocks only the paths THIS SCRIPT RECORDED it cloned (see MANIFEST_DIR) and
+refuses any whose inode is a real store's.
+
 The amended acceptance rule (2026-10-02, the supervisor's ruling). The project's rule was "a status-file
 verdict from a worktree of the committed tree", and it was unachievable as stated: `data/cache`,
 `data/reference` and `data/knowledge` are git-ignored machine-local data, absent from a worktree by
@@ -47,6 +55,7 @@ as a file, and the comment there records that the spelling was chosen for exactl
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -58,6 +67,19 @@ from typing import Any
 
 #: The git-ignored stores linked whole. `data/results` is deliberately not here; see the docstring.
 STORES = ("reference", "knowledge", "cache")
+
+#: Where the linker RECORDS what it cloned, and the ONLY record `scripts/remove_worktree.py` trusts.
+#: Added 2026-10-03, after a lane met the hole this leaves: `git worktree remove` cannot delete a
+#: worktree whose clones are at 0444, so the lane restored write with `chmod -R u+w` over the whole
+#: worktree and then `rm -rf`. Both halves are the hazard. A recursive chmod restores write on paths
+#: nobody recorded, and `rm -rf` on a path that may contain a link or a clone into a store is the one
+#: operation that can destroy the machine's only copy. A remover that trusts a RECORD instead touches
+#: exactly the paths the linker says it made, and can check each one's inode against the real store's
+#: before it touches it. The record lives in the repository's COMMON git directory and NOT inside the
+#: worktree: a file inside the worktree would be untracked content, and `tree_before == tree_after` is
+#: precisely what this script exists to preserve. It is keyed by the resolved worktree path, so two
+#: worktrees never share a record and a stale record can never be read as another worktree's.
+MANIFEST_DIR = "genomeos_linked_stores"
 
 #: Directories keep traverse and list, and lose create. Files lose write. Both are the kernel's to
 #: enforce, which is what makes this stronger than the audit hook in `scripts/rebuild_write_guard.py`:
@@ -72,6 +94,85 @@ def tree_hash(where: Path) -> str:
         [sys.executable, "-m", "genomeos.verdict", "tree"], cwd=where, capture_output=True, text=True
     )
     return r.stdout.strip() if r.returncode == 0 else f"unavailable: {r.stderr.strip()[-200:]}"
+
+
+def manifest_path(worktree: Path, root: Path) -> Path:
+    """The record file for `worktree`, under the common git directory. Pure: it creates nothing.
+
+    The common directory is asked of the WORKTREE first and of `root` second. Either answers the same
+    thing for a real worktree, and asking the worktree first is what makes this work when `root` is not
+    a git repository at all -- which `link` is called with (a root with no stores on this machine is
+    named rather than failed), so a record that could only be placed from `root` would turn that into a
+    crash. Raises when neither is a repository: there is then no worktree for anyone to remove.
+    """
+    last: Exception | None = None
+    for cwd in (worktree, root):
+        try:
+            common = subprocess.check_output(
+                ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                cwd=cwd,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            ).strip()
+        except (OSError, subprocess.CalledProcessError) as e:
+            last = e
+            continue
+        key = hashlib.sha256(str(worktree.resolve()).encode()).hexdigest()[:16]
+        return Path(common) / MANIFEST_DIR / f"{key}.json"
+    raise RuntimeError(f"no git common directory from {worktree} or {root}: {last}")
+
+
+def read_manifest(worktree: Path, root: Path) -> dict[str, Any]:
+    """What the linker recorded for `worktree`, or an empty record. A malformed file reads as EMPTY
+    rather than raising: the remover's refusals must come from its checks, and an unreadable record
+    means nothing is known to be a clone, which is the safe reading, not a reason to guess."""
+    try:
+        r = json.loads(manifest_path(worktree, root).read_text())
+    except (OSError, ValueError, RuntimeError):
+        return {"worktree": str(worktree), "clones": []}
+    return (
+        r
+        if isinstance(r, dict) and isinstance(r.get("clones"), list)
+        else {
+            "worktree": str(worktree),
+            "clones": [],
+        }
+    )
+
+
+def write_manifest(worktree: Path, root: Path, clones: list[dict[str, Any]]) -> Path:
+    """Record `clones` for `worktree`, MERGED over whatever an earlier run recorded for the same
+    worktree: `link` is idempotent and leaves a store it finds already there alone, so a second run
+    must not drop the first run's record of it. One entry per store, this run's winning."""
+    p = manifest_path(worktree, root)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    merged = {c["store"]: c for c in read_manifest(worktree, root)["clones"] if "store" in c}
+    merged.update({c["store"]: c for c in clones})
+    record = {
+        "worktree": str(worktree),
+        "root": str(root),
+        "recorded_at": time.time(),
+        "clones": [merged[k] for k in sorted(merged)],
+    }
+    p.write_text(json.dumps(record, indent=1) + "\n")
+    return p
+
+
+def _recorded(store: str, src: Path, dst: Path, cloned: bool, entries: int) -> dict[str, Any]:
+    """One clone's record. The inodes of BOTH sides go in, so a remover can refuse a record whose
+    worktree side has since been replaced by the real store rather than trusting the path string."""
+    s, d = src.stat(), dst.stat()
+    return {
+        "store": store,
+        "path": str(dst),
+        "source": str(src),
+        "inode": d.st_ino,
+        "device": d.st_dev,
+        "source_inode": s.st_ino,
+        "source_device": s.st_dev,
+        "cloned": cloned,
+        "entries_locked": entries,
+    }
 
 
 def lock(path: Path) -> int:
@@ -132,6 +233,7 @@ def free_bytes(path: Path) -> int:
 def link(root: Path, worktree: Path, check_tree: bool = False) -> dict[str, Any]:
     """Clone each store into `worktree` read-only. Idempotent: a store already there is left alone."""
     out: dict[str, Any] = {"worktree": str(worktree), "stores": [], "failures": []}
+    recorded: list[dict[str, Any]] = []
     if check_tree:
         out["tree_before"] = tree_hash(worktree)
     # the directory is made BEFORE the disk is measured: a worktree that does not exist yet cannot be
@@ -152,6 +254,7 @@ def link(root: Path, worktree: Path, check_tree: bool = False) -> dict[str, Any]
         except OSError as e:
             out["failures"].append(f"{name}: {e}")
             continue
+        recorded.append(_recorded(name, src, dst, cloned, entries))
         probe = _write_is_refused(dst)
         if not probe:
             out["failures"].append(
@@ -175,6 +278,21 @@ def link(root: Path, worktree: Path, check_tree: bool = False) -> dict[str, Any]
     if check_tree:
         out["tree_after"] = tree_hash(worktree)
         out["tree_unchanged"] = out["tree_before"] == out["tree_after"]
+    # The record is written LAST, so a run that dies midway leaves a locked clone that NOTHING records.
+    # That direction is the safe one and is the reason the order is this way round rather than the
+    # other: `scripts/remove_worktree.py` unlocks only recorded paths, so an unrecorded clone makes it
+    # refuse or makes git refuse, and either way a human is told. The opposite order would leave a
+    # record of a clone that does not exist, which is a record inviting a chmod of whatever is there.
+    try:
+        out["manifest"] = str(write_manifest(worktree, root, recorded))
+    except (OSError, RuntimeError) as e:
+        out["manifest"] = None
+        out["manifest_why"] = str(e)
+        # A clone that was locked and NOT recorded is a trap: `scripts/remove_worktree.py` unlocks only
+        # recorded paths, so nobody can unlock it and nobody is told why. That is a failure. Nothing
+        # cloned means nothing to record, and no worktree anyone needs to remove, so that is not.
+        if recorded:
+            out["failures"].append(f"the record of {len(recorded)} locked clone(s) could not be written: {e}")
     out["ok"] = not out["failures"]
     return out
 
