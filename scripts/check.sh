@@ -102,7 +102,7 @@ leg=startup
 combined_note() {
   local note=""
   local extra
-  for extra in "${SUITE_LOCK_NOTE:-}" "${shellcheck_note:-}" "${refusal_note:-}"; do
+  for extra in "${SUITE_LOCK_NOTE:-}" "${shellcheck_note:-}" "${refusal_note:-}" "${skip_report_note:-}"; do
     [ -n "$extra" ] || continue
     if [ -n "$note" ]; then note="$note; $extra"; else note="$extra"; fi
   done
@@ -180,9 +180,50 @@ fi
 # shows nothing for minutes at a time. A check that looks stalled is what gets backgrounded, and a
 # backgrounded check is where the exit code stopped meaning anything. Buffering only: the same
 # command, the same arguments, the same codes.
+# A COUNT OF SKIPS IS NOT A VERDICT ON A TEST, and until 2026-10-03 this leg ran bare `pytest -q`,
+# so the log a status file points at recorded "12 skipped" and could not say WHICH twelve. push19's
+# verdict for tree c78041b1 read "5,053 passed, 12 skipped, 8 xfailed", and no requirement of the
+# form "the signed tree must show test X PASSED, not skipped" could be settled from it: somebody
+# re-ran 260 tests by hand that night to establish what the kept file should already have carried.
+# CI has passed `-rs` all along (.github/workflows/ci.yml), so this also ends an asymmetry in which
+# the throwaway CI log said more about the tree than the verdict file this project signs from.
+#
+# `-rs` ALONE IS NOT ENOUGH, which is the part worth knowing: pytest FOLDS its skip summary by
+# (file, line, reason) and prints `SKIPPED [3] tests/test_x.py:12: reason` -- a count and a location,
+# no test id, and three parametrised cases collapsed into one line. `--no-fold-skipped` (pytest 8.3
+# and later) prints one line per test, `SKIPPED tests/test_x.py::test_y - Skipped: reason`, which is
+# the form a reader can match against a requirement that names a test.
+#
+# PROBED, NOT ASSUMED. The lock pins pytest 9.1.1 but the dev pin is `pytest>=8`, so a checkout can
+# hold an 8.0-8.2 that does not know the flag -- and pytest answers an unknown flag with a USAGE
+# ERROR, exit 4, NO TEST RUN AT ALL. That is the exact shape of the two false reds of 2026-10-02,
+# where an argument and not the tree made a status file red. So support is read off `pytest --help`
+# and the flag is dropped where it is absent, with the loss said in a line of its own AND in the
+# verdict's note: the shellcheck leg's rule, for its reason -- a check that quietly carries less than
+# its reader thinks is worse than one that says so.
+#
+# NOTHING ELSE HERE MOVES. These flags change what the log PRINTS ABOUT SKIPS and nothing else: the
+# summary line genomeos/verdict.py reads is byte-identical, `parse_pytest_counts` is untouched, and
+# the exit code is still pytest's own. tests/test_check_skip_reasons.py plants a real skipping test,
+# runs this script, and reads the id out of the log it wrote.
 leg=pytest
+skip_report_args=(-rs)
+skip_report_note=""
+# Captured into a variable rather than piped into grep: with pipefail on, a `grep -q` that closes the
+# pipe early can leave the pipeline reporting uv's SIGPIPE, and the probe would then answer
+# "unsupported" about a pytest that supports the flag perfectly well.
+pytest_help=$(uv run pytest --help 2>/dev/null || true)
+case "$pytest_help" in
+*--no-fold-skipped*)
+  skip_report_args+=(--no-fold-skipped)
+  ;;
+*)
+  skip_report_note="skips reported FOLDED: this pytest has no --no-fold-skipped, so the log names each skip's file, line and reason but NOT its test id"
+  echo "check: $skip_report_note" >&2
+  ;;
+esac
 set +e
-PYTHONUNBUFFERED=1 uv run pytest -q 2>&1 | tee "$pytest_log"
+PYTHONUNBUFFERED=1 uv run pytest -q "${skip_report_args[@]}" 2>&1 | tee "$pytest_log"
 pytest_code=${PIPESTATUS[0]}
 set -e
 [ "$pytest_code" -eq 0 ] || exit "$pytest_code"
