@@ -1751,3 +1751,31 @@ The reason this is not a lesson about carelessness: the coordinator made it twic
 correcting the same class, and the supervising session made it once while ordering the audit built to
 stop it — naming a lane from an earlier message rather than from the committed queue. Reading prose as
 current state is the DEFAULT behaviour, not a lapse. Only going to the value defeats it.
+
+## A mutation test restored from a byte-identical copy can run the mutant's bytecode (2026-10-03)
+
+The mutation test is this project's strongest instrument: remove a guard, confirm the suite goes red,
+and a guard that stays green is **unreached**. Twelve inert guards and several unreached ones were found
+with it today. So a defect in the instrument matters more than a defect in any one guard.
+
+A lane hit one. It mutated a module by **moving a block** — so the mutant was **byte-identical in size**
+to the original. `cp` restored the source, but `__pycache__` kept the mutant's compiled form, whose
+timestamp and size both still matched, so Python loaded the mutant. The visible symptom was a **false
+red on the restored tree**, which is the harmless direction and is why it was caught at all.
+
+**The dangerous direction is the other one.** The same mechanism can serve a *stale cache* to the
+mutated run — the guard appears still present, the suite stays green, and the guard is recorded as
+**UNREACHED when it was never actually removed**. That is a false negative in the one test this project
+relies on to tell a real guard from a list, and it leaves no symptom: a green is what the method expects
+to see when a guard is unreached.
+
+So: **clear `__pycache__` before every leg of a mutation run — the mutated leg and the restored leg
+both** — and do not rely on `cp` plus mtime to invalidate it. Treat a result that arrives without that
+step as unverified rather than as a pass, and note that the risk is highest for the mutations that look
+safest: a moved block, a reordered branch, a renamed local — anything that leaves the file the same size.
+
+The general form, which this project keeps rediscovering in new places: **a verification tool that can
+fail towards flattering is worse than no tool**, because its output is trusted. `scripts/rerecord_compare.py`
+is tested on a difference it must *not* forgive for the same reason. A mutation harness needs the same
+treatment: prove it can report a guard present when the guard is there, and absent when it is not, on a
+mutation whose file size does not change.
