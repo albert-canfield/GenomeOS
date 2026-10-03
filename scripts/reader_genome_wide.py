@@ -35,14 +35,46 @@ RERUN = "--rerun" in sys.argv  # start the summary afresh (after a change to wha
 CELLS = [a for a in sys.argv[1:] if a != "--rerun"] or DEFAULT_CELLS
 
 
+def panel_or_refuse(cells: list[str], published: list[str], what: str) -> None:
+    """Refuse a roll-up whose panel is narrower than the published one, naming what would go.
+
+    The normalised readings are standardised residuals of a fit over the panel of biosamples
+    (`normalise_family` in `genome/reader.py`), so the panel is their denominator: drop one
+    biosample and a, b and s all move and every residual in the file is a different number. The
+    module already refuses a panel with a missing *field*, on the stated ground that "a panel with
+    a hole is a different panel"; a panel with a missing *biosample* is the same hole and nothing
+    refused it. Two routes reach it, and both run without a word today: `--rerun` starts the
+    summary afresh from the biosamples named on the command line, and DEFAULT_CELLS is narrower
+    than the panel on disk; and the completeness filter below drops any biosample absent from one
+    chromosome's row. So this is checked, not assumed, and a narrower panel is a decision that has
+    to be made out loud.
+    """
+    dropped = [c for c in published if c not in cells]
+    if dropped:
+        raise ValueError(
+            f"{what} would normalise over {len(cells)} biosamples and drop {len(dropped)} of the "
+            f"{len(published)} the published panel was fitted over: {', '.join(dropped)}. Every "
+            "residual in `normalised` is standardised by a fit over the panel, so this moves all "
+            "of them and says nothing. Name every biosample of the published panel to keep it; a "
+            "narrower panel is a different panel and belongs in a result of its own, not on top "
+            "of this one."
+        )
+
+
 def _sum_or_none(ch: dict, cell: str, field: str) -> int | None:
     vals = [r[cell].get(field) for r in ch.values()]
     return None if any(v is None for v in vals) else sum(vals)
 
 
 def main() -> None:
-    out = (None if RERUN else load_result("reader_genome_wide")) or {"cell_types": [], "chromosomes": {}}
-    out["cell_types"] = list(dict.fromkeys([*out.get("cell_types", []), *CELLS]))
+    previous = load_result("reader_genome_wide") or {}
+    published = list(previous.get("cell_types") or [])
+    # a --rerun overwrites the summary as each chromosome finishes, so its panel is checked before
+    # the first write rather than after the last
+    if RERUN:
+        panel_or_refuse(CELLS, published, "--rerun")
+    out = (None if RERUN else previous) or {"cell_types": [], "chromosomes": {}}
+    out["cell_types"] = list(dict.fromkeys([*published, *CELLS]))
     t0 = time.time()
     local = [c for c in ORDER if Path(f"data/reference/{c}.fa.gz").exists() and default_gencode({c})]
     for cell in CELLS:
@@ -103,6 +135,7 @@ def main() -> None:
         )
     ch = out["chromosomes"]
     cells = [c for c in out["cell_types"] if all(c in r for r in ch.values())]
+    panel_or_refuse(cells, published, "the roll-up")
     out["cell_types"] = cells
     out["totals"] = {
         cell: {
