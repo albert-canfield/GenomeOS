@@ -511,3 +511,112 @@ def test_the_probe_stores_a_perturbed_distribution_and_no_perturbed_row() -> Non
     # the only per-row obs the probe keeps is for the NON-TARGETING rows, and it keeps 585 of each
     for column, values in probe["obs"].items():
         assert len(values) == probe["non_targeting_count"], column
+
+
+# --- the committed result, pinned ------------------------------------------------------------------------
+#
+# data/results/ IS committed, so these read it unconditionally and carry NO needs_local_data marker: a
+# marker on a committed path raises, for the reason an unknown extra raises. They pin the two figures
+# the pass rule read, so a later change to the module cannot move a published verdict in silence.
+
+RESULT = ROOT / "data/results/n1b_calibration.json"
+
+
+def _result() -> dict:
+    return json.loads(RESULT.read_text())
+
+
+def test_the_committed_result_read_585_rows_in_585_requests_of_exactly_one_row_each() -> None:
+    r = _result()
+    assert r["rows"]["non_targeting_read"] == 585
+    assert r["rows"]["usable"] == 514
+    assert r["rows"]["unusable"] == 71
+    assert r["fetch"]["requests"] == 585
+    assert r["fetch"]["bytes"] == 585 * 32992 == 19_300_320
+    assert len({e["sha256"] for e in r["fetch"]["log"]}) == 585, "585 distinct ranges, 585 distinct hashes"
+    assert {e["url"] for e in r["fetch"]["log"]} == {"https://ndownloader.figshare.com/files/35773217"}
+
+
+def test_the_committed_result_passed_both_bands_overall_and_in_every_quintile() -> None:
+    r = _result()
+    assert r["verdict"]["passed"] is True
+    assert r["verdict"]["failed_scopes"] == []
+    assert len(r["strata"]) == n1b.STRATA
+    for scope in [r["overall"], *r["strata"]]:
+        assert n1b.VAR_LO <= scope["var_primary"] <= n1b.VAR_HI
+        assert n1b.TAIL_LO <= scope["tail_primary"] <= n1b.TAIL_HI
+
+
+def test_the_committed_results_two_figures_are_the_ones_reported() -> None:
+    r = _result()
+    assert math.isclose(r["overall"]["var_primary"], 1.0146, abs_tol=5e-4)
+    assert math.isclose(r["overall"]["tail_primary"], 0.05121, abs_tol=5e-5)
+    assert [round(s["var_primary"], 4) for s in r["strata"]] == [1.0070, 1.0034, 1.0074, 1.0148, 1.0413]
+    assert [round(s["tail_primary"], 5) for s in r["strata"]] == [
+        0.04906,
+        0.04895,
+        0.05023,
+        0.05151,
+        0.05628,
+    ]
+
+
+def test_the_worst_quintile_is_the_most_expressed_not_the_sparsest() -> None:
+    """Registered in advance as the OPPOSITE expectation: the derivation was expected to fail on
+    sparse genes. It did not. Quintile 4, the most expressed, carries the largest deviation on both
+    legs, and quintile 0, the sparsest, is among the closest to nominal. Pinned so the reversal is
+    not lost."""
+    r = _result()
+    var = [s["var_primary"] for s in r["strata"]]
+    tail = [s["tail_primary"] for s in r["strata"]]
+    assert var.index(max(var)) == 4 and tail.index(max(tail)) == 4
+    assert var[0] < var[4] and tail[0] < tail[4]
+    assert r["strata"][0]["control_expression_max"] < r["strata"][4]["control_expression_min"]
+
+
+def test_every_committed_interval_lies_inside_its_band_and_none_is_degenerate() -> None:
+    r = _result()
+    assert r["inconclusive_scopes"] == []
+    for name, iv in r["intervals"].items():
+        for leg, (lo, hi) in (("variance", (n1b.VAR_LO, n1b.VAR_HI)), ("tail", (n1b.TAIL_LO, n1b.TAIL_HI))):
+            assert iv[leg]["identical_resample_share"] < 0.01, (name, leg)
+            assert iv[leg]["degenerate"] is False, (name, leg)
+            assert lo <= iv[leg]["low"] <= iv[leg]["high"] <= hi, (name, leg)
+            assert "fallback" not in iv[leg], f"{name}/{leg} needed no Wilson bound"
+        assert iv["clusters"] == 514 and iv["cluster"] == "non-targeting row"
+
+
+def test_the_committed_verdict_carries_the_licence_and_every_ratio_carries_its_level() -> None:
+    r = _result()
+    assert r["verdict"]["pass_licence"] == n1b.PASS_LICENCE
+    assert n1b.PASS_LICENCE in r["verdict"]["reading"]
+    assert r["verdict"]["cannot_establish"] == list(n1b.CANNOT_ESTABLISH)
+    for scope in [r["overall"], *r["strata"]]:
+        assert len(scope["ratios"]) == 2
+        for x in scope["ratios"]:
+            assert x["absolute"] is not None and x["control"] is not None
+            assert "not an empirical control group" in x["control_kind"]
+    assert len(r["assumptions"]) == 4
+    assert any("UNCONFIRMED" in a for a in r["assumptions"])
+
+
+def test_the_committed_result_names_the_registration_it_applied_and_read_no_factor_row() -> None:
+    r = _result()
+    assert r["registration"]["path"] == "data/results/n1b_calibration_registration.json"
+    assert r["registration"]["commit"]
+    assert r["outcome_exposure"]["recorded"] == "null-calibration exposure, no outcome row"
+    assert r["cost"] == {
+        "alphagenome_requests": 0,
+        "model_requests": 0,
+        "money": "none",
+        "network": "the public Figshare range reads and nothing else",
+    }
+    assert any("NO FACTOR ROW WAS READ, AT ALL" in e for e in r["result_manifest"]["exclusions"])
+
+
+def test_the_committed_registration_holds_no_field_a_run_would_fill() -> None:
+    reg = json.loads((ROOT / "data/results/n1b_calibration_registration.json").read_text())
+    for key in ("verdict", "passed", "figures", "reading", "overall", "strata_figures"):
+        assert key not in reg, f"the registration must not carry {key}"
+    assert reg["result"] == "n1b_calibration_registration", "the registry name stamp, not an outcome"
+    assert reg["albert_approved"] == "(8) open N1b calibration-only."
