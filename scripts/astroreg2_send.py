@@ -282,6 +282,9 @@ def main() -> int:
             activity_result=ACTIVITY,
             registration=REGISTRATION,
             run_id=args.run,
+            # Albert's second clause is "after today's CI is green", and the tree CI must have judged
+            # is the one this run would send from, so the sha is HEAD and never a sha chosen by hand.
+            sha=head_sha(),
             signoff=astrorun.recorded_signoff_words(),
             plan=plan,
             reviewed_digest=REVIEWED_DIGEST,
@@ -382,6 +385,16 @@ def main() -> int:
     print(f"-> {save_result(RESULT, out)}")
     print(f"({time.time() - t0:.0f} s) sent {budget.sent} of {astrorun.ASTROREG2_CAP}")
     return 0
+
+
+def head_sha() -> str:
+    """The sha of the tree this run would send from, which is the tree CI must have judged green."""
+    import subprocess
+
+    out = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=str(ROOT), capture_output=True, text=True, check=False
+    )
+    return out.stdout.strip()
 
 
 def committed_in_git(path: Path) -> bool:

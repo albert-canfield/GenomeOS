@@ -481,6 +481,16 @@ A_GUARD_KEYED_TO_WHAT_THE_CALLER_SUPPLIES_IS_NOT_A_GUARD = (
 #: on 20fe5ee's body before it was changed: 4,928 requests permitted across four further runs with the
 #: approval text unchanged, and no stopping point in sight. A per-ledger cap is not a budget.
 ASTROREG2_AUTHORISATIONS: dict[int, dict[str, Any]] = {
+    #: Run 2's slot: the structure is here and the WORDS ARE NOT, because this lane holds a relay and
+    #: not Albert's words. See WHY_RUN2_SLOT_IS_EMPTY_IN_THIS_LANE. authorisation_for_run(2) refuses
+    #: while `words` is empty, which is the state today; the first-hand session fills it.
+    2: {
+        "words": None,
+        "requests": 1_232,
+        "consumed": False,
+        "final": True,
+        "relayed_text_is_not_the_approval": "RUN2_AUTHORISATION_AS_RELAYED, kept beside this slot",
+    },
     1: {
         "words": ASTROREG2_AUTHORISATION,
         "requests": ASTROREG2_CAP,
@@ -540,8 +550,14 @@ def total_charged_across_runs(root: Path | None = None) -> dict[str, Any]:
 
 
 def total_authorised_requests() -> int:
-    """The sum of the authorised request counts, consumed or not: what has ever been approved in total."""
-    return sum(int(rec["requests"]) for rec in ASTROREG2_AUTHORISATIONS.values())
+    """The sum of the request counts of approvals THAT HAVE WORDS, consumed or not.
+
+    A slot with no words is not an approval, so its count does not join the total. Adding run 2's
+    slot made this return 2,464 while Albert's words for run 2 were unrecorded -- the total bound on
+    money doubling on the strength of a RELAY, which is the one thing the empty slot exists to
+    prevent. Recording his words must unlock the budget; creating a slot for them must not.
+    """
+    return sum(int(rec["requests"]) for rec in ASTROREG2_AUTHORISATIONS.values() if rec.get("words"))
 
 
 def authorisation_for_run(run_id: int) -> dict[str, Any]:
@@ -1237,6 +1253,8 @@ def may_send(
     committed: Any = None,
     resume_authorisation: str | None = None,
     free_bytes: int | None = None,
+    sha: str | None = None,
+    ci_reader: Any = None,
 ) -> dict[str, Any]:
     """Every clause of Albert's approval as its own refusal. Returns only if ALL of them hold.
 
@@ -1256,6 +1274,10 @@ def may_send(
     # THIS run's own approval, before any ledger is looked at. The ledger cannot answer this question:
     # a fresh run resolves a fresh file, so "is this ledger finished?" is False for every new run.
     authorisation_for_run(run_id)
+    # "a second AND FINAL run": run 3 has no approval at all, refused by name and not by a counter.
+    check_run_is_authorised_and_final(run_id)
+    # "on its own ledger": run 2 must not write into run 1's file.
+    check_own_ledger(run_id, ledger_root)
     check_earlier_runs_are_complete(run_id, ledger_root)
     totals = check_total_cap(run_id, len(plan), ledger_root)
 
@@ -1291,6 +1313,19 @@ def may_send(
                 f"the committed activity result records {key}={got!r}, not amendment 2's {want!r}. It "
                 "was produced under a different rule",
             )
+
+    # Albert's second approval adds two clauses of its own, in his words: "after today's CI is green"
+    # and "the astroargmax registration is committed". They are HIS, kept apart from items (f) and (g)
+    # which are the supervisor's, because conflating the two would misreport what he agreed to.
+    if int(run_id) >= 2:
+        if not sha:
+            _refuse_run2(
+                "ci_green",
+                f"no sha was named, so there is nothing to ask CI about. {CI_IS_NOT_THE_LOCAL_SUITE}",
+            )
+        check_ci_is_green(sha, ci_reader)
+        check_astroargmax_registration_is_committed(root=ROOT_FOR_BLOBS)
+        check_signoff_is_the_supervisors_for_this_run(recorded_signoff(), run_id, signoff)
 
     check_signoff_closure(root=ROOT_FOR_BLOBS, run_id=run_id)
     check_nothing_in_the_plan_is_already_cached(plan)
@@ -1343,6 +1378,7 @@ def may_send(
         "requests": len(plan),
         "digest": reviewed_digest,
         "clauses_checked": sorted(ASTROREG2_CLAUSES),
+        "run2_clauses_checked": sorted(RUN2_CLAUSES) if int(run_id) >= 2 else [],
     }
 
 
@@ -1848,3 +1884,264 @@ def check_adapter_writes_full_vectors(module_name: str = ADAPTER_MODULE) -> dict
         "probe_tracks": tracks,
         "how": "the recording path was RUN and every value came back named and equal",
     }
+
+
+# ------------------------------------- run 2: Albert's second AND FINAL approval, clause by clause
+
+#: Albert's second approval AS RELAYED TO THIS LANE by the coordinator, kept beside the slot and
+#: labelled, never in it. The rule that saved run 1 applies unchanged: a lane holds a relay, an agent's
+#: account of what a person approved is not that person's approval, and transcribing it into the slot
+#: the send path reads would manufacture a record of consent this lane cannot verify. The slot is
+#: filled by the session that received his words FIRST-HAND, as run 1's was.
+RUN2_AUTHORISATION_AS_RELAYED = (
+    "I approve a second and final AstroREG-2 run of at most 1,232 AlphaGenome requests on its own "
+    "ledger, after today's CI is green, the astroargmax registration is committed and the supervisor "
+    'writes "dry run reviewed".'
+)
+
+WHY_RUN2_SLOT_IS_EMPTY_IN_THIS_LANE = (
+    "the same reason run 1's was, and it is not a formality: this lane received the text through "
+    "another agent. Every clause below is encoded and refuses on its own, so nothing is lost "
+    "operationally -- what is preserved is that the record does not assert something about Albert "
+    "that only a relay supports. The first-hand session fills `words` for run 2 in "
+    "ASTROREG2_AUTHORISATIONS, and until it does, authorisation_for_run(2) refuses"
+)
+
+#: His five clauses, named so a refusal can quote the one it enforces. Kept APART from the supervisor's
+#: conditions (items (f) and (g)): his approval names the cap, the separate ledger, CI green, the
+#: registration and the sign-off, and conflating the two would misreport what he agreed to.
+RUN2_CLAUSES = {
+    "at_most_1232": '"a second and final AstroREG-2 run of at most 1,232 AlphaGenome requests"',
+    "own_ledger": '"on its own ledger"',
+    "ci_green": '"after today\'s CI is green"',
+    "astroargmax_registration_committed": '"the astroargmax registration is committed"',
+    "supervisor_signoff": '"and the supervisor writes \\"dry run reviewed\\""',
+}
+
+
+def _refuse_run2(clause: str, detail: str) -> None:
+    """Refuse a clause of his SECOND approval, quoting the clause in his own words."""
+    raise SendRefusedError(
+        f"Albert's second approval is CONDITIONAL on {RUN2_CLAUSES[clause]} and that is not "
+        f"satisfied: clause {clause}: {detail}"
+    )
+
+
+SECOND_AND_FINAL = (
+    'his words are "a second AND FINAL AstroREG-2 run", so run 3 has NO AUTHORISATION AT ALL. That is '
+    "refused BY NAME and never by an exhausted counter: a counter at its limit and a run nobody "
+    "approved are different facts, and a reset would look like the former while being the latter"
+)
+
+#: The CI clause in his own words is "after TODAY'S CI is green", which distinguishes CI from the local
+#: suite by naming it. A local green is not a substitute and this check never reads one: it asks the
+#: forge for the conclusion of a run for a NAMED SHA. A green for an older sha is not today's CI
+#: either, so the run's own date is checked against the day the approval was given.
+CI_IS_NOT_THE_LOCAL_SUITE = (
+    "his clause says CI, so the check reads the forge's conclusion for a named sha and nothing else. "
+    "The local suite and CI disagree often enough that the project already records it as a lesson -- a "
+    "local pre-push green is not CI green -- and substituting the one we control for the one he named "
+    "would answer a different question than the one he asked"
+)
+
+#: The day his approval was given. A CI run older than this is not "today's CI", however green.
+CI_MUST_BE_ON_OR_AFTER = "2026-10-02"
+
+#: Item (h). It must be a COMMIT before the run, not a file beside it.
+ASTROARGMAX_REGISTRATION = Path("data/results/astroargmax_registration.json")
+
+A_REGISTRATION_BESIDE_A_RUN_IS_NOT_A_PRE_REGISTRATION = (
+    "his clause is that the registration IS COMMITTED, so an uncommitted file does not satisfy it. A "
+    "registration written beside a run can be adjusted once a number is in view, which is the whole "
+    "thing a pre-registration exists to prevent; a committed one is an act in the repository's history"
+)
+
+#: The session whose sign-off counts, and the words it must contain. Not a paraphrase and not an
+#: inference from its approval of something else.
+SUPERVISOR_SESSION = "genomeos-fe"
+SIGNOFF_WORDS = "dry run reviewed"
+
+
+class CiNotGreenError(SendRefusedError):
+    """The CI clause of Albert's second approval is not satisfied."""
+
+
+def ci_conclusion(sha: str) -> dict[str, Any]:
+    """The forge's own verdict for one sha, read rather than inferred. No local status file is consulted.
+
+    THE SHA IS RESOLVED TO ITS FULL FORM FIRST. `gh run list --commit` matches on the full 40-character
+    sha and returns NOTHING for an abbreviation: asked about `2355bad` it reported no runs, while the
+    run for `2355badf4277bb9f...` exists with conclusion `failure`. The refusal that produced was in a
+    safe direction but for a FALSE reason -- "there is no CI run at all" when there was a red one -- and
+    for a green commit it would have refused forever, which is a clause that can never be satisfied.
+    """
+    import subprocess
+
+    full = subprocess.run(
+        ["git", "rev-parse", f"{sha}^{{commit}}"],
+        cwd=str(ROOT_FOR_BLOBS),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if full.returncode != 0:
+        return {
+            "read": False,
+            "why": f"{sha} does not resolve to a commit here ({full.stderr.strip()[:80]})",
+            "runs": [],
+        }
+    sha = full.stdout.strip()
+
+    out = subprocess.run(
+        [
+            "gh",
+            "run",
+            "list",
+            "--commit",
+            sha,
+            "--branch",
+            "dev",
+            "--limit",
+            "20",
+            "--json",
+            "conclusion,status,headSha,workflowName,createdAt",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if out.returncode != 0:
+        return {"read": False, "why": (out.stderr or "gh failed").strip()[:200], "runs": []}
+    try:
+        runs = json.loads(out.stdout or "[]")
+    except ValueError as e:
+        return {"read": False, "why": f"unreadable gh output ({e})", "runs": []}
+    return {"read": True, "runs": runs, "sha": sha}
+
+
+def check_ci_is_green(sha: str, reader: Any = None) -> dict[str, Any]:
+    """Refuse unless the forge reports a SUCCESSFUL run for this sha, dated on or after the approval.
+
+    `reader` is injected so this is testable without a network, exactly as `committed` is. The figure
+    is never taken from the local suite: see CI_IS_NOT_THE_LOCAL_SUITE.
+    """
+    read = (reader or ci_conclusion)(sha)
+    if not read.get("read"):
+        raise CiNotGreenError(
+            f"clause ci_green: the CI conclusion for {sha} could not be READ ({read.get('why')}), so it "
+            f"is not known to be green. An unread verdict is not a green one. {CI_IS_NOT_THE_LOCAL_SUITE}"
+        )
+    runs = read.get("runs") or []
+    if not runs:
+        raise CiNotGreenError(
+            f"clause ci_green: there is NO CI run for {sha} at all, so today's CI has not judged this "
+            f"tree. Absence is not success. {CI_IS_NOT_THE_LOCAL_SUITE}"
+        )
+    bad = [r for r in runs if (r.get("conclusion") or "").lower() != "success"]
+    if bad:
+        names = ", ".join(
+            f"{r.get('workflowName') or '?'}={r.get('conclusion') or r.get('status') or 'pending'}"
+            for r in bad
+        )
+        raise CiNotGreenError(
+            f"clause ci_green: CI for {sha} is not green ({names}). His clause is \"after today's CI is "
+            f'green", and anything that is not success is not green. {CI_IS_NOT_THE_LOCAL_SUITE}'
+        )
+    stale = [r for r in runs if str(r.get("createdAt") or "")[:10] < CI_MUST_BE_ON_OR_AFTER]
+    if stale:
+        raise CiNotGreenError(
+            f"clause ci_green: the green run for {sha} is dated {str(stale[0].get('createdAt'))[:10]}, "
+            f"before {CI_MUST_BE_ON_OR_AFTER} when the approval was given. His clause says TODAY'S CI, "
+            "so a green from an earlier day does not satisfy it"
+        )
+    return {"sha": sha, "runs_green": len(runs), "clause": "ci_green"}
+
+
+def check_astroargmax_registration_is_committed(
+    path: Path | str | None = None, root: Path | None = None
+) -> dict[str, Any]:
+    """Refuse unless item (h)'s registration has a committed copy at HEAD. See the note above."""
+    import subprocess
+
+    base = (Path(root) if root is not None else ROOT_FOR_BLOBS).resolve()
+    given = Path(path) if path is not None else ASTROARGMAX_REGISTRATION
+    target = (given if given.is_absolute() else base / given).resolve()
+    try:
+        rel = target.relative_to(base)
+    except ValueError as e:
+        raise SendRefusedError(
+            f"clause astroargmax_registration_committed: {target} is outside the repository at {base}, "
+            "so no commit can vouch for it"
+        ) from e
+    shown = subprocess.run(
+        ["git", "show", f"HEAD:{rel.as_posix()}"], cwd=str(base), capture_output=True, check=False
+    )
+    if shown.returncode != 0:
+        raise SendRefusedError(
+            f"clause astroargmax_registration_committed: {rel.as_posix()} has no committed copy at "
+            f"HEAD. {A_REGISTRATION_BESIDE_A_RUN_IS_NOT_A_PRE_REGISTRATION}"
+        )
+    if not shown.stdout.strip():
+        raise SendRefusedError(
+            f"clause astroargmax_registration_committed: {rel.as_posix()} is committed but EMPTY, so "
+            f"it registers nothing. {A_REGISTRATION_BESIDE_A_RUN_IS_NOT_A_PRE_REGISTRATION}"
+        )
+    return {
+        "registration": rel.as_posix(),
+        "bytes": len(shown.stdout),
+        "clause": "astroargmax_registration_committed",
+    }
+
+
+def check_run_is_authorised_and_final(run_id: int) -> dict[str, Any]:
+    """Run 3 and beyond refuse BY NAME, because "second and final" authorises no third run."""
+    if int(run_id) > 2:
+        raise NoAuthorisationError(
+            f"clause at_most_1232: run {run_id} has NO approval of any kind. {SECOND_AND_FINAL}"
+        )
+    return {"run_id": int(run_id), "final_run": int(run_id) == 2}
+
+
+def check_own_ledger(run_id: int, root: Path | None = None) -> dict[str, Any]:
+    """His words are "on its own ledger": run 2 must not write into run 1's file."""
+    mine = ledger_for_run(run_id)
+    if int(run_id) != 1 and mine == LEDGER_RUN1:
+        raise SendRefusedError(
+            f"clause own_ledger: run {run_id} resolves to run 1's ledger {LEDGER_RUN1}. His words are "
+            f'"on its own ledger". {A_NEW_RUN_GETS_ITS_OWN_LEDGER}'
+        )
+    return {"ledger": str(mine), "clause": "own_ledger"}
+
+
+def check_signoff_is_the_supervisors_for_this_run(
+    rec: dict[str, Any] | None, run_id: int, words: str | None
+) -> dict[str, Any]:
+    """The sign-off must be the supervisor's own words, for THIS run, against a named closure digest."""
+    if not words or SIGNOFF_WORDS not in words:
+        raise SendRefusedError(
+            f"clause supervisor_signoff: no sign-off containing the words '{SIGNOFF_WORDS}' is "
+            "recorded. It may not be anticipated, paraphrased or represented by a flag"
+        )
+    if rec is None:
+        raise SendRefusedError(
+            "clause supervisor_signoff: no sign-off record is present, so the words above are not "
+            "attached to anything that names what was signed"
+        )
+    by = rec.get("by")
+    if by != SUPERVISOR_SESSION:
+        raise SendRefusedError(
+            f"clause supervisor_signoff: the governing line was written by {by!r} and his clause names "
+            f"the supervisor, {SUPERVISOR_SESSION!r}. Another session's approval of something else is "
+            "not the supervisor's sign-off"
+        )
+    if not rec.get("digest"):
+        raise SendRefusedError(
+            "clause supervisor_signoff: the governing line names no closure digest, so it does not say "
+            "WHICH code was reviewed. A sign-off is for the code it read"
+        )
+    if int(rec.get("run_id", -1)) != int(run_id):
+        raise SendRefusedError(
+            f"clause supervisor_signoff: the governing line covers run {rec.get('run_id')}, not run "
+            f"{run_id}. {A_SIGNOFF_IS_FOR_ONE_RUN}"
+        )
+    return {"by": by, "digest": rec["digest"], "run_id": int(run_id), "clause": "supervisor_signoff"}

@@ -1130,6 +1130,16 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
             "run_id": run_id,
             "ledger_root": tmp_path,
             "free_bytes": 11 * 1024**3,  # injected, so the run rule is not decided by free disk
+            # Albert's CI clause is injected here for the same reason: a test of the RUN rule must not
+            # be decided by what the forge says today. The CI clause has its own planted tests, both
+            # ways, including a red run, a stale green and an unreadable verdict.
+            "sha": "abc1234",
+            "ci_reader": lambda sha: {
+                "read": True,
+                "runs": [
+                    {"conclusion": "success", "createdAt": "2026-10-02T12:00:00Z", "workflowName": "ci"}
+                ],
+            },
             "signoff": 'the supervisor wrote "dry run reviewed" at 2026-10-02T20:05:00',
             "plan": plan,
             "reviewed_digest": astrorun.plan_digest(plan),
@@ -1169,6 +1179,12 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
         # Items (f) and (g) are the supervisor's and have their own planted tests; (g) refuses today,
         # so stubbing it is what lets this class be about the run rule it is named for.
         monkeypatch.setattr(astrorun, "check_adapter_writes_full_vectors", lambda *a, **k: {})
+        # Albert's registration clause likewise: item (h) is not committed yet, and it has its own
+        # planted tests both ways. Stubbing it keeps this class about the run rule it is named for.
+        monkeypatch.setattr(astrorun, "check_astroargmax_registration_is_committed", lambda *a, **k: {})
+        # And his sign-off clause, which has six planted tests of its own -- absent words, a
+        # paraphrase, another session, no digest, another run's line, and no record at all.
+        monkeypatch.setattr(astrorun, "check_signoff_is_the_supervisors_for_this_run", lambda *a, **k: {})
 
     def test_PLANTED_run_2_with_only_run_1s_approval_REFUSES(self, tmp_path, monkeypatch):
         """The hole itself: a fresh ledger used to make run 2 look like a run nobody had done yet."""
@@ -1199,10 +1215,20 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
         assert rec["words"] == astrorun.ASTROREG2_AUTHORISATION, "run 1 holds the existing text"
         assert rec["requests"] == 1232
         assert "not a second run, and not a resume" in rec["why_consumed"]
-        assert set(astrorun.ASTROREG2_AUTHORISATIONS) == {1}, (
-            "no approval for any later run is recorded, so no later run can start"
+        # Run 2's slot exists since Albert's second approval was relayed, and its WORDS are empty
+        # because this lane holds a relay. The claim is unchanged -- no later run can start -- and it
+        # is now tested on the behaviour rather than on the key set.
+        assert set(astrorun.ASTROREG2_AUTHORISATIONS) == {1, 2}
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["words"] is None
+        for run in (1, 2, 3):
+            with pytest.raises(astrorun.NoAuthorisationError):
+                astrorun.authorisation_for_run(run)
+        # 1,232 and NOT 2,464: run 2's slot exists but has no words, and a slot is not an approval.
+        assert astrorun.total_authorised_requests() == 1232, (
+            "a slot with no words must not add its count to the total, or the bound on money doubles "
+            "on the strength of a relay"
         )
-        assert astrorun.total_authorised_requests() == 1232
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["requests"] == 1232, "the count is recorded"
 
     def test_PLANTED_run_3_after_a_completed_run_2_without_its_own_approval_REFUSES(
         self, tmp_path, monkeypatch
@@ -1216,15 +1242,36 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
             astrorun.may_send(**self.kwargs(tmp_path, 3))
         assert "no approval is recorded for run 3" in str(exc.value)
 
-    def test_PLANTED_run_3_SKIPPING_run_2_REFUSES(self, tmp_path, monkeypatch):
-        """No skipping and no two runs at once: an open run's charges count against nothing."""
+    def test_PLANTED_run_3_now_refuses_on_FINALITY_before_the_skipping_rule_is_reached(
+        self, tmp_path, monkeypatch
+    ):
+        """Albert's "second and final" makes run 3 unauthorised outright, which refuses first.
+
+        The skipping rule is not weakened, it is simply no longer the FIRST thing wrong with a run 3:
+        a run nobody approved is a more basic objection than a run taken out of order. The skipping
+        rule's own test is below, on run 2, where it can still be reached.
+        """
         monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
         self.approvals(monkeypatch, live=(3,), spent=(1, 2))
         self.complete_run(tmp_path, 1)
-        with pytest.raises(astrorun.SendRefusedError) as exc:
+        with pytest.raises(astrorun.NoAuthorisationError) as exc:
             astrorun.may_send(**self.kwargs(tmp_path, 3))
         said = str(exc.value)
-        assert "run 3 cannot start" in said
+        assert "run 3 has NO approval of any kind" in said
+        assert "never by an exhausted counter" in said
+
+    def test_PLANTED_run_2_cannot_start_while_run_1_HAS_NOT_ENDED(self, tmp_path, monkeypatch):
+        """The skipping rule itself, on the only later run Albert authorised."""
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        self.approvals(monkeypatch, live=(2,), spent=(1,))
+        # run 1's ledger holds charges and NO run_complete line: it is still open
+        led = astrorun.ledger_path_for_run(1, tmp_path)
+        led.parent.mkdir(parents=True, exist_ok=True)
+        astrorun.RequestBudget(led, cap=self.CAP).take(chrom="chr21", element="open")
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.may_send(**self.kwargs(tmp_path, 2))
+        said = str(exc.value)
+        assert "run 2 cannot start" in said
         assert "run_complete" in said
         assert "skip a run or put two runs on the same approvals at once" in said
 
@@ -1340,6 +1387,399 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
         assert out["ledger"].endswith(astrorun.ledger_for_run(2).name)
         assert out["totals"]["total_authorised"] == 2 * self.CAP
         assert seen.get("run_id") == 2, "the sign-off check must be asked about THIS run"
+
+
+class TestAlbertsSecondAndFinalApprovalIsFiveRefusals:
+    """His second approval, clause by clause, each refusing BY NAME and quoting what it enforces.
+
+    His words, complete: "I approve a second and final AstroREG-2 run of at most 1,232 AlphaGenome
+    requests on its own ledger, after today's CI is green, the astroargmax registration is committed
+    and the supervisor writes \"dry run reviewed\"."
+
+    Recording those words must not by itself unlock the budget -- that is the rule that saved run 1 --
+    so this lane encodes the clauses and leaves the WORDS slot empty, because it holds a relay and not
+    Albert's words. Items (f) and (g) stay apart as the SUPERVISOR's conditions throughout: his
+    approval names the cap, the separate ledger, CI green, the registration and the sign-off.
+    """
+
+    def green(self, when="2026-10-02T12:00:00Z", conclusion="success"):
+        return lambda sha: {
+            "read": True,
+            "runs": [{"conclusion": conclusion, "createdAt": when, "workflowName": "ci"}],
+        }
+
+    # ---- clause 1: at most 1,232, and a third run has no approval at all --------------------------
+
+    def test_clause_1_a_THIRD_run_refuses_BY_NAME_and_not_by_a_counter(self):
+        with pytest.raises(astrorun.NoAuthorisationError) as exc:
+            astrorun.check_run_is_authorised_and_final(3)
+        said = str(exc.value)
+        assert "clause at_most_1232" in said
+        assert "run 3 has NO approval of any kind" in said
+        assert "second AND FINAL" in said
+        assert "never by an exhausted counter" in said
+
+    def test_clause_1_runs_1_and_2_pass_the_finality_check(self):
+        assert astrorun.check_run_is_authorised_and_final(1)["final_run"] is False
+        assert astrorun.check_run_is_authorised_and_final(2)["final_run"] is True
+
+    def test_clause_1_the_cap_is_at_most_and_the_slot_records_1232(self):
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["requests"] == 1232
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["final"] is True
+        assert "at most 1,232" in astrorun.RUN2_AUTHORISATION_AS_RELAYED
+
+    # ---- clause 2: on its own ledger, and the total does not reset ---------------------------------
+
+    def test_clause_2_run_2_gets_its_OWN_ledger_and_run_1s_is_untouched(self):
+        assert astrorun.check_own_ledger(2)["ledger"] == "data/ledgers/astroreg2_run2.jsonl"
+        assert astrorun.ledger_for_run(2) != astrorun.LEDGER_RUN1
+
+    def test_clause_2_PLANTED_a_run_2_pointed_at_run_1s_ledger_REFUSES(self, monkeypatch):
+        monkeypatch.setattr(astrorun, "ledger_for_run", lambda n: astrorun.LEDGER_RUN1)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_own_ledger(2)
+        said = str(exc.value)
+        assert "clause own_ledger" in said
+        assert "on its own ledger" in said
+
+    def test_clause_2_run_2s_OWN_cap_does_NOT_reset_the_total(self, monkeypatch, tmp_path):
+        """A reset must look like a reset, never like exhaustion."""
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {
+                1: {"words": "<1>", "requests": 10, "consumed": True, "why_consumed": "ran"},
+                2: {"words": "<2>", "requests": 10, "consumed": False},
+            },
+        )
+        (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
+        led1 = astrorun.ledger_path_for_run(1, tmp_path)
+        budget = astrorun.RequestBudget(led1, cap=10)
+        for i in range(8):
+            budget.take(chrom="chr21", element=f"e{i}")
+        astrorun.mark_run_complete(led1, requests=8)
+        # 20 authorised in total, 8 already charged in run 1, so run 2's cap is 12 -> lowered to 10 by
+        # its own allowance; charge more in run 1 and run 2's room shrinks rather than resetting.
+        assert astrorun.total_authorised_requests() == 20
+        assert astrorun.total_charged_across_runs(tmp_path)["total"] == 8
+        b2 = astrorun.astroreg2_budget(run_id=2, root=tmp_path)
+        assert b2.cap == 10, "its own allowance, which the total still bounds"
+        totals = astrorun.check_total_cap(2, 10, tmp_path)
+        assert totals["charged_in_other_runs"] == 8
+        assert totals["remaining_in_total"] == 12
+        with pytest.raises(astrorun.CapRefusedError, match="the total ever authorised is 20"):
+            astrorun.check_total_cap(2, 13, tmp_path)
+
+    # ---- clause 3: after today's CI is green -------------------------------------------------------
+
+    def test_clause_3_PLANTED_no_run_at_all_REFUSES(self):
+        with pytest.raises(astrorun.CiNotGreenError) as exc:
+            astrorun.check_ci_is_green("abc1234", lambda sha: {"read": True, "runs": []})
+        assert "there is NO CI run for abc1234 at all" in str(exc.value)
+        assert "Absence is not success" in str(exc.value)
+
+    def test_clause_3_PLANTED_a_FAILED_run_REFUSES(self):
+        with pytest.raises(astrorun.CiNotGreenError) as exc:
+            astrorun.check_ci_is_green("abc1234", self.green(conclusion="failure"))
+        said = str(exc.value)
+        assert "is not green (ci=failure)" in said
+        assert "anything that is not success is not green" in said
+
+    def test_clause_3_PLANTED_a_GREEN_run_from_an_EARLIER_DAY_REFUSES(self):
+        with pytest.raises(astrorun.CiNotGreenError) as exc:
+            astrorun.check_ci_is_green("abc1234", self.green(when="2026-10-01T22:26:35Z"))
+        said = str(exc.value)
+        assert "dated 2026-10-01, before 2026-10-02" in said
+        assert "TODAY'S CI" in said
+
+    def test_clause_3_PLANTED_an_UNREADABLE_verdict_REFUSES_rather_than_passing(self):
+        with pytest.raises(astrorun.CiNotGreenError) as exc:
+            astrorun.check_ci_is_green("abc1234", lambda sha: {"read": False, "why": "gh not logged in"})
+        assert "could not be READ" in str(exc.value)
+        assert "An unread verdict is not a green one" in str(exc.value)
+
+    def test_clause_3_NEAR_MISS_a_green_run_dated_on_the_day_PASSES(self):
+        out = astrorun.check_ci_is_green("abc1234", self.green())
+        assert out["runs_green"] == 1
+        assert out["clause"] == "ci_green"
+
+    def test_clause_3_the_check_NEVER_reads_the_local_suites_verdict(self):
+        """His clause names CI, and the local suite is a different question."""
+        import ast
+        import inspect
+
+        src = inspect.getsource(astrorun.check_ci_is_green) + inspect.getsource(astrorun.ci_conclusion)
+        for forbidden in ("genomeos.verdict", "status-dir", "status_dir", "check.sh", "genomeos-check"):
+            assert forbidden not in src, f"the CI clause must not consult {forbidden}"
+        assert "gh" in src and "rev-parse" in src, "it asks the forge, about a resolved sha"
+        tree = ast.parse(inspect.getsource(astrorun.ci_conclusion))
+        assert any(isinstance(n, ast.Call) for n in ast.walk(tree))
+
+    def test_clause_3_the_sha_is_RESOLVED_because_gh_matches_only_the_full_one(self):
+        """Measured: `gh run list --commit 2355bad` returns nothing while the full sha has a red run."""
+        import inspect
+
+        doc = " ".join(inspect.getdoc(astrorun.ci_conclusion).split())
+        assert "full 40-character sha" in doc
+        assert "clause that can never be satisfied" in doc
+
+    # ---- clause 4: the astroargmax registration is committed --------------------------------------
+
+    def repo(self, tmp_path, content=None):
+        import subprocess
+
+        subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+        subprocess.run(["git", "-C", str(tmp_path), "config", "user.email", "t@t"], check=True)
+        subprocess.run(["git", "-C", str(tmp_path), "config", "user.name", "t"], check=True)
+        rel = astrorun.ASTROARGMAX_REGISTRATION
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text(content if content is not None else "")
+        if content is not None:
+            subprocess.run(["git", "-C", str(tmp_path), "add", "-f", str(rel)], check=True)
+            subprocess.run(["git", "-C", str(tmp_path), "commit", "-qm", "reg"], check=True)
+        else:
+            (tmp_path / "x").write_text("x")
+            subprocess.run(["git", "-C", str(tmp_path), "add", "x"], check=True)
+            subprocess.run(["git", "-C", str(tmp_path), "commit", "-qm", "no reg"], check=True)
+        return tmp_path
+
+    def test_clause_4_PLANTED_an_UNCOMMITTED_registration_REFUSES(self, tmp_path):
+        base = self.repo(tmp_path, content=None)
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_astroargmax_registration_is_committed(root=base)
+        said = str(exc.value)
+        assert "clause astroargmax_registration_committed" in said
+        assert "no committed copy at HEAD" in said
+        assert "adjusted once a number is in view" in said
+
+    def test_clause_4_PLANTED_a_COMMITTED_but_EMPTY_registration_REFUSES(self, tmp_path):
+        base = self.repo(tmp_path, content="")
+        with pytest.raises(astrorun.SendRefusedError, match="committed but EMPTY"):
+            astrorun.check_astroargmax_registration_is_committed(root=base)
+
+    def test_clause_4_NEAR_MISS_a_committed_non_empty_registration_PASSES(self, tmp_path):
+        base = self.repo(tmp_path, content='{"bands": "fixed first"}')
+        out = astrorun.check_astroargmax_registration_is_committed(root=base)
+        assert out["bytes"] > 0
+        assert out["clause"] == "astroargmax_registration_committed"
+
+    def test_clause_4_it_is_NOT_committed_in_this_repository_today(self):
+        """The true state: item (h) does not exist yet, so this clause refuses on the real tree."""
+        with pytest.raises(astrorun.SendRefusedError, match="no committed copy at HEAD"):
+            astrorun.check_astroargmax_registration_is_committed()
+
+    # ---- clause 5: the supervisor writes "dry run reviewed" ---------------------------------------
+
+    def record(self, **over):
+        rec = {"by": "genomeos-fe", "digest": "d" * 64, "run_id": 2}
+        rec.update(over)
+        return rec
+
+    def test_clause_5_PLANTED_the_words_absent_or_PARAPHRASED_REFUSES(self):
+        for words in (None, "", "the supervisor approved the dry run"):
+            with pytest.raises(astrorun.SendRefusedError) as exc:
+                astrorun.check_signoff_is_the_supervisors_for_this_run(self.record(), 2, words)
+            assert "clause supervisor_signoff" in str(exc.value)
+            assert "may not be anticipated, paraphrased or represented by a flag" in str(exc.value)
+
+    def test_clause_5_PLANTED_ANOTHER_SESSIONS_signoff_REFUSES(self):
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            astrorun.check_signoff_is_the_supervisors_for_this_run(
+                self.record(by="genomeos-c6"), 2, 'wrote "dry run reviewed"'
+            )
+        assert "names the supervisor, 'genomeos-fe'" in str(exc.value)
+
+    def test_clause_5_PLANTED_no_closure_digest_REFUSES(self):
+        with pytest.raises(astrorun.SendRefusedError, match="names no closure digest"):
+            astrorun.check_signoff_is_the_supervisors_for_this_run(
+                self.record(digest=None), 2, 'wrote "dry run reviewed"'
+            )
+
+    def test_clause_5_PLANTED_a_signoff_for_ANOTHER_RUN_REFUSES(self):
+        with pytest.raises(astrorun.SendRefusedError, match="covers run 1, not run 2"):
+            astrorun.check_signoff_is_the_supervisors_for_this_run(
+                self.record(run_id=1), 2, 'wrote "dry run reviewed"'
+            )
+
+    def test_clause_5_PLANTED_no_record_at_all_REFUSES_even_with_the_words(self):
+        with pytest.raises(astrorun.SendRefusedError, match="no sign-off record is present"):
+            astrorun.check_signoff_is_the_supervisors_for_this_run(None, 2, 'wrote "dry run reviewed"')
+
+    def test_clause_5_NEAR_MISS_the_supervisors_own_words_for_THIS_run_PASS(self):
+        out = astrorun.check_signoff_is_the_supervisors_for_this_run(
+            self.record(), 2, 'genomeos-fe wrote "dry run reviewed" at 20:05'
+        )
+        assert out["by"] == "genomeos-fe"
+        assert out["run_id"] == 2
+
+    # ---- the whole gate: all five unmet refuse, all five met pass ---------------------------------
+
+    def test_the_RELAY_is_not_the_approval_and_the_slot_is_EMPTY_today(self):
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["words"] is None
+        assert "this lane received the text through another agent" in (
+            astrorun.WHY_RUN2_SLOT_IS_EMPTY_IN_THIS_LANE
+        )
+        with pytest.raises(astrorun.NoAuthorisationError, match="no approval is recorded for run 2"):
+            astrorun.authorisation_for_run(2)
+
+    def test_ALL_FIVE_SATISFIED_the_gate_PASSES_and_names_every_clause(self, tmp_path, monkeypatch):
+        """A guard that can never pass is the fixed-point defect, so the positive control.
+
+        Items (f) and (g) and the closure are the SUPERVISOR's conditions with their own planted
+        tests; they are stubbed, and the stubs RECORD that they were called, so this also shows them
+        wired rather than switched off. Albert's five run on their real bodies.
+        """
+        seen: dict[str, object] = {}
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        reg = tmp_path / "reg.json"
+        reg.write_text("{}")
+        (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
+        plan = [
+            {"chrom": "chr21", "element": f"e{i}", "start": i, "end": i + 1, "serves_genes": ["G"]}
+            for i in range(3)
+        ]
+        # run 1 ended, as "a second run" requires
+        led1 = astrorun.ledger_path_for_run(1, tmp_path)
+        astrorun.RequestBudget(led1, cap=3).take(chrom="chr21", element="old")
+        astrorun.mark_run_complete(led1, requests=1)
+
+        monkeypatch.setattr(astrorun, "ASTROREG2_CAP", 3)
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {
+                1: {"words": "<1>", "requests": 3, "consumed": True, "why_consumed": "run 1 happened"},
+                2: {
+                    "words": "<his words, recorded first-hand>",
+                    "requests": 3,
+                    "consumed": False,
+                    "final": True,
+                },
+            },
+        )
+        monkeypatch.setattr(astrorun, "recorded_signoff", lambda *a, **k: self.record())
+        monkeypatch.setattr(
+            astrorun,
+            "check_astroargmax_registration_is_committed",
+            lambda *a, **k: seen.setdefault("registration", True) or {},
+        )
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: seen.update(k) or {})
+        monkeypatch.setattr(astrorun, "check_nothing_in_the_plan_is_already_cached", lambda *a, **k: None)
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        monkeypatch.setattr(astrorun, "check_adapter_writes_full_vectors", lambda *a, **k: {})
+
+        out = astrorun.may_send(
+            activity_result=act,
+            registration=reg,
+            run_id=2,
+            ledger_root=tmp_path,
+            signoff='genomeos-fe wrote "dry run reviewed" at 20:05',
+            plan=plan,
+            reviewed_digest=astrorun.plan_digest(plan),
+            committed=lambda p: True,
+            free_bytes=11 * 1024**3,
+            sha="abc1234",
+            ci_reader=self.green(),
+        )
+        assert out["may_send"] is True
+        assert out["run_id"] == 2
+        assert out["ledger"].endswith("astroreg2_run2.jsonl"), "his words: on its own ledger"
+        assert out["run2_clauses_checked"] == sorted(astrorun.RUN2_CLAUSES)
+        assert seen.get("registration") is True, "the registration clause was asked"
+        assert seen.get("run_id") == 2, "the closure check was asked about THIS run"
+
+    def test_PLANTED_each_of_the_five_unmet_stops_the_gate_BY_NAME(self, tmp_path, monkeypatch):
+        """Five refusals, one per clause, from the same otherwise-passing call."""
+        import contextlib
+
+        def call(**over):
+            act = tmp_path / "activity.json"
+            act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+            reg = tmp_path / "reg.json"
+            reg.write_text("{}")
+            (tmp_path / astrorun.LEDGER_RUN1.parent).mkdir(parents=True, exist_ok=True)
+            plan = [
+                {"chrom": "chr21", "element": f"e{i}", "start": i, "end": i + 1, "serves_genes": ["G"]}
+                for i in range(3)
+            ]
+            kw = {
+                "activity_result": act,
+                "registration": reg,
+                "run_id": 2,
+                "ledger_root": tmp_path,
+                "signoff": 'genomeos-fe wrote "dry run reviewed" at 20:05',
+                "plan": plan,
+                "reviewed_digest": astrorun.plan_digest(plan),
+                "committed": lambda p: True,
+                "free_bytes": 11 * 1024**3,
+                "sha": "abc1234",
+                "ci_reader": self.green(),
+            }
+            kw.update(over)
+            return astrorun.may_send(**kw)
+
+        led1 = astrorun.ledger_path_for_run(1, tmp_path)
+        led1.parent.mkdir(parents=True, exist_ok=True)
+        astrorun.RequestBudget(led1, cap=3).take(chrom="chr21", element="old")
+        astrorun.mark_run_complete(led1, requests=1)
+        monkeypatch.setattr(astrorun, "ASTROREG2_CAP", 3)
+        monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {
+                1: {"words": "<1>", "requests": 3, "consumed": True, "why_consumed": "ran"},
+                2: {"words": "<recorded first-hand>", "requests": 3, "consumed": False, "final": True},
+            },
+        )
+        monkeypatch.setattr(astrorun, "recorded_signoff", lambda *a, **k: self.record())
+        monkeypatch.setattr(astrorun, "check_astroargmax_registration_is_committed", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_nothing_in_the_plan_is_already_cached", lambda *a, **k: None)
+        monkeypatch.setattr(astrorun, "check_adapter_v2", lambda *a, **k: {"stubbed": True})
+        monkeypatch.setattr(astrorun, "check_adapter_writes_full_vectors", lambda *a, **k: {})
+        assert call()["may_send"] is True, "the control: all five met"
+
+        # 1 at_most_1232: one request more than the run is approved for
+        with pytest.raises(astrorun.SendRefusedError) as exc:
+            big = [
+                {"chrom": "chr21", "element": f"e{i}", "start": i, "end": i + 1, "serves_genes": ["G"]}
+                for i in range(4)
+            ]
+            call(plan=big, reviewed_digest=astrorun.plan_digest(big))
+        assert "the list holds 4 requests and the approval names 3" in str(exc.value)
+
+        # 2 own_ledger
+        with monkeypatch.context() as m:
+            m.setattr(astrorun, "ledger_for_run", lambda n: astrorun.LEDGER_RUN1)
+            with pytest.raises(astrorun.SendRefusedError, match="clause own_ledger"):
+                call()
+
+        # 3 ci_green
+        with pytest.raises(astrorun.CiNotGreenError, match="clause ci_green"):
+            call(ci_reader=self.green(conclusion="failure"))
+        with pytest.raises(astrorun.SendRefusedError, match="no sha was named"):
+            call(sha=None)
+
+        # 4 astroargmax_registration_committed
+        with monkeypatch.context() as m:
+
+            def refuse(*a, **k):
+                raise astrorun.SendRefusedError(
+                    "clause astroargmax_registration_committed: has no committed copy at HEAD"
+                )
+
+            m.setattr(astrorun, "check_astroargmax_registration_is_committed", refuse)
+            with pytest.raises(astrorun.SendRefusedError, match="astroargmax_registration_committed"):
+                call()
+
+        # 5 supervisor_signoff
+        with pytest.raises(astrorun.SendRefusedError, match="clause supervisor_signoff"):
+            call(signoff="the supervisor approved it")
+        with contextlib.suppress(astrorun.SendRefusedError):
+            call()
 
 
 class TestItemGTheFullTrackVectorIsKept:
