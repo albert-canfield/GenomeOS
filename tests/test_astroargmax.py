@@ -430,3 +430,169 @@ def test_the_payload_manifest_validates_and_claims_no_coordinate() -> None:
     assert m["assembly"].startswith("n/a:")
     assert m["parameters"]["ratio_enriched_floor"] == aa.RATIO_ENRICHED_FLOOR
     assert len(m["parameters"]["label_set_CNS_PRIMARY"]) == 27
+
+
+# ====================================================== AMENDMENT 1: the unit is an ELEMENT, imported
+
+
+def _row(gene: str, drop: float, rise: float, drop_t: str, rise_t: str) -> dict:
+    return {
+        "gene": gene,
+        "max_drop_log2fc": drop,
+        "max_rise_log2fc": rise,
+        "max_drop_tissue": drop_t,
+        "max_rise_tissue": rise_t,
+    }
+
+
+def test_element_label_is_one_label_per_element_from_the_winning_target_row() -> None:
+    """Two gene rows, one element, ONE label: the target row's tissue and not the other's."""
+    rows = [
+        _row("WEAK", -0.2, 0.1, "K562", "HepG2"),
+        _row("TARGET", -1.4, 0.3, "astrocyte", "brain"),
+    ]
+    assert aa.element_label(rows) == "astrocyte"
+    # the non-target row's own argmax tissue is NOT the element's label
+    assert aa.element_label([rows[0]]) == "K562"
+
+
+def test_element_label_returns_none_where_no_gene_moves_by_min_effect() -> None:
+    assert aa.min_effect() == 0.1
+    assert aa.element_label([_row("FLAT", -0.01, 0.02, "K562", "HepG2")]) is None
+    assert aa.element_label([]) is None
+
+
+def test_min_effect_is_imported_and_no_literal_of_it_lives_in_this_lanes_module() -> None:
+    """A copied literal and a re-implemented rule are the same defect."""
+    import inspect
+
+    from genomeos.predict import enhancer_target
+
+    assert aa.min_effect() == enhancer_target.MIN_EFFECT
+    src = inspect.getsource(aa)
+    assert "MIN_EFFECT = " not in src, "the floor must be read from enhancer_target, never copied"
+
+
+def test_element_label_DELEGATES_rather_than_agreeing_by_coincidence(monkeypatch) -> None:
+    """Substitute predict_target and the label FOLLOWS it. A re-implementation would not move."""
+    from genomeos.predict import enhancer_target
+
+    monkeypatch.setattr(enhancer_target, "predict_target", lambda rows, **k: {"tissue": "planted"})
+    assert aa.element_label([_row("ANY", -9.0, 0.0, "astrocyte", "brain")]) == "planted"
+    monkeypatch.setattr(enhancer_target, "predict_target", lambda rows, **k: None)
+    assert aa.element_label([_row("ANY", -9.0, 0.0, "astrocyte", "brain")]) is None
+
+
+def test_element_label_uses_compiles_own_context_function(monkeypatch) -> None:
+    """The label function is the compiler's, so a rule's label and an answer's cannot diverge."""
+    from genomeos.attribution import compile as co
+
+    monkeypatch.setattr(co, "context", lambda name: f"ctx<{name}>")
+    assert aa.element_label([_row("T", -1.0, 0.0, "astrocyte", "brain")]) == "ctx<astrocyte>"
+
+
+def test_the_module_holds_no_argmax_over_drop_and_rise_of_its_own() -> None:
+    """The one place the unit is computed must not re-derive the target finder's comparison."""
+    import inspect
+
+    src = inspect.getsource(aa)
+    for forbidden in ("max_drop_log2fc", "max_rise_log2fc", "max_drop_tissue", "max_rise_tissue"):
+        assert forbidden not in src, f"{forbidden} appears, so the argmax is being re-implemented"
+
+
+def test_label_population_reports_the_excluded_count_beside_the_denominator() -> None:
+    got = aa.label_population(
+        {
+            "E1": [_row("A", -1.0, 0.0, "astrocyte", "brain")],
+            "E2": [_row("B", -0.02, 0.01, "K562", "HepG2")],  # no gene moves by MIN_EFFECT
+            "E3": [_row("C", 0.0, 2.0, "K562", "cerebellum")],
+        }
+    )
+    assert got["elements_read"] == 3
+    assert got["elements_with_a_target"] == 1 + 1
+    assert got["elements_with_no_target"] == 1
+    assert got["elements_with_no_target_named"] == ["E2"]
+    assert got["elements_read"] == got["elements_with_a_target"] + got["elements_with_no_target"]
+    assert got["denominator_is"] == "elements_with_a_target"
+    assert got["labels_by_element"] == {"E1": "astrocyte", "E3": "cerebellum"}
+    assert got["min_effect"] == 0.1
+    assert "never silently dropped" in got["excluded_count_is_reported"]
+
+
+def test_the_amendment_text_names_the_defect_the_parts_and_its_own_blindness() -> None:
+    assert "THE UNIT UNDEFINED" in aa.AMENDMENT_1
+    assert "compile.py` line 851" in aa.AMENDMENT_1
+    assert "predict_target" in aa.AMENDMENT_1
+    assert "not a wording fix" in aa.AMENDMENT_1.lower()
+    assert "IMPORTED and never re-implemented" in aa.AMENDMENT_1_PART_1
+    assert "D40" in aa.AMENDMENT_1_PART_1
+    assert "REPORTED BESIDE THE RATE" in aa.AMENDMENT_1_PART_2
+    assert "DECIDES NOTHING" in aa.AMENDMENT_1_PART_3
+    assert "UNOBTAINABLE" in aa.AMENDMENT_1_IS_BLIND
+    assert "2026-10-02" in aa.AMENDMENT_1_IS_BLIND
+    assert "NOT rewritten" in aa.AMENDMENT_1_THE_REGISTRATION_IS_NOT_EDITED
+
+
+def test_the_amendment_moves_no_band_and_names_the_blob_it_amends() -> None:
+    assert aa.AMENDS == "astroargmax_registration"
+    assert len(aa.AMENDS_BLOB_SHA256) == 64
+    assert "byte-identical" in aa.AMENDMENT_1_WHAT_DOES_NOT_MOVE
+    # the bands are the committed ones and this file does not redefine them
+    assert (aa.RATIO_ENRICHED_FLOOR, aa.ABSOLUTE_LEVEL_FLOOR) == (2.0, 0.10)
+    assert (aa.EQUIVALENCE_BAND, aa.RATIO_DEPLETED_CEILING) == (0.25, 0.8)
+
+
+def _amendment_payload() -> dict:
+    import importlib.util
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "astroargmax_amend_1", root / "scripts" / "astroargmax_amend_1.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.payload()
+
+
+def test_the_amendment_payload_identifies_the_blob_it_amends_and_holds_the_three_parts() -> None:
+    body = _amendment_payload()
+    a = body["amended_registration"]
+    assert a["commit"] == aa.AMENDS_COMMIT
+    assert a["blob_sha256"] == aa.AMENDS_BLOB_SHA256
+    assert a["bytes"] > 0
+    for part in ("part_1_the_unit", "part_2_the_denominator", "part_3_the_secondary"):
+        assert len(body[part]) > 200
+    # the defect is EVIDENCED on the committed bytes, not asserted
+    ev = body["the_evidence_counted_on_the_committed_bytes"]
+    assert ev["gene row"] == 2
+    assert ev["predict_target"] == 0 and ev["predicted_coding"] == 0 and ev["per element"] == 0
+    # and the imported identities are recorded, so the fix rests on the code
+    ids = body["the_label_path_in_the_code"]["imported_identities"]
+    assert ids["predict_target"] == "genomeos.predict.enhancer_target.predict_target"
+    assert ids["context"] == "genomeos.attribution.compile.context"
+    assert body["the_label_path_in_the_code"]["min_effect"] == 0.1
+
+
+def test_the_amendment_payload_is_blind_and_holds_no_field_a_run_would_fill() -> None:
+    body = _amendment_payload()
+    for field in FIELDS_A_RUN_WOULD_FILL:
+        assert field not in body, f"{field} exists, so the amendment can be read as a preview"
+    assert body["alphagenome_requests"] == 0
+    assert body["network_requests"] == 0
+    assert "0 of the 1,232 requests sent" in body["what_was_read_of_the_outcome_when_this_was_written"]
+    assert "THE BLIND KIND" in body["which_kind_of_amendment_this_is"]
+    assert body["bands_unchanged"]["ratio_enriched_floor"] == aa.RATIO_ENRICHED_FLOOR
+    assert len(body["bands_unchanged"]["label_set_CNS_PRIMARY"]) == 27
+
+
+def test_the_amendment_payload_manifest_validates_and_counts_the_exclusion() -> None:
+    from genomeos import manifest as mf
+
+    m = _amendment_payload()["result_manifest"]
+    assert mf.validate({**m, "code": {"git_sha": "x", "dirty": False}}) == []
+    assert m["parameters"]["denominator"] == "elements_with_a_target"
+    assert m["parameters"]["excluded_and_counted"] == "elements_with_no_target"
+    assert any("COUNTED and reported, never silently dropped" in e for e in m["exclusions"])
+    assert set(m["partitions"]) == {"elements_with_a_target", "elements_with_no_target", "gene_rows"}

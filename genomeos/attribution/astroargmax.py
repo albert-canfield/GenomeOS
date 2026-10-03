@@ -862,3 +862,161 @@ def power_in_cluster_units(control_rate: float, sizes: dict[str, int]) -> dict[s
         "degenerate_bootstrap": INSTRUMENT_ASSUMPTIONS["degenerate_bootstrap"],
         "identical_resample_share": INSTRUMENT_ASSUMPTIONS["identical_resample_share"],
     }
+
+
+# ============================================================ AMENDMENT 1: the unit is an ELEMENT
+#
+# Appended, not edited: the registration above stands as committed at b5fd1b6 and this is the
+# correction. The whole of it is below, so a reader of the original reaches it from the amendment's
+# `amends` and never has to reconcile two versions of one sentence.
+
+AMENDMENT_1 = (
+    "THE DEFECT, established by the supervisor's review before any request was sent and verified "
+    "here against the code rather than relayed: the registration left THE UNIT UNDEFINED, and as "
+    "written it compared TWO POPULATIONS.\n"
+    "The evidence in the committed file itself: it says 'gene row' twice and contains ZERO "
+    "occurrences of `predict_target`, `predicted_coding` and 'per element' -- counted on the "
+    "committed bytes. Its question speaks of 'the track carrying the largest movement in a GENE "
+    "ROW's whole track vector' and its correlation sources list 'the gene rows within one answer: "
+    "one deletion, many genes', which reads as ONE LABEL PER GENE ROW over every gene of every "
+    "answer.\n"
+    "But both things it compares against are ONE LABEL PER ELEMENT. Control (a) counts COMPILED "
+    "RULES, and a compiled rule's label is `genomeos/attribution/compile.py` line 851, `label = "
+    "context(pc.get('tissue'))`, where `pc` is the element's `predicted_coding` head -- ONE dict per "
+    "element, the gene and the tissue chosen JOINTLY by `enhancer_target.predict_target`, which "
+    "returns None when no gene moves by MIN_EFFECT. Comparison (b) reads the same "
+    "`predicted_coding` tissue from the sweep's element tables.\n"
+    "WHY IT IS NOT A WORDING FIX. The argmax labels of NON-TARGET gene rows carry small effects, "
+    "more noise and more track-scale influence, so their label distribution need not follow the "
+    "target row's. An all-gene-row rate against a per-element control would be a different "
+    "population with a different noise structure, and the ratio the bands were written for would "
+    "not mean what the bands say. The bands do not move; the thing they are applied to is fixed"
+)
+
+AMENDMENT_1_PART_1 = (
+    "THE UNIT: ONE LABEL PER PAID-ANSWER ELEMENT, computed by the SAME functions the compiled rules "
+    "used -- `enhancer_target.predict_target` -> that head's `tissue` -> `compile.context` -- "
+    "IMPORTED and never re-implemented, applied to the paid answer's own gene rows. The astrocyte "
+    "arm, control (a) and comparison (b) then share ONE population definition. Importing rather "
+    "than re-implementing is the rule a sibling lane's D40 fix established: a copied literal and a "
+    "re-implemented rule are the same defect, and both drift silently. `astroargmax.element_label` "
+    "is the one place it happens, it holds no argmax of its own, and a test proves the delegation by "
+    "substituting `predict_target` and showing the label follows it"
+)
+
+AMENDMENT_1_PART_2 = (
+    "THE DENOMINATOR: an element whose `predict_target` returns None -- no gene moving by MIN_EFFECT "
+    "= 0.1, imported and not copied -- IS EXCLUDED, exactly as the census's attributed population "
+    "excludes it, because such an element emits no compiled rule and so is in neither the control's "
+    "numerator nor its denominator. THE EXCLUDED COUNT IS REPORTED BESIDE THE RATE and never "
+    "silently dropped: the reported denominator is `elements_with_a_target`, with "
+    "`elements_with_no_target` printed next to it and both summing to the answers read. A rate "
+    "whose denominator shrank for an unreported reason is the failure this clause exists to stop"
+)
+
+AMENDMENT_1_PART_3 = (
+    "THE ALL-GENE-ROW ARGMAX is reported as a LABELLED SECONDARY and DECIDES NOTHING. It is "
+    "interesting -- it is the only view of what the non-target rows do, and it is what the original "
+    "wording would have measured -- and it is not the registered quantity. It is printed under its "
+    "own name with its own denominator (gene rows, not elements), it is never compared with control "
+    "(a) or with comparison (b), no band is applied to it, and no reading of it is a reading of this "
+    "question"
+)
+
+AMENDMENT_1_IS_BLIND = (
+    "THIS AMENDMENT IS BLIND, and the distinction matters because the project has the other kind on "
+    "record. NOT ONE of the 1,232 requests has been sent and NO astrocyte answer exists, so no "
+    "figure of the outcome could have informed a single word of it. The outcome is not merely unseen "
+    "but UNOBTAINABLE: the sender still refuses on two of Albert's five clauses -- today's CI green "
+    "and the supervisor's 'dry run reviewed' -- so there is no path by which a number could have "
+    "been looked at first. Contrast the amendment another lane had to disclose on 2026-10-02, which "
+    "was written AFTER its first count had been seen and cost that result its clean negative. Ours "
+    "is the first kind, and the evidence for it is in the repository rather than in this sentence"
+)
+
+AMENDMENT_1_WHAT_DOES_NOT_MOVE = (
+    "every band and every threshold: the ratio floor 2.0, the absolute level floor 0.10, the "
+    "relative equivalence band 0.25, the depletion ceiling 0.8, MIN_CLUSTERS, the draws, the seed "
+    "and the minimum distinct resamples are byte-identical to the committed registration. The label "
+    "set's 27 CURIEs, the three alternatives, every borderline call and its reason, the control's "
+    "value 33,588 / 440,589 = 0.07623431 and its rule, the panel share and its label, the declared "
+    "panel hash, the training-exposure paragraph, the instrument assumptions, the power table and "
+    "the disclosure all stand unchanged. This amendment fixes WHAT IS COUNTED ONCE, not how much of "
+    "it is needed to read anything"
+)
+
+AMENDMENT_1_THE_REGISTRATION_IS_NOT_EDITED = (
+    "data/results/astroargmax_registration.json is NOT rewritten. It stands as committed at b5fd1b6 "
+    "with blob sha256 941fe4d18ad5aa8516aa6f29375d3b15e883d589930faf5327bef50eda416dcc, which this "
+    "amendment names and checks. A registration is near-immutable once landed and corrections are "
+    "APPENDED as their own files -- the gene_identity registration carries three such amendments -- "
+    "because a registration edited in place cannot be told from one that was always right, and the "
+    "history is the only thing that makes 'registered first' mean anything"
+)
+
+#: The committed registration this amends, by result name and by the sha256 of its committed blob.
+AMENDS = "astroargmax_registration"
+AMENDS_COMMIT = "b5fd1b6"
+AMENDS_BLOB_SHA256 = "941fe4d18ad5aa8516aa6f29375d3b15e883d589930faf5327bef50eda416dcc"
+
+
+def element_label(rows: list[dict[str, Any]]) -> str | None:
+    """ONE label for ONE element, or None when no gene moves by MIN_EFFECT.
+
+    The whole of amendment 1 part 1 in one function, and it contains NO argmax of its own: the
+    target head and the label both come from the imported functions the compiler used, so the paid
+    answers, the control and the K562 arm cannot drift apart. A re-implementation here that agreed
+    today would be free to disagree the day either of them changed.
+    """
+    from genomeos.attribution.compile import context
+    from genomeos.predict.enhancer_target import predict_target
+
+    pc = predict_target(rows)
+    if pc is None:
+        return None
+    return context(pc.get("tissue"))
+
+
+def min_effect() -> float:
+    """MIN_EFFECT as the target finder defines it, imported. Never a literal in this module."""
+    from genomeos.predict.enhancer_target import MIN_EFFECT
+
+    return float(MIN_EFFECT)
+
+
+def label_population(
+    per_element_rows: dict[str, list[dict[str, Any]]],
+) -> dict[str, Any]:
+    """The registered population of an arm: one label per element, and the exclusions COUNTED.
+
+    `elements_with_no_target` is returned beside the denominator rather than subtracted out of
+    sight, which is amendment 1 part 2. Nothing here classifies a label or computes a rate: that is
+    the run's, and the run does not exist.
+    """
+    labels: dict[str, str] = {}
+    no_target: list[str] = []
+    for element, rows in per_element_rows.items():
+        label = element_label(rows)
+        if label is None:
+            no_target.append(element)
+        else:
+            labels[element] = label
+    return {
+        "labels_by_element": labels,
+        "elements_read": len(per_element_rows),
+        "elements_with_a_target": len(labels),
+        "elements_with_no_target": len(no_target),
+        "elements_with_no_target_named": sorted(no_target),
+        "denominator_is": "elements_with_a_target",
+        "min_effect": min_effect(),
+        "excluded_count_is_reported": AMENDMENT_1_PART_2,
+        "one_label_per_element": AMENDMENT_1_PART_1,
+    }
+
+
+SECONDARY_ALL_GENE_ROWS = (
+    "the LABELLED SECONDARY of amendment 1 part 3. Its denominator is GENE ROWS and not elements, "
+    "it is never compared with the control or with the K562 arm, no band is applied to it, and no "
+    "reading of it is a reading of this question. It is computed by the run, and the run does not "
+    "exist"
+)
