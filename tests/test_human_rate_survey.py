@@ -17,7 +17,7 @@ import json
 import math
 from pathlib import Path
 
-import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import bridge
 
@@ -42,9 +42,12 @@ NOT_IDENTIFIABLE = 76469
 
 
 def _result(name: str) -> dict:
+    # Every call site passes a literal: "gene_rates" and "bridge_audit", and git TRACKS both results.
+    # So "not built" could never be true of either, and the skip protected nothing. It RAISES instead,
+    # and `must_be_present` refuses the call outright if a later caller names an untracked result --
+    # which is what keeps this conversion from turning a real absence into a red push.
     p = RESULTS / f"{name}.json"
-    if not p.exists():
-        pytest.skip(f"{p} not built")
+    tp.must_be_present(p, was=f"{p} not built")
     return json.loads(p.read_text())
 
 

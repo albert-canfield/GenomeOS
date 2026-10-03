@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+import tracked_paths as tp
 
 from genomeos import manifest as mf
 from genomeos.attribution import crispri
@@ -25,8 +26,10 @@ OLD = Path(v2.OLD)
 
 
 def committed() -> dict[str, Any]:
-    if not OLD.exists():  # pragma: no cover - the file is committed; a stripped checkout may lack it
-        pytest.skip(f"{OLD} is not in this checkout")
+    # The `pragma: no cover` here said it outright -- "the file is committed" -- and then skipped on
+    # its absence anyway. `data/results/crispri_benchmark.json` is TRACKED, so a checkout without it
+    # is not a stripped machine but a broken tree, and that is a failure and not a skip.
+    tp.must_be_present(OLD, was=f"{OLD} is not in this checkout")
     return json.loads(OLD.read_text())
 
 

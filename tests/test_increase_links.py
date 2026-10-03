@@ -17,6 +17,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import cell2, crispri, fresh
 from genomeos.attribution import increase_links as il
@@ -346,8 +347,8 @@ def test_the_registration_states_that_no_direction_is_read_here() -> None:
 
 def test_the_registration_result_on_disk_was_written_with_its_code_committed() -> None:
     p = Path("data/results/increase_links_registration.json")
-    if not p.exists():
-        pytest.skip(f"the registration result is not on this machine: {p}")
+    # the registration is TRACKED, so it is on every machine that has this commit
+    tp.must_be_present(p, was=f"the registration result is not on this machine: {p}")
     d = json.loads(p.read_text())
     cc = d["result_manifest"]["code_cleanliness"]
     assert cc["own_code_is_committed"] is True

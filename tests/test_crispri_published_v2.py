@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -28,8 +29,8 @@ OLD = ROOT / "data" / "results" / "crispri_published.json"
 
 @pytest.fixture(scope="module")
 def old() -> dict:
-    if not OLD.is_file():
-        pytest.skip(f"{OLD} is not in this checkout")
+    # `data/results/crispri_published.json` is TRACKED, so this fixture could never skip; it RAISES.
+    tp.must_be_present(OLD, was=f"{OLD} is not in this checkout")
     return json.loads(OLD.read_text())
 
 

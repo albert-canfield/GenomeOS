@@ -15,6 +15,7 @@ import math
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import measured as ms
 
@@ -324,8 +325,8 @@ def test_the_lines_are_the_committed_calibrations_expected_differences():
     import json
 
     p = Path(__file__).resolve().parents[1] / "data" / "results" / "clause2_design_power_calibrated.json"
-    if not p.exists():
-        pytest.skip("the calibrated result is not in this checkout")
+    # the calibrated result is TRACKED, so "not in this checkout" was never a reachable state
+    tp.must_be_present(p, was="the calibrated result is not in this checkout")
     seen: dict[int, dict[float, float]] = {}
     for r in json.loads(p.read_text())["by_design"]:
         seen.setdefault(r["design"]["k"], {})[r["ratio"]] = r["expected_difference_points"]

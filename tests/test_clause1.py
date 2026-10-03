@@ -11,6 +11,7 @@ import csv
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import clause1 as c1
 from genomeos.attribution import direction_v2 as dv2
@@ -451,8 +452,10 @@ RESULT_PATH = Path(__file__).resolve().parents[1] / "data" / "results" / "clause
 
 
 def _result() -> dict:
-    if not RESULT_PATH.exists():
-        pytest.skip("data/results/clause1.json has not been written on this machine")
+    # `data/results/clause1.json` is TRACKED, so it HAS been written on every machine that has this
+    # commit: the skip that stood here could never fire and every test reading the result read as
+    # conditional. A tracked result that is missing is a broken checkout, so it RAISES by name.
+    tp.must_be_present(RESULT_PATH, was="data/results/clause1.json has not been written on this machine")
     import json
 
     with RESULT_PATH.open() as fh:
