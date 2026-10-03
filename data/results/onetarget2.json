@@ -1,0 +1,1729 @@
+{
+  "result": "onetarget2",
+  "date": "2026-10-03",
+  "lane": "lane-onetarget",
+  "registered_at": "24adf33 (code), aed8ae9 (the registration file)",
+  "question": "Which modules still read ONE target gene per element, what does each of them claim on the strength of that one gene, and what single figure of each one's own output would have to move for its reading to be wrong? One registration, one falsifier per module, no module's claim widened or dropped on the way in.",
+  "the_invariant_the_wave_stands_on": "the window's at-the-bar head is the compact table's `predicted` gene wherever the table names one, and the at-the-bar list is empty exactly when the table names none: 849,469 elements, 0 head disagreements, 0 coding-head disagreements (data/results/onetarget_consumers.json, 2026-09-27). Carried here word for word as that result registered it and NOT strengthened: it is a measurement over the elements that run's arm compared, not a theorem about every element on every chromosome, and the same result records 10 elements of 4,794 with no `predicted_coding` field whose cache DOES name a coding gene, so the coding head is not invariant in the way the any-gene head is",
+  "the_invariants_own_limit_is_load_bearing": "the CODING head is not invariant the way the any-gene head is: the 2026-09-27 result found 10 elements of 4,794 with no `predicted_coding` field although the cache named a coding gene. Every arm therefore counts coding_head_disagrees BY NAME and only an ANY-GENE disagreement stops the run",
+  "a_falsifier_per_module": "each arm carries the falsifier its own census entry registered, quoted from the registration, and is judged against that one alone",
+  "modules_moved": [
+    "genomeos/attribution/closure.py",
+    "genomeos/attribution/measured.py",
+    "genomeos/attribution/not_open_profile.py"
+  ],
+  "modules_free_but_not_yet_moved": [
+    "genomeos/attribution/variation.py",
+    "genomeos/attribution/gwas.py",
+    "genomeos/attribution/vista.py",
+    "genomeos/decompile.py",
+    "genomeos/genome/regdiff.py",
+    "genomeos/report.py",
+    "genomeos/benchmark/rearrangements.py",
+    "genomeos/knowledge/across.py"
+  ],
+  "modules_outstanding": [
+    {
+      "module": "genomeos/attribution/compile.py",
+      "reason": "a live peer lane holds this path on the work board; the commit gate refuses a staged path a peer holds and no hold was released",
+      "class": "peer"
+    },
+    {
+      "module": "genomeos/attribution/organise.py",
+      "reason": "a live peer lane holds this path on the work board; the commit gate refuses a staged path a peer holds and no hold was released",
+      "class": "peer"
+    },
+    {
+      "module": "genomeos/attribution/argmaxcell.py",
+      "reason": "a live peer lane holds this path on the work board; the commit gate refuses a staged path a peer holds and no hold was released",
+      "class": "peer"
+    },
+    {
+      "module": "genomeos/attribution/context_evidence.py",
+      "reason": "a live peer lane holds this path on the work board; the commit gate refuses a staged path a peer holds and no hold was released",
+      "class": "peer"
+    },
+    {
+      "module": "genomeos/genome/motifs.py",
+      "reason": "inside the paid study's frozen 52-file import closure; sender_closure() hashes the working tree, so even an uncommitted edit refuses the frozen send. It clears when the paid run resolves or is declined",
+      "class": "closure"
+    },
+    {
+      "module": "genomeos/genome/regulation.py",
+      "reason": "inside the paid study's frozen 52-file import closure; sender_closure() hashes the working tree, so even an uncommitted edit refuses the frozen send. It clears when the paid run resolves or is declined",
+      "class": "closure"
+    },
+    {
+      "module": "genomeos/cli.py",
+      "reason": "a live peer lane holds this path on the work board; the commit gate refuses a staged path a peer holds and no hold was released",
+      "class": "peer"
+    }
+  ],
+  "this_file_does_not_imply_completeness": "3 of the census's 18 identity modules are moved here. The rest are listed above with the reason each is not",
+  "arms": [
+    {
+      "module": "genomeos/attribution/closure.py",
+      "falsifier": "a gene whose closure gains or loses an element when the elements are grouped by every gene at the bar instead of by the head alone. If no gene's element set changes, the closure was never one-target in effect and this module is withdrawn from the wave.",
+      "chrom": "chr21",
+      "committed_reading_unchanged": {
+        "function": "attributed_elements",
+        "genes": 193,
+        "memberships": 5174,
+        "note": "judge() still calls this with no reader, so no committed closure figure moves"
+      },
+      "window_reading": {
+        "function": "window_elements",
+        "genes": 209,
+        "memberships": 6531
+      },
+      "census": {
+        "elements": 5174,
+        "not_cached": 0,
+        "no_coding_window": 0,
+        "coding_head_disagrees": 0,
+        "head_disagrees": 0,
+        "memberships": 6531
+      },
+      "genes_that_gain_an_element": 164,
+      "element_memberships_gained": 1357,
+      "genes_new_to_the_closure": 16,
+      "genes_new_to_the_closure_named": [
+        "CFAP298-TCP10L",
+        "IFNAR2-IL10RB",
+        "KRTAP10-12",
+        "KRTAP10-8",
+        "KRTAP19-2",
+        "KRTAP19-3",
+        "KRTAP19-4",
+        "KRTAP19-5",
+        "KRTAP19-6",
+        "KRTAP19-7",
+        "KRTAP20-1",
+        "KRTAP22-1",
+        "KRTAP6-2",
+        "KRTAP6-3",
+        "PWP2",
+        "SMIM34"
+      ],
+      "genes_that_lose_an_element": 0,
+      "genes_that_lose_an_element_named": [],
+      "verdict_against_its_own_falsifier": "FIRES on the gain half and does NOT fire on the loss half",
+      "the_closure_test_can_now_judge_genes_it_could_not": "a gene with no attributed element cannot be judged by this module at all, so the genes new to the closure are the part of this arm that changes what the test can reach. Whether their closure HOLDS is not asked here and is not answered by this run",
+      "seconds": 0.85
+    },
+    {
+      "module": "genomeos/attribution/measured.py",
+      "scope": "genome-wide",
+      "falsifier": "an element whose measured regulated gene is at the bar in the window but is not the head. Every such element is one where this module today says the model named a different gene than the measurement, and the window says it named this one too. One such element falsifies the reading; zero of them, over the elements the layer covers, says the one-target projection costs this comparison nothing and the module is withdrawn.",
+      "chromosomes_read": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX",
+        "chrY"
+      ],
+      "chromosomes_skipped": {},
+      "committed_fields_identical_on_every_chromosome": true,
+      "total": {
+        "rows": 19072,
+        "crispri_rows": 1505,
+        "fires": 27,
+        "head_disagrees": 0,
+        "coding_head_disagrees": 0,
+        "not_cached": 0
+      },
+      "rows_whose_head_already_agrees": 97,
+      "rows_where_a_regulated_gene_is_anywhere_in_the_window": 124,
+      "per_chromosome": {
+        "chr1": {
+          "rows": 2124,
+          "crispri_rows": 134,
+          "fires": 3,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr2": {
+          "rows": 1397,
+          "crispri_rows": 73,
+          "fires": 2,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr3": {
+          "rows": 1119,
+          "crispri_rows": 79,
+          "fires": 2,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr4": {
+          "rows": 774,
+          "crispri_rows": 15,
+          "fires": 2,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr5": {
+          "rows": 845,
+          "crispri_rows": 36,
+          "fires": 2,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr6": {
+          "rows": 1125,
+          "crispri_rows": 73,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr7": {
+          "rows": 982,
+          "crispri_rows": 49,
+          "fires": 1,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr8": {
+          "rows": 778,
+          "crispri_rows": 103,
+          "fires": 1,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr9": {
+          "rows": 778,
+          "crispri_rows": 15,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr10": {
+          "rows": 923,
+          "crispri_rows": 46,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr11": {
+          "rows": 1149,
+          "crispri_rows": 224,
+          "fires": 5,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr12": {
+          "rows": 888,
+          "crispri_rows": 72,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr13": {
+          "rows": 342,
+          "crispri_rows": 0,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr14": {
+          "rows": 503,
+          "crispri_rows": 22,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr15": {
+          "rows": 581,
+          "crispri_rows": 16,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr16": {
+          "rows": 669,
+          "crispri_rows": 55,
+          "fires": 1,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr17": {
+          "rows": 1019,
+          "crispri_rows": 88,
+          "fires": 2,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr18": {
+          "rows": 358,
+          "crispri_rows": 28,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr19": {
+          "rows": 942,
+          "crispri_rows": 211,
+          "fires": 4,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr20": {
+          "rows": 607,
+          "crispri_rows": 50,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr21": {
+          "rows": 200,
+          "crispri_rows": 18,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chr22": {
+          "rows": 421,
+          "crispri_rows": 14,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chrX": {
+          "rows": 542,
+          "crispri_rows": 84,
+          "fires": 2,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        },
+        "chrY": {
+          "rows": 6,
+          "crispri_rows": 0,
+          "fires": 0,
+          "head_disagrees": 0,
+          "coding_head_disagrees": 0,
+          "not_cached": 0
+        }
+      },
+      "fired": [
+        {
+          "id": "EH38E2798810",
+          "compiled_claim_names": "OPRD1",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "EPB41"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr1"
+        },
+        {
+          "id": "EH38E2852957",
+          "compiled_claim_names": "COLGALT2",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "TSEN15"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr1"
+        },
+        {
+          "id": "EH38E2869635",
+          "compiled_claim_names": "LEFTY2",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "PYCR2"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr1"
+        },
+        {
+          "id": "EH38E3365489",
+          "compiled_claim_names": "NT5DC4",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "SLC20A1"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr2"
+        },
+        {
+          "id": "EH38E3410744",
+          "compiled_claim_names": "RAMP1",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "UBE2F"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr2"
+        },
+        {
+          "id": "EH38E3547060",
+          "compiled_claim_names": "ERICH6",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "SIAH2"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr3"
+        },
+        {
+          "id": "EH38E3564105",
+          "compiled_claim_names": "ZDHHC19",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "TFRC"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr3"
+        },
+        {
+          "id": "EH38E2306895",
+          "compiled_claim_names": "PRDM8",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "ANTXR2"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr4"
+        },
+        {
+          "id": "EH38E2319836",
+          "compiled_claim_names": "ENPEP",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "ELOVL6"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr4"
+        },
+        {
+          "id": "EH38E3634150",
+          "compiled_claim_names": "CARD6",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "PRKAA1"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr5"
+        },
+        {
+          "id": "EH38E3637278",
+          "compiled_claim_names": "ANKRD55",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "IL6ST"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr5"
+        },
+        {
+          "id": "EH38E3807716",
+          "compiled_claim_names": "RARRES2",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "LRRC61"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr7"
+        },
+        {
+          "id": "EH38E2675917",
+          "compiled_claim_names": "OPLAH",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "EXOSC4"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr8"
+        },
+        {
+          "id": "EH38E2937342",
+          "compiled_claim_names": "B4GALNT4",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "IFITM1",
+            "IFITM2"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr11"
+        },
+        {
+          "id": "EH38E1516972",
+          "compiled_claim_names": "ENSG00000284931",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "HBB",
+            "HBD",
+            "HBG1"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr11"
+        },
+        {
+          "id": "EH38E1539499",
+          "compiled_claim_names": "PRG2",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "SLC43A3"
+          ],
+          "rank_in_the_window": 4,
+          "chrom": "chr11"
+        },
+        {
+          "id": "EH38E2960997",
+          "compiled_claim_names": "FADS2",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "FADS1"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr11"
+        },
+        {
+          "id": "EH38E1548653",
+          "compiled_claim_names": "MYEOV",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "CCND1"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr11"
+        },
+        {
+          "id": "EH38E3177546",
+          "compiled_claim_names": "PRSS36",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "PRSS8"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr16"
+        },
+        {
+          "id": "EH38E3225603",
+          "compiled_claim_names": "SLC4A1",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "SLC25A39"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr17"
+        },
+        {
+          "id": "EH38E3248836",
+          "compiled_claim_names": "SLC26A11",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "RNF213"
+          ],
+          "rank_in_the_window": 3,
+          "chrom": "chr17"
+        },
+        {
+          "id": "EH38E3291349",
+          "compiled_claim_names": "KLF1",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "DNASE2"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr19"
+        },
+        {
+          "id": "EH38E3297996",
+          "compiled_claim_names": "ZNF714",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "ZNF431"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr19"
+        },
+        {
+          "id": "EH38E1960291",
+          "compiled_claim_names": "FGF21",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "FUT1"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr19"
+        },
+        {
+          "id": "EH38E3312821",
+          "compiled_claim_names": "BAX",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "FTL"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chr19"
+        },
+        {
+          "id": "EH38E2742842",
+          "compiled_claim_names": "TLR8",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "TMSB4X"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chrX"
+        },
+        {
+          "id": "EH38E3934104",
+          "compiled_claim_names": "MAGIX",
+          "crispri_verdict_on_that_claim": "predicted_gene_not_tested",
+          "regulated_genes_in_the_same_window": [
+            "PLP2"
+          ],
+          "rank_in_the_window": 2,
+          "chrom": "chrX"
+        }
+      ],
+      "verdict_against_its_own_falsifier": "FIRES on 27 element(s) across 12 chromosome(s)",
+      "what_the_firing_rows_are_and_are_NOT": "every verdict among them must be read as it stands. A row fires when the compiled claim's own gene did not get an `agrees` AND a gene the screen found regulated is at the bar in the same element's window. If that verdict is `predicted_gene_not_tested`, the screen never tested the model's gene, so the model was NOT contradicted at that element -- it was not asked, and the window shows the screen did regulate a gene the model also named. That is a claim made unfalsifiable by the projection, which is not the same as a claim shown wrong, and neither is it evidence that the element regulates that gene",
+      "seconds": 146.46
+    },
+    {
+      "module": "genomeos/attribution/not_open_profile.py",
+      "falsifier": "the number of predicted rules changing. One element must yield one rule per gene it names, so the rule COUNT is expected to rise; a count that does not rise at all means no element in this profile's population names a second gene, and the module is withdrawn from the wave on its own evidence.",
+      "chrom": "chr21",
+      "compiled_rules_unchanged": true,
+      "rules_is_not_changed_it_is_called": "window_rules() calls rules() and appends; rules() itself is byte-identical to its committed form, so tests/test_not_open_profile.py's element-for-element pin to context_evidence.rule_loci holds by construction rather than by re-checking",
+      "compiled_predicted_rules": 5174,
+      "window_rules_added": 1357,
+      "distinct_genes_compiled": 193,
+      "distinct_genes_with_the_window": 209,
+      "elements_naming_more_than_one_gene": 813,
+      "window_rules_by_effect_band": {
+        "strong": 134,
+        "weak": 1223
+      },
+      "verdict_against_its_own_falsifier": "FIRES: the predicted rule count rises",
+      "window_rules_are_in_no_committed_program": "they carry SOURCE_PREDICTED_WINDOW, which is not in SOURCES, so a caller counting compiled rules is unchanged. Their `cell` is the ELEMENT's compiled context and not the gene's own strongest track, which the function's docstring states as a limit",
+      "seconds": 1.95
+    }
+  ],
+  "requests": {
+    "alphagenome_requests": 0,
+    "money": "none",
+    "network": "none: the response cache is already on this machine"
+  },
+  "seconds": 149.87,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the AlphaGenome deletion sweep's per-element response cache",
+        "version": "data/knowledge/alphagenome/elements, written by scripts/enhancer_targets_all.py at threshold=0.0; machine-local and git-ignored by the data boundary"
+      },
+      {
+        "accession": "GENCODE v50, per chromosome",
+        "version": "data/reference/gencode_v50_<chrom>.gff3.gz, the same file the 2026-09-27 one-target lane read its coding set from"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "the sweep's per-element response cache, one archive per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+            "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+            "bytes": 14622897
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+            "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+            "bytes": 470775
+          }
+        ],
+        "sha256": "dae60244f56738d071c120cf2a2b599d1f32ad322542e49039d5b0757a4d0781",
+        "bytes": 789611479,
+        "files": 24,
+        "partition": "the window: every gene the sweep scored at an element, read at threshold=0.0. One archive is held at a time, so the memory bill is the largest chromosome and not the tree"
+      },
+      {
+        "path": "the compact one-target tables, one per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+            "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+            "bytes": 59143558
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+            "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+            "bytes": 30053316
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+            "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+            "bytes": 33499966
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+            "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+            "bytes": 31351611
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+            "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+            "bytes": 15228015
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+            "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+            "bytes": 20072956
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+            "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+            "bytes": 20640048
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+            "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+            "bytes": 21208708
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+            "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+            "bytes": 28806649
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+            "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+            "bytes": 13758030
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+            "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+            "bytes": 21448470
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+            "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+            "bytes": 49594427
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+            "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+            "bytes": 17561812
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+            "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+            "bytes": 7768557
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+            "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+            "bytes": 13336425
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+            "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+            "bytes": 39520954
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+            "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+            "bytes": 29236717
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+            "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+            "bytes": 33400922
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+            "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+            "bytes": 35593651
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+            "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+            "bytes": 31588372
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+            "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+            "bytes": 27866660
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+            "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+            "bytes": 26873186
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+            "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+            "bytes": 14767878
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+            "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+            "bytes": 462897
+          }
+        ],
+        "sha256": "d8be757572cbaef70d78447644245d84063b4e198910b8aed0ea25d7ec525d9b",
+        "bytes": 622783785,
+        "files": 24,
+        "partition": "the head each consumer reads today, reached through the run summaries' elements_where field"
+      },
+      {
+        "path": "the deletion runs' committed summaries",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/constrained_targets_chr1.json",
+            "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+            "bytes": 80409
+          },
+          {
+            "path": "data/results/constrained_targets_chr10.json",
+            "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+            "bytes": 82872
+          },
+          {
+            "path": "data/results/constrained_targets_chr11.json",
+            "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+            "bytes": 93050
+          },
+          {
+            "path": "data/results/constrained_targets_chr12.json",
+            "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+            "bytes": 93749
+          },
+          {
+            "path": "data/results/constrained_targets_chr13.json",
+            "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+            "bytes": 93299
+          },
+          {
+            "path": "data/results/constrained_targets_chr14.json",
+            "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+            "bytes": 86812
+          },
+          {
+            "path": "data/results/constrained_targets_chr15.json",
+            "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+            "bytes": 76206
+          },
+          {
+            "path": "data/results/constrained_targets_chr16.json",
+            "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+            "bytes": 83816
+          },
+          {
+            "path": "data/results/constrained_targets_chr17.json",
+            "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+            "bytes": 88799
+          },
+          {
+            "path": "data/results/constrained_targets_chr18.json",
+            "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+            "bytes": 89764
+          },
+          {
+            "path": "data/results/constrained_targets_chr19.json",
+            "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+            "bytes": 101189
+          },
+          {
+            "path": "data/results/constrained_targets_chr2.json",
+            "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+            "bytes": 88553
+          },
+          {
+            "path": "data/results/constrained_targets_chr20.json",
+            "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+            "bytes": 93809
+          },
+          {
+            "path": "data/results/constrained_targets_chr21.json",
+            "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+            "bytes": 111930
+          },
+          {
+            "path": "data/results/constrained_targets_chr22.json",
+            "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+            "bytes": 96441
+          },
+          {
+            "path": "data/results/constrained_targets_chr3.json",
+            "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+            "bytes": 87015
+          },
+          {
+            "path": "data/results/constrained_targets_chr4.json",
+            "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+            "bytes": 92315
+          },
+          {
+            "path": "data/results/constrained_targets_chr5.json",
+            "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+            "bytes": 80937
+          },
+          {
+            "path": "data/results/constrained_targets_chr6.json",
+            "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+            "bytes": 91754
+          },
+          {
+            "path": "data/results/constrained_targets_chr7.json",
+            "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+            "bytes": 91280
+          },
+          {
+            "path": "data/results/constrained_targets_chr8.json",
+            "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+            "bytes": 88507
+          },
+          {
+            "path": "data/results/constrained_targets_chr9.json",
+            "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+            "bytes": 81094
+          },
+          {
+            "path": "data/results/constrained_targets_chrX.json",
+            "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+            "bytes": 90048
+          },
+          {
+            "path": "data/results/constrained_targets_chrY.json",
+            "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+            "bytes": 5788
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr1.json",
+            "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+            "bytes": 1680
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr10.json",
+            "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+            "bytes": 1719
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr11.json",
+            "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+            "bytes": 1651
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr12.json",
+            "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+            "bytes": 1645
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr13.json",
+            "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+            "bytes": 1654
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr14.json",
+            "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+            "bytes": 1657
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr15.json",
+            "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+            "bytes": 1660
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr16.json",
+            "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+            "bytes": 1627
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr17.json",
+            "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+            "bytes": 1649
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr18.json",
+            "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+            "bytes": 1703
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr19.json",
+            "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+            "bytes": 1643
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr2.json",
+            "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+            "bytes": 1677
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr20.json",
+            "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+            "bytes": 1640
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr21.json",
+            "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+            "bytes": 1619
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr22.json",
+            "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+            "bytes": 1608
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr3.json",
+            "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+            "bytes": 1655
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr4.json",
+            "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+            "bytes": 1663
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr5.json",
+            "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+            "bytes": 1643
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr6.json",
+            "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+            "bytes": 1708
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr7.json",
+            "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+            "bytes": 1668
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr8.json",
+            "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+            "bytes": 1663
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr9.json",
+            "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+            "bytes": 1661
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chrX.json",
+            "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+            "bytes": 1673
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chrY.json",
+            "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+            "bytes": 1517
+          },
+          {
+            "path": "data/results/enhancer_targets_chr1.json",
+            "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+            "bytes": 231503
+          },
+          {
+            "path": "data/results/enhancer_targets_chr10.json",
+            "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+            "bytes": 226154
+          },
+          {
+            "path": "data/results/enhancer_targets_chr11.json",
+            "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+            "bytes": 235882
+          },
+          {
+            "path": "data/results/enhancer_targets_chr12.json",
+            "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+            "bytes": 236541
+          },
+          {
+            "path": "data/results/enhancer_targets_chr13.json",
+            "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+            "bytes": 232682
+          },
+          {
+            "path": "data/results/enhancer_targets_chr14.json",
+            "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+            "bytes": 226799
+          },
+          {
+            "path": "data/results/enhancer_targets_chr15.json",
+            "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+            "bytes": 235302
+          },
+          {
+            "path": "data/results/enhancer_targets_chr16.json",
+            "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+            "bytes": 226186
+          },
+          {
+            "path": "data/results/enhancer_targets_chr17.json",
+            "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+            "bytes": 233113
+          },
+          {
+            "path": "data/results/enhancer_targets_chr18.json",
+            "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+            "bytes": 231108
+          },
+          {
+            "path": "data/results/enhancer_targets_chr19.json",
+            "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+            "bytes": 233210
+          },
+          {
+            "path": "data/results/enhancer_targets_chr2.json",
+            "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+            "bytes": 228771
+          },
+          {
+            "path": "data/results/enhancer_targets_chr20.json",
+            "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+            "bytes": 227506
+          },
+          {
+            "path": "data/results/enhancer_targets_chr21.json",
+            "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+            "bytes": 266488
+          },
+          {
+            "path": "data/results/enhancer_targets_chr22.json",
+            "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+            "bytes": 230906
+          },
+          {
+            "path": "data/results/enhancer_targets_chr3.json",
+            "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+            "bytes": 231751
+          },
+          {
+            "path": "data/results/enhancer_targets_chr4.json",
+            "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+            "bytes": 232560
+          },
+          {
+            "path": "data/results/enhancer_targets_chr5.json",
+            "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+            "bytes": 225597
+          },
+          {
+            "path": "data/results/enhancer_targets_chr6.json",
+            "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+            "bytes": 227287
+          },
+          {
+            "path": "data/results/enhancer_targets_chr7.json",
+            "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+            "bytes": 223619
+          },
+          {
+            "path": "data/results/enhancer_targets_chr8.json",
+            "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+            "bytes": 225706
+          },
+          {
+            "path": "data/results/enhancer_targets_chr9.json",
+            "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+            "bytes": 235646
+          },
+          {
+            "path": "data/results/enhancer_targets_chrX.json",
+            "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+            "bytes": 226730
+          },
+          {
+            "path": "data/results/enhancer_targets_chrY.json",
+            "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+            "bytes": 207535
+          }
+        ],
+        "sha256": "a7ad25889596090eafe1c85d4277e7d3e2c1d44372d6f8dbb5146d4b36d916f0",
+        "bytes": 7647701,
+        "files": 72,
+        "partition": "targets.attributed reads all three in order and each one's elements_where points at the compact table above"
+      },
+      {
+        "path": "GENCODE v50, per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/gencode_v50_chr1.gff3.gz",
+            "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+            "bytes": 15781966
+          },
+          {
+            "path": "data/reference/gencode_v50_chr10.gff3.gz",
+            "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+            "bytes": 6971712
+          },
+          {
+            "path": "data/reference/gencode_v50_chr11.gff3.gz",
+            "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+            "bytes": 9161789
+          },
+          {
+            "path": "data/reference/gencode_v50_chr12.gff3.gz",
+            "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+            "bytes": 8537589
+          },
+          {
+            "path": "data/reference/gencode_v50_chr13.gff3.gz",
+            "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+            "bytes": 2925688
+          },
+          {
+            "path": "data/reference/gencode_v50_chr14.gff3.gz",
+            "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+            "bytes": 5446220
+          },
+          {
+            "path": "data/reference/gencode_v50_chr15.gff3.gz",
+            "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+            "bytes": 5424386
+          },
+          {
+            "path": "data/reference/gencode_v50_chr16.gff3.gz",
+            "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+            "bytes": 6795096
+          },
+          {
+            "path": "data/reference/gencode_v50_chr17.gff3.gz",
+            "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+            "bytes": 9026753
+          },
+          {
+            "path": "data/reference/gencode_v50_chr18.gff3.gz",
+            "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+            "bytes": 2682634
+          },
+          {
+            "path": "data/reference/gencode_v50_chr19.gff3.gz",
+            "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+            "bytes": 8518707
+          },
+          {
+            "path": "data/reference/gencode_v50_chr2.gff3.gz",
+            "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+            "bytes": 12336546
+          },
+          {
+            "path": "data/reference/gencode_v50_chr20.gff3.gz",
+            "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+            "bytes": 3974515
+          },
+          {
+            "path": "data/reference/gencode_v50_chr21.gff3.gz",
+            "sha256": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+            "bytes": 1858385
+          },
+          {
+            "path": "data/reference/gencode_v50_chr22.gff3.gz",
+            "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+            "bytes": 3912249
+          },
+          {
+            "path": "data/reference/gencode_v50_chr3.gff3.gz",
+            "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+            "bytes": 10518849
+          },
+          {
+            "path": "data/reference/gencode_v50_chr4.gff3.gz",
+            "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+            "bytes": 6522948
+          },
+          {
+            "path": "data/reference/gencode_v50_chr5.gff3.gz",
+            "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+            "bytes": 7000086
+          },
+          {
+            "path": "data/reference/gencode_v50_chr6.gff3.gz",
+            "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+            "bytes": 7623994
+          },
+          {
+            "path": "data/reference/gencode_v50_chr7.gff3.gz",
+            "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+            "bytes": 8058560
+          },
+          {
+            "path": "data/reference/gencode_v50_chr8.gff3.gz",
+            "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+            "bytes": 5864835
+          },
+          {
+            "path": "data/reference/gencode_v50_chr9.gff3.gz",
+            "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+            "bytes": 6759087
+          },
+          {
+            "path": "data/reference/gencode_v50_chrX.gff3.gz",
+            "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+            "bytes": 4849239
+          },
+          {
+            "path": "data/reference/gencode_v50_chrY.gff3.gz",
+            "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+            "bytes": 428494
+          }
+        ],
+        "sha256": "67ce29ad660c5f4f3e875ffa43b518b562e26a72c1b93561deaf769e57915f1b",
+        "bytes": 160980327,
+        "files": 24,
+        "partition": "the protein-coding symbol set that forms the coding window, and the TSS of each gene a window rule's distance is measured to"
+      },
+      {
+        "path": "the measured layer's assay sources",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+            "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+            "bytes": 373837
+          },
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+            "bytes": 996546
+          },
+          {
+            "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+            "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+            "bytes": 1085644
+          },
+          {
+            "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+            "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+            "bytes": 1088965
+          },
+          {
+            "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+            "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+            "bytes": 1085246
+          },
+          {
+            "path": "data/knowledge/satmut/elements.tsv.gz",
+            "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+            "bytes": 2677485
+          },
+          {
+            "path": "data/knowledge/vista/locus.tsv.gz",
+            "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+            "bytes": 121847
+          }
+        ],
+        "sha256": "294098a3238e530f26b27aa19cd6a330c624fff11e4a01903775611699a469cc",
+        "bytes": 7429570,
+        "files": 7,
+        "partition": "CRISPRi, lentiMPRA, saturation mutagenesis and VISTA as measured.Layer.load reads them; the CRISPRi genes_regulated list is what measured.py's falsifier is asked about"
+      },
+      {
+        "path": "the element axes for chr21",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/ccres_chr21.bed.gz",
+            "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+            "bytes": 150095
+          },
+          {
+            "path": "data/results/rmsk_chr21.bed.gz",
+            "sha256": "f4d3ca63604c892470f0bfe842d780f382c5bb618402c8a48c2a63470ac63aaf",
+            "bytes": 744112
+          }
+        ],
+        "sha256": "488f665fad7a4d84ebcaa7edfed8e8aaaadf388d36f368d6b355e88574a5036c",
+        "bytes": 894207,
+        "files": 2,
+        "partition": "cCREs and interspersed repeats, read by not_open_profile through compile's own loaders to type each rule's element"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/cache/holdout/genes",
+        "sha256": "cd1921ecca0f2008c0c4c8096a98cafa382c12fa22fb5dcbad7b100984da2798",
+        "bytes": 1080943,
+        "partition": "pilot_bio.gene_tss's content-addressed cache. Declared as a TREE because each file is named by its own digest, so the name cannot be written down in advance",
+        "files": 1
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/onetarget_consumers.json",
+        "sha256": "55c6dc774d80ac8fb11e0bbb1409954c7d991fce29e98e019197a4ce8d21a6fe",
+        "bytes": 17712,
+        "partition": "the committed 2026-09-27 result, read by check_the_quoted_invariant to verify the invariant's quoted figures against the file rather than recall them"
+      }
+    ],
+    "input_count": 8,
+    "assembly": "GRCh38: the assembly the deletion sweep and the compact tables were written on",
+    "coordinates": "n/a: this run compares gene memberships and element ids; no interval of its own is formed",
+    "parameters": {
+      "chrom": "chr21",
+      "min_effect": 0.1,
+      "bar_rule": "predict_target's own size rule applied to every gene of the window instead of to its head only (targets.genes_at_bar)",
+      "coding_set": "protein_coding symbols of the chromosome's GENCODE v50 file"
+    },
+    "exclusions": [
+      "every module of the census whose class is not identity: two are registered as invariant and NOT to be moved, five read a head without being a live consumer",
+      "every module listed in modules_outstanding, with its reason"
+    ],
+    "partitions": {
+      "committed_reading": "attributed_elements, one coding gene per element, unchanged",
+      "window_reading": "window_elements, every coding gene at the bar"
+    },
+    "code_cleanliness": {
+      "git_sha": "601261d81ad8bcde8ca0d59f0986fd03ffe7a866",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/onetarget2_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/onetarget2_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/onetarget2_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/decompile.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/closure.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/rna_measured.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/onetarget2_run.py"
+      ],
+      "counting_path_count": 138,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "601261d81ad8bcde8ca0d59f0986fd03ffe7a866",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/gwas.py",
+        "genomeos/decompile.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json",
+        "data/results/onetarget2.json"
+      ],
+      "argv": [
+        "scripts/onetarget2_run.py",
+        "--measured-genome-wide"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "601261d81ad8bcde8ca0d59f0986fd03ffe7a866",
+      "code_cleanliness_git_sha": "601261d81ad8bcde8ca0d59f0986fd03ffe7a866",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 601261d"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 1297,
+      "opens_under_data": 727,
+      "files_read": 155,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
