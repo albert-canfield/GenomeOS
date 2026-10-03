@@ -854,19 +854,153 @@ AMENDMENTS: tuple[dict[str, Any], ...] = (
 )
 
 
-class CensusDriftError(RuntimeError):
+# ---------------------------------------------------------------------------
+# the refusals, each carrying the ONE declared condition that produced it
+#
+# WHY A CAUSE AND NOT ONLY A MESSAGE (added 2026-10-03 by lane-plantcause; nothing below is removed).
+# Every guard in this module is planted in `tests/test_onetarget2.py`, and until today each plant
+# asserted on a SUBSTRING of the message its guard raises. That is not enough, because one exception
+# type here is raised for several unrelated conditions: `CensusDriftError` has four conditions inside
+# `check_census_matches_tree` alone, two more in `check_registered_lines_are_not_edited` and one in
+# `check_scope_counts`. So `pytest.raises(CensusDriftError)` is satisfied by a condition the plant
+# never planted.
+#
+# It happened in both directions. On 2026-10-03 the overlap plant went RED because an unclassified
+# head-reading module elsewhere in the tree raised FIRST, with a different message: a verdict about
+# the tree, not about the plant. The dangerous direction is the other one -- with the planted raise
+# DELETED, an unrelated condition still satisfies `pytest.raises`, and the only thing left standing
+# between that and a false green recording a LIVE guard as UNREACHED is a substring. Two false
+# greens of exactly that shape are already in `docs/LESSONS.md` at `1a15b27`.
+#
+# So every refusal below now carries `cause`, a name from CAUSES, keyword-only and REQUIRED, and the
+# plants assert on it. The message assertions are kept beside it: they were never wrong, they were
+# just not sufficient. `cause` is required rather than defaulted so that a raise site added later
+# cannot be cause-less -- a missing or unknown name is a loud ValueError from the constructor.
+# ---------------------------------------------------------------------------
+
+#: Every condition this module refuses on, one entry per `raise` site, with the function that raises
+#: it. A planted mutation test asserts `exc.cause == "<name>"`, which only that raise site can
+#: produce, so the plant's verdict cannot rest on another condition firing first. This is a finer
+#: axis than REFUSALS, which is per FUNCTION (8 entries for 16 raise sites); REFUSALS and
+#: REFUSALS_ADDED_BY_THE_MOVES are registered tuples and are not edited here.
+CAUSES: tuple[dict[str, str], ...] = (
+    {
+        "cause": "unclassified_head_reading_module",
+        "raised_by": "check_census_matches_tree",
+        "when": "a file under genomeos/ reads a compact element head and is in none of the lists",
+    },
+    {
+        "cause": "declared_module_reads_no_head",
+        "raised_by": "check_census_matches_tree",
+        "when": "a census module reads no compact head in the tree at all",
+    },
+    {
+        "cause": "line_declared_both_head_and_not_head",
+        "raised_by": "check_census_matches_tree",
+        "when": "a line is declared both as a head read and in not_head_lines",
+    },
+    {
+        "cause": "declared_lines_do_not_match_the_tree",
+        "raised_by": "check_census_matches_tree",
+        "when": "the lines the census accounts for are not the lines the tree matches on",
+    },
+    {
+        "cause": "registered_lines_edited",
+        "raised_by": "check_registered_lines_are_not_edited",
+        "when": "CENSUS's declared lines are no longer the lines 24adf33 registered",
+    },
+    {
+        "cause": "move_record_restates_the_claim",
+        "raised_by": "check_registered_lines_are_not_edited",
+        "when": "a MOVED_LINES record's `was` is not what the registration said",
+    },
+    {
+        "cause": "scope_counts_drifted",
+        "raised_by": "check_scope_counts",
+        "when": "a scope figure quoted in this registration's prose is not what CENSUS holds",
+    },
+    {
+        "cause": "module_has_no_falsifier",
+        "raised_by": "check_one_falsifier_per_module",
+        "when": "a census module's falsifier is empty",
+    },
+    {
+        "cause": "falsifier_shared_between_modules",
+        "raised_by": "check_one_falsifier_per_module",
+        "when": "two census modules were given one falsifier verbatim",
+    },
+    {
+        "cause": "closure_file_marked_movable",
+        "raised_by": "check_no_closure_file_is_moving",
+        "when": "a file of the paid study's import closure carries any status but frozen_closure",
+    },
+    {
+        "cause": "forbidden_field_in_registration",
+        "raised_by": "check_no_preview",
+        "when": "the payload holds a field a run would fill",
+    },
+    {
+        "cause": "measurement_in_registration",
+        "raised_by": "check_no_preview",
+        "when": "the payload holds a float",
+    },
+    {
+        "cause": "prior_evidence_file_absent",
+        "raised_by": "check_the_quoted_invariant",
+        "when": "the committed result THE_INVARIANT quotes is not on this machine",
+    },
+    {
+        "cause": "prior_evidence_figures_differ",
+        "raised_by": "check_the_quoted_invariant",
+        "when": "the committed result's head_control is not what THE_INVARIANT quotes",
+    },
+    {
+        "cause": "invariant_does_not_state_its_figure",
+        "raised_by": "check_the_quoted_invariant",
+        "when": "THE_INVARIANT does not state the element count it rests on",
+    },
+    {
+        "cause": "any_gene_head_disagreement",
+        "raised_by": "check_head_invariant",
+        "when": "the window's at-the-bar head is not the compact table's gene on any element",
+    },
+)
+
+#: Just the names, in order.
+CAUSE_NAMES: tuple[str, ...] = tuple(c["cause"] for c in CAUSES)
+
+
+class _NamedCauseError(RuntimeError):
+    """A refusal that names WHICH declared condition produced it.
+
+    `cause` is keyword-only and required. It is the field a planted mutation test binds its verdict
+    to, so that a plant cannot pass on another condition's raise.
+    """
+
+    def __init__(self, message: str, *, cause: str) -> None:
+        super().__init__(message)
+        if cause not in CAUSE_NAMES:
+            raise ValueError(
+                f"{cause!r} is not one of this module's declared causes. Add it to CAUSES with the "
+                f"function that raises it and the condition; the declared names are {CAUSE_NAMES}"
+            )
+        #: Which declared condition produced this refusal.
+        self.cause = cause
+
+
+class CensusDriftError(_NamedCauseError):
     """The declared census is not what the tree holds."""
 
 
-class SharedFalsifierError(RuntimeError):
+class SharedFalsifierError(_NamedCauseError):
     """Two modules were given one falsifier, or a module was given none."""
 
 
-class ClosureFileMovingError(RuntimeError):
+class ClosureFileMovingError(_NamedCauseError):
     """A file of the paid study's import closure was marked movable."""
 
 
-class PreviewInRegistrationError(RuntimeError):
+class PreviewInRegistrationError(_NamedCauseError):
     """The registration holds something a run would fill."""
 
 
@@ -924,17 +1058,23 @@ def check_census_matches_tree(root: Path | None = None) -> dict[str, list[int]]:
     if unknown:
         raise CensusDriftError(
             f"{len(unknown)} head-reading module(s) under genomeos/ are in no list: {unknown}. "
-            "Classify each one or name it in EXCLUDED_BY_NAME with its reason."
+            "Classify each one or name it in EXCLUDED_BY_NAME with its reason.",
+            cause="unclassified_head_reading_module",
         )
     eff = effective_lines()
     for mod, lines in sorted(dec.items()):
         lines = eff[mod]
         if mod not in found:
-            raise CensusDriftError(f"{mod} is declared in the census and reads no compact head in the tree")
+            raise CensusDriftError(
+                f"{mod} is declared in the census and reads no compact head in the tree",
+                cause="declared_module_reads_no_head",
+            )
         other = set(not_head().get(mod, {}))
         if set(lines) & other:
             raise CensusDriftError(
-                f"{mod}: line(s) {sorted(set(lines) & other)} are declared both as a head read and as not one"
+                f"{mod}: line(s) {sorted(set(lines) & other)} are declared both as a head "
+                "read and as not one",
+                cause="line_declared_both_head_and_not_head",
             )
         if set(found[mod]) != set(lines) | other:
             raise CensusDriftError(
@@ -942,7 +1082,8 @@ def check_census_matches_tree(root: Path | None = None) -> dict[str, list[int]]:
                 f"matches on {found[mod]}. Re-read the module before touching it: a line that "
                 "moved may be a peer's edit, and a line that vanished may be a claim that was "
                 "dropped. A line that is not a compact head goes in `not_head_lines` with its "
-                "reason, never left out."
+                "reason, never left out.",
+                cause="declared_lines_do_not_match_the_tree",
             )
     return found
 
@@ -962,13 +1103,15 @@ def check_registered_lines_are_not_edited() -> None:
         }
         raise CensusDriftError(
             f"CENSUS's declared lines no longer match what 24adf33 registered: {bad} (registered, "
-            "now). A moved module's new lines go in MOVED_LINES; the registered ones do not change."
+            "now). A moved module's new lines go in MOVED_LINES; the registered ones do not change.",
+            cause="registered_lines_edited",
         )
     for mod, rec in MOVED_LINES.items():
         if tuple(rec.get("was") or ()) != REGISTERED_LINES.get(mod):
             raise CensusDriftError(
                 f"MOVED_LINES[{mod!r}]['was'] is {rec.get('was')} and the registration said "
-                f"{REGISTERED_LINES.get(mod)}. A move record may not restate the claim."
+                f"{REGISTERED_LINES.get(mod)}. A move record may not restate the claim.",
+                cause="move_record_restates_the_claim",
             )
 
 
@@ -978,12 +1121,16 @@ def check_one_falsifier_per_module() -> None:
     for c in CENSUS:
         f = (c.get("falsifier") or "").strip()
         if not f:
-            raise SharedFalsifierError(f"{c['module']} has no falsifier; the row asks for one per module")
+            raise SharedFalsifierError(
+                f"{c['module']} has no falsifier; the row asks for one per module",
+                cause="module_has_no_falsifier",
+            )
         if f in seen:
             raise SharedFalsifierError(
                 f"{c['module']} and {seen[f]} were given one falsifier verbatim. A falsifier shared "
                 "between modules lets one of them pass on the other's evidence, which is the "
-                "defect this row exists to avoid."
+                "defect this row exists to avoid.",
+                cause="falsifier_shared_between_modules",
             )
         seen[f] = c["module"]
 
@@ -995,7 +1142,8 @@ def check_no_closure_file_is_moving() -> None:
             raise ClosureFileMovingError(
                 f"{c['module']} is in the paid study's 52-file import closure and is marked "
                 f"{c['status']!r}. sender_closure() hashes the WORKING TREE, so even an uncommitted "
-                "edit here refuses the frozen send. This is Albert's call, not a lane's."
+                "edit here refuses the frozen send. This is Albert's call, not a lane's.",
+                cause="closure_file_marked_movable",
             )
 
 
@@ -1007,7 +1155,8 @@ def check_no_preview(payload: dict[str, Any]) -> None:
             for k, v in node.items():
                 if k in FORBIDDEN_FIELDS and path:
                     raise PreviewInRegistrationError(
-                        f"{path}.{k} is a field a run would fill; a registration may not hold it"
+                        f"{path}.{k} is a field a run would fill; a registration may not hold it",
+                        cause="forbidden_field_in_registration",
                     )
                 walk(v, f"{path}.{k}" if path else k)
         elif isinstance(node, list | tuple):
@@ -1016,7 +1165,10 @@ def check_no_preview(payload: dict[str, Any]) -> None:
         elif isinstance(node, bool):
             return
         elif isinstance(node, float):
-            raise PreviewInRegistrationError(f"{path} is a float; no measurement may be in a registration")
+            raise PreviewInRegistrationError(
+                f"{path} is a float; no measurement may be in a registration",
+                cause="measurement_in_registration",
+            )
 
     walk(payload, "")
 
@@ -1046,11 +1198,12 @@ def check_scope_counts() -> None:
         raise CensusDriftError(
             f"declared scope counts do not match the census: {bad} (declared, actual). The prose in "
             "ROW_SAYS_FIVE_THE_TREE_SAYS_OTHERWISE quotes these figures, so a drift here is a "
-            "registration that misstates its own scope."
+            "registration that misstates its own scope.",
+            cause="scope_counts_drifted",
         )
 
 
-class MisquotedPriorEvidenceError(RuntimeError):
+class MisquotedPriorEvidenceError(_NamedCauseError):
     """THE_INVARIANT does not say what the committed result it cites says."""
 
 
@@ -1061,7 +1214,8 @@ def check_the_quoted_invariant(path: Path | None = None) -> dict[str, Any]:
     p = path or (_root() / PRIOR_EVIDENCE)
     if not p.exists():
         raise MisquotedPriorEvidenceError(
-            f"{PRIOR_EVIDENCE} is not on this machine; THE_INVARIANT may not be quoted without it"
+            f"{PRIOR_EVIDENCE} is not on this machine; THE_INVARIANT may not be quoted without it",
+            cause="prior_evidence_file_absent",
         )
     hc = (json.loads(p.read_text()).get(PRIOR_EVIDENCE_ARM) or {}).get("head_control") or {}
     want = {
@@ -1073,16 +1227,18 @@ def check_the_quoted_invariant(path: Path | None = None) -> dict[str, Any]:
     if got != want:
         raise MisquotedPriorEvidenceError(
             f"{PRIOR_EVIDENCE}[{PRIOR_EVIDENCE_ARM}].head_control holds {got} and THE_INVARIANT "
-            f"quotes {want}. Re-read the committed result before quoting it."
+            f"quotes {want}. Re-read the committed result before quoting it.",
+            cause="prior_evidence_figures_differ",
         )
     if f"{PRIOR_EVIDENCE_COMPARED:,}" not in THE_INVARIANT:
         raise MisquotedPriorEvidenceError(
-            f"THE_INVARIANT does not state the {PRIOR_EVIDENCE_COMPARED:,} elements it rests on"
+            f"THE_INVARIANT does not state the {PRIOR_EVIDENCE_COMPARED:,} elements it rests on",
+            cause="invariant_does_not_state_its_figure",
         )
     return dict(hc)
 
 
-class InvariantRefutedError(RuntimeError):
+class InvariantRefutedError(_NamedCauseError):
     """The window's at-the-bar head is not the compact table's gene. The wave stops here."""
 
 
@@ -1107,7 +1263,8 @@ def check_head_invariant(census: dict[str, Any], where: str) -> None:
             f"table's `predicted` gene. THE WAVE STOPS. The registered invariant "
             f"({PRIOR_EVIDENCE_COMPARED:,} elements, {PRIOR_EVIDENCE_DISAGREEMENTS} disagreements, "
             "2026-09-27) is refuted on this population, so no module's move may be read as a "
-            "result. Report it before anything else."
+            "result. Report it before anything else.",
+            cause="any_gene_head_disagreement",
         )
 
 
