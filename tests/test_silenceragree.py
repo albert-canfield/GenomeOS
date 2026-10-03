@@ -251,6 +251,21 @@ def test_the_registration_as_written_holds_no_field_a_run_would_fill() -> None:
         pytest.skip("the registration is not written yet")
     written = json.loads(path.read_text())
     assert written["result"] == "silenceragree_registration"
+    # Every forbidden key in the written file must be one of the registry's OWN stamps, and each
+    # is allowed by VALUE: `result` must hold the registration's name and
+    # `revision_stamps.reading` must hold one of the three sentences genomeos/manifest.py can
+    # produce. A stamp carrying a figure would be allowed by neither, which allowing the KEY
+    # would not have achieved.
+    hits = reg.forbidden_at_any_depth(written)
+    assert hits, "the registry writes at least `result`; an empty list means the check stopped working"
+    assert [k for k in hits if not reg.stamp_is_the_registrys_own(k, written)] == []
+    assert sorted(hits) == ["result", "result_manifest.revision_stamps.reading"]
+    # And the lane's OWN payload -- everything the registration says, with the registry's stamp
+    # block set aside -- must hold no forbidden key but `result`. That is the original flat
+    # assertion, kept verbatim and given the narrower subject it is actually true of: the stamps
+    # live inside `result_manifest` and only the registry writes them, so what this lane wrote is
+    # checked here and the registry's two stamps are checked by value above.
+    written = {k: v for k, v in written.items() if k != "result_manifest"}
     assert [k for k in reg.forbidden_at_any_depth(written) if k != "result"] == []
 
 
@@ -277,3 +292,31 @@ def test_the_base_rate_excludes_the_joined_elements_it_is_the_base_rate_for() ->
         "the stratum base-rate population still contains the joined elements it is the base rate for"
     )
     assert base["elements"] < total
+
+
+def test_a_registry_stamp_holding_a_figure_is_refused_although_its_path_is_allowed() -> None:
+    """The stamps are allowed by VALUE, never by name, and only a synthetic value can show it.
+
+    The live registration happens to hold the right sentences, so no run against real data could
+    distinguish a by-value check from a by-name one. These do.
+    """
+    good = {
+        "result": "silenceragree_registration",
+        "result_manifest": {"revision_stamps": {"reading": "no revision race: both stamps record abc1234"}},
+    }
+    assert reg.stamp_is_the_registrys_own("result", good)
+    assert reg.stamp_is_the_registrys_own("result_manifest.revision_stamps.reading", good)
+
+    bad_name = {**good, "result": "silencer_like agrees with ReSE on 61% of elements"}
+    assert not reg.stamp_is_the_registrys_own("result", bad_name)
+
+    bad_reading = {
+        "result": "silenceragree_registration",
+        "result_manifest": {"revision_stamps": {"reading": "CONSISTENT: 61.2% against a 37.7% base rate"}},
+    }
+    assert not reg.stamp_is_the_registrys_own("result_manifest.revision_stamps.reading", bad_reading)
+
+    # A path nobody allowed is never a stamp, whatever it holds.
+    assert not reg.stamp_is_the_registrys_own("scope.band", {"scope": {"band": "no revision race: x"}})
+    # A missing path is not quietly allowed either.
+    assert not reg.stamp_is_the_registrys_own("result_manifest.revision_stamps.reading", {"result": "x"})
