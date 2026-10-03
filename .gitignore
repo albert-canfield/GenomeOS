@@ -17,6 +17,7 @@ data/reference
 data/knowledge
 # imported personal genomes (genomeos individual import) never leave the machine
 data/individuals/
+# local AlphaGenome and cache data, never committed
 data/cache
 # A twin holds a named person's measured biological state: chronological age,
 # telomere length, epigenetic age, their variants and modifiers. Only the
