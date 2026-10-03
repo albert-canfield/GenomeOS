@@ -17,6 +17,15 @@ context becomes either an evidenced one or a labelled one.
     not_open_in_reader   no narrowPeak of that biosample overlaps the locus
     not_assessable       the reading could not be taken, with the reason
 
+**A fourth value, which is not a state, was adopted on 2026-10-03** (Albert, item (7)): `not_assessed`,
+the absence of a reading. The three above are readings and this one says none was ATTEMPTED - the
+mapping table was not on the machine that compiled the program, so nothing was tried on any rule. Since
+that date the compiler WRITES it onto the rule line in that case instead of omitting the field, so
+"nobody looked" is readable from the rule itself rather than inferred from a silence, and `parse_value`
+accepts it. It is kept out of `STATES`, which stays the three readings, and out of `value()`, which
+writes a reading: it is never `not_assessable`, a reading that was attempted and could not be taken and
+which carries its reason, so `not_assessed` is accepted bare and refused with one.
+
 `not_open_in_reader` is **not** "closed", and it is not "contradicted". Peak absence is *not
 detected open at the reader's registered call*: a peak set is a call set, so a locus with no peak
 may be shut, may be open below the caller's sensitivity in that experiment, or may be open in a
@@ -66,6 +75,7 @@ from typing import Any
 
 from genomeos import manifest as _mf
 from genomeos.genome import reader
+from genomeos.provenance import rule_evidence_tier as ret
 
 # ---- the states and the reasons, named by the measurement -------------------------------------
 
@@ -73,6 +83,35 @@ STATE_OPEN = "open_in_reader"
 STATE_NOT_OPEN = "not_open_in_reader"
 STATE_NOT_ASSESSABLE = "not_assessable"
 STATES = (STATE_OPEN, STATE_NOT_OPEN, STATE_NOT_ASSESSABLE)
+
+#: The FOURTH value a rule's `context_evidence` may carry, adopted 2026-10-03 on Albert's item (7)
+#: ("adopt the header fix, not_assessed, visible defaults and per-slot evidence tier; defer cell
+#: provenance"). It is the only one of the four that is NOT a reading: `not_assessed` says nothing was
+#: tried - the mapping table was not on the machine that compiled the program, so no reading was
+#: attempted on any rule. It is NOT `not_assessable`, which is a reading that WAS attempted and could
+#: not be taken, and which carries its reason; so `not_assessed` may never carry one, and
+#: `genomeos.provenance.compiled_defaults.check_not_assessed_carries_no_reason` and `parse_value`
+#: below both refuse a value that gives it one.
+#:
+#: The spelling is IMPORTED and not re-typed. `rule_evidence_tier.NOT_ASSESSED` is the one place this
+#: project spells the absence of an assessment, and a second spelling is how two levels of the
+#: language start disagreeing about the same fact.
+#:
+#: It is deliberately NOT added to `STATES`, and that is the whole shape of this adoption. `STATES` is
+#: the set of READINGS: `value()` writes a reading and still refuses this one, `registration()`
+#: registers the readings and is byte-unmoved, and `tests/test_context_evidence.py` pins `STATES` to
+#: its three members. Only `parse_value`, which reads what a program may legitimately CARRY, knows the
+#: fourth - because a program may now carry it, and a reader of a program must not choke on it.
+STATE_NOT_ASSESSED = ret.NOT_ASSESSED
+
+#: Every value `parse_value` accepts: the three readings and the absence of one. `STATES` is unchanged.
+#:
+#: It is a DECLARATION and not the membership test. `parse_value` takes the fourth value in a clause
+#: that returns before the committed three-state test it leaves intact, so this tuple could in
+#: principle drift away from what that function really accepts. It cannot drift silently:
+#: `tests/test_context_evidence.py` feeds every member of this tuple through `parse_value` and then
+#: shows that a value outside it is refused, so the declaration is held to the behaviour.
+VALUES = (*STATES, STATE_NOT_ASSESSED)
 
 REASON_NO_READER = "no_reader_for_this_cell"
 REASON_OUTSIDE_SPAN = "region_outside_measured_span"
@@ -326,9 +365,34 @@ def value(state: str, *parts: str) -> str:
     return ", ".join([state, *parts])
 
 
+# TAUGHT THE FOURTH VALUE on 2026-10-03, Albert's item (7), and taught it by ADDITION: the docstring
+# below, the split, the strip, the tuple, the three-state membership test and the `ValueError` it
+# raises are the lines `bd0e56a` committed, unchanged and in the same order. `not_assessed` is handled
+# by a clause ABOVE them and returns before they are reached, so nothing about the three readings can
+# have moved - there is no line left for it to have moved in. (It is also why the ValueError below
+# still names three states and not four: that line is the committed one. The fourth value never
+# reaches it.)
+#
+# Two reasons for the shape rather than one. The first is the project's: this lane may not remove a
+# committed line, `--force` is denied to a lane, and `dbb5d4a` established that the route left open is
+# to add. The second is the better one: "the three readings behave exactly as before" is a claim, and
+# a clause that returns before their code is reached turns it into a fact a reader can check by eye.
+#
+# `not_assessed` is accepted BARE only. With anything after the comma it is refused, for the same
+# reason `compiled_defaults.check_not_assessed_carries_no_reason` refuses it in a whole program: a
+# reason is the mark of an attempt, and nothing was attempted. The value that was attempted and could
+# not be taken is `not_assessable`, and `not_assessable, <reason>, <cell>` is accepted as it always was.
 def parse_value(text: str) -> tuple[str, tuple[str, ...]]:
     """(state, the rest) from a written value. The inverse of `value`."""
     bits = [b.strip() for b in text.split(",")]
+    if bits and bits[0] == STATE_NOT_ASSESSED:
+        if bits[1:]:
+            raise ValueError(
+                f"{text!r} gives {STATE_NOT_ASSESSED!r} a reason. A reason is the mark of an attempt "
+                f"and nothing was attempted; the value that was attempted and not takeable is "
+                f"{STATE_NOT_ASSESSABLE!r}, and that is the one which carries its reason."
+            )
+        return bits[0], ()
     if not bits or bits[0] not in STATES:
         raise ValueError(f"{text!r} does not begin with one of {STATES}")
     return bits[0], tuple(bits[1:])

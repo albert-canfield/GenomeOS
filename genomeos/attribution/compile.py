@@ -483,10 +483,42 @@ def context_evidence_field(context_state: Any, label: str, start: int, end: int)
     the field it adds"), and `attribution.context_evidence.parse_value` refuses any value that does not
     begin with one of its three states, which `not_assessed` does not. Both belong to that module's
     lane, so the per-line form is its decision and not this one's.
+
+    ADOPTED 2026-10-03, and the paragraph above is KEPT as the record of why it was withdrawn rather
+    than rewritten to look as though the decision had always been made. Albert's item (7) names
+    `not_assessed` in his own words, so the per-line form is now written: where no reading was
+    attempted the line says `context_evidence: not_assessed` instead of saying nothing. Neither
+    blocker was weakened to get there. `parse_value` was TAUGHT the fourth value, as an addition to
+    what it accepts with the three readings' behaviour byte-identical; and
+    `test_the_state_is_added_beside_the_rule_and_deletes_nothing` was SUPERSEDED additively -
+    `xfail(strict=True)` with its reason beside it and the corrected assertion added, so the record
+    still shows what the old reading was. The field is now on every rule line of every cut, which is
+    why a regenerated program goes under a new name (`noncoding_chr21_v3.bio`) and v1 and v2 keep
+    their bytes: whether the PUBLISHED program moves is a re-cut, and a re-cut is Albert's decision.
+
+    The line this branch used to be, quoted and not deleted - `--force` is denied to a lane, so a
+    committed line stays in the file, and a reader of the change should see what the branch did:
+
+        return ""
     """
     if context_state is None:
-        return ""
+        return f"context_evidence: {cd.ABSENT}; "
     return f"context_evidence: {context_state(label, start, end)}; "
+
+
+#: The two lines the `context evidence: NONE was read` section of a cut used to open with. Kept
+#: verbatim here and NO LONGER EMITTED. SUPERSEDED 2026-10-03 on Albert's item (7): the first of them
+#: says "no rule states the field", which was true of every cut written before that date and is false
+#: of every cut written since, because `context_evidence_field` above now writes `not_assessed` onto
+#: the line instead of omitting it. They are kept rather than rewritten for the reason `dbb5d4a`
+#: gives: a correction that overwrites its predecessor leaves a reader nothing to compare, so the
+#: record has to show what the program used to say as well as what it says now.
+#: `tests/test_compiled_defaults.py` pins both halves - that neither line is emitted by a cut that
+#: read nothing, and that both are still here.
+SUPERSEDED_ABSENT_SECTION_OPENING = (
+    "# ---- context evidence: NONE was read for this cut, so no rule states the field and",
+    f"# every rule's reading is `{cd.ABSENT}`. The mapping table from cell label to ontology",
+)
 
 
 def _human_axis(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
@@ -937,8 +969,11 @@ def compile_chromosome(
         # never read, and the absent reading is a fact worth stating rather than a silence
         lines += [
             "",
-            "# ---- context evidence: NONE was read for this cut, so no rule states the field and",
-            f"# every rule's reading is `{cd.ABSENT}`. The mapping table from cell label to ontology",
+            # The two lines this section used to open with are SUPERSEDED and kept verbatim in
+            # SUPERSEDED_ABSENT_SECTION_OPENING above, not deleted: one of them said "no rule states
+            # the field", and since 2026-10-03 every rule line states it. The corrected opening:
+            "# ---- context evidence: NONE was read for this cut, so every rule line STATES the",
+            f"# field as `{cd.ABSENT}` and carries no reading. The mapping table from cell label to ontology",
             "# term was not on the machine that compiled this program, so no reading was attempted.",
             f"# `{cd.ABSENT}` is therefore not `not_assessable`, which is a reading that was attempted",
             "# and could not be taken and which carries its reason.",

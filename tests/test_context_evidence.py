@@ -311,6 +311,25 @@ def test_the_written_state_parses_back_to_its_state_and_its_qualifiers():
         ce.parse_value("open in K562")
 
 
+# SUPERSEDED 2026-10-03 on Albert's item (7) - "adopt the header fix, not_assessed, visible defaults
+# and per-slot evidence tier" - and KEPT rather than deleted or relaxed, so the record shows what the
+# old reading was. `compile.context_evidence_field` now writes `context_evidence: not_assessed` where
+# no reading was attempted instead of omitting the field, so a cut with no reader DOES carry the key
+# and both assertions below are now FALSE. `strict=True` is the point: if the field ever goes back to
+# being omitted, the suite reds rather than passing quietly. The corrected assertion is
+# `test_the_state_replaces_the_absent_value_beside_the_rule_and_deletes_nothing`, immediately below,
+# and it keeps this test's real claim - that nothing but that one field differs between the two cuts.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-03 (Albert, item 7): a cut with no reader now writes "
+        "`context_evidence: not_assessed` on every rule line instead of omitting the field, so "
+        "`'context_evidence' not in without` is false. Replaced by "
+        "test_the_state_replaces_the_absent_value_beside_the_rule_and_deletes_nothing. Kept because a "
+        "supersession here is additive: the old reading and the reason it moved are both part of the "
+        "record, and no pin is deleted or weakened to make room for the new one."
+    ),
+)
 @needs_track_metadata
 def test_the_state_is_added_beside_the_rule_and_deletes_nothing(tmp_path):
     """The only difference the reading makes to a program is the field it adds."""
@@ -321,6 +340,116 @@ def test_the_state_is_added_beside_the_rule_and_deletes_nothing(tmp_path):
     with_state = program(row, lambda label, s, e: ce.state_for(label, CHROM, s, e, readers))
     assert "context_evidence" not in without
     assert with_state.replace("context_evidence: open_in_reader, K562; ", "") == without
+
+
+@needs_track_metadata
+def test_the_state_replaces_the_absent_value_beside_the_rule_and_deletes_nothing(tmp_path):
+    """The corrected form of the pin xfailed above: the reading changes a field's VALUE, nothing else.
+
+    Before 2026-10-03 the difference a reading made to a program was that a field APPEARED. Since
+    Albert's item (7) both cuts carry the field and the difference is that `not_assessed` - nothing was
+    tried - becomes a reading. The claim the old pin was really making is kept and made sharper: ONE
+    substitution turns one cut into the other character for character, and the only lines that differ
+    at all are rule lines.
+    """
+    peak_file(tmp_path, "K562", CHROM, [(1000, 1200, 5.0)])
+    readers = ce.Readers(results_dir=tmp_path)
+    row = row_of(pair("AAA", -30.0, "K562"))
+    without = program(row)
+    with_state = program(row, lambda label, s, e: ce.state_for(label, CHROM, s, e, readers))
+    assert "context_evidence: not_assessed; " in without
+    assert ce.parse_value("not_assessed") == (ce.STATE_NOT_ASSESSED, ())
+    assert (
+        with_state.replace("context_evidence: open_in_reader, K562; ", "context_evidence: not_assessed; ")
+        == without
+    )
+    # the substitution is the WHOLE difference, and it falls on rule lines only: a cut that moved a
+    # gene stub or a measured block as well would satisfy the equality above only by accident
+    a, b = without.splitlines(), with_state.splitlines()
+    assert len(a) == len(b)
+    differ = [i for i, (x, y) in enumerate(zip(a, b, strict=True)) if x != y]
+    assert differ, "the two cuts are identical, so this test would pass on a reading that did nothing"
+    assert all(a[i].startswith("rule ") and b[i].startswith("rule ") for i in differ)
+
+
+# ---- the fourth value: not_assessed, adopted 2026-10-03 (Albert, item 7) -----------------------
+
+
+def test_parse_value_takes_the_fourth_value_and_the_three_readings_are_unmoved():
+    """`parse_value` gains one value; `STATES`, `value()` and the three readings gain nothing."""
+    assert ce.STATE_NOT_ASSESSED == "not_assessed"
+    assert (*ce.STATES, ce.STATE_NOT_ASSESSED) == ce.VALUES
+    assert ce.STATE_NOT_ASSESSED not in ce.STATES
+    assert ce.parse_value("not_assessed") == ("not_assessed", ())
+    # byte-identical behaviour for the three, asserted beside the addition and not assumed
+    for state in ce.STATES:
+        assert ce.parse_value(ce.value(state, "K562")) == (state, ("K562",))
+    assert ce.parse_value("not_assessable, region_outside_measured_span, K562") == (
+        "not_assessable",
+        ("region_outside_measured_span", "K562"),
+    )
+
+
+def test_VALUES_is_held_to_what_parse_value_really_accepts_and_cannot_drift_from_it():
+    """`VALUES` is a declaration, not the membership test: `parse_value` takes the fourth value in a
+    clause that returns before the committed three-state test, so the tuple could in principle say
+    something the function does not do. Every member is fed through, and a non-member is shown
+    refused, so the two are held together rather than assumed to agree."""
+    for v in ce.VALUES:
+        assert ce.parse_value(v)[0] == v
+    for outside in ("unsourced", "not_assesed", "open", "", "U_unsourced"):
+        assert outside not in ce.VALUES
+        with pytest.raises(ValueError):
+            ce.parse_value(outside)
+
+
+def test_the_fourth_value_is_the_project_s_one_spelling_and_not_a_second_one():
+    """A second spelling of the same fact is how two levels of the language start disagreeing."""
+    from genomeos.provenance import compiled_defaults as cd
+    from genomeos.provenance import rule_evidence_tier as ret
+
+    assert ce.STATE_NOT_ASSESSED is ret.NOT_ASSESSED
+    assert ce.STATE_NOT_ASSESSED == cd.ABSENT
+
+
+def test_the_fourth_value_carries_no_verdict_either():
+    for stem in ce.FORBIDDEN_IN_A_STATE_NAME:
+        assert stem not in ce.STATE_NOT_ASSESSED.lower(), (
+            f"{ce.STATE_NOT_ASSESSED!r} contains {stem!r}: the absence of a reading is not a verdict "
+            "on a rule any more than a reading is"
+        )
+
+
+def test_PLANT_parse_value_refuses_a_not_assessed_that_carries_a_reason(tmp_path):
+    """The guard REFUSES, reached through emitted program text and not through a hand-made string.
+
+    A reason is the mark of an attempt and nothing was attempted, so `not_assessed, <reason>` is the
+    one shape of the fourth value that is a lie about the work done. The planted value is written onto
+    a rule by the compiler's own emitter and read back off the emitted line, so what is refused is a
+    program a cut could have produced.
+    """
+    row = row_of(pair("AAA", -30.0, "K562"))
+    planted = program(row, lambda label, s, e: "not_assessed, no_reader_for_this_cell")
+    (line,) = [ln for ln in planted.splitlines() if ln.startswith("rule ")]
+    written = line.split("context_evidence: ", 1)[1].split(";", 1)[0]
+    assert written == "not_assessed, no_reader_for_this_cell"
+    with pytest.raises(ValueError, match="gives 'not_assessed' a reason"):
+        ce.parse_value(written)
+    # and the bare value off a real emission is accepted, so the refusal above is about the reason
+    bare = program(row, lambda label, s, e: ce.STATE_NOT_ASSESSED)
+    (ok_line,) = [ln for ln in bare.splitlines() if ln.startswith("rule ")]
+    assert ce.parse_value(ok_line.split("context_evidence: ", 1)[1].split(";", 1)[0]) == (
+        "not_assessed",
+        (),
+    )
+
+
+def test_PLANT_the_writer_of_readings_still_refuses_the_fourth_value_and_a_verdict():
+    """`value()` writes a READING. `not_assessed` is the absence of one, so it is not writable here -
+    which is what keeps `STATES` meaning the three and keeps `registration()` unmoved."""
+    for refused in (ce.STATE_NOT_ASSESSED, "supported", "unsourced"):
+        with pytest.raises(ValueError, match="is not one of"):
+            ce.value(refused)
 
 
 @needs_track_metadata

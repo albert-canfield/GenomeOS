@@ -370,6 +370,22 @@ def _tracked_bio() -> set[str]:
     return {line for line in out.stdout.splitlines() if line}
 
 
+# SUPERSEDED 2026-10-03 by the v3 cut, and KEPT rather than edited in place: a tracked program was
+# ADDED to the corpus, so `tracked_files` is 44 and `tracked_generated` is 11. This is the same move
+# lane-headerfix made when v2 took the totals 66 -> 67 and 33 -> 34, and the same sentence applies:
+# not one HAND-AUTHORED figure moved, which is what the replacement below measures by re-asserting
+# every one of them unchanged. `strict=True` so that if the corpus ever loses a program the suite reds
+# instead of passing on a stale figure. Replaced by
+# `test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after_v3`.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-03: data/organisms/human/noncoding_chr21_v3.bio was added beside v2, so "
+        "the tracked corpus is 44 = 33 hand-authored + 11 generated-and-committed. Replaced by "
+        "test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after_v3. Kept "
+        "additively because editing the figure would remove a line a commit of today added."
+    ),
+)
 def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported():
     """The figures this proposal reports, re-derived from the corpus every run. The generated half is
     a 399 MB line scan and is not re-derived here; `--scan` does it.
@@ -414,6 +430,18 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported():
     assert c["rules_generated_scanned"] is None
 
 
+# SUPERSEDED 2026-10-03 for the same reason as the test above and kept the same way: v3 took
+# `programs_total` 67 -> 68 and `programs_generated` 34 -> 35. The untracked count is still 24 - v3 is
+# a committed program, not a machine-local one - and the replacement asserts that too, because that
+# half is the one which says the git-ignored store has not changed.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-03: noncoding_chr21_v3.bio took programs_total 67 -> 68 and "
+        "programs_generated 34 -> 35. Replaced by "
+        "test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes_after_v3."
+    ),
+)
 @pytest.mark.needs_local_data(
     GENERATED_STORE, how="compile the chromosomes: genomeos budget --chrom chrN --bio"
 )
@@ -439,6 +467,18 @@ def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes():
 
 @pytest.mark.needs_local_data(
     GENERATED_STORE, how="compile the chromosomes: genomeos budget --chrom chrN --bio"
+)
+# SUPERSEDED 2026-10-03, third of three, same cause and same route: the CI total is 44 now that v3 is
+# tracked, and `programs_generated` is 11. The claim this test exists to make - that not one
+# hand-authored figure depends on which machine ran it - is UNCHANGED and is re-asserted in full by
+# `test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store_after_v3`.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-03: with noncoding_chr21_v3.bio tracked, a store-free checkout holds 44 "
+        "programs, 11 of them generated. Every hand-authored figure is unmoved. Replaced by "
+        "test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store_after_v3."
+    ),
 )
 def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store(monkeypatch):
     """The CI case, PROVED here instead of inferred. The corpus enumeration is injected with the
@@ -472,6 +512,102 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
     assert c["programs_total"] == 43
     assert c["programs_hand_authored"] == 33
     assert c["programs_generated"] == 10
+    assert c["rules_hand_authored_written"] == 22
+    assert c["rules_hand_authored_compiled"] == 41
+    assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
+    assert c["rules_hand_authored_with_tiered_numbers"] == 20
+    assert c["slots_hand_authored"] == 60
+    assert c["programs_hand_authored_with_at_least_one_rule"] == 7
+    assert c["scan_calibration"]["calibrated"] is True
+
+
+# --- 10b. the same cost after v3: one program ADDED, and not one hand-authored figure moved ---------
+#
+# `data/organisms/human/noncoding_chr21_v3.bio` was added beside v2 on 2026-10-03 (Albert's item (7):
+# every rule line now carries `context_evidence`, so a cut that shows it goes under a new name and the
+# published v1 and v2 keep their bytes). The three tests above are xfailed and kept; these three are
+# the same assertions with the figures the corpus now has. It is exactly the move lane-headerfix made
+# when v2 took `programs_total` 66 -> 67 and `programs_generated` 33 -> 34.
+#
+# Every hand-authored figure is re-asserted UNCHANGED, and that is the whole reason these are full
+# copies rather than two corrected numbers: the claim worth keeping is not "the total is 44", it is
+# "an added generated program moves the generated side and nothing else", and only re-asserting both
+# sides measures that.
+
+
+def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after_v3():
+    """Supersedes `test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported`."""
+    c = cost_script.cost(scan_generated=False)
+    tracked = _tracked_bio()
+    hand = [f for f in c["files"] if f["kind"] == "hand_authored"]
+    untracked_hand = sorted(f["path"] for f in hand if f["path"] not in tracked)
+    assert untracked_hand == [], (
+        "a hand-authored program git does not track makes every hand-authored figure below a fact "
+        f"about this machine: {untracked_hand}"
+    )
+    tracked_files = [f for f in c["files"] if f["path"] in tracked]
+    tracked_generated = [f for f in tracked_files if f["kind"] == "generated"]
+    # the repository's own corpus: 44 = 33 hand-authored + 11 generated-and-committed, v3 being the
+    # eleventh and the only change since the 43 the superseded test above asserts
+    assert len(tracked_files) == 44
+    assert len(tracked_generated) == 11
+    assert len(tracked_files) == len(hand) + len(tracked_generated)
+    assert "data/organisms/human/noncoding_chr21_v3.bio" in {f["path"] for f in tracked_generated}
+    assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
+    # not one of these moved, which is the claim: v3 joined the generated side
+    assert c["programs_hand_authored"] == 33
+    assert c["rules_hand_authored_written"] == 22
+    assert c["rules_hand_authored_compiled"] == 41
+    assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
+    assert c["rules_hand_authored_with_tiered_numbers"] == 20
+    assert c["slots_hand_authored"] == 60
+    assert c["programs_hand_authored_with_at_least_one_rule"] == 7
+    assert c["default"] == ret.NOT_ASSESSED
+    assert c["rules_generated_scanned"] is None
+
+
+@pytest.mark.needs_local_data(
+    GENERATED_STORE, how="compile the chromosomes: genomeos budget --chrom chrN --bio"
+)
+def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes_after_v3():
+    """Supersedes `test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes`.
+
+    The UNTRACKED half is unchanged at 24 and that is the half worth saying out loud: v3 is a
+    committed program, not one of the machine-local compiled chromosomes, so the git-ignored store is
+    the same store it was this morning.
+    """
+    c = cost_script.cost(scan_generated=False)
+    tracked = _tracked_bio()
+    paths = {f["path"] for f in c["files"]}
+    untracked = sorted(paths - tracked)
+    assert len(untracked) == 24
+    assert all(p.startswith(GENERATED_STORE + "/") for p in untracked), untracked
+    assert all(f["kind"] == "generated" for f in c["files"] if f["path"] in set(untracked))
+    assert c["programs_total"] == 68
+    assert c["programs_generated"] == 35
+    assert c["programs_hand_authored"] == 33
+    assert c["programs_total"] == len(paths & tracked) + len(untracked)
+
+
+@pytest.mark.needs_local_data(
+    GENERATED_STORE, how="compile the chromosomes: genomeos budget --chrom chrN --bio"
+)
+def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store_after_v3(
+    monkeypatch,
+):
+    """Supersedes
+    `test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store`, and keeps its
+    marker and the reason for it: the injection subtracts the untracked programs from the real
+    enumeration, so it only simulates a fresh checkout on a machine that HAS them."""
+    tracked = _tracked_bio()
+    real = cost_script.bio_files()
+    fresh = [p for p in real if str(p.relative_to(cost_script.ROOT)) in tracked]
+    assert len(fresh) < len(real), "this machine holds no untracked program, so this proves nothing"
+    monkeypatch.setattr(cost_script, "bio_files", lambda: fresh)
+    c = cost_script.cost(scan_generated=False)
+    assert c["programs_total"] == 44
+    assert c["programs_hand_authored"] == 33
+    assert c["programs_generated"] == 11
     assert c["rules_hand_authored_written"] == 22
     assert c["rules_hand_authored_compiled"] == 41
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 19

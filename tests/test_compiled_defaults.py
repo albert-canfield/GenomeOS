@@ -17,8 +17,10 @@ bytes: v1 against the sha256 `data/results/label_gene.json` names, v2 against it
 
 from __future__ import annotations
 
+import collections
 import dataclasses
 import hashlib
+import re
 import subprocess
 from pathlib import Path
 
@@ -26,6 +28,7 @@ import pytest
 
 from genomeos.attribution import compile as cp
 from genomeos.ir.model import Rule
+from genomeos.lang import parse
 from genomeos.provenance import compiled_defaults as cd
 from genomeos.provenance import rule_evidence_tier as ret
 
@@ -393,6 +396,10 @@ def test_PLANT_the_compiler_itself_refuses_a_cut_that_hands_not_assessed_a_reaso
         cp.compile_chromosome("chr21")
 
 
+# The same store, for the same reason as the five above: this makes a REAL cut, so it needs the chr21
+# element table, which is git-ignored. `needs_chr21` is not a guard here - budget_chr21.json is
+# tracked, so its skipif has never fired in any checkout - and relying on it would hand CI a red.
+@needs_the_chr21_element_table
 @needs_chr21
 def test_a_cut_that_READ_NOTHING_states_not_assessed_on_every_rule_line(monkeypatch):
     """Reachability, not a branch: the None path is reached through `compile_chromosome` itself, with
@@ -416,6 +423,7 @@ def test_a_cut_that_READ_NOTHING_states_not_assessed_on_every_rule_line(monkeypa
     cd.check_not_assessed_carries_no_reason(text)
 
 
+@needs_the_chr21_element_table
 @needs_chr21
 def test_the_superseded_section_opening_is_kept_in_the_source_and_no_longer_written(monkeypatch):
     """Zero deletions, shown rather than claimed: the two sentences the no-reader section used to open
@@ -472,12 +480,23 @@ def test_v3_differs_from_v2_in_the_context_evidence_FIELD_AND_IN_NOTHING_ELSE():
     collects the names that ever disagree; the answer has to be the single-element set. Asserting the
     set rather than `!=` on one field is deliberate: a comparison that only looks at the field it
     expects to move cannot notice the one it did not expect.
+
+    The comparison line was first written, and committed by `eab5b04` while this lane was still
+    editing the file, as
+
+    moved = {n for a, b in zip(m2.rules, m3.rules) for n in names if getattr(a, n) != getattr(b, n)}
+
+    which ruff refuses (B905, a `zip` with no explicit `strict=`). It is quoted rather than removed
+    because `--force` is denied to a lane; the live form below takes the pairs once with
+    `strict=True`, which additionally refuses two cuts of different lengths instead of truncating to
+    the shorter one and reporting agreement about rules it never compared.
     """
     m2, m3 = parse(V2.read_text()), parse(V3.read_text())
     assert len(m2.rules) == len(m3.rules) == 5176
     names = [f.name for f in dataclasses.fields(Rule)]
     assert "context_evidence" in names and len(names) >= 12, names
-    moved = {n for a, b in zip(m2.rules, m3.rules) for n in names if getattr(a, n) != getattr(b, n)}
+    pairs = list(zip(m2.rules, m3.rules, strict=True))
+    moved = {n for a, b in pairs for n in names if getattr(a, n) != getattr(b, n)}
     assert moved == {"context_evidence"}, sorted(moved)
     # and the field moved on EVERY rule, so the set above is not one rule's accident
     assert all(r.context_evidence == "" for r in m2.rules)
