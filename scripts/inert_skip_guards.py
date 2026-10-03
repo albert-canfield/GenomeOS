@@ -803,11 +803,30 @@ def _guards(tree: ast.Module, filename: str, tracked: frozenset[str]) -> list[Gu
     return out
 
 
-def all_guards(tests: Path = Path("tests"), root: Path | None = None) -> list[Guard]:
-    """Every skip guard in every test module, classified. The whole population, in file order."""
+def all_guards(
+    tests: Path = Path("tests"), root: Path | None = None, tracked_only: bool = False
+) -> list[Guard]:
+    """Every skip guard in every test module, classified. The whole population, in file order.
+
+    `tracked_only` leaves out test files git does not track. The CLI shows everything, because a lane
+    wants its own new file checked before it commits it; the suite-wide INVARIANT asks for tracked
+    only, and the reason is this shared checkout. Several sessions edit this tree at once, so an
+    untracked `tests/test_*.py` is a peer's work in progress and not part of the suite. An invariant
+    that read it would turn one lane's half-written file into every other lane's red push -- and it
+    did, within the hour: `tests/test_manifest_rebuild_reads.py` appeared untracked with a guard on
+    `data/results` while this was being written. Scoping to the commit is not a weaker claim; it is
+    the claim correctly aimed, and the guard is still caught the moment the file is committed.
+    """
     tracked = tracked_paths(root)
     out: list[Guard] = []
     for path in sorted(tests.glob("*.py")):
+        if tracked_only:
+            try:
+                relative = path.resolve().relative_to((root or Path()).resolve()).as_posix()
+            except ValueError:
+                relative = path.as_posix()
+            if relative not in tracked:
+                continue
         out.extend(guards_in_module(path.read_text(), str(path), tracked))
     return out
 

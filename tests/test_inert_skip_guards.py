@@ -279,9 +279,21 @@ def test_NO_skip_guard_IN_THE_SUITE_is_keyed_on_a_path_that_git_TRACKS() -> None
     `tests/test_local_data_symlinked_store.py` makes the same claim over `skipif` decorators alone
     and keeps its own resolver; this one covers `pytest.skip()` in a body and a fixture as well,
     which is where 24 of the 31 lived.
+
+    SCOPED TO TEST FILES GIT TRACKS, and that is the claim correctly aimed rather than a weaker one.
+    Several sessions edit this one checkout at once, so an untracked `tests/test_*.py` is a peer's
+    work in progress. Reading it would turn one lane's half-written file into every other lane's red
+    push, which happened within the hour of this being written: `tests/test_manifest_rebuild_reads.py`
+    appeared untracked carrying `if not Path("data/results").is_dir(): pytest.skip("data/results is
+    git-ignored: ...")`, whose premise is the one `tests/local_data.py` exists to correct --
+    `data/results` is ignored by PATTERN with `!` re-includes and hundreds of its files are committed.
+    It was reported to the coordinator rather than edited, and this check will refuse it the moment it
+    is committed, which is exactly when it becomes part of the suite.
     """
     finder = _finder()
-    inert = [g for g in finder.all_guards(ROOT / "tests") if g.verdict == "INERT"]
+    inert = [
+        g for g in finder.all_guards(ROOT / "tests", root=ROOT, tracked_only=True) if g.verdict == "INERT"
+    ]
     assert not inert, (
         "these skip guards test for a file git TRACKS, so they are present in every checkout and the "
         "skip can never fire. Convert each to tracked_paths.must_be_present, which RAISES by name: "
@@ -293,7 +305,11 @@ def test_no_test_is_SKIPPED_EVERY_RUN_by_a_guard_on_a_tracked_path() -> None:
     """The mirror class, over the real suite: a tracked path tested for PRESENCE never runs at all.
     There are none, and this is the check that says so rather than the absence of a report."""
     finder = _finder()
-    always = [g for g in finder.all_guards(ROOT / "tests") if g.verdict == "ALWAYS_FIRES"]
+    always = [
+        g
+        for g in finder.all_guards(ROOT / "tests", root=ROOT, tracked_only=True)
+        if g.verdict == "ALWAYS_FIRES"
+    ]
     assert not always, f"these tests skip on every run, so they never run: {always}"
 
 
