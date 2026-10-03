@@ -1901,3 +1901,45 @@ because it had been **summarised** rather than re-read — the same mechanism as
 blocker earlier the same day. The standing rule this project already has is to carry a registered or
 recorded reading **word for word and never to strengthen it**; a lesson is a recorded reading, and
 "can serve a stale cache" is not "did, twice".
+
+## Before naming a cause, run the check that would distinguish it (2026-10-03)
+
+Seven times in one day, across the two sessions supervising this project, a cause was **named** from an
+observation without running the one cheap check that would have told that cause from the real one. Every
+instance was caught by somebody else. None was caught by the session that made it.
+
+The coordinator's three:
+
+| asserted | actually | the check that was available |
+| --- | --- | --- |
+| "`scripts/remove_worktree.py` does not exist yet" (read from the work board) | it had existed for hours, at `f7b4114` | `ls scripts/remove_worktree.py` |
+| "the orphaned worktree is 6.7 GB" (from `du -sh`) | 6.7 GB of **APFS clone blocks shared with the real stores**; unique remainder **4 KB** | `du -sh` per store, or compare inodes |
+| "`push_own.sh` exits 0 on a failed push" | the script exits 1; **`tail`'s status was being read as the script's** | run it unpiped — or read the word "pipeline" in my own echo label |
+
+The supervisor's four, in its own words, are "the absolute band, DE=1, 'every compiled program', the GIAB
+fallback". The pattern is identical and the conclusion was reached independently from the other side.
+
+**What makes this one lesson rather than seven mistakes** is that in every case the asserted cause was not
+the most *likely* one — it was the most **available** one. The board text was in front of me. `du` is the
+command one reaches for. The script was the thing being run. Availability is not evidence, and a cause that
+arrives already formed is the one most in need of a check, not least.
+
+**The distinguishing check was one command every time**, which is the whole argument. Not a suite, not a
+rebuild, not a worktree: one `ls`, one `du` per directory, one unpiped run. The cost of running it is
+nothing against the cost of not running it, which today was a destructive `git worktree remove`, a figure
+wrong by three orders of magnitude published four times, and a lane briefed on a defect that did not exist.
+
+**Two properties of this failure that make it hard to self-catch**, and they are why the rule has to be
+procedural rather than a matter of attention:
+
+- **It is usually confirmed by the next thing you see.** The failed removal *did* fail, the directory *did*
+  hold 6.7 GB, the exit code *was* 0. Each observation is true. What is wrong is the causal claim attached
+  to it, and no amount of re-reading the observation tests that claim.
+- **It travels in the flattering direction.** Two of the three made the project's tooling sound *worse*
+  than it is, which is the direction nobody argues with, so it drew no challenge through four repetitions.
+  A claim that costs you nothing to believe is the one to check hardest.
+
+So the rule, stated as an action and not a disposition: **when you are about to write down a cause, name
+the check that would distinguish it from the nearest alternative, and run that check first.** If no such
+check exists, write the observation and say the cause is unknown — which is what the lanes that got this
+right today did, in those words ("the refusals are the finding", "I do not claim to know which two").
