@@ -55,6 +55,98 @@ OWN_CODE = (
 )
 
 
+#: The stores this run reads, enumerated DELIBERATELY and not taken from the tracer. Declaring what
+#: `manifest.traced_reads()` reports would make the contract circular -- the writer would declare
+#: whatever it happened to open and the reconciliation could never fail. So the groups below are
+#: written out from what the arms are known to read, and if the enumeration is wrong the write is
+#: refused, which is the check doing its job. It refused this run once, naming 155 undeclared files.
+RESPONSE_CACHE = Path("data/knowledge/alphagenome/elements")
+COMPACT_TABLES = Path("data/knowledge/alphagenome/all_elements")
+RESULTS = Path("data/results")
+RUN_SUMMARIES = ("enhancer_targets_all", "constrained_targets", "enhancer_targets")
+#: The measured layer's own assay sources, read by `measured.Layer.load`.
+ASSAY_SOURCES = (
+    "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+    "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+    "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+    "data/knowledge/mpra/ENCFF769REH.bed.gz",
+    "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+    "data/knowledge/satmut/elements.tsv.gz",
+    "data/knowledge/vista/locus.tsv.gz",
+)
+#: Read by `not_open_profile` through `compile._ccres` and `compile._Interspersed`, chr21 only
+#: because that is the chromosome its arm runs on.
+PROFILE_AXES = ("data/results/ccres_chr21.bed.gz", "data/results/rmsk_chr21.bed.gz")
+#: `pilot_bio.gene_tss` reads a content-addressed cache whose file NAME is a digest, so it cannot be
+#: predicted; the directory is declared as a tree instead.
+TSS_CACHE = Path("data/cache/holdout/genes")
+
+
+def inputs(chroms: tuple[str, ...], profile_chrom: str) -> list[dict[str, Any]]:
+    """Every file this run reads, declared by group and hashed member by member."""
+    here = Path(__file__).resolve().parents[1]
+    out: list[dict[str, Any]] = []
+
+    def group(label: str, paths: list[Path], why: str) -> None:
+        present = [p for p in paths if (here / p).exists()]
+        if present:
+            out.append(mf.files_entry(label, present, partition=why))
+
+    group(
+        "the sweep's per-element response cache, one archive per chromosome",
+        [RESPONSE_CACHE / f"{c}.json.gz" for c in chroms],
+        "the window: every gene the sweep scored at an element, read at threshold=0.0. One archive "
+        "is held at a time, so the memory bill is the largest chromosome and not the tree",
+    )
+    group(
+        "the compact one-target tables, one per chromosome",
+        [COMPACT_TABLES / f"{c}.json" for c in chroms],
+        "the head each consumer reads today, reached through the run summaries' elements_where field",
+    )
+    group(
+        "the deletion runs' committed summaries",
+        [RESULTS / f"{n}_{c}.json" for n in RUN_SUMMARIES for c in chroms],
+        "targets.attributed reads all three in order and each one's elements_where points at the "
+        "compact table above",
+    )
+    group(
+        "GENCODE v50, per chromosome",
+        [Path(f"data/reference/gencode_v50_{c}.gff3.gz") for c in chroms],
+        "the protein-coding symbol set that forms the coding window, and the TSS of each gene a "
+        "window rule's distance is measured to",
+    )
+    group(
+        "the measured layer's assay sources",
+        [Path(x) for x in ASSAY_SOURCES],
+        "CRISPRi, lentiMPRA, saturation mutagenesis and VISTA as measured.Layer.load reads them; "
+        "the CRISPRi genes_regulated list is what measured.py's falsifier is asked about",
+    )
+    group(
+        f"the element axes for {profile_chrom}",
+        [Path(x) for x in PROFILE_AXES],
+        "cCREs and interspersed repeats, read by not_open_profile through compile's own loaders to "
+        "type each rule's element",
+    )
+    if (here / TSS_CACHE).exists():
+        out.append(
+            mf.input_entry(
+                here / TSS_CACHE,
+                partition="pilot_bio.gene_tss's content-addressed cache. Declared as a TREE because "
+                "each file is named by its own digest, so the name cannot be written down in advance",
+            )
+        )
+    inv = here / ot.PRIOR_EVIDENCE
+    if inv.exists():
+        out.append(
+            mf.input_entry(
+                inv,
+                partition="the committed 2026-09-27 result, read by check_the_quoted_invariant to "
+                "verify the invariant's quoted figures against the file rather than recall them",
+            )
+        )
+    return out
+
+
 def coding_of(chrom: str) -> set[str]:
     """The chromosome's protein-coding symbols, from the per-chromosome GENCODE v50 file.
 
@@ -332,7 +424,9 @@ def outstanding() -> list[dict[str, str]]:
     return out
 
 
-def payload(chrom: str, arms: list[dict[str, Any]], seconds: float) -> dict[str, Any]:
+def payload(
+    chrom: str, arms: list[dict[str, Any]], seconds: float, entries: list[dict[str, Any]]
+) -> dict[str, Any]:
     moved = [a["module"] for a in arms]
     blocked = outstanding()
     free_not_yet = [m for m in ot.free_to_move() if m not in moved]
@@ -380,8 +474,8 @@ def payload(chrom: str, arms: list[dict[str, Any]], seconds: float) -> dict[str,
                     "2026-09-27 one-target lane read its coding set from",
                 },
             ],
-            "inputs": [],
-            "input_count": 0,
+            "inputs": entries,
+            "input_count": len(entries),
             "assembly": "GRCh38: the assembly the deletion sweep and the compact tables were written on",
             "coordinates": "n/a: this run compares gene memberships and element ids; no interval of "
             "its own is formed",
@@ -431,7 +525,8 @@ def main() -> int:
             arms.append(arm_measured_genome_wide(responses))
         else:
             arms.append(ARMS[name](args.chrom, responses, coding))
-    p = payload(args.chrom, arms, time.time() - t)
+    read_chroms = CHROMS if args.measured_genome_wide else (args.chrom,)
+    p = payload(args.chrom, arms, time.time() - t, inputs(read_chroms, args.chrom))
     for a in arms:
         print(f"{a['module']}: {a['verdict_against_its_own_falsifier']}")
     if args.no_save:
