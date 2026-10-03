@@ -427,6 +427,39 @@ ASTROREG2_AUTHORISATION = (
 #: as a relayed text transcribed as an approval.
 ASTROREG2_AUTHORISATION_WRITTEN_BEFORE = "2026-10-02 15:15:13 +0100 (evidenced by 53a0332)"
 
+#: ALBERT'S APPROVAL FOR RUN 2, recorded VERBATIM by the coordinator session that received it
+#: FIRST-HAND, on 2026-10-03. It arrived as item (6) of an eight-item message answering eight open
+#: decisions; only item (6) is reproduced here, because the other seven authorise nothing about this
+#: run and a slot that carried them would invite a reader to find consent in the wrong sentence.
+#:
+#: THIS TEXT IS THE APPROVAL. The lane that built run 2's gate deliberately left this slot EMPTY and
+#: refused to transcribe the coordinator's relay into it, on the ground that an agent's account of
+#: what a person approved is not that person's approval. That was right, and it is why the slot could
+#: only be filled from this session. `RUN2_AUTHORISATION_AS_RELAYED` stays beside it, labelled, so the
+#: two can be told apart by anyone reading the file later.
+RUN2_AUTHORISATION = (
+    "I approve a second and final AstroREG-2 run of at most 1,232 AlphaGenome requests on its own "
+    "ledger, after today's CI is green, the astroargmax registration is committed and the supervisor "
+    'writes "dry run reviewed".'
+)
+
+#: WHEN HE WROTE IT, bounded by evidence rather than asserted to a precision this record lacks. His
+#: words reached the coordinator session on 2026-10-03 between 11:30:00 and 11:36 +0100: the lower
+#: bound is the coordinator's own board update at 11:30 which does not mention them, and the upper is
+#: the message dispatching the encoding task, which could only be written after they had been read.
+RUN2_AUTHORISATION_WRITTEN_BEFORE = "2026-10-03 11:36 +0100 (received 11:30-11:36, same session)"
+
+#: WHAT HIS WORDS DO NOT SAY, kept here because the gate's job is to refuse what he did not approve.
+#: He did not approve: a third run (his words are "a second AND FINAL"); a run on run 1's ledger; a
+#: run before today's CI is green; a run before the astroargmax registration is COMMITTED; a run on
+#: anyone's sign-off but the supervisor's own words. Nor did he mention items (f) or (g), which are the
+#: SUPERVISOR's conditions -- carrying those into his clauses would misreport what he agreed to.
+RUN2_AUTHORISATION_DOES_NOT_SAY = (
+    "no third run, not on run 1's ledger, not before CI is green, not before the registration is "
+    "committed, not on any sign-off but the supervisor's own words; items (f) and (g) are the "
+    "supervisor's conditions and are not his clauses"
+)
+
 #: Why this slot is filled by the coordinator and not by a lane, and why only now.
 WHO_RECORDED_THE_AUTHORISATION = (
     "recorded by the coordinator session that received Albert's words FIRST-HAND, not by a lane. A lane "
@@ -485,7 +518,7 @@ ASTROREG2_AUTHORISATIONS: dict[int, dict[str, Any]] = {
     #: not Albert's words. See WHY_RUN2_SLOT_IS_EMPTY_IN_THIS_LANE. authorisation_for_run(2) refuses
     #: while `words` is empty, which is the state today; the first-hand session fills it.
     2: {
-        "words": None,
+        "words": RUN2_AUTHORISATION,
         "requests": 1_232,
         "consumed": False,
         "final": True,
