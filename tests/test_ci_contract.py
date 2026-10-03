@@ -208,6 +208,37 @@ def test_no_shell_script_carries_a_bare_shellcheck_disable() -> None:
     )
 
 
+def test_no_shell_script_asks_mktemp_for_a_template_gnu_refuses() -> None:
+    """A FIFTH defect, found here and in the same class as the other four: BSD-only mktemp templates.
+
+    `mktemp -t <prefix>` with no trailing X's is a BSD spelling. BSD invents its own suffix and
+    returns a path; GNU mktemp, which is what CI runs, REFUSES it outright --
+    `mktemp: too few X's in template 'genomeos-push'` -- and that string is verbatim what the
+    2026-10-02 12:08 run printed, five times, out of tests/test_push_own.py. So
+    scripts/push_own.sh could never have run on Linux, and scripts/commit_own.sh carried the same
+    call and the same latent breakage in the tool every lane commits with. Local green was not CI
+    green for the most literal possible reason: the two machines ran different programs.
+
+    Both are now `mktemp "${TMPDIR:-/tmp}/<name>.XXXXXX"`, which is what scripts/pre-push.sh already
+    used and what GNU documents, and which BSD also accepts. This guard is static and portable, so it
+    holds on the developer machines where the defect is invisible -- which is the whole point, since a
+    test that merely runs mktemp would pass on every Mac in the project.
+    """
+    offenders = []
+    for script in sorted((ROOT / "scripts").glob("*.sh")):
+        for i, line in enumerate(script.read_text().splitlines()):
+            if line.lstrip().startswith("#"):
+                continue
+            for template in re.findall(r"mktemp\b[^\n]*?-t\s+\"?([^\"\s)]+)", line):
+                if not re.search(r"X{3,}", template):
+                    offenders.append(f"{script.name}:{i + 1}: {line.strip()}")
+    assert offenders == [], (
+        "`mktemp -t <prefix>` without at least three trailing X's is accepted by BSD mktemp and "
+        "REFUSED by GNU mktemp, so it works on every machine in this project and on no CI runner. "
+        'Write the path out instead: mktemp "${TMPDIR:-/tmp}/<name>.XXXXXX".\n' + "\n".join(offenders)
+    )
+
+
 # ---------------------------------------------------------------------------
 # 3. The lock and pyproject.toml say the same thing
 # ---------------------------------------------------------------------------

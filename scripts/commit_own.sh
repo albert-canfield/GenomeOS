@@ -144,7 +144,14 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 [ "$branch" != "main" ] || { echo "refusing to commit to main; work on dev" >&2; exit 65; }
 
 parent=$(git rev-parse HEAD)
-index=$(mktemp -t "genomeos-index")
+# Full path with six X's, not `mktemp -t <prefix>`. GNU mktemp -- which is what CI runs --
+# REFUSES a -t template with fewer than three trailing X's: `mktemp: too few X's in template
+# 'genomeos-index'`, which is verbatim what the run of 2026-10-02 12:08 UTC printed. BSD mktemp, which
+# is what every lane has locally, accepts a bare prefix and invents its own suffix, so this
+# script worked on each developer machine and could not work on Linux at all. This form is the
+# one scripts/pre-push.sh already uses, it is what GNU documents, and BSD takes it too (probed:
+# it appends a further suffix of its own, which is harmless since the name is never parsed).
+index=$(mktemp "${TMPDIR:-/tmp}/genomeos-index.XXXXXX")
 trap 'rm -f "$index"' EXIT
 export GIT_INDEX_FILE="$index"
 

@@ -101,7 +101,14 @@ attempt() {
   return "$st"
 }
 
-out=$(mktemp -t genomeos-push)
+# Full path with six X's, not `mktemp -t <prefix>`. GNU mktemp -- which is what CI runs --
+# REFUSES a -t template with fewer than three trailing X's: `mktemp: too few X's in template
+# 'genomeos-push'`, which is verbatim what the run of 2026-10-02 12:08 UTC printed. BSD mktemp, which
+# is what every lane has locally, accepts a bare prefix and invents its own suffix, so this
+# script worked on each developer machine and could not work on Linux at all. This form is the
+# one scripts/pre-push.sh already uses, it is what GNU documents, and BSD takes it too (probed:
+# it appends a further suffix of its own, which is harmless since the name is never parsed).
+out=$(mktemp "${TMPDIR:-/tmp}/genomeos-push.XXXXXX")
 trap 'rm -f "$out"' EXIT
 
 echo "push_own: pushing $short to $remote/$branch (the sha, not the branch name)"
