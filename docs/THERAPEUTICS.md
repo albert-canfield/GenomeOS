@@ -1157,6 +1157,144 @@ committed number will show. Saying so is the point: the honest outcome of the
 was one disagreement between a gate and a score rather than a scoring regime
 nobody had built.
 
+## The 5' partner's surface score, pre-registered 2026-10-03
+
+The section above closed one half of a disagreement and left the other half
+standing on purpose, with a test to make it countable
+(`test_the_five_prime_divergence_is_named_rather_than_left_uncovered`). This
+section decides that half. It is registered separately because closing it turns
+a weighted dimension off for a whole class of candidates, which moves numbers,
+and a change that moves numbers does not travel on another change's
+registration.
+
+**The question, in one sentence.** For a gene contributed as the 5' partner of
+every fusion that reached it, does this gene's own product reach the cell
+surface? The gate `mechanisms._surface` answers `None`. The score
+`surface_accessibility` reads the curated annotation and answers `1.0`. Both
+answers have a case, and the case has to be put before either is preferred.
+
+**What the gate's `None` licenses, and what it gets wrong.** The gate declines
+to call *any* fusion product reachable unless the orientation and the curated
+topology together settle it. That licenses exactly one thing: every surface
+mechanism for such a candidate is marked provisional and its compatibility is
+capped at `PROVISIONAL_CEILING`, so no antibody, conjugate or cell product is
+offered as established against a protein whose outward face is not established.
+What it gets wrong is the opposite error: a 5' partner whose junction lies
+beyond its own transmembrane segment makes a product that carries this gene's
+signal peptide, its whole ectodomain *and* its anchor — a genuine surface
+target, refused. The gate's cost is a missed target, which is recoverable, and
+it never offers a binder against something a binder cannot reach.
+
+**What the score's `1.0` licenses, and what it gets wrong.** It licenses the
+curated full-length figure as a description of the product: the compartment
+confidence, plus the bonus for the length of the curated extracellular span. For
+a 5' partner that is right exactly when the junction falls 3' of this gene's
+transmembrane segment. What it gets wrong is that nothing in the record says
+where the junction falls. `VariantOrigin.fusion_orientation` is `"5'"`, `"3'"`
+or empty; `fusion_junction` is kept verbatim and nothing parses it; and the
+fourth column of `read_sv_table` carries an end, not a breakpoint. So the
+annotation is read at full value for a product whose membrane anchorage is
+unrecorded — and the repository holds the worked case that shows this is not
+hypothetical. The EML4-ALK fixture's own recorded annotation is "EML4 exons
+1-20 with ALK exons 20-29", with ALK's ectodomain at exons 1-19
+(`tests/test_cancer_alterations.py`). A fusion contributing ALK as the 5'
+partner at that junction would carry ALK's signal peptide and its entire
+ectodomain and none of its transmembrane segment: an unanchored outward face,
+not a surface target, scored at the maximum.
+
+**Why this is not two different questions.** The strongest argument for leaving
+the two apart is written in `scoring.py` itself: `alteration_evidence` was taken
+out of the weighted mean because "a precondition is not a dimension of goodness",
+and whether a product is anchored at the membrane is a precondition. Under that
+principle the unknown belongs in the gate, where it already is, and the mean
+should not change its denominator for it. The argument fails on the project's own
+committed decision: `ectodomain_lost` puts the product question *into the score*
+and answers `0.0` for ALK, which is published, pinned
+(`tests/test_therapeutic_benchmark.py`, "scored from the product the fusion
+makes") and reasoned; and the section above extended that to `None` for the
+uncurated arrangement. Honouring the precondition principle here would mean
+undoing ALK's published `0.0`, which is not on offer. Given that the score
+answers the product question, `1.0` for a 5' partner is an unknown defaulted to
+the maximum — the same inversion of this module's opening rule that the section
+above repaired one case of, and not a second question.
+
+**What is registered.** `mechanisms.product_extent_unknown(c)` is true when
+every event that reached this gene is a fusion and the record does not establish
+this gene as the 3' partner of all of them — the 5' partner, the fusion whose
+orientation no caller reported, and the gene that is the 3' partner of one
+fusion and the 5' of another. `surface_accessibility` then returns `None` with
+the reason, so the dimension is dropped from the mean and counted as missing
+coverage, which is what the gate has said since 2026-09-21. The gate is not
+changed: it already answers `None` across this whole region, and only the score
+moves to meet it. The three states stay pairwise exclusive by construction,
+because `product_extent_unknown` requires that this gene is *not* established as
+the 3' partner of every fusion while `ectodomain_lost` and
+`ectodomain_uncertain` both require that it is.
+
+**The unknown orientation is included, and why.** A fusion with no reported
+orientation is strictly less established than a 5' partner: it does not even say
+which end this gene contributes. Leaving it at `1.0` while the
+better-characterised 5' case answered `None` would make the score fall as the
+record improves, which no scoring rule may do. `read_sv_table` already refuses
+to guess an orientation from the gene order in a fusion's name, calling that a
+naming convention and not a measurement; this is the same refusal carried one
+step further, into the number.
+
+**What this must not do.** It must not become "a fusion is never a surface
+target". A gene reached by a fusion *and* by another route makes a full-length
+product too and keeps its annotation reading. A candidate with no fusion origin
+is untouched. `ectodomain_lost` keeps precedence and still answers `0.0`, and a
+protein curated inside the cell still answers `0.0` before the fusion question is
+asked. The 3' partner whose curated arrangement is multi-pass or whose
+extracellular segment runs past its first pass keeps the annotation reading the
+section above registered for it: that is a described arrangement rather than a
+gap, it was deliberately left in place with its reason, and it is not reopened
+here.
+
+**What is expected to move, named before it is moved.** No published figure. The
+two committed benchmark results hold ten rows carrying `surface_accessibility`;
+one of them is a fusion candidate, ALK, and it is the 3' partner of a curated
+type-I arrangement, so `ectodomain_lost` answers it at `0.0` and it is outside
+this predicate. The other nine reach the dimension by amplification, point
+mutation or expression and are not fusion-only. `BURIED_SURFACE_TARGETS` is
+**not** predicted to move and may not rise; `surface_cases`,
+`surface_cases_recovered`, `targets_recovered`, `verdicts_correct` and
+`top_mechanism_defensible` are not predicted to move. What does move is
+uncommitted and prospective: for any fusion-only candidate in this region the
+surface dimension becomes missing coverage, and because the removed value was
+`1.0`, the maximum, the overall weighted mean can only fall or hold and may
+never rise. The scale of the prospective move is on the record and is the reason
+this needed registering: `data/results/cancer_alterations_msk_impact_2017.json`
+reports fusions in 95 genes over 928 samples of 10,945, and records an
+orientation for none of them, because the cBioPortal client asked for
+`projection=SUMMARY`, which drops it. Every one of those would arrive in the
+unknown-orientation branch. Recovering them is a separate decision and not this
+one: it needs the junction located against the curated transmembrane segment,
+either by parsing `fusion_junction` or by asking the detailed endpoint that
+carries the breakpoints.
+
+**The falsifier.** Falsified by any published score, rank, target class,
+mechanism, compatibility, accessibility or peptide route in either committed
+therapeutic benchmark changing; by `product_extent_unknown` being true together
+with `ectodomain_lost` or with `ectodomain_uncertain`; by a gene reached by a
+fusion and by another route, or a gene with no fusion origin, losing its
+annotation reading; by a 3' partner's answer changing anywhere; by the overall
+score of any candidate *rising* under this change; by `surface_accessibility`
+returning `None` where the gate answers `True` or `False`; or by any pin rising.
+
+**What it does not claim.** It does not claim that a 5' partner's product is
+unanchored; it claims that the record does not say, and that an unrecorded
+anchor may not be scored at the maximum. It does not claim an improvement any
+committed number will show, because no benchmark case is a 5' partner or an
+unoriented fusion — this is a correctness repair proven by planted inputs. And
+it leaves one subcase named and open rather than answered: a 5' partner curated
+as GPI-anchored loses the C-terminus that an anchor of that kind occupies, which
+would be an answer rather than a gap, but the model carries `gpi_anchored` as a
+compartment confidence and no anchor region, so there is nothing to read and
+`None` is the honest reading until there is.
+
+Holds no measurement and no field a run would fill.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
