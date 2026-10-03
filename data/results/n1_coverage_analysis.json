@@ -1,0 +1,611 @@
+{
+  "result": "n1_coverage_analysis",
+  "date": "2026-10-03",
+  "what_this_is": "AN ANALYSIS OF COMMITTED FIGURES. It contains NO NEW MEASUREMENT. No study file was opened: nothing was downloaded, no cached pseudobulk or published p-value file was read, no p-value was parsed, no perturbed row, knockdown field or differential-expression call was touched, and no request of any kind was made. Every figure below is arithmetic over numbers already committed in data/results/n1_result_amendment_2.json, or a line number found in the committed text of the module that wrote them.",
+  "outcome_exposure": {
+    "spent": "none",
+    "why": "the inputs are three committed result files and two committed texts. N1b step 2's value is that outcome blindness has not been spent, and this analysis spends none of it."
+  },
+  "explains": {
+    "result": "n1_result_amendment_2",
+    "status": "insufficient_coverage",
+    "committed_note": "12 defined paired differences, below the floor of 30; no estimate is reported and no rule is relaxed",
+    "the_floor_is_not_touched": "no rule is relaxed, reinterpreted or worked around here, and no estimate is recovered. The question answered is WHY the coverage is what it is."
+  },
+  "headline": "The floor failed through CONCENTRATION, not through density. The 56 factors average 1.000 responders each with a variance of 15.1636, a ratio of 15.16. An even spread at that same mean would have left 35.4 factors defined, ABOVE the floor of 30; the observed 44 zero factors is 6.5 standard deviations away from that model, which the committed counts therefore refute. All of the responders sit in 12 of the 56 factors. That is a property of how much perturbations differ from one another in effect, not a property of the gene universe, and no rule about which genes to analyse corrects it.",
+  "endpoint": {
+    "answer": "(a) the producers' own Anderson-Darling differential-expression calls at BH-adjusted p < 0.05",
+    "not": "(b) a per-gene derived statistic of the T = X * sqrt(n) family, and nothing else either: the two answers below agree and no third path can write these bytes",
+    "from_the_code": {
+      "file": "genomeos/attribution/n1_perturb_response.py",
+      "predicate": "labels = [pvals[genes[j]] < AD_LEVEL for j in keep]",
+      "predicate_line": [
+        1251
+      ],
+      "level_constant": "AD_LEVEL = 0.05",
+      "level_constant_line": [
+        1135
+      ],
+      "emission_site": "return None, \"no_responders\", 0",
+      "emission_line": [
+        883
+      ],
+      "chain": "factor_result_v3 forms the labels from the published adjusted p-values that ad_values_pass parsed; stratified_auroc emits the string when that label class is empty; paired_analysis_v2 tallies it into undefined_reasons"
+    },
+    "from_the_result_alone": {
+      "basis": "each factor_result_* writer emits a key the other does not, so the committed bytes name their own writer without reference to the code",
+      "key_present": [
+        "genes_missing"
+      ],
+      "key_absent": [
+        "genes_nonfinite_response"
+      ],
+      "endpoint": "published_anderson_darling",
+      "datasets_read": [
+        "raw:obs/gene_transcript",
+        "raw:var/gene_id",
+        "raw:X[585 rows x 860 columns]",
+        "ad: labels",
+        "ad: values: 56 columns x 496 rows"
+      ],
+      "normalized_pseudobulk_appears": false,
+      "reading": "the normalized pseudobulk never appears and no perturbed row of any file was read; the only pseudobulk read is 585 non-targeting rows, used for the decile axis"
+    },
+    "the_two_answers_agree": true,
+    "prose_and_code_agree": true,
+    "registration_question": "Among the 56 frozen candidate factors, do the element-attribution predictions rank the genes the producers' Anderson-Darling test calls differentially expressed (BH-adjusted p < 0.05) after the factor's assigned CRISPRi perturbation above the non-responding genes of the same control-expression decile, more than promoter proximity does?",
+    "t_is_absent_from_run_v3": {
+      "function": "run_v3",
+      "span": [
+        1279,
+        1348
+      ],
+      "absent": true,
+      "marker_lines": {
+        "RESPONDS_T": [
+          47,
+          48,
+          92,
+          430,
+          559,
+          923
+        ],
+        "pooled_t(": [
+          515,
+          737,
+          1055
+        ]
+      },
+      "marker_lines_inside_the_span": {}
+    },
+    "where_t_is_used_instead": {
+      "responds_t_constant_line": [
+        47
+      ],
+      "pooled_t_definition_line": [
+        515
+      ],
+      "note": "every occurrence listed under t_is_absent_from_run_v3.marker_lines lies outside the span of run_v3, which is given beside them; the amendment-1 path that does use them stops at eligibility_unsupported and wrote no committed result"
+    },
+    "what_this_settles": "the shortfall is a shortfall under endpoint (a) and under endpoint (a) only",
+    "what_this_leaves_open": "the 44 are SILENT about coverage under a calibrated-T endpoint. Its coverage is UNKNOWN; it was not estimated here, in either direction, because estimating it would read outcome rows. The one caution that follows from the committed counts and not from any new reading is that the quantity which broke the floor is concentration across factors (see `why_the_floor_was_not_reached`), which a change of per-gene label does not obviously fix. That is a caution and not an estimate, and it must not be read as one either way."
+  },
+  "what_no_responders_means": {
+    "operational_definition": "a factor is counted undefined with the reason `no_responders` when NOT ONE gene of its own universe -- the 496 analysis genes, minus that factor's excluded genes, minus any gene whose published adjusted p-value is missing -- has a published BH-adjusted Anderson-Darling p-value below 0.05 in that factor's principal-transcript column",
+    "emitted_when": "pos == 0, where pos counts the True labels",
+    "undefined_reasons_as_committed": {
+      "no_responders": 44
+    },
+    "sibling_labels_counted_apart": {
+      "all_responders": {
+        "emitted_at_line": [
+          885
+        ],
+        "count_in_the_committed_result": 0
+      },
+      "no_stratum_with_both_classes": {
+        "emitted_at_line": [
+          903
+        ],
+        "count_in_the_committed_result": 0,
+        "means": "decile matching left no comparison group"
+      }
+    },
+    "genes_missing_per_factor": [
+      0
+    ],
+    "genes_per_factor": [
+      496
+    ],
+    "ruled_out_by_the_committed_figures": [
+      "decile matching leaving no comparison group: separately labelled and counted 0",
+      "every gene responding: separately labelled and counted 0",
+      "missing p-values: genes_missing is 0 for all 56 factors, so the 56 x 496 submatrix carried a usable value at every cell",
+      "per-factor exclusions: genes is 496 for all 56, so no factor excluded any analysed gene and all 56 share one identical universe",
+      "an identifier mismatch between the two files: the registration records the gene axis as Ensembl gene IDs as row labels, with the file's first row label placed at index 2 of the pseudobulk's genes, so the 364 absent genes are a genuine gene-subset difference"
+    ],
+    "conflates_exactly_two_causes": [
+      "a perturbation for which the producers called nothing differentially expressed anywhere",
+      "a perturbation whose differentially expressed genes all lie outside the analysis universe"
+    ],
+    "decomposition_is_not_possible_from_committed_data": true,
+    "missing_field": {
+      "field": "responders_outside_universe",
+      "would_separate": [
+        "a perturbation for which the producers called nothing differentially expressed anywhere",
+        "a perturbation whose differentially expressed genes all lie outside the analysis universe"
+      ],
+      "why_it_was_never_formed": "the values pass skips every row outside the wanted rows after reading its first field, so a p-value outside the universe is never converted and no count of such calls exists in the result",
+      "cost_to_form": "it parses published adjusted p-values at genes the authorised run did not read, so it spends outcome blindness and was not taken here",
+      "skip_site": "if gene not in wanted_rows:",
+      "skip_line": [
+        1227
+      ]
+    }
+  },
+  "why_the_floor_was_not_reached": {
+    "factors": 56,
+    "responder_cells": 56,
+    "per_factor_mean": 1.0,
+    "per_factor_variance_ddof1": 15.163636363636364,
+    "variance_to_mean_ratio": 15.163636363636364,
+    "zero_factors_observed": 44,
+    "defined_observed": 12,
+    "floor": 30,
+    "even_spread": {
+      "model": "homogeneous Poisson at the observed per-factor mean: every factor the same rate",
+      "zero_probability": 0.36787944117144233,
+      "expected_zero_factors": 20.60124870560077,
+      "expected_defined": 35.39875129439923,
+      "clears_the_floor": true,
+      "sd_of_the_zero_count": 3.6086663525948834,
+      "observed_zeros_in_sd": 6.484043967537728
+    },
+    "responder_counts": [
+      27,
+      11,
+      3,
+      3,
+      3,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "share_of_responders_in_the_defined_factors": 1.0,
+    "reading": "the shortfall is not a shortage of responders overall. The per-factor mean is high enough that an even spread would have cleared the floor. It is a shortage of factors with ANY detected response, which is what extreme between-factor variation produces.",
+    "this_is_a_property_of": "perturbation effect sizes varying across perturbations",
+    "this_is_not_a_property_of": "the gene universe, the decile matching, the missing values or the two arms' scores"
+  },
+  "the_coverage_gap": {
+    "as_committed": {
+      "universe": 860,
+      "in_file_rows": 496,
+      "absent_from_file": 364,
+      "listed_twice": 0,
+      "non_finite_control_expression": 0,
+      "analysis_genes": 496
+    },
+    "share_of_the_universe_absent": 0.4232558139534884,
+    "model_based_extrapolation": {
+      "fits": true,
+      "model": "gamma-mixed Poisson (negative binomial), shape and mean matched to the observed counts by moments; the mean scales with the universe and the shape is held",
+      "shape_k": 0.07060333761232349,
+      "mixing_coefficient_of_variation": 3.763460689795546,
+      "assumption": "a factor's per-gene responder rate outside the analysed genes equals its rate inside them",
+      "at_universes": [
+        {
+          "universe_genes": 496,
+          "mean_responders_per_factor": 1.0,
+          "zero_probability": 0.8253370505454617,
+          "expected_zero_factors": 46.21887483054586,
+          "expected_defined": 9.781125169454146
+        },
+        {
+          "universe_genes": 860,
+          "mean_responders_per_factor": 1.7338709677419355,
+          "zero_probability": 0.7954703635862077,
+          "expected_zero_factors": 44.54634036082763,
+          "expected_defined": 11.453659639172368
+        },
+        {
+          "universe_genes": 8248,
+          "mean_responders_per_factor": 16.629032258064516,
+          "zero_probability": 0.6798232673112611,
+          "expected_zero_factors": 38.07010296943062,
+          "expected_defined": 17.92989703056938
+        }
+      ]
+    },
+    "model_based_universe_for_the_floor": {
+      "solvable": true,
+      "wanted_defined": 30,
+      "mean_responders_per_factor_needed": 3701.250613500697,
+      "universe_genes_needed": 1835820.3042963457
+    },
+    "distribution_free_bracket": {
+      "low_end": {
+        "assumption": "each factor's per-gene rate is its own observed rate",
+        "defined_at_any_universe": 12,
+        "reading": "a factor with no responder among the analysed genes stays undefined however many genes are added"
+      },
+      "high_end": {
+        "assumption": "a factor with no responder sits at its exact one-sided 95% upper confidence bound",
+        "genes_observed": 496,
+        "upper_per_gene_rate": 0.006021579986860649,
+        "responders_per_observed_universe_at_that_rate": 2.986703673482882,
+        "added_genes": 364,
+        "probability_at_least_one_responder_among_the_added_genes": 0.8890283973840076,
+        "reading": "a case exists in which most of the undefined factors would become defined, and the committed counts do not exclude it"
+      },
+      "what_separates_them": "whether a factor with none among the analysed genes has a rate near zero or was merely unlucky in them, which only its p-values at the other genes would say"
+    },
+    "largest_universe_the_study_admits": {
+      "genes": 8248,
+      "where_from": "the gene count of the raw pseudobulk, as data/results/n1b_calibration.json records it",
+      "reading": "the fitted extrapolation falls short of the floor even there, which is why enlarging the gene universe is not a route to it"
+    },
+    "never_quote_the_model_alone": "the fitted figures and the distribution-free bracket are one finding and are to be carried together; the bracket's high end is not excluded by anything committed",
+    "cannot_be_determined": [
+      "why 364 of the 860 are absent from the published file's rows. The plausible mechanism is that the producers' table reports fewer genes than the pseudobulk holds because of an expression filter, in which case the absent genes are the least expressed and the least likely to be called differentially expressed, and the equal-density reading above is already generous. It is not confirmed here.",
+      "the published file's total row count, which would say how large the gap is relative to what the producers tested. It is in no committed record (see carried_forward).",
+      "whether a factor with no responder among the analysed genes has a per-gene rate near zero or was merely unlucky in them. Only its p-values at the other genes would say, and reading them spends outcome blindness."
+    ]
+  },
+  "changes_that_could_reach_the_floor": [
+    {
+      "change": "enlarge the gene universe toward every gene the raw pseudobulk holds",
+      "design_status": "pre-registerable: a universe rule can be fixed before any label is seen",
+      "reads_new_outcome_data": true,
+      "what_it_would_license": "nothing that reaches the floor. The extrapolation fitted to the committed counts falls short at the largest universe the study admits, and the shortfall it would have to close is not a shortfall of genes."
+    },
+    {
+      "change": "enlarge the candidate factor set beyond the 56",
+      "design_status": "pre-registerable",
+      "reads_new_outcome_data": true,
+      "what_it_would_license": "at the observed share of defined factors it would take about 143 candidates to expect 30 defined, and the element scan that produced the 56 would have to be extended first. Nothing committed says new factors would behave differently."
+    },
+    {
+      "change": "raise the adjusted-p level above 0.05, or re-run the adjustment over this subset",
+      "design_status": "POST-HOC tuning of a frozen label",
+      "reads_new_outcome_data": true,
+      "what_it_would_license": "nothing. The level is the producers' own and is frozen, and the family the adjustment ran over is not documented, so no re-adjustment is justified in either direction."
+    },
+    {
+      "change": "change the endpoint, for instance to a calibrated-T label",
+      "design_status": "pre-registerable ONLY as a new registered study, never as a relaxation of N1",
+      "reads_new_outcome_data": true,
+      "what_it_would_license": "not established here, and deliberately so. The 44 are SILENT about this endpoint. Its coverage is UNKNOWN and was not estimated, in either direction. The caution that does follow from the committed counts is that concentration across factors is what broke the floor, and a change of per-gene label does not obviously fix it; that is a caution and not an estimate, and a reader must not take it as one."
+    },
+    {
+      "change": "lower the floor of 30, or treat the unstratified mean as an estimate",
+      "design_status": "POST-HOC, and refused",
+      "reads_new_outcome_data": false,
+      "what_it_would_license": "nothing. This is the failure the floor exists to prevent. The unstratified mean over the 12 defined factors is -0.06105..., it carries no criterion, it sits below the floor and it is not an estimate of the gain."
+    },
+    {
+      "change": "record the published file's total row count",
+      "design_status": "neither: a record-keeping repair, not a design change",
+      "reads_new_outcome_data": false,
+      "what_it_would_license": "not one more defined factor. It would say whether the 364 gap is small or large relative to what the producers tested. Ruled not now (see carried_forward)."
+    }
+  ],
+  "verdict": "No pre-registerable change to N1's frozen design reaches the floor of 30 without reading new outcome data, and the change that enlarges coverage the most is the one the committed counts predict would still fall short. 'The study lacks responders under this endpoint and no pre-registerable change reaches the floor' is the finding, stated with no less confidence than any other.",
+  "the_null_tail_figure_is_not_a_coverage_estimate": {
+    "quote": "about two chance responders per factor over 860 genes",
+    "where": "docs/ATTRIBUTION.md line(s) [12196]",
+    "what_it_is": "the original N1 registration's own pre-measurement arithmetic on the derived statistic's null tail: how many responders CHANCE ALONE would produce under the old operational label, over 860 genes",
+    "what_it_is_not": "it is not a coverage estimate. It says nothing about how many factors would be defined under any endpoint, and in particular nothing about concentration across factors, which is the quantity that broke the floor. It is quoted here only as what it is."
+  },
+  "carried_forward": {
+    "item": "record the published file's total row count, len(labels['rows']), on the NEXT authorised pass over that file, if one ever happens -- not as a separate read",
+    "where_it_was_lost": "genomeos/attribution/n1_perturb_response.py line(s) [1306]: the labels pass forms every row's first field, the run counts only the three universe-relative figures from it, and the row count itself is discarded with the list",
+    "ruling": "THE COORDINATOR'S RULING, 2026-10-03: DO NOT READ IT as a separate act. Two reasons, neither of them caution about the door: it is not decision-critical, because enlarging the universe is predicted to fall short at every gene the study holds anyway, so the size of the gap cannot change the recommendation; and a read that cannot change a decision is not worth its precedent. It rides along on the next authorised pass, where it costs nothing at all.",
+    "the_lane_s_reading_differed": "lane-n1coverage judged the read free of outcome blindness: a labels pass parses no value and exposes no outcome. The coordinator does not dispute that and declines the separate read on cost and precedent. Both positions are on the record; the ruling is the coordinator's and the lane did not take the read.",
+    "for_the_next_registration": "a pass that has already paid for its access should record the cheap identity facts it is standing on top of -- row and column counts, duplicate counts, the first and last label -- because each is free while the file is open and costs a whole read afterwards"
+  },
+  "cost": {
+    "money": "none",
+    "model_requests": 0,
+    "alphagenome_requests": 0,
+    "network": "none: no request was made",
+    "study_files_opened": 0,
+    "outcome_values_parsed": 0
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/n1_result_amendment_2.json, the committed result of N1's authorised amendment-2 run",
+        "version": "amendment 2, written 2026-10-01 at 29e7a88b1ca3a5d116cc0c59c68bbecab7327862; read for its coverage, analysis and per-factor counts"
+      },
+      {
+        "accession": "data/results/n1_registration_amendment_2.json, the registration that froze the question and the label",
+        "version": "2026-10-01; read for the question, the gene axis and the rules, and for nothing numeric"
+      },
+      {
+        "accession": "data/results/n1b_calibration.json, read for one number: the gene count of the raw pseudobulk",
+        "version": "its own committed figure genes.in_file, which bounds the largest gene universe the study admits"
+      },
+      {
+        "accession": "genomeos/attribution/n1_perturb_response.py, the committed module that wrote the result",
+        "version": "its text in this checkout, searched for exact source strings so every line number reported is found rather than typed in"
+      },
+      {
+        "accession": "docs/ATTRIBUTION.md, read for one quoted sentence",
+        "version": "the original N1 registration's null-tail figure, carried word for word and marked as not a coverage estimate"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/n1_result_amendment_2.json",
+        "sha256": "51d18fff86e858349e0586b204d769b0697ecaa8bf6f8e72ea913263f53d5ea8",
+        "bytes": 30145,
+        "partition": "the committed amendment-2 result: coverage, analysis and the 56 per-factor records"
+      },
+      {
+        "path": "data/results/n1_registration_amendment_2.json",
+        "sha256": "97909dbf210a4fc9553052511c3c8b5786cceb2873fe258a37a2e4efe67ba90b",
+        "bytes": 13656,
+        "partition": "the frozen question, rules and gene axis"
+      },
+      {
+        "path": "data/results/n1b_calibration.json",
+        "sha256": "fd9b88d0ef42e825fd4d1b5f8e7e9ef4fddca657229865b74deda764c84bf83a",
+        "bytes": 206178,
+        "partition": "one figure: genes.in_file, the pseudobulk's genes"
+      },
+      {
+        "path": "genomeos/attribution/n1_perturb_response.py",
+        "sha256": "9be800c903fefa644a985e14ebfa224723770118c4f4a91494ee9ecfad092904",
+        "bytes": 63958,
+        "partition": "committed code, read as TEXT to locate the predicate and the emission sites; outside data/, so the audit hook that watches data/ cannot record this read and the entry appears under declared_not_read for that reason and not because its digest was carried over from elsewhere"
+      },
+      {
+        "path": "docs/ATTRIBUTION.md",
+        "sha256": "c4a210d57147577ca927ff8c8ffd3e83a8be2565623f9f9401c791f3e1f22ee1",
+        "bytes": 1175025,
+        "partition": "committed prose, read for one quoted sentence; outside data/, so the same note applies as for the module"
+      }
+    ],
+    "assembly": "n/a: this analysis holds no coordinate and no sequence. It is arithmetic over counts in a committed result and line numbers in committed text.",
+    "coordinates": "n/a: no interval is read, written or compared.",
+    "parameters": {
+      "floor": 30,
+      "universes_extrapolated_to": [
+        496,
+        860,
+        8248
+      ],
+      "extrapolation_model": "gamma-mixed Poisson, shape and mean matched to the observed counts by moments, mean scaling with the universe and shape held",
+      "bracket_level": 0.05,
+      "source_strings_searched_for": {
+        "responder_predicate": "labels = [pvals[genes[j]] < AD_LEVEL for j in keep]",
+        "ad_level_constant": "AD_LEVEL = 0.05",
+        "no_responders_emission": "return None, \"no_responders\", 0",
+        "all_responders_emission": "return None, \"all_responders\", 0",
+        "no_stratum_emission": "return None, \"no_stratum_with_both_classes\", 0",
+        "values_pass_row_skip": "if gene not in wanted_rows:",
+        "labels_pass_row_count_discarded": "seen = Counter(labels[\"rows\"])",
+        "responds_t_constant": "RESPONDS_T = 3.0",
+        "pooled_t_definition": "def pooled_t(",
+        "run_v3_definition": "def run_v3(",
+        "factor_result_v3_definition": "def factor_result_v3(",
+        "stratified_auroc_definition": "def stratified_auroc("
+      },
+      "endpoint_discriminating_keys": {
+        "published_anderson_darling": "genes_missing",
+        "derived_t_statistic": "genes_nonfinite_response"
+      }
+    },
+    "exclusions": [
+      "NO NEW MEASUREMENT: no study file was opened, no p-value parsed, no perturbed row, knockdown field or differential-expression call read, and no request made",
+      "the floor of 30 is not relaxed, lowered, reinterpreted or worked around, and no estimate is recovered from a run that is below it",
+      "the unstratified mean of -0.06105... over 12 factors is quoted only as what the registration says it is and is never treated as an estimate of the gain",
+      "coverage under any OTHER endpoint is not computed, estimated, sampled or spot-checked, in either direction, because doing so would read outcome rows",
+      "no model-based extrapolation is reported without the distribution-free bracket beside it, whose high end the committed counts do not exclude",
+      "the published file's total row count was NOT read: the coordinator ruled against the separate read and it is carried forward to the next authorised pass",
+      "no claim is made that the 44 factors lack a regulatory role in K562: the perturbations are assigned, with no knockdown check, as the committed result already states"
+    ],
+    "partitions": {
+      "defined_factors": "the 12 factors whose stratified paired difference is defined, each with at least one responder among the analysed genes",
+      "undefined_factors": "the 44 counted `no_responders`: not one analysed gene with a published adjusted p below 0.05 in that factor's principal column",
+      "absent_genes": "the 364 universe genes with no row in the published file, which could never be labelled for any factor",
+      "analysed_genes": "the 496 universe genes present once in the file's rows with a finite control expression, identical for all 56 factors"
+    },
+    "code_cleanliness": {
+      "git_sha": "431d06f2cb9cbf6d641a758a5914e84e3d24f893",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/n1_coverage_analysis.py",
+        "form": "committed_repository_file",
+        "path": "scripts/n1_coverage_analysis.py",
+        "is_committed": true,
+        "declared_entry": "scripts/n1_coverage_analysis.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/compile.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/parser.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_cell_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/compose.py",
+        "genomeos/runtime/debugger.py",
+        "genomeos/runtime/gastrulation.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/sbml.py",
+        "genomeos/runtime/segmentation.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "scripts/number_provenance_census.py",
+        "scripts/number_provenance_register.py",
+        "scripts/rule_cell_provenance_cost.py",
+        "scripts/rule_evidence_tier_cost.py",
+        "scripts/rule_evidence_tier_register.py",
+        "scripts/rule_number_sources_census.py",
+        "scripts/rule_number_sources_register.py",
+        "tests/test_compiled_defaults.py",
+        "tests/test_engine_licence_headers.py",
+        "tests/test_number_provenance.py",
+        "tests/test_rule_cell_provenance.py",
+        "tests/test_rule_evidence_tier.py",
+        "tests/test_rule_number_sources.py",
+        "tests/test_rule_number_sources_findings.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/n1_coverage.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/n1_coverage_analysis.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "431d06f2cb9cbf6d641a758a5914e84e3d24f893",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/parser.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_cell_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/compose.py",
+        "genomeos/runtime/debugger.py",
+        "genomeos/runtime/gastrulation.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/sbml.py",
+        "genomeos/runtime/segmentation.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "scripts/number_provenance_census.py",
+        "scripts/number_provenance_register.py",
+        "scripts/rule_cell_provenance_cost.py",
+        "scripts/rule_evidence_tier_cost.py",
+        "scripts/rule_evidence_tier_register.py",
+        "scripts/rule_number_sources_census.py",
+        "scripts/rule_number_sources_register.py",
+        "tests/test_compiled_defaults.py",
+        "tests/test_engine_licence_headers.py",
+        "tests/test_number_provenance.py",
+        "tests/test_rule_cell_provenance.py",
+        "tests/test_rule_evidence_tier.py",
+        "tests/test_rule_number_sources.py",
+        "tests/test_rule_number_sources_findings.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "tests/test_compiled_defaults.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/n1_coverage_analysis.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "431d06f2cb9cbf6d641a758a5914e84e3d24f893",
+      "code_cleanliness_git_sha": "431d06f2cb9cbf6d641a758a5914e84e3d24f893",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 431d06f"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 29,
+      "opens_under_data": 7,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "docs/ATTRIBUTION.md",
+        "genomeos/attribution/n1_perturb_response.py"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
