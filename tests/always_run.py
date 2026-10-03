@@ -108,6 +108,14 @@ TRANSITIVE_GENOMEOS_MODULES_LOADED: dict[str, int] = {
     "tests/test_headline_registry_matches_readme.py": 0,
     "tests/test_committed_data.py": 0,
     "tests/test_results_writers_guard.py": 0,
+    # 4, and it is the FIRST member that loads any genomeos module at all -- the other five are
+    # static analyses that import nothing from the package. Measured the documented way, not guessed:
+    # genomeos, genomeos.attribution, genomeos.attribution.onetarget2, genomeos.version. Worth stating
+    # because it changes the character of this list: a member that imports the package can fail for a
+    # reason inside the package rather than for the invariant it names. It is still the cheapest way to
+    # hold the census, and the alternative -- leaving it out -- is what let two lanes commit an
+    # unclassified head-reading module in one hour on 2026-10-03.
+    "tests/test_onetarget2.py": 4,
 }
 
 HOW_THE_COUNT_WAS_TAKEN = (
@@ -125,14 +133,27 @@ def test_every_member_exists_and_is_a_test_module() -> None:
         assert member["category"].strip() and member["why"].strip(), member["path"]
 
 
-def test_the_four_categories_the_coordinator_named_are_all_covered() -> None:
-    categories = {m["category"] for m in MEMBERS}
-    assert categories == {
+#: The four this list was created with, 2026-10-02. Kept as its own set so the test below keeps the
+#: name it was given and stays true: these four must all still be covered, whatever is added later.
+CATEGORIES_AS_CREATED = frozenset(
+    {
         "engine/licensing boundary",
         "README-registry match",
         "committed-artefact presence",
         "the write guard",
     }
+)
+
+#: Everything covered today. Added since: the one-target census (2026-10-03, after two lanes committed
+#: an unclassified head-reading module within one hour and neither could see the red).
+CATEGORIES_NOW = CATEGORIES_AS_CREATED | {"one-target census drift"}
+
+
+def test_the_four_categories_the_coordinator_named_are_all_covered() -> None:
+    categories = {m["category"] for m in MEMBERS}
+    assert categories >= CATEGORIES_AS_CREATED, CATEGORIES_AS_CREATED - categories
+    # And the whole set is pinned, so an addition is a decision recorded here rather than a drift.
+    assert categories == CATEGORIES_NOW, categories ^ CATEGORIES_NOW
 
 
 def test_this_list_carries_no_allowlist_and_no_skip() -> None:

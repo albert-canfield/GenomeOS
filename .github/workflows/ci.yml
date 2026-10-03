@@ -34,7 +34,15 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # 25 until 2026-10-03, when `test` was CANCELLED at 25:04 having already printed its own
+    # result (8 failed, 5,569 passed in 24:47) -- so the cancellation destroyed a verdict that
+    # existed, and a cancelled run makes the sha permanently unusable for the paid study's
+    # ci_green clause. At 0199fbe the same jobs took 15.5 and 19.6 minutes; tonight 24.8 and
+    # 24.2 with about 6% more tests, and the local gate moved from ~9 to ~20 minutes on an idle
+    # machine. Something slow came in; `--durations=25` and a row will say what. Raising the
+    # ceiling lowers NO bar: every test still has to pass. It only stops the clock ending a run
+    # that was going to answer.
+    timeout-minutes: 45
     steps:
       - name: The daily check is on dev
         if: github.event_name == 'schedule' && github.ref != 'refs/heads/dev'
@@ -145,7 +153,15 @@ jobs:
   # goes on his list once this job has run green twice.
   test-bare:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # 25 until 2026-10-03, when `test` was CANCELLED at 25:04 having already printed its own
+    # result (8 failed, 5,569 passed in 24:47) -- so the cancellation destroyed a verdict that
+    # existed, and a cancelled run makes the sha permanently unusable for the paid study's
+    # ci_green clause. At 0199fbe the same jobs took 15.5 and 19.6 minutes; tonight 24.8 and
+    # 24.2 with about 6% more tests, and the local gate moved from ~9 to ~20 minutes on an idle
+    # machine. Something slow came in; `--durations=25` and a row will say what. Raising the
+    # ceiling lowers NO bar: every test still has to pass. It only stops the clock ending a run
+    # that was going to answer.
+    timeout-minutes: 45
     steps:
       # fetch-depth: 0 for the reason argued at the `test` job's checkout. This is the job the five
       # SETUP errors were actually recorded in, because `test` died at the shellcheck step before

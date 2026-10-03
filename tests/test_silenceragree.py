@@ -64,9 +64,25 @@ def test_a_record_unplaced_on_grch38_is_rejected_not_placed_at_chrom_blank() -> 
     assert accounting["rejected"]["unplaced_on_grch38"] == 1
 
 
+#: The two git-IGNORED stores this check reads, and the reason a skip rather than a raise is correct
+#: for them. Both were verified with `git check-ignore` rather than assumed: `data/cache` is ignored at
+#: .gitignore:21 and `data/knowledge` with it. The standing rule is that a TRACKED path missing RAISES
+#: (tests/tracked_paths.py) and a git-IGNORED path missing is a named NOT-RUN-HERE skip
+#: (tests/local_data.py) -- the marker moves where a test runs, never what it claims.
+#:
+#: These seven tests went in at 88c0c8b, 4254351 and 19dd450 with no marker, so they RAN and FAILED in
+#: CI's bare job: 7 of the 8 failures of run 37153989422 on dcbe545. They pass here because this
+#: machine has the stores, which is exactly the asymmetry the marker exists to name.
+RESE_RECORDS = "data/cache/silenceragree/rese_records.json"
+RESE_HOW = "scripts/silenceragree_fetch.py fetches the ReSE records from NCBI Gene eutils (free, no key)"
+SCORED_ELEMENTS = "data/knowledge/alphagenome/all_elements"
+SCORED_HOW = "scripts/enhancer_targets_all.py writes the per-chromosome scored elements (worker_scorer)"
+
+
 # ---------------------------------------------------------------- scope sees no direction
 
 
+@pytest.mark.needs_local_data(SCORED_ELEMENTS, how=SCORED_HOW)
 def test_element_index_returns_no_direction_at_all() -> None:
     """scope()'s only door onto the element results must hand it no action field.
 
@@ -82,6 +98,7 @@ def test_element_index_returns_no_direction_at_all() -> None:
     assert not {"'represses'", "'activates'"} & flat
 
 
+@pytest.mark.needs_local_data(RESE_RECORDS, SCORED_ELEMENTS, how=RESE_HOW)
 def test_scope_output_holds_no_field_a_run_would_fill() -> None:
     assert reg.forbidden_at_any_depth(sa.scope()) == []
 
@@ -97,6 +114,7 @@ def test_the_forbidden_check_is_recursive_not_only_top_level() -> None:
 # ---------------------------------------------------------------- the control
 
 
+@pytest.mark.needs_local_data(RESE_RECORDS, SCORED_ELEMENTS, how=RESE_HOW)
 def test_the_control_never_draws_an_element_from_the_test_set() -> None:
     """A control that could re-draw the test set would pull its own mean toward the observation."""
     kept, _ = sa.rese_intervals(sa.rese_records())
@@ -106,6 +124,7 @@ def test_the_control_never_draws_an_element_from_the_test_set() -> None:
         assert not used & set(drawn)
 
 
+@pytest.mark.needs_local_data(RESE_RECORDS, SCORED_ELEMENTS, how=RESE_HOW)
 def test_the_control_matches_the_test_set_stratum_by_stratum() -> None:
     """Matched on (chromosome, cCRE class). A control matched on chromosome alone would import the
     genome's class composition, and the join is dELS and pELS only."""
@@ -124,6 +143,7 @@ def test_the_control_matches_the_test_set_stratum_by_stratum() -> None:
         assert len(set(drawn)) == len(drawn), "a control set drew the same element twice"
 
 
+@pytest.mark.needs_local_data(RESE_RECORDS, SCORED_ELEMENTS, how=RESE_HOW)
 def test_the_control_is_deterministic_under_its_registered_seed() -> None:
     kept, _ = sa.rese_intervals(sa.rese_records())
     rows, _ = sa.join(kept)
@@ -229,6 +249,7 @@ def test_independence_from_the_training_data_is_registered_as_not_established() 
 # ---------------------------------------------------------------- the negative that stands
 
 
+@pytest.mark.needs_local_data(RESE_RECORDS, how=RESE_HOW)
 def test_no_rese_record_validates_in_gm12878_or_imr90() -> None:
     """The four-cell-line negative, measured on the records rather than asserted.
 
@@ -271,6 +292,7 @@ def test_the_registration_as_written_holds_no_field_a_run_would_fill() -> None:
     assert [k for k in reg.forbidden_at_any_depth(written) if k != "result"] == []
 
 
+@pytest.mark.needs_local_data(RESE_RECORDS, SCORED_ELEMENTS, how=RESE_HOW)
 def test_the_base_rate_excludes_the_joined_elements_it_is_the_base_rate_for() -> None:
     """A base rate containing the observation is not a base rate.
 

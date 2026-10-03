@@ -43,14 +43,68 @@ def test_every_cited_commit_is_an_ancestor_or_has_a_recorded_reason(found: dict)
     )
 
 
-def test_the_reasons_list_stays_pruned(found: dict) -> None:
-    """A commit that has since merged must leave the allowlist, or it hides the next one."""
-    stray = {s["commit"] for s in found["commits"]["not ancestors"]}
-    stale_entries = sorted(set(tp.NOT_ANCESTOR_EXPECTED) - stray)
-    assert not stale_entries, (
-        "these are ancestors of HEAD now, so their exemption is dead weight and would "
-        f"mask a real stray: {stale_entries}"
+def _is_ancestor_of_head(rev: str) -> bool | None:
+    """True, False, or None when this checkout does not carry the commit at all.
+
+    Three outcomes and not two, which is the whole of the correction below.
+    """
+    import subprocess
+
+    present = subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", f"{rev}^{{commit}}"],
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
     )
+    if present.returncode != 0:
+        return None
+    anc = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", rev, "HEAD"], cwd=ROOT, capture_output=True, check=False
+    )
+    return anc.returncode == 0
+
+
+def test_the_reasons_list_stays_pruned() -> None:
+    """A commit that has since merged must leave the allowlist, or it hides the next one.
+
+    STALE MEANS "IS NOW AN ANCESTOR OF HEAD", which is what the message has always claimed, and it is
+    now what the test computes. The first version computed `NOT_ANCESTOR_EXPECTED - {not ancestors}`,
+    which conflates two different facts: a commit that has MERGED (really stale) and a commit this
+    checkout does not CARRY AT ALL (nothing of the kind). `cc677e8` is the second -- it was relabelled
+    to a3f1c04 before it was ever pushed, so it survives here only as a dangling object on no branch,
+    and dangling objects do not travel through a clone. So the old form was GREEN here and RED IN ANY
+    FRESH CLONE, including CI, where it reported `cc677e8` as "an ancestor of HEAD now" -- a sentence
+    that is false about a commit the clone does not have. It was 1 of the 8 failures of CI run
+    37153989422 on dcbe545, and no worktree could ever have shown it.
+
+    An absent entry is reported and asserted to carry a reason, so it is neither silently ignored nor
+    counted as stale.
+    """
+    verdicts = {rev: _is_ancestor_of_head(rev) for rev in sorted(tp.NOT_ANCESTOR_EXPECTED)}
+    stale = sorted(rev for rev, v in verdicts.items() if v is True)
+    assert not stale, (
+        "these are ancestors of HEAD now, so their exemption is dead weight and would "
+        f"mask a real stray: {stale}"
+    )
+    absent = sorted(rev for rev, v in verdicts.items() if v is None)
+    for rev in absent:
+        assert tp.NOT_ANCESTOR_EXPECTED[rev].strip(), rev
+
+
+def test_a_NEAR_MISS_entry_that_really_IS_an_ancestor_is_REPORTED_stale(monkeypatch) -> None:
+    """The near miss, so the correction above cannot have made the test vacuous.
+
+    HEAD is an ancestor of itself, so an allowlist naming it must be reported stale. Without this, a
+    version of the test that simply never found anything would look identical to a passing one.
+    """
+    import subprocess
+
+    head = subprocess.run(
+        ["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
+    ).stdout.strip()
+    monkeypatch.setattr(tp, "NOT_ANCESTOR_EXPECTED", {head: "planted: HEAD is its own ancestor"})
+    with pytest.raises(AssertionError, match="dead weight"):
+        test_the_reasons_list_stays_pruned()
 
 
 def test_every_result_named_in_a_data_bullet_exists(found: dict) -> None:
