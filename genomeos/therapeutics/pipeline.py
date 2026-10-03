@@ -629,6 +629,7 @@ def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) ->
         c.localization,
         ectodomain_lost=mech.ectodomain_lost(c),
         ectodomain_uncertain=mech.ectodomain_uncertain(c),
+        product_extent_unknown=mech.product_extent_unknown(c),
     )
     sel, sel_basis, sel_ev = tumour_selectivity(c.gene, c.tumour, c.normal_tissue)
     exp, exp_basis = tumour_expression_score(c.tumour)

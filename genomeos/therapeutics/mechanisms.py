@@ -168,6 +168,43 @@ def ectodomain_uncertain(c: Any) -> bool:
     return _fusion_only(c) and _n_terminus_lost(c) and _ectodomain_arrangement_uncurated(c.localization)
 
 
+def product_extent_unknown(c: Any) -> bool:
+    """Which part of this gene the fusion product contains is not on the record.
+
+    True when every event that reached this gene is a fusion and the record
+    does not establish this gene as the 3' partner of all of them: it is the
+    5' partner, or no caller reported an orientation at all, or it is the 3'
+    partner of one fusion and the 5' partner of another.
+
+    A 5' partner keeps the N-terminus it contributes, so its signal peptide and
+    the start of its outward face are in the product. Whether its own
+    transmembrane segment is depends on where the junction falls, and no field
+    records that: `fusion_orientation` names an end, `fusion_junction` is kept
+    verbatim and nothing parses it, and `read_sv_table`'s fourth column is an
+    end and not a breakpoint. The EML4-ALK fixture is the worked case, from its
+    own recorded annotation of EML4 exons 1-20 with ALK exons 20-29 against
+    ALK's ectodomain at exons 1-19: a fusion contributing ALK as the 5' partner
+    at that junction would carry ALK's signal peptide and its whole ectodomain
+    and none of its transmembrane segment. So the curated full-length figure
+    describes a product that may be an anchored receptor and may be an
+    unanchored outward face, and those are not the same target.
+
+    An unreported orientation is included because it is strictly less
+    established than a 5' partner, and leaving it at the annotation while the
+    better-characterised case answered `None` would make the score fall as the
+    record improves. `read_sv_table` already refuses to infer an orientation
+    from the gene order in a fusion's name, calling that a naming convention
+    and not a measurement; this carries the same refusal into the number.
+
+    `_surface` has returned `None` across this whole region since 2026-09-21,
+    and this exists so the score can say the same thing instead of reading the
+    annotation at full value. It is false wherever `ectodomain_lost` or
+    `ectodomain_uncertain` is true, by construction: both of those require
+    `_n_terminus_lost` and this requires its negation.
+    """
+    return _fusion_only(c) and not _n_terminus_lost(c)
+
+
 def _surface(c: Any) -> bool | None:
     if c.localization.plasma_membrane is False:
         return False

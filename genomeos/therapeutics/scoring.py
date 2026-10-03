@@ -352,7 +352,10 @@ def magnitude_prefers(a: dict[str, Any], b: dict[str, Any]) -> int:
 
 
 def surface_accessibility(
-    localisation: Any, ectodomain_lost: bool = False, ectodomain_uncertain: bool = False
+    localisation: Any,
+    ectodomain_lost: bool = False,
+    ectodomain_uncertain: bool = False,
+    product_extent_unknown: bool = False,
 ) -> tuple[float | None, str]:
     """How reachable the protein is from outside, from curated localisation.
 
@@ -368,6 +371,14 @@ def surface_accessibility(
     Answering `False` to "is it lost" and then reading the annotation at full
     value defaults an unknown to the maximum, which is the one rule at the top
     of this module turned inside out.
+
+    `product_extent_unknown` is the fourth state and the same inversion one
+    step earlier: every event that reached this gene is a fusion and the record
+    does not establish it as the 3' partner of all of them. A 5' partner keeps
+    the N-terminus it contributes, but no field says whether the junction falls
+    beyond its own transmembrane segment, so the product may be an anchored
+    receptor or an unanchored outward face. The gate has answered `None` across
+    that whole region since 2026-09-21.
     """
     if ectodomain_lost:
         return 0.0, (
@@ -387,6 +398,13 @@ def surface_accessibility(
             "C-terminal half, and its curated topology does not settle whether its outward face is the "
             "N-terminal part that the product therefore lacks; the curated figure describes the "
             "full-length protein and it is not known that the tumour makes it"
+        )
+    if product_extent_unknown:
+        return None, (
+            "every event that reached this gene is a fusion and the record does not establish which "
+            "part of this gene the product contains: no junction position is reported, so whether the "
+            "product carries this gene's own membrane anchor or only an unanchored outward face is "
+            "unknown, and the curated figure describes the full-length protein"
         )
     best = max(
         (

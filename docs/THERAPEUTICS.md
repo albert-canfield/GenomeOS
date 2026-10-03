@@ -1140,6 +1140,18 @@ so the annotation is the right reading there and the score stays unchanged. A
 candidate with no fusion origin is untouched. And `ectodomain_lost` keeps
 precedence: where the arrangement is curated, the answer is 0.0 and not unknown.
 
+*Superseded in one clause on 2026-10-03, additively and with nothing taken back.*
+One sentence of the paragraph above — that a 5' partner scores from the
+annotation unchanged — was decided against later the same day, in "The 5'
+partner's surface score" below, on the ground that no field records whether the
+junction falls beyond this gene's own transmembrane segment. The rest of the
+paragraph stands unchanged and is still law: a multiply-reached gene and a gene
+with no fusion origin keep the annotation reading, `ectodomain_lost` keeps
+precedence, and the rule may not decay into "a fusion is never a surface
+target". The 3' partner whose curated arrangement is multi-pass or whose
+extracellular segment runs past its first pass also keeps the annotation
+reading, exactly as registered here and not reopened.
+
 **The falsifier.** Falsified by any published score, rank, target class,
 mechanism, compatibility, accessibility or peptide route in the therapeutic
 benchmark changing; by `surface_accessibility` returning `None` for any
