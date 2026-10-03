@@ -120,6 +120,17 @@ def _faithful_tree(tmp: Path, shift: dict[str, int] | None = None) -> None:
         _tree(tmp, c["module"], "".join(lines))
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="SUPERSEDED by the moves of 2026-10-03, kept rather than edited (precedent dbb5d4a). "
+    "`_faithful_tree` builds its synthetic tree from CENSUS's REGISTERED lines, and three modules "
+    "have since moved, so the tree it builds no longer describes them and the drift guard refuses "
+    "it -- correctly. The live form of this check is "
+    "`test_the_tree_built_from_the_EFFECTIVE_lines_is_accepted` below, which builds from "
+    "`effective_lines()`. This one is left in place, failing strictly, so that the supersession is "
+    "visible and so that a future change which made the registered lines describe the tree again "
+    "would turn this red.",
+)
 def test_the_faithful_tree_is_accepted(tmp_path):
     """The plant below differs from this by one line, so the refusal is about the line and nothing else."""
     _faithful_tree(tmp_path)
@@ -148,6 +159,15 @@ def test_PLANTED_a_declared_module_that_reads_no_head_at_all_is_REFUSED(tmp_path
     assert "reads no compact head" in str(e.value)
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="SUPERSEDED by the moves of 2026-10-03, kept rather than edited (precedent dbb5d4a). "
+    "This plant claims a REGISTERED line twice, and for a module that has since moved the "
+    "registered line is no longer one the tree matches, so the overlap clause is not the clause "
+    "that fires. A plant against a stale rule is worse than no plant: it would pass while testing "
+    "nothing. The live form is "
+    "`test_PLANTED_an_EFFECTIVE_line_declared_both_as_a_head_and_as_not_one_is_REFUSED` below.",
+)
 def test_PLANTED_a_line_declared_both_as_a_head_and_as_not_one_is_REFUSED(monkeypatch):
     """Mutation: delete the overlap raise in check_census_matches_tree and this test fails."""
     bad = tuple(
@@ -335,3 +355,125 @@ def test_the_registration_says_what_it_cannot_establish_and_authorises_nothing()
     assert "authorises no conclusion" in ot.AUTHORISES_NO_CONCLUSION
     assert "DO NOT EXIST" in ot.AUTHORISES_NO_CONCLUSION
     assert len(ot.REFUSALS) == 6
+
+
+# ---------------------------------------------------------------------------
+# added 2026-10-03 with the first three moves. Nothing above is edited: the two tests the moves
+# superseded are left in place as strict expected failures with their reason beside them, and these
+# are their live forms, built from `effective_lines()` instead of from the registered lines.
+# ---------------------------------------------------------------------------
+
+
+def _effective_tree(tmp: Path, shift: dict[str, int] | None = None) -> None:
+    """A synthetic tree whose head reads sit on the lines the census EXPECTS TODAY."""
+    shift = shift or {}
+    eff = ot.effective_lines()
+    for c in ot.CENSUS:
+        mod = c["module"]
+        want = sorted(set(eff[mod]) | set(c.get("not_head_lines") or {}))
+        want = [n + shift.get(mod, 0) for n in want]
+        lines = ["\n"] * (max(want) + 1)
+        for n in want:
+            lines[n - 1] = HEAD_LINE
+        _tree(tmp, mod, "".join(lines))
+
+
+def test_the_tree_built_from_the_EFFECTIVE_lines_is_accepted(tmp_path):
+    """The live form of the superseded faithful-tree check; the plant below differs by one line."""
+    _effective_tree(tmp_path)
+    ot.check_census_matches_tree(tmp_path)
+
+
+def test_PLANTED_an_EFFECTIVE_line_that_moved_is_REFUSED(tmp_path):
+    """Mutation: delete the line-set raise in check_census_matches_tree and this test fails."""
+    mod = ot.CENSUS[0]["module"]
+    _effective_tree(tmp_path, {mod: 1})
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_census_matches_tree(tmp_path)
+    assert mod in str(e.value) and "accounts for lines" in str(e.value)
+
+
+def test_PLANTED_an_EFFECTIVE_line_declared_both_as_a_head_and_as_not_one_is_REFUSED(monkeypatch):
+    """Mutation: delete the overlap raise in check_census_matches_tree and this test fails."""
+    eff = ot.effective_lines()
+    bad = tuple(
+        {**c, "not_head_lines": {eff[c["module"]][0]: "claimed twice"}} if i == 0 else c
+        for i, c in enumerate(ot.CENSUS)
+    )
+    monkeypatch.setattr(ot, "CENSUS", bad)
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_census_matches_tree()
+    assert "both as a head read and as not one" in str(e.value)
+
+
+def test_effective_lines_is_the_registered_lines_until_a_module_moves():
+    eff = ot.effective_lines()
+    for c in ot.CENSUS:
+        mod = c["module"]
+        if mod in ot.MOVED_LINES:
+            assert eff[mod] == tuple(ot.MOVED_LINES[mod]["now"])
+        else:
+            assert eff[mod] == ot.REGISTERED_LINES[mod]
+
+
+# ---- the moves' own refusals, kept apart from the registered ones --------------------------------
+
+
+def test_the_moves_refusals_are_kept_apart_from_the_registered_ones():
+    """The registration's own REFUSALS tuple is not rewritten because the moves needed more."""
+    assert len(ot.REFUSALS) == 6
+    assert len(ot.REFUSALS_ADDED_BY_THE_MOVES) == 2
+    assert not set(ot.REFUSALS) & set(ot.REFUSALS_ADDED_BY_THE_MOVES)
+
+
+def test_the_registered_lines_are_what_the_registration_committed():
+    assert ot.declared() == ot.REGISTERED_LINES
+    ot.check_registered_lines_are_not_edited()
+
+
+def test_PLANTED_editing_a_registered_line_to_match_a_moved_tree_is_REFUSED(monkeypatch):
+    """The temptation after a move is to update the census; that replaces the claim.
+
+    Mutation: delete the `declared() != REGISTERED_LINES` raise and this test fails.
+    """
+    bad = tuple({**c, "lines": (c["lines"][0] + 19,)} if i == 0 else c for i, c in enumerate(ot.CENSUS))
+    monkeypatch.setattr(ot, "CENSUS", bad)
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_registered_lines_are_not_edited()
+    assert "no longer match what 24adf33 registered" in str(e.value)
+
+
+def test_PLANTED_a_move_record_that_restates_the_claim_is_REFUSED(monkeypatch):
+    """Mutation: delete the MOVED_LINES['was'] raise and this test fails."""
+    mod = next(iter(ot.MOVED_LINES))
+    monkeypatch.setattr(ot, "MOVED_LINES", {mod: {**ot.MOVED_LINES[mod], "was": (999,)}})
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_registered_lines_are_not_edited()
+    assert "may not restate the claim" in str(e.value)
+
+
+def test_every_moved_module_is_an_identity_module_and_says_what_moved():
+    identity = set(ot.by_class("identity"))
+    for mod, rec in ot.MOVED_LINES.items():
+        assert mod in identity, mod
+        assert rec["what"].strip(), mod
+        assert rec["was"] == ot.REGISTERED_LINES[mod], mod
+
+
+# ---- one refusal for the one invariant the whole wave stands on ----------------------------------
+
+
+def test_a_clean_census_passes_the_invariant_check():
+    ot.check_head_invariant({"elements": 10, "head_disagrees": 0, "coding_head_disagrees": 3}, "x")
+
+
+def test_PLANTED_an_any_gene_head_disagreement_STOPS_THE_WAVE():
+    """Mutation: delete the raise in check_head_invariant and this test fails."""
+    with pytest.raises(ot.InvariantRefutedError) as e:
+        ot.check_head_invariant({"elements": 10, "head_disagrees": 1}, "closure.window_elements")
+    assert "THE WAVE STOPS" in str(e.value) and "closure.window_elements" in str(e.value)
+
+
+def test_a_coding_head_disagreement_alone_is_counted_and_is_NOT_a_refutation():
+    """The registered limit doing work: 10 of 4,794 had no predicted_coding where the cache named one."""
+    ot.check_head_invariant({"elements": 4794, "coding_head_disagrees": 10}, "x")

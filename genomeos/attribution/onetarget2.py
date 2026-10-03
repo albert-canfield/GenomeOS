@@ -591,6 +591,18 @@ REFUSALS = (
     "file, not recalled",
 )
 
+#: Refusals the MOVES added, kept apart from REFUSALS so that the registered tuple stays exactly as
+#: 24adf33 registered it and the test asserting its length keeps passing unedited. Superseding is
+#: additive: a registration's own list is not rewritten because later work needed more refusals.
+REFUSALS_ADDED_BY_THE_MOVES = (
+    "check_registered_lines_are_not_edited(): refuses any change to the lines 24adf33 registered; "
+    "a moved module's new lines go in MOVED_LINES additively, so the pre-move claim is kept",
+    "check_head_invariant(census, where): refuses on ANY any-gene head disagreement in any "
+    "module's move, because that refutes the ground the whole wave stands on. One refusal for one "
+    "invariant, never a substitute for a module's own falsifier; the CODING head is not checked "
+    "here, by the registered limit",
+)
+
 #: Field names a run would fill. None of them may exist in the registration payload.
 FORBIDDEN_FIELDS = (
     "verdict",
@@ -628,6 +640,66 @@ OWN_CODE = (
 
 _ALT = "|".join(HEAD_KEYS)
 _SITE = re.compile(rf"""(?:get\(\s*["'](?:{_ALT})["']|\[\s*["'](?:{_ALT})["']\s*\])""")
+
+
+#: The lines the registration declared AS COMMITTED at 24adf33, frozen. A move changes the tree, so
+#: MOVED_LINES below says where each moved module's head reads sit now; this dict says where they
+#: sat when the claim was registered, and `check_registered_lines_are_not_edited()` refuses any
+#: change to it. Superseding is additive: the pre-move record is kept, never overwritten.
+REGISTERED_LINES: dict[str, tuple[int, ...]] = {
+    "genomeos/attribution/closure.py": (73,),
+    "genomeos/attribution/compile.py": (332, 838, 880),
+    "genomeos/attribution/organise.py": (164,),
+    "genomeos/attribution/variation.py": (197,),
+    "genomeos/attribution/measured.py": (1092,),
+    "genomeos/attribution/not_open_profile.py": (254,),
+    "genomeos/attribution/gwas.py": (153, 154, 155, 164, 166),
+    "genomeos/attribution/argmaxcell.py": (677, 692),
+    "genomeos/attribution/context_evidence.py": (441,),
+    "genomeos/attribution/vista.py": (260, 277, 278, 280, 312, 326),
+    "genomeos/decompile.py": (124,),
+    "genomeos/genome/motifs.py": (522,),
+    "genomeos/genome/regulation.py": (163,),
+    "genomeos/genome/regdiff.py": (101, 176, 177, 194, 195),
+    "genomeos/report.py": (98, 99, 100, 104),
+    "genomeos/benchmark/rearrangements.py": (427,),
+    "genomeos/knowledge/across.py": (326,),
+    "genomeos/cli.py": (3840, 3848, 4109),
+    "genomeos/attribution/confidence_calibration.py": (245, 891),
+    "genomeos/response_map2.py": (413,),
+}
+
+#: Per module moved in this wave: where its compact-head reads sit AFTER the move, and the commit.
+#: A moved module keeps its compact reading -- that is the point of the move -- so its head reads do
+#: not disappear; they move, and usually one is ADDED where the window reading keeps the compact
+#: fallback for an element the cache does not hold.
+MOVED_LINES: dict[str, dict[str, Any]] = {
+    "genomeos/attribution/closure.py": {
+        "now": (92, 150),
+        "was": (73,),
+        "what": "attributed_elements is unchanged and still the reading every committed closure "
+        "figure rests on (its head read moved 73 -> 92 on the docstring this move added). The "
+        "second read, 150, is window_elements' COMPACT FALLBACK: the head it keeps for an element "
+        "the response cache does not hold, and for one it holds without a coding window",
+    },
+    "genomeos/attribution/measured.py": {
+        "now": (1141,),
+        "was": (1092,),
+        "what": "rows() keeps its one `predicted_gene` per row and every committed field; its head "
+        "read moved 1092 -> 1141 behind the new window_agreement(). With a reader each row gains "
+        "ONE new key, `window`, and nothing else moves",
+    },
+    "genomeos/attribution/not_open_profile.py": {
+        "now": (262, 434),
+        "was": (254,),
+        "what": "rules() is NOT CHANGED AT ALL -- the diff against its committed form removes zero "
+        "lines -- which is what keeps tests/test_not_open_profile.py's element-for-element pin to "
+        "rule_loci true by construction; its head read moved 254 -> 262 only because the new source "
+        "constants sit above it. The second read, 434, is the new window_rules(), which CALLS "
+        "rules() and appends SOURCE_PREDICTED_WINDOW rules: a population in no committed program, "
+        "kept out of SOURCES so no caller counting compiled rules moves",
+    },
+}
 
 
 class CensusDriftError(RuntimeError):
@@ -669,6 +741,18 @@ def declared() -> dict[str, tuple[int, ...]]:
     return {c["module"]: tuple(c["lines"]) for c in CENSUS}
 
 
+def effective_lines() -> dict[str, tuple[int, ...]]:
+    """Per module, the lines the TREE should match today: `MOVED_LINES['now']` once it has moved,
+    the registered lines until then. One definition, shared by the guard and its tests, so the two
+    cannot drift and a passing plant cannot be a plant against a stale rule."""
+    return {
+        c["module"]: tuple(MOVED_LINES[c["module"]]["now"])
+        if c["module"] in MOVED_LINES
+        else tuple(c["lines"])
+        for c in CENSUS
+    }
+
+
 def not_head() -> dict[str, dict[int, str]]:
     """Per module, the matching lines that are NOT a compact element head, each with its reason."""
     return {c["module"]: dict(c.get("not_head_lines") or {}) for c in CENSUS}
@@ -690,7 +774,9 @@ def check_census_matches_tree(root: Path | None = None) -> dict[str, list[int]]:
             f"{len(unknown)} head-reading module(s) under genomeos/ are in no list: {unknown}. "
             "Classify each one or name it in EXCLUDED_BY_NAME with its reason."
         )
+    eff = effective_lines()
     for mod, lines in sorted(dec.items()):
+        lines = eff[mod]
         if mod not in found:
             raise CensusDriftError(f"{mod} is declared in the census and reads no compact head in the tree")
         other = set(not_head().get(mod, {}))
@@ -707,6 +793,31 @@ def check_census_matches_tree(root: Path | None = None) -> dict[str, list[int]]:
                 "reason, never left out."
             )
     return found
+
+
+def check_registered_lines_are_not_edited() -> None:
+    """Refuse if CENSUS's declared lines have been changed from what 24adf33 registered.
+
+    A module that moves changes the tree, and the temptation is to update the census to match. That
+    would quietly replace the claim this wave was registered against. MOVED_LINES carries the new
+    lines additively instead, and this refusal keeps the registered ones where they are.
+    """
+    if declared() != REGISTERED_LINES:
+        bad = {
+            m: (REGISTERED_LINES.get(m), declared().get(m))
+            for m in set(REGISTERED_LINES) | set(declared())
+            if REGISTERED_LINES.get(m) != declared().get(m)
+        }
+        raise CensusDriftError(
+            f"CENSUS's declared lines no longer match what 24adf33 registered: {bad} (registered, "
+            "now). A moved module's new lines go in MOVED_LINES; the registered ones do not change."
+        )
+    for mod, rec in MOVED_LINES.items():
+        if tuple(rec.get("was") or ()) != REGISTERED_LINES.get(mod):
+            raise CensusDriftError(
+                f"MOVED_LINES[{mod!r}]['was'] is {rec.get('was')} and the registration said "
+                f"{REGISTERED_LINES.get(mod)}. A move record may not restate the claim."
+            )
 
 
 def check_one_falsifier_per_module() -> None:
@@ -819,7 +930,37 @@ def check_the_quoted_invariant(path: Path | None = None) -> dict[str, Any]:
     return dict(hc)
 
 
+class InvariantRefutedError(RuntimeError):
+    """The window's at-the-bar head is not the compact table's gene. The wave stops here."""
+
+
+def check_head_invariant(census: dict[str, Any], where: str) -> None:
+    """Refuse on any ANY-GENE head disagreement. ONE refusal, because it is ONE invariant.
+
+    This is deliberately not a per-module falsifier and is not one of the eighteen. The eighteen
+    falsifiers each ask what a module's own figure does; this asks whether the ground the whole wave
+    stands on is still there. A single disagreement means `predict_target` and `genes_at_bar` no
+    longer apply the same size rule with the same tie order, every module's move is void, and the
+    wave stops rather than reporting a result.
+
+    The CODING head is explicitly NOT checked here, and that is the registered limit doing work:
+    the 2026-09-27 result found 10 elements of 4,794 with no `predicted_coding` field although the
+    cache named a coding gene, so a coding-head disagreement is expected, is counted by name, and
+    is not a refutation.
+    """
+    n = int(census.get("head_disagreements") or census.get("head_disagrees") or 0)
+    if n:
+        raise InvariantRefutedError(
+            f"{where}: {n} element(s) where the window's at-the-bar head is not the compact "
+            f"table's `predicted` gene. THE WAVE STOPS. The registered invariant "
+            f"({PRIOR_EVIDENCE_COMPARED:,} elements, {PRIOR_EVIDENCE_DISAGREEMENTS} disagreements, "
+            "2026-09-27) is refuted on this population, so no module's move may be read as a "
+            "result. Report it before anything else."
+        )
+
+
 def check_all(root: Path | None = None, payload: dict[str, Any] | None = None) -> None:
+    check_registered_lines_are_not_edited()
     check_census_matches_tree(root)
     check_scope_counts()
     check_one_falsifier_per_module()

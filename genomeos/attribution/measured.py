@@ -1071,14 +1071,63 @@ def sources_of(measured: dict[str, Any]) -> str:
     return "; ".join(SOURCES[a] for a in ASSAYS if a in measured)
 
 
+def window_agreement(
+    measured: dict[str, Any], at_bar: list[tuple[str, float]] | tuple[tuple[str, float], ...] | None
+) -> dict[str, Any]:
+    """Does the CRISPRi-regulated gene appear ANYWHERE in the sweep's window at this element?
+
+    `agreement()` above asks whether the ONE gene the compact table named is regulated. That is the
+    compiled claim and it is not changed. This asks the different question the window makes askable:
+    of the genes the sweep put at the bar at this element, is one of them a gene the screen found
+    regulated -- and if so, at what RANK, since rank 1 is the compact head and anything beyond it is
+    a gene the one-target projection dropped.
+
+    `at_bar=None` means the element is not in the response cache, which is NOT an empty window: the
+    answer is `None` under `regulated_gene_in_window`, never False and never a zero.
+
+    This is a question about the MODEL's window, not new evidence about the element. It cannot make
+    a disagreement into an agreement of the compiled claim, because the compiled claim names one
+    gene; what it can show is whether that claim was narrower than the model it came from.
+    """
+    c = measured.get("crispri")
+    out: dict[str, Any] = {
+        "genes_at_bar": None if at_bar is None else len(at_bar),
+        "not_cached": at_bar is None,
+        "regulated_gene_in_window": None,
+        "regulated_genes_in_window": [],
+        "best_rank_of_a_regulated_gene": None,
+    }
+    if at_bar is None or not c:
+        return out
+    order = [g for g, _ in at_bar]
+    hits = [g for g in order if g in (c.get("genes_regulated") or ())]
+    out["regulated_gene_in_window"] = bool(hits)
+    out["regulated_genes_in_window"] = hits
+    out["best_rank_of_a_regulated_gene"] = (min(order.index(g) for g in hits) + 1) if hits else None
+    return out
+
+
 def rows(
     chrom: str,
     elements: list[dict[str, Any]] | None = None,
     layer: Layer | None = None,
     fraction: float = RECIPROCAL_OVERLAP,
     results_dir: Path = RESULTS_DIR,
+    responses: Any = None,
+    coding: set[str] | None = None,
+    min_effect: float = 0.1,
 ) -> list[dict[str, Any]]:
-    """One row per compiled element that a measurement of that same element exists for."""
+    """One row per compiled element that a measurement of that same element exists for.
+
+    ONE PREDICTED GENE PER ROW, unchanged: `predicted_gene`, `predicted_log2_fold_change`,
+    `predicted_action` and `agreement` are exactly what they have always been, and with the default
+    `responses=None` nothing is opened and every row is byte for byte its committed self.
+
+    With an `attribution.targets.ElementResponses` each row gains ONE new key, `window`, holding
+    `window_agreement` above. No existing key moves. Registered in `attribution/onetarget2.py`
+    (2026-10-03); this module's falsifier is an element whose measured regulated gene is at the bar
+    in the window and is not the head.
+    """
     if elements is None:
         from genomeos.attribution.targets import attributed
 
@@ -1107,6 +1156,16 @@ def rows(
                 "confidence": confidence_of(m),
             }
         )
+        if responses is not None:
+            from genomeos.attribution.targets import window_reading
+
+            w = window_reading(responses, chrom, e, coding, min_effect)
+            out[-1]["window"] = {
+                **window_agreement(m, w.coding_at_bar if coding is not None else w.at_bar),
+                "head_agrees": w.head_agrees,
+                "coding_head_agrees": w.coding_head_agrees,
+                "dropped_by_the_projection": list(w.coding_extra if coding is not None else w.extra),
+            }
     out.sort(key=lambda r: r["start"])
     return out
 

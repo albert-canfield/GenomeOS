@@ -64,8 +64,27 @@ def merge(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:
     return out
 
 
+def effect_of(signed: float) -> float:
+    """One gene's regulatory effect from the sweep's signed log2 change, activators positive.
+
+    A fall in expression on deleting the element (negative log2) means the element ACTIVATES the
+    gene, so the effect is positive; a rise means it represses, so the effect is negative. That is
+    exactly `sign * abs(log2_fold_change)` as this module has always computed it from the compact
+    head, rewritten as the one arithmetic both readings share: for the head gene the two agree to
+    the bit, which `tests/test_closure_window.py` asserts rather than assumes.
+    """
+    return -float(signed)
+
+
 def attributed_elements(chrom: str) -> dict[str, list[dict]]:
-    """Elements with a predicted coding target, by target symbol; the whole-chromosome run first."""
+    """Elements with a predicted coding target, by target symbol; the whole-chromosome run first.
+
+    ONE TARGET PER ELEMENT, deliberately unchanged. This is the reading every committed closure
+    figure was computed on, and `judge` still calls it with no reader, so no stored number moves.
+    `window_elements` below is the same grouping taken over every coding gene the sweep put at the
+    bar; comparing the two is this module's registered falsifier
+    (`attribution/onetarget2.py`, 2026-10-03).
+    """
     from genomeos.attribution.targets import attributed
 
     by: dict[str, list[dict]] = {}
@@ -87,6 +106,103 @@ def attributed_elements(chrom: str) -> dict[str, list[dict]]:
             }
         )
     return by
+
+
+def window_elements(
+    chrom: str,
+    responses,
+    coding: set[str] | None = None,
+    results_dir=None,
+    min_effect: float = 0.1,
+) -> tuple[dict[str, list[dict]], dict[str, int]]:
+    """`attributed_elements`'s grouping, taken over EVERY coding gene the sweep put at the bar.
+
+    An element whose window names three coding genes at the bar enters three genes' closures here
+    and exactly one gene's closure in `attributed_elements`. That difference is the whole question
+    this module was registered to answer, and it is returned beside a census so that no element is
+    silently dropped:
+
+    * `not_cached` -- the element is not in the response cache. It keeps its COMPACT reading, which
+      is the only honest thing to do: a missing window is not an empty one and never a zero.
+    * `no_coding_window` -- cached, but `coding` was not supplied, so the coding window cannot be
+      formed. The element keeps its compact reading. Forming it against an uncoded window would
+      compare two populations, which is the defect this wave is about.
+    * `coding_head_disagrees` -- the window's coding head is not the table's `predicted_coding`
+      gene. The 2026-09-27 result found 10 such elements of 4,794, so this is EXPECTED to be
+      non-zero and is not a refutation; the any-gene head is the one that may not disagree.
+
+    `responses=None` returns exactly `attributed_elements`'s grouping with every element counted as
+    `not_cached`, so the control costs nothing and opens nothing.
+    """
+    from genomeos.attribution.targets import attributed, window_reading
+
+    by: dict[str, list[dict]] = {}
+    census = {
+        "elements": 0,
+        "not_cached": 0,
+        "no_coding_window": 0,
+        "coding_head_disagrees": 0,
+        "head_disagrees": 0,
+        "memberships": 0,
+    }
+    for e in attributed(chrom) if results_dir is None else attributed(chrom, results_dir):
+        census["elements"] += 1
+        pc = e["predicted_coding"]
+        w = window_reading(responses, chrom, e, coding, min_effect)
+        if w.head_agrees is False:
+            census["head_disagrees"] += 1
+        if w.coding_head_agrees is False:
+            census["coding_head_disagrees"] += 1
+        rows: list[tuple[str, float]]
+        if w.not_cached:
+            census["not_cached"] += 1
+            rows = [
+                (
+                    pc["gene"],
+                    -(1.0 if pc.get("action") == "activates" else -1.0) * abs(pc["log2_fold_change"]),
+                )
+            ]
+        elif w.coding_at_bar is None:
+            census["no_coding_window"] += 1
+            rows = [
+                (
+                    pc["gene"],
+                    -(1.0 if pc.get("action") == "activates" else -1.0) * abs(pc["log2_fold_change"]),
+                )
+            ]
+        else:
+            rows = list(w.coding_at_bar)
+        by_cell_all = {
+            c: -float(v) for c, v in (e.get("predicted_coding_by_cell") or {}).items() if v is not None
+        }
+        for gene, signed in rows:
+            census["memberships"] += 1
+            by.setdefault(gene, []).append(
+                {
+                    "id": e["id"],
+                    "start": e["start"],
+                    "end": e["end"],
+                    "effect": effect_of(signed),
+                    "by_cell": by_cell_all if gene == pc["gene"] else _by_cell(responses, chrom, e, gene),
+                }
+            )
+    return by, census
+
+
+def _by_cell(responses, chrom: str, element: dict, gene: str) -> dict[str, float]:
+    """One non-head gene's per-cell effects, from the same four tracks the compact head uses.
+
+    A cell the sweep did not score for this gene is ABSENT from the dict rather than zero, which is
+    how `attributed_elements` already treats a missing per-cell value.
+    """
+    if responses is None:
+        return {}
+    out: dict[str, float] = {}
+    for c in CELLS:
+        v = responses.value(chrom, str(element["id"]), gene, c)
+        if v is not None:
+            out[c] = effect_of(v)
+    return out
 
 
 def spearman(x: list[float], y: list[float]) -> float | None:

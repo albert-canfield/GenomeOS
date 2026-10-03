@@ -252,3 +252,118 @@ class ElementResponses:
                 out.append((name, float(drop)))
         key = (lambda kv: -abs(kv[1])) if by == "effect" else (lambda kv: kv[1])
         return sorted(out, key=key)
+
+
+# ---------------------------------------------------------------------------
+# the one window reading every consumer gains, so none of them invents its own
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class WindowReading:
+    """One element read BOTH ways: the compact head the table kept, and the window it came from.
+
+    Registered in `attribution/onetarget2.py` (2026-10-03). Eighteen consumers under `genomeos/`
+    read one target gene per element; this is the single record each of them gains, so that the
+    window arrives in one shape rather than eighteen. Nothing here replaces a head: `head` is the
+    compact table's own gene, carried through unchanged, and the window is carried BESIDE it.
+
+    `at_bar` is None when the element is not in the response cache -- which is NOT an empty window
+    and NOT a zero. A consumer must keep its compact reading for such an element and count it by
+    name; `not_cached` says so, and `extra` is empty rather than misleading.
+
+    The head and the window agree by construction and that agreement is measured, not assumed:
+    `predict_target` and `genes_at_bar` apply the same size rule with the same tie order, and
+    849,469 elements were compared with 0 head disagreements (2026-09-27, `d717b28`). The LIMIT of
+    that measurement travels with it: it is one arm's elements and not a theorem, and 10 of 4,794
+    elements had no `predicted_coding` field although the cache named a coding gene -- so
+    `coding_head_agrees` can be False where `head_agrees` is True, and a consumer that depends on
+    the CODING head specifically must read `coding_head_agrees` rather than assume it.
+    """
+
+    head: str | None
+    coding_head: str | None
+    at_bar: tuple[tuple[str, float], ...] | None
+    coding_at_bar: tuple[tuple[str, float], ...] | None
+
+    @property
+    def not_cached(self) -> bool:
+        return self.at_bar is None
+
+    @property
+    def genes(self) -> tuple[str, ...]:
+        """Every gene at the bar, strongest first; empty when not cached or nothing is at the bar."""
+        return tuple(g for g, _ in (self.at_bar or ()))
+
+    @property
+    def coding_genes(self) -> tuple[str, ...]:
+        return tuple(g for g, _ in (self.coding_at_bar or ()))
+
+    @property
+    def extra(self) -> tuple[str, ...]:
+        """At the bar and NOT the compact head: exactly what the one-target projection dropped."""
+        return tuple(g for g in self.genes if g != self.head)
+
+    @property
+    def coding_extra(self) -> tuple[str, ...]:
+        return tuple(g for g in self.coding_genes if g != self.coding_head)
+
+    @property
+    def head_agrees(self) -> bool | None:
+        """Is the window's at-the-bar head the compact table's `predicted` gene? None: not cached.
+
+        False refutes the registered invariant and stops the wave; it is never a result.
+        """
+        if self.at_bar is None:
+            return None
+        return (self.at_bar[0][0] if self.at_bar else None) == self.head
+
+    @property
+    def coding_head_agrees(self) -> bool | None:
+        """The same for the coding head, which the 2026-09-27 result found is NOT equally safe."""
+        if self.coding_at_bar is None:
+            return None
+        return (self.coding_at_bar[0][0] if self.coding_at_bar else None) == self.coding_head
+
+
+def head_gene(element: dict[str, Any], coding: bool = True) -> str | None:
+    """The compact table's own head gene for one element, read and not recomputed."""
+    return ((element.get("predicted_coding" if coding else "predicted")) or {}).get("gene")
+
+
+#: A SECOND function of this name exists: `attribution/unknown_scoring.py:129`'s
+#: `window_reading(responses, chrom, element_id, coding)`, written by wave 0's lane, which takes an
+#: element ID rather than the element and returns a plain dict rather than a `WindowReading`. The two
+#: do not collide -- neither module imports the other -- but they are two shapes of one reading, which
+#: is the problem this wave exists to stop, reappearing one level down. Unifying them is NOT done
+#: here: unknown_scoring is wave 0's module and is in progress, and consolidating a live lane's reader
+#: underneath it would be the kind of silent widening this registration refuses. Reported instead.
+def window_reading(
+    responses: ElementResponses | None,
+    chrom: str,
+    element: dict[str, Any],
+    coding: set[str] | None = None,
+    min_effect: float = 0.1,
+) -> WindowReading:
+    """One element's `WindowReading`. With `responses=None` nothing is opened and nothing is read.
+
+    `responses=None` is the control every consumer keeps: the record then carries the compact heads
+    alone and `not_cached` is True, so a consumer written against this helper reproduces its own
+    committed figures exactly when it is called the old way.
+
+    `coding` is the chromosome's coding symbols. Without it the coding window is not formed, because
+    a coding head beside an uncoded window would invite a comparison between two different
+    populations -- which is the defect this whole wave is about.
+    """
+    head, chead = head_gene(element, coding=False), head_gene(element, coding=True)
+    if responses is None:
+        return WindowReading(head, chead, None, None)
+    eid = str(element["id"])
+    bar = responses.at_bar(chrom, eid, min_effect)
+    cbar = None if (bar is None or coding is None) else [t for t in bar if t[0] in coding]
+    return WindowReading(
+        head,
+        chead,
+        None if bar is None else tuple(bar),
+        None if cbar is None else tuple(cbar),
+    )

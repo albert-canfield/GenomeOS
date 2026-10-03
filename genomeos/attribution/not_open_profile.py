@@ -62,6 +62,14 @@ SOURCE_PREDICTED = "predicted_alphagenome_deletion"
 #: and are counted as their own population in the effect-size breakdown rather than given a band.
 SOURCE_MEASURED = "measured_crispri"
 SOURCES = (SOURCE_PREDICTED, SOURCE_MEASURED)
+#: A rule for a gene the SWEEP put at the bar at this element and the compact table dropped. These
+#: rules are in NO committed program: the compiler emits one rule per element and this is the second
+#: and third gene that element's window names. They are kept under their own source so that a window
+#: rule can never be counted as a compiled one, they are produced only by `window_rules()` below,
+#: and `SOURCES` stays the committed pair so any caller counting over it is unchanged.
+#: Registered in `attribution/onetarget2.py` (2026-10-03).
+SOURCE_PREDICTED_WINDOW = "predicted_alphagenome_deletion_window"
+ALL_SOURCES = (SOURCE_PREDICTED, SOURCE_MEASURED, SOURCE_PREDICTED_WINDOW)
 
 # ---- the effect-size band, as the prediction already carries it ---------------------------------
 
@@ -358,3 +366,95 @@ def registration() -> dict[str, Any]:
         "limitations": limitations(),
         "alphagenome_requests": 0,
     }
+
+
+# ---------------------------------------------------------------------------
+# the window beside the head: `rules()` above is not touched
+# ---------------------------------------------------------------------------
+
+
+def window_band(signed: float) -> str:
+    """`predict_target`'s own effect-size band, applied to a window gene's signed change.
+
+    The compact head carries `strength` as a field and `rules()` reads it rather than recomputing it
+    (EFFECT_BAND_CALL). A gene the compact table dropped has no such field, because the table has no
+    row for it, so the band is formed here by the SAME rule at the same threshold -- reproducing
+    `enhancer_target.predict_target`, not inventing a second rule.
+    `tests/test_not_open_profile_window.py` asserts the two agree on every chr21 head rather than
+    assuming it.
+    """
+    return STRONG if abs(float(signed)) >= STRONG_EFFECT else WEAK
+
+
+def window_rules(
+    chrom: str,
+    results_dir: Path = RESULTS_DIR,
+    layer: Any = None,
+    responses: Any = None,
+    coding: set[str] | None = None,
+    min_effect: float = 0.1,
+) -> list[Rule]:
+    """`rules()`'s list, plus one rule per FURTHER coding gene the sweep put at the bar.
+
+    `rules()` is deliberately NOT changed and is not reimplemented here: it is called, and its list
+    is the prefix of this one. That is what keeps `tests/test_not_open_profile.py`'s
+    element-for-element pin to `context_evidence.rule_loci` true, and it means a caller that wants
+    the compiled profile goes on calling `rules()` and sees nothing new.
+
+    With `responses=None` this returns exactly `rules()`'s list and opens nothing. With an
+    `attribution.targets.ElementResponses` it appends `SOURCE_PREDICTED_WINDOW` rules -- a
+    population that is in no committed program. An element the cache does not hold contributes
+    none, and keeps its compiled rule alone; that is a named silence, never a zero.
+
+    Registered in `attribution/onetarget2.py` (2026-10-03); this module's falsifier is the number of
+    predicted rules changing.
+
+    STATED LIMIT of a window rule: its `cell` is the ELEMENT's compiled context, taken from the
+    compact head's tissue, and NOT this gene's own strongest track. The cache holds that track
+    (`max_drop_tissue`) and `at_bar` does not return it, so a per-gene context is a second reader's
+    worth of work. Until it is done, that field says which element the rule belongs to and must not
+    be read as which cell moved THIS gene.
+    """
+    out = list(rules(chrom, results_dir, layer))
+    if responses is None:
+        return out
+    from genomeos.attribution import compile as cp
+    from genomeos.attribution.pilot_bio import gene_tss
+    from genomeos.attribution.targets import window_reading
+
+    by_element = {r.element: r for r in out if r.source == SOURCE_PREDICTED}
+    ccre = cp._ccres(chrom, results_dir)
+    rep = cp._Interspersed(chrom, results_dir)
+    tss = gene_tss(chrom)
+    extra: list[Rule] = []
+    for e in cp._attributed(chrom, results_dir):
+        compiled = by_element.get(e["id"])
+        if compiled is None:
+            continue
+        pc = e["predicted_coding"]
+        w = window_reading(responses, chrom, e, coding, min_effect)
+        bar = w.coding_at_bar if coding is not None else w.at_bar
+        if bar is None:
+            continue  # not cached: a named silence, and the element keeps its compiled rule alone
+        axes = cp.element_axes(e, ccre, rep)
+        for gene, signed in bar:
+            if gene == pc["gene"]:
+                continue
+            extra.append(
+                Rule(
+                    source=SOURCE_PREDICTED_WINDOW,
+                    element=e["id"],
+                    chrom=chrom,
+                    start=e["start"],
+                    end=e["end"],
+                    cell=compiled.cell,
+                    gene=gene,
+                    element_class=cp.derived_class(axes),
+                    activity_axis=axis_value(axes, "activity"),
+                    origin_axis=axis_value(axes, "origin"),
+                    effect=float(signed),
+                    effect_band=window_band(signed),
+                    distance=_distance(e["start"], e["end"], tss.get(gene)),
+                )
+            )
+    return out + extra
