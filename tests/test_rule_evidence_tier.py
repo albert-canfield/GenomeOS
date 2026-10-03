@@ -359,9 +359,19 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported():
     """The figures this proposal reports, re-derived from the corpus every run. The generated half is
     a 399 MB line scan and is not re-derived here; `--scan` does it."""
     c = cost_script.cost(scan_generated=False)
-    assert c["programs_total"] == 66
+    # 2026-10-03: the GENERATED half grew by one, because lane-headerfix added
+    # data/organisms/human/noncoding_chr21_v2.bio -- v1 regenerated with the corrected cell-sentence
+    # header and v1's pinned bytes left intact. So programs_total went 66 -> 67 and
+    # programs_generated 33 -> 34, and NOT ONE HAND-AUTHORED FIGURE MOVED: 33 programs, 22 written
+    # rules, 41 compiled, 19 parser-synthesised, 20 with tiered numbers, 60 slots, 7 programs with at
+    # least one rule, all unchanged below. This proposal's adoption cost is about the hand-authored
+    # corpus -- the test's own name says so -- so the cost it reports is exactly what it was.
+    # The relationship is asserted rather than only the totals, so a program added on either side
+    # cannot leave these three disagreeing again without saying which side it joined.
+    assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
+    assert c["programs_total"] == 67
     assert c["programs_hand_authored"] == 33
-    assert c["programs_generated"] == 33
+    assert c["programs_generated"] == 34
     assert c["rules_hand_authored_written"] == 22
     assert c["rules_hand_authored_compiled"] == 41
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
