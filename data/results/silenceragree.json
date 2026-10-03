@@ -1,0 +1,898 @@
+{
+  "result": "silenceragree",
+  "date": "2026-10-03",
+  "denominator": 1181,
+  "rese": {
+    "records_returned": 5478,
+    "joinable_intervals": 4992,
+    "rejected": {
+      "not_the_assayed_fragment": 480,
+      "no_genomicinfo": 4,
+      "unplaced_on_grch38": 2
+    },
+    "rejected_reason": "ReSE is named somewhere in the record but the record is not itself the assayed fragment, so its genomicinfo span is a parent region (measured: median 3.55x the fragment, up to 138.9x) and joining on it would attribute the assay to sequence the assay never carried",
+    "build_tag_on_every_description": {
+      "GRCh37": 4998
+    },
+    "grch38_span_equals_the_fragment_length": 4760,
+    "grch38_span_differs_in_length": 232,
+    "relocated_to_another_chromosome_by_the_lift": 1,
+    "coordinates_joined_on": "genomicinfo, which is GRCh38 (NC_*.1x accessions)"
+  },
+  "join": {
+    "overlapping_a_scored_element": 1584,
+    "overlapping_one_with_a_named_target": 1181,
+    "no_scored_element": 3408,
+    "scored_but_no_gene_moved_enough": 403,
+    "on_a_chromosome_with_no_scored_file": 0,
+    "fragment_spanning_more_than_one_named_element": 146
+  },
+  "join_rule": {
+    "overlap": "a ReSE fragment [rs, re) and a scored element [es, ee) overlap when es < re AND ee > rs. Touching ends do not overlap. No padding and no minimum overlap: one shared base is an overlap, and the overlap in bases is recorded on every row so a stricter rule can be applied afterwards without re-joining.",
+    "one_row_per_fragment": "the unit is the ReSE FRAGMENT, not the element, so a fragment never contributes more than one row and a fragment cannot be counted twice by overlapping two elements.",
+    "fragment_overlapping_several_elements": "the element with the GREATEST overlap in bases wins, ties by that measure broken by the order the elements come off the sorted index, which is deterministic. How many fragments were in this position is reported as `fragment_spanning_more_than_one_named_element` and not hidden.",
+    "element_overlapping_several_fragments": "an element CAN be named by more than one fragment, in which case it contributes a row per fragment. `distinct_elements` is reported beside the denominator so the reader can see whether this happened.",
+    "eligibility": "the element must carry a NAMED predicted target. An element on which no gene moved by MIN_EFFECT has no direction at all and is counted in the join block, never scored as a disagreement."
+  },
+  "base_rates": {
+    "curated_label_share_among_the_joined_elements_percent": 100.0,
+    "curated_label_share_is_degenerate": "100% BY CONSTRUCTION, and saying so is the point. Every joined element overlaps an assay-validated ReSE silencer, because that is what the join selects on; this base rate is degenerate and carries no information, and quoting it as though it did would be the error. It is stated so that no reader mistakes the agreement rate for a comparison against it.",
+    "stratum_matched_as_shipped": {
+      "population": "every named-target element in the join's (chromosome, cCRE class) strata, with the joined elements themselves excluded",
+      "elements": 610588,
+      "silencer_like": 230237,
+      "percent": 37.707,
+      "per_stratum": {
+        "chr1|dELS": {
+          "n": 43421,
+          "silencer_like": 16448
+        },
+        "chr1|pELS": {
+          "n": 14330,
+          "silencer_like": 5300
+        },
+        "chr10|dELS": {
+          "n": 23181,
+          "silencer_like": 8831
+        },
+        "chr10|pELS": {
+          "n": 5636,
+          "silencer_like": 2011
+        },
+        "chr11|dELS": {
+          "n": 25050,
+          "silencer_like": 9797
+        },
+        "chr11|pELS": {
+          "n": 8477,
+          "silencer_like": 3093
+        },
+        "chr12|dELS": {
+          "n": 23714,
+          "silencer_like": 9015
+        },
+        "chr12|pELS": {
+          "n": 7868,
+          "silencer_like": 2778
+        },
+        "chr13|dELS": {
+          "n": 12070,
+          "silencer_like": 4717
+        },
+        "chr13|pELS": {
+          "n": 2801,
+          "silencer_like": 1001
+        },
+        "chr14|dELS": {
+          "n": 14539,
+          "silencer_like": 5623
+        },
+        "chr14|pELS": {
+          "n": 5232,
+          "silencer_like": 1906
+        },
+        "chr15|dELS": {
+          "n": 15849,
+          "silencer_like": 6248
+        },
+        "chr15|pELS": {
+          "n": 4929,
+          "silencer_like": 1786
+        },
+        "chr16|dELS": {
+          "n": 14493,
+          "silencer_like": 5498
+        },
+        "chr16|pELS": {
+          "n": 6256,
+          "silencer_like": 2200
+        },
+        "chr17|dELS": {
+          "n": 19240,
+          "silencer_like": 7229
+        },
+        "chr17|pELS": {
+          "n": 9006,
+          "silencer_like": 3204
+        },
+        "chr18|dELS": {
+          "n": 10876,
+          "silencer_like": 4192
+        },
+        "chr18|pELS": {
+          "n": 2762,
+          "silencer_like": 1000
+        },
+        "chr19|dELS": {
+          "n": 12537,
+          "silencer_like": 4396
+        },
+        "chr19|pELS": {
+          "n": 8168,
+          "silencer_like": 2859
+        },
+        "chr2|dELS": {
+          "n": 38616,
+          "silencer_like": 14807
+        },
+        "chr2|pELS": {
+          "n": 10010,
+          "silencer_like": 3697
+        },
+        "chr20|dELS": {
+          "n": 12878,
+          "silencer_like": 4993
+        },
+        "chr20|pELS": {
+          "n": 4075,
+          "silencer_like": 1509
+        },
+        "chr21|dELS": {
+          "n": 6011,
+          "silencer_like": 2406
+        },
+        "chr21|pELS": {
+          "n": 1826,
+          "silencer_like": 646
+        },
+        "chr22|dELS": {
+          "n": 9131,
+          "silencer_like": 3500
+        },
+        "chr22|pELS": {
+          "n": 3941,
+          "silencer_like": 1439
+        },
+        "chr3|dELS": {
+          "n": 30713,
+          "silencer_like": 11759
+        },
+        "chr3|pELS": {
+          "n": 7942,
+          "silencer_like": 2902
+        },
+        "chr4|dELS": {
+          "n": 23178,
+          "silencer_like": 8897
+        },
+        "chr4|pELS": {
+          "n": 5573,
+          "silencer_like": 2031
+        },
+        "chr5|dELS": {
+          "n": 26361,
+          "silencer_like": 10176
+        },
+        "chr5|pELS": {
+          "n": 6587,
+          "silencer_like": 2364
+        },
+        "chr6|dELS": {
+          "n": 27362,
+          "silencer_like": 10564
+        },
+        "chr6|pELS": {
+          "n": 7722,
+          "silencer_like": 2798
+        },
+        "chr7|dELS": {
+          "n": 23989,
+          "silencer_like": 9207
+        },
+        "chr7|pELS": {
+          "n": 6860,
+          "silencer_like": 2451
+        },
+        "chr8|dELS": {
+          "n": 21542,
+          "silencer_like": 8207
+        },
+        "chr8|pELS": {
+          "n": 5885,
+          "silencer_like": 2187
+        },
+        "chr9|dELS": {
+          "n": 20350,
+          "silencer_like": 7807
+        },
+        "chr9|pELS": {
+          "n": 5738,
+          "silencer_like": 2109
+        },
+        "chrX|dELS": {
+          "n": 10534,
+          "silencer_like": 3558
+        },
+        "chrX|pELS": {
+          "n": 3329,
+          "silencer_like": 1091
+        }
+      }
+    },
+    "stratum_matched_cell_matched_percent": 45.016,
+    "global_for_comparison": {
+      "elements_scored": 961227,
+      "with_a_named_predicted_target": 612323,
+      "silencer_like": 230839,
+      "rate_of_named": 0.37699
+    }
+  },
+  "reading_1_as_shipped": {
+    "what": "AS SHIPPED: predicted.action == 'represses' on the committed per-element result, the argmax over every track. This is the quantity 230,839 elements carry and the one a reader of the project would meet.",
+    "denominator": 1181,
+    "silencer_like": 420,
+    "observed_percent": 35.563,
+    "base_rate_percent": 37.707,
+    "difference_points": -2.144,
+    "clustered_interval_on_the_difference": {
+      "clusters": 23,
+      "draws": 2000,
+      "interval_percent_points": [
+        -5.897,
+        1.158
+      ]
+    },
+    "band": "NO_SIGNAL",
+    "per_chromosome": {
+      "chr1": {
+        "silencer_like": 56,
+        "n": 143
+      },
+      "chr10": {
+        "silencer_like": 19,
+        "n": 48
+      },
+      "chr11": {
+        "silencer_like": 27,
+        "n": 57
+      },
+      "chr12": {
+        "silencer_like": 12,
+        "n": 44
+      },
+      "chr13": {
+        "silencer_like": 6,
+        "n": 14
+      },
+      "chr14": {
+        "silencer_like": 14,
+        "n": 34
+      },
+      "chr15": {
+        "silencer_like": 27,
+        "n": 53
+      },
+      "chr16": {
+        "silencer_like": 22,
+        "n": 54
+      },
+      "chr17": {
+        "silencer_like": 30,
+        "n": 84
+      },
+      "chr18": {
+        "silencer_like": 2,
+        "n": 12
+      },
+      "chr19": {
+        "silencer_like": 25,
+        "n": 95
+      },
+      "chr2": {
+        "silencer_like": 34,
+        "n": 84
+      },
+      "chr20": {
+        "silencer_like": 11,
+        "n": 37
+      },
+      "chr21": {
+        "silencer_like": 3,
+        "n": 9
+      },
+      "chr22": {
+        "silencer_like": 13,
+        "n": 36
+      },
+      "chr3": {
+        "silencer_like": 13,
+        "n": 43
+      },
+      "chr4": {
+        "silencer_like": 4,
+        "n": 27
+      },
+      "chr5": {
+        "silencer_like": 11,
+        "n": 45
+      },
+      "chr6": {
+        "silencer_like": 20,
+        "n": 76
+      },
+      "chr7": {
+        "silencer_like": 28,
+        "n": 61
+      },
+      "chr8": {
+        "silencer_like": 17,
+        "n": 49
+      },
+      "chr9": {
+        "silencer_like": 17,
+        "n": 50
+      },
+      "chrX": {
+        "silencer_like": 9,
+        "n": 26
+      }
+    }
+  },
+  "reading_2_cell_matched": {
+    "what": "CELL-MATCHED: the sign of predicted_by_cell[<the ReSE record's own validation cell line>] for that same predicted gene -- positive means the gene rose on deletion, i.e. silencer-like in that cell. No magnitude threshold is applied, because MIN_EFFECT was already spent selecting the gene; a value of exactly 0.0 counts as NOT silencer-like, which is the model's own tie rule carried over unchanged. A fragment validated in both lines is counted silencer-like if either line's value is positive, and how many such fragments there are is stated. The count whose |value| < 0.01 -- effectively no movement in the matched cell at all -- is reported beside the rate rather than removed from it.",
+    "denominator": 1181,
+    "silencer_like": 511,
+    "observed_percent": 43.268,
+    "base_rate_percent": 45.016,
+    "difference_points": -1.748,
+    "clustered_interval_on_the_difference": {
+      "clusters": 23,
+      "draws": 2000,
+      "interval_percent_points": [
+        -5.146,
+        1.459
+      ]
+    },
+    "band": "NO_SIGNAL",
+    "per_chromosome": {
+      "chr1": {
+        "silencer_like": 71,
+        "n": 143
+      },
+      "chr10": {
+        "silencer_like": 20,
+        "n": 48
+      },
+      "chr11": {
+        "silencer_like": 21,
+        "n": 57
+      },
+      "chr12": {
+        "silencer_like": 18,
+        "n": 44
+      },
+      "chr13": {
+        "silencer_like": 10,
+        "n": 14
+      },
+      "chr14": {
+        "silencer_like": 11,
+        "n": 34
+      },
+      "chr15": {
+        "silencer_like": 25,
+        "n": 53
+      },
+      "chr16": {
+        "silencer_like": 25,
+        "n": 54
+      },
+      "chr17": {
+        "silencer_like": 35,
+        "n": 84
+      },
+      "chr18": {
+        "silencer_like": 4,
+        "n": 12
+      },
+      "chr19": {
+        "silencer_like": 32,
+        "n": 95
+      },
+      "chr2": {
+        "silencer_like": 35,
+        "n": 84
+      },
+      "chr20": {
+        "silencer_like": 16,
+        "n": 37
+      },
+      "chr21": {
+        "silencer_like": 4,
+        "n": 9
+      },
+      "chr22": {
+        "silencer_like": 15,
+        "n": 36
+      },
+      "chr3": {
+        "silencer_like": 13,
+        "n": 43
+      },
+      "chr4": {
+        "silencer_like": 6,
+        "n": 27
+      },
+      "chr5": {
+        "silencer_like": 27,
+        "n": 45
+      },
+      "chr6": {
+        "silencer_like": 34,
+        "n": 76
+      },
+      "chr7": {
+        "silencer_like": 32,
+        "n": 61
+      },
+      "chr8": {
+        "silencer_like": 23,
+        "n": 49
+      },
+      "chr9": {
+        "silencer_like": 22,
+        "n": 50
+      },
+      "chrX": {
+        "silencer_like": 12,
+        "n": 26
+      }
+    },
+    "exactly_zero_in_the_matched_cell": 11,
+    "absolute_value_under_0.01_in_the_matched_cell": 244,
+    "counted_on_either_line_because_validated_in_both": 15
+  },
+  "reading_3_tie_bias": {
+    "what_a_tie_is": "-max_drop_log2fc == max_rise_log2fc on the gene the rule selected, which the model's own rule awards to activation",
+    "selected_genes_found_in_the_cache": 1181,
+    "not_found_in_the_cache": 0,
+    "exact_ties_awarded_to_activation": 0,
+    "tie_share_of_those_checked_percent": 0.0,
+    "margins_within_0.001_of_a_tie": 2,
+    "direction_of_the_bias": "every tie is counted as a DISAGREEMENT by this study, so the tie rule biases the measured agreement DOWNWARD on a silencer set"
+  },
+  "power": {
+    "shift_0_points": {
+      "NO_SIGNAL": 185,
+      "DISPLACED_BUT_SMALL": 15
+    },
+    "shift_5_points": {
+      "DISPLACED_BUT_SMALL": 174,
+      "NO_SIGNAL": 26
+    },
+    "shift_10_points": {
+      "DISPLACED_BUT_SMALL": 122,
+      "CONSISTENT": 78
+    },
+    "shift_15_points": {
+      "CONSISTENT": 200
+    },
+    "shift_20_points": {
+      "CONSISTENT": 200
+    }
+  },
+  "falsifier_control_disagrees_with_itself": {
+    "fired": false,
+    "null_reading": {
+      "what": "a matched control draw standing in for the ReSE set",
+      "denominator": 1181,
+      "silencer_like": 432,
+      "observed_percent": 36.579,
+      "base_rate_percent": 37.707,
+      "difference_points": -1.128,
+      "clustered_interval_on_the_difference": {
+        "clusters": 23,
+        "draws": 2000,
+        "interval_percent_points": [
+          -3.658,
+          0.957
+        ]
+      },
+      "band": "NO_SIGNAL",
+      "per_chromosome": {
+        "chr1": {
+          "silencer_like": 61,
+          "n": 143
+        },
+        "chr10": {
+          "silencer_like": 18,
+          "n": 48
+        },
+        "chr11": {
+          "silencer_like": 22,
+          "n": 57
+        },
+        "chr12": {
+          "silencer_like": 18,
+          "n": 44
+        },
+        "chr13": {
+          "silencer_like": 7,
+          "n": 14
+        },
+        "chr14": {
+          "silencer_like": 13,
+          "n": 34
+        },
+        "chr15": {
+          "silencer_like": 21,
+          "n": 53
+        },
+        "chr16": {
+          "silencer_like": 20,
+          "n": 54
+        },
+        "chr17": {
+          "silencer_like": 31,
+          "n": 84
+        },
+        "chr18": {
+          "silencer_like": 1,
+          "n": 12
+        },
+        "chr19": {
+          "silencer_like": 36,
+          "n": 95
+        },
+        "chr2": {
+          "silencer_like": 32,
+          "n": 84
+        },
+        "chr20": {
+          "silencer_like": 12,
+          "n": 37
+        },
+        "chr21": {
+          "silencer_like": 3,
+          "n": 9
+        },
+        "chr22": {
+          "silencer_like": 15,
+          "n": 36
+        },
+        "chr3": {
+          "silencer_like": 19,
+          "n": 43
+        },
+        "chr4": {
+          "silencer_like": 8,
+          "n": 27
+        },
+        "chr5": {
+          "silencer_like": 16,
+          "n": 45
+        },
+        "chr6": {
+          "silencer_like": 24,
+          "n": 76
+        },
+        "chr7": {
+          "silencer_like": 19,
+          "n": 61
+        },
+        "chr8": {
+          "silencer_like": 17,
+          "n": 49
+        },
+        "chr9": {
+          "silencer_like": 13,
+          "n": 50
+        },
+        "chrX": {
+          "silencer_like": 6,
+          "n": 26
+        }
+      }
+    }
+  },
+  "registration": {
+    "file": "data/results/silenceragree_registration.json",
+    "commit": "c3ebf701ebee3e145b17ed4b759238f0b9f1a428"
+  },
+  "base_rate": {
+    "elements_scored": 961227,
+    "with_a_named_predicted_target": 612323,
+    "silencer_like": 230839,
+    "rate_of_named": 0.37699
+  },
+  "bands_as_registered": {
+    "INCONCLUSIVE_TOO_FEW_CLUSTERS": "fewer than 10 chromosomes carry a joined element, so no interval is computed and no band is read",
+    "INCONCLUSIVE_UNDERPOWERED": "the interval includes 0 AND reaches beyond the band threshold, so 'no signal' and 'consistent' are both inside it and this population cannot tell them apart. THIS IS A COMPLETE READING: it says the check is underpowered at this denominator.",
+    "NO_SIGNAL": "the interval includes 0 and stays inside the band threshold, so the difference is both unsigned and small",
+    "CONSISTENT": "the difference exceeds the stratum-matched base rate by >= 10 percentage points and the interval excludes 0",
+    "INVERTED": "the difference falls below the stratum-matched base rate by >= 10 percentage points and the interval excludes 0",
+    "DISPLACED_BUT_SMALL": "the interval excludes 0 and the difference is under 10 percentage points in absolute value"
+  },
+  "what_this_licenses": "That the model's signed direction carries SOME information about assayed repressive ability, on dELS and pELS elements, in K562 and HepG2, at the rate measured and no better. It would license reporting silencer_like as a direction with one external point of contact where it previously had none.",
+  "what_this_does_not_license": "It is NOT a validation of the 230,839. The joined set is 0.5% of them, two cell lines of the four scored, and two cCRE classes. It does NOT make any element a silencer: molecular_role silencer is defined in genomeos/lang/grammar.py as 'a repressive element; never inferred from a direction of effect alone', and this check reads exactly a direction of effect. It does not attach a probability to any element: review R4 stands and nothing here converts a rate over a set into a certainty for a member of it. A LOW rate is NOT a refutation of the model either: a reporter fragment and a 1 Mb window argmax can disagree with neither being wrong.",
+  "tie_bias": "The model's own rule breaks a tie toward ACTIVATION ('ties go to activation, the usual case'), which biases this check AGAINST agreement on a silencer set, because every exact tie is counted as a disagreement. The bias is quantifiable and is quantified: the per-element committed results keep only the winning direction and its signed magnitude, but the AlphaGenome element cache keeps max_drop_log2fc and max_rise_log2fc for every gene in the window, so the exact-tie count is countable on the joined set rather than argued about.",
+  "four_cell_line_negative": "No reachable curated source covers the project's four scored cell lines. Every ReSE record validates in K562 or HepG2 and NOTHING validates in GM12878 or IMR-90 -- measured on the records themselves, not inferred. So any work planned as 'silencers, genome-wide, all four lines' is not fundable by any source that exists today, and that is the more durable finding of this lane whatever the agreement rate turns out to be.",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ReSE screen-validated silencers in RefSeq Functional Elements, NCBI Gene esummary, query 'ReSE[All Fields] AND human[orgn]'",
+        "version": "fetched 2026-10-03; 5,478 records; NCBI places no use restrictions"
+      },
+      {
+        "accession": "Pang B, Snyder MP. Systematic identification of silencers in human cells. Nat Genet 2020;52(3):254-263",
+        "version": "10.1038/s41588-020-0578-5"
+      },
+      {
+        "accession": "ENCODE cCRE v3 element classes, as committed in data/results/ccres_chr*.bed.gz",
+        "version": "as committed"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/cache/silenceragree/rese_records.json",
+        "sha256": "d45f2fa965cc1b537d7b420f63a0b7a1b0708cc417542a6279a6e10a0492fd01",
+        "bytes": 12189659,
+        "partition": "the external source; data/cache is never committed"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/knowledge/alphagenome/all_elements",
+        "sha256": "f27d2c56ab54283b359e1aa8fe064a5109b7d1eea1792b44304f4f7365eeb82c",
+        "bytes": 622783785,
+        "partition": "the project's scored elements; data/knowledge is never committed",
+        "files": 24
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/knowledge/alphagenome/elements",
+        "sha256": "41dc8a631dee0a3f95ca7eb894c3f09bc930dc080b9f378aed0261a0f338034e",
+        "bytes": 805894526,
+        "partition": "the AlphaGenome element cache, read for the per-gene drop/rise pair that makes the tie bias countable; data/knowledge is never committed",
+        "files": 3233
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/silenceragree_registration.json",
+        "sha256": "0ffc208219d9077750bbd17d5ddb3537bf639d4cea044465c5cbc934977bbaf3",
+        "bytes": 41240,
+        "partition": "the registration this run is bound by"
+      },
+      {
+        "path": "ENCODE cCRE v3 per-chromosome subsets, read for the element CLASS the control matches on",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/ccres_chr1.bed.gz",
+            "sha256": "45594cde8f16b975b510ce05ffa4edfd6bc41fab8f9b78ae503b856b8ef22b09",
+            "bytes": 1092197
+          },
+          {
+            "path": "data/results/ccres_chr10.bed.gz",
+            "sha256": "3652de90ffe5e588a5eec20a1a124c8a02aefcdc9dd3bf2c78b6ffcd646190f2",
+            "bytes": 586862
+          },
+          {
+            "path": "data/results/ccres_chr11.bed.gz",
+            "sha256": "e14233c61c0ffafdaa8183022152a3a90b298beea1126631ffbf6214790cc6fb",
+            "bytes": 603871
+          },
+          {
+            "path": "data/results/ccres_chr12.bed.gz",
+            "sha256": "fb52a62a2e5c0e2ab4d64c5e1458f4eb0343d03fb6e0dfd1ae2e63903969878d",
+            "bytes": 583682
+          },
+          {
+            "path": "data/results/ccres_chr13.bed.gz",
+            "sha256": "81ffa1fa84419823f95cc67d905ed232b606ef54dbce7c7e4a2d87cfe46ad042",
+            "bytes": 323960
+          },
+          {
+            "path": "data/results/ccres_chr14.bed.gz",
+            "sha256": "208c4cdb346e8acc63ee50f23478ddc5cb8b6b60daaca45f8b0419ff2718f940",
+            "bytes": 396902
+          },
+          {
+            "path": "data/results/ccres_chr15.bed.gz",
+            "sha256": "0bc6ccf77ae99c08220a0cb5593b3ed2022337155919fc6178dd832405da075a",
+            "bytes": 382991
+          },
+          {
+            "path": "data/results/ccres_chr16.bed.gz",
+            "sha256": "bb71ba26ee5b05463d4c7c90f6934044b1c5f6e28e34925fe3505f33253ab15f",
+            "bytes": 401936
+          },
+          {
+            "path": "data/results/ccres_chr17.bed.gz",
+            "sha256": "69fd52a048754f98aa754e888240605b5ac753055010fe5a12f127d3607fdfa0",
+            "bytes": 505715
+          },
+          {
+            "path": "data/results/ccres_chr18.bed.gz",
+            "sha256": "4a508b1ae54f1b716c4e86df7524aacdc777aa66b9a6b3a00a28cd28ddf6a08f",
+            "bytes": 277669
+          },
+          {
+            "path": "data/results/ccres_chr19.bed.gz",
+            "sha256": "4bfc69a4b13f2f46bd83e4c9b9dbc86cdc5edadc6bd3ac67de0ba81868fbac67",
+            "bytes": 371935
+          },
+          {
+            "path": "data/results/ccres_chr2.bed.gz",
+            "sha256": "eac85435e73dc25cc49b6ff171bda95c079646cc068aa8ed6a27abeeaadd9bd9",
+            "bytes": 992268
+          },
+          {
+            "path": "data/results/ccres_chr20.bed.gz",
+            "sha256": "1f2a32665cbc35988f3715a835ddbf737ebe7fea4fcd3e19fe76c81c629a2aea",
+            "bytes": 332264
+          },
+          {
+            "path": "data/results/ccres_chr21.bed.gz",
+            "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+            "bytes": 150095
+          },
+          {
+            "path": "data/results/ccres_chr22.bed.gz",
+            "sha256": "395da0f82f7a3943e4f0f49ec91ad7dfa9a78762d39cdbfd002e3491cb8c4350",
+            "bytes": 240224
+          },
+          {
+            "path": "data/results/ccres_chr3.bed.gz",
+            "sha256": "698e706c750e4b4ea20eef2de8100bab53bdeada7754953f73b1a1583ac5ea1a",
+            "bytes": 782800
+          },
+          {
+            "path": "data/results/ccres_chr4.bed.gz",
+            "sha256": "1023c222f611d3515fc79d88b2251e12bae8da3ef36f84f922e60ffdabd040da",
+            "bytes": 591199
+          },
+          {
+            "path": "data/results/ccres_chr5.bed.gz",
+            "sha256": "5fdbe0dead2f84a6da66086b931c844fc008e9ea19517a5a5d6dce843b8f3849",
+            "bytes": 667998
+          },
+          {
+            "path": "data/results/ccres_chr6.bed.gz",
+            "sha256": "7abb25c8cac47b608cbdcb85d0fedbabc4cef06d64a48444d60e86bf1a4b57c5",
+            "bytes": 708503
+          },
+          {
+            "path": "data/results/ccres_chr7.bed.gz",
+            "sha256": "6dcd8393a58e2a26fbea3276f2d0173a35b65eb4dc023ef7915e688a6988cc00",
+            "bytes": 624219
+          },
+          {
+            "path": "data/results/ccres_chr8.bed.gz",
+            "sha256": "7dcab72e2a9200b1cdd09f6d3e150641d72eae4f21a55839a1310e464887ea92",
+            "bytes": 572895
+          },
+          {
+            "path": "data/results/ccres_chr9.bed.gz",
+            "sha256": "db587673ba52948d804e39ec0851eef49837bff9dbd51a4e423b33ff59c0d9b1",
+            "bytes": 513553
+          },
+          {
+            "path": "data/results/ccres_chrM.bed.gz",
+            "sha256": "f52d831771e550f59d5bb3fa063bf07f4f223210a455510ff118fd0ce5a12f69",
+            "bytes": 146
+          },
+          {
+            "path": "data/results/ccres_chrX.bed.gz",
+            "sha256": "3bc5c0d39049fdf472a43556fc9873ee2a322252de2c53defd023f63f015be0e",
+            "bytes": 298355
+          },
+          {
+            "path": "data/results/ccres_chrY.bed.gz",
+            "sha256": "ae4ef64ae71612d78be3d8aa7e84381542e4b6b121c940e3cf5118cc9c6c7b8e",
+            "bytes": 12318
+          }
+        ],
+        "sha256": "6babe906b9acc2f76bcaf0b63009b9c352da0fa6a4ba8d86adb8a67d5bdee508",
+        "bytes": 12014557,
+        "files": 25,
+        "partition": "the registry's own committed cCRE subsets"
+      }
+    ],
+    "assembly": "GRCh38; the ReSE intervals are joined on NCBI genomicinfo and never on the GRCh37 coordinates in each record's description",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "0-based half-open for the project's elements as stored; the NCBI genomicinfo span is used as given, which costs at most one base at each end of a fragment whose median length is 192 bp, and overlap is tested as element_start < rese_end and element_end > rese_start. The overlap in bases is recorded on every joined row, so a stricter rule can be applied afterwards without re-joining."
+    },
+    "parameters": {
+      "registration_commit": "c3ebf701ebee3e145b17ed4b759238f0b9f1a428",
+      "control_draws": 1000,
+      "control_seed": 20261003,
+      "band_threshold_points": 10.0,
+      "near_zero": 0.01
+    },
+    "exclusions": [
+      "480 records naming ReSE only outside the description (genomicinfo is a parent span)",
+      "4 with no genomicinfo, 2 unplaced on GRCh38",
+      "3,408 fragments overlapping no scored element",
+      "403 fragments whose overlapping element has no named predicted target",
+      "SilencerDB entirely: no licence is stated anywhere in it"
+    ],
+    "partitions": "n/a: no evaluation partition. This is an external check against a curated assay, not a held-out split of anything the model was fitted on. Whether the ReSE screen's data entered the training corpus is NOT ESTABLISHED and is registered as unknown, so this field records the absence of a partition and must not be read as a claim of independence.",
+    "code_cleanliness": {
+      "git_sha": "42543517623e409e4d3b147c0713b6e6009ec81e",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/silenceragree_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/silenceragree_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/silenceragree_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/silenceragree.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/silenceragree_run.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "42543517623e409e4d3b147c0713b6e6009ec81e",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json",
+        "data/results/silenceragree.json"
+      ],
+      "argv": [
+        "scripts/silenceragree_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "42543517623e409e4d3b147c0713b6e6009ec81e",
+      "code_cleanliness_git_sha": "42543517623e409e4d3b147c0713b6e6009ec81e",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 4254351"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 3649,
+      "opens_under_data": 3632,
+      "files_read": 3284,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
