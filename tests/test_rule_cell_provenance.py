@@ -33,6 +33,12 @@ COMPILED = "data/organisms/human/noncoding_chr21.bio"
 REPAIRED = "data/organisms/human/noncoding_chr21_v2.bio"
 #: every tracked compiled program, which is what the cost scan's population globs
 COMPILED_PROGRAMS = (COMPILED, REPAIRED)
+#: the same cut as v2 with `context_evidence` on every rule line, tracked beside it since 2026-10-03
+#: (lane-notassessed, Albert's item (7)). Added as lines of its own rather than by editing the tuple
+#: above, which is a line a commit of 2026-10-03 added and which this lane may not remove.
+RECUT_WITH_CONTEXT_EVIDENCE = "data/organisms/human/noncoding_chr21_v3.bio"
+#: what the cost scan's population actually globs now: every tracked compiled program, all three
+COMPILED_PROGRAMS_WITH_V3 = (*COMPILED_PROGRAMS, RECUT_WITH_CONTEXT_EVIDENCE)
 RUNTIME_FIXTURE = "data/demo/cell_context.bio"
 COMPILER = "genomeos/attribution/compile.py"
 
@@ -604,6 +610,22 @@ def test_no_test_in_this_file_skips_on_a_committed_path() -> None:
 # --- the adoption cost, counted rather than estimated -------------------------------------------------
 
 
+# SUPERSEDED 2026-10-03 by a THIRD tracked compiled program, `noncoding_chr21_v3.bio`, and kept
+# rather than edited: lines 620-621 were added by `c4ba266` today, so correcting the population in
+# place would remove a committed line and `--force` is denied to a lane. Nothing about the proposal
+# moved - one human decision, the rest mechanical - and the per-class figures are sums over the
+# population, so they rose with it: 10,348 -> 15,522 and 4 -> 6. `strict=True` so that if the
+# population ever shrinks back the suite reds instead of passing on a stale figure. Replaced by
+# `test_the_counted_adoption_cost_is_one_human_decision_and_the_rest_mechanical_with_v3`.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-03: noncoding_chr21_v3.bio is a third tracked compiled program, so the "
+        "per-class sums over the population are 15,522 and 6, not 10,348 and 4. The population "
+        "constant this test reads names two programs. Replaced by "
+        "test_the_counted_adoption_cost_is_one_human_decision_and_the_rest_mechanical_with_v3."
+    ),
+)
 @committed(COMPILED, *HAND_AUTHORED)
 def test_the_counted_adoption_cost_is_one_human_decision_and_the_rest_mechanical() -> None:
     """The proposal's own scale. A per-rule mark over every tracked program, split by who pays."""
@@ -619,6 +641,36 @@ def test_the_counted_adoption_cost_is_one_human_decision_and_the_rest_mechanical
     assert cost["marks_a_machine_can_derive_by_class"] == {
         cp.ARGMAX_OF_PREDICTED_EFFECT: sum(len(_parsed(p).rules) - 2 for p in COMPILED_PROGRAMS),
         cp.MEASURED_PERTURBATION_IN_THAT_CELL: 2 * len(COMPILED_PROGRAMS),
+    }
+    assert cost["synthesised_rules_naming_a_cell"] == 0
+    assert cost["default_for_every_one_of_them_before_a_decision"] is cp.NOT_ASSESSED
+
+
+@committed(COMPILED, RECUT_WITH_CONTEXT_EVIDENCE, *HAND_AUTHORED)
+def test_the_counted_adoption_cost_is_one_human_decision_and_the_rest_mechanical_with_v3() -> None:
+    """The same scale over the population as it now stands: THREE tracked compiled programs.
+
+    Supersedes the test xfailed above, and nothing it claims is weakened. The figure that matters -
+    one mark a human must decide, every other mark derivable - is re-asserted unchanged, and so is
+    the identity of that one rule. What moved is arithmetic over a population that gained a program:
+    the per-class counts are sums over `COMPILED_PROGRAMS_WITH_V3` rather than over two names, and
+    they are still computed from the parsed programs rather than written down, so a program added or
+    removed again moves the expectation with the reading instead of against it.
+    """
+    cost = _cost().count()
+    assert cost["marks_a_human_must_decide"] == 1
+    assert cost["marks_a_human_must_decide_rules"] == [
+        {"program": RUNTIME_FIXTURE, "rule": next(iter(ADJUDICATED))}
+    ]
+    assert cost["marks_a_machine_can_derive"] == cost["rules_in_the_population"] - 1
+    # Three compiled programs are tracked: v1, whose bytes are pinned by sha256 in
+    # data/results/label_gene.json; the header-repaired v2 beside it; and v3, the same cut as v2 with
+    # `context_evidence` on every rule line. The population is every tracked `.bio`, so the per-class
+    # figures sum over all three and are v1's alone no more than they were v1's and v2's.
+    assert len(COMPILED_PROGRAMS_WITH_V3) == 3
+    assert cost["marks_a_machine_can_derive_by_class"] == {
+        cp.ARGMAX_OF_PREDICTED_EFFECT: sum(len(_parsed(p).rules) - 2 for p in COMPILED_PROGRAMS_WITH_V3),
+        cp.MEASURED_PERTURBATION_IN_THAT_CELL: 2 * len(COMPILED_PROGRAMS_WITH_V3),
     }
     assert cost["synthesised_rules_naming_a_cell"] == 0
     assert cost["default_for_every_one_of_them_before_a_decision"] is cp.NOT_ASSESSED
