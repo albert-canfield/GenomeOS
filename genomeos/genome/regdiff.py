@@ -53,11 +53,25 @@ def chromosome_elements(chrom: str, reference: Path = Path("data/reference")):
     return by_id, iv.freeze()
 
 
+#: The element classes whose cached deletion prediction this module reads. The window below is read
+#: for EXACTLY this population and no other, because a window formed where no head was asked for
+#: would make the two counts compare different sets of variants.
+PREDICTED_CLASSES = ("enhancer", "promoter")
+
+
 def variants_in_elements(
-    name: str, chrom: str, by_id, iv, root: Path, base_at=None
+    name: str, chrom: str, by_id, iv, root: Path, base_at=None, window: bool = False, coding=None
 ) -> dict[tuple, dict[str, Any]]:
-    """The person's variants (normalised) that fall inside an element, keyed (pos, ref, alt)."""
-    from genomeos.predict.enhancer_target import cached_prediction
+    """The person's variants (normalised) that fall inside an element, keyed (pos, ref, alt).
+
+    With `window=False`, which is the default and what every committed figure was produced under,
+    nothing extra is opened and each row is exactly what it was: one `predicted` gene per element
+    from `cached_prediction`. With `window=True` the SAME cached record `cached_prediction` already
+    opened one call down is read again from the same per-process archive -- no new reader, no
+    request -- and each row gains one new key, `window`, beside its unchanged `predicted`.
+    """
+    from genomeos.attribution.targets import prediction_window_reading
+    from genomeos.predict.enhancer_target import cached_prediction, load_cached
 
     if name == REFERENCE:
         return {}
@@ -71,7 +85,18 @@ def variants_in_elements(
             continue
         e = by_id[ids[0]]
         target = e.targets[0] if e.targets else None
-        pred = cached_prediction(chrom, e.id) if e.cls in ("enhancer", "promoter") else None
+        asked = e.cls in PREDICTED_CLASSES
+        pred = cached_prediction(chrom, e.id) if asked else None
+        win = None
+        if window and asked:
+            w = prediction_window_reading(load_cached(chrom, e.id), (pred or {}).get("gene"), coding=coding)
+            win = {
+                "at_bar": [list(t) for t in (w.at_bar or ())],
+                "extra": list(w.extra),
+                "not_cached": w.not_cached,
+                "head_agrees": w.head_agrees,
+                "anything_at_bar": None if w.at_bar is None else bool(w.at_bar),
+            }
         out[(pos, ref, alt)] = {
             "pos": pos,
             "ref": ref,
@@ -88,6 +113,8 @@ def variants_in_elements(
                 else None
             ),
         }
+        if win is not None:  # only with a reader, so the committed row shape is unchanged without one
+            out[(pos, ref, alt)]["window"] = win
     return out
 
 
@@ -120,6 +147,96 @@ def add_constraint(chrom: str, rows: list[dict[str, Any]], progress=None) -> dic
     return cost
 
 
+#: What `_window_arm` reports when it is asked for, and what each figure is for. Registered in
+#: `attribution/onetarget2.py` for this module as: "either `with_predicted_target_only_a` or
+#: `with_predicted_target_only_b` changing ... by THE_INVARIANT they must NOT move; a move means
+#: `cached_prediction` and the window disagree about whether anything was predicted at all. The GENE
+#: may change and that is the expected gain."
+WINDOW_FALSIFIER = (
+    "the two with_predicted_target counts are conditioned on `predicted` being truthy, which is the "
+    "yes/no and not the gene, so the window must reproduce them exactly. The gene is where the gain "
+    "is: `extra` names every gene the sweep put at the bar at that element and the one-target "
+    "projection dropped."
+)
+#: The limit the invariant travels with, and whether it bites here. It does NOT: every figure below
+#: is read off the ANY-GENE head, which is the head `cached_prediction` itself names, so the
+#: 2026-09-27 coding-head exception (10 elements of 4,794 with no `predicted_coding` where the cache
+#: named a coding gene) cannot reach this module's counts. A caller that passes `coding` gets the
+#: coding window BESIDE the any-gene one and must read `coding_head_agrees` before using it.
+WINDOW_DOES_NOT_READ_THE_CODING_HEAD = (
+    "regdiff reads cached_prediction's own any-gene head, so the registered coding-head limit is not "
+    "load-bearing for these counts; the coding window is formed only when a caller asks for it"
+)
+#: MEASURED, not assumed, and reported rather than used to drop the check: this module's registered
+#: falsifier is SUBSUMED by `onetarget2.check_head_invariant`. An asked, cached row can take five
+#: shapes -- head None with an empty bar, head G with G at the head of the bar, head None with a
+#: non-empty bar, head G with an empty bar, head G with another gene at the head of the bar -- and
+#: the first two leave the two counts equal while the last three are any-gene head disagreements,
+#: which the invariant guard refuses before the counts are returned. So no input reachable through
+#: `regulatory_diff` can set `the_count_moved`, and `tests/test_regdiff_window.py` records that by
+#: driving `_window_arm` directly for the branch. The count is still computed and still reported,
+#: because the registration names it as this module's own falsifier and the figure belongs in the
+#: record; what is NOT claimed is that it adds a refusal the invariant guard does not already make.
+WINDOW_FALSIFIER_IS_SUBSUMED_BY_THE_INVARIANT_GUARD = (
+    "the two counts cannot diverge without an any-gene head disagreement, which check_head_invariant "
+    "refuses first; this module's falsifier is therefore strictly weaker than that refusal and is "
+    "reported as a figure rather than relied on as a second guard"
+)
+
+
+def _window_arm(window: bool, only_a: list[dict[str, Any]], only_b: list[dict[str, Any]]) -> dict[str, Any]:
+    """The module's own falsifier, computed only when a window was read; `{}` otherwise.
+
+    `{}` is why every committed figure is untouched without a reader: this contributes no key at all
+    to `regulatory_diff`'s result unless it was asked for.
+    """
+    if not window:
+        return {}
+    from genomeos.attribution import onetarget2 as ot
+
+    out: dict[str, Any] = {
+        "falsifier": WINDOW_FALSIFIER,
+        "limit": WINDOW_DOES_NOT_READ_THE_CODING_HEAD,
+        "the_falsifier_is_subsumed": WINDOW_FALSIFIER_IS_SUBSUMED_BY_THE_INVARIANT_GUARD,
+    }
+    disagreements = 0
+    for side, rows in (("only_a", only_a), ("only_b", only_b)):
+        asked = [v for v in rows if "window" in v]
+        head_yes = sum(1 for v in asked if v["predicted"])
+        bar_yes = sum(1 for v in asked if v["window"]["anything_at_bar"])
+        extra = [v for v in asked if v["window"]["extra"]]
+        disagreements += sum(1 for v in asked if v["window"]["head_agrees"] is False)
+        out[side] = {
+            "variants_whose_element_was_asked": len(asked),
+            "with_predicted_target_head": head_yes,
+            "with_predicted_target_window": bar_yes,
+            "the_count_moved": head_yes != bar_yes,
+            "not_cached": sum(1 for v in asked if v["window"]["not_cached"]),
+            "variants_gaining_a_gene": len(extra),
+            "genes_gained": sum(len(v["window"]["extra"]) for v in asked),
+            "genes_gained_at": [
+                {
+                    "element": v["element"],
+                    "head": (v["predicted"] or {}).get("gene"),
+                    "extra": v["window"]["extra"],
+                }
+                for v in extra[:20]
+            ],
+        }
+    out["head_disagreements"] = disagreements
+    ot.check_head_invariant(out, "genome/regdiff.py window arm")
+    moved = out["only_a"]["the_count_moved"] or out["only_b"]["the_count_moved"]
+    gained = out["only_a"]["variants_gaining_a_gene"] + out["only_b"]["variants_gaining_a_gene"]
+    out["verdict_against_its_own_falsifier"] = (
+        "REFUTES THE INVARIANT: a with_predicted_target count moved, so cached_prediction and the "
+        "window disagree about whether anything was predicted. The wave stops."
+        if moved
+        else f"does NOT fire, as registered: both counts reproduced exactly; {gained} variant(s) "
+        f"gained a dropped gene, which is the registered expected gain and not a count moving"
+    )
+    return out
+
+
 def regulatory_diff(
     a: str,
     b: str,
@@ -128,13 +245,15 @@ def regulatory_diff(
     constraint: bool = False,
     reference: Path = Path("data/reference"),
     progress=None,
+    window: bool = False,
+    coding=None,
 ) -> dict[str, Any]:
     root = root or ROOT
     by_id, iv = chromosome_elements(chrom, reference)
     base_at, genome = _reference_base_reader(chrom, reference)
     try:
-        va = variants_in_elements(a, chrom, by_id, iv, root, base_at)
-        vb = variants_in_elements(b, chrom, by_id, iv, root, base_at)
+        va = variants_in_elements(a, chrom, by_id, iv, root, base_at, window=window, coding=coding)
+        vb = variants_in_elements(b, chrom, by_id, iv, root, base_at, window=window, coding=coding)
     finally:
         if genome is not None:
             genome.close()
@@ -175,6 +294,7 @@ def regulatory_diff(
         "by_class": by_class,
         "with_predicted_target_only_a": count(only_a, lambda v: v["predicted"]),
         "with_predicted_target_only_b": count(only_b, lambda v: v["predicted"]),
+        **({"window": _window_arm(window, only_a, only_b)} if window else {}),
         "constrained_only_a": count(only_a, _constrained) if constraint else None,
         "constrained_only_b": count(only_b, _constrained) if constraint else None,
         "phylop_cost": cost,

@@ -699,6 +699,19 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
         "rules() and appends SOURCE_PREDICTED_WINDOW rules: a population in no committed program, "
         "kept out of SOURCES so no caller counting compiled rules moves",
     },
+    "genomeos/genome/regdiff.py": {
+        "now": (128, 205, 220, 295, 296, 314, 315),
+        "was": (101, 176, 177, 194, 195),
+        "what": "every registered read is still there and still reads the same head: the rank term "
+        "moved 101 -> 128, the two with_predicted_target counts 176, 177 -> 295, 296 and the printed "
+        "line 194, 195 -> 314, 315, all of them pushed down by the constants and the window arm "
+        "added above them and none of them rewritten. The two NEW reads, 205 and 220, are inside "
+        "that arm and read the SAME head to compare it with the window: 205 is the head half of the "
+        "count the registered falsifier names, and 220 names the head beside the genes the "
+        "projection dropped. `variants_in_elements` still gets its one `predicted` gene from "
+        "`cached_prediction` unchanged, and the window is a new key beside it that exists only when "
+        "a reader was asked for",
+    },
 }
 
 

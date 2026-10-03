@@ -367,3 +367,39 @@ def window_reading(
         None if bar is None else tuple(bar),
         None if cbar is None else tuple(cbar),
     )
+
+
+def prediction_window_reading(
+    record: dict[str, Any] | None,
+    head: str | None,
+    coding_head: str | None = None,
+    coding: set[str] | None = None,
+    min_effect: float = 0.1,
+) -> WindowReading:
+    """The same `WindowReading`, for a consumer that reads the sweep's cache RECORD, not a table row.
+
+    `window_reading` above takes a compact table element, whose head is a `predicted` field. Some
+    consumers never see that table: they call `predict.enhancer_target.cached_prediction`, which
+    opens the element's cached record, collapses the window with `predict_target` and returns one
+    gene. `genome/regdiff.py` and `genome/regulation.py` are the two, named in the registration
+    (`attribution/onetarget2.py`, THE_SHARED_READER) as the pair whose fix needs no new reader and
+    no request, because the record is already in hand one call down.
+
+    So this takes the record and the head the caller already read, and returns the one shape. It
+    does NOT recompute the head: `head` is `cached_prediction`'s own gene, carried through, exactly
+    as `window_reading` carries the table's. `record=None` is the control -- nothing was opened, or
+    the element is not cached -- and the reading then carries the heads alone with `not_cached` True,
+    which is what lets a consumer reproduce its committed figures when it is called the old way.
+
+    `coding` is the chromosome's coding symbols, and without it the coding window is not formed,
+    for the reason `window_reading` gives: a coding head beside an uncoded window would compare two
+    different populations.
+    """
+    bar = genes_at_bar(record, min_effect)
+    cbar = None if (bar is None or coding is None) else [t for t in bar if t[0] in coding]
+    return WindowReading(
+        head,
+        coding_head,
+        None if bar is None else tuple(bar),
+        None if cbar is None else tuple(cbar),
+    )
