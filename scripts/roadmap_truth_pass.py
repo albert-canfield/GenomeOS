@@ -167,11 +167,34 @@ def check_data_bullets(lines: list[str]) -> list[dict]:
                     {
                         "line": bullet["line"],
                         "claim": name,
-                        "exists": (RESULTS / f"{name}.json").exists(),
+                        # Try the name AS GIVEN first, then `.json`, then the other
+                        # extensions a committed result actually uses. The first form of
+                        # this line was `(RESULTS / f"{name}.json").exists()` and only
+                        # ever appended `.json`, so it reported MISSING for
+                        # `origin_genome_wide.json` (looked for `…json.json`), for
+                        # `gencode_v50_chr21_chrM.gff3.gz`, and for `ccres_mm10_chr11`,
+                        # which is a `.bed.gz`. All three are present. A verification tool
+                        # that errs towards ALARM is safer than one that flatters, but it
+                        # is still wrong: a false MISSING sends a reader to "fix" a
+                        # document that is correct.
+                        "exists": result_exists(name),
                         "kind": "file",
                     }
                 )
     return rows
+
+
+#: The extensions a committed result under `data/results` actually uses. A result is not
+#: always JSON: the reference and annotation results are `.bed.gz` and `.gff3.gz`.
+RESULT_SUFFIXES = (".json", ".bed.gz", ".gff3.gz", ".tsv", ".csv", ".txt")
+
+
+def result_exists(name: str, results: Path | None = None) -> bool:
+    """Does a committed result go by this name, under any extension a result really uses?"""
+    base = results if results is not None else RESULTS
+    if (base / name).exists():
+        return True
+    return any((base / f"{name}{suffix}").exists() for suffix in RESULT_SUFFIXES)
 
 
 def check_milestones(text: str) -> dict:
