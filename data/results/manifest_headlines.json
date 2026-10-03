@@ -453,6 +453,116 @@
       "status": "pending",
       "resolved": "rebuilt in the third pass on 2026-09-28 at 0126346: see its entry under rebuilt",
       "why": "lane-split (the CRISPRi split and partition fix) had not finished when this pass ran; the writer gets its manifest after it, so that its inputs carry the final partition field"
+    },
+    {
+      "result": "silenceragree",
+      "figure": "the first independent check of the predicted silencer_like call: assay-validated ReSE silencers against the model's signed direction, 420 of 1,181 = 35.563% against a stratum-matched 37.707%, difference MINUS 2.144 points, [-5.897, +1.158], band NO_SIGNAL",
+      "writer": "scripts/silenceragree_run.py",
+      "argv": [
+        "scripts/silenceragree_run.py"
+      ],
+      "writer_sha": "42543517623e409e4d3b147c0713b6e6009ec81e",
+      "verification_tool_at": "715dd04ec34a11f23a589341125325f7afb6f079",
+      "status": "pending",
+      "why": "NOT REBUILDABLE BY THE COMMITTED TOOL AS DECLARED, which is a defect in the manifest's record and not a difference in any value. The manifest declares its fourth input as the ABSOLUTE path /Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/silenceragree_registration.json, because scripts/silenceragree_run.py passes ROOT / REGISTRATION to genomeos.manifest.input_entry, which records str(path) verbatim, while the sibling helper files_entry puts every member through _repo_relative. scripts/manifest_rebuild.py accepts an absolute input only when it resolves inside one of the three linked stores (data/reference, data/knowledge, data/cache); data/results is never one, so the tool stops at step 3 with 4 of 5 inputs checked and runs no command. 9 of the 212 committed results that carry result_manifest.inputs declare an absolute path outside those three stores and are unrebuildable for the same reason: n1b_calibration, node_independence_audit, onetarget2, onetarget2_registration, pilot_biological_gate, pilot_synthetic_gate, prior_only_test, repression_trace, silenceragree. The fix belongs in the writer and in input_entry, under a NEW NAME: a published pin never moves in place, and these bytes were not touched or restamped",
+      "no_verdict_because": "input /Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/silenceragree_registration.json is an absolute path outside the linked data stores: the bytes there are not the bytes this worktree reads, so it cannot be checked against this manifest",
+      "inputs_declared_and_checked": "4 of 5",
+      "files_opened_and_hashed": 3283,
+      "input_that_could_not_be_checked": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/silenceragree_registration.json",
+      "the_unchecked_input_is_not_missing": "its bytes at the writer's sha 4254351 hash to 0ffc208219d9077750bbd17d5ddb3537bf639d4cea044465c5cbc934977bbaf3, which is the sha256 the manifest declares and is also the published file's sha256 today. The input is satisfied in substance and unverifiable by the tool in form",
+      "alphagenome_requests": 0,
+      "rebuild_how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha 715dd04 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)",
+      "independent_comparison": {
+        "not_a_tool_verdict": "NOT A TOOL VERDICT. scripts/manifest_rebuild.py gave none, for the reason in no_verdict_because. These figures come from a driver that reproduces every other step of that tool at the writer's sha and compares with the TOOL'S OWN committed comparison functions (comparable, diff, run_differences, environment_differences, must_hold_failures, leaf_reconciliation at 715dd04), so the comparison is the committed one even though the verdict is not the tool's. No published byte was written: each rebuild wrote inside its own worktree only, and both worktrees were removed by scripts/remove_worktree.py with stores_unchanged true",
+        "runs": 2,
+        "exit": 0,
+        "write_guard_armed_in_the_run": true,
+        "leaves": {
+          "total": 499,
+          "compared": 492,
+          "not_compared": 7,
+          "set_aside": 0
+        },
+        "differences": 4,
+        "differences_named": [
+          "/result_manifest/inputs[0]/path",
+          "/result_manifest/inputs[1]/path",
+          "/result_manifest/inputs[2]/path",
+          "/result_manifest/inputs[3]/path"
+        ],
+        "what_the_four_differences_are": "all four are the ABSOLUTE path of a declared input, which records where the checkout sits and not anything the run computed. The tool's own CWD_FIELDS allowance for an absolute path does not cover result_manifest.inputs[*].path, so they are reported rather than set aside, and they are reported here the same way",
+        "must_hold_failures": 0,
+        "every_other_leaf": "every reading reproduces: denominator, reading_1_as_shipped, reading_2_cell_matched, power, tie_bias, falsifier_control_disagrees_with_itself and four_cell_line_negative are each equal to the published block",
+        "the_two_runs": "byte-identical except those four lines, and byte-identical after normalising the worktree path: 14 unified-diff lines between the two rebuilt files, 4 of them changed `path` values and the rest diff headers",
+        "rebuilt_sha256_run_1": "2adba0755322ee1a580ce29cf07bf7325264864bd76b2c6d8bcfc2ed07d941b7",
+        "rebuilt_sha256_run_2": "dfda2fd4b31ffd5baebdb7f837823ebd18b9940bb850d8c6a79dd11ed85208b0",
+        "rebuilt_sha256_differ_because": "each file records its own worktree's absolute input paths"
+      },
+      "traced_reads_against_declared_inputs": {
+        "files_read_under_data": 3283,
+        "declared_inputs": 5,
+        "read_but_not_declared": [
+          "data/results/silenceragree.json",
+          "data/results/silenceragree_registration.json"
+        ],
+        "read_but_not_declared_reading": "the first is the run's OWN OUTPUT, read back by save_result; the second IS declared, and reads as undeclared only because the manifest spells it absolutely while the writer opens it relatively. Neither is an undeclared input",
+        "declared_but_never_opened": [
+          "data/results/ccres_chrM.bed.gz",
+          "data/results/ccres_chrY.bed.gz"
+        ],
+        "declared_but_never_opened_reading": "THIS FIGURE IS AN ARTEFACT AND SAYS SO. The child's own read record contains both files; they are dropped from the reconciliation because the child recorded them as RELATIVE paths and scripts/manifest_rebuild.py resolves a recorded path with os.path.realpath in the TOOL's working directory, not the child's, so a relative read resolves into the wrong checkout and is discarded as not under data/. 26 of the 3,340 reads this run recorded are relative: the 25 cCRE members genomeos.manifest.group_digest opens to build the group digest, and data/results_legacy.txt. What IS true is that the analysis module opens 23 of the 25 declared cCRE members, chr1-chr22 and chrX, which matches the result's own '23 chromosomes'",
+        "limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it"
+      }
+    },
+    {
+      "result": "silenceragree_registration",
+      "figure": "the registration committed ALONE before any agreement figure existed: bands, control, power and falsifiers fixed in advance, 36 keys, 0 fields a run would fill at any depth",
+      "writer": "scripts/silenceragree_register.py",
+      "argv": [
+        "scripts/silenceragree_register.py"
+      ],
+      "writer_sha": "fb9a0f39b487d72c7b08ff589bdb7aa1f89cfee5",
+      "verification_tool_at": "715dd04ec34a11f23a589341125325f7afb6f079",
+      "status": "pending",
+      "why": "THE COMMAND RAN AND THE TOOL STILL GAVE NO VERDICT, for a different reason from silenceragree's. All 3 declared inputs matched their sha256 and the run exited 0, but the run read data/results/silenceragree_registration.json -- ITS OWN OUTPUT -- and reads_against_declared counts that as a read pinned by no sha256, so the tool returns before comparing a single leaf. The same tool already knows the concept: link_machine_local_inputs refuses to link the output as an input and records not_linked_because_it_is_the_output. The asymmetry is that the read reconciliation has no such exclusion. That the read is of the run's own bytes is checkable: data/results/silenceragree_registration.json is ABSENT from tree fb9a0f3, so nothing in that worktree could have held it before the run wrote it",
+      "no_verdict_because": "no verdict: the rebuilt command read data/results/silenceragree_registration.json under data/, which this manifest's inputs neither name nor contain, so those bytes are pinned by no sha256 and a comparison of fields says nothing about them",
+      "inputs_declared_and_checked": "3 of 3",
+      "files_opened_and_hashed": 50,
+      "alphagenome_requests": 0,
+      "rebuild_how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha 715dd04 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)",
+      "independent_comparison": {
+        "not_a_tool_verdict": "NOT A TOOL VERDICT. scripts/manifest_rebuild.py gave none, for the reason in no_verdict_because. These figures come from a driver that reproduces every other step of that tool at the writer's sha and compares with the TOOL'S OWN committed comparison functions (comparable, diff, run_differences, environment_differences, must_hold_failures, leaf_reconciliation at 715dd04), so the comparison is the committed one even though the verdict is not the tool's. No published byte was written: each rebuild wrote inside its own worktree only, and both worktrees were removed by scripts/remove_worktree.py with stores_unchanged true",
+        "runs": 3,
+        "runs_detail": "three runs of the tool, two of them with --keep so the written file could be compared; all three produced the identical refusal and identical 26,108-byte reports",
+        "exit": 0,
+        "leaves": {
+          "total": 450,
+          "compared": 443,
+          "not_compared": 7,
+          "set_aside": 0
+        },
+        "differences": 2,
+        "differences_named": [
+          "/result_manifest/inputs[0]/path",
+          "/result_manifest/inputs[1]/path"
+        ],
+        "what_the_two_differences_are": "both are the ABSOLUTE path of a declared input under a linked store, so they record where the checkout sits and not anything the run computed",
+        "must_hold_failures": 0,
+        "the_two_runs": "byte-identical except those two lines, and byte-identical after normalising the worktree path: 8 unified-diff lines between the two rebuilt files, 2 of them changed `path` values"
+      },
+      "traced_reads_against_declared_inputs": {
+        "files_read_under_data": 49,
+        "declared_inputs": 3,
+        "read_but_not_declared": [
+          "data/results/silenceragree_registration.json"
+        ],
+        "declared_but_never_opened": [
+          "data/results/ccres_chrM.bed.gz",
+          "data/results/ccres_chrY.bed.gz"
+        ],
+        "declared_but_never_opened_reading": "the same artefact as silenceragree's row: both files ARE opened by group_digest and are dropped from the reconciliation because the child recorded them relatively. The analysis module opens 23 of the 25 declared cCRE members",
+        "limit": "the tracer is sys.addaudithook on 'open', so the claim is about PYTHON-LEVEL reads only: a read made inside a C library (htslib through pysam) raises no audit event and is invisible to it"
+      }
     }
   ],
   "ignored_in_comparison": [
@@ -651,5 +761,24 @@
       "reason": "rebuilt under a new name on 2026-10-02: 2000 chromosome resamples per interval in place of 200, each interval stating the clusters and draws it rests on, no interval at all below 10 clusters, and no deletion gain where a stratum carries no deletion value; the committed result at data/results/crispri_benchmark.json (date 2026-09-22) is kept unchanged beside this one",
       "reason_recorded_in": "data/results/crispri_benchmark_v2.json result_manifest.supersedes"
     }
-  ]
+  ],
+  "fifth_pass": {
+    "date": "2026-10-03",
+    "who": "lane-silencerebuild",
+    "verification_tool_at": "715dd04ec34a11f23a589341125325f7afb6f079",
+    "how": "scripts/manifest_rebuild.py run from a git worktree at the committed sha 715dd04 (not from the shared checkout, whose working tree is never clean), with that worktree's own genomeos package on PYTHONPATH and the three git-ignored stores linked into it; the tool reported tool_is_committed true. The rebuild itself ran the recorded argv at the recorded writer sha in its own clean worktree with a fresh environment from the committed uv.lock (uv sync --frozen --offline)",
+    "membership": "silenceragree and silenceragree_registration were registered nowhere in this file. They are registered here as PENDING, under the statuses map's own definition -- not rebuilt in this pass, why says why -- and not under rebuilt, because scripts/manifest_rebuild.py returned no verdict on either of them",
+    "scope": "both files are the first independent external check of the predicted silencer_like call. Neither is cited in README.md, so neither is in the gate tests/test_headline_registry_matches_readme.py sets; they are registered because a notable result whose rebuild was attempted should carry the attempt's record",
+    "verdicts": "ZERO of the two. The supervisor's expectation was 0 differences; what the rebuild found is that the committed tool can give NO VERDICT on either file, for two different and unrelated reasons, and neither reason is a difference in a value. Each row above carries the refusal verbatim",
+    "three_defects_this_pass_measured": [
+      "a data/results input declared by ABSOLUTE path cannot be checked by the tool at all: genomeos.manifest.input_entry records str(path) verbatim while its sibling files_entry relativises every member. 9 of 212 committed results with manifest inputs are unrebuildable for this reason",
+      "a writer that reads back its own output is refused a verdict, although the same tool already excludes the output when linking inputs: link_machine_local_inputs has not_linked_because_it_is_the_output and reads_against_declared has no counterpart",
+      "scripts/manifest_rebuild.py resolves each recorded read with os.path.realpath in the TOOL's working directory rather than the child's, so EVERY read a rebuilt command makes through a relative path is silently dropped from the reconciliation. Measured: 26 of the 3,340 reads silenceragree's rebuild recorded are relative and all 26 are absent from reads_under_data (3,283 absolute data reads = reads_under_data_count exactly). The tool's 'every read is declared' is therefore blind to a relative-path read, which is the same class of hole as the 194th-file blindness it was built to close"
+    ],
+    "a_correction_to_a_row_in_this_file_which_is_not_restamped": "the crispri_published_v2 row records framework_read_note 'data/results_legacy.txt ... was not read at all by this run, so the exempt-by-exact-path allowance was not exercised'. Measured on silenceragree's rebuild: data/results_legacy.txt IS read by save_result and IS in the child's own read record, as a RELATIVE path, and the tool drops it -- so framework_reads_ignored comes back empty whether the read happened or not, and an empty list cannot establish that it did not. That row's bytes are left exactly as lane-gate2 wrote them; the correction is recorded here and the row is not restamped",
+    "guard_refusals": "none. The write guard was armed in the tool's process and in each rebuilt command's (processes_that_armed_it non-empty on every run) and no write into a store was attempted",
+    "money": "0 AlphaGenome requests, 0 paid requests, no network: every run was offline (UV_OFFLINE=1)",
+    "worktrees": "5 created and 5 removed by scripts/remove_worktree.py by their recorded paths, never by rm; every removal reported stores_unchanged true, and data/reference, data/knowledge and data/cache carry the same device, inode and mode 0755 before and after",
+    "the_pre_format_bytes_ran": "715dd04 reformatted scripts/silenceragree_run.py, scripts/silenceragree_register.py and genomeos/attribution/silenceragree.py with ruff format and is a descendant of both writer shas. Each rebuild ran in a worktree of the WRITER's sha, whose blobs differ from 715dd04's for all three files, so the pre-format bytes are what ran"
+  }
 }
