@@ -23,10 +23,22 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import n1b_calibration as n1b  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from scripts import n1b_fetch  # noqa: E402
 
-OUT = ROOT / "data/results/n1b_calibration_registration.json"
+NAME = "n1b_calibration_registration"
+OUT = ROOT / f"data/results/{NAME}.json"
+#: This script, as the entry whose transitive import closure is the counting path of its result.
+ENTRY = "scripts/n1b_register.py"
+OWN_CODE = (
+    "genomeos/attribution/n1b_calibration.py",
+    "scripts/n1b_fetch.py",
+    "scripts/n1b_register.py",
+    "scripts/n1b_run.py",
+    "tests/test_n1b_calibration.py",
+)
 FROZEN = ("genomeos/attribution/n1b_calibration.py", "tests/test_n1b_calibration.py")
 PLUMBING = ("scripts/n1b_fetch.py", "scripts/n1b_register.py", "scripts/n1b_run.py")
 
@@ -343,16 +355,73 @@ def registration(probe: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+FORBIDDEN = ("result", "verdict", "passed", "figures", "reading", "overall", "strata_figures")
+
+
+def result_manifest() -> dict[str, Any]:
+    """What produced these numbers, so the registration is reproducible like any other result.
+
+    It has inputs although it measures nothing: the row counts and the byte ranges it states come
+    from the probe's record of the file's own index, and from the local raw file whose sha256 it
+    carries. Both live under data/cache, which is never committed, so a rebuild on a fresh checkout
+    reports them ABSENT rather than differing -- which is the honest reading and not a gap to paper
+    over, since Albert has ruled "data/cache stays local".
+    """
+    return {
+        "sources": [
+            {
+                "accession": "Replogle et al. 2022 processed Perturb-seq, Figshare+ 20029387 "
+                "(K562_gwps_normalized_bulk_01.h5ad: headers, index and three obs columns only, by "
+                "HTTP range request; no byte of X)",
+                "version": "10.25452/figshare.plus.20029387.v1, CC BY 4.0",
+            },
+            {
+                "accession": "Replogle et al. 2022 processed Perturb-seq, Figshare+ 20029387 "
+                "(K562_gwps_raw_bulk_01.h5ad: present locally from N1's download, md5 checked against "
+                "Figshare's published one; read here for its sha256 alone)",
+                "version": "10.25452/figshare.plus.20029387.v1, CC BY 4.0",
+            },
+            {
+                "accession": "Replogle et al. 2022, Cell (the documentation of what X is)",
+                "version": "10.1016/j.cell.2022.05.013",
+            },
+        ],
+        "inputs": [
+            mf.input_entry(n1b_fetch.PROBE, partition="the file's own index and obs columns"),
+            mf.input_entry(n1b_fetch.RAW_LOCAL, partition="the stratifier's file, hashed not read here"),
+        ],
+        "assembly": "n/a: a registration over pseudobulk rows and gene columns; no coordinate is read",
+        "coordinates": "n/a: no genomic interval is read",
+        "parameters": {
+            **n1b.CONSTANTS,
+            "primary_var_summary": n1b.PRIMARY_VAR_SUMMARY,
+            "primary_tail_summary": n1b.PRIMARY_TAIL_SUMMARY,
+            "pass_rule": n1b.PASS_RULE,
+            "x_row_bytes_planned": 585 * 32992,
+        },
+        "exclusions": [
+            "every row that is not non-targeting. NO FACTOR ROW IS READ, AT ALL, on a pass or a fail",
+            "the 71 non-core non-targeting rows are read but carry no finite num_cells_filtered, so no "
+            "figure is computed from them; they are fetched so the exclusion is auditable from bytes",
+            "obs/control_expr, which the brief named as the stratifier: it is NaN on all 585 "
+            "non-targeting rows and quintiles of it cannot be formed",
+        ],
+        "partitions": "n/a: a registration committed before any measurement; nothing is evaluated in it",
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
+    }
+
+
 def main() -> int:
+    mf.trace_begin()
     probe = json.loads(n1b_fetch.PROBE.read_text())
     rec = registration(probe)
-    OUT.write_text(json.dumps(rec, indent=1, sort_keys=True) + "\n")
-    forbidden = {"result", "verdict", "passed", "figures", "reading", "overall", "strata_figures"}
-    present = forbidden & set(rec)
+    present = set(FORBIDDEN) & set(rec)
     if present:
         raise SystemExit(f"the registration must hold no field a run would fill: {sorted(present)}")
-    print(f"wrote {OUT.relative_to(ROOT)}, sha256 {sha256_text(OUT)}")
-    print(f"fields a run would fill: none of {sorted(forbidden)} exists in it")
+    rec["result_manifest"] = result_manifest()
+    path = save_result(NAME, rec)
+    print(f"wrote {path}, sha256 {sha256_text(ROOT / path)}")
+    print(f"fields a run would fill: none of {sorted(FORBIDDEN)} exists in it")
     return 0
 
 

@@ -19,11 +19,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from genomeos import manifest as mf  # noqa: E402
 from genomeos.attribution import n1b_calibration as n1b  # noqa: E402
+from genomeos.results import save_result  # noqa: E402
 from scripts import n1b_fetch, n1b_register  # noqa: E402
 
-OUT = ROOT / "data/results/n1b_calibration.json"
+NAME = "n1b_calibration"
+OUT = ROOT / f"data/results/{NAME}.json"
 REG = n1b_register.OUT
+ENTRY = "scripts/n1b_run.py"
+OWN_CODE = n1b_register.OWN_CODE
 
 
 def git(*args: str) -> str:
@@ -93,6 +98,7 @@ def _inconclusive(intervals: dict) -> list[dict]:
 def main() -> int:
     import numpy as np
 
+    mf.trace_begin()
     problems = freeze_problems()
     if problems:
         for p in problems:
@@ -212,8 +218,58 @@ def main() -> int:
             "matrix_bytes": int(t.nbytes),
         },
     }
-    OUT.write_text(json.dumps(out, indent=1, sort_keys=True, default=float) + "\n")
-    print(f"wrote {OUT.relative_to(ROOT)}")
+    out["result_manifest"] = {
+        "sources": [
+            {
+                "accession": "Replogle et al. 2022 processed Perturb-seq, Figshare+ 20029387 "
+                "(K562_gwps_normalized_bulk_01.h5ad: the 585 non-targeting rows of X by exact HTTP "
+                "range request, plus the headers and three obs columns the probe read)",
+                "version": "10.25452/figshare.plus.20029387.v1, CC BY 4.0",
+            },
+            {
+                "accession": "Replogle et al. 2022 processed Perturb-seq, Figshare+ 20029387 "
+                "(K562_gwps_raw_bulk_01.h5ad: the usable non-targeting rows, for the per-gene control "
+                "expression that forms the strata and for nothing else)",
+                "version": "10.25452/figshare.plus.20029387.v1, CC BY 4.0",
+            },
+            {
+                "accession": "GenomeOS n1b_calibration_registration, committed before any byte of X",
+                "version": out["registration"]["commit"] or "uncommitted",
+            },
+        ],
+        "inputs": [
+            mf.input_entry(REG, partition="the registration this run applies"),
+            mf.input_entry(n1b_fetch.PROBE, partition="the file's own index and obs columns"),
+            mf.input_entry(n1b_fetch.RAW_LOCAL, partition="the stratifier"),
+        ],
+        "assembly": "n/a: pseudobulk rows and gene columns; no coordinate is read",
+        "coordinates": "n/a: no genomic interval is read",
+        "parameters": {
+            **n1b.CONSTANTS,
+            "primary_var_summary": n1b.PRIMARY_VAR_SUMMARY,
+            "primary_tail_summary": n1b.PRIMARY_TAIL_SUMMARY,
+            "pass_rule": n1b.PASS_RULE,
+            "x_rows_read": len(nt),
+            "x_bytes_read": sum(e["bytes"] for e in fetch_log),
+            "x_requests": len(fetch_log),
+        },
+        "exclusions": [
+            "every row that is not non-targeting. NO FACTOR ROW WAS READ, AT ALL",
+            f"{len(usable['rows_dropped'])} non-targeting rows carry no finite num_cells_filtered, so "
+            "T cannot be formed on them; their bytes were fetched so the exclusion is auditable",
+            f"{len(bad)} genes left before any figure was formed: a non-finite T or a non-finite "
+            "control expression",
+            "obs/control_expr, NaN on all 585 non-targeting rows, so quintiles of it cannot be formed",
+        ],
+        "partitions": {
+            f"quintile {r['stratum']}": f"{r['genes']} genes, control expression "
+            f"{r['control_expression_min']:.4g} to {r['control_expression_max']:.4g}"
+            for r in recs
+        },
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE, ROOT),
+    }
+    path = save_result(NAME, out)
+    print(f"wrote {path}")
     print(f"PASSED: {verdict['passed']}")
     print(f"overall variance {overall['var_primary']:.4f}  tail {overall['tail_primary']:.5f}")
     for r in recs:
