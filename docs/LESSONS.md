@@ -1843,3 +1843,32 @@ made.
 And one check that did pay: before the removal I verified the clones were distinct inodes from the real
 stores with `nlink=1` and that the worktree held no symlinks. That is why this story ends with wasted
 disk and not with a destroyed store.
+
+### Correction to the lesson above, appended the same hour, 2026-10-03
+
+**The "6.7 GB orphan" figure in the lesson above is wrong in the way that matters, and it is wrong by the
+same mechanism this project corrected earlier on the same day.** `du` counts the blocks of an APFS clone;
+`df` does not, because a `cp -c` clone shares its blocks with the original. Measured per store rather than
+in aggregate: the orphan's 6.7 GB is `data/knowledge` 5.3 GB plus `data/reference` 1.4 GB — **the two
+cloned stores** — and the **unique remainder is 4 KB**, one message file. So removing the orphan would
+reclaim kilobytes, not gigabytes, and the disk pressure the figure implied does not exist: about 16 GiB
+free, above the capacity gate's 10 GB floor.
+
+The sentence above is kept as written because it is what I published and the correction is the record.
+What it got wrong is not the story and not the cause — the non-atomic `git worktree remove`, the stale
+blocker, and "no worktree is removed by `rm`" all stand unchanged. What it got wrong is **the cost**, and
+it overstated it by three orders of magnitude.
+
+**Two reasons that is worth a correction of its own rather than an edit.** First, a wrong cost drives wrong
+decisions: a 6.7 GB figure against a 10 GB floor argues for an urgent destructive cleanup, and the true
+figure argues for doing nothing tonight. Second, and worse, **this is a repeat.** Earlier the same day the
+same session reported 35 GB of reclaimable worktrees and withdrew it to 0.86 GB for exactly this reason,
+and wrote the clone-versus-`du` point down. Knowing the rule did not stop me applying `du -sh` to a
+directory full of clones and publishing the number four times before anyone asked how it was measured.
+
+So the rule is not "remember that clones share blocks". It is procedural: **a disk figure is not reportable
+until it has been broken down by what is cloned and what is unique.** `du -sh <dir>` on anything under a
+worktree, a verdict tree or a store is a measurement of the wrong quantity, and the breakdown costs one
+command. The general form is the one this project keeps relearning: **a number that arrives without its
+method attached is not evidence, however many times it is repeated** — and repetition is what made this
+one look solid.
