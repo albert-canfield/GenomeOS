@@ -1646,3 +1646,34 @@ that the guard fires on a figure above the ceiling proves the comparison, not th
 **Verify against a guard that IGNORES the injected figure** — feed it a number that must trip it and
 confirm it does not, so a guard still reading the process cannot pass itself off as one reading the
 work.
+
+## A figure that is free while the file is open costs a whole read afterwards (2026-10-03)
+
+N1's authorised run made a **labels pass** over the producers' published p-value file: 488 MB
+decompressed end to end, every row's first field formed into a list, and not one value parsed. From that
+list the run kept three counts, all of them relative to its own 860-gene universe — 496 present once, 364
+absent, 0 listed twice — and then the list went out of scope. `seen = Counter(labels["rows"])`, and the
+file's own total row count, one `len()` on a list already in memory, was never recorded.
+
+The question that wanted it arrived two days later: is 364 absent of 860 a large share of what the
+producers actually tested, or a small one? Nothing in the record answers it. The number is not hard to
+get. It is simply no longer **free**: getting it now means decompressing a 488 MB study file again, and in
+a study whose scarce resource is outcome blindness that is a decision for the owner, not a `len()`.
+
+What makes it easy to miss is that the three counts kept are exactly the ones the analysis needed, so the
+record looks complete on its own terms. A count is missing only relative to a question nobody had yet.
+The asymmetry is the lesson: while the file is open the marginal cost of an identity fact is nothing, and
+once it is closed the cost is a whole authorised read.
+
+**A pass that has already paid for its access should record the cheap identity facts it is standing on
+top of.** Row and column counts, duplicates, the first and last label, the share of each axis the
+analysis kept — not because a question is pending, but because they are free exactly once. Universe-
+relative counts answer "did my analysis get what it asked for"; file-relative counts answer "what was
+there", and only the second survives a change of question. Under *stream, distil, discard* this applies
+to every source that is opened once and not kept.
+
+The disposal here is also the evidence. The coordinator ruled against reading the count back as a
+separate act — it could not change the decision in front of it, and a read that cannot change a decision
+is not worth its precedent — and carried it forward to the next authorised pass over that file, if one
+ever happens. That is the right call, and it is only necessary because the cheapest moment to record the
+number had already gone.
