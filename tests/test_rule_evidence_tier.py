@@ -437,6 +437,9 @@ def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes():
     assert c["programs_total"] == len(paths & tracked) + len(untracked)
 
 
+@pytest.mark.needs_local_data(
+    GENERATED_STORE, how="compile the chromosomes: genomeos budget --chrom chrN --bio"
+)
 def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store(monkeypatch):
     """The CI case, PROVED here instead of inferred. The corpus enumeration is injected with the
     git-ignored store taken out - which is what a fresh checkout is - and every hand-authored figure
@@ -444,6 +447,21 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
     comes out 43, the figure both CI jobs reported.
 
     Injection and not deletion: nothing is removed from this machine, and `cost()` is the real one.
+
+    AND IT NEEDS THE STORE IT IS NAMED FOR, which is the joke the marker above is undoing. The
+    injection subtracts the untracked programs from the real enumeration, so it only simulates a
+    fresh checkout where untracked programs EXIST: its own first assertion says so -- "this machine
+    holds no untracked program, so this proves nothing". In a genuine store-free checkout tracked ==
+    total == 43, `len(fresh) < len(real)` is `43 < 43`, and the test FAILS in exactly the situation
+    it is named for. CI run 37124753522 on 5c4589d reported that failure word for word. So it carries
+    the same marker as the local-totals test above and SKIPS BY NAME there, saying "not run here"
+    rather than claiming a red.
+
+    Nothing it asserts is weakened, and this is not a substitute for the real check either: the
+    hand-authored figures stay UNCONDITIONAL in
+    `test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported`, which runs everywhere
+    and measures that all 33 are tracked. This test adds the counterfactual on top of that, where the
+    store is present to subtract.
     """
     tracked = _tracked_bio()
     real = cost_script.bio_files()

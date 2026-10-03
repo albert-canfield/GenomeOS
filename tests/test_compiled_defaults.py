@@ -42,6 +42,35 @@ V1_PINNED_SHA256 = "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e03
 HAS_CHR21 = (ROOT / "data" / "results" / "budget_chr21.json").exists()
 needs_chr21 = pytest.mark.skipif(not HAS_CHR21, reason="chr21's budget is not on this machine")
 
+#: `needs_local_data`, the project's marker for a test that reads a git-ignored machine-local store
+#: (`tests/local_data.py`, the supervisor's AMENDED acceptance rule of 2026-10-02): such a test RUNS in a
+#: checkout or a verdict worktree that has the store, and where the store is genuinely absent -- CI, or a
+#: bare worktree -- it SKIPS BY NAME, so a reader can tell "not run here" from "passed".
+#:
+#: Why the five tests below need it, and why `needs_chr21` above was not enough. `compile_chromosome`
+#: reaches `targets.run_elements`, and the committed summary `enhancer_targets_all_chr21` carries no
+#: inline elements: it points at `data/knowledge/alphagenome/all_elements/chr21.json`, and
+#: `data/knowledge` is git-ignored (.gitignore:17), machine-local by the data boundary. `run_elements`
+#: then raises FileNotFoundError -- "points at ..., which is not on this machine" -- which is the module
+#: behaving correctly: a summary whose table is missing must not read as a run with no elements.
+#: `needs_chr21` guards on `data/results/budget_chr21.json`, which git TRACKS, so it is present in every
+#: checkout and that skipif never fires; it is kept because it names the other input a real cut needs,
+#: and the store the cut actually lacks in CI is named here. CI run 37124753522 on 5c4589d failed all
+#: five, in the `test` job, while every one of them was green in this checkout -- so a local green proved
+#: nothing about them. tests/test_header_cell_sentence.py carries the same marker for the same defect in
+#: the same compiler path (`b04f48a`), and this names the same store in the same form.
+#:
+#: The marker moves WHERE these tests run, never what they claim. The two reachability PLANTS still
+#: reach the guard through `compile_chromosome`, the only entry point that writes a program, rather than
+#: supplying their own trigger -- that is the property they exist for. The table is NOT stubbed and NOT
+#: mocked, deliberately: the counts below (> 5000 rule lines, and the whole-corpus digest) are readings
+#: of the real table, so a planted table would make the plants assert against a fiction.
+needs_the_chr21_element_table = pytest.mark.needs_local_data(
+    "data/knowledge/alphagenome/all_elements/chr21.json",
+    how="scripts/enhancer_targets_all_chain.py writes it (the enhancer_targets_all_chr21 job); "
+    "data/knowledge is git-ignored machine-local data, so a fresh checkout cannot have it",
+)
+
 
 @dataclasses.dataclass
 class _DriftedRule:
@@ -238,6 +267,24 @@ def test_PLANT_not_assessed_with_a_reason_is_refused_because_a_reason_means_an_a
 # --- 6. the compiler writes it, and REFUSES when it is wrong: reachability, not a branch -----------
 
 
+# SUPERSEDED 2026-10-03, hours after it was written, and KEPT rather than edited: the clause it
+# records as another lane's decision has now been decided. Albert's item (7) names `not_assessed` in
+# his own words, so `context_evidence_field(None, ...)` no longer returns `""` and the first assertion
+# below is FALSE. `strict=True` means it must keep failing. Both named blockers were moved without
+# being weakened: `parse_value` was TAUGHT the fourth value (the three readings byte-identical), and
+# `test_the_state_is_added_beside_the_rule_and_deletes_nothing` was superseded additively in its own
+# file with `xfail(strict=True)` and a corrected replacement. The corrected assertion here is
+# `test_the_line_now_states_not_assessed_instead_of_staying_silent`, immediately below, which keeps
+# the two assertions of this test that are still true.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-03 (Albert, item 7): the withdrawn piece this test records was adopted, "
+        "so context_evidence_field(None, ...) now returns 'context_evidence: not_assessed; ' and not "
+        "''. Replaced by test_the_line_now_states_not_assessed_instead_of_staying_silent. Kept so the "
+        "record shows what was withdrawn, why, and that neither blocker was weakened to move it."
+    ),
+)
 def test_the_omitted_field_reads_not_assessed_even_though_the_line_stays_silent():
     """WITHDRAWN AND SAID SO: the rule LINE keeps the behaviour another lane's test pins - no reader
     means no field - and what that omission reads is `not_assessed`, which the program's header now
@@ -249,6 +296,19 @@ def test_the_omitted_field_reads_not_assessed_even_though_the_line_stays_silent(
     of its three states, and `not_assessed` is not one of them.
     """
     assert cp.context_evidence_field(None, "K562", 1, 2) == ""
+    assert cd.context_evidence_value("") == cd.ABSENT
+    assert f"`context_evidence:` reads `{cd.ABSENT}`" in _block()
+
+
+def test_the_line_now_states_not_assessed_instead_of_staying_silent():
+    """The adopted form of the test xfailed above: the line SAYS it, it is not inferred from silence.
+
+    Two of that test's three assertions are still true and are kept here. The READING of an empty
+    stored value does not move, and it must not: v1 and v2 were cut before today and carry no field at
+    all, so `context_evidence_value("")` is what makes them readable, and the header still has to say
+    so for a program that stands on its own.
+    """
+    assert cp.context_evidence_field(None, "K562", 1, 2) == f"context_evidence: {cd.ABSENT}; "
     assert cd.context_evidence_value("") == cd.ABSENT
     assert f"`context_evidence:` reads `{cd.ABSENT}`" in _block()
 
@@ -284,6 +344,7 @@ def test_PLANT_a_second_inline_emission_site_in_a_copy_of_the_compiler_is_caught
     assert src.count("ctx = context_evidence_field(") == 1
 
 
+@needs_the_chr21_element_table
 @needs_chr21
 def test_a_real_cut_carries_the_declaration_and_the_guards_pass_on_it():
     text = cp.compile_chromosome("chr21")
@@ -292,6 +353,7 @@ def test_a_real_cut_carries_the_declaration_and_the_guards_pass_on_it():
     cd.check_not_assessed_carries_no_reason(text)
 
 
+@needs_the_chr21_element_table
 @needs_chr21
 def test_the_declaration_is_in_the_header_and_on_no_rule_line_so_a_cut_moves_no_rule(monkeypatch):
     """A mark on every rule LINE would move all 5,176 of chr21's on the next cut, which is a re-cut
@@ -305,6 +367,7 @@ def test_the_declaration_is_in_the_header_and_on_no_rule_line_so_a_cut_moves_no_
         assert "context_evidence: " in line
 
 
+@needs_the_chr21_element_table
 @needs_chr21
 def test_PLANT_the_compiler_itself_refuses_a_cut_whose_declaration_drifted(monkeypatch):
     """Reachability, not a branch: the guard is reached through `compile_chromosome`, the only entry
@@ -316,6 +379,7 @@ def test_PLANT_the_compiler_itself_refuses_a_cut_whose_declaration_drifted(monke
         cp.compile_chromosome("chr21")
 
 
+@needs_the_chr21_element_table
 @needs_chr21
 def test_PLANT_the_compiler_itself_refuses_a_cut_that_hands_not_assessed_a_reason(monkeypatch):
     """Reachability again: injected at the one place the field is written, the refusal comes out of
@@ -327,6 +391,53 @@ def test_PLANT_the_compiler_itself_refuses_a_cut_that_hands_not_assessed_a_reaso
     )
     with pytest.raises(ValueError, match="carries a reason"):
         cp.compile_chromosome("chr21")
+
+
+@needs_chr21
+def test_a_cut_that_READ_NOTHING_states_not_assessed_on_every_rule_line(monkeypatch):
+    """Reachability, not a branch: the None path is reached through `compile_chromosome` itself, with
+    the mapping table taken away where the compiler asks for it, which is what a machine without that
+    git-ignored store is. 5,176 rule lines then carry the fourth value, bare, and both guards pass."""
+    from genomeos.attribution import context_evidence as ce
+
+    def no_table(*a, **k):
+        raise FileNotFoundError("the cell-to-biosample mapping table is not on this machine")
+
+    monkeypatch.setattr(ce, "mapping", no_table)
+    text = cp.compile_chromosome("chr21")
+    rules = [ln for ln in text.splitlines() if ln.startswith("rule ")]
+    assert len(rules) > 5000
+    for line in rules:
+        assert f"context_evidence: {cd.ABSENT}; " in line, line[:120]
+        written = line.split("context_evidence: ", 1)[1].split(";", 1)[0]
+        assert ce.parse_value(written) == (cd.ABSENT, ()), line[:120]
+    # a bare `not_assessed` carries no reason, so the guard that refuses one passes on a real cut
+    cd.check_declaration(text)
+    cd.check_not_assessed_carries_no_reason(text)
+
+
+@needs_chr21
+def test_the_superseded_section_opening_is_kept_in_the_source_and_no_longer_written(monkeypatch):
+    """Zero deletions, shown rather than claimed: the two sentences the no-reader section used to open
+    with are preserved verbatim in the compiler and are absent from what it now writes.
+
+    One of them said "no rule states the field", which is false of every cut made since Albert's item
+    (7). Rewriting it in place would have removed a committed line; keeping it where a reader can
+    compare it with its replacement is what `dbb5d4a` established as the route.
+    """
+    from genomeos.attribution import context_evidence as ce
+
+    kept = cp.SUPERSEDED_ABSENT_SECTION_OPENING
+    assert kept == (
+        "# ---- context evidence: NONE was read for this cut, so no rule states the field and",
+        "# every rule's reading is `not_assessed`. The mapping table from cell label to ontology",
+    )
+    monkeypatch.setattr(ce, "mapping", lambda *a, **k: (_ for _ in ()).throw(FileNotFoundError("none")))
+    text = cp.compile_chromosome("chr21")
+    for line in kept:
+        assert line.lstrip("# -").strip() not in text, line
+    # and what IS written says the opposite, in the program and not only in this test
+    assert "NONE was read for this cut, so every rule line STATES the" in text
 
 
 # --- 7. the published programs' bytes did not move -------------------------------------------------
@@ -348,6 +459,63 @@ def test_v2s_bytes_are_still_its_committed_blob():
     assert V2.read_bytes() == blob.stdout
 
 
+#: The re-cut made under this lane, under a NEW NAME and beside v2 rather than instead of it. Whether
+#: the PUBLISHED program moves to v3 is the re-cut question still on Albert's list and is not decided
+#: here: v1 stays what `data/results/label_gene.json` pins and v2 stays what the README points at.
+V3 = ROOT / "data" / "organisms" / "human" / "noncoding_chr21_v3.bio"
+
+
+def test_v3_differs_from_v2_in_the_context_evidence_FIELD_AND_IN_NOTHING_ELSE():
+    """Measured field by field over all 5,176 rules, not claimed from how it was generated.
+
+    `Rule` carries twelve fields. The comparison walks every one of them on every rule, in order, and
+    collects the names that ever disagree; the answer has to be the single-element set. Asserting the
+    set rather than `!=` on one field is deliberate: a comparison that only looks at the field it
+    expects to move cannot notice the one it did not expect.
+    """
+    m2, m3 = parse(V2.read_text()), parse(V3.read_text())
+    assert len(m2.rules) == len(m3.rules) == 5176
+    names = [f.name for f in dataclasses.fields(Rule)]
+    assert "context_evidence" in names and len(names) >= 12, names
+    moved = {n for a, b in zip(m2.rules, m3.rules) for n in names if getattr(a, n) != getattr(b, n)}
+    assert moved == {"context_evidence"}, sorted(moved)
+    # and the field moved on EVERY rule, so the set above is not one rule's accident
+    assert all(r.context_evidence == "" for r in m2.rules)
+    assert all(r.context_evidence != "" for r in m3.rules)
+    from genomeos.attribution import context_evidence as ce
+
+    assert {ce.parse_value(r.context_evidence)[0] for r in m3.rules} <= set(ce.STATES)
+
+
+def test_v3_and_v2_are_the_same_program_once_the_field_is_dropped():
+    """The whole BioIR module and not only the rules: regions, gene stubs, domains, measured blocks,
+    parameters, timers, every top-level key. `to_dict` is the form S1 and R1 check a cut in."""
+    d2, d3 = parse(V2.read_text()).to_dict(), parse(V3.read_text()).to_dict()
+    assert set(d2) == set(d3)
+    assert d2 != d3, "identical before the field is dropped would mean v3 carries no reading at all"
+    for r in (*d2["rules"], *d3["rules"]):
+        r.pop("context_evidence", None)
+    assert d2 == d3
+
+
+def test_every_line_that_differs_between_v2_and_v3_outside_the_rules_is_a_COMMENT():
+    """The text claim beside the structural one: v3's extra lines are the generation date, the
+    declaration block and the context-evidence summary - all comments. Counted as a multiset, so a
+    line that merely moved is not reported as a difference."""
+    n2 = [ln for ln in V2.read_text().splitlines() if not ln.startswith("rule ")]
+    n3 = [ln for ln in V3.read_text().splitlines() if not ln.startswith("rule ")]
+    c2, c3 = collections.Counter(n2), collections.Counter(n3)
+    only = [*(c2 - c3).elements(), *(c3 - c2).elements()]
+    assert only, "no difference at all would mean v3 is v2 and this lane cut nothing"
+    assert [ln for ln in only if ln.strip() and not ln.lstrip().startswith("#")] == []
+    # the rule lines are the same lines once the field is taken off, which is the other half
+    r2 = [ln for ln in V2.read_text().splitlines() if ln.startswith("rule ")]
+    r3 = [ln for ln in V3.read_text().splitlines() if ln.startswith("rule ")]
+    assert len(r2) == len(r3) == 5176
+    stripped = [re.sub(r"context_evidence: [^;]*; ", "", ln) for ln in r3]
+    assert stripped == r2
+
+
 def _bio_digests() -> dict[str, str]:
     return {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -355,6 +523,7 @@ def _bio_digests() -> dict[str, str]:
     }
 
 
+@needs_the_chr21_element_table
 @needs_chr21
 def test_a_cut_and_every_guard_in_this_suite_leave_every_bio_file_byte_identical():
     """The adoption changes what a cut WOULD write; it writes nothing. Digested before and after a
