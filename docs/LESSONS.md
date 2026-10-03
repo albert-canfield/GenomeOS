@@ -1872,3 +1872,32 @@ worktree, a verdict tree or a store is a measurement of the wrong quantity, and 
 command. The general form is the one this project keeps relearning: **a number that arrives without its
 method attached is not evidence, however many times it is repeated** — and repetition is what made this
 one look solid.
+
+### Correction, 2026-10-03: how this lesson was being cited was stronger than what it says
+
+The lesson above was repeatedly paraphrased by the coordinator, in four lane briefs and in several
+cross-session messages, as **"two false greens of the mutation-harness class, both of which recorded a
+LIVE guard as UNREACHED."** It says neither of those things, and a lane checked it against the text
+rather than accepting it.
+
+What it records is **one** mechanism — a byte-identical restore serving the mutant's bytecode — whose
+**realised symptom was a false RED on the restored tree**, in its own words *"the harmless direction and
+is why it was caught at all"*. The false-**green** direction is written as what the same mechanism **can**
+do, as a hazard to guard against. It did not happen here, and **no live guard was recorded as UNREACHED by
+it.** The second case in the paraphrase — a fixture that never reached the targeted branch — is a real
+and separate lesson, but it is **not at this sha** and folding it in here attached a second instance to a
+record that holds one.
+
+Nothing in the lesson is withdrawn and nothing above is rewritten. The procedural rules it gives — clear
+`__pycache__` before **every** leg, treat a result arrived at without that step as unverified, and prove a
+mutation harness can report a guard both present and absent — all stand exactly as written, and a lane
+found a defect in its own harness today by applying them.
+
+**Why the correction is worth its own note rather than a quiet stop.** The overstatement travelled in the
+direction overstatements always travel: it made the project's evidence sound *worse* and the hazard sound
+*realised*, which is a flattering shape for whoever is arguing for more caution, and it was never
+challenged because it argued for something everyone already agreed with. It also kept being repeated
+because it had been **summarised** rather than re-read — the same mechanism as the stale work-board
+blocker earlier the same day. The standing rule this project already has is to carry a registered or
+recorded reading **word for word and never to strengthen it**; a lesson is a recorded reading, and
+"can serve a stale cache" is not "did, twice".
