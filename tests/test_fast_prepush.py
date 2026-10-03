@@ -358,7 +358,10 @@ from pathlib import Path
 import pytest
 
 
-@pytest.mark.needs_local_data("data/cache")
+@pytest.mark.needs_local_data(
+    "data/cache",
+    how="nothing fetches it: this store is planted by this test file and removed with the worktree",
+)
 def test_reads_a_git_ignored_store_and_declares_it():
     assert Path("data/cache/fast_prepush_plant.txt").read_text().strip() == "planted"
 """
