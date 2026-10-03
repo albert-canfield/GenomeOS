@@ -1,0 +1,27 @@
+The manifest contract refused the registration twice, both refusals were real gaps, and the fix is 62 insertions and 0 deletions because the undo guard refused the edit
+
+`save_result` quarantined the registration rather than writing it and named two things the declaration had
+wrong. Neither was ceremony.
+
+TWENTY-THREE UNDECLARED READS. The control matches on the cCRE CLASS, and the class comes from the 23
+committed `data/results/ccres_chr*.bed.gz` subsets. The manifest declared the ReSE cache and the element
+results and not one of the 23, so the file that decides every stratum boundary was invisible to a rebuild.
+They are now one `files_entry` group with every member hashed on its own.
+
+COORDINATES AS PROSE RATHER THAN THE CONTRACT'S SHAPE. `coordinates` must be `{base, interval}` and was a
+sentence. It now reads `base: 0, interval: half-open`, and the one approximation is stated rather than left
+for a reader to find: the NCBI `genomicinfo` span is used as given, which costs at most one base at each end
+of a fragment whose median length is 192 bp, and the overlap in bases is recorded on every joined row so a
+stricter rule can be applied afterwards without re-joining.
+
+AND THE SHAPE OF THIS COMMIT IS THE POINT. Fixing those two in place removed three lines that commit 88c0c8b
+had added minutes earlier, and the undo guard refused it, naming every removed line. The lane did not force:
+it superseded ADDITIVELY instead, so the prose `coordinates` and the short input list stay exactly where they
+are and the correct values are written over them in `main()`, with a comment at the override saying why it is
+an override and not an edit. 31 insertions and 0 deletions in each of the two scripts; what lands in the
+written file is the contract's shape. Nothing was resolved by moving a removed line into a comment -- the
+superseded sentence is kept as a live declared value, as the `note`, so none of what it said is lost.
+
+The third refusal was the contract working and is not a gap: the entry script must be COMMITTED before
+anything it writes enters the registry, which is why this precedes the registration rather than accompanying
+it. Still 0 AlphaGenome requests, no key, no money, and NO agreement figure exists yet.

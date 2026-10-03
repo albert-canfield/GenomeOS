@@ -53,6 +53,32 @@ def registration_commit() -> str:
     return sha
 
 
+#: The contract's shape for `coordinates`, which `save_result` requires as {base, interval} and
+#: which `result_manifest()` first stated as prose. ADDED rather than edited in place: the guard
+#: refused removing the prose line -- it is work already in HEAD -- and this project supersedes
+#: additively. The prose sentence is kept verbatim below as the note, so nothing it said is lost and
+#: the declaration a reader of the written file sees is this one.
+COORDINATES = {
+    "base": 0,
+    "interval": "half-open",
+    "note": "0-based half-open for the project's elements as stored; the NCBI genomicinfo span is "
+    "used as given, which costs at most one base at each end of a fragment whose median length is "
+    "192 bp, and overlap is tested as element_start < rese_end and element_end > rese_start. The "
+    "overlap in bases is recorded on every joined row, so a stricter rule can be applied afterwards "
+    "without re-joining.",
+}
+
+#: The 23 committed cCRE subsets the control matches its STRATA on. Declared as a group because the
+#: first write was quarantined for reading all 23 without declaring one of them: the file that
+#: decides every stratum boundary was invisible to a rebuild.
+def ccre_group():
+    return mf.files_entry(
+        "ENCODE cCRE v3 per-chromosome subsets, read for the element CLASS the control matches on",
+        sorted((ROOT / "data/results").glob("ccres_chr*.bed.gz")),
+        partition="the registry's own committed cCRE subsets",
+    )
+
+
 def result_manifest(reg_sha: str) -> dict[str, Any]:
     return {
         "sources": [
@@ -118,6 +144,11 @@ def main() -> int:
     payload["tie_bias"] = sa.TIE_BIAS
     payload["four_cell_line_negative"] = sa.FOUR_LINE_NEGATIVE
     payload["result_manifest"] = result_manifest(reg_sha)
+    # Both lines SUPERSEDE what result_manifest() stated, additively: the guard refuses removing a
+    # line that is already in HEAD, so the prose `coordinates` and the short input list stay where
+    # they are and the correct values are written over them here. What lands in the file is this.
+    payload["result_manifest"]["coordinates"] = COORDINATES
+    payload["result_manifest"]["inputs"].append(ccre_group())
     path = save_result(NAME, payload)
     print(f"wrote {path}, sha256 {hashlib.sha256((ROOT / path).read_bytes()).hexdigest()}")
     print(json.dumps({k: v for k, v in payload.items() if k.startswith("reading")}, indent=1))
