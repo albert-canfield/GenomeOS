@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import astrorun
 
@@ -1372,8 +1373,10 @@ class TestEachRunHasItsOwnLedger:
     def test_PLANTED_a_second_run_on_the_FIRST_ledger_refuses(self):
         """Run 1 completed, so its ledger carries run_complete and must never be appended to again."""
         first = Path("data/ledgers/astroreg2.jsonl")
-        if not first.exists():
-            pytest.skip("run 1's ledger is not on this machine")
+        # run 1's ledger is TRACKED: it is the committed record of what was spent, so it is on every
+        # machine that has this commit and the skip could never fire. The plant that proves a second
+        # run on a completed ledger is refused is now unconditional, which is what a plant must be.
+        tp.must_be_present(first, was="run 1's ledger is not on this machine")
         assert astrorun.run_already_completed(first) is True
         assert astrorun.ledger_charges(first)["charges"] == 10
 

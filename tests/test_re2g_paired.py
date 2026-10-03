@@ -12,6 +12,7 @@ import importlib.util
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos import manifest as mf
 from genomeos.attribution import crispri
@@ -168,8 +169,8 @@ def test_the_paired_result_leads_with_the_notice_that_withdraws_its_own_positive
     import json
 
     path = ROOT / "data/results/re2g_paired.json"
-    if not path.is_file():
-        pytest.skip("re2g_paired.json has not been generated in this checkout")
+    # TRACKED, so it HAS been generated in every checkout of this commit; the skip could never fire
+    tp.must_be_present(path, was="re2g_paired.json has not been generated in this checkout")
     payload = json.loads(path.read_text())
     assert next(iter(payload)) in ("result", "date", "read_this_first")
     notice = payload["read_this_first"]
@@ -184,8 +185,8 @@ def test_the_like_for_like_result_leads_with_its_own_binding_outcome():
     import json
 
     path = ROOT / "data/results/re2g_likeforlike.json"
-    if not path.is_file():
-        pytest.skip("re2g_likeforlike.json has not been generated in this checkout")
+    # TRACKED: see the note above; a missing committed result is a broken tree, not an ungenerated one
+    tp.must_be_present(path, was="re2g_likeforlike.json has not been generated in this checkout")
     payload = json.loads(path.read_text())
     notice = payload["read_this_first"]
     assert "THE BINDING RESULT OF THIS LANE" in notice
@@ -292,8 +293,8 @@ def test_the_baseline_arm_on_the_registered_population_is_labelled_pre_specified
     import json
 
     path = ROOT / "data/results/re2g_likeforlike.json"
-    if not path.is_file():
-        pytest.skip("re2g_likeforlike.json has not been generated in this checkout")
+    # TRACKED: see the note above; a missing committed result is a broken tree, not an ungenerated one
+    tp.must_be_present(path, was="re2g_likeforlike.json has not been generated in this checkout")
     payload = json.loads(path.read_text())
     arm = payload["paired_delta"]["primary_k562"]["dnase_plus_distance_alone"]
     assert "pre-specified secondary arm" in arm["label"]

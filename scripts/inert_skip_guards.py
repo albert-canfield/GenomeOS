@@ -449,6 +449,50 @@ def _direct_terms(
     return terms
 
 
+def helper_terms(
+    node: ast.AST,
+    helpers: dict[str, ast.AST],
+    consts: dict[str, str],
+    sequences: dict[str, tuple[str, ...]],
+) -> list[str | None]:
+    """The path terms of any module-local helper the condition CALLS, read from the helper's body.
+
+    `if _benchmark_present() is None: pytest.skip(...)` carries no existence call and no path, so a
+    reading that stops at the condition puts it in NOT_PATH -- "the condition tests no path" -- when
+    the whole question is inside the three lines of `_benchmark_present`. That is the one way the
+    NOT_PATH class could hide an inert guard, and the fix is to read the helper. Found on 2026-10-03
+    while checking that a peer's claim about a cached-table skip was not being undone.
+    """
+    terms: list[str | None] = []
+    for inner in ast.walk(node):
+        if not isinstance(inner, ast.Call):
+            continue
+        name = getattr(inner.func, "id", None)
+        if name is None or name not in helpers:
+            continue
+        body = helpers[name]
+        inner_consts, inner_predicates = dict(consts), {}
+        inner_sequences = dict(sequences)
+        _bindings(body.body, inner_consts, inner_predicates, inner_sequences, nested=True)
+        for statement in _walk(ast.Module(body=body.body, type_ignores=[])):
+            if isinstance(statement, ast.If):
+                terms.extend(existence_terms(statement.test, inner_consts, inner_predicates, inner_sequences))
+            elif isinstance(statement, ast.Return) and statement.value is not None:
+                terms.extend(
+                    existence_terms(statement.value, inner_consts, inner_predicates, inner_sequences)
+                )
+    return terms
+
+
+def module_helpers(tree: ast.Module) -> dict[str, ast.AST]:
+    """The module's own non-test functions, by name, so a condition that calls one can be read."""
+    return {
+        node.name: node
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and not node.name.startswith("test")
+    }
+
+
 def existence_terms(
     node: ast.AST,
     consts: dict[str, str],
@@ -649,6 +693,13 @@ def _tests_for_presence(condition: ast.AST, in_else: bool) -> bool:
     )
     names = {n.id.lower() for n in ast.walk(condition) if isinstance(n, ast.Name)}
     worded = any("absent" in n or "missing" in n for n in names)
+    if not _existence_calls(condition, into_comps=True):
+        # The direction is NOT readable here. `if _present() is None:` has no `not` and no existence
+        # call, and the inversion lives inside the helper's `return None`, so reading the surface
+        # syntax called a perfectly ordinary absent-guard ALWAYS_FIRES. A constant condition is still
+        # constant -- that is what INERT says -- but which constant it is, is not claimed on syntax
+        # that does not carry it. Measured against a plant on 2026-10-03.
+        return False
     return (negated or inverted or worded) == in_else
 
 
@@ -688,6 +739,7 @@ def guards_in_module(source: str, filename: str, tracked: frozenset[str]) -> lis
 def _guards(tree: ast.Module, filename: str, tracked: frozenset[str]) -> list[Guard]:
     """The body of `guards_in_module`, with `filename` on the `_ORIGIN` stack."""
     consts, predicates, sequences = module_level(tree)
+    helpers = module_helpers(tree)
     out: list[Guard] = []
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
@@ -720,6 +772,7 @@ def _guards(tree: ast.Module, filename: str, tracked: frozenset[str]) -> list[Gu
             out.append(Guard(where, "mark.skip", NOT_PATH, (), "an unconditional skip, keyed on nothing"))
         elif name == "skipif" and node.args:
             terms = existence_terms(node.args[0], consts, predicates, sequences)
+            terms += helper_terms(node.args[0], helpers, consts, sequences)
             verdict, why = _verdict(terms, tracked, for_presence=False)
             out.append(Guard(where, "skipif", verdict, tuple(terms), why))
         elif name == "skip" and isinstance(func, ast.Attribute):
@@ -744,6 +797,7 @@ def _guards(tree: ast.Module, filename: str, tracked: frozenset[str]) -> list[Gu
                     if scope is not None:
                         _bindings(scope.body, *bound, nested=True)
                 terms.extend(existence_terms(branch.test, *bound))
+            terms.extend(helper_terms(branch.test, helpers, local_consts, local_sequences))
             verdict, why = _verdict(terms, tracked, for_presence=_tests_for_presence(branch.test, in_else))
             out.append(Guard(where, "skip()", verdict, tuple(dict.fromkeys(terms)), why))
     return out

@@ -42,6 +42,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos import manifest as mf
 from genomeos import results
@@ -213,8 +214,9 @@ def test_the_real_registry_spelling_still_answers_data_quarantine_results(monkey
     """Unpatched, from the repository root: the documented answer, as a string. `chdir` rather than
     the ambient directory so the relative spelling is what it is in the docstring."""
     root = Path(__file__).resolve().parent.parent
-    if not (root / "data" / "results").is_dir():
-        pytest.skip("test_the_real_registry_spelling_still_answers_data_quarantine_results: no data/results")
+    # `data/results` holds hundreds of committed files, so git TRACKS the directory: "no
+    # data/results" is not a state a checkout of this commit can be in and the skip never fired
+    tp.must_be_present(root / "data" / "results", was="no data/results")
     monkeypatch.chdir(root)
     assert str(results.quarantine_dir(Path("data/results"))) == "data/quarantine/results"
     assert str(results.quarantine_dir(results.RESULTS_DIR)) == "data/quarantine/results"

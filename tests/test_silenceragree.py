@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import silenceragree as sa
 from scripts import silenceragree_register as reg
@@ -247,8 +248,9 @@ def test_the_registration_as_written_holds_no_field_a_run_would_fill() -> None:
     from pathlib import Path
 
     path = Path("data/results/silenceragree_registration.json")
-    if not path.exists():
-        pytest.skip("the registration is not written yet")
+    # the registration IS written: git tracks it, so "not written yet" could never be true and the
+    # test that reads the committed registration file was never conditional
+    tp.must_be_present(path, was="the registration is not written yet")
     written = json.loads(path.read_text())
     assert written["result"] == "silenceragree_registration"
     # Every forbidden key in the written file must be one of the registry's OWN stamps, and each

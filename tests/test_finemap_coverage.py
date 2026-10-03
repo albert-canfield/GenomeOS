@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -123,8 +124,9 @@ def test_the_distinction_is_quoted_from_the_registration() -> None:
     import json
 
     reg = ROOT / "data/results/eqtl_crispri_frame_registration.json"
-    if not reg.exists():
-        pytest.skip("the re-distillation registration is not on this machine")
+    # the registration is TRACKED, so it is on every machine that has this commit and the skip that
+    # stood here could never fire: a quotation from a committed registration is not conditional
+    tp.must_be_present(reg, was="the re-distillation registration is not on this machine")
     kept = json.loads(reg.read_text())["the_two_figures_kept_apart"]
     for key in ("assessed", "carrying_a_hit", "why"):
         assert fc.THE_DISTINCTION[key] == kept[key], f"{key} is not the registration's own wording"
@@ -214,8 +216,8 @@ def test_the_assessable_count_and_the_unassessed_count_make_the_frame() -> None:
     import json
 
     p = ROOT / "data/results/finemap_coverage.json"
-    if not p.exists():
-        pytest.skip("the result has not been written on this machine")
+    # TRACKED: it HAS been written on every machine that has this commit
+    tp.must_be_present(p, was="the result has not been written on this machine")
     a = json.loads(p.read_text())["ASSESSABLE_FIRST"]
     assert a["assessable"] + a["unassessed"] == a["elements_of_the_frame"]
     assert a["assessable"] >= a["where_dapg_placed_a_row_at_any_posterior"]
@@ -226,8 +228,8 @@ def test_the_carrying_count_never_exceeds_the_determined_subframe() -> None:
     import json
 
     p = ROOT / "data/results/finemap_coverage.json"
-    if not p.exists():
-        pytest.skip("the result has not been written on this machine")
+    # TRACKED: it HAS been written on every machine that has this commit
+    tp.must_be_present(p, was="the result has not been written on this machine")
     d = json.loads(p.read_text())
     determined = d["ASSESSABLE_FIRST"]["where_a_posterior_survives_on_disk_at_any_value"]
     assert d["CARRYING_SECOND"]["carrying_any_fine_mapped_variant"] <= determined

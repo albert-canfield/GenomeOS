@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import measured
 from genomeos.attribution.compile import compile_chromosome
@@ -453,8 +454,9 @@ def test_the_committed_chromosome_program_states_experimental_facts():
     assay caches under data/knowledge are present before believing a zero.
     """
     path = Path("data/organisms/human/noncoding_chr21.bio")
-    if not path.exists():
-        pytest.skip("chr21 program not compiled on this machine")
+    # the compiled chr21 program is TRACKED, so it is not something a machine can lack: the skip
+    # could never fire, and the docstring's advice about the data/knowledge caches stands as written
+    tp.must_be_present(path, was="chr21 program not compiled on this machine")
     module = parse(path.read_text())
     experimental = [
         e

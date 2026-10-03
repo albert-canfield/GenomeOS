@@ -14,6 +14,7 @@ import math
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import n1_coverage as nc
 
@@ -25,14 +26,15 @@ COMMITTED_COUNTS = [27, 11, 3, 3, 3, 2, 2, 1, 1, 1, 1, 1] + [0] * 44
 
 
 def _module_text() -> str:
-    if not MODULE.exists():
-        pytest.skip(f"{MODULE} is absent")
+    # `genomeos/attribution/n1_perturb_response.py` is TRACKED -- it is the project's own source --
+    # so "is absent" could only mean a broken checkout, never a machine without a store
+    tp.must_be_present(MODULE, was=f"{MODULE} is absent")
     return MODULE.read_text()
 
 
 def _result() -> dict:
-    if not RESULT.exists():
-        pytest.skip(f"{RESULT} is absent")
+    # `data/results/n1_result_amendment_2.json` is TRACKED, so this skip could never fire
+    tp.must_be_present(RESULT, was=f"{RESULT} is absent")
     return json.loads(RESULT.read_text())
 
 

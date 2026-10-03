@@ -30,6 +30,7 @@ from typing import Any
 
 import planted_cleanliness
 import pytest
+import tracked_paths as tp
 
 from genomeos import manifest as mf
 from genomeos import results
@@ -310,11 +311,13 @@ def test_the_recorded_astrocyte_race_is_the_benign_one() -> None:
     """`data/results/astroreg2_astrocyte_activity.json`: 53f3b33 sampled, 675e54a stamped, 130 files.
 
     Checked against the committed result and this repository's real history, not a copy of it, so the
-    reference point the ruling named is a test and not a note. Skipped only if the result is absent.
+    reference point the ruling named is a test and not a note. The result is TRACKED, so it is in
+    every checkout of this commit: this test is NOT conditional, and the sentence that used to say
+    "skipped only if the result is absent" described a skip that could never fire. Absence of a
+    committed result is a broken checkout and raises by name.
     """
     p = Path("data/results/astroreg2_astrocyte_activity.json")
-    if not p.exists():
-        pytest.skip(f"{p} is not in this checkout")
+    tp.must_be_present(p, was=f"{p} is not in this checkout")
     race = mr.revision_race(json.loads(p.read_text()), Path.cwd())
     assert race["found"] is True
     assert race["race"] == "revision race (53f3b33 → 675e54a)"

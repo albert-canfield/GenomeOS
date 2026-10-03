@@ -235,3 +235,81 @@ def test_each_shape_the_finder_knows_is_present_in_the_real_suite(shape: str) ->
     """A corpus pin: the shapes are read off the suite, so a shape going unread is visible."""
     finder = _finder()
     assert any(g.shape == shape for g in finder.all_guards(ROOT / "tests")), shape
+
+
+def test_a_condition_that_CALLS_a_helper_is_read_through_the_helper_not_filed_as_NOT_PATH() -> None:
+    """The one way NOT_PATH could hide an inert guard, found on 2026-10-03 and closed.
+
+    `if _benchmark_present() is None: pytest.skip(...)` -- a real guard in
+    `tests/test_increase_links.py` -- carries no existence call and no path, so a reading that stops
+    at the condition files it as "the condition tests no path" while the whole question lives in the
+    three lines of the helper. It is read through the helper now, and the real case it was found on
+    comes back LIVE on `data/knowledge/crispri/<?>`, which is what it is.
+    """
+    source = (
+        "from pathlib import Path\n"
+        "import pytest\n"
+        "ROOT = Path(__file__).resolve().parent.parent\n"
+        "def _present():\n"
+        f'    if not (ROOT / "{A_TRACKED_RESULT}").exists():\n'
+        "        return None\n"
+        "    return True\n"
+        "def test_reads_it():\n"
+        "    if _present() is None:\n"
+        '        pytest.skip("not here")\n'
+    )
+    found = _classify(source)
+    assert found["tests/planted.py:10"] == ("INERT", (A_TRACKED_RESULT,)), found
+    finder = _finder()
+    live = {
+        g.where: g.terms
+        for g in finder.all_guards(ROOT / "tests")
+        if "test_increase_links.py" in g.where and g.verdict == "LIVE"
+    }
+    assert live, "the real case this was found on no longer reads as LIVE"
+    assert any("data/knowledge" in t for terms in live.values() for t in terms if t), live
+
+
+def test_NO_skip_guard_IN_THE_SUITE_is_keyed_on_a_path_that_git_TRACKS() -> None:
+    """The deliverable, over the real suite and over all four shapes a guard comes in.
+
+    31 guards were in this class on 2026-10-03 and every one of them now raises instead. A tracked
+    file is in every checkout of its commit, so a skip waiting on its absence is not a guard: it is a
+    sentence that reads as protection while the condition is a constant. The companion check in
+    `tests/test_local_data_symlinked_store.py` makes the same claim over `skipif` decorators alone
+    and keeps its own resolver; this one covers `pytest.skip()` in a body and a fixture as well,
+    which is where 24 of the 31 lived.
+    """
+    finder = _finder()
+    inert = [g for g in finder.all_guards(ROOT / "tests") if g.verdict == "INERT"]
+    assert not inert, (
+        "these skip guards test for a file git TRACKS, so they are present in every checkout and the "
+        "skip can never fire. Convert each to tracked_paths.must_be_present, which RAISES by name: "
+        f"{[(g.where, g.terms) for g in inert]}"
+    )
+
+
+def test_no_test_is_SKIPPED_EVERY_RUN_by_a_guard_on_a_tracked_path() -> None:
+    """The mirror class, over the real suite: a tracked path tested for PRESENCE never runs at all.
+    There are none, and this is the check that says so rather than the absence of a report."""
+    finder = _finder()
+    always = [g for g in finder.all_guards(ROOT / "tests") if g.verdict == "ALWAYS_FIRES"]
+    assert not always, f"these tests skip on every run, so they never run: {always}"
+
+
+#: THE ELEVEN UNRESOLVED GUARDS, read by hand on 2026-10-03 and left alone, with what each one is.
+#: Reported by name rather than folded into a class, because an UNRESOLVED count of zero would have
+#: to be earned and this finder has not earned it. Every one of them is LIVE or needs a judgement no
+#: resolver makes, and NOT ONE is keyed on a tracked path:
+#:   tests/conftest.py:47                      `local_data.missing(tuple(mark.args))` -- the
+#:                                             needs_local_data machinery itself, whose args are a
+#:                                             runtime marker. It cannot be inert: the helper raises.
+#:   tests/test_clause2_design_power.py:293/475/656   `dp.RESULTS_DIR / f"{dp.RESULT}.json"` reached
+#:                                             through a module loaded by importlib from a path.
+#:   tests/test_crispri_split.py:66/242        `measured.CRISPRI_KNOWLEDGE` under data/knowledge.
+#:   tests/test_joint_pretest.py:115           the same store, through `dict(measured.CRISPRI_SPLIT_OF)`.
+#:   tests/test_kd_semantics_census.py:50      `m.CACHE / m.DOCS[...]["file"]`, m a dynamic import.
+#:   tests/test_loci_gene_input.py:220         a result name from a loop over a runtime frame.
+#:   tests/test_pre_push_hook_is_the_wrapper.py:49   `.git/hooks/pre-push`, which is not in the tree
+#:                                             at all, so no `ls-files` answer applies to it.
+#:   tests/test_response_map_increment4.py:59  `ROOT / i4.INCREMENT_3_COUNT`, i4 a fixture.

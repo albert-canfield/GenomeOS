@@ -40,6 +40,7 @@ from typing import Any
 
 import guard_injection as gj
 import pytest
+import tracked_paths as tp
 
 from genomeos import manifest as mf
 from genomeos.benchmark import loci as lb
@@ -198,9 +199,14 @@ def test_the_read_ceiling_fires_on_a_real_read_past_it() -> None:
     genuine 300 MB allocation does not move the figure by one byte, so a guard on it cannot be shown
     to fire on real work - the defect this project has written up as a guard that cannot fire.
     """
-    absent = [s for s in PLANT_OVERSHOOT if not (RESULTS / f"{s}.json").exists()]
-    if absent:
-        pytest.skip(f"tracked results absent from this checkout: {', '.join(absent)}")
+    # The reason said it: "TRACKED results absent from this checkout". Both of `PLANT_OVERSHOOT`'s
+    # results -- `discovery_review.json` and `origin_genome_wide.json` -- are in the commit, so the
+    # list could never be non-empty. The plant that proves the read ceiling FIRES was itself guarded
+    # by a condition that could not, which is the defect this very docstring describes.
+    tp.must_be_present(
+        *(RESULTS / f"{s}.json" for s in PLANT_OVERSHOOT),
+        was="tracked results absent from this checkout",
+    )
     mf.trace_begin()
     _frame("loci_noncoding")
     before = _under_the_ceiling("one frame alone")

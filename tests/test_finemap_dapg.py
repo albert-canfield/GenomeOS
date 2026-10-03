@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -199,8 +200,8 @@ def test_assessed_by_construction_is_the_registrations_own_wording() -> None:
     import json
 
     reg = ROOT / "data/results/eqtl_crispri_frame_registration.json"
-    if not reg.exists():
-        pytest.skip("the re-distillation registration is not on this machine")
+    # the registration is TRACKED, so this skip could never fire; a missing one is a broken checkout
+    tp.must_be_present(reg, was="the re-distillation registration is not on this machine")
     assert json.loads(reg.read_text())["assessed_by_construction"] == fd.ASSESSED_BY_CONSTRUCTION
 
 

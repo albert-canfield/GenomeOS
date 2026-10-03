@@ -16,6 +16,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADLINES = ROOT / "data/results/manifest_headlines.json"
@@ -64,8 +65,11 @@ def test_every_verdict_the_census_can_return_is_described():
 
 def test_reading_a_result_does_not_touch_its_bytes():
     """Several results' sha256 are registrations; a census that rewrote one would break a pin."""
-    if not HEADLINES.is_file():
-        pytest.skip(f"{HEADLINES} is not in this checkout, so there is nothing to read")
+    # `data/results/manifest_headlines.json` is TRACKED, so "there is nothing to read" could never be
+    # true: the three skips in this file were conditional on a result that is in the commit. A
+    # missing committed result is a broken checkout and must be red, not quiet -- all the more here,
+    # where what the test guards is that reading a result does not change the bytes a pin names.
+    tp.must_be_present(HEADLINES, was=f"{HEADLINES} is not in this checkout, so there is nothing to read")
     before = hashlib.sha256(HEADLINES.read_bytes()).hexdigest()
     row = census_mod.read_one("manifest_headlines")
     assert row["result"] == "manifest_headlines"
@@ -241,8 +245,7 @@ def test_the_census_does_not_restate_the_stronger_organised_chr_claim():
 
 
 def test_the_manifest_meets_the_contract_and_counts_this_script_as_the_entry():
-    if not HEADLINES.is_file():
-        pytest.skip(f"{HEADLINES} is not in this checkout, so there is nothing to hash")
+    tp.must_be_present(HEADLINES, was=f"{HEADLINES} is not in this checkout, so there is nothing to hash")
     m = census_mod.manifest_for(["manifest_headlines"])
     from genomeos import manifest as mf
 
@@ -271,8 +274,7 @@ def test_the_census_does_not_hash_its_own_result_as_an_input_of_the_run_that_wri
 
 
 def test_the_artefact_carries_the_split_the_readings_and_the_population():
-    if not HEADLINES.is_file():
-        pytest.skip(f"{HEADLINES} is not in this checkout, so there is nothing to examine")
+    tp.must_be_present(HEADLINES, was=f"{HEADLINES} is not in this checkout, so there is nothing to examine")
     a = census_mod.artefact(["manifest_headlines"])
     assert a["population"]["files"] == 1
     assert a["all_results"]["examined"] == 1
