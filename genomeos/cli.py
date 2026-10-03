@@ -4662,7 +4662,23 @@ def cmd_work(args: argparse.Namespace) -> int:
         elif args.action == "update":
             work.update(root, args.who, args.note, args.task, args.area, args.files, args.next, args.state)
         elif args.action == "done":
-            work.done(root, args.who, args.note)
+            # A release has to say who made it. `work done --who <another lane>` is a command any
+            # session can run, and until 2026-10-03 the board recorded the state change and not the
+            # actor, so a lane that wanted a peer's file could release the peer's hold and walk
+            # through the commit check that had just refused it. The holder releasing its own hold,
+            # and the coordinator releasing it after a handover, are the two legitimate cases and
+            # both still work; what needed closing is the one that needed no deception. If --who
+            # came from GENOMEOS_WHO then the actor is that same name and no flag is needed.
+            by = args.by or os.environ.get("GENOMEOS_WHO") or os.environ.get("GENOMEOS_LANE") or ""
+            if not by:
+                raise ValueError(
+                    f"say who is releasing this hold: --by NAME, or set GENOMEOS_WHO. If you are "
+                    f"{args.who}, that is `work done --who {args.who} --by {args.who}`. If you are "
+                    f"releasing {args.who}'s hold for them, name YOUR lane: only the holder's own "
+                    "release and the coordinator's count, and scripts/check_staged.py refuses a "
+                    "commit of a file whose hold anyone else released."
+                )
+            work.done(root, args.who, args.note, by=by)
     except ValueError as e:
         print(f"genomeos work: {e}", file=sys.stderr)
         return 2
@@ -5629,6 +5645,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--files", nargs="*", help="files held (comma or space separated; dir/ holds a directory)")
     p.add_argument("--next", help="what comes after this task")
     p.add_argument("--note", help="progress note (update, done)")
+    p.add_argument("--by", help="done: the lane releasing the hold (default: GENOMEOS_WHO)")
     p.add_argument("--state", choices=["working", "waiting"], help="update: working or waiting on something")
     p.set_defaults(fn=cmd_work)
 

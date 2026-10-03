@@ -64,6 +64,22 @@ already says so when you EDIT such a file. It was the commit that never asked. S
 live lane other than you declares in its `files` is refused, named with its holder, its task and its
 age. There is deliberately no `--force` for it: the holder is a person to ask, not a flag.
 
+That check is satisfied the moment the holder's entry reads `done`, and `genomeos work done --who
+<another lane>` is a command any session can run, so on the same day the coordinator found the
+inclusion defect again with one extra step: a lane could release the peer's own hold and walk
+through the check it had just cleared, with nothing in the record to say who released it. So the
+board now records the releasing session (`genomeos.work.RELEASED_BY`), and a fourth question is
+asked here (`staged_whose_hold_was_taken`):
+
+    was this hold released by anyone other than its holder or the coordinator?
+
+A release counts if the holder made it, or if a session the board shows as the coordinator made it --
+the handover case, which is legitimate and must keep working. Any other name, and the hold stands and
+the commit is refused. An entry carrying no releasing name at all was written before the field
+existed and is read as the holder's own release. None of this is a credential: data/work/ is a
+directory of json files every session can write, so a determined session can still name someone else
+or overwrite the entry. What it closes is the route that needed no deception.
+
 Alongside the refusal it prints a NOTICE, which refuses nothing, for a SHARED file whose whole
 working copy this commit stages (`whole_copy_notices`). A file counts as shared two ways: it is on
 the list below, or a live lane holds it. The list alone was the hook's whole test on 2026-10-03 and
@@ -532,6 +548,76 @@ def whole_copy_notices(index: str | None) -> list[str]:
     return notices
 
 
+#: The marker lines tests/test_check_staged.py cuts between to show, by removal, that a hold a third
+#: lane released lets the commit through.
+RELEASE_BEGIN = "    # --- the taken-release condition ---"
+RELEASE_END = "    # --- end of the taken-release condition ---"
+
+
+def unreleased_holds(root: Path) -> list[tuple[dict[str, object], str]]:
+    """(entry, releaser) for finished entries whose hold was not the releaser's to release.
+
+    The board's own reader is used again, and `genomeos.work` owns both the field name and the test
+    for who the coordinator is, so the gate and the board cannot disagree about either. An entry
+    with no releasing name was written before the field existed, and is read as the holder's own
+    release: reading those as taken would make every finished entry on the board hold its files
+    again for a day, which is a false refusal for every lane that finishes a task.
+
+    The board drops a finished entry a day after it finishes, so this protection lasts as long as
+    the record does, which is that day.
+    """
+    if not (root / "data" / "work").is_dir():
+        return []
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from genomeos.work import RELEASED_BY, board, is_coordinator
+
+    rows = board(root)
+    coordinators = {str(e.get("who") or "") for e in rows if is_coordinator(e)}
+    taken = []
+    for entry in rows:
+        if entry.get("state") != "done":
+            continue
+        releaser = entry.get(RELEASED_BY)
+        if not isinstance(releaser, str) or not releaser:
+            continue
+        if releaser == entry.get("who") or releaser in coordinators:
+            continue
+        taken.append((entry, releaser))
+    return taken
+
+
+def staged_whose_hold_was_taken(index: str | None, lane: str, message_name: str) -> list[str]:
+    """Staged paths whose hold was released by neither the holder nor the coordinator.
+
+    Narrowed exactly as the live-hold refusal is, and for the same reason: an exact file claim
+    refuses, a directory claim does not. Your own entry is skipped -- a peer releasing YOUR hold
+    does not stop you committing your own file -- and so the case this refuses is the one the
+    coordinator walked into: somebody else's file, somebody else's hold, released by a third name.
+    """
+    problems: list[str] = []
+    taken = unreleased_holds(_repo_root())
+    if not taken:
+        return problems
+    # --- the taken-release condition ---
+    for status, path in staged_paths(index):
+        if status == "D":
+            continue
+        for entry, releaser in taken:
+            who = str(entry.get("who") or "")
+            if is_me(who, lane, message_name):
+                continue
+            files, _dirs = declared(entry)
+            if path not in files:
+                continue
+            task = str(entry.get("task") or "no task recorded")
+            problems.append(
+                f"{path}: held by {who} ({task[:90]}), and that hold was released by {releaser}, "
+                f"who is neither {who} nor the coordinator"
+            )
+    # --- end of the taken-release condition ---
+    return problems
+
+
 # `from genomeos.a.b import c` and `import genomeos.a.b`: the dotted module a staged file needs.
 _IMPORT = re.compile(r"^\s*(?:from\s+(genomeos(?:\.\w+)*)\s+import\b|import\s+(genomeos(?:\.\w+)*))", re.M)
 
@@ -718,6 +804,7 @@ def main(argv: list[str] | None = None) -> int:
 
     notices = whole_copy_notices(args.index)
     held = staged_held_by_a_live_lane(args.index, args.lane, args.message_name)
+    taken = staged_whose_hold_was_taken(args.index, args.lane, args.message_name)
     problems = check(args.index, args.since)
     for notice in notices:
         # first, and above any refusal, because it is the sentence that explains the refusal when
@@ -742,6 +829,21 @@ def main(argv: list[str] | None = None) -> int:
             "    --files` is the same route from the other end); or stage only your own hunk -- the HEAD\n"
             "    copy plus your lines, scripts/stage_section.py for a markdown section -- and leave\n"
             "    theirs in the worktree.\n"
+        )
+        return 2
+    if taken:
+        # Its own heading, because it is its own fault: not "somebody is working on this" but
+        # "somebody signed off on this for somebody else". No --force here either, for the reason
+        # above, and the route is the same one: ask the holder, or ask the coordinator.
+        print("REFUSED: this commit takes a file whose hold somebody else released\n")
+        for problem in taken:
+            print(f"    {problem}\n")
+        print(
+            "    `genomeos work done --who <lane>` is a command any session can run, so a release by\n"
+            "    a third name is not a release: it is the same inclusion defect with one more step,\n"
+            "    and it was found the day this check was written, on this check.\n"
+            "    If the holder handed the work over, let the HOLDER release it (`genomeos work done\n"
+            "    --who <holder> --by <holder>`), or let the coordinator release it and commit it.\n"
         )
         return 2
     if unimportable:

@@ -178,3 +178,64 @@ def test_the_board_root_can_be_named_by_the_environment(tmp_path, monkeypatch):
     # and the listing from that root sees it while the live board does not
     assert "lane-in-a-worktree" in run("work", "list", env_root=elsewhere).stdout
     assert "lane-in-a-worktree" not in run("work", "list").stdout
+
+
+def test_a_release_records_who_made_it(tmp_path):
+    """The board recorded the state change and not the actor, and that was the whole hole.
+
+    `genomeos work done --who <another lane>` is a command any session can run, so a lane that
+    wanted a peer's file could release the peer's own hold and walk through the commit check that
+    had just refused it. Nothing in the record said who released it, which is why the check could
+    not tell a finished task from a peer letting itself in.
+    """
+    import subprocess
+    import sys
+
+    def run(*args):
+        env = {
+            "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+            "HOME": str(tmp_path),
+            "GENOMEOS_WORK_ROOT": str(tmp_path),
+            "PYTHONPATH": str(ROOT),
+        }
+        return subprocess.run(
+            [sys.executable, "-c", "from genomeos.cli import main; raise SystemExit(main())", *args],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            env=env,
+        )
+
+    assert run("work", "start", "--who", "lane-holder", "the kinetics rows").returncode == 0
+
+    # no --by, and no GENOMEOS_WHO to stand in for it: the command cannot say who is releasing it
+    refused = run("work", "done", "--who", "lane-holder")
+    assert refused.returncode == 2, (refused.stdout, refused.stderr)
+    assert "say who is releasing this hold" in refused.stderr
+    assert work.read(tmp_path, "lane-holder")["state"] == "working", "refused and still released it"
+
+    assert run("work", "done", "--who", "lane-holder", "--by", "lane-holder").returncode == 0
+    entry = work.read(tmp_path, "lane-holder")
+    assert entry["state"] == "done" and entry[work.RELEASED_BY] == "lane-holder"
+
+
+def test_a_release_by_a_third_lane_is_recorded_under_its_own_name(tmp_path):
+    """The record is what the commit gate reads, so it has to carry the name that was given."""
+    work.start(tmp_path, "lane-holder", "the kinetics rows", now=0.0)
+    work.done(tmp_path, "lane-holder", by="lane-other", now=10.0)
+
+    assert work.read(tmp_path, "lane-holder")[work.RELEASED_BY] == "lane-other"
+    # and a release made through the function with no name is left unattributed, as every entry
+    # written before the field existed is
+    work.start(tmp_path, "lane-old", "an older task", now=0.0)
+    work.done(tmp_path, "lane-old", now=10.0)
+    assert work.RELEASED_BY not in work.read(tmp_path, "lane-old")
+
+
+def test_the_coordinator_is_recognised_by_what_its_own_entry_says(tmp_path):
+    """Self-declared, and deliberately not a hardcoded session name: those change on every restart."""
+    assert work.is_coordinator({"task": "[G] Coordinator: the lanes and the promotion gate"})
+    assert work.is_coordinator({"task": "coordinator for the night shift"})
+    assert not work.is_coordinator({"task": "the kinetics rows, half written"})
+    assert not work.is_coordinator({"task": "asked the coordinator to commit this"})
+    assert not work.is_coordinator({})

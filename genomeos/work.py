@@ -25,6 +25,27 @@ KEEP_DONE = 24 * 3600  # finished entries stay visible for a day
 #: means nobody is coming back to it, and only the second is a lie worth removing from the board.
 ABANDONED_AFTER = 48 * 3600
 _WHO = re.compile(r"^[A-Za-z0-9_.-]{1,64}$")
+#: The field a release writes: the name the session that ran `work done` gave for itself. It exists
+#: because the board recorded the state change and not the actor, and `work done --who <another
+#: lane>` is a command any session can run -- so a lane that wanted a peer's file could release the
+#: peer's own hold and walk through the commit check it had just cleared (found 2026-10-03, by the
+#: coordinator, on the check that had refused it minutes earlier).
+#:
+#: It is a SELF-REPORT and not a credential. data/work/ is a directory of json files every session
+#: can write, so a session can still name someone else here, or overwrite the entry outright. What
+#: this closes is the route that needed no deception: the obvious command now leaves a name in the
+#: record, and `scripts/check_staged.py` refuses a commit of a file whose hold was released by
+#: neither its holder nor the coordinator.
+RELEASED_BY = "released_by"
+#: How the coordinating session is recognised: it says so at the START of its own task, which is
+#: what it already does ("[G] Coordinator: ..."). Self-declared, like everything else on this board,
+#: and deliberately not a hardcoded session name -- those change every time a session restarts.
+_COORDINATOR = re.compile(r"^\s*(?:\[[A-Za-z]\]\s*)?coordinator\b", re.I)
+
+
+def is_coordinator(entry: dict[str, Any]) -> bool:
+    """Whether this entry declares itself the coordinating session."""
+    return bool(_COORDINATOR.match(str(entry.get("task") or "")))
 
 
 def _dir(root: Path) -> Path:
@@ -116,13 +137,24 @@ def update(
     return _write(root, entry)
 
 
-def done(root: Path, who: str, note: str | None = None, now: float | None = None) -> dict[str, Any]:
-    """Finish the task: the entry stays on the board as finished for a day."""
+def done(
+    root: Path, who: str, note: str | None = None, now: float | None = None, by: str | None = None
+) -> dict[str, Any]:
+    """Finish the task: the entry stays on the board as finished for a day.
+
+    `by` is the session doing the releasing, recorded under `RELEASED_BY`. `genomeos work done`
+    requires it, because a release that does not say who made it cannot be told from a peer letting
+    itself in; called as a function with `by` left out, the entry carries no actor and the commit
+    gate reads it as the holder's own release, which is how every entry written before 2026-10-03
+    is read.
+    """
     entry = read(root, who)
     if entry is None:
         raise ValueError(f"{who} has no entry")
     now = time.time() if now is None else now
     entry.update(state="done", finished=now, updated=now)
+    if by:
+        entry[RELEASED_BY] = by
     if note:
         entry["note"] = note
     return _write(root, entry)

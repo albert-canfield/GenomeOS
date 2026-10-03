@@ -1162,3 +1162,124 @@ def test_the_tokenizer_marks_a_docstring_interior_as_not_live(tmp_path: Path) ->
     assert "x = 1" not in live
     assert "# z = 3" not in live
     assert cs.live_code_text("def f(:\n") is None
+
+
+# ------------------------------------------- a hold released by somebody who was not its holder
+#
+# 2026-10-03, found by the coordinator on this very check, minutes after it had refused him: the
+# live-hold refusal is satisfied the moment the holder's entry reads `done`, and `genomeos work done
+# --who <another lane>` is a command any session can run. So a lane could release the peer's own
+# hold and walk through the check it had just cleared, with nothing in the record naming who did it.
+
+COORDINATOR_TASK = "[G] Coordinator: the lanes, the roadmap and the promotion gate"
+
+
+def release(repo: Path, who: str, by: str | None, *, minutes: float = 2) -> None:
+    """Mark an entry finished, as `genomeos work done --by` writes it."""
+    import json as _json
+
+    path = repo / "data" / "work" / f"{who}.json"
+    entry = _json.loads(path.read_text())
+    stamp = time.time() - minutes * 60
+    entry.update(state="done", finished=stamp, updated=stamp)
+    if by is not None:
+        entry["released_by"] = by
+    path.write_text(_json.dumps(entry))
+
+
+def test_a_hold_released_by_a_third_lane_still_refuses(repo: Path, tmp_path: Path) -> None:
+    """The route the coordinator found: release the peer's hold, then take the file."""
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    release(repo, "lane-kinetics", "lane-mine")
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 2, done.stdout
+    assert "somebody else released" in done.stdout
+    assert "released by lane-mine" in done.stdout
+    assert "neither lane-kinetics nor the coordinator" in done.stdout
+
+
+def test_force_does_not_pass_a_taken_release(repo: Path, tmp_path: Path) -> None:
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    release(repo, "lane-kinetics", "lane-mine")
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--force", "--lane", "lane-mine")
+
+    assert done.returncode == 2, done.stdout
+
+
+def test_the_holder_releasing_its_own_hold_passes(repo: Path, tmp_path: Path) -> None:
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    release(repo, "lane-kinetics", "lane-kinetics")
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_the_coordinator_releasing_a_hold_passes(repo: Path, tmp_path: Path) -> None:
+    """The legitimate handover: the holder finished, reported, and asked for the commit."""
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    hold(repo, "genomeos-c6", ["docs/ROADMAP.md"])
+    board = repo / "data" / "work" / "genomeos-c6.json"
+    board.write_text(board.read_text().replace(PEER_TASK, COORDINATOR_TASK))
+    release(repo, "lane-kinetics", "genomeos-c6")
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+
+
+def test_a_release_with_no_name_on_it_passes(repo: Path, tmp_path: Path) -> None:
+    """Every entry written before the field existed carries no name, and reading those as taken
+    would make every finished entry hold its files again for a day."""
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    release(repo, "lane-kinetics", None)
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+
+
+def test_a_peer_releasing_your_own_hold_does_not_stop_you(repo: Path, tmp_path: Path) -> None:
+    """It is your file; somebody else signing your entry off does not take it away from you."""
+    hold(repo, "lane-mine", ["GRAMMAR.md"])
+    release(repo, "lane-mine", "lane-kinetics")
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+
+
+def test_without_the_taken_release_condition_the_file_goes_in(repo: Path, tmp_path: Path) -> None:
+    """Credited with preventing something, shown by removal."""
+    import check_staged as cs
+
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    release(repo, "lane-kinetics", "lane-mine")
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    refused = run_check(repo, index, "--lane", "lane-mine")
+    assert refused.returncode == 2, refused.stdout
+
+    cut = without_block(tmp_path, cs.RELEASE_BEGIN, cs.RELEASE_END, "check_staged_without_release.py")
+    allowed = run_cut(repo, index, cut, "--lane", "lane-mine")
+
+    assert allowed.returncode == 0, allowed.stdout + allowed.stderr
+    assert "takes nothing back out" in allowed.stdout
+    assert "lane-kinetics" not in allowed.stdout
