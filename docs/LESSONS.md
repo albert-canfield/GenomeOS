@@ -1579,3 +1579,70 @@ whether this run writes to that path.
 
 The lane found this in its own first write and fixed it before the result was committed, which is
 the only reason there is nothing to correct.
+
+## A tool that works on one interpreter or OS is not a working tool (2026-10-03)
+
+Two faults in one day, unrelated in mechanism and identical in shape: each passed on every developer
+Mac and made a script **unrunnable in CI**, so the thing that broke was not the logic but the
+assumption that one machine's behaviour is the behaviour.
+
+**`mktemp -t <prefix>` is not portable.** GNU mktemp, which is what CI runs, REFUSES a `-t` template
+with fewer than three trailing X's: the run of 2026-10-02 12:08 UTC printed `mktemp: too few X's in
+template 'genomeos-index'` and stopped. BSD mktemp accepts a bare prefix and invents the suffix
+itself, so the same line had worked locally for as long as it had existed. `scripts/push_own.sh` could
+not run on Linux at all, which is the only platform that matters for a push gate. The fix is a full
+path with six X's and a comment saying which mktemp refuses what.
+
+**argparse's positional matching is version-dependent across CPython MICRO versions.** Two optional
+positionals with an option between them are not parsed the same way by 3.12.x as by 3.12.y, and that
+produced two full-suite reds that existed **only in CI** — nothing to reproduce locally, no file to
+bisect, and the temptation to blame the runner. The repair is `class StableParser(argparse.ArgumentParser)`
+in `genomeos/cli.py`, which carries CPython's own guard so the parse does not depend on which micro
+version happens to be installed.
+
+**The lesson is the class, not the two instances.** A shell builtin's flags, a standard library's
+argument matching, a filesystem's case sensitivity, a locale's sort order: each is a place where "it
+works" is a statement about one interpreter and one OS. Where a script is run by CI, the question is
+not whether it runs but **where it has been shown to run**, and a green that has only ever been
+produced on a Mac is evidence about a Mac.
+
+## A red run whose first job dies early reports almost nothing (2026-10-03)
+
+A failure summary was read as the whole suite's verdict when it came from **one job of several**. The
+line quoted was "5 errors"; the real line was `25 failed, 3844 passed, 129 skipped, 5 xfailed, 5
+errors`, and it came from `test-bare` ALONE — the `test` job had died at shellcheck and never reached
+pytest at all. So the figures that were discussed described a fraction of the suite, and the jobs
+nobody had looked at had not run.
+
+What makes it hard to see is that the summary is perfectly accurate about what it covers. Nothing in
+it is wrong. It simply does not say which jobs produced it, and a job that dies in an early step
+produces no test output to be missing from the total — the absence has no line of its own.
+
+**Read which jobs RAN before reading what they said.** A red run is first a question about the matrix:
+which jobs started, which reached their test step, which exited before it. Only then does a count mean
+anything, and a count quoted without its job name is a count without a denominator.
+
+## A resource guard inside a test reads the test process, not the work (2026-10-03)
+
+Memory ceilings were written against `resource.getrusage(resource.RUSAGE_SELF).ru_maxrss` from inside
+a test. The reasoning was sound and the instrument could not carry it: `ru_maxrss` is a **process
+high-water mark**, so it is monotonic and never comes down. A ceiling on it is therefore a ceiling on
+**every test that ran before it in the same process**, and it fails in a full suite for memory that
+some other test used — green alone, red together, with nothing about the code under test having
+changed.
+
+The repair is injection: the figure under test is passed in and asserted on, so the assertion is about
+the work rather than about the process that happens to be hosting it. In one case the honest quantity
+was different again — bytes read from `data/` — and measuring that instead removed the dependence on
+the process entirely. `tests/guard_injection.py` and `tests/test_loci_gene_input.py` carry the
+reasoning beside the code.
+
+A latent instance of the same ceiling survived in `tests/test_argmaxcell.py` **only because of
+alphabetical collection order**: it happened to run early enough that the high-water was still low. It
+had never passed for a reason.
+
+This is the third plant for this class, and the plant is the part that keeps being got wrong. Showing
+that the guard fires on a figure above the ceiling proves the comparison, not the measurement.
+**Verify against a guard that IGNORES the injected figure** — feed it a number that must trip it and
+confirm it does not, so a guard still reading the process cannot pass itself off as one reading the
+work.
