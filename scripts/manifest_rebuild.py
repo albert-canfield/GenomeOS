@@ -23,7 +23,13 @@ rebuild with the reason:
    carries its target's mode, so until then a rebuild could write to the only copy of an input store on
    this machine, which was measured and not supposed. The hook is a Python-level guard and the report
    says so; a clone at 0444 is the kernel-enforced one. A rebuild whose command did not arm it reports no
-   verdict. `copied_not_cloned` names any machine-local input whose `cp -c` fell back to a real copy;
+   verdict. `copied_not_cloned` names any machine-local input whose `cp -c` fell back to a real copy.
+   Since 2026-10-03 an input declared as an ABSOLUTE path that RESOLVES INSIDE the repository root is
+   read by its repository-relative form and checked like any other (`repo_relative_declaration`,
+   `relativised_absolute_declarations`): `genomeos.manifest.input_entry` records `str(path)` where its
+   sibling `files_entry` relativises, which left 9 of the 212 committed results with inputs declared
+   absolutely and unrebuildable. An absolute path that resolves OUTSIDE the root is refused exactly as
+   before, and the refusal now names the root it was tested against;
 4. run `code.argv` in the worktree, in a fresh environment from the committed uv.lock (`--venv
    fresh`, offline) or the checkout's own (`--venv shared`);
 5. compare the rebuilt result with RESULT.json field by field, ignoring only `date` and the
@@ -46,6 +52,13 @@ rebuild with the reason:
    Whatever was set aside is printed with the reason (`ignored_because`), and `comparison_reading` is
    the one sentence that says whether anything was: "0 differences" and "0 differences after setting
    aside N leaves" are different claims and the second is never printable as the first.
+
+Two holes in step 4's read reconciliation were measured by `lane-silencerebuild` on 2026-10-03 and are
+closed in `reads_against_declared`: a RELATIVE read was resolved against the TOOL'S working directory
+and then dropped as not under `data/` (26 of silenceragree's 3,340 recorded reads, silently, two of
+which the manifest declared and which were then reported never opened), and a run that read back ITS OWN
+OUTPUT was refused a verdict before a single leaf was compared, though the worktree is checked to have
+held nothing at that path before the command ran.
 """
 
 from __future__ import annotations
@@ -452,7 +465,12 @@ FRAMEWORK_READS = ("data/results_legacy.txt",)
 
 
 def reads_against_declared(
-    worktree: Path, manifest: Any, recorded: list[str], stores: list[str]
+    worktree: Path,
+    manifest: Any,
+    recorded: list[str],
+    stores: list[str],
+    output: str | None = None,
+    output_held_bytes_before_the_run: bool | None = None,
 ) -> dict[str, Any]:
     """Which recorded reads the manifest declares, and which it does not.
 
@@ -460,36 +478,93 @@ def reads_against_declared(
     and the standard library are not a result's inputs. A read through a linked store resolves OUTSIDE
     the worktree, so the store roots are passed in and matched too -- without them every store read
     would be dropped as "not under data/" and the reconciliation would be vacuous.
+
+    A RELATIVE read is resolved against the directory the CHILD was launched in, not this tool's own.
+    Until 2026-10-03 every recorded path went through `os.path.realpath` here, which resolves a relative
+    path against the CWD OF THE TOOL, so a read the rebuilt command made as `data/results/x.json`
+    resolved into whatever checkout the tool happened to be run from and was then dropped as "not under
+    data/" -- silently, with nothing in the report saying a path had been discarded. Measured on
+    silenceragree's rebuild: 26 of 3,340 recorded reads were relative, all 26 were missing from
+    `reads_under_data`, and the remaining 3,283 absolute data reads equalled `reads_under_data_count`
+    exactly. Two of those 26 were cCRE members the manifest declares, which the reconciliation then
+    reported as DECLARED BUT NEVER OPENED -- a false report about the record, from the same class of
+    hole as the 194th-file blindness this reconciliation was built to close.
+
+    WHAT THE RESOLUTION STILL CANNOT DO, stated rather than left to be inferred: the child's working
+    directory is the one this tool launched it in. A command that `chdir`s and then opens a relative
+    path resolves somewhere this tool does not know, and such a path lands in
+    `relative_reads_that_are_not_there` instead of being dropped, so a wrong resolution is a named
+    figure in the report rather than silence.
+
+    `output` is the result path this run WRITES. A read of it is not a read of unpinned bytes when the
+    path held nothing before the command ran, which is why the exemption is conditional on
+    `output_held_bytes_before_the_run` being measured False by the caller and is never taken on None.
+    The exemption is ONE EXACT PATH: not a prefix, not `data/results/`, not the name with another
+    suffix. `link_machine_local_inputs` already refuses to link that same path over
+    (`not_linked_because_it_is_the_output`); this is its counterpart on the read side.
     """
     declared_files, declared_dirs = mf.declared_inputs(manifest)
+    child_cwd = str(worktree.resolve())
     data = str((worktree / "data").resolve())
     under: list[str] = []
+    relative: list[str] = []
+    relative_under: list[str] = []
+    relative_missing: list[str] = []
     for raw in recorded:
-        real = os.path.realpath(raw)
+        is_relative = not os.path.isabs(raw)
+        if is_relative:
+            relative.append(raw)
+            real = os.path.realpath(os.path.join(child_cwd, raw))
+        else:
+            real = os.path.realpath(raw)
         rel = None
         if real == data or real.startswith(data + os.sep):
-            rel = os.path.relpath(real, str(worktree.resolve()))
+            rel = os.path.relpath(real, child_cwd)
         else:
             for store in stores:
                 if real == store or real.startswith(store + os.sep):
                     rel = "data/" + os.path.relpath(real, os.path.dirname(store))
                     break
         if rel is not None:
-            under.append(rel.replace(os.sep, "/"))
+            rel = rel.replace(os.sep, "/")
+            under.append(rel)
+            if is_relative:
+                relative_under.append(rel)
+        elif is_relative and not os.path.exists(real):
+            relative_missing.append(raw)
     under = sorted(set(under))
     framework = [p for p in under if p in FRAMEWORK_READS]
     rest = [p for p in under if p not in FRAMEWORK_READS]
-    undeclared = sorted(
+    undeclared_including_the_output = sorted(
         p
         for p in rest
         if p not in declared_files
         and not any(p == d or p.startswith(d.rstrip("/") + "/") for d in declared_dirs)
     )
+    own_output = [
+        p
+        for p in undeclared_including_the_output
+        if output is not None and p == output and output_held_bytes_before_the_run is False
+    ]
+    undeclared = [p for p in undeclared_including_the_output if p not in own_output]
     return {
         "reads_under_data": under,
         "reads_under_data_count": len(under),
         "declared": sorted(declared_files),
         "declared_directories": sorted(declared_dirs),
+        "relative_reads_recorded": sorted(set(relative)),
+        "relative_reads_recorded_count": len(set(relative)),
+        "relative_reads_resolved_under_data": sorted(set(relative_under)),
+        "relative_reads_resolved_under_data_count": len(set(relative_under)),
+        "relative_reads_resolved_against": child_cwd,
+        "relative_reads_that_are_not_there": sorted(set(relative_missing)),
+        "relative_reads_because": (
+            "a relative read is resolved against the directory the child was launched in. Before "
+            "2026-10-03 it was resolved against THIS TOOL'S working directory and then dropped as not "
+            "under data/, which lost 26 of silenceragree's 3,340 recorded reads without saying so. A "
+            "path in relative_reads_that_are_not_there resolved to nothing, which is what a command "
+            "that chdir'd would leave behind: the loss is named, not silent"
+        ),
         "framework_reads_ignored": framework,
         "framework_reads_ignored_because": (
             "read by save_result itself on every registry write, exempt by exact path. The loss, "
@@ -499,7 +574,17 @@ def reads_against_declared(
         if framework
         else "nothing was exempted",
         "read_but_not_declared": undeclared,
-        "every_read_is_declared": not undeclared,
+        "read_but_not_declared_because_it_is_this_run_s_own_output": own_output,
+        "own_output_exempt_because": (
+            f"{own_output[0]} is the file this run writes and the worktree held nothing at that path "
+            "before the command ran, so those bytes are this run's product and not an input it was "
+            "computed from. One exact path, and only on a measured absence: if the path had existed "
+            "beforehand the read would be of bytes no sha256 pins and the verdict would be withheld"
+        )
+        if own_output
+        else "nothing was exempted as this run's own output",
+        "every_read_is_declared": not undeclared_including_the_output,
+        "every_read_is_declared_or_is_this_run_s_own_output": not undeclared,
     }
 
 
@@ -916,6 +1001,38 @@ def declared_paths(inputs: Any) -> list[str]:
     return out
 
 
+def repo_relative_declaration(path: str, root: Path) -> str | None:
+    """The repository-relative form of a declared input path, or None when it is outside `root`.
+
+    `genomeos.manifest.input_entry` records `str(path)` verbatim where its sibling `files_entry` puts
+    every member through `_repo_relative`, so 9 of the 212 committed results carrying
+    `result_manifest.inputs` declare an input as an ABSOLUTE path -- `scripts/silenceragree_run.py`
+    passes `ROOT / REGISTRATION`. That file is inside the paid study's frozen import closure and cannot
+    be edited, so the declaration is absorbed HERE instead: an absolute path that resolves inside the
+    repository root names a file this checkout holds, and naming it relatively is all the writer failed
+    to do.
+
+    The test is RESOLUTION, not a string prefix, and the difference is not cosmetic: `root` itself is a
+    symlinked path on this machine (/tmp, /var and the per-session scratch directories all resolve
+    elsewhere), a declaration can carry `..`, and a worktree under /private/var is not the prefix its
+    unresolved spelling suggests. Both sides go through `os.path.realpath` and the boundary is a path
+    SEPARATOR, so a sibling directory whose name merely starts with the root's (a second checkout at
+    `GenomeOS-old`) is outside and stays outside.
+
+    A relative declaration is returned unchanged, except one that climbs out of the repository with
+    `..`, which is outside by the same rule.
+    """
+    if not os.path.isabs(path):
+        return None if ".." in Path(path).parts else path
+    real = os.path.realpath(path)
+    real_root = os.path.realpath(str(root))
+    if real == real_root:
+        return "."
+    if real.startswith(real_root + os.sep):
+        return os.path.relpath(real, real_root).replace(os.sep, "/")
+    return None
+
+
 def git_ignored(root: Path, paths: list[str]) -> set[str]:
     """Which of `paths` git ignores in `root`: the machine-local ones, answered for all of them at once.
 
@@ -973,6 +1090,10 @@ def link_machine_local_inputs(
     afterwards against the sha256 the manifest declares, so a machine-local input whose bytes have since
     changed is a reported difference and not a silent pass. `output` is the result the rebuild will write,
     which is this run's product rather than its input and is never linked over.
+
+    An input declared as an ABSOLUTE path that resolves inside this repository is linked by its
+    repository-relative form (`repo_relative_declaration`), because that is the file it names; one that
+    resolves outside is not a path this checkout holds and is left for `_check_one_path` to refuse.
     """
     out: dict[str, Any] = {
         "linked": [],
@@ -986,12 +1107,11 @@ def link_machine_local_inputs(
     }
     want = sorted(
         {
-            p
-            for p in declared_paths(inputs)
-            if not os.path.isabs(p)
-            and ".." not in Path(p).parts
-            and (p == MACHINE_LOCAL_DIR or p.startswith(MACHINE_LOCAL_DIR + "/"))
-            and not (worktree / p).exists()
+            rel
+            for rel in (repo_relative_declaration(p, root) for p in declared_paths(inputs))
+            if rel is not None
+            and (rel == MACHINE_LOCAL_DIR or rel.startswith(MACHINE_LOCAL_DIR + "/"))
+            and not (worktree / rel).exists()
         }
     )
     ignored = git_ignored(root, want)
@@ -1059,6 +1179,9 @@ def check_inputs(
         "entries": [],
         "unavailable": [],
         "checked_outside_the_worktree": [],
+        # an absolute declaration read by its repository-relative form: named here, never implied, so a
+        # reader can see which inputs were checked through a path the writer did not record
+        "relativised_absolute_declarations": [],
     }
     local = machine_local or set()
     if not isinstance(inputs, list) or not inputs:
@@ -1086,7 +1209,7 @@ def check_inputs(
                 "written, so there is nothing for a rebuild to check these bytes against"
             )
         else:
-            _check_one_path(worktree, i, linked, out, local)
+            _check_one_path(worktree, i, linked, root, out, local)
     return out
 
 
@@ -1180,28 +1303,56 @@ def _check_group(
 
 
 def _check_one_path(
-    worktree: Path, i: dict[str, Any], linked: list[str], out: dict[str, Any], local: set[str] | None = None
+    worktree: Path,
+    i: dict[str, Any],
+    linked: list[str],
+    root: Path,
+    out: dict[str, Any],
+    local: set[str] | None = None,
 ) -> None:
     """One input recorded as a single path, which may be a file or a directory."""
     path = i["path"]
     outside: dict[str, Any] | None = None
+    read_as = path
     if os.path.isabs(path):
         # `worktree / path` leaves the worktree when path is absolute, so the bytes hashed would not be
         # the bytes the rebuild reads -- except under data/reference, data/knowledge and data/cache,
         # which are linked into the worktree and so are the same file.
         real = str(Path(path).resolve())
         store = next((s for s in linked if real == s or real.startswith(s + os.sep)), None)
-        if store is None:
-            out["entries"].append(
-                {"path": path, "sha256_matches": False, "problem": "absolute, outside the linked stores"}
+        if store is not None:
+            outside = {"path": path, "linked_store": store}
+        else:
+            # Since 2026-10-03: an absolute declaration that RESOLVES INSIDE the repository root names a
+            # file this checkout does hold, so it is read by its repository-relative form instead of
+            # being refused. The refusal's own reason -- "the bytes there are not the bytes this worktree
+            # reads" -- stopped applying to that case the moment the path was known to be in-repo. One
+            # resolved in-repo check and nothing wider: a path outside the root is still refused below,
+            # and the root tested against is named in the refusal, because the same declaration is
+            # in-repo when the tool runs from the checkout and out-of-repo when it runs from a worktree.
+            rel = repo_relative_declaration(path, root)
+            if rel is None:
+                out["entries"].append(
+                    {"path": path, "sha256_matches": False, "problem": "absolute, outside the linked stores"}
+                )
+                out["unavailable"].append(
+                    f"input {path} is an absolute path outside the linked data stores and outside the "
+                    f"repository root {os.path.realpath(str(root))}: the bytes there are not the bytes "
+                    "this worktree reads, so it cannot be checked against this manifest"
+                )
+                return
+            read_as = rel
+            out["relativised_absolute_declarations"].append(
+                {
+                    "declared": path,
+                    "read_as": rel,
+                    "because": (
+                        "it resolves inside the repository root, so it names a file this checkout holds; "
+                        "genomeos.manifest.input_entry records str(path) where files_entry relativises"
+                    ),
+                }
             )
-            out["unavailable"].append(
-                f"input {path} is an absolute path outside the linked data stores: the bytes there are "
-                "not the bytes this worktree reads, so it cannot be checked against this manifest"
-            )
-            return
-        outside = {"path": path, "linked_store": store}
-    p = worktree / path
+    p = worktree / read_as
     if not p.exists():
         # `files` on an entry with no member list reads as a group recorded under a label before
         # files_entry named its members; saying so is the difference between an input that is missing
@@ -1233,7 +1384,9 @@ def _check_one_path(
     ok = digest == i.get("sha256")
     out["files_opened"] += count
     entry = {"path": path, "sha256_matches": ok, "bytes": size, "files_opened": count}
-    if path in (local or set()):
+    if read_as != path:
+        entry["read_as"] = read_as
+    if read_as in (local or set()):
         # opened and hashed, and counted here, whether or not it matched: a machine-local input whose
         # bytes differ is still an input this rebuild took from this machine, and the difference is
         # reported below. The count says what the rebuild rested on, not what passed.
@@ -1332,6 +1485,8 @@ def rebuild(
         ]
         if found["checked_outside_the_worktree"]:
             report["checked_outside_the_worktree"] = found["checked_outside_the_worktree"]
+        if found["relativised_absolute_declarations"]:
+            report["relativised_absolute_declarations"] = found["relativised_absolute_declarations"]
         report["unavailable"] += found["unavailable"]
         if report["unavailable"]:
             return {**report, "rebuilt": False}
@@ -1373,6 +1528,24 @@ def rebuild(
         # fe0880a still names genomeos 0.9.0 against pyproject's 1.0.0) and the rewritten lock makes
         # the second checkout dirty, which the rebuilt manifest then records as a one-byte difference.
         env.update(UV_FROZEN="1", UV_OFFLINE="1")
+        # Measured HERE, before the command runs, because the command is about to write this path and
+        # after that no observation can tell what was there first. A run that reads back the result it
+        # writes -- `save_result` does, on the registration results -- was refused a verdict outright
+        # until 2026-10-03, before a single leaf was compared. The read is exempt only on this measured
+        # absence: if the worktree already held bytes at that path, the run read bytes no sha256 pins
+        # and the refusal stands.
+        name = original.get("result") or result.stem
+        output_rel = f"data/results/{name}.json"
+        output_held_bytes_before_the_run = (wt / output_rel).exists()
+        report["output_of_this_run"] = {
+            "path": output_rel,
+            "held_bytes_in_the_worktree_before_the_command_ran": output_held_bytes_before_the_run,
+            "measured": "by os.path.exists in the worktree immediately before the command was started",
+            "what_it_decides": (
+                "whether a recorded read of that one exact path is this run's own product (exempt) or a "
+                "read of pre-existing bytes pinned by no sha256 (no verdict)"
+            ),
+        }
         run = subprocess.run(["uv", "run", "python", *argv], cwd=wt, env=env, capture_output=True, text=True)
         report["exit"] = run.returncode
         report["stdout_tail"] = run.stdout[-1500:]
@@ -1385,7 +1558,14 @@ def rebuild(
         # what the run READ, from the same audit hook that refused its writes
         recorded = guard.reads_recorded(guard_dir)
         report["reads_recorded"] = recorded
-        report["reads_reconciled"] = reads_against_declared(wt, m, recorded["paths"], stores)
+        report["reads_reconciled"] = reads_against_declared(
+            wt,
+            m,
+            recorded["paths"],
+            stores,
+            output=output_rel,
+            output_held_bytes_before_the_run=output_held_bytes_before_the_run,
+        )
         if not armed_pids:
             report["unavailable"].append(
                 "the write guard did not arm in the rebuilt command's process, so the command ran with "
