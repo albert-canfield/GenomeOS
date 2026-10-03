@@ -331,11 +331,28 @@ def test_the_nine_committed_results_that_declare_an_absolute_input_are_measured_
         ]
         if abs_paths:
             absolute[f.stem] = abs_paths
-    # every absolutely declared input in the registry points inside this repository, which is why (C)
-    # covers all of them: not one of them names another machine
-    root = Path(__file__).resolve().parent.parent
-    outside = [
-        p for paths in absolute.values() for p in paths if mr.repo_relative_declaration(p, root) is None
-    ]
-    assert outside == [], f"an absolute declaration outside this repository: {outside[:3]}"
     assert len(absolute) >= 9, f"{len(absolute)} results declare an absolute input, 9 were measured"
+    every = [p for paths in absolute.values() for p in paths]
+
+    # Every absolutely declared input in the registry points inside the MAIN checkout -- not one of
+    # them names another machine -- which is why (C) covers all of them there. The main checkout is
+    # asked of git rather than taken from __file__, because __file__ is the WORKTREE when this runs in
+    # one, and that distinction is the whole of the limitation pinned below.
+    common = subprocess.run(
+        ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    main_root = Path(common).parent
+    outside = [p for p in every if mr.repo_relative_declaration(p, main_root) is None]
+    assert outside == [], f"an absolute declaration outside the main checkout: {outside[:3]}"
+
+    # AND THE LIMITATION, pinned rather than described: the repository root of a WORKTREE is not the
+    # root the declaration was written against, so against a worktree's root every one of these
+    # declarations is outside and (C) does not relativise it. A rebuild of these results is therefore
+    # unblocked only when the tool is run from the checkout the writer ran in, and NOT in CI, in a
+    # verdict worktree or in the store-free pre-push leg. The full gate on 2026-10-03 caught this
+    # test asserting the opposite from a worktree, which is how the limitation came to be measured.
+    in_a_worktree = main_root / ".claude" / "worktrees" / "any-lane"
+    assert [p for p in every if mr.repo_relative_declaration(p, in_a_worktree) is not None] == []
