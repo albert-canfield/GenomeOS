@@ -314,8 +314,20 @@ def test_the_import_path_assertion_REFUSES_a_tree_that_carries_no_source(tmp_pat
     got = fp.assert_import_path(ROOT, tmp_path)
     assert got["ok"] is False
     assert "REFUSED" in got["why"]
-    assert str(ROOT) in got["imported"]
     assert str(tmp_path) in got["why"]
+    # The load-bearing assertion, and the ONLY form of it that holds in every tree. What matters is
+    # that the import did NOT come from the tree being excluded -- that is precisely why the leg must
+    # refuse. An earlier form asserted `str(ROOT) in got["imported"]`, meaning "the fallback resolved
+    # under this checkout", which quietly assumed THIS TREE IS THE EDITABLE INSTALL. That is false in
+    # any worktree, including the push gate's own at $TMPDIR/genomeos-push.*, where it reddened the
+    # gate and blocked the push: there ROOT is the worktree while the fallback resolves to the main
+    # checkout. Asserting the editable path instead fails the other way round, because the in-process
+    # import resolves to the worktree and the subprocess fallback to the main checkout, so the two are
+    # legitimately different paths. Neither absolute path is an invariant; this negative one is.
+    assert str(tmp_path) not in got["imported"], (
+        "the fallback import resolved INSIDE the tree under test, so this plant proves nothing: the "
+        "assertion would be refusing a tree that really did carry its own source"
+    )
 
 
 def test_run_pytest_calls_a_non_zero_exit_red_and_an_empty_set_nothing_to_run(tmp_path: Path) -> None:
