@@ -1527,8 +1527,18 @@ class TestAnUncommittedSignoffAuthorisesNothing:
         """A mechanism that exists but is not wired is indistinguishable from one that does not exist.
 
         So the subject here is the WIRING, not the check: may_send is driven to the sign-off clause with
-        every earlier clause satisfied, and it must refuse because data/ledgers/astroreg2_signoff.jsonl
-        has no committed copy at HEAD. If the call were removed from may_send, this returns and sends.
+        every earlier clause satisfied, and it must refuse because the sign-off record has no committed
+        copy at HEAD. If the call were removed from may_send, this returns and sends.
+
+        THE RECORD IS A PLANT AND NOT THE REAL ONE, and that is the whole correction here. This test
+        used to drive the clause against the real `data/ledgers/astroreg2_signoff.jsonl` and relied on
+        it being ABSENT FROM THE REPOSITORY -- so the day run 2's sign-off was committed (`f029d47`),
+        the committed check started passing, `may_send` walked on to the next clause, and the test went
+        red reporting "the governing sign-off line covers run 2, not run 1". It was asserting the
+        wiring by way of a fact about the repository's contents, which the first real sign-off was
+        always going to falsify. `SIGNOFF_RECORD` is read from the module at call time by both
+        `check_signoff_is_committed` and `recorded_signoff`, so pointing it at a repo-relative path
+        that no commit holds tests the wiring against a condition this test OWNS.
         """
         reg = tmp_path / "reg.json"
         reg.write_text("{}")
@@ -1541,6 +1551,8 @@ class TestAnUncommittedSignoffAuthorisesNothing:
             "ASTROREG2_AUTHORISATIONS",
             {1: {"words": "<run 1's words>", "requests": astrorun.ASTROREG2_CAP, "consumed": False}},
         )
+        absent = Path("data/ledgers/astroreg2_signoff_PLANT_absent.jsonl")
+        monkeypatch.setattr(astrorun, "SIGNOFF_RECORD", absent)
         with pytest.raises(astrorun.SendRefusedError) as exc:
             astrorun.may_send(
                 plan=plan,
@@ -1553,7 +1565,10 @@ class TestAnUncommittedSignoffAuthorisesNothing:
                 committed=lambda p: True,
             )
         said = str(exc.value)
-        assert "astroreg2_signoff.jsonl" in said
+        # The PLANTED name, so the refusal is demonstrably about the record this test controls and not
+        # about whatever the repository happens to hold today.
+        assert absent.as_posix() in said, said
+        assert "astroreg2_signoff" in said
         assert "no committed copy at HEAD" in said, said
         assert "An uncommitted sign-off authorises nothing" in said
 
