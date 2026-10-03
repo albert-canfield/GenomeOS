@@ -30,7 +30,12 @@ tmp=""
 held=""
 announced=""
 
-# shellcheck disable=SC2329  # invoked by the trap below, which shellcheck cannot see
+# shellcheck disable=SC2329,SC2317
+# Both for one reason: this function is invoked by the `trap` below, and no shellcheck version
+# follows a trap. 0.11.0 (the pin scripts/check.sh and ci.yml both name) calls the function itself
+# never invoked, SC2329; 0.9.0, which the ubuntu-24.04 runner ships, instead calls four commands
+# inside its body unreachable, SC2317 at lines 35, 36, 37 and 40. Same false positive seen from two
+# versions, so both are named and the reason is stated rather than the code being bare-disabled.
 cleanup() {
   if [ -n "$tmp" ]; then
     # the linked stores are at 0444 and their directories at 0555, so `rm -rf` is refused without this.

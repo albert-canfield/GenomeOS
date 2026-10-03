@@ -41,7 +41,26 @@ jobs:
         run: |
           echo "::error::the scheduled check ran on ${GITHUB_REF}, not refs/heads/dev; GitHub runs schedules on the default branch, and it is no longer dev"
           exit 1
+      # fetch-depth: 0, and the reason is the whole of 2026-10-02's red (tests/test_ci_contract.py
+      # guards it). actions/checkout defaults to depth 1, so until now NO job had any history, and a
+      # growing family of tests reads the record BY REVISION: tests/test_crispri_published.py's five
+      # setups run `git show a39073d:data/results/crispri_published.json`, tests/test_respmap_v2.py
+      # pins `ad07bf5^` through `carriers_in_tree`, the registration-lineage guards do the same, and
+      # scripts/entry_script_census.py walks `git log -L`. Every one of them fails with exit 128 on a
+      # depth-1 clone. The run of 12:08 UTC shows the five as ERRORS at SETUP.
+      #
+      # The alternative considered and REJECTED: have each such test skip by name on a shallow clone.
+      # That is this project's precedent for an environment-dependent test, and it is wrong here. Those
+      # tests exist to pin a published claim to the commit it was made at; a suite that silently skips
+      # its pins in the one place that is meant to be the real verdict reports green over exactly the
+      # claims nobody checked, which is the failure scripts/check.sh's own shellcheck leg is written to
+      # avoid ("a check that quietly skips is worse than no check"). A skip is also right only when the
+      # thing is genuinely ABSENT from the environment: git-ignored data, a paid key, the network.
+      # History is not absent here -- it is one flag away, 53 MiB over 1,437 commits, fetched once per
+      # job. And the skip list would need maintaining forever: tonight alone added three more readers.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
@@ -51,12 +70,31 @@ jobs:
         run: uv run ruff check . && uv run ruff format --check .
       # The shell scripts carry the commit and push guards and nothing linted them until
       # 2026-10-02: ruff is given a file list, and a .sh path named there is read as Python and
-      # fails as one. GitHub's Ubuntu runners ship shellcheck, so this installs nothing. Locally
-      # scripts/check.sh uses the runner's equivalent, a pinned PyPI wheel fetched on demand and
-      # deliberately absent from pyproject: shellcheck is GPL-3.0 and this project's dependencies
-      # are permissive-only, so it stays a dev tool that is never shipped or locked.
+      # fails as one. The wheel is pinned and deliberately absent from pyproject: shellcheck is
+      # GPL-3.0 and this project's dependencies are permissive-only, so it stays a dev tool that is
+      # never shipped or locked.
+      #
+      # THE PIN IS THE POINT, and it is not a severity setting. This step used to run the runner
+      # image's `/usr/bin/shellcheck`, and the two checkers were DIFFERENT PROGRAMS: ubuntu-24.04
+      # ships shellcheck 0.9.0-1 (actions/runner-images Ubuntu2404-Readme.md), while scripts/check.sh
+      # fetches shellcheck-py==0.11.0.1, i.e. 0.11.0. Neither run set a `--severity`; both default to
+      # `style`, the lowest, so both reported everything they had. What differed was WHAT THEY HAVE.
+      # On this tree 0.9.0 emits SC2015 at scripts/commit_own.sh:101 and SC2317 at
+      # scripts/pre-push.sh:35,36,37,40 and exits 1; 0.11.0 emits nothing and exits 0 -- measured,
+      # both on the same bytes. So local green genuinely was not CI green, and the cause was an
+      # unpinned linter in CI: a runner-image bump could redden this gate with no commit at all, and
+      # on 2026-10-02 the effect was worse than red -- `test` died here and never ran pytest, so the
+      # whole suite went unrun in that job and the run reported a lint failure as its only finding.
+      # Naming the same wheel scripts/check.sh names is what makes the two runs the same check, and
+      # tests/test_ci_contract.py fails if the two strings ever drift apart again. The version is
+      # printed so a future reader of this log does not have to infer it, which is what this cost.
+      #
+      # The two findings are fixed in the scripts as well, so `scripts/*.sh` is clean under 0.9.0 and
+      # under 0.11.0 both. Pinning alone would have hidden them rather than resolved them.
       - name: Lint the shell scripts
-        run: shellcheck scripts/*.sh
+        run: |
+          uv run --quiet --with shellcheck-py==0.11.0.1 --no-project -- shellcheck --version
+          uv run --quiet --with shellcheck-py==0.11.0.1 --no-project -- shellcheck scripts/*.sh
       - name: Cache reference data
         uses: actions/cache@v4
         with:
@@ -75,8 +113,14 @@ jobs:
           [ -s data/knowledge/go-basic.obo ] || curl -sL --fail -o data/knowledge/go-basic.obo https://current.geneontology.org/ontology/go-basic.obo
           [ -s data/knowledge/goa_human.gaf.gz ] || curl -sL --fail -o data/knowledge/goa_human.gaf.gz https://current.geneontology.org/annotations/goa_human.gaf.gz
           [ -s data/knowledge/cl-basic.obo ] || curl -sL --fail -o data/knowledge/cl-basic.obo http://purl.obolibrary.org/obo/cl/cl-basic.obo
+      # --no-fold-skipped, found by lane-skipids and credited to it. `-rs` alone prints pytest's
+      # FOLDED summary, one line per (file, line, reason) -- `SKIPPED [3] tests/test_x.py:12: reason`
+      # -- which is a count and a location and never an id, so three parametrised skips collapse into
+      # one line and no id appears anywhere. The whole purpose of `-rs` here is that what CI did not
+      # run is on the record rather than invisible, and folded it is only half on the record.
+      # tests/test_ci_contract.py plants a parametrised skip and fails if its id is absent.
       - name: Test
-        run: uv run pytest -q -rs
+        run: uv run pytest -q -rs --no-fold-skipped
       - name: BioLang programs test themselves
         run: uv run bio test data/demo genomeos/std data/organisms
 
@@ -103,7 +147,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
+      # fetch-depth: 0 for the reason argued at the `test` job's checkout. This is the job the five
+      # SETUP errors were actually recorded in, because `test` died at the shellcheck step before
+      # pytest ran at all.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
@@ -127,8 +176,11 @@ jobs:
           [ -s data/knowledge/go-basic.obo ] || curl -sL --fail -o data/knowledge/go-basic.obo https://current.geneontology.org/ontology/go-basic.obo
           [ -s data/knowledge/goa_human.gaf.gz ] || curl -sL --fail -o data/knowledge/goa_human.gaf.gz https://current.geneontology.org/annotations/goa_human.gaf.gz
           [ -s data/knowledge/cl-basic.obo ] || curl -sL --fail -o data/knowledge/cl-basic.obo http://purl.obolibrary.org/obo/cl/cl-basic.obo
+      # --no-fold-skipped for the reason given at `test`'s pytest step. It matters most here: this is
+      # the job whose declared purpose is that a skip says which extra it is missing, and a folded
+      # summary cannot say which test that was.
       - name: Test
-        run: uv run --no-sync pytest -q -rs
+        run: uv run --no-sync pytest -q -rs --no-fold-skipped
       # pyproject's rule, enforced where it can be: "the engine and the CLI must import with no
       # third-party package present". `bio` is an entry point of that engine, and here it has nothing
       # but the dev group to import from.
@@ -149,7 +201,12 @@ jobs:
     timeout-minutes: 15
     continue-on-error: true
     steps:
+      # fetch-depth: 0 for the reason argued at the `test` job's checkout. It runs pytest too, over
+      # three named files, and the guard that refuses a shallow checkout has to hold wherever pytest
+      # runs rather than in two jobs out of three.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
@@ -159,4 +216,7 @@ jobs:
         env:
           GENOMEOS_LIVE: "1"
           GENOMEOS_NET: "1"
-        run: uv run pytest -q -rs tests/test_attribution.py tests/test_variation.py tests/test_molecules.py
+        # --no-fold-skipped for the reason given at `test`'s pytest step: these three readers are
+        # gated on env vars, so a skip here is the normal outcome and reading which one skipped is
+        # the entire output of the job.
+        run: uv run pytest -q -rs --no-fold-skipped tests/test_attribution.py tests/test_variation.py tests/test_molecules.py

@@ -98,7 +98,11 @@ esac
 msg_mtime=$(mtime "$msg_file")
 oldest=""
 while IFS= read -r changed; do
-  [ -n "$changed" ] && [ -f "$changed" ] || continue
+  # Written as an explicit `if` rather than `[ A ] && [ B ] || continue`. The two are equivalent
+  # here, but shellcheck 0.9.0 -- which is what the ubuntu-24.04 runner ships -- flags the second as
+  # SC2015, and in CI that is a fatal lint, not a note. Said positively: skip a line that is empty
+  # or is not a file that exists.
+  if [ -z "$changed" ] || [ ! -f "$changed" ]; then continue; fi
   t=$(mtime "$changed")
   if [ -z "$oldest" ] || [ "$t" -lt "$oldest" ]; then oldest="$t"; fi
 done <<EOF
