@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+# Part of the GenomeOS application; see LICENSING.md.
 """What every number in a hand-authored BioLang program rests on.
 
 This module holds the population, the scoped fields and the classification of a census of number

@@ -17,6 +17,7 @@ import copy
 import hashlib
 import itertools
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -24,9 +25,9 @@ import pytest
 
 from genomeos import manifest as mf
 from genomeos.ir import Action, EvidenceKind
-from genomeos.lang import rule_evidence_tier as ret
-from genomeos.lang import rule_number_sources as rns
 from genomeos.lang.parser import parse_file
+from genomeos.provenance import rule_evidence_tier as ret
+from genomeos.provenance import rule_number_sources as rns
 from genomeos.runtime.grn import NetworkRuntime
 from genomeos.runtime.uncertainty import UncertaintyReport, report_for_network
 
@@ -193,9 +194,10 @@ def test_P4_no_runtime_module_can_even_read_the_tier(entry):
     """Stronger than a passing simulation: it holds for inputs nobody ran. If the tier is ever made
     to gate, this test is what fails."""
     closure = mf.counting_path(entry, ROOT)
-    assert "genomeos/lang/rule_evidence_tier.py" not in closure
+    assert "genomeos/provenance/rule_evidence_tier.py" not in closure
     # and the one-way direction is the point: the tier module does not import the runtime either
-    assert "genomeos/runtime/grn.py" not in mf.counting_path("genomeos/lang/rule_evidence_tier.py", ROOT)
+    tier_path = "genomeos/provenance/rule_evidence_tier.py"
+    assert "genomeos/runtime/grn.py" not in mf.counting_path(tier_path, ROOT)
 
 
 # --- 6. P6: the coherence rule, validated against the only adjudication that exists ----------------
@@ -312,7 +314,7 @@ def test_the_proposal_has_no_code_path_that_writes_a_program():
     """Belt and braces: no `open(..., "w")`, no `write_text` and no `.bio` write anywhere in the
     proposal's own three files."""
     for rel in (
-        "genomeos/lang/rule_evidence_tier.py",
+        "genomeos/provenance/rule_evidence_tier.py",
         "scripts/rule_evidence_tier_cost.py",
         "scripts/rule_evidence_tier_register.py",
     ):
@@ -355,23 +357,53 @@ def test_the_registration_does_not_restate_the_censuss_counts():
 # --- 10. the adoption cost, re-derived ---------------------------------------------------------------
 
 
+#: Where the 24 git-ignored compiled chromosomes live. Named as a store rather than counted, so the
+#: marker below skips BY NAME in a checkout that does not have them.
+GENERATED_STORE = "data/knowledge/compiled"
+
+
+def _tracked_bio() -> set[str]:
+    """Every `.bio` path git tracks. A count over these is the same in every checkout."""
+    out = subprocess.run(
+        ["git", "-C", str(ROOT), "ls-files", "--", "*.bio"], capture_output=True, text=True, check=True
+    )
+    return {line for line in out.stdout.splitlines() if line}
+
+
 def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported():
     """The figures this proposal reports, re-derived from the corpus every run. The generated half is
-    a 399 MB line scan and is not re-derived here; `--scan` does it."""
+    a 399 MB line scan and is not re-derived here; `--scan` does it.
+
+    SPLIT 2026-10-03, and the split is the finding. `cost()` counts the FILESYSTEM, so
+    `programs_total` was 67 on the laptop the figure was pinned on and 43 in CI, where
+    `data/knowledge/compiled`'s 24 git-ignored chromosomes do not exist: `ef99f3c` was green here and
+    red in both CI jobs from the moment it landed. Neither number was wrong - the ASSERTION was, for
+    claiming a machine. So the tracked counts are asserted here, unconditionally and identically
+    everywhere, and the local total is asserted in the test below under `needs_local_data`.
+
+    Every hand-authored figure stays unconditional, and the reason is checked rather than assumed:
+    all 33 hand-authored programs are TRACKED, which the first assertion measures. If one ever is
+    not, that assertion fails and says so instead of letting a hand-authored figure drift with the
+    machine - which is the whole class of defect this split is undoing.
+    """
     c = cost_script.cost(scan_generated=False)
-    # 2026-10-03: the GENERATED half grew by one, because lane-headerfix added
-    # data/organisms/human/noncoding_chr21_v2.bio -- v1 regenerated with the corrected cell-sentence
-    # header and v1's pinned bytes left intact. So programs_total went 66 -> 67 and
-    # programs_generated 33 -> 34, and NOT ONE HAND-AUTHORED FIGURE MOVED: 33 programs, 22 written
-    # rules, 41 compiled, 19 parser-synthesised, 20 with tiered numbers, 60 slots, 7 programs with at
-    # least one rule, all unchanged below. This proposal's adoption cost is about the hand-authored
-    # corpus -- the test's own name says so -- so the cost it reports is exactly what it was.
-    # The relationship is asserted rather than only the totals, so a program added on either side
-    # cannot leave these three disagreeing again without saying which side it joined.
+    tracked = _tracked_bio()
+    hand = [f for f in c["files"] if f["kind"] == "hand_authored"]
+    untracked_hand = sorted(f["path"] for f in hand if f["path"] not in tracked)
+    assert untracked_hand == [], (
+        "a hand-authored program git does not track makes every hand-authored figure below a fact "
+        f"about this machine: {untracked_hand}"
+    )
+    tracked_files = [f for f in c["files"] if f["path"] in tracked]
+    tracked_generated = [f for f in tracked_files if f["kind"] == "generated"]
+    # the repository's own corpus: 43 = 33 hand-authored + 10 generated-and-committed
+    assert len(tracked_files) == 43
+    assert len(tracked_generated) == 10
+    assert len(tracked_files) == len(hand) + len(tracked_generated)
+    # the relationship is asserted and not only the totals, so a program added on either side cannot
+    # leave these disagreeing again without saying which side it joined
     assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
-    assert c["programs_total"] == 67
     assert c["programs_hand_authored"] == 33
-    assert c["programs_generated"] == 34
     assert c["rules_hand_authored_written"] == 22
     assert c["rules_hand_authored_compiled"] == 41
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
@@ -380,6 +412,67 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported():
     assert c["programs_hand_authored_with_at_least_one_rule"] == 7
     assert c["default"] == ret.NOT_ASSESSED
     assert c["rules_generated_scanned"] is None
+
+
+@pytest.mark.needs_local_data(
+    GENERATED_STORE, how="compile the chromosomes: genomeos budget --chrom chrN --bio"
+)
+def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes():
+    """The other half of the split, kept rather than lost: 67 is the right total WHERE the store is.
+
+    The 2026-10-03 figures stand unchanged in their own place. `programs_total` went 66 -> 67 and
+    `programs_generated` 33 -> 34 when lane-headerfix added
+    `data/organisms/human/noncoding_chr21_v2.bio` - v1 regenerated with the corrected cell-sentence
+    header and v1's pinned bytes left intact - and not one hand-authored figure moved.
+    """
+    c = cost_script.cost(scan_generated=False)
+    tracked = _tracked_bio()
+    paths = {f["path"] for f in c["files"]}
+    untracked = sorted(paths - tracked)
+    assert len(untracked) == 24
+    assert all(p.startswith(GENERATED_STORE + "/") for p in untracked), untracked
+    assert all(f["kind"] == "generated" for f in c["files"] if f["path"] in set(untracked))
+    assert c["programs_total"] == 67
+    assert c["programs_generated"] == 34
+    assert c["programs_total"] == len(paths & tracked) + len(untracked)
+
+
+def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_store(monkeypatch):
+    """The CI case, PROVED here instead of inferred. The corpus enumeration is injected with the
+    git-ignored store taken out - which is what a fresh checkout is - and every hand-authored figure
+    above is unchanged, which is what makes those assertions safe to keep unconditional. The total
+    comes out 43, the figure both CI jobs reported.
+
+    Injection and not deletion: nothing is removed from this machine, and `cost()` is the real one.
+    """
+    tracked = _tracked_bio()
+    real = cost_script.bio_files()
+    fresh = [p for p in real if str(p.relative_to(cost_script.ROOT)) in tracked]
+    assert len(fresh) < len(real), "this machine holds no untracked program, so this proves nothing"
+    monkeypatch.setattr(cost_script, "bio_files", lambda: fresh)
+    c = cost_script.cost(scan_generated=False)
+    assert c["programs_total"] == 43
+    assert c["programs_hand_authored"] == 33
+    assert c["programs_generated"] == 10
+    assert c["rules_hand_authored_written"] == 22
+    assert c["rules_hand_authored_compiled"] == 41
+    assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
+    assert c["rules_hand_authored_with_tiered_numbers"] == 20
+    assert c["slots_hand_authored"] == 60
+    assert c["programs_hand_authored_with_at_least_one_rule"] == 7
+    assert c["scan_calibration"]["calibrated"] is True
+
+
+def test_the_store_the_marker_names_is_git_ignored_so_the_marker_skips_and_never_raises():
+    """`needs_local_data` RAISES on a path git tracks, by design, so the name it is given has to be
+    the machine-local store and not a committed path. Asked of git, as that module asks it."""
+    sys.path.insert(0, str(ROOT / "tests"))
+    import local_data
+
+    ignored, answered_about = local_data.ignored_by_name(GENERATED_STORE)
+    assert ignored, f"git does not ignore {answered_about}, so the marker would raise rather than skip"
+    # and NOT whether the store is on this machine: that is the very kind of assertion being removed
+    # from this file today, and it would be red in CI for being true here
 
 
 def test_the_line_scan_is_calibrated_against_the_parse_before_it_is_believed():

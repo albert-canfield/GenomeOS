@@ -6,7 +6,7 @@
 
 Pre-registered in data/results/number_provenance_registration.json. The population, the scoped
 fields, the classes, the cascade, the convention tags, the citation-furniture strip and the
-denominator all come from `genomeos.lang.number_provenance` and were committed before this count.
+denominator all come from `genomeos.provenance.number_provenance` and were committed before this count.
 This script adds only what a count produces: the tallies, the per-rule table for the module the
 lane was asked about, the hand adjudication of every member of the sourced class, and the record of
 which cited sources were fetched and what each one does NOT claim.
@@ -25,14 +25,14 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.lang import number_provenance as np  # noqa: E402
+from genomeos.provenance import number_provenance as np  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
 RESULT = "number_provenance_census"
 REGISTRATION = "number_provenance_registration"
 
 OWN_CODE = (
-    "genomeos/lang/number_provenance.py",
+    "genomeos/provenance/number_provenance.py",
     "scripts/number_provenance_register.py",
     "scripts/number_provenance_census.py",
     "tests/test_number_provenance.py",

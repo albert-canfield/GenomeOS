@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """BioIR v0.4 - the Biological Intermediate Representation (v0.4 adds places: docs/BIOLANG-v0.4-ECONOMY.md).
 
 Everything the compiler emits and the VM executes is one of these types.

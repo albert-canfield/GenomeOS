@@ -14,8 +14,8 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, TypeVar
 
-from genomeos.lang import rule_number_sources as rns
-from genomeos.lang import rule_number_sources_findings as rnf
+from genomeos.provenance import rule_number_sources as rns
+from genomeos.provenance import rule_number_sources_findings as rnf
 
 REGISTRATION = Path("data/results/rule_number_sources_registration.json")
 CENSUS_RELATIVE = "data/results/rule_number_sources_census.json"

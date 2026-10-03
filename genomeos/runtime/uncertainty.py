@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Uncertainty report per biological level (task 3.5).
 
 Every simulation output carries a report saying how grounded it is at each

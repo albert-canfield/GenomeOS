@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+# Part of the GenomeOS application; see LICENSING.md.
 """PROPOSAL, registered before it is built: carry a compiled rule's CELL PROVENANCE.
 
 A compiled rule says `when: cell_type = K562`. A reader takes that as "where this rule acts". What
@@ -22,7 +23,7 @@ It edits no `.bio` file, no compiler, no IR and no grammar; it changes no cell, 
 strength and no number, and it is not a route to changing one. A provenance records how a cell got
 onto a rule and never which cell should be there. It is also not a gate: see decision 4.
 
-PAIRED WITH, NOT DUPLICATING, THE SIBLING AXIS. `genomeos.lang.rule_evidence_tier` (registration
+PAIRED WITH, NOT DUPLICATING, THE SIBLING AXIS. `genomeos.provenance.rule_evidence_tier` (registration
 `709aebc`, proposal `6150aa9`) marks what a rule's NUMBERS rest on. This marks how a rule's CELL
 was chosen. They are orthogonal: a rule can carry a measured strength and an argmax cell, or an
 author's strength and a screen's cell. The two axes share exactly one thing, the absent-default,
@@ -33,7 +34,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from genomeos.lang.rule_evidence_tier import NOT_ASSESSED as _SIBLING_NOT_ASSESSED
+from genomeos.provenance.rule_evidence_tier import NOT_ASSESSED as _SIBLING_NOT_ASSESSED
 
 # --- 1. THE AXIS ------------------------------------------------------------------------------------
 #
@@ -63,7 +64,7 @@ CLASSES: tuple[str, ...] = (
 
 #: The absent-default, and it is NOT a class on the axis: it is the absence of one. "Nobody has said
 #: how this rule's cell was chosen" and "the cell rests on the author's word" are different states of
-#: the world, and only the second is a finding. Decided by `genomeos.lang.rule_evidence_tier`
+#: the world, and only the second is a finding. Decided by `genomeos.provenance.rule_evidence_tier`
 #: (`709aebc`) for its own axis and taken from it UNCHANGED and AS THE SAME OBJECT: a second spelling
 #: of the word in this file would be a second default that could drift from the first.
 #:
@@ -311,7 +312,7 @@ PREDICTIONS: tuple[dict[str, str], ...] = (
 NOT_BLIND = (
     "before this registration was written this lane had read `genomeos/attribution/compile.py`'s two "
     "rule-emitting sites, `predict.enhancer_target.predict_target`, `measured.rule_links`, "
-    "`ir.model.Rule`, `lang.parser._check_keys`, `genomeos.lang.rule_evidence_tier` and "
+    "`ir.model.Rule`, `lang.parser._check_keys`, `genomeos.provenance.rule_evidence_tier` and "
     "`data/results/clause1_registration.json`; it had counted `rule` lines and `when: cell_type` "
     "labels in `data/organisms/human/noncoding_chr21.bio` with grep, and it had parsed that program "
     "and the tracked hand-authored programs once each to see which rules carry a cell. So the three "
@@ -423,22 +424,27 @@ def registration() -> dict[str, Any]:
 # `scripts/rule_cell_provenance_cost.py`'s output and reported, not quietly amended.
 # ====================================================================================================
 
-#: THIS MODULE IS AN UNADOPTED PROPOSAL, and it sits inside the Apache-2.0 engine because
-#: `genomeos/lang/` is where a language proposal about rules belongs. Nothing in the engine calls it:
-#: its only callers are `tests/test_rule_cell_provenance.py` and
+#: THIS MODULE IS AN UNADOPTED PROPOSAL. It was written under `genomeos/lang/`, because that is where
+#: a language proposal about rules looked as though it belonged; nothing in the engine ever called it.
+#: Its only callers are `tests/test_rule_cell_provenance.py` and
 #: `scripts/rule_cell_provenance_cost.py`, both application-side. Adopting the proposal means a
 #: commit to `genomeos/ir/model.py`, `genomeos/lang/grammar.py` and `genomeos/attribution/compile.py`,
 #: and that commit is Albert's.
 #:
-#: WHETHER AN UNADOPTED PROPOSAL SHOULD SHIP INSIDE THE PACKAGED ENGINE at the 2.0 milestone is NOT
-#: decided here and is not this module's to decide: it is a question for Albert's package. What is
-#: recorded here is only that it is unadopted, so the question can be asked of a file that says so.
-#: One measured fact belongs with it: this file carries an `AGPL-3.0-or-later` SPDX header and
-#: `scripts/package_engine.py` copies `genomeos/lang/` into the Apache package, as do the two
-#: neighbours it is built on. That is reported, not resolved.
+#: THE SHIPPING QUESTION IS ANSWERED FOR THE FILE AND STILL OPEN FOR THE MARK. The fact recorded here
+#: before was that this file carries an `AGPL-3.0-or-later` SPDX header while
+#: `scripts/package_engine.py` copies `genomeos/lang/` verbatim into a package declaring Apache-2.0,
+#: as it did for the two neighbours this is built on -- reported by
+#: `tests/test_engine_licence_headers.py` on 2026-10-02 and not resolved there, because a licensing
+#: decision is Albert's. He resolved it on 2026-10-03 by moving the file to `genomeos/provenance/`,
+#: which `PACKAGES` does not name, so it is no longer copied into the Apache package at all. What
+#: remains undecided is the other thing: whether an ADOPTED cell-provenance mark belongs in the
+#: engine at the 2.0 milestone. That is a question for Albert's package, and this file only says it is
+#: unadopted so the question can be asked of a file that says so.
 UNADOPTED = (
     "an unadopted proposal. No engine module calls it; adopting it is a commit to the IR, the grammar "
-    "and the compiler, and that commit is Albert's. Whether it should ship inside the packaged engine "
+    "and the compiler, and that commit is Albert's. The file itself is application-side since "
+    "2026-10-03 and ships in no engine package; whether an ADOPTED mark belongs in the packaged engine "
     "is a question for the package and is not decided here"
 )
 
@@ -459,14 +465,23 @@ class CorpusVocabulary:
 
     THE LICENSING BOUNDARY IS WHY THIS EXISTS, and it is worth writing down because two of this
     project's rules collided here. "Import a value, never copy its literal" said to read the CRISPRi
-    citation from the application module that owns it. `genomeos/lang/` is part of the Apache-2.0
-    engine, so doing that made the engine import the AGPL-3.0 application, against LICENSING.md
-    decision D40 (Albert's split of 2026-09-11) - a legal boundary, not a style rule, and
-    `tests/test_engine_boundary.py` failed on it exactly as it should have. Both rules are right, so
-    the resolution is structural rather than a choice between them: the engine takes the values as a
-    PARAMETER and the application-side caller supplies them from the module that owns them. Nothing
-    is copied and nothing crosses the boundary. The boundary test is untouched: no exemption, no
-    allowlist, no per-file skip.
+    citation from the application module that owns it. This module lived under `genomeos/lang/`, which
+    is part of the Apache-2.0 engine, so doing that made the engine import the AGPL-3.0 application,
+    against LICENSING.md decision D40 (Albert's split of 2026-09-11) - a legal boundary, not a style
+    rule, and `tests/test_engine_boundary.py` failed on it exactly as it should have. Both rules are
+    right, so the resolution was structural rather than a choice between them: the module takes the
+    values as a PARAMETER and the application-side caller supplies them from the module that owns
+    them. Nothing is copied and nothing crosses the boundary. The boundary test is untouched: no
+    exemption, no allowlist, no per-file skip.
+
+    SINCE 2026-10-03 THE FILE IS APPLICATION-SIDE (`genomeos/provenance/`, Albert's resolution of the
+    AGPL-in-an-Apache-package defect), so the import D40 forbade is now legal and the injection is no
+    longer compelled. It is kept, deliberately, for a reason that outlives the licence: a census of
+    what a program's rules rest on should be answerable about a corpus whose vocabulary is NOT this
+    repository's `attribution.measured` - another compiler's citation prefix, a corpus with no CRISPRi
+    in it at all - and a parameter makes that a different argument rather than a different module. The
+    identity assertions in `tests/test_rule_cell_provenance.py` keep "import, never copy" honest at
+    the one place the values are supplied, exactly as before.
 
     `unrecorded_cell` is the application's `measured.CONTEXT_UNKNOWN` and `measured_source_prefix` is
     its `measured.SOURCES["crispri"]`. `scripts/rule_cell_provenance_cost.py` is the one place that
@@ -483,7 +498,8 @@ class CorpusVocabulary:
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(
                     f"{name} must be a non-empty string supplied by the application side; got "
-                    f"{value!r}. This module may not import it: see the class docstring and D40"
+                    f"{value!r}. This module takes it as a parameter and keeps no copy of it: see "
+                    "the class docstring"
                 )
 
 
@@ -651,7 +667,9 @@ def binds_as_a_literal(value: str) -> list[int]:
     way the value may arrive (see NOT_ASSESSED), and `is` cannot show that on its own because the
     value is an identifier-shaped string CPython interns. For an injected application string the
     module must hold no copy at all, and there `is` IS evidence - but the walk is kept anyway, since a
-    stale copy sitting unused in the engine would still be a copy of AGPL-side text.
+    stale copy sitting unused is still a second place the value is written, which is the thing "import
+    a value, never copy its literal" exists to prevent. That reason is unchanged by the 2026-10-03 move
+    application-side; what changed is only that the copy would no longer also cross a licence.
     """
     tree = ast.parse(inspect.getsource(inspect.getmodule(provenance_of)))
     out = []

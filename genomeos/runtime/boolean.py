@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Boolean (logical) network engine (task 2.4).
 
 Reads BoolNet-style `.bnet` rules ("target, factors") and simulates

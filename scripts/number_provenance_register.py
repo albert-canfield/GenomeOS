@@ -6,7 +6,7 @@
 
 It reads nothing but its own code and the digests of the programs the census will read. The
 population, the scoped fields, the classes, the cascade, the convention tags, the citation-furniture
-strip, what will be reported and the denominator all come from `genomeos.lang.number_provenance`, so
+strip, what will be reported and the denominator all come from `genomeos.provenance.number_provenance`, so
 the registration and the code that applies it cannot drift apart.
 
 No count is taken here, no class is assigned, no program is written to and no model request is made.
@@ -22,7 +22,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.lang import number_provenance as np  # noqa: E402
+from genomeos.provenance import number_provenance as np  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
 RESULT = "number_provenance_registration"
@@ -41,7 +41,7 @@ DESCRIBES = (
 
 #: This lane's own files.
 OWN_CODE = (
-    "genomeos/lang/number_provenance.py",
+    "genomeos/provenance/number_provenance.py",
     "scripts/number_provenance_register.py",
     "scripts/number_provenance_census.py",
     "tests/test_number_provenance.py",
@@ -69,9 +69,10 @@ def main() -> None:
     ]
     # The population figure is pinned HERE, as a registered datum with every program digested by
     # name, and not asserted in the test suite. tests/test_number_provenance.py asserts the
-    # mechanism instead, because `scripts/package_engine.py` ships `genomeos/lang` - where
-    # `number_provenance` lives - together with only part of the corpus, so a file count is a
-    # property of this tree and not of the code.
+    # mechanism instead, because a tree can hold only part of the corpus, so a file count is a
+    # property of this tree and not of the code. The tree that showed it was the packaged engine,
+    # which shipped `genomeos/lang` - where `number_provenance` lived until the 2026-10-03 move to
+    # `genomeos/provenance` - with six of the nineteen programs.
     payload["population_size"] = len(entries)
     payload["population_programs"] = [e["path"] for e in entries]
     payload["result_manifest"] = {

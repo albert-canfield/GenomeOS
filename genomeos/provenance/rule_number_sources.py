@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+# Part of the GenomeOS application; see LICENSING.md.
 """Source census of the rule numbers of `data/demo/gastrulation.bio`.
 
 For every number the program's `rule` declarations carry - `strength`, `threshold`, `hill`, one slot
@@ -31,7 +32,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from genomeos.lang import number_provenance as np
+from genomeos.provenance import number_provenance as np
 
 #: The one program this census is about.
 PROGRAM = "data/demo/gastrulation.bio"

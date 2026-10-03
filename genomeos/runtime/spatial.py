@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Spatial engine (task 4.1): a 2-D field of cells with diffusing morphogens.
 
 The minimal machinery development needs: cells with positions and state,

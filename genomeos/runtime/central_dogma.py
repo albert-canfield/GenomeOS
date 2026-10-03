@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """The central dogma as executable code: DNA -> RNA -> protein.
 
 This is the lowest level of BioVM. It is deterministic; regulation of *when*

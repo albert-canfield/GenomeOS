@@ -5,7 +5,7 @@
     uv run --frozen python scripts/rule_number_sources_census.py
 
 It enumerates the program's 21 rule numbers from the program itself and joins each one to the
-finding recorded for it in `genomeos.lang.rule_number_sources.FINDINGS`, which holds, per slot, the
+finding recorded for it in `genomeos.provenance.rule_number_sources.FINDINGS`, which holds, per slot, the
 URL that was fetched, what was retrieved from it, what the source claims, what it does NOT claim,
 and the class. Every count printed is a recount of those findings.
 
@@ -23,15 +23,15 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.lang import rule_number_sources as rns  # noqa: E402
+from genomeos.provenance import rule_number_sources as rns  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
 RESULT = "rule_number_sources_census"
 REGISTERED_BEFORE = "data/results/rule_number_sources_registration.json"
 
 OWN_CODE = (
-    "genomeos/lang/rule_number_sources.py",
-    "genomeos/lang/rule_number_sources_findings.py",
+    "genomeos/provenance/rule_number_sources.py",
+    "genomeos/provenance/rule_number_sources_findings.py",
     "scripts/rule_number_sources_register.py",
     "scripts/rule_number_sources_census.py",
     "tests/test_rule_number_sources.py",
@@ -60,7 +60,7 @@ def main() -> None:
     # them here, in this process only, from the module written after every source was fetched, so
     # nothing is mutated in a test run or in a registration run. `rns.registration()` is read below
     # for the question text alone.
-    from genomeos.lang import rule_number_sources_findings as rnf
+    from genomeos.provenance import rule_number_sources_findings as rnf
 
     rns.FINDINGS.update(rnf.findings())
     rns.SOURCES_FETCHED = rnf.SOURCES_FETCHED

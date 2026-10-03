@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Biological debugger (task 4.4): step, breakpoints, and an evidence trace.
 
 Works on the network runtime (species levels) and the cell-ageing runtime

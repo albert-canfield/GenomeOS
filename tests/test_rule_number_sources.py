@@ -16,7 +16,7 @@ from typing import Any, TypeVar
 
 import pytest
 
-from genomeos.lang import rule_number_sources as rns
+from genomeos.provenance import rule_number_sources as rns
 
 REGISTRATION_RELATIVE = "data/results/rule_number_sources_registration.json"
 REGISTRATION = Path(REGISTRATION_RELATIVE)

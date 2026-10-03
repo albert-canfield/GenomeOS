@@ -24,7 +24,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.lang import rule_evidence_tier as ret  # noqa: E402
+from genomeos.provenance import rule_evidence_tier as ret  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
 RESULT = "rule_evidence_tier_proposal_registration"
@@ -32,7 +32,7 @@ CENSUS = "data/results/rule_number_sources_census.json"
 PROGRAM = "data/demo/gastrulation.bio"
 
 OWN_CODE = (
-    "genomeos/lang/rule_evidence_tier.py",
+    "genomeos/provenance/rule_evidence_tier.py",
     "scripts/rule_evidence_tier_register.py",
 )
 
@@ -74,7 +74,7 @@ def main() -> None:
         "coordinates": "n/a: the proposal addresses declarations by rule id and field name.",
         "method": (
             "The design is written down before it is implemented. The four tiers and their "
-            "definitions are IMPORTED from genomeos.lang.rule_number_sources as the same Python "
+            "definitions are IMPORTED from genomeos.provenance.rule_number_sources as the same Python "
             "objects (TIERS is CASCADE, TIER_DEFINITIONS is CLASSES), so the language cannot grow a "
             "divergent second copy of the census's vocabulary; the suite asserts the identity with "
             "`is`. A fifth axis value, `not_assessed`, is the default and is not a tier: it marks a "

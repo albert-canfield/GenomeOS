@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+# Part of the GenomeOS application; see LICENSING.md.
 """PROPOSAL, registered before it is built: mark rule evidence tier in BioLang programs.
 
 This module is the registration. It fixes the vocabulary, where the mark lives, what the runtime
@@ -26,7 +27,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from genomeos.lang import rule_number_sources as rns
+from genomeos.provenance import rule_number_sources as rns
 
 # --- 1. THE AXIS -----------------------------------------------------------------------------------
 #
@@ -546,7 +547,7 @@ def census_slot_marks(adjudication: str = "4d4003d") -> tuple[list[SlotMark], li
     it is what the coherence rule is validated against: a rule derived from the census's class
     definitions must hold on the census's own output or it is wrong (prediction P6).
     """
-    from genomeos.lang import rule_number_sources_findings as rnf
+    from genomeos.provenance import rule_number_sources_findings as rnf
 
     slots = [
         SlotMark(rule=rule, field=field, tier=rec["class"], adjudication=adjudication)

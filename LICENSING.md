@@ -14,7 +14,7 @@ built on it.
 | **Documentation** — `docs/`, `README.md`, and the other Markdown files | | **Creative Commons Attribution 4.0** | quote it, teach from it, translate it; credit the project. |
 | **Distilled results** — `data/results/` | | derived from their upstream sources, whose terms apply | each summary names its source; see [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md). |
 | **BioLang programs** — `data/demo/`, `data/organisms/` | | Apache License 2.0, as part of the engine's standard material | programs are meant to be copied and adapted. |
-| **Engine tests** — the test files `scripts/package_engine.py` selects because they import only the engine (29 today, each headed `SPDX-License-Identifier: Apache-2.0`) | | **Apache License 2.0**, taking precedence over the `tests/` entry above; decided by the copyright holder on 2026-09-28 | they ship inside the Apache-2.0 `biolang` package as its own test suite, so they carry its licence. |
+| **Engine tests** — the test files `scripts/package_engine.py` selects because they import only the engine (31 today, 30 of them headed `SPDX-License-Identifier: Apache-2.0`; `tests/test_unstated_confidence.py` carries no header and takes the package's licence by default, which `tests/test_engine_licence_headers.py` pins) | | **Apache License 2.0**, taking precedence over the `tests/` entry above; decided by the copyright holder on 2026-09-28 | they ship inside the Apache-2.0 `biolang` package as its own test suite, so they carry its licence. |
 
 **The dependency direction is the rule that keeps the split honest.** The
 application may import the engine; the engine may never import the
@@ -75,6 +75,15 @@ available under MIT: a licence change is not retroactive, and anyone who
 obtained the earlier code keeps the rights it gave them. Everything from the
 relicensing commit onward is Apache 2.0 or AGPL-3.0-or-later by the table
 above.
+
+On 2026-10-03 five files moved from `genomeos/lang/` to `genomeos/provenance/`
+— the number and evidence provenance censuses — and the 14 engine files that
+carried no `SPDX-License-Identifier` were given the Apache-2.0 header. Neither
+changed any file's licence. The move corrected a packaging conflict: the five
+declared `AGPL-3.0-or-later` while `scripts/package_engine.py` copied
+`genomeos/lang/` into a package declaring Apache-2.0, so AGPL files shipped
+inside an Apache wheel. `tests/test_engine_licence_headers.py` holds the record
+and pins both sets, now empty, by equality.
 
 ## Contributing
 

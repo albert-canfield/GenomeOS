@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Segmentation clock and wavefront (task 4.2).
 
 Clock-and-wavefront (Cooke & Zeeman 1976): every presomitic cell carries an

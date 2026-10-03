@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """BioLang v0.3 parser: source text -> BioIR Module.
 
 Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):

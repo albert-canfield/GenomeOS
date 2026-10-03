@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Cell ageing runtime: the "timer" in a cell.
 
 A stochastic, per-cell state model with four ageing clocks:

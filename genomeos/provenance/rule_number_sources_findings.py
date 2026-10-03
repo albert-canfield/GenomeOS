@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
+# Part of the GenomeOS application; see LICENSING.md.
 """What the literature holds for each of the 21 rule numbers of `data/demo/gastrulation.bio`.
 
 Written AFTER every source was fetched and read, which is why it is a module of its own. The
@@ -23,7 +24,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from genomeos.lang.rule_number_sources import CLASSES, slots
+from genomeos.provenance.rule_number_sources import CLASSES, slots
 
 __all__ = [
     "CONTRADICTIONS",

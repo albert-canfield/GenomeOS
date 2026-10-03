@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Composition: GenomeOS engines as process-bigraph processes.
 
 process-bigraph (Vivarium 2.0) is an optional extra (`uv sync --extra compose`).

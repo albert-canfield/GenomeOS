@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """The adoption cost of the cell-provenance proposal, counted over the committed corpus.
 
-The proposal is registered at `ea3ef2e` (`genomeos.lang.rule_cell_provenance`). It recommends
+The proposal is registered at `ea3ef2e` (`genomeos.provenance.rule_cell_provenance`). It recommends
 nothing and this script recommends nothing: it counts, because a proposal that hides its own scale
 is not a proposal.
 
@@ -34,8 +34,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from genomeos.lang import rule_cell_provenance as cp  # noqa: E402
 from genomeos.lang.parser import parse_file  # noqa: E402
+from genomeos.provenance import rule_cell_provenance as cp  # noqa: E402
 
 #: The generated program git tracks. Named, not globbed, so a rename is a failure and not a silent
 #: change of population.
@@ -45,12 +45,18 @@ COMPILED = "data/organisms/human/noncoding_chr21.bio"
 def vocabulary() -> cp.CorpusVocabulary:
     """The application-side strings the engine module takes as a parameter. THE ONLY PLACE they cross.
 
-    `genomeos/lang/rule_cell_provenance.py` is part of the Apache-2.0 engine and may not import the
-    AGPL-3.0 application (LICENSING.md decision D40, Albert's split of 2026-09-11). It used to, in
-    order to honour the other rule this project holds - import a value, never copy its literal - and
-    `tests/test_engine_boundary.py` failed on it, correctly. The two rules are reconciled here and not
-    traded against each other: this file is application-side, so the import is legal, and it hands the
-    values to the engine as data. Nothing is copied.
+    `rule_cell_provenance` used to live at `genomeos/lang/rule_cell_provenance.py`, part of the
+    Apache-2.0 engine, which may not import the AGPL-3.0 application (LICENSING.md decision D40,
+    Albert's split of 2026-09-11). It did import it, in order to honour the other rule this project
+    holds - import a value, never copy its literal - and `tests/test_engine_boundary.py` failed on it,
+    correctly. The two rules were reconciled here and not traded against each other: this file is
+    application-side, so the import is legal, and it hands the values to the census as data. Nothing is
+    copied.
+
+    Since 2026-10-03 the census is application-side too (`genomeos/provenance/`), so D40 no longer
+    forbids it the import. The injection stays: it is kept for the reason given in `CorpusVocabulary`'s
+    own docstring - a corpus with a different vocabulary is then a different argument - and this
+    function remains the one place the two values cross.
 
     `tests/test_rule_cell_provenance.py` asserts that each value IS the object this reads, by identity
     against `measured.SOURCES["crispri"]` and `measured.CONTEXT_UNKNOWN`, and - because one of those

@@ -22,9 +22,9 @@ import pytest
 
 from genomeos.attribution.measured import CONTEXT_UNKNOWN, SOURCES
 from genomeos.ir.model import Rule
-from genomeos.lang import rule_cell_provenance as cp
-from genomeos.lang import rule_evidence_tier as tier
 from genomeos.lang.parser import BioLangError, parse, parse_file
+from genomeos.provenance import rule_cell_provenance as cp
+from genomeos.provenance import rule_evidence_tier as tier
 from genomeos.runtime.grn import NetworkRuntime
 from tests.committed_data import ROOT, committed, must_be_committed
 
@@ -322,17 +322,39 @@ def test_the_injected_values_ARE_the_application_objects_and_the_engine_holds_no
     assert SOURCES["crispri"] not in Path(cp.__file__).read_text()
 
 
-def test_the_engine_module_imports_nothing_outside_the_engine() -> None:
-    """The invariant at this lane, using the boundary test's OWN helper so it cannot drift from it.
+def test_the_census_reaches_no_further_into_the_application_than_its_own_package() -> None:
+    """What this check is now, and why it is narrower rather than weaker than what it was.
 
-    `tests/test_engine_boundary.py` is untouched by this fix: no exemption, no allowlist, no per-file
-    skip. This test adds a second, narrower check in the file that broke it, so the next change to
-    this module fails here first.
+    It began as the engine-boundary invariant at this lane, using the boundary test's OWN helper so it
+    could not drift from it: `genomeos/lang/rule_cell_provenance.py` had been committed importing
+    `genomeos/attribution/measured.py`, which put the Apache-2.0 engine in the position of importing
+    the AGPL-3.0 application (LICENSING.md D40) and reddened every sha after it. On 2026-10-03 Albert
+    moved the file to `genomeos/provenance/`, application-side, because it carried an AGPL header
+    inside a package `scripts/package_engine.py` declares Apache-2.0. That answers D40 for this file
+    by removing it from the engine, so the original claim is no longer a claim anyone can make about
+    it. `tests/test_engine_boundary.py` is still untouched - no exemption, no allowlist, no per-file
+    skip - and it still polices every file that IS in the engine.
+
+    Deleting this check along with its reason would lose something real, so it keeps the part that
+    survives the move: the census imports the engine and its own package, and nothing else of the
+    application. The injected vocabulary (`CorpusVocabulary`) is the design that makes that true, and
+    this is the test that fails first if a later change imports `attribution` directly instead.
     """
     from tests.test_engine_boundary import ALLOWED, imported_genomeos_names
 
+    allowed = ALLOWED | {"provenance"}
     imported = imported_genomeos_names(Path(cp.__file__))
-    assert imported - ALLOWED == set(), imported
+    assert imported, "nothing was read, so the helper or the path is wrong and this check is vacuous"
+    assert "provenance" in imported, "the sibling import is what the widened name is for"
+    assert imported - allowed == set(), imported
+    # The counterfactual, because a name added to an allowlist that cannot be shown to refuse is just
+    # a list. `attribution` - the import that broke this lane - is still outside it, and widening by
+    # the module's own package did not widen it to the application.
+    assert "attribution" not in allowed
+    assert imported_genomeos_names(ROOT / "scripts/rule_cell_provenance_cost.py") - allowed, (
+        "the application-side caller imports attribution, so a check that passed on it too would be "
+        "admitting everything"
+    )
 
 
 def test_the_vocabulary_refuses_a_value_the_application_did_not_supply() -> None:

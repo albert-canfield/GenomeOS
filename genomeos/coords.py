@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Genomic coordinates: strand and locus.
 
 Lives at the top level so that both the genome engine and BioIR can import it

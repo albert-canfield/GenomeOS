@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Gene regulatory network runtime.
 
 Executes a BioIR Module as a continuous-time system: mRNA and protein levels

@@ -51,6 +51,7 @@ from genomeos.certainty import Certainty
 from genomeos.genome.repeats import INTERSPERSED as _INTERSPERSED
 from genomeos.predict.enhancer_target import MODEL_SCORE_NAME as LINK_SCORE_NAME
 from genomeos.predict.enhancer_target import link_score
+from genomeos.provenance import compiled_defaults as cd
 from genomeos.results import RESULTS_DIR, load_result
 
 #: retired as a compiled number by review R4 (2026-09-28); kept because
@@ -466,6 +467,28 @@ def context(name: str | None) -> str:
     return ident(name) if name and name.strip() else CONTEXT_UNKNOWN
 
 
+def context_evidence_field(context_state: Any, label: str, start: int, end: int) -> str:
+    """The `context_evidence:` a rule line carries, from the one place that writes it.
+
+    `context_state` is None on a machine with no mapping table, where no reading was taken at all,
+    and the field is then OMITTED. What that omission READS is `not_assessed`
+    (`genomeos.provenance.compiled_defaults.context_evidence_value`), and since this lane the program
+    SAYS so in its header instead of leaving a reader to infer it - so "nobody looked" is no longer
+    indistinguishable from "this language has no such field".
+
+    Writing `context_evidence: not_assessed` on the rule line itself was built and WITHDRAWN, and the
+    reason is recorded here rather than lost: `tests/test_context_evidence.py`'s
+    `test_the_state_is_added_beside_the_rule_and_deletes_nothing` pins that a program compiled with no
+    reader carries no `context_evidence` at all ("the only difference the reading makes to a program is
+    the field it adds"), and `attribution.context_evidence.parse_value` refuses any value that does not
+    begin with one of its three states, which `not_assessed` does not. Both belong to that module's
+    lane, so the per-line form is its decision and not this one's.
+    """
+    if context_state is None:
+        return ""
+    return f"context_evidence: {context_state(label, start, end)}; "
+
+
 def _human_axis(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
     """The human constraint axis per block start, from variation_<chrom> when it has been read."""
     r = load_result(f"variation_{chrom}", results_dir) or {}
@@ -619,8 +642,9 @@ def _measured_blocks(
 
     `context_state(cell_label, start, end)` is the reader's chromatin state for the cell a rule
     names (genomeos.attribution.context_evidence). None means no reading was taken, and then no
-    `context_evidence:` is written: an absent field says nothing was read, which is not the same as
-    `not_assessable`, a reading that was attempted and could not be taken.
+    `context_evidence:` is written (`context_evidence_field`, the one place that writes it). What an
+    absent field READS is `not_assessed`, which the program's header now states rather than leaving a
+    reader to infer it, and which is not `not_assessable`, a reading attempted and not takeable.
     """
     from genomeos.attribution import measured as ms
 
@@ -650,9 +674,7 @@ def _measured_blocks(
     for gene, action, strength, cell, split in ms.rule_links(row):
         mark = f", {ms.HELDOUT_MARK}" if split == ms.HELDOUT else ""
         label = context(cell)
-        ctx = ""
-        if context_state is not None:
-            ctx = f"context_evidence: {context_state(label, row['start'], row['end'])}; "
+        ctx = context_evidence_field(context_state, label, row["start"], row["end"])
         lines.append(
             f"rule {row['id']}_measured {action} {ident_of[gene]} {{ strength: {strength}; "
             f"when: {ms.CONTEXT_KEY} = {label}; {ctx}"
@@ -758,6 +780,7 @@ def compile_chromosome(
         "# evidence-quality score for the rule that fired, not a probability; a `_measured` block's is the",
         "# hand-set rank of its strongest assay kind (perturbation above reporter), not a probability.",
         "# Gene stubs and domains state no confidence.",
+        *cd.declaration_lines(),
         "#",
         "# Executable annotation, not a simulation (review R3, 2026-09-28). A rule's `strength` is its",
         "# observation's magnitude in that observation's unit: |log2 fold change| clipped at 1 for a",
@@ -849,9 +872,7 @@ def compile_chromosome(
             lines.append("}")
             strength = round(min(1.0, abs(float(pc["log2_fold_change"]))), 3)
             label = context(pc.get("tissue"))
-            ctx = ""
-            if context_state is not None:
-                ctx = f"context_evidence: {context_state(label, e['start'], e['end'])}; "
+            ctx = context_evidence_field(context_state, label, e["start"], e["end"])
             lines.append(
                 f"rule {e['id']} {action} {ident(pc['gene'])} {{ strength: {strength}; "
                 f"when: cell_type = {label}; {ctx}"
@@ -910,8 +931,25 @@ def compile_chromosome(
             f"# {ce.NOT_VALIDATION}.",
             *(f"# {v}: {n}" for v, n in sorted(context_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
         ]
+    else:
+        # the section is written even when nothing was read, for the reason the whole lane exists: a
+        # program that says nothing about context evidence cannot be told from one whose field was
+        # never read, and the absent reading is a fact worth stating rather than a silence
+        lines += [
+            "",
+            "# ---- context evidence: NONE was read for this cut, so no rule states the field and",
+            f"# every rule's reading is `{cd.ABSENT}`. The mapping table from cell label to ontology",
+            "# term was not on the machine that compiled this program, so no reading was attempted.",
+            f"# `{cd.ABSENT}` is therefore not `not_assessable`, which is a reading that was attempted",
+            "# and could not be taken and which carries its reason.",
+        ]
     check_cell_counts(lines, n_predicted_rules, n_measured_rules, chrom)
-    return "\n".join(lines) + "\n"
+    text = "\n".join(lines) + "\n"
+    # no cut may drop the declaration or let it drift from the dataclass the engine applies, and none
+    # may write a tier it has not adjudicated or hand `not_assessed` a reason
+    cd.check_declaration(text)
+    cd.check_not_assessed_carries_no_reason(text)
+    return text
 
 
 def write_program(

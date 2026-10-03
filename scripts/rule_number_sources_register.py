@@ -6,7 +6,7 @@
 
 It reads nothing but its own code and the digest of the one program the census is about. The
 question, the population, the three axes, the cascade, the search plan, what will be reported and
-the denominator all come from `genomeos.lang.rule_number_sources`, so the registration and the code
+the denominator all come from `genomeos.provenance.rule_number_sources`, so the registration and the code
 that applies it cannot drift apart.
 
 No class is assigned here, no source is fetched, no program is written to, no number is changed and
@@ -23,7 +23,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from genomeos import manifest as mf  # noqa: E402
-from genomeos.lang import rule_number_sources as rns  # noqa: E402
+from genomeos.provenance import rule_number_sources as rns  # noqa: E402
 from genomeos.results import save_result  # noqa: E402
 
 RESULT = "rule_number_sources_registration"
@@ -45,7 +45,7 @@ DESCRIBES = (
 
 #: This lane's own files.
 OWN_CODE = (
-    "genomeos/lang/rule_number_sources.py",
+    "genomeos/provenance/rule_number_sources.py",
     "scripts/rule_number_sources_register.py",
     "scripts/rule_number_sources_census.py",
     "tests/test_rule_number_sources.py",

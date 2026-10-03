@@ -45,7 +45,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from genomeos.lang import rule_evidence_tier as ret  # noqa: E402
+from genomeos.provenance import rule_evidence_tier as ret  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 

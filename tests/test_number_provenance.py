@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from genomeos.ir import model as ir_model
-from genomeos.lang import number_provenance as np
+from genomeos.provenance import number_provenance as np
 
 GASTRULATION = "data/demo/gastrulation.bio"
 
@@ -189,9 +189,12 @@ def test_the_registration_states_the_population_the_code_reads() -> None:
 
     This asserts the MECHANISM and not a file count. An earlier version of this test asserted
     `len(np.programs()) == 19`, the figure in this repository, and that is a property of this
-    repository's data rather than of the code: `scripts/package_engine.py` ships `genomeos/lang`,
-    where this module lives, together with only six of the nineteen programs, so the packaged
+    repository's data rather than of the code: `scripts/package_engine.py` shipped `genomeos/lang`,
+    where this module then lived, together with only six of the nineteen programs, so the packaged
     engine's suite qualified the test and could not satisfy it - 6 against 19, red for every lane.
+    The module moved to `genomeos/provenance/` on 2026-10-03 and is no longer shipped, so that
+    particular tree cannot arise again; the shape stays, because the reason it was adopted - a file
+    count is a datum about a tree and belongs in the registration - did not depend on the packaging.
     The population figure is a registered datum and belongs in the result, where
     `scripts/number_provenance_register.py` already digests every program by name; what belongs
     here is that the code reads exactly the declared directories, whatever a tree holds of them.
@@ -227,9 +230,11 @@ def test_the_corpus_is_nineteen_programs_in_the_source_repository() -> None:
     found = np.programs()
     if not Path(".git").exists():
         pytest.skip(
-            f"not the source repository (no .git): this tree holds {len(found)} programs. The "
-            "packaged engine ships genomeos/lang, where this module lives, with only part of the "
-            "corpus, so the repository's population figure is not a claim about it. The figure is "
+            f"not the source repository (no .git): this tree holds {len(found)} programs. A tree "
+            "that holds only part of the corpus is one the repository's population figure is not a "
+            "claim about - the packaged engine was such a tree while this module sat in "
+            "genomeos/lang, and since the 2026-10-03 move to genomeos/provenance it ships the module "
+            "no longer. The figure is "
             "pinned in data/results/number_provenance_registration.json, which digests every "
             "program by name."
         )

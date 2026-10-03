@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Variant effect on a transcript (task 1.6).
 
 Applies a variant to the transcript's coding sequence in genomic coordinates,

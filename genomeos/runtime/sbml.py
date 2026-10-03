@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """SBML engine (task 2.3): run reaction-network models from BioModels.
 
 Supports the SBML core used by most curated ODE models: compartments,

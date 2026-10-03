@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 """Germ-layer specification (task 4.3): a population of cells, each running the
 gastrulation regulatory module, reading a NODAL gradient from one pole."""
 

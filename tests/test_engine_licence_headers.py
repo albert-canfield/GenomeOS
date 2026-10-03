@@ -23,11 +23,42 @@ declaring nothing takes the package's licence by default, which is probably the 
 runtime modules but is nowhere stated. The `.bio` modules have no SPDX convention at all -- their
 headers are prose comments -- so whether they should carry one is a question and not a defect.
 
+RESOLVED 2026-10-03, by Albert, and the pins are edited in the same commit as the resolution because
+that is what they were built to force. Three of the four numbers above changed and one did not:
+
+  - **The 5 AGPL files are gone from the engine.** They moved to `genomeos/provenance/`, a package
+    `PACKAGES` does not name, so the packager no longer copies them anywhere. `DECLARE_AGPL` is now
+    EMPTY, which is the strongest form this pin has ever had: the equality now says the engine ships
+    no AGPL file at all, and the first one to appear fails. The two AGPL *tests* went with them, by
+    consequence rather than by edit -- `engine_tests()` selects by the imports it reads, and a test
+    importing `genomeos.provenance` is no longer a test importing only the engine. That set is pinned
+    here too now, at empty, because it was the same conflict going through a door this file did not
+    watch.
+  - **14 of the 15 header-less `.py` files now declare `Apache-2.0`**, in the two-line house form, at
+    the top of the file where every other engine file carries it. `DECLARE_NOTHING_PY` is EMPTY.
+  - **The 15th, `genomeos/coords.py`, was never header-less.** It has declared `Apache-2.0` since it
+    was written, on line 6, under a five-line module docstring, so `_declared()` read the first five
+    lines and did not see it: this pin held a mislabel, and the file was not the thing that was wrong.
+    WIDENING THE WINDOW WAS CONSIDERED AND REJECTED. A window that skipped the module docstring would
+    have read line 6, and it would have cost the property
+    `test_PLANTED_the_detector_reads_each_of_the_three_states` exists for -- that a tag below the fifth
+    line is NOT read -- for one file's sake. So the detector is untouched and the plant keeps its full
+    force. `coords.py` instead has a second, identical `Apache-2.0` comment INSERTED at the top, its
+    line 6 left exactly where it was. Two identical tags in one file is already the practice here:
+    `genomeos/bio.py` carries one at line 1 and another at line 23. The insertion also keeps that
+    file's diff a PURE INSERTION of comment lines, which all 15 share and which matters for the 8 of
+    them that are in the AstroREG-2 sender's reviewed 52-file import closure -- a digest over file
+    contents cannot tell a comment from a behaviour change, so the proof that nothing but comments
+    moved is in `tests/test_licence_headers_are_insertions.py`.
+  - **The 7 `.bio` files are untouched.** There is still no SPDX convention for BioLang modules, so
+    the open question stays open and nothing was invented for it.
+
 WHAT THIS TEST DOES AND DOES NOT DECIDE. It does not move a file, change a header, or alter the
 packager: each of those is a licensing decision, and licensing decisions are Albert's. It PINS the
 known sets EXACTLY, so that:
 
-  - a SIXTH AGPL file entering the engine fails immediately, which is the regression that matters;
+  - an AGPL file entering the engine fails immediately, which is the regression that matters. It
+    was "a SIXTH" while the pin held five; since 2026-10-03 the pin is empty and it is the FIRST;
   - RESOLVING one forces this pin to be edited in the same commit, so it cannot rot into a permanent
     allowlist that quietly grows. An allowlist nobody has to update is how a violation becomes the
     status quo, and these are equalities rather than subset checks for exactly that reason.
@@ -44,35 +75,33 @@ ROOT = Path(__file__).resolve().parent.parent
 
 APACHE = "SPDX-License-Identifier: Apache-2.0"
 
-#: Shipped files that DECLARE the application's licence. Each is copied verbatim into a package
-#: declaring Apache-2.0. Pinned exactly; a sixth fails.
-DECLARE_AGPL = (
-    "genomeos/lang/number_provenance.py",
-    "genomeos/lang/rule_cell_provenance.py",
-    "genomeos/lang/rule_evidence_tier.py",
-    "genomeos/lang/rule_number_sources.py",
-    "genomeos/lang/rule_number_sources_findings.py",
-)
+#: Shipped files that DECLARE the application's licence. EMPTY since 2026-10-03: the five that were
+#: here moved to `genomeos/provenance/` and are shipped by nothing. Pinned exactly, as an equality on
+#: the empty set, so the FIRST one to appear fails rather than the sixth.
+DECLARE_AGPL: tuple[str, ...] = ()
 
-#: Shipped `.py` files declaring NO licence. Milder: they take the package's licence by default.
-#: Pinned separately so an AGPL file can never be mistaken for one of these.
-DECLARE_NOTHING_PY = (
-    "genomeos/coords.py",
-    "genomeos/ir/model.py",
-    "genomeos/lang/parser.py",
-    "genomeos/runtime/boolean.py",
-    "genomeos/runtime/cell.py",
-    "genomeos/runtime/central_dogma.py",
-    "genomeos/runtime/compose.py",
-    "genomeos/runtime/debugger.py",
-    "genomeos/runtime/gastrulation.py",
-    "genomeos/runtime/grn.py",
-    "genomeos/runtime/sbml.py",
-    "genomeos/runtime/segmentation.py",
-    "genomeos/runtime/spatial.py",
-    "genomeos/runtime/uncertainty.py",
-    "genomeos/runtime/variant_effect.py",
-)
+#: Shipped engine TESTS that declare the application's licence. The same conflict through a door this
+#: file did not watch until the move: `package_engine.engine_tests()` selects test files by their
+#: imports and copies them into the Apache-2.0 package as its own suite (LICENSING.md names them a
+#: separate Apache entry), and nothing checked their headers. Two were AGPL --
+#: `tests/test_rule_number_sources.py` and `tests/test_rule_number_sources_findings.py` -- and both
+#: left the selection when the modules they import moved. EMPTY, by equality, for the same reason.
+DECLARE_AGPL_TESTS: tuple[str, ...] = ()
+
+#: Shipped `.py` files declaring NO licence. EMPTY since 2026-10-03: 14 of the 15 were given the
+#: two-line Apache-2.0 house header, and the 15th (`genomeos/coords.py`) had one all along on line 6 --
+#: a mislabel this pin inherited from the five-line window, corrected by inserting a second identical
+#: tag at the top of that file rather than by widening the window. Pinned separately from the AGPL
+#: set, as it always was, so that a conflict can never be mistaken for the milder state of taking the
+#: package's licence by default.
+DECLARE_NOTHING_PY: tuple[str, ...] = ()
+
+#: Shipped engine TESTS declaring NO licence. The milder state on the tests side, pinned apart from
+#: the conflict for the same reason as on the files side. One today: LICENSING.md states that the
+#: selected tests are Apache-2.0, "decided by the copyright holder on 2026-09-28", and 30 of the 31
+#: say so in their own first lines while this one says nothing and takes it by default. Recorded, not
+#: resolved -- putting a header on a file is a licensing act and licensing acts are Albert's.
+DECLARE_NOTHING_TESTS = ("tests/test_unstated_confidence.py",)
 
 #: Shipped non-`.py` files: the standard library's BioLang modules. They carry prose comment headers
 #: and there is no SPDX convention for `.bio` at all, so this is an open question, not a defect.
@@ -128,8 +157,12 @@ def test_the_engine_ships_no_file_declaring_the_application_s_licence_beyond_the
     )
 
 
-def test_PLANTED_a_sixth_agpl_file_in_the_engine_fails_this_check(tmp_path):
+def test_PLANTED_an_agpl_file_entering_the_engine_fails_this_check(tmp_path):
     """The counterfactual. A pin that cannot be shown to refuse is a list, not a check.
+
+    It was a SIXTH file when the pin held five. Since the five moved out on 2026-10-03 the pin is the
+    empty set and the planted file is the FIRST, which is the same plant doing more work: there is no
+    longer any member whose presence could make a planted one look ordinary.
 
     The plant is hermetic: a file is written under `tmp_path` and `shipped()` is monkeypatched to
     return the real population plus that file. Nothing is written into `genomeos/`, because a peer
@@ -157,9 +190,10 @@ def test_PLANTED_a_sixth_agpl_file_in_the_engine_fails_this_check(tmp_path):
 
     before = found_agpl(real)
     assert before == sorted(DECLARE_AGPL), "the real population must match the pin before planting"
+    assert before == [], "the pin is empty today, so the real population must be empty too"
 
     after = found_agpl([*real, planted])
-    assert after != sorted(DECLARE_AGPL), "planting a sixth AGPL file must change the set"
+    assert after != sorted(DECLARE_AGPL), "planting an AGPL file must change the set"
     assert "planted_sixth.py" in after, "the planted file must be the thing that changed it"
     with pytest.raises(AssertionError):
         assert after == sorted(DECLARE_AGPL)
@@ -179,6 +213,96 @@ def test_PLANTED_the_detector_reads_each_of_the_three_states(tmp_path):
         assert _declared(p) == expected, name
     # `late.py` is the one worth stating: a tag below the fifth line is NOT read, so a file cannot
     # satisfy this check by burying its licence where a reader would not look for it.
+    # UNCHANGED ON 2026-10-03, deliberately. `genomeos/coords.py` declares Apache-2.0 on line 6, under
+    # a five-line docstring, and this window was NOT widened to reach it: a tag below the fifth line
+    # staying unread is the property this plant exists for, and it is worth more than the one file.
+    # `coords.py` got a second, identical tag INSERTED at the top instead, which is what
+    # `genomeos/bio.py` already does -- one at line 1 and another at line 23, same licence, both
+    # comments. Insertion also keeps that file's diff a pure insertion, which matters because it is
+    # one of the 52 files in the AstroREG-2 sender's reviewed import closure.
+
+
+def shipped_tests() -> list[Path]:
+    """Exactly the test files the packager copies, from the packager's own function.
+
+    Imported and not re-derived, for the reason the module docstring gives about `engine_files()`:
+    `engine_tests()` selects by READING each test's imports, so a list restated here would drift the
+    moment a test gained or lost one.
+    """
+    return list(_packager().engine_tests())
+
+
+def test_the_engine_ships_no_TEST_declaring_the_application_s_licence():
+    """The door this file did not watch until 2026-10-03, pinned the same way and apart.
+
+    The package ships a test suite of its own: `engine_tests()` picks the tests that import only the
+    engine and nothing from `scripts/`, and they are copied into the Apache-2.0 package exactly as the
+    modules are. LICENSING.md makes them a separate Apache-2.0 entry, "taking precedence over the
+    `tests/` entry above", decided by the copyright holder on 2026-09-28 -- so an AGPL header on one of
+    them is the same conflict as an AGPL header on a module, and the pins above could not see it,
+    because their population is `engine_files()`.
+
+    Two were AGPL when this was written: `tests/test_rule_number_sources.py` and
+    `tests/test_rule_number_sources_findings.py`. Neither was edited. They left the selection because
+    the modules they import moved to `genomeos.provenance`, and `engine_tests()` reads imports -- which
+    is why the fix for the modules fixed the tests without anyone touching them.
+    """
+    found = sorted(_rel(p) for p in shipped_tests() if (_declared(p) or "").startswith("AGPL"))
+    assert found == sorted(DECLARE_AGPL_TESTS), (
+        "the set of shipped engine TESTS declaring AGPL has CHANGED.\n"
+        f"  found:  {found}\n"
+        f"  pinned: {sorted(DECLARE_AGPL_TESTS)}\n"
+        "An addition ships an AGPL test inside a package declaring Apache-2.0. A removal means one "
+        "was resolved -- update this pin in the same commit, for the same reason as the one above."
+    )
+    assert shipped_tests(), "no tests were selected at all, so this check would pass on nothing"
+
+
+def test_the_shipped_tests_are_either_apache_or_pinned_as_declaring_nothing():
+    """The positive half on the tests side, so the two pins above are not vacuous."""
+    pinned = set(DECLARE_AGPL_TESTS) | set(DECLARE_NOTHING_TESTS)
+    assert len(pinned) == len(DECLARE_AGPL_TESTS) + len(DECLARE_NOTHING_TESTS), (
+        "a test appears in both pins, so one of them is not saying what it claims"
+    )
+    silent = sorted(_rel(p) for p in shipped_tests() if _declared(p) is None)
+    assert silent == sorted(DECLARE_NOTHING_TESTS), (
+        "the set of shipped engine tests carrying NO SPDX header has changed.\n"
+        f"  found:  {silent}\n"
+        f"  pinned: {sorted(DECLARE_NOTHING_TESTS)}\n"
+        "LICENSING.md says the selected tests are Apache-2.0; add the header rather than extending "
+        "this pin, and edit the pin in the same commit."
+    )
+    offenders = [
+        _rel(p)
+        for p in shipped_tests()
+        if _rel(p) not in pinned
+        and APACHE not in "".join(p.read_text(errors="replace").splitlines(keepends=True)[:5])
+    ]
+    assert not offenders, f"shipped engine tests outside both pins must carry '{APACHE}': {offenders}"
+
+
+def test_PLANTED_an_agpl_test_entering_the_engine_suite_fails_this_check(tmp_path):
+    """Hermetic, for the reason the other plant gives: nothing is written into `tests/`."""
+    import pytest
+
+    planted = tmp_path / "test_planted_agpl.py"
+    planted.write_text("# SPDX-License-Identifier: AGPL-3.0-or-later\ndef test_x():\n    assert True\n")
+    assert (_declared(planted) or "").startswith("AGPL"), "the detector must see the planted header"
+
+    real = shipped_tests()
+
+    def found_agpl(files: list[Path]) -> list[str]:
+        return sorted(
+            p.name if not str(p).startswith(str(ROOT)) else _rel(p)
+            for p in files
+            if (_declared(p) or "").startswith("AGPL")
+        )
+
+    assert found_agpl(real) == sorted(DECLARE_AGPL_TESTS) == [], "the pin must hold before planting"
+    after = found_agpl([*real, planted])
+    assert "test_planted_agpl.py" in after, "the planted file must be the thing that changed the set"
+    with pytest.raises(AssertionError):
+        assert after == sorted(DECLARE_AGPL_TESTS)
 
 
 def test_the_shipped_files_declaring_nothing_are_pinned_too():
@@ -219,6 +343,8 @@ def test_the_pins_name_files_the_packager_still_ships():
     stale = [
         rel for rel in (*DECLARE_AGPL, *DECLARE_NOTHING_PY, *DECLARE_NOTHING_BIO) if rel not in shipped_rel
     ]
+    shipped_test_rel = {_rel(p) for p in shipped_tests()}
+    stale += [rel for rel in (*DECLARE_AGPL_TESTS, *DECLARE_NOTHING_TESTS) if rel not in shipped_test_rel]
     assert not stale, (
         f"pinned files the packager no longer ships, so the pin is stale and hides nothing: {stale}"
     )
