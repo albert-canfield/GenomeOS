@@ -141,6 +141,11 @@ class TestTheCapRefuses:
         assert b.sent == 1322, "a refused request must not be charged"
         assert "1322 of 1322 sent" in str(exc.value)
         assert "number 1323" in str(exc.value)
+        # `CapRefusedError` has three raise sites, and `check_total_cap`'s also names counts and a
+        # cap. The phrase below belongs to `RequestBudget.take` alone, so this plant cannot be
+        # satisfied by a different site's refusal.
+        assert "the authorised number of AlphaGenome requests is reached" in str(exc.value)
+        assert astrorun.CAP_IS_A_REFUSAL in str(exc.value)
 
     def test_the_refusal_names_the_count_reached_and_the_cap(self, tmp_path):
         b = astrorun.RequestBudget(tmp_path / "l.jsonl", cap=3)
@@ -981,8 +986,19 @@ class TestAlbertsConditionsAreEachTheirOwnRefusal:
         grant_run(monkeypatch)
         led = astrorun.ledger_path_for_run(good["run_id"], good["ledger_root"])
         astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP).take(chrom="chr1", element="E0")
-        with pytest.raises(astrorun.SendRefusedError, match="a partial run exists"):
+        # MEASURED 2026-10-03 by removing this refusal from `may_send` in a detached worktree: a
+        # plant asserting only the TYPE then PASSED, because `check_adapter_writes_full_vectors`,
+        # further down the same function, raises the same `SendRefusedError` (one of the module's 25
+        # `raise SendRefusedError` sites). So the phrase is load-bearing and the whole message is
+        # asserted here, not a fragment of it. With the refusal restored the plant goes green again.
+        with pytest.raises(astrorun.SendRefusedError, match="a partial run exists") as exc:
             astrorun.may_send(**good)
+        said = str(exc.value)
+        assert "a partial run exists (1 charged)" in said, "the refusal names what it counted"
+        assert "no completion is recorded" in said
+        assert "a resume needs Albert's new word" in said
+        assert astrorun.A_CRASH_STOP_IS_NOT_A_CONTINUATION in said
+        assert astrorun.ASTROREG2_CLAUSES["one_run"] in said, "the clause it is conditional on, named"
 
     def test_PLANTED_activity_result_absent(self, authorised, good, tmp_path):
         good["activity_result"] = tmp_path / "missing.json"
@@ -1436,6 +1452,13 @@ class TestAlbertsSecondAndFinalApprovalIsFiveRefusals:
         assert "run 3 has NO approval of any kind" in said
         assert "second AND FINAL" in said
         assert "never by an exhausted counter" in said
+        # The whole of the reason, not a fragment. `NoAuthorisationError` has five raise sites
+        # (astrorun.py 490, 600, 605, 1302, 2163) and only 2163 is this one: the other four say an
+        # approval is unrecorded, missing for the run, or consumed, which is a DIFFERENT fact --
+        # "a counter at its limit and a run nobody approved are different facts". Requiring the
+        # exact text pins this plant to the finality raise alone.
+        assert astrorun.SECOND_AND_FINAL in said
+        assert said == f"clause at_most_1232: run 3 has NO approval of any kind. {astrorun.SECOND_AND_FINAL}"
 
     def test_clause_1_runs_1_and_2_pass_the_finality_check(self):
         assert astrorun.check_run_is_authorised_and_final(1)["final_run"] is False

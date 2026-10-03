@@ -245,6 +245,58 @@ class TestThePilotCheckpoint:
         assert out["pilot"]["stopped"]["at_request"] == 10
         assert [f["id"] for f in out["pilot"]["stopped"]["failing"]] == ["EH38E0000004"]
         assert astrorun.run_already_completed(led) is True, "a pilot stop is terminal"
+        # The stop must be THIS guard's stop and not some other end to the loop: the record carries
+        # the pilot's OWN rule and its OWN consequence, word for word, and the ledger holds the
+        # `pilot_stop` note. Without these the assertions above are satisfied by any early exit.
+        assert out["pilot"]["stopped"]["rule"] == sender.PILOT_RULE
+        assert (
+            "EVERY one of them must carry a gene name and a non-empty effects set"
+            in (out["pilot"]["stopped"]["rule"])
+        )
+        assert out["pilot"]["stopped"]["consequence"] == sender.PILOT_STOP_CONSUMES_THE_ONE_RUN
+        notes = [json.loads(line) for line in led.read_text().splitlines()]
+        stops = [n for n in notes if n.get("event") == "pilot_stop"]
+        assert len(stops) == 1, "the stop is on the ledger, which is the durable record of it"
+        assert stops[0]["at_request"] == 10
+        assert stops[0]["failing"] == 1
+
+    def test_PLANTED_a_VECTOR_LESS_response_in_the_first_ten_also_stops_the_run(self, tmp_path):
+        """The other half of the rule, which had no send-level plant: effects kept, vectors thrown away.
+
+        `answer_is_usable` was tested on a vector-less answer in isolation, but nothing showed that
+        `send` STOPS on one. Item (g)'s whole point is that a paid answer missing its track vector
+        cannot be widened without paying again, so the pilot is the last cheap moment to catch it --
+        and an answer that is NAMED, with non-empty effects, passes the half of the rule the other
+        plant exercises. So this is a separate fact and gets its own plant.
+        """
+        led = tmp_path / "l.jsonl"
+        budget = astrorun.RequestBudget(led, cap=astrorun.ASTROREG2_CAP)
+        root = tmp_path / "c"
+        out = sender.send(
+            [row(i) for i in range(50)],
+            budget,
+            writing_score(
+                root,
+                lambda eid: (
+                    answer_without_full_vectors(eid)
+                    if int(eid.replace("EH38E", "")) == 7
+                    else good_answer(eid)
+                ),
+            ),
+            cache_root=root,
+        )
+        assert out["requests_sent"] == 10, "it stops AT the checkpoint, not after the whole list"
+        assert out["pilot"]["passed"] is False
+        assert out["pilot"]["stopped"]["at_request"] == 10
+        failing = out["pilot"]["stopped"]["failing"]
+        assert [f["id"] for f in failing] == ["EH38E0000007"]
+        # the cause named: this one is NAMED with effects and fails only on the discarded vector
+        assert failing[0]["gene_name_present"] is True
+        assert failing[0]["effects_non_empty"] is True
+        assert failing[0]["full_vectors_kept"] is False
+        assert out["pilot"]["stopped"]["rule"] == sender.PILOT_RULE
+        assert out["pilot"]["stopped"]["consequence"] == sender.PILOT_STOP_CONSUMES_THE_ONE_RUN
+        assert astrorun.run_already_completed(led) is True, "a pilot stop is terminal"
 
     def test_the_stop_says_it_consumes_albert_s_one_run_rather_than_exhausting_a_budget(self, tmp_path):
         out = sender.send(
