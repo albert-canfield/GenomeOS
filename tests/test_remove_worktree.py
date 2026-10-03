@@ -24,11 +24,14 @@ THE FOUR PLANTS, and each must FAIL if the guard it tests is taken out:
 (d) the MEASUREMENT the tool's existence rests on: plain `git worktree remove`, with and without
     `--force`, on a worktree whose clones are at 0444. Measured on 2026-10-03 with git 2.50.0:
     exit 255, `error: failed to delete '<wt>': Permission denied`, and the worktree survives. The
-    second finding, which was not expected: the failed removal is NOT atomic -- it had already deleted
-    the tracked files and the `.git` file and DEREGISTERED the worktree, so `--force` then answers
+    second finding, which was not expected: the failed removal is NOT atomic -- it had already
+    DEREGISTERED the worktree before it reached the read-only data, so `--force` then answers
     `fatal: '<wt>' is not a working tree` and the directory on disk is an orphan git can no longer
     touch by any flag. That is the dead end that leaves a lane with no git route at all, and it is why
     `remove_worktree.py` unlocks BEFORE it calls git rather than after a first attempt fails.
+    WHICH FILES the failed removal had already unlinked is NOT part of that finding and is not
+    asserted: it differs by platform, and the test said otherwise until CI proved it. See the comment
+    in `test_d_plain_git_worktree_remove_fails_on_a_read_only_clone`.
 """
 
 from __future__ import annotations
@@ -448,12 +451,28 @@ def test_d_plain_git_worktree_remove_fails_on_a_read_only_clone(linked: dict[str
     assert forced.returncode != 0, forced
     assert worktree.is_dir()
 
-    # the second finding: the failed removal is not atomic. It deleted the tracked file and the .git
-    # file and deregistered the worktree before it reached the read-only data, so --force cannot find a
-    # working tree to remove and nothing git offers can clear what is left.
-    assert not (worktree / "tracked.txt").exists()
-    assert not (worktree / ".git").exists()
+    # The second finding, stated as the part of it that holds on EVERY platform: the failed removal is
+    # not atomic -- it DEREGISTERED the worktree before it reached the read-only data, so --force cannot
+    # find a working tree to remove and nothing git offers can clear what is left. That is the dead end
+    # a lane is left in, and it is why remove_worktree.py unlocks BEFORE it calls git. Deregistration is
+    # measured on both platforms: here on macOS, and on Linux by
+    # test_an_orphan_left_by_a_half_done_removal_is_refused_not_removed, which asserts it after the same
+    # plain removal and passed in the same CI run that failed the two lines below.
+    assert worktree not in rmwt.registered_worktrees(repo)
     assert "is not a working tree" in forced.stderr, forced.stderr
+
+    # WHICH FILES THE FAILED REMOVAL HAPPENED TO DELETE IS DELIBERATELY NOT ASSERTED.
+    # Observed on macOS 15 with git 2.50.0, 2026-10-03: at this point both `tracked.txt` and the `.git`
+    # file were already gone, and this test asserted that they were. The assertion was wrong to make.
+    # CI run 37121198184 on a101d3d reached `assert not (worktree / "tracked.txt").exists()` on ubuntu
+    # and got `assert not True`: on Linux the tracked file SURVIVES the same failed removal. git promises
+    # no order in which it unlinks a worktree's contents before it meets a path it cannot remove, so the
+    # set of survivors is a property of the platform, not of git -- and pinning it made a green verdict
+    # depend on which machine ran the suite, which is the defect class this project removed on
+    # 2026-10-02. It is recorded here because it was measured, and not asserted because it is not git's
+    # behaviour. What is asserted above holds on both platforms and carries the whole of the tool's
+    # premise: a non-zero exit, a permission failure named in stderr, a surviving worktree directory, a
+    # deregistered worktree that --force cannot reach, and the real store unchanged by inode and mode.
 
     # and through all of that the real stores are untouched
     assert {n: _state(repo / "data" / n) for n in lsro.STORES} == before

@@ -35,6 +35,30 @@ V2 = REPO / "data" / "organisms" / "human" / "noncoding_chr21_v2.bio"
 #: the sha256 `data/results/label_gene.json` and `label_gene_registration.json` name for v1
 V1_PINNED_SHA256 = "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192"
 
+#: `needs_local_data`, the project's marker for a test that reads a git-ignored machine-local store
+#: (`tests/local_data.py`, the supervisor's AMENDED acceptance rule of 2026-10-02): such a test RUNS in a
+#: checkout or a verdict worktree that has the store, and where the store is genuinely absent -- CI, or a
+#: bare worktree -- it SKIPS BY NAME, so a reader can tell "not run here" from "passed".
+#:
+#: Why the one test below needs it. `compile_chromosome("chr21")` reaches `targets.run_elements`, and the
+#: committed summary `enhancer_targets_all_chr21` carries no inline elements: it points at
+#: `data/knowledge/alphagenome/all_elements/chr21.json`, and `data/knowledge` is git-ignored
+#: (.gitignore:17), machine-local by the data boundary. `run_elements` then raises FileNotFoundError --
+#: "points at ..., which is not on this machine; rerun the job" -- which is the module behaving correctly:
+#: a summary whose table is missing must not read as a run with no elements. CI run 37121198184 on
+#: a101d3d hit exactly that, in both the `test` and `test-bare` jobs, while the test was green here.
+#:
+#: The marker moves WHERE the test runs, never what it claims. The +1 is still planted on the compiler's
+#: own count, the refusal is still the compiler's, and 5175 and 5176 still come from the real table rather
+#: than from a constant. That last point is also why the table must NOT be stubbed or mocked: a planted
+#: table would make the counterfactual assert against a fiction, and 5175 in the match string would stop
+#: being a reading of the data.
+needs_the_chr21_element_table = pytest.mark.needs_local_data(
+    "data/knowledge/alphagenome/all_elements/chr21.json",
+    how="scripts/enhancer_targets_all_chain.py writes it (the enhancer_targets_all_chr21 job); "
+    "data/knowledge is git-ignored machine-local data, so a fresh checkout cannot have it",
+)
+
 #: the agreed wording, as one sentence with chr21's counts
 AGREED = (
     "The cell named is the tissue whose predicted expression of the target gene changed most when "
@@ -282,6 +306,7 @@ def _module_from(source: str, name: str):
     return mod
 
 
+@needs_the_chr21_element_table
 def test_counterfactual_a_drifted_predicted_count_makes_the_compiler_refuse_chr21() -> None:
     """Plant +1 on the compiler's own predicted count: compiling chr21 must then refuse."""
     src = COMPILER.read_text()
