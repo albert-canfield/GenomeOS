@@ -1,9 +1,8 @@
 """The C. elegans reference lineage: parse, distil, query, generate BioLang."""
 
 import json
-from pathlib import Path
 
-import pytest
+import tracked_paths as tp
 
 from genomeos.organism.reference import (
     KNOWLEDGE,
@@ -107,8 +106,10 @@ def test_blast_classes():
     ]
 
 
-@pytest.mark.skipif(not Path(KNOWLEDGE).exists(), reason="run `genomeos data distil --only celegans_lineage`")
+# `KNOWLEDGE` is `data/results/celegans_lineage_cells.json`, which git TRACKS: the `skipif` here
+# could never fire, so it named a real input while protecting nothing. It RAISES by name now.
 def test_distilled_reference_holds():
+    tp.must_be_present(KNOWLEDGE, was="run `genomeos data distil --only celegans_lineage`")
     ref = ReferenceLineage.load()
     s = ref.summary()
     assert s["cells"] == 2183 and s["deaths"] == 131 and s["alive_adult"] == 961  # 959 somatic + Z2/Z3

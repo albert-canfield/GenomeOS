@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos import response_map as rm
 from genomeos import response_map2 as r2
@@ -346,8 +347,10 @@ def test_the_module_states_what_it_does_not_cover():
     assert conventions["locus_grouping"].endswith("not established biological independence")
 
 
-@pytest.mark.skipif(not BUILT.is_file(), reason="the genome-wide build is not in this checkout")
+# `BUILT` is `data/results/response_map_increment2.json`, which git TRACKS, so "not in this checkout"
+# could never be true and the guard was constant. A missing committed build is a broken checkout.
 def test_the_committed_build_reconciles_with_the_counted_population(counted):
+    tp.must_be_present(BUILT, was="the genome-wide build is not in this checkout")
     built = json.loads(BUILT.read_text())
     r = built["reconciliation"]
     assert r["addable_loci_counted_before_the_build"] == counted["addable"]["independent_loci"]

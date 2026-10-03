@@ -13,6 +13,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.therapeutics.atlas import PACKAGED
 from genomeos.therapeutics.providers import PatientRnaProvider
@@ -25,9 +26,14 @@ RNA = DEMO / "bcell_lymphoma_rna.tsv"
 PROTEINS = ROOT / "data/knowledge/proteins"
 VEP_CACHE = ROOT / "data/knowledge/vep/vep_cache.jsonl"
 
-pytestmark = pytest.mark.skipif(
-    not (PACKAGED.exists() and RNA.exists()), reason="run scripts/normal_tissue.py"
-)
+
+# BOTH terms are TRACKED -- `genomeos/therapeutics/data/normal_tissue.json.gz` ships in the package
+# and `data/demo/expression/bcell_lymphoma_rna.tsv` is committed -- so this module-wide `skipif` could
+# never fire. The two guards below it name `data/knowledge`, which IS git-ignored, and they stay
+# exactly as they are: this file holds one guard of each kind, and only the constant one is converted.
+@pytest.fixture(autouse=True)
+def _the_packaged_table_and_the_demo_rna_are_present() -> None:
+    tp.must_be_present(PACKAGED, RNA, was="run scripts/normal_tissue.py")
 
 
 def hits():

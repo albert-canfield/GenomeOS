@@ -7,6 +7,7 @@ import zipfile
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.lang import parse
 from genomeos.organism.reference import ReferenceLineage, parse_wormweb
@@ -148,10 +149,10 @@ decision gut { action: differentiate; when: ELT-2 = present, END-1 = absent; to:
         parse(bad + "decision x { action: express; when: cell = R }")
 
 
-@pytest.mark.skipif(
-    not Path(CELLS_FILE).exists(), reason="run `genomeos data distil --only celegans_tf_atlas`"
-)
+# `CELLS_FILE` is `data/results/celegans_tf_atlas_cells.json`, which git TRACKS, so this `skipif`
+# could never fire and the distil command it named is not a thing this checkout needs run.
 def test_distilled_atlas_agrees_with_the_textbook():
+    tp.must_be_present(CELLS_FILE, was="run `genomeos data distil --only celegans_tf_atlas`")
     from genomeos.results import load_result
 
     r = load_result("celegans_tf_atlas")

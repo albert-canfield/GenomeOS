@@ -10,13 +10,23 @@ offline safety answer are all checked in CI without a request.
 from __future__ import annotations
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.results import load_result
 from genomeos.therapeutics.atlas import PACKAGED, load, row, universe
 from genomeos.therapeutics.expression import normal_profile, normal_tissue_safety
 from genomeos.therapeutics.providers import CRITICAL_TISSUES, DiskCache, HpaExpressionProvider, hpa_column
 
-pytestmark = pytest.mark.skipif(not PACKAGED.exists(), reason="run scripts/normal_tissue.py")
+
+# `PACKAGED` is `genomeos/therapeutics/data/normal_tissue.json.gz`, which git TRACKS: it ships inside
+# the package. The module-wide `skipif` that stood here could never fire, so every test in this file
+# read as conditional on a table that is in the commit, and "run scripts/normal_tissue.py" was advice
+# for a state no checkout of this commit can be in. An autouse fixture RAISES by name instead, which
+# keeps the guard module-wide and makes a missing packaged table a red rather than a silent skip.
+@pytest.fixture(autouse=True)
+def _the_packaged_normal_tissue_table_is_present() -> None:
+    tp.must_be_present(PACKAGED, was="run scripts/normal_tissue.py")
+
 
 #: no per-gene cache and no network: only the packaged table can answer
 OFFLINE = HpaExpressionProvider(net=False, cache=DiskCache("hpa_absent_in_tests"))

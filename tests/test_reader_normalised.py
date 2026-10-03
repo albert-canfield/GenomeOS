@@ -16,7 +16,7 @@ import json
 import math
 from pathlib import Path
 
-import pytest
+import tracked_paths as tp
 
 from genomeos.genome import reader
 from genomeos.genome.domains import Domain
@@ -125,11 +125,14 @@ _NORM = RESULTS / "reader_normalised.json"
 _RAR = RESULTS / "reader_rarefied.json"
 
 
-@pytest.mark.skipif(not _NORM.exists() or not _RAR.exists(), reason="result files not on disk")
+# BOTH results are TRACKED (`data/results/reader_normalised.json`, `reader_rarefied.json`), so the
+# `skipif` that stood here could never fire and "result files not on disk" was never a reachable
+# state. A tracked input that is missing is a broken checkout, so it RAISES by name instead.
 def test_the_published_share_reverses_on_the_residual_and_survives_at_matched_depth():
     """Both results are kept visible: the registered residual reverses K562 against HepG2 on read
     share, and cutting both to the same number of peaks keeps K562 above with the gap shrunk. K562
     is alone at the top of DNase depth, so its residual is an extrapolation."""
+    tp.must_be_present(_NORM, _RAR, was="result files not on disk")
     norm = json.loads(_NORM.read_text())
     assert all(norm["kept"].values())
     for f in ("genes_read_open_depth_residual", "genes_read_depth_residual"):

@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.lang import parse
 from genomeos.organism import REFERENCES, ReferenceLineage
@@ -94,8 +95,13 @@ def test_no_organism_block_is_an_error():
 REF = Path(REFERENCES["celegans"])
 
 
-@pytest.mark.skipif(not REF.exists(), reason="run `genomeos data distil --only celegans_lineage`")
+# `REFERENCES["celegans"]` is `data/results/celegans_lineage_cells.json`, which git TRACKS, so the
+# `skipif` that stood here could never fire: it read as protection that does not exist, and it said
+# "run `genomeos data distil --only celegans_lineage`" about a file that is in the commit. Absence of
+# a tracked input is a BROKEN CHECKOUT, not a machine without the distilled reference, so it RAISES by
+# name (`tests/tracked_paths.py`). The words of the skip are carried into the failure, not dropped.
 def test_celegans_grows_to_the_adult_and_matches_the_reference():
+    tp.must_be_present(REF, was="run `genomeos data distil --only celegans_lineage`")
     from genomeos.lang import parse_file
 
     m = parse_file("data/organisms/celegans/embryo.bio")
