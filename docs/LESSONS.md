@@ -1779,3 +1779,67 @@ fail towards flattering is worse than no tool**, because its output is trusted. 
 is tested on a difference it must *not* forgive for the same reason. A mutation harness needs the same
 treatment: prove it can report a guard present when the guard is there, and absent when it is not, on a
 mutation whose file size does not change.
+
+## The acceptance rule a lane follows is not the gate the push runs (2026-10-03)
+
+A push of 19 commits was refused. The verdict was red for its tree with `error_class` **tooling** and
+`failed_leg` **ruff-format**: three committed files would be reformatted. Nothing was wrong with the
+science, nothing was wrong with any test, and the check ran for **2.1 seconds** before dying — so
+**pytest never ran at all**, and the tree's real state was still unknown after a full gate had been spent
+on it.
+
+The cause is not carelessness. The lane acceptance rule says *targeted tests plus `ruff` on your own
+files*, and **every one of those lanes ran `ruff check` and got "All checks passed"**. `ruff check` and
+`ruff format --check` are **different legs**. The lanes were green by the rule they were given and red by
+the gate's, and because only a push exercises the gate, the gap sat in the tree for nineteen commits
+before anything noticed.
+
+Three things follow, and the third is the general one.
+
+**A lane's rule must name the legs the gate runs, not a tool.** "Run ruff" is not a specification when
+the tool has two modes and the gate runs both. The brief now says `ruff check` **and**
+`ruff format --check`, by name.
+
+**A cheap leg that can refuse the whole gate should run before the expensive one, or the expensive one
+should not be gated behind it.** Two seconds of formatting decided whether 5,500 tests ran. The suite's
+result was the thing worth having and it was never produced.
+
+**And the general form: a check is only as informative as its narrowest gate.** A green from a subset
+says nothing about any leg the subset omits, however many tests the subset contains. The honest reading
+of a lane's green is "green on the legs it ran", and the only way to know the rest is to run the rest —
+which is why the push's job is the push's job, and why a cross-cutting leg that no lane owns has to be
+named somewhere every lane reads (`tests/always_run.py`, and `tests/test_onetarget2.py` joined it the
+same day for exactly this reason).
+
+## A blocker's reason goes stale, and acting on the reason instead of the tree can be destructive (2026-10-03)
+
+A killed push left its worktree behind. I ran `git worktree remove` on it. It failed with
+`Permission denied` — and the failure is **not atomic**: before reaching the read-only store clones it
+had already deleted the tracked files, the `.git` file, and **deregistered the worktree**. What is left is
+a **6.7 GB orphan that no git command can touch by any flag**, on a machine with about 16 GiB free
+against a capacity gate whose floor is 10 GB.
+
+`scripts/remove_worktree.py` exists precisely to prevent this. It unlocks the recorded clones **first**
+and then hands git a worktree it can actually delete. It has existed since `f7b4114`, committed hours
+earlier, and it documents this exact failure as a measured result.
+
+**I did not use it because the work board said it did not exist.** That blocker entry was written when it
+was true and was never updated when the tool landed. I read the board, believed the reason, and reached
+for the raw git command the tool was written to replace.
+
+The lesson is not "read the board less". It is that **a blocker records a reason, and a reason has a
+date**. The board is a list of what was true when each line was written; the tree is what is true now.
+So before acting on a blocker's *reason* — especially before any destructive step the reason seems to
+license — check the thing the reason asserts. `ls scripts/remove_worktree.py` would have cost nothing.
+
+Two further notes, because the recovery matters as much as the cause. The tool **refuses an orphan by
+design**, and is right to: *"it is REPORTED to its owner, never removed, because this tool has no way to
+tell an orphan from a directory that merely looks like one."* So there is no tool route out of the state
+I created, and the standing rule — **no worktree is removed by `rm`** — still holds over 6.7 GB of my own
+mess. That is the correct trade and it is uncomfortable on purpose. The real fix is upstream: a gate that
+creates a worktree should remove it through the tool, including when it is killed, so the orphan is never
+made.
+
+And one check that did pay: before the removal I verified the clones were distinct inodes from the real
+stores with `nlink=1` and that the worktree held no symlinks. That is why this story ends with wasted
+disk and not with a destroyed store.
