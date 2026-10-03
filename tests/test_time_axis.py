@@ -1,9 +1,6 @@
 """The reference lineage's minute measured against two independent clocks."""
 
 import json
-from pathlib import Path
-
-import pytest
 
 from genomeos.organism.reference import ReferenceLineage, distil, parse_wormweb
 from genomeos.organism.time_axis import _fit, compare
@@ -60,7 +57,9 @@ def test_compare_fits_births_divisions_and_midlife_on_a_toy():
     assert "reference minute" in r["reading"] or r["reading"].startswith("not enough")
 
 
-@pytest.mark.skipif(not Path("data/results/celegans_time_axis.json").exists(), reason="distil first")
+# No skipif: `data/results/celegans_time_axis.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
 def test_distilled_time_axis_says_the_reference_runs_slow():
     r = load_result("celegans_time_axis")
     assert r["packer_midlife"]["n"] > 50 and 0.6 <= r["packer_midlife"]["slope"] <= 0.8

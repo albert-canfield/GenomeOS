@@ -419,9 +419,21 @@ def test_the_v3_run_reports_three_rules_and_every_moved_claim(tmp_path, monkeypa
 
 
 # --- the committed re-judge --------------------------------------------------------------------------
-needs_v3 = pytest.mark.skipif(
-    not V3_RESULT.exists(), reason="the v3 re-judge is written once, after the code"
-)
+# No skipif: `data/results/attribution_correctness_v3.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
+# The re-judge is written once, after the code, and then committed; it is committed now.
+@pytest.fixture
+def the_v3_re_judge_is_committed() -> None:
+    """A TRACKED input: `data/results/attribution_correctness_v3.json`. Its absence is a broken
+    checkout, not a machine without a store, so this FAILS by name and never skips."""
+    if not V3_RESULT.exists():
+        raise AssertionError(
+            "data/results/attribution_correctness_v3.json is tracked by git and is missing from this checkout"
+        )
+
+
+needs_v3 = pytest.mark.usefixtures("the_v3_re_judge_is_committed")
 
 
 @pytest.fixture(scope="module")

@@ -304,9 +304,9 @@ def test_the_distance_bands_are_the_projects_with_one_residual_row() -> None:
 RESULTS = Path("data/results")
 
 
-@pytest.mark.skipif(
-    not (RESULTS / "gene_identity_registration.json").exists(), reason="registration not written yet"
-)
+# No skipif: `data/results/gene_identity_registration.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
 def test_the_registration_fixes_the_definitions_before_any_count() -> None:
     reg = json.loads((RESULTS / "gene_identity_registration.json").read_text())
     assert reg["alphagenome_requests"] == 0 and reg["network_requests"] == 0
@@ -321,7 +321,9 @@ def test_the_registration_fixes_the_definitions_before_any_count() -> None:
     assert annotation and all(len(e["sha256"]) == 64 for e in annotation)
 
 
-@pytest.mark.skipif(not (RESULTS / "gene_identity.json").exists(), reason="result not written yet")
+# No skipif: `data/results/gene_identity.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
 def test_the_result_sums_to_its_population_with_every_cause_named() -> None:
     res = json.loads((RESULTS / "gene_identity.json").read_text())
     c = res["counts"]
@@ -378,7 +380,9 @@ def test_the_recorded_names_to_look_for_are_the_real_symbols_and_the_token() -> 
 AMENDMENT = RESULTS / "gene_identity_registration_amendment_1.json"
 
 
-@pytest.mark.skipif(not AMENDMENT.exists(), reason="amendment 1 not written yet")
+# No skipif: `data/results/gene_identity_registration_amendment_1.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
 def test_amendment_one_accounts_for_every_cause_the_registration_does_not_name() -> None:
     reg = json.loads((RESULTS / "gene_identity_registration.json").read_text())
     am = json.loads(AMENDMENT.read_text())

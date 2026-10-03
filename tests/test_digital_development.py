@@ -1,10 +1,6 @@
 """Digital Development (Du et al. 2014): the observed founder transformations per knockout, scored against
 the program's own knockouts."""
 
-from pathlib import Path
-
-import pytest
-
 from genomeos.lang import parse_file
 from genomeos.organism.digital_development import GENE_TO_FACTOR, IDENTITY_TYPE, compare
 from genomeos.results import load_result
@@ -41,10 +37,9 @@ def test_compare_scores_reproduced_missed_and_not_modelled():
     )
 
 
-@pytest.mark.skipif(
-    not Path("data/results/celegans_digital_development.json").exists(),
-    reason="run `genomeos data distil --only celegans_digital_development`",
-)
+# No skipif: `data/results/celegans_digital_development.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
 def test_distilled_digital_development_check_holds():
     r = load_result("celegans_digital_development")
     assert r["genes_in_table"] >= 70 and r["genes_modelled"] >= 7

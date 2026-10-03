@@ -18,7 +18,23 @@ needs_knowledge = pytest.mark.skipif(
     not (nc.GENE_TABLE.exists() and (nc.crispri.KNOWLEDGE / nc.SOURCE).exists()),
     reason="the GENCODE table or the held-out CRISPR benchmark file is not fetched",
 )
-needs_fourth = pytest.mark.skipif(not FOURTH.exists(), reason="the fourth frame has not been run")
+
+
+# No skipif: `data/results/loci_fourth.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
+# Its one use is stacked under `needs_knowledge`, which keys on untracked stores and does fire.
+@pytest.fixture
+def the_fourth_frame_is_committed() -> None:
+    """A TRACKED input: `data/results/loci_fourth.json`. Its absence is a broken
+    checkout, not a machine without a store, so this FAILS by name and never skips."""
+    if not FOURTH.exists():
+        raise AssertionError(
+            "data/results/loci_fourth.json is tracked by git and is missing from this checkout"
+        )
+
+
+needs_fourth = pytest.mark.usefixtures("the_fourth_frame_is_committed")
 
 
 @pytest.fixture(scope="module")

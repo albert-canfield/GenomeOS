@@ -43,7 +43,21 @@ V1_PINNED_SHA256 = "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e03
 
 #: a real cut needs chr21's attribution results on this machine
 HAS_CHR21 = (ROOT / "data" / "results" / "budget_chr21.json").exists()
-needs_chr21 = pytest.mark.skipif(not HAS_CHR21, reason="chr21's budget is not on this machine")
+
+
+@pytest.fixture
+def the_chr21_budget_is_present() -> None:
+    """`data/results/budget_chr21.json` is TRACKED by git, so it is in every checkout and a
+    `skipif` on its absence could never fire -- it read as protection that did not exist. The
+    name is kept, because it names a real input a cut needs, but absence of a TRACKED input is a
+    broken checkout and not a machine without a store: FAIL by name, never skip."""
+    if not HAS_CHR21:
+        raise AssertionError(
+            "data/results/budget_chr21.json is tracked by git and is missing from this checkout"
+        )
+
+
+needs_chr21 = pytest.mark.usefixtures("the_chr21_budget_is_present")
 
 #: `needs_local_data`, the project's marker for a test that reads a git-ignored machine-local store
 #: (`tests/local_data.py`, the supervisor's AMENDED acceptance rule of 2026-10-02): such a test RUNS in a

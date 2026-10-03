@@ -252,9 +252,21 @@ def test_the_document_carries_the_registration_word_for_word():
 
 
 # --- the committed re-judge --------------------------------------------------------------------------
-needs_v2 = pytest.mark.skipif(
-    not V2_RESULT.exists(), reason="the v2 re-judge is written once, after the code"
-)
+# No skipif: `data/results/attribution_correctness_v2.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
+# The re-judge is written once, after the code, and then committed; it is committed now.
+@pytest.fixture
+def the_v2_re_judge_is_committed() -> None:
+    """A TRACKED input: `data/results/attribution_correctness_v2.json`. Its absence is a broken
+    checkout, not a machine without a store, so this FAILS by name and never skips."""
+    if not V2_RESULT.exists():
+        raise AssertionError(
+            "data/results/attribution_correctness_v2.json is tracked by git and is missing from this checkout"
+        )
+
+
+needs_v2 = pytest.mark.usefixtures("the_v2_re_judge_is_committed")
 
 
 @pytest.fixture(scope="module")

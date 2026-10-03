@@ -20,9 +20,10 @@ from genomeos.attribution import label_gene as lg
 REGISTRATION = Path("data/results/label_gene_registration.json")
 
 
-@pytest.mark.skipif(
-    not REGISTRATION.exists(), reason="the registration is written by its own committed script"
-)
+# No skipif: `data/results/label_gene_registration.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
+# It is written by its own committed script, and the bytes it wrote are committed too.
 def test_registration_on_disk_carries_every_registered_field_unchanged() -> None:
     """The committed file must still say what the module says: save_result adds fields, never
     rewrites one."""

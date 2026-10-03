@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import pytest
-
 from genomeos.molecules.rna import summarise_tissues, transcripts_of
 
 
@@ -21,9 +19,11 @@ def test_tissue_summary_patterns():
     assert summarise_tissues("X", "ENSG1.1", {})["pattern"] == "not detected"
 
 
-@pytest.mark.skipif(
-    not Path("data/results/gencode_v50_chr21_chrM.gff3.gz").exists(), reason="needs chr21 models"
-)
+# No skipif: `data/results/gencode_v50_chr21_chrM.gff3.gz` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
+# It is `annotation.GENCODE_SUBSET`, which is what `default_gencode({"chr21"})` returns here,
+# so the models this test needs are committed and not fetched.
 def test_transcripts_of_app():
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
 

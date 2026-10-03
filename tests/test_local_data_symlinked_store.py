@@ -33,7 +33,7 @@ the red, because then nobody could tell "not run here" from "passed".
 
 from __future__ import annotations
 
-import re
+import ast
 import subprocess
 from pathlib import Path
 
@@ -192,26 +192,360 @@ def test_a_symlink_that_is_not_an_ignored_name_is_refused_and_not_guessed(tmp_pa
     local_data.ignored_by_name.cache_clear()
 
 
-#: Every `needs_local_data` call site in the suite, read as text. Collecting the real markers would
-#: mean importing every test module; the fetch command is written at the call site, so the call site
-#: is what this reads.
-_MARKER_CALL = re.compile(r"needs_local_data\(\s*(.*?)\)\s*\n(?:def |@|needs_|\s*def )", re.S)
+# ---- the marker invariant, read by SYNTAX and not by text ---------------------------------------
+#
+# WHY AN AST AND NOT A REGEX. Until 2026-10-03 this invariant was `re.finditer(r"needs_local_data\(")`
+# over every `tests/test_*.py`, balancing parentheses by hand. A scan over source TEXT cannot tell a
+# marker from a MENTION of one, and on 2026-10-03 it went red on a marker that exists only inside a
+# STRING LITERAL -- `tests/test_fast_prepush.py`'s `MARKED` template, a test file that another test
+# writes to disk. `c9509e1` patched that one literal as the smallest honest fix and recorded that the
+# instrument was still wrong; the next plant that writes a marker into a string would have tripped it
+# again. A syntax tree cannot see inside a string literal, which is exactly the property wanted.
+#
+# THE CLAIM IS UNCHANGED, and is the reason this exists: a skip reason without a `how=` names the
+# store but not the way back to it, so a reader learns what is missing and not how to get it.
+#
+# COUNTS, measured at 0199fbe so a later divergence can be read against them: the text scan found 24
+# call sites, this walk finds 23, and the one difference is the string literal above. The walk finds
+# no site the text scan missed.
+
+
+def markers_without_how(source: str, filename: str) -> list[str]:
+    """Every `needs_local_data(...)` CALL in one module's syntax tree that gives no `how=` keyword.
+
+    Resolves the callee by its final name, so all three forms in use are found: a direct
+    `@pytest.mark.needs_local_data(...)` decorator, a module-level alias
+    (`needs_x = pytest.mark.needs_local_data(...)`) and either of those stacked under another
+    decorator -- a decorator is an expression like any other and `ast.walk` reaches it.
+    """
+    without = []
+    for node in ast.walk(ast.parse(source, filename=filename)):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if isinstance(func, ast.Attribute):
+            name = func.attr
+        elif isinstance(func, ast.Name):
+            name = func.id
+        else:
+            continue
+        if name != "needs_local_data":
+            continue
+        if not any(kw.arg == "how" for kw in node.keywords):
+            without.append(f"{filename}:{node.lineno}")
+    return without
+
+
+def marker_call_sites(source: str, filename: str) -> list[int]:
+    """The line of every `needs_local_data(...)` call in one module, found the same way."""
+    lines = []
+    for node in ast.walk(ast.parse(source, filename=filename)):
+        if isinstance(node, ast.Call):
+            func = node.func
+            name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+            if name == "needs_local_data":
+                lines.append(node.lineno)
+    return sorted(lines)
 
 
 def test_every_needs_local_data_marker_carries_the_command_that_fetches_the_store() -> None:
     """A skip reason without a `how` names the store but not the way back. None may be without one."""
-    without = []
+    without: list[str] = []
     for path in sorted(Path("tests").glob("test_*.py")):
-        text = path.read_text()
-        for match in re.finditer(r"needs_local_data\(", text):
-            start = match.end()
-            depth, i = 1, start
-            while i < len(text) and depth:
-                depth += (text[i] == "(") - (text[i] == ")")
-                i += 1
-            if "how=" not in text[start : i - 1]:
-                without.append(f"{path}:{text.count(chr(10), 0, match.start()) + 1}")
+        without.extend(markers_without_how(path.read_text(), str(path)))
     assert without == [], (
         f"these needs_local_data markers give no `how=`, so their skip reason cannot name the command "
         f"that fetches the store: {without}"
     )
+
+
+def test_the_marker_invariant_has_a_corpus_to_read_and_finds_all_three_decorator_forms() -> None:
+    """Non-vacuity over the REAL suite: a walk that resolved nothing would pass the test above.
+
+    The three forms are pinned by file, not by count, so adding a marker does not move this test:
+    `tests/test_astroargmax.py` carries direct `@pytest.mark.needs_local_data(...)` decorators,
+    `tests/test_compiled_defaults.py` a module-level alias, and in that same file the alias is
+    STACKED with a second decorator.
+    """
+    found = {
+        str(path): marker_call_sites(path.read_text(), str(path))
+        for path in sorted(Path("tests").glob("test_*.py"))
+    }
+    total = sum(len(v) for v in found.values())
+    assert total >= 20, f"the marker corpus has all but vanished, so the invariant reads nothing: {total}"
+    assert len(found["tests/test_astroargmax.py"]) >= 8, found["tests/test_astroargmax.py"]
+    assert found["tests/test_compiled_defaults.py"], "the module-level alias form was not found"
+    stacked = Path("tests/test_compiled_defaults.py").read_text()
+    assert "@needs_the_chr21_element_table\n@needs_chr21\n" in stacked, "the stacked form is gone"
+
+
+def test_the_marker_invariant_REFUSES_a_real_marker_that_carries_no_how() -> None:
+    """The plant. A check that cannot be shown to refuse is a list, not a check."""
+    planted = (
+        "import pytest\n"
+        "\n"
+        "\n"
+        '@pytest.mark.needs_local_data("data/cache/planted")\n'
+        "def test_reads_a_store_without_saying_how_to_get_it():\n"
+        "    pass\n"
+    )
+    assert markers_without_how(planted, "planted.py") == ["planted.py:4"]
+    # and the same marker, with a `how=`, is accepted: it is the `how=` being read, not the call
+    with_how = planted.replace('"data/cache/planted")', '"data/cache/planted", how="fetch it")')
+    assert markers_without_how(with_how, "planted.py") == []
+    assert marker_call_sites(with_how, "planted.py") == [4]
+
+
+def test_a_marker_written_inside_a_STRING_LITERAL_is_ignored() -> None:
+    """The case that caused this, planted so nobody re-tightens the instrument back to a text scan.
+
+    A test file that WRITES a test file carries markers in its string literals. Those are not call
+    sites of this suite: the generated file has its own run, with its own conftest, and this
+    invariant does not reach it. The planted literal here deliberately carries NO `how=`, so a text
+    scan would refuse it; the AST sees a string and nothing else.
+    """
+    planted = (
+        'TEMPLATE = """\\\n'
+        "import pytest\n"
+        "\n"
+        "\n"
+        '@pytest.mark.needs_local_data("data/cache/planted")\n'
+        "def test_written_to_disk_by_another_test():\n"
+        "    pass\n"
+        '"""\n'
+    )
+    assert 'needs_local_data("data/cache/planted")' in planted  # the text a regex would have matched
+    assert markers_without_how(planted, "planted.py") == []
+    assert marker_call_sites(planted, "planted.py") == []
+
+
+# ---- a skip guard keyed on a path git TRACKS can never fire -------------------------------------
+#
+# THE CLASS, found on 2026-10-03. Twelve `skipif` guards were keyed on the existence of a file that
+# git TRACKS. A tracked file is in every checkout -- this one, CI, a verdict worktree, the store-free
+# pre-push leg, which keeps `data/results` because it is committed -- so those skips had never fired
+# anywhere and could not. They were not failures: the tests ran and passed. They read as protection
+# that did not exist, and a reader who believed them would think a test was conditional when it was
+# not. The twelve were settled (eleven conditions removed, one turned into a fixture that FAILS) and
+# this is the check that stops the class coming back.
+#
+# WHAT IS NOT REFUSED, and why the rule is "every term", not "any term". A guard whose condition
+# names several paths can fire as soon as ONE of them can be absent, and a term this cannot resolve
+# statically -- an imported module constant, a function call -- might be anything. So a guard is
+# called inert only when EVERY path term it carries resolves AND every one of them is tracked. The
+# two compound guards in `tests/test_context_evidence.py` are of exactly that shape: inert on their
+# first term (`data/results/budget_chr21.json`, tracked) and live on their second, and they pass.
+#
+# WHY NOT `needs_local_data`. The marker is for the git-IGNORED machine-local stores and RAISES on a
+# path git tracks (`local_data.ignored_by_name`). Converting one of these guards to it would be a
+# lie about the path and would raise at once.
+
+
+def _tracked_paths() -> frozenset[str]:
+    """Every path git tracks in this checkout, as git spells it: repository-relative, forward slashes."""
+    out = subprocess.run(["git", "ls-files"], capture_output=True, text=True, check=True)
+    return frozenset(out.stdout.splitlines())
+
+
+def _is_repo_root(node: ast.AST) -> bool:
+    """`Path(__file__).resolve().parents[1]` and its kin: the repository root spelled from a file."""
+    return any(isinstance(n, ast.Attribute) and n.attr == "parents" for n in ast.walk(node))
+
+
+def _as_path(node: ast.AST, consts: dict[str, str]) -> str | None:
+    """A repository-relative path for an expression, or None when it cannot be resolved by syntax.
+
+    None is not a failure: it is the honest answer for `ce.TRACK_METADATA` or `default_gencode(...)`,
+    and it is what keeps such a guard out of the inert class.
+    """
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    if isinstance(node, ast.Name):
+        return consts.get(node.id)
+    if isinstance(node, ast.Call):
+        func = node.func
+        name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+        if name in {"Path", "str"} and len(node.args) == 1 and not node.keywords:
+            return _as_path(node.args[0], consts)
+        return None
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        left = _as_path(node.left, consts)
+        if left is None and _is_repo_root(node.left):
+            left = ""  # ROOT / "data" / ... is the same path as "data/..." asked of git
+        right = _as_path(node.right, consts)
+        if left is None or right is None:
+            return None
+        return f"{left}/{right}".lstrip("/")
+    return None
+
+
+def _existence_terms(node: ast.AST, consts: dict[str, str], predicates: dict[str, list]) -> list:
+    """Every `<something>.exists()` term inside an expression, each resolved to a path or to None.
+
+    Follows a module-level boolean through its name, which is the form `needs_chr21` used:
+    `HAS_CHR21 = (ROOT / "data" / "results" / "budget_chr21.json").exists()` and then
+    `skipif(not HAS_CHR21, ...)`. Without that the condition is a bare `Name` and carries no path.
+    """
+    terms: list = []
+    for inner in ast.walk(node):
+        if (
+            isinstance(inner, ast.Call)
+            and isinstance(inner.func, ast.Attribute)
+            and inner.func.attr == "exists"
+            and not inner.args
+        ):
+            terms.append(_as_path(inner.func.value, consts))
+        elif isinstance(inner, ast.Name) and inner.id in predicates:
+            terms.extend(predicates[inner.id])
+    return terms
+
+
+def _module_level(tree: ast.Module) -> tuple[dict[str, str], dict[str, list]]:
+    """Module-level names: those that resolve to a path, and those that are an existence predicate."""
+    consts: dict[str, str] = {}
+    predicates: dict[str, list] = {}
+    for stmt in tree.body:
+        if not (isinstance(stmt, ast.Assign) and len(stmt.targets) == 1):
+            continue
+        target = stmt.targets[0]
+        if not isinstance(target, ast.Name):
+            continue
+        resolved = _as_path(stmt.value, consts)
+        if resolved is not None:
+            consts[target.id] = resolved
+        elif _is_repo_root(stmt.value):
+            consts[target.id] = ""
+        terms = _existence_terms(stmt.value, consts, predicates)
+        if terms:
+            predicates[target.id] = terms
+    return consts, predicates
+
+
+def skip_guards(source: str, filename: str) -> list[tuple[str, list]]:
+    """Every `skipif(...)` call site in one module, with the path terms its condition tests."""
+    tree = ast.parse(source, filename=filename)
+    consts, predicates = _module_level(tree)
+    guards = []
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Call) and node.args):
+            continue
+        func = node.func
+        name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+        if name != "skipif":
+            continue
+        terms = _existence_terms(node.args[0], consts, predicates)
+        if terms:
+            guards.append((f"{filename}:{node.lineno}", terms))
+    return guards
+
+
+def inert_skip_guards(source: str, filename: str, tracked: frozenset[str]) -> list[tuple[str, list]]:
+    """The guards that can never fire: every path their condition tests is tracked by git."""
+    return [
+        (where, terms)
+        for where, terms in skip_guards(source, filename)
+        if all(path is not None and path in tracked for path in terms)
+    ]
+
+
+def test_no_skip_guard_is_keyed_on_a_path_that_git_TRACKS() -> None:
+    """A tracked file is in every checkout, so a skip waiting on its absence is not a guard at all."""
+    tracked = _tracked_paths()
+    inert = []
+    for path in sorted(Path("tests").glob("test_*.py")):
+        inert.extend(inert_skip_guards(path.read_text(), str(path), tracked))
+    assert inert == [], (
+        f"these skipif guards test for a file git TRACKS, so they are present in every checkout and "
+        f"the skip can never fire -- remove the condition and let the test run, or make the absence "
+        f"of a tracked input a failure: {inert}"
+    )
+
+
+def test_the_tracked_path_check_has_a_corpus_and_resolves_the_two_guards_that_DO_fire() -> None:
+    """Non-vacuity over the real suite. A resolver that answered None everywhere would pass above.
+
+    The two pinned guards are the ones measured on 2026-10-03 to key on genuinely UNTRACKED paths,
+    and they are named by path rather than by line so an edit above them does not move this test.
+    """
+    tracked = _tracked_paths()
+    resolved = {}
+    for path in sorted(Path("tests").glob("test_*.py")):
+        for where, terms in skip_guards(path.read_text(), str(path)):
+            resolved[where] = terms
+    with_a_path = [t for t in resolved.values() if any(p is not None for p in t)]
+    assert len(with_a_path) >= 20, f"the resolver has stopped resolving paths: {len(with_a_path)}"
+
+    gencode = [t for w, t in resolved.items() if w.startswith("tests/test_gene_identity.py:")]
+    assert ["data/reference/gencode_v50_chr21.gff3.gz"] in gencode, gencode
+    assert "data/reference/gencode_v50_chr21.gff3.gz" not in tracked
+
+    compound = [t for w, t in resolved.items() if w.startswith("tests/test_context_evidence.py:")]
+    assert compound, "the compound guards are gone"
+    for terms in compound:
+        assert "data/results/budget_chr21.json" in terms and None in terms, terms
+    assert (
+        inert_skip_guards(
+            Path("tests/test_context_evidence.py").read_text(), "tests/test_context_evidence.py", tracked
+        )
+        == []
+    ), "a compound guard that can fire on its second term must not be refused"
+
+
+def test_the_tracked_path_check_REFUSES_a_guard_on_a_tracked_path() -> None:
+    """The plant, both ways: the same guard refuses on a tracked path and passes on an untracked one."""
+    planted = (
+        "from pathlib import Path\n"
+        "\n"
+        "import pytest\n"
+        "\n"
+        'NEEDED = Path("data/results/planted.json")\n'
+        "\n"
+        "\n"
+        '@pytest.mark.skipif(not NEEDED.exists(), reason="not written yet")\n'
+        "def test_reads_a_committed_result():\n"
+        "    pass\n"
+    )
+    where = [w for w, _ in skip_guards(planted, "planted.py")]
+    assert where == ["planted.py:8"], where
+
+    refused = inert_skip_guards(planted, "planted.py", frozenset({"data/results/planted.json"}))
+    assert refused == [("planted.py:8", ["data/results/planted.json"])], refused
+    # the identical guard on a path git does not track is left alone
+    assert inert_skip_guards(planted, "planted.py", frozenset({"data/results/something_else.json"})) == []
+
+
+def test_the_tracked_path_check_passes_a_guard_whose_second_term_can_be_absent() -> None:
+    """The two shapes that must survive: one untracked term, and one term it cannot resolve."""
+    both_tracked = (
+        "from pathlib import Path\n"
+        "\n"
+        "import pytest\n"
+        "\n"
+        "import somewhere\n"
+        "\n"
+        "ROOT = Path(__file__).resolve().parents[1]\n"
+        "\n"
+        "\n"
+        "@pytest.mark.skipif(\n"
+        '    not ((ROOT / "data" / "results" / "a.json").exists() and Path("data/cache/b").exists()),\n'
+        '    reason="one of the two is not here",\n'
+        ")\n"
+        "def test_needs_both():\n"
+        "    pass\n"
+        "\n"
+        "\n"
+        "@pytest.mark.skipif(\n"
+        '    not ((ROOT / "data" / "results" / "a.json").exists() and somewhere.TABLE.exists()),\n'
+        '    reason="one of the two is not here",\n'
+        ")\n"
+        "def test_needs_both_one_of_them_opaque():\n"
+        "    pass\n"
+    )
+    guards = dict(skip_guards(both_tracked, "planted.py"))
+    assert guards["planted.py:10"] == ["data/results/a.json", "data/cache/b"], guards
+    assert guards["planted.py:18"] == ["data/results/a.json", None], guards
+    only_a = frozenset({"data/results/a.json"})
+    assert inert_skip_guards(both_tracked, "planted.py", only_a) == []
+    # and with BOTH terms tracked the same compound guard IS refused, so the rule is not toothless
+    both = frozenset({"data/results/a.json", "data/cache/b"})
+    assert [w for w, _ in inert_skip_guards(both_tracked, "planted.py", both)] == ["planted.py:10"]

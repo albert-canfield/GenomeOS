@@ -116,7 +116,9 @@ def test_the_registration_says_the_primary_cannot_move_and_names_the_instrument(
     assert "stays optional" in AMENDMENT["verdict_rule"]
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="gate (b) has not been run in this checkout")
+# No skipif: `data/results/abundance_gate.json` is TRACKED by git, so it is
+# in every checkout and a guard on its absence could never fire anywhere -- this test has
+# always run. The condition is gone; the input it named is named here instead.
 def test_the_recorded_run_fails_the_gate_and_the_derivation_holds() -> None:
     got = json.loads(RESULT.read_text())
     assert got["verdict"]["passed"] is False
