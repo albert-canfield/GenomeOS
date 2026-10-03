@@ -331,28 +331,57 @@ def test_the_nine_committed_results_that_declare_an_absolute_input_are_measured_
         ]
         if abs_paths:
             absolute[f.stem] = abs_paths
-    assert len(absolute) >= 9, f"{len(absolute)} results declare an absolute input, 9 were measured"
+    assert len(absolute) >= 11, f"{len(absolute)} results declare an absolute input, 11 were measured"
     every = [p for paths in absolute.values() for p in paths]
 
-    # Every absolutely declared input in the registry points inside the MAIN checkout -- not one of
-    # them names another machine -- which is why (C) covers all of them there. The main checkout is
-    # asked of git rather than taken from __file__, because __file__ is the WORKTREE when this runs in
-    # one, and that distinction is the whole of the limitation pinned below.
-    common = subprocess.run(
-        ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.strip()
-    main_root = Path(common).parent
-    outside = [p for p in every if mr.repo_relative_declaration(p, main_root) is None]
-    assert outside == [], f"an absolute declaration outside the main checkout: {outside[:3]}"
+    # THE ROOT IS DERIVED FROM THE DECLARATIONS THEMSELVES, never from this checkout.
+    #
+    # The first version of this test asked git for `--git-common-dir` and tested the declarations
+    # against THAT. It passes here and is RED IN CI, which is the whole point of the limitation it
+    # was written to pin: in CI the common dir is /home/runner/work/GenomeOS/GenomeOS, every one of
+    # these declarations names a different machine, so all of them relativise to None and the
+    # `outside == []` assertion fails. The local gate cannot see it, because from a worktree
+    # `--git-common-dir` resolves back to this checkout. A red that only a different checkout can
+    # show is a push-gate red, and this one would have blocked a paid run's CI-green step.
+    #
+    # So the claim is restated as what it always meant: these declarations share ONE recording root,
+    # and against THAT root every one of them relativises. That is true in a checkout at any path.
+    recording_root = Path(os.path.commonpath(every))
+    assert str(recording_root) != os.sep, "the declarations share no common root at all"
+    outside = [p for p in every if mr.repo_relative_declaration(p, recording_root) is None]
+    assert outside == [], f"an absolute declaration outside its own recording root: {outside[:3]}"
 
-    # AND THE LIMITATION, pinned rather than described: the repository root of a WORKTREE is not the
-    # root the declaration was written against, so against a worktree's root every one of these
-    # declarations is outside and (C) does not relativise it. A rebuild of these results is therefore
-    # unblocked only when the tool is run from the checkout the writer ran in, and NOT in CI, in a
-    # verdict worktree or in the store-free pre-push leg. The full gate on 2026-10-03 caught this
-    # test asserting the opposite from a worktree, which is how the limitation came to be measured.
-    in_a_worktree = main_root / ".claude" / "worktrees" / "any-lane"
-    assert [p for p in every if mr.repo_relative_declaration(p, in_a_worktree) is not None] == []
+    # AND THE LIMITATION, pinned rather than described, and now pinned in the form that holds
+    # everywhere: against a root at ANY OTHER PATH -- which is CI, a verdict worktree, the store-free
+    # pre-push leg, or another developer's machine -- every one of these declarations is outside, and
+    # (C) does not relativise it. A rebuild of these results is unblocked only when the tool runs
+    # from the checkout the writer ran in.
+    for foreign in (
+        Path("/home/runner/work/GenomeOS/GenomeOS"),  # the CI job's checkout, by name
+        recording_root / ".claude" / "worktrees" / "any-lane",  # a verdict worktree
+        Path("/tmp/not-this-checkout"),
+    ):
+        assert [p for p in every if mr.repo_relative_declaration(p, foreign) is not None] == [], (
+            f"a declaration relativised against a foreign root {foreign}, so the limitation this "
+            "test pins is not the limitation the tool has"
+        )
+
+    # AND THE OVERCLAIM THE FIRST VERSION CARRIED, corrected here with the split measured.
+    #
+    # It said every absolute declaration "points inside the MAIN checkout ... which is why (C)
+    # covers all of them there". That is FALSE for 435 of the 502. Those 435 were recorded while the
+    # writer ran INSIDE a lane worktree, so (C) relativises them to a path under
+    # .claude/worktrees/<lane>/ -- a worktree deleted since -- and NOT to the repository path. Those
+    # three results stay unrebuildable even from this checkout, and one of them, prior_only_test, is
+    # the pilot's headline (+0.163). Mapping a .claude/worktrees/<lane>/ prefix onto the repo path,
+    # with the manifest's own sha256 deciding identity, is strictly wider than "resolves inside the
+    # root" and is a ROADMAP row rather than a silent widening here.
+    in_a_lane_worktree = {
+        name: sum(1 for p in paths if "/.claude/worktrees/" in p) for name, paths in absolute.items()
+    }
+    assert sum(in_a_lane_worktree.values()) == 435, in_a_lane_worktree
+    assert {k: v for k, v in in_a_lane_worktree.items() if v} == {
+        "prior_only_test": 336,
+        "pilot_biological_gate": 98,
+        "pilot_synthetic_gate": 1,
+    }, in_a_lane_worktree
