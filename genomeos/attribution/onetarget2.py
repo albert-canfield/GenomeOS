@@ -699,6 +699,51 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
         "rules() and appends SOURCE_PREDICTED_WINDOW rules: a population in no committed program, "
         "kept out of SOURCES so no caller counting compiled rules moves",
     },
+    "genomeos/attribution/variation.py": {
+        "now": (298,),
+        "was": (197,),
+        "what": "elements_of() is NOT CHANGED AT ALL -- the diff against its committed form removes "
+        "zero lines -- so every committed variation_chr*.json figure is produced by the unchanged "
+        "function; its one read moved 197 -> 298 only because window_elements_of() and the two "
+        "constants sit above it. window_elements_of() CALLS it and does not read a head itself: it "
+        "reads the ROW elements_of already built, compares the stored magnitude with the window's "
+        "value for the same gene, and RAISES if they differ, because the registration says a move "
+        "there refutes the invariant and stops the wave rather than becoming a finding",
+    },
+    "genomeos/attribution/vista.py": {
+        "now": (260, 277, 278, 280, 358, 438, 452),
+        "was": (260, 277, 278, 280, 312, 326),
+        "what": "score() is NOT TOUCHED: 260 (the over-length skip writing a None head), 277, 278 "
+        "and 280 (predicted_group and tissue_agrees) are all at their registered lines, because the "
+        "window arm sits BELOW score() and above summarise(). summarise()'s two reads moved 312, "
+        "326 -> 430, 444 and are unchanged, so with_predicted_target and strong do not move. The "
+        "NEW read, 350, is inside window_tissue_agreement(), which returns {} without a reader; it "
+        "reads the same head in order to find the rows whose head DISAGREED, which is the "
+        "population the registered falsifier asks about. tissue_agrees is never recomputed and "
+        "never overwritten",
+    },
+    "genomeos/benchmark/rearrangements.py": {
+        "now": (450,),
+        "was": (427,),
+        "what": "the ONE registered read is unchanged and still reads the same two heads in the same "
+        "order; it moved 427 -> 450 only because the two constants and the widened signature sit "
+        "above it. names_the_recipient is NOT touched, so no committed benchmark figure moves: the "
+        "falsifier is read from names_the_recipient_in_the_window beside it, and the registration's "
+        "demand about genes_named's truncation to 8 is met by DECLARING it (genes_named_total, "
+        "genes_named_truncated_to) rather than widening a committed field",
+    },
+    "genomeos/attribution/gwas.py": {
+        "now": (203, 232, 282, 283, 284, 293, 295),
+        "was": (153, 154, 155, 164, 166),
+        "what": "summarise() keeps every committed figure and every registered read: the three "
+        "partition lines moved 153, 154, 155 -> 274, 275, 276 and the agreement selection 164, 166 "
+        "-> 285, 287, pushed down by the window arm added above them and not rewritten. The two NEW "
+        "reads, 203 and 224, are inside window_agreement(), which returns {} without a reader so "
+        "summarise contributes no new key at all; 203 is the head half of the comparison the "
+        "registered falsifier names and 224 names the head beside the gene that was gained. The "
+        "catalogue's mapped-gene rule is read through a NEW helper, _mapped_genes, so the two "
+        "committed expressions that produce the stored shares are left exactly as they are",
+    },
     "genomeos/genome/regdiff.py": {
         "now": (128, 205, 220, 295, 296, 314, 315),
         "was": (101, 176, 177, 194, 195),
@@ -713,6 +758,69 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
         "a reader was asked for",
     },
 }
+
+
+#: THE TWO FREE MODULES THIS WAVE DELIBERATELY DID NOT MOVE, with the dependency that stops them
+#: CHECKED against the record rather than recalled. Both are class `identity` and status `free` in
+#: the census -- nothing holds them on the work board and neither is in the frozen closure -- and
+#: both are registered with a falsifier that CANNOT FIRE this wave. A change appearing in either
+#: without its upstream moving would therefore be a DEFECT and not a result, which is exactly why
+#: the registration named them: the dependency is on the record, not discovered later.
+NOT_MOVED_THIS_WAVE: tuple[dict[str, Any], ...] = (
+    {
+        "module": "genomeos/report.py",
+        "falsifier": "a gene whose `strongest_predicted` element changes identity",
+        "cannot_fire_because": "its rows come from genomeos/genome/regulation.py, which IS one of "
+        "the 52 files of the frozen import closure and is not this wave's to touch. report.py "
+        "itself is NOT in the closure, so the block is the upstream and not the module.",
+        "checked": "report.py imports genomeos.genome.regulation; "
+        "genomeos/genome/regulation.py in sender_closure() is True; "
+        "genomeos/report.py in sender_closure() is False.",
+        "what_would_be_a_defect": "any change to strongest_predicted while regulation.py is "
+        "unchanged, because the set it selects from is built one gene per element upstream",
+    },
+    {
+        "module": "genomeos/knowledge/across.py",
+        "falsifier": "an element whose across-species gene changes",
+        "cannot_fire_because": "it reads the COMMITTED data/results/vista_chr*.json files, so it "
+        "cannot move until vista.py is RE-RUN and those files are rewritten. The registration says "
+        "this in those words, and it is NOT the same dependency as report.py's: across.py is not "
+        "downstream of regulation.py at all.",
+        "checked": "across.py reads data/results/vista_chr*.json; 23 such files on disk, all "
+        "tracked by git and none modified in the working tree, so the gene it reads today is the "
+        "committed one.",
+        "what_would_be_a_defect": "any change to the across-species gene without a new vista run, "
+        "because the stored head is the only thing this module reads",
+        "what_this_wave_DID_establish_about_it": "vista.py's own window arm fired on 13 rows of "
+        "2,223, so the stored vista heads ARE narrower than the window at those elements. That is a "
+        "measurement about vista.py's rows and NOT a change to across.py's output, which still "
+        "reads the committed head and is untouched by this wave.",
+    },
+)
+
+
+#: AMENDMENTS TO THE REGISTRATION, additive and each with the module that forced it. The rule
+#: 24adf33 set is that a module which cannot move without widening its claim says so HERE rather
+#: than widening it in silence. Nothing here weakens a falsifier or a refusal; each entry adds a
+#: quantity the shared reader did not provide and names what asserts it did not become a second rule.
+AMENDMENTS: tuple[dict[str, Any], ...] = (
+    {
+        "amendment": "the shared reader gains the TRACK beside the gene at the bar",
+        "added": "attribution/targets.tracks_at_bar",
+        "forced_by": "genomeos/attribution/vista.py",
+        "why": "vista's registered falsifier is about tissue_agrees, which compares the predicted "
+        "track GROUP with the element's observed expression groups. WindowReading carries the gene "
+        "and the signed change and drops the track, so a second gene at the bar has no group to "
+        "compare and the falsifier cannot be asked at all without it.",
+        "what_is_not_widened": "no falsifier, no refusal and no census line changes; the compact "
+        "head stays the head and tissue_agrees itself is untouched. The answer read off the window "
+        "is a NEW key beside it.",
+        "how_it_is_kept_from_becoming_a_second_size_rule": "tracks_at_bar applies genes_at_bar's own "
+        "rule to the same fields in the same order, and tests/test_vista_window.py asserts that its "
+        "(gene, signed) projection EQUALS genes_at_bar's output on fixtures and on real chromosome "
+        "data, so the two cannot drift apart unnoticed.",
+    },
+)
 
 
 class CensusDriftError(RuntimeError):

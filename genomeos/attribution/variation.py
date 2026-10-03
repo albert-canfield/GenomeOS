@@ -184,6 +184,107 @@ def classify_blocks(blocks: list[dict], stats: list[IntervalStats | None]) -> li
     return rows
 
 
+#: THE REGISTERED FALSIFIER, and it is one of the three the registration expects NOT to fire:
+#: "any row's log2_fold_change changing. The head's magnitude is the window maximum by construction,
+#: so this number must NOT move; if it does, predict_target's size rule and genes_at_bar's are not
+#: the same rule and every magnitude in the census is in doubt."
+WINDOW_FALSIFIER = (
+    "any row's log2_fold_change changing; the head's magnitude is the window maximum by "
+    "construction, so a move means predict_target and genes_at_bar are not the same rule and every "
+    "magnitude in the census is in doubt"
+)
+#: THE REGISTERED LIMIT IS LOAD-BEARING HERE: this module reads `predicted_coding`, so the magnitude
+#: it carries is the CODING head's, and the measured invariant is an ANY-GENE one. 10 of 4,794
+#: elements had no `predicted_coding` where the cache named a coding gene (2026-09-27), so a
+#: coding-head disagreement is expected, is counted by name, and is NOT a refutation --
+#: `onetarget2.check_head_invariant` is called on the any-gene head alone, as it is everywhere.
+CODING_HEAD_IS_NOT_INVARIANT = (
+    "variation.py reads the coding head, and the measured invariant is an any-gene one: a "
+    "coding-head disagreement is expected at the 10-in-4,794 rate of the 2026-09-27 result, is "
+    "counted by name, and does not refuse"
+)
+
+
+class MagnitudeMovedError(RuntimeError):
+    """A row's log2_fold_change is not the window's value for the same gene. The wave stops."""
+
+
+def window_elements_of(
+    chrom: str, results_dir: Path = RESULTS_DIR, responses=None, coding: set[str] | None = None
+) -> tuple[list[dict], dict]:
+    """`elements_of` unchanged, plus the arm that asks whether any magnitude moved.
+
+    Returns the rows and the arm. Without a reader the rows are `elements_of`'s own, untouched, and
+    the arm is `{}`: this function is then exactly the committed call with an empty dict beside it.
+
+    With a reader each row gains ONE key, `window`, and `target` and `log2_fold_change` are carried
+    through unchanged -- they are not recomputed, because recomputing them is how a magnitude would
+    move without anyone noticing. The arm compares the stored magnitude with the window's value for
+    THE SAME GENE and raises if they differ, because the registration says a move there refutes the
+    invariant and stops the wave rather than becoming a finding.
+    """
+    rows = elements_of(chrom, results_dir)
+    if responses is None:
+        return rows, {}
+    from genomeos.attribution import onetarget2 as ot
+    from genomeos.attribution.targets import window_reading
+
+    by_id = {}
+    for name in ("constrained_targets", "enhancer_targets"):
+        r = load_result(f"{name}_{chrom}", results_dir) or {}
+        for e in r.get("elements", []):
+            by_id.setdefault(e["id"], e)
+    compared = not_cached = any_dis = coding_dis = gained = 0
+    extra_total = 0
+    for row in rows:
+        e = by_id.get(row["id"])
+        w = window_reading(responses, chrom, e, coding=coding) if e is not None else None
+        if w is None or w.not_cached:
+            not_cached += 1
+            row["window"] = {"not_cached": True, "at_bar": [], "extra": []}
+            continue
+        if w.head_agrees is False:
+            any_dis += 1
+        if w.coding_head_agrees is False:
+            coding_dis += 1
+        bar = dict(w.coding_at_bar or ())
+        if row["target"] is not None:
+            got = bar.get(row["target"])
+            if got is None or round(float(got), 4) != round(float(row["log2_fold_change"]), 4):
+                raise MagnitudeMovedError(
+                    f"{chrom} {row['id']}: the stored log2_fold_change for {row['target']} is "
+                    f"{row['log2_fold_change']} and the window's value for the same gene is {got}. "
+                    f"{WINDOW_FALSIFIER}. THE MAGNITUDE MOVED; nothing is reported."
+                )
+            compared += 1
+        extra = [g for g in w.coding_genes if g != row["target"]]
+        extra_total += len(extra)
+        if extra:
+            gained += 1
+        row["window"] = {
+            "not_cached": False,
+            "at_bar": [list(t) for t in (w.coding_at_bar or ())],
+            "extra": extra,
+        }
+    ot.check_head_invariant({"head_disagreements": any_dis}, f"attribution/variation.py {chrom}")
+    return rows, {
+        "falsifier": WINDOW_FALSIFIER,
+        "limit": CODING_HEAD_IS_NOT_INVARIANT,
+        "rows": len(rows),
+        "magnitudes_compared": compared,
+        "rows_not_cached": not_cached,
+        "any_gene_head_disagreements": any_dis,
+        "coding_head_disagreements": coding_dis,
+        "rows_gaining_a_coding_gene": gained,
+        "coding_genes_gained": extra_total,
+        "verdict_against_its_own_falsifier": (
+            f"does NOT fire, as registered: all {compared} stored magnitude(s) are the window's own "
+            f"value for the same gene, to four places; {gained} row(s) gain a coding gene the "
+            "projection dropped, which is not a magnitude moving"
+        ),
+    }
+
+
 def elements_of(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict]:
     """Every element the target runs scored on this chromosome, constrained run first, by id."""
     seen: set[str] = set()

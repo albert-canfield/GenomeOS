@@ -143,8 +143,137 @@ def _frac(rows, pred) -> float | None:
     return round(sum(1 for r in rows if pred(r)) / len(rows), 3) if rows else None
 
 
-def summarise(elements: list[dict[str, Any]], hits: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
-    """Enrichment of lead variants over the attribution's own partitions of the elements."""
+#: THE ONE MODULE IN THE CENSUS WHOSE HEADLINE FIGURE CAN ONLY MOVE ONE WAY, which is why its
+#: registered falsifier is "the agreement share not rising": an element agrees if ANY gene at the bar
+#: is the catalogue's mapped gene, and agreeing on the HEAD is a special case of that, so the window
+#: set is a superset of the head set. A share that falls, or an element that loses its agreement, is
+#: a DEFECT IN THE MOVE and not a finding, and `window_agreement` refuses rather than reporting it.
+WINDOW_CAN_ONLY_RISE = (
+    "agreement on the head is a special case of agreement on any gene at the bar, so the window set "
+    "contains the head set; an element that loses its agreement means the window was not formed from "
+    "the same element and is a defect, not a result"
+)
+#: This module reads the ANY-GENE head (`predicted`), not the coding head, so the 2026-09-27
+#: coding-head exception does not reach these figures; the any-gene invariant does, and
+#: `onetarget2.check_head_invariant` is called on this population.
+WINDOW_READS_THE_ANY_GENE_HEAD = (
+    "gwas.py reads the any-gene head field and not the coding one, so the registered coding-head "
+    "limit is not load-bearing here and the any-gene invariant is checked on this population"
+)
+
+
+class WindowLostAnAgreementError(RuntimeError):
+    """An element agreed on its head and not on its window. That cannot happen; the move is wrong."""
+
+
+def _mapped_genes(h: dict[str, Any]) -> list[str]:
+    """The catalogue's mapped gene(s) for one hit, by the same rule `summarise` has always used.
+
+    A new helper rather than a rewrite of the two expressions above it: those lines produce committed
+    figures and are left exactly as they are.
+    """
+    return (h.get("mapped_gene") or "").replace(" - ", ",").split(",")
+
+
+def window_agreement(
+    with_hit: list[dict[str, Any]],
+    responses=None,
+    coding: set[str] | None = None,
+    min_effect: float = 0.1,
+) -> dict[str, Any]:
+    """Agreement with the catalogue read off the WHOLE window instead of the one predicted gene.
+
+    `{}` without a reader, so `summarise` contributes no new key and every committed figure of this
+    module is produced by the unchanged code path.
+
+    The refusal is the point. `WINDOW_CAN_ONLY_RISE`: an element whose head is the mapped gene must
+    also have that gene at its bar, because the head is always at its own bar. An element that
+    agreed on the head and does not agree on the window is therefore a defect in how the window was
+    formed -- the wrong element, the wrong chromosome, a stale cache -- and this function raises and
+    names the element rather than publishing a share that fell.
+    """
+    if responses is None:
+        return {}
+    from genomeos.attribution import onetarget2 as ot
+    from genomeos.attribution.targets import window_reading
+
+    head_agree, bar_agree, gained, not_cached, disagreements = [], [], [], 0, 0
+    for e in with_hit:
+        mapped = {g for h in e["gwas"] for g in _mapped_genes(h) if g}
+        on_head = ((e.get("predicted") or {}).get("gene") or "") in mapped
+        w = window_reading(responses, e["chrom"], e, coding=coding, min_effect=min_effect)
+        if w.not_cached:
+            #: AN ELEMENT THE CACHE DOES NOT HOLD KEEPS ITS COMPACT ANSWER, which is
+            #: `WindowReading`'s own contract: not_cached is neither an empty window nor a zero, and
+            #: a consumer must keep its compact reading and count it by name. Doing anything else
+            #: here would let the share FALL on elements that were never scored rather than on
+            #: anything the window said -- the first form of this function raised on exactly such an
+            #: element, and the refusal was right about the shape and wrong about the cause.
+            not_cached += 1
+            on_bar = on_head
+        else:
+            if w.head_agrees is False:
+                disagreements += 1
+            on_bar = bool(mapped & set(w.genes))
+        if on_head:
+            head_agree.append(e)
+            if not on_bar:
+                raise WindowLostAnAgreementError(
+                    f"{e.get('key') or e.get('id')}: the catalogue's mapped gene is this element's "
+                    f"predicted head and is NOT at its bar. {WINDOW_CAN_ONLY_RISE}. The share is not "
+                    "published; the move is wrong."
+                )
+        if on_bar:
+            bar_agree.append(e)
+            if not on_head:
+                gained.append(
+                    {
+                        "key": e.get("key") or e.get("id"),
+                        "head": (e.get("predicted") or {}).get("gene"),
+                        "mapped": sorted(mapped),
+                        "rank_in_the_window": min(
+                            (w.genes.index(g) + 1 for g in mapped if g in w.genes), default=None
+                        ),
+                    }
+                )
+    ot.check_head_invariant({"head_disagreements": disagreements}, "attribution/gwas.py window arm")
+    n = len(with_hit)
+    return {
+        "catalog_gene_is_at_the_bar": round(len(bar_agree) / n, 3) if n else None,
+        "window": {
+            "falsifier": "the agreement share not rising",
+            "can_only_rise": WINDOW_CAN_ONLY_RISE,
+            "limit": WINDOW_READS_THE_ANY_GENE_HEAD,
+            "elements_with_a_lead_variant": n,
+            "agree_on_the_head": len(head_agree),
+            "agree_anywhere_in_the_window": len(bar_agree),
+            "elements_gaining_an_agreement": len(gained),
+            "not_cached": not_cached,
+            "gained": gained[:25],
+            "verdict_against_its_own_falsifier": (
+                f"FIRES: {len(gained)} element(s) agree with the catalogue on a gene the one-target "
+                "projection dropped, so the stored share understates agreement of the ELEMENT"
+                if gained
+                else "does NOT fire: no element agrees on a gene other than its head, so the stored "
+                "share stands unchanged as a share of the element and not only of the head"
+            ),
+        },
+    }
+
+
+def summarise(
+    elements: list[dict[str, Any]],
+    hits: dict[str, list[dict[str, Any]]],
+    responses=None,
+    coding: set[str] | None = None,
+) -> dict[str, Any]:
+    """Enrichment of lead variants over the attribution's own partitions of the elements.
+
+    With `responses=None`, the default and what every committed figure was produced under, nothing
+    is opened and the result is exactly what it was: no `catalog_gene_is_at_the_bar` key and no
+    `window` key. With a reader, those two are added and nothing else moves -- see
+    `window_agreement`, which refuses if any element loses an agreement.
+    """
     for e in elements:
         e["gwas"] = hits.get(e["key"], [])
         e["gwas_shifted"] = len(hits.get(e["key"] + SHIFTED, []))
@@ -200,6 +329,7 @@ def summarise(elements: list[dict[str, Any]], hits: dict[str, list[dict[str, Any
         if with_hit
         else None,
         "catalog_gene_is_the_inferred_target": round(len(agree_inf) / len(with_hit), 3) if with_hit else None,
+        **window_agreement(with_hit, responses, coding),
         "top_traits": dict(sorted(traits.items(), key=lambda kv: -kv[1])[:15]),
         "margin_bp": MARGIN,
         "evidence": EVIDENCE,

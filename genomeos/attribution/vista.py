@@ -285,6 +285,124 @@ def score(ctx, scorer, row: dict[str, Any], cache: Path | None = None) -> dict[s
     return row
 
 
+#: THE REGISTERED FALSIFIER, word for word from 24adf33: "a VISTA row whose `tissue_agrees` is False
+#: on the head and True for some other gene at the bar. One such row falsifies the stored agreement
+#: rate as an agreement rate of the ELEMENT; zero of them leaves the stored rate standing unchanged."
+WINDOW_FALSIFIER = (
+    "a row whose tissue_agrees is False on the head and True for some other gene at the bar; one "
+    "such row falsifies the stored rate as a rate of the ELEMENT, zero leave it standing unchanged"
+)
+#: What the window CANNOT answer here, stated at the move. `tissue_agrees` is None for a row with no
+#: observed groups and for a row with no predicted group, and those two silences are different; the
+#: window can turn a False into a True and can give a group to a row that had none, but it cannot
+#: supply observed groups, so a row with no `groups` stays unjudged under the window as well.
+WINDOW_CANNOT_SUPPLY_OBSERVED_GROUPS = (
+    "a VISTA row with no observed expression groups is unjudged with a window as without one: the "
+    "window supplies a predicted group per gene and never an observed one"
+)
+#: An over-length element is SKIPPED by `score` and its head is written as None (the registered read
+#: at the skip). The window cannot rescue it either: nothing was ever scored, so there is no cached
+#: record, and such rows are counted as `skipped` and never as "no gene at the bar".
+SKIPPED_IS_NOT_UNPREDICTED = (
+    "an element longer than MAX_DELETION was never scored, so it has no window; it is counted as "
+    "skipped and never as an element whose window named nothing"
+)
+
+
+def window_tissue_agreement(
+    rows: list[dict[str, Any]], chrom: str, responses=None, min_effect: float = 0.1
+) -> dict[str, Any]:
+    """vista.py's own falsifier: does any row agree on a gene at the bar that its head disagreed on.
+
+    `{}` without a reader, so `summarise` contributes no new key and every committed figure of this
+    module is produced by the unchanged code path. `tissue_agrees` is NOT recomputed and NOT
+    overwritten; the window's answer is reported beside it.
+
+    The group of a gene at the bar is `group_of_track` applied to that gene's own strongest track,
+    which `attribution/targets.tracks_at_bar` returns -- the amendment recorded in
+    `onetarget2.AMENDMENTS`. A gene whose track has no VISTA group contributes nothing, exactly as a
+    head with no group does today.
+    """
+    if responses is None:
+        return {}
+    from genomeos.attribution import onetarget2 as ot
+    from genomeos.attribution.targets import genes_at_bar, tracks_at_bar
+
+    flipped, not_cached, skipped, unjudged, disagreements, judged = [], 0, 0, 0, 0, 0
+    for r in rows:
+        if r.get("skipped"):
+            skipped += 1
+            continue
+        groups = r.get("groups")
+        if groups is None and r.get("tissues") is not None:
+            #: A COMMITTED vista_chr*.json row carries `tissues` and not `groups`, because `groups`
+            #: is a property of VistaElement and was never serialised. It is re-derived here with
+            #: the module's OWN rule, `tissue_groups`, rather than treating a stored row as
+            #: unjudgeable -- which is what the first run of this arm did, reporting 2,179 of 2,223
+            #: rows as having no observed groups while 91 of them carried a tissue_agrees of False.
+            groups = sorted(tissue_groups(r["tissues"]))
+        if not groups:
+            unjudged += 1
+            continue
+        record = responses.element(chrom, str(r["id"]))
+        bar = tracks_at_bar(record, min_effect)
+        if bar is None:
+            not_cached += 1
+            continue
+        plain = genes_at_bar(record, min_effect) or []
+        if [(g, v) for g, v, _ in bar] != list(plain):
+            raise ValueError(
+                f"{r['id']}: tracks_at_bar and genes_at_bar disagree, so the amendment has become a "
+                "second size rule. Nothing is reported."
+            )
+        head = ((r.get("predicted") or {}).get("gene")) or None
+        if bar and (bar[0][0] != head):
+            disagreements += 1
+        judged += 1
+        if r.get("tissue_agrees") is not False:
+            continue
+        for gene, signed, tissue in bar:
+            if gene == head:
+                continue
+            group = group_of_track(tissue)
+            if group and group in groups:
+                flipped.append(
+                    {
+                        "id": r["id"],
+                        "status": r.get("status"),
+                        "head": head,
+                        "head_group": r.get("predicted_group"),
+                        "observed_groups": sorted(groups),
+                        "gene_at_the_bar": gene,
+                        "its_group": group,
+                        "its_log2_fold_change": signed,
+                    }
+                )
+                break
+    ot.check_head_invariant({"head_disagreements": disagreements}, f"attribution/vista.py {chrom}")
+    return {
+        "window": {
+            "falsifier": WINDOW_FALSIFIER,
+            "cannot_supply_observed_groups": WINDOW_CANNOT_SUPPLY_OBSERVED_GROUPS,
+            "skipped_is_not_unpredicted": SKIPPED_IS_NOT_UNPREDICTED,
+            "rows": len(rows),
+            "rows_judged_under_the_window": judged,
+            "rows_skipped_as_over_length": skipped,
+            "rows_with_no_observed_groups": unjudged,
+            "rows_not_cached": not_cached,
+            "rows_agreeing_on_a_gene_the_head_dropped": len(flipped),
+            "flipped": flipped[:25],
+            "verdict_against_its_own_falsifier": (
+                f"FIRES: {len(flipped)} row(s) disagree on the head and agree on another gene at the "
+                "bar, so the stored rate is a rate of the HEAD and not of the element"
+                if flipped
+                else "does NOT fire: no row agrees on a gene other than its head, so the stored rate "
+                "stands unchanged as a rate of the element"
+            ),
+        }
+    }
+
+
 def _mean(xs: list[float]) -> float | None:
     xs = [x for x in xs if x is not None]
     return round(sum(xs) / len(xs), 3) if xs else None
@@ -302,8 +420,16 @@ def _expected_agreement(judged: list[dict[str, Any]], pool: list[dict[str, Any]]
     return round(total / len(judged), 3)
 
 
-def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    """Positives against negatives on what GenomeOS says blind: registry, constraint, prediction, tissue."""
+def summarise(
+    rows: list[dict[str, Any]], chrom: str | None = None, responses=None, min_effect: float = 0.1
+) -> dict[str, Any]:
+    """Positives against negatives on what GenomeOS says blind: registry, constraint, prediction, tissue.
+
+    With `responses=None`, the default and what every committed vista result was produced under,
+    nothing is opened and the result is exactly what it was. With a reader (and the chromosome, which
+    the rows do not carry) one key is added, `window`, and no stored field moves: see
+    `window_tissue_agreement`.
+    """
     out: dict[str, Any] = {}
     for status in ("positive", "negative"):
         rs = [r for r in rows if r["status"] == status]
@@ -351,6 +477,13 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
                 groups[g] = groups.get(g, 0) + 1
     out["positive_groups"] = dict(sorted(groups.items(), key=lambda kv: -kv[1]))
     out["evidence"] = EVIDENCE
+    if responses is not None:
+        if not chrom:
+            raise ValueError(
+                "summarise needs the chromosome with a reader: the rows do not carry it and the "
+                "response cache is keyed by chromosome, so a window could be read from the wrong one"
+            )
+        out.update(window_tissue_agreement(rows, chrom, responses, min_effect))
     return out
 
 

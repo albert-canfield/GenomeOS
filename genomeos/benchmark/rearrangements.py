@@ -414,10 +414,33 @@ def matched_controls(
     return out
 
 
-def named_by_a_derived_layer(ch, results_dir: Path, pos: int, gene: str) -> dict[str, Any]:
+#: `genes_named` below is TRUNCATED TO 8 and that truncation is declared rather than widened, because
+#: the registration says so: "genes_named's truncation to 8 must be widened or declared before the
+#: count is read, because a longer list silently truncated would hide the gain." Widening it would
+#: change a committed field; declaring it adds `genes_named_total` beside it, so a reader can see
+#: that the list is a sample and the count it is a sample OF.
+GENES_NAMED_TRUNCATION = 8
+#: THE INVARIANT DOES NOT PROTECT THIS CLAIM, and that is the registered reason it is informative.
+#: `names_the_recipient` is a yes/no about a NAMED gene, not about any gene, so the measured any-gene
+#: head invariant says nothing about it: a recipient can be absent from every head and present at a
+#: bar, and one such flip establishes that the benchmark's negative was a property of the projection.
+NAMED_GENE_IS_NOT_PROTECTED_BY_THE_INVARIANT = (
+    "names_the_recipient asks about one named gene, so the any-gene head invariant does not protect "
+    "it; a False -> True flip is a genuine result and not a defect"
+)
+
+
+def named_by_a_derived_layer(
+    ch, results_dir: Path, pos: int, gene: str, responses=None, coding=None
+) -> dict[str, Any]:
     """Claim 3: does any already-computed deletion in the recipient's neighbourhood name it.
 
     Read from runs already made, exactly as the locus benchmark's deletion layer is: no request.
+
+    With `responses=None`, the default and what every committed benchmark figure was produced under,
+    the answer is exactly what it was: the heads of the scored elements, and nothing is opened.
+    With a reader, four keys are ADDED and `names_the_recipient` itself is untouched, so no caller
+    reading it moves -- the falsifier is read from `names_the_recipient_in_the_window` beside it.
     """
     from genomeos.benchmark.loci import _deletion_rows
 
@@ -427,12 +450,42 @@ def named_by_a_derived_layer(ch, results_dir: Path, pos: int, gene: str) -> dict
         p = e.get("predicted_coding") or e.get("predicted") or {}
         if p.get("gene"):
             named.append(p["gene"])
-    return {
+    out = {
         "elements_scored": len(rows),
         "genes_named": sorted(set(named))[:8],
         "names_the_recipient": gene in named,
         "pending": None if rows else "no deletion has been scored within 100 kb of the recipient",
     }
+    if responses is None:
+        return out
+    from genomeos.attribution import onetarget2 as ot
+    from genomeos.attribution.targets import window_reading
+
+    at_bar: set[str] = set()
+    not_cached = disagreements = 0
+    for e in rows:
+        w = window_reading(responses, ch.chrom, e, coding=coding)
+        if w.not_cached:
+            not_cached += 1
+            continue
+        if w.head_agrees is False:
+            disagreements += 1
+        at_bar.update(w.genes)
+    ot.check_head_invariant(
+        {"head_disagreements": disagreements}, f"benchmark/rearrangements.py at {ch.chrom}:{pos}"
+    )
+    out["genes_named_total"] = len(set(named))  # the count `genes_named` is a sample of
+    out["genes_named_truncated_to"] = GENES_NAMED_TRUNCATION
+    out["window"] = {
+        "limit": NAMED_GENE_IS_NOT_PROTECTED_BY_THE_INVARIANT,
+        "genes_at_the_bar_total": len(at_bar),
+        "genes_at_the_bar_and_not_a_head": sorted(at_bar - set(named))[:GENES_NAMED_TRUNCATION],
+        "genes_at_the_bar_and_not_a_head_total": len(at_bar - set(named)),
+        "elements_not_cached": not_cached,
+    }
+    out["names_the_recipient_in_the_window"] = gene in at_bar
+    out["the_claim_flipped"] = (gene in at_bar) and gene not in named
+    return out
 
 
 def domains_from(chrom: str, length: int, boundaries: list[int]) -> list:

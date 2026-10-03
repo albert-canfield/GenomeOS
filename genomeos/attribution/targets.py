@@ -403,3 +403,42 @@ def prediction_window_reading(
         None if bar is None else tuple(bar),
         None if cbar is None else tuple(cbar),
     )
+
+
+def tracks_at_bar(
+    record: dict[str, Any] | None, min_effect: float = 0.1
+) -> list[tuple[str, float, str | None]] | None:
+    """`genes_at_bar` WITH the track each gene's size was taken on, as (gene, signed, tissue).
+
+    AN AMENDMENT TO THE REGISTRATION, recorded in `onetarget2.AMENDMENTS`, because it widens what the
+    shared reader provides. `WindowReading` carries the gene and the signed change and drops the
+    track; `attribution/vista.py` cannot move without it, since its whole claim is whether the
+    predicted TRACK GROUP agrees with the element's observed expression groups, and a gene with no
+    track has no group to compare. Rather than let vista reimplement the size rule privately, the
+    track is returned here beside the same gene list.
+
+    The rule is `genes_at_bar`'s own, applied to the same fields in the same order: the larger of the
+    predicted fall and the predicted rise, ties to the fall, and the tissue of whichever side won.
+    That the two agree is not assumed: `tests/test_vista_window.py` asserts that the (gene, signed)
+    projection of this list is EQUAL to `genes_at_bar`'s output, element for element, on fixtures and
+    on real chromosome data, so the two cannot drift into two size rules.
+
+    None means the element was not cached, exactly as in `genes_at_bar`.
+    """
+    if record is None:
+        return None
+    out = []
+    for g in record.get("genes") or []:
+        drop, rise = g.get("max_drop_log2fc"), g.get("max_rise_log2fc")
+        if not g.get("gene") or drop is None:
+            continue
+        fall = -float(drop)
+        up = float(rise) if rise is not None else float("-inf")
+        if fall >= up:
+            size, signed, tissue = fall, float(drop), g.get("max_drop_tissue")
+        else:
+            size, signed, tissue = up, up, g.get("max_rise_tissue")
+        if size >= min_effect:
+            out.append((g["gene"], round(signed, 4), size, tissue))
+    out.sort(key=lambda t: -t[2])
+    return [(name, signed, tissue) for name, signed, _, tissue in out]

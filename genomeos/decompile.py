@@ -150,6 +150,97 @@ def _elements(symbol: str, chrom: str, results_dir: Path) -> list[dict]:
     return out
 
 
+#: An element whose WINDOW names this gene at the bar while the compact coding head named another.
+#: Kept under its own source so a window element can never be counted as a decompiled one: `_elements`
+#: above is NOT changed, `window_elements` below CALLS it and appends, and every committed figure of
+#: the decompiled view is produced by the unchanged function.
+SOURCE_WINDOW = "the sweep's coding window at the bar, not the compact coding head"
+#: THE REGISTERED LIMIT IS LOAD-BEARING HERE, unlike in regdiff.py, and it is stated at the move.
+#: `_elements` selects on `predicted_coding`, so this module depends on the CODING head specifically.
+#: The invariant measured on 2026-09-27 is an ANY-GENE head invariant: 0 disagreements over 849,469
+#: elements, but 10 of 4,794 elements carried no `predicted_coding` field although the cache named a
+#: coding gene. `onetarget2.check_head_invariant` refuses on an any-gene disagreement and
+#: deliberately does not check the coding head, so a coding-head disagreement here is EXPECTED, is
+#: counted by name, and is not a refutation of anything.
+CODING_HEAD_IS_NOT_INVARIANT = (
+    "this module reads the coding head, and the measured invariant is an any-gene one: a coding-head "
+    "disagreement is expected at the 10-in-4,794 rate the 2026-09-27 result found and is counted by "
+    "name rather than refusing"
+)
+
+
+def window_elements(
+    symbol: str,
+    chrom: str,
+    results_dir: Path = RESULTS_DIR,
+    responses=None,
+    coding: set[str] | None = None,
+) -> list[dict]:
+    """The decompiled elements for a gene, plus the ones its window names and the projection dropped.
+
+    With `responses=None` this is `_elements` and nothing else: the same list, in the same order, so
+    a caller of the old shape cannot see this function at all. With a reader, every element of the
+    two sampled runs whose CODING window names `symbol` at the bar is appended, tagged
+    `SOURCE_WINDOW`, with the head gene that was kept instead and this gene's rank in that window.
+
+    `coding` is the chromosome's coding symbol set and is REQUIRED with a reader: `_elements` selects
+    on the coding head, so an uncoded window beside it would compare two different populations,
+    which is the defect this wave exists to stop. Asking without it raises rather than quietly
+    widening the claim.
+
+    The appended rows carry NO head-derived field. `action`, `log2_fold_change`, `tissue`,
+    `confidence` and `certainty` belong to `predict_target`'s chosen gene and say nothing about a
+    second mover, so they are absent rather than filled from the window under the same key; the
+    window's own signed change is `at_bar_log2_fold_change`, which is a different quantity and has a
+    different name.
+    """
+    from genomeos.attribution.targets import window_reading
+
+    out = _elements(symbol, chrom, results_dir)
+    if responses is None:
+        return out
+    if coding is None:
+        raise ValueError(
+            "window_elements needs the chromosome's coding symbols: _elements selects on the CODING "
+            "head, so forming an any-gene window beside it would compare two different populations"
+        )
+    have = {e["id"] for e in out}
+    var = {e["id"]: e for e in (load_result(f"variation_{chrom}", results_dir) or {}).get("elements", [])}
+    dup_ids = set(
+        ((load_result(f"duplication_{chrom}", results_dir) or {}).get("elements") or {}).get("ids", [])
+    )
+    extra: list[dict] = []
+    for name, origin in (("constrained_targets", "constrained"), ("enhancer_targets", "uniform")):
+        r = load_result(f"{name}_{chrom}", results_dir) or {}
+        for e in r.get("elements", []):
+            if e["id"] in have:
+                continue
+            w = window_reading(responses, chrom, e, coding=coding)
+            names = w.coding_genes
+            if symbol not in names:
+                continue
+            have.add(e["id"])
+            v = var.get(e["id"], {})
+            extra.append(
+                {
+                    "id": e["id"],
+                    "start": e["start"],
+                    "end": e["end"],
+                    "origin": origin,
+                    "source": SOURCE_WINDOW,
+                    "head_gene": w.coding_head,
+                    "rank_in_the_coding_window": names.index(symbol) + 1,
+                    "at_bar_log2_fold_change": dict(w.coding_at_bar or ()).get(symbol),
+                    "mammal_fraction": v.get("mammal_fraction", e.get("constrained_fraction")),
+                    "human_fraction": (v.get("gnocchi") or {}).get("fraction_above"),
+                    "case": (v.get("case") or {}).get("case"),
+                    "duplicated": e["id"] in dup_ids,
+                }
+            )
+    extra.sort(key=lambda e: e["start"])
+    return out + extra
+
+
 def _expression(symbol: str) -> dict | None:
     p = Path("data/knowledge/expression") / f"gtex_{symbol}.json"
     if not p.exists():
