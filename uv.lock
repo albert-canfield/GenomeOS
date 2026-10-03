@@ -752,11 +752,11 @@ hla = [
 ]
 predict = [
     { name = "alphagenome" },
+    { name = "anndata" },
 ]
 
 [package.dev-dependencies]
 dev = [
-    { name = "anndata" },
     { name = "numpy" },
     { name = "openpyxl" },
     { name = "pandas" },
@@ -767,6 +767,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "alphagenome", marker = "extra == 'predict'", specifier = ">=0.9.0" },
+    { name = "anndata", marker = "extra == 'predict'", specifier = ">=0.13" },
     { name = "biolearn", marker = "extra == 'clocks'", specifier = ">=0.9.1" },
     { name = "mhcflurry", marker = "extra == 'hla'", specifier = ">=2.1" },
     { name = "numpy", marker = "extra == 'analysis'", specifier = ">=1.26" },
@@ -776,7 +777,6 @@ provides-extras = ["compose", "clocks", "predict", "hla", "analysis"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "anndata", specifier = ">=0.13" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "openpyxl", specifier = ">=3.1" },
     { name = "pandas", specifier = ">=2.2" },

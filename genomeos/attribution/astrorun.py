@@ -1672,6 +1672,37 @@ NAMES_ARE_NOT_UNIQUE = (
 )
 
 
+#: THREE COUNTS, APPENDED beside the sentence above rather than over it, because two of them are 316
+#: and the coincidence has already caused a misreading in each direction. Measured on the metadata
+#: copy's 667 rna_seq rows, sha256 5157dcca...abf7:
+#:
+#:   316 distinct, collapsing 351 -- the names the ADAPTER WRITES: gtex_tissue where it is set and
+#:     biosample_name otherwise, which is `tissue_names`, which is what lands in `track_names` and
+#:     what `named_track_values` zips against. THIS is the quantity the sentence above is about, and
+#:     it is the one a {name: value} row would collapse. Re-measured against the adapter's own rule.
+#:   371 distinct, collapsing 296 -- the metadata copy's own `name` column, e.g.
+#:     "CL:0000047 polyA plus RNA-seq". A DIFFERENT FIELD, and not the axis the adapter writes. It is
+#:     the figure a reader gets by counting distinct values of the wrong column.
+#:   316 "distinct winning names" -- a THIRD quantity, from astroreg_registration.json, over the chr21
+#:     sweep's winning genes rather than over any track axis. It equals the first by COINCIDENCE, and
+#:     a correction was proposed on the strength of that coincidence which would have replaced the
+#:     right figure with the wrong one.
+#:
+#: NONE OF THE THREE IS READ AS A NUMBER ANYWHERE. The refusal interpolates len(values) and len(pairs)
+#: from the answer in hand, the plant uses a synthetic six-element list and asserts the MECHANISM, and
+#: no threshold, expected count or round-trip check names any of them. That is why this correction
+#: weakens nothing: returning a row as {name: value} collapses duplicates whatever the exact counts
+#: are, and the counts are prose that must nevertheless be true.
+THREE_COUNTS_AND_WHICH_IS_WHICH = (
+    "316 of 667 distinct, collapsing 351, is the ADAPTER'S name rule and the subject of "
+    "NAMES_ARE_NOT_UNIQUE; 371 distinct collapsing 296 is the metadata's own `name` column, a "
+    "different field; and 316 'distinct winning names' in astroreg_registration.json is a third "
+    "quantity over the chr21 sweep's winners that happens to share a digit string with the first. "
+    "Two counts over two populations read as one is the same act as the panel share read as a base "
+    "rate, and it has now happened in both directions on the same pair of numbers"
+)
+
+
 def named_track_values(axis: dict[str, Any], row_index: int) -> list[tuple[str, float]]:
     """One gene row's vector as (track name, value) PAIRS in the response's own column order.
 

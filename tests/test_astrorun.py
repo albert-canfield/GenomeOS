@@ -49,6 +49,20 @@ def grant_run(monkeypatch, run=1, requests=None, consumed=False, words="<the run
 #: comes back named and equal, and both still read the figure from the file rather than from a
 #: constant. It changes WHERE they run, not what they claim -- and the skip names the missing store, so
 #: a reader can tell "not run here" from "passed".
+#: `requires_extra("predict")`. anndata moved from the dev group into the `predict` extra, because in
+#: the dev group it pulled pandas, numpy, scipy and h5py into the BARE closure: scipy stopped being
+#: extra-only and 8c4dbe0's guard against the pandas declaration being silently removed could no
+#: longer fire, since anndata kept pandas present either way. Keeping it there would have spent a
+#: guard to avoid a one-line dependency move.
+#:
+#: WHAT IT COSTS, stated rather than glossed: the tests that build a response with the library's own
+#: AnnData, and the send-time gate's own test, now SKIP BY NAME where the extra is absent. It does not
+#: weaken item (g). The gate itself still REFUSES when anndata is missing -- a check that cannot run
+#: must refuse, never pass -- so no purchase can slip through an environment without it. And the
+#: environment that CAN buy is this one: alphagenome is in the same extra, so the check that runs
+#: before a purchase has what it needs exactly where a purchase is possible.
+needs_predict = pytest.mark.requires_extra("predict")
+
 needs_track_metadata = pytest.mark.needs_local_data(
     "data/cache/entex/alphagenome_track_metadata_copy.csv",
     how="scripts/entex_feasibility.py writes it (AG_METADATA); data/cache is machine-local by the "
@@ -1874,6 +1888,48 @@ class TestItemGTheFullTrackVectorIsKept:
         assert pairs[0] == ("astrocyte", self.Matrix(3, 6).values[1][0])
         assert pairs[5] == ("GM12878", self.Matrix(3, 6).values[1][5])
 
+    def test_the_THREE_counts_are_each_measured_from_the_file_not_remembered(self):
+        """Two of the three are 316, and that coincidence has caused a misreading in each direction.
+
+        A correction was proposed replacing 316-collapsing-351 with 371-collapsing-296. Measured, the
+        second is the metadata's own `name` column -- a different field from the axis the adapter
+        writes -- so applying it would have put the wrong figure over the right one. All three are
+        re-measured here from the file, by the rules that produce them.
+        """
+        import csv
+
+        meta_csv = Path(astrorun.ROOT_FOR_BLOBS) / "data/cache/entex/alphagenome_track_metadata_copy.csv"
+        if not meta_csv.exists():  # pragma: no cover - the marker below covers the real run
+            pytest.skip("the metadata copy is not on this machine")
+        with open(meta_csv) as fh:
+            rows = [r for r in csv.DictReader(fh) if r["output"] == "rna_seq"]
+
+        def adapter_rule(r):
+            g, n = r["gtex_tissue"], r["biosample_name"]
+            return str(g) if g and str(g) not in ("nan", "") else str(n)
+
+        by_adapter = {adapter_rule(r) for r in rows}
+        by_name_column = {r["name"] for r in rows}
+        assert len(rows) == 667
+        assert len(by_adapter) == 316, "the ADAPTER's rule: the names that reach track_names"
+        assert len(rows) - len(by_adapter) == 351, "and what a {name: value} row would collapse"
+        assert len(by_name_column) == 371, "a DIFFERENT field, which is where 371 comes from"
+        assert len(rows) - len(by_name_column) == 296
+        assert by_adapter != by_name_column, "two populations, not one"
+        assert "316 of 667 distinct" in astrorun.THREE_COUNTS_AND_WHICH_IS_WHICH
+        assert "different field" in astrorun.THREE_COUNTS_AND_WHICH_IS_WHICH
+
+    def test_the_adapter_rule_is_the_one_the_constant_is_about(self):
+        """Pinned to tissue_names itself, so the figure cannot drift from the code that makes it."""
+        import inspect
+
+        from genomeos.predict import alphagenome_adapter as adapter
+
+        src = inspect.getsource(adapter.tissue_names)
+        assert "gtex_tissue" in src and "biosample_name" in src, (
+            "the names that reach track_names come from this rule, so 316 is a fact about it"
+        )
+
     def test_PLANTED_duplicate_track_names_do_not_COLLAPSE(self):
         """The defect the REAL metadata found: 667 rna_seq rows carry only 316 distinct names.
 
@@ -1984,6 +2040,7 @@ class TestItemGTheFullTrackVectorIsKept:
         assert abs(written - est["bytes_per_row"]) <= 40, (written, est["bytes_per_row"])
 
     @needs_track_metadata
+    @needs_predict
     def test_the_REAL_recording_path_keeps_the_WHOLE_vector(self):
         """(a) The real recorded_axis, run and read back: every value, named, equal.
 
@@ -2035,12 +2092,14 @@ class TestItemGTheFullTrackVectorIsKept:
         got = astrorun.check_full_vectors_in_answer({"model": {"gene_axis_outputs": [axis]}})
         assert got["gene_rows_with_full_vectors"] == 3
 
+    @needs_predict
     def test_the_REAL_adapter_PASSES_the_send_time_check(self):
         """The positive control for item (g)'s gate, run against the module that will do the buying."""
         out = astrorun.check_adapter_writes_full_vectors()
         assert out["recorded_axis_keeps_the_full_vector"] is True
         assert out["how"].startswith("the recording path was RUN")
 
+    @needs_predict
     def test_PLANTED_a_recorder_that_only_MENTIONS_the_key_in_its_DOCSTRING(self, tmp_path, monkeypatch):
         """(b) Both verdicts side by side: the source check PASSES it, the behavioural check FAILS it.
 
@@ -2069,6 +2128,7 @@ class TestItemGTheFullTrackVectorIsKept:
         assert "does not write the whole track vector" in str(exc.value)
         assert "existence-by-name" in astrorun.EXISTENCE_BY_NAME_IS_NOT_A_CHECK
 
+    @needs_predict
     def test_PLANTED_a_recorder_that_THRESHOLDS_fails_on_the_VALUES(self, tmp_path, monkeypatch):
         """A vector that is present but not what arrived is the same loss, one step quieter."""
         mod = tmp_path / "recorder_that_filters.py"
@@ -2096,6 +2156,7 @@ class TestItemGTheFullTrackVectorIsKept:
         assert 0.0 in flat, "an exact zero, which a threshold drops"
         assert any(v < 0 for v in flat), "and a negative, which a sign error flips"
 
+    @needs_predict
     def test_PLANTED_item_g_is_WIRED_into_may_send_and_a_REGRESSED_recorder_stops_it(
         self, tmp_path, monkeypatch
     ):

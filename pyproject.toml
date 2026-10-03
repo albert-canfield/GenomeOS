@@ -34,6 +34,16 @@ clocks = [
 ]
 predict = [
     "alphagenome>=0.9.0",
+    # The paid path returns anndata.AnnData objects, so item (g)'s behavioural check builds a response
+    # with the library's own class. It belongs HERE and not in the dev group: in the dev group it
+    # pulled pandas, numpy, scipy and h5py into the BARE closure, which made scipy no longer
+    # extra-only and silently retired 8c4dbe0's guard against the pandas declaration being removed --
+    # anndata would have kept pandas present either way. It also arrives transitively with this extra
+    # already, so declaring it here costs nothing. And the environment that can BUY an answer is this
+    # one: alphagenome lives here too, so the check that runs before a purchase has what it needs
+    # exactly where a purchase is possible. Licence read from the installed metadata rather than taken
+    # on report: anndata 0.13.3 BSD-3-Clause.
+    "anndata>=0.13",
 ]
 hla = [
     # MHCflurry 2 is Apache 2.0; its models are downloaded by the user with
@@ -68,13 +78,6 @@ dev = [
     # python-dateutil dual Apache-2.0/BSD-3-Clause, six MIT. Nothing copyleft arrives with them.
     "pandas>=2.2",
     "openpyxl>=3.1",
-    # The paid AlphaGenome path returns anndata.AnnData objects, so item (g)'s behavioural check and
-    # its tests build a response with the library's own class rather than a shape of our own. Without
-    # it those five tests fail on a missing import, which reads as a broken check rather than as a
-    # missing dependency - the same reason numpy and pandas are here. It arrives transitively with the
-    # `predict` extra; declared here so a checkout with only this group can still run them. Licence
-    # read from the installed metadata rather than taken on report: anndata 0.13.3 BSD-3-Clause.
-    "anndata>=0.13",
 ]
 
 [build-system]
