@@ -68,6 +68,7 @@ COORDINATES = {
     "without re-joining.",
 }
 
+
 #: The 23 committed cCRE subsets the control matches its STRATA on. Declared as a group because the
 #: first write was quarantined for reading all 23 without declaring one of them: the file that
 #: decides every stratum boundary was invisible to a rebuild.
@@ -93,8 +94,7 @@ def result_manifest(reg_sha: str) -> dict[str, Any]:
                 "version": "10.1038/s41588-020-0578-5",
             },
             {
-                "accession": "ENCODE cCRE v3 element classes, as committed in "
-                "data/results/ccres_chr*.bed.gz",
+                "accession": "ENCODE cCRE v3 element classes, as committed in data/results/ccres_chr*.bed.gz",
                 "version": "as committed",
             },
         ],

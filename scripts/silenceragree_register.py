@@ -233,6 +233,7 @@ COORDINATES = {
     "without re-joining.",
 }
 
+
 #: The 23 committed cCRE subsets the control matches its STRATA on. Declared as a group because the
 #: first write was quarantined for reading all 23 without declaring one of them: the file that
 #: decides every stratum boundary was invisible to a rebuild.

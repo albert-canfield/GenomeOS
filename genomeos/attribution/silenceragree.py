@@ -921,9 +921,7 @@ def readings() -> dict[str, Any]:
         "join_rule": JOIN_RULE,
         "base_rates": {
             "curated_label_share_among_the_joined_elements_percent": 100.0,
-            "curated_label_share_is_degenerate": BASE_RATES[
-                "curated_label_share_among_the_joined_elements"
-            ],
+            "curated_label_share_is_degenerate": BASE_RATES["curated_label_share_among_the_joined_elements"],
             "stratum_matched_as_shipped": base,
             "stratum_matched_cell_matched_percent": base_pc_2,
             "global_for_comparison": base_rate(),
