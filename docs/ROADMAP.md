@@ -4248,6 +4248,8 @@ entire sweep. What is next, in order of what it decides:
 
    **The waves, ordered so each one's result is an input and never a re-do.**
 
+   ***THIS TABLE IS APPEND-ONLY FROM 2026-10-03.** The rows below are the 2026-09-27 snapshot and stay unedited. Every update is an APPENDED row beneath the row it updates, the way item 13's table is maintained — and that difference is not a style choice, it is the measured cause of the drift: item 13's table did not go stale in a single row, while this one was frozen and ten of its fifteen rows came to read as open while being done or refused. The dated status block below the table is the first appended row. A header telling a reader to check elsewhere was tried first and is not enough: it works only while someone remembers it, and four lanes were dispatched wrongly from this table in one afternoon before anyone did.*
+
    | wave | lane | why here | lane-sessions |
    |---|---|---|---|
    | 0 *(running)* | the node-containment claim: audit its baseline and interval, then hold it against 661 measured CRISPRi pairs | quoted seven times with no interval and an undefined baseline; everything node-based waits on it | 2 |
