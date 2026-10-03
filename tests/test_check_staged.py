@@ -7,6 +7,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -685,3 +686,479 @@ def test_without_the_conditions_the_harm_happens(
     assert allowed.returncode == 0, allowed.stdout + allowed.stderr
     assert "takes nothing back out" in allowed.stdout  # through, silently
     assert name not in allowed.stdout
+
+
+# --------------------------------------------------------------- a file another lane is working on
+#
+# 2026-10-03: a lane staged a whole test file carrying another lane's in-flight tests and committed
+# it under its own message. The guard was clean, exit 0, no --force, and HEAD went red on NameError
+# because the tests went in without their imports. The holder had declared the file on the work
+# board, and the edit-time hook says so; the commit never asked.
+
+PEER_TASK = "the kinetics rows and their fixture, half written"
+
+
+def hold(repo: Path, who: str, files: list[str], *, minutes: float = 3, state: str = "working") -> None:
+    """One work-board entry, in the shape `genomeos work start` writes."""
+    d = repo / "data" / "work"
+    d.mkdir(parents=True, exist_ok=True)
+    stamp = time.time() - minutes * 60
+    (d / f"{who}.json").write_text(
+        json.dumps(
+            {
+                "who": who,
+                "task": PEER_TASK,
+                "area": None,
+                "files": files,
+                "next": None,
+                "state": state,
+                "note": None,
+                "started": stamp,
+                "updated": stamp,
+                "finished": stamp if state == "done" else None,
+            }
+        )
+    )
+
+
+def without_block(tmp_path: Path, begin: str, end: str, name: str) -> Path:
+    """A copy of the guard with one marked block cut out, between the markers the script names."""
+    lines = SCRIPT.read_text().splitlines(keepends=True)
+    first = next(i for i, line in enumerate(lines) if line.rstrip("\n") == begin)
+    last = next(i for i, line in enumerate(lines) if line.rstrip("\n") == end)
+    assert first < last
+    cut = tmp_path / name
+    cut.write_text("".join(lines[:first] + lines[last + 1 :]))
+    return cut
+
+
+def run_cut(repo: Path, index: str, cut: Path, *extra: str) -> subprocess.CompletedProcess[str]:
+    env = dict(os.environ)
+    env["GIT_INDEX_FILE"] = index
+    return subprocess.run(
+        [sys.executable, str(cut), *extra], cwd=repo, capture_output=True, text=True, env=env
+    )
+
+
+def test_a_file_a_live_lane_holds_is_refused(repo: Path, tmp_path: Path) -> None:
+    """The commit removes nothing, so only the hold can refuse it -- and it must."""
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 2, done.stdout
+    assert "another lane is working on" in done.stdout
+    assert "lane-kinetics" in done.stdout
+    assert PEER_TASK in done.stdout
+    assert "3 min ago" in done.stdout
+    assert "hand the file to the coordinator" in done.stdout
+    assert "stage only your own hunk" in done.stdout
+
+
+def test_a_space_separated_files_field_still_holds_the_file(repo: Path, tmp_path: Path) -> None:
+    """Entries on this board store four files in one string, because --files split only on commas."""
+    hold(repo, "lane-kinetics", ["docs/x.md GRAMMAR.md scripts/y.py"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 2, done.stdout
+    assert "lane-kinetics" in done.stdout
+
+
+def test_force_does_not_pass_another_lanes_held_file(repo: Path, tmp_path: Path) -> None:
+    """Lanes never force in this project: the holder is a person to ask, not a flag."""
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--force", "--lane", "lane-mine")
+
+    assert done.returncode == 2, done.stdout
+    assert "lane-kinetics" in done.stdout
+
+
+def test_your_own_hold_passes_when_the_lane_is_named(repo: Path, tmp_path: Path) -> None:
+    hold(repo, "lane-mine", ["GRAMMAR.md"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_your_own_hold_passes_through_the_message_file_name(repo: Path, tmp_path: Path) -> None:
+    """commit_own.sh already requires the message name to carry the lane, so it identifies you."""
+    hold(repo, "lane-mine", ["GRAMMAR.md"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--message-name", "msg-lane-mine-grammar-1791040000.txt")
+
+    assert done.returncode == 0, done.stdout
+
+
+@pytest.mark.parametrize(
+    ("minutes", "state", "why"),
+    [
+        (7 * 60, "working", "stale: six hours untouched and the board stops calling it current"),
+        (3 * 24 * 60, "working", "abandoned: the session that wrote it is gone"),
+        (5, "done", "finished, and a finished entry holds nothing"),
+    ],
+)
+def test_a_hold_that_is_not_live_passes(
+    repo: Path, tmp_path: Path, minutes: float, state: str, why: str
+) -> None:
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"], minutes=minutes, state=state)
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, f"{why}: {done.stdout}"
+    assert "lane-kinetics" not in done.stdout
+
+
+def test_a_directory_hold_does_not_refuse(repo: Path, tmp_path: Path) -> None:
+    """Deliberate, and the hole this leaves: entries hold `tests/` and `scripts/` for a day at a
+    time, so refusing on a region would stop every other lane committing any test or any script."""
+    hold(repo, "lane-kinetics", ["docs/"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "docs/note.md", "a new file of my own\n")
+
+    done = run_check(repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+
+
+def test_without_the_live_hold_condition_the_peers_file_goes_in_silently(repo: Path, tmp_path: Path) -> None:
+    """Credited with preventing something, shown to prevent it by removal."""
+    import check_staged as cs
+
+    hold(repo, "lane-kinetics", ["GRAMMAR.md"])
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", OWN_EDIT)
+
+    refused = run_check(repo, index, "--lane", "lane-mine")
+    assert refused.returncode == 2, refused.stdout
+
+    cut = without_block(tmp_path, cs.HELD_BEGIN, cs.HELD_END, "check_staged_without_hold.py")
+    allowed = run_cut(repo, index, cut, "--lane", "lane-mine")
+
+    assert allowed.returncode == 0, allowed.stdout + allowed.stderr
+    assert "takes nothing back out" in allowed.stdout
+    assert "lane-kinetics" not in allowed.stdout
+
+
+# ------------------------------------------------------------- the whole-copy notice, two sources
+#
+# The hook's notice fired only for a hardcoded list of eight paths, and a test file is not on it,
+# which is why nothing was said on 2026-10-03. Being held by a live lane is now the second way a
+# file counts as shared; the list stays, because a file can be shared with nobody holding it.
+
+README = "# GenomeOS\n\nthe engine and the application\n"
+
+
+@pytest.fixture
+def shared_repo(tmp_path: Path) -> Path:
+    """A listed shared file and an unlisted one, both committed, both dirty in the worktree."""
+    repo = tmp_path / "shared"
+    repo.mkdir()
+    git(repo, "init", "-q", "-b", "main")
+    git(repo, "config", "user.email", "lane@example.test")
+    git(repo, "config", "user.name", "A Lane")
+    (repo / "README.md").write_text(README)
+    (repo / "tests").mkdir()
+    (repo / "tests" / "test_kinetics.py").write_text("def test_one():\n    assert True\n")
+    git(repo, "add", "README.md", "tests/test_kinetics.py")
+    git(repo, "commit", "-qm", "the readme and a test")
+    return repo
+
+
+def stage_worktree(repo: Path, index: str, path: str, content: str) -> None:
+    """Write the working copy and stage it whole, which is what commit_own.sh does with a path."""
+    f = repo / path
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(content)
+    git(repo, "add", "--", path, index=index)
+
+
+def test_a_listed_shared_file_staged_whole_is_noticed(shared_repo: Path, tmp_path: Path) -> None:
+    """The static list keeps working: it is a second source now, not a deleted one."""
+    index = private_index(shared_repo, tmp_path)
+    stage_worktree(shared_repo, index, "README.md", README + "\na line of my own\n")
+
+    done = run_check(shared_repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "NOTICE" in done.stdout
+    assert "README.md is a shared file" in done.stdout
+    assert "whole working copy" in done.stdout
+
+
+def test_a_held_file_that_is_on_no_list_is_noticed(shared_repo: Path, tmp_path: Path) -> None:
+    """The file that went in silently on 2026-10-03 was a test file, on nobody's list."""
+    hold(shared_repo, "lane-kinetics", ["tests/test_kinetics.py"])
+    index = private_index(shared_repo, tmp_path)
+    stage_worktree(
+        shared_repo,
+        index,
+        "tests/test_kinetics.py",
+        "def test_one():\n    assert True\n\n\ndef test_two():\n    assert True\n",
+    )
+
+    done = run_check(shared_repo, index, "--lane", "lane-mine")
+
+    assert "NOTICE" in done.stdout
+    assert "tests/test_kinetics.py is held on the work board by lane-kinetics" in done.stdout
+    assert "uncommitted hunk(s)" in done.stdout
+    assert done.returncode == 2, done.stdout  # and the refusal of finding 1 as well
+
+
+def test_a_directory_hold_is_noticed_even_though_it_does_not_refuse(
+    shared_repo: Path, tmp_path: Path
+) -> None:
+    """A region claim is the case the refusal deliberately leaves alone, so the notice carries it."""
+    hold(shared_repo, "lane-kinetics", ["tests/"])
+    index = private_index(shared_repo, tmp_path)
+    stage_worktree(
+        shared_repo,
+        index,
+        "tests/test_kinetics.py",
+        "def test_one():\n    assert True\n\n\ndef test_two():\n    assert True\n",
+    )
+
+    done = run_check(shared_repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "inside tests/, held on the work board by lane-kinetics" in done.stdout
+
+
+def test_a_file_neither_listed_nor_held_is_not_noticed(shared_repo: Path, tmp_path: Path) -> None:
+    index = private_index(shared_repo, tmp_path)
+    stage_worktree(shared_repo, index, "tests/test_kinetics.py", "def test_one():\n    assert 1\n")
+
+    done = run_check(shared_repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "NOTICE" not in done.stdout
+
+
+def test_staging_your_own_hunk_instead_says_nothing(shared_repo: Path, tmp_path: Path) -> None:
+    """The notice is about taking the WHOLE working copy, so a partial staging silences it."""
+    hold(shared_repo, "lane-mine", ["README.md"])
+    index = private_index(shared_repo, tmp_path)
+    stage_blob(shared_repo, index, "README.md", README + "\nmy own line\n")
+    (shared_repo / "README.md").write_text(README + "\nmy own line\na peer's line\n")
+
+    done = run_check(shared_repo, index, "--lane", "lane-mine")
+
+    assert done.returncode == 0, done.stdout
+    assert "NOTICE" not in done.stdout
+
+
+def test_without_the_whole_copy_condition_a_held_file_is_not_noticed(
+    shared_repo: Path, tmp_path: Path
+) -> None:
+    """Credited with preventing something, shown by removal: with the block cut, nothing is said."""
+    import check_staged as cs
+
+    hold(shared_repo, "lane-kinetics", ["tests/"])
+    index = private_index(shared_repo, tmp_path)
+    stage_worktree(
+        shared_repo,
+        index,
+        "tests/test_kinetics.py",
+        "def test_one():\n    assert True\n\n\ndef test_two():\n    assert True\n",
+    )
+
+    said = run_check(shared_repo, index, "--lane", "lane-mine")
+    assert "NOTICE" in said.stdout
+
+    cut = without_block(tmp_path, cs.WHOLE_COPY_BEGIN, cs.WHOLE_COPY_END, "check_staged_without_whole.py")
+    quiet = run_cut(shared_repo, index, cut, "--lane", "lane-mine")
+
+    assert quiet.returncode == 0, quiet.stdout + quiet.stderr
+    assert "NOTICE" not in quiet.stdout
+    assert "lane-kinetics" not in quiet.stdout
+
+
+# ------------------------------------------------- a removal cancelled only inside a comment
+#
+# The subtraction that stops a moved line being read as a revert takes content back from anywhere in
+# the file, on stripped text. So a removed line pasted verbatim into a docstring stopped counting as
+# removed. Quoting superseded PROSE as history is this project's practice and keeps working; pasting
+# a removed line of CODE into a comment must not silence the guard.
+
+# The quotation is re-indented, as a quotation of code inside prose is. A line pasted at its own
+# original indentation is not reported by git as removed at all -- it matches the line it replaces --
+# so there is nothing for any guard to subtract and nothing to refuse; that case is named in
+# `live_put_back`. This is the case that was reaching the subtraction and being cancelled by it.
+QUOTED_INTO_A_DOCSTRING = """def register(payload):
+    \"\"\"Superseded on 2026-10-03, and this is what the line said:
+
+        p = save_result(RESULT, payload)
+
+    The stamp below takes the name from the path instead.
+    \"\"\"
+    path = RESULT
+    stamp = record_stamp(p)
+    return path
+"""
+
+PROSE_QUOTED_AS_HISTORY = """# Grammar
+
+| field | type | meaning |
+|---|---|---|
+| `fraction` | `number` | a share of what is left when it runs |
+
+## Superseded
+
+Until today the table also carried, word for word:
+
+| `share` | `number` | a share of the whole at this decision point, order-free |
+"""
+
+PROSE_BASE = '''def register(payload):
+    """Register the payload."""
+    path = RESULT
+    return path
+'''
+
+# the peer commit adds two lines of PROSE to a python file: a docstring sentence and a comment
+PROSE_PEER = '''def register(payload):
+    """Register the payload.
+
+    The name save_result wrote is not always the one that was asked for.
+    """
+    # keep the asked-for name, not the written one
+    path = RESULT
+    return path
+'''
+
+PEER_SENTENCE = "The name save_result wrote is not always the one that was asked for."
+PEER_COMMENT = "# keep the asked-for name, not the written one"
+
+
+def test_a_removed_code_line_quoted_into_a_docstring_is_still_refused(
+    code_repo: Path, tmp_path: Path
+) -> None:
+    """The only removal here is the peer's line, and the only thing putting it back is a docstring."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(code_repo, index, "reg.py", QUOTED_INTO_A_DOCSTRING)
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout
+    assert PEER_SUBJECT in done.stdout
+    assert HELD in done.stdout
+
+
+def test_prose_quoted_as_history_still_passes(repo: Path, tmp_path: Path) -> None:
+    """The established additive practice: the superseded row is kept, word for word, as history."""
+    index = private_index(repo, tmp_path)
+    stage_blob(repo, index, "GRAMMAR.md", PROSE_QUOTED_AS_HISTORY)
+
+    done = run_check(repo, index)
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+@pytest.fixture
+def prose_repo(tmp_path: Path) -> Path:
+    """A python file whose recent peer commit added PROSE: a docstring sentence and a comment."""
+    repo = tmp_path / "prose"
+    repo.mkdir()
+    git(repo, "init", "-q", "-b", "main")
+    git(repo, "config", "user.email", "peer@example.test")
+    git(repo, "config", "user.name", "A Peer")
+    source = repo / "reg.py"
+    source.write_text(PROSE_BASE)
+    git(repo, "add", "reg.py")
+    git(repo, "commit", "-qm", "the register skeleton")
+    source.write_text(PROSE_PEER)
+    git(repo, "add", "reg.py")
+    git(repo, "commit", "-qm", PEER_SUBJECT)
+    return repo
+
+
+def test_a_peers_prose_rewrapped_in_a_python_file_still_passes(prose_repo: Path, tmp_path: Path) -> None:
+    """No false refusal inside python either: a sentence and a comment re-indented word for word.
+
+    Both lines move to a new indentation, so git reports each as a removal plus an addition -- the
+    same shape as the quotation above. Neither was live code in HEAD, so neither is restricted, and
+    re-wrapping a docstring stays ordinary work.
+    """
+    index = private_index(prose_repo, tmp_path)
+    stage_blob(
+        prose_repo,
+        index,
+        "reg.py",
+        "def register(payload):\n"
+        '    """Register the payload.\n'
+        "\n"
+        f"        {PEER_SENTENCE}\n"
+        '    """\n'
+        f"        {PEER_COMMENT}\n"
+        "    path = RESULT\n"
+        "    return path\n",
+    )
+
+    done = run_check(prose_repo, index)
+
+    assert done.returncode == 0, done.stdout
+    assert "takes nothing back out" in done.stdout
+
+
+def test_a_file_that_cannot_be_tokenized_keeps_the_old_behaviour(code_repo: Path, tmp_path: Path) -> None:
+    """A refusal resting on a file this script could not read would be a guess, so it does not."""
+    index = private_index(code_repo, tmp_path)
+    stage_blob(
+        code_repo,
+        index,
+        "reg.py",
+        "def register(payload:\n    path = RESULT\n" + f"    # {HELD}\n" + "    stamp = record_stamp(p)\n",
+    )
+
+    done = run_check(code_repo, index)
+
+    assert done.returncode == 2, done.stdout  # the removal is still a removal; nothing cancelled it
+
+
+def test_without_the_quoted_cancellation_condition_the_quotation_silences_the_guard(
+    code_repo: Path, tmp_path: Path
+) -> None:
+    """Credited with preventing something, shown by removal: with the block cut, it goes through."""
+    import check_staged as cs
+
+    index = private_index(code_repo, tmp_path)
+    stage_blob(code_repo, index, "reg.py", QUOTED_INTO_A_DOCSTRING)
+
+    refused = run_check(code_repo, index)
+    assert refused.returncode == 2, refused.stdout
+
+    cut = without_block(tmp_path, cs.QUOTED_BEGIN, cs.QUOTED_END, "check_staged_without_quoted.py")
+    allowed = run_cut(code_repo, index, cut)
+
+    assert allowed.returncode == 0, allowed.stdout + allowed.stderr
+    assert "takes nothing back out" in allowed.stdout
+    assert HELD not in allowed.stdout
+
+
+def test_the_tokenizer_marks_a_docstring_interior_as_not_live(tmp_path: Path) -> None:
+    """The distinction itself, directly: the same text as code and as a quotation of code."""
+    import check_staged as cs
+
+    live = cs.live_code_text('def f():\n    """\n    x = 1\n    """\n    y = 2\n    # z = 3\n')
+
+    assert live is not None
+    assert "y = 2" in live
+    assert "x = 1" not in live
+    assert "# z = 3" not in live
+    assert cs.live_code_text("def f(:\n") is None

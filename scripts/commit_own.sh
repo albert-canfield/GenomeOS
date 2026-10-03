@@ -161,7 +161,12 @@ git add -- "${paths[@]}"
 # Unpiped and unredirected on purpose: a pipeline's status is its last command's, and a redirect
 # throws away the reason. Both of those have already cost this project a commit.
 set +e
-python3 scripts/check_staged.py $force
+# --lane and --message-name are what this script already knows and the guard cannot find out: the
+# guard refuses a staged path that a DIFFERENT live lane holds on the work board, so it has to be
+# told which lane is committing. Both are optional there; without them a lane's own held file would
+# read as a peer's. The message name is accepted as a second form because check 1 above already
+# requires it to carry the lane, so the test that says the message is yours says the entry is yours.
+python3 scripts/check_staged.py $force --lane "$lane" --message-name "$base"
 guard=$?
 set -e
 if [ $guard -ne 0 ]; then
