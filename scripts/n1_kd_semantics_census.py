@@ -44,6 +44,12 @@ ORIGINAL = RESULTS_DIR / "n1_registration.json"
 AMENDMENT_1 = RESULTS_DIR / "n1_registration_amendment_1.json"
 AMENDMENT_2 = RESULTS_DIR / "n1_registration_amendment_2.json"
 
+#: This lane's own files. Everything else uncommitted in this shared checkout belongs to a peer.
+OWN_CODE = (
+    "scripts/n1_kd_semantics_census.py",
+    "tests/test_kd_semantics_census.py",
+)
+
 #: The documents, each one the producers' own: their deposit records, their paper, their code.
 DOCS: dict[str, dict[str, str]] = {
     "figshare_20029387": {
@@ -385,6 +391,7 @@ def main() -> int:
             "never opened, so no knockdown value of any kind is read",
         ],
         "partitions": "n/a: a census of documents, not of rows",
+        "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
     }
     for p in (ORIGINAL, AMENDMENT_1, AMENDMENT_2):
         json.loads(p.read_text())  # the record this answers for must parse and be present
