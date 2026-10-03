@@ -71,6 +71,106 @@ NO_PROBABILITY = (
     " quoted"
 )
 REGION_SCORE_NOTE = "confidence is the budget's hand-set evidence-quality score per rule, not a probability"
+
+# ---- what a rule's `when: cell_type` actually names (the header sentence, fixed 2026-10-03) ----
+# ---- what a rule's `when: cell_type` actually names (the header sentence, fixed 2026-10-03) ----
+#: The wording this replaced claimed each rule's cell was one the element had been assayed or scored
+#: within. That is false for every predicted rule, and those are 5,174 of chr21's 5,176: the compiled
+#: cell is the ARGMAX over the scorer's RNA-seq track axis - the tissue whose predicted expression of
+#: the TARGET GENE moved most on deletion - so the element was scored in all 371 tracks and in no one
+#: of them. The superseded text itself is quarantined in genomeos.attribution.reheader, which exists
+#: only to version an already-published program; this module must not contain a copy of it.
+#:
+#: Two measurements bound what may be said instead, and neither licenses a claim that the label
+#: carries usable cell information: data/results/argmaxcell.json, where the compiled cell is the
+#: measured cell on 612 of 3,228 K562 elements (19.0%) against a pre-registered 25% usability
+#: threshold, the argmax naming some other cell on 2,616; and data/results/label_gene.json, where
+#: within-gene label concordance is 10,193 of 169,514 pairs (6.013%) against a 1.729% control, so 94%
+#: of same-gene element pairs disagree. The replacement states only HOW the cell is picked and
+#: asserts nothing about where the rule acts.
+
+#: The agreed replacement for the false clause, verbatim but for the leading capital and the stop
+#: that grammar requires of a sentence. Both counts are `{}` on purpose: they are facts about the
+#: program being written, and `compile_chromosome` refuses rather than ship a header whose counts
+#: disagree with the rule lines underneath it.
+CELL_SENTENCE = (
+    "The cell named is the tissue whose predicted expression of the target gene changed most when "
+    "the element is deleted (over {tracks} RNA-seq tracks; {predicted:,} rules), or the cell a "
+    "CRISPRi screen measured ({experimental:,} rules)."
+)
+
+#: The true parts of the superseded paragraph, which the fix keeps.
+CELL_GATE_SENTENCE = (
+    "Every rule is gated on a cell (`when: cell_type = K562`), one rule per element, gene and cell, "
+    "so a run in HepG2 integrates none of K562's."
+)
+CELL_UNKNOWN_SENTENCE = (
+    "A rule whose cell was not recorded says `cell_type = unknown`, which matches no cell: it is "
+    "never universal."
+)
+
+
+def check_cell_counts(lines: list[str], n_predicted: int, n_experimental: int, chrom: str) -> None:
+    """Refuse a program whose cell sentence disagrees with the rule lines underneath it.
+
+    The two counts in the header are claims about THIS program, so they are recounted from the rule
+    lines actually emitted. A count that survives a change in what the compiler emits is how the
+    superseded sentence stayed wrong through every regeneration; this makes that failure loud.
+    """
+    emitted = [ln for ln in lines if ln.startswith("rule ")]
+    seen_predicted = sum(1 for ln in emitted if 'evidence: predicted "AlphaGenome deletion' in ln)
+    seen_experimental = sum(1 for ln in emitted if 'evidence: experimental "' in ln)
+    if (seen_predicted, seen_experimental) != (n_predicted, n_experimental):
+        raise ValueError(
+            f"{chrom}: the header's cell sentence declares {n_predicted} predicted and "
+            f"{n_experimental} experimental rules, the program carries {seen_predicted} and "
+            f"{seen_experimental}; refusing to write a header that contradicts its own rules"
+        )
+    if seen_predicted + seen_experimental != len(emitted):
+        raise ValueError(
+            f"{chrom}: {len(emitted)} rule lines but {seen_predicted + seen_experimental} carry a "
+            "predicted or experimental evidence tier; the cell sentence would account for only some "
+            "of the rules it speaks for"
+        )
+
+
+def count_rules(text: str) -> tuple[int, int]:
+    """The predicted and experimental rule-line counts of a compiled program, read off the program.
+
+    Refuses a program whose rule lines are not wholly accounted for by the two tiers, because the
+    cell sentence speaks for every rule and a third tier would make it silently partial.
+    """
+    rules = [ln for ln in text.splitlines() if ln.startswith("rule ")]
+    predicted = sum(1 for ln in rules if 'evidence: predicted "AlphaGenome deletion' in ln)
+    experimental = sum(1 for ln in rules if 'evidence: experimental "' in ln)
+    if predicted + experimental != len(rules):
+        raise ValueError(
+            f"{len(rules)} rule lines but {predicted + experimental} carry a predicted or "
+            "experimental evidence tier; the cell sentence would speak for only some of them"
+        )
+    return predicted, experimental
+
+
+def cell_sentence_lines(n_predicted: int, n_experimental: int) -> list[str]:
+    """The `when: cell_type` paragraph of a program's header, as `# `-prefixed comment lines.
+
+    `n_predicted` and `n_experimental` are the counts of rule lines the caller is about to write, not
+    constants: a count typed into this paragraph is the next version of the defect it repairs.
+    """
+    import textwrap
+
+    from genomeos.attribution.gene_row_locus import TRACKS
+
+    body = " ".join(
+        (
+            CELL_GATE_SENTENCE,
+            CELL_SENTENCE.format(tracks=TRACKS, predicted=n_predicted, experimental=n_experimental),
+            CELL_UNKNOWN_SENTENCE,
+        )
+    )
+    return ["# " + ln for ln in textwrap.wrap(body, width=97, break_long_words=False)]
+
+
 EVIDENCE_BY_TIER = {
     "structural": ("curated", "RepeatMasker and the assembly, classified by genomeos unknown"),
     "repeat_unconstrained": ("curated", "RepeatMasker family, Zoonomia phyloP over 241 mammals"),
@@ -614,6 +714,8 @@ def compile_chromosome(
 
     # one experimental rule per (element, gene, cell), R1 of 2026-09-28
     n_measured_rules = sum(len(rule_links(r)) for r in measured_rows)
+    # one predicted rule per attributed element, emitted in the `if elements:` loop below
+    n_predicted_rules = len(elements)
 
     lines = [
         f"module human.noncoding.{chrom}",
@@ -637,9 +739,7 @@ def compile_chromosome(
         "# whose measured bases are all inert is stated as a fact about those bases and never as a",
         "# verdict on the element, and it raises no rule, because it names no gene.",
         "#",
-        "# Every rule is gated on the cell it was measured or predicted in (`when: cell_type = K562`), one",
-        "# rule per element, gene and cell, so a run in HepG2 integrates none of K562's. A rule whose",
-        "# cell was not recorded says `cell_type = unknown`, which matches no cell: it is never universal.",
+        *cell_sentence_lines(n_predicted_rules, n_measured_rules),
         "#",
         "# Certainty (review R4, 2026-09-28). A predicted element or rule states no `confidence:`: the",
         "# size of a predicted effect is not how sure anyone is. Each carries its effect in its unit and",
@@ -810,6 +910,7 @@ def compile_chromosome(
             f"# {ce.NOT_VALIDATION}.",
             *(f"# {v}: {n}" for v, n in sorted(context_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
         ]
+    check_cell_counts(lines, n_predicted_rules, n_measured_rules, chrom)
     return "\n".join(lines) + "\n"
 
 
