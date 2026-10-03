@@ -410,3 +410,104 @@ def test_the_core_set_and_the_unusable_rows_are_the_same_71_rows() -> None:
     assert len(got["rows_dropped"]) == 71
     assert set(nt[got["rows_used"]].tolist()) == set(nt[core[nt]].tolist())
     assert not np.isfinite(ce[nt]).any(), "obs/control_expr is NaN on every non-targeting row"
+
+
+# --- what a pass licenses, and what cannot be established ---------------------------------------------
+
+
+def test_a_verdict_cannot_be_emitted_without_the_pass_licence_attached() -> None:
+    """The caveat has to TRAVEL with the figures. A reader who sees only `decide`'s output must still
+    see that a pass is about non-targeting subsets of the normalisation reference."""
+    for passing in (True, False):
+        overall = {"var_primary": 1.0 if passing else 2.0, "tail_primary": 0.05}
+        v = n1b.decide(overall, [])
+        assert v["passed"] is passing
+        assert v["pass_licence"] == n1b.PASS_LICENCE
+        assert v["cannot_establish"] == list(n1b.CANNOT_ESTABLISH)
+
+
+def test_the_pass_licence_names_the_assumption_and_the_step_that_must_restate_it() -> None:
+    lic = n1b.PASS_LICENCE
+    assert "non-targeting subsets of the normalisation reference" in lic
+    assert "ASSUMPTION" in lic
+    assert "step 2" in lic and "beside every perturbed-row figure" in lic
+
+
+def test_a_passing_reading_states_the_licence_in_its_own_sentence() -> None:
+    v = n1b.decide({"var_primary": 1.0, "tail_primary": 0.05}, [])
+    assert v["passed"]
+    assert n1b.PASS_LICENCE in v["reading"]
+
+
+def test_what_cannot_be_established_includes_the_perturbed_rows_and_the_unconfirmed_divisor() -> None:
+    joined = " ".join(n1b.CANNOT_ESTABLISH)
+    assert "UNCONFIRMED" in joined
+    assert "PER-FACTOR COUNTS ARE NOT READ IN N1b, AT ALL" in joined
+    assert "fitness phenotype and not metadata" in joined
+    assert "No factor row is read on a pass or a fail" in joined
+    assert n1b.PASS_LICENCE in n1b.CANNOT_ESTABLISH
+
+
+def test_the_licence_moves_no_band() -> None:
+    """The addition bounds what a pass LICENSES, not what counts as one. The bands are the same
+    objects they were when the study was frozen, and a figure outside one still fails."""
+    assert (n1b.VAR_LO, n1b.VAR_HI, n1b.TAIL_LO, n1b.TAIL_HI, n1b.STRATA) == (0.80, 1.25, 0.04, 0.06, 5)
+    assert not n1b.decide({"var_primary": 1.26, "tail_primary": 0.05}, [])["passed"]
+    assert not n1b.decide({"var_primary": 1.0, "tail_primary": 0.0601}, [])["passed"]
+
+
+# --- the cell-count distribution: quantiles only, no identity -------------------------------------------
+
+
+def test_the_cell_count_distribution_persists_no_row_and_no_index() -> None:
+    from scripts import n1b_fetch
+
+    counts = [float(v) for v in range(10, 110)]
+    got = n1b_fetch.cell_count_distribution(counts, list(range(100)))
+    assert set(got) == {
+        "rows",
+        "with_a_finite_count",
+        "quantiles",
+        "mean",
+        "cells_in_total",
+        "what_is_not_here",
+    }
+    assert got["rows"] == 100 and got["with_a_finite_count"] == 100
+    assert sorted(got["quantiles"]) == sorted(str(q) for q in n1b_fetch.CELL_COUNT_QUANTILES)
+    assert got["quantiles"]["0.0"] == 10.0 and got["quantiles"]["1.0"] == 109.0
+    assert "no per-row count and no row index" in got["what_is_not_here"]
+
+
+def test_the_distribution_drops_non_finite_counts_and_says_how_many_it_kept() -> None:
+    from scripts import n1b_fetch
+
+    got = n1b_fetch.cell_count_distribution([1.0, float("nan"), 3.0], [0, 1, 2])
+    assert got["rows"] == 3 and got["with_a_finite_count"] == 2
+    assert got["quantiles"]["0.5"] == 2.0
+
+
+def test_a_scope_with_no_finite_count_reports_no_quantiles_rather_than_a_zero() -> None:
+    from scripts import n1b_fetch
+
+    got = n1b_fetch.cell_count_distribution([float("nan")], [0])
+    assert got["quantiles"] is None and got["with_a_finite_count"] == 0
+
+
+def test_the_disclosure_wording_is_the_registered_one() -> None:
+    from scripts import n1b_fetch
+
+    assert n1b_fetch.DISCLOSURE == "perturbed-row cell-count distribution read, no identity, no expression"
+
+
+@pytest.mark.needs_local_data(
+    "data/cache/n1b/probe.json", how="scripts/n1b_fetch.py probe fetches the file's index by range"
+)
+def test_the_probe_stores_a_perturbed_distribution_and_no_perturbed_row() -> None:
+    probe = json.loads((ROOT / "data/cache/n1b/probe.json").read_text())
+    cells = probe["cell_counts"]
+    assert cells["disclosure"] == "perturbed-row cell-count distribution read, no identity, no expression"
+    assert cells["perturbed"]["rows"] == probe["rows_total"] - probe["non_targeting_count"]
+    assert "per_row" not in json.dumps(cells)
+    # the only per-row obs the probe keeps is for the NON-TARGETING rows, and it keeps 585 of each
+    for column, values in probe["obs"].items():
+        assert len(values) == probe["non_targeting_count"], column

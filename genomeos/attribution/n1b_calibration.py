@@ -120,6 +120,38 @@ PASS_RULE = (
 
 INCONCLUSIVE_WORDING = "the data cannot tell"
 
+#: WHAT A PASS LICENSES, and it is narrower than a pass will read to someone skimming. Registered
+#: before any byte of X on the coordinator's reading of the producers' normalisation, which is right
+#: and which this lane had not seen: Replogle's per-cell z-scores are computed per gemgroup AGAINST
+#: THE NON-TARGETING CELLS -- the mean and SD of the control population. So every non-targeting row
+#: is a per-guide SUBSET of the very reference that defined the scale. A pass therefore tests the
+#: sqrt(n) scaling, cell independence and normality WITHIN the reference population. It does not show
+#: that T is calibrated for PERTURBED rows, whose cell counts, variances and knockdown-induced shifts
+#: all differ. `decide` cannot emit a verdict without this sentence attached, so the caveat travels
+#: with the figures rather than sitting once in a file nobody re-reads.
+PASS_LICENCE = (
+    "a PASS licenses T only as calibrated on non-targeting subsets of the normalisation reference; "
+    "its transfer to perturbed rows is an ASSUMPTION, and step 2, if it ever runs, states it again "
+    "beside every perturbed-row figure"
+)
+
+#: What this study cannot establish, written before the run. None of these is a band and none of them
+#: is a reason to widen one; they bound what a pass MEANS, not what counts as one.
+CANNOT_ESTABLISH = (
+    PASS_LICENCE,
+    "whether X's divisor is the num_cells_filtered the obs column reports (instrument assumption 1, "
+    "UNCONFIRMED). A figure that failed only because of that would look exactly like a derivation "
+    "that is wrong, and this study cannot tell those apart",
+    "whether the normal approximation holds for PERTURBED rows at |T| > 1.96. If perturbed rows carry "
+    "far fewer cells than non-targeting rows, it is weaker there than this check can possibly show. "
+    "The cell-count DISTRIBUTION over all perturbed rows is reported as a property of the file, as "
+    "quantiles with NO perturbation identity attached, because a perturbed row's num_cells_filtered "
+    "is outcome-adjacent: knocking down an essential gene lowers its cell count, which is a fitness "
+    "phenotype and not metadata. PER-FACTOR COUNTS ARE NOT READ IN N1b, AT ALL -- not sampled, not "
+    "spot-checked, not printed for a sanity check",
+    "anything whatever about which genes respond to which factor. No factor row is read on a pass or a fail",
+)
+
 
 # --- the usable rows and the uncalibratable genes ----------------------------------------------------------
 
@@ -283,12 +315,14 @@ def decide(overall: dict[str, Any], strata: Sequence[dict[str, Any]]) -> dict[st
     return {
         "pass_rule": PASS_RULE,
         "passed": passed,
+        "pass_licence": PASS_LICENCE,
+        "cannot_establish": list(CANNOT_ESTABLISH),
         "legs": legs,
         "failed_scopes": failed,
         "reading": (
             "T = X * sqrt(n) is calibrated on the non-targeting rows under the registered rule: both "
             "bands hold overall and in every control-expression quintile. The reading is about the NULL "
-            "and about nothing else."
+            "and about nothing else, and it licenses no more than this: " + PASS_LICENCE + "."
             if passed
             else "T = X * sqrt(n) is UNUSABLE. The registered rule is missed in "
             f"{len(failed)} of {len(legs)} scopes. The derivation is not repaired here and no second "

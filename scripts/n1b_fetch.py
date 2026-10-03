@@ -41,6 +41,35 @@ OBS_COLUMNS = ("num_cells_filtered", "core_control", "control_expr")
 NON_TARGETING_MARK = "non-targeting"
 
 
+#: The quantiles the perturbed-row cell-count distribution is reported at. QUANTILES ONLY: no
+#: perturbed row's own count, and no perturbed row's index, reaches disk. A perturbed row's
+#: num_cells_filtered is OUTCOME-ADJACENT -- knocking down an essential gene lowers its cell count,
+#: which is a fitness phenotype and not metadata -- so per-factor counts are not read in N1b at all,
+#: not sampled and not spot-checked. The distribution is read for one purpose: if perturbed rows carry
+#: far fewer cells than non-targeting rows, the normal approximation at |T| > 1.96 is weaker there
+#: than this check can possibly show, and that bounds what a PASS means.
+CELL_COUNT_QUANTILES = (0.0, 0.05, 0.25, 0.5, 0.75, 0.95, 1.0)
+DISCLOSURE = "perturbed-row cell-count distribution read, no identity, no expression"
+
+
+def cell_count_distribution(counts: list[float], rows: list[int]) -> dict[str, Any]:
+    """The cell-count distribution over the named rows, as quantiles and counts and nothing else."""
+    import numpy as np
+
+    finite = [counts[i] for i in rows if n1b._finite(counts[i])]  # noqa: SLF001
+    if not finite:
+        return {"rows": len(rows), "with_a_finite_count": 0, "quantiles": None}
+    a = np.asarray(finite, dtype=np.float64)
+    return {
+        "rows": len(rows),
+        "with_a_finite_count": len(finite),
+        "quantiles": {str(q): float(np.quantile(a, q)) for q in CELL_COUNT_QUANTILES},
+        "mean": float(a.mean()),
+        "cells_in_total": int(a.sum()),
+        "what_is_not_here": "no per-row count and no row index, for any perturbed row",
+    }
+
+
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
@@ -61,7 +90,19 @@ def probe() -> dict[str, Any]:
         var_ids = [x.decode() if isinstance(x, bytes) else str(x) for x in h["var/gene_id"][()]]
         obs = {c: [float(v) for v in h[f"obs/{c}"][()]] for c in OBS_COLUMNS}
     nt = [i for i, s in enumerate(index) if NON_TARGETING_MARK in s]
+    perturbed = [i for i in range(len(index)) if NON_TARGETING_MARK not in index[i]]
     usable = n1b.usable_rows([obs["num_cells_filtered"][i] for i in nt])
+    counts = obs["num_cells_filtered"]
+    cells = {
+        "disclosure": DISCLOSURE,
+        "read_when": "in this probe, before the registration was written and before any byte of X",
+        "non_targeting": cell_count_distribution(counts, nt),
+        "perturbed": cell_count_distribution(counts, perturbed),
+        "why_it_is_here": "it bounds what a PASS means. If perturbed rows carry far fewer cells than "
+        "non-targeting rows, the normal approximation at |T| > 1.96 is weaker there than this study "
+        "can show. PER-FACTOR COUNTS ARE NOT READ: identities add nothing to a distribution and cost "
+        "the blindness this registration exists to protect.",
+    }
     rec = {
         "stage": "probe",
         "what_was_read": "the normalized file's superblock and object headers, obs/gene_transcript, "
@@ -80,6 +121,8 @@ def probe() -> dict[str, Any]:
             sum(1 for i in nt if n1b._finite(obs["control_expr"][i]))  # noqa: SLF001
         ),
         "obs": {c: [obs[c][i] for i in nt] for c in OBS_COLUMNS},
+        "perturbed_rows": len(perturbed),
+        "cell_counts": cells,
         "bytes_fetched": rf.fetched,
         "fetch_log": rf.log,
     }
@@ -154,6 +197,13 @@ def main() -> int:
             f"{rec['bytes_fetched']} bytes in {len(rec['fetch_log'])} range requests"
         )
         print(f"X at offset {rec['x_layout']['offset']}, stride {rec['x_layout']['row_stride_bytes']}")
+        for kind in ("non_targeting", "perturbed"):
+            d = rec["cell_counts"][kind]
+            q = d["quantiles"]
+            print(
+                f"cells per row, {kind}: {d['rows']} rows, {d['with_a_finite_count']} with a count, "
+                f"median {q['0.5']:.0f}, 5-95% {q['0.05']:.0f}-{q['0.95']:.0f}, mean {d['mean']:.1f}"
+            )
         return 0
     rec = json.loads(PROBE.read_text())
     print(json.dumps(row_ranges(rec["x_layout"], rec["non_targeting_rows"]), indent=1))

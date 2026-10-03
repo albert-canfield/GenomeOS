@@ -302,6 +302,52 @@ def registration(probe: dict[str, Any]) -> dict[str, Any]:
             "the band holds. That is not the band holding, and it is not the absence of information "
             "either: the figure and its interval are both reported.",
         },
+        "cannot_establish": {
+            "statements": list(n1b.CANNOT_ESTABLISH),
+            "pass_licence": n1b.PASS_LICENCE,
+            "why_the_licence_is_narrow": (
+                "the producers' normalisation computes each per-cell z-score per gemgroup AGAINST THE "
+                "NON-TARGETING CELLS -- the mean and SD of the control population. So every "
+                "non-targeting row is a per-guide SUBSET of the very reference that defined the scale, "
+                "and a pass tests the sqrt(n) scaling, cell independence and normality WITHIN that "
+                "reference. It does NOT show that T is calibrated for perturbed rows, whose cell "
+                "counts, variances and knockdown-induced shifts all differ. A pass is therefore weaker "
+                "than it would read to someone skimming, and this is registered in advance rather than "
+                "left to be noticed later."
+            ),
+            "the_caveat_travels": "decide() cannot emit a verdict without pass_licence and "
+            "cannot_establish attached, so the sentence sits beside every figure rather than once in "
+            "a file nobody re-reads. If step 2 ever runs, it states it again beside every "
+            "perturbed-row figure.",
+            "it_moves_no_band": "the variance band, the tail band, every-quintile-plus-overall, a "
+            "stratum that cannot be formed counting as a failure, the row as the cluster and the four "
+            "printed assumptions all stand exactly as frozen at d04261a. This bounds what a pass "
+            "LICENSES, not what counts as one.",
+            "perturbed_row_cell_counts": {
+                **probe["cell_counts"],
+                "per_factor_counts_are_not_read": "NOT in N1b, at all: not sampled, not spot-checked, "
+                "not printed for a sanity check. A perturbed row's num_cells_filtered is "
+                "OUTCOME-ADJACENT -- knocking down an essential gene lowers its cell count, which is a "
+                "fitness phenotype and not metadata -- so reading per-factor counts would read an "
+                "outcome and would cost exactly the blindness this registration exists to protect. "
+                "Only a distribution over ALL perturbed rows is read, as quantiles, with no identity.",
+            },
+        },
+        "disclosure": {
+            "read_before_this_registration_was_written": [
+                "the normalized file's superblock and object headers (where X lives, and its shape)",
+                "obs/gene_transcript and var/gene_id: the file's own row and gene index",
+                "obs/num_cells_filtered, obs/core_control and obs/control_expr, whole columns",
+                probe["cell_counts"]["disclosure"],
+            ],
+            "when": "in scripts/n1b_fetch.py probe, by 33 HTTP range requests over "
+            f"{probe['bytes_fetched']:,} bytes, before this file was written and before any byte of X",
+            "never_read": "no byte of X at this point; no perturbed row's own cell count and no "
+            "perturbed row's index persisted anywhere; no expression value of any perturbed row; no "
+            "factor row at all",
+            "standard": "disclosure, not abstinence, for the file's shape -- and abstinence for a "
+            "perturbed row's identity, because that one is outcome-adjacent.",
+        },
         "what_a_fail_means": {
             "written_before_the_run": True,
             "verdict": "the derivation T = X * sqrt(n) is UNUSABLE.",
