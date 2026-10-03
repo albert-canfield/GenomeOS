@@ -351,13 +351,23 @@ def magnitude_prefers(a: dict[str, Any], b: dict[str, Any]) -> int:
     return 0
 
 
-def surface_accessibility(localisation: Any, ectodomain_lost: bool = False) -> tuple[float | None, str]:
+def surface_accessibility(
+    localisation: Any, ectodomain_lost: bool = False, ectodomain_uncertain: bool = False
+) -> tuple[float | None, str]:
     """How reachable the protein is from outside, from curated localisation.
 
     Curated localisation describes the full-length protein. When the tumour
     makes a fusion that drops this gene's N-terminal ectodomain, the curated
     figure is a description of a protein the tumour does not have, so it is
     not the number to score.
+
+    `ectodomain_uncertain` is the third state, and it exists because a bool
+    could not hold it: the gene is the 3' partner of every fusion that reached
+    it, but its curated topology does not settle whether its outward face is
+    the N-terminal part. The mechanism gate has always answered `None` there.
+    Answering `False` to "is it lost" and then reading the annotation at full
+    value defaults an unknown to the maximum, which is the one rule at the top
+    of this module turned inside out.
     """
     if ectodomain_lost:
         return 0.0, (
@@ -370,6 +380,13 @@ def surface_accessibility(localisation: Any, ectodomain_lost: bool = False) -> t
         return 0.0, (
             f"curated localisation places {localisation.primary} inside the cell; a circulating binder "
             "cannot reach it"
+        )
+    if ectodomain_uncertain:
+        return None, (
+            "this gene is the 3' partner of every fusion that reached it, so the product carries its "
+            "C-terminal half, and its curated topology does not settle whether its outward face is the "
+            "N-terminal part that the product therefore lacks; the curated figure describes the "
+            "full-length protein and it is not known that the tumour makes it"
         )
     best = max(
         (

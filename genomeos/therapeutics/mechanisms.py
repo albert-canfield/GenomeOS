@@ -132,6 +132,42 @@ def ectodomain_lost(c: Any) -> bool:
     return _fusion_only(c) and _n_terminus_lost(c) and _ectodomain_is_n_terminal(c.localization)
 
 
+def _ectodomain_arrangement_uncurated(loc: Any) -> bool:
+    """The curated topology does not settle whether the outward face is N-terminal.
+
+    This is a gap and not an answer, and the two have to be kept apart. A
+    protein curated with two or more transmembrane segments, or with an
+    extracellular segment running past its first pass, has been described, and
+    the description says its outward face is not only N-terminal: a 3' partner
+    may still contribute part of it, so the curated figure is not simply a
+    description of a protein the tumour lacks. What is a gap is a missing
+    signal peptide, no curated transmembrane segment, or no curated
+    extracellular segment at all.
+    """
+    tms = [r for r in loc.transmembrane_regions if r.start]
+    ecto = [r for r in loc.extracellular_regions if r.start]
+    if len(tms) > 1:
+        return False
+    if ecto and tms and not all((r.end or 0) <= tms[0].start for r in ecto):
+        return False
+    return loc.signal_peptide is None or not ecto or not tms
+
+
+def ectodomain_uncertain(c: Any) -> bool:
+    """Whether the product keeps this gene's outward face is an open question.
+
+    True when every clause of `ectodomain_lost` holds except that the curated
+    topology does not settle the arrangement: the gene is the 3' partner of
+    every fusion that reached it, nothing else reached it, and so the curated
+    full-length figure describes a protein that may not be the one the tumour
+    makes. `_surface` has always returned `None` here, and this exists so the
+    score can say the same thing instead of reading the annotation at full
+    value. It is false wherever `ectodomain_lost` is true, by construction:
+    the arrangement cannot be both curated as type-I and uncurated.
+    """
+    return _fusion_only(c) and _n_terminus_lost(c) and _ectodomain_arrangement_uncurated(c.localization)
+
+
 def _surface(c: Any) -> bool | None:
     if c.localization.plasma_membrane is False:
         return False

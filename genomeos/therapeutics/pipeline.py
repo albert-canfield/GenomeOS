@@ -625,7 +625,11 @@ def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) ->
     # mutated gene were scored from the same annotation and came out equal.
     tier, tier_value, tier_basis = alteration_evidence(c.origins, c.tumour)
     c.evidence_tier, c.evidence_tier_reason = tier, tier_basis
-    sa, sa_basis = surface_accessibility(c.localization, ectodomain_lost=mech.ectodomain_lost(c))
+    sa, sa_basis = surface_accessibility(
+        c.localization,
+        ectodomain_lost=mech.ectodomain_lost(c),
+        ectodomain_uncertain=mech.ectodomain_uncertain(c),
+    )
     sel, sel_basis, sel_ev = tumour_selectivity(c.gene, c.tumour, c.normal_tissue)
     exp, exp_basis = tumour_expression_score(c.tumour)
     nts, nts_basis = normal_tissue_safety(c.normal_tissue)
