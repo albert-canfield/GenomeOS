@@ -1079,6 +1079,84 @@ identical field by field apart from their per-case timings, so the tenth case
 changed no existing result, and a second run after the additive amendment
 reproduced every value of the first.
 
+## The surface score's last annotation read, pre-registered 2026-10-03
+
+This completes the registration of 2026-09-27 rather than replacing it, and it
+starts by withdrawing the premise the plan still carries. The 2026-09-27 row
+asked for `BURIED_SURFACE_TARGETS` 2 to 0; it reads **0** in
+`tests/test_therapeutic_benchmark.py` and `outranked_by_hypotheses` is empty on
+every row of the committed result, so that criterion was met on the day it was
+registered and the three places that still describe it as open are stale. What
+was *not* finished is the sentence beside it — that the surface score reads the
+annotation rather than the alteration — and this section says exactly how much
+of that sentence survives, which is one subcase and not a scoring regime.
+
+**What already reads the alteration.** Three things do, and none of them is
+`surface_accessibility`: `alteration_evidence` gates the order by what is known
+about the gene in this patient; `mutation_topology` asks whether the altered
+residue is itself outside the cell and routes the mutation-specific epitope on
+the answer; and `ectodomain_lost` turns the curated figure to 0.0 when the
+tumour's product has none of this gene's outward-facing part. The 2026-09-27
+design deliberately answered the ERBB2 defect at the ordering layer and said
+why: a precondition is not a dimension of goodness. That decision stands and
+is not reopened here.
+
+**The subcase that is left, stated as a disagreement between two readers of the
+same open question.** `ectodomain_lost` is the conjunction of three clauses —
+every origin a fusion, this gene the 3' partner of every one of them, and the
+curated topology the type-I arrangement whose ectodomain the N-terminus carries.
+The third clause requires a curated signal peptide, on purpose, so that a
+multi-pass protein, a C-terminal ectodomain or an uncurated topology answers no
+and **the question stays open**. The mechanism gate honours that: `_surface`
+returns `None` for such a candidate and every surface mechanism stays
+provisional. The score does not: `surface_accessibility` is handed
+`ectodomain_lost=False`, which it cannot distinguish from *the ectodomain
+survives*, and it returns the full-length curated figure at full value. So for
+one and the same candidate the gate says the surface is an open question and
+the score says it is maximally accessible, read off an annotation describing a
+protein the orientation says the tumour does not make.
+
+That is the module's own first rule inverted. `scoring.py` opens by saying an
+unknown dimension is dropped from the mean and never defaulted to a middling
+value; here an unknown is defaulted to the maximum, which is worse than
+middling, and it is the one place where "reads the annotation rather than the
+alteration" is still literally true of the surface score.
+
+**What is registered.** The openness is passed through, and nothing else.
+`mechanisms.ectodomain_uncertain(c)` is true exactly when every clause of
+`ectodomain_lost` holds except that the type-I arrangement is uncurated — the
+gene is the 3' partner of every fusion that reached it, no other route reached
+it, and the curated topology does not settle whether its outward face is
+N-terminal. `surface_accessibility` then returns `None` with the reason, so the
+dimension is dropped from the mean and counted as missing coverage, exactly as
+the gate already treats it. The score and the gate answer the same question the
+same way.
+
+**What this must not do.** It must not become "a fusion is never a surface
+target", which is false and is how the 2026-09-21 fix went wrong. A 5' partner
+keeps the N-terminus it contributes and scores from the annotation unchanged. A
+gene reached by a fusion *and* by another route makes a full-length product too,
+so the annotation is the right reading there and the score stays unchanged. A
+candidate with no fusion origin is untouched. And `ectodomain_lost` keeps
+precedence: where the arrangement is curated, the answer is 0.0 and not unknown.
+
+**The falsifier.** Falsified by any published score, rank, target class,
+mechanism, compatibility, accessibility or peptide route in the therapeutic
+benchmark changing; by `surface_accessibility` returning `None` for any
+candidate the gate answers `True` or `False`; by `ectodomain_uncertain` and
+`ectodomain_lost` ever being true together; by a 5' partner or a
+multiply-reached gene losing its annotation reading; or by any pin rising.
+`BURIED_SURFACE_TARGETS` is **not** predicted to move and may not rise: it is
+already 0 and no benchmark case reaches this subcase, so a change in it would
+mean this edit was wider than registered.
+
+**What it does not claim.** No case in the benchmark exercises this subcase, so
+this is a correctness repair proven by planted inputs and not an improvement any
+committed number will show. Saying so is the point: the honest outcome of the
+2026-09-27 row is that its number was reached, and what remained of its sentence
+was one disagreement between a gate and a score rather than a scoring regime
+nobody had built.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
