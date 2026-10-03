@@ -91,7 +91,8 @@ unphased sequence, so it does not see a diploid individual.
    for a geneticist is the label on an enhancer: 61 elements move from
    "nearest coding gene in the node, inferred 0.4" to a named gene with a
    tissue and a magnitude, and 43 elements that the registry calls
-   enhancer-like behave as silencers for the gene they move. The examples
+   enhancer-like are silencer-like for the gene they move -- expression rises
+   when deleted, a direction and not a function. silencer_like is a DIRECTION, not a function: on the 1,181 assay-validated silencers where both instruments have an opinion it is NOT enriched (-2.144 points, [-5.897, +1.158], NO_SIGNAL; cell-matched -1.748, [-5.146, +1.459]; a powered null, a 15-point shift detected 200/200 and +10 excluded) -- data/results/silenceragree.json, 2026-10-03. The examples
    worth looking at are PKNOX1 (element EH38E3461530, 56 kb away, −0.80 in a
    neuroectodermal line, agrees) and the elements the inference gets wrong:
    EH38E3454846 is 41 kb from SCAF4 but moves HUNK, beyond the boundary;

@@ -125,7 +125,7 @@ docs/ALPHAGENOME.md, `data/results/enhancer_targets_chr21.json`):
   itself.
 - 43 of the 127 named effects are rises, not drops: the registry's
   "enhancer-like" class, defined by chromatin marks, includes elements that
-  behave as silencers for the gene they move.
+  are silencer-like for the gene they move: expression rises when they are deleted. silencer_like is a DIRECTION, not a function: on the 1,181 assay-validated silencers where both instruments have an opinion it is NOT enriched (-2.144 points, [-5.897, +1.158], NO_SIGNAL; cell-matched -1.748, [-5.146, +1.459]; a powered null, a 15-point shift detected 200/200 and +10 excluded) -- data/results/silenceragree.json, 2026-10-03.
 
 This is a prediction agreeing with an inference, and both are labelled as
 such; it is not a measurement. But it is the first evidence in the project,
