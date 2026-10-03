@@ -140,7 +140,13 @@ def registration(probe: dict[str, Any]) -> dict[str, Any]:
         "authorises_no_conclusion": (
             "This file states a plan and a rule. It holds no measurement, no figure and no verdict, "
             "and the fields a run would fill DO NOT EXIST in it rather than sitting empty, so that "
-            "nothing in it can read as a preview. It authorises no conclusion of any kind."
+            "nothing in it can read as a preview. It authorises no conclusion of any kind. The check "
+            "that says so runs twice: once on the payload, and once on the file AS WRITTEN, because "
+            "genomeos/results.py adds the registry's own stamp after the payload leaves the writer. "
+            "That stamp uses one of the forbidden spellings -- `result` -- and it holds this "
+            "registration's own NAME, 'n1b_calibration_registration', and not an outcome. It is "
+            "allowed at exactly that value and nothing else, so a future stamp putting a figure there "
+            "would stop the write rather than pass unnoticed. `date` is the same stamp's write date."
         ),
         "data": {
             "study": "Replogle et al. 2022, genome-scale Perturb-seq in K562",
@@ -466,8 +472,19 @@ def main() -> int:
         raise SystemExit(f"the registration must hold no field a run would fill: {sorted(present)}")
     rec["result_manifest"] = result_manifest()
     path = save_result(NAME, rec)
+    # The check runs AGAIN on the file as WRITTEN, not only on the payload, because save_result adds
+    # the registry's own stamp after the payload leaves here. `result` is the one forbidden spelling
+    # the stamp uses, and it holds this registration's own NAME -- not an outcome. It is allowed only
+    # at exactly that value, so a future stamp that put anything else there would stop the write.
+    written = json.loads((ROOT / path).read_text())
+    for key in FORBIDDEN:
+        if key == "result" and written.get(key) == NAME:
+            continue
+        if key in written:
+            raise SystemExit(f"the written registration holds {key!r}, a field a run would fill")
     print(f"wrote {path}, sha256 {sha256_text(ROOT / path)}")
-    print(f"fields a run would fill: none of {sorted(FORBIDDEN)} exists in it")
+    print(f"fields a run would fill: none of {sorted(FORBIDDEN)} is in the written file")
+    print(f"the one exception, checked by value: result == {written['result']!r}, the registry's name stamp")
     return 0
 
 
