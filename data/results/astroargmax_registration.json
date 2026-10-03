@@ -1,0 +1,1630 @@
+{
+  "result": "astroargmax_registration",
+  "date": "2026-10-03",
+  "lane": "lane-astroargmax",
+  "status": "A REGISTRATION AND NOTHING ELSE. No astrocyte answer exists, so no observed rate, no interval, no verdict and no count of any arm exists or can. 0 AlphaGenome requests, no network to the service, no key read, no money",
+  "registered_in_its_own_commit": "this file is committed ALONE, before any of the 1,232 requests is sent and before any astrocyte answer exists. A registration in the same commit as its result is a claim resting on a sentence; this one rests on the history, and astrorun's clause `astroargmax_registration_committed` reads git and not this file's own word for it",
+  "question": "On the 1,232 paid astrocyte-element answers of AstroREG-2, at what rate is the ARGMAX LABEL -- the track carrying the largest movement in a gene row's whole track vector -- a CNS track, against (a) that label set's share of the 440,589 compiled rules and (b) the K562 arm's rate for the same label set? No astrocyte answer exists, so no rate of either arm exists here",
+  "this_file_does_not_authorise_the_run": "this file does not authorise the run and does not spend anything. Albert's second approval has five clauses -- the cap of 1,232, the separate ledger, today's CI green, THIS registration committed, and the supervisor's words \"dry run reviewed\" -- and astrorun enforces each one separately and refuses on each separately. Committing this file satisfies exactly one of them. No cap, ledger, CI check, sign-off, threshold, test, pin or registration is moved, weakened, exempted or allowlisted by it",
+  "ordering_is_load_bearing": "the bands come FIRST in this file and were decided before the control was computed. A control is an input a band could be drawn around: a band width chosen after seeing a control can be chosen to clear it, and nothing in the artefact would show that it had been. So the order is bands, then the label-set rule in words, then the enumeration under it, then the control, then the disclosure. Blindness depends on that order, which is why it is stated rather than implied",
+  "bands": {
+    "decided_before_the_control": "every number in this section was fixed before `control()` was called, and none of them is a function of the control's value: the two deciding bands are RATIOS to the control and a share of the answers, so they are the same numbers whatever the control turns out to be. That is the property an after-the-fact band cannot have",
+    "ratio_enriched_floor": 2.0,
+    "absolute_level_floor": 0.1,
+    "equivalence_band_relative": 0.25,
+    "equivalence_interval_on_the_ratio": [
+      0.8,
+      1.25
+    ],
+    "ratio_depleted_ceiling": 0.8,
+    "why_relative_and_not_absolute": "the band is RELATIVE because an absolute band at a low control is close to a vacuous equivalence claim. argmaxcell's band was an absolute 0.02 and its own patch records what that cost: 0.02 is 0.3 times K562's base rate and 91.7 times WTC11's, so one band meant a different claim on every arm, and on the low arms 'the rate is within 0.02 of its base rate' was satisfied by anything from zero to many times the base rate. A control near a few per cent has the same problem here. A ratio band of +/-25% says the same thing at any control value, which is what makes the equivalence reading worth printing",
+    "why_a_ratio_floor_is_not_enough": "the enrichment reading needs BOTH the ratio floor and the absolute level floor, and either failing fails it. On 2026-10-02 this project published a 2.9-4.1x relative excess whose absolute level was 6.0%, so 94% of pairs disagreed with the property the ratio suggested; the ratio was right and the sentence it supported was not. A level floor of 0.10 states in advance how much of the data a positive reading has to describe: at least one answer in ten. It is a declared convention and not a measured threshold, and it is stated as one",
+    "why_two_point_zero": "2.0 is the smallest ratio floor that is not reachable by this registration's own boundary decisions. The borderline calls below move the label set by 6 rows (spinal cord), 8 rows (the CNS-derived cell lines) and 8 rows (the neural-crest-derived lines) out of 667, so a defensible alternative enumeration moves the set's panel share by up to about a third of itself. A floor of 1.5 could therefore be cleared or missed by a decision about the pituitary; a floor of 2.0 cannot. The three alternative enumerations are themselves registered below and reported, so a reader does not have to take that argument on trust",
+    "minimum_clusters_for_an_interval": 10,
+    "locus_span_when_chromosomes_are_too_few": 1000000,
+    "bootstrap_draws": 2000,
+    "bootstrap_seed": 20261003,
+    "minimum_distinct_resamples": 100,
+    "readings": {
+      "enriched": "the lower end of the two-sided clustered interval on observed_rate / control is at or above 2.0 AND the observed rate itself is at or above 0.1. Both, because a ratio without a level misleads. Reading: the argmax carries CNS information beyond what the compiled-rule label distribution produces on its own -- subject in full to TRAINING_EXPOSURE, which this design cannot see past",
+      "depleted": "the upper end of that interval is at or below 0.8. Reading: the argmax lands on a CNS track LESS often than the compiled-rule distribution alone would give. That is a result and not a failure",
+      "equivalent": "the two-sided interval on the ratio lies wholly inside [0.8000, 1.2500]. Reading: on these answers the argmax label is NOT evidence of the cell the element was measured in; its rate is what the label distribution produces by itself. That is the finding and it will be written in those words",
+      "inconclusive": "anything else, including fewer than 10 clusters and a degenerate bootstrap. Worded: THE DATA CANNOT TELL. Not 'no information' -- an interval that spans both a doubling and a halving carries information about neither, and saying 'no information' would misreport an instrument that worked"
+    },
+    "instrument_assumptions_printed_beside_every_interval": {
+      "clusters": "whole chromosomes. The astrocyte arm's 1,232 requests fall on 23 chromosomes, sized 5 to 137 requests, which is in the committed dry run and is read here",
+      "assumed_independent": "chromosomes, and nothing finer",
+      "known_not_independent": [
+        "requests within a chromosome: the dry run's list is a TILING, 1,232 registry elements over 882 distinct screen-element sets, up to 5 adjacent registry elements serving one screen element, so neighbouring requests see overlapping sequence",
+        "the gene rows within one answer: one deletion, many genes",
+        "the 667 track columns within one row: the panel's own rows are 371 distinct names over 2 strands plus repeats, so a two-strand name supplies two correlated columns to the argmax"
+      ],
+      "degenerate_bootstrap": "at 0 or n successes a cluster bootstrap is DEGENERATE: every resample returns the same value, the percentile interval collapses to a point and it decides nothing. The rule is to route to a Clopper-Pearson exact bound (or Wilson, named which) on an EFFECTIVE sample size n_eff = n / design_effect, and to print beside it that the bound is NOT the cluster bootstrap's and that the reading is INCONCLUSIVE unless the band is cleared by the exact bound alone",
+      "identical_resample_share": "reported for EVERY interval, degenerate or not: the share of the 2000 resamples whose statistic equals the most common resampled value. An interval whose resamples are mostly identical has fewer effective draws than its draw count says, and below 100 distinct resamples it is reported as degenerate",
+      "design_effect": "Kish's, from the cluster sizes: (sum n_c)^2 / (C * sum n_c^2) inverted, reported beside every interval. It is computed from sizes alone and assumes nothing about the outcome"
+    },
+    "every_ratio_carries_its_absolute_level": "no ratio is printed anywhere in the result without, in the same record: the absolute level it is a ratio OF, the control it is a ratio TO, the numerator count and the denominator. The 2026-10-02 failure is the reason -- a 2.9-4.1x excess was published whose absolute level was 6.0%, so 94% of the pairs disagreed with what the ratio was taken to mean. A ratio is a comparison and never a description of the typical answer"
+  },
+  "label_set_rule": "WHAT COUNTS as a CNS track, decided and written before any CURIE of the panel was read for this purpose. (1) CNS TISSUE: a term naming the brain or any region, lobe, nucleus or part of it, and the spinal cord or any segment of it. (2) CNS-DERIVED CELLS: a term naming a cell type of the central nervous system or a progenitor committed to it -- astrocytes, neurons, glia, neural progenitors, and the neural stem cell and neurosphere terms that name aggregates of them. WHAT DOES NOT COUNT: peripheral nervous tissue; a term whose stated referent mixes neural and non-neural tissue and that the panel gives no way to split; a lineage term broad enough to contain non-neural fates; and a cell line, whose panel label is an opaque code that says nothing about its tissue of origin on its face. The reading is taken on the set this rule produces; the borderline calls below are decided individually with their reasons, and three alternative enumerations are registered so a reader can see what each decision is worth",
+  "borderline_calls": {
+    "peripheral_nerve_tibial_and_sciatic": {
+      "terms": [
+        "UBERON:0001323 tibial nerve",
+        "UBERON:0001322 sciatic nerve"
+      ],
+      "decision": "OUT",
+      "reason": "both are peripheral nerve. The question asks about a brain/astrocyte track and the rule says CNS; a peripheral nerve is neither, and its resident cells (Schwann cells, not astrocytes) are a different lineage. Admitting them would make 'CNS' mean 'nervous system anywhere', which is a different question and a larger label set. They are the clearest case where a neural-sounding name is not a CNS track"
+    },
+    "pituitary_gland": {
+      "terms": [
+        "UBERON:0000007 pituitary gland"
+      ],
+      "decision": "OUT",
+      "reason": "the gland is two organs in one term. The adenohypophysis is oral ectoderm and not neural tissue; the neurohypophysis is a down-growth of the diencephalon and is. The panel carries ONE pituitary term and no lobe terms, so there is no way to take the neural half and leave the other, and a term that is part non-neural cannot be counted as a CNS track without overstating what it is. Out, and named here so the decision is visible rather than an omission"
+    },
+    "retina": {
+      "terms": [
+        "(absent) retina",
+        "UBERON:0000019 camera-type eye"
+      ],
+      "decision": "OUT, and the first term DOES NOT EXIST on this panel",
+      "reason": "retina is developmentally CNS and would have been IN under the rule. The panel carries no retina term at all -- a MEASURED absence, checked against the 285 terms -- so the decision has no effect on any count. The eye term that is present is not a substitute: 'camera-type eye' includes cornea, lens and sclera, which are not neural, and it is the same mixed-referent problem as the pituitary. Recorded because a reader who knows retina is CNS should be able to see that it was looked for and not found"
+    },
+    "neuroblastoma_lines": {
+      "terms": [
+        "EFO:0003072 SK-N-SH",
+        "EFO:0005721 SK-N-DZ",
+        "EFO:0005725 BE2C",
+        "CL:0011012 neural crest cell"
+      ],
+      "decision": "OUT of the registered set; IN the registered alternative CNS_AND_ALL_NEURAL_LINES",
+      "reason": "neuroblastoma arises from the sympathoadrenal lineage of the NEURAL CREST, which is peripheral: these lines are neural in origin and not central, and the same argument that excludes the tibial nerve excludes them. The neural crest term itself is excluded for the stronger reason that the crest also gives melanocytes, craniofacial cartilage and bone, so it is a lineage term containing non-neural fates. They are 8 panel rows and the alternative that admits them is enumerated and reported, so the decision is priced rather than hidden"
+    },
+    "cns_derived_cell_lines": {
+      "terms": [
+        "EFO:0002101 A172",
+        "EFO:0002184 H4",
+        "EFO:0005237 U-87 MG",
+        "EFO:0005234 PFSK-1",
+        "EFO:0005698 Daoy"
+      ],
+      "decision": "OUT of the registered set; IN the registered alternative CNS_AND_CNS_LINES",
+      "reason": "these five are glioma, neuroglioma, glioblastoma, CNS primitive neuroectodermal and medulloblastoma lines, so by tissue of origin they belong under the rule. What keeps them out of the REGISTERED set is the rule's last clause: the panel label is 'A172', an opaque code, and classifying it needs knowledge from outside the committed artefact, which is precisely the kind of input this registration is trying not to depend on. Excluding them also biases nothing in the direction of a positive finding. They are 8 rows, enumerated as an alternative and reported beside the reading"
+    },
+    "spinal_cord": {
+      "terms": [
+        "UBERON:0002240 spinal cord",
+        "UBERON:0006469 C1 segment of cervical spinal cord"
+      ],
+      "decision": "IN the registered set; OUT of the registered alternative BRAIN_ONLY",
+      "reason": "the spinal cord is CNS by the definition of CNS, and the astrocytes the bought answers are about are CNS astrocytes wherever they sit. The counter-argument is that the question says 'brain', and 6 of the registered set's 50 rows are cord. Both readings are defensible, so the decision is IN and the brain-only alternative is enumerated and reported with its own control and its own bands"
+    },
+    "broad_lineage_terms": {
+      "terms": [
+        "CL:0000221 ectodermal cell",
+        "CL:0000222 mesodermal cell",
+        "CL:0000223 endodermal cell",
+        "EFO:0003042 H1",
+        "EFO:0003045 H9",
+        "EFO:0005904 H7",
+        "EFO:0007089 HUES64",
+        "EFO:0009747 WTC11",
+        "NTR:0000856 mesendoderm"
+      ],
+      "decision": "OUT",
+      "reason": "ectoderm contains skin as well as neural plate, and a pluripotent or germ-layer term contains every fate. A rule that admitted them would count a label that is CNS among other things as a CNS label, which is the mixed-referent problem again and at its widest"
+    },
+    "clo_prefix": {
+      "terms": [
+        "CLO:0007045 Jurkat, Clone E6-1"
+      ],
+      "decision": "OUT",
+      "reason": "the panel's ONLY CLO term, and a T-cell leukaemia line. Recorded because the enumeration is required to cover all five prefixes present on the panel: CLO is covered and contributes nothing, so the registered set draws on four prefixes. That is a measured fact about this panel and not a rule about prefixes"
+    }
+  },
+  "not_by_ontology_descendant_resolution": "the set is an ENUMERATED LIST of CURIEs and not a descendant query, and the argument for that is specific to this machine and this panel rather than a preference.\n(1) IT CANNOT BE RUN HERE. There is no UBERON file on this machine: data/knowledge holds cl-basic.obo and go-basic.obo and nothing else, checked. 283 of the panel's 667 rna_seq rows carry UBERON terms, so 'descendants of UBERON:0000955' is not a rule that can be evaluated at all, and a rule that cannot be evaluated is not a rule.\n(2) IT COULD NOT BE COMMITTED EITHER. data/knowledge is git-ignored (.gitignore:17) and has 0 tracked files, so the ontology a descendant query resolved against could not travel with the registration. A later reader would resolve against whatever version their machine had.\n(3) IT MOVES. 'Descendants of UBERON:0000955' is a different set in different UBERON releases, so the registered quantity would change without the registration changing -- exactly what a pre-registration exists to prevent. An enumerated list of 27 CURIEs is fixed by the commit and is checkable with no ontology file at all.\n(4) AND IT WOULD DECIDE 22% OF THE PANEL BY ACCIDENT. A UBERON-plus-CL rule leaves every EFO, NTR and CLO row unclassifiable: 130 + 15 + 1 = 146 of 667 rows, 21.89%, which includes the five CNS-derived cell lines and the neurosphere term. Those rows would fall out of the label set because of which ontology the panel happened to spell them in, not because anybody decided anything about them. The enumeration decides them, in BORDERLINE_CALLS, with reasons that can be disagreed with.",
+  "enumeration_preceded_the_control": "every CURIE below was chosen from the panel's own terms and labels. No compiled-rule count of any term, and no compiled-rule count of anything, was consulted while the list was being built: reading the axis is reading what was bought, but reading which terms carry many compiled rules would let the set lean toward or away from the control it is about to be compared with. The one exposure that did happen is disclosed in DISCLOSURE, by term and by figure",
+  "which_set_decides": "CNS_PRIMARY, the 27 terms of REGISTERED_SET, decides the reading. The three alternatives are reported with their own rates, controls and band verdicts; none of them may be promoted to the reading after the fact, and a disagreement between them is reported as a disagreement and not reconciled by choosing one",
+  "label_set_CNS_PRIMARY": {
+    "terms": 27,
+    "included": [
+      {
+        "curie": "UBERON:0000955",
+        "label": "brain",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001870",
+        "label": "frontal cortex",
+        "panel_rows": 3,
+        "panel_names": 2
+      },
+      {
+        "curie": "UBERON:0001871",
+        "label": "temporal lobe",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001872",
+        "label": "parietal lobe",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001873",
+        "label": "caudate nucleus",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001874",
+        "label": "putamen",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001876",
+        "label": "amygdala",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001882",
+        "label": "nucleus accumbens",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001894",
+        "label": "diencephalon",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001898",
+        "label": "hypothalamus",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0001954",
+        "label": "Ammon's horn",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0002021",
+        "label": "occipital lobe",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0002037",
+        "label": "cerebellum",
+        "panel_rows": 5,
+        "panel_names": 3
+      },
+      {
+        "curie": "UBERON:0002038",
+        "label": "substantia nigra",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0002245",
+        "label": "cerebellar hemisphere",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0009834",
+        "label": "dorsolateral prefrontal cortex",
+        "panel_rows": 3,
+        "panel_names": 2
+      },
+      {
+        "curie": "UBERON:0009835",
+        "label": "anterior cingulate cortex",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "UBERON:0002240",
+        "label": "spinal cord",
+        "panel_rows": 5,
+        "panel_names": 2
+      },
+      {
+        "curie": "UBERON:0006469",
+        "label": "C1 segment of cervical spinal cord",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0000047",
+        "label": "neuronal stem cell",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0000100",
+        "label": "motor neuron",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0000121",
+        "label": "Purkinje cell",
+        "panel_rows": 1,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0000127",
+        "label": "astrocyte",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0000679",
+        "label": "glutamatergic neuron",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0002319",
+        "label": "neural cell",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "CL:0011020",
+        "label": "neural progenitor cell",
+        "panel_rows": 2,
+        "panel_names": 1
+      },
+      {
+        "curie": "NTR:0000427",
+        "label": "neurosphere",
+        "panel_rows": 2,
+        "panel_names": 1
+      }
+    ],
+    "absent_from_the_panel": [],
+    "panel_rows": 50,
+    "panel_names": 32,
+    "panel_row_share": 0.074963,
+    "panel_row_share_is_a_panel_share": "THIS IS A PROPERTY OF THE ASSAY PANEL. It is not a property of the genome, it is not a property of anything the compiled rules say, and it is NEVER the rule and never a denominator. It is printed beside the control and labelled, because an unlabelled percentage sitting next to a compiled-rule rate is how a reader mistakes one for the other -- the label does the work, not the number. It is reported for one reason: a substring sweep and the enumeration should land in the same neighbourhood, and where they do not, the disagreement is itself the argument for the enumeration. They do not: the substring rule misses 20 of the registered set's rows and adds 10 rows that are not CNS at all, which is reported term by term",
+    "prefixes_represented": [
+      "CL",
+      "NTR",
+      "UBERON"
+    ]
+  },
+  "label_sets_registered_as_alternatives": {
+    "BRAIN_ONLY": {
+      "terms": 25,
+      "included": [
+        {
+          "curie": "UBERON:0000955",
+          "label": "brain",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001870",
+          "label": "frontal cortex",
+          "panel_rows": 3,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0001871",
+          "label": "temporal lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001872",
+          "label": "parietal lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001873",
+          "label": "caudate nucleus",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001874",
+          "label": "putamen",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001876",
+          "label": "amygdala",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001882",
+          "label": "nucleus accumbens",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001894",
+          "label": "diencephalon",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001898",
+          "label": "hypothalamus",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001954",
+          "label": "Ammon's horn",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002021",
+          "label": "occipital lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002037",
+          "label": "cerebellum",
+          "panel_rows": 5,
+          "panel_names": 3
+        },
+        {
+          "curie": "UBERON:0002038",
+          "label": "substantia nigra",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002245",
+          "label": "cerebellar hemisphere",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0009834",
+          "label": "dorsolateral prefrontal cortex",
+          "panel_rows": 3,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0009835",
+          "label": "anterior cingulate cortex",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000047",
+          "label": "neuronal stem cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000100",
+          "label": "motor neuron",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000121",
+          "label": "Purkinje cell",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000127",
+          "label": "astrocyte",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000679",
+          "label": "glutamatergic neuron",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0002319",
+          "label": "neural cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0011020",
+          "label": "neural progenitor cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "NTR:0000427",
+          "label": "neurosphere",
+          "panel_rows": 2,
+          "panel_names": 1
+        }
+      ],
+      "absent_from_the_panel": [],
+      "panel_rows": 44,
+      "panel_names": 29,
+      "panel_row_share": 0.065967,
+      "panel_row_share_is_a_panel_share": "THIS IS A PROPERTY OF THE ASSAY PANEL. It is not a property of the genome, it is not a property of anything the compiled rules say, and it is NEVER the rule and never a denominator. It is printed beside the control and labelled, because an unlabelled percentage sitting next to a compiled-rule rate is how a reader mistakes one for the other -- the label does the work, not the number. It is reported for one reason: a substring sweep and the enumeration should land in the same neighbourhood, and where they do not, the disagreement is itself the argument for the enumeration. They do not: the substring rule misses 20 of the registered set's rows and adds 10 rows that are not CNS at all, which is reported term by term",
+      "prefixes_represented": [
+        "CL",
+        "NTR",
+        "UBERON"
+      ]
+    },
+    "CNS_AND_CNS_LINES": {
+      "terms": 32,
+      "included": [
+        {
+          "curie": "UBERON:0000955",
+          "label": "brain",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001870",
+          "label": "frontal cortex",
+          "panel_rows": 3,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0001871",
+          "label": "temporal lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001872",
+          "label": "parietal lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001873",
+          "label": "caudate nucleus",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001874",
+          "label": "putamen",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001876",
+          "label": "amygdala",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001882",
+          "label": "nucleus accumbens",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001894",
+          "label": "diencephalon",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001898",
+          "label": "hypothalamus",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001954",
+          "label": "Ammon's horn",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002021",
+          "label": "occipital lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002037",
+          "label": "cerebellum",
+          "panel_rows": 5,
+          "panel_names": 3
+        },
+        {
+          "curie": "UBERON:0002038",
+          "label": "substantia nigra",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002245",
+          "label": "cerebellar hemisphere",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0009834",
+          "label": "dorsolateral prefrontal cortex",
+          "panel_rows": 3,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0009835",
+          "label": "anterior cingulate cortex",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002240",
+          "label": "spinal cord",
+          "panel_rows": 5,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0006469",
+          "label": "C1 segment of cervical spinal cord",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000047",
+          "label": "neuronal stem cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000100",
+          "label": "motor neuron",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000121",
+          "label": "Purkinje cell",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000127",
+          "label": "astrocyte",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000679",
+          "label": "glutamatergic neuron",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0002319",
+          "label": "neural cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0011020",
+          "label": "neural progenitor cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "NTR:0000427",
+          "label": "neurosphere",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0002101",
+          "label": "A172",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0002184",
+          "label": "H4",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005234",
+          "label": "PFSK-1",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005237",
+          "label": "U-87 MG",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005698",
+          "label": "Daoy",
+          "panel_rows": 2,
+          "panel_names": 1
+        }
+      ],
+      "absent_from_the_panel": [],
+      "panel_rows": 58,
+      "panel_names": 37,
+      "panel_row_share": 0.086957,
+      "panel_row_share_is_a_panel_share": "THIS IS A PROPERTY OF THE ASSAY PANEL. It is not a property of the genome, it is not a property of anything the compiled rules say, and it is NEVER the rule and never a denominator. It is printed beside the control and labelled, because an unlabelled percentage sitting next to a compiled-rule rate is how a reader mistakes one for the other -- the label does the work, not the number. It is reported for one reason: a substring sweep and the enumeration should land in the same neighbourhood, and where they do not, the disagreement is itself the argument for the enumeration. They do not: the substring rule misses 20 of the registered set's rows and adds 10 rows that are not CNS at all, which is reported term by term",
+      "prefixes_represented": [
+        "CL",
+        "EFO",
+        "NTR",
+        "UBERON"
+      ]
+    },
+    "CNS_AND_ALL_NEURAL_LINES": {
+      "terms": 36,
+      "included": [
+        {
+          "curie": "UBERON:0000955",
+          "label": "brain",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001870",
+          "label": "frontal cortex",
+          "panel_rows": 3,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0001871",
+          "label": "temporal lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001872",
+          "label": "parietal lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001873",
+          "label": "caudate nucleus",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001874",
+          "label": "putamen",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001876",
+          "label": "amygdala",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001882",
+          "label": "nucleus accumbens",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001894",
+          "label": "diencephalon",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001898",
+          "label": "hypothalamus",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0001954",
+          "label": "Ammon's horn",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002021",
+          "label": "occipital lobe",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002037",
+          "label": "cerebellum",
+          "panel_rows": 5,
+          "panel_names": 3
+        },
+        {
+          "curie": "UBERON:0002038",
+          "label": "substantia nigra",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002245",
+          "label": "cerebellar hemisphere",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0009834",
+          "label": "dorsolateral prefrontal cortex",
+          "panel_rows": 3,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0009835",
+          "label": "anterior cingulate cortex",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "UBERON:0002240",
+          "label": "spinal cord",
+          "panel_rows": 5,
+          "panel_names": 2
+        },
+        {
+          "curie": "UBERON:0006469",
+          "label": "C1 segment of cervical spinal cord",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000047",
+          "label": "neuronal stem cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000100",
+          "label": "motor neuron",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000121",
+          "label": "Purkinje cell",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000127",
+          "label": "astrocyte",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0000679",
+          "label": "glutamatergic neuron",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0002319",
+          "label": "neural cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0011020",
+          "label": "neural progenitor cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "NTR:0000427",
+          "label": "neurosphere",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0002101",
+          "label": "A172",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0002184",
+          "label": "H4",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005234",
+          "label": "PFSK-1",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005237",
+          "label": "U-87 MG",
+          "panel_rows": 1,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005698",
+          "label": "Daoy",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "CL:0011012",
+          "label": "neural crest cell",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0003072",
+          "label": "SK-N-SH",
+          "panel_rows": 3,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005721",
+          "label": "SK-N-DZ",
+          "panel_rows": 2,
+          "panel_names": 1
+        },
+        {
+          "curie": "EFO:0005725",
+          "label": "BE2C",
+          "panel_rows": 1,
+          "panel_names": 1
+        }
+      ],
+      "absent_from_the_panel": [],
+      "panel_rows": 66,
+      "panel_names": 41,
+      "panel_row_share": 0.098951,
+      "panel_row_share_is_a_panel_share": "THIS IS A PROPERTY OF THE ASSAY PANEL. It is not a property of the genome, it is not a property of anything the compiled rules say, and it is NEVER the rule and never a denominator. It is printed beside the control and labelled, because an unlabelled percentage sitting next to a compiled-rule rate is how a reader mistakes one for the other -- the label does the work, not the number. It is reported for one reason: a substring sweep and the enumeration should land in the same neighbourhood, and where they do not, the disagreement is itself the argument for the enumeration. They do not: the substring rule misses 20 of the registered set's rows and adds 10 rows that are not CNS at all, which is reported term by term",
+      "prefixes_represented": [
+        "CL",
+        "EFO",
+        "NTR",
+        "UBERON"
+      ]
+    }
+  },
+  "panel": {
+    "rows": 667,
+    "distinct_names": 371,
+    "rows_that_collapse_under_name": 296,
+    "names_with_one_row": 100,
+    "names_with_two_rows": 246,
+    "names_with_more_than_two_rows": 25,
+    "distinct_ontology_terms": 285,
+    "rows_by_prefix": {
+      "CL": 238,
+      "CLO": 1,
+      "EFO": 130,
+      "NTR": 15,
+      "UBERON": 283
+    },
+    "rows_by_data_source": {
+      "encode": 613,
+      "gtex": 54
+    },
+    "axis_not_population": "`tracks_total` and `track_names` on an answer are the RESPONSE'S AXIS -- what was bought, in column order. They are NOT a population and NOT a denominator. The panel this axis is drawn from carries 667 rna_seq rows under 371 DISTINCT NAMES: 100 names on one row, 246 on two (strand + and strand -), 25 on more. So the axis has 667 entries and 371 names, and a rate 'per track' and a rate 'per name' are different quantities on the same answer. Neither is a denominator for the question: the question's denominator is the 1,232 ANSWERS",
+    "measured_correction": "astrorun.NAMES_ARE_NOT_UNIQUE states that the real RNA-seq metadata carries '667 rows under 316 distinct names', collapsing 351. MEASURED on the file declared by hash here, the figure is 667 rows under 371 distinct names, collapsing 296. 316 is a different quantity: astroreg_registration.json records it as the number of distinct WINNING names in the chr21 sweep, '316 distinct winning names and 371 tracks scored per window'. The two were conflated. Recorded as a measurement because the collapse is what makes comparison (b) an unmatched comparison (see K562_ARM). astrorun.py is another lane's file and is modified in the working tree, so nothing of it is touched here: this is the measurement, not an edit"
+  },
+  "panel_declared_by_hash": {
+    "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+    "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+    "bytes": 403465,
+    "git_ignored": true,
+    "a_fresh_checkout_cannot_recompute_this": "data/cache/entex/alphagenome_track_metadata_copy.csv is GIT-IGNORED (.gitignore:20, data/cache), so a FRESH CHECKOUT CANNOT RECOMPUTE the panel share or the enumeration's row counts from the commit alone. Albert has ruled that data/cache stays local and is never committed, so declaring it by sha256 is the route -- the one 55 committed results already take. It is declared here by path, sha256 and byte count, and every figure derived from it is written into this registration so that what cannot be recomputed can still be CHECKED against the hash where the file exists, and read where it does not"
+  },
+  "control": {
+    "rate": 0.07623431,
+    "rules_with_a_label_in_the_set": 33588,
+    "rules_total": 440589,
+    "census_labels_matched": {
+      "neural_cell": 9955,
+      "Purkinje_cell": 7478,
+      "Brain_Cerebellar_Hemisphere": 3054,
+      "Brain_Spinal_cord_cervical_c_1": 2280,
+      "neural_progenitor_cell": 1226,
+      "Brain_Frontal_Cortex_BA9": 1064,
+      "glutamatergic_neuron": 1054,
+      "neurosphere": 975,
+      "Brain_Cerebellum": 973,
+      "cerebellum": 601,
+      "frontal_cortex": 599,
+      "dorsolateral_prefrontal_cortex": 579,
+      "brain": 511,
+      "Brain_Hippocampus": 453,
+      "neuronal_stem_cell": 422,
+      "occipital_lobe": 371,
+      "temporal_lobe": 361,
+      "Brain_Putamen_basal_ganglia": 314,
+      "astrocyte": 209,
+      "Brain_Cortex": 164,
+      "diencephalon": 158,
+      "spinal_cord": 151,
+      "parietal_lobe": 119,
+      "Brain_Anterior_cingulate_cortex_BA24": 98,
+      "Brain_Caudate_basal_ganglia": 97,
+      "Brain_Amygdala": 95,
+      "Brain_Nucleus_accumbens_basal_ganglia": 95,
+      "Brain_Hypothalamus": 68,
+      "Brain_Substantia_nigra": 49,
+      "motor_neuron": 15
+    },
+    "census_labels_matched_count": 30,
+    "curies_in_the_set_with_no_census_label": [],
+    "census_labels_carrying_no_ontology_term": 0,
+    "how": "control = sum over census per_cell entries whose `ontology_term` is in the label set, of that entry's `rules`, divided by the census's own `rules` (440,589: every rule compile.compile_chromosome emits over the 24 chromosomes). The join is by CURIE, which the census carries per label, so no name matching is involved. No part of the control is computed by this lane from the astrocyte side, and none of it can have been chosen after seeing an observed figure, because no observed figure exists",
+    "never_a_track_share": "the control is the label set's share of COMPILED RULES. It is NEVER its share of TRACK NAMES. argmaxcell's registration says why, and it is quoted rather than paraphrased: 'That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.' A label's genome-wide frequency already reflects properties of its tracks -- scale, dynamic range, how often that track wins an argmax anywhere -- and a track-name share throws all of that away and replaces it with a count of columns. This is a LIVE error and not a hypothetical: a coordinator used a track share as a control on 2026-10-02, after that registration had already forbidden it in writing",
+    "source": "data/results/context_evidence.json"
+  },
+  "control_for_each_alternative_set": {
+    "BRAIN_ONLY": {
+      "rate": 0.0707167,
+      "rules_with_a_label_in_the_set": 31157,
+      "rules_total": 440589,
+      "census_labels_matched": {
+        "neural_cell": 9955,
+        "Purkinje_cell": 7478,
+        "Brain_Cerebellar_Hemisphere": 3054,
+        "neural_progenitor_cell": 1226,
+        "Brain_Frontal_Cortex_BA9": 1064,
+        "glutamatergic_neuron": 1054,
+        "neurosphere": 975,
+        "Brain_Cerebellum": 973,
+        "cerebellum": 601,
+        "frontal_cortex": 599,
+        "dorsolateral_prefrontal_cortex": 579,
+        "brain": 511,
+        "Brain_Hippocampus": 453,
+        "neuronal_stem_cell": 422,
+        "occipital_lobe": 371,
+        "temporal_lobe": 361,
+        "Brain_Putamen_basal_ganglia": 314,
+        "astrocyte": 209,
+        "Brain_Cortex": 164,
+        "diencephalon": 158,
+        "parietal_lobe": 119,
+        "Brain_Anterior_cingulate_cortex_BA24": 98,
+        "Brain_Caudate_basal_ganglia": 97,
+        "Brain_Amygdala": 95,
+        "Brain_Nucleus_accumbens_basal_ganglia": 95,
+        "Brain_Hypothalamus": 68,
+        "Brain_Substantia_nigra": 49,
+        "motor_neuron": 15
+      },
+      "census_labels_matched_count": 28,
+      "curies_in_the_set_with_no_census_label": [],
+      "census_labels_carrying_no_ontology_term": 0,
+      "how": "control = sum over census per_cell entries whose `ontology_term` is in the label set, of that entry's `rules`, divided by the census's own `rules` (440,589: every rule compile.compile_chromosome emits over the 24 chromosomes). The join is by CURIE, which the census carries per label, so no name matching is involved. No part of the control is computed by this lane from the astrocyte side, and none of it can have been chosen after seeing an observed figure, because no observed figure exists",
+      "never_a_track_share": "the control is the label set's share of COMPILED RULES. It is NEVER its share of TRACK NAMES. argmaxcell's registration says why, and it is quoted rather than paraphrased: 'That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.' A label's genome-wide frequency already reflects properties of its tracks -- scale, dynamic range, how often that track wins an argmax anywhere -- and a track-name share throws all of that away and replaces it with a count of columns. This is a LIVE error and not a hypothetical: a coordinator used a track share as a control on 2026-10-02, after that registration had already forbidden it in writing",
+      "source": "data/results/context_evidence.json"
+    },
+    "CNS_AND_CNS_LINES": {
+      "rate": 0.07993845,
+      "rules_with_a_label_in_the_set": 35220,
+      "rules_total": 440589,
+      "census_labels_matched": {
+        "neural_cell": 9955,
+        "Purkinje_cell": 7478,
+        "Brain_Cerebellar_Hemisphere": 3054,
+        "Brain_Spinal_cord_cervical_c_1": 2280,
+        "neural_progenitor_cell": 1226,
+        "Brain_Frontal_Cortex_BA9": 1064,
+        "glutamatergic_neuron": 1054,
+        "U_87_MG": 1020,
+        "neurosphere": 975,
+        "Brain_Cerebellum": 973,
+        "cerebellum": 601,
+        "frontal_cortex": 599,
+        "dorsolateral_prefrontal_cortex": 579,
+        "brain": 511,
+        "Brain_Hippocampus": 453,
+        "neuronal_stem_cell": 422,
+        "occipital_lobe": 371,
+        "temporal_lobe": 361,
+        "Brain_Putamen_basal_ganglia": 314,
+        "PFSK_1": 297,
+        "astrocyte": 209,
+        "Brain_Cortex": 164,
+        "diencephalon": 158,
+        "spinal_cord": 151,
+        "A172": 134,
+        "parietal_lobe": 119,
+        "H4": 112,
+        "Brain_Anterior_cingulate_cortex_BA24": 98,
+        "Brain_Caudate_basal_ganglia": 97,
+        "Brain_Amygdala": 95,
+        "Brain_Nucleus_accumbens_basal_ganglia": 95,
+        "Daoy": 69,
+        "Brain_Hypothalamus": 68,
+        "Brain_Substantia_nigra": 49,
+        "motor_neuron": 15
+      },
+      "census_labels_matched_count": 35,
+      "curies_in_the_set_with_no_census_label": [],
+      "census_labels_carrying_no_ontology_term": 0,
+      "how": "control = sum over census per_cell entries whose `ontology_term` is in the label set, of that entry's `rules`, divided by the census's own `rules` (440,589: every rule compile.compile_chromosome emits over the 24 chromosomes). The join is by CURIE, which the census carries per label, so no name matching is involved. No part of the control is computed by this lane from the astrocyte side, and none of it can have been chosen after seeing an observed figure, because no observed figure exists",
+      "never_a_track_share": "the control is the label set's share of COMPILED RULES. It is NEVER its share of TRACK NAMES. argmaxcell's registration says why, and it is quoted rather than paraphrased: 'That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.' A label's genome-wide frequency already reflects properties of its tracks -- scale, dynamic range, how often that track wins an argmax anywhere -- and a track-name share throws all of that away and replaces it with a count of columns. This is a LIVE error and not a hypothetical: a coordinator used a track share as a control on 2026-10-02, after that registration had already forbidden it in writing",
+      "source": "data/results/context_evidence.json"
+    },
+    "CNS_AND_ALL_NEURAL_LINES": {
+      "rate": 0.08479104,
+      "rules_with_a_label_in_the_set": 37358,
+      "rules_total": 440589,
+      "census_labels_matched": {
+        "neural_cell": 9955,
+        "Purkinje_cell": 7478,
+        "Brain_Cerebellar_Hemisphere": 3054,
+        "Brain_Spinal_cord_cervical_c_1": 2280,
+        "neural_progenitor_cell": 1226,
+        "Brain_Frontal_Cortex_BA9": 1064,
+        "glutamatergic_neuron": 1054,
+        "U_87_MG": 1020,
+        "neurosphere": 975,
+        "Brain_Cerebellum": 973,
+        "BE2C": 619,
+        "cerebellum": 601,
+        "frontal_cortex": 599,
+        "neural_crest_cell": 593,
+        "dorsolateral_prefrontal_cortex": 579,
+        "SK_N_DZ": 578,
+        "brain": 511,
+        "Brain_Hippocampus": 453,
+        "neuronal_stem_cell": 422,
+        "occipital_lobe": 371,
+        "temporal_lobe": 361,
+        "SK_N_SH": 348,
+        "Brain_Putamen_basal_ganglia": 314,
+        "PFSK_1": 297,
+        "astrocyte": 209,
+        "Brain_Cortex": 164,
+        "diencephalon": 158,
+        "spinal_cord": 151,
+        "A172": 134,
+        "parietal_lobe": 119,
+        "H4": 112,
+        "Brain_Anterior_cingulate_cortex_BA24": 98,
+        "Brain_Caudate_basal_ganglia": 97,
+        "Brain_Amygdala": 95,
+        "Brain_Nucleus_accumbens_basal_ganglia": 95,
+        "Daoy": 69,
+        "Brain_Hypothalamus": 68,
+        "Brain_Substantia_nigra": 49,
+        "motor_neuron": 15
+      },
+      "census_labels_matched_count": 39,
+      "curies_in_the_set_with_no_census_label": [],
+      "census_labels_carrying_no_ontology_term": 0,
+      "how": "control = sum over census per_cell entries whose `ontology_term` is in the label set, of that entry's `rules`, divided by the census's own `rules` (440,589: every rule compile.compile_chromosome emits over the 24 chromosomes). The join is by CURIE, which the census carries per label, so no name matching is involved. No part of the control is computed by this lane from the astrocyte side, and none of it can have been chosen after seeing an observed figure, because no observed figure exists",
+      "never_a_track_share": "the control is the label set's share of COMPILED RULES. It is NEVER its share of TRACK NAMES. argmaxcell's registration says why, and it is quoted rather than paraphrased: 'That is precisely why the base rate and not the track count is the control: a high rate of `label == K562` on K562-measured elements is what the genome-wide label distribution produces on its own, before any cell-type information is supposed.' A label's genome-wide frequency already reflects properties of its tracks -- scale, dynamic range, how often that track wins an argmax anywhere -- and a track-name share throws all of that away and replaces it with a count of columns. This is a LIVE error and not a hypothetical: a coordinator used a track share as a control on 2026-10-02, after that registration had already forbidden it in writing",
+      "source": "data/results/context_evidence.json"
+    }
+  },
+  "census": {
+    "source": "data/results/context_evidence.json",
+    "rules": 440589,
+    "distinct_labels": 317,
+    "per_cell_sums_to_rules": true,
+    "checked_here": "the sum is recomputed by astroargmax.census() and this registration refuses to be written if it does not equal the census's own `rules`"
+  },
+  "what_a_rate_at_the_control_means": "stated here so it cannot be softened later: if the observed rate sits inside the equivalence band around the control, then on these answers the ARGMAX LABEL IS NOT EVIDENCE of the cell the element was measured in. That is the finding, it will be written in those words, it is not a failure of the measurement, and it is not a claim that astrocyte regulation is absent anywhere -- it is a fact about what an argmax over this track panel carries",
+  "panel_share_beside_the_control": {
+    "label": "PANEL SHARE -- a property of the assay panel, not of the genome and not of the rules",
+    "patterns": [
+      "brain",
+      "astro",
+      "cortex",
+      "cerebellum",
+      "neuron",
+      "glia"
+    ],
+    "fields": [
+      "name",
+      "biosample_name"
+    ],
+    "matching_rows": 40,
+    "panel_rows": 667,
+    "panel_share": 0.05997,
+    "never_the_rule": "THIS IS A PROPERTY OF THE ASSAY PANEL. It is not a property of the genome, it is not a property of anything the compiled rules say, and it is NEVER the rule and never a denominator. It is printed beside the control and labelled, because an unlabelled percentage sitting next to a compiled-rule rate is how a reader mistakes one for the other -- the label does the work, not the number. It is reported for one reason: a substring sweep and the enumeration should land in the same neighbourhood, and where they do not, the disagreement is itself the argument for the enumeration. They do not: the substring rule misses 20 of the registered set's rows and adds 10 rows that are not CNS at all, which is reported term by term",
+    "disagrees_with_the_enumeration_on": 30,
+    "matched_but_not_cns": [
+      {
+        "curie": "UBERON:0001225",
+        "label": "cortex of kidney",
+        "panel_rows": 1,
+        "why": "a substring, not a referent"
+      },
+      {
+        "curie": "UBERON:0004550",
+        "label": "gastroesophageal sphincter",
+        "panel_rows": 3,
+        "why": "a substring, not a referent"
+      },
+      {
+        "curie": "UBERON:0005270",
+        "label": "renal cortex interstitium",
+        "panel_rows": 1,
+        "why": "a substring, not a referent"
+      },
+      {
+        "curie": "UBERON:0011907",
+        "label": "gastrocnemius medialis",
+        "panel_rows": 3,
+        "why": "a substring, not a referent"
+      },
+      {
+        "curie": "UBERON:0018117",
+        "label": "left renal cortex interstitium",
+        "panel_rows": 1,
+        "why": "a substring, not a referent"
+      },
+      {
+        "curie": "UBERON:0018118",
+        "label": "right renal cortex interstitium",
+        "panel_rows": 1,
+        "why": "a substring, not a referent"
+      }
+    ],
+    "cns_but_not_matched": [
+      {
+        "curie": "CL:0000121",
+        "label": "Purkinje cell",
+        "panel_rows": 1
+      },
+      {
+        "curie": "CL:0002319",
+        "label": "neural cell",
+        "panel_rows": 2
+      },
+      {
+        "curie": "CL:0011020",
+        "label": "neural progenitor cell",
+        "panel_rows": 2
+      },
+      {
+        "curie": "NTR:0000427",
+        "label": "neurosphere",
+        "panel_rows": 2
+      },
+      {
+        "curie": "UBERON:0001871",
+        "label": "temporal lobe",
+        "panel_rows": 2
+      },
+      {
+        "curie": "UBERON:0001872",
+        "label": "parietal lobe",
+        "panel_rows": 2
+      },
+      {
+        "curie": "UBERON:0001894",
+        "label": "diencephalon",
+        "panel_rows": 2
+      },
+      {
+        "curie": "UBERON:0002021",
+        "label": "occipital lobe",
+        "panel_rows": 2
+      },
+      {
+        "curie": "UBERON:0002240",
+        "label": "spinal cord",
+        "panel_rows": 5
+      }
+    ],
+    "what_the_disagreement_shows": "'astro' is a substring of 'gastrocnemius' and of 'gastroesophageal', and 'cortex' is a substring of 'cortex of kidney' and of three renal cortex interstitium terms: that is 10 rows a substring rule calls brain and no reader would. In the other direction the rule misses spinal cord, four lobes of the brain, the diencephalon, Purkinje cells, neural cells, neural progenitor cells and neurospheres: 20 rows. A rule that is wrong in both directions on 30 of 667 rows is a cross-check and cannot be the label set"
+  },
+  "power_stated_in_advance": {
+    "comparison_a_vs_the_control": {
+      "alternative_registered_in_advance": 0.19058578,
+      "alternative_is": "2.0 x 1.25 x the control, i.e. the ratio floor cleared with 25% to spare. Declared here so the power figure describes a stated effect and not whatever is found",
+      "null_the_lower_bound_must_clear": 0.15246862,
+      "absolute_level_floor_must_also_be_cleared": 0.1,
+      "mean_cluster_size": 53.5652,
+      "per_intracluster_correlation": {
+        "icc_0.0": {
+          "clusters_needed": 7,
+          "clusters_available": 23,
+          "effective_clusters_kish": 17.0876
+        },
+        "icc_0.05": {
+          "clusters_needed": 23,
+          "clusters_available": 23,
+          "effective_clusters_kish": 17.0876
+        },
+        "icc_0.2": {
+          "clusters_needed": 71,
+          "clusters_available": 23,
+          "effective_clusters_kish": 17.0876
+        }
+      },
+      "units": "whole chromosomes, which are the clusters the interval resamples",
+      "how": "normal approximation on the log rate with cluster inflation 1 + (m - 1) * rho, z = 1.96 two-sided. It is an approximation and is reported as one; the interval that DECIDES is the cluster bootstrap, and where that is degenerate, the exact bound",
+      "and_the_honest_part": "the astrocyte arm has 23 chromosomes and an effective 17.0876 of them by Kish, because the sizes run from 5 to 137 requests. Where the table above asks for more clusters than 23, the comparison is UNDERPOWERED BY REGISTRATION and its reading will be INCONCLUSIVE -- the data cannot tell -- whatever the point estimate turns out to be. That is registered now rather than discovered later"
+    },
+    "comparison_b_vs_the_K562_arm": {
+      "what_is_compared": "two rates, on the NAME-COLLAPSED axis only: see K562_ARM",
+      "clusters": "whole chromosomes on both arms; the astrocyte arm's 23 are known and sized here, the K562 arm's count and size distribution are NOT known to this registration and are reported with its rate",
+      "power_cannot_be_stated_as_one_number_here": "a two-sample power figure needs both arms' cluster counts and sizes, and the K562 arm's are not known without reading its element set, which this registration does not read. What IS registered in advance: the SAME bands apply, the comparison is INCONCLUSIVE BY RULE if either arm has fewer than 10 clusters, and the clusters_needed table above is reported for both arms at their own mean cluster sizes once those are known. Stating a number here that depends on a quantity this lane has not read would be a figure with nothing behind it"
+    },
+    "degenerate_bootstrap": "at 0 or n successes a cluster bootstrap is DEGENERATE: every resample returns the same value, the percentile interval collapses to a point and it decides nothing. The rule is to route to a Clopper-Pearson exact bound (or Wilson, named which) on an EFFECTIVE sample size n_eff = n / design_effect, and to print beside it that the bound is NOT the cluster bootstrap's and that the reading is INCONCLUSIVE unless the band is cleared by the exact bound alone",
+    "identical_resample_share": "reported for EVERY interval, degenerate or not: the share of the 2000 resamples whose statistic equals the most common resampled value. An interval whose resamples are mostly identical has fewer effective draws than its draw count says, and below 100 distinct resamples it is reported as degenerate"
+  },
+  "cluster_sizes": {
+    "chr1": 137,
+    "chr10": 83,
+    "chr11": 95,
+    "chr12": 42,
+    "chr13": 45,
+    "chr14": 45,
+    "chr15": 62,
+    "chr16": 32,
+    "chr17": 51,
+    "chr18": 15,
+    "chr19": 58,
+    "chr2": 107,
+    "chr20": 24,
+    "chr21": 5,
+    "chr22": 50,
+    "chr3": 72,
+    "chr4": 33,
+    "chr5": 27,
+    "chr6": 77,
+    "chr7": 46,
+    "chr8": 43,
+    "chr9": 76,
+    "chrX": 7
+  },
+  "design": {
+    "clusters": 23,
+    "requests": 1232,
+    "smallest_cluster": 5,
+    "largest_cluster": 137,
+    "effective_clusters_kish": 17.0876,
+    "design_effect_from_sizes": 1.346,
+    "how": "n_eff = (sum n_c)^2 / sum n_c^2 over the per-chromosome request counts; the design effect is C / n_eff. Both are computed from cluster SIZES only and assume nothing about any outcome, so they are stated in advance",
+    "clusters_are": "whole chromosomes. The astrocyte arm's 1,232 requests fall on 23 chromosomes, sized 5 to 137 requests, which is in the committed dry run and is read here"
+  },
+  "comparison_b_the_K562_arm": "comparison (b) is the K562 arm's rate for the SAME label set, and it is registered here as a quantity to be computed at reading time and NOT computed now. Definition: the argmax label of the all-element deletion sweep's committed per-chromosome element tables, restricted to elements overlapping the ENCODE K562 CRISPRi screen's valid pairs, classified against the same 27 CURIEs by the same join. THE ASYMMETRY, registered before either rate exists: the sweep's cached argmax is over NAME-COLLAPSED columns -- 371 names, which is why its own record speaks of 371 tracks scored per window -- while a paid astrocyte answer keeps all 667 columns, which is the whole point of item (g). A two-strand name therefore gets two chances to win on the astrocyte arm and one on the K562 arm, and the collapse is not label-neutral. So the astrocyte arm's rate is reported BOTH ways: over the 667 columns, and over the axis collapsed to 371 names exactly as the sweep collapses it, and comparison (b) is read ONLY on the collapsed pair. The 667-column rate is reported beside it and is not compared to K562",
+  "training_exposure": "REGISTERED IN ADVANCE AND NEVER SOFTENED, and it is the strongest limitation on the whole question. AlphaGenome's tracks were trained on ENCODE and GTEx data from these same biosamples -- the panel's own `data_source` column says encode on 613 of the 667 rows and gtex on 54 -- so an agreement between the argmax and a brain label may be RECALL OF SEEN DATA rather than biology, and THIS DESIGN CANNOT DISTINGUISH THE TWO. There is no held-out brain assay here, no biosample outside the training distribution, and no second instrument. An enriched reading therefore supports 'the argmax lands on CNS tracks more often than the compiled-rule distribution alone would give' and does NOT support 'the model knows this element acts in astrocytes'. This sentence travels with every quote of any reading of this question, in this form of words, and may not be shortened to 'a caveat about training data'",
+  "disclosure": "WHAT WAS SEEN BEFORE THIS REGISTRATION WAS WRITTEN, AND WHEN. All of it on 2026-10-03, in this order.\n(1) BEFORE the bands: astrorun.py's approval clauses, its track-count constants (371, 667) and its item-(g) vector checks; data/results/astroreg2_registration.json and astroreg2_request_plan.json in full, including the 1,232/1,322/90 split and the per-chromosome request counts; data/results/argmaxcell_registration.json in full, which is the model for this file and from which the base rates of its five arms were seen (K562 27,445/440,589 among them); and compile.context.\n(2) THEN the bands were decided and written. They are ratios and a share of the answers, so no figure seen above fixes any of them.\n(3) THEN the panel: the 667 rna_seq rows of the file declared by hash, their 285 CURIEs with labels and row counts, the 371-name collapse and the substring cross-check. This is the axis.\n(4) THEN the enumeration was fixed, and the four sets' term lists and panel row counts were computed: registered set 27 terms / 50 rows, BRAIN_ONLY 25 / 44, CNS_AND_CNS_LINES 32 / 58, CNS_AND_ALL_NEURAL_LINES 36 / 66.\n(5) ONE EXPOSURE, DISCLOSED RATHER THAN MINIMISED. While reading the census's SHAPE to find out whether per_cell entries carry a CURIE at all, the first eight entries printed, and one of them is in the registered set: neural_cell (CL:0002319) at 9,955 of 440,589 rules. The seven others -- K562, CD14-positive monocyte, HepG2, placenta, Whole_Blood, psoas_muscle, small_intestine -- are not in it. The enumeration was ALREADY FIXED when that printed, and it was not revised afterwards: no term was added or removed after step (4). The exposure is recorded because a reader cannot check that from the file and has to be told.\n(6) THEN the control, the alternatives' controls and the power figures were computed, which is this file.\nWHAT WAS NOT SEEN, AND DOES NOT EXIST: no astrocyte answer, no astrocyte argmax, no astrocyte rate, no K562 argmax distribution of any kind, and no winning-name distribution from the sweep. Not one of the 1,232 requests has been sent.",
+  "cannot_establish": [
+    "whether an agreement between the argmax and a CNS label is biology or recall of training data: see TRAINING_EXPOSURE. No outcome of this question settles it",
+    "whether the element acts in astrocytes. An argmax is the place the largest movement happened to fall, over a panel this lane did not choose; it is a SELECTION and not a measurement of a cell",
+    "whether the label set is the right one. Three alternatives are registered because it is a judgement, and the reading is reported against all four",
+    "anything about the 2,174 non-rna_seq rows of the panel. The question is about the gene-axis argmax, which is taken over rna_seq columns",
+    "any statement needing a biosample or experiment accession: the declared metadata copy carries neither, so 'one biosample NAME' is the most that can be said of a track and this lane says less than that"
+  ],
+  "refusals": [
+    "this registration is committed ALONE. No count, no result, no answer, no rate, no interval",
+    "the fields a run would fill are ABSENT from the payload rather than present and empty, so nothing in it can be read as a preview of an answer that does not exist",
+    "no threshold, floor, cap, pin, test or registration of any other lane is moved, weakened, exempted or allowlisted, including astrorun's five clauses and its 1,232 cap",
+    "no AlphaGenome request, no network to the service, no key read, no money"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed genome-wide context-evidence census of compiled rule cell labels",
+        "version": "the committed data/results/context_evidence.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "the committed AstroREG-2 request plan, whose `requests` list IS the 1,232",
+        "version": "the committed data/results/astroreg2_request_plan.json on this machine, digested in inputs"
+      },
+      {
+        "accession": "AlphaGenome's own track metadata, as saved by the model client",
+        "version": "the local copy at data/cache/entex/alphagenome_track_metadata_copy.csv, sha256 5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7, 403465 bytes. GIT-IGNORED and declared by that hash"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/context_evidence.json",
+        "sha256": "fbdea8613934e45f6c74dbbdfd20a5cf6bd5e238105364a77e3999096818080a",
+        "bytes": 184616,
+        "partition": "the committed genome-wide census of every compiled rule's `when: cell_type` label. The CONTROL is its per_cell block's share of 440,589 compiled rules for the label set, and nothing else; no part of it is computed here"
+      },
+      {
+        "path": "data/results/astroreg2_request_plan.json",
+        "sha256": "30b2050d4c48d674730700c0fceb258e988387fc5c038ec612b83b0defcaef41",
+        "bytes": 572472,
+        "partition": "the committed AstroREG-2 dry run. Read for ONE thing: the chromosome of each of the 1,232 requests, which gives the cluster sizes the power figure is stated in. No outcome, no label and no gene of any request is read for a rate"
+      },
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": "the assay panel the answer's track axis is drawn from, read for its 667 rna_seq rows' name, ontology_curie, biosample_name and data_source. GIT-IGNORED by Albert's rule that data/cache stays local, so it is DECLARED BY HASH and every figure taken from it is written into the registration",
+        "git_ignored": true,
+        "declared_by_hash_not_committed": "data/cache/entex/alphagenome_track_metadata_copy.csv is GIT-IGNORED (.gitignore:20, data/cache), so a FRESH CHECKOUT CANNOT RECOMPUTE the panel share or the enumeration's row counts from the commit alone. Albert has ruled that data/cache stays local and is never committed, so declaring it by sha256 is the route -- the one 55 committed results already take. It is declared here by path, sha256 and byte count, and every figure derived from it is written into this registration so that what cannot be recomputed can still be CHECKED against the hash where the file exists, and read where it does not",
+        "declared_sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "declared_bytes": 403465
+      }
+    ],
+    "input_count": 3,
+    "assembly": "n/a: this registration reads no coordinate and no sequence",
+    "coordinates": "n/a: no interval is read. The only genomic quantity read is each of the 1,232 requests' CHROMOSOME, which is the cluster label and not a coordinate",
+    "parameters": {
+      "ratio_enriched_floor": 2.0,
+      "absolute_level_floor": 0.1,
+      "equivalence_band_relative": 0.25,
+      "ratio_depleted_ceiling": 0.8,
+      "minimum_clusters_for_an_interval": 10,
+      "locus_span_when_chromosomes_are_too_few": 1000000,
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20261003,
+      "minimum_distinct_resamples": 100,
+      "label_set_CNS_PRIMARY": [
+        "UBERON:0000955",
+        "UBERON:0001870",
+        "UBERON:0001871",
+        "UBERON:0001872",
+        "UBERON:0001873",
+        "UBERON:0001874",
+        "UBERON:0001876",
+        "UBERON:0001882",
+        "UBERON:0001894",
+        "UBERON:0001898",
+        "UBERON:0001954",
+        "UBERON:0002021",
+        "UBERON:0002037",
+        "UBERON:0002038",
+        "UBERON:0002245",
+        "UBERON:0009834",
+        "UBERON:0009835",
+        "UBERON:0002240",
+        "UBERON:0006469",
+        "CL:0000047",
+        "CL:0000100",
+        "CL:0000121",
+        "CL:0000127",
+        "CL:0000679",
+        "CL:0002319",
+        "CL:0011020",
+        "NTR:0000427"
+      ],
+      "label_sets_registered_as_alternatives": {
+        "BRAIN_ONLY": [
+          "UBERON:0000955",
+          "UBERON:0001870",
+          "UBERON:0001871",
+          "UBERON:0001872",
+          "UBERON:0001873",
+          "UBERON:0001874",
+          "UBERON:0001876",
+          "UBERON:0001882",
+          "UBERON:0001894",
+          "UBERON:0001898",
+          "UBERON:0001954",
+          "UBERON:0002021",
+          "UBERON:0002037",
+          "UBERON:0002038",
+          "UBERON:0002245",
+          "UBERON:0009834",
+          "UBERON:0009835",
+          "CL:0000047",
+          "CL:0000100",
+          "CL:0000121",
+          "CL:0000127",
+          "CL:0000679",
+          "CL:0002319",
+          "CL:0011020",
+          "NTR:0000427"
+        ],
+        "CNS_AND_CNS_LINES": [
+          "UBERON:0000955",
+          "UBERON:0001870",
+          "UBERON:0001871",
+          "UBERON:0001872",
+          "UBERON:0001873",
+          "UBERON:0001874",
+          "UBERON:0001876",
+          "UBERON:0001882",
+          "UBERON:0001894",
+          "UBERON:0001898",
+          "UBERON:0001954",
+          "UBERON:0002021",
+          "UBERON:0002037",
+          "UBERON:0002038",
+          "UBERON:0002245",
+          "UBERON:0009834",
+          "UBERON:0009835",
+          "UBERON:0002240",
+          "UBERON:0006469",
+          "CL:0000047",
+          "CL:0000100",
+          "CL:0000121",
+          "CL:0000127",
+          "CL:0000679",
+          "CL:0002319",
+          "CL:0011020",
+          "NTR:0000427",
+          "EFO:0002101",
+          "EFO:0002184",
+          "EFO:0005234",
+          "EFO:0005237",
+          "EFO:0005698"
+        ],
+        "CNS_AND_ALL_NEURAL_LINES": [
+          "UBERON:0000955",
+          "UBERON:0001870",
+          "UBERON:0001871",
+          "UBERON:0001872",
+          "UBERON:0001873",
+          "UBERON:0001874",
+          "UBERON:0001876",
+          "UBERON:0001882",
+          "UBERON:0001894",
+          "UBERON:0001898",
+          "UBERON:0001954",
+          "UBERON:0002021",
+          "UBERON:0002037",
+          "UBERON:0002038",
+          "UBERON:0002245",
+          "UBERON:0009834",
+          "UBERON:0009835",
+          "UBERON:0002240",
+          "UBERON:0006469",
+          "CL:0000047",
+          "CL:0000100",
+          "CL:0000121",
+          "CL:0000127",
+          "CL:0000679",
+          "CL:0002319",
+          "CL:0011020",
+          "NTR:0000427",
+          "EFO:0002101",
+          "EFO:0002184",
+          "EFO:0005234",
+          "EFO:0005237",
+          "EFO:0005698",
+          "CL:0011012",
+          "EFO:0003072",
+          "EFO:0005721",
+          "EFO:0005725"
+        ]
+      },
+      "panel_share_patterns": [
+        "brain",
+        "astro",
+        "cortex",
+        "cerebellum",
+        "neuron",
+        "glia"
+      ],
+      "panel_share_fields": [
+        "name",
+        "biosample_name"
+      ],
+      "no_threshold_of_any_other_lane_is_set_or_moved": "astrorun's 1,232 cap, its five approval clauses, its CI date floor, its disk floor and every registration this lane cites stay exactly as committed. The only numbers this lane sets are its own reading bands, and they are set before any figure of the question exists"
+    },
+    "exclusions": [
+      "every panel row whose `output` is not rna_seq: 2,174 of 2,841. The gene-axis argmax this question is about is taken over rna_seq columns",
+      "every borderline term decided OUT in borderline_calls, each with its reason there",
+      "every astrocyte answer: none exists. No request is sent and none is read",
+      "every winning-name distribution of the all-element sweep: none is read, so no K562-arm rate exists in this file"
+    ],
+    "partitions": {
+      "the_1232_answers": "the question's denominator, one per paid astrocyte element. NOT the 667 track columns and NOT the 371 names: those are the response's AXIS",
+      "the_census_440589": "the control's denominator, read from the committed census and computed by no code of this lane",
+      "the_667_rna_seq_rows": "the PANEL, the axis the argmax is taken over. Used for the enumeration's row counts and the labelled panel share, never as a denominator for the question"
+    },
+    "code_cleanliness": {
+      "git_sha": "c5eab32fef9309ac8f6f6ae5ae34969085e58937",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/astroargmax_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/astroargmax_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/astroargmax_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "data/organisms/human/noncoding_chr21_v2.bio",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/reheader.py",
+        "scripts/astroreg2_send.py",
+        "scripts/reheader_program.py",
+        "tests/test_astrorun.py",
+        "tests/test_header_cell_sentence.py",
+        "tests/test_rule_cell_provenance.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astroargmax.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/astroargmax_register.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "c5eab32fef9309ac8f6f6ae5ae34969085e58937",
+      "dirty": true,
+      "dirty_code_paths": [
+        "data/organisms/human/noncoding_chr21_v2.bio",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/reheader.py",
+        "scripts/astroreg2_send.py",
+        "scripts/reheader_program.py",
+        "tests/test_astrorun.py",
+        "tests/test_header_cell_sentence.py",
+        "tests/test_rule_cell_provenance.py"
+      ],
+      "untracked_code_paths": [
+        "data/organisms/human/noncoding_chr21_v2.bio",
+        "genomeos/attribution/reheader.py",
+        "scripts/reheader_program.py",
+        "tests/test_header_cell_sentence.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/astroargmax_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "c5eab32fef9309ac8f6f6ae5ae34969085e58937",
+      "code_cleanliness_git_sha": "c5eab32fef9309ac8f6f6ae5ae34969085e58937",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record c5eab32"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 30,
+      "opens_under_data": 7,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
