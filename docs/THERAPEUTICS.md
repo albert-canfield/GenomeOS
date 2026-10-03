@@ -1307,6 +1307,207 @@ compartment confidence and no anchor region, so there is nothing to read and
 
 Holds no measurement and no field a run would fill.
 
+## Does the known-absent surface actually invert a ranking, pre-registered 2026-10-03
+
+The section above closed the 5' partner's surface score and then measured one
+consequence on a single fixture without claiming its significance, in these
+words: *"I did not measure whether any ranking inverts — `pipeline.analyse`
+orders on the evidence tier first and both rows here are the same gene. Worth a
+lane."* The fixture read: the 3' candidate, surface **known absent** at `0.0`,
+overall `0.509`; the 5' candidate, surface **unestablished** at `None`, overall
+`0.609`. The scale is the published overall score, `0.0` to `1.0`, so the
+difference is `0.100` of that scale and `19.6%` of the lower absolute `0.509`.
+
+That is the property the opening note of `scoring.py` states as a rule rather
+than a defect — *"an unknown dimension is dropped from the mean, never defaulted
+to a middling value"* — read in the direction the rule does not name: a
+dimension that is **known bad** stays in the mean and lowers it, while the same
+dimension **unestablished** leaves the mean and lowers nothing. This section
+registers the measurement that says whether that reaches a published ranking,
+and it registers no change to the mean.
+
+**The question, in one sentence.** Over real candidate sets rather than one
+fixture, is any candidate whose `surface_accessibility` is `0.0` ranked *below*
+a candidate whose `surface_accessibility` is `None`, in a position the rest of
+the evidence does not justify?
+
+**What is measured, and the instrument.** The ten cases of
+`data/results/therapeutic_benchmark_v2.json`, re-run through
+`genomeos.therapeutics.analyse_vcf` with the network refused (`net=False`,
+answered from `data/knowledge/proteins/` and `data/knowledge/therapeutics/`),
+reading every candidate of every case and not only the target's row, which is
+all the committed file publishes. For each ordered pair of candidates in one
+case where the first has `surface_accessibility` exactly `0.0` and the second
+has it `None`, the pair is classified by where the two sit in the four-part rank
+key `(tier class, mechanism gate, -overall, gene)`:
+
+  * **separated above the mean** — the pair differs on the tier class or on the
+    mechanism gate, so the mean never decided it and the asymmetry cannot have
+    inverted anything;
+  * **inverted and justified** — same tier class, same gate class, the `0.0`
+    candidate below, and the mean's other dimensions account for the gap;
+  * **inverted and not justified** — same tier class, same gate class, the `0.0`
+    candidate below, and the surface dimension is what put it there.
+
+The third class is separated from the second by recomputing each pair's mean
+with the surface dimension dropped from **both** candidates — which is exactly
+what the `None` side already gets — and asking whether the order survives. An
+order that survives is justified by the other evidence. An order that reverses
+was produced by the asymmetry.
+
+**What is read from the code before any run, and is not a measurement.**
+`pipeline.analyse` sorts on `_rank_key`, which is
+`(c.evidence_tier == UNMEASURED_TIER, MECHANISM_GATE_ORDER.index(c.mechanism_reach), -(c.scores.overall or 0.0), c.gene)`.
+The tier enters as a **two-class partition** and not as its three tiers, so it
+orders first but does not order throughout: within one class the gate decides,
+and within one gate class the mean decides. `mechanisms._surface` answers
+`False` where the surface score is `0.0` by `ectodomain_lost` or by
+`plasma_membrane is False`, and `None` where the score is `None`; `SURFACE_GATE`
+carries `unknown_is_failure=False`, so `False` is a failed hard requirement and
+`None` is a provisional one, and `mechanism_reach` places *both* in
+`no_established_mechanism`. The gate therefore does not separate a known-absent
+surface from an unestablished one. Whether that reaches a ranking over real
+candidates is the open question and is not settled by this paragraph.
+
+**What is predicted.** That the partition above the mean separates most pairs,
+because a gene curated inside the cell is usually also in a different tier or
+gate class from one with no localisation evidence at all; that at least one pair
+reaches the mean, because the two classes collapse into one gate class by
+construction; and that where a pair reaches the mean the `0.0` candidate is
+below the `None` one, because the surface weight is `1.0` of a declared `9.9`
+and the removed value is the whole of it.
+
+**What must not move.** No committed figure. `targets_recovered`,
+`verdicts_correct`, `top_mechanism_defensible`, `surface_cases`,
+`surface_cases_recovered`, every row's `rank`, `score`,
+`surface_accessibility`, `evidence_tier` and `mechanism_reach` in both committed
+benchmark results, and every pin. The mean-over-available property is **not
+changed here**: this section registers a measurement, and any change to the
+arithmetic of `assemble` is a separate decision for the coordinator with its own
+registration. The 5' decision above is not reopened, and the 3' described-
+arrangement divergence stays at exactly four.
+
+**The control, and what happens if it fails.** The offline run must reproduce
+the committed `score`, `surface_accessibility`, `evidence_tier`,
+`mechanism_reach` and `rank` of all ten target rows. Where it does, the pair
+counts are on the published numbers. Where a row differs, that case is reported
+as **offline-divergent** and its pairs are reported separately and not counted
+in the headline, because a number the published run does not hold is not a
+measurement of the published ranking.
+
+**The falsifiers.** Falsified by any committed benchmark figure moving; by the
+measurement reporting a count without naming its cases and its candidate pairs;
+by a pair counted as *not justified* whose order survives the surface dimension
+being dropped from both sides; by a pair counted as *separated above the mean*
+whose tier class and gate class are in fact equal; by `_rank_key` being read as
+ordering on the three evidence tiers rather than on the two-class partition; by
+any score in the measurement being produced with the network reached; or by the
+arithmetic of `assemble` being edited under this section.
+
+**What it will not claim.** It will not claim the mean-over-available property
+is wrong. The property has a written argument behind it in the opening note of
+`scoring.py` and in the `DIAGNOSTIC` note, and a measurement that an inversion
+exists is not a measurement that dropping unknowns is the wrong rule — the
+alternatives each have their own cost, and naming one is a decision and not a
+reading. "No ranking inverts" is a complete answer to this section and closes
+the worry.
+
+### What the run measured, 2026-10-03
+
+**The control first.** The ten cases were re-run with the network refused and
+reproduced the committed file exactly: all ten target rows identical on `score`,
+`surface_accessibility`, `evidence_tier`, `mechanism_reach` and `rank`, and the
+candidate count identical case by case (1, 1, 3, 5, 5, 2, 6, 6, 5, 8 — forty-two
+candidates). No case is offline-divergent, so every number below is a number of
+the published ranking. No committed figure moved.
+
+**The headline: no ranking inverts, and the reason is not the one the tier
+offered.** Of the forty-two candidates, **seven** carry a known-absent surface
+(`0.0`) and **zero** carry an unestablished one (`None`), so **zero** pairs of
+the registered form exist and no ranking can have inverted. That is a fact about
+these ten tumours and not about the ordering rule. The tier did not keep the
+mean away from the ranking: 7 of the 10 cases hold a tier-and-gate cell with two
+or more candidates in it, and the cells over all forty-two candidates are
+occupied 7 / 12 / 23 — measured-and-reached, measured-and-unreached,
+unmeasured-and-reached. Inside those cells nothing but the mean and the gene name
+is left, and the mean ordered them.
+
+**The tier does order first, and it dominates where the classes differ.** The
+KRAS case is the named instance: KRAS, an observed alteration, ranks first at an
+overall of `0.369`, and KIT, on which nothing in this patient was measured,
+ranks second at `0.616`. That is `0.247` of the published 0.0-to-1.0 overall
+scale, 66.9% of the lower absolute `0.369`, and the tier reverses it on purpose.
+
+**The asymmetry's size on real candidates, measured within each candidate.** For
+each of the seven known-absent surfaces, the same candidate was rescored with
+that one dimension unestablished instead of measured-absent — which is exactly
+what the `None` side already gets — and the case re-ordered on the same
+four-part key. **Two of the seven change rank:**
+
+| case | candidate | known absent | unestablished | gap | rank | overtakes |
+|---|---|---|---|---|---|---|
+| HER2-positive gastroesophageal | TP53 | 0.353 | 0.399 | +0.046, 13.0% of 0.353 | 4 → 3 | GRB7 at 0.365 |
+| HER2-positive gastroesophageal | MYC | 0.246 | 0.286 | +0.040, 16.3% of 0.246 | 6 → 5 | MIEN1 at 0.275 |
+
+The other five do not move: KRAS `0.369` → `0.431` and IDH1 `0.345` → `0.403`
+and ALK `0.559` → `0.656` all hold rank 1, TP53 in the CD19 case `0.324` →
+`0.379` holds rank 3, MIEN1 `0.275` → `0.321` holds rank 5. The first row is the
+one that matters: GRB7's surface is a **measured** `0.36`, so GRB7 above TP53's
+measured `0.0` is the mean working correctly, and TP53 above GRB7 on no surface
+evidence at all would be the mean paying for ignorance. The scale of the lane's
+own fixture figure, restated with its absolutes: `0.609` against `0.509` is
+`0.100` of the same 0.0-to-1.0 scale and 19.6% of `0.509`.
+
+**One real case run on both sides of the axis.** The EML4-ALK tumour was re-run
+with the orientation column removed from its structural-variant table, which is
+the condition every real cohort fusion is in. ALK's surface moves from a measured
+`0.0` to unestablished, its overall rises `0.559` → `0.656` (`+0.097`, 17.4% of
+`0.559`) and its component coverage falls `0.68` → `0.58`. ALK holds rank 1 in
+both runs, so no rank moves here either; what the run shows is that the
+unestablished class does appear in a real candidate set and lands in the **same**
+tier-and-gate cell as the known-absent one, exactly as the gate reading predicted.
+
+**How large the exposed class is, in the committed cohort record.**
+`data/results/cancer_alterations_msk_impact_2017.json` records a fusion in 95
+genes over 928 sample-events of 10,945 samples and an orientation for none of
+them. Computed against the committed compiled-protein store: **35 of the 95
+genes, carrying 516 of the 928 sample-events (55.6%)**, answer unestablished
+under the unoriented branch because they hold curated membrane localisation —
+ALK, EGFR, ERBB2, ERBB3, FGFR1-3, MET, RET, ROS1, CDH1, NOTCH1, NOTCH2, KIT,
+FLT3, PDGFRA, PTCH1, SMO, RNF43, TGFBR2 among them. The remaining 60 genes and
+412 sample-events (44.4%) answer `0.0` regardless, being curated inside the cell.
+That is the size of the class the 5' decision moved into the missing bucket, and
+it is a count of genes and events, not of inversions.
+
+**Which of the three registered outcomes holds: none of them exactly, and the
+fourth is named rather than folded into one.** No inversion occurs — but not
+because the tier orders first, which was the first outcome's stated reason. It
+does not occur because the unestablished-surface class is empty in these ten
+tumours, while the mean does reach real rankings in seven of them and two real
+candidates sit one step from moving. Reporting this as "the tier orders first"
+would have closed a worry that is not closed.
+
+**What is handed up rather than acted on.** Whether the mean-over-available
+property should change is a registered decision and is not taken here. The
+measurement says the asymmetry is real, reaches the ranking, and is worth between
+`0.040` and `0.097` of the overall scale on the candidates measured — and it also
+says the property is not obviously wrong. A candidate whose surface is
+unestablished genuinely might reach the surface; averaging in a middling default
+would be the rule the top of this module refuses, and penalising absence directly
+would make coverage a weight, which the `DIAGNOSTIC` note records as having
+inverted an ERBB2-amplified tumour once already. The honest options are to carry
+coverage into the order as a tiebreak below the mean, or to leave it and publish
+the coverage beside every score as it already does. Neither is this lane's to
+choose.
+
+Seven guards hold this reading in `tests/test_the_mean_orders_inside_a_tier_and_gate_cell.py`,
+each mutation-tested against the source it watches, and one of those mutations
+first recorded a false green: the guard on the provisional-mechanism branch
+passed under its own mutation because the bare fixture scores every mechanism at
+compatibility `0.0` and never reaches that branch. A second fixture that does
+reach it was added and the mutation then failed it.
+
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
