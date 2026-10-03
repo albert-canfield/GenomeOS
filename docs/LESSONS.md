@@ -1677,3 +1677,41 @@ separate act — it could not change the decision in front of it, and a read tha
 is not worth its precedent — and carried it forward to the next authorised pass over that file, if one
 ever happens. That is the right call, and it is only necessary because the cheapest moment to record the
 number had already gone.
+
+## A test that pins what is on this disk is a claim about this disk (2026-10-03)
+
+CI run 37121198184 failed on three tests, in both test jobs, and all three were one class: a test
+whose verdict was decided by which machine ran it. None was a code defect. In the first the module
+under test was behaving correctly, in the second git was, and in the third the arithmetic was right.
+
+- A compiler counterfactual reached a **git-ignored** element table and raised `FileNotFoundError`
+  where it expected the compiler's own `ValueError`. Repaired with `needs_local_data`, which skips BY
+  NAME where the store is absent and runs where it is present — not with a stub, because a planted
+  table would make the counterfactual assert against a fiction.
+- A worktree test asserted **which files a FAILED `git worktree remove` had already deleted**. That is
+  platform `readdir` order; macOS and Linux differ, so the assertion was true here and false on the
+  runner. The repair keeps the half that holds everywhere — the failed removal **deregisters** the
+  worktree — and demotes the platform-specific observation to a comment naming the platform it was
+  seen on.
+- A count was pinned at 67 where a fresh checkout sees 43, because 24 **generated** programs exist
+  locally and are untracked. A count taken over a working tree is a fact about that working tree.
+
+Each of these passed locally, every time, and had never passed anywhere else. **A local green is not
+evidence about any other machine**, and in a project where the interesting data is deliberately
+git-ignored, the gap between this tree and a fresh checkout is wide and permanent rather than an
+accident waiting to be tidied up.
+
+The question to ask before pinning any count, path or filesystem behaviour: **would this be the same
+in a fresh checkout with no git-ignored stores, on another operating system?** If not, it needs the
+marker, or a tracked-only population, or an invariant that holds everywhere — and the first two are
+better than weakening the assertion, because they keep the check's force where the data does exist.
+
+**The marker is proved by REMOVING it.** A test that skips is no evidence that skipping was the
+repair; a test that reproduces the original failure the moment the marker comes off is. Red 1 was
+established that way, in a worktree of HEAD with no local stores at all, and the failure came back
+word for word. Without that step a marker is indistinguishable from a test quietly switched off.
+
+These three landed on the same day three other entries about machine-dependent tooling were written.
+The class was already known. The instances were not, because nothing in the suite looks for them —
+which is the argument for running the suite somewhere that has none of this machine's data, rather
+than for being more careful.
