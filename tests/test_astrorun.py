@@ -1215,16 +1215,20 @@ class TestOneApprovalPerRunAndOneTotalAcrossThem:
         assert rec["words"] == astrorun.ASTROREG2_AUTHORISATION, "run 1 holds the existing text"
         assert rec["requests"] == 1232
         assert "not a second run, and not a resume" in rec["why_consumed"]
-        # Run 2's slot exists since Albert's second approval was relayed, and its WORDS are empty
-        # because this lane holds a relay. The claim is unchanged -- no later run can start -- and it
-        # is now tested on the behaviour rather than on the key set.
+        # Run 2's WORDS ARE NOW RECORDED, at 07827c9, by the session that received them first-hand.
+        # Until then the slot existed with `words` None because the lane that built it held a relay,
+        # and a relay is not an approval. Both facts are kept: run 1 is consumed, run 2 is authorised,
+        # and run 3 has no slot at all -- so a third run refuses by NAME and never by an exhausted
+        # counter, which is the distinction this suite exists to hold.
         assert set(astrorun.ASTROREG2_AUTHORISATIONS) == {1, 2}
-        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["words"] is None
-        for run in (1, 2, 3):
-            with pytest.raises(astrorun.NoAuthorisationError):
-                astrorun.authorisation_for_run(run)
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["words"] == astrorun.RUN2_AUTHORISATION
+        with pytest.raises(astrorun.NoAuthorisationError):
+            astrorun.authorisation_for_run(1)  # consumed: a spent approval authorises nothing
+        astrorun.authorisation_for_run(2)  # recorded, so it resolves
+        with pytest.raises(astrorun.NoAuthorisationError):
+            astrorun.authorisation_for_run(3)  # "second AND FINAL": no slot, refused by name
         # 1,232 and NOT 2,464: run 2's slot exists but has no words, and a slot is not an approval.
-        assert astrorun.total_authorised_requests() == 1232, (
+        assert astrorun.total_authorised_requests() == 2464, (
             "a slot with no words must not add its count to the total, or the bound on money doubles "
             "on the strength of a relay"
         )
@@ -1563,10 +1567,21 @@ class TestAlbertsSecondAndFinalApprovalIsFiveRefusals:
         assert out["bytes"] > 0
         assert out["clause"] == "astroargmax_registration_committed"
 
-    def test_clause_4_it_is_NOT_committed_in_this_repository_today(self):
-        """The true state: item (h) does not exist yet, so this clause refuses on the real tree."""
-        with pytest.raises(astrorun.SendRefusedError, match="no committed copy at HEAD"):
-            astrorun.check_astroargmax_registration_is_committed()
+    def test_clause_4_it_IS_committed_in_this_repository_today(self):
+        """The true state since b5fd1b6: item (h)'s registration is in HEAD, so this clause PASSES.
+
+        It asserted the opposite until lane-astroargmax committed
+        `data/results/astroargmax_registration.json` ALONE. That is a state change and not a
+        weakening: the three PLANTED/NEAR_MISS clause-4 tests that prove the refusal still works run
+        against a temp repository and pass unchanged, so the refusal is still demonstrated. What
+        changed is the world, not the guard.
+
+        The clause is satisfied; the other four are not, and each refuses on its own.
+        """
+        out = astrorun.check_astroargmax_registration_is_committed()
+        assert out["clause"] == "astroargmax_registration_committed"
+        assert out["registration"] == astrorun.ASTROARGMAX_REGISTRATION.as_posix()
+        assert out["bytes"] > 0
 
     # ---- clause 5: the supervisor writes "dry run reviewed" ---------------------------------------
 
@@ -1614,13 +1629,32 @@ class TestAlbertsSecondAndFinalApprovalIsFiveRefusals:
 
     # ---- the whole gate: all five unmet refuse, all five met pass ---------------------------------
 
-    def test_the_RELAY_is_not_the_approval_and_the_slot_is_EMPTY_today(self):
-        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["words"] is None
+    def test_the_RELAY_IS_STILL_NOT_THE_APPROVAL_and_the_two_are_kept_apart(self):
+        """The slot is filled now, and the reason it was once empty must stay legible.
+
+        The lane that built this gate refused to transcribe a relay into the slot and said why; the
+        coordinator session that heard Albert filled it at 07827c9. What this test protects is that
+        the RELAYED text and the APPROVAL remain distinct objects, so no future reader can mistake
+        one for the other -- which is the whole content of the rule the empty slot enforced.
+        """
+        assert astrorun.ASTROREG2_AUTHORISATIONS[2]["words"] == astrorun.RUN2_AUTHORISATION
         assert "this lane received the text through another agent" in (
             astrorun.WHY_RUN2_SLOT_IS_EMPTY_IN_THIS_LANE
+        ), "the reason the slot was once empty is kept, so the rule is still readable"
+        # The two TEXTS turn out to be identical, and that is worth asserting rather than hiding:
+        # it is evidence the relay was faithful. What must never collapse is the PROVENANCE -- two
+        # named records, one holding what a person said and one holding an agent's account of it,
+        # with the gate reading only the first. A faithful relay is not the same thing as an
+        # approval, and this assertion fails loudly if the two names ever become one object.
+        assert astrorun.RUN2_AUTHORISATION == astrorun.RUN2_AUTHORISATION_AS_RELAYED, (
+            "the relay was faithful; if this ever differs, the relay misreported him and the "
+            "APPROVAL is the one to trust"
         )
-        with pytest.raises(astrorun.NoAuthorisationError, match="no approval is recorded for run 2"):
-            astrorun.authorisation_for_run(2)
+        assert "RUN2_AUTHORISATION" in dir(astrorun)
+        assert "RUN2_AUTHORISATION_AS_RELAYED" in dir(astrorun), (
+            "the relay keeps its own name, so a reader can always tell which is which"
+        )
+        assert astrorun.authorisation_for_run(2)["words"] == astrorun.RUN2_AUTHORISATION
 
     def test_ALL_FIVE_SATISFIED_the_gate_PASSES_and_names_every_clause(self, tmp_path, monkeypatch):
         """A guard that can never pass is the fixed-point defect, so the positive control.

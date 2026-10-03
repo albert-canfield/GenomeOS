@@ -29,6 +29,10 @@ from genomeos.runtime.grn import NetworkRuntime
 from tests.committed_data import ROOT, committed, must_be_committed
 
 COMPILED = "data/organisms/human/noncoding_chr21.bio"
+#: the header-repaired copy of COMPILED, tracked beside it since 2026-10-03 (lane-headerfix)
+REPAIRED = "data/organisms/human/noncoding_chr21_v2.bio"
+#: every tracked compiled program, which is what the cost scan's population globs
+COMPILED_PROGRAMS = (COMPILED, REPAIRED)
 RUNTIME_FIXTURE = "data/demo/cell_context.bio"
 COMPILER = "genomeos/attribution/compile.py"
 
@@ -480,13 +484,24 @@ def test_the_compiled_program_nowhere_states_that_a_cell_is_a_selection() -> Non
 
 @committed(COMPILED)
 def test_the_compiled_header_already_asserts_the_reading_the_proposal_says_is_false() -> None:
-    """An adoption cost nobody asked for: the compiler's OWN header says the cell is one the rule
+    """An adoption cost nobody asked for: the compiler's OWN header said the cell is one the rule
     was "measured or predicted in". On the argmax rules that is the misreading itself, written into
-    the artefact by the tool, so adopting the proposal means changing this line too."""
+    the artefact by the tool, so adopting the proposal means changing this line too.
+
+    PAID, 2026-10-03, by lane-headerfix under Albert's adoption of the header fix (cell provenance
+    itself stays deferred). The compiler no longer carries the sentence and cannot emit it again -
+    tests/test_header_cell_sentence.py holds that, with the superseded text quarantined in
+    genomeos.attribution.reheader. This test keeps both halves of the record: the COMMITTED v1
+    artefact still carries the false sentence, because its bytes are pinned by sha256 in
+    data/results/label_gene.json and were not rewritten, and the repair is the separate program
+    data/organisms/human/noncoding_chr21_v2.bio."""
     text = must_be_committed(COMPILED).read_text()
     assert "gated on the cell it was measured or predicted in" in text
     compiler = must_be_committed(COMPILER).read_text()
-    assert "gated on the cell it was measured or predicted in" in compiler
+    assert "gated on the cell it was measured or predicted in" not in compiler
+    repaired = must_be_committed(REPAIRED).read_text()
+    assert "gated on the cell it was measured or predicted in" not in repaired
+    assert "the cell named is the tissue whose predicted expression" in repaired.lower()
 
 
 @committed(COMPILED)
@@ -576,9 +591,12 @@ def test_the_counted_adoption_cost_is_one_human_decision_and_the_rest_mechanical
         {"program": RUNTIME_FIXTURE, "rule": next(iter(ADJUDICATED))}
     ]
     assert cost["marks_a_machine_can_derive"] == cost["rules_in_the_population"] - 1
+    # Two compiled programs are tracked since 2026-10-03: v1, whose bytes are pinned by sha256 in
+    # data/results/label_gene.json, and the header-repaired v2 beside it. The population is every
+    # tracked `.bio`, so the per-class figures sum over both and are not v1's alone.
     assert cost["marks_a_machine_can_derive_by_class"] == {
-        cp.ARGMAX_OF_PREDICTED_EFFECT: len(_parsed(COMPILED).rules) - 2,
-        cp.MEASURED_PERTURBATION_IN_THAT_CELL: 2,
+        cp.ARGMAX_OF_PREDICTED_EFFECT: sum(len(_parsed(p).rules) - 2 for p in COMPILED_PROGRAMS),
+        cp.MEASURED_PERTURBATION_IN_THAT_CELL: 2 * len(COMPILED_PROGRAMS),
     }
     assert cost["synthesised_rules_naming_a_cell"] == 0
     assert cost["default_for_every_one_of_them_before_a_decision"] is cp.NOT_ASSESSED
