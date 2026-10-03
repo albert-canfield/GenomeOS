@@ -23,14 +23,16 @@ which neither predictor provides.
 
 from __future__ import annotations
 
-import importlib.util
 import os
 import shutil
 import subprocess
 import tempfile
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+from genomeos.importable import importable
 
 from .evidence import prediction
 from .providers import Answer
@@ -121,8 +123,20 @@ class MhcflurryPredictor:
         return "MHCflurry 2"
 
     @staticmethod
-    def installed() -> bool:
-        return importlib.util.find_spec("mhcflurry") is not None
+    def installed(present: Callable[[str], bool] | None = None) -> bool:
+        """Whether the client is installed here, asked of the finders and not of `sys.modules`.
+
+        This read `importlib.util.find_spec("mhcflurry") is not None` until 2026-10-03, which RAISES
+        `ValueError` rather than answering when something has left a spec-less module object under that
+        name: see `genomeos.importable`, where the same shape was measured raising out of the optional
+        AlphaGenome client's own gate. A feature gate that throws is not a gate that says no.
+
+        `present` is the reading, INJECTED so that a test can prove this answers about what it was
+        handed rather than about the process it happens to run in. Every real call -- `available` and
+        `predict` below -- passes nothing and gets `importable`, which is the live environment, and a
+        test pins that they do: a guard keyed to what its caller supplies would be no guard.
+        """
+        return (importable if present is None else present)("mhcflurry")
 
     @property
     def available(self) -> bool:
