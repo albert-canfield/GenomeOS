@@ -1,0 +1,380 @@
+{
+  "result": "n1_knockdown_field_semantics_census",
+  "date": "2026-10-03",
+  "question": "can the semantics of the CRISPRi knockdown-efficacy fields be established from the producers' own documentation, so that an eligibility threshold could be fixed in advance?",
+  "contains_no_study_measurement": true,
+  "no_study_file_was_opened": "no byte of K562_gwps_normalized_bulk_01.h5ad, K562_gwps_raw_bulk_01.h5ad or any published p-value table was read: not a header, not a row, not a value, not a distribution. Only documentation was read",
+  "documents_read": {
+    "figshare_20029387": {
+      "url": "https://api.figshare.com/v2/articles/20029387",
+      "file": "figshare_20029387.json",
+      "what": "the deposit that hosts the pseudobulk files, description text (public metadata API)",
+      "bytes": 11400
+    },
+    "figshare_21632564": {
+      "url": "https://api.figshare.com/v2/articles/21632564",
+      "file": "figshare_21632564.json",
+      "what": "the producers' supplemental deposit, description text (public metadata API)",
+      "bytes": 9357
+    },
+    "pmc9380471": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9380471/fullTextXML",
+      "file": "pmc9380471.xml",
+      "what": "Replogle et al. 2022, Cell 185:2559, full text with STAR Methods and figure legends",
+      "bytes": 304532
+    },
+    "code_perturbseq_gi": {
+      "url": "https://codeload.github.com/thomasmaxwellnorman/Perturbseq_GI/tar.gz/refs/heads/master",
+      "file": "Perturbseq_GI-master.tar.gz",
+      "what": "the 'Perturb-seq analysis codebase' the paper's key resources table names (Norman 2019)",
+      "bytes": 15836173
+    },
+    "code_guide_calling": {
+      "url": "https://codeload.github.com/josephreplogle/guide_calling/tar.gz/refs/heads/master",
+      "file": "guide_calling-master.tar.gz",
+      "what": "the 'sgRNA assignment scripts' the paper's key resources table names",
+      "bytes": 283497
+    }
+  },
+  "registration_this_answers_for": {
+    "refusal_that_stands": "data/results/n1_registration_amendment_2.json, run_v3.never_read: 'any knockdown field'; question_changes[0]: 'the undocumented knockdown fields are not read'",
+    "nothing_here_amends_it": true
+  },
+  "quantity": {
+    "item": "on-target knockdown, the quantity",
+    "verdict": "ESTABLISHED",
+    "definition": "Knockdown was computed as the ratio of mean (unnormalized) expression of the target gene within perturbed cells vs. that in cells with non-targeting sgRNAs.",
+    "definition_where": "Replogle et al. 2022, Cell 185:2559 (PMC9380471), STAR Methods, 'Leverage scores for quantifying perturbation penetrance and variability'",
+    "units": "dimensionless as a ratio (perturbed mean over non-targeting mean of the target gene), reported in the paper as a percent reduction; 100% knockdown is a ratio of 0 and a fractional change of -1",
+    "units_where": "the same section, with Figure S3's legend for the fractional change",
+    "direction": "as a RATIO, smaller is better knockdown; as a PERCENT KNOCKDOWN or a fractional change, larger magnitude of reduction is better knockdown. The two run opposite ways, which is exactly why a threshold cannot be fixed against an unnamed carrier",
+    "direction_where": "The fractional change in expression is defined as the expression in the targeted cells minus the expression in non-targeting cells, relative to the expression in the non-targeting cell population (-1 implies 100% knockdown).",
+    "producers_own_thresholds": [
+      {
+        "level": "at least 30% on-target knockdown, or the target not detected",
+        "used_for": "the paper's 'strong perturbations', its broad functional filter",
+        "quote": "an on-target knockdown, if measured, of at least 30% (i.e. the target of perturbation was either knocked down by at least 30% or was not detected, a broad attempt to remove non-functional perturbations)",
+        "where": "PMC9380471, STAR Methods, 'Functional analyses of strong perturbations'"
+      },
+      {
+        "level": "at least 60% on-target knockdown",
+        "used_for": "the mitochondrial clustering of Figures 6A, 6C, S12A and S12E",
+        "quote": "an on-target knockdown of at least 60%",
+        "where": "PMC9380471, STAR Methods, the mitochondrial clustering criteria"
+      }
+    ],
+    "scale_reference": {
+      "quote": "We observed a median target knockdown of 85.5% in K562 cells and 91.6% in RPE1 cells",
+      "where": "PMC9380471, Results, with Figure 1B"
+    }
+  },
+  "fields": [
+    {
+      "field": "control_expr",
+      "where_it_lives": "`.obs` of K562_gwps_normalized_bulk_01.h5ad (Figshare+ 20029387), one row per pseudobulk perturbation population -- NOT OPENED BY THIS CENSUS",
+      "verdict": "NOT ESTABLISHED",
+      "looked_at": [
+        "the deposit that hosts the pseudobulk files, description text (public metadata API)",
+        "the producers' supplemental deposit, description text (public metadata API)",
+        "Replogle et al. 2022, Cell 185:2559, full text with STAR Methods and figure legends",
+        "the 'Perturb-seq analysis codebase' the paper's key resources table names (Norman 2019)",
+        "the 'sgRNA assignment scripts' the paper's key resources table names"
+      ],
+      "what_was_missing": "the spelling `control_expr` occurs 0 times in the paper's full text (including STAR Methods, all figure legends and the key resources table), 0 times in either Figshare+ deposit description, and 0 times in both code repositories the paper names as the authors' own. No producer document defines it, gives its units, or states its direction",
+      "counts": {
+        "paper": 0,
+        "deposit_descriptions": 0,
+        "named_producer_code": 0
+      }
+    },
+    {
+      "field": "fold_expr",
+      "where_it_lives": "`.obs` of K562_gwps_normalized_bulk_01.h5ad (Figshare+ 20029387), one row per pseudobulk perturbation population -- NOT OPENED BY THIS CENSUS",
+      "verdict": "NOT ESTABLISHED",
+      "looked_at": [
+        "the deposit that hosts the pseudobulk files, description text (public metadata API)",
+        "the producers' supplemental deposit, description text (public metadata API)",
+        "Replogle et al. 2022, Cell 185:2559, full text with STAR Methods and figure legends",
+        "the 'Perturb-seq analysis codebase' the paper's key resources table names (Norman 2019)",
+        "the 'sgRNA assignment scripts' the paper's key resources table names"
+      ],
+      "what_was_missing": "the spelling `fold_expr` occurs 0 times in the paper's full text (including STAR Methods, all figure legends and the key resources table), 0 times in either Figshare+ deposit description, and 0 times in both code repositories the paper names as the authors' own. No producer document defines it, gives its units, or states its direction",
+      "counts": {
+        "paper": 0,
+        "deposit_descriptions": 0,
+        "named_producer_code": 0
+      }
+    },
+    {
+      "field": "pct_expr",
+      "where_it_lives": "`.obs` of K562_gwps_normalized_bulk_01.h5ad (Figshare+ 20029387), one row per pseudobulk perturbation population -- NOT OPENED BY THIS CENSUS",
+      "verdict": "NOT ESTABLISHED",
+      "looked_at": [
+        "the deposit that hosts the pseudobulk files, description text (public metadata API)",
+        "the producers' supplemental deposit, description text (public metadata API)",
+        "Replogle et al. 2022, Cell 185:2559, full text with STAR Methods and figure legends",
+        "the 'Perturb-seq analysis codebase' the paper's key resources table names (Norman 2019)",
+        "the 'sgRNA assignment scripts' the paper's key resources table names"
+      ],
+      "what_was_missing": "the spelling `pct_expr` occurs 0 times in the paper's full text (including STAR Methods, all figure legends and the key resources table), 0 times in either Figshare+ deposit description, and 0 times in both code repositories the paper names as the authors' own. No producer document defines it, gives its units, or states its direction",
+      "counts": {
+        "paper": 0,
+        "deposit_descriptions": 0,
+        "named_producer_code": 0
+      }
+    },
+    {
+      "field": "num_cells_filtered",
+      "where_it_lives": "`.obs` of K562_gwps_normalized_bulk_01.h5ad (Figshare+ 20029387), one row per pseudobulk perturbation population -- NOT OPENED BY THIS CENSUS",
+      "verdict": "NOT ESTABLISHED",
+      "looked_at": [
+        "the deposit that hosts the pseudobulk files, description text (public metadata API)",
+        "the producers' supplemental deposit, description text (public metadata API)",
+        "Replogle et al. 2022, Cell 185:2559, full text with STAR Methods and figure legends",
+        "the 'Perturb-seq analysis codebase' the paper's key resources table names (Norman 2019)",
+        "the 'sgRNA assignment scripts' the paper's key resources table names"
+      ],
+      "what_was_missing": "the spelling `num_cells_filtered` occurs 0 times in the paper's full text (including STAR Methods, all figure legends and the key resources table), 0 times in either Figshare+ deposit description, and 0 times in both code repositories the paper names as the authors' own. No producer document defines it, gives its units, or states its direction",
+      "counts": {
+        "paper": 0,
+        "deposit_descriptions": 0,
+        "named_producer_code": 0
+      }
+    }
+  ],
+  "fields_absent_from_every_producer_document": [
+    "control_expr",
+    "fold_expr",
+    "pct_expr",
+    "num_cells_filtered"
+  ],
+  "counts": {
+    "paper": {
+      "control_expr": 0,
+      "fold_expr": 0,
+      "pct_expr": 0,
+      "num_cells_filtered": 0
+    },
+    "deposit_descriptions": {
+      "control_expr": 0,
+      "fold_expr": 0,
+      "pct_expr": 0,
+      "num_cells_filtered": 0
+    },
+    "named_producer_code": {
+      "control_expr": 0,
+      "fold_expr": 0,
+      "pct_expr": 0,
+      "num_cells_filtered": 0
+    }
+  },
+  "quotes_found": {
+    "knockdown_definition": true,
+    "fractional_change_definition": true,
+    "producer_threshold_30": true,
+    "producer_threshold_60": true,
+    "median_knockdown": true,
+    "obs_is_all_the_deposit_says": true,
+    "code_availability": true
+  },
+  "deposit_says_only_this_about_obs": {
+    "quote": "the .obs annotation details single-cells/pseudobulk populations",
+    "where": "Figshare+ 20029387 description (public metadata API), the whole of it on .obs",
+    "verdict": "NOT ESTABLISHED",
+    "reason": "it names no column"
+  },
+  "the_2022_pipeline_code_is_not_released": {
+    "verdict": "ESTABLISHED (as an absence)",
+    "quote": "Our codebase for Perturb-seq analysis is available at https://github.com/thomasmaxwellnorman/Perturbseq_GI and https://github.com/josephreplogle/guide_calling",
+    "where": "PMC9380471, 'Data and code availability'",
+    "reading": "the two repositories the authors release are Norman 2019's analysis codebase and the sgRNA caller. Neither contains any of the four spellings. The 2022 pseudobulk pipeline that wrote these columns is not among them, and the section's remedy is 'available from the lead contact upon request'"
+  },
+  "correction_to_the_committed_record": {
+    "what_the_record_says": "data/results/n1_registration_amendment_1.json, changes[1].evidence[4].does_not_establish: 'pct_expr has no 2019 counterpart'",
+    "what_this_census_finds": "a counterpart does exist in the codebase the paper names, under the 2019 naming scheme, computed as (perturbed - control) / control",
+    "line": "mean_pop.cells['pct_first_expr'] = mean_pop.cells['diff_first_expr']/mean_pop.cells['control_first_expr']",
+    "where": "thomasmaxwellnorman/Perturbseq_GI, GI_generate_populations.ipynb and GI_activation_of_neighboring_genes.ipynb",
+    "verdict": "NOT ESTABLISHED for the 2022 file",
+    "why_it_changes_nothing": "the 2019 names carry a slot (`pct_first_expr`, `pct_second_expr`) because that experiment pairs two targets; the 2022 file's columns are spelled without one and appear in no document. Reading one family as the other is an inference from naming analogy across a different experiment and a changed pipeline -- the 2022 pipeline added per-gemgroup depth adjustment, so 'unnormalized' is ambiguous between raw and adjusted counts. Amendment 1's verdict therefore stands on a corrected premise, and amending the recorded sentence is a registration decision, not this census's"
+  },
+  "answer": {
+    "question": "can an eligibility gate with a knockdown threshold fixed in advance be built on this dataset's producer documentation?",
+    "verdict": "NO, not on the file's knockdown columns",
+    "because": "the quantity is documented and the producers state their own thresholds, but no producer document names a single column of the distributed file. A threshold fixed against `fold_expr` would be a number on a scale no document ties to those bytes, and the ratio and the percent run in opposite directions, so even the sign of the comparison is an inference",
+    "what_would_resolve_it": [
+      "the 2022 pipeline code, or a statement by the authors defining the columns and units",
+      "deriving knockdown from documented quantities instead -- the raw pseudobulk's target column against its non-targeting rows is the producers' own definition, computable without reading any undocumented column -- which is a separate registration, with its own outcome exposure, and is NOT authorised by this census"
+    ],
+    "not_chosen_here": "no threshold is chosen; that is a registration decision"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Replogle et al. 2022, Cell, full text (documentation)",
+        "version": "PMC9380471"
+      },
+      {
+        "accession": "Figshare+ 20029387 description (metadata API)",
+        "version": "article record"
+      },
+      {
+        "accession": "Figshare+ 21632564 description (metadata API)",
+        "version": "article record"
+      },
+      {
+        "accession": "thomasmaxwellnorman/Perturbseq_GI (producer code)",
+        "version": "master"
+      },
+      {
+        "accession": "josephreplogle/guide_calling (producer code)",
+        "version": "master"
+      },
+      {
+        "accession": "GenomeOS n1_registration, amendment 1 and amendment 2",
+        "version": "the committed record"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/n1_registration.json",
+        "sha256": "8478dd761d7ec3f668dae794060040ee15e36b82294c0c6b05af765fd197d883",
+        "bytes": 1084039,
+        "partition": null
+      },
+      {
+        "path": "data/results/n1_registration_amendment_1.json",
+        "sha256": "ecfb55fcf70c9a45a1b9b70f60a822aeb5c9635fa50a61c5af07aac784ab774d",
+        "bytes": 15866,
+        "partition": null
+      },
+      {
+        "path": "data/results/n1_registration_amendment_2.json",
+        "sha256": "97909dbf210a4fc9553052511c3c8b5786cceb2873fe258a37a2e4efe67ba90b",
+        "bytes": 13656,
+        "partition": null
+      },
+      {
+        "path": "data/cache/kdsemantics/figshare_20029387.json",
+        "sha256": "8fca06c135b0a5ec3f37f15b6e27f841ab865578f33aa96e14c124d21ecb1eda",
+        "bytes": 11400,
+        "partition": null,
+        "url": "https://api.figshare.com/v2/articles/20029387"
+      },
+      {
+        "path": "data/cache/kdsemantics/figshare_21632564.json",
+        "sha256": "9097b54055248f2644eddad00e21f2e435e9b0978b7e986dfafb9b89ec4d5551",
+        "bytes": 9357,
+        "partition": null,
+        "url": "https://api.figshare.com/v2/articles/21632564"
+      },
+      {
+        "path": "data/cache/kdsemantics/pmc9380471.xml",
+        "sha256": "459c2519163bbbf7a6984da4c33dd7c726a8b159e7f3bd2f4c851123693377e4",
+        "bytes": 304532,
+        "partition": null,
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9380471/fullTextXML"
+      },
+      {
+        "path": "data/cache/kdsemantics/Perturbseq_GI-master.tar.gz",
+        "sha256": "401d3afe625b9206b55ea0ba0aa99d46ab901e838a13b974cd7e8eee74ff7a43",
+        "bytes": 15836173,
+        "partition": null,
+        "url": "https://codeload.github.com/thomasmaxwellnorman/Perturbseq_GI/tar.gz/refs/heads/master"
+      },
+      {
+        "path": "data/cache/kdsemantics/guide_calling-master.tar.gz",
+        "sha256": "4e6dc53dd10efe0fb561b4dccb6c2a45cc22893fa9a21a32a5a3e5bbe054a687",
+        "bytes": 283497,
+        "partition": null,
+        "url": "https://codeload.github.com/josephreplogle/guide_calling/tar.gz/refs/heads/master"
+      }
+    ],
+    "assembly": "n/a: a documentation census; no coordinate is read",
+    "coordinates": "n/a: a documentation census; no coordinate is read",
+    "parameters": {
+      "fields_censused": [
+        "control_expr",
+        "fold_expr",
+        "pct_expr",
+        "num_cells_filtered"
+      ],
+      "producer_documents": [
+        "figshare_20029387",
+        "figshare_21632564",
+        "pmc9380471",
+        "code_perturbseq_gi",
+        "code_guide_calling"
+      ],
+      "threshold_chosen": "none: choosing one is a registration decision"
+    },
+    "exclusions": [
+      "every study data file: the two pseudobulk h5ads and the published p-value table are never opened, so no knockdown value of any kind is read"
+    ],
+    "partitions": "n/a: a census of documents, not of rows",
+    "code_cleanliness": {
+      "git_sha": "9d35dfb2a2339017665276ffa649271573f07f05",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/n1_kd_semantics_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/n1_kd_semantics_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/n1_kd_semantics_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/n1_kd_semantics_census.py"
+      ],
+      "counting_path_count": 5,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "9d35dfb2a2339017665276ffa649271573f07f05",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/n1_kd_semantics_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "9d35dfb2a2339017665276ffa649271573f07f05",
+      "code_cleanliness_git_sha": "9d35dfb2a2339017665276ffa649271573f07f05",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 9d35dfb"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 31,
+      "opens_under_data": 16,
+      "files_read": 8,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
