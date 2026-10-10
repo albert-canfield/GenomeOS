@@ -305,6 +305,11 @@ AMENDMENTS: list[dict[str, str]] = [
             " they are identical. Nothing in REGISTRATION, the data, the fits, the split, the bar or"
             " the readings changes; the pins are re-taken because the script's bytes changed"
         ),
+        "how_the_pins_are_retaken": (
+            "in a separate file, data/results/saturable_gate_registration_amendment1.json, written by"
+            " `amend` with the binding words, the new pins and this amendment; the original registration"
+            " stays as committed in 9d2ab1f and `run` checks the binding words of both"
+        ),
         "rule": (
             "the reading is run 2's only if run 2's payload is identical to run 1's; if they differ,"
             " that is recorded and run 1's quarantined payload is the registered run"
@@ -312,6 +317,8 @@ AMENDMENTS: list[dict[str, str]] = [
     },
 ]
 QUARANTINED_RUN_1 = ROOT / "data" / "quarantine" / "results" / f"{RESULT_NAME}.json"
+AMENDMENT_NAME = "saturable_gate_registration_amendment1"
+AMENDMENT_FILE = ROOT / "data" / "results" / f"{AMENDMENT_NAME}.json"
 
 
 # ---- the rules fixed above, as code -----------------------------------------------------------
@@ -733,7 +740,48 @@ def register() -> int:
     return 0
 
 
+def register_amendment() -> int:
+    """Amendment 1's re-pinned registration: the same binding words, new pins, nothing re-fitted."""
+    from genomeos import manifest as mf
+    from genomeos.results import save_result
+
+    original = json.loads(REGISTRATION_FILE.read_text())
+    if original["registration"] != _binding_words():
+        raise SystemExit("REFUSED: the original registration's binding words differ from REGISTRATION")
+    pins = {p: _sha(ROOT / p) for p in PINNED_CODE}
+    for f in (PAXDB_FILE, GTEX_FILE):
+        pins[str(f.relative_to(ROOT))] = _sha(f)
+    out = {
+        "result": AMENDMENT_NAME,
+        "date": "2026-10-10",
+        "lane": "lane-saturable",
+        "amends": {"path": str(REGISTRATION_FILE.relative_to(ROOT)), "commit": "9d2ab1f"},
+        "registration": REGISTRATION,
+        "amendments": AMENDMENTS,
+        "pinned_sha256": pins,
+        "previous_pins": original["pinned_sha256"],
+        "protein_values_read": 0,
+        "run_1_numbers_seen": 0,
+    }
+    inputs = [
+        mf.input_entry(REGISTRATION_FILE.relative_to(ROOT), partition=None),
+        mf.input_entry(PAXDB_FILE.relative_to(ROOT), partition="pinned by sha256; no value read"),
+        mf.input_entry(GTEX_FILE.relative_to(ROOT), partition="pinned by sha256; no value read"),
+    ]
+    print("saved", save_result(AMENDMENT_NAME, out, manifest=_manifest(inputs, "n/a: a registration")))
+    return 0
+
+
 def _check_registration() -> dict[str, Any]:
+    if AMENDMENT_FILE.exists():  # amendment 1: the re-pinned registration, binding words unchanged
+        amended = json.loads(AMENDMENT_FILE.read_text())
+        original = json.loads(REGISTRATION_FILE.read_text())
+        if amended["registration"] != _binding_words() or original["registration"] != _binding_words():
+            raise SystemExit("REFUSED: a registration's binding words differ from REGISTRATION")
+        for path, sha in amended["pinned_sha256"].items():
+            if _sha(ROOT / path) != sha:
+                raise SystemExit(f"REFUSED: {path} has changed since amendment 1 pinned it")
+        return amended
     reg = json.loads(REGISTRATION_FILE.read_text())
     if reg["registration"] != _binding_words():
         raise SystemExit("REFUSED: the registration's binding words differ from REGISTRATION in this script")
@@ -782,6 +830,8 @@ def run() -> int:
         "reading": reading,
         "reading_numbers": fmt,
     }
+    if AMENDMENT_FILE.exists():
+        out["registration_amendment"] = str(AMENDMENT_FILE.relative_to(ROOT))
     residues = [PROTEINS / f"{s}.json" for s in sorted(j["rna"]) if (PROTEINS / f"{s}.json").exists()]
     inputs = [
         mf.input_entry(REGISTRATION_FILE.relative_to(ROOT), partition=None),
@@ -789,6 +839,8 @@ def run() -> int:
         mf.input_entry(GTEX_FILE.relative_to(ROOT), partition="training and held-out, split by symbol hash"),
         mf.files_entry("data/knowledge/proteins/<symbol>.json for every GTEx symbol that has one", residues),
     ]
+    if AMENDMENT_FILE.exists():
+        inputs.append(mf.input_entry(AMENDMENT_FILE.relative_to(ROOT), partition=None))
     # amendment 1: run 1 was quarantined unread; its payload must equal this run's, key for key
     if QUARANTINED_RUN_1.exists():
         q = json.loads(QUARANTINED_RUN_1.read_text())
@@ -811,4 +863,6 @@ def run() -> int:
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+    if cmd == "amend":
+        raise SystemExit(register_amendment())
     raise SystemExit({"register": register, "dry": dry, "run": run}.get(cmd, lambda: 2)())
