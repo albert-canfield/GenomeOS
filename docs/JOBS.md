@@ -1,5 +1,12 @@
 # Background jobs: reliable by construction
 
+**Status on 2026-10-10.** Accurate as written, checked against `genomeos/jobs.py`: the pid
+refusal, the heartbeat, the 20-minute stall threshold (`STALL_AFTER`), the supervisor's
+auto-heal and the append-mode logs are all in the registry, and completion is still a
+predicate over the results (`complete`), not over the process — the proteome job's is still
+25 `proteome_chr*.json` files. The registry has grown since this page was written, so the
+list of jobs lives in the code and in the Progress tab rather than here.
+
 Long computations (a genome-wide pass, a proteome compile) run as separate
 processes started from the Progress tab or the command line and tracked in
 `data/jobs/`. The rules that make them reliable:

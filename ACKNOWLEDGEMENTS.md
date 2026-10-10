@@ -1,5 +1,15 @@
 # Acknowledgements
 
+**Status on 2026-10-10.** The core still has no runtime dependencies, and the optional
+engines and the data sources listed below hold with their licences as stated. The tables are
+behind the code, so "full list with licences" means the full list of what this file names,
+not of what the project reads: sources in use whose provenance and terms are recorded
+elsewhere include DepMap 24Q4 Public, CC BY 4.0 (docs/THERAPEUTICS.md, "Sources"); the CPTAC
+phosphoproteomic profiles reached through cBioPortal and the Ochoa et al. 2020 reference
+phosphoproteome (docs/PROTEIN.md); and the 4D Nucleome data portal, AlphaMissense, the PGS
+Catalog and ENCODE4 lentiMPRA, each with its own section in docs/DATA.md. Folding those into
+the tables below is the next edit to this file.
+
 GenomeOS stands on public science and open-source software. Nothing here is
 our data: every biological fact comes from a curated source that is named in
 the output, and every optional engine is somebody else's work. This page

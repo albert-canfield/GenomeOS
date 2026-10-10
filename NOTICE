@@ -1,6 +1,12 @@
 GenomeOS
 Copyright (c) 2026 Albert Canfield
 
+Status on 2026-10-10: this notice is current. The engine paths listed below are
+the paths scripts/package_engine.py ships, and the five provenance modules moved
+out of genomeos/lang on 2026-10-03 are application files under the AGPL, not
+part of the engine. Nothing in the licensing of any file has changed since the
+relicensing of 2026-09-11 recorded at the end.
+
 This product includes two separately licensed parts:
 
   * The BioLang engine — the language, the intermediate representation, the

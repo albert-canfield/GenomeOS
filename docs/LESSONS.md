@@ -1,5 +1,12 @@
 # Lessons the core has learned from data
 
+**Status on 2026-10-10.** This file is an append-only record and is current to its last
+entry, 2026-10-03; it holds 36 sections. Nothing in it is edited or removed: a lesson that
+turns out to be wrong gets a dated correction appended beside it, which is why older
+sections keep their original wording. The sentence below that "numbers are from the
+2026-09-10 runs" applies to the first sections only — every later section carries its own
+date and its own run. New entries belong at the end, with the result file that produced them.
+
 Every real-data run leaves a summary (docs/STORAGE.md). This page is the
 distilled knowledge itself: what the engine now carries, where it came from,
 and how sure we are. When a lesson changes a parameter or a rule in the code,

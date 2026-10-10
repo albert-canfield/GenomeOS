@@ -1,5 +1,18 @@
 # BioForge's predicted confidence: what it is, and why it cannot be calibrated
 
+**Status on 2026-10-10.** The title's "cannot be calibrated" is superseded by the correction
+of 2026-09-28 printed below (`3b29509`, external review R4): a constant predictor *can* be
+calibrated, what it cannot have is discrimination, and the two real defects are that the
+value 0.3 was never supported and that no evaluation population exists — the verdict
+`UNSUPPORTED_VALUE_NO_EVALUATION_POPULATION`, recorded beside the original in
+`genomeos/forge/calibration.py`. In the code today a BioForge answer carries **no stated
+probability**: `genomeos/organism/forge.py` emits `UNSTATED_CONFIDENCE` on the `experiment`
+and a `Certainty` whose probability is `None` with the reason "no calibration record: no
+population of design answers with a published outcome and a negative case exists". Of §6's
+two asks, the first is done and the second is not: the literal is gone, and a program's own
+`confidence:` is still overwritten by `to_experiment()`, now with the parser's UNSTATED
+rather than with 0.3.
+
 *2026-09-22. Area H, third open item: "calibrate predicted confidence: how often a design's answer
 matches the published outcome". Registration and verdict in `genomeos/forge/calibration.py`; the
 facts the verdict rests on are pinned in `tests/test_forge_calibration.py`.*

@@ -1,5 +1,18 @@
 # Cancer: healthy cell versus tumour cell
 
+**Status on 2026-10-10.** The comparison, the tumour-alone path, the alteration tables and
+the `cancer.*` libraries hold as described, with the figures coming from the committed
+`data/results/cancer_msk_impact_2017.json` and
+`data/results/cancer_alterations_msk_impact_2017.json`. Both bullets under "Next" are
+superseded. A cohort reference exists: `genomeos cancer expression --study ...` distils a
+study's tumour-versus-normal expression per gene and the therapeutic pipeline takes it as
+`--cohort`. And what a deep deletion is worth is now measured rather than unmodelled:
+`genomeos/therapeutics/depmap.py` and `genomeos/therapeutics/synthetic_lethality.py`, both
+added 2026-09-16 (`2305bee`), test dependency against loss across DepMap 24Q4 cell lines
+(docs/THERAPEUTICS.md, "What the loss makes indispensable"). "HLA binding is not predicted
+here" remains true of this path (`genomeos/cancer/tumour.py`); the optional peptide/HLA
+predictors belong to the therapeutic pipeline.
+
 A tumour is the same genome with somatic changes. GenomeOS therefore treats
 cancer analysis as a comparison: the person's normal sample against their
 tumour sample, the differences annotated with the variant engine and graded

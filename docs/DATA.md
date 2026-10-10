@@ -1,5 +1,17 @@
 # Open genome data for testing
 
+**Status on 2026-10-10.** The sources, the fetch targets and the optional feeds below hold,
+and the dated sections from 2026-09-27 on — the trio phasing, the allele fractions, the C5
+probe, the EN-TEx audit and the result registry of item 12 S6 — are the current record.
+`data/results/` holds 880 tracked files today (`git ls-files data/results | wc -l`), and
+what may enter it is decided by the registry contract in the last section, with refusals
+going to the git-ignored `data/quarantine/results/`. One correction to "Verified today"
+(2026-09-10), beside the original rather than in place of it: the ORF finder is no longer
+AUG-only. `find_orfs` in `genomeos/runtime/central_dogma.py` defaults to the table's own
+initiators — AUG for the standard code, AUU/AUA/AUC/AUG/GUG for vertebrate mitochondria —
+so ND1, ND2 and ND5 are found at their own starts, and the alternative-start item that
+section calls a Phase 1 limitation is done.
+
 All of the following are open access and were verified reachable on
 2026-09-10. Fetch with `scripts/fetch_reference.sh <target>`; files land in
 `data/reference/` (gitignored).

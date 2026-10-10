@@ -1,5 +1,15 @@
 # The upward flow, and the types that carry it
 
+**Status on 2026-10-10.** Current. The layer table and the four commands hold:
+`flow`, `lookup`, `rna` and `regulation` are all parsers in `genomeos/cli.py`, and
+`genomeos/flow/trace.py` is still the single home of the DNA–RNA–protein relationship
+(`trace`, `residue_of`, `genomic_of_residue`, `substitute`). The regulation confidences
+quoted below are the ones the code uses (`genomeos/genome/regulation.py`: promoter of, 0.8;
+nearest TSS in domain, 0.4; same domain, 0.25), and node calls are still inferred at 0.4
+(`genomeos/genome/domains.py`). One line has moved on: "Hi-C would make it curated" now has
+a route — `genomeos/genome/hic.py` streams measured 4D Nucleome boundary calls and loads
+disabled without an account key (docs/DATA.md, "Optional: 4D Nucleome boundary calls").
+
 Genetic information flows upward:
 
 ```

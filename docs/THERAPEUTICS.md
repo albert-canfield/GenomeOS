@@ -1,5 +1,17 @@
 # Therapeutic targeting and mechanism reasoning
 
+**Status on 2026-10-10.** Current; the dated, pre-registered sections run to 2026-10-03 and
+are the live record. Milestone 1.2 was reached on 2026-09-27, in the roadmap's words: "ten
+tumour cases, the tenth hand-written from cohort medians; target recovered, route and top
+mechanism scored apart". The committed benchmark is
+`data/results/therapeutic_benchmark_v2.json` (2026-10-02): 10 cases, 10 targets recovered,
+10 verdicts correct, 10 top mechanisms defensible, 5 surface cases. The same roadmap row
+keeps three items open — surface scoring that reads the alteration rather than the gene's
+annotation, a scored structural-variant case, and a matched normal instead of the population
+consensus. Peptide/HLA prediction is optional and never assumed: a `NeoantigenProvider`
+protocol since `853de7d` (2026-09-11), MHCflurry 2 as the installable default and
+NetMHCpan 4.1 as a user-installed binary, with binding still not presentation.
+
 GenomeOS reads a tumour's alterations and asks the question a target biologist
 asks:
 

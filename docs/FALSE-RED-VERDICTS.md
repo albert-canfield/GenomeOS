@@ -1,5 +1,15 @@
 # False red verdicts, 2026-10-02
 
+**Status on 2026-10-10.** This is the record of one day and keeps what it said. Its reading
+aid is live: `genomeos/verdict.py` writes an `error_class` and the class list into every
+status file (`ERROR_CLASSES = ("", "test", "test_setup", "tooling", "tree_moved",
+"unknown")`), and `verdict require` still refuses any red whatever class it carries. The
+skipped test named in the `tree_moved` section is still skipped for the reason given,
+"Removal waits on a policy decision" (`tests/test_context_evidence.py`). Later reds are not
+in this file and are not covered by it: the eight CI failures of 2026-10-09 to 2026-10-10
+from three unrelated causes are recorded in the commits `06d0761` and `c00250f` and in
+docs/ROADMAP.md §5 item 14.
+
 A red verdict in `.git/genomeos-check/` is a statement about a tree. Four of the reds written on
 2026-10-02 were statements about nothing in any tree: two because `git check-ignore` could not answer
 past a symlinked data store, and two because `ruff` was handed a `.json` as a lint argument. They were

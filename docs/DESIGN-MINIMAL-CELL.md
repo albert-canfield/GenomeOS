@@ -1,5 +1,17 @@
 # Can a small extract of the genome build a neuron that multiplies?
 
+**Status on 2026-10-10.** The answer below holds, and so do the registrations of 2026-09-28
+and 2026-09-29 and the mesoderm diagnosis of 2026-10-02 at the end ("the program lacked any
+repressor of SOX17 but the rule whose sign was wrong"). One later result is not yet written
+up in this file: **a sourced repressor of SOX17 restores a mesoderm band** (registration
+`430b510`, committed with its closed list and seven verdicts before any run; result
+`53d9936`, `data/results/sox17_repressor_single.json`), carrying its registered caveat
+verbatim — "any entry that restores the band means the program lacked a repressor of SOX17;
+it does not mean that factor specifies mesoderm" — and the lane's own finding that all three
+sourced candidates give one answer because the module's default inhibiting numbers are a
+switch, not a brake. The current description is the ROADMAP §5 row registered at `b1e8839`;
+this file keeps the diagnosis that preceded it.
+
 Short answer: the *program* that makes a neuron is small; the *machinery* a
 neuron runs on is not, and the two properties you want, "neuron" and
 "multiplies", are in tension in biology. Here is what the tools say.

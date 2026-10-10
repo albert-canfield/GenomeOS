@@ -1,5 +1,15 @@
 # Storage economics: stream, distil, discard
 
+**Status on 2026-10-10.** Stream, distil, discard holds, and so do the audit of 2026-09-16
+and the GitHub measurements of 2026-09-27. "Summaries produced so far" is nine early
+examples and not a census: `git ls-files data/results | wc -l` gives **880** tracked result
+files today, and what may enter that directory is decided by the registry contract in
+docs/DATA.md ("The result registry: what enters it and what is quarantined", item 12 S6).
+Disk today, measured here: `df -h .` reports 398 GiB of 460 GiB used, 93% capacity, 33 GiB
+free; `du -sh` gives `data/knowledge` 6.6G, `data/cache` 3.3G, `data/reference` 1.4G and
+`data/results` 440M. Those `du` figures overstate the space actually occupied, because this
+is an APFS volume and a cloned file is counted in full in every copy that shares its blocks.
+
 Real biology data is large (a 30x genome is ~100 GB of reads) and this project
 runs on an ordinary laptop. The rule is therefore:
 
@@ -121,6 +131,11 @@ represent soft-masking or any non-ACGT character without side tables. That is a
 loss of information, so it is not on the table under the rule above.
 
 ## Summaries produced so far
+
+*Nine worked examples from the first week, kept for the sizes they record. This is not the
+list of results: 880 files are tracked under `data/results/` on 2026-10-10
+(`git ls-files data/results | wc -l`), and the registry that decides what may enter is
+described in docs/DATA.md, "The result registry: what enters it and what is quarantined".*
 
 | Summary | Raw input it replaces | Size before → after |
 |---|---|---|

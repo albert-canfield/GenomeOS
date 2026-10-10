@@ -1,5 +1,17 @@
 # The protein layer: a federated compiler, not a database
 
+**Status on 2026-10-10.** The federated-compiler design holds and the compile commands are
+in the code as written (`genomeos protein`, `genomeos proteome`, `genomeos/molecules/`).
+The proteome milestone of 2026-09-11 is unchanged and was re-added today from the committed
+results: the 25 tracked `data/results/proteome_chr*.json` sum to 19,478 coding genes with
+genomic origin 19,353, sequence 19,310, name 19,310, function 16,804, domains 19,280,
+pathways 11,333, interactions 15,882, expression 19,373, experimental structure 8,799,
+predicted structure 19,121 and disease 4,960 — the figures in the genome-wide table below.
+The local cache holds 19,453 compiled definitions under `data/knowledge/proteins/`
+(git-ignored, as the Storage section says). The current description of modification state is
+the two phosphosite sections (2026-09-27, 2026-09-28): `observed_in_cell_types_or_tissues`
+and `relative_abundance_in_tumours` in `genomeos/molecules/ptm.py`, neither of them occupancy.
+
 The human proteome is far better catalogued than whole-organism behaviour,
 so GenomeOS does not build its own protein database. It compiles what the
 public databases already know into one stable object per protein, keyed by

@@ -2,6 +2,14 @@
 
 > Historical plan (2026-09-10), executed. The living plan is [ROADMAP.md](ROADMAP.md).
 
+**Status on 2026-10-10.** This is the executed plan of 2026-09-10, kept as history and not
+maintained. Its five phases were carried out and its wording is left as written, so where
+it speaks in the present tense — what is built, what is open, which engines are deferred —
+it describes 2026-09-10 and not today. The current plan, the open items and the external
+reviews are in [ROADMAP.md](ROADMAP.md), whose §5 ("Next steps, consolidated") is the one
+list that is kept true; per-area state is in §3 and the evidence per step in PROGRESS.md.
+Read this file for what was decided and built first, and the roadmap for what holds now.
+
 Written 2026-09-10 after the research pass (see LANDSCAPE.md and DATA.md).
 The plan is ordered so that every phase produces something runnable and a
 test that proves it against known biology.

@@ -2,6 +2,18 @@
 
 Status: proposed 2026-09-10; all six steps built 2026-09-11 (see the end of the document and docs/PROGRESS.md).
 
+**Status on 2026-10-10.** The research, the design and the plan hold, and the dated sections
+from 2026-09-14 to 2026-09-22 at the end are the current record of what the worm program
+does. Two limits, stated as the roadmap states them. Outside haematopoiesis the human body
+program is counts, not mechanism — §2.6 below says so already and `genomeos/organism/human.py`
+repeats it in its own header ("curated counts, not mechanism"), so the uncertainty report
+reading "low" at every level is the honest answer and not a defect. And the worm's open item
+is terminality: the fate claim of area E is capped by a terminality call the factors cannot
+make, with the four numbers standing as `d5215bf` published them — **522 with the lookup as
+fallback, 381 honest, 136 free, 0 decided without the lookup having written the fate first**
+— and area E's next real number is not in the Ma 2021 atlas but in a measurement about the
+decision to divide (terminality section, 2026-09-22).
+
 The ask: a computational model that starts with one cell and, by reading the
 genome under timers and signals, grows, maintains and kills cells until an
 organism exists; not an aesthetic body, but a language, code and libraries
