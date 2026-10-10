@@ -88,6 +88,7 @@ at compile time, and a formatter/linter so BioLang files review cleanly.
 
 *(2026-10-10: `organism` and `experiment` were built ([BIOLANG-v0.3.md](BIOLANG-v0.3.md)). Units are
 checked where the language has a closed set — times on timers, stages and decisions (`min`, `h`,
-`d`, `wk`, `yr`), volumes, concentrations and cost units — while an event's rate unit and a
-`param`'s unit are accepted unchecked. No formatter or linter was built: `bio` has `check`,
+`d`, `wk`, `yr`), volumes, concentrations and cost units — and, since a later 2026-10-10 change
+(ROADMAP §5 item 13, A), an event's rate unit (per time) and a `param`'s unit as well; the sets are in
+[BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md). No formatter or linter was built: `bio` has `check`,
 `compile`, `run`, `test` and `repl`.)*

@@ -137,3 +137,93 @@ rule Rp inhibits T { threshold: 100; hill: 8; strength: STRENGTH }
 
     assert final("unknown") == pytest.approx(final("0"))
     assert final("unknown") > 10 * final("1.0"), "held, not run at full strength"
+
+
+# ---- debt 4: an event's rate unit and a param's unit are checked ---------------------------------------
+
+
+@pytest.mark.parametrize("unit", ["/yr", "/day", "1/yr", "/h", "/min", "1/wk", "/years"])
+def test_an_event_rate_per_time_is_accepted(unit):
+    (e,) = parse(f"module t\nevent divide {{ rate: 0.5 {unit} }}\n").events
+    assert e.rate == 0.5 and e.rate_unit == unit
+
+
+def test_an_event_rate_with_no_unit_keeps_its_default():
+    (e,) = parse("module t\nevent divide { rate: 0.5 }\n").events
+    assert e.rate_unit == "1/yr"
+
+
+@pytest.mark.parametrize("unit", ["yr", "per_yr", "/fortnight", "/", "1/", "2/yr", "bp"])
+def test_an_event_rate_that_is_not_per_time_is_refused_naming_the_unit_and_the_set(unit):
+    with pytest.raises(BioLangError) as err:
+        parse(f"module t\nevent divide {{ rate: 0.5 {unit} }}\n")
+    msg = str(err.value)
+    assert f"event 'divide': rate unit {unit!r} is not a rate" in msg
+    assert "/min, /h, /d, /wk, /yr" in msg
+
+
+@pytest.mark.parametrize(
+    "unit",
+    [
+        "",
+        "h",
+        "min",
+        "bp",
+        "CpGs",
+        "sites",
+        "divisions",
+        "fraction",
+        "a.u.",
+        "/division",
+        "cells/h",
+        "nM",
+        "fL",
+    ]
+    + ["bp/division", "1/h", "/yr", "molecules/min"],
+)
+def test_the_param_units_the_programs_use_and_their_kin_are_accepted(unit):
+    m = parse(f"module t\nparam x = 2 {unit} {{ }}\n")
+    assert m.parameters["x"].unit == unit
+
+
+@pytest.mark.parametrize("unit", ["hrs", "bps", "per_division", "cells/fortnight", "a.u", "%", "kg"])
+def test_a_param_unit_outside_the_set_is_refused_naming_the_unit_and_the_set(unit):
+    with pytest.raises(BioLangError) as err:
+        parse(f"module t\nparam x = 2 {unit} {{ }}\n")
+    msg = str(err.value)
+    assert f"param 'x': unit {unit!r} is not one a param may state" in msg
+    assert "bp, nt, aa, CpGs" in msg and "division" in msg
+
+
+def test_an_unknown_param_value_still_takes_a_checked_unit():
+    assert parse("module t\nparam x = unknown /division { }\n").parameters["x"].unit == "/division"
+    with pytest.raises(BioLangError, match="unit '/divisions' is not one"):
+        parse("module t\nparam x = unknown /divisions { }\n")
+
+
+def test_a_half_life_the_runtimes_read_in_hours_refuses_another_unit():
+    """grn.py and located.py read these two in hours and convert nothing, so `30 min` ran as 30 h."""
+    for name in ("mrna_half_life", "protein_half_life"):
+        for ok in ("", "h", "hours"):
+            assert parse(f"module t\nparam {name} = 0.5 {ok} {{ }}\n").parameters[name].value == 0.5
+        with pytest.raises(BioLangError, match=f"param '{name}' has unit 'min'; .* in hours"):
+            parse(f"module t\nparam {name} = 30 min {{ }}\n")
+
+
+def test_every_committed_program_passes_the_unit_checks():
+    """2026-10-10: no committed program states a rate or param unit outside the sets."""
+    from pathlib import Path
+
+    from genomeos.lang import parse_file
+
+    files = [
+        p
+        for root in ("data/demo", "genomeos/std", "data/organisms")
+        for p in sorted(Path(root).rglob("*.bio"))
+    ]
+    assert len(files) == 47  # exact, 2026-10-10 (lane-engdebts)
+    units = set()
+    for path in files:
+        m = parse_file(path)
+        units |= {p.unit for p in m.parameters.values()} | {e.rate_unit for e in m.events}
+    assert units >= {"/division", "cells/h", "a.u.", "/yr", "/day", "h"}

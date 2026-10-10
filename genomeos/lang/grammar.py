@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import dataclasses
 import sys
+import textwrap
 
 from genomeos.ir import model as ir
 from genomeos.lang import parser as _parser
@@ -131,7 +132,11 @@ BLOCKS: dict[str, dict] = {
     "event": {
         "header": "event <Id> { ... }",
         "props": {
-            "rate": ("number /unit", "rate with unit"),
+            "rate": (
+                "number [/min | /h | /d | /wk | /yr]",
+                "events per time; `1/T` and the long time spellings are accepted, anything else is "
+                "refused (checked since 2026-10-10); no unit: /yr",
+            ),
             "when": ("k = v, ...", "guards"),
             "effect": ("var op number [unit]", "repeatable; op in += -= *= ="),
             "cost": ("POOL number per UNIT", "repeatable; v0.4: a draw on a declared pool"),
@@ -506,6 +511,17 @@ def render() -> str:
         + ", ".join(sorted(_parser._REPEATABLE))
         + ".",
         "- Times take a unit: min, h, d, wk, yr. Loci are `chrN:start-end` with an optional strand.",
+        *textwrap.wrap(
+            "- Units are checked against closed sets: times, volumes, concentrations, cost units, an "
+            "event's rate (per time) and a `param`'s unit. A param states no unit; a time, volume or "
+            f"molar unit; a count ({', '.join(ir.PARAM_COUNT_UNITS)}); a scale "
+            f"({', '.join(ir.PARAM_SCALE_UNITS)}); or a rate `X/P` or `/P` with P one of "
+            f"{', '.join(ir.PARAM_PER_UNITS)}. `mrna_half_life` and `protein_half_life` are read in "
+            "hours and refuse any other unit.",
+            width=100,
+            subsequent_indent="  ",
+            break_on_hyphens=False,
+        ),
         "- `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison",
         "  `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no",
         "  context, so a rule gated on it runs in no cell rather than in every cell.",

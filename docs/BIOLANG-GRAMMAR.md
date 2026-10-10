@@ -11,6 +11,11 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md, BIOLANG-v0.4-ECONOMY.md and BIOLAN
   on one line.
 - Only `transcript` nests (inside `gene`). Repeatable keys: assert, cost, effect, keep, observe, source, target, vary.
 - Times take a unit: min, h, d, wk, yr. Loci are `chrN:start-end` with an optional strand.
+- Units are checked against closed sets: times, volumes, concentrations, cost units, an event's rate
+  (per time) and a `param`'s unit. A param states no unit; a time, volume or molar unit; a count
+  (bp, nt, aa, CpGs, sites, cells, molecules, copies, divisions); a scale (fraction, a.u.); or a
+  rate `X/P` or `/P` with P one of min, h, d, wk, yr, division. `mrna_half_life` and
+  `protein_half_life` are read in hours and refuse any other unit.
 - `when` clauses: `k = v, k = v`; `v` may be `any`, `absent`, alternatives `a|b`, or a comparison
   `>=n` `<=n` `>n` `<n`. `unknown` states that the context was not recorded: it matches no
   context, so a rule gated on it runs in no cell rather than in every cell.
@@ -140,7 +145,7 @@ May contain `transcript` blocks.
 
 | property | form | meaning |
 |---|---|---|
-| `rate` | `number /unit` | rate with unit |
+| `rate` | `number [/min | /h | /d | /wk | /yr]` | events per time; `1/T` and the long time spellings are accepted, anything else is refused (checked since 2026-10-10); no unit: /yr |
 | `when` | `k = v, ...` | guards |
 | `effect` | `var op number [unit]` | repeatable; op in += -= *= = |
 | `cost` | `POOL number per UNIT` | repeatable; v0.4: a draw on a declared pool |

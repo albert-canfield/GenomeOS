@@ -706,6 +706,51 @@ def to_molar(value: float, unit: str) -> float:
         raise ValueError(f"unknown molar unit {unit!r}; expected one of {', '.join(MOLAR_UNITS)}") from None
 
 
+#: The time units, in the short spelling the grammar prints; `to_minutes` also takes the long ones.
+TIME_UNITS = ("min", "h", "d", "wk", "yr")
+RATE_UNITS = tuple(f"/{t}" for t in TIME_UNITS)
+
+
+def check_rate_unit(unit: str) -> str:
+    """An event's rate unit: per time, `/T` or `1/T` with T a time unit `to_minutes` reads (`/yr`,
+    `1/day`). Until 2026-10-10 any text was accepted here (lane-engdebts); the error names the set."""
+    per = unit[1:] if unit.startswith("/") else unit[2:] if unit.startswith("1/") else None
+    if per is None or not per or per not in _UNIT_MIN:
+        raise ValueError(
+            f"rate unit {unit!r} is not a rate; expected per time, one of {', '.join(RATE_UNITS)} "
+            f"(`1/T` and the long spellings of {', '.join(TIME_UNITS)} are accepted too)"
+        )
+    return unit
+
+
+#: What a `param` may count or measure besides time, volume and concentration. A closed list, as the
+#: other unit checks are: the programs in the repo use each of these (2026-10-10).
+PARAM_COUNT_UNITS = ("bp", "nt", "aa", "CpGs", "sites", "cells", "molecules", "copies", "divisions")
+PARAM_SCALE_UNITS = ("fraction", "a.u.")
+#: A param may be per one of these: a time, or one division (methylation's `/division`).
+PARAM_PER_UNITS = (*TIME_UNITS, "division")
+_PARAM_BASE = {*_UNIT_MIN, *_UNIT_VOLUME_FL, *_UNIT_MOLAR, *PARAM_COUNT_UNITS, *PARAM_SCALE_UNITS} - {""}
+_PARAM_PER = {*_UNIT_MIN, "division"} - {""}
+
+
+def check_param_unit(unit: str) -> str:
+    """A `param`'s unit: none (a bare number), a base unit, or a rate `X/P` or `/P`.
+
+    The base units are the time, volume and molar units the other checks read, the counts in
+    PARAM_COUNT_UNITS and the scales in PARAM_SCALE_UNITS; P is a time unit or `division`. Until
+    2026-10-10 any text was accepted (lane-engdebts); the error names the unit and the set."""
+    if not unit or unit in _PARAM_BASE:
+        return unit
+    num, sep, per = unit.partition("/")
+    if sep and per in _PARAM_PER and (num in ("", "1") or num in _PARAM_BASE):
+        return unit
+    raise ValueError(
+        f"unit {unit!r} is not one a param may state; expected none, one of "
+        f"{', '.join((*TIME_UNITS, *VOLUME_UNITS, *MOLAR_UNITS, *PARAM_COUNT_UNITS, *PARAM_SCALE_UNITS))}, "
+        f"or a rate X/P or /P with P one of {', '.join(PARAM_PER_UNITS)}"
+    )
+
+
 def molecules_in(molar: float, volume_fl: float) -> float:
     """Molecules of a species at `molar` in a compartment of `volume_fl` femtolitres.
 
@@ -1308,7 +1353,14 @@ __all__ = [
     "COST_UNITS",
     "DECISION_ACTIONS",
     "MOLAR_UNITS",
+    "PARAM_COUNT_UNITS",
+    "PARAM_PER_UNITS",
+    "PARAM_SCALE_UNITS",
     "PARTITION_MODES",
+    "RATE_UNITS",
+    "TIME_UNITS",
+    "check_param_unit",
+    "check_rate_unit",
     "READER_OPEN",
     "READER_STATES",
     "READER_UNKNOWN",

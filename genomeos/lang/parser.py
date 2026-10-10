@@ -92,6 +92,8 @@ from genomeos.ir import (
     Timer,
     Transcript,
     Transport,
+    check_param_unit,
+    check_rate_unit,
     to_femtolitres,
     to_minutes,
     to_molar,
@@ -442,6 +444,26 @@ def _through(value: str, rule: Rule, line_no: int) -> str:
     return names[0]
 
 
+#: Params the network and located runtimes read in hours whatever unit the program states: a unit
+#: they do not convert is refused here, so `30 min` cannot run as 30 hours.
+_READ_IN_HOURS = ("mrna_half_life", "protein_half_life")
+_HOUR_SPELLINGS = ("h", "hr", "hour", "hours")
+
+
+def _param_unit(name: str, unit: str, line_no: int) -> str:
+    """A param's unit, checked against the closed set (`check_param_unit`; lane-engdebts, 2026-10-10)."""
+    try:
+        check_param_unit(unit)
+    except ValueError as err:
+        raise BioLangError(f"line {line_no}: param {name!r}: {err}") from None
+    if name in _READ_IN_HOURS and unit and unit not in _HOUR_SPELLINGS:
+        raise BioLangError(
+            f"line {line_no}: param {name!r} has unit {unit!r}; the network and located runtimes read it "
+            f"in hours and do not convert, so state it in one of {', '.join(_HOUR_SPELLINGS)}"
+        )
+    return unit
+
+
 def _unknown_strength(rule: Rule, line_no: int) -> object:
     """`strength: unknown`: the program says the number is not known. The rule is HELD at strength 0
     by `Module.active_rules` rather than run at 1.0, which is what a rule with no strength line gets
@@ -620,7 +642,10 @@ def _compile_block(b: Block, module: Module) -> None:
             parts = p["rate"].split()
             e.rate = _float(parts[0], "rate", b.line)
             if len(parts) > 1:
-                e.rate_unit = parts[1]
+                try:
+                    e.rate_unit = check_rate_unit(parts[1])
+                except ValueError as err:
+                    raise BioLangError(f"line {b.line}: event {b.header!r}: {err}") from None
         if "when" in p:
             e.when = _parse_when(p["when"])
         if "cost" in p:
@@ -700,7 +725,11 @@ def _compile_block(b: Block, module: Module) -> None:
         raw = pm.group(2)
         value = UNKNOWN if raw.lower() == "unknown" else float(raw)
         module.parameters[pm.group(1)] = Parameter(
-            name=pm.group(1), value=value, unit=pm.group(3), evidence=ev, confidence=conf
+            name=pm.group(1),
+            value=value,
+            unit=_param_unit(pm.group(1), pm.group(3), b.line),
+            evidence=ev,
+            confidence=conf,
         )
     elif b.kind == "domain":
         dm = Domain(id=b.header, kind="domain", evidence=ev, confidence=conf)
