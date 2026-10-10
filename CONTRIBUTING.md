@@ -179,9 +179,11 @@ After this date:
    uv run ruff check genomeos/x.py tests/test_x.py
    ```
 
-   **The full verdict on the committed tree comes from the coordinator's next
-   push check**, which already runs `scripts/check.sh` in a clean worktree of
-   the pushed sha and reads the status file — **and a red push still blocks**,
+   **The verdict on the committed tree comes from the coordinator's next push
+   check**, which runs in a clean worktree of the pushed sha and reads the
+   status file: the fast gate on a `dev` push, and the full `scripts/check.sh`
+   when the daily CI is red or unread, on `main` and promotion branches, and
+   under `GENOMEOS_FULL_GATE=1` (step 4) — **and a red push still blocks**,
    so nothing reaches `origin/dev` on a lane's targeted green alone. A lane
    runs the full `scripts/check.sh` itself **only** for a **paid path** (a run
    that spends money or a model key) or for a **verification tool**; everything
