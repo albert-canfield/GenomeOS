@@ -2039,6 +2039,79 @@ reading the same product and one of them has to go. And the grid check that no
 two verdicts can hold at once for one candidate, which is the property the
 fusion states were given a test for.
 
+### What the run measured, 2026-10-10
+
+**The benchmark did not move, in any field.** The ten cases were re-scored
+offline before the change (`1350f51`'s parent) and after it, and every field of
+every row came out identical: rank, score, target class, evidence tier, surface
+accessibility, mechanism, compatibility, peptide route, verdict, the
+hypotheses-above and unreachable-above lists, and `rank_without_gate`. The
+committed result file is therefore left exactly as it is, as the fusion change
+left it. The offline baseline reproduces the committed rows field for field,
+which is what makes the comparison a measurement rather than an assertion:
+accessibility 1.0 for EGFR, both ERBB2 copy-number cases and the
+gastroesophageal case, 1.0 for CD19, 0.36 for BRAF and PIK3CA, 0.0 for KRAS,
+IDH1 and ALK.
+
+**The reading fires on the benchmark's real records, and says the registered
+things.** Over the ten cases it answers 854 times across 42 candidates: 120
+`retained` (96 from a consequence that changes no protein, 24 from a
+substitution — EGFR L858R among them, read from the reconstructed sequence
+rather than from the notation) and 132 `unread`, every one of them a protein
+with no curated transmembrane segment, BRAF and PIK3CA being the two the scope
+line was written for. No benchmark candidate carries a truncating, splice-site
+or in-frame-indel alteration, which is why the rows hold still.
+
+**No overall score rose anywhere.** Registered regression condition 5, measured
+two ways: over all 42 benchmark candidates with the reading on against the same
+run with it off, where no candidate's overall, surface value, mechanism reach or
+preferred mechanism differs at all; and over the constructed grid of twelve
+alteration classes crossed with three arrangements, where the test asserts it.
+
+**The demo tumour (data level 1) also holds still, and exercises the truncating
+path on a real record.** APP N770K reads `retained` from its substitution,
+RUNX1 Y480* is read as a truncation to residue 479 and then answered `unread`
+because RUNX1 has no curated transmembrane segment, and SOD1 and NRIP1 read
+`unread` from a synonymous and an intronic variant. No score, mechanism or
+reach moves.
+
+**Where it does move, measured on the fixtures.** The same ALK topology with a
+stop at residue 500 goes from 1.0 to 0.0 with the anchor named, and its
+cytoplasmic-tail control at 1401 stays at 1.0; a frameshift at the same residue
+500 answers unknown rather than 0.0; an in-frame deletion of 200 residues inside
+a 382-residue curated outward face takes the dimension from 0.976 to 0.936 by
+reading the 182 residues that survive; a splice-donor change, a lost start and
+an indel with no span answer unknown with their reasons. The gate answers
+`False`, `None` and `True` in step with the score across the whole grid.
+
+**Fifteen guards, each mutation-tested by removal or inversion, none
+unreached.** The two new branches in `surface_accessibility` (8 and 10 red), the
+surviving-span branch, the two gate answers, the no-anchor scope line (13 red),
+the frameshift's open answer, the numbering requirement, the tail-truncation
+`retained` branch, the composition order, reading `hgvsp` rather than the short
+form (7 red), the declined splice and start classes, the notation-against-term
+cross-check, the truncation-versus-deletion test in the sequence reader, and the
+reconstruction's key. Every mutation turns at least one test red.
+
+**One amendment to the registration above, additive and in the conservative
+direction.** An alteration kind outside the recorded five (`amplification`,
+`gain`, `shallow_deletion`, `deep_deletion`, `fusion`) answers `unread` rather
+than `unknown`, so a record this module does not read leaves the curated
+annotation to answer as before. The registration did not name that case; it is
+resolved toward saying nothing, which keeps 3fe7c27's published
+5'-fusion-plus-mutation control at 1.0. Where the table and the scope paragraph
+above could be read against each other — a cut falling between the passes of a
+multi-pass protein — the table governs and the answer is `unknown`.
+
+**What this does not do.** It does not predict nonsense-mediated decay, read a
+splice change's exon content, place a GPI attachment site, judge whether a
+residue substitution inside a transmembrane segment disrupts it, or say anything
+for a protein with no curated anchor. Each of those is named in the reason the
+score carries rather than left to be inferred from a number. And the dimension
+remains a research-priority component: a product that keeps its anchor and its
+outward face is a hypothesis about reachability with its evidence attached, not
+a statement that any binder works.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
