@@ -342,3 +342,24 @@ def test_score_reads_a_stage_that_is_the_anchor_as_the_anchor_and_an_empty_stage
     assert (out["outcome"], out["stage_where_it_stops"]) == ("LOST_AT", "s4_bridge")
     assert out["reading"].startswith("the measured signal is lost at s4_bridge")
     assert s["s1_anchor"]["reading"].startswith("anchor reproduced")
+
+
+# ---- the committed registration ------------------------------------------------------------------------
+
+
+def test_the_committed_registration_is_the_module_it_binds_and_pins_the_population():
+    import json
+    from pathlib import Path
+
+    import tracked_paths as tp
+
+    reg_path = Path("data/results/signaltrace_registration.json")
+    tp.must_be_present(reg_path)
+    reg = json.loads(reg_path.read_text())
+    assert {f: reg[f] for f in st.BOUND} == st.registered_fields()
+    assert reg["population_pairs"] == len(reg["population_ids"]) == 1918
+    assert st.ids_sha256(reg["population_ids"]) == reg["population_sha256"]
+    assert len(set(reg["population_ids"])) == 1918
+    assert reg["result_manifest"]["complete"] is True
+    assert reg["result_manifest"]["code_cleanliness"]["own_code_is_committed"] is True
+    assert reg["alphagenome_requests"] == 0
