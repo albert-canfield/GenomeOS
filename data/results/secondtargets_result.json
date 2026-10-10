@@ -1,0 +1,695 @@
+{
+  "result": "secondtargets_result",
+  "date": "2026-10-10",
+  "lane": "lane-secondtargets",
+  "registration": "data/results/secondtargets_registration.json",
+  "registration_date": "2026-10-10",
+  "question": "Is a compiled element's second or further target at the compiler's bar (a protein-coding gene whose predicted change on deletion reaches enhancer_target.MIN_EFFECT, 0.1 log2, other than the compiled target; targetchoice.CANDIDATES, nothing re-tuned) more often a measured hit in Gasperini et al. 2019's at-scale K562 CRISPRi screen than the genes the same screen tested at the same element, at a matched distance, that the shortlist does not name, on the screen's tests that the CRISPRi benchmark does not hold?",
+  "census": {
+    "pair_table": {
+      "rows": 1086564,
+      "non_targeting": 937839,
+      "candidate_enhancer_tests": 128962,
+      "other_guide_group": 9095,
+      "selected_for_a_pilot_hit": 187,
+      "not_lifted": 38,
+      "tss_control": 9938,
+      "other_control": 730,
+      "tests": 128737
+    },
+    "candidate_enhancer_tests_read": 128737,
+    "excluded_same_gene_in_benchmark": 6015,
+    "independent": 122722,
+    "independence": {
+      "element_untested": 58148,
+      "element_other_gene": 64574,
+      "same_gene": 6015
+    },
+    "excluded_by_benchmark_dataset": {
+      "Gasperini2019": 5466,
+      "Schraivogel2020": 147,
+      "Nasser2021": 135,
+      "Xie": 89,
+      "K562_DC_TAP": 63,
+      "WTC11_DC_TAP": 54,
+      "Morris": 25,
+      "Gasperini2019,WTC11_DC_TAP": 14,
+      "Klann": 9,
+      "Gasperini2019,Schraivogel2020": 5,
+      "HCT116": 3,
+      "Gasperini2019,Nasser2021": 3,
+      "Gasperini2019,K562_DC_TAP": 1,
+      "HCT116,Nasser2021": 1
+    },
+    "after_independence": {
+      "no_compiled_element_overlaps": 61398,
+      "not_protein_coding_in_gencode_v50": 4212,
+      "rows": 57112
+    },
+    "arms": {
+      "compiled_target": 2289,
+      "shortlist": 1411,
+      "other": 53412
+    },
+    "guide_groups_at_compiled_elements": 2488,
+    "coding_tests_at_compiled_elements": 57112,
+    "shortlist_tests": 1411,
+    "shortlist_by_rank": {
+      "2": 796,
+      "3": 315,
+      "4-5": 215,
+      "6+": 85
+    },
+    "matched_shortlist_tests": 872,
+    "matched_elements": 591,
+    "matched_chromosomes": 23,
+    "matched_element_untested": 383,
+    "unmatched_shortlist_tests": 539,
+    "controls_per_matched_test": {
+      "min": 1,
+      "median": 3,
+      "max": 30,
+      "mean": 3.63
+    }
+  },
+  "shortlist_genome_wide": {
+    "compiled_elements": 440252,
+    "with_a_second_target": 73271,
+    "second_and_further_targets": 102407,
+    "shortlist_size_histogram": {
+      "1": 55349,
+      "2": 12323,
+      "3": 3415,
+      "4-5": 1614,
+      "6-10": 437,
+      "11+": 133
+    }
+  },
+  "benchmark_rows_by_dataset": {
+    "Gasperini2019": 5299,
+    "Nasser2021": 3894,
+    "WTC11_DC_TAP": 1921,
+    "Schraivogel2020": 1306,
+    "K562_DC_TAP": 1252,
+    "Xie": 441,
+    "HCT116": 396,
+    "Morris": 184,
+    "Klann": 33,
+    "Reilly": 8
+  },
+  "readout": {
+    "path": "data/knowledge/measured_unknown/GSE120861_all_deg_results.at_scale.txt.gz",
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE120nnn/GSE120861/suppl/GSE120861_all_deg_results.at_scale.txt.gz",
+    "held": false
+  },
+  "limitations": [
+    "the benchmark kept the screen's pairs that passed its own filters (power, expression, distance), so the independent remainder is what those filters left out: on average less well powered, so its hit rates are lower than the benchmark's and a difference is harder to detect. Both arms share that",
+    "the shortlist names genes AlphaGenome predicts to respond, and a gene that responds in a predicted track is likely expressed; a single-cell readout detects a change more easily in a well-expressed gene. The matched control shares the element and the distance, not the expression level",
+    "AlphaGenome was trained on ENCODE data that include K562; the screen itself is not in its training as far as this lane knows, but its cell line is",
+    "a screen hit is a measured decrease of a gene's RNA in K562 after CRISPRi at the element; it is not function in another cell and not a mechanism",
+    "the screen's coordinates are hg19 and are lifted; distances are read in hg19 from the screen's own table",
+    "the design's selection label (general_group) is read only to exclude elements selected for a pilot hit; its other labels may encode pilot-screen status and are not used"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "network": "none",
+  "outcome": "NOT_RUN_NO_READOUT",
+  "reading": "not run, too few independent pairs with a readout: 0 of the 872 independent Gasperini 2019 K562 tests of a second or further target that have a distance-matched control at the same element carry a readout on this machine, because the screen's differential-expression table (GSE120861_all_deg_results.at_scale.txt.gz) was never fetched; 6,015 of the screen's 128,737 candidate-enhancer tests were excluded as already in the CRISPRi benchmark, 122,722 are independent, 57,112 of those test a protein-coding gene at a compiled element and 1,411 a second or further target. The registered test waits on that one table; nothing was read",
+  "falsified": false,
+  "prediction_held": false,
+  "readout_values_read": 0,
+  "seconds": 198.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GEO GSE120861 (Gasperini et al. 2019, Cell), at-scale screen pair table",
+        "version": "fetched 2026-10-10 by lane-measuredunknown; pinned here by sha256",
+        "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE120nnn/GSE120861/suppl/"
+      },
+      {
+        "accession": "UCSC hg19ToHg38.over.chain",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "EngreitzLab/CRISPR_comparison EPCrisprBenchmark training_K562 and heldout_5_cell_types (Gschwind et al.)",
+        "version": "fetched 2026-09-16; pinned here by sha256",
+        "url": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      },
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (per-element response cache)",
+        "version": "the 2026-09 all-element sweep; pinned here by sha256"
+      },
+      {
+        "accession": "the compiled non-coding programs (data/knowledge/compiled)",
+        "version": "pinned"
+      },
+      {
+        "accession": "GENCODE v50 annotation (protein-coding genes)",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/measured_unknown/GSE120861_gene_gRNAgroup_pair_table.at_scale.txt.gz",
+        "sha256": "e8dc62e1ed39735e4db837c84da9397742ccad2d227427849ccddaa8dbb4a4eb",
+        "bytes": 19743497,
+        "partition": null,
+        "role": "the screen's tests: coordinates and genes only"
+      },
+      {
+        "path": "data/knowledge/measured_unknown/hg19ToHg38.over.chain.gz",
+        "sha256": "5c0598e500ceb5a78c73086929e8ef993aec309bcafb595139b53d440b125a1d",
+        "bytes": 227698,
+        "partition": null,
+        "role": "UCSC hg19 to hg38 chain, for the screen's elements"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+        "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+        "bytes": 996546,
+        "partition": "training",
+        "role": "the benchmark, read by element, gene and dataset only: the independence exclusion"
+      },
+      {
+        "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+        "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+        "bytes": 373837,
+        "partition": "heldout",
+        "role": "the benchmark, read by element, gene and dataset only: the independence exclusion"
+      },
+      {
+        "path": "data/knowledge/alphagenome/elements",
+        "sha256": "41dc8a631dee0a3f95ca7eb894c3f09bc930dc080b9f378aed0261a0f338034e",
+        "bytes": 805894526,
+        "partition": null,
+        "files": 3233,
+        "role": "ElementResponses: every gene's predicted deletion response at an element (the shortlist)"
+      },
+      {
+        "path": "the compiled non-coding programs (targetchoice.chromosome_choice)",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/compiled/noncoding_chr1.bio",
+            "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+            "bytes": 41450505
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr10.bio",
+            "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+            "bytes": 19929386
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr11.bio",
+            "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+            "bytes": 24409857
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr12.bio",
+            "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+            "bytes": 21457838
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr13.bio",
+            "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+            "bytes": 9261652
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr14.bio",
+            "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+            "bytes": 12734645
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr15.bio",
+            "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+            "bytes": 13580933
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr16.bio",
+            "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+            "bytes": 14058774
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr17.bio",
+            "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+            "bytes": 20400200
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr18.bio",
+            "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+            "bytes": 8786498
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr19.bio",
+            "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+            "bytes": 16587267
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr2.bio",
+            "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+            "bytes": 31176997
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr20.bio",
+            "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+            "bytes": 12095731
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr21.bio",
+            "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+            "bytes": 4970000
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr22.bio",
+            "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+            "bytes": 9186897
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr3.bio",
+            "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+            "bytes": 25913658
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr4.bio",
+            "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+            "bytes": 19591946
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr5.bio",
+            "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+            "bytes": 21461188
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr6.bio",
+            "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+            "bytes": 22566069
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr7.bio",
+            "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+            "bytes": 21423286
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr8.bio",
+            "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+            "bytes": 17604365
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr9.bio",
+            "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+            "bytes": 18189257
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chrX.bio",
+            "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+            "bytes": 10763687
+          }
+        ],
+        "sha256": "5827022b2b01e6c8b8a090dc205f6e0d8adac7486af7f04d29de303ae26757fe",
+        "bytes": 417600636,
+        "files": 23,
+        "partition": null
+      },
+      {
+        "path": "GENCODE v50 per-chromosome GFF3 (protein-coding genes by Ensembl id)",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/gencode_v50_chr1.gff3.gz",
+            "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+            "bytes": 15781966
+          },
+          {
+            "path": "data/reference/gencode_v50_chr10.gff3.gz",
+            "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+            "bytes": 6971712
+          },
+          {
+            "path": "data/reference/gencode_v50_chr11.gff3.gz",
+            "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+            "bytes": 9161789
+          },
+          {
+            "path": "data/reference/gencode_v50_chr12.gff3.gz",
+            "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+            "bytes": 8537589
+          },
+          {
+            "path": "data/reference/gencode_v50_chr13.gff3.gz",
+            "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+            "bytes": 2925688
+          },
+          {
+            "path": "data/reference/gencode_v50_chr14.gff3.gz",
+            "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+            "bytes": 5446220
+          },
+          {
+            "path": "data/reference/gencode_v50_chr15.gff3.gz",
+            "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+            "bytes": 5424386
+          },
+          {
+            "path": "data/reference/gencode_v50_chr16.gff3.gz",
+            "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+            "bytes": 6795096
+          },
+          {
+            "path": "data/reference/gencode_v50_chr17.gff3.gz",
+            "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+            "bytes": 9026753
+          },
+          {
+            "path": "data/reference/gencode_v50_chr18.gff3.gz",
+            "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+            "bytes": 2682634
+          },
+          {
+            "path": "data/reference/gencode_v50_chr19.gff3.gz",
+            "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+            "bytes": 8518707
+          },
+          {
+            "path": "data/reference/gencode_v50_chr2.gff3.gz",
+            "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+            "bytes": 12336546
+          },
+          {
+            "path": "data/reference/gencode_v50_chr20.gff3.gz",
+            "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+            "bytes": 3974515
+          },
+          {
+            "path": "data/reference/gencode_v50_chr22.gff3.gz",
+            "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+            "bytes": 3912249
+          },
+          {
+            "path": "data/reference/gencode_v50_chr3.gff3.gz",
+            "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+            "bytes": 10518849
+          },
+          {
+            "path": "data/reference/gencode_v50_chr4.gff3.gz",
+            "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+            "bytes": 6522948
+          },
+          {
+            "path": "data/reference/gencode_v50_chr5.gff3.gz",
+            "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+            "bytes": 7000086
+          },
+          {
+            "path": "data/reference/gencode_v50_chr6.gff3.gz",
+            "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+            "bytes": 7623994
+          },
+          {
+            "path": "data/reference/gencode_v50_chr7.gff3.gz",
+            "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+            "bytes": 8058560
+          },
+          {
+            "path": "data/reference/gencode_v50_chr8.gff3.gz",
+            "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+            "bytes": 5864835
+          },
+          {
+            "path": "data/reference/gencode_v50_chr9.gff3.gz",
+            "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+            "bytes": 6759087
+          },
+          {
+            "path": "data/reference/gencode_v50_chrX.gff3.gz",
+            "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+            "bytes": 4849239
+          },
+          {
+            "path": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+            "sha256": "2b64229c75e2a3910d3fe3ce109896a917bee9882eaf37ab27d15b0c90108d99",
+            "bytes": 1862225
+          }
+        ],
+        "sha256": "1faf2d23a3491a7e520bc79b4ab688988fcdab86da21ec35fcc474aa4d0aaf0e",
+        "bytes": 160555673,
+        "files": 23,
+        "partition": null
+      },
+      {
+        "path": "data/results/secondtargets_registration.json",
+        "sha256": "1064a8ff74d3d8350c7d6edcbd52b327ea3d96fbc87ed5f718892864adad0cfa",
+        "bytes": 81789,
+        "partition": null,
+        "role": "this run's registration, read before any reading"
+      }
+    ],
+    "input_count": 8,
+    "assembly": "GRCh38 (the screen's hg19 elements lifted); distances in hg19 from the screen's table",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "min_effect": 0.1,
+      "guide_group": "top_two",
+      "distance_factor": 2.0,
+      "min_matched": 100,
+      "hit": {
+        "pair_column": [
+          "pairs4merge",
+          "pairs"
+        ],
+        "p_column": "pvalue.empirical.adjusted",
+        "p_below": 0.1,
+        "fold_column": "fold_change.transcript_remap",
+        "fold_below": 1.0
+      },
+      "positive_control_min": 0.5,
+      "bootstrap": {
+        "unit": "chromosome (the matched tests of one chromosome are drawn together)",
+        "resamples": 2000,
+        "seed": 0,
+        "interval": "percentile, 2.5 and 97.5"
+      }
+    },
+    "exclusions": [
+      "the at-scale screen's tests in its pair table (GSE120861_gene_gRNAgroup_pair_table.at_scale), one per candidate-enhancer guide group 'top_two' and gene, lifted from hg19 to GRCh38 by measured_unknown.Chain at liftOver's default (95% of bases); excluded and counted: non-targeting groups, TSS and other control groups, the 'second_two' repeat groups, elements the design labels not_model_selected_* (entered because a pilot screen found a hit there), tests that do not lift, and repeated tests. Then INDEPENDENCE. Then the gene must be protein-coding in GENCODE v50 by its Ensembl id, and the element must overlap at least one compiled element (half-open, one base)",
+      "a test is excluded, and counted, when any row of either EPCrisprBenchmark file (training_K562 and heldout_5_cell_types, every dataset and cell type, read by coordinates, gene and dataset only) names the same gene (Ensembl id without version, or symbol) at an element overlapping the test's lifted element by at least one base. The remaining tests are independent of the benchmark pair by pair; the subset whose element overlaps no benchmark element at all is independent element by element and is read beside the primary",
+      "experimental rule lines of the compiled programs (signaltrace.PREDICTED_ONLY)"
+    ],
+    "partitions": {
+      "training": "none of this test: the benchmark's rows are read only to exclude the tests they hold",
+      "heldout": "the screen's tests independent of the benchmark; their readout is read once, if held"
+    },
+    "code_cleanliness": {
+      "git_sha": "18da8cbd6ba443aea75044cbb11c4b3609e9c487",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/secondtargets_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/secondtargets_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/secondtargets_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/measured_unknown.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/organise.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/secondtargets.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/evidence.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/secondtargets_run.py"
+      ],
+      "counting_path_count": 152,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "18da8cbd6ba443aea75044cbb11c4b3609e9c487",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/secondtargets_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "18da8cbd6ba443aea75044cbb11c4b3609e9c487",
+      "code_cleanliness_git_sha": "18da8cbd6ba443aea75044cbb11c4b3609e9c487",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 18da8cb"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 3666,
+      "opens_under_data": 3358,
+      "files_read": 3284,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
