@@ -9,11 +9,13 @@ from the git-ignored local copies when they are present (only that test skips wi
 
 from __future__ import annotations
 
+import json
 import math
 from pathlib import Path
 
 import numpy as np
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import simpler
 from genomeos.attribution import simpler_tiers as st
@@ -189,8 +191,6 @@ def test_sampling_draws_a_tenth_of_the_groups_with_the_seed() -> None:
 
 @pytest.mark.skipif(not all(p.exists() for p in LOCAL), reason="git-ignored Table S2 or WBcel235 GFF3 absent")
 def test_population_is_stage_one_population() -> None:
-    import json
-
     chroms = simpler.read_genes(ROOT / simpler.GFF3)
     rows = st.population(
         chroms, simpler.read_elements(ROOT / simpler.TABLE_S2, kinds=(simpler.ELEMENT_TYPE,))
@@ -198,3 +198,26 @@ def test_population_is_stage_one_population() -> None:
     reg = json.loads((ROOT / "data/results/simpler_worm_registration.json").read_text())
     assert len(rows) == reg["census"]["elements"]
     assert sum(r["domain_case"] == "host" for r in rows) == reg["census"]["host_elements"]
+
+
+TIERS = ROOT / "data/results/simpler_worm_tiers.json"
+
+
+def test_stored_cut_is_benjamini_hochberg_on_the_stored_histogram() -> None:
+    tp.must_be_present(TIERS, was="tiers not yet written")
+    d = json.loads(TIERS.read_text())
+    assert d["rna_sheet_read"] is False and d["bytes_stored"] == 0
+    assert d["element_columns"] == list(st.ELEMENT_COLUMNS)
+    for t in d["tracks"].values():
+        hists = t["abs_hist_by_class"]
+        total = sum(np.array(h["pos"]) + np.array(h["neg"]) for h in hists.values())
+        assert st.bh_cut(total) == t["cut"]
+        i = round(t["cut"] / st.HIST_BIN)
+        above = sum(sum(h["pos"][i:]) for h in hists.values())
+        assert round(above / total.sum(), 5) == t["constrained_share_all_scored"]
+        assert t["cut_interval_95"][0] <= t["cut"] <= t["cut_interval_95"][1]
+        assert t["bytes_moved_total"] <= 200_000_000
+        cds, intron = (t["by_class"][c]["constrained_share"] for c in ("cds", "intron"))
+        assert t["instrument_check"]["passed"] is (cds > intron)
+    for row in d["elements"]:
+        assert 0 <= row[4] <= row[3] and 0 <= row[6] <= row[5]
