@@ -1,0 +1,3613 @@
+{
+  "result": "regulators_registration",
+  "date": "2026-10-10",
+  "lane": "lane-regulators",
+  "roadmap_item": "section 5 item 7b, M1b",
+  "question": "when ENCODE knocked down a transcription factor in K562 or HepG2, did the genes whose compiled rules in that cell pass through an element the factor occupies there change more than the other genes of the same compiled programme, more than genes near the factor's peaks, and more than another factor's assigned genes?",
+  "why_network_level": "the prediction is about genes the compiled programme connects to a regulator only through its elements: a regulator -> element -> gene path, which no compiled rule held before M1b (0 of 440,589 rules named a gene as its source). A knockdown changes the regulator, not the element, so the endpoint reads the path, not any one rule's input observation",
+  "census_facts": {
+    "rules": 440589,
+    "rules_gaining_a_source": 46889,
+    "by_kind": {
+      "occupancy_same_cell_with_motif": 30571,
+      "occupancy_same_cell": 16318,
+      "occupancy_other_cell": 327749,
+      "motif_only": 65951,
+      "unknown": 0
+    }
+  },
+  "endpoint_exposure": "none before this registration: the ENCODE knockdown and control quantification files are undownloaded; the lane read only portal metadata (experiment identities, targets, controls, file accessions, md5, sizes). No lane of this project has read these experiments (searched 2026-10-10). The compiled rules come from AlphaGenome, trained on ENCODE tracks that may include K562 and HepG2 RNA-seq, but not on these knockdowns",
+  "population": "factor-cell units: an ENCODE experiment of an assay in kd_assays, in a test cell, whose target ENCODE classifies as a transcription factor and also profiled by ChIP-seq in the same cell (the UCSC clusters), with a control experiment sharing a GRCh38 annotation. An experiment is used when (1) the factor's own gene has >= 1 mean TPM in control and <= 0.70 of it in knockdown (>= 30% lower; the threshold Replogle et al. 2022 use for a strong perturbation, adopted here, not ENCODE's), and (2) its universe holds >= 10 rule-arm genes and >= 10 others. A unit enters with >= 1 used experiment and its AUROCs are the means over them. A cell type with a single unit is set aside (it cannot be deranged within its cell)",
+  "universe": "per experiment: Ensembl genes with >= 1 compiled rule in the unit's cell (symbols mapped by GENCODE v50, protein-coding preferred) and >= 1 mean TPM in the control replicates, minus the factor's own gene and genes whose TSS lies within 10 kb of the factor's TSS",
+  "measured": "response = |log2((mean TPM knockdown + 1) / (mean TPM control + 1))| per gene, the replicates of the knockdown experiment against all replicates of its listed control experiments",
+  "rule_arm": "universe genes with >= 1 compiled rule in the unit's cell whose element a ChIP-seq peak cluster of the factor overlaps in that cell (census kinds occupancy_same_cell and occupancy_same_cell_with_motif)",
+  "baseline": "genes near the factor's peaks, ignoring every compiled rule: the same number of universe genes as the rule arm, ranked by the factor's peak midpoints in that cell within 50 kb of the TSS, then by distance to the nearest midpoint, then by gene id",
+  "metric": "per experiment, the stratified AUROC of each arm against the rest of the universe on the response, pairs taken only within deciles of log2(control TPM + 1); per unit, the mean over its experiments; the primary is the mean over units of (rule-arm AUROC - baseline AUROC), with a 95% percentile bootstrap interval over units (10,000 resamples, seed 20261010)",
+  "matched_control": "factor identity: each unit relabelled with another unit-factor's rule arm from the same cell (a uniform derangement within each cell type, 1,000 draws, seed 20261011), scored inside the unit's own universe and response; p = (1 + draws whose mean AUROC >= the observed mean rule-arm AUROC) / 1,001",
+  "falsifier": "control p >= 0.05: the compiled assignment does not pick out a factor's responding genes better than another factor's assignment does, so the regulator -> element -> gene path carries no factor-specific prediction on this endpoint, whatever the comparison with the baseline",
+  "decision": "in order: fewer than 20 units -> stopped_below_floor; control p >= 0.05 -> not_factor_specific; else the interval of the mean paired difference: lower bound > 0 -> rules_beat_peaks, upper bound < 0 -> peaks_beat_rules, otherwise no_difference_detected",
+  "stop_rule": "the run happens once (the runner refuses a second); fewer than 20 units stops it before any comparison with no rule relaxed; a knockdown file whose md5 is not ENCODE's stops it before any value is read; no threshold, universe or arm changes after a value is read",
+  "outcomes": {
+    "stopped_below_floor": "stopped before any comparison: {n} factor-cell units met the registered conditions, below the floor of {floor}; no estimate is reported and no rule is relaxed",
+    "not_factor_specific": "the compiled regulator assignment did not anticipate a factor's knockdown better than another factor's assignment did: mean stratified AUROC {a:.4f} for the factor's own assigned genes against a median of {c:.4f} for another factor's, control p = {p:.4g} over {n} factor-cell units; the paired difference against genes near the factor's peaks, {d:+.4f} [95% CI {lo:+.4f}, {hi:+.4f}], is reported and decides nothing",
+    "rules_beat_peaks": "the genes the compiled rules route through a factor's occupied elements changed more on that factor's knockdown than genes near the factor's peaks: mean paired AUROC difference {d:+.4f} [95% CI {lo:+.4f}, {hi:+.4f}] over {n} factor-cell units, and more than another factor's assigned genes (control p = {p:.4g})",
+    "no_difference_detected": "no difference detected: the genes the compiled rules route through a factor's occupied elements did not change on that factor's knockdown by a detectably different amount from genes near the factor's peaks (mean paired AUROC difference {d:+.4f} [95% CI {lo:+.4f}, {hi:+.4f}] over {n} factor-cell units), though they changed more than another factor's assigned genes (control p = {p:.4g})",
+    "peaks_beat_rules": "genes near a factor's peaks changed more on that factor's knockdown than the genes the compiled rules route through its occupied elements: mean paired AUROC difference {d:+.4f} [95% CI {lo:+.4f}, {hi:+.4f}] over {n} factor-cell units (control p = {p:.4g})"
+  },
+  "descriptives_not_verdicts": [
+    "per experiment: knockdown ratio, universe, arm and baseline sizes, assay",
+    "the rule arm restricted to elements where the factor's own JASPAR profile also matches",
+    "K562 units alone, the paired difference and its interval without the control",
+    "for directed candidate rows (curated GO direction agreeing with the element's rule): the share of genes whose signed change on knockdown has the sign the direction predicts (activates -> lower, inhibits -> higher), beside the same share among the universe's other genes"
+  ],
+  "limitations": [
+    "occupancy is not function: a factor bound at an element need not regulate the gene, and a knockdown also acts through indirect paths, so a response is not a validated connection",
+    "the knockdown lowers the factor's RNA; protein loss and timing are undocumented per experiment",
+    "two to four replicates per arm: the response is a fold change, not a test statistic",
+    "ENCODE profiled factors by ChIP in few cell types, so the test covers K562 and HepG2 only",
+    "the clusters are ENCODE 3's uniform peaks (2020), not the ENCODE4 set"
+  ],
+  "constants": {
+    "test_cells": [
+      "K562",
+      "HepG2"
+    ],
+    "kd_assays": [
+      "CRISPRi RNA-seq",
+      "siRNA RNA-seq",
+      "shRNA RNA-seq",
+      "CRISPR RNA-seq"
+    ],
+    "target_class": "transcription factor",
+    "kd_max_ratio": 0.7,
+    "kd_min_control_tpm": 1.0,
+    "expressed_tpm": 1.0,
+    "pseudo_tpm": 1.0,
+    "neighbour_bp": 10000,
+    "peak_window": 50000,
+    "min_arm": 10,
+    "strata": 10,
+    "floor_units": 20,
+    "bootstrap_b": 10000,
+    "bootstrap_seed": 20261010,
+    "permutations": 1000,
+    "permutation_seed": 20261011,
+    "control_alpha": 0.05
+  },
+  "not_admitted_experiments": {
+    "no_chip_of_the_target_in_this_cell": 110
+  },
+  "compiled_genes_per_cell": {
+    "HepG2": 4749,
+    "K562": 5988
+  },
+  "compiled_rules_with_unmapped_gene_per_cell": {
+    "K562": 73,
+    "HepG2": 31
+  },
+  "units_before_expression": 45,
+  "units": [
+    {
+      "factor": "ARID3A",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR169DSM",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR109YDL",
+            "ENCSR287SHU"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF995USC",
+              "md5sum": "0812028720a9db406e52f331563cf26c",
+              "file_size": 10901195,
+              "href": "/files/ENCFF995USC/@@download/ENCFF995USC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF258CIX",
+              "md5sum": "c3b88edaed2ed0f87ca221ceab7ad62e",
+              "file_size": 10900301,
+              "href": "/files/ENCFF258CIX/@@download/ENCFF258CIX.tsv",
+              "biological_replicates": [
+                2
+              ]
+            },
+            {
+              "accession": "ENCFF353YGI",
+              "md5sum": "af8f46e642e16a22e8b4ea742a5e7cc0",
+              "file_size": 10879950,
+              "href": "/files/ENCFF353YGI/@@download/ENCFF353YGI.tsv",
+              "biological_replicates": [
+                3
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF547PJN",
+              "md5sum": "b5f551596898aca98cbec0636adb70c8",
+              "file_size": 10893269,
+              "href": "/files/ENCFF547PJN/@@download/ENCFF547PJN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF415CGN",
+              "md5sum": "5a6ef9fe919f793c4c6de0f6b535cbe7",
+              "file_size": 10870013,
+              "href": "/files/ENCFF415CGN/@@download/ENCFF415CGN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF133FXL",
+              "md5sum": "08dac0f69867a1fe99d34609d6160d25",
+              "file_size": 10880993,
+              "href": "/files/ENCFF133FXL/@@download/ENCFF133FXL.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR898UNK",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF062TMG",
+              "md5sum": "9a2217fbe0c02a5d2a807bf0f2ffa513",
+              "file_size": 10859675,
+              "href": "/files/ENCFF062TMG/@@download/ENCFF062TMG.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF174VEX",
+              "md5sum": "051b66f21d293ab4868593c91686b31d",
+              "file_size": 10874213,
+              "href": "/files/ENCFF174VEX/@@download/ENCFF174VEX.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1239,
+      "rule_arm_with_motif_before_expression": 975,
+      "peaks_in_cell": 10685
+    },
+    {
+      "factor": "ATF3",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR045TQN",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR128HAQ",
+            "ENCSR109YDL"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF989NPI",
+              "md5sum": "6ad9535f3574143b7a0a1a86c499ec4a",
+              "file_size": 10901993,
+              "href": "/files/ENCFF989NPI/@@download/ENCFF989NPI.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF345BJP",
+              "md5sum": "8600ae28fc9320b068718fa05e944e36",
+              "file_size": 10883353,
+              "href": "/files/ENCFF345BJP/@@download/ENCFF345BJP.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF109FHQ",
+              "md5sum": "f44a505a4276a0988d5985f895820323",
+              "file_size": 10885617,
+              "href": "/files/ENCFF109FHQ/@@download/ENCFF109FHQ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF415CGN",
+              "md5sum": "5a6ef9fe919f793c4c6de0f6b535cbe7",
+              "file_size": 10870013,
+              "href": "/files/ENCFF415CGN/@@download/ENCFF415CGN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR123IMQ",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF492RYO",
+              "md5sum": "85aa14c65ffe17c12e134762e7dec862",
+              "file_size": 10862369,
+              "href": "/files/ENCFF492RYO/@@download/ENCFF492RYO.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF178RMO",
+              "md5sum": "5fd79c9335be5ad9211396f7737a5aac",
+              "file_size": 10846716,
+              "href": "/files/ENCFF178RMO/@@download/ENCFF178RMO.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2133,
+      "rule_arm_with_motif_before_expression": 1740,
+      "peaks_in_cell": 57397
+    },
+    {
+      "factor": "BACH1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR190RZZ",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF516FRU",
+              "md5sum": "b7aed50bcbdd0ef2171cecdb935691aa",
+              "file_size": 10843177,
+              "href": "/files/ENCFF516FRU/@@download/ENCFF516FRU.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF521BDY",
+              "md5sum": "6619617f82bdc19edd2a7e18c1714f23",
+              "file_size": 10836773,
+              "href": "/files/ENCFF521BDY/@@download/ENCFF521BDY.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR793ISR",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF355JMG",
+              "md5sum": "e9e59ef916598c8eceba6e057520c809",
+              "file_size": 10871682,
+              "href": "/files/ENCFF355JMG/@@download/ENCFF355JMG.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF609MSB",
+              "md5sum": "baf86819554615290a54f733aeee0e45",
+              "file_size": 10874922,
+              "href": "/files/ENCFF609MSB/@@download/ENCFF609MSB.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF373THD",
+              "md5sum": "fba53c03743de52a518a5a0919d36693",
+              "file_size": 10899841,
+              "href": "/files/ENCFF373THD/@@download/ENCFF373THD.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF133FXL",
+              "md5sum": "08dac0f69867a1fe99d34609d6160d25",
+              "file_size": 10880993,
+              "href": "/files/ENCFF133FXL/@@download/ENCFF133FXL.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 422,
+      "rule_arm_with_motif_before_expression": 369,
+      "peaks_in_cell": 4498
+    },
+    {
+      "factor": "BHLHE40",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR626SFM",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR109YDL",
+            "ENCSR126QVF"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF321VZR",
+              "md5sum": "832c5fa918d7a504b844ba20c5985542",
+              "file_size": 10838391,
+              "href": "/files/ENCFF321VZR/@@download/ENCFF321VZR.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF363EKJ",
+              "md5sum": "0419f7239c3a6cd4698d4e231196773d",
+              "file_size": 10879163,
+              "href": "/files/ENCFF363EKJ/@@download/ENCFF363EKJ.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF415CGN",
+              "md5sum": "5a6ef9fe919f793c4c6de0f6b535cbe7",
+              "file_size": 10870013,
+              "href": "/files/ENCFF415CGN/@@download/ENCFF415CGN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF547PJN",
+              "md5sum": "b5f551596898aca98cbec0636adb70c8",
+              "file_size": 10893269,
+              "href": "/files/ENCFF547PJN/@@download/ENCFF547PJN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1727,
+      "rule_arm_with_motif_before_expression": 1075,
+      "peaks_in_cell": 26230
+    },
+    {
+      "factor": "CDC5L",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR544ZMX",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR220DTX"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF503GQZ",
+              "md5sum": "0aacb7e5fdc37f87ba8c84ee2aa3f6a3",
+              "file_size": 10912728,
+              "href": "/files/ENCFF503GQZ/@@download/ENCFF503GQZ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF942BFC",
+              "md5sum": "b24e1ee85db7cece65d9484ccb4e1c34",
+              "file_size": 10906202,
+              "href": "/files/ENCFF942BFC/@@download/ENCFF942BFC.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF407HJZ",
+              "md5sum": "a0951795e46a0096cd953f6f584f9ed7",
+              "file_size": 10891674,
+              "href": "/files/ENCFF407HJZ/@@download/ENCFF407HJZ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF191PYC",
+              "md5sum": "8f20325990fbcaadd98fa99f6261b3cb",
+              "file_size": 10891253,
+              "href": "/files/ENCFF191PYC/@@download/ENCFF191PYC.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 351,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 5154
+    },
+    {
+      "factor": "CTCF",
+      "cell": "HepG2",
+      "experiments": [
+        {
+          "accession": "ENCSR871XPX",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF754MBP",
+              "md5sum": "c41c0f507e82e71361816f3ad64f5b9a",
+              "file_size": 10975859,
+              "href": "/files/ENCFF754MBP/@@download/ENCFF754MBP.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF926MKW",
+              "md5sum": "ba31cd592885b9022ad9f471ab0aea91",
+              "file_size": 10972771,
+              "href": "/files/ENCFF926MKW/@@download/ENCFF926MKW.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF273TDZ",
+              "md5sum": "847c4dcedae85fd826cff09d4e61e13d",
+              "file_size": 10979601,
+              "href": "/files/ENCFF273TDZ/@@download/ENCFF273TDZ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF266WGJ",
+              "md5sum": "ec3cbe9be2c76950306384c41f7a4ea9",
+              "file_size": 10968107,
+              "href": "/files/ENCFF266WGJ/@@download/ENCFF266WGJ.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1083,
+      "rule_arm_with_motif_before_expression": 612,
+      "peaks_in_cell": 57451
+    },
+    {
+      "factor": "CTCF",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR067CAG",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR756JGE",
+            "ENCSR443QFD"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF743ARY",
+              "md5sum": "74f92af4f63ea40014c9e817164e70d0",
+              "file_size": 10846719,
+              "href": "/files/ENCFF743ARY/@@download/ENCFF743ARY.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF513KVW",
+              "md5sum": "411c305a619805bc14c8e12e2a31c6ba",
+              "file_size": 10975033,
+              "href": "/files/ENCFF513KVW/@@download/ENCFF513KVW.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF931WTP",
+              "md5sum": "b298ed629746847147cb773e93c42e8a",
+              "file_size": 10833898,
+              "href": "/files/ENCFF931WTP/@@download/ENCFF931WTP.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF351VJZ",
+              "md5sum": "7c538accc18535b5c48ae499256062c5",
+              "file_size": 10962335,
+              "href": "/files/ENCFF351VJZ/@@download/ENCFF351VJZ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR613LSQ",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF022QAO",
+              "md5sum": "87d9eb16a260b4950b085dba3c80fc62",
+              "file_size": 10952539,
+              "href": "/files/ENCFF022QAO/@@download/ENCFF022QAO.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF369XNQ",
+              "md5sum": "ca75a5d57f0dd0ec36db9f72ef00ef55",
+              "file_size": 10946028,
+              "href": "/files/ENCFF369XNQ/@@download/ENCFF369XNQ.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF713RSE",
+              "md5sum": "e628db0e73f7f647550f031c51c27bb3",
+              "file_size": 10947467,
+              "href": "/files/ENCFF713RSE/@@download/ENCFF713RSE.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF112RNN",
+              "md5sum": "013b2c9db1fe1d1797a4e7b7efc8c1d1",
+              "file_size": 10959396,
+              "href": "/files/ENCFF112RNN/@@download/ENCFF112RNN.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2089,
+      "rule_arm_with_motif_before_expression": 1073,
+      "peaks_in_cell": 64191
+    },
+    {
+      "factor": "E2F6",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR820EGA",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF882RGJ",
+              "md5sum": "8d196c1acbf3a9571b8e9c87fa2b5ea3",
+              "file_size": 10871429,
+              "href": "/files/ENCFF882RGJ/@@download/ENCFF882RGJ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF462ZWJ",
+              "md5sum": "fe33d74ceaa57240c79a6dd879024622",
+              "file_size": 10893987,
+              "href": "/files/ENCFF462ZWJ/@@download/ENCFF462ZWJ.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF373THD",
+              "md5sum": "fba53c03743de52a518a5a0919d36693",
+              "file_size": 10899841,
+              "href": "/files/ENCFF373THD/@@download/ENCFF373THD.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF133FXL",
+              "md5sum": "08dac0f69867a1fe99d34609d6160d25",
+              "file_size": 10880993,
+              "href": "/files/ENCFF133FXL/@@download/ENCFF133FXL.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1463,
+      "rule_arm_with_motif_before_expression": 1023,
+      "peaks_in_cell": 29454
+    },
+    {
+      "factor": "E4F1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR916PCG",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF894GOT",
+              "md5sum": "f38302881d9158d7e9b2380709c2c381",
+              "file_size": 10964180,
+              "href": "/files/ENCFF894GOT/@@download/ENCFF894GOT.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF500LTM",
+              "md5sum": "9da50c64d54d64cfecb85c0b56f531f5",
+              "file_size": 10987290,
+              "href": "/files/ENCFF500LTM/@@download/ENCFF500LTM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF713RSE",
+              "md5sum": "e628db0e73f7f647550f031c51c27bb3",
+              "file_size": 10947467,
+              "href": "/files/ENCFF713RSE/@@download/ENCFF713RSE.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF112RNN",
+              "md5sum": "013b2c9db1fe1d1797a4e7b7efc8c1d1",
+              "file_size": 10959396,
+              "href": "/files/ENCFF112RNN/@@download/ENCFF112RNN.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2034,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 23428
+    },
+    {
+      "factor": "FOXK2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR773VKE",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF574CVU",
+              "md5sum": "2cb63fa1b0de399595443a8662977164",
+              "file_size": 10853568,
+              "href": "/files/ENCFF574CVU/@@download/ENCFF574CVU.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF286LEV",
+              "md5sum": "0caf1dedd7156ce5966fcf117075585d",
+              "file_size": 10892015,
+              "href": "/files/ENCFF286LEV/@@download/ENCFF286LEV.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1959,
+      "rule_arm_with_motif_before_expression": 1316,
+      "peaks_in_cell": 27637
+    },
+    {
+      "factor": "GATA1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR850LOZ",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF254DIG",
+              "md5sum": "0ae9a7468a6f895d76671ca1369f582a",
+              "file_size": 10819569,
+              "href": "/files/ENCFF254DIG/@@download/ENCFF254DIG.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF132PGY",
+              "md5sum": "7bd1fb88c74cd33f6f7d450525ec1187",
+              "file_size": 10810729,
+              "href": "/files/ENCFF132PGY/@@download/ENCFF132PGY.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1868,
+      "rule_arm_with_motif_before_expression": 1791,
+      "peaks_in_cell": 14425
+    },
+    {
+      "factor": "GATA2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR557BMX",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF679QYZ",
+              "md5sum": "0f160aa899f682507ef5db638a9637b5",
+              "file_size": 10841915,
+              "href": "/files/ENCFF679QYZ/@@download/ENCFF679QYZ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF279WUL",
+              "md5sum": "f8d487c3bdb87d63679b9e217ab5716c",
+              "file_size": 10877670,
+              "href": "/files/ENCFF279WUL/@@download/ENCFF279WUL.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1663,
+      "rule_arm_with_motif_before_expression": 1591,
+      "peaks_in_cell": 11244
+    },
+    {
+      "factor": "HMBOX1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR942XXL",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF970MDB",
+              "md5sum": "48d3b723f22cd6d0e302e51be5bc2385",
+              "file_size": 10767684,
+              "href": "/files/ENCFF970MDB/@@download/ENCFF970MDB.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF882AFA",
+              "md5sum": "87cd2e003f195db70ecf2a0712e0db04",
+              "file_size": 10821405,
+              "href": "/files/ENCFF882AFA/@@download/ENCFF882AFA.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1711,
+      "rule_arm_with_motif_before_expression": 1657,
+      "peaks_in_cell": 24343
+    },
+    {
+      "factor": "HNRNPK",
+      "cell": "HepG2",
+      "experiments": [
+        {
+          "accession": "ENCSR853ZJS",
+          "assay": "shRNA RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR237YZT"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF319UOJ",
+              "md5sum": "bb23191a83f71df973e0807d75dbcf7f",
+              "file_size": 10906976,
+              "href": "/files/ENCFF319UOJ/@@download/ENCFF319UOJ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF365SGO",
+              "md5sum": "6ad5361e58ca7f4841cea714c1948aae",
+              "file_size": 10904467,
+              "href": "/files/ENCFF365SGO/@@download/ENCFF365SGO.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF785WTG",
+              "md5sum": "dc2341c256a3c93ef865aac8e6367c4e",
+              "file_size": 10903637,
+              "href": "/files/ENCFF785WTG/@@download/ENCFF785WTG.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF548ZDN",
+              "md5sum": "3902a79651b0e948d47f73eb3f4e3607",
+              "file_size": 10910473,
+              "href": "/files/ENCFF548ZDN/@@download/ENCFF548ZDN.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 336,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 20484
+    },
+    {
+      "factor": "HNRNPK",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR529JNJ",
+          "assay": "shRNA RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR129RWD"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF900YES",
+              "md5sum": "2b00daa0e14195a3dd0e95f9f2123eee",
+              "file_size": 10902639,
+              "href": "/files/ENCFF900YES/@@download/ENCFF900YES.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF765IMX",
+              "md5sum": "776e9fc644fa3cc9a47b73314b2ab9a5",
+              "file_size": 10911603,
+              "href": "/files/ENCFF765IMX/@@download/ENCFF765IMX.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF587DSG",
+              "md5sum": "9d64a74c8a09c01b08421a27c82664a2",
+              "file_size": 10908471,
+              "href": "/files/ENCFF587DSG/@@download/ENCFF587DSG.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF774RTC",
+              "md5sum": "df949910f3dccaec1f6f08c021d17cd7",
+              "file_size": 10909790,
+              "href": "/files/ENCFF774RTC/@@download/ENCFF774RTC.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 260,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 9685
+    },
+    {
+      "factor": "JUND",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR389OCD",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF124KLX",
+              "md5sum": "1bf7352fbf7f67a58673a3bb197a7440",
+              "file_size": 10860965,
+              "href": "/files/ENCFF124KLX/@@download/ENCFF124KLX.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF736HEU",
+              "md5sum": "4955ba23f57fefa85497305e8b3943df",
+              "file_size": 10866911,
+              "href": "/files/ENCFF736HEU/@@download/ENCFF736HEU.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2495,
+      "rule_arm_with_motif_before_expression": 2301,
+      "peaks_in_cell": 46300
+    },
+    {
+      "factor": "MAFK",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR640PVZ",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR128HAQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF245QGX",
+              "md5sum": "b0f9196475ea62c91c67d66485f95c9b",
+              "file_size": 10899495,
+              "href": "/files/ENCFF245QGX/@@download/ENCFF245QGX.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF291IDL",
+              "md5sum": "ed4b4d99d1fa309e575b2ba27474441c",
+              "file_size": 10876278,
+              "href": "/files/ENCFF291IDL/@@download/ENCFF291IDL.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF373THD",
+              "md5sum": "fba53c03743de52a518a5a0919d36693",
+              "file_size": 10899841,
+              "href": "/files/ENCFF373THD/@@download/ENCFF373THD.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF109FHQ",
+              "md5sum": "f44a505a4276a0988d5985f895820323",
+              "file_size": 10885617,
+              "href": "/files/ENCFF109FHQ/@@download/ENCFF109FHQ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1232,
+      "rule_arm_with_motif_before_expression": 739,
+      "peaks_in_cell": 26592
+    },
+    {
+      "factor": "MAX",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR675SDG",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF640VXF",
+              "md5sum": "50a6125f8a16a29bd19dc07981a1b543",
+              "file_size": 10865600,
+              "href": "/files/ENCFF640VXF/@@download/ENCFF640VXF.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF986FFE",
+              "md5sum": "305d5bee5e5181f9034e99db819fa9d0",
+              "file_size": 10879113,
+              "href": "/files/ENCFF986FFE/@@download/ENCFF986FFE.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF373THD",
+              "md5sum": "fba53c03743de52a518a5a0919d36693",
+              "file_size": 10899841,
+              "href": "/files/ENCFF373THD/@@download/ENCFF373THD.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF133FXL",
+              "md5sum": "08dac0f69867a1fe99d34609d6160d25",
+              "file_size": 10880993,
+              "href": "/files/ENCFF133FXL/@@download/ENCFF133FXL.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2733,
+      "rule_arm_with_motif_before_expression": 2273,
+      "peaks_in_cell": 58145
+    },
+    {
+      "factor": "MEIS2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR733TFF",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF151BRB",
+              "md5sum": "afe95e75ee2b25c9769d7f0de1a6b0df",
+              "file_size": 10836347,
+              "href": "/files/ENCFF151BRB/@@download/ENCFF151BRB.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF979IBU",
+              "md5sum": "861d81282e2b312980628db10308b6ea",
+              "file_size": 10837680,
+              "href": "/files/ENCFF979IBU/@@download/ENCFF979IBU.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2232,
+      "rule_arm_with_motif_before_expression": 2065,
+      "peaks_in_cell": 52198
+    },
+    {
+      "factor": "MITF",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR905SEH",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF550STS",
+              "md5sum": "1e6a51c8dd88d01a30b0a3a9e73f3ef3",
+              "file_size": 10876489,
+              "href": "/files/ENCFF550STS/@@download/ENCFF550STS.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF145VMS",
+              "md5sum": "ffa9183a66df7d5c6b76e46f97fb51fb",
+              "file_size": 10863397,
+              "href": "/files/ENCFF145VMS/@@download/ENCFF145VMS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1473,
+      "rule_arm_with_motif_before_expression": 554,
+      "peaks_in_cell": 36116
+    },
+    {
+      "factor": "MXI1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR631RKH",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR401RKW",
+            "ENCSR608CVU"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF113KXF",
+              "md5sum": "e4d5bb6ec0fa338802c3351c4d65970c",
+              "file_size": 10901451,
+              "href": "/files/ENCFF113KXF/@@download/ENCFF113KXF.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF758XNJ",
+              "md5sum": "470183fc463c6dde937fa243e2ba5890",
+              "file_size": 10877109,
+              "href": "/files/ENCFF758XNJ/@@download/ENCFF758XNJ.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF564BJO",
+              "md5sum": "6c862aafd7e56869c1dbcedf593ec55f",
+              "file_size": 10900740,
+              "href": "/files/ENCFF564BJO/@@download/ENCFF564BJO.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF373THD",
+              "md5sum": "fba53c03743de52a518a5a0919d36693",
+              "file_size": 10899841,
+              "href": "/files/ENCFF373THD/@@download/ENCFF373THD.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 769,
+      "rule_arm_with_motif_before_expression": 669,
+      "peaks_in_cell": 7994
+    },
+    {
+      "factor": "NR2C2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR808HQN",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF289BIS",
+              "md5sum": "48de2af7b53ce8f9471652c4c3439228",
+              "file_size": 10824365,
+              "href": "/files/ENCFF289BIS/@@download/ENCFF289BIS.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF365RCN",
+              "md5sum": "00bd4b514494b494674329a6e8f94074",
+              "file_size": 10883355,
+              "href": "/files/ENCFF365RCN/@@download/ENCFF365RCN.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF803WYX",
+              "md5sum": "73d2c61fca14330cf7c5489e0f84d8c2",
+              "file_size": 10879242,
+              "href": "/files/ENCFF803WYX/@@download/ENCFF803WYX.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 10,
+      "rule_arm_with_motif_before_expression": 10,
+      "peaks_in_cell": 570
+    },
+    {
+      "factor": "NR2F2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR688UTN",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF488AVA",
+              "md5sum": "00cd884b98e121f2620b849d808aeee3",
+              "file_size": 10791684,
+              "href": "/files/ENCFF488AVA/@@download/ENCFF488AVA.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF326RTK",
+              "md5sum": "e0bc105993e7013c40456381d566cc4f",
+              "file_size": 10870549,
+              "href": "/files/ENCFF326RTK/@@download/ENCFF326RTK.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF320IEG",
+              "md5sum": "4182e63d89f1a5c32bdfc04f027ccd82",
+              "file_size": 10869470,
+              "href": "/files/ENCFF320IEG/@@download/ENCFF320IEG.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1968,
+      "rule_arm_with_motif_before_expression": 1475,
+      "peaks_in_cell": 19031
+    },
+    {
+      "factor": "NRF1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR299HUJ",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF272LLI",
+              "md5sum": "042c12ec6d543df952e096bda47ce871",
+              "file_size": 10803890,
+              "href": "/files/ENCFF272LLI/@@download/ENCFF272LLI.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF047QKO",
+              "md5sum": "b17ada37c68e8d87fe9b78ae8ed4f923",
+              "file_size": 10829453,
+              "href": "/files/ENCFF047QKO/@@download/ENCFF047QKO.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF183ONQ",
+              "md5sum": "3df874d627a54b2265073aa396ef2e4f",
+              "file_size": 10872405,
+              "href": "/files/ENCFF183ONQ/@@download/ENCFF183ONQ.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2122,
+      "rule_arm_with_motif_before_expression": 648,
+      "peaks_in_cell": 34475
+    },
+    {
+      "factor": "RCOR1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR390GWL",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR561NXJ",
+            "ENCSR608CVU"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF854FQE",
+              "md5sum": "9ed7949bb0131f0dce37efcf48b3d7e6",
+              "file_size": 10889855,
+              "href": "/files/ENCFF854FQE/@@download/ENCFF854FQE.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF631VWY",
+              "md5sum": "bd595b52f5dc86020a10976569134b63",
+              "file_size": 10881396,
+              "href": "/files/ENCFF631VWY/@@download/ENCFF631VWY.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF577UBR",
+              "md5sum": "b5391b2486c71223b5ebcbb567084cbf",
+              "file_size": 10883483,
+              "href": "/files/ENCFF577UBR/@@download/ENCFF577UBR.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF373THD",
+              "md5sum": "fba53c03743de52a518a5a0919d36693",
+              "file_size": 10899841,
+              "href": "/files/ENCFF373THD/@@download/ENCFF373THD.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 970,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 6544
+    },
+    {
+      "factor": "RFX5",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR619EYC",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF653GGH",
+              "md5sum": "2de24a54d241e3975129160b1ae68dfb",
+              "file_size": 10858384,
+              "href": "/files/ENCFF653GGH/@@download/ENCFF653GGH.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF812TLM",
+              "md5sum": "581d15c52aeb29c30c18665c6d002376",
+              "file_size": 10874642,
+              "href": "/files/ENCFF812TLM/@@download/ENCFF812TLM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 117,
+      "rule_arm_with_motif_before_expression": 9,
+      "peaks_in_cell": 2492
+    },
+    {
+      "factor": "RNF2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR043UMW",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF955BZZ",
+              "md5sum": "284239944dd71b2cf42fcbf71aff9beb",
+              "file_size": 10831936,
+              "href": "/files/ENCFF955BZZ/@@download/ENCFF955BZZ.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF433TGC",
+              "md5sum": "0f55f88359c43aaa9fc0d4154ce44389",
+              "file_size": 10840885,
+              "href": "/files/ENCFF433TGC/@@download/ENCFF433TGC.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2869,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 41090
+    },
+    {
+      "factor": "SIX5",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR104QKG",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF786RQN",
+              "md5sum": "9f19b3a11e734116d7a484873f54dc94",
+              "file_size": 10818270,
+              "href": "/files/ENCFF786RQN/@@download/ENCFF786RQN.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF249JKV",
+              "md5sum": "c3f2d9f24b854e0723deb0ad7b679e08",
+              "file_size": 10853773,
+              "href": "/files/ENCFF249JKV/@@download/ENCFF249JKV.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 93,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 3523
+    },
+    {
+      "factor": "SMAD2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR016WTN",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR404OHQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF784VLY",
+              "md5sum": "c6999246a238fc421d38c5d5c775b8ea",
+              "file_size": 10946726,
+              "href": "/files/ENCFF784VLY/@@download/ENCFF784VLY.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF600XQG",
+              "md5sum": "46b1a82f2792d715cdfb1bc3a7051f7f",
+              "file_size": 10966379,
+              "href": "/files/ENCFF600XQG/@@download/ENCFF600XQG.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF199EEY",
+              "md5sum": "02a84b660fdbd15ec3a260898f612b23",
+              "file_size": 10948062,
+              "href": "/files/ENCFF199EEY/@@download/ENCFF199EEY.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF516IKR",
+              "md5sum": "dba0223aa4697dc182f8cf36cc1ec490",
+              "file_size": 10942298,
+              "href": "/files/ENCFF516IKR/@@download/ENCFF516IKR.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2,
+      "rule_arm_with_motif_before_expression": 2,
+      "peaks_in_cell": 158
+    },
+    {
+      "factor": "SMAD5",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR649MBU",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR978MMZ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF059FQH",
+              "md5sum": "7202fed404bd3638fb21bda65cff2a9c",
+              "file_size": 11038499,
+              "href": "/files/ENCFF059FQH/@@download/ENCFF059FQH.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF098JGO",
+              "md5sum": "c03d459d8cc424d80634b7de38500ad7",
+              "file_size": 11011625,
+              "href": "/files/ENCFF098JGO/@@download/ENCFF098JGO.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF028EPW",
+              "md5sum": "b5d6672bfe146a97e1ad1c281315c321",
+              "file_size": 11055424,
+              "href": "/files/ENCFF028EPW/@@download/ENCFF028EPW.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF707HOB",
+              "md5sum": "63415213c166da654af30cb0642ca877",
+              "file_size": 11020556,
+              "href": "/files/ENCFF707HOB/@@download/ENCFF707HOB.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR731FEO",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF689GNL",
+              "md5sum": "a3e307103a8b4b35c92e29f18ea4c6ef",
+              "file_size": 10843731,
+              "href": "/files/ENCFF689GNL/@@download/ENCFF689GNL.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF770NIM",
+              "md5sum": "e52c5da7aa4994b1d217672e20255cf3",
+              "file_size": 10857765,
+              "href": "/files/ENCFF770NIM/@@download/ENCFF770NIM.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 834,
+      "rule_arm_with_motif_before_expression": 171,
+      "peaks_in_cell": 16895
+    },
+    {
+      "factor": "SP1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR650QAK",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF304OTT",
+              "md5sum": "872d0979239aaa6ab3f49caa1314974b",
+              "file_size": 10794013,
+              "href": "/files/ENCFF304OTT/@@download/ENCFF304OTT.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF213FRV",
+              "md5sum": "cbfaa1a58c15b6167ca0eaaa75500dc4",
+              "file_size": 10874817,
+              "href": "/files/ENCFF213FRV/@@download/ENCFF213FRV.tsv",
+              "biological_replicates": [
+                3
+              ]
+            },
+            {
+              "accession": "ENCFF029MBI",
+              "md5sum": "85c1f5e0d7cc8d253902121d6b81e298",
+              "file_size": 10884282,
+              "href": "/files/ENCFF029MBI/@@download/ENCFF029MBI.tsv",
+              "biological_replicates": [
+                4
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 607,
+      "rule_arm_with_motif_before_expression": 460,
+      "peaks_in_cell": 11677
+    },
+    {
+      "factor": "STAT1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR184VVN",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF559KTZ",
+              "md5sum": "3c9404b46c7d45e6a49fd78e43d069bc",
+              "file_size": 10776837,
+              "href": "/files/ENCFF559KTZ/@@download/ENCFF559KTZ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF049GWW",
+              "md5sum": "5490aeef224b1aa1ed1d9093f25e4d38",
+              "file_size": 10839512,
+              "href": "/files/ENCFF049GWW/@@download/ENCFF049GWW.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 604,
+      "rule_arm_with_motif_before_expression": 566,
+      "peaks_in_cell": 3890
+    },
+    {
+      "factor": "STAT2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR469EFL",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF540WJL",
+              "md5sum": "17012a860196af273b4fb39b5282a493",
+              "file_size": 10884122,
+              "href": "/files/ENCFF540WJL/@@download/ENCFF540WJL.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF403TSW",
+              "md5sum": "dcf3576bb4dceb06424768397c212bc9",
+              "file_size": 10871147,
+              "href": "/files/ENCFF403TSW/@@download/ENCFF403TSW.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 729,
+      "rule_arm_with_motif_before_expression": 350,
+      "peaks_in_cell": 3255
+    },
+    {
+      "factor": "STAT5A",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR174FUO",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR341RCF",
+            "ENCSR074DIJ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF853QNF",
+              "md5sum": "64e7494d7f5ae9e930f033304f5dc646",
+              "file_size": 10924865,
+              "href": "/files/ENCFF853QNF/@@download/ENCFF853QNF.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF003GEH",
+              "md5sum": "b2701dded1239c40634f1d222364f534",
+              "file_size": 10889144,
+              "href": "/files/ENCFF003GEH/@@download/ENCFF003GEH.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF471NDF",
+              "md5sum": "128cb7e048726b0d8dea235b759bcfd9",
+              "file_size": 10919955,
+              "href": "/files/ENCFF471NDF/@@download/ENCFF471NDF.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF109SDJ",
+              "md5sum": "37a6aceae0ac9d11049d754205cfa63f",
+              "file_size": 10887894,
+              "href": "/files/ENCFF109SDJ/@@download/ENCFF109SDJ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR376CFR",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF483TOV",
+              "md5sum": "469ee7fe11a85730d6dc573627646860",
+              "file_size": 10858342,
+              "href": "/files/ENCFF483TOV/@@download/ENCFF483TOV.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF430UEB",
+              "md5sum": "b19eca59f5cad1d2cc5c46e4b079850e",
+              "file_size": 10850228,
+              "href": "/files/ENCFF430UEB/@@download/ENCFF430UEB.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1851,
+      "rule_arm_with_motif_before_expression": 1786,
+      "peaks_in_cell": 12777
+    },
+    {
+      "factor": "TEAD4",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR550FIL",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF047VVT",
+              "md5sum": "642115b00be59dce6da39cb3fa5471b7",
+              "file_size": 10873228,
+              "href": "/files/ENCFF047VVT/@@download/ENCFF047VVT.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF945RLS",
+              "md5sum": "34a2834ad8be924beeae733eceb7af7d",
+              "file_size": 10857104,
+              "href": "/files/ENCFF945RLS/@@download/ENCFF945RLS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 2478,
+      "rule_arm_with_motif_before_expression": 1215,
+      "peaks_in_cell": 34200
+    },
+    {
+      "factor": "THAP1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR294ZCD",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF332UTN",
+              "md5sum": "83f807ce0e4d6b063b2f280e43e19a6f",
+              "file_size": 10858999,
+              "href": "/files/ENCFF332UTN/@@download/ENCFF332UTN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF145UQS",
+              "md5sum": "781476e73b7ad0c436790b53c4f000dd",
+              "file_size": 10839165,
+              "href": "/files/ENCFF145UQS/@@download/ENCFF145UQS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 150,
+      "rule_arm_with_motif_before_expression": 123,
+      "peaks_in_cell": 5215
+    },
+    {
+      "factor": "TRIM28",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR591QYK",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF545SQK",
+              "md5sum": "3c911e3377044ac9380bcb1680db2265",
+              "file_size": 10866753,
+              "href": "/files/ENCFF545SQK/@@download/ENCFF545SQK.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF686UEE",
+              "md5sum": "69b90633d12835fccc43311409dd5cd1",
+              "file_size": 10858628,
+              "href": "/files/ENCFF686UEE/@@download/ENCFF686UEE.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1892,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 24946
+    },
+    {
+      "factor": "UBTF",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR312FIT",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR644GSV"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF594SXN",
+              "md5sum": "e0ff5662110c675668d748d76c8366d0",
+              "file_size": 10864791,
+              "href": "/files/ENCFF594SXN/@@download/ENCFF594SXN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF242RSI",
+              "md5sum": "655ad5fd43dcebd16c49b6f17c8c505e",
+              "file_size": 10890877,
+              "href": "/files/ENCFF242RSI/@@download/ENCFF242RSI.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF547PJN",
+              "md5sum": "b5f551596898aca98cbec0636adb70c8",
+              "file_size": 10893269,
+              "href": "/files/ENCFF547PJN/@@download/ENCFF547PJN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF636KJN",
+              "md5sum": "e01a78fd503a230ecd592ec50b3b4bef",
+              "file_size": 10896435,
+              "href": "/files/ENCFF636KJN/@@download/ENCFF636KJN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR608ORR",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF535DMT",
+              "md5sum": "17909f09d1371ee344051baa4f26c0b9",
+              "file_size": 10829721,
+              "href": "/files/ENCFF535DMT/@@download/ENCFF535DMT.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF428KYN",
+              "md5sum": "17e0f3d005f51c3c36c949f9d117a14b",
+              "file_size": 10815214,
+              "href": "/files/ENCFF428KYN/@@download/ENCFF428KYN.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1206,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 17628
+    },
+    {
+      "factor": "USF2",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR052BWT",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF427PDU",
+              "md5sum": "5c6480ad7e0b242fd24def66e061955c",
+              "file_size": 10737085,
+              "href": "/files/ENCFF427PDU/@@download/ENCFF427PDU.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF100QXE",
+              "md5sum": "a373f4e7663c93b696d8672e29039f89",
+              "file_size": 10760861,
+              "href": "/files/ENCFF100QXE/@@download/ENCFF100QXE.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF086OAC",
+              "md5sum": "f88b7104bc587be9231334ac1242e5fc",
+              "file_size": 10842072,
+              "href": "/files/ENCFF086OAC/@@download/ENCFF086OAC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF520EWS",
+              "md5sum": "7f577f13e0aafae4113a3c3f32cbb8f7",
+              "file_size": 10869193,
+              "href": "/files/ENCFF520EWS/@@download/ENCFF520EWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 147,
+      "rule_arm_with_motif_before_expression": 110,
+      "peaks_in_cell": 3498
+    },
+    {
+      "factor": "XRCC5",
+      "cell": "HepG2",
+      "experiments": [
+        {
+          "accession": "ENCSR732IYM",
+          "assay": "shRNA RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR491FOC"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF948BGE",
+              "md5sum": "b655f9f62542530d8e7ea68f58b6c4a6",
+              "file_size": 10900017,
+              "href": "/files/ENCFF948BGE/@@download/ENCFF948BGE.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF652NGN",
+              "md5sum": "4abf623746d74293d33cb1ae6b062214",
+              "file_size": 10884268,
+              "href": "/files/ENCFF652NGN/@@download/ENCFF652NGN.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF803IXT",
+              "md5sum": "f5da758517aff99fa2b4eaf305887b78",
+              "file_size": 10903329,
+              "href": "/files/ENCFF803IXT/@@download/ENCFF803IXT.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF412VND",
+              "md5sum": "720aaa45a4bea43ca8e307502e675cf7",
+              "file_size": 10900836,
+              "href": "/files/ENCFF412VND/@@download/ENCFF412VND.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 1222,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 27684
+    },
+    {
+      "factor": "XRCC5",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR276GMG",
+          "assay": "CRISPR RNA-seq",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR292PXV"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF575GSF",
+              "md5sum": "d2cda9c584d0d547fe0b839427524ee0",
+              "file_size": 10950119,
+              "href": "/files/ENCFF575GSF/@@download/ENCFF575GSF.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF672FOX",
+              "md5sum": "fe5f7b1ecd2aea042630aac71887445f",
+              "file_size": 10920555,
+              "href": "/files/ENCFF672FOX/@@download/ENCFF672FOX.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF145YOO",
+              "md5sum": "adbd2a2a8e3569478059f3bc57c58d8c",
+              "file_size": 10948554,
+              "href": "/files/ENCFF145YOO/@@download/ENCFF145YOO.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF366OWS",
+              "md5sum": "abd598fe5b93b6ee56f05bbb79312c41",
+              "file_size": 10916345,
+              "href": "/files/ENCFF366OWS/@@download/ENCFF366OWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 717,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 11308
+    },
+    {
+      "factor": "ZBTB33",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR223QTD",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF726SRJ",
+              "md5sum": "333a469e4a58358241793ea721a3af7e",
+              "file_size": 10757318,
+              "href": "/files/ENCFF726SRJ/@@download/ENCFF726SRJ.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF250HBH",
+              "md5sum": "13688b92fb0dee296ed4376e2bd2500f",
+              "file_size": 10781014,
+              "href": "/files/ENCFF250HBH/@@download/ENCFF250HBH.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 851,
+      "rule_arm_with_motif_before_expression": 144,
+      "peaks_in_cell": 56506
+    },
+    {
+      "factor": "ZMIZ1",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR509YMP",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR644GSV"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF142QVE",
+              "md5sum": "afb416762bdb28da17088a807aa5623d",
+              "file_size": 10879703,
+              "href": "/files/ENCFF142QVE/@@download/ENCFF142QVE.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF491LIJ",
+              "md5sum": "823cca2f17efcc0d98f5a0fca0f254e2",
+              "file_size": 10886876,
+              "href": "/files/ENCFF491LIJ/@@download/ENCFF491LIJ.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF547PJN",
+              "md5sum": "b5f551596898aca98cbec0636adb70c8",
+              "file_size": 10893269,
+              "href": "/files/ENCFF547PJN/@@download/ENCFF547PJN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF636KJN",
+              "md5sum": "e01a78fd503a230ecd592ec50b3b4bef",
+              "file_size": 10896435,
+              "href": "/files/ENCFF636KJN/@@download/ENCFF636KJN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 31,
+      "rule_arm_with_motif_before_expression": 0,
+      "peaks_in_cell": 1077
+    },
+    {
+      "factor": "ZNF143",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR781XJD",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF847HBG",
+              "md5sum": "82569013c108e7440c28b788d4ec4eb6",
+              "file_size": 10813659,
+              "href": "/files/ENCFF847HBG/@@download/ENCFF847HBG.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF649WWS",
+              "md5sum": "3202f5c00b33c105d92de3b116d3f2f6",
+              "file_size": 10800726,
+              "href": "/files/ENCFF649WWS/@@download/ENCFF649WWS.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 983,
+      "rule_arm_with_motif_before_expression": 29,
+      "peaks_in_cell": 29442
+    },
+    {
+      "factor": "ZNF384",
+      "cell": "K562",
+      "experiments": [
+        {
+          "accession": "ENCSR103URL",
+          "assay": "CRISPRi RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF995GDM",
+              "md5sum": "041959090afabd094699e3fae2404016",
+              "file_size": 10801147,
+              "href": "/files/ENCFF995GDM/@@download/ENCFF995GDM.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF852DSL",
+              "md5sum": "d919f569f00e716ec65bcbeb205ee56f",
+              "file_size": 10823180,
+              "href": "/files/ENCFF852DSL/@@download/ENCFF852DSL.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF295GVC",
+              "md5sum": "b8335f91684c590f3d6bf6e7044b9bd7",
+              "file_size": 10818869,
+              "href": "/files/ENCFF295GVC/@@download/ENCFF295GVC.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF613BCM",
+              "md5sum": "b58e2cded570855cbd8ce71aa5e407b1",
+              "file_size": 10822509,
+              "href": "/files/ENCFF613BCM/@@download/ENCFF613BCM.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "accession": "ENCSR965CCM",
+          "assay": "siRNA RNA-seq",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR561NXJ",
+            "ENCSR109YDL"
+          ],
+          "annotation": "V29",
+          "knockdown_files": [
+            {
+              "accession": "ENCFF249WBF",
+              "md5sum": "6b6b143bf7c778e59139e041b770e89d",
+              "file_size": 10883631,
+              "href": "/files/ENCFF249WBF/@@download/ENCFF249WBF.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF317SHF",
+              "md5sum": "2871dcb76ae38bb0fceaf575a8744c1f",
+              "file_size": 10868245,
+              "href": "/files/ENCFF317SHF/@@download/ENCFF317SHF.tsv",
+              "biological_replicates": [
+                2
+              ]
+            }
+          ],
+          "control_files": [
+            {
+              "accession": "ENCFF577UBR",
+              "md5sum": "b5391b2486c71223b5ebcbb567084cbf",
+              "file_size": 10883483,
+              "href": "/files/ENCFF577UBR/@@download/ENCFF577UBR.tsv",
+              "biological_replicates": [
+                1
+              ]
+            },
+            {
+              "accession": "ENCFF415CGN",
+              "md5sum": "5a6ef9fe919f793c4c6de0f6b535cbe7",
+              "file_size": 10870013,
+              "href": "/files/ENCFF415CGN/@@download/ENCFF415CGN.tsv",
+              "biological_replicates": [
+                1
+              ]
+            }
+          ]
+        }
+      ],
+      "rule_arm_genes_before_expression": 937,
+      "rule_arm_with_motif_before_expression": 731,
+      "peaks_in_cell": 19293
+    }
+  ],
+  "files_to_fetch": 145,
+  "bytes_to_fetch": 1577570574,
+  "test_inputs": {
+    "path": "data/cache/regulators/test_inputs.json.gz",
+    "sha256": "f2a4d3e29ef92bed5d0fe218cc1dd6f3c49d6f6a0423631876c945736fbc35ea",
+    "committed": false
+  },
+  "frozen_code": {
+    "head_at_registration": "c267869a3d47a8f1860967d13bd85276f3c275b8",
+    "last_commit_per_file": {
+      "genomeos/attribution/regulators.py": "45422038bc405cf1d30a709cc8af05086188d781",
+      "scripts/regulators_run.py": "cfc30e412ecb6b48299585743e4f61768b0dad3d"
+    },
+    "sha256": {
+      "genomeos/attribution/regulators.py": "bbc3fb9c4ff504dc25120ea3570539971662d083e1b3879e6201b271ec4b64dc",
+      "scripts/regulators_run.py": "279ccb73f6b10fefca612994f07cf69cc70733fb5a866c61002d7cf9186ca5f6"
+    }
+  },
+  "what_the_run_will_write": "data/results/regulators_result.json",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 147.7,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/encRegTfbsClusteredWithCells.hg38.bed.gz",
+        "version": "2020-01-27"
+      },
+      {
+        "accession": "https://www.encodeproject.org JSON API",
+        "version": "metadata fetched 2026-10-10"
+      },
+      {
+        "accession": "data/results/regulators_census.json",
+        "version": "the committed census"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz",
+        "sha256": "542eb15d4d90236c2d3437b285396bbaddee023ca3d9d0e7efb767fcd1ef7899",
+        "bytes": 125375233,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/regulators/knockdown/experiments.json",
+        "sha256": "536c685ef0618f302a9f22bdeb14521cd7098406da998b1d5cd22f6f34f77ebe",
+        "bytes": 6159494,
+        "partition": null
+      },
+      {
+        "path": "data/cache/regulators/assignment.tsv.gz",
+        "sha256": "72eb9feef3c211ccd6957572c9118b09f026b1d73e3964011f8fd684d869b4ee",
+        "bytes": 3658470,
+        "partition": null
+      },
+      {
+        "path": "data/cache/regulators/test_inputs.json.gz",
+        "sha256": "f2a4d3e29ef92bed5d0fe218cc1dd6f3c49d6f6a0423631876c945736fbc35ea",
+        "bytes": 4758818,
+        "partition": null
+      },
+      {
+        "path": "data/results/regulators_census.json",
+        "sha256": "a3024930b190709821dc61e9a474c67331a359a13c139cdbb64afa098bde0100",
+        "bytes": 167723,
+        "partition": null
+      },
+      {
+        "path": "the compiled programs",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/compiled/noncoding_chr1.bio",
+            "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+            "bytes": 41450505
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr10.bio",
+            "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+            "bytes": 19929386
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr11.bio",
+            "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+            "bytes": 24409857
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr12.bio",
+            "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+            "bytes": 21457838
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr13.bio",
+            "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+            "bytes": 9261652
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr14.bio",
+            "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+            "bytes": 12734645
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr15.bio",
+            "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+            "bytes": 13580933
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr16.bio",
+            "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+            "bytes": 14058774
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr17.bio",
+            "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+            "bytes": 20400200
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr18.bio",
+            "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+            "bytes": 8786498
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr19.bio",
+            "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+            "bytes": 16587267
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr2.bio",
+            "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+            "bytes": 31176997
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr20.bio",
+            "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+            "bytes": 12095731
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr21.bio",
+            "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+            "bytes": 4970000
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr22.bio",
+            "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+            "bytes": 9186897
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr3.bio",
+            "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+            "bytes": 25913658
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr4.bio",
+            "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+            "bytes": 19591946
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr5.bio",
+            "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+            "bytes": 21461188
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr6.bio",
+            "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+            "bytes": 22566069
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr7.bio",
+            "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+            "bytes": 21423286
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr8.bio",
+            "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+            "bytes": 17604365
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chr9.bio",
+            "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+            "bytes": 18189257
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chrX.bio",
+            "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+            "bytes": 10763687
+          },
+          {
+            "path": "data/knowledge/compiled/noncoding_chrY.bio",
+            "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+            "bytes": 347166
+          }
+        ],
+        "sha256": "20d2806e55d2fde649f160bc2ee0608fb6ad186df88e46fbd3aa4265ead0facf",
+        "bytes": 417947802,
+        "files": 24,
+        "partition": null
+      },
+      {
+        "path": "GENCODE v50 genes, as attribution.holdout reads them",
+        "group": true,
+        "members": [
+          {
+            "path": "data/cache/holdout/genes/7205b6bbd848609ce9a3cabbd962ce6161578e140a7121479e428856e3b1b0fc.json.gz",
+            "sha256": "34f74d61cb81d03265eabfff72a609ce2b1b423b5efd51532c9affa75e7bb58a",
+            "bytes": 1080943
+          }
+        ],
+        "sha256": "6e11a1fbe5e8d5028221d4789160d84a1fb8dbb5fd386d23ad89c6cb63d30e6c",
+        "bytes": 1080943,
+        "files": 1,
+        "partition": null
+      }
+    ],
+    "input_count": 7,
+    "assembly": "GRCh38; GENCODE v50 for symbols and TSS; the knockdown files' own annotation per unit",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "test_cells": [
+        "K562",
+        "HepG2"
+      ],
+      "kd_assays": [
+        "CRISPRi RNA-seq",
+        "siRNA RNA-seq",
+        "shRNA RNA-seq",
+        "CRISPR RNA-seq"
+      ],
+      "target_class": "transcription factor",
+      "kd_max_ratio": 0.7,
+      "kd_min_control_tpm": 1.0,
+      "expressed_tpm": 1.0,
+      "pseudo_tpm": 1.0,
+      "neighbour_bp": 10000,
+      "peak_window": 50000,
+      "min_arm": 10,
+      "strata": 10,
+      "floor_units": 20,
+      "bootstrap_b": 10000,
+      "bootstrap_seed": 20261010,
+      "permutations": 1000,
+      "permutation_seed": 20261011,
+      "control_alpha": 0.05
+    },
+    "exclusions": [
+      {
+        "reason": "no_chip_of_the_target_in_this_cell",
+        "count": 110
+      }
+    ],
+    "partitions": "n/a: the endpoint is outside every training set this project fitted",
+    "code_cleanliness": {
+      "git_sha": "c267869a3d47a8f1860967d13bd85276f3c275b8",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/regulators_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/regulators_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/regulators_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/evidence.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/regulators_register.py"
+      ],
+      "counting_path_count": 138,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "c267869a3d47a8f1860967d13bd85276f3c275b8",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/regulators_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "c267869a3d47a8f1860967d13bd85276f3c275b8",
+      "code_cleanliness_git_sha": "c267869a3d47a8f1860967d13bd85276f3c275b8",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record c267869"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 351,
+      "opens_under_data": 61,
+      "files_read": 30,
+      "files_written": 1,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
