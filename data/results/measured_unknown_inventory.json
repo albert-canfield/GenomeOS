@@ -58,7 +58,15 @@
     "element_perturbation": "Every public element-perturbation screen with a gene readout, pooled, tested an element against a protein-coding gene in 13 of the 882 real-unknown blocks (14 counting the libraries whose gene is not resolved per guide, as an upper bound). The smallest calibrated design needs 75 compared blocks, so the shortfall is 62 blocks to that floor and 518 to the design for a half; it is not met by anything published.",
     "reporter_and_growth": "Reporter assays reach more blocks (encode_lentimpra_joint_library 167, encode_mpra_element_references 385, vista 55, mpravardb 34) and the growth screens encode_cell_growth_screens 153, but neither names a gene, so neither can score the clause's 'attributed to a gene'.",
     "natural_perturbation": "The one source whose tested universe reaches the sizing is GTEx v8 fine-mapped cis-eQTL: 879 of 882 blocks (530 of the 531 carrying a scored element) hold at least one dbSNP common single-nucleotide variant, the proxy used here for a variant GTEx tested. Its endpoint names a gene and a tissue. Its sensitivity rises with a variant's frequency, which purifying selection lowers, so a fair test must match its controls on the variants they carry; the fine-mapped track itself has not been read.",
-    "next": "register a fine-mapped eQTL test over these blocks, matched on length, neighbourhood and common-variant count, before the track is read; or record the clause as waiting on measurement no public source has made"
+    "decision": {
+      "registered_test": false,
+      "why": "Among the sources inventoried here, only CRISPR perturbation names the gene an element was tested against, and it reaches 13 blocks against a coding gene (14 as an upper bound), under the 75 the smallest calibrated design needs. The calibrated sizing (cab70d9) describes that endpoint and no other. The fine-mapped eQTL route reaches 879 blocks by the tested-variant proxy, but its window rate, its clustering and its sensitivity have never been calibrated in this project, and its control has yet to be chosen, so the sizing cannot say it is enough. No test is registered by this lane.",
+      "what_the_clause_needs": [
+        "62 more blocks with an element tested against a coding gene for the smallest calibrated design, 518 more for the design for a half; no published screen inventoried here supplies them",
+        "or, on natural variation: a power calibration of a fine-mapped eQTL arm measured on sequence outside the 882 blocks, a control matched on length, common-variant count and distance to the named gene's start, and a registration, all before the gtexDapg track is read over the blocks"
+      ],
+      "prior_exposure": "earlier lanes range-read the gtexDapg track over storage units of the UNKNOWN space (human_panel) and at 1,505 CRISPRi elements (finemap_dapg); whether any of those rows lie in the 882 blocks is not checked here, because checking would read them"
+    }
   },
   "table": [
     {
@@ -4119,7 +4127,7 @@
   },
   "alphagenome_requests": 0,
   "money": "none",
-  "seconds": 298.4,
+  "seconds": 291.8,
   "result_manifest": {
     "sources": [
       {
@@ -5976,7 +5984,7 @@
     ],
     "partitions": "n/a: an inventory, nothing is trained or held out",
     "code_cleanliness": {
-      "git_sha": "25c841e56e02545f528d698a14f967457eb591c9",
+      "git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
       "dirty": false,
       "entry_script": {
         "argv0": "scripts/measured_unknown_inventory.py",
@@ -6140,13 +6148,11 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "25c841e56e02545f528d698a14f967457eb591c9",
+      "git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
       "dirty": false,
       "dirty_code_paths": [],
       "untracked_code_paths": [],
-      "dirty_result_paths": [
-        "data/results/engine_package.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/measured_unknown_inventory.py"
       ],
@@ -6154,18 +6160,18 @@
     },
     "complete": true,
     "revision_stamps": {
-      "code_git_sha": "25c841e56e02545f528d698a14f967457eb591c9",
-      "code_cleanliness_git_sha": "25c841e56e02545f528d698a14f967457eb591c9",
+      "code_git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
+      "code_cleanliness_git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
       "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
       "comparable": true,
       "agree": true,
       "revision_race": false,
-      "reading": "no revision race: both stamps record 25c841e"
+      "reading": "no revision race: both stamps record cfc30e4"
     },
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
       "active": true,
-      "opens": 1003,
+      "opens": 1006,
       "opens_under_data": 852,
       "files_read": 339,
       "files_written": 0,
