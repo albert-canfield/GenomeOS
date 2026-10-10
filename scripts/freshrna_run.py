@@ -380,6 +380,9 @@ def main() -> int:
     out = registered_run()
     rows = out.pop("_rows", [])
     if args.post_hoc:
+        # the post-hoc stage re-reads the committed registered result to check it reproduces
+        inputs.append(mf.input_entry("data/results/freshrna_result.json", partition=None))
+        manifest["input_count"] = len(inputs)
         result = json.loads(Path("data/results/freshrna_result.json").read_text())
         if result["outcome"] != out["outcome"]:
             raise SystemExit(
