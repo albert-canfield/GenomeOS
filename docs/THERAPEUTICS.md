@@ -2112,6 +2112,148 @@ remains a research-priority component: a product that keeps its anchor and its
 outward face is a hypothesis about reachability with its evidence attached, not
 a statement that any binder works.
 
+## The dependency a deep deletion creates, wired into the evidence, pre-registered 2026-10-10
+
+Area F's first open item. The section "What the loss makes indispensable" built
+the cell-line half on 2026-09-16 (`2305bee`), and the pipeline never read it:
+a deep-deleted gene is classed `unsuitable` and its limitation says the
+dependency it creates "this pipeline does not model". This registers how a deep
+deletion now contributes, before any lineage statistic has been computed.
+
+**The trigger.** A `GeneAlteration` of kind `deep_deletion` in this patient's
+copy-number table — a GISTIC −2, or an absolute count below 0.5 copies, as
+`cancer/alterations.py` already classifies it — and nothing else. A truncating
+point mutation, a damaging missense and a shallow deletion do not trigger it:
+a heterozygous truncation is not the loss of both copies, and extending the
+trigger to the sweep's other loss definition (DepMap `LikelyLoF`) is a later
+item, named here so that its absence is not read as a finding.
+
+**The partners are the sweep's, frozen.** The partners a deletion can point at
+are the 44 pairs the sweep recovered at q ≤ 0.10, and no others. The committed
+result `data/results/synthetic_lethality.json` lists 40 of them under
+`top_hits`; the other four (DNMT1→RAD50, SMARCA4→MAD2L2, BRCA1→RAD23A,
+ATM→POLH, q 0.090 to 0.098) were reproduced by re-running the sweep offline from
+the DepMap cache, which returned the committed 19,749 tests and 44 hits and
+matched all 40 listed rows field for field. The table is frozen in
+`genomeos/therapeutics/dependency.py` as `REGISTERED_PAIRS`, with the 304 loss
+genes the sweep asked about and the 171 it could test, so a deleted gene gets one
+of four statuses: `partners_registered`, `asked_no_partner` (testable, and no
+pair reached q ≤ 0.10), `asked_untestable` (fewer than 5 lines lost it) and
+`not_asked` (outside the sweep's candidate space; PTEN, RB1 and SMAD4 are
+here, and their absence of partners means the sweep did not ask, not that none
+exists). The same-event groups the sweep reported (CDKN2A with CDKN2B, CDKN2A
+with MTAP, CDKN2B with MTAP) are frozen beside them.
+
+**What each dependency candidate carries.** One record per registered pair whose
+lost gene this tumour deleted, in a new list `dependency_candidates` beside the
+target candidates, never inside them:
+
+1. the patient's event, the one patient-derived line, which is about the
+   deleted gene and not about the partner;
+2. the registered sweep row as committed (lines lost and kept, the two medians,
+   Cliff's delta, q), with the sweep's own evidence record:
+   `prediction`, `computational`, confidence at most 0.7, pan-cancer, and under
+   the sweep's union loss definition;
+3. a lineage test, the new measurement: the DepMap 24Q4 lines whose
+   `OncotreeLineage` equals the lineage the caller states, with a gene effect
+   for the partner and an absolute copy number for the deleted gene; *deleted*
+   is below 0.5 copies (the sweep's `DELETION_MAX_COPIES`, the patient's own
+   event), *kept* is 0.5 or more. The test is the sweep's: one-sided
+   Mann-Whitney through `synthetic_lethality.test_pair`, at least 5 deleted and
+   20 kept lines, Benjamini-Hochberg across every lineage test in the one
+   analysis, and the evidence record is `database`, level `in_vitro`, never
+   patient-derived, confidence by the sweep's formula and so at most 0.7;
+4. where the deleted gene is in a same-event group and this tumour's own table
+   states the other gene's copy state (deleted, or present at 0.5 copies or
+   more, or altered in another way), the deleted group is restricted to lines
+   that match this tumour on that gene; where the table says nothing about it,
+   the state is recorded as unknown and the cell-line comparison is named as
+   mixing both;
+5. the partner's state in this tumour: a partner this tumour also deep-deleted
+   is marked `contradicted_by_this_tumour`, because a tumour that grows without
+   the partner is not dependent on it; a partner that is also a target
+   candidate is marked as such, and that target candidate is left exactly as
+   it was.
+
+**The lineage is stated, never inferred.** It comes from the caller
+(`analyse_vcf(lineage=...)`, `PatientProfile.lineage`, and `--lineage` on the
+command line) as a DepMap `OncotreeLineage` name, matched without regard to
+case. It is not inferred from the tumour's mutations or from the suggested
+cancer types, which are guesses.
+
+**The verdicts, and their wording.** Each reading ends with the same sentence:
+*a cell-line dependency is a hypothesis for this tumour, not a measurement in
+it, and not evidence that any therapy works.*
+
+| Lineage verdict | Rule | Reading |
+|---|---|---|
+| `supported_in_lineage` | q ≤ 0.10 and Cliff's delta < 0 | "In the N DepMap {lineage} lines that deeply deleted A, knocking out B slowed growth more than in the M that kept A (median gene effect x against y)." |
+| `nominal_in_lineage` | p ≤ 0.05 and delta < 0, q above 0.10 | "...shifted the same way at p, not past the false-discovery rate across this analysis's lineage tests; unconfirmed in this lineage." |
+| `not_supported_in_lineage` | enough lines, neither | "In this lineage's lines the dependency is not stronger where A was deleted; the pan-cancer pair stands as registered and is not borne out here." |
+| `unknown` | lineage not stated; not a DepMap lineage; fewer than 5 deleted or 20 kept lines; partner without a gene effect; deleted gene masked in copy number; DepMap cache absent | the reason, with the counts where there are counts |
+| `contradicted_by_this_tumour` | the partner is itself deep-deleted here | "This tumour deleted B too and grows: it is not dependent on B." |
+
+The list is ordered by that verdict (in the order of the table, `unknown` before
+`not_supported_in_lineage` and the contradiction last), then the sweep's q,
+then the larger effect, then the name.
+
+**Why a separate list and not the target ranking.** Every dimension the target
+ranking reads — surface accessibility, the mechanism gate, internalisation,
+healthy-tissue safety — describes a binder or an immune modality, and a
+dependency partner is a target for an inhibitor or a degrader, which GenomeOS
+does not model. Scored there it would land in the unmeasured tier with no
+mechanism reaching it, which says nothing true about it. Kept apart, it adds a
+candidate and evidence and by construction cannot raise, lower or reorder any
+target candidate. The only text that changes in a target candidate is the
+deleted gene's own limitation, which stops saying the dependency is not
+modelled and points at the list.
+
+**Data.** The DepMap cache only, network or not: every partner of the 44 has a
+gene effect there and every lost gene a copy number (checked), and nothing is
+streamed during a pipeline run. Without the cache every lineage verdict is
+`unknown` with that reason and the sweep rows still stand.
+
+**Expected movement in the ten benchmark cases: none, in any field.** No case
+carries a deep deletion: the three copy tables hold ERBB2 at 12 and 13, GRB7,
+MIEN1 and STARD3 at 13, MYC at 8 and TP53 at 2. The prediction is that every row
+is identical, field for field, with the wiring on and off, and that
+`dependency_candidates` is empty in all ten. That is a prediction about the
+trigger as much as about the cases: a wiring that fired on an amplification, a
+diploid count or a truncating point mutation would add candidates here.
+
+**Expected on the one tumour that carries a deep deletion.** The glioma
+fixture `data/demo/alterations/cdkn2a_deleted.*` (CDKN2A at GISTIC −2, EGFR
+amplified, BRAF V600E). Predicted with no lineage stated: one deleted gene,
+`partners_registered`, two dependency candidates, WDR77 then PRMT5 (sweep q
+below 1e-5 and 0.0077, delta −0.245 and −0.163, 427 lines lost), both lineage
+verdicts `unknown` because the lineage was not stated, MTAP's and CDKN2B's state
+in this tumour unknown because the table does not mention them, and every
+target candidate — BRAF, EGFR, CDKN2A and the hypotheses — identical in score,
+tier, gate and rank to the run with the wiring off. With `CNS/Brain` stated (the
+glioma lineage), the same two candidates; the expectation, which is not a pass
+condition, is `supported_in_lineage` for WDR77 and at least
+`nominal_in_lineage` for PRMT5, and the result will be reported whichever of
+the five it is.
+
+**What counts as a regression.** (1) Any of the ten targets losing its
+recovered route, rank, target class, verdict or preferred mechanism, or any
+committed row field moving at all. (2) Any target candidate's overall score,
+evidence tier, mechanism reach or position changing with the wiring on against
+off, over the ten cases, the demo tumour and the CDKN2A fixture. (3) A
+dependency candidate appearing in `candidates`, in the combinations or in the
+design dataset. (4) A dependency evidence line marked patient-derived, at a
+level other than `computational` or `in_vitro`, or above 0.7 confidence. (5) A
+partner outside `REGISTERED_PAIRS`, or candidates from a deleted gene whose
+status is not `partners_registered`. (6) A lineage verdict other than `unknown`
+where the lineage was not stated or not recognised, or with fewer than 5
+deleted or 20 kept lines. (7) A reading without the closing sentence, or one
+that says a therapy is effective, that a tumour will respond, or names a dose.
+
+**What would falsify the design.** The frozen table failing to match an
+offline re-run of the sweep from the same cache: the partners would then be a
+transcription and not the sweep's. A test re-derives them wherever the cache is
+present.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
