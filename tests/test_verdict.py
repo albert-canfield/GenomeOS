@@ -87,6 +87,34 @@ def test_an_ignored_file_is_not_part_of_the_tree(repo: Path) -> None:
     assert verdict.working_tree_hash(repo) == before
 
 
+def test_a_tracked_file_an_exclude_rule_matches_is_still_in_the_tree(repo: Path) -> None:
+    """Planted: the 2026-10-10 defect. A local exclude line matching a TRACKED file must not take it
+    out of the hash, because git never ignores a tracked file; when it did, a clean worktree stopped
+    hashing to its commit tree and every push gate refused every sha. Untracked files the same rule
+    matches must still stay out, which is what the exclusion is for."""
+    (repo / "msg-lane-x-1.txt").write_text("a committed message file\n")
+    _git(repo, "add", "msg-lane-x-1.txt")
+    _git(repo, "commit", "-qm", "two")
+    with (repo / ".git" / "info" / "exclude").open("a") as f:
+        f.write("msg-*.txt\n")
+    assert _git(repo, "ls-files", "-c", "-i", "--exclude-standard") == "msg-lane-x-1.txt"  # the plant took
+    tree = verdict.working_tree_hash(repo)
+    assert tree == _git(repo, "rev-parse", "HEAD^{tree}")
+    assert "msg-lane-x-1.txt" in _git(repo, "ls-tree", "--name-only", tree).splitlines()
+    # an untracked file the same rule matches is still excluded; one it does not match is still in
+    (repo / "msg-lane-y-2.txt").write_text("untracked, excluded\n")
+    assert verdict.working_tree_hash(repo) == tree
+    (repo / "notes.txt").write_text("untracked, not excluded\n")
+    assert verdict.working_tree_hash(repo) != tree
+    # an edit to the tracked-and-excluded file moves the hash, as an edit to any tracked file does
+    (repo / "notes.txt").unlink()
+    (repo / "msg-lane-x-1.txt").write_text("edited\n")
+    assert verdict.working_tree_hash(repo) != tree
+    # and deleting it on disk takes it out, as for any tracked file
+    (repo / "msg-lane-x-1.txt").unlink()
+    assert "msg-lane-x-1.txt" not in _git(repo, "ls-tree", "--name-only", verdict.working_tree_hash(repo))
+
+
 def test_hashing_does_not_stage_anything(repo: Path) -> None:
     """The hash is built in a throwaway index: in a shared checkout it must not stage a peer's work."""
     (repo / "peer_half_written.py").write_text("def f(:\n")

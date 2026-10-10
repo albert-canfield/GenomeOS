@@ -119,6 +119,19 @@ def status_dir(root: Path) -> Path:
     return Path(common) / "genomeos-check"
 
 
+def _ls_files(root: Path, env: dict[str, str] | None = None) -> list[str]:
+    """The paths an index holds, read with `-z` so no name is quoted or stripped. `ls-files` only
+    reads the index; it never refreshes or rewrites it, so this is safe on the shared index."""
+    full = dict(os.environ)
+    if env:
+        full.update(env)
+    out = subprocess.run(
+        ["git", "ls-files", "-z"], cwd=str(root), env=full, check=True, capture_output=True, text=True
+    )
+    # an unmerged path is listed once per stage; one entry is enough
+    return list(dict.fromkeys(p for p in out.stdout.split("\0") if p))
+
+
 def working_tree_hash(root: Path) -> str:
     """The hash of the working tree: tracked and untracked-not-ignored files, as they are on disk.
 
@@ -128,6 +141,19 @@ def working_tree_hash(root: Path) -> str:
     under a mkdtemp that is deleted on the way out, so `git add -A` here cannot affect what any
     session is about to commit. The assertion below is there so a later edit cannot quietly drop
     the override and turn this reader into a writer.
+
+    TRACKED FILES ARE ALWAYS IN, WHATEVER THE IGNORE RULES SAY (2026-10-10). `git add -A` into an
+    EMPTY index treats every path as untracked, so an ignore rule that matches a TRACKED file --
+    a line in `.git/info/exclude`, a global excludesFile, a `.gitignore` written after the file
+    was committed -- left that file out of the hash. Git itself never ignores a tracked file, so
+    the hash of a clean worktree then stopped equalling its commit's tree, and every push gate
+    refused every sha with "no green verdict exists for the tree being pushed". Measured on
+    2026-10-10 from about 10:22 until a `msg-*.txt` line was taken out of `.git/info/exclude`.
+    So after `add -A`, every path the repository's own index tracks (read, never written) that
+    is on disk and still absent from the throwaway index is added by `update-index`, which does
+    not consult ignore rules. What is excluded for UNTRACKED files is unchanged: an untracked
+    path an ignore rule matches stays out. A tracked file deleted on disk stays out, as before,
+    and a tracked path that is now a directory is left to `add -A`, which read its contents.
     """
     with tempfile.TemporaryDirectory(prefix="genomeos-treehash-") as td:
         index = Path(td) / "index"
@@ -139,6 +165,23 @@ def working_tree_hash(root: Path) -> str:
         _git("add", "-A", ".", cwd=root, env=env)
         if not index.exists():
             raise RuntimeError(f"git wrote no index at {index}; GIT_INDEX_FILE did not take effect")
+        added = set(_ls_files(root, env=env))
+        left_out = [
+            p
+            for p in _ls_files(root)  # the repository's own index, read only
+            if p not in added and ((root / p).is_symlink() or (root / p).is_file())
+        ]
+        if left_out:
+            # `--remove` makes a file deleted between the listing and this call a no-op, not an error
+            subprocess.run(
+                ["git", "update-index", "--add", "--remove", "-z", "--stdin"],
+                cwd=str(root),
+                env={**os.environ, **env},
+                input="".join(f"{p}\0" for p in left_out),
+                check=True,
+                capture_output=True,
+                text=True,
+            )
         return _git("write-tree", cwd=root, env=env)
 
 
