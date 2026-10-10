@@ -253,12 +253,22 @@ def main() -> int:
             continue
         cell = candidate["cell"]
         counted = cc2.arms_over(rows, designs[candidate["library"]], columns[cell]["values"], cell)
+        held = columns[cell]["values"]
+        asked_with_a_value = sum(1 for g in genes if g.upper() in held)
         entry["dependency"] = {
             "cell": cell,
             "model": cc2.CELLS[cell],
             "release": columns[cell]["release"],
             "genes_with_a_value": len(columns[cell]["values"]),
             "genes_absent_from_the_release": len(columns[cell]["missing"]),
+            "genes_this_search_asked_about": len(genes),
+            "of_those_with_a_value_in_this_cell": asked_with_a_value,
+            "of_those_absent_from_the_release": len(genes) - asked_with_a_value,
+            "genes_in_the_cache_for_this_cell": len(columns[cell]["requested"]),
+            "cache_denominator_note": "the two counts named genes_with_a_value and "
+            "genes_absent_from_the_release are over the CACHE, which is reused between runs and "
+            "holds more genes for K562 (M3's census asked about them) than for HepG2; the three "
+            "counts over this search's own gene set are the ones to compare between cells",
             "streamed_sha256": columns[cell].get("streamed_sha256"),
         }
         entry["coverage"] = counted
