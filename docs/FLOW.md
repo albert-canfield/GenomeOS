@@ -148,3 +148,19 @@ The script (`scripts/flow_tissue_census.py`), tissue.py and trace.py are
 pinned by sha256 and the tables by digest; the run refuses if any moved. The
 committed result carries counts only: no position, allele, genotype or protein
 change of the person.
+
+**Census result (`data/results/flow_tissue_census_result.json`).** Over 299
+coding SNVs of HG002 in 46 genes with cached GTEx isoform tables, the
+consequence predicted on a tissue's dominant isoform differs in class or
+residue number from the one predicted on the canonical transcript in 551 of
+5,705 variant-tissue pairs where the tissue's isoform is established (238
+class changes, 313 residue-number changes, 0 other-amino-acid-only); 10,441
+of 16,146 pairs are UNKNOWN (low expression 9,554, dominant non-coding 649,
+tie 215, dominant not in the local models 23). Every one of the 54 tissues
+has at least 3 disagreeing variants (median 10 of a median 127 established;
+testis 32 of 156, cerebellum 13 of 37, whole blood 3 of 72); 11 of the 46
+genes carry all 551. All 299 are coding on the canonical transcript; none is
+coding only on a tissue's isoform. Both consequences are predictions of the
+local trace on GTEx's population-median isoform, not measurements and not
+this person's own expression; the genes are the project's cached set (mostly
+translation-disagreement genes), not a sample of the genome.

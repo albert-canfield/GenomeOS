@@ -1,0 +1,3194 @@
+{
+  "result": "flow_tissue_census_result",
+  "date": "2026-10-10",
+  "person": "HG002",
+  "headline": "Over 299 coding SNVs of HG002 in 46 genes with cached GTEx isoform tables, the consequence predicted on a tissue's dominant isoform differs in class or residue number from the one predicted on the canonical transcript in 551 of 5705 variant-tissue pairs where the tissue's isoform is established (10441 of 16146 pairs UNKNOWN; per tissue in per_tissue).",
+  "reading": "Both consequences are predictions of the local trace on GTEx's population-median isoform, not measurements and not this person's own expression; the genes are the project's cached set, not a sample of the genome.",
+  "genes": {
+    "tables": 99,
+    "tables_included": 86,
+    "traced": 83,
+    "with_universe_variants": 46
+  },
+  "variants": {
+    "snvs_in_census_gene_loci": 5246,
+    "universe": 299,
+    "coding_on_canonical": 299,
+    "coding_only_on_a_tissue_isoform": 0
+  },
+  "tissues": 54,
+  "totals": {
+    "established": 5705,
+    "same_transcript": 4999,
+    "other_transcript": 706,
+    "same": 5154,
+    "class_changed": 238,
+    "residue_changed": 313,
+    "change_differs": 0,
+    "disagree": 551,
+    "pairs": 16146,
+    "unknown": {
+      "no_isoform_data": 0,
+      "tissue_not_measured": 0,
+      "low_expression": 9554,
+      "tie": 215,
+      "dominant_not_in_local_models": 23,
+      "dominant_non_coding": 649
+    }
+  },
+  "tissues_by_disagreement": [
+    [
+      "Testis",
+      32,
+      156,
+      299
+    ],
+    [
+      "Brain_Cortex",
+      14,
+      43,
+      299
+    ],
+    [
+      "Colon_Transverse",
+      14,
+      138,
+      299
+    ],
+    [
+      "Kidney_Medulla",
+      14,
+      133,
+      299
+    ],
+    [
+      "Brain_Cerebellar_Hemisphere",
+      13,
+      37,
+      299
+    ],
+    [
+      "Brain_Cerebellum",
+      13,
+      37,
+      299
+    ],
+    [
+      "Kidney_Cortex",
+      13,
+      133,
+      299
+    ],
+    [
+      "Lung",
+      13,
+      157,
+      299
+    ],
+    [
+      "Ovary",
+      13,
+      155,
+      299
+    ],
+    [
+      "Stomach",
+      13,
+      140,
+      299
+    ],
+    [
+      "Brain_Caudate_basal_ganglia",
+      12,
+      89,
+      299
+    ],
+    [
+      "Brain_Hypothalamus",
+      12,
+      89,
+      299
+    ],
+    [
+      "Brain_Nucleus_accumbens_basal_ganglia",
+      12,
+      40,
+      299
+    ],
+    [
+      "Skin_Sun_Exposed_Lower_leg",
+      12,
+      136,
+      299
+    ],
+    [
+      "Adipose_Visceral_Omentum",
+      11,
+      129,
+      299
+    ],
+    [
+      "Brain_Amygdala",
+      11,
+      88,
+      299
+    ],
+    [
+      "Brain_Anterior_cingulate_cortex_BA24",
+      11,
+      39,
+      299
+    ],
+    [
+      "Brain_Spinal_cord_cervical_c-1",
+      11,
+      88,
+      299
+    ],
+    [
+      "Brain_Substantia_nigra",
+      11,
+      88,
+      299
+    ],
+    [
+      "Liver",
+      11,
+      84,
+      299
+    ],
+    [
+      "Small_Intestine_Terminal_Ileum",
+      11,
+      140,
+      299
+    ],
+    [
+      "Adrenal_Gland",
+      10,
+      129,
+      299
+    ],
+    [
+      "Bladder",
+      10,
+      129,
+      299
+    ],
+    [
+      "Brain_Frontal_Cortex_BA9",
+      10,
+      39,
+      299
+    ],
+    [
+      "Breast_Mammary_Tissue",
+      10,
+      129,
+      299
+    ],
+    [
+      "Cervix_Ectocervix",
+      10,
+      87,
+      299
+    ],
+    [
+      "Pancreas",
+      10,
+      133,
+      299
+    ],
+    [
+      "Skin_Not_Sun_Exposed_Suprapubic",
+      10,
+      133,
+      299
+    ],
+    [
+      "Thyroid",
+      10,
+      130,
+      299
+    ],
+    [
+      "Vagina",
+      10,
+      134,
+      299
+    ],
+    [
+      "Artery_Aorta",
+      9,
+      129,
+      299
+    ],
+    [
+      "Artery_Coronary",
+      9,
+      129,
+      299
+    ],
+    [
+      "Artery_Tibial",
+      9,
+      129,
+      299
+    ],
+    [
+      "Brain_Putamen_basal_ganglia",
+      9,
+      37,
+      299
+    ],
+    [
+      "Cervix_Endocervix",
+      9,
+      130,
+      299
+    ],
+    [
+      "Heart_Atrial_Appendage",
+      9,
+      86,
+      299
+    ],
+    [
+      "Heart_Left_Ventricle",
+      9,
+      86,
+      299
+    ],
+    [
+      "Muscle_Skeletal",
+      9,
+      87,
+      299
+    ],
+    [
+      "Pituitary",
+      9,
+      134,
+      299
+    ],
+    [
+      "Uterus",
+      9,
+      87,
+      299
+    ],
+    [
+      "Brain_Hippocampus",
+      8,
+      85,
+      299
+    ],
+    [
+      "Cells_Cultured_fibroblasts",
+      8,
+      38,
+      299
+    ],
+    [
+      "Esophagus_Mucosa",
+      8,
+      128,
+      299
+    ],
+    [
+      "Fallopian_Tube",
+      8,
+      127,
+      299
+    ],
+    [
+      "Adipose_Subcutaneous",
+      7,
+      126,
+      299
+    ],
+    [
+      "Minor_Salivary_Gland",
+      7,
+      131,
+      299
+    ],
+    [
+      "Nerve_Tibial",
+      7,
+      130,
+      299
+    ],
+    [
+      "Prostate",
+      7,
+      127,
+      299
+    ],
+    [
+      "Spleen",
+      7,
+      154,
+      299
+    ],
+    [
+      "Cells_EBV-transformed_lymphocytes",
+      6,
+      80,
+      299
+    ],
+    [
+      "Colon_Sigmoid",
+      6,
+      125,
+      299
+    ],
+    [
+      "Esophagus_Gastroesophageal_Junction",
+      6,
+      83,
+      299
+    ],
+    [
+      "Esophagus_Muscularis",
+      6,
+      83,
+      299
+    ],
+    [
+      "Whole_Blood",
+      3,
+      72,
+      299
+    ]
+  ],
+  "per_tissue": {
+    "Adipose_Subcutaneous": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 165,
+        "tie": 4,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 126,
+      "same_transcript": 116,
+      "other_transcript": 10,
+      "same": 119,
+      "class_changed": 2,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 7,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Adipose_Visceral_Omentum": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 151,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 18
+      },
+      "established": 129,
+      "same_transcript": 115,
+      "other_transcript": 14,
+      "same": 118,
+      "class_changed": 5,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Adrenal_Gland": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 165,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 129,
+      "same_transcript": 116,
+      "other_transcript": 13,
+      "same": 119,
+      "class_changed": 4,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Artery_Aorta": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 165,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 129,
+      "same_transcript": 117,
+      "other_transcript": 12,
+      "same": 120,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Artery_Coronary": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 165,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 129,
+      "same_transcript": 117,
+      "other_transcript": 12,
+      "same": 120,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Artery_Tibial": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 165,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 129,
+      "same_transcript": 117,
+      "other_transcript": 12,
+      "same": 120,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Bladder": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 151,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 129,
+      "same_transcript": 116,
+      "other_transcript": 13,
+      "same": 119,
+      "class_changed": 5,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Brain_Amygdala": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 196,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 88,
+      "same_transcript": 74,
+      "other_transcript": 14,
+      "same": 77,
+      "class_changed": 4,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Brain_Anterior_cingulate_cortex_BA24": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 245,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 39,
+      "same_transcript": 25,
+      "other_transcript": 14,
+      "same": 28,
+      "class_changed": 4,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Brain_Caudate_basal_ganglia": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 195,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 89,
+      "same_transcript": 74,
+      "other_transcript": 15,
+      "same": 77,
+      "class_changed": 5,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 12,
+      "genes_established_other_transcript": 8,
+      "genes_disagreeing": 7
+    },
+    "Brain_Cerebellar_Hemisphere": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 242,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 19
+      },
+      "established": 37,
+      "same_transcript": 21,
+      "other_transcript": 16,
+      "same": 24,
+      "class_changed": 6,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 13,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Brain_Cerebellum": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 242,
+        "tie": 15,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 5
+      },
+      "established": 37,
+      "same_transcript": 21,
+      "other_transcript": 16,
+      "same": 24,
+      "class_changed": 6,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 13,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Brain_Cortex": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 241,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 43,
+      "same_transcript": 26,
+      "other_transcript": 17,
+      "same": 29,
+      "class_changed": 6,
+      "residue_changed": 8,
+      "change_differs": 0,
+      "disagree": 14,
+      "genes_established_other_transcript": 8,
+      "genes_disagreeing": 7
+    },
+    "Brain_Frontal_Cortex_BA9": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 244,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 39,
+      "same_transcript": 26,
+      "other_transcript": 13,
+      "same": 29,
+      "class_changed": 4,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Brain_Hippocampus": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 200,
+        "tie": 0,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 85,
+      "same_transcript": 74,
+      "other_transcript": 11,
+      "same": 77,
+      "class_changed": 3,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 8,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Brain_Hypothalamus": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 195,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 89,
+      "same_transcript": 74,
+      "other_transcript": 15,
+      "same": 77,
+      "class_changed": 5,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 12,
+      "genes_established_other_transcript": 8,
+      "genes_disagreeing": 7
+    },
+    "Brain_Nucleus_accumbens_basal_ganglia": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 243,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 40,
+      "same_transcript": 25,
+      "other_transcript": 15,
+      "same": 28,
+      "class_changed": 6,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 12,
+      "genes_established_other_transcript": 8,
+      "genes_disagreeing": 7
+    },
+    "Brain_Putamen_basal_ganglia": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 247,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 37,
+      "same_transcript": 25,
+      "other_transcript": 12,
+      "same": 28,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Brain_Spinal_cord_cervical_c-1": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 193,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 88,
+      "same_transcript": 74,
+      "other_transcript": 14,
+      "same": 77,
+      "class_changed": 4,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Brain_Substantia_nigra": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 196,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 88,
+      "same_transcript": 74,
+      "other_transcript": 14,
+      "same": 77,
+      "class_changed": 4,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Breast_Mammary_Tissue": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 151,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 18
+      },
+      "established": 129,
+      "same_transcript": 116,
+      "other_transcript": 13,
+      "same": 119,
+      "class_changed": 5,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Cells_Cultured_fibroblasts": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 260,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 0
+      },
+      "established": 38,
+      "same_transcript": 28,
+      "other_transcript": 10,
+      "same": 30,
+      "class_changed": 1,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 8,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Cells_EBV-transformed_lymphocytes": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 185,
+        "tie": 3,
+        "dominant_not_in_local_models": 3,
+        "dominant_non_coding": 28
+      },
+      "established": 80,
+      "same_transcript": 72,
+      "other_transcript": 8,
+      "same": 74,
+      "class_changed": 1,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 6,
+      "genes_established_other_transcript": 3,
+      "genes_disagreeing": 2
+    },
+    "Cervix_Ectocervix": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 193,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 18
+      },
+      "established": 87,
+      "same_transcript": 74,
+      "other_transcript": 13,
+      "same": 77,
+      "class_changed": 5,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Cervix_Endocervix": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 151,
+        "tie": 15,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 130,
+      "same_transcript": 118,
+      "other_transcript": 12,
+      "same": 121,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Colon_Sigmoid": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 168,
+        "tie": 3,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 125,
+      "same_transcript": 116,
+      "other_transcript": 9,
+      "same": 119,
+      "class_changed": 3,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 6,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Colon_Transverse": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 128,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 31
+      },
+      "established": 138,
+      "same_transcript": 121,
+      "other_transcript": 17,
+      "same": 124,
+      "class_changed": 7,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 14,
+      "genes_established_other_transcript": 8,
+      "genes_disagreeing": 7
+    },
+    "Esophagus_Gastroesophageal_Junction": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 210,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 83,
+      "same_transcript": 74,
+      "other_transcript": 9,
+      "same": 77,
+      "class_changed": 3,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 6,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Esophagus_Mucosa": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 151,
+        "tie": 3,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 128,
+      "same_transcript": 117,
+      "other_transcript": 11,
+      "same": 120,
+      "class_changed": 2,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 8,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Esophagus_Muscularis": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 210,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 83,
+      "same_transcript": 74,
+      "other_transcript": 9,
+      "same": 77,
+      "class_changed": 3,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 6,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Fallopian_Tube": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 146,
+        "tie": 18,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 8
+      },
+      "established": 127,
+      "same_transcript": 117,
+      "other_transcript": 10,
+      "same": 119,
+      "class_changed": 3,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 8,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Heart_Atrial_Appendage": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 208,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 4
+      },
+      "established": 86,
+      "same_transcript": 74,
+      "other_transcript": 12,
+      "same": 77,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Heart_Left_Ventricle": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 208,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 86,
+      "same_transcript": 74,
+      "other_transcript": 12,
+      "same": 77,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Kidney_Cortex": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 145,
+        "tie": 1,
+        "dominant_not_in_local_models": 3,
+        "dominant_non_coding": 17
+      },
+      "established": 133,
+      "same_transcript": 117,
+      "other_transcript": 16,
+      "same": 120,
+      "class_changed": 7,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 13,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Kidney_Medulla": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 148,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 133,
+      "same_transcript": 116,
+      "other_transcript": 17,
+      "same": 119,
+      "class_changed": 7,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 14,
+      "genes_established_other_transcript": 8,
+      "genes_disagreeing": 7
+    },
+    "Liver": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 197,
+        "tie": 4,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 84,
+      "same_transcript": 70,
+      "other_transcript": 14,
+      "same": 73,
+      "class_changed": 6,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Lung": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 124,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 157,
+      "same_transcript": 141,
+      "other_transcript": 16,
+      "same": 144,
+      "class_changed": 5,
+      "residue_changed": 8,
+      "change_differs": 0,
+      "disagree": 13,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Minor_Salivary_Gland": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 137,
+        "tie": 16,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 15
+      },
+      "established": 131,
+      "same_transcript": 121,
+      "other_transcript": 10,
+      "same": 124,
+      "class_changed": 2,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 7,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Muscle_Skeletal": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 211,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 0
+      },
+      "established": 87,
+      "same_transcript": 75,
+      "other_transcript": 12,
+      "same": 78,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Nerve_Tibial": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 147,
+        "tie": 19,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 130,
+      "same_transcript": 120,
+      "other_transcript": 10,
+      "same": 123,
+      "class_changed": 4,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 7,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Ovary": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 124,
+        "tie": 16,
+        "dominant_not_in_local_models": 1,
+        "dominant_non_coding": 3
+      },
+      "established": 155,
+      "same_transcript": 139,
+      "other_transcript": 16,
+      "same": 142,
+      "class_changed": 4,
+      "residue_changed": 9,
+      "change_differs": 0,
+      "disagree": 13,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Pancreas": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 158,
+        "tie": 8,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 0
+      },
+      "established": 133,
+      "same_transcript": 121,
+      "other_transcript": 12,
+      "same": 123,
+      "class_changed": 3,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Pituitary": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 132,
+        "tie": 19,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 14
+      },
+      "established": 134,
+      "same_transcript": 122,
+      "other_transcript": 12,
+      "same": 125,
+      "class_changed": 6,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Prostate": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 154,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 127,
+      "same_transcript": 117,
+      "other_transcript": 10,
+      "same": 120,
+      "class_changed": 4,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 7,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Skin_Not_Sun_Exposed_Suprapubic": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 147,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 18
+      },
+      "established": 133,
+      "same_transcript": 120,
+      "other_transcript": 13,
+      "same": 123,
+      "class_changed": 3,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Skin_Sun_Exposed_Lower_leg": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 144,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 18
+      },
+      "established": 136,
+      "same_transcript": 121,
+      "other_transcript": 15,
+      "same": 124,
+      "class_changed": 5,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 12,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Small_Intestine_Terminal_Ileum": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 126,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 31
+      },
+      "established": 140,
+      "same_transcript": 126,
+      "other_transcript": 14,
+      "same": 129,
+      "class_changed": 4,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 11,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Spleen": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 124,
+        "tie": 1,
+        "dominant_not_in_local_models": 3,
+        "dominant_non_coding": 17
+      },
+      "established": 154,
+      "same_transcript": 144,
+      "other_transcript": 10,
+      "same": 147,
+      "class_changed": 1,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 7,
+      "genes_established_other_transcript": 4,
+      "genes_disagreeing": 3
+    },
+    "Stomach": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 152,
+        "tie": 4,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 140,
+      "same_transcript": 125,
+      "other_transcript": 15,
+      "same": 127,
+      "class_changed": 6,
+      "residue_changed": 7,
+      "change_differs": 0,
+      "disagree": 13,
+      "genes_established_other_transcript": 7,
+      "genes_disagreeing": 6
+    },
+    "Testis": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 97,
+        "tie": 19,
+        "dominant_not_in_local_models": 13,
+        "dominant_non_coding": 14
+      },
+      "established": 156,
+      "same_transcript": 120,
+      "other_transcript": 36,
+      "same": 124,
+      "class_changed": 20,
+      "residue_changed": 12,
+      "change_differs": 0,
+      "disagree": 32,
+      "genes_established_other_transcript": 10,
+      "genes_disagreeing": 9
+    },
+    "Thyroid": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 151,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 130,
+      "same_transcript": 117,
+      "other_transcript": 13,
+      "same": 120,
+      "class_changed": 5,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Uterus": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 193,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 17
+      },
+      "established": 87,
+      "same_transcript": 75,
+      "other_transcript": 12,
+      "same": 78,
+      "class_changed": 4,
+      "residue_changed": 5,
+      "change_differs": 0,
+      "disagree": 9,
+      "genes_established_other_transcript": 5,
+      "genes_disagreeing": 4
+    },
+    "Vagina": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 145,
+        "tie": 2,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 18
+      },
+      "established": 134,
+      "same_transcript": 121,
+      "other_transcript": 13,
+      "same": 124,
+      "class_changed": 4,
+      "residue_changed": 6,
+      "change_differs": 0,
+      "disagree": 10,
+      "genes_established_other_transcript": 6,
+      "genes_disagreeing": 5
+    },
+    "Whole_Blood": {
+      "variants": 299,
+      "unknown": {
+        "no_isoform_data": 0,
+        "tissue_not_measured": 0,
+        "low_expression": 223,
+        "tie": 1,
+        "dominant_not_in_local_models": 0,
+        "dominant_non_coding": 3
+      },
+      "established": 72,
+      "same_transcript": 69,
+      "other_transcript": 3,
+      "same": 69,
+      "class_changed": 0,
+      "residue_changed": 3,
+      "change_differs": 0,
+      "disagree": 3,
+      "genes_established_other_transcript": 1,
+      "genes_disagreeing": 1
+    }
+  },
+  "per_gene": [
+    {
+      "gene": "AKR7L",
+      "chrom": "chr1",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 14,
+      "tissues_disagreeing": 14
+    },
+    {
+      "gene": "MUC1",
+      "chrom": "chr1",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 19,
+      "tissues_disagreeing": 19
+    },
+    {
+      "gene": "GPATCH4",
+      "chrom": "chr1",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR10J4",
+      "chrom": "chr1",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "FCGR2C",
+      "chrom": "chr1",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "VN1R5",
+      "chrom": "chr1",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "KCNE4",
+      "chrom": "chr2",
+      "variants": 4,
+      "coding_on_canonical": 4,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR5AC1",
+      "chrom": "chr3",
+      "variants": 5,
+      "coding_on_canonical": 5,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR5H8",
+      "chrom": "chr3",
+      "variants": 7,
+      "coding_on_canonical": 7,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "ARL9",
+      "chrom": "chr4",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 1,
+      "tissues_disagreeing": 1
+    },
+    {
+      "gene": "OR12D1",
+      "chrom": "chr6",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "MICA",
+      "chrom": "chr6",
+      "variants": 17,
+      "coding_on_canonical": 17,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "HLA-DQA1",
+      "chrom": "chr6",
+      "variants": 49,
+      "coding_on_canonical": 49,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "EPM2A",
+      "chrom": "chr6",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 42,
+      "tissues_disagreeing": 42
+    },
+    {
+      "gene": "OR10AC1",
+      "chrom": "chr7",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "NOBOX",
+      "chrom": "chr7",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "PINX1",
+      "chrom": "chr8",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 47,
+      "tissues_disagreeing": 47
+    },
+    {
+      "gene": "MROH5",
+      "chrom": "chr8",
+      "variants": 18,
+      "coding_on_canonical": 18,
+      "tissues_other_isoform_established": 1,
+      "tissues_disagreeing": 1
+    },
+    {
+      "gene": "PRSS3",
+      "chrom": "chr9",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 20,
+      "tissues_disagreeing": 20
+    },
+    {
+      "gene": "OR13C7",
+      "chrom": "chr9",
+      "variants": 8,
+      "coding_on_canonical": 8,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "PTCHD3",
+      "chrom": "chr10",
+      "variants": 13,
+      "coding_on_canonical": 13,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "AGAP9",
+      "chrom": "chr10",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "PANK1",
+      "chrom": "chr10",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 44,
+      "tissues_disagreeing": 44
+    },
+    {
+      "gene": "PNLIPRP2",
+      "chrom": "chr10",
+      "variants": 4,
+      "coding_on_canonical": 4,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "MUC2",
+      "chrom": "chr11",
+      "variants": 14,
+      "coding_on_canonical": 14,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR4A8",
+      "chrom": "chr11",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR8J2",
+      "chrom": "chr11",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR5AL1",
+      "chrom": "chr11",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR5G3",
+      "chrom": "chr11",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "MUC19",
+      "chrom": "chr12",
+      "variants": 11,
+      "coding_on_canonical": 11,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "C12orf76",
+      "chrom": "chr12",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR4Q2",
+      "chrom": "chr14",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "OR11H7",
+      "chrom": "chr14",
+      "variants": 4,
+      "coding_on_canonical": 4,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "SERPINA2",
+      "chrom": "chr14",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "SLC22A31",
+      "chrom": "chr16",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 7,
+      "tissues_disagreeing": 7
+    },
+    {
+      "gene": "TP53",
+      "chrom": "chr17",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "TGIF1",
+      "chrom": "chr18",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 49,
+      "tissues_disagreeing": 49
+    },
+    {
+      "gene": "ZNF302",
+      "chrom": "chr19",
+      "variants": 2,
+      "coding_on_canonical": 2,
+      "tissues_other_isoform_established": 53,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "FCGBP",
+      "chrom": "chr19",
+      "variants": 42,
+      "coding_on_canonical": 42,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "FUT2",
+      "chrom": "chr19",
+      "variants": 5,
+      "coding_on_canonical": 5,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "SIGLEC16",
+      "chrom": "chr19",
+      "variants": 24,
+      "coding_on_canonical": 24,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "KIR2DS4",
+      "chrom": "chr19",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "GCNT7",
+      "chrom": "chr20",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "SH3BGR",
+      "chrom": "chr21",
+      "variants": 1,
+      "coding_on_canonical": 1,
+      "tissues_other_isoform_established": 22,
+      "tissues_disagreeing": 22
+    },
+    {
+      "gene": "CYP2D7",
+      "chrom": "chr22",
+      "variants": 14,
+      "coding_on_canonical": 14,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    },
+    {
+      "gene": "KLHDC7B",
+      "chrom": "chr22",
+      "variants": 3,
+      "coding_on_canonical": 3,
+      "tissues_other_isoform_established": 0,
+      "tissues_disagreeing": 0
+    }
+  ],
+  "exclusions": {
+    "table_without_gencode_id": 13,
+    "table_unreadable": 0,
+    "gene_not_in_local_models_on_chr1_22": 2,
+    "gene_on_a_chromosome_without_calls_or_sequence": 0,
+    "gene_without_coding_canonical": 1,
+    "multi_allelic_rows": 100,
+    "indel_or_mnv_rows": 773,
+    "rows_without_alt_genotype": 0
+  },
+  "registration": {
+    "file": "data/results/flow_tissue_census_registration.json",
+    "date": "2026-10-10",
+    "frozen": {
+      "genomeos/flow/tissue.py": "d02965931b8979f7b591b6b492309efca36f941c44fc192c4331373af294cc3a",
+      "genomeos/flow/trace.py": "8a132cfac8216555c2592be0cdac77c267cc7378980e17584262ba80b39b97f9",
+      "scripts/flow_tissue_census.py": "4675a49b522c948931292e0f413f3b9dd2545396111d1619085a811b268f2723"
+    }
+  },
+  "seconds": 55,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GTEx Portal API v2 medianTranscriptExpression, datasetId gtex_v8",
+        "version": "GTEx v8 (RSEM transcript TPM on GENCODE v26 models), cached per gene by genomeos.molecules.rna.gtex_isoforms"
+      },
+      {
+        "accession": "GENCODE comprehensive annotation (GFF3)",
+        "version": "v50"
+      },
+      {
+        "accession": "UCSC hg38 chromosome FASTA (GRCh38)",
+        "version": "hg38"
+      },
+      {
+        "accession": "GIAB v4.2.1 benchmark calls (open-consent HG002), PASS rows per chromosome",
+        "version": "NISTv4.2.1 GRCh38, chr1-22"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/flow_tissue_census_registration.json",
+        "sha256": "519f33c27de636419f5f70ed5572fb6505270d1423c5901af61dd35ddf5e934d",
+        "bytes": 39135,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/expression/gtex_isoforms_*.json",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_AGAP9.json",
+            "sha256": "f9f8622db6c8e685eb385a9aadfe361de82624fd7c245dac535d038dceda21a9",
+            "bytes": 6577
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_AKR7L.json",
+            "sha256": "243ef6552a8baed99af238fa80f2bc818e9ba34ff2d5f88981d18f0ef7a7463c",
+            "bytes": 17185
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_APP.json",
+            "sha256": "187d4d7b518a486b97aad7dad142fb0f0839c441955ae5604c284499f67e8d75",
+            "bytes": 35412
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ARL9.json",
+            "sha256": "38ef90a3fe86665bf19960ccfcd367d8e925008e707787e2b3a40af1f51d1ff2",
+            "bytes": 12768
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ASPRV1.json",
+            "sha256": "cb21020df33c270a5714d1dea04a1981b66bdd6080e4dbed157557630f6eed05",
+            "bytes": 6520
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_C10ORF95.json",
+            "sha256": "b63c7f80a15db16b2ae49590adf063f3f0c9e124118bfc1c2d5dacd06bb10712",
+            "bytes": 6500
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_C12ORF76.json",
+            "sha256": "4fc6b45de3406518f076d5d6c8268dc04f4d78cee81b3e975b3c9e97d6a884a5",
+            "bytes": 22075
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_C16ORF82.json",
+            "sha256": "da27aeb0c3f15c67e1536e4fddcc3ae83b9274b62d6c98c20c62e099aab98497",
+            "bytes": 8351
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CALML4.json",
+            "sha256": "fd2aa7396fe9e463102026bdf804d27005082ef54c3dd3d05fa43606fc66cf2f",
+            "bytes": 23614
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CAPS.json",
+            "sha256": "92320a770638e50dfec59a429d82626e62281d60729127d1e1246adbdc73a63e",
+            "bytes": 14303
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CASP12.json",
+            "sha256": "571af1ecf1eeaaca310a8a5d8e2f42ac2faad2d9b63872efcd6f23fc37423152",
+            "bytes": 29279
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CCDC28A.json",
+            "sha256": "fa70e5448f0a474c26efc476273ab75389af5d71931e47abb5e2a79ab47b309e",
+            "bytes": 9954
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CPEB2.json",
+            "sha256": "6c6926da952923b987d229f193b2ad2ac8791c5ae422b7e77a988f4a11bb102a",
+            "bytes": 25362
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CXXC4.json",
+            "sha256": "5ef3626f56c7f1e25124454861c8791ec4f0517badf4e48ad81d4e73ab824fee",
+            "bytes": 9756
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CYP2D7.json",
+            "sha256": "28a97228f60a388e3033fbecd6a10c4b466223bd24bec2b8b7f6a0e0b78de00d",
+            "bytes": 23841
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DEFB109D.json",
+            "sha256": "06b9cbf5fb965ff3f2f633e9c74abc1e7263c582a81450631cddb5c9b9746880",
+            "bytes": 100
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DEFB112.json",
+            "sha256": "53440a228cd4570b7e9d92a7883a005e4d41e7f78c9efde20bbb015385f931d3",
+            "bytes": 1950
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DRC8.json",
+            "sha256": "dddfaa4e8f4a2f8bc367cfa3f8bb34b90289b810e176056d633dabd71edc8190",
+            "bytes": 96
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DUSP13B.json",
+            "sha256": "742a46b17159fd49f566a268868429d0eb98051edf328051789e4cf7ea991c94",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_EPM2A.json",
+            "sha256": "aa423b6fbc5fe9fa97c3da27ec8ee0c0c12d1741728159a4b0cdaf076f0c991f",
+            "bytes": 57866
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FAM174C.json",
+            "sha256": "20acc3f82958adfe36c4ad476112f6a7b77e50beb063a1f530feccfce0a13c51",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FAM246C.json",
+            "sha256": "da85a30a9de1c82f6576b8573d3f154692564601d9336be755f396a644c54633",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FCGBP.json",
+            "sha256": "a5ef5e3b262a6d872ba488f728ee22ea81164e18e0d236ced4ae3b2f71d9b655",
+            "bytes": 9730
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FCGR2C.json",
+            "sha256": "39fcd8a554d2a6768378f3fa6fa67673054a2b76008ef84837c996c3da9f1a33",
+            "bytes": 30152
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FUT2.json",
+            "sha256": "4d00a353f827e4e14353d161ba8ac365f4b11ccf1836ae75d1528de03fc72b7e",
+            "bytes": 12053
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GAGE12B.json",
+            "sha256": "6845d828edcd9d68115f77896d69b83e50e06e107951e38fab192b33f4b1d1db",
+            "bytes": 2045
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GCNT7.json",
+            "sha256": "46a27f2fa565db4588f16b1457973a64d88398096cf2ca008308c896432b34f7",
+            "bytes": 6201
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GPATCH4.json",
+            "sha256": "e0c2cb1b9fbf2c614af479a22968eca0ca1d7ecf4d26a849d0cbcac01e39f8d6",
+            "bytes": 31290
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GSTT2.json",
+            "sha256": "2f842a17f56f6868c929ab033726fb17f1a3e406fff8f034a02afee856e3757d",
+            "bytes": 9358
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_HLA-DQA1.json",
+            "sha256": "13fe09b287eb1758a9b9fbcbaf8393bd520365d9105a90f2a3085aef98fcb0d3",
+            "bytes": 16550
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_IFNL4.json",
+            "sha256": "dc090f14f2a9f9c2cec6ce3aae36560abd995d37ea301b588aab4856abbbeff5",
+            "bytes": 7269
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KCNE4.json",
+            "sha256": "d323b9002a54313b2780ed0b2dd1fa8e2751eccd828a3c7e8bcc1d96d2aebad8",
+            "bytes": 8216
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KIR2DS4.json",
+            "sha256": "5c943a024af54f851d7338d7726de2db231ff8d801a89e4cf764eef6638156e3",
+            "bytes": 5136
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KLHDC7B.json",
+            "sha256": "ca89bf396d49412dcf1990a96013866cab9bdbf138a7c8b241c6025faedf25ff",
+            "bytes": 11735
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KRTAP5-4.json",
+            "sha256": "1d40eaa8cbbdd820d9311959b0e49c4ab4675d2b038fdad943bf08225cdbf7fb",
+            "bytes": 4070
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_LCN9.json",
+            "sha256": "a0335d2e4db35c7eab733a3cbf095db97cf1303bed11f936ce4c1d328c613470",
+            "bytes": 9123
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MICA.json",
+            "sha256": "4f9b7c7ea6ad71ef891f8973b666d8dbc84932abce77116802d8889fc1979995",
+            "bytes": 9990
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MROH5.json",
+            "sha256": "d66f2a33fbbe271a89ad398aaedd47d0936038081cb5c977f6f707f599ccef13",
+            "bytes": 9091
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MSLNL.json",
+            "sha256": "1259025ed885e50692a00128adc924be0950539b6ebad1f5fa7531295bbac3b2",
+            "bytes": 8345
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUC1.json",
+            "sha256": "992d1941cc21c0b94117fe2bf2533c6d46b4eccffa55009d0f97268a958c12d5",
+            "bytes": 55348
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUC19.json",
+            "sha256": "dcd546ceb22845ea07751121eb824abc602dcc1a1b53e9dd0ec3917a1a09cf76",
+            "bytes": 21726
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUC2.json",
+            "sha256": "a714f7d3057caf66735680aea8a49686bf6d155f63958d9f6e21712cb257b7cd",
+            "bytes": 11676
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUCL3.json",
+            "sha256": "8522984030db2b1e0f34cf599678f5afad4bfaa4fd73dc3275375fb582438f0c",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_NOBOX.json",
+            "sha256": "92a7cfce0e2bf0dc0519fbd078889c490571712fc738dadc756f7ad73c0b0885",
+            "bytes": 3688
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_NPFFR2.json",
+            "sha256": "c7c09aa6acfa58e7a9fbedbf7b1dc643f0bb057a411037a8b00e0ff653ef1763",
+            "bytes": 10330
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_NPIPB3.json",
+            "sha256": "7a1f989f819ec063aeb3aa971e91739bf8ea1bccc1df9eac6d290a88d09d6a7f",
+            "bytes": 28142
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OOSP1.json",
+            "sha256": "718d8614f28ca4d29f740b5c243299155f545923f4d87b5d2f85620d4bfab7e5",
+            "bytes": 4117
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR10AC1.json",
+            "sha256": "b5ef6ceb34cbca670c2c517f9b8a7a61ed4ff94c41dc5ec490902f96924d3819",
+            "bytes": 2402
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR10J4.json",
+            "sha256": "61c6ea89cb56d451a342b182dda33e3c23859dedd3b6313ddd6d84b3ea1ef214",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR11H7.json",
+            "sha256": "3de00605a7fd35393670279542cfb5b56ada2959e62b6d6a1bce60fc6f901f19",
+            "bytes": 5905
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR12D1.json",
+            "sha256": "03f41041b6eea30266874cd62f12c4ef86c9cdf64dec8f6a4a7b35201b4facdb",
+            "bytes": 2043
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR13C7.json",
+            "sha256": "2cf7cdfa7dfe00a5eecca03a71f5dca8b4056a1c99f74fa8d53485a511bb21d5",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR1P1.json",
+            "sha256": "36876163c62c158798aff89f3b5f5f10f6599270a2ab589e807cabc814c51154",
+            "bytes": 1969
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR2B8.json",
+            "sha256": "76868d1a1dcbef375b9f63ebea86d454c0a1b3c010ce326bbaed1b97776bcefb",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR2T7.json",
+            "sha256": "459f9bb0650a040e28a842c7d90bb15474912f5d777a0d4cf67b41f5550f9b8c",
+            "bytes": 2104
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4A8.json",
+            "sha256": "37360328ae00e6488fbd2ffc616028a08527d55d9b8f2aca85b0f1efa6256b79",
+            "bytes": 1969
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4C45.json",
+            "sha256": "b09cfd1a96d0c3d8feda1e0ee6c36d694f74ed1690706d684e130be2904e6a42",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4K3.json",
+            "sha256": "883f7b9d83faabdaafc1098cda361c2d1e67f1c7a6fd261772270c7ad83906fe",
+            "bytes": 1969
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4Q2.json",
+            "sha256": "f0bd6043caf5c9f7df5161a64eebdc3a299b7953342574536ebb8adab2945846",
+            "bytes": 3552
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR52P1.json",
+            "sha256": "75e57457492df92f452b3ce3db1c77f7cf336a7eb1116a09508683f455d61a0a",
+            "bytes": 98
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5AC1.json",
+            "sha256": "1100ac1d845fc083c915f1895112c6682107b7bc491e93ac4016c3d8c629b6bb",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5AL1.json",
+            "sha256": "cf3154a45718d202e7f0c24fa1b70b61cdb91c396c981d8ce7fa7c8d83c4992b",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5G3.json",
+            "sha256": "4bece5ff1e2b7faa1a3462c9607d49e22b3267f4518903e57c5d7921a98ea646",
+            "bytes": 2138
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5H8.json",
+            "sha256": "86ccd36bcf69c9ad08767a2c5aa86ca367c3b56b3d459b5977f63cefb30744f0",
+            "bytes": 2223
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR8J2.json",
+            "sha256": "f9111964b48d8e0b1f8415c1be4ef0edd0726cba6bc6fb000ce1dcb99e44a7c9",
+            "bytes": 2104
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR9H1.json",
+            "sha256": "19e88f0f2a2949f4ab2ae2aa252d52a4760d9a85146e275cf7a8c24f64313ce2",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PANK1.json",
+            "sha256": "e0ff32029802296a91d779006dc2279302589d7abaabb7ca1344828dc74c3919",
+            "bytes": 18799
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PINX1.json",
+            "sha256": "97e9ae6d1f64a8e2399bf64a4c77c0c5d84e01f47175c05f5af4f273d62d85a8",
+            "bytes": 23465
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PLA2G2F.json",
+            "sha256": "46caf7427cde90806452a36f9fbdd2f55d0561314f534e2face50ef994cd1c2a",
+            "bytes": 5603
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PNLIPRP2.json",
+            "sha256": "f79b3e873ea7e053c23490dbf9063bb4117d25b52037cb30fabda6facfbeaee3",
+            "bytes": 9515
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRB1.json",
+            "sha256": "e3475a7956ba30ea829cab6c5cfd454994af8889ef930258fd653fa39efff02e",
+            "bytes": 7386
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRB4.json",
+            "sha256": "ccd274ddf624bc43675cb3b6d4dd4c895dcf044963e769b92df6f7cc2fe27c81",
+            "bytes": 6746
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRR33.json",
+            "sha256": "b76f430f5100914624d4f40d79b31d2d93a3ceeb64e92591eae7aff278f0a340",
+            "bytes": 6522
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRSS3.json",
+            "sha256": "cd259ba8d1caccd263aab00fd27f51629aa14088452a047bffe7843ffefac903",
+            "bytes": 19669
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PTCHD3.json",
+            "sha256": "681cf4933faa60de1809ace73a46ded0d0332986bb130d5abab6a91d9d5f0cd9",
+            "bytes": 5843
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PTGES3L.json",
+            "sha256": "eaff06b708319438aca14ae624829039c8044c8dabae103b591308251f001ada",
+            "bytes": 19564
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RAVER1.json",
+            "sha256": "1e3d658dd9d984039c114b6275b0e2ec866a3958a6ad594ea0284a136e92bbbf",
+            "bytes": 18147
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RESP18.json",
+            "sha256": "737e66179739e5927b0d01ac20d5e293538a3547bfb1872bb3cf7d362e15e68d",
+            "bytes": 6531
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RFLNB.json",
+            "sha256": "e6932341cc48d5945a97d4fe2a9faa8747934a867bb0d53b4bd9e1bdbcbe2ed3",
+            "bytes": 6536
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RPL36.json",
+            "sha256": "dc865268acfe31399126bc5c692bd3ccbe9ce4fb131398a377cac8418ee95078",
+            "bytes": 24103
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RSPH3.json",
+            "sha256": "f89dd657b05933535fc499418563fe20fe6dfeb5bd61bd20cda7df545e67b7f7",
+            "bytes": 11530
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RTL8C.json",
+            "sha256": "8274432b22389efd79d65c9fe7d388acede60cc0b0f5cc2ddf1759a896cb1cd7",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SAMD1.json",
+            "sha256": "f10ad36c5b962016d1bf245e2630722f3dce230100367b8e753a95bf07b77a8f",
+            "bytes": 10007
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SCOC.json",
+            "sha256": "ab414ce7f5ee68d55ada9c6881c06da35b59beeab24912de90cc9bdf6ba679c3",
+            "bytes": 28417
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SCYGR10.json",
+            "sha256": "551991032f9dc8e1b74673b0d1ebe7b486426e9e4dc06355522d1e4e710c9a93",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SERPINA2.json",
+            "sha256": "a61c5bae9f740c6498f732424fbe34238e49fcb1f51c6bcda74083813d7bc59c",
+            "bytes": 2207
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SFTA3.json",
+            "sha256": "2d22de46791f44c6f9c27337d2f4598823f136836167f69cd5c8e6709394c879",
+            "bytes": 366
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SH3BGR.json",
+            "sha256": "d39b4fff917a0a6a910fdaa0c7b8e5b9957b39b58a1d6f6b664303ff8fe249db",
+            "bytes": 22588
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SIGLEC16.json",
+            "sha256": "aa9ccdbae3e0695e2df086228baa5c4eb37b4ebae810f3a75cb715e53ed48b2a",
+            "bytes": 8110
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SLC22A31.json",
+            "sha256": "908f93dd928b3c0bd4e2fe10b85022220f06648d9017f0849feaedbb5b6e6f99",
+            "bytes": 20522
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SPATA31H1.json",
+            "sha256": "85621b78afe8710467b3a7cfb19c6a70777ede0bd46e2474a888fb7bc131d48e",
+            "bytes": 101
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SWI5.json",
+            "sha256": "fd74773c808d3e9499ae291307742aa418d44674b9870c598d98767a61d1213b",
+            "bytes": 14850
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_TGIF1.json",
+            "sha256": "cae715b32f947514a33c7765bfdb28c6d3a9a8841d5081d9f404e77e3b6196e3",
+            "bytes": 48333
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_TP53.json",
+            "sha256": "f75997df456b27bc7595866587266c4d2b4efc928f58432dc4ed079993082460",
+            "bytes": 50167
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_UBE2NL.json",
+            "sha256": "1d8d250696db78a43a378ea03b2d7540fddcb2af6a888e050589a0a848a9e362",
+            "bytes": 2224
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_VN1R5.json",
+            "sha256": "c32791c5e36c39f2d21a2837ce7de15feffc5487406cf985a355d50ee53d9a2c",
+            "bytes": 2850
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_WFDC6.json",
+            "sha256": "8db0c5181f67d309d50a2fca0c15db6e392aa59e8b9756fe022cf62c6e2cbd24",
+            "bytes": 4123
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ZFP57.json",
+            "sha256": "16a5bbcfa2ab6058954811771471d20984fdd4991a98568cb2928a2596268459",
+            "bytes": 11682
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ZNF302.json",
+            "sha256": "d918a5b4dd8f73515443d597f3ad7635b25f6ff55c0637865c7effbb2a7420b1",
+            "bytes": 35235
+          }
+        ],
+        "sha256": "db04b90c09e9884dd4aed80a65dd8da079c9b0ad1b5353f7a2629524437c0993",
+        "bytes": 1127746,
+        "files": 99,
+        "partition": null
+      },
+      {
+        "path": "GENCODE v50 annotation, per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/gencode_v50_chr1.gff3.gz",
+            "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+            "bytes": 15781966
+          },
+          {
+            "path": "data/reference/gencode_v50_chr10.gff3.gz",
+            "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+            "bytes": 6971712
+          },
+          {
+            "path": "data/reference/gencode_v50_chr11.gff3.gz",
+            "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+            "bytes": 9161789
+          },
+          {
+            "path": "data/reference/gencode_v50_chr12.gff3.gz",
+            "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+            "bytes": 8537589
+          },
+          {
+            "path": "data/reference/gencode_v50_chr13.gff3.gz",
+            "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+            "bytes": 2925688
+          },
+          {
+            "path": "data/reference/gencode_v50_chr14.gff3.gz",
+            "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+            "bytes": 5446220
+          },
+          {
+            "path": "data/reference/gencode_v50_chr15.gff3.gz",
+            "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+            "bytes": 5424386
+          },
+          {
+            "path": "data/reference/gencode_v50_chr16.gff3.gz",
+            "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+            "bytes": 6795096
+          },
+          {
+            "path": "data/reference/gencode_v50_chr17.gff3.gz",
+            "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+            "bytes": 9026753
+          },
+          {
+            "path": "data/reference/gencode_v50_chr18.gff3.gz",
+            "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+            "bytes": 2682634
+          },
+          {
+            "path": "data/reference/gencode_v50_chr19.gff3.gz",
+            "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+            "bytes": 8518707
+          },
+          {
+            "path": "data/reference/gencode_v50_chr2.gff3.gz",
+            "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+            "bytes": 12336546
+          },
+          {
+            "path": "data/reference/gencode_v50_chr20.gff3.gz",
+            "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+            "bytes": 3974515
+          },
+          {
+            "path": "data/reference/gencode_v50_chr22.gff3.gz",
+            "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+            "bytes": 3912249
+          },
+          {
+            "path": "data/reference/gencode_v50_chr3.gff3.gz",
+            "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+            "bytes": 10518849
+          },
+          {
+            "path": "data/reference/gencode_v50_chr4.gff3.gz",
+            "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+            "bytes": 6522948
+          },
+          {
+            "path": "data/reference/gencode_v50_chr5.gff3.gz",
+            "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+            "bytes": 7000086
+          },
+          {
+            "path": "data/reference/gencode_v50_chr6.gff3.gz",
+            "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+            "bytes": 7623994
+          },
+          {
+            "path": "data/reference/gencode_v50_chr7.gff3.gz",
+            "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+            "bytes": 8058560
+          },
+          {
+            "path": "data/reference/gencode_v50_chr8.gff3.gz",
+            "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+            "bytes": 5864835
+          },
+          {
+            "path": "data/reference/gencode_v50_chr9.gff3.gz",
+            "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+            "bytes": 6759087
+          },
+          {
+            "path": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+            "sha256": "2b64229c75e2a3910d3fe3ce109896a917bee9882eaf37ab27d15b0c90108d99",
+            "bytes": 1862225
+          }
+        ],
+        "sha256": "5c9fee2acb7a4d705d0cd0baab3e451c232d25565113f1e94a8038fa5c224d3b",
+        "bytes": 155706434,
+        "files": 22,
+        "partition": null
+      },
+      {
+        "path": "HG002 calls, per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/HG002_chr1.vcf.gz",
+            "sha256": "8d391fdaafc2f170438e006d47af420871a6d169926cf21786ca7307114bc245",
+            "bytes": 1685950
+          },
+          {
+            "path": "data/reference/HG002_chr10.vcf.gz",
+            "sha256": "ca4ce0edbb061c851ce051ff426e8baf8add0ba0b26f84c046ce28ff6041cef9",
+            "bytes": 1105898
+          },
+          {
+            "path": "data/reference/HG002_chr11.vcf.gz",
+            "sha256": "f2af7add5a44fbe500f9b0e44409deecdd83c37740a294705492ab63b6615255",
+            "bytes": 1071650
+          },
+          {
+            "path": "data/reference/HG002_chr12.vcf.gz",
+            "sha256": "0802188d67ee6361739cf1419d02d4eaf5f8d5616556fd7f34bc643d058cae36",
+            "bytes": 1032558
+          },
+          {
+            "path": "data/reference/HG002_chr14.vcf.gz",
+            "sha256": "b4bb146dbd22127c6bd96dcdf289036ca10d0136899182473d3ba9ee88277046",
+            "bytes": 694177
+          },
+          {
+            "path": "data/reference/HG002_chr15.vcf.gz",
+            "sha256": "68207802c798b5b76be98110eacd26e41b7194fd2e86a4d893f2eee619e93679",
+            "bytes": 648614
+          },
+          {
+            "path": "data/reference/HG002_chr16.vcf.gz",
+            "sha256": "13efa4f7ae1783ccda00190892a3cece9e5c52f48415dbc391ff3d2d3cd6dd0d",
+            "bytes": 634907
+          },
+          {
+            "path": "data/reference/HG002_chr17.vcf.gz",
+            "sha256": "279e22d34bfa722b6873060c4b026a445c8136f28d328a96dc2eeee6a4139c53",
+            "bytes": 568942
+          },
+          {
+            "path": "data/reference/HG002_chr18.vcf.gz",
+            "sha256": "446877fad903b2ba4311e63b7e8744efeace6cd5267174ca34403197431dc346",
+            "bytes": 619737
+          },
+          {
+            "path": "data/reference/HG002_chr19.vcf.gz",
+            "sha256": "584afd488694b3a4f9b636801be12c0f4b226a8fe9bf00ce1ca987576703ff93",
+            "bytes": 471121
+          },
+          {
+            "path": "data/reference/HG002_chr2.vcf.gz",
+            "sha256": "41a889ce9d71b9147c481360c1527a2d21e99ae50fff2c389339f220dda93ea5",
+            "bytes": 1730584
+          },
+          {
+            "path": "data/reference/HG002_chr20.vcf.gz",
+            "sha256": "8e0e0b708e050284343634ffd4ea0d73031b0e6778eb88c1a08f845599756489",
+            "bytes": 452542
+          },
+          {
+            "path": "data/reference/HG002_chr22.vcf.gz",
+            "sha256": "9d2a4c7b803d03d12f972f8a8b5df9c08ac6b65df613841d96a9baf8dac2bc58",
+            "bytes": 264821
+          },
+          {
+            "path": "data/reference/HG002_chr3.vcf.gz",
+            "sha256": "36bf6386aecd22bd65cadabaf5bb599549540e9d1e1621e9ca10a392da5082e8",
+            "bytes": 1499340
+          },
+          {
+            "path": "data/reference/HG002_chr4.vcf.gz",
+            "sha256": "8e5c745e212c3bd0a739b739329e2a3d3f76c988368a6e1dc33866d8224dbbdb",
+            "bytes": 1583098
+          },
+          {
+            "path": "data/reference/HG002_chr6.vcf.gz",
+            "sha256": "6674aef080e4a1cef60bd12bb87a58121c99b33bead41464d45b9d2026f13032",
+            "bytes": 1420363
+          },
+          {
+            "path": "data/reference/HG002_chr7.vcf.gz",
+            "sha256": "2477ffd81a3f4b97d1e057e22c2d9179cae72911176ccf36e5da3f783108e168",
+            "bytes": 1214241
+          },
+          {
+            "path": "data/reference/HG002_chr8.vcf.gz",
+            "sha256": "58fc490714a735824c6208640e9162c8cb05bd6e8468ab5445a01f88008fad5a",
+            "bytes": 1158530
+          },
+          {
+            "path": "data/reference/HG002_chr9.vcf.gz",
+            "sha256": "68dd7ad9f7a4931c002e3cc5f9597f0e6a31201247d093c590c36adcaee37861",
+            "bytes": 909161
+          },
+          {
+            "path": "data/results/HG002_chr21.vcf",
+            "sha256": "2bb18d512c002a9973a9a9d4308d4bac8f25d2df1de6837bf5877491f5ba0665",
+            "bytes": 2075002
+          }
+        ],
+        "sha256": "3b4d77f218b5a8a25f3207e79ab53804d0ae5d6448f4b9290b55f5a0d8dd2a16",
+        "bytes": 20841236,
+        "files": 20,
+        "partition": null
+      },
+      {
+        "path": "hg38 sequence and its indexes, per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/chr1.fa.gz",
+            "sha256": "828d314f67e2415f126431a270561ec331d7ce75a7c9eb5d5bd3c92cf38aacb9",
+            "bytes": 75707504
+          },
+          {
+            "path": "data/reference/chr1.fa.gz.fai",
+            "sha256": "b93f31e77bada79b6e93a4156a3d5555f2ff01ec9beece1041bd4316636d7f9b",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr1.fa.gz.gzi",
+            "sha256": "d2e8b072a750cebaf3bf58b0c2830ac54994e7aabdf3b05d3a3901c3bc9267ff",
+            "bytes": 62232
+          },
+          {
+            "path": "data/reference/chr10.fa.gz",
+            "sha256": "e815b740c23080498ad9ca85aeefbb6e83bf416be943c87931c30f775cb8f074",
+            "bytes": 43709951
+          },
+          {
+            "path": "data/reference/chr10.fa.gz.fai",
+            "sha256": "a5bd8d51f36163ec2d12322f4c9ebb27554a44b37d3fd657f4bda082a086e652",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr10.fa.gz.gzi",
+            "sha256": "7f294faec87f9f688675dd071623952395574bfb28151ec7f5ada5e6b6132b93",
+            "bytes": 33448
+          },
+          {
+            "path": "data/reference/chr11.fa.gz",
+            "sha256": "de4fb00b1ee30f73f1ce02f17a8efe86dff0466513d1733470fc6021f03df752",
+            "bytes": 43717971
+          },
+          {
+            "path": "data/reference/chr11.fa.gz.fai",
+            "sha256": "a239664652b93914be554809c58427e79208917583e1f915013e7f09ff14f6e0",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr11.fa.gz.gzi",
+            "sha256": "e0a5f9d5701786ca47c3f66b7a3332dfc566213a7ed631b0b7280a5e0034095d",
+            "bytes": 33768
+          },
+          {
+            "path": "data/reference/chr12.fa.gz",
+            "sha256": "c63d8421ca3201761c905b395810ebf67d288a636fbcba039b9caf4286d98119",
+            "bytes": 43469034
+          },
+          {
+            "path": "data/reference/chr12.fa.gz.fai",
+            "sha256": "1c01ea1c034dde781510aa13ff42e85d89f7348b0dd3bafcf043d24e07803d1e",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr12.fa.gz.gzi",
+            "sha256": "7b7226fb23bade92b4a1e35a5d31bab7f3708b8e0b9dde49984ae1afcaaff2b4",
+            "bytes": 33320
+          },
+          {
+            "path": "data/reference/chr14.fa.gz",
+            "sha256": "0f831812f76805b24318b4afec75369e72ed23901ec3e58716f22eb0b71482d1",
+            "bytes": 29652602
+          },
+          {
+            "path": "data/reference/chr14.fa.gz.fai",
+            "sha256": "0df468f00233874383381914eb654f91d3003720e7a241c183f70c8974030a3b",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr14.fa.gz.gzi",
+            "sha256": "0d49668503509db91f0692d32431d082b71fbce6d3be97f0a8e8d9446089179e",
+            "bytes": 26760
+          },
+          {
+            "path": "data/reference/chr15.fa.gz",
+            "sha256": "b69617ecc744fbbc2090c65b7891e26d3e4e04afd0b3ef5f4ae307857c9a3ece",
+            "bytes": 27555619
+          },
+          {
+            "path": "data/reference/chr15.fa.gz.fai",
+            "sha256": "82d22292e9cada50cce925c088d0ba8d173117222b3fcda15b43bd554b38e040",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr15.fa.gz.gzi",
+            "sha256": "245fcab8e26c2e492e787828865bd1d83fd533882d9cdd9765b562f6145e0b84",
+            "bytes": 25496
+          },
+          {
+            "path": "data/reference/chr16.fa.gz",
+            "sha256": "fe45607f12de02223958fbdc27d9093ba0662cf98df1f66717125c0fea2a220a",
+            "bytes": 26434295
+          },
+          {
+            "path": "data/reference/chr16.fa.gz.fai",
+            "sha256": "4962857863c84e6d5b72321e8b173cb47a1576bb90bd7378c521b79b36edf566",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr16.fa.gz.gzi",
+            "sha256": "8336f48479815edca712934ce1112f9f8094a262aea4665a9996c9c24eb48873",
+            "bytes": 22584
+          },
+          {
+            "path": "data/reference/chr17.fa.gz",
+            "sha256": "3112040e9d49c99b395a6272d071c96857a86b315eb5d8d905102286214d3791",
+            "bytes": 26214112
+          },
+          {
+            "path": "data/reference/chr17.fa.gz.fai",
+            "sha256": "9597aca42ec115a11a5212f8098780c759627cceb30ca8e03cf2243df2c90a3d",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr17.fa.gz.gzi",
+            "sha256": "b67fb7966b83f63e74059e5915cb4b30cade6f13e17499a462ce7e06a75d7a76",
+            "bytes": 20808
+          },
+          {
+            "path": "data/reference/chr18.fa.gz",
+            "sha256": "0f48c53c54fc52b2cd8cf924c53962bf07531e97829fedbc6a27b17bb745b02d",
+            "bytes": 25458085
+          },
+          {
+            "path": "data/reference/chr18.fa.gz.fai",
+            "sha256": "2cb3e60b228e33ba7dbb547089d01ea6f022a93b4e939372a982bded3b6d1e94",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr18.fa.gz.gzi",
+            "sha256": "7634ff5eaa785b8859900d60bde2a18ab791f554e400d76b4a02c20b18b45caf",
+            "bytes": 20088
+          },
+          {
+            "path": "data/reference/chr19.fa.gz",
+            "sha256": "e7d3ea398d679c2247fe247aee7f611f15010f5b05444b727dbc9ece9a78a875",
+            "bytes": 18025567
+          },
+          {
+            "path": "data/reference/chr19.fa.gz.fai",
+            "sha256": "753857e3850afd6bfdd138e9341d4bfc9acb4997b4931c2722469aa64894115b",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr19.fa.gz.gzi",
+            "sha256": "561270ac37fcb0be94a4ec6b6c7f7bea33e72786d7e9c3a818c6c14a5e30dd49",
+            "bytes": 14648
+          },
+          {
+            "path": "data/reference/chr2.fa",
+            "sha256": "c3e11120f5f1fffb315b7b7562de9ef3d30e27a5d31fea7bde7b3f0e02fd142e",
+            "bytes": 247037406
+          },
+          {
+            "path": "data/reference/chr2.fa.fai",
+            "sha256": "70bdaeaa6711c723c4c5b2cfb1617aea9d718d9b8624890fb1da1d976f3117fd",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr2.fa.gz",
+            "sha256": "748007e198312d16d6277dcdd48d4f050109273cacf1a7a09860f965f2060555",
+            "bytes": 78561132
+          },
+          {
+            "path": "data/reference/chr20.fa.gz",
+            "sha256": "fcc7e6698c6b68d43ff9fb316758549693432c488547276821be988d9ccbed5e",
+            "bytes": 20592866
+          },
+          {
+            "path": "data/reference/chr20.fa.gz.fai",
+            "sha256": "081e289f1f48b9c9548bb74a9f43b0596c47c6bf59ec986d988839264baf0570",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr20.fa.gz.gzi",
+            "sha256": "d66c853fb71bf36950bbee7c18746715640f46eec99b2360a1e61a2a4852d068",
+            "bytes": 16104
+          },
+          {
+            "path": "data/reference/chr21.fa.gz",
+            "sha256": "61aaf88c7d3ddef8c0726a1fbbaee6be9dac209a5bb05294e4bdc3db552c9a9c",
+            "bytes": 12844216
+          },
+          {
+            "path": "data/reference/chr21.fa.gz.fai",
+            "sha256": "c98f0f7e9a3e8c2ad7a89aac749d4dbe8dc156690b5f492296e6e8bf50a53fdb",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr21.fa.gz.gzi",
+            "sha256": "dc6b50836526089b65080f5cc1d6ab7c7297464c6c1e067ea50afa3d2232454a",
+            "bytes": 11672
+          },
+          {
+            "path": "data/reference/chr22.fa.gz",
+            "sha256": "fdc31d88b392c6bbbe8a8c8084a234a31419c1ea1b2c095033b097223272ae48",
+            "bytes": 12368087
+          },
+          {
+            "path": "data/reference/chr22.fa.gz.fai",
+            "sha256": "26356feb528bad613ba1637331b248f7fb5b09cd3e94a9f85f5166d268817fda",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr22.fa.gz.gzi",
+            "sha256": "dec39c764c036f8f26c130ab000fade5faf6db32aacbe89cffae333097625291",
+            "bytes": 12712
+          },
+          {
+            "path": "data/reference/chr3.fa.gz",
+            "sha256": "6bb0a25d5bbf7f3d0c466e2f81baba91c3e3b31c27597cb889a49e40f6ed5943",
+            "bytes": 65345852
+          },
+          {
+            "path": "data/reference/chr3.fa.gz.fai",
+            "sha256": "1e4e1e6e4758587c54fc3cabc88df61042f6bb150d5e223778fbbbb56b45b164",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr3.fa.gz.gzi",
+            "sha256": "2adaf25a8a1732189a66c160cf4283f657f2baaa92e0b019436a0cac3d13ec45",
+            "bytes": 49576
+          },
+          {
+            "path": "data/reference/chr4.fa.gz",
+            "sha256": "62faff0e7381ae0ded0d2e7358c8d90c12e5b7e50e87fa0a4805fdc1825acfc2",
+            "bytes": 62714098
+          },
+          {
+            "path": "data/reference/chr4.fa.gz.fai",
+            "sha256": "15712947b3e44eb2c61c6e26eb56e3522d2f9371a35debfd3a58fd09570a6804",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr4.fa.gz.gzi",
+            "sha256": "c56d1753949830fc9c521c6e75861e068b94c2ce1f1cb59686582fbb3a6ce248",
+            "bytes": 47560
+          },
+          {
+            "path": "data/reference/chr6.fa.gz",
+            "sha256": "26b010de0ae3e4a10fb2f2b4c4fa0f6b52041642fa7749e507ac0d336671df8e",
+            "bytes": 56304281
+          },
+          {
+            "path": "data/reference/chr6.fa.gz.fai",
+            "sha256": "e83e5ac789db3ca9060bf73e6a1c68699784afb24deb70d474ec6e6ad09f7f20",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr6.fa.gz.gzi",
+            "sha256": "e71a004240bc67124e9be7f440a7d2670163be399e42cc8709b99aa18c205fb7",
+            "bytes": 42696
+          },
+          {
+            "path": "data/reference/chr7.fa.gz",
+            "sha256": "0e12684d743b41f2ea77f229b57db2516e238f84999b4e48abdb8c0bbeeb3c0c",
+            "bytes": 51714090
+          },
+          {
+            "path": "data/reference/chr7.fa.gz.fai",
+            "sha256": "eda5a503df39a2dfdb80f2069118f6b55382ef564f265bbe17111e3b338613d4",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr7.fa.gz.gzi",
+            "sha256": "6c80c3fe323c653093fbe9db823d6bde94e3332613c2329c7dfafd6b25bc3bd4",
+            "bytes": 39832
+          },
+          {
+            "path": "data/reference/chr8.fa.gz",
+            "sha256": "ab8287e4fa09fa6b8e9bb58a79edc1a48588577b0c4df534246981078c146325",
+            "bytes": 47688473
+          },
+          {
+            "path": "data/reference/chr8.fa.gz.fai",
+            "sha256": "7e4ca3a11738da78832043845b1db5f8b1e5e890f3c017e15d8721102a050817",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr8.fa.gz.gzi",
+            "sha256": "749696ecfa70939be1c43c5765db8a4f4bcd0d508c0d7a711c55e3a1b2ac127a",
+            "bytes": 36280
+          },
+          {
+            "path": "data/reference/chr9.fa.gz",
+            "sha256": "984a2143e6bdb232b4d0e6efb539b96ef8d6bd579ba882de29a5615fbb5e0f6a",
+            "bytes": 39939594
+          },
+          {
+            "path": "data/reference/chr9.fa.gz.fai",
+            "sha256": "355c6eacc7b33dae746cc6dc848b397f3ba33a3e4ce2fd4e727bf901be4c3f89",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr9.fa.gz.gzi",
+            "sha256": "77c158d1d862e7fc95d3d3c9ce016484ea26be3eba4728eb655e8691f01b160f",
+            "bytes": 34600
+          }
+        ],
+        "sha256": "62954abda43b77514bd8b4a5b3ef58db15cb5e28dba7759a0be29c3f82148e6c",
+        "bytes": 1055639484,
+        "files": 60,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "min_tpm": 1.0,
+      "tie_ratio": 0.9,
+      "person": "HG002",
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22"
+      ]
+    },
+    "exclusions": [
+      "table_without_gencode_id: 13",
+      "table_unreadable: 0",
+      "gene_not_in_local_models_on_chr1_22: 2",
+      "gene_on_a_chromosome_without_calls_or_sequence: 0",
+      "gene_without_coding_canonical: 1",
+      "multi_allelic_rows: 100",
+      "indel_or_mnv_rows: 773",
+      "rows_without_alt_genotype: 0"
+    ],
+    "partitions": "n/a: a census of one person's variants; nothing is fitted, so nothing is held out",
+    "code_cleanliness": {
+      "git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/flow_tissue_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/flow_tissue_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/flow_tissue_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/multrna_census.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_fly.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/flow_tissue_census.py"
+      ],
+      "counting_path_count": 92,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/multrna_census.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_fly.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "scripts/multrna_census.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_simpler_fly.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/pie1_corrections.json"
+      ],
+      "argv": [
+        "scripts/flow_tissue_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "code_cleanliness_git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 26e9ef7"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 811,
+      "opens_under_data": 625,
+      "files_read": 202,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
