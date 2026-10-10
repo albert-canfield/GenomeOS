@@ -1,0 +1,2177 @@
+{
+  "result": "roadrunner_scores",
+  "date": "2026-10-10",
+  "question": "Does libRoadRunner, behind the stand-in's interface, reproduce Schoeberl2002 and the models the stand-in already ran, against BioModels' curation figures, at a tolerance fixed before the runs?",
+  "tolerance": {
+    "relative": 0.1,
+    "pixels": 3,
+    "period_relative": 0.03
+  },
+  "agreement_threshold": 0.02,
+  "roadrunner": {
+    "engine": "roadrunner",
+    "libroadrunner": "2.10.0",
+    "integrator": "cvode",
+    "relative_tolerance": 1e-06,
+    "absolute_tolerance": 1e-12,
+    "stiff": true,
+    "maximum_num_steps": 20000
+  },
+  "table": {
+    "BIOMD0000000019": {
+      "standin": false,
+      "roadrunner": true,
+      "engines_agree": false
+    },
+    "BIOMD0000000010": {
+      "standin": true,
+      "roadrunner": true,
+      "engines_agree": true
+    },
+    "BIOMD0000000012": {
+      "standin": true,
+      "roadrunner": true,
+      "engines_agree": true
+    },
+    "BIOMD0000000084": {
+      "standin": true,
+      "roadrunner": true,
+      "engines_agree": true
+    },
+    "BIOMD0000000116": {
+      "standin": null,
+      "roadrunner": null,
+      "engines_agree": true
+    }
+  },
+  "models": {
+    "BIOMD0000000019": {
+      "name": "Schoeberl2002 - EGF MAPK",
+      "figure": "BioModels BIOMD0000000019 curation_image.png: 'time course of active species as in fig. 2 c,d,e,f'; integration by SBMLODESolver (20080507); 4 panels, 0-60 min; red 50, blue 0.5, green 0.125 ng/ml EGF",
+      "file": "data/knowledge/biomodels/BIOMD0000000019.xml",
+      "doses": {
+        "50 ng/ml (x1 = 4962, the SBML default)": {
+          "standin": {
+            "pass": false,
+            "checks_passed": 0,
+            "checks": 11,
+            "dt": 0.01,
+            "seconds": 3.6,
+            "detail": [
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 10340000.0,
+                "simulated": 6.988132952133384e+54,
+                "bound": 1034000.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 3.68,
+                "simulated": 0.06,
+                "bound": 0.649819,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 20.0,
+                "check": "level",
+                "reference": 6830000.0,
+                "simulated": 0.0,
+                "bound": 683000.0,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 40.0,
+                "check": "level",
+                "reference": 3960000.0,
+                "simulated": 0.0,
+                "bound": 396000.0,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 59.6,
+                "check": "level",
+                "reference": 1720000.0,
+                "simulated": 0.0,
+                "bound": 191489.361702,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 131900.0,
+                "simulated": 3.140538766685476e+110,
+                "bound": 13190.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 3.9,
+                "simulated": 0.06,
+                "bound": 0.649819,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 16510.0,
+                "simulated": 1.540198658077745e+144,
+                "bound": 1651.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 1.3,
+                "simulated": 0.06,
+                "bound": 0.649819,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 16310.0,
+                "simulated": 1.4837598560639575e+56,
+                "bound": 1631.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 1.08,
+                "simulated": 0.06,
+                "bound": 0.649819,
+                "pass": false
+              }
+            ]
+          },
+          "roadrunner": {
+            "pass": true,
+            "checks_passed": 11,
+            "checks": 11,
+            "dt": 0.01,
+            "seconds": 1.11,
+            "detail": [
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 10340000.0,
+                "simulated": 10292581.395805,
+                "bound": 1034000.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 3.68,
+                "simulated": 3.99,
+                "bound": 0.649819,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 20.0,
+                "check": "level",
+                "reference": 6830000.0,
+                "simulated": 6786939.668073,
+                "bound": 683000.0,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 40.0,
+                "check": "level",
+                "reference": 3960000.0,
+                "simulated": 3949937.836643,
+                "bound": 396000.0,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 59.6,
+                "check": "level",
+                "reference": 1720000.0,
+                "simulated": 1681743.305142,
+                "bound": 191489.361702,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 131900.0,
+                "simulated": 131865.193266,
+                "bound": 13190.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 3.9,
+                "simulated": 3.92,
+                "bound": 0.649819,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 16510.0,
+                "simulated": 16522.338518,
+                "bound": 1651.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 1.3,
+                "simulated": 1.44,
+                "bound": 0.649819,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 16310.0,
+                "simulated": 16345.189983,
+                "bound": 1631.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 1.08,
+                "simulated": 1.07,
+                "bound": 0.649819,
+                "pass": true
+              }
+            ]
+          },
+          "agreement": {
+            "max_relative_difference": Infinity,
+            "species": "x32",
+            "agree": false
+          }
+        },
+        "0.5 ng/ml (x1 = 49.62)": {
+          "standin": {
+            "pass": false,
+            "checks_passed": 0,
+            "checks": 11,
+            "dt": 0.01,
+            "seconds": 6.28,
+            "detail": [
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 9260000.0,
+                "simulated": 1.1737665347397433e+134,
+                "bound": 926000.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 6.72,
+                "simulated": 0.07,
+                "bound": 0.672,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 20.0,
+                "check": "level",
+                "reference": 5940000.0,
+                "simulated": 0.0,
+                "bound": 594000.0,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 40.0,
+                "check": "level",
+                "reference": 3320000.0,
+                "simulated": 0.0,
+                "bound": 332000.0,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 59.6,
+                "check": "level",
+                "reference": 1340000.0,
+                "simulated": 0.0,
+                "bound": 191489.361702,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 37200.0,
+                "simulated": 4.832287539558397e+19,
+                "bound": 3720.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 6.72,
+                "simulated": 0.06,
+                "bound": 0.672,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 10560.0,
+                "simulated": 9.547367397131049e+250,
+                "bound": 1056.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 3.25,
+                "simulated": 0.07,
+                "bound": 0.649819,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 7900.0,
+                "simulated": 8.710768985354624e+226,
+                "bound": 790.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 2.82,
+                "simulated": 0.07,
+                "bound": 0.649819,
+                "pass": false
+              }
+            ]
+          },
+          "roadrunner": {
+            "pass": true,
+            "checks_passed": 11,
+            "checks": 11,
+            "dt": 0.01,
+            "seconds": 1.67,
+            "detail": [
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 9260000.0,
+                "simulated": 9229974.559052,
+                "bound": 926000.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 6.72,
+                "simulated": 6.99,
+                "bound": 0.672,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 20.0,
+                "check": "level",
+                "reference": 5940000.0,
+                "simulated": 5880921.885788,
+                "bound": 594000.0,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 40.0,
+                "check": "level",
+                "reference": 3320000.0,
+                "simulated": 3336661.097555,
+                "bound": 332000.0,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 59.6,
+                "check": "level",
+                "reference": 1340000.0,
+                "simulated": 1344535.181098,
+                "bound": 191489.361702,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 37200.0,
+                "simulated": 37046.604549,
+                "bound": 3720.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 6.72,
+                "simulated": 6.97,
+                "bound": 0.672,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 10560.0,
+                "simulated": 10526.721686,
+                "bound": 1056.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 3.25,
+                "simulated": 3.32,
+                "bound": 0.649819,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 7900.0,
+                "simulated": 7950.526777,
+                "bound": 790.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 2.82,
+                "simulated": 2.99,
+                "bound": 0.649819,
+                "pass": true
+              }
+            ]
+          },
+          "agreement": {
+            "max_relative_difference": Infinity,
+            "species": "x5",
+            "agree": false
+          }
+        },
+        "0.125 ng/ml (x1 = 12.405)": {
+          "standin": {
+            "pass": false,
+            "checks_passed": 0,
+            "checks": 11,
+            "dt": 0.01,
+            "seconds": 4.6,
+            "detail": [
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 6260000.0,
+                "simulated": 1.8003419661148723e+77,
+                "bound": 626000.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 11.26,
+                "simulated": 0.07,
+                "bound": 1.126,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 20.0,
+                "check": "level",
+                "reference": 4530000.0,
+                "simulated": 0.0,
+                "bound": 453000.0,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 40.0,
+                "check": "level",
+                "reference": 1910000.0,
+                "simulated": 0.0,
+                "bound": 191489.361702,
+                "pass": false
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 59.6,
+                "check": "level",
+                "reference": 510000.0,
+                "simulated": 0.0,
+                "bound": 191489.361702,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 12800.0,
+                "simulated": 1.1878221507030175e+114,
+                "bound": 3191.489362,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 10.83,
+                "simulated": 0.07,
+                "bound": 1.083,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 6560.0,
+                "simulated": 1.997282764660448e+159,
+                "bound": 656.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 4.77,
+                "simulated": 0.07,
+                "bound": 0.649819,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 4410.0,
+                "simulated": 6.463784815725614e+135,
+                "bound": 441.0,
+                "pass": false
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 4.77,
+                "simulated": 0.07,
+                "bound": 0.649819,
+                "pass": false
+              }
+            ]
+          },
+          "roadrunner": {
+            "pass": true,
+            "checks_passed": 11,
+            "checks": 11,
+            "dt": 0.01,
+            "seconds": 1.47,
+            "detail": [
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 6260000.0,
+                "simulated": 6256215.906009,
+                "bound": 626000.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "ERK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 11.26,
+                "simulated": 11.83,
+                "bound": 1.126,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 20.0,
+                "check": "level",
+                "reference": 4530000.0,
+                "simulated": 4505293.969576,
+                "bound": 453000.0,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 40.0,
+                "check": "level",
+                "reference": 1910000.0,
+                "simulated": 1915173.55901,
+                "bound": 191489.361702,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "ERK_PP",
+                "where": 59.6,
+                "check": "level",
+                "reference": 510000.0,
+                "simulated": 504125.617503,
+                "bound": 191489.361702,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 12800.0,
+                "simulated": 12448.698581,
+                "bound": 3191.489362,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "MEK_PP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 10.83,
+                "simulated": 11.79,
+                "bound": 1.083,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 6560.0,
+                "simulated": 6616.322388,
+                "bound": 656.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Raf_act",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 4.77,
+                "simulated": 5.19,
+                "bound": 0.649819,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "level",
+                "reference": 4410.0,
+                "simulated": 4392.806551,
+                "bound": 441.0,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "Ras_GTP",
+                "where": [
+                  0.0,
+                  60.0
+                ],
+                "check": "time",
+                "reference": 4.77,
+                "simulated": 4.86,
+                "bound": 0.649819,
+                "pass": true
+              }
+            ]
+          },
+          "agreement": {
+            "max_relative_difference": Infinity,
+            "species": "x4",
+            "agree": false
+          }
+        }
+      },
+      "diagnostic_standin_dt_over_10": {
+        "dt": 0.001,
+        "seconds": 39.38,
+        "checks_passed": 0,
+        "checks": 11,
+        "scored": false,
+        "detail": [
+          {
+            "feature": "peak",
+            "quantity": "ERK_PP",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "level",
+            "reference": 10340000.0,
+            "simulated": 0.0,
+            "bound": 1034000.0,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "ERK_PP",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "time",
+            "reference": 3.68,
+            "simulated": 0.01,
+            "bound": 0.649819,
+            "pass": false
+          },
+          {
+            "feature": "at",
+            "quantity": "ERK_PP",
+            "where": 20.0,
+            "check": "level",
+            "reference": 6830000.0,
+            "simulated": 0.0,
+            "bound": 683000.0,
+            "pass": false
+          },
+          {
+            "feature": "at",
+            "quantity": "ERK_PP",
+            "where": 40.0,
+            "check": "level",
+            "reference": 3960000.0,
+            "simulated": 0.0,
+            "bound": 396000.0,
+            "pass": false
+          },
+          {
+            "feature": "at",
+            "quantity": "ERK_PP",
+            "where": 59.6,
+            "check": "level",
+            "reference": 1720000.0,
+            "simulated": 0.0,
+            "bound": 191489.361702,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "MEK_PP",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "level",
+            "reference": 131900.0,
+            "simulated": 1666197.694735,
+            "bound": 13190.0,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "MEK_PP",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "time",
+            "reference": 3.9,
+            "simulated": 0.01,
+            "bound": 0.649819,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "Raf_act",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "level",
+            "reference": 16510.0,
+            "simulated": 5091416802713.466,
+            "bound": 1651.0,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "Raf_act",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "time",
+            "reference": 1.3,
+            "simulated": 0.01,
+            "bound": 0.649819,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "Ras_GTP",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "level",
+            "reference": 16310.0,
+            "simulated": 9e-06,
+            "bound": 1631.0,
+            "pass": false
+          },
+          {
+            "feature": "peak",
+            "quantity": "Ras_GTP",
+            "where": [
+              0.0,
+              60.0
+            ],
+            "check": "time",
+            "reference": 1.08,
+            "simulated": 0.01,
+            "bound": 0.649819,
+            "pass": false
+          }
+        ]
+      },
+      "standin_passes": false,
+      "roadrunner_passes": true,
+      "engines_agree": false
+    },
+    "BIOMD0000000010": {
+      "name": "Kholodenko2000 - MAPK oscillations",
+      "figure": "BioModels BIOMD0000000010 curation_image.png: Figure 2A reproduced with Copasi 4.10 (Build 55); MAPK (green) and MAPK-PP (blue), nM, 0-150 min; x calibrated on the tick labels, 3.653 px/min",
+      "file": "data/knowledge/biomodels/BIOMD0000000010.xml",
+      "doses": {
+        "as curated": {
+          "standin": {
+            "pass": true,
+            "checks_passed": 7,
+            "checks": 7,
+            "dt": 0.05,
+            "seconds": 7.84,
+            "detail": [
+              {
+                "feature": "period",
+                "quantity": "MAPK",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "period",
+                "reference": 1297.8,
+                "simulated": 1299.8,
+                "bound": 38.934,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "MAPK",
+                "where": 900.0,
+                "check": "time",
+                "reference": 1617.6000000000001,
+                "simulated": 1677.0,
+                "bound": 161.76,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "MAPK",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 204.3,
+                "simulated": 204.483667,
+                "bound": 20.43,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "MAPK",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 0.9,
+                "simulated": 0.435252,
+                "bound": 2.586207,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "MAPK_PP",
+                "where": [
+                  1800.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 296.6,
+                "simulated": 296.626517,
+                "bound": 29.66,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "MAPK_PP",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 37.1,
+                "simulated": 35.767923,
+                "bound": 3.71,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "MAPK_PP",
+                "where": [
+                  0.0,
+                  900.0
+                ],
+                "check": "level",
+                "reference": 298.3,
+                "simulated": 298.761647,
+                "bound": 29.83,
+                "pass": true
+              }
+            ]
+          },
+          "roadrunner": {
+            "pass": true,
+            "checks_passed": 7,
+            "checks": 7,
+            "dt": 0.05,
+            "seconds": 0.04,
+            "detail": [
+              {
+                "feature": "period",
+                "quantity": "MAPK",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "period",
+                "reference": 1297.8,
+                "simulated": 1299.8,
+                "bound": 38.934,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "MAPK",
+                "where": 900.0,
+                "check": "time",
+                "reference": 1617.6000000000001,
+                "simulated": 1677.0,
+                "bound": 161.76,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "MAPK",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 204.3,
+                "simulated": 204.483809,
+                "bound": 20.43,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "MAPK",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 0.9,
+                "simulated": 0.435252,
+                "bound": 2.586207,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "MAPK_PP",
+                "where": [
+                  1800.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 296.6,
+                "simulated": 296.626518,
+                "bound": 29.66,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "MAPK_PP",
+                "where": [
+                  900.0,
+                  9000.0
+                ],
+                "check": "level",
+                "reference": 37.1,
+                "simulated": 35.767884,
+                "bound": 3.71,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "MAPK_PP",
+                "where": [
+                  0.0,
+                  900.0
+                ],
+                "check": "level",
+                "reference": 298.3,
+                "simulated": 298.761647,
+                "bound": 29.83,
+                "pass": true
+              }
+            ]
+          },
+          "agreement": {
+            "max_relative_difference": 5.696303226260265e-05,
+            "species": "MAPK_P",
+            "agree": true
+          }
+        }
+      },
+      "standin_passes": true,
+      "roadrunner_passes": true,
+      "engines_agree": true
+    },
+    "BIOMD0000000012": {
+      "name": "Elowitz2000 - Repressilator",
+      "figure": "BioModels BIOMD0000000012 curation_image.png: protein numbers as in figure 1c, deterministic run with SBML ODESolver; the notes say it departs from the paper before 400 min (initial conditions), so only 400-1000 min is read; red LacI (PX), orange TetR (PY), blue cI (PZ)",
+      "file": "data/models/BIOMD0000000012.xml",
+      "doses": {
+        "as curated": {
+          "standin": {
+            "pass": true,
+            "checks_passed": 12,
+            "checks": 12,
+            "dt": 0.05,
+            "seconds": 0.67,
+            "detail": [
+              {
+                "feature": "period",
+                "quantity": "PX",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "period",
+                "reference": 125.7,
+                "simulated": 125.375,
+                "bound": 3.771,
+                "pass": true
+              },
+              {
+                "feature": "period",
+                "quantity": "PY",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "period",
+                "reference": 125.2,
+                "simulated": 125.25,
+                "bound": 3.756,
+                "pass": true
+              },
+              {
+                "feature": "period",
+                "quantity": "PZ",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "period",
+                "reference": 125.2,
+                "simulated": 125.375,
+                "bound": 3.756,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "PX",
+                "where": 380.0,
+                "check": "time",
+                "reference": 489.9,
+                "simulated": 491.0,
+                "bound": 48.99,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "PY",
+                "where": 380.0,
+                "check": "time",
+                "reference": 449.4,
+                "simulated": 449.5,
+                "bound": 44.94,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "PZ",
+                "where": 380.0,
+                "check": "time",
+                "reference": 407.0,
+                "simulated": 407.5,
+                "bound": 40.7,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "PX",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 2369.0,
+                "simulated": 2368.635564,
+                "bound": 236.9,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "PY",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 2369.0,
+                "simulated": 2368.447402,
+                "bound": 236.9,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "PZ",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 2369.0,
+                "simulated": 2368.585899,
+                "bound": 236.9,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "PX",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 50.0,
+                "simulated": 50.052767,
+                "bound": 18.75,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "PY",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 50.0,
+                "simulated": 50.049771,
+                "bound": 18.75,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "PZ",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 50.0,
+                "simulated": 50.048699,
+                "bound": 18.75,
+                "pass": true
+              }
+            ]
+          },
+          "roadrunner": {
+            "pass": true,
+            "checks_passed": 12,
+            "checks": 12,
+            "dt": 0.05,
+            "seconds": 0.03,
+            "detail": [
+              {
+                "feature": "period",
+                "quantity": "PX",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "period",
+                "reference": 125.7,
+                "simulated": 125.375,
+                "bound": 3.771,
+                "pass": true
+              },
+              {
+                "feature": "period",
+                "quantity": "PY",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "period",
+                "reference": 125.2,
+                "simulated": 125.25,
+                "bound": 3.756,
+                "pass": true
+              },
+              {
+                "feature": "period",
+                "quantity": "PZ",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "period",
+                "reference": 125.2,
+                "simulated": 125.375,
+                "bound": 3.756,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "PX",
+                "where": 380.0,
+                "check": "time",
+                "reference": 489.9,
+                "simulated": 491.0,
+                "bound": 48.99,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "PY",
+                "where": 380.0,
+                "check": "time",
+                "reference": 449.4,
+                "simulated": 449.5,
+                "bound": 44.94,
+                "pass": true
+              },
+              {
+                "feature": "first_peak",
+                "quantity": "PZ",
+                "where": 380.0,
+                "check": "time",
+                "reference": 407.0,
+                "simulated": 407.5,
+                "bound": 40.7,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "PX",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 2369.0,
+                "simulated": 2368.637711,
+                "bound": 236.9,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "PY",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 2369.0,
+                "simulated": 2368.458237,
+                "bound": 236.9,
+                "pass": true
+              },
+              {
+                "feature": "max",
+                "quantity": "PZ",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 2369.0,
+                "simulated": 2368.593201,
+                "bound": 236.9,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "PX",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 50.0,
+                "simulated": 50.052673,
+                "bound": 18.75,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "PY",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 50.0,
+                "simulated": 50.049654,
+                "bound": 18.75,
+                "pass": true
+              },
+              {
+                "feature": "min",
+                "quantity": "PZ",
+                "where": [
+                  400.0,
+                  1000.0
+                ],
+                "check": "level",
+                "reference": 50.0,
+                "simulated": 50.048656,
+                "bound": 18.75,
+                "pass": true
+              }
+            ]
+          },
+          "agreement": {
+            "max_relative_difference": 2.0409313151466222e-05,
+            "species": "X",
+            "agree": true
+          }
+        }
+      },
+      "standin_passes": true,
+      "roadrunner_passes": true,
+      "engines_agree": true
+    },
+    "BIOMD0000000084": {
+      "name": "Hornberg2005 - ERK cascade",
+      "figure": "BioModels BIOMD0000000084 curation_image.jpeg: the plot of Fig 2, simulated with MathSBML; top R over 0-2, bottom x1p (green), x2p (blue), x3p (red) over 0-50; axes calibrated on the tick labels (top 139.5 px per unit time, 362.5 px per unit level; bottom 5.8 and 320)",
+      "file": "data/knowledge/biomodels/BIOMD0000000084.xml",
+      "doses": {
+        "as curated": {
+          "standin": {
+            "pass": true,
+            "checks_passed": 15,
+            "checks": 15,
+            "dt": 0.01,
+            "seconds": 0.15,
+            "detail": [
+              {
+                "feature": "at",
+                "quantity": "R",
+                "where": 0.25,
+                "check": "level",
+                "reference": 0.301,
+                "simulated": 0.301894,
+                "bound": 0.0301,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "R",
+                "where": 0.5,
+                "check": "level",
+                "reference": 0.132,
+                "simulated": 0.135073,
+                "bound": 0.0132,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "R",
+                "where": 0.75,
+                "check": "level",
+                "reference": 0.03,
+                "simulated": 0.032543,
+                "bound": 0.008276,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x1p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "level",
+                "reference": 0.1359,
+                "simulated": 0.136232,
+                "bound": 0.01359,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x1p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "time",
+                "reference": 0.52,
+                "simulated": 0.72,
+                "bound": 0.517241,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x2p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "level",
+                "reference": 0.2016,
+                "simulated": 0.200975,
+                "bound": 0.02016,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x2p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "time",
+                "reference": 3.97,
+                "simulated": 4.15,
+                "bound": 0.517241,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x3p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "level",
+                "reference": 0.5609,
+                "simulated": 0.561911,
+                "bound": 0.05609,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x3p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "time",
+                "reference": 8.28,
+                "simulated": 8.67,
+                "bound": 0.828,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x2p",
+                "where": 10.0,
+                "check": "level",
+                "reference": 0.1078,
+                "simulated": 0.10739,
+                "bound": 0.01078,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x2p",
+                "where": 20.0,
+                "check": "level",
+                "reference": 0.0203,
+                "simulated": 0.018383,
+                "bound": 0.009375,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 20.0,
+                "check": "level",
+                "reference": 0.1797,
+                "simulated": 0.179096,
+                "bound": 0.01797,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 30.0,
+                "check": "level",
+                "reference": 0.0422,
+                "simulated": 0.04121,
+                "bound": 0.009375,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 40.0,
+                "check": "level",
+                "reference": 0.0266,
+                "simulated": 0.02555,
+                "bound": 0.009375,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 49.0,
+                "check": "level",
+                "reference": 0.0234,
+                "simulated": 0.024255,
+                "bound": 0.009375,
+                "pass": true
+              }
+            ]
+          },
+          "roadrunner": {
+            "pass": true,
+            "checks_passed": 15,
+            "checks": 15,
+            "dt": 0.01,
+            "seconds": 0.03,
+            "detail": [
+              {
+                "feature": "at",
+                "quantity": "R",
+                "where": 0.25,
+                "check": "level",
+                "reference": 0.301,
+                "simulated": 0.301894,
+                "bound": 0.0301,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "R",
+                "where": 0.5,
+                "check": "level",
+                "reference": 0.132,
+                "simulated": 0.135072,
+                "bound": 0.0132,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "R",
+                "where": 0.75,
+                "check": "level",
+                "reference": 0.03,
+                "simulated": 0.032542,
+                "bound": 0.008276,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x1p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "level",
+                "reference": 0.1359,
+                "simulated": 0.136232,
+                "bound": 0.01359,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x1p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "time",
+                "reference": 0.52,
+                "simulated": 0.72,
+                "bound": 0.517241,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x2p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "level",
+                "reference": 0.2016,
+                "simulated": 0.200974,
+                "bound": 0.02016,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x2p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "time",
+                "reference": 3.97,
+                "simulated": 4.15,
+                "bound": 0.517241,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x3p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "level",
+                "reference": 0.5609,
+                "simulated": 0.561909,
+                "bound": 0.05609,
+                "pass": true
+              },
+              {
+                "feature": "peak",
+                "quantity": "x3p",
+                "where": [
+                  0.0,
+                  50.0
+                ],
+                "check": "time",
+                "reference": 8.28,
+                "simulated": 8.67,
+                "bound": 0.828,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x2p",
+                "where": 10.0,
+                "check": "level",
+                "reference": 0.1078,
+                "simulated": 0.107389,
+                "bound": 0.01078,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x2p",
+                "where": 20.0,
+                "check": "level",
+                "reference": 0.0203,
+                "simulated": 0.018383,
+                "bound": 0.009375,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 20.0,
+                "check": "level",
+                "reference": 0.1797,
+                "simulated": 0.179094,
+                "bound": 0.01797,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 30.0,
+                "check": "level",
+                "reference": 0.0422,
+                "simulated": 0.04121,
+                "bound": 0.009375,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 40.0,
+                "check": "level",
+                "reference": 0.0266,
+                "simulated": 0.02555,
+                "bound": 0.009375,
+                "pass": true
+              },
+              {
+                "feature": "at",
+                "quantity": "x3p",
+                "where": 49.0,
+                "check": "level",
+                "reference": 0.0234,
+                "simulated": 0.024255,
+                "bound": 0.009375,
+                "pass": true
+              }
+            ]
+          },
+          "agreement": {
+            "max_relative_difference": 5.872883810284411e-06,
+            "species": "x2",
+            "agree": true
+          }
+        }
+      },
+      "standin_passes": true,
+      "roadrunner_passes": true,
+      "engines_agree": true
+    },
+    "BIOMD0000000116": {
+      "name": "McClean2007 - CrossTalk",
+      "figure": "BioModels BIOMD0000000116 curation_image.png is a parameter scan (Supplementary Figure 2, COPASI 4.0.20), not a time course: no feature is read, the engines are compared only",
+      "file": "data/knowledge/biomodels/BIOMD0000000116.xml",
+      "doses": {
+        "as curated": {
+          "standin": {
+            "pass": false,
+            "checks_passed": 0,
+            "checks": 0,
+            "dt": 0.01,
+            "seconds": 0.37,
+            "detail": []
+          },
+          "roadrunner": {
+            "pass": false,
+            "checks_passed": 0,
+            "checks": 0,
+            "dt": 0.01,
+            "seconds": 0.03,
+            "detail": []
+          },
+          "agreement": {
+            "max_relative_difference": 0.019878665136722786,
+            "species": "species_3",
+            "agree": true
+          }
+        }
+      },
+      "standin_passes": null,
+      "roadrunner_passes": null,
+      "engines_agree": true
+    }
+  },
+  "seconds": 73.4,
+  "money": "none: public BioModels files, no key",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "https://www.ebi.ac.uk/biomodels",
+        "version": "the SBML main files as downloaded, sha256 per input; references read from the entries' curation_image files (genomeos/molecules/sbml_reference.py)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/biomodels/BIOMD0000000019.xml",
+        "sha256": "541c2a16196dfcd0649df14cff51fb80fc4157bad041c562b17679552baeff48",
+        "bytes": 153594,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/biomodels/BIOMD0000000010.xml",
+        "sha256": "906964e07ffd570ad94a03c1222e230b54b913cd536b008392bfb6155930a966",
+        "bytes": 29295,
+        "partition": null
+      },
+      {
+        "path": "data/models/BIOMD0000000012.xml",
+        "sha256": "d535c84bc5fe68b01728cac5c53f8fed971176e3f0f2367a9ba1e9c043b11a2d",
+        "bytes": 43901,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/biomodels/BIOMD0000000084.xml",
+        "sha256": "6f40d173598f7fa9949a6b1b107401d2b7dd9a2367f27599162fbd21fa30f8de",
+        "bytes": 22107,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/biomodels/BIOMD0000000116.xml",
+        "sha256": "918bf3943e65d713dbe61cf16b7ba864c196ad7b3306459f307d53107098a071",
+        "bytes": 26156,
+        "partition": null
+      }
+    ],
+    "input_count": 5,
+    "assembly": "n/a: kinetic models, no genome coordinates",
+    "coordinates": "n/a: kinetic models, no genome coordinates",
+    "parameters": {
+      "tolerance": {
+        "relative": 0.1,
+        "pixels": 3,
+        "period_relative": 0.03
+      },
+      "agreement": 0.02,
+      "engines": [
+        "standin",
+        "roadrunner"
+      ]
+    },
+    "exclusions": [
+      {
+        "reason": "McClean2007: its curation figure is a parameter scan, not a time course; compared on both engines, not scored",
+        "count": 1
+      }
+    ],
+    "partitions": "n/a: nothing was fitted; the references are read from figures, not trained on",
+    "code_cleanliness": {
+      "git_sha": "b9331296c8bf9032f0e6010688ca94772636ab15",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/roadrunner_score.py",
+        "form": "committed_repository_file",
+        "path": "scripts/roadrunner_score.py",
+        "is_committed": true,
+        "declared_entry": "scripts/roadrunner_score.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/biomodels.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/sbml_reference.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/roadrunner.py",
+        "genomeos/runtime/sbml.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/roadrunner_score.py"
+      ],
+      "counting_path_count": 30,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "b9331296c8bf9032f0e6010688ca94772636ab15",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/roadrunner_score.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "b9331296c8bf9032f0e6010688ca94772636ab15",
+      "code_cleanliness_git_sha": "b9331296c8bf9032f0e6010688ca94772636ab15",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record b933129"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 252,
+      "opens_under_data": 37,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
