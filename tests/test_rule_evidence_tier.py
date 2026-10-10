@@ -595,6 +595,25 @@ def _the_colon_programs(c: dict) -> None:
     assert mutants["rules_scanned"] == mutants["rules_written"]
 
 
+STOMACH = "data/organisms/human/stomach.bio"
+STOMACH_MUTANTS = "data/organisms/human/stomach_mutants.bio"
+
+
+def _the_stomach_programs(c: dict) -> None:
+    """The two programs c0e0c85 added, the same shape as the small-intestinal and colonic pairs above:
+    a generated module (its header says so) and a mutant file of experiments with no rules, which is
+    why every rule and slot figure below stays put while the program figures move by exactly two."""
+    (module,) = [f for f in c["files"] if f["path"] == STOMACH]
+    assert module["kind"] == "generated", module
+    (mutants,) = [f for f in c["files"] if f["path"] == STOMACH_MUTANTS]
+    assert mutants["kind"] == "hand_authored", mutants
+    assert mutants["rules_written"] == 0
+    assert mutants["rules_compiled"] == 0
+    assert mutants["rules_synthesised_by_the_parser"] == 0
+    assert mutants["rules_with_tiered_numbers"] == 0
+    assert mutants["rules_scanned"] == mutants["rules_written"]
+
+
 NOLOOKUP_HAND = (
     "data/organisms/celegans/embryo_nolookup.bio",
     "data/organisms/celegans/founder_tissues.bio",
@@ -645,8 +664,10 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after
     # fa5a4f1 (lane-stage3): 54 = 41 + 13, two stage-3 demos and bio.std.core_metabolism, hand-authored
     # 2026-10-10, 3750411 (lane-colon): 56 = 42 + 14, the colonic module generated and its mutant file
     # hand-authored (`_the_colon_programs`), the same two-program move 7646bd7 made
-    assert len(tracked_files) == 56
-    assert len(tracked_generated) == 14
+    # 2026-10-10, c0e0c85 (lane-stomach): 58 = 43 + 15, the gastric module generated and its mutant
+    # file hand-authored (`_the_stomach_programs`), the same two-program move again
+    assert len(tracked_files) == 58
+    assert len(tracked_generated) == 15
     assert len(tracked_files) == len(hand) + len(tracked_generated)
     assert "data/organisms/human/noncoding_chr21_v3.bio" in {f["path"] for f in tracked_generated}
     assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
@@ -656,8 +677,10 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after
     _the_intestine_programs(c)
     _the_nolookup_programs(c)
     _the_colon_programs(c)
-    # 2026-10-10: a3790d0 and 1c2ae67 35 -> 38; fa5a4f1 -> 41; 3750411 (lane-colon) -> 42
-    assert c["programs_hand_authored"] == 42
+    _the_stomach_programs(c)
+    # 2026-10-10: a3790d0 and 1c2ae67 35 -> 38; fa5a4f1 -> 41; 3750411 (lane-colon) -> 42;
+    # c0e0c85 (lane-stomach) -> 43
+    assert c["programs_hand_authored"] == 43
     assert c["rules_hand_authored_written"] == 24
     assert c["rules_hand_authored_compiled"] == 46
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
@@ -694,9 +717,11 @@ def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes_af
     # 2026-10-10, fa5a4f1 (lane-stage3): 75 -> 78 and the hand-authored 38 -> 41 for its three programs
     # 2026-10-10, 3750411 (lane-colon): 78 -> 80, the generated 37 -> 38 for colon.bio and the
     # hand-authored 41 -> 42 for colon_mutants.bio; the untracked 24 unchanged, both being committed
-    assert c["programs_total"] == 80
-    assert c["programs_generated"] == 38
-    assert c["programs_hand_authored"] == 42
+    # 2026-10-10, c0e0c85 (lane-stomach): 80 -> 82, the generated 38 -> 39 for stomach.bio and the
+    # hand-authored 42 -> 43 for stomach_mutants.bio; the untracked 24 unchanged, both being committed
+    assert c["programs_total"] == 82
+    assert c["programs_generated"] == 39
+    assert c["programs_hand_authored"] == 43
     assert c["programs_total"] == len(paths & tracked) + len(untracked)
 
 
@@ -726,10 +751,12 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
     _the_reader_demo(c)
     _the_intestine_programs(c)
     _the_colon_programs(c)
+    _the_stomach_programs(c)
     _the_nolookup_programs(c)
-    assert c["programs_total"] == 56
-    assert c["programs_hand_authored"] == 42
-    assert c["programs_generated"] == 14
+    # 2026-10-10, c0e0c85 (lane-stomach): 56 -> 58, one program on each side and no rule written
+    assert c["programs_total"] == 58
+    assert c["programs_hand_authored"] == 43
+    assert c["programs_generated"] == 15
     assert c["rules_hand_authored_written"] == 24
     assert c["rules_hand_authored_compiled"] == 46
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
@@ -762,4 +789,5 @@ def test_the_line_scan_is_calibrated_against_the_parse_before_it_is_believed():
     # 2026-10-10, a3790d0 and 1c2ae67: 35 -> 38, the three hand-authored no-lookup programs, agreed.
     # 2026-10-10, fa5a4f1 (lane-stage3): 38 -> 41, its three programs, agreed
     # 2026-10-10, 3750411 (lane-colon): 41 -> 42, the scan compared on colon_mutants.bio too and agreed
-    assert c["scan_calibration"]["files_compared"] == 42
+    # 2026-10-10, c0e0c85 (lane-stomach): 42 -> 43, the scan compared on stomach_mutants.bio, agreed
+    assert c["scan_calibration"]["files_compared"] == 43
