@@ -8,6 +8,14 @@ proves that, so this builds it.
 
     uv run python scripts/package_engine.py [--out DIR] [--name biolang]
 
+Only the default build -- `build/biolang` in the repository, under the name `biolang` -- writes the
+canonical result, `data/results/engine_package.json`. A run with any other `--out` or `--name` is a
+scratch run: its result is written beside the package it built (`DIR/engine_package.json`) and never
+to data/results, and the script says so. Until 2026-10-10 every run saved the canonical result, so a
+scratch build in a temporary directory overwrote it with a dirty-tree result naming that directory.
+The package's location is recorded relative to the repository, or, for a build outside it, relative
+to `--out` with `package outside repository` set, so the result names no machine path.
+
 It copies the Apache-2.0 half — lang, ir, runtime, std and the three loose modules — into a package
 of its own, rewrites its imports to the new name, gives it a pyproject of its own declaring Apache-2.0
 and no dependencies, and then runs it **in a Python with no site-packages and no PYTHONPATH**, from a
@@ -45,6 +53,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# the one build that writes data/results/engine_package.json; anything else is a scratch run
+DEFAULT_OUT = ROOT / "build" / "biolang"
+DEFAULT_NAME = "biolang"
 PACKAGES = ("lang", "ir", "runtime", "std")  # the same list the boundary test enforces
 MODULES = ("coords", "version", "bio")
 
@@ -517,7 +528,7 @@ def build(out: Path, name: str) -> dict:
     return {
         "files": len(copied),
         "rewritten": rewritten,
-        "package": str(package),
+        **recorded_path(package, out),
         "dangling references": dangling,
         "version": ENGINE_VERSION,
         "test files": [p.name for p in tests],
@@ -525,6 +536,25 @@ def build(out: Path, name: str) -> dict:
         "fixtures": needed,
         "docs": docs,
     }
+
+
+def recorded_path(package: Path, out: Path, root: Path = ROOT) -> dict:
+    """Where the package was built, as the result records it: relative to the repository, or, for a
+    build outside it, relative to `out` with the flag set. Never an absolute path: the committed result
+    named `/Users/...` until 2026-10-10 and a scratch rebuild named a `/private/tmp` scratchpad, and
+    neither meant anything on another machine or after the directory was gone."""
+    try:
+        return {
+            "package": package.resolve().relative_to(root.resolve()).as_posix(),
+            "package outside repository": False,
+        }
+    except ValueError:
+        return {"package": package.relative_to(out).as_posix(), "package outside repository": True}
+
+
+def is_canonical(out: Path, name: str) -> bool:
+    """True only for the default build, the one whose result is `data/results/engine_package.json`."""
+    return out.resolve() == DEFAULT_OUT.resolve() and name == DEFAULT_NAME
 
 
 def package_docs(package: Path, name: str) -> list[str]:
@@ -675,12 +705,22 @@ def suite(out: Path) -> dict:
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--out", default="build/biolang", help="where to build the package")
-    ap.add_argument("--name", default="biolang", help="the package name to build it under")
-    args = ap.parse_args()
+    ap.add_argument(
+        "--out",
+        default=str(DEFAULT_OUT),
+        help="where to build the package (default build/biolang in the repository); any other directory"
+        " is a scratch run, whose result is written there and never to data/results",
+    )
+    ap.add_argument(
+        "--name",
+        default=DEFAULT_NAME,
+        help="the package name to build it under; any name but biolang is a scratch run",
+    )
+    args = ap.parse_args(argv)
     out = Path(args.out).resolve()
+    canonical = is_canonical(out, args.name)
     built = build(out, args.name)
     print(
         f"built {args.name} {built['version']} from {built['files']} files"
@@ -701,16 +741,19 @@ def main() -> int:
             print(f"       {r['output']}")
     ok = all(r["ok"] for r in results)
     print(f"\nthe engine runs with the application absent: {ok}")
+    payload = {"name": args.name, "built": built, "checks": results, "passed": ok, "canonical run": canonical}
     try:
         from genomeos.results import save_result
 
-        print(
-            "wrote",
-            save_result(
-                "engine_package",
-                {"name": args.name, "built": built, "checks": results, "passed": ok},
-            ),
-        )
+        if canonical:
+            print("wrote", save_result("engine_package", payload))
+        else:
+            # a scratch run never touches the canonical result: its result goes beside its own build
+            where = save_result("engine_package", payload, results_dir=out)
+            print(
+                f"scratch run (--out or --name is not the default {DEFAULT_OUT.relative_to(ROOT)},"
+                f" {DEFAULT_NAME}): wrote {where}, not data/results/engine_package.json"
+            )
     except Exception as e:  # noqa: BLE001  (the report is a convenience, not the measurement)
         print(f"(no result file: {e})", file=sys.stderr)
     print(json.dumps({"passed": ok}))

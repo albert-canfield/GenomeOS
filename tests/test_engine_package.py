@@ -15,6 +15,7 @@ could not honestly be distributed under Apache.
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -152,3 +153,76 @@ def test_import_protein_without_genomeos_is_a_named_error(described):
     c = next(c for c in described if c["check"].startswith("import protein:"))
     assert c["ok"], c["error"] or c["output"]
     assert "the engine ships none" in c["error"]
+
+
+# ---------------------------------------------------------------- what the writer records, and where
+
+
+def test_the_recorded_package_path_names_no_machine(built):
+    """A build outside the repository (here a pytest temporary directory) is recorded relative to its
+    `--out` with the flag set: the committed result named `/Users/...` until 2026-10-10, and a scratch
+    rebuild named a `/private/tmp` scratchpad that no longer exists."""
+    out, info, _ = built
+    assert info["package"] == "biolang"
+    assert info["package outside repository"] is True
+    assert str(out) not in json.dumps(info) and str(out.resolve()) not in json.dumps(info)
+
+
+def test_a_package_inside_the_repository_is_recorded_relative_to_it():
+    out = package_engine.DEFAULT_OUT
+    assert package_engine.recorded_path(out / "biolang", out) == {
+        "package": "build/biolang/biolang",
+        "package outside repository": False,
+    }
+
+
+def _stub_run(monkeypatch) -> list[dict]:
+    """main() with the build and the checks stubbed out, and save_result recording its calls, so the
+    test asks only where a result would go and writes nothing anywhere."""
+    calls: list[dict] = []
+    built = {
+        "files": 1,
+        "rewritten": 1,
+        "package": "x",
+        "package outside repository": True,
+        "dangling references": [],
+        "version": package_engine.ENGINE_VERSION,
+        "test files": [],
+        "test functions": 0,
+        "fixtures": [],
+        "docs": [],
+    }
+    monkeypatch.setattr(package_engine, "build", lambda out, name: built)
+    monkeypatch.setattr(package_engine, "verify", lambda out, name: [{"check": "c", "ok": True}])
+    monkeypatch.setattr(package_engine, "describe", lambda out, name: [])
+    import genomeos.results
+
+    def save_result(name, payload, results_dir=genomeos.results.RESULTS_DIR, **kw):
+        calls.append({"name": name, "payload": payload, "results_dir": Path(results_dir)})
+        return Path(results_dir) / f"{name}.json"
+
+    monkeypatch.setattr(genomeos.results, "save_result", save_result)
+    return calls
+
+
+@pytest.mark.parametrize("extra", [["--out", "SCRATCH"], ["--name", "other"]])
+def test_a_scratch_run_never_writes_the_canonical_result(monkeypatch, tmp_path, capsys, extra):
+    """Any --out or --name but the default is a scratch run: its result goes beside its own build and
+    never to data/results, which is how the uncommitted 2026-10-02 scratch rebuild replaced the
+    canonical result in the shared tree."""
+    calls = _stub_run(monkeypatch)
+    argv = [str(tmp_path / "scratch") if a == "SCRATCH" else a for a in extra]
+    assert package_engine.main(argv) == 0
+    [call] = calls
+    assert call["results_dir"].resolve() != (ROOT / "data" / "results").resolve()
+    assert call["results_dir"] != Path("data/results")
+    assert call["payload"]["canonical run"] is False
+    assert "scratch run" in capsys.readouterr().out
+
+
+def test_the_default_run_writes_the_canonical_result(monkeypatch):
+    calls = _stub_run(monkeypatch)
+    assert package_engine.main([]) == 0
+    [call] = calls
+    assert call["results_dir"] == Path("data/results")
+    assert call["payload"]["canonical run"] is True
