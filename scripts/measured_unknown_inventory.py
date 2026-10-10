@@ -791,24 +791,22 @@ def gene_union(rows: list[dict[str, Any]], sources: list[dict[str, Any]], coding
     }
 
 
-def result_manifest(sources: list[dict[str, Any]], chain: dict[str, Any]) -> dict[str, Any]:
-    inputs = []
-    for s in sources:
-        for f in s["files"]:
-            if f.get("sha256"):
-                inputs.append(
-                    {
-                        "path": f.get("path") or f.get("url"),
-                        "url": f.get("url"),
-                        "sha256": f["sha256"],
-                        "md5_matches_publisher": f.get("md5_matches"),
-                        "bytes": f.get("bytes"),
-                        "partition": s["key"],
-                    }
-                )
-    inputs.append(
-        {"path": chain["path"], "url": chain["url"], "sha256": chain["sha256"], "partition": "lift"}
-    )
+#: how the files a run reads under data/ are grouped in its manifest, first prefix that matches
+READ_GROUPS = (
+    ("data/knowledge/alphagenome/all_elements/", "the element archive the population is built from"),
+    ("data/knowledge/measured_unknown/", "the public files this lane fetched, digested member by member"),
+    ("data/results/", "the organiser's per-chromosome inputs, as committed"),
+    ("data/reference/", "the reference genome and annotation (coding genes; the guide build check)"),
+    ("data/", "the held assay tables (benchmark, lentiMPRA joint library, VISTA, growth-screen guides)"),
+)
+
+
+def result_manifest(sources: list[dict[str, Any]], reads: list[str]) -> dict[str, Any]:
+    groups: dict[str, list[str]] = {}
+    for path in sorted(set(reads)):
+        label = next(lab for pre, lab in READ_GROUPS if path.startswith(pre))
+        groups.setdefault(label, []).append(path)
+    inputs = [mf.files_entry(label, paths, partition="read by the run") for label, paths in groups.items()]
     return {
         "sources": [
             {"accession": f"{s['key']}: {s['label']}", "version": (s["query"] or s["licence"])[:400]}
@@ -917,6 +915,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-save", action="store_true")
     ap.add_argument("--offline", action="store_true", help="use only files already cached")
     args = ap.parse_args(argv)
+    mf.trace_begin()
     t0 = time.time()
     rows = mu.population()
     g = mu.gate(rows)
@@ -989,7 +988,7 @@ def main(argv: list[str] | None = None) -> int:
         "money": "none",
         "seconds": round(time.time() - t0, 1),
     }
-    record["result_manifest"] = result_manifest(sources, chain_file)
+    record["result_manifest"] = result_manifest(sources, mf.traced_reads())
     if args.no_save:
         json.dump(
             {k: record[k] for k in ("population", "verdict", "table")}, sys.stdout, indent=1, default=str
