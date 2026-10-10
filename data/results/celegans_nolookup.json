@@ -1,0 +1,692 @@
+{
+  "result": "celegans_nolookup",
+  "date": "2026-10-10",
+  "registration": "data/results/celegans_nolookup_registration.json",
+  "script_changed_since_registration": false,
+  "primary": {
+    "cells": 555,
+    "decided": 56,
+    "right": 56,
+    "wrong": 0,
+    "by_rule": {
+      "tissue_D": 20,
+      "tissue_E": 34,
+      "tissue_germline": 2
+    },
+    "by_type": {
+      "Intestine": 34,
+      "Muscle": 20,
+      "Reproductive": 2
+    },
+    "by_founder": {
+      "D": {
+        "Muscle": 20
+      },
+      "E": {
+        "Intestine": 34
+      },
+      "P4": {
+        "Reproductive": 2
+      }
+    },
+    "wrong_by_kind": {},
+    "unattributed": [],
+    "compare": {
+      "until_min": 800.0,
+      "reference_cells": 1439,
+      "matched": 1439,
+      "born_fraction": 1.0,
+      "missing": 0,
+      "missing_examples": [],
+      "extra": 0,
+      "extra_examples": [],
+      "parent_mismatch": 0,
+      "timing_median_min": 7.600000000000023,
+      "timing_p90_min": 25.399999999999977,
+      "fates_checked": 555,
+      "fates_correct": 56,
+      "fates_unknown": 0,
+      "fate_accuracy": 0.1009,
+      "fate_confusion": {
+        "Neuron->ABpPrecursor": 134,
+        "Neuron->ABaPrecursor": 84,
+        "Muscle->MSPrecursor": 47,
+        "Muscle->CPrecursor": 32,
+        "Hypodermis->ABpPrecursor": 31,
+        "Hypodermis->ABaPrecursor": 25,
+        "Muscle->ABaPrecursor": 19,
+        "GliaSheath->ABaPrecursor": 14,
+        "GliaSocket->ABaPrecursor": 14,
+        "Hypodermis->CPrecursor": 13
+      },
+      "deaths_expected": 110,
+      "deaths_matched": 110,
+      "counts": [
+        {
+          "t": 0.5,
+          "body": 2.0,
+          "reference": 2
+        },
+        {
+          "t": 50,
+          "body": 4.0,
+          "reference": 4
+        },
+        {
+          "t": 100,
+          "body": 12.0,
+          "reference": 12
+        },
+        {
+          "t": 200,
+          "body": 52.0,
+          "reference": 52
+        },
+        {
+          "t": 350,
+          "body": 194.0,
+          "reference": 274
+        },
+        {
+          "t": 500,
+          "body": 596.0,
+          "reference": 622
+        },
+        {
+          "t": 800,
+          "body": 610.0,
+          "reference": 610
+        }
+      ]
+    }
+  },
+  "founders_measured": {
+    "types": {
+      "ABa": "ABaPrecursor",
+      "ABp": "ABpPrecursor",
+      "EMS": "EMSPolarised",
+      "MS": "MSPrecursor",
+      "E": "EPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    },
+    "correct": 8,
+    "of": 8
+  },
+  "seeds": {
+    "per_seed": {
+      "0": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "1": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "2": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "3": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "4": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "5": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "6": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "7": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "8": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "9": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "10": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "11": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "12": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "13": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "14": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "15": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "16": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "17": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "18": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      },
+      "19": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0
+      }
+    },
+    "decided_range": [
+      56,
+      56
+    ],
+    "right_range": [
+      56,
+      56
+    ]
+  },
+  "other_tables": {
+    "curated": {
+      "decided": 56,
+      "right": 56,
+      "wrong": 0,
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "EMSPolarised",
+        "MS": "MSPrecursor",
+        "E": "EPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "founders_correct": 8
+    },
+    "detected_sheet1": {
+      "decided": 56,
+      "right": 56,
+      "wrong": 0,
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABpPrecursor",
+        "EMS": "EMSPolarised",
+        "MS": "MSPrecursor",
+        "E": "EPrecursor",
+        "C": "CPrecursor",
+        "D": "DPrecursor",
+        "P4": "GermCell"
+      },
+      "founders_correct": 8
+    }
+  },
+  "no_table": {
+    "counts": {
+      "Intestine": 0,
+      "Muscle": 20,
+      "Reproductive": 2,
+      "decided": 22
+    },
+    "right": 22,
+    "founders": {
+      "ABa": "ABaPrecursor",
+      "ABp": "ABaPrecursor",
+      "EMS": "EMSPrecursor",
+      "MS": "MSPrecursor",
+      "E": "MSPrecursor",
+      "C": "CPrecursor",
+      "D": "DPrecursor",
+      "P4": "GermCell"
+    }
+  },
+  "rearranged": {
+    "what": "ABa and ABp swapped in the measured table alone; the rules are unchanged",
+    "founders": {
+      "ABa": "ABpPrecursor",
+      "ABp": "ABaPrecursor"
+    },
+    "fates_follow_position": true
+  },
+  "knockouts": {
+    "APX-1": {
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABaPrecursor",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 34,
+        "Muscle": 20,
+        "Reproductive": 2,
+        "decided": 56
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        },
+        "E": {
+          "Intestine": 34
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": null,
+      "reading": "ABp becomes ABa-like (Mello et al. 1994, Cell 77:95). Registered reading: a founder-level phenotype only; no AB fate is decided without the lookup, so nothing terminal can move"
+    },
+    "GLP-1": {
+      "founders": {
+        "ABa": "ABaPrecursor",
+        "ABp": "ABaPrecursor",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 34,
+        "Muscle": 20,
+        "Reproductive": 2,
+        "decided": 56
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        },
+        "E": {
+          "Intestine": 34
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": null,
+      "reading": "ABp becomes ABa-like (Priess, Schnabel & Schnabel 1987, Cell 51:601). As APX-1"
+    },
+    "MOM-2": {
+      "founders": {
+        "E": "MSPrecursor",
+        "MS": "MSPrecursor",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 0,
+        "Muscle": 20,
+        "Reproductive": 2,
+        "decided": 22
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": true,
+      "reading": "E takes the MS fate, no intestine (Thorpe et al. 1997, Cell 90:695; Rocheleau et al. 1997, Cell 90:707). Registered reading: reproduced if Intestine is 0"
+    },
+    "MOM-5": {
+      "founders": {
+        "E": "MSPrecursor",
+        "MS": "MSPrecursor",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 0,
+        "Muscle": 20,
+        "Reproductive": 2,
+        "decided": 22
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": true,
+      "reading": "E takes the MS fate (Rocheleau et al. 1997). The published RNAi phenotype is partially penetrant; the program's knockout is complete, so only the direction is compared"
+    },
+    "PIE-1": {
+      "founders": {
+        "ABp": "ABaPrecursor",
+        "P2": "EMSPrecursor"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 0,
+        "Muscle": 20,
+        "Reproductive": 0,
+        "decided": 20
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": false,
+      "reading": "P2 takes the EMS fate: extra pharynx and intestine and no germ line (Mello et al. 1992, Cell 70:163). Registered reading: 'no germ line' reproduced if Reproductive is 0; 'extra intestine' NOT reproduced, predicted in advance and in the opposite direction: the program loses E's intestine too, because presents_mom2 requires PIE-1 in P2, so without PIE-1 no Wnt reaches EMS at the contact and E takes the MS fate; and the MS/E founder rules are guarded on the names MS and E, so a P2 turned EMS-like still divides into cells named C and P3, and D keeps its muscle"
+    },
+    "SKN-1": {
+      "founders": {
+        "E": "CPrecursor",
+        "MS": "CPrecursor",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 0,
+        "Muscle": 20,
+        "Reproductive": 2,
+        "decided": 22
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": true,
+      "reading": "no intestine and no pharynx; EMS daughters make C-like hypodermis and muscle (Bowerman et al. 1992, Cell 68:1061). Registered reading: reproduced if Intestine is 0; the extra C-like tissue is not decidable here (no C tissue rule)"
+    },
+    "POP-1": {
+      "founders": {
+        "E": "EPrecursor",
+        "MS": "EPrecursor",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 111,
+        "Muscle": 20,
+        "Reproductive": 2,
+        "decided": 133
+      },
+      "terminal_by_founder": {
+        "D": {
+          "Muscle": 20
+        },
+        "E": {
+          "Intestine": 34
+        },
+        "MS": {
+          "Intestine": 77
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": true,
+      "reading": "MS adopts the E fate: extra intestine, no MS-derived pharynx or muscle (Lin, Thorpe & Priess 1995, Cell 83:599). Registered reading: reproduced in direction if MS's terminal cells are Intestine; the count (111) is NOT comparable, because MS's divisions are still read from the lineage by name, where a pop-1 MS makes an E-like lineage"
+    },
+    "PAL-1": {
+      "founders": {
+        "C": "Blastomere",
+        "D": "Blastomere",
+        "P2": "Blastomere"
+      },
+      "founder_phenotype_reproduced": true,
+      "terminal": {
+        "Intestine": 34,
+        "Muscle": 0,
+        "Reproductive": 2,
+        "decided": 36
+      },
+      "terminal_by_founder": {
+        "E": {
+          "Intestine": 34
+        },
+        "P4": {
+          "Reproductive": 2
+        }
+      },
+      "terminal_as_registered": true,
+      "published_terminal_phenotype_reproduced": true,
+      "reading": "C and D lose their fates: no D muscle (Hunter & Kenyon 1996, Cell 87:217). Registered reading: reproduced if Muscle is 0; C's tissues are not decided either way"
+    }
+  },
+  "predictions_held": {
+    "P1 primary": true,
+    "P2 seeds": true,
+    "P3 founders": true,
+    "P4 other tables": true,
+    "P5 no table": true,
+    "P6 rearranged": true,
+    "P7 knockouts, founder level": true,
+    "P8 knockouts, terminal level": true
+  },
+  "void": [],
+  "headline": "56 of 555 embryonic terminal fates are decided without the lookup, 56 right and 0 wrong, in embryo_nolookup.bio; all 56 are circular as wild-type predictions (each founder-tissue rule was written from Sulston's clonal observation, the record they are scored against); 34 follow a Wnt read at a measured contact (Cao et al. 2020), 22 follow maternal factors segregated by named divisions. The shipped embryo_factors.bio is unchanged and its count stays 0",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "WormWeb C. elegans cell lineage, json-celllineage.js (Sulston et al. 1983; Sulston and Horvitz 1977)",
+        "version": "as fetched and distilled into data/results/celegans_lineage_cells.json (first 0a8aa05, 2026-09-11); the page carries no release number, so the distilled file's sha256 pins it",
+        "url": "http://wormweb.org/js/json-celllineage.js",
+        "licence": "CC BY"
+      },
+      {
+        "accession": "Zenodo 4737593 (Ma et al. 2021, Nat Methods 18:893), Time_series_expression_dataset.zip",
+        "version": "Zenodo record 4737593",
+        "url": "https://zenodo.org/api/records/4737593/files/Time_series_expression_dataset.zip/content",
+        "licence": "CC BY 4.0"
+      },
+      {
+        "accession": "Cao et al. 2020, Nat Commun 11:6254, doi:10.1038/s41467-020-19863-x (CShaper), Supplementary Data 5 (41467_2020_19863_MOESM6_ESM.xls)",
+        "version": "sha256 519c34349af8e8f6cbd675c665f9a880c99fe1ad482b469067f4a6078a855c99, 461,824 bytes, distilled by scripts/celegans_cshaper_contacts.py",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-020-19863-x/MediaObjects/41467_2020_19863_MOESM6_ESM.xls",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/celegans_lineage_cells.json",
+        "sha256": "93635ad98a08e4641c9f8719d63cc3420ecee6fd161c0d8fab897720fb6d4ab6",
+        "bytes": 305885,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans",
+        "sha256": "8497f7fbab31e5441522f25195a2451c4f3cf68aa7dea882d0b140b074aaf9e6",
+        "bytes": 1476286,
+        "partition": null,
+        "files": 22
+      },
+      {
+        "path": "data/results/celegans_nolookup_registration.json",
+        "sha256": "db5b38a4477d97639855f434045b30fcb69d92d218fb0cfdec6c55b50c0bfb6e",
+        "bytes": 19502,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: a cell lineage and per-cell factor presence; nothing is placed on a genome",
+    "coordinates": "n/a: cells are named by their lineage path, not by a genomic interval",
+    "parameters": {
+      "until_min": 800.0,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "founder_until_min": 250.0,
+      "timers": "means",
+      "atlas_presence_fraction_of_max": 0.2,
+      "atlas_minutes_per_frame": 1.25
+    },
+    "exclusions": [
+      "terminal cells of AB, MS and C: no founder-tissue rule names them, so they are counted as not decided, never as wrong",
+      "post-embryonic cells: the 555 are those born before 800 min"
+    ],
+    "partitions": "n/a: no evaluation split; every cell is read",
+    "code_cleanliness": {
+      "git_sha": "6bdecd4cb3ff39acdf6261ed1b41be0ada359e50",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/celegans_nolookup.py",
+        "form": "committed_repository_file",
+        "path": "scripts/celegans_nolookup.py",
+        "is_committed": true,
+        "declared_entry": "scripts/celegans_nolookup.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/targetchoice.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_targetchoice.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/__init__.py",
+        "genomeos/organism/atlas_levels.py",
+        "genomeos/organism/celegans.py",
+        "genomeos/organism/diff.py",
+        "genomeos/organism/fate_rules.py",
+        "genomeos/organism/provenance.py",
+        "genomeos/organism/reference.py",
+        "genomeos/organism/tf_atlas.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/body.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/celegans_nolookup.py"
+      ],
+      "counting_path_count": 30,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "6bdecd4cb3ff39acdf6261ed1b41be0ada359e50",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/targetchoice.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_targetchoice.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/celegans_nolookup.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "6bdecd4cb3ff39acdf6261ed1b41be0ada359e50",
+      "code_cleanliness_git_sha": "6bdecd4cb3ff39acdf6261ed1b41be0ada359e50",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 6bdecd4"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 234,
+      "opens_under_data": 110,
+      "files_read": 24,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
