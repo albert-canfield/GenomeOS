@@ -52,7 +52,7 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
 
 | Component | Role | Status (2026-10-10) |
 |---|---|---|
-| **BioLang** | biological programming language / DSL | v0.4: 26 block kinds from `gene` to `organism`, `experiment` and `design`; evidence on every block; programs test themselves; the grammar is generated from the parser ([docs/BIOLANG-GRAMMAR.md](docs/BIOLANG-GRAMMAR.md)) |
+| **BioLang** | biological programming language / DSL | v0.4: 27 block kinds from `gene` to `organism`, `experiment`, `design` and v0.5's `reader`; evidence on every block; programs test themselves; the grammar is generated from the parser ([docs/BIOLANG-GRAMMAR.md](docs/BIOLANG-GRAMMAR.md)) |
 | **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | 0.4: 25 types with JSON round-trip, `UNKNOWN` as a value |
 | **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | eleven engines (central dogma, network, Boolean, SBML, ageing, spatial, segmentation, gastrulation, Body, debugger, uncertainty); process-bigraph composition |
 | **`bio`** | the toolchain on its own | `bio check | compile | run | test | repl`; packaged as the separately installable `biolang` engine (milestone 2.0, 2026-09-27) |

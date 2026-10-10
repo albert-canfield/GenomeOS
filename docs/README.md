@@ -25,8 +25,8 @@ wide to narrow; read them top down.
 
 | Document | Holds |
 |---|---|
-| [BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md) | the language and the IR as they are: the v0.4 grammar (26 block kinds) and the BioIR 0.4 types (25), generated from the parser and the dataclasses; a test fails when it is out of date |
-| [BIOLANG-v0.1.md](BIOLANG-v0.1.md), [BIOLANG-v0.2.md](BIOLANG-v0.2.md), [BIOLANG-v0.3.md](BIOLANG-v0.3.md), [BIOLANG-v0.4-ECONOMY.md](BIOLANG-v0.4-ECONOMY.md) | the language design, one document per version (v0.3 adds the organism layer and experiments; v0.4 structure, economy and control: stages 1, 2 and 4 implemented, stage 3, energy and mitochondria, not) |
+| [BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md) | the language and the IR as they are: the v0.4 grammar (27 block kinds, v0.5's `reader` the newest) and the BioIR 0.4 types (26), generated from the parser and the dataclasses; a test fails when it is out of date |
+| [BIOLANG-v0.1.md](BIOLANG-v0.1.md), [BIOLANG-v0.2.md](BIOLANG-v0.2.md), [BIOLANG-v0.3.md](BIOLANG-v0.3.md), [BIOLANG-v0.4-ECONOMY.md](BIOLANG-v0.4-ECONOMY.md), [BIOLANG-v0.5-READER.md](BIOLANG-v0.5-READER.md) | the language design, one document per version (v0.3 adds the organism layer and experiments; v0.4 structure, economy and control: stages 1, 2 and 4 implemented, stage 3, energy and mitochondria, not; v0.5 the `reader`, chromatin per cell type gating rules) |
 | [BIOIR-v0.1.md](BIOIR-v0.1.md) | the intermediate representation as first designed; the current types are in BIOLANG-GRAMMAR.md |
 | [BIO-TOOLCHAIN.md](BIO-TOOLCHAIN.md) | `bio check | compile | run | test | repl`, self-testing programs, the REPL |
 | [SEQUENCE-GRAMMAR.md](SEQUENCE-GRAMMAR.md) | the genome's own delimiters as a grammar |
