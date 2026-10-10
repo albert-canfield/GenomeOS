@@ -238,3 +238,42 @@ def test_schoeberl2002_reproduces_on_libroadrunner_at_all_three_egf_doses():
 def test_the_repressilator_reproduces_on_libroadrunner():
     failed = _score(REPRESSILATOR, "BIOMD0000000012")
     assert failed == {"as curated": []}, failed
+
+
+STIFF = """<?xml version="1.0"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+<model id="stiff">
+ <listOfCompartments><compartment id="c" size="1"/></listOfCompartments>
+ <listOfSpecies>
+  <species id="A" compartment="c" initialConcentration="1"/>
+  <species id="B" compartment="c" initialConcentration="0"/>
+ </listOfSpecies>
+ <listOfParameters><parameter id="k" value="10000"/></listOfParameters>
+ <listOfReactions>
+  <reaction id="r" reversible="false">
+   <listOfReactants><speciesReference species="A"/></listOfReactants>
+   <listOfProducts><speciesReference species="B"/></listOfProducts>
+   <kineticLaw><math xmlns="http://www.w3.org/1998/Math/MathML">
+    <apply><times/><ci>k</ci><ci>A</ci></apply></math></kineticLaw>
+  </reaction>
+ </listOfReactions>
+</model></sbml>"""
+
+
+def test_a_diverged_stand_in_run_raises_instead_of_reading_as_zero(tmp_path):
+    """k = 1e4 at dt = 0.01 is far outside RK4's stability region. Before 2026-10-10 the overflow became
+    NaN and max(0.0, nan) wrote it as 0.0, so a blow-up looked like a species that never moved."""
+    path = tmp_path / "stiff.xml"
+    path.write_text(STIFF)
+    with pytest.raises(FloatingPointError, match=r"diverged.*engine='roadrunner'"):
+        SbmlRuntime(SbmlModel.from_file(path)).run(duration=1.0, dt=0.01)
+    stable = SbmlRuntime(SbmlModel.from_file(path)).run(duration=1.0, dt=1e-5, record_every=10000)
+    assert stable.levels["A"][-1] < 1e-9 and abs(stable.levels["B"][-1] - 1.0) < 1e-9
+
+
+@needs_roadrunner
+def test_the_stiff_model_runs_on_libroadrunner_at_the_same_grid(tmp_path):
+    path = tmp_path / "stiff.xml"
+    path.write_text(STIFF)
+    traj = runtime(SbmlModel.from_file(path), "roadrunner").run(duration=1.0, dt=0.01)
+    assert abs(traj.levels["B"][-1] - 1.0) < 1e-6 and abs(traj.levels["A"][-1]) < 1e-6

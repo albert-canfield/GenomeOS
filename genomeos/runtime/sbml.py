@@ -463,7 +463,15 @@ class SbmlRuntime:
             s4 = {**state, **{s: state[s] + dt * k3[s] for s in self.dynamic}}
             k4 = self._derivatives(s4)
             for s in self.dynamic:
-                state[s] = max(0.0, state[s] + dt / 6 * (k1[s] + 2 * k2[s] + 2 * k3[s] + k4[s]))
+                x = state[s] + dt / 6 * (k1[s] + 2 * k2[s] + 2 * k3[s] + k4[s])
+                # max(0.0, nan) is 0.0: without this check a diverged run read as species at exactly
+                # zero, which is how Schoeberl2002's cascade was once recorded as "flat" (2026-10-10)
+                if not math.isfinite(x):
+                    raise FloatingPointError(
+                        f"RK4 diverged at t={step * dt:g}: {s} became {x}; dt={dt:g} is unstable for "
+                        f"this model. A stiff model needs engine='roadrunner' (the roadrunner extra)."
+                    )
+                state[s] = max(0.0, x)
             if step % record_every == 0:
                 record(step * dt)
         return traj
