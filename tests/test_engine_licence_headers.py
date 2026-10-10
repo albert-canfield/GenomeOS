@@ -101,6 +101,10 @@ DECLARE_NOTHING_PY: tuple[str, ...] = ()
 #: selected tests are Apache-2.0, "decided by the copyright holder on 2026-09-28", and 30 of the 31
 #: say so in their own first lines while this one says nothing and takes it by default. Recorded, not
 #: resolved -- putting a header on a file is a licensing act and licensing acts are Albert's.
+#: Count corrected 2026-10-10: "30 of the 31" was the selection when this was written. Measured with
+#: `engine_tests()` it was 32 selected and 31 headed at dd84686 (the LICENSING.md correction), and 33
+#: selected and 32 headed after bc9fc7a added tests/test_grn_competition.py; this one is still the
+#: only file without the header. The count moves as engine tests join, and the pin below is by set.
 DECLARE_NOTHING_TESTS = ("tests/test_unstated_confidence.py",)
 
 #: Shipped non-`.py` files: the standard library's BioLang modules. They carry prose comment headers
