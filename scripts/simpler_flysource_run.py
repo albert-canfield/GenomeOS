@@ -745,6 +745,7 @@ def register() -> None:
     }
     out["result_manifest"] = _manifest(
         [
+            (str(fs.FETCH_RECORD), "each input's registered sha256"),
             (str(fs.CELL_TYPES_FILE), "the `RNAcluster` column only"),
             (str(fs.DAR_FILE), "the selected rows' region and cell type only"),
             (str(fn.BOUNDARY_FILE), "Table S4 (manual boundary positions)"),
