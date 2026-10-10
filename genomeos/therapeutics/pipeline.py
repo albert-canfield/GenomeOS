@@ -601,6 +601,19 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
             "the full-length protein is annotated"
         )
     if loc.reachable and loc.plasma_membrane is not False:
+        # The class may not claim a surface the score refuses. Where the surface
+        # score answers None for a stated reason -- a fusion product whose extent
+        # the record does not establish, or one whose outward face the curated
+        # arrangement leaves open -- the class is the vocabulary's `unknown` and
+        # carries the score's own sentence, so one row cannot name a surface
+        # target and publish no surface figure (2026-10-10, lane-svfix, on the
+        # FGFR3-TACC3 case, where the two fields disagreed).
+        accessible, accessible_basis = surface_score(c)
+        if accessible is None:
+            return "unknown", (
+                f"curated localisation places {c.gene} at the {loc.primary.replace('_', ' ')}, but the "
+                f"surface score cannot establish that this tumour's product is reachable: {accessible_basis}"
+            )
         outside = [r for r in loc.extracellular_regions]
         if outside:
             longest = max(outside, key=lambda r: (r.end or 0) - (r.start or 0))
@@ -629,6 +642,22 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
     )
 
 
+def surface_score(c: TherapeuticTargetCandidate) -> tuple[float | None, str]:
+    """The surface dimension, asked once so the class and the score read the same answer."""
+    return surface_accessibility(
+        c.localization,
+        ectodomain_lost=mech.ectodomain_lost(c),
+        ectodomain_uncertain=mech.ectodomain_uncertain(c),
+        product_extent_unknown=mech.product_extent_unknown(c),
+        # What this tumour's alterations leave of the outward face, read from the
+        # product and not from the gene's annotation (registered 2026-10-10).
+        product=product.altered_surface(c),
+        # The junction each fusion carries as its source stated it, so that the
+        # sentence never says a reported junction is unreported (2026-10-10).
+        junctions=tuple(o.fusion_junction or "" for o in c.origins if o.alteration_kind == "fusion"),
+    )
+
+
 def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) -> Any:
     """Every dimension, each with the sentence that explains it."""
     # What is known about this gene in this patient. Curated localisation
@@ -637,15 +666,7 @@ def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) ->
     # mutated gene were scored from the same annotation and came out equal.
     tier, tier_value, tier_basis = alteration_evidence(c.origins, c.tumour)
     c.evidence_tier, c.evidence_tier_reason = tier, tier_basis
-    sa, sa_basis = surface_accessibility(
-        c.localization,
-        ectodomain_lost=mech.ectodomain_lost(c),
-        ectodomain_uncertain=mech.ectodomain_uncertain(c),
-        product_extent_unknown=mech.product_extent_unknown(c),
-        # What this tumour's alterations leave of the outward face, read from the
-        # product and not from the gene's annotation (registered 2026-10-10).
-        product=product.altered_surface(c),
-    )
+    sa, sa_basis = surface_score(c)
     sel, sel_basis, sel_ev = tumour_selectivity(c.gene, c.tumour, c.normal_tissue)
     exp, exp_basis = tumour_expression_score(c.tumour)
     nts, nts_basis = normal_tissue_safety(c.normal_tissue)

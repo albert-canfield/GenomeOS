@@ -358,6 +358,7 @@ def surface_accessibility(
     ectodomain_uncertain: bool = False,
     product_extent_unknown: bool = False,
     product: Any = None,
+    junctions: tuple[str, ...] = (),
 ) -> tuple[float | None, str]:
     """How reachable the protein is from outside, from curated localisation.
 
@@ -392,6 +393,13 @@ def surface_accessibility(
     are different statements: the product keeps the curated arrangement, against
     nothing being said about it. The three fusion states above keep precedence,
     and `product` is `None` for a candidate with no alteration record at all.
+
+    `junctions` is the junction each fusion that reached this gene carries, as
+    the source stated it and possibly empty. It changes only the sentence of
+    the fourth state: a record that reports a junction is not told it reports
+    none. Nothing here reads a junction into exon content, so a reported one
+    leaves the answer at `None` all the same (corrected 2026-10-10, lane-svfix,
+    on the structural-variant case whose record states both breakpoints).
     """
     if ectodomain_lost:
         return 0.0, (
@@ -413,9 +421,22 @@ def surface_accessibility(
             "full-length protein and it is not known that the tumour makes it"
         )
     if product_extent_unknown:
+        reported = sorted({j for j in junctions if j})
+        if not reported:
+            missing = "no junction position is reported"
+        else:
+            share = (
+                ""
+                if all(junctions)
+                else f" for {len(junctions) - junctions.count('')} of {len(junctions)} fusions"
+            )
+            missing = (
+                f"the record reports the junction{share} ({'; '.join(reported)}), but no junction is "
+                "read into exon content here"
+            )
         return None, (
             "every event that reached this gene is a fusion and the record does not establish which "
-            "part of this gene the product contains: no junction position is reported, so whether the "
+            f"part of this gene the product contains: {missing}, so whether the "
             "product carries this gene's own membrane anchor or only an unanchored outward face is "
             "unknown, and the curated figure describes the full-length protein"
         )
