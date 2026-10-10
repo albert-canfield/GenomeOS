@@ -1,0 +1,37 @@
+diff --git a/genomeos/forge/__init__.py b/genomeos/forge/__init__.py
+index 33ddf7f..a1ab710 100644
+--- a/genomeos/forge/__init__.py
++++ b/genomeos/forge/__init__.py
+@@ -1,3 +1,4 @@
++# SPDX-License-Identifier: AGPL-3.0-or-later
+ from .design import Design, DesignResult, Knob, Objective, forge, period_of
+ 
+ __all__ = ["Design", "DesignResult", "Knob", "Objective", "forge", "period_of"]
+diff --git a/genomeos/forge/design.py b/genomeos/forge/design.py
+index 535da7f..565baac 100644
+--- a/genomeos/forge/design.py
++++ b/genomeos/forge/design.py
+@@ -1,3 +1,4 @@
++# SPDX-License-Identifier: AGPL-3.0-or-later
+ """BioForge (Phase 5): design under constraints, in silico.
+ 
+ Given a BioLang module, a set of tunable knobs (gene max/basal rates, rule
+diff --git a/tests/test_licence_header_presence.py b/tests/test_licence_header_presence.py
+index db17146..7e5122c 100644
+--- a/tests/test_licence_header_presence.py
++++ b/tests/test_licence_header_presence.py
+@@ -107,11 +107,9 @@ PENDING_CLOSURE: dict[str, str] = {
+     )
+ }
+ 
+-#: Header-less application files a live lane held on the work board when the sweep ran.
+-DEFERRED_HELD: dict[str, str] = {
+-    "genomeos/forge/__init__.py": "genomeos/forge/ held by lane-forgecal on 2026-10-10",
+-    "genomeos/forge/design.py": "genomeos/forge/ held by lane-forgecal on 2026-10-10",
+-}
++#: Header-less application files a live lane held on the work board when the sweep ran. Empty since
++#: lane-ciextras headed the two genomeos/forge/ files once lane-forgecal had finished (2026-10-10).
++DEFERRED_HELD: dict[str, str] = {}
+ 
+ #: Files that carry the same tag twice by design: one at the top and one older one below the module
+ #: docstring that the engine test's five-line window could not see. Both are comments and both name
