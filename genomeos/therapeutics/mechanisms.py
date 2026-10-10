@@ -27,6 +27,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from typing import Any
 
+from . import product as prod
 from .evidence import Evidence, derived
 from .model import Binder, Cargo, Effector, Grade, MechanismFit, MechanismStatus
 
@@ -229,6 +230,16 @@ def _surface(c: Any) -> bool | None:
             return False
         # Orientation unknown, or this gene is the 5' partner and keeps its own
         # N-terminus: unanswered, not answered yes.
+        return None
+    # The same question for every other alteration class, read from the product
+    # (registered 2026-10-10). The gate moves with the score here rather than
+    # staying permissive while the score answers 0.0: leaving them apart would
+    # recreate, with the sides swapped, the disagreement the fusion sections
+    # closed. `unread` and `retained` fall through to the curated answer below.
+    altered = prod.altered_surface(c)
+    if altered is not None and altered.verdict == "not_anchored":
+        return False
+    if altered is not None and altered.verdict == "unknown":
         return None
     if c.localization.reachable:
         return True

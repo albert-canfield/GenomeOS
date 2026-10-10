@@ -38,6 +38,7 @@ from genomeos.cancer.tumour import CODING, TumourVariant
 
 from . import logic as combination_logic
 from . import mechanisms as mech
+from . import product
 from .evidence import database, derived, strongest_level
 from .evidence import patient as patient_evidence
 from .expression import (
@@ -362,6 +363,10 @@ def build_candidate(
     c.protein = ident.get("name") or ""
     c.uniprot = ident.get("accession")
     sequence = ident.get("sequence")
+    # Carried on the candidate so that a residue index from a VEP transcript can
+    # be checked against the protein the curated topology numbers before the
+    # surface score gives any definite answer about the product.
+    c.reference_sequence = sequence or ""
     ensembl_gene = ((defn.get("sections", {}).get("genomic_origin") or {}).get("items") or {}).get("gene_id")
 
     # --- stage 2: localisation and tumour accessibility
@@ -631,6 +636,9 @@ def score_candidate(c: TherapeuticTargetCandidate, precedent_available: bool) ->
         ectodomain_lost=mech.ectodomain_lost(c),
         ectodomain_uncertain=mech.ectodomain_uncertain(c),
         product_extent_unknown=mech.product_extent_unknown(c),
+        # What this tumour's alterations leave of the outward face, read from the
+        # product and not from the gene's annotation (registered 2026-10-10).
+        product=product.altered_surface(c),
     )
     sel, sel_basis, sel_ev = tumour_selectivity(c.gene, c.tumour, c.normal_tissue)
     exp, exp_basis = tumour_expression_score(c.tumour)

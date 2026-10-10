@@ -475,6 +475,16 @@ class NeoantigenAssessment:
     observed_immunopeptidomics: dict[str, Any] | None = None
     clinical_evidence: dict[str, Any] | None = None
     wild_type_discrimination: str = "unknown"
+    #: The altered-sequence comparison, where the transcript could be fetched
+    #: and the coding change applied: `neoantigen.altered_protein`'s dict with
+    #: the two translated proteins dropped and the transcript and coding change
+    #: added. It is carried because the surface score reads the same
+    #: reconstruction (`product.altered_surface`), so that the two answers come
+    #: from one measurement of what the protein becomes rather than from two.
+    #: It stays out of `to_dict`: every figure in it reaches the report through
+    #: the reason sentences that quote it, and the full dict would put a
+    #: megabyte of sequence into every result file.
+    reconstruction: dict[str, Any] | None = None
     evidence: list[Evidence] = field(default_factory=list)
     missing: list[Missing] = field(default_factory=list)
 
@@ -835,6 +845,13 @@ class TherapeuticTargetCandidate:
     alteration_magnitude: dict[str, Any] = field(default_factory=dict)
     alteration_magnitude_reason: str = ""
     localization: Localisation = field(default_factory=Localisation)
+    #: The curated reference protein sequence, from the same UniProt record the
+    #: topology comes from. It is carried so that a residue index taken from a
+    #: VEP transcript can be checked against the protein the topology numbers
+    #: before any definite answer is given about the product (see
+    #: `product.altered_surface`); the demo's RUNX1 Y480* is the case where the
+    #: two numberings differ.
+    reference_sequence: str = ""
     tumour: TumourState = field(default_factory=TumourState)
     normal_tissue: NormalTissueProfile = field(default_factory=NormalTissueProfile)
     trafficking: Trafficking = field(default_factory=Trafficking)

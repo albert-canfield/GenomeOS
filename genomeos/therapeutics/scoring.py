@@ -357,6 +357,7 @@ def surface_accessibility(
     ectodomain_lost: bool = False,
     ectodomain_uncertain: bool = False,
     product_extent_unknown: bool = False,
+    product: Any = None,
 ) -> tuple[float | None, str]:
     """How reachable the protein is from outside, from curated localisation.
 
@@ -380,6 +381,17 @@ def surface_accessibility(
     beyond its own transmembrane segment, so the product may be an anchored
     receptor or an unanchored outward face. The gate has answered `None` across
     that whole region since 2026-09-21.
+
+    `product` is the same question asked of every other alteration class, read
+    from the product rather than from the gene: a `product.ProductSurface`,
+    registered 2026-10-10. `not_anchored` answers `0.0` because the record
+    establishes that the tumour's product has no membrane anchor; `unknown`
+    answers `None`; `reduced` keeps the membrane figure and computes the
+    extracellular-span bonus over the residues the alteration leaves. The other
+    two values, `retained` and `unread`, read the annotation as before, and they
+    are different statements: the product keeps the curated arrangement, against
+    nothing being said about it. The three fusion states above keep precedence,
+    and `product` is `None` for a candidate with no alteration record at all.
     """
     if ectodomain_lost:
         return 0.0, (
@@ -407,6 +419,10 @@ def surface_accessibility(
             "product carries this gene's own membrane anchor or only an unanchored outward face is "
             "unknown, and the curated figure describes the full-length protein"
         )
+    if product is not None and product.verdict == "not_anchored":
+        return 0.0, product.reason
+    if product is not None and product.verdict == "unknown":
+        return None, product.reason
     best = max(
         (
             localisation.compartments.get(c, 0.0)
@@ -419,6 +435,17 @@ def surface_accessibility(
     if localisation.extracellular_regions:
         longest = max(localisation.extracellular_regions, key=lambda r: (r.end or 0) - (r.start or 0))
         span = (longest.end or 0) - (longest.start or 0) + 1
+        if product is not None and product.extracellular_span is not None:
+            # The alteration removes part of the curated outward face. The span
+            # the bonus reads is what the product keeps, and the sentence says
+            # which residues are gone rather than quoting the curated range as
+            # though the tumour made it.
+            bonus = min(0.1, product.extracellular_span / 5000)
+            return min(1.0, best + bonus), (
+                f"curated membrane localisation at confidence {best:.2f}, plus "
+                f"{product.extracellular_span} residues of curated extracellular topology that this "
+                f"tumour's product keeps, worth +{bonus:.2f}: {product.reason}"
+            )
         bonus = min(0.1, span / 5000)
         return min(1.0, best + bonus), (
             f"curated membrane localisation at confidence {best:.2f}, plus {span} residues of curated "

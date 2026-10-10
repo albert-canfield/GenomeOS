@@ -536,6 +536,17 @@ def _reconstruct(
         )
         return None
     a.evidence.extend(answer.evidence)
+    # Carried on the assessment so the surface score can read the same
+    # measurement of what the protein becomes instead of re-deriving it from the
+    # variant class: `product.altered_surface` keys it on the coding change and
+    # the transcript, which is why both are added here. The two translated
+    # proteins are dropped: they are up to a megabyte and nothing downstream
+    # reads them.
+    a.reconstruction = {
+        **{k: v for k, v in rebuilt.items() if k not in ("reference_protein", "mutant_protein")},
+        "hgvsc": hgvsc,
+        "transcript": transcript,
+    }
     novel = rebuilt["novel_residues"]
     inframe = consequence in ("inframe_deletion", "inframe_insertion")
     a.novel_peptide_sequence = bool(novel) or inframe
