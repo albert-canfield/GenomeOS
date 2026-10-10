@@ -141,6 +141,21 @@ _KINDS = (
 )
 # `cost` repeats because one gene draws on more than one pool: a transcript costs RNAPII once and
 # ATP per nucleotide, and those are two costs rather than one compound value (v0.4 §5.2).
+#: Why `optimise` is refused HERE and not when it is run (2026-10-10, lane-deadkeys, ROADMAP §5 item
+#: 13 A). `runtime/economy.py` refuses to divide a pool by `optimise` because the engine solves no
+#: objective. A refusal only at run time let a program pass `bio check` and then die on its first
+#: oversubscribed allocation, which is the worst place to learn it: the check is what a program is
+#: checked with. So the check refuses it, naming the policy and the policies that can be run. The
+#: run-time refusal stays, because the IR can be built in Python without this parser. The key is NOT
+#: removed from the grammar or from `ALLOCATION_POLICIES`: removing a key is Albert's language
+#: decision, and `optimise` has a meaning — a declared modelling device — that an engine may one day
+#: honour. Until then the refusal says so rather than letting the program look runnable.
+_OPTIMISE_REFUSAL = (
+    "policy optimise is a declared modelling device that no runtime here can honour: the engine"
+    " solves no objective, so a program stating it would pass this check and then be refused on its"
+    " first oversubscribed allocation. State a policy that can be run (proportional, priority,"
+    " competitive, saturable); whether optimise stays in the language is Albert's decision"
+)
 _REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary", "cost")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
 _PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+|unknown|UNKNOWN)\s*([^\s{]*)\s*$")
@@ -1168,6 +1183,8 @@ def _compile_block(b: Block, module: Module) -> None:
         al.objective = p.get("objective", "")
         if al.policy == "optimise" and not al.objective:
             raise BioLangError(f"line {b.line}: policy optimise must declare its objective")
+        if al.policy == "optimise":
+            raise BioLangError(f"line {b.line}: {_OPTIMISE_REFUSAL}")
         module.add(al)
     elif b.kind == "transport":
         tr = Transport(id=b.header, kind="transport", evidence=ev, confidence=conf)
@@ -1203,6 +1220,8 @@ def _compile_block(b: Block, module: Module) -> None:
             if key in p:
                 if p[key] not in allowed:
                     raise BioLangError(f"line {b.line}: regime {key} must be one of {allowed}")
+                if key == "allocation" and p[key] == "optimise":
+                    raise BioLangError(f"line {b.line}: {_OPTIMISE_REFUSAL}")
                 setattr(rg, key, p[key])
         if "threshold" in p:
             rg.threshold = _float(p["threshold"], "threshold", b.line)

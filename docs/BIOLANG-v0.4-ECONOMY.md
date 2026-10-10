@@ -306,6 +306,14 @@ objective, always labelled a modelling device, never the default; see §7.3).
 *(2026-10-10: `optimise` compiles, and the economy runtime refuses to run it with an error that the
 runtime solves no objective, `runtime/economy.py`; the other three run.)*
 
+*(2026-10-10, SUPERSEDING the line above the same day, lane-deadkeys, ROADMAP section 5 item 13 A:
+`optimise` no longer compiles. The CHECK refuses it, `lang/parser.py`'s `_OPTIMISE_REFUSAL`, in an
+`allocation` block and in a `regime`'s `allocation:`, naming the policy and the four that can be run,
+because a program that cannot run must not pass `bio check`. The economy runtime's refusal stays for
+an IR built without this parser. The `growth_law` example above is therefore no longer a program; it
+is kept as what the key would mean if an engine ever honoured it. Whether `optimise` stays in the
+language is Albert's decision, so it is still listed and still parsed as far as its objective.)*
+
 **Gates, both required.**
 
 - (a) *Burden.* Expressing a costly protein must reduce the output of

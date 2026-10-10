@@ -39,6 +39,18 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md, BIOLANG-v0.4-ECONOMY.md and BIOLAN
 - `!=` is refused: `k != v` is a parse error naming the clause. Write the values that do match
   instead (`a|b`, `absent`, or a comparison); what `!=` would mean on a missing key is
   undecided, and no program in the repo uses it.
+- `allocation { policy: optimise }` and `regime { allocation: optimise }` are REFUSED by the
+  check (2026-10-10, ROADMAP §5 item 13 A): no runtime here solves an objective, so a program
+  stating the policy would pass `bio check` and then be refused on its first oversubscribed
+  allocation. The key stays listed below, because removing it from the language is Albert's
+  decision; a missing `objective:` keeps its own message, and `runtime/economy.py` still refuses
+  an IR built without this parser.
+- A pool's `regenerates:` is read in two of its three positions (2026-10-10): `from P, P` by the
+  metabolism, which finds the regenerated pool and the processes that refill it from it, and a
+  rate on `Glucose` or `O2` as the uptake ceiling and the oxygen supply. A rate on ANY OTHER pool
+  is read by nothing, because the economy holds a pool's demand against a capacity its caller
+  passed or else the pool's `size`; what such a rate should mean there is an open language
+  decision, so it is pinned by a falsifier (`tests/test_dead_keys.py`) rather than guessed.
 - Every block accepts `evidence: kind "source" [note]` and `confidence: 0..1`.
 
 ## Directives

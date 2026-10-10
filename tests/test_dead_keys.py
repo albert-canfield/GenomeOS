@@ -20,6 +20,11 @@ does not solve an objective, so a program that names one is refused where the mi
 check -- with the policy named. Removing the key from the language is NOT done here: that is Albert's
 decision, and the refusal is what makes the gap honest in the meantime. The run-time refusal stays,
 because the IR can still be built in Python without the parser (`tests/test_economy.py` pins it).
+Implemented in `lang/parser.py`'s `_OPTIMISE_REFUSAL`, in the `allocation` block and in a `regime`'s
+`allocation:`, which `runtime/located.py` likewise cannot honour. `bio check` on a program stating it
+exits 2 with that message, so the gap is closed where a program is checked. The debt test below is
+not deleted but turned into `xfail(strict=True)`: it now fails, which is the fix, and it fails the
+other way -- loudly -- the day `optimise` passes the check again.
 
 **`regenerates:` -> THE ROADMAP'S SENTENCE IS WRONG ABOUT THIS KEY.** It is read in two of its three
 positions, and the one dead position is a language decision, not an engine bug. First-hand, the key
@@ -74,6 +79,13 @@ allocation a { pool: R; policy: optimise%s }
 event work { rate: 1500 /h; cost: R 1 per event }
 """
 
+#: The same program with a policy the check accepts, so `optimise` can be set on the IR afterwards.
+RUNNABLE = """module t
+pool R { size: 1000 }
+allocation a { pool: R; policy: proportional }
+event work { rate: 1500 /h; cost: R 1 per event }
+"""
+
 #: A pool that is neither Glucose nor O2, with both a stock and a refill rate: position 3 above.
 STOCK = """module t
 compartment Cytosol { volume: 0.7 }
@@ -89,6 +101,13 @@ def cell(processes: str = "Glycolysis, TCA, OXPHOS", glucose: str = "100", o2: s
 # ---- `policy: optimise` ---------------------------------------------------------------------
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="SUPERSEDED IN PLACE, same day: the check-time refusal chosen in this file's docstring"
+    " landed in `lang/parser.py`, so the gap this test recorded as a fact is gone and the test must"
+    " fail. Kept rather than deleted, and STRICT, so that it fails the other way the day a program"
+    " naming `optimise` passes the check again -- the regression this debt would be.",
+)
 def test_the_debt_optimise_compiles_today_and_only_the_runtime_refuses_it() -> None:
     """THIS TEST IS THE DEBT ITSELF, committed before the fix so the gap is on the record as a fact
     and not as a sentence. A program naming a policy the engine cannot run passes the check and dies
@@ -145,3 +164,29 @@ def test_a_regenerates_rate_on_any_other_pool_is_read_by_nothing(rate: str) -> N
     assert economy.capacity_of("Ribosomes") == 100.0
     assert economy.scale({"work": 1000.0})["work"] == pytest.approx(0.1)
     assert economy.report({"work": 1000.0}) == Economy.from_module(parse(STOCK % "")).report({"work": 1000.0})
+
+
+def test_optimise_is_refused_at_check_time_with_the_policy_and_the_alternatives_named() -> None:
+    """Outcome 2, implemented. A program naming a policy no runtime here can honour never passes the
+    check, so it cannot reach the allocation that would refuse it, and the message names the policy
+    and what may be stated instead. Both blocks that carry the key are refused: `allocation`, and a
+    `regime`'s `allocation:`, which `runtime/located.py` cannot honour either."""
+    with pytest.raises(BioLangError, match="solves no objective"):
+        parse(OPTIMISE % "; objective: growth")
+    with pytest.raises(BioLangError, match="State a policy that can be run"):
+        parse(OPTIMISE % "; objective: growth")
+    with pytest.raises(BioLangError, match="solves no objective"):
+        parse("module t\nregime r { allocation: optimise }")
+
+
+def test_the_run_time_refusal_stays_because_the_ir_can_be_built_without_the_parser() -> None:
+    """The check-time refusal is not a reason to drop the run-time one. An engine embedded by
+    something other than this parser, or a test that builds the allocation in Python as
+    `tests/test_economy.py` does, must still be told rather than having its pool divided by a policy
+    nothing implements. Here the policy is set on an allocation the check accepted."""
+    module = parse(RUNNABLE)
+    allocation = module.entities["a"]
+    allocation.policy, allocation.objective = "optimise", "growth"
+
+    with pytest.raises(EconomyError, match="does not solve an objective"):
+        Economy.from_module(module).scale({"work": 1500.0})
