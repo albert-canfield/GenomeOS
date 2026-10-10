@@ -6,8 +6,9 @@ Supports the SBML core used by most curated ODE models: compartments,
 species (amounts or concentrations), global and local parameters,
 assignment rules, reactions with kinetic laws in MathML, and a subset of
 MathML (arithmetic, power, exp/ln/log, piecewise, comparisons, constants).
-Integration is RK4. This is the zero-dependency stand-in for libRoadRunner;
-a roadrunner adapter can replace `SbmlRuntime.run` without changing callers.
+Integration is RK4. This is the zero-dependency stand-in for libRoadRunner,
+and it stays the default: `runtime(model, engine="roadrunner")` runs the same model
+on libRoadRunner (runtime/roadrunner.py, the `roadrunner` extra) when asked by name.
 """
 
 from __future__ import annotations
@@ -220,6 +221,7 @@ class SbmlModel:
     amount_units: set[str] = field(
         default_factory=set
     )  # species whose value is an amount, not a concentration
+    source: str = ""  # the SBML file this was read from, for an engine that compiles the file itself
 
     @classmethod
     def from_file(cls, path: str | Path) -> SbmlModel:
@@ -348,6 +350,7 @@ class SbmlModel:
             names,
             annotations,
             amount_units,
+            str(path),
         )
 
     # ---- BioIR ------------------------------------------------------------
@@ -464,3 +467,19 @@ class SbmlRuntime:
             if step % record_every == 0:
                 record(step * dt)
         return traj
+
+
+#: the engines `runtime` can build; the first is the default
+ENGINES = ("standin", "roadrunner")
+
+
+def runtime(model: SbmlModel, engine: str = "standin"):
+    """The runtime for `model` on the named engine. The in-house stand-in is the default; libRoadRunner
+    runs only when named, and a missing extra raises `EngineUnavailableError` rather than falling back."""
+    if engine == "standin":
+        return SbmlRuntime(model)
+    if engine == "roadrunner":
+        from .roadrunner import RoadRunnerRuntime
+
+        return RoadRunnerRuntime(model)
+    raise ValueError(f"unknown SBML engine {engine!r}; choose one of {ENGINES}")

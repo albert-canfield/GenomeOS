@@ -58,6 +58,14 @@ analysis = [
     # pattern to keep: the engine and the CLI must import with no third-party package present.
     "numpy>=1.26",
 ]
+roadrunner = [
+    # libRoadRunner, the standard SBML simulator (CVODE for stiff models), behind
+    # genomeos/runtime/roadrunner.py. Chosen explicitly (engine="roadrunner"); the in-house
+    # runtime/sbml.py stays the default and nothing falls back silently. Licence read from the
+    # installed wheel: libRoadRunner Apache-2.0; its NOTICE lists bundled libSBML (LGPL-2.1),
+    # SUNDIALS (BSD), LLVM (NCSA) and Poco (Boost). Its one dependency, numpy 2, is already locked.
+    "libroadrunner>=2.10",
+]
 
 [dependency-groups]
 dev = [

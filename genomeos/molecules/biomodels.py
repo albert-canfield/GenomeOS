@@ -24,6 +24,9 @@ from typing import Any
 BIOMODELS = "https://www.ebi.ac.uk/biomodels"
 CACHE = Path("data/knowledge/biomodels")
 EVIDENCE = "curated: BioModels (manually curated, reproduces the cited paper); derived: in-house RK4 run"
+EVIDENCE_ROADRUNNER = (
+    "curated: BioModels (manually curated, reproduces the cited paper); derived: libRoadRunner (CVODE) run"
+)
 
 
 def _get(url: str, accept: str = "application/json", timeout: int = 60) -> bytes:
@@ -142,10 +145,13 @@ def run(
     dt: float = 0.01,
     knockout: list[str] | None = None,
     accessions: dict[str, str] | None = None,
+    engine: str = "standin",
 ) -> dict[str, Any]:
     """Run the model, optionally with species held at zero; per-species final level and peak.
-    `accessions` maps a knockout term to a UniProt accession so annotated species match by identity."""
-    from genomeos.runtime.sbml import SbmlModel, SbmlRuntime
+    `accessions` maps a knockout term to a UniProt accession so annotated species match by identity.
+    `engine` is "standin" (the in-house RK4, the default) or "roadrunner" (libRoadRunner, the
+    `roadrunner` extra), chosen by name and never substituted for one another."""
+    from genomeos.runtime.sbml import SbmlModel, runtime
 
     model = SbmlModel.from_file(path)
     held = []
@@ -155,7 +161,7 @@ def run(
                 model.species[sid] = 0.0
                 model.constant_species.add(sid)
                 held.append(sid)
-    rt = SbmlRuntime(model)
+    rt = runtime(model, engine)
     traj = rt.run(duration=duration, dt=dt, record_every=max(1, int(duration / dt / 400)))
     levels = {}
     for s in traj.species:
@@ -176,11 +182,12 @@ def run(
         "rate_rules": len(model.rate_rules),
         "duration": duration,
         "dt": dt,
+        "engine": engine,
         "knocked_out": held,
         "levels": levels,
         "times": [round(t, 4) for t in traj.times],
         "series": {s: [round(x, 6) for x in traj.levels[s]] for s in traj.species},
-        "evidence": EVIDENCE,
+        "evidence": EVIDENCE if engine == "standin" else EVIDENCE_ROADRUNNER,
     }
 
 
