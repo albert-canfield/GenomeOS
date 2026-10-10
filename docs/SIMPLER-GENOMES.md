@@ -442,3 +442,57 @@ worm's were; cells per RNA label were seen, no gene's count was.
   labels were assigned separately in each modality and grouped here by name. Inside gene bodies
   accessibility can follow the host's own transcription. Trans-splicing, the worm's outron confound,
   is rare in the fly, but the host confound stands.
+
+### Result (2026-10-10, registration `fd81e37`)
+
+Run once by `scripts/simpler_fly_run.py score` from a clean worktree of `fd81e37` (stores linked
+read-only), 10 seconds, no request to any model. Outcome **DOMAIN_RULE_AHEAD**; falsifier
+**NOT_FALSIFIED**. The registered reading, verbatim:
+
+> On 2,518 D. melanogaster embryo distal elements accessible in clusters of exactly one of 14 tissues (Calderon et al. 2022, 0-20 h, the source's own marker call), the gene the domain rule attributes is expressed at 5 counts per million or more and highest in the element's own tissue, in RNA pooled over that tissue's cells, for 299 of 2,518 (11.9%), against 231 of 2,518 (9.2%) for the gene with the nearest 5' end; the rules differ on 822 elements; difference +2.70 points, 95% +1.32 to +4.10 over 1-Mb clusters. On this endpoint the domain rule is ahead of nearest TSS. The worm's result (+2.89 points on Serizay et al. 2020) is replicated in direction on a second species and source. The domain rule's genes match the element's tissue more often than genes at a matched distance (2.8%, one-sided p 0.001), so position carries tissue information here. The difference is not carried by the intergenic elements; inside gene bodies accessibility can follow the host gene's own transcription, so this run does not separate regulation from transcription. Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it, and the two assays come from different nuclei.
+
+The positive control separates, so the readout is responsive: of 460 single-tissue promoter
+elements, the nearest-TSS gene is concordant for 128 (27.8%) against 5.5% for genes at a matched
+distance (one-sided p 0.001, the floor of 1,000 draws). The nearest-TSS gene on the distal elements
+is also above its own matched control (9.2% against 3.6%, p 0.001). All 13,950 protein-coding genes
+are in the RNA rows, so no attributed gene is missing.
+
+Beside the primary, deciding nothing (registered strata; percentile intervals over 1-Mb clusters;
+strata of fewer than 50 elements are not shown, and their intervals mean little):
+
+| stratum | elements | domain rule | nearest TSS | difference, points [95%] |
+|---|---|---|---|---|
+| inside a gene body | 1,601 | 14.2% | 10.5% | +3.69 [+1.82, +5.72] |
+| between genes | 917 | 7.9% | 6.9% | +0.98 [-0.42, +2.31] |
+| the 822 where the rules differ | 822 | 11.4% | 3.2% | +8.27 [+3.93, +12.62] |
+| neural | 1,330 | 11.9% | 9.2% | +2.63 [+0.48, +4.57] |
+| epidermis | 579 | 9.8% | 6.7% | +3.11 [+0.20, +6.83] |
+| muscle | 301 | 9.6% | 8.3% | +1.33 [-0.64, +3.97] |
+| midgut | 224 | 10.7% | 9.4% | +1.34 [-0.53, +3.90] |
+
+**What this says and what it does not.** The difference has the worm's direction (+2.70 here,
++2.89 in the worm, and the two intervals overlap), on a second species, a second source, a different
+assay (single-cell rather than sorted nuclei) and an endpoint that asks for the highest of 14 tissues
+rather than of 5.
+The concordance rates are low because that endpoint is strict: 2.8% for a gene at a matched
+distance, 11.9% for the domain rule.
+
+The fly differs from the worm in where the difference sits. In the worm it held between genes
+(+3.73); in the fly it does not (+0.98, interval spanning zero), and the registered host caveat is
+part of the reading. The difference is carried by elements inside gene bodies, where accessibility
+can follow the host gene's own transcription. In the fly this run therefore does not separate
+regulation from transcription. Trans-splicing, which confounded the worm's between-gene stratum, is
+rare in the fly, so the two species' caveats are not the same caveat. Two of the four tissues with
+more than 200 elements (muscle, midgut) show no difference on their own.
+
+Accessibility is not function. Nothing here says that any element acts on the gene it is attributed
+to. It is one source, pooled over 0–20 h, with accessibility and RNA from different nuclei.
+
+### What follows from the fly
+
+1. A boundary node, registered on its own: a measured boundary set (stage, cell source and caller
+   named and cited before the run) against the gene-structure rule, on this population.
+2. The between-gene question on a second fly source: the worm and the fly disagree on whether the
+   difference survives outside gene bodies. A registration that makes the between-gene stratum its
+   primary, with the window of the marker call matched to the window of the RNA, would ask it
+   directly.

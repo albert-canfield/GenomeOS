@@ -236,3 +236,24 @@ def test_census_recomputes_from_the_registered_inputs() -> None:
     els, counts = sf.elements(calls, sf.read_peaks(ROOT / sf.PEAKS), chroms, tss)
     assert {"marker_calls": funnel, "classes": counts} == reg["population_funnel"]
     assert sf.census(simpler.attribute(els, chroms)) == reg["census"]
+
+
+RESULT = ROOT / "data/results/simpler_fly_result.json"
+
+
+def test_result_reading_is_the_registered_wording() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(RESULT, REGISTRATION, was="result not yet written")
+    res = json.loads(RESULT.read_text())
+    reg = json.loads(REGISTRATION.read_text())
+    assert res["census"] == reg["census"]
+    assert res["registration_commit"]
+    assert res["positive_control"]["responsive"] is True
+    label = simpler.comparison_label(*res["primary"]["delta_ci95_points"])
+    assert res["outcome"] == res["comparison"] == label
+    assert sf.reading({**res, "strata": res["strata_beside"]}) == res["reading"]
+    assert res["alphagenome_requests"] == 0
+    assert res["result_manifest"]["complete"] is True and res["result_manifest"]["code"]["dirty"] is False
