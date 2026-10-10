@@ -18,22 +18,21 @@ constant.
 from __future__ import annotations
 
 from dataclasses import replace
-from functools import lru_cache
-from pathlib import Path
 
 import pytest
 
 from genomeos.certainty import Calibration, Certainty, Probability
+from genomeos.forge.design_answers import results_for
 from genomeos.ir import confidence_stated
-from genomeos.lang import parse, parse_file
+from genomeos.lang import parse
 from genomeos.organism.forge import UNSTATED_CONFIDENCE, Knob, design_certainty, run_designs
 
 DESIGN_FILES = ("data/organisms/celegans/designs.bio", "data/organisms/human/haematopoiesis_designs.bio")
 
 
-@lru_cache(maxsize=1)
 def _shipped() -> list:
-    return [r for path in DESIGN_FILES for r in run_designs(parse_file(str(Path(path))), None, seed=0)]
+    # one run per process, shared with tests/test_forge_design_answers.py and test_forge_calibration.py
+    return [r for path in DESIGN_FILES for r in results_for(path)]
 
 
 def test_a_probability_cannot_exist_without_its_calibration_record() -> None:

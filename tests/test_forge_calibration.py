@@ -23,8 +23,8 @@ from genomeos.forge.calibration import (
     THE_CONSTANT,
     VERDICT,
 )
-from genomeos.lang import parse_file
-from genomeos.organism.forge import UNSTATED_CONFIDENCE, run_designs
+from genomeos.forge.design_answers import results_for
+from genomeos.organism.forge import UNSTATED_CONFIDENCE
 
 DESIGN_FILES = [Path(p) for p in CENSUS["design_block_files"]]
 
@@ -34,7 +34,7 @@ def _run() -> dict[str, tuple[int, int, float | None, float | None, float, bool]
     """Every design in the repository, run once: the search is the expensive part of these tests."""
     out: dict[str, tuple[int, int, float | None, float | None, float, bool]] = {}
     for path in DESIGN_FILES:
-        for r in run_designs(parse_file(str(path)), None, seed=0):
+        for r in results_for(path.as_posix()):  # seed 0, one run per process shared with the forge tests
             ex = r.to_experiment()
             out[r.design.name] = (
                 r.evaluations,
