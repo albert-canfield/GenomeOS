@@ -574,3 +574,112 @@ multiple is a claim about the stomach. It is the formalism and the cap, and it i
 
 `bio test data/demo genomeos/std data/organisms`: 56 files and 383/383 checks before, **58 files and
 410/410 after** — 5 new checks in the module and 22 in the mutants.
+
+# The epidermis, chosen and registered before anything was built (2026-10-10, lane-module3)
+
+Haematopoiesis, the small intestine, the colon and the stomach leave the human body program with
+mechanism in blood and the gut and counts everywhere else. This section chooses the next tissue by
+criteria written down first, says why the others were set aside, and registers the closed list, the
+knockouts, the one fitted number and eight readings before a line of the module exists. The
+authoritative, machine-readable form is `REGISTRATION` in `scripts/epidermis_registration.py`, committed
+with this section. Every citation was fetched in this lane (PubMed E-utilities, PMC full text, EBI OLS4
+for the Cell Ontology ids, the `milo-lab/cellular_turnover` repository for the tabulated kinetics,
+BioNumbers for Hoath & Leahy's Table I), and the sentence each gate rests on is quoted in that file.
+
+Stop list (ROADMAP §5, the list of 2026-09-27 reinstated): a human tissue module is not the worm's fate
+ceiling, adds no reader biosample, builds nothing in area J and nothing on the node model.
+
+## The criteria, written before the candidates were compared
+
+| # | Criterion | Why |
+| --- | --- | --- |
+| C1 | a tissue that renews in the adult, with a published lineage hierarchy | a flow module is a renewing hierarchy |
+| C2 | already a counts-only population of `tissues.bio`, with a human count and a daily turnover that Sender & Milo 2021 did NOT extrapolate from rodents | so the one fitted number closes against a published human number, as in every module before it |
+| C3 | per-compartment kinetics, measured in human, for at least two compartments | so the fitted number is one knob and not the whole module |
+| C4 | at least six published single-gene perturbations with stated phenotypes in that tissue, fetched and read, most of them a LOSS of a compartment | the stomach showed that a list of maturation defects leaves the lineages ungated |
+| C5 | outside the gut, and best of all in a germ layer no module covers | three gut modules already exist; blood is mesoderm, the gut endoderm |
+| C6 | not on the stop list | ROADMAP §5 |
+
+## The candidates
+
+| Candidate | C1 | C2 | C3 | C4 | C5 | Verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| **interfollicular epidermis** | basal, spinous, granular, cornified (Blanpain et al. 2006: "a terminal differentiation program consisting of three distinct stages: spinous, granular layer, and stratum corneum") | `Keratinocyte`, 1.2e11 cells, 3.7e9/day, 31 d, not extrapolated | three compartments with turnovers, Tc 311 h and a 39-day total (Weinstein et al. 1984); stratum corneum 14 d (Hoath & Leahy 2003) | 24 perturbations of 16 genes fetched; 7 genes enter as gates, each with a removal-type phenotype in at least one fetched experiment | ectoderm, the first | **chosen** |
+| spermatogenesis | yes | no: no row in the Sender & Milo table and no population in `tissues.bio` | not assessed | not assessed | yes | set aside on C2 |
+| bronchial epithelium | yes | 1.04e10 cells, 139 d, not extrapolated | only a whole-population lifespan was looked at; no per-compartment human kinetics fetched | not assessed, nothing fetched | endoderm-derived, outside the gut | set aside on C3 |
+| hepatocytes, alveolar epithelium | slow or facultative | no: turnover extrapolated from rodents | — | — | — | set aside on C2 |
+
+Nothing about the genetics of the set-aside candidates is claimed: none was fetched.
+
+## The compartments and the numbers they rest on
+
+Four populations in a chain: `BasalKeratinocyte` (CL:0002187) → `SpinousKeratinocyte` (CL:0000649) →
+`GranularKeratinocyte` (CL:0002189) → `Corneocyte` (CL:0002153), shed from the surface. Sender & Milo's
+1.2e11 are the NUCLEATED cells ("As corneocytes are essentially dead cells, we don't count them",
+`Skin_cells.ipynb`), so the closure is on the first three, and the corneocytes are a fourth population
+the count leaves out.
+
+- **Measured, used as given:** 1.2e11 nucleated cells and 3.7e9 per day (Sender & Milo 2021); the basal
+  compartment's 311 h, Weinstein et al. 1984's cell-cycle time for the proliferative compartment, which
+  Sender & Milo tabulate as the germinative layer's 12.958 d; the stratum corneum's 14 d (Hoath & Leahy
+  2003, Table I, from Rothberg 1961, Weinstein & Van Scott 1965, Jansen 1974); one flux through every
+  layer, on Weinstein's "very similar 'turnover' rates in each of the compartments", 1246, 1417 and 1490
+  cells/day/mm².
+- **Fitted, the one knob:** the suprabasal residence (spinous plus granular), so the three nucleated pools
+  sum to 1.2e11. R2 states its value, 19.47 d, in advance and the published span it must land in.
+- **Inferred, no primary citation:** the granular residence, 2.0 d, which only splits the fitted suprabasal
+  pool between two layers (R5); no death in the viable layers; a cap on basal renewal near its pool (R6).
+- **Not claimed:** the basal pool, about 4.8e10, checked against no basal density.
+
+## The closed, sourced list: seven gates
+
+| # | Factor | Gates | Published epidermal phenotype of its loss | Source | Registered as |
+| --- | --- | --- | --- | --- | --- |
+| E1 | TP63 | the basal compartment | the skin "lacks stratification and does not express differentiation markers"; "a striking absence of all squamous epithelia" | Mills et al. 1999, Nature 398:708; Yang et al. 1999, Nature 398:714 | full |
+| E2 | DNMT1 | basal divisions only | in regenerated human epidermis, "exit from the progenitor cell compartment, premature differentiation and eventual tissue loss" | Sen et al. 2010, Nature 463:563 | partial: the premature differentiation and the loss of a formed tissue are not expressible; the knockdown left 34% of tissues alive at week 3 |
+| E3 | RBPJ | the spinous compartment | "Spinous layers are absent"; "fewer granular layer cells"; basal markers "relatively normal" | Blanpain et al. 2006, Genes Dev 20:3022 | partial: "fewer granular" is overstated as none by a chain |
+| E4 | IRF6 | the granular compartment | "the basal layer was present along with a greatly expanded spinous layer, but the outer two layers appeared absent" | Ingraham et al. 2006, Nat Genet 38:1335 (Richardson et al. 2006 agreeing) | full; the spinous proliferation named as not expressible |
+| E5 | KDF1 | the granular compartment | granular and cornified markers "are not induced"; basal and spinous markers expanded | Lee, Kong & Weatherbee 2013, Dev Biol 383:201 | full |
+| E6 | CHUK (IKKα) | the granular compartment | germline null: no cornified layer, "granular cells ... were not present", basal unchanged, K10+ cells "increased dramatically" | Li et al. 1999, Genes Dev 13:1322 | **contested**: keratinocyte-restricted ablation gives "a normally differentiated stratified epidermis" (Gareus et al. 2007, Nat Cell Biol 9:461) |
+| E7 | ZNF750 | the granular compartment | human regenerated epidermis: K1 and K10 "unaffected", late differentiation genes (FLG, LOR) not induced | Sen et al. 2012, Dev Cell 22:669 | **contested**: the mouse Zfp750 null keeps its granular layer and stratum corneum, loricrin "unchanged" (Butera et al. 2023, Sci Adv 9:eadg5423) |
+
+The granular-to-cornified step has no gate. Every fetched candidate for it spoils the layer rather than
+removing it, the stomach's finding in a new tissue. Excluded, each with the fetched reason in the
+registration: **NOTCH1** (hyperplasia, "an increase rather than decrease of granular marker expression
+and no noticeable defect in spinous layers"), **ADAM10** (a reduction with premature differentiation),
+**RIPK4** (the full knockout's layer phenotype is in no sentence fetched here, and the epidermis-specific
+knockout "was normally stratified"), **KLF4** (barrier lost "without morphological and biochemical
+alterations to the well-known structural features of epidermis"), **GRHL3**, **TGM1** and **PRDM1** (a
+present but defective stratum corneum or granular layer), **SFN** (the Er allele makes a truncated protein
+with a heterozygous phenotype, so it is not a loss of function), **OVOL1** (an increase in
+proliferation), and three PAIRS considered without a fetch (CEBPA/B, MAF/MAFB, HDAC1/2), because a gate
+of one factor cannot state redundancy.
+
+## The knockouts, registered with their pass rules
+
+Seven `experiment` blocks in `data/organisms/human/epidermis_mutants.bio`, each run to one year: lost
+layers exactly 0, kept layers at least 1e6, and for the four granular gates the registered direction that
+the spinous pool stands above twice its wild-type design. TP63 leaves the single seed cell in the basal
+compartment and nothing above it; DNMT1 leaves every layer below one cell. Three are full (TP63, IRF6,
+KDF1), two partial (DNMT1, RBPJ), two contested (CHUK, ZNF750), so the result cannot read "seven of
+seven" (R1).
+
+## Registered in advance about the formalism and the sources
+
+- **R2** the fitted suprabasal residence will be 19.47 d (1.2e11 / 3.7e9 − 311 / 24): between Weinstein's
+  12 d and Halprin's 26–42 d, inside neither study.
+- **R3** the corneocyte pool, not fitted, will be 5.18e10, 1.53 times the 3.38e10 that 17,778 per mm²
+  over 1.9 m² gives: exactly the ratio of Sender & Milo's flux to Hoath & Leahy's rate of stratum corneum
+  formation, a disagreement between the sources that the module inherits.
+- **R4** a blocked granular route leaves the spinous compartment with no outflow, so it grows at the
+  wild-type inflow for the whole run: only the direction is claimed, the size (about 18 times) belongs to
+  the run's length. For ZNF750 the same growth contradicts the human paper's "unaffected" K1 and K10.
+- **R5** the inferred granular residence moves only the spinous/granular split.
+- **R6** under RBPJ the basal compartment stands within 10% of its wild-type pool, because of a cap this
+  module assumes; the sign agrees with the paper and is not evidence.
+- **R7** TP63 and DNMT1 cannot be told apart by what is left. **R8** no appendages, no space, no barrier.
+
+## Wiring into `body.bio` / `tissues.bio`: not wired, and why
+
+`tissues.bio`'s `Keratinocyte` already counts these 1.2e11 cells; importing the module beside it would
+count the epidermis twice, which is why no mechanism module is wired.
