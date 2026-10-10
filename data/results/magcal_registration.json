@@ -1,0 +1,484 @@
+{
+  "result": "magcal_registration",
+  "date": "2026-10-10",
+  "lane": "lane-magcal",
+  "roadmap_item": "\u00a75 item M2h: the magnitude calibration of the compiled rules against measured RNA, registered",
+  "question": "Each of the three composition forms already read against measured RNA in the thirteen reader cells (7d's runtime mean, 7d's promoter competition, 7h's multiplicative composition) read WORSE than running no rule at all, while 7's post-hoc information term beat 992 of 1,000 shuffles. Do the compiled rules therefore carry information at the wrong SIZE: with ONE scale per form, fitted on training genes alone and applied to held-out genes, does the scaled run come closer to measured log2(TPM+1) across the thirteen reader cell types than the no-rule baseline; and what is that scale?",
+  "forms": [
+    "mean",
+    "competition",
+    "multiplicative"
+  ],
+  "sources": {
+    "mean": "data/results/combine2_result.json",
+    "competition": "data/results/combine2_result.json",
+    "multiplicative": "data/results/multrna_result.json"
+  },
+  "form_words": {
+    "mean": "the runtime's mean",
+    "competition": "the promoter-competition form (Bothma 2015, declared half-occupied promoter)",
+    "multiplicative": "the multiplicative composition (Zhou et al. 2024)"
+  },
+  "carried_verbatim": {
+    "endpoint": "y(G, X) = log2(TPM(G, X) + PSEUDOCOUNT), TPM(G, X) the mean over the chosen experiment's files (RNA_SELECTION). The measured deviation is D(G, X) = y(G, X) - mean over the thirteen cells X' of y(G, X'): G's level in X relative to its own mean across the reader cells",
+    "rna_selection": "per reader biosample, from the ENCODE portal: every released GRCh38 'gene quantifications' TSV with genome_annotation V29 (the ENCODE4 uniform RNA-seq pipeline, RSEM) of assay 'polyA plus RNA-seq', on the biosample's ontology term name, from a human experiment the portal lists as not perturbed (perturbed=false) and that carries no ERROR audit, and whose file biosample summary names no subcellular fraction, treatment, disease or genetic modification (none of 'fraction', 'treated', 'with ', 'genetically', 'transfected', 'knockdown'). polyA plus is the one assay with such an experiment for all thirteen (SK-N-SH has no whole-cell untreated total RNA-seq in this query). Of the qualifying experiments the one with the most qualifying files is taken, ties broken by the latest date_released and then the lowest accession; the gene's TPM in the biosample is the mean of its TPM over that experiment's qualifying files (its replicates). Chosen from portal metadata alone; no value of any file was read to choose",
+    "pseudocount": 1.0,
+    "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the thirteen reader cells",
+    "min_genes": 100,
+    "cells": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "selection": "reader_cells",
+    "seven_d_control": "shuffled-reader control, per form: the thirteen-cell open/held rows of the population's elements are permuted among all its elements (PERMUTATIONS times); every element keeps its own observation and role and every gene its fit, so the control keeps each cell's open count and the distribution of rows and breaks only the tie between a gene's elements and their own chromatin. The permuted prediction is the form's closed form (FIT), which the run must equal (HARNESS). control p = (1 + permutations with Delta MSE(F) >= observed) / (1 + PERMUTATIONS)",
+    "seven_h_control": "shuffled-reader control, 7d's: the thirteen-cell open/held rows of the population's elements are permuted among all its elements (PERMUTATIONS times); every element keeps its own observation and role and every gene its fit, so the control keeps each cell's open count and the distribution of rows and breaks only the tie between a gene's elements and their own chromatin. The permuted prediction is the form's closed form (STRUCTURE['closed_form_under_the_hold']), which the run must equal (HARNESS). control p = (1 + permutations with Delta MSE(M) >= observed) / (1 + PERMUTATIONS)",
+    "note": "endpoint, baseline, population, pseudocount, cells and MIN_GENES are 7d's and 7h's, carried word for word; this lane defines no population of its own and admits no gene those two did not admit. 7d's and 7h's shuffled-reader control is quoted here because it is part of the design being calibrated, and its registered p values are carried as context (7d: mean 0.2997, competition 0.7343; 7h: 1.0); it is NOT this lane's control, because the element-level open/held rows it permutes are not in the committed genes tables and re-deriving them would be a re-run of 7d and 7h, not a calibration. This lane's own control is CONTROL below, named differently for that reason"
+  },
+  "population": "per form F, exactly the population of F's committed result, gene for gene and in the committed order: 7d's mean (4,725 genes), 7d's promoter competition (2,501 genes) and 7h's multiplicative composition (16,509 genes), each gene with its thirteen (gene, cell) pairs. 7d's POPULATION and 7h's POPULATION are carried unchanged; this lane applies no filter of its own, admits no gene they did not admit and drops none they did. Each form's rows are read from the committed genes table of SOURCES[F] (pinned by sha256), which carries, per gene, the thirteen P and the thirteen D the committed registered reading was computed from. The three populations are nested only in part and are not combined: each form is calibrated and read on its own genes, as 7d and 7h read each form on its own genes",
+  "prior_exposure": "STATED PLAINLY, AND NOT A CAVEAT ADDED AFTERWARDS. This measurement is not fresh for this project. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples, under the same log2(TPM+1) endpoint and the same no-rule baseline, has already been read by: item 7 (M2b, lane-readercompile, data/results/readergate_result.json) including its post-hoc information term; item 7d (M2c, lane-combine2) for the runtime's mean and promoter competition; item 7h (M2f, lane-multrna) for the multiplicative composition; and today's capped-sum census (lane-capsumrna), which reached NOT_TESTABLE. The P and D this lane calibrates ARE 7d's and 7h's committed rows, so every value it reads has been read before, and the choice to look for a magnitude at all was made BECAUSE those readings came out worse than no rule. The held-out split limits that exposure and does not eliminate it: the split is fixed before any held-out number is read and no held-out gene enters any fit, but the held-out genes' RNA values were in the earlier readings' populations, the endpoint and baseline were chosen with those readings in hand, and nothing here is a blind prediction of an unseen measurement. Any reading from this lane therefore holds as a statement about THIS measurement and is not independent confirmation of it; a magnitude read here is a hypothesis for a fresh measurement, not a result on one",
+  "split": "held out when int(sha256(symbol as UTF-8).hexdigest()[:8], 16) is odd, training when even (scripts/saturable_gate.is_held_out, the convention lane-saturable registered today, taken unchanged); the split is on the gene SYMBOL, so a gene falls the same side in every form, is fixed by this registration before any held-out number is read, and depends on no measured value. A gene is wholly on one side with all thirteen of its pairs: no cell of a held-out gene enters any fit",
+  "predictions": {
+    "form": "per form F and gene G, P_F(G, X) for the thirteen cells X: the centred prediction of F's committed genes table, exactly as 7d's and 7h's PREDICTIONS['form'] define it (the gated run's log2 level in X minus its mean over the thirteen cells), rounded to five decimals by the committed table",
+    "calibrated": "P_F^a(G, X) = a_F * P_F(G, X), one real number a_F per form and nothing else. No per-gene parameter, no per-cell parameter, no intercept, no transformation of P and no reweighting of pairs or genes: a form's whole calibration is one number, fitted on the training genes alone",
+    "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the thirteen reader cells"
+  },
+  "fit": "a_F is the one scale that minimises the squared error over the TRAINING pairs of form F, in closed form: a_F = (sum over training pairs of D*P_F) / (sum over training pairs of P_F^2); it is undefined, and the form is NOT_FITTABLE, when the denominator is 0. Equivalently it is the scale that maximises Delta MSE on the training pairs. It is fitted on training pairs only; no held-out value enters it. a_F = 1 is the uncalibrated form, which is what 7d and 7h read",
+  "metric": "Delta MSE(F, a) = mean over the pairs of D^2 - mean of (D - a*P_F)^2 = mean of (2a*D*P_F - a^2*P_F^2) (combine2.METRIC with the calibrated prediction in place of P), positive when the scaled form's squared error is below the no-rule baseline's. The registered endpoint is this quantity on the HELD-OUT pairs at a = a_F, with a_F fitted on the training pairs. Reported beside it, deciding nothing: the same quantity on the held-out pairs at a = 1 (the uncalibrated form on the held-out genes) and on the training pairs at a = a_F",
+  "form_interval": [
+    0.8333333333333334,
+    99.16666666666667
+  ],
+  "form_interval_words": "98.33% CI",
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 20261010,
+    "unit": "gene: genes are resampled with replacement and carry all thirteen of their pairs",
+    "interval": "per form, the 98.33% percentile interval (Bonferroni over the three forms, from 95%; 7d Bonferroni-adjusted two forms to 97.5% on the same convention). The held-out Delta MSE interval resamples the HELD-OUT genes with replacement, each carrying its thirteen pairs, with a_F held fixed at the value fitted on the training genes; the SCALE interval resamples the TRAINING genes with replacement, each carrying its thirteen pairs, and refits a_F on each resample"
+  },
+  "control": "a within-gene cell permutation, this lane's own and NOT 7d's or 7h's shuffled-reader control (see CARRIED['note']): for each permutation, each gene's thirteen P values are permuted among its own thirteen cells by an independent draw of the seeded generator, every gene keeping its own prediction values, its own range and its own side of the split, and every pair keeping its own D. Only the tie between a prediction and the cell it was made for is broken. The scale is REFITTED on the permuted training pairs and the permuted held-out Delta MSE is computed, so the control asks exactly what the registered endpoint asks of a form whose magnitudes survive and whose cell alignment does not. PERMUTATIONS['count'] permutations at PERMUTATIONS['seed']; control p = (1 + permutations with held-out Delta MSE >= observed) / (1 + count)",
+  "permutations": {
+    "count": 1000,
+    "seed": 20261011
+  },
+  "control_alpha": 0.05,
+  "min_genes": 100,
+  "harness": "before any split, scale, held-out value or control is computed, for each of the three forms: (1) the genes table of SOURCES[F] has F's committed gene count and its committed pair count; (2) Delta MSE(F, 1) recomputed over all of F's pairs from that table equals the committed delta_mse of F's result within TOLERANCE; (3) every gene's P and D have thirteen entries and every symbol is non-empty; (4) no symbol occurs twice in one form. A miss in any of them stops the run (HARNESS_DEFECT) and nothing is split, fitted or read. (2) is the check that this lane is reading the same population, the same endpoint and the same baseline that 7d's and 7h's registered readings were computed on",
+  "tolerance": 0.0001,
+  "which_governs": "THE HELD-OUT INTERVAL DECIDES. The scale only splits the straddle case:\n- held-out Delta MSE excludes 0 on the rules' side -> \"better\" (shrinking the rules to 0 cannot produce this);\n- excludes 0 on the baseline's side -> \"worse\" (the falsifier);\n- straddles 0, AND the training-set scale interval includes 0 -> \"calibration removes the rules: no magnitude of the compiled rules improves on no rule\" (a negative);\n- straddles 0, AND the scale interval excludes 0 -> \"inconclusive\".\nA negative scale is reported beside whichever reading applies, as \"the rules point the wrong way on average\". Every reading carries the prior-exposure sentence (this RNA was read by items 7, 7d, 7h and today's capped-sum census).",
+  "not_vacuous": "a scale fitted to near 0 makes the calibrated prediction near-identical to the no-rule baseline, so its held-out Delta MSE comes out near 0 and the interval straddles 0. A dead scale can therefore MANUFACTURE A STRADDLE but it cannot manufacture a win: a held-out interval wholly above 0 requires the scaled prediction to lower the squared error on genes that entered no fit, which a prediction shrunk to nothing cannot do. 'better' is the one reading the vacuity trap cannot fake, which is why the held-out interval decides and the scale interval is what tells a dead-scale straddle (CALIBRATION_REMOVES, a negative) from a live-scale straddle (INCONCLUSIVE)",
+  "scale_clauses": {
+    "fitted": "fitted scale {a} [{ci} {alo}, {ahi}], one number for the whole form, fitted on {tg} training genes ({tn} gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1",
+    "negative": "the rules point the wrong way on average: the scale that best fits the training genes is negative (scale {a} [{ci} {alo}, {ahi}], fitted on {tg} training genes), so the measured level moves against the compiled prediction",
+    "not_fittable": "no scale is defined: the training pairs carry no prediction variance (sum of P^2 is 0)"
+  },
+  "outcomes": {
+    "NOT_TESTABLE": "{form}: not testable at the registered size; {g} held-out genes, fewer than the registered {min}; no comparison was read ({scale})",
+    "NOT_FITTABLE": "{form}: not fitted and not read; {scale}",
+    "BETTER": "{form}: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE {d} [{ci} {lo}, {hi}] over {n} gene-cell pairs, {g} genes; control p = {p}; {scale})",
+    "WORSE": "{form}: worse; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes raised the squared error of measured log2(TPM+1) across the thirteen reader cell types above the no-rule baseline's, so it is further from measured RNA than the no-rule baseline even at its best single magnitude (held-out Delta MSE {d} [{ci} {lo}, {hi}] over {n} gene-cell pairs, {g} genes; control p = {p}; {scale})",
+    "CALIBRATION_REMOVES": "{form}: calibration removes the rules: no magnitude of the compiled rules improves on no rule; the held-out interval straddles 0 and the training-set scale interval includes 0, so the calibration is not distinguishable from switching the compiled rules off (held-out Delta MSE {d} [{ci} {lo}, {hi}] over {n} gene-cell pairs, {g} genes; control p = {p}; {scale}). This is a negative result and is not 'no difference detected'",
+    "INCONCLUSIVE": "{form}: inconclusive; the held-out interval straddles 0 while the training-set scale interval excludes 0, so a magnitude is estimated and this measurement does not resolve whether the scaled run is closer to or further from measured RNA than the no-rule baseline (held-out Delta MSE {d} [{ci} {lo}, {hi}] over {n} gene-cell pairs, {g} genes; control p = {p}; {scale})",
+    "HARNESS_DEFECT": "stopped before anything was split, fitted or read: the committed genes tables did not reproduce their committed readings' numbers ({what})"
+  },
+  "decision": "1. If any form misses the HARNESS, the run stops before anything is split, fitted or read (HARNESS_DEFECT), and no scale and no held-out value is computed. 2. Per form, the scale a_F is fitted on the training genes alone (FIT) and reported with its 98.33% training-gene bootstrap interval (a_F refitted on each resample) in every reading, whatever the reading is; a training denominator of 0 is NOT_FITTABLE and the form is read no further. 3. Per form, fewer than MIN_GENES held-out genes is NOT_TESTABLE and no comparison is read. 4. Otherwise the verdict is WHICH_GOVERNS' four-way table, applied as written, on the held-out Delta MSE at a = a_F with its 98.33% held-out-gene bootstrap interval (a_F fixed): lower bound > 0 -> BETTER; upper bound < 0 -> WORSE (the falsifier); the interval straddles 0 and the scale interval includes 0 -> CALIBRATION_REMOVES, a negative; the interval straddles 0 and the scale interval excludes 0 -> INCONCLUSIVE. 5. A negative scale (scale interval wholly below 0) is reported BESIDE whichever of those applies, in SCALE_CLAUSES['negative']'s words, never instead of it. 6. The control p is reported in every verdict sentence and changes no verdict; it is this lane's own within-gene cell permutation (CONTROL), not 7d's or 7h's shuffled-reader control. 7. The combined reading is the three forms' sentences, in FORMS order, joined by '; ', then PRIOR_EXPOSURE_CLAUSE, always",
+  "falsifier": "the reading under test is that the compiled rules carry the right information at the wrong size ('right information, wrong size'), which is what 7d's, 7h's and the capped sum's readings beside 7's post-hoc information term suggest. It is FALSIFIED for a form when that form's held-out Delta MSE interval excludes 0 on the BASELINE's side (upper bound < 0, outcome WORSE): with one scale fitted freely on the training genes, the form is still further from measured RNA than running no rule at all, so no single magnitude of it carries the information on held-out genes. An interval straddling 0 falsifies nothing and is read by the scale: CALIBRATION_REMOVES when the scale interval includes 0 (a negative, not a null), INCONCLUSIVE when it excludes 0. An interval excluding 0 on the rules' side (BETTER) is a POSITIVE for that form and is stated as such in the registered words, with PRIOR_EXPOSURE_CLAUSE attached. NOT_VACUOUS states why 'better' is the reading a dead scale cannot fake",
+  "prior_exposure_clause": "carried with every reading: this RNA is not a fresh measurement. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h and by today's capped-sum census, and the P and D calibrated here are 7d's and 7h's committed rows; the held-out split limits that exposure and does not eliminate it, so a reading here is a statement about this measurement and a hypothesis for a fresh one, not independent confirmation",
+  "stop_rule": "one run, from this registration's committed code, on the files the registration pins by sha256 (7d's and 7h's registrations and results). No form, population, split rule, scale definition, endpoint, metric, interval, control, decision, falsifier or wording is changed after a held-out value is read; a defect found afterwards is reported beside the registered reading and corrected only under a new registration",
+  "limitations": [
+    "independence: each element's removal fold comes from AlphaGenome's RNA-seq gene scorer (an in-silico deletion, the argmax over 371 RNA-seq tracks), a model trained on ENCODE and GTEx RNA-seq, with RNA-seq tracks named for the reader biosamples among them, and on ENCODE DNase-seq; the reader's open/closed calls are ENCODE DNase-seq narrowPeak files of the same biosamples; the measured outcome is ENCODE polyA plus RNA-seq of those biosamples, data of the kind, and possibly the very experiments, the model was trained on. The cross-cell pattern of a gated prediction comes from the DNase calls alone and the size of each element's part from the model",
+    "PRIOR EXPOSURE, repeated as a limitation because it is the largest one: see PRIOR_EXPOSURE. The held-out genes' RNA values were inside the populations of items 7, 7d, 7h and the capped-sum census, and the decision to look for a magnitude was made because those readings came out worse than no rule. No number here is a blind prediction",
+    "one scale is the smallest calibration there is and also the weakest: it can only shrink, grow or flip a form's predictions as a block. It cannot fix a form whose error is in the SHAPE of its prediction across cells or across genes, and a form that reads FURTHER even at its best scale is not thereby shown to carry no information \u2014 only that no single magnitude of it helps on these held-out genes",
+    "the calibration is a statistical rescaling and not a mechanism: a scale of, say, 0.1 does not say that an element's measured removal fold is ten times too large, because the same number would arise from a prediction that is right on a tenth of the genes and empty on the rest. Nothing here attributes the size to any stage of the compiled pipeline",
+    "the three populations differ (4,725, 2,501 and 16,509 genes) and are read separately, as 7d and 7h read them; no scale is compared between forms and no head-to-head is registered here",
+    "the P and D are the committed tables' five-decimal roundings, which is why the harness admits TOLERANCE rather than exact equality",
+    "this lane's control is a within-gene cell permutation and not 7d's or 7h's shuffled-reader control (CARRIED['note']); their registered control p values are carried as context and are not re-decided here",
+    "accessibility near a gene tracks its expression across cell types whatever any compiled rule says; an open element is one a rule may act through, not evidence that it does, and no reading here is evidence of a mechanism",
+    "one polyA plus experiment per biosample, from several labs; two of the thirteen are tissues (ovary, testis). Every rate under the run is mouse NIH 3T3 or their genome median; no fold prediction depends on it and no level in molecules per cell is quoted"
+  ],
+  "descriptives": [
+    "per form, deciding nothing: the held-out Delta MSE at a = 1 (the uncalibrated form on the held-out genes) with its 98.33% interval, and the training Delta MSE at a = a_F; the training and held-out gene and pair counts; mean(D^2), mean(P^2), mean(a_F^2 P^2) and mean(D*P) on each side, so that the size the calibration keeps is visible as a number; the held-out Delta MSE per reader cell at a = a_F; the predicted range quantiles before and after scaling",
+    "context, copied verbatim and not re-decided: 7d's registered reading, 7h's registered reading and their control p values"
+  ],
+  "committed_facts": {
+    "harness_targets": {
+      "mean": {
+        "genes": 4725,
+        "pairs": 61425,
+        "delta_mse": -0.44348590854013453
+      },
+      "competition": {
+        "genes": 2501,
+        "pairs": 32513,
+        "delta_mse": -0.8101520857173696
+      },
+      "multiplicative": {
+        "genes": 16509,
+        "pairs": 214617,
+        "delta_mse": -0.5361286982098615
+      }
+    },
+    "seven_d_verbatim": {
+      "source": "data/results/combine2_result.json",
+      "reading": "the runtime's mean: worse; the reader-gated run of genes with two or more compiled elements raised the squared error of measured log2(TPM+1) across the thirteen reader cell types above the no-rule baseline's (Delta MSE -0.4435 [97.5% CI -0.4843, -0.4085] over 61,425 gene-cell pairs, 4,725 genes; control p = 0.3); the promoter-competition form (Bothma 2015, declared half-occupied promoter): worse; the reader-gated run of genes with two or more compiled elements raised the squared error of measured log2(TPM+1) across the thirteen reader cell types above the no-rule baseline's (Delta MSE -0.8102 [97.5% CI -0.8994, -0.7252] over 32,513 gene-cell pairs, 2,501 genes; control p = 0.734). Head-to-head over the 2,405 genes in both populations, the promoter-competition form was further from measured RNA than the mean (MSE(mean) - MSE(competition) -0.6944 [95% CI -0.7613, -0.6288]).",
+      "outcomes": {
+        "mean": "WORSE",
+        "competition": "WORSE"
+      },
+      "control_p": {
+        "mean": 0.2997002997002997,
+        "competition": 0.7342657342657343
+      }
+    },
+    "seven_h_verbatim": {
+      "source": "data/results/multrna_result.json",
+      "reading": "the multiplicative composition (Zhou et al. 2024): worse; the reader-gated run of genes with two or more compiled elements raised the squared error of measured log2(TPM+1) across the thirteen reader cell types above the no-rule baseline's (Delta MSE -0.5361 [97.5% CI -0.5637, -0.5088] over 214,617 gene-cell pairs, 16,509 genes; control p = 1). Head-to-head over the 2,405 genes in all three populations (31,265 gene-cell pairs), the multiplicative composition was closer to measured RNA than the runtime's mean (MSE(mean) - MSE(multiplicative) +0.04395 [97.5% CI +0.0385, +0.04979]) and closer to measured RNA than the promoter-competition form (Bothma 2015, declared half-occupied promoter) (MSE(competition) - MSE(multiplicative) +0.7383 [97.5% CI +0.6625, +0.8183]).",
+      "outcome": "WORSE",
+      "control_p": 1.0
+    }
+  },
+  "exploration_preceded_this": "stated so that nothing here is read as a blind prediction. Before writing it this lane read: genomeos/attribution/combine2.py, multrna.py, capsumrna.py and saturate.py and their register and run scripts; scripts/saturable_gate.py for the split convention; ROADMAP \u00a75 items 7, 7b, 7c, 7d and 7h and the stop list of 2026-09-27; and, from 7d's and 7h's committed results, each form's registered reading, outcome, gene and pair counts, Delta MSE, interval, control p, baseline MSE and form MSE, and the COLUMN LAYOUT and FIRST ROW of each genes table. It therefore knows the three committed uncalibrated Delta MSE values (mean -0.4435, competition -0.8102, multiplicative -0.5361), which is the harness it must reproduce, and it has seen two genes' P and D rows (ADAR, AGO3, A3GALT2). It has computed NO scale, NO split, NO training value and NO held-out value of any kind: this script reads the committed tables' lengths and the committed summary numbers, and the first held-out number of this design will be computed by scripts/magcal_run.py after this registration is committed. PRIOR EXPOSURE, which is larger than this paragraph, is stated separately and binds the reading",
+  "decisions": [
+    "design: 7d's and 7h's, with one scale per form added and nothing else changed. The endpoint (ENCODE polyA plus RNA-seq of the thirteen reader biosamples, log2(TPM+1), centred within gene across the thirteen cells), the no-rule baseline, Delta MSE, the gene bootstrap, MIN_GENES and the reading vocabulary are theirs, carried word for word; the populations are theirs, gene for gene",
+    "one number per form, and no more: the calibration is a single real scale a_F, fitted in closed form on the training pairs. There is no per-gene and no per-cell free parameter, no intercept and no transformation of P. a_F = 1 is the uncalibrated form 7d and 7h read",
+    "reuse, not re-run: 7d's and 7h's committed genes tables carry the very P and D their registered readings were computed from, so the calibration is read off them. That is why the harness reproduces each form's committed Delta MSE before anything is split: it is the check that this lane reads the same population, endpoint and baseline. No compiled program, narrowPeak file or RNA quantification is opened by this lane, and none of 7d's, 7h's or capsumrna's files is edited",
+    "split: lane-saturable's convention, taken unchanged (sha256 of the gene symbol, odd held out), on the SYMBOL so that a gene falls the same side in all three forms, with all thirteen of its pairs",
+    "intervals: 7d Bonferroni-adjusted two forms from 95% to 97.5%; three forms are judged here, so the per-form interval is 98.33% on the same convention. The held-out interval resamples held-out genes with the scale fixed; the scale interval resamples training genes and refits",
+    "control: a within-gene cell permutation of this lane's own, because 7d's and 7h's shuffled-reader control permutes element-level open/held rows that the committed genes tables do not carry, and re-deriving them would be a re-run of 7d and 7h rather than a calibration. It is named differently for that reason, their registered control p values are carried as context, and the control changes no verdict",
+    "the decision procedure is the supervisor's science ruling of 2026-10-10 (magcal.WHICH_GOVERNS), carried verbatim: the held-out interval decides, and the scale interval only splits the straddle case. magcal.NOT_VACUOUS states in advance why that is not vacuous: a dead scale can manufacture a straddle but it cannot manufacture a win",
+    "nothing in area J, no node model, no BioForge calibration, no new biosample (the thirteen reader cells only, READER_TERMS unchanged), no deletion request and 0 AlphaGenome requests: the stop list of 2026-09-27 as ROADMAP \u00a75 reinstated it. No stop item is touched by this item"
+  ],
+  "pinned_sha256": {
+    "data/results/combine2_result.json": "b63475013edc37835547a60071ab81eb14579493214bf1fc2e966b2826828a14",
+    "data/results/multrna_result.json": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+    "data/results/combine2_registration.json": "39b738f2032553d50566bb27f351eb1607bfc4d1877721e5bc7f6a7db2a530d2",
+    "data/results/multrna_registration.json": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7"
+  },
+  "what_the_run_will_write": "data/results/magcal_result.json",
+  "the_code_that_runs_it": "genomeos/attribution/magcal.py and scripts/magcal_run.py, committed before this registration, with the committed combine2.py and multrna.py they import for the words and constants carried verbatim",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/combine2_result.json (7d, lane-combine2)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/multrna_result.json (7h, lane-multrna)",
+        "version": "pinned"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq gene quantifications, V29, 13 reader biosamples",
+        "version": "read by 7d and 7h; this lane reads their committed rows, not the files"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/combine2_result.json",
+        "sha256": "b63475013edc37835547a60071ab81eb14579493214bf1fc2e966b2826828a14",
+        "bytes": 5581336,
+        "partition": "the source of one or two forms' P and D: pinned by sha256; its committed summary numbers and registered reading read, no scale, split or held-out value computed"
+      },
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "the source of one or two forms' P and D: pinned by sha256; its committed summary numbers and registered reading read, no scale, split or held-out value computed"
+      },
+      {
+        "path": "data/results/combine2_registration.json",
+        "sha256": "39b738f2032553d50566bb27f351eb1607bfc4d1877721e5bc7f6a7db2a530d2",
+        "bytes": 124683,
+        "partition": "pinned by sha256; the design it carries is quoted, not re-decided"
+      },
+      {
+        "path": "data/results/multrna_registration.json",
+        "sha256": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7",
+        "bytes": 134997,
+        "partition": "pinned by sha256; the design it carries is quoted, not re-decided"
+      }
+    ],
+    "input_count": 4,
+    "assembly": "GRCh38; genes as 7d and 7h matched them, by gene_id",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "forms": [
+        "mean",
+        "competition",
+        "multiplicative"
+      ],
+      "split": "held out when int(sha256(symbol as UTF-8).hexdigest()[:8], 16) is odd, training when even (scripts/saturable_gate.is_held_out, the convention lane-saturable registered today, taken unchanged); the split is on the gene SYMBOL, so a gene falls the same side in every form, is fixed by this registration before any held-out number is read, and depends on no measured value. A gene is wholly on one side with all thirteen of its pairs: no cell of a held-out gene enters any fit",
+      "min_genes": 100,
+      "form_interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "bootstrap": {
+        "resamples": 2000,
+        "seed": 20261010,
+        "unit": "gene: genes are resampled with replacement and carry all thirteen of their pairs",
+        "interval": "per form, the 98.33% percentile interval (Bonferroni over the three forms, from 95%; 7d Bonferroni-adjusted two forms to 97.5% on the same convention). The held-out Delta MSE interval resamples the HELD-OUT genes with replacement, each carrying its thirteen pairs, with a_F held fixed at the value fitted on the training genes; the SCALE interval resamples the TRAINING genes with replacement, each carrying its thirteen pairs, and refits a_F on each resample"
+      },
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      },
+      "control_alpha": 0.05,
+      "tolerance": 0.0001,
+      "free_parameters": "one real scale per form; no per-gene and no per-cell parameter"
+    },
+    "exclusions": [
+      "none of this lane's own: each form's population is 7d's or 7h's, unchanged"
+    ],
+    "partitions": "n/a: a registration; no split computed and no outcome read",
+    "code_cleanliness": {
+      "git_sha": "2b0b60492b5a15b78f14383456716e033ca504ad",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/magcal_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/magcal_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/magcal_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/envelope.py",
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/envelope_census.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_envelope.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/magcal_register.py",
+        "scripts/magcal_run.py"
+      ],
+      "counting_path_count": 154,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "b0eefdc6e6dc382bfdb2faa7dca69aab42612885",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/simpler_flysource.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/magcal_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "b0eefdc6e6dc382bfdb2faa7dca69aab42612885",
+      "code_cleanliness_git_sha": "2b0b60492b5a15b78f14383456716e033ca504ad",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": false,
+      "revision_race": true,
+      "reading": "revision race: the cleanliness block sampled 2b0b604 and the write stamped b0eefdc, so HEAD moved while this result was being written"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 293,
+      "opens_under_data": 6,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
