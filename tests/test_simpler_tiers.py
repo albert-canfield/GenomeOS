@@ -232,3 +232,23 @@ def test_fraction_tertiles_split_top_from_bottom_and_drop_the_middle() -> None:
     bottom = [r["above"] for r in out if r["tier"] == "not_constrained"]
     assert min(top) > max(bottom)
     assert len(top) + len(bottom) < 30 and abs(len(top) - len(bottom)) <= 2
+
+
+REGISTRATION = ROOT / "data/results/simpler_worm_tiers_registration.json"
+
+
+def test_committed_registration_is_the_module_registration() -> None:
+    tp.must_be_present(REGISTRATION, was="registration not yet written")
+    reg = json.loads(REGISTRATION.read_text())
+    assert reg["written_before_tiers_were_read_against_rna"] is True
+    assert reg["registration"] == json.loads(json.dumps(st.REGISTRATION))
+    cen = reg["census"]
+    assert cen["constrained"] + cen["not_constrained"] + cen["not_measured"] == cen["elements"]
+    assert sum(sum(v.values()) for v in cen["by_tissue"].values()) == cen["elements"] - cen["not_measured"]
+    assert cen["stop_rule_met"] is (
+        min(cen["constrained_in_support"], cen["not_constrained_in_support"]) < 200
+    )
+    tiers = json.loads(TIERS.read_text())
+    assert reg["registered_inputs"]["tiers"]["sha256"] == simpler.sha256(TIERS)
+    for name, cut in reg["cuts"].items():
+        assert cut["cut"] == tiers["tracks"][name]["cut"]
