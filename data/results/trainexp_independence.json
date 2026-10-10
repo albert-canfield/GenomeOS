@@ -1,0 +1,900 @@
+{
+  "result": "trainexp_independence",
+  "date": "2026-10-10",
+  "lane": "lane-trainexp",
+  "post_hoc": "POST HOC, computed after M2i's registered result (f6e71c6) and its post-hoc stage (0119387) were committed. It QUALIFIES M2i and DECIDES NOTHING: it does not revise M2i's reading, its outcome, its interval or its scale, and nothing is fitted anywhere in it.",
+  "what": "M2i's independence from AlphaGenome's training data, measured from the recorded track metadata, and the eleven-cell subset. Both post hoc; both decide nothing",
+  "matching": {
+    "label": "POST HOC (1): the two sets against AlphaGenome's recorded output-track metadata",
+    "metadata_file": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+    "metadata_fields": [
+      "Assay title",
+      "biosample_life_stage",
+      "biosample_name",
+      "biosample_type",
+      "data_source",
+      "endedness",
+      "genetically_modified",
+      "gtex_tissue",
+      "histone_mark",
+      "name",
+      "nonzero_mean",
+      "ontology_curie",
+      "output",
+      "strand"
+    ],
+    "metadata_rows": 2841,
+    "rna_seq_rows": 667,
+    "rna_seq_distinct_track_names": 371,
+    "rna_seq_rows_carrying_an_accession": 0,
+    "accessions_anywhere_in_the_metadata": {
+      "ENCSR072YCM": [
+        "procap"
+      ],
+      "ENCSR182QNJ": [
+        "procap"
+      ],
+      "ENCSR740IPL": [
+        "procap"
+      ],
+      "ENCSR797DEF": [
+        "procap"
+      ],
+      "ENCSR801ECP": [
+        "procap"
+      ],
+      "ENCSR860TYZ": [
+        "procap"
+      ]
+    },
+    "accession_matching_available_for_rna_seq": false,
+    "classes": {
+      "matched": "MATCHED: the recorded track metadata names this experiment's own ENCODE accession, so the experiment IS one AlphaGenome records as an output track of its own. Accession matching is STRONG: it identifies the experiment, not merely its kind",
+      "probable": "PROBABLE: the recorded track metadata carries NO accession for any RNA-seq track, so the strong method is unavailable; a track of the SAME biosample (ontology CURIE) and the SAME assay title exists. Biosample+assay matching is SUGGESTIVE ONLY: it establishes that AlphaGenome has an output track of this biosample and assay, hence was trained on SOME ENCODE RNA-seq of it, but NOT that this experiment is the one behind that track",
+      "unknown": "UNKNOWN: no basis in the record to decide. The metadata has no accession to match and no RNA-seq track of this biosample under this assay. THIS IS NOT 'NOT A TRAINING TRACK': it is the absence of a basis, and it must never be read, reported or summarised as evidence of independence"
+    },
+    "training_set_record": "AlphaGenome's training-set composition is NOT documented at track level in anything this project holds. What IS knowable from the record is which OUTPUT tracks the model carries metadata for, by assay title and biosample ontology CURIE, and that the only ENCODE accessions the metadata names at all are the six PRO-cap track names (ENCSR072YCM, ENCSR182QNJ, ENCSR740IPL, ENCSR797DEF, ENCSR801ECP, ENCSR860TYZ) -- none of them RNA-seq. An output track is a training TARGET, so a biosample+assay match says the model saw some ENCODE RNA-seq of that biosample and assay; it does not say which experiment. This lane therefore reports 'unknown' for the experiment-level question and does NOT infer a training set from a publication's prose.",
+    "fresh_thirteen": {
+      "what": "M2i's thirteen fresh experiments (freshrna_sources non_overlap.this_lane)",
+      "entries": [
+        {
+          "cell": "K562",
+          "experiment": "ENCSR000AEP",
+          "biosample": "K562",
+          "ontology_curie": "EFO:0002067",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0002067 under 'polyA plus RNA-seq': EFO:0002067 polyA plus RNA-seq"
+        },
+        {
+          "cell": "HepG2",
+          "experiment": "ENCSR985KAT",
+          "biosample": "HepG2",
+          "ontology_curie": "EFO:0001187",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0001187 under 'polyA plus RNA-seq': EFO:0001187 polyA plus RNA-seq"
+        },
+        {
+          "cell": "GM12878",
+          "experiment": "ENCSR000AEG",
+          "biosample": "GM12878",
+          "ontology_curie": "EFO:0002784",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0002784 under 'polyA plus RNA-seq': EFO:0002784 polyA plus RNA-seq"
+        },
+        {
+          "cell": "IMR_90",
+          "experiment": "ENCSR797RXV",
+          "biosample": "IMR-90",
+          "ontology_curie": "EFO:0001196",
+          "assay": "total RNA-seq",
+          "files": 1,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0001196 under 'total RNA-seq': EFO:0001196 total RNA-seq"
+        },
+        {
+          "cell": "H1",
+          "experiment": "ENCSR000COU",
+          "biosample": "H1",
+          "ontology_curie": "EFO:0003042",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0003042 under 'polyA plus RNA-seq': EFO:0003042 polyA plus RNA-seq"
+        },
+        {
+          "cell": "SK_N_SH",
+          "experiment": "ENCSR000BYL",
+          "biosample": "SK-N-SH",
+          "ontology_curie": "EFO:0003072",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0003072 under 'polyA plus RNA-seq': EFO:0003072 polyA plus RNA-seq"
+        },
+        {
+          "cell": "astrocyte",
+          "experiment": "ENCSR129VBC",
+          "biosample": "astrocyte",
+          "ontology_curie": "CL:0000127",
+          "assay": "total RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000127 under 'total RNA-seq': CL:0000127 total RNA-seq"
+        },
+        {
+          "cell": "hepatocyte",
+          "experiment": "ENCSR908ZAS",
+          "biosample": "hepatocyte",
+          "ontology_curie": "CL:0000182",
+          "assay": "total RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000182 under 'total RNA-seq': CL:0000182 total RNA-seq"
+        },
+        {
+          "cell": "keratinocyte",
+          "experiment": "ENCSR000EYT",
+          "biosample": "keratinocyte",
+          "ontology_curie": "CL:0000312",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000312 under 'polyA plus RNA-seq': CL:0000312 polyA plus RNA-seq"
+        },
+        {
+          "cell": "cardiac_muscle_cell",
+          "experiment": "ENCSR379YAE",
+          "biosample": "cardiac muscle cell",
+          "ontology_curie": "CL:0000746",
+          "assay": "total RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000746 under 'total RNA-seq': CL:0000746 total RNA-seq"
+        },
+        {
+          "cell": "CD14_positive_monocyte",
+          "experiment": "ENCSR992MUF",
+          "biosample": "CD14-positive monocyte",
+          "ontology_curie": "CL:0001054",
+          "assay": "polyA plus RNA-seq",
+          "files": 1,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0001054 under 'polyA plus RNA-seq': CL:0001054 polyA plus RNA-seq"
+        },
+        {
+          "cell": "ovary",
+          "experiment": "ENCSR725TPW",
+          "biosample": "ovary",
+          "ontology_curie": "UBERON:0000992",
+          "assay": "polyA plus RNA-seq",
+          "files": 1,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "2 recorded RNA-seq track name(s) of UBERON:0000992 under 'polyA plus RNA-seq': UBERON:0000992 gtex Ovary polyA plus RNA-seq, UBERON:0000992 polyA plus RNA-seq"
+        },
+        {
+          "cell": "testis",
+          "experiment": "ENCSR755LFM",
+          "biosample": "testis",
+          "ontology_curie": "UBERON:0000473",
+          "assay": "polyA plus RNA-seq",
+          "files": 1,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "2 recorded RNA-seq track name(s) of UBERON:0000473 under 'polyA plus RNA-seq': UBERON:0000473 gtex Testis polyA plus RNA-seq, UBERON:0000473 polyA plus RNA-seq"
+        }
+      ],
+      "tally": {
+        "matched": {
+          "experiments": 0,
+          "files": 0
+        },
+        "probable": {
+          "experiments": 13,
+          "files": 22
+        },
+        "unknown": {
+          "experiments": 0,
+          "files": 0
+        }
+      }
+    },
+    "already_read_twenty_seven": {
+      "what": "items 7/7d/7h's twenty-seven already-read quantifications, thirteen experiments",
+      "assay": "polyA plus RNA-seq",
+      "entries": [
+        {
+          "cell": "K562",
+          "experiment": "ENCSR545DKY",
+          "biosample": "K562",
+          "ontology_curie": "EFO:0002067",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0002067 under 'polyA plus RNA-seq': EFO:0002067 polyA plus RNA-seq"
+        },
+        {
+          "cell": "HepG2",
+          "experiment": "ENCSR561FEE",
+          "biosample": "HepG2",
+          "ontology_curie": "EFO:0001187",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0001187 under 'polyA plus RNA-seq': EFO:0001187 polyA plus RNA-seq"
+        },
+        {
+          "cell": "GM12878",
+          "experiment": "ENCSR843RJV",
+          "biosample": "GM12878",
+          "ontology_curie": "EFO:0002784",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0002784 under 'polyA plus RNA-seq': EFO:0002784 polyA plus RNA-seq"
+        },
+        {
+          "cell": "IMR_90",
+          "experiment": "ENCSR000CTQ",
+          "biosample": "IMR-90",
+          "ontology_curie": "EFO:0001196",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0001196 under 'polyA plus RNA-seq': EFO:0001196 polyA plus RNA-seq"
+        },
+        {
+          "cell": "H1",
+          "experiment": "ENCSR000EYP",
+          "biosample": "H1",
+          "ontology_curie": "EFO:0003042",
+          "assay": "polyA plus RNA-seq",
+          "files": 4,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0003042 under 'polyA plus RNA-seq': EFO:0003042 polyA plus RNA-seq"
+        },
+        {
+          "cell": "SK_N_SH",
+          "experiment": "ENCSR000CTT",
+          "biosample": "SK-N-SH",
+          "ontology_curie": "EFO:0003072",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of EFO:0003072 under 'polyA plus RNA-seq': EFO:0003072 polyA plus RNA-seq"
+        },
+        {
+          "cell": "astrocyte",
+          "experiment": "ENCSR920UAO",
+          "biosample": "astrocyte",
+          "ontology_curie": "CL:0000127",
+          "assay": "polyA plus RNA-seq",
+          "files": 1,
+          "class": "unknown",
+          "method": "none available: no accession in the metadata and no track of this biosample and assay",
+          "evidence": "no RNA-seq track of CL:0000127 under 'polyA plus RNA-seq'; the assay titles the metadata does record RNA-seq tracks of CL:0000127 under are: total RNA-seq"
+        },
+        {
+          "cell": "hepatocyte",
+          "experiment": "ENCSR859HWB",
+          "biosample": "hepatocyte",
+          "ontology_curie": "CL:0000182",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000182 under 'polyA plus RNA-seq': CL:0000182 polyA plus RNA-seq"
+        },
+        {
+          "cell": "keratinocyte",
+          "experiment": "ENCSR000CPL",
+          "biosample": "keratinocyte",
+          "ontology_curie": "CL:0000312",
+          "assay": "polyA plus RNA-seq",
+          "files": 3,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000312 under 'polyA plus RNA-seq': CL:0000312 polyA plus RNA-seq"
+        },
+        {
+          "cell": "cardiac_muscle_cell",
+          "experiment": "ENCSR294NDO",
+          "biosample": "cardiac muscle cell",
+          "ontology_curie": "CL:0000746",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0000746 under 'polyA plus RNA-seq': CL:0000746 polyA plus RNA-seq"
+        },
+        {
+          "cell": "CD14_positive_monocyte",
+          "experiment": "ENCSR000CUC",
+          "biosample": "CD14-positive monocyte",
+          "ontology_curie": "CL:0001054",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "1 recorded RNA-seq track name(s) of CL:0001054 under 'polyA plus RNA-seq': CL:0001054 polyA plus RNA-seq"
+        },
+        {
+          "cell": "ovary",
+          "experiment": "ENCSR046XHI",
+          "biosample": "ovary",
+          "ontology_curie": "UBERON:0000992",
+          "assay": "polyA plus RNA-seq",
+          "files": 1,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "2 recorded RNA-seq track name(s) of UBERON:0000992 under 'polyA plus RNA-seq': UBERON:0000992 gtex Ovary polyA plus RNA-seq, UBERON:0000992 polyA plus RNA-seq"
+        },
+        {
+          "cell": "testis",
+          "experiment": "ENCSR693GGB",
+          "biosample": "testis",
+          "ontology_curie": "UBERON:0000473",
+          "assay": "polyA plus RNA-seq",
+          "files": 2,
+          "class": "probable",
+          "method": "biosample ontology CURIE + assay title, the metadata carrying no accession (SUGGESTIVE ONLY)",
+          "evidence": "2 recorded RNA-seq track name(s) of UBERON:0000473 under 'polyA plus RNA-seq': UBERON:0000473 gtex Testis polyA plus RNA-seq, UBERON:0000473 polyA plus RNA-seq"
+        }
+      ],
+      "tally": {
+        "matched": {
+          "experiments": 0,
+          "files": 0
+        },
+        "probable": {
+          "experiments": 12,
+          "files": 26
+        },
+        "unknown": {
+          "experiments": 1,
+          "files": 1
+        }
+      }
+    },
+    "sentence_for_every_m2i_better": "fresh to this project; its independence from AlphaGenome's training data is unknown for 13 of 13 -- AlphaGenome's recorded track metadata carries no ENCODE accession for any RNA-seq track, and a track of the same biosample and assay exists for 13 of 13, which is suggestive of training exposure and settles nothing either way"
+  },
+  "eleven_cell_subset": {
+    "label": "POST HOC (2): the eleven-cell subset",
+    "note": "POST HOC: M2i's comparison recomputed on eleven of the thirteen cells, dropping cardiac muscle cell and hepatocyte -- the two whose biosamples (ENCBS077RUJ, ENCBS343AKO, ENCBS520VFV, ENCBS806KLM) an already-read experiment also used, which is the one non-independence M2i itself disclosed (`non_overlap.cells_sharing_a_read_biosample`). It isolates that disclosed overlap and NOTHING ELSE: it is not a test of independence from AlphaGenome's training data, which the record cannot settle. Everything about it is post hoc. NOTHING IS FITTED: the scale is M2i's constant, D' is recentred within each gene across the eleven kept cells exactly as M2i's own nine-polyA-plus subset recentres, and the interval is M2i's gene-level percentile bootstrap at its registered resamples, seed and percentiles.",
+    "nothing_is_fitted": "NOTHING IS FITTED IN THIS LANE. There is no free parameter of any kind: no scale, no intercept, no per-gene and no per-cell parameter, no threshold, no weighting and no transformation is estimated from the fresh RNA or from anything else. The single number the comparison needs, the scale, is the constant SCALE taken from `ac5580b` (SCALE_ORIGIN). The code REFUSES TO FIT: `fit_scale` raises NoFitError when called, and the run calls it nowhere, so a fit cannot be introduced by accident and cannot be introduced quietly. Because nothing is fitted, no training/held-out split is needed to protect the fresh measurement: no fresh value enters any estimate, so every gene of the population is out of sample by construction. The split is nevertheless used to DEFINE the primary population (POPULATION), for the one reason that M2h's +0.04339 was read on its held-out genes and the primary reading here must be the same genes, so the two numbers are comparable",
+    "scale": 0.2145911381525326,
+    "interval_method": "M2i's gene-level percentile bootstrap: 2000 resamples, seed 20261010, percentiles [0.8333333333333334, 99.16666666666667], the scale held fixed",
+    "cells_kept": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "keratinocyte",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "cells_dropped": [
+      "hepatocyte",
+      "cardiac_muscle_cell"
+    ],
+    "attrition": {
+      "resolved": 16509,
+      "dropped": 0,
+      "dropped_symbols": []
+    },
+    "fresh_tables": 22,
+    "thirteen_cells": {
+      "label": "M2i's thirteen cells, recomputed here for comparison",
+      "genes": 8328,
+      "pairs": 108264,
+      "delta_mse": 0.03727241565491676,
+      "ci": [
+        0.03202429380417028,
+        0.04299157342045463
+      ],
+      "mean_D2": 1.614971412380872,
+      "mean_P2": 0.9337121967026681,
+      "mean_D_times_P": 0.18702836992490532
+    },
+    "eleven_cells": {
+      "label": "POST HOC: the eleven cells, cardiac muscle cell and hepatocyte dropped",
+      "genes": 8328,
+      "pairs": 91608,
+      "delta_mse": 0.0459557845802319,
+      "ci": [
+        0.040272388859847665,
+        0.05209648171116512
+      ],
+      "mean_D2": 1.7003484694950077,
+      "mean_P2": 0.9137542822047352,
+      "mean_D_times_P": 0.20511933088205228
+    },
+    "difference_in_delta_mse": 0.008683368925315134,
+    "thirteen_reproduces_the_committed_result": true,
+    "committed_delta_mse": 0.03727241565491676,
+    "reading": "POST HOC and deciding nothing. With the two cells whose biosamples an already-read experiment also used dropped, Delta MSE is +0.04596 [98.33% CI +0.04027, +0.05210] on 8,328 genes and 91,608 pairs, against +0.03727 on all thirteen. This isolates the one non-independence M2i disclosed and nothing else; it does not revise M2i's reading and it says nothing about independence from AlphaGenome's training data, which the record cannot settle."
+  },
+  "alphagenome_requests": 0,
+  "money": "none: metadata and public files already on disk, no key read",
+  "seconds": 33.2,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "f6e71c6",
+        "version": "M2i, the registered result this qualifies"
+      },
+      {
+        "accession": "0119387",
+        "version": "M2i, the post-hoc stage"
+      },
+      {
+        "accession": "ac5580b",
+        "version": "M2h, the fixed scale"
+      },
+      {
+        "accession": "alphagenome_track_metadata_copy.csv",
+        "version": "AlphaGenome's recorded output-track metadata, the copy on disk"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+        "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+        "bytes": 403465,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": null
+      },
+      {
+        "path": "data/results/readergate_rna_sources.json",
+        "sha256": "5f13c22aabd782b1536803b8878d4d05961becfb598472ae3e157a352d67fea3",
+        "bytes": 57984,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_result.json",
+        "sha256": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+        "bytes": 51911,
+        "partition": null
+      },
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": null
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": null
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF472HFI.tsv",
+        "sha256": "dbf86a3654fa4f47ae3fc3a87b2754f2b7c01c7a2a60625623e7c915cf660c4f",
+        "bytes": 10967642,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF628SMT.tsv",
+        "sha256": "ad08091aab7f7662511c4255e45f01a72ddd3f12fd93779a45d2630773db7381",
+        "bytes": 10966441,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF073RKC.tsv",
+        "sha256": "70feb107b43e4cb83f2480274b20bcb62d340ef7343bbc3dc8f82c6d718771d8",
+        "bytes": 10891080,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF355TDA.tsv",
+        "sha256": "9ef0afe156652004c32884d86f9cd0d5dab3d27c693e8b65b9db3a3a97fac9e6",
+        "bytes": 10897631,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TZG.tsv",
+        "sha256": "89d9dfa96436dafe545299cabc8cdd91c232bb6366acce64d81cbfb265e9195f",
+        "bytes": 10959672,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF477OQB.tsv",
+        "sha256": "c8bfce24e1daacf75b810a7266c7eda67eb1d6914fe1bbddfea0d6a86250ee77",
+        "bytes": 10960675,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF325KTI.tsv",
+        "sha256": "12f2ddfbd068720f05cef0c6802c9fc4b4ea98bac83845d62cbba4f3649cffbe",
+        "bytes": 11066214,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF321HCT.tsv",
+        "sha256": "8de9f71bce82827ea583865983d1bbf06e36e4c7495632c22c3fb36076e9dc8f",
+        "bytes": 10888164,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF736CCO.tsv",
+        "sha256": "1b9be5e12f0b64dc1a593ad04b16365ce4ea900b1524ba59023a41fef41df877",
+        "bytes": 10852917,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF172AFC.tsv",
+        "sha256": "8ecde96d56f0be82b514df1126702d0ab69dc35cd227ebc39366a290434e8fdf",
+        "bytes": 11176308,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF677KYO.tsv",
+        "sha256": "82988197d3175947c2afc136d284c5fb4aeefffd83fca904a18f1642af459529",
+        "bytes": 11176683,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF155ZUU.tsv",
+        "sha256": "7e7092df9bb7a08ae2e2121653ce8e53f7fefdc86507aa349c628f4c26569db9",
+        "bytes": 11049242,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF993LWR.tsv",
+        "sha256": "28e2b1d02ac8e2cdaca8e921b1303f8ce33e79f6c2e9f711e6462350c4ecaa3a",
+        "bytes": 11039475,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF526TMF.tsv",
+        "sha256": "460e8b573206306ea33e0ee6bf6711cadc335633d8b89943aa8549a1260ac2a9",
+        "bytes": 10815847,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF807ORH.tsv",
+        "sha256": "7ad4ef9694c2900a3e0cd8a40dc64e9b095c88b2b73a5fce15a0995c0f9844dd",
+        "bytes": 10821121,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF198VCX.tsv",
+        "sha256": "6f67af2f60f8e7aa7403711a2cc815b8f7d5362497aababae5d6e4a8dc11cfa8",
+        "bytes": 10834428,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF223GBX.tsv",
+        "sha256": "00f6512a82d649bcdfd44a295c68d6cbf6769cb907793d978afb5beb27c79fb2",
+        "bytes": 10941052,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF166LSM.tsv",
+        "sha256": "257cba8f9cb77e33765f977643f21c40271d862ab563846afbe09f2831594c10",
+        "bytes": 10853636,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF314OZK.tsv",
+        "sha256": "7bbfe61b268e2c7847fb7f3670288e4ee1fdf12d41ee45bc56af1849b9758216",
+        "bytes": 10806152,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TKR.tsv",
+        "sha256": "efe0bd2de174518201586aa3a7b6264af3bc148b0d33fac4b2f37e331d6afb0b",
+        "bytes": 10790670,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF306DIV.tsv",
+        "sha256": "947d2df99c7c3517589a6e2780fc17c8187b7d67d76d9befb5abb8f82d27d56c",
+        "bytes": 10831170,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF416QUL.tsv",
+        "sha256": "26ebe77bfea175892c0da172c9f080cdce937f8ff0e377cb751da379502a3301",
+        "bytes": 11195080,
+        "partition": null
+      }
+    ],
+    "input_count": 29,
+    "assembly": "GRCh38, GENCODE V29 gene models",
+    "coordinates": "n/a: gene-level quantifications keyed by gene_id",
+    "parameters": {
+      "scale": 0.2145911381525326,
+      "nothing_is_fitted": "NOTHING IS FITTED IN THIS LANE. There is no free parameter of any kind: no scale, no intercept, no per-gene and no per-cell parameter, no threshold, no weighting and no transformation is estimated from the fresh RNA or from anything else. The single number the comparison needs, the scale, is the constant SCALE taken from `ac5580b` (SCALE_ORIGIN). The code REFUSES TO FIT: `fit_scale` raises NoFitError when called, and the run calls it nowhere, so a fit cannot be introduced by accident and cannot be introduced quietly. Because nothing is fitted, no training/held-out split is needed to protect the fresh measurement: no fresh value enters any estimate, so every gene of the population is out of sample by construction. The split is nevertheless used to DEFINE the primary population (POPULATION), for the one reason that M2h's +0.04339 was read on its held-out genes and the primary reading here must be the same genes, so the two numbers are comparable",
+      "interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "resamples": 2000,
+      "seed": 20261010,
+      "cells_dropped": [
+        "cardiac muscle cell",
+        "hepatocyte"
+      ]
+    },
+    "exclusions": [
+      "non-rna_seq tracks, when matching a measured RNA quantification",
+      "cardiac muscle cell and hepatocyte, in the eleven-cell subset alone"
+    ],
+    "partitions": {
+      "fresh_thirteen": "M2i's thirteen fresh experiments",
+      "already_read_twenty_seven": "items 7/7d/7h's twenty-seven already-read quantifications",
+      "eleven_cells": "M2i's primary population on eleven of the thirteen cells"
+    },
+    "code_cleanliness": {
+      "git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/trainexp_match.py",
+        "form": "committed_repository_file",
+        "path": "scripts/trainexp_match.py",
+        "is_committed": true,
+        "declared_entry": "scripts/trainexp_match.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/trainexp.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/trainexp_match.py"
+      ],
+      "counting_path_count": 155,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/simpler_flysource_result.json",
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/trainexp_independence.json"
+      ],
+      "argv": [
+        "scripts/trainexp_match.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "code_cleanliness_git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 18de375"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 572,
+      "opens_under_data": 81,
+      "files_read": 29,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
