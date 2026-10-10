@@ -11,6 +11,8 @@ it does not mean that factor specifies mesoderm" — and the lane's own finding 
 sourced candidates give one answer because the module's default inhibiting numbers are a
 switch, not a brake. The current description is the ROADMAP §5 row registered at `b1e8839`;
 this file keeps the diagnosis that preceded it.
+*(Later on 2026-10-10: that result is now written up in the last section, "A sourced repressor of
+SOX17 restores a mesoderm band".)*
 
 Short answer: the *program* that makes a neuron is small; the *machinery* a
 neuron runs on is not, and the two properties you want, "neuron" and
@@ -1380,3 +1382,64 @@ program"; confidence: 0.4`. The mutual-repression toggle that held the 0.10 meso
 out of two inferred rules at the module's lowest confidence, and the source contradicts one of them.
 So the 0.10 was not a result the program had earned, and losing it is not a regression in anything
 the program could show: `0.10 to 0.00` is a guess being withdrawn, not a measurement being lost.
+
+## A sourced repressor of SOX17 restores a mesoderm band (registered 2026-10-02; written up 2026-10-10)
+
+*(Written up here on 2026-10-10 by lane-docfix from lane-sox17rep's result file and commit
+messages; the registered words are quoted, not restated.)* The diagnosis above ended on a
+structural finding: nothing in the program represses SOX17. lane-sox17rep registered
+`scripts/sox17_repressor_search.py` at `430b510` before any run, with a closed list of three
+entries and every citation fetched through Europe PMC and read. C1 is a MESP1 node with the
+module's NODAL drive and `Mesp1 inhibits SOX17`; C2 the same node unregulated; C3 a HAND1 node
+unregulated with `Hand1 inhibits SOX17`. C1 and C2 rest on Costello et al. 2011, Nat Cell Biol
+13:1084-1091, full text fetched: "Within this early sub-set Mesp1 directly represses genes required
+for formation of DE including Foxa2, Gsc and Sox17." C3 rests on Lynch et al. 2025, EMBO J
+44:2541-2565, full text fetched: "genes potentially repressed by HAND1 were associated with
+processes including neural development, WNT signalling and endoderm development (including SOX17
+and NODAL)" — potentially repressed, from expression and accessibility with motif enrichment, no
+ChIP at the SOX17 locus. Each entry is added alone at the program's own default numbers, and the
+bound, the run and the number convention are the prior lane's, imported from its committed module.
+
+Result `53d9936`, `data/results/sox17_repressor_single.json` (ROADMAP row `b1e8839`). Ecto / meso /
+endo at the final stage, with the sustained-tail minimum over the last 10% of simulated time:
+
+| run | ecto | meso | endo | tail min | bound |
+| --- | --- | --- | --- | --- | --- |
+| baseline | 0.633 | 0.000 | 0.367 | 0.0000 | no |
+| C1 MESP1 node, NODAL drive | 0.467 | 0.533 | 0.000 | 0.5333 | clears |
+| C2 MESP1 node, unregulated | 0.467 | 0.533 | 0.000 | 0.5333 | clears |
+| C3 HAND1 node, unregulated | 0.467 | 0.533 | 0.000 | 0.5333 | clears |
+
+**The registered reading is the first of the two: "a sourced repressor of SOX17 restores a mesoderm
+band".** Its registered caveat, verbatim: "any entry that restores the band means the program lacked
+a repressor of SOX17; it does not mean that factor specifies mesoderm". The runs forced four
+qualifications, given in the lane's words:
+
+- **The three entries are indistinguishable.** "the run does not separate MESP1 from HAND1, and it
+  does not separate a NODAL-driven carrier from an unregulated one. What cleared the bound is the
+  module's inhibiting numbers, not the identity of the factor."
+- **A switch, not a brake.** The number convention gives an added gene max 10 and an added
+  inhibiting rule the module's own threshold 2.0 and hill 3; the carrier's protein settles at 41.84
+  unregulated and 21.02 to 40.71 under NODAL drive, so SOX17's repression factor goes from exactly
+  1.00000 to 0.000109 (C2 and C3) or 0.000119 to 0.000860 (C1), and SOX17's final level is 0.21 at
+  every clamped NODAL, its basal floor. "The module's default inhibiting numbers, applied to a
+  carrier at the module's default max, CANNOT express a partial repression at all. That is a finding
+  about the number convention inherited from 0790d51, not about the biology".
+- **Endoderm pays for the band.** Endoderm goes 0.367 to 0.000 in all three: "The program does not
+  acquire three layers; it exchanges which layer is missing." The weak bound is a one-layer bound
+  and cannot see that. 0.533 is not the measured CS7 mesoderm range 0.694-0.773 and no comparison to
+  it is made: the CS7 comparison stays falsified on all three layers, carrying `d55cb19` verbatim, "a
+  sampled census of one embryo is not a 1-D axis, and the model names no stage."
+- **The wording stays structural.** "It is not a claim that MESP1 or HAND1 specifies mesoderm, and a
+  candidate clearing a deliberately weak one-layer bound in a four-gene module is not evidence about
+  an embryo."
+
+Carried unchanged from the result above: "M1, a MIXL1 node, CLEARS THE WEAK BOUND: sustained 0.0167
+against a bound of 0.01. It does not restore mesoderm.", and R1 "LOCATES WHERE THE BAND RESTS. It is
+not a fix, and the rule stays." One qualification lands on M1: its two rules, "Nodal activates
+MIXL1" and "Mixl1 inhibits SOX2", are attributed to Hart et al. 2002, whose fetched abstract mentions
+neither Nodal nor Sox2; the verdict is not confirmed rather than mis-cited, so M1's two rules are
+inferred from the factor's role and not stated by the cited paper. Nothing was tuned and no rule was
+removed; the sign correction at `5cbce26` stands in every run. `data/demo/gastrulation.bio` is
+untouched, so its header still reads "Mutual repression makes the choice sharp", which is false as
+the program stands. 0 model requests, no money; the web was used for citation fetching only.
