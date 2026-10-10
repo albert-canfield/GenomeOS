@@ -203,6 +203,53 @@ def requests_not_yet_charged(plan: list[dict[str, Any]], ledger: Path | str) -> 
     return [r for r in plan if (r["chrom"], r["element"]) not in already]
 
 
+def answered_elements(ledger: Path | str) -> set[tuple[str, str]]:
+    """(chrom, element) of every charge in THIS ledger whose own answer note follows it.
+
+    An answer counts only when its `id` is the element of the request line it answers -- the latest
+    request before it, with no error recorded in between. A loose answer note, an answer for another
+    element, or a charge that died before its answer (run 2's request 364) is NOT answered. Refuses on
+    an unreadable line for the same reason `charged_elements` does: the set would be unknown.
+    """
+    path = Path(ledger)
+    counts = ledger_charges(path)
+    if counts["unreadable_lines"]:
+        raise ValueError(
+            f"{path} holds {counts['unreadable_lines']} line(s) that cannot be read, so which "
+            "elements were answered is unknown and no element may be exempted on its strength"
+        )
+    out: set[tuple[str, str]] = set()
+    if not path.exists():
+        return out
+    pending: tuple[str, str] | None = None
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if not isinstance(row, dict):
+            continue
+        event = row.get("event")
+        if event == "request":
+            pending = (row.get("chrom"), row.get("element"))
+        elif event == "answer":
+            if pending is not None and row.get("id") == pending[1]:
+                out.add(pending)
+            pending = None
+        elif event == "error":
+            pending = None
+    return out
+
+
+#: Why a dry check reads the ledger and never writes it.
+A_DRY_CHECK_WRITES_NOTHING = (
+    "a check that sends nothing must leave every ledger byte-identical. may_send used to build a "
+    "RequestBudget to compare the log with the count, and a budget built over a partial ledger APPENDS "
+    "an `event: resume` line -- so the first dry check of a resume wrote a restart into the money record "
+    "of a run that had not restarted. The comparison is kept; the line is written only by the budget an "
+    "actual send builds"
+)
+
+
 class CapRefusedError(RuntimeError):
     """The authorised number of requests is reached. Raised instead of returning, so the run stops.
 
@@ -224,9 +271,18 @@ class RequestBudget:
     taken, never their sum, because a caller passing what it read from the ledger must not charge it
     twice over. A resume appends one `event: resume` line naming the count it found, so a restart is
     on the record the committed log makes.
+
+    `record_resume=False` is for a CHECK that reads the count and sends nothing: it writes no line.
+    See `A_DRY_CHECK_WRITES_NOTHING`. Every budget that may charge keeps the default.
     """
 
-    def __init__(self, ledger: Path | str, cap: int = AUTHORISED_REQUESTS, sent: int = 0) -> None:
+    def __init__(
+        self,
+        ledger: Path | str,
+        cap: int = AUTHORISED_REQUESTS,
+        sent: int = 0,
+        record_resume: bool = True,
+    ) -> None:
         if cap < 0:
             raise ValueError(f"a request cap cannot be negative: {cap}")
         self.cap = cap
@@ -235,7 +291,7 @@ class RequestBudget:
         self.resumed_from_ledger = self.on_disk["charges"]
         self.sent = max(sent, self.resumed_from_ledger)
         self._lock = threading.Lock()
-        if self.resumed_from_ledger:
+        if self.resumed_from_ledger and record_resume:
             self._write(
                 {
                     "event": "resume",
@@ -1106,18 +1162,61 @@ def plan_elements_already_cached(
     return present
 
 
+#: The one exemption from the rule above, and why it is no wider.
+ONLY_THIS_LEDGERS_ANSWERS_ARE_EXEMPT = (
+    "a resume finds the answers its own run already bought in the request cache root, so the rule above "
+    "would refuse every resume. The exemption is the elements THIS run's ledger records as charged AND "
+    "answered, each answer paired with its own request line -- and no other. Those are never sent again "
+    "(requests_not_yet_charged skips every charged element), so their cache entries cannot turn a charge "
+    "into a non-purchase. Any other cached element still refuses: one the ledger never charged, one "
+    "charged without an answer, one answered in ANOTHER run's ledger. And the converse refuses too: an "
+    "answered element missing from the root means the root is not the one this run wrote to"
+)
+
+
 def check_nothing_in_the_plan_is_already_cached(
-    plan: list[dict[str, Any]], cache_root: Path | str | None = None, root: Path | None = None
+    plan: list[dict[str, Any]],
+    cache_root: Path | str | None = None,
+    root: Path | None = None,
+    answered: set[tuple[str, str]] | None = None,
 ) -> dict[str, Any]:
-    """Refuse unless EVERY request would really be a request. See the note above."""
-    present = plan_elements_already_cached(plan, cache_root, root)
-    if present:
+    """Refuse unless EVERY request would really be a request. See the notes above.
+
+    `answered` is `answered_elements(<this run's ledger>)`; empty or None, the rule is unchanged.
+    """
+    exempt = {(c, e) for c, e in (answered or set())}
+    planned = {(r["chrom"], r["element"]) for r in plan}
+    stray = sorted(exempt - planned)
+    if stray:
         raise SendRefusedError(
-            f"{len(present)} of the {len(plan)} planned elements already have a cached answer in the "
-            f"request cache root, so they would be charged and NOT bought (first: {present[:3]}). "
-            f"{AN_EXISTING_ENTRY_MEANS_NOTHING_WOULD_BE_BOUGHT}"
+            f"the ledger records {len(stray)} answered element(s) that are not in the reviewed list "
+            f"(first: {[e for _, e in stray[:3]]}), so it is not this list's ledger. "
+            f"{ONLY_THIS_LEDGERS_ANSWERS_ARE_EXEMPT}"
         )
-    return {"plan": len(plan), "already_cached": 0, "cache_root": str(cache_root or ASTROREG2_CACHE_ROOT)}
+    by_element = {r["element"]: (r["chrom"], r["element"]) for r in plan}
+    present = plan_elements_already_cached(plan, cache_root, root)
+    present_keys = {by_element[e] for e in present}
+    refused = [e for e in present if by_element[e] not in exempt]
+    if refused:
+        raise SendRefusedError(
+            f"{len(refused)} of the {len(plan)} planned elements already have a cached answer in the "
+            f"request cache root, so they would be charged and NOT bought (first: {refused[:3]}). "
+            f"{len(present) - len(refused)} other cached element(s) are this ledger's own answers and "
+            f"exempt. {AN_EXISTING_ENTRY_MEANS_NOTHING_WOULD_BE_BOUGHT}"
+        )
+    missing = sorted(e for _, e in exempt - present_keys)
+    if missing:
+        raise SendRefusedError(
+            f"{len(missing)} element(s) this ledger records as answered have NO entry in the request "
+            f"cache root (first: {missing[:3]}), so the root checked is not the one this run wrote its "
+            f"answers to. {ONLY_THIS_LEDGERS_ANSWERS_ARE_EXEMPT}"
+        )
+    return {
+        "plan": len(plan),
+        "already_cached": len(present),
+        "exempt_as_this_ledgers_answers": len(present),
+        "cache_root": str(cache_root or ASTROREG2_CACHE_ROOT),
+    }
 
 
 def sender_closure(entry: str = SENDER_ENTRY, root: Path | None = None) -> dict[str, str]:
@@ -1297,6 +1396,11 @@ def may_send(
 
     `committed` is a predicate taking a path and saying whether it is committed, injected so the check
     can be tested without a repository.
+
+    `resume_authorisation` is the text the OPERATOR supplies for a resume of a partial run: required,
+    non-blank, when the ledger holds charges, and refused when it holds none. The gate checks that it is
+    present; it cannot check whose words it is, which is why the sender writes it verbatim into the
+    ledger before the first new charge. This function writes nothing: see A_DRY_CHECK_WRITES_NOTHING.
     """
     if not ASTROREG2_AUTHORISATION:
         raise NoAuthorisationError(
@@ -1361,7 +1465,9 @@ def may_send(
         check_signoff_is_the_supervisors_for_this_run(recorded_signoff(), run_id, signoff)
 
     check_signoff_closure(root=ROOT_FOR_BLOBS, run_id=run_id)
-    check_nothing_in_the_plan_is_already_cached(plan)
+    # Exempt from the cache rule: ONLY what THIS run's ledger records as charged and answered. See
+    # ONLY_THIS_LEDGERS_ANSWERS_ARE_EXEMPT. On a fresh ledger the set is empty and the rule is unchanged.
+    check_nothing_in_the_plan_is_already_cached(plan, answered=answered_elements(ledger))
     if not signoff or "dry run reviewed" not in signoff:
         _refuse(
             "signoff",
@@ -1373,11 +1479,21 @@ def may_send(
         _refuse("one_run", f"the ledger already records a completed run. {ONE_RUN_IS_TERMINAL}")
 
     charged = ledger_charges(ledger)["charges"]
-    if charged and not resume_authorisation:
+    # Blank or whitespace is no word at all: the gate reads the text the operator supplies, and an empty
+    # string that passed would be a flag standing in for Albert's words.
+    resume_words = (resume_authorisation or "").strip()
+    if charged and not resume_words:
         _refuse(
             "one_run",
             f"a partial run exists ({charged} charged) and no completion is recorded; a resume needs "
             f"Albert's new word. {A_CRASH_STOP_IS_NOT_A_CONTINUATION}",
+        )
+    if resume_words and not charged:
+        _refuse(
+            "one_run",
+            f"a resume authorisation was given but run {run_id}'s ledger holds no charge, so there is "
+            "nothing to resume. Words given for a resume are not an approval of a fresh run, and a "
+            "fresh run under them would put a resume on the record that never happened",
         )
 
     check_adapter_v2(ADAPTER_MODULE)  # read at CALL time so the module under check is substitutable
@@ -1391,7 +1507,8 @@ def may_send(
     # deleting files. The guard's live reading is unchanged for real runs.
     check_disk_for_full_vectors(len(plan), OBSERVED_ROWS_PER_ANSWER, OBSERVED_TRACKS_PER_ANSWER, free_bytes)
 
-    budget = RequestBudget(ledger, cap=ASTROREG2_CAP)
+    # record_resume=False: this is the check, not the send. See A_DRY_CHECK_WRITES_NOTHING.
+    budget = RequestBudget(ledger, cap=ASTROREG2_CAP, record_resume=False)
     if budget.charged() != budget.sent:
         _refuse(
             "logged",
@@ -1403,6 +1520,8 @@ def may_send(
         "may_send": True,
         "resuming": bool(charged),
         "already_charged": charged,
+        "already_answered": len(answered_elements(ledger)),
+        "resume_authorisation": resume_words or None,
         "remaining": len(remaining),
         "run_id": int(run_id),
         "ledger": str(ledger),

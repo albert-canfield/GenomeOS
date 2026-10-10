@@ -440,6 +440,10 @@ class TestACrashRestartCannotRePay:
         monkeypatch.setattr(sender, "LEDGER", led)
         # --run resolves the ledger now, so the partial ledger has to arrive through that resolution
         monkeypatch.setattr(astrorun, "ledger_for_run", lambda n: led)
+        # HERMETIC: the total-cap clause globs every run ledger under the repository root, so on a
+        # machine holding run 2's real partial ledger this test was refused by THAT ledger ("ledgers
+        # exist for run(s) [2]") before it reached the clause it is about. The root is the test's own.
+        monkeypatch.setattr(astrorun, "ROOT_FOR_BLOBS", tmp_path / "repo")
         monkeypatch.setattr(sender, "ACTIVITY", act)
         monkeypatch.setattr(sender, "REGISTRATION", reg)
         monkeypatch.setattr(astrorun, "ASTROREG2_AUTHORISATION", astrorun.ASTROREG2_AUTHORISATION_AS_RELAYED)
@@ -1633,3 +1637,404 @@ class TestAnUncommittedSignoffAuthorisesNothing:
         src = Path("genomeos/attribution/astrorun.py").read_text()
         assert "act in the repository's history" in src
         assert "An uncommitted sign-off authorises nothing" in src
+
+
+class TestAResumeOfRun2IsPossibleOnlyUnderTheOperatorsWords:
+    """A1's preparation: run 2 stopped at request 364 of 1,232 with 363 answers and no stop event.
+
+    The committed sender could not resume it, for three reasons, and each is fixed here without
+    loosening anything: (1) the cache rule refused the run's OWN 363 answers; (2) the gate demands
+    `resume_authorisation` and the sender had no way to pass it; (3) the gate's dry check built a
+    RequestBudget, which APPENDS a `resume` line to a partial ledger -- a dry check writing the money
+    record. Every test drives `main()`, against a repository root, ledgers and cache of its own; the
+    real ledger and cache are never read or written. For each refusal a planted case shows it still
+    fires; for each allowance a case shows exactly what passes.
+
+    WORDS below is a placeholder that stands for the operator's text. It is not, and does not
+    paraphrase, anything Albert said.
+    """
+
+    WORDS = "<the operator's text for the resume>"
+
+    def world(self, tmp_path, monkeypatch, n=40, charged=14, answered=13, run1_charges=10):
+        """Run 1 complete; run 2 partial in the REAL shape: request/answer pairs, the last unanswered."""
+        from types import SimpleNamespace
+
+        repo = tmp_path / "repo"
+        monkeypatch.setattr(astrorun, "ROOT_FOR_BLOBS", repo)
+        cache = repo / astrorun.ASTROREG2_CACHE_ROOT
+        monkeypatch.setattr(astrorun, "ASTROREG2_CACHE_ROOT", cache)
+        plan = [row(i) for i in range(n)]
+        p = tmp_path / "plan.json"
+        p.write_text(json.dumps({"requests": plan}))
+        monkeypatch.setattr(sender, "PLAN", p)
+        monkeypatch.setattr(sender, "REVIEWED_DIGEST", astrorun.plan_digest(plan))
+        monkeypatch.setattr(sender, "LEDGER", sender.LEDGER)
+        act = tmp_path / "activity.json"
+        act.write_text(json.dumps({"rule": {"producer": dict(astrorun.AMENDMENT_2_RULE_FINGERPRINT)}}))
+        reg = tmp_path / "reg.json"
+        reg.write_text("{}")
+        monkeypatch.setattr(sender, "ACTIVITY", act)
+        monkeypatch.setattr(sender, "REGISTRATION", reg)
+        monkeypatch.setattr(sender, "committed_in_git", lambda path: True)
+        monkeypatch.setattr(astrorun, "ASTROREG2_CAP", n)
+        # The record's shape today: run 1's approval consumed, run 2's live and final.
+        monkeypatch.setattr(
+            astrorun,
+            "ASTROREG2_AUTHORISATIONS",
+            {
+                1: {"words": "<run 1's words>", "requests": n, "consumed": True, "why_consumed": "ran"},
+                2: {"words": "<run 2's words>", "requests": n, "consumed": False, "final": True},
+            },
+        )
+        led1 = astrorun.ledger_path_for_run(1)
+        b1 = astrorun.RequestBudget(led1, cap=n + run1_charges)
+        for i in range(run1_charges):
+            b1.take(chrom="chr21", element=f"run1_{i}")
+        astrorun.mark_run_complete(led1, requests=run1_charges)
+        led2 = astrorun.ledger_path_for_run(2)
+        b2 = astrorun.RequestBudget(led2, cap=n)
+        write = writing_score(cache)
+        for i, r in enumerate(plan[:charged]):
+            b2.take(chrom=r["chrom"], element=r["element"], start=r["start"], end=r["end"])
+            if i < answered:
+                write(chrom=r["chrom"], element_id=r["element"], start=r["start"], end=r["end"])
+                check = sender.answer_is_usable(sender.written_entry(r["chrom"], r["element"], cache))
+                b2.note(event="answer", from_written_entry=True, **check)
+        # The clauses this class is NOT about, each with planted tests of its own elsewhere: CI (read
+        # from the forge), the item (h) commit, the supervisor's line and its closure, and free disk.
+        monkeypatch.setattr(sender, "head_sha", lambda: "abc1234")
+        monkeypatch.setattr(
+            astrorun,
+            "ci_conclusion",
+            lambda sha: {
+                "read": True,
+                "runs": [
+                    {"conclusion": "success", "createdAt": "2026-10-03T12:00:00Z", "workflowName": "ci"}
+                ],
+            },
+        )
+        monkeypatch.setattr(astrorun, "check_astroargmax_registration_is_committed", lambda *a, **k: {})
+        rec = {
+            "by": astrorun.SUPERVISOR_SESSION,
+            "digest": "d",
+            "run_id": 2,
+            "words": 'wrote "dry run reviewed"',
+        }
+        monkeypatch.setattr(astrorun, "recorded_signoff", lambda *a, **k: rec)
+        monkeypatch.setattr(astrorun, "recorded_signoff_words", lambda *a, **k: rec["words"])
+        monkeypatch.setattr(astrorun, "check_signoff_closure", lambda *a, **k: {})
+        monkeypatch.setattr(astrorun, "check_disk_for_full_vectors", lambda *a, **k: {})
+        self.tripwire(monkeypatch)
+        return SimpleNamespace(plan=plan, led1=led1, led2=led2, cache=cache, n=n, charged=charged)
+
+    def tripwire(self, monkeypatch):
+        """Installed in EVERY world: if a regressed gate let a refusal test through, main() would build
+        the real adapter and could read a key and send. Here it meets this instead, and fails loudly.
+        `fake_service` replaces it only in the tests whose subject is an allowed send."""
+        import genomeos.predict as gp
+        import genomeos.results as gr
+
+        def tripped(*a, **k):
+            raise AssertionError("a refusal test reached the service: the gate let it through")
+
+        monkeypatch.setattr(gp, "AlphaGenomeAdapter", tripped)
+        monkeypatch.setattr(sender.enhancer_target, "score_element", tripped)
+        monkeypatch.setattr(gr, "save_result", tripped)
+
+    def run(self, monkeypatch, capsys, *args):
+        monkeypatch.setattr(sys, "argv", ["astroreg2_send.py", "--run", "2", *args])
+        code = sender.main()
+        return code, capsys.readouterr().out
+
+    def fake_service(self, monkeypatch, w, answer=None):
+        """The service replaced at the recording path, so main() sends to nothing real and reads no key."""
+        import genomeos.predict as gp
+        import genomeos.predict.alphagenome_adapter as ga
+        import genomeos.results as gr
+
+        class FakeAdapter:
+            available = True
+            api_key = "not-a-key"
+            last_scan: dict = {}
+
+            def _live_scorer(self, threshold):
+                assert threshold == astrorun.FROZEN_SCORER_THRESHOLD
+                return "scorer"
+
+        monkeypatch.setattr(gp, "AlphaGenomeAdapter", FakeAdapter)
+        monkeypatch.setattr(ga, "create_client", lambda *a, **k: object())
+        write = writing_score(w.cache, answer)
+        bought: list[str] = []
+
+        def score_element(scorer, fetch, cache=None, **kw):
+            assert Path(cache) == w.cache, "the answers go to the separate root"
+            bought.append(kw["element_id"])
+            return write(**kw)
+
+        monkeypatch.setattr(sender.enhancer_target, "score_element", score_element)
+        saved: dict = {}
+
+        def save_result(name, out):
+            saved[name] = out
+            return Path("not-written")
+
+        monkeypatch.setattr(gr, "save_result", save_result)
+        monkeypatch.setattr(sender, "manifest", lambda out, plan: {"stubbed": True})
+        return bought, saved
+
+    @staticmethod
+    def rows(path):
+        return [json.loads(x) for x in Path(path).read_text().splitlines() if x.strip()]
+
+    # ------------------------------------------------------------------ the partial-run clause
+
+    def test_PLANTED_no_resume_words_REFUSES_and_the_ledger_is_untouched(self, tmp_path, monkeypatch, capsys):
+        w = self.world(tmp_path, monkeypatch)
+        before = w.led2.read_bytes()
+        for args in ((), ("--send",)):
+            code, said = self.run(monkeypatch, capsys, *args)
+            assert code == 2
+            assert "a partial run exists (14 charged)" in said
+            assert "a resume needs Albert's new word" in said
+        assert w.led2.read_bytes() == before
+
+    @pytest.mark.parametrize("blank", ["", "   ", "\n\t"])
+    def test_PLANTED_blank_resume_words_REFUSE(self, tmp_path, monkeypatch, capsys, blank):
+        w = self.world(tmp_path, monkeypatch)
+        before = w.led2.read_bytes()
+        code, said = self.run(monkeypatch, capsys, "--send", "--resume-authorisation", blank)
+        assert code == 2
+        assert "a partial run exists (14 charged)" in said
+        assert w.led2.read_bytes() == before
+
+    def test_PLANTED_resume_words_on_a_FRESH_ledger_REFUSE(self, tmp_path, monkeypatch, capsys):
+        w = self.world(tmp_path, monkeypatch, charged=0, answered=0)
+        assert not w.led2.exists()
+        code, said = self.run(monkeypatch, capsys, "--resume-authorisation", self.WORDS)
+        assert code == 2
+        assert "nothing to resume" in said
+        assert not w.led2.exists(), "a refused check creates no ledger"
+
+    def test_PLANTED_resume_words_do_not_reopen_a_COMPLETED_run(self, tmp_path, monkeypatch, capsys):
+        w = self.world(tmp_path, monkeypatch)
+        astrorun.mark_run_complete(w.led2, requests=w.charged)
+        code, said = self.run(monkeypatch, capsys, "--send", "--resume-authorisation", self.WORDS)
+        assert code == 2
+        assert "already records a completed run" in said
+
+    # ------------------------------------------------------------------ the dry check writes nothing
+
+    def test_ALLOWED_the_dry_check_with_words_passes_and_writes_NOTHING(self, tmp_path, monkeypatch, capsys):
+        w = self.world(tmp_path, monkeypatch)
+        led1_before, led2_before = w.led1.read_bytes(), w.led2.read_bytes()
+        code, said = self.run(monkeypatch, capsys, "--resume-authorisation", self.WORDS)
+        assert code == 0, said
+        assert "every clause satisfied" in said
+        assert "'resuming': True" in said
+        assert "'already_charged': 14" in said
+        assert "'already_answered': 13" in said
+        assert "'remaining': 26" in said
+        assert "nothing is sent and no ledger was written" in said
+        assert w.led2.read_bytes() == led2_before, "the dry check wrote to run 2's ledger"
+        assert w.led1.read_bytes() == led1_before
+
+    def test_the_defect_the_dry_check_had_is_measured_on_the_old_shape(self, tmp_path):
+        """A default budget over a partial ledger appends `resume`; the check's budget does not."""
+        led = tmp_path / "l.jsonl"
+        b = astrorun.RequestBudget(led, cap=5)
+        b.take(chrom="chr1", element="e0")
+        before = led.read_bytes()
+        astrorun.RequestBudget(led, cap=5, record_resume=False)
+        assert led.read_bytes() == before
+        astrorun.RequestBudget(led, cap=5)  # the shape may_send used before this change
+        assert [r["event"] for r in self.rows(led)] == ["request", "resume"]
+        assert "byte-identical" in astrorun.A_DRY_CHECK_WRITES_NOTHING
+
+    def test_may_send_builds_its_budget_with_record_resume_False(self):
+        import ast
+
+        tree = ast.parse((ROOT / "genomeos/attribution/astrorun.py").read_text())
+        fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "may_send")
+        budgets = [
+            c
+            for c in ast.walk(fn)
+            if isinstance(c, ast.Call) and isinstance(c.func, ast.Name) and c.func.id == "RequestBudget"
+        ]
+        assert len(budgets) == 1
+        kw = {k.arg: k.value for k in budgets[0].keywords}
+        assert isinstance(kw.get("record_resume"), ast.Constant) and kw["record_resume"].value is False
+
+    # ------------------------------------------------------------------ the cache exemption
+
+    def test_PLANTED_an_UNCHARGED_cached_element_still_REFUSES(self, tmp_path, monkeypatch, capsys):
+        w = self.world(tmp_path, monkeypatch)
+        stray = w.plan[30]
+        writing_score(w.cache)(chrom=stray["chrom"], element_id=stray["element"])
+        code, said = self.run(monkeypatch, capsys, "--resume-authorisation", self.WORDS)
+        assert code == 2
+        assert "1 of the 40 planned elements already have a cached answer" in said
+        assert stray["element"] in said
+        assert "13 other cached element(s) are this ledger's own answers" in said
+
+    def test_PLANTED_the_CHARGED_but_UNANSWERED_element_cached_still_REFUSES(
+        self, tmp_path, monkeypatch, capsys
+    ):
+        """Run 2's request 364 shape: charged, no answer line. If its entry were on disk it is not exempt."""
+        w = self.world(tmp_path, monkeypatch)
+        last = w.plan[w.charged - 1]
+        writing_score(w.cache)(chrom=last["chrom"], element_id=last["element"])
+        code, said = self.run(monkeypatch, capsys, "--resume-authorisation", self.WORDS)
+        assert code == 2
+        assert last["element"] in said
+        assert "charged and NOT bought" in said
+
+    def test_PLANTED_an_element_answered_in_ANOTHER_runs_ledger_is_not_exempt(
+        self, tmp_path, monkeypatch, capsys
+    ):
+        w = self.world(tmp_path, monkeypatch)
+        other = w.plan[35]
+        rows = self.rows(w.led1)
+        rows[-1:-1] = [
+            {"event": "request", "chrom": other["chrom"], "element": other["element"], "n": 11},
+            {"event": "answer", "id": other["element"], "usable": True},
+        ]
+        w.led1.write_text("".join(json.dumps(r) + "\n" for r in rows))
+        writing_score(w.cache)(chrom=other["chrom"], element_id=other["element"])
+        code, said = self.run(monkeypatch, capsys, "--resume-authorisation", self.WORDS)
+        assert code == 2
+        assert other["element"] in said
+
+    def test_PLANTED_an_answered_element_MISSING_from_the_root_REFUSES(self, tmp_path, monkeypatch, capsys):
+        """The converse: the root checked is not the one this run wrote to."""
+        w = self.world(tmp_path, monkeypatch)
+        gone = w.plan[3]
+        (w.cache / gone["chrom"] / f"{gone['element']}.json").unlink()
+        code, said = self.run(monkeypatch, capsys, "--resume-authorisation", self.WORDS)
+        assert code == 2
+        assert "have NO entry in the request cache root" in said
+        assert gone["element"] in said
+
+    def test_answered_means_paired_with_its_own_request(self, tmp_path):
+        led = tmp_path / "l.jsonl"
+        lines = [
+            {"event": "request", "chrom": "chr1", "element": "a"},
+            {"event": "answer", "id": "a"},
+            {"event": "request", "chrom": "chr1", "element": "b"},
+            {"event": "answer", "id": "z"},  # an answer for another element
+            {"event": "request", "chrom": "chr1", "element": "c"},
+            {"event": "error", "element": "c"},
+            {"event": "answer", "id": "c"},  # a loose answer after the error
+            {"event": "request", "chrom": "chr1", "element": "d"},  # charged, never answered
+        ]
+        led.write_text("".join(json.dumps(x) + "\n" for x in lines))
+        assert astrorun.answered_elements(led) == {("chr1", "a")}
+        led.write_text(led.read_text() + "{truncated\n")
+        with pytest.raises(ValueError, match="cannot be read"):
+            astrorun.answered_elements(led)
+
+    def test_a_fresh_ledger_leaves_the_cache_rule_exactly_as_it_was(self, tmp_path):
+        plan = [row(i) for i in range(4)]
+        root = tmp_path / "c"
+        writing_score(root)(chrom="chr1", element_id=plan[0]["element"])
+        with pytest.raises(astrorun.SendRefusedError, match="1 of the 4 planned"):
+            astrorun.check_nothing_in_the_plan_is_already_cached(plan, root, answered=set())
+
+    # ------------------------------------------------------------------ the send itself
+
+    def test_ALLOWED_a_resume_buys_exactly_the_uncharged_remainder_at_the_REAL_numbers(
+        self, tmp_path, monkeypatch, capsys
+    ):
+        """1,232 planned, run 1 holding 10 charges, run 2 holding 364 charges and 363 answers.
+
+        The remainder is 868 = 1,232 - 364: request 364 counts as charged and is NOT bought again, and
+        the cap is min(1,232, total left) = 1,232, which the resumed budget reaches exactly.
+        """
+        w = self.world(tmp_path, monkeypatch, n=1232, charged=364, answered=363)
+        before = self.rows(w.led2)
+        bought, saved = self.fake_service(monkeypatch, w)
+        code, said = self.run(monkeypatch, capsys, "--send", "--resume-authorisation", self.WORDS)
+        assert code == 0, said[-2000:]
+        assert bought == [r["element"] for r in w.plan[364:]], "exactly the 868 uncharged, in plan order"
+        assert len(bought) == 868
+        assert w.plan[363]["element"] not in bought, "request 364 is charged and is not bought twice"
+        rows = self.rows(w.led2)
+        assert rows[: len(before)] == before, "append-only: the partial record is unchanged"
+        new = rows[len(before) :]
+        assert new[0]["event"] == "resume"
+        assert new[0]["charges_found_in_the_ledger"] == 364
+        assert new[0]["cap"] == 1232 and new[0]["remaining"] == 868
+        assert new[1]["event"] == "resume_authorised"
+        assert new[1]["words"] == self.WORDS, "the operator's text, verbatim, before the first new charge"
+        assert new[2]["event"] == "request" and new[2]["n"] == 365
+        reqs = [r for r in rows if r.get("event") == "request"]
+        assert len(reqs) == 1232 == len({r["element"] for r in reqs})
+        assert rows[-1]["event"] == astrorun.RUN_COMPLETE_EVENT and rows[-1]["requests"] == 1232
+        assert sum(1 for r in rows if r.get("event") == "resume") == 1
+        out = saved[sender.RESULT]
+        assert out["requests_charged_before_this_pass"] == 364
+        assert out["requests_this_pass"] == 868
+        assert out["resumed"] is True and out["resume_authorisation"] == self.WORDS
+        # and the cap really is the bound: one more request is refused by the budget itself
+        with pytest.raises(astrorun.CapRefusedError):
+            astrorun.astroreg2_budget(run_id=2).take(chrom="chr1", element="one-more")
+
+    def test_PLANTED_the_pilot_does_NOT_re_fire_on_a_resume_past_ten(self, tmp_path, monkeypatch, capsys):
+        """Every resumed answer nameless: a pilot that re-fired would stop at once. It must not."""
+        w = self.world(tmp_path, monkeypatch, n=40, charged=14, answered=13)
+        bought, saved = self.fake_service(monkeypatch, w, answer=nameless_answer)
+        code, said = self.run(monkeypatch, capsys, "--send", "--resume-authorisation", self.WORDS)
+        assert code == 0, said[-2000:]
+        assert len(bought) == 26
+        rows = self.rows(w.led2)
+        assert not [r for r in rows if r.get("event") == "pilot_stop"]
+        out = saved[sender.RESULT]
+        assert out["pilot"]["passed"] is True
+        assert len(out["unusable_answers"]) == 26, "recorded, not stopped on"
+
+    def test_PLANTED_a_resume_BEFORE_ten_answers_still_meets_the_pilot(self, tmp_path, monkeypatch, capsys):
+        """The other direction: the pilot counts the RUN's answers, so it fires at the tenth overall."""
+        w = self.world(tmp_path, monkeypatch, n=40, charged=7, answered=6)
+        bought, saved = self.fake_service(monkeypatch, w, answer=nameless_answer)
+        code, said = self.run(monkeypatch, capsys, "--send", "--resume-authorisation", self.WORDS)
+        assert code == 0, said[-2000:]
+        assert len(bought) == 4, "answers 7..10 of the run, then the stop"
+        out = saved[sender.RESULT]
+        assert out["pilot"]["passed"] is False
+        assert out["pilot"]["stopped"]["at_request"] == 10
+        assert astrorun.run_already_completed(w.led2)
+
+    def test_the_cap_is_min_of_the_runs_count_and_the_total_left(self, tmp_path, monkeypatch):
+        """With the other runs' charges eating into the total, the lower figure is the cap."""
+        w = self.world(tmp_path, monkeypatch, n=40, charged=14, answered=13, run1_charges=50)
+        budget = astrorun.astroreg2_budget(run_id=2)
+        assert budget.cap == min(40, 80 - 50) == 30
+        assert budget.remaining() == 30 - 14
+        # and the gate itself refuses a run whose list no longer fits inside the total
+        with pytest.raises(astrorun.CapRefusedError, match="the total ever authorised is 80"):
+            astrorun.check_total_cap(2, len(w.plan))
+
+    def test_the_sender_passes_the_flag_through_and_supplies_no_default(self):
+        import ast
+
+        src = (ROOT / "scripts/astroreg2_send.py").read_text()
+        tree = ast.parse(src)
+        call = next(
+            c
+            for c in ast.walk(tree)
+            if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr == "may_send"
+        )
+        kw = {k.arg: ast.unparse(k.value) for k in call.keywords}
+        assert kw["resume_authorisation"] == "args.resume_authorisation"
+        flag = next(
+            c
+            for c in ast.walk(tree)
+            if isinstance(c, ast.Call)
+            and isinstance(c.func, ast.Attribute)
+            and c.func.attr == "add_argument"
+            and c.args
+            and isinstance(c.args[0], ast.Constant)
+            and c.args[0].value == "--resume-authorisation"
+        )
+        default = {k.arg: k.value for k in flag.keywords}["default"]
+        assert isinstance(default, ast.Constant) and default.value is None, "no default words, ever"

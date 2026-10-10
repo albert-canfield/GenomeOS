@@ -259,6 +259,16 @@ def main() -> int:
         action="store_true",
         help="required by name. Without it nothing is sent and the clause checks are reported only",
     )
+    ap.add_argument(
+        "--resume-authorisation",
+        default=None,
+        metavar="WORDS",
+        help="Albert's own words authorising a RESUME of this run's partial ledger, quoted verbatim by "
+        "whoever received them first-hand. Required, non-blank, when the run's ledger holds charges; "
+        "refused when it holds none. Nothing here supplies or defaults it. On --send it is written "
+        "verbatim into the ledger before the first new charge, so the record says under whose words "
+        "the run went on",
+    )
     args = ap.parse_args()
     t0 = time.time()
     global LEDGER
@@ -289,6 +299,9 @@ def main() -> int:
             plan=plan,
             reviewed_digest=REVIEWED_DIGEST,
             committed=committed_in_git,
+            # The operator's text, passed through unchanged. The gate requires it for a partial ledger
+            # and refuses it for a fresh one; this script never supplies, defaults or edits it.
+            resume_authorisation=args.resume_authorisation,
         )
     except (astrorun.NoAuthorisationError, astrorun.SendRefusedError) as e:
         print(f"REFUSED: {e}")
@@ -296,13 +309,26 @@ def main() -> int:
     print(f"every clause satisfied: {permitted}")
 
     if not args.send:
-        print("--send was not given, so nothing is sent. The clause checks above all passed")
+        print(
+            "--send was not given, so nothing is sent and no ledger was written. The clause checks "
+            "above all passed"
+        )
         return 0
 
     # The ledger comes from the gate's own derivation, never from this script's module global: one
     # source for the path the charges are written to, and it is the one the clauses were checked against.
     LEDGER = Path(permitted["ledger"])
     budget = astrorun.astroreg2_budget(run_id=args.run)
+    if permitted["resuming"]:
+        # Before the first new charge: the words the run went on under, verbatim, on the money record.
+        budget.note(
+            event="resume_authorised",
+            words=permitted["resume_authorisation"],
+            already_charged=permitted["already_charged"],
+            already_answered=permitted["already_answered"],
+            remaining=permitted["remaining"],
+            cap=budget.cap,
+        )
 
     # Built INLINE and exactly as the sweep that produced the frozen K562 values built it
     # (scripts/enhancer_targets_all.py worker_scorer, verified at :98-107): the pinned client with the
@@ -360,6 +386,10 @@ def main() -> int:
         "gene-axis record and each named cell's value multiset. No client call was made from here"
     )
     out["ledger"] = str(LEDGER)
+    # A resumed pass says so, with the words it went on under, so this result cannot be read as the
+    # whole run's: the ledger, not this pass, is the record of what the run bought.
+    out["resumed"] = bool(permitted["resuming"])
+    out["resume_authorisation"] = permitted["resume_authorisation"]
     out["feature_definition"] = {
         "scorer_threshold": astrorun.FROZEN_SCORER_THRESHOLD,
         "client_timeout": astrorun.FROZEN_CLIENT_TIMEOUT,
@@ -452,6 +482,8 @@ def manifest(out: dict[str, Any], plan: list[dict[str, Any]]) -> dict[str, Any]:
             "requests_sent": out["requests_sent"],
             "pilot_requests": PILOT_REQUESTS,
             "pilot_passed": out["pilot"]["passed"],
+            "resumed": out.get("resumed", False),
+            "requests_charged_before_this_pass": out.get("requests_charged_before_this_pass", 0),
             "reviewed_digest": REVIEWED_DIGEST,
         },
         "cache_root": str(astrorun.ASTROREG2_CACHE_ROOT),
