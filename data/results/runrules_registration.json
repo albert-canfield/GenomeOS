@@ -1,0 +1,523 @@
+{
+  "result": "runrules_registration",
+  "date": "2026-10-10",
+  "lane": "lane-runrules",
+  "roadmap_item": "\u00a75 item 14, M1: compiled rules that run",
+  "question": "Does running the compiled rules predict measured RNA? Specifically: across the 54 GTEx tissues, is a gene's measured expression in the tissue its compiled rule is gated on better predicted by the level a run of that rule computes than by a baseline that ignores the compiled rules?",
+  "structure": {
+    "network": "a compiled rule's source is an element, never a gene: the census counts rules whose source is a gene entity, and if that count is 0 a run integrates one independent one-gene system per regulated gene, so nothing a run reports depends on any other gene",
+    "level": "the bridge fits each resolved gene so that its intact steady state is T / delta_m in every cell it resolves (split_measured_rate: intact transcription = T), so the predicted level of a gene does not depend on any compiled rule and is the same in every cell",
+    "on_off": "every resolved gene has basal_rate > 0, because the split reports one that does not as rate_split_infeasible; a run therefore predicts 'on' for every resolved gene in every cell, with its element present or absent, and cannot predict 'off' anywhere",
+    "in_its_own_cell": "with the element clamped present and absent in the rule's own cell, a run returns the observation it was fitted to (bridge.RATE_ACCEPTANCE; S5: 'direction and fold for all (they are the input)')"
+  },
+  "census_facts": {
+    "census": "data/results/runrules_census.json",
+    "totals": {
+      "rules": 440589,
+      "rules_with_gene_source": 0
+    },
+    "all_contexts": {
+      "contexts": 317,
+      "rules": 440589,
+      "gene_cell_pairs": 237613,
+      "single_mechanism_pairs": 161144,
+      "several_mechanism_pairs": 76469,
+      "resolved_measured": 22576,
+      "resolved_borrowed": 160392,
+      "resolved_borrowed_activates": 113248,
+      "resolved_borrowed_inhibits": 47144,
+      "resolved_borrowed_basal_not_positive": 0
+    },
+    "panel_contexts": {
+      "contexts": 54,
+      "rules": 31858,
+      "gene_cell_pairs": 19765,
+      "single_mechanism_pairs": 14306,
+      "several_mechanism_pairs": 5459,
+      "resolved_measured": 2129,
+      "resolved_borrowed": 14269,
+      "resolved_borrowed_activates": 9848,
+      "resolved_borrowed_inhibits": 4421,
+      "resolved_borrowed_basal_not_positive": 0
+    },
+    "panel_unresolved_borrowed": {
+      "not_identifiable": 5459,
+      "rate_split_infeasible": 37
+    },
+    "panel_labels_absent": []
+  },
+  "exploration_preceded_this": "stated so that nothing here is read as a blind prediction of figures this lane had seen. Before writing it the lane read: the rule count per compiled cell context over all 24 programs (318 contexts, by grep of the program text; Whole_Blood 11,325 rules, all 54 GTEx-named contexts present); data/results/bridge_audit.json's pooled counts (237,613 gene-cell pairs, 76,469 with several mechanisms, 22,576 resolved on a measured rate, 160,392 on the borrowed median); a prototype on chr21 only (33 of the 54 panel contexts present, 147 panel pairs resolved on the borrowed tier, 30 Whole_Blood pairs run with the runtime, largest |m - closed form| 9.4e-16); the first three lines of the GTEx table (its version line, its dimensions 56,200 x 54, and the tissue header) and NO value of it; this lane's own census (data/results/runrules_census.json, 8420637: 317 contexts by the parser, where the grep above also counted header comments; on the panel 14,269 pairs resolved on the borrowed tier before pooling over programs); one row of the saved AlphaGenome track metadata (the Whole_Blood track, data_source 'gtex'); and data/results/argmaxcell.json's verdict headline. No measured expression value of any gene in any tissue was read, so no outcome, no D and no sign agreement was seen before this file was committed",
+  "departures": [
+    "from ROADMAP \u00a75 item 14 M1 ('the on/off state per cell type of genes the compiled rules drive, against measured RNA in the reader's cell types'), each with its reason. (1) Not on/off: the census shows a run predicts 'on' for every resolved gene in every cell (STRUCTURE['on_off']), so an on/off test cannot separate the run from any baseline; on/off is kept as a descriptive. (2) Not the reader's cells: the measured RNA this machine holds for K562, HepG2, GM12878, IMR-90, A549 and MCF-7 is six JSON files of bigWig URLs, no values; the one cached per-tissue table is GTEx v8, and the 54 compiled contexts named for GTEx tissues map to it by name with no judgement. (3) The strength-dependent activator form R3 left open is not attempted here: every pair in this population has one mechanism, so no combination rule enters it, and that form needs its own registration",
+    "from the coordinator's suggested shape: the baseline is the gene's own level in the tissues where it has no compiled rule (its 'expression in other cells'), not its basal rate, because the basal rate is the run's own number and the rate cancels from the prediction (READING)"
+  ],
+  "reading": "element-state reading of the compiled gate. A run of gene G's bridged program in tissue C with its element clamped PRESENT (1.0) gives L_present; the same program with the element clamped ABSENT (0.0) gives L_absent. A tissue C' in which G has no compiled rule at all is read as a tissue in which the element does not act, i.e. the ABSENT state - the bridge's own SOURCE_STATE ('element presence, dimensionless: 1.0 intact, 0.0 removed'), and the state the v0.5 reader (5682e6c, Module.active_rules) gives a rule acting through an element a cell does not read as open: held at strength 0, so the gene keeps its rule and transcribes at its basal rate (for one activating rule; for one inhibiting rule, at basal + max_rate). The run's prediction for G in C against G elsewhere is therefore m = log2(L_present / L_absent): positive for a rule whose action is 'activates', negative for 'inhibits'. m does not depend on the rate T, on the Hill threshold or coefficient, or on the mRNA half-life (the split is linear in T and the fold is dimensionless), so the borrowed median is used only to make a gene with no measured rate executable and moves no prediction",
+  "reading_not_taken": "the runtime's literal reading of an UNGATED rule is not registered: a gene with no active activator takes A = 1.0 and transcribes at basal + max_rate (runtime/grn.py, `a = 1.0`), so with the C-fitted parameters a run in a tissue with no rule gives (2 - RHO) * T for an activating rule and RHO * T for an inhibiting one, and predicts G LOWER in its rule's tissue for both actions. grn.py's own comment calls that convention 'the opposite of silencing', and lane-mesoderm (d340e5c) recorded that no paper can source it. Its sign agreement is not a separate test: it is one minus the gate-only figure reported under DESCRIPTIVES",
+  "population": "every (gene G, tissue C) with C one of the 54 panel contexts such that, pooled over all 24 compiled programs, G has EXACTLY ONE mechanism (bridge.mechanism_key) active in C, and bridge.parameterize resolves it on the borrowed tier (rates = data/results/gene_rates.json, borrowed_rate = its genome median), i.e. the pair is runnable at least in relative units; AND G's symbol (its `symbol:` field, not the program identifier, which turns '-' and '.' into '_') names exactly one row of the GTEx table's Description column; AND G has at least MIN_REFERENCE_TISSUES panel tissues in which it has no compiled regulatory rule of any kind (its reference tissues R(G)). No filter on expression is applied: no measured value selects a pair",
+  "measured": "y(G, T) = log2(median TPM of G in GTEx tissue T + PSEUDOCOUNT). The measured deviation of G in its rule's tissue is D(G, C) = y(G, C) - median over C' in R(G) of y(G, C')",
+  "baseline": "no-rule baseline: predicts D(G, C) = 0, i.e. G's level in C equals its median level over the tissues where it has no compiled rule. It uses no compiled rule, no gate and no sign, and it is the same level prediction as the run's except for the run's computed shift m",
+  "metric": "Delta MSE = mean over the population of D^2 - mean of (D - m)^2 (= mean of 2*m*D - m^2). Positive means the run's predicted level is closer to the measured level than the no-rule baseline's. Stated before the run because it decides how a null reads: a shift that carries no information about D still costs mean(m^2), so a run whose shifts are unrelated to the measured deviation reads WORSE, not NO_DIFFERENCE, once the population resolves mean(m^2); NO_DIFFERENCE means the information the shifts carry and their cost could not be told apart",
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 20261010,
+    "unit": "gene: genes are resampled with replacement and carry all their (gene, tissue) pairs",
+    "interval": "95% percentile interval of Delta MSE"
+  },
+  "control": "shuffled-rule control: within each tissue, the run's shifts m are permuted among that tissue's pairs (PERMUTATIONS times), which keeps every tissue's gate and its distribution of shifts and breaks only the tie between a gene and its own rule's sign and size. control p = (1 + number of permutations with Delta MSE >= observed) / (1 + PERMUTATIONS)",
+  "permutations": {
+    "count": 1000,
+    "seed": 20261011
+  },
+  "control_alpha": 0.05,
+  "decision": "1. If any pair's run differs from the closed form by more than CLOSED_FORM_TOLERANCE in log2, the run stops before the measured RNA is opened (HARNESS_DEFECT). 2. If the population holds fewer than MIN_POPULATION pairs, the run stops before any comparison is read (NOT_TESTABLE). 3. Else: lower bound of the bootstrap interval > 0 -> BEATS (then control p <= CONTROL_ALPHA -> BEATS_AND_CONTROL, else BEATS_NOT_CONTROL); upper bound < 0 -> WORSE; otherwise NO_DIFFERENCE",
+  "falsifier": "the run does not beat the no-rule baseline: the 95% interval of Delta MSE includes 0 or lies below it. And the narrower claim that the gene's OWN rule carries information is falsified when the shuffled-rule control is not beaten (control p > CONTROL_ALPHA)",
+  "stop_rule": "one run, from this registration's committed code, on the cached files whose sha256 the registration pins. No parameter, panel, population rule, pseudocount or metric is changed after the measured RNA is opened; a defect found afterwards is reported beside the registered reading and corrected only under a new registration",
+  "outcomes": {
+    "HARNESS_DEFECT": "stopped before the measured RNA was opened: the run differed from its closed form by more than {tol} log2 at {bad} of {n} pairs",
+    "NOT_TESTABLE": "not testable at the registered size: the population holds {n} (gene, tissue) pairs, fewer than the registered {min}; no comparison was read",
+    "BEATS_AND_CONTROL": "beats baseline: running the compiled rules lowered the squared error of measured log2(TPM+1) below the no-rule baseline's (Delta MSE {d} [95% CI {lo}, {hi}] over {n} gene-tissue pairs, {g} genes, {t} GTEx tissues), and by more than the shuffled-rule control (control p = {p})",
+    "BEATS_NOT_CONTROL": "beats baseline, but not the shuffled-rule control: running the compiled rules lowered the squared error of measured log2(TPM+1) below the no-rule baseline's (Delta MSE {d} [95% CI {lo}, {hi}] over {n} gene-tissue pairs, {g} genes, {t} GTEx tissues), and shifts shuffled among the genes of the same tissue did as well (control p = {p}); the gain is not carried by a gene's own rule",
+    "NO_DIFFERENCE": "no difference detected: running the compiled rules did not change the squared error of measured log2(TPM+1) against the no-rule baseline by a detectable amount (Delta MSE {d} [95% CI {lo}, {hi}] over {n} gene-tissue pairs, {g} genes, {t} GTEx tissues; control p = {p})",
+    "WORSE": "worse: running the compiled rules raised the squared error of measured log2(TPM+1) above the no-rule baseline's (Delta MSE {d} [95% CI {lo}, {hi}] over {n} gene-tissue pairs, {g} genes, {t} GTEx tissues; control p = {p})"
+  },
+  "limitations": [
+    "every rule in the population was compiled and gated from AlphaGenome RNA-seq tracks named for GTEx tissues; the saved track metadata records data_source 'gtex' for such a track (the Whole_Blood row was read), so the measured outcome is the kind of data the rules' source model was trained on and is not independent of it. No reading here is evidence of a mechanism",
+    "the run's shift m equals the input observation's -log2(RHO): what is tested is the compiled observation read across tissues under READING, not dynamics that a run adds; there are none to add (STRUCTURE)",
+    "a GTEx median over donors is not a cell type and not the AlphaGenome track's own sample set",
+    "every rate under the run is mouse NIH 3T3 or the genome median of those rates; m does not depend on it, and no level in molecules per cell is quoted"
+  ],
+  "descriptives_not_verdicts": [
+    "sign table: rule action (activates, inhibits) against sign of D (+, 0, -), counts",
+    "gate-only agreement: the share of pairs with D > 0, which is the agreement of a predictor that uses only the gate and always says 'higher in the rule's tissue'; the runtime-literal reading (READING_NOT_TAKEN) agrees on exactly the share with D < 0",
+    "Delta MSE by action, by tissue (count, Delta MSE, mean D, mean m), and on the subset of genes standing on their own measured (mouse) rate",
+    "Spearman correlation of m with D",
+    "on/off, descriptive only and not a test of the run (which predicts 'on' everywhere): share of pairs with TPM >= 1 in the rule's tissue, and mean share of reference tissues with TPM >= 1"
+  ],
+  "min_reference_tissues": 20,
+  "min_population": 500,
+  "pseudocount": 1.0,
+  "runtime": {
+    "hours": 40.0,
+    "dt": 0.05,
+    "strict": true,
+    "start": "every species at 0"
+  },
+  "closed_form_tolerance": 1e-06,
+  "gtex_tissues": [
+    "Adipose - Subcutaneous",
+    "Adipose - Visceral (Omentum)",
+    "Adrenal Gland",
+    "Artery - Aorta",
+    "Artery - Coronary",
+    "Artery - Tibial",
+    "Bladder",
+    "Brain - Amygdala",
+    "Brain - Anterior cingulate cortex (BA24)",
+    "Brain - Caudate (basal ganglia)",
+    "Brain - Cerebellar Hemisphere",
+    "Brain - Cerebellum",
+    "Brain - Cortex",
+    "Brain - Frontal Cortex (BA9)",
+    "Brain - Hippocampus",
+    "Brain - Hypothalamus",
+    "Brain - Nucleus accumbens (basal ganglia)",
+    "Brain - Putamen (basal ganglia)",
+    "Brain - Spinal cord (cervical c-1)",
+    "Brain - Substantia nigra",
+    "Breast - Mammary Tissue",
+    "Cells - Cultured fibroblasts",
+    "Cells - EBV-transformed lymphocytes",
+    "Cervix - Ectocervix",
+    "Cervix - Endocervix",
+    "Colon - Sigmoid",
+    "Colon - Transverse",
+    "Esophagus - Gastroesophageal Junction",
+    "Esophagus - Mucosa",
+    "Esophagus - Muscularis",
+    "Fallopian Tube",
+    "Heart - Atrial Appendage",
+    "Heart - Left Ventricle",
+    "Kidney - Cortex",
+    "Kidney - Medulla",
+    "Liver",
+    "Lung",
+    "Minor Salivary Gland",
+    "Muscle - Skeletal",
+    "Nerve - Tibial",
+    "Ovary",
+    "Pancreas",
+    "Pituitary",
+    "Prostate",
+    "Skin - Not Sun Exposed (Suprapubic)",
+    "Skin - Sun Exposed (Lower leg)",
+    "Small Intestine - Terminal Ileum",
+    "Spleen",
+    "Stomach",
+    "Testis",
+    "Thyroid",
+    "Uterus",
+    "Vagina",
+    "Whole Blood"
+  ],
+  "panel": {
+    "Adipose_Subcutaneous": "Adipose - Subcutaneous",
+    "Adipose_Visceral_Omentum": "Adipose - Visceral (Omentum)",
+    "Adrenal_Gland": "Adrenal Gland",
+    "Artery_Aorta": "Artery - Aorta",
+    "Artery_Coronary": "Artery - Coronary",
+    "Artery_Tibial": "Artery - Tibial",
+    "Bladder": "Bladder",
+    "Brain_Amygdala": "Brain - Amygdala",
+    "Brain_Anterior_cingulate_cortex_BA24": "Brain - Anterior cingulate cortex (BA24)",
+    "Brain_Caudate_basal_ganglia": "Brain - Caudate (basal ganglia)",
+    "Brain_Cerebellar_Hemisphere": "Brain - Cerebellar Hemisphere",
+    "Brain_Cerebellum": "Brain - Cerebellum",
+    "Brain_Cortex": "Brain - Cortex",
+    "Brain_Frontal_Cortex_BA9": "Brain - Frontal Cortex (BA9)",
+    "Brain_Hippocampus": "Brain - Hippocampus",
+    "Brain_Hypothalamus": "Brain - Hypothalamus",
+    "Brain_Nucleus_accumbens_basal_ganglia": "Brain - Nucleus accumbens (basal ganglia)",
+    "Brain_Putamen_basal_ganglia": "Brain - Putamen (basal ganglia)",
+    "Brain_Spinal_cord_cervical_c_1": "Brain - Spinal cord (cervical c-1)",
+    "Brain_Substantia_nigra": "Brain - Substantia nigra",
+    "Breast_Mammary_Tissue": "Breast - Mammary Tissue",
+    "Cells_Cultured_fibroblasts": "Cells - Cultured fibroblasts",
+    "Cells_EBV_transformed_lymphocytes": "Cells - EBV-transformed lymphocytes",
+    "Cervix_Ectocervix": "Cervix - Ectocervix",
+    "Cervix_Endocervix": "Cervix - Endocervix",
+    "Colon_Sigmoid": "Colon - Sigmoid",
+    "Colon_Transverse": "Colon - Transverse",
+    "Esophagus_Gastroesophageal_Junction": "Esophagus - Gastroesophageal Junction",
+    "Esophagus_Mucosa": "Esophagus - Mucosa",
+    "Esophagus_Muscularis": "Esophagus - Muscularis",
+    "Fallopian_Tube": "Fallopian Tube",
+    "Heart_Atrial_Appendage": "Heart - Atrial Appendage",
+    "Heart_Left_Ventricle": "Heart - Left Ventricle",
+    "Kidney_Cortex": "Kidney - Cortex",
+    "Kidney_Medulla": "Kidney - Medulla",
+    "Liver": "Liver",
+    "Lung": "Lung",
+    "Minor_Salivary_Gland": "Minor Salivary Gland",
+    "Muscle_Skeletal": "Muscle - Skeletal",
+    "Nerve_Tibial": "Nerve - Tibial",
+    "Ovary": "Ovary",
+    "Pancreas": "Pancreas",
+    "Pituitary": "Pituitary",
+    "Prostate": "Prostate",
+    "Skin_Not_Sun_Exposed_Suprapubic": "Skin - Not Sun Exposed (Suprapubic)",
+    "Skin_Sun_Exposed_Lower_leg": "Skin - Sun Exposed (Lower leg)",
+    "Small_Intestine_Terminal_Ileum": "Small Intestine - Terminal Ileum",
+    "Spleen": "Spleen",
+    "Stomach": "Stomach",
+    "Testis": "Testis",
+    "Thyroid": "Thyroid",
+    "Uterus": "Uterus",
+    "Vagina": "Vagina",
+    "Whole_Blood": "Whole Blood"
+  },
+  "what_the_run_will_write": "data/results/runrules_result.json",
+  "the_code_that_runs_it": "genomeos/attribution/runrules.py and scripts/runrules_run.py, committed before this registration",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "network": "none: every input is already on this machine",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the 24 compiled non-coding programs",
+        "version": "pinned by sha256 in inputs"
+      },
+      {
+        "accession": "data/results/gene_rates.json (mouse NIH 3T3, e921fae)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/runrules_census.json (this lane)",
+        "version": "pinned"
+      },
+      {
+        "accession": "GTEx v8 gene median TPM, GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9",
+        "version": "the cached file, pinned by sha256; only its header line was read"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/results/gene_rates.json",
+        "sha256": "0948028fe65f49e20043131e661b4f125b12c0880bcc3af216522ed1a3514bc8",
+        "bytes": 1169712,
+        "partition": null
+      },
+      {
+        "path": "data/results/runrules_census.json",
+        "sha256": "93d1bc6af809cbb3eb587da4c11fe8ff157c3bb38e8257d9e57df17aaaad41b8",
+        "bytes": 272546,
+        "partition": null
+      },
+      {
+        "path": "data/cache/c5/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_median_tpm.gct.gz",
+        "sha256": "ee7201ff2f280b0de5657d4b08e9a240362d9757efed7f7bd5dba35a5f8617b8",
+        "bytes": 6952331,
+        "partition": "the measured outcome, pinned by sha256 only; no value read here"
+      }
+    ],
+    "input_count": 27,
+    "assembly": "GRCh38 for the compiled programs; GTEx rows are matched by symbol only",
+    "coordinates": "n/a: no interval is read, written or compared",
+    "parameters": {
+      "min_reference_tissues": 20,
+      "min_population": 500,
+      "pseudocount": 1.0,
+      "bootstrap": {
+        "resamples": 2000,
+        "seed": 20261010,
+        "unit": "gene: genes are resampled with replacement and carry all their (gene, tissue) pairs",
+        "interval": "95% percentile interval of Delta MSE"
+      },
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      },
+      "control_alpha": 0.05,
+      "runtime": {
+        "hours": 40.0,
+        "dt": 0.05,
+        "strict": true,
+        "start": "every species at 0"
+      },
+      "closed_form_tolerance": 1e-06
+    },
+    "exclusions": [
+      "every compiled context not named for a GTEx tissue: no hand-made mapping is made",
+      "pairs with several mechanisms in their tissue, pooled over programs",
+      "genes whose symbol is not on exactly one GTEx row",
+      "genes with fewer than 20 panel tissues free of any compiled rule"
+    ],
+    "partitions": "n/a: no training partition; every compiled panel pair that qualifies is scored",
+    "code_cleanliness": {
+      "git_sha": "71dc377152a5494f48f8994983def3cefab6a994",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/runrules_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/runrules_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/runrules_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/coords.py",
+        "genomeos/evidence.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/runrules_census.py",
+        "scripts/runrules_register.py"
+      ],
+      "counting_path_count": 25,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "71dc377152a5494f48f8994983def3cefab6a994",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/runrules_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "71dc377152a5494f48f8994983def3cefab6a994",
+      "code_cleanliness_git_sha": "71dc377152a5494f48f8994983def3cefab6a994",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 71dc377"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 104,
+      "opens_under_data": 28,
+      "files_read": 27,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
