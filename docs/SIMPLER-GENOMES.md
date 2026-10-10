@@ -156,3 +156,174 @@ element. It is one stage (young adults), five tissues, one source.
    per-cell element activity and per-cell RNA can be joined on the lineage.
 4. Then Drosophila (genome-wide STARR-seq and embryo enhancer tiles exist; sizes and licences not
    yet checked), fugu as the compact vertebrate, and mouse for transfer, each without a model request.
+
+## 6. Stage 2: the worm's constraint tiers, registered (2026-10-10, lane-simpler2)
+
+Item 2 of section 5. No money, no key, no model request. The phyloP tracks were read by HTTP range
+request and nothing of them was stored.
+
+Code: `genomeos/attribution/simpler_tiers.py` (imports `simpler.py`, unchanged),
+`scripts/simpler_tiers_run.py` (`tiers`, `register`, `score`), `tests/test_simpler_tiers.py`.
+Results: `data/results/simpler_worm_tiers.json` (cuts, histograms, per-element counts; `1e61925`),
+`simpler_worm_tiers_registration.json` (`752f7fc`), `simpler_worm_tiers_result.json` (`25e25fd`).
+Each was written from a clean worktree of the committed tree.
+
+### How the human tiers were derived, and what transfers
+
+A human base is constrained when its Zoonomia phyloP score is positive and its q value is at most
+0.05. Christmas et al. 2023 (Science 380:eabn3943), Methods: "We computed a mammalian phyloP
+threshold by converting the p values corresponding to the phyloP scores into q values using a FDR
+correction. We considered any column with a resulting q ≤ 0.05 to be significantly evolutionarily
+constrained or accelerated, as determined by the sign of the score." On the 241-mammal track that
+procedure gives 2.27 (`constraint.PHYLOP_THRESHOLD`). A block of the regulatory class is "under
+constraint" when at least 5% of its measured bases pass (`budget.CONSTRAINED_MIN`, `budget._rule`).
+
+The nematode tracks were checked on 2026-10-10. The UCSC ce11 READMEs and track descriptions give
+no significance cut-off. They say "the absolute values of the scores represent -log p-values under
+a null hypothesis of neutral evolution", computed per column by a likelihood-ratio test
+(`--method LRT`, `--mode CONACC`), with the neutral model fitted by phyloFit on 4-fold degenerate
+sites. Neither track has a publication of its own. phyloP135way aligns 134 genomes to C. elegans:
+111 nematodes, 22 flatworms and Ciona. Its guide tree comes from shared k-mers ("not necessarily
+biologically correct", README). phyloP26way aligns 26 nematodes. Neither the number 2.27 nor any
+other number was borrowed. Zoonomia's procedure was applied to each track's own scores:
+p = 10^-|score| for every scored base, Benjamini-Hochberg at q = 0.05 over both signs, and a
+constrained base is one with a positive score at or above the cut.
+
+The distribution was read from a uniform sample of data blocks. The blocks of chrI to V and X, in
+file order, were cut into consecutive groups of 16, and 10% of the groups were drawn with seed
+20261010. Every scored base sits in exactly one block, so every scored base had the same chance of
+being sampled. The cut's interval is a bootstrap over the sample's 1-Mb windows.
+
+| track | 5% FDR cut [95%] | scored bases sampled | pass: all scored | non-exon | CDS | other exon | intron | intergenic | bytes moved |
+|---|---|---|---|---|---|---|---|---|---|
+| phyloP135way (primary) | 2.08 [2.05, 2.12] | 9,496,101 | 15.7% | 7.2% | 39.6% | 13.7% | 7.7% | 6.6% | 56,378,275 |
+| phyloP26way (beside) | 2.15 [2.12, 2.17] | 5,848,517 | 14.4% | 3.1% | 31.3% | 8.4% | 3.9% | 1.7% | 32,712,304 |
+
+The registered instrument check passed on both tracks: the cut places more CDS than intron bases
+above it. For comparison, Zoonomia's 5% FDR set is 3.26% of the human genome. Coding sequence
+dominates what aligns across nematodes, and that accounts for most of the worm's larger share.
+
+**Element tiers.** Stage 1's 5,814 single-tissue putative enhancers are all 150 bp. Exon bases of
+any transcript were removed first, because the human tiers are measured on unknown space, which
+excludes exons. The human regulatory-class rule then applies: an element is constrained when at
+least 5% of its remaining scored bases pass. On phyloP135way, 3,894 elements are constrained, 1,117
+are not, and 803 have no scored base left (not measured). On phyloP26way the counts are 1,290,
+2,860 and 1,664. The human 5% rule puts 78% of the measured elements (3,894 of 5,011) in the
+constrained tier on the primary track. Under that rule 8 of 150 bases are enough, while 7.2% of
+the worm's non-exon scored bases pass the cut. The human rule was set in a genome where 3.26% of
+all bases pass. This was seen in the tier counts before anything was registered. The rule was kept
+as the primary and a dose view was named beside it.
+
+### The registered test
+
+Registered in `simpler_tiers.REGISTRATION` and committed in `752f7fc` before the RNA sheet was read
+against any tier. `score` refuses to run unless the registration, the tiers file and the module are
+committed and unchanged, and unless the census recomputes to the registered one.
+
+- **Question.** Does constraint carry tissue information beyond the domain rule? Among the
+  single-tissue elements, is the domain-rule gene concordant (stage 1's endpoint, unchanged) more
+  often for constrained elements than for unconstrained ones?
+- **Matching.** Strata are tissue × inside a gene body or between genes × the distance bin of the
+  domain-rule gene's 5' end (stage 1's 8 bins) × measured-length tertile. The length tertile edges
+  coincide at 150 bp, so the length strata are in effect "fully measured" and "less". 100 of 113
+  strata hold both tiers: 3,865 constrained and 1,109 unconstrained elements.
+- **Statistic.** The difference in concordance, standardised to the constrained elements' strata.
+  The 95% interval is a percentile cluster bootstrap over 1-Mb windows. The MDE was 4.8 points
+  before clustering.
+- **Falsifier.** A within-stratum permutation of the tier label (1,000 permutations). The claim is
+  FALSIFIED if p ≥ 0.05.
+- **Decision.** CONSTRAINT_ADDS, NO_DIFFERENCE_DETECTED or CONSTRAINT_BELOW, read from the interval.
+- **Stop rule.** Fewer than 200 elements per tier in support stops the run unscored. The test is run
+  once.
+- **Confound, stated in advance.** Stage 1 named transcription. Transcribed sequence can be
+  constrained for splicing, trans-splicing or RNA-level reasons. Exons are removed and position is
+  a stratum, but introns and outrons are not removed, and outrons are not annotated. A difference
+  would therefore not separate regulatory constraint from transcription-linked constraint.
+
+### Result (2026-10-10, registration `752f7fc`)
+
+Outcome **NO_DIFFERENCE_DETECTED**. Falsifier **FALSIFIED** (permutation p 0.105). The registered
+reading, verbatim:
+
+> On 5,011 C. elegans putative enhancers accessible in exactly one of five tissues (Serizay et al. 2020) with constraint measured on their exon-free bases (UCSC ce11 phyloP135way, cut re-derived at 5% FDR by Zoonomia's procedure), the domain-rule gene is expressed at 5 TPM or more and highest in the element's own tissue for 2,093 of 3,865 constrained elements (54.2%), against 51.5% for the 1,109 not constrained at the same tissue, position class, distance and measured length; difference +2.63 points, 95% -1.35 to +7.03 over 1-Mb clusters (within-stratum permutation p 0.105; FALSIFIED). No difference was detected: on this endpoint constraint adds no detectable tissue information to the domain rule's position. This is not evidence that constrained elements lack function. Conservation and accessibility are not function, and this run does not separate regulatory constraint from transcription-linked constraint.
+
+The views below are reported beside the registered test and decide nothing. Each is matched the
+same way, with a percentile interval over 1-Mb clusters and a within-stratum permutation p.
+
+| view | constrained / not, in support | constrained | matched not | difference, points [95%] | p |
+|---|---|---|---|---|---|
+| inside a gene body | 2,263 / 505 | 54.2% | 51.9% | +2.32 [-3.52, +8.13] | 0.18 |
+| between genes | 1,602 / 604 | 54.1% | 51.0% | +3.08 [-2.08, +8.92] | 0.13 |
+| germline | 163 / 171 | 56.4% | 60.3% | -3.89 [-13.34, +6.34] | 0.75 |
+| neurons | 1,096 / 225 | 52.4% | 46.3% | +6.06 [-1.47, +14.44] | 0.061 |
+| muscle | 972 / 221 | 46.4% | 34.1% | +12.31 [+3.49, +21.02] | 0.004 |
+| hypodermis | 1,028 / 276 | 56.1% | 59.7% | -3.54 [-11.86, +5.16] | 0.81 |
+| intestine | 606 / 216 | 65.8% | 72.7% | -6.84 [-14.76, +2.53] | 0.97 |
+| phyloP26way tiers (cut 2.15) | 1,287 / 2,819 | 57.1% | 52.4% | +4.71 [+0.95, +8.36] | 0.007 |
+| dose view: constrained fraction ≥ 0.19 against < 0.08 (phyloP135way) | 1,664 / 1,563 | 54.6% | 47.9% | +6.69 [+2.11, +11.68] | 0.001 |
+
+Without matching, 2,104 of 3,894 constrained elements (54.0%) are concordant, against 599 of 1,117
+unconstrained (53.6%). 28 domain-rule genes are absent from the RNA sheet and count as not
+concordant, as in stage 1.
+
+**What this says and what it does not.** On the registered test, the worm's constraint tier carries
+no detectable tissue information beyond the domain rule's position. The difference is +2.63 points
+and its interval spans zero, and the permutation does not separate it from chance. This is a
+negative result for the registered tier: the 5% rule taken from human, on the 135-genome track.
+
+It is not evidence that constrained elements lack function. Two views beside the test point the
+other way, and neither decides anything:
+
+- **The dose view.** The top third of elements by constrained fraction against the bottom third
+  gives +6.69 [+2.11, +11.68].
+- **The 26-genome track.** Its tiers on the same elements give +4.71 [+0.95, +8.36]. That track
+  has a stricter tier, with 31% of measured elements constrained against 78% on the primary.
+
+Both are consistent with a reading that a coarse tier dilutes a graded signal. That reading was not
+the registered question. Testing it needs its own registration, on a second source, before it is
+run. The tissues disagree: muscle +12.31 [+3.49, +21.02], and germline, hypodermis and intestine
+negative, each interval spanning zero. The confound named in advance stands in every view.
+Conservation and accessibility are not function, and none of these views separates regulatory
+constraint from transcription-linked constraint.
+
+### What follows from stage 2
+
+1. A registered dose test: constrained fraction as a continuous or top-tertile variable, with the
+   cut-points fixed before the run, on a second source (Jänes et al. 2018 or Durham et al. 2021).
+   This one cannot be re-tested on Serizay 2020 without the views above informing it.
+2. An element rule derived for the worm rather than borrowed. The 5% fraction would be re-derived
+   against the worm's own non-exon base rate in the way the base cut was, on a population that
+   does not read this endpoint.
+
+## 7. Drosophila: what measured data exists (inventory, no test; 2026-10-10, lane-simpler2)
+
+Checked on 2026-10-10. Sizes are bytes as served (HTTP Content-Length or Content-Range). Only files
+under 1 MB were opened. Nothing was kept in the project. The Vienna tiles, phyloP124way, phyloP27way
+and Calderon peak URLs were re-checked by HEAD request. "Not stated" means the source states no
+licence that was found. No licence is inferred.
+
+| source | measures | assembly | where | bytes | licence |
+|---|---|---|---|---|---|
+| Kvon et al. 2014, Nature 512:91 (Vienna Tiles) | Gal4 reporter tiles in embryos, stages 4–16: 7,793 tiles, 3,604 active, annotated with anatomy terms per stage | dm3 | enhancers.starklab.org/download/tiles/all | 957,907 | not stated (cite the paper) |
+| BDGP in situ (gene side for the tiles) | embryo in situ terms by stage, 99,319 rows; presence/absence, not quantitative | gene IDs | insitu.fruitfly.org/insitu-mysql-dump/insitu_annot.csv.gz | 486,763 | "All rights reserved" |
+| Arnold et al. 2013, Science 339:1074 (STARR-seq) | STARR-seq peaks (S2 3,966; OSC 3,835), with DHS and RNA in the same two cell lines | dm3 | GEO GSE40739 | 1,730,560 (archive) | GEO: no restrictions |
+| Zabidi et al. 2015, Nature 518:556 | STARR-seq with developmental and housekeeping core promoters, S2 and OSC, 5,408 to 6,217 peaks per set | dm3 | GEO GSE57876 | 64,877 to 88,054 per peak file | GEO: no restrictions |
+| REDfly v10 (Rivera et al. 2019, NAR 47:D828) | curated reporter-tested CRMs: 58,241 (17,272 in vivo) | Release 6 annotation; coordinate build not checked | redfly.ccr.buffalo.edu; bulk export not verified | not checked | CC BY-NC-ND 4.0 |
+| Cusanovich et al. 2018, Nature 555:538 | sci-ATAC on embryos at 2–4, 6–8 and 10–12 h; no RNA | dm3 | GEO GSE101581 | 894,832,640 (archive) | not stated |
+| Calderon et al. 2022, Science 377:eabn5800 | sci-ATAC (about 1M nuclei) and sci-RNA (about 0.5M) over 0–20 h embryos, 110,185 peaks, tissue labels in both | dm6 | shendure-web.gs.washington.edu (DEAP) peaks.bed; GEO GSE190147 | 2,532,609 (peaks); 697,773,156 (RNA matrix) | not stated |
+| Reddington et al. 2020, Dev Cell 55:648 | DNase on sorted neural and mesoderm nuclei, 4–12 h | dm3 | ArrayExpress E-MTAB-8881 | 328,669,420 per bigWig | not stated |
+| Bozek et al. 2019, Genome Res 29:771 | ATAC in anterior–posterior domains of the blastoderm | dm3 | GEO GSE118240 | 744,281 (one peak file) | not stated |
+| FlyAtlas2 (Leader et al. 2018, NAR 46:D809) | tissue RNA-seq, adult and larva; no embryo | gene IDs | FlyBase precomputed high-throughput expression table | 25,841,525 | CC BY 4.0 (FlyBase) |
+| UCSC dm6 phyloP27way, phyloP124way | per-base conservation | dm6 | hgdownload.soe.ucsc.edu/goldenPath/dm6/ | 415,668,365; 470,242,283 | "freely available for public use"; no cut-off given |
+| modERN (Kudron et al. 2018, Genetics 208:937) | 640 TF ChIP-seq experiments | dm6 | ENCODE portal | about 200 KB per peak file | ENCODE: no restrictions |
+
+**What the fly offers and what it lacks.** Calderon et al. 2022 is the one dm6 source that labels
+accessibility and RNA in the same embryo tissues over the same windows, which is the worm test's
+design. It measures accessibility rather than tested activity, the two assays come from different
+nuclei, and no licence is stated. Measured enhancer activity in vivo (the Vienna tiles) pairs only
+with presence/absence in situ calls, so "expressed highest" cannot be measured on it. Only 79 of
+228 tile terms match BDGP term names exactly, and BDGP reserves all rights. No quantitative embryo
+tissue RNA was found, and no adult or larval tissue accessibility was found to pair with
+FlyAtlas2. The tiles, both STARR-seq sets, Cusanovich, Reddington and Bozek are on dm3 and would
+need lifting to dm6 for the conservation tracks. UCSC gives no phyloP cut-off for dm6 either, so
+the cut would be re-derived here in the same way.
