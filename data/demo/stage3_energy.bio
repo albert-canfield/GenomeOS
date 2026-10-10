@@ -1,0 +1,83 @@
+# Stage 3 of the economy model: energy and mitochondria (BIOLANG-v0.4-ECONOMY.md §6, §9.5).
+# One nucleated cell whose ATP pool is refilled per hour by glycolysis, the TCA cycle and oxidative
+# phosphorylation, with the stoichiometry of bio.std.core_metabolism and both ends of its spread.
+#
+# Every number of the CELL below is declared, not measured, and registered before this file existed
+# (genomeos/runtime/metabolism_gate.py): this project holds no measured ATP turnover, consumer split,
+# uptake or respiratory capacity for any cell type, and no clause compares these with a measurement.
+module demo.stage3_energy
+import bio.std.core_metabolism
+
+compartment Extracellular { evidence: curated "Alberts et al., Molecular Biology of the Cell 6e"; confidence: 0.9 }
+compartment PlasmaMembrane { parent: Extracellular; membrane: yes
+  evidence: curated "Alberts MBoC 6e"; confidence: 0.9 }
+compartment Cytosol { parent: PlasmaMembrane; volume: 0.7; absolute_volume: 1400 fL; translation: yes
+  evidence: experimental "a HeLa-scale cell, for a demonstration"; confidence: 0.4 }
+compartment Nucleus { parent: Cytosol; volume: 0.06; absolute_volume: 120 fL; genome: nuclear
+  evidence: experimental "Alberts MBoC 6e Table 12-1"; confidence: 0.6 }
+# §6's own example: 70% of the mitochondrial genome copies carry m.3243A>G. The cell has the reserve
+# to carry its demand with fewer than 30% of them, so this load is below its threshold (§9.5 clause 8).
+compartment Mitochondrion { parent: Cytosol; volume: 0.22; genome: chrM; translation: yes; copies: 1000
+  heteroplasmy: m.3243A>G = 0.7
+  evidence: inferred "copy number declared for a demonstration; the variant is §6's example"; confidence: 0.2 }
+
+# the energy currency, refilled by the three processes of the reduced module
+pool ATP { location: Cytosol; size: 3e9; regenerates: from Glycolysis, TCA, OXPHOS; returns_as: ADP
+  evidence: experimental "standing stock: Milo 2013, BioEssays 35:1050, as stage 2's demo states it"
+  confidence: 0.5 }
+# the substrates: a rate is the most the cell can take up per hour
+pool Glucose { location: Cytosol; size: 1e9; regenerates: 2e9 /h
+  evidence: inferred "an uptake ceiling declared for a demonstration, not measured"; confidence: 0.2 }
+pool O2 { location: Cytosol; size: 1e9; regenerates: 3e9 /h
+  evidence: inferred "an oxygen supply declared for a demonstration, not measured"; confidence: 0.2 }
+
+param oxphos_capacity_per_copy = 2e7 molecules/h {
+  evidence: inferred "electron pairs per hour per mitochondrial copy, declared so the cell has a reserve; not measured"
+  confidence: 0.2 }
+
+# Four ATP consumers at an equal 2.5e9 ATP per hour. Equal on purpose: no measured split is held, so
+# the program claims none. The per-event costs are the textbook ones (§5.2, polymerisation only).
+event protein_synthesis { rate: 6.25e8 /h; cost: ATP 4 per event
+  evidence: curated "4 ATP equivalents per peptide bond (2 aminoacylation, 2 GTP elongation); the rate is declared"
+  confidence: 0.3 }
+event rna_dna_synthesis { rate: 1.25e9 /h; cost: ATP 2 per event
+  evidence: curated "about 2 ATP per nucleotide polymerised; the rate is declared"; confidence: 0.3 }
+event na_k_pumping { rate: 2.5e9 /h; cost: ATP 1 per event
+  evidence: curated "one ATP per Na+/K+-ATPase cycle (3 Na+ out, 2 K+ in); the rate is declared"; confidence: 0.3 }
+event ca_pumping { rate: 2.5e9 /h; cost: ATP 1 per event
+  evidence: curated "one Ca2+ per ATP at the plasma-membrane Ca2+-ATPase; the rate is declared"; confidence: 0.3 }
+
+# When ATP is short, who is cut first. The order is Buttgereit & Brand 1995's (Biochem J 312:163,
+# abstract): macromolecule synthesis is most sensitive to energy supply, then sodium cycling, then
+# calcium cycling. Served first is the least sensitive. This is written in, so a run that reproduces
+# the order reproduces this line, not a prediction (§9.5 clause 7).
+allocation energy_stress { pool: ATP; policy: priority; order: ca_pumping, na_k_pumping, rna_dna_synthesis, protein_synthesis
+  evidence: curated "Buttgereit & Brand 1995, Biochem J 312:163: macromolecule biosynthesis most sensitive to energy supply, then sodium cycling, then calcium cycling"
+  confidence: 0.5 }
+
+# the yields at both ends of the spread, from bio.std.core_metabolism
+# test: metabolism.high.yield_aerobic == 32
+# test: metabolism.low.yield_aerobic == 28
+# test: metabolism.high.yield_anaerobic == 2
+# test: metabolism.copies == 1000
+# test: metabolism.mutant_copies == 700
+# full oxygen and glucose: demand met by oxidation alone, below the heteroplasmy threshold
+# test: metabolism.high.atp_supply == 1e10
+# test: metabolism.high.glucose_uptake == 3.125e8
+# test: metabolism.high.o2_uptake == 1.875e9
+# test: metabolism.high.lactate == 0
+# test: metabolism.high.oxphos_share == 0.875
+# test: metabolism.low.met == 1
+# test: metabolism.low.glucose_uptake > 3.5714e8
+# test: metabolism.low.glucose_uptake < 3.5715e8
+# no oxygen: glycolysis at its uptake ceiling makes 4e9 of the 1e10 asked, and the cut follows the order
+# test: metabolism.high.met == 0.4 in O2=0
+# test: metabolism.low.met == 0.4 in O2=0
+# test: metabolism.high.oxphos_share == 0 in O2=0
+# test: metabolism.high.glucose_uptake == 2e9 in O2=0
+# test: metabolism.high.lactate == 4e9 in O2=0
+# test: metabolism.high.factor.ca_pumping == 1 in O2=0
+# test: metabolism.high.factor.na_k_pumping == 0.6 in O2=0
+# test: metabolism.high.factor.protein_synthesis == 0 in O2=0
+# no glucose: the reduced module has no other fuel, so this cell makes nothing
+# test: metabolism.high.atp_supply == 0 in Glucose=0

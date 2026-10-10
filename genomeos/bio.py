@@ -20,6 +20,9 @@
     # test: active_rules == 3 in cell_type=K562     rules in that cell's network; held_rules: the
                                     ones held there at strength 0, by its reader
                                     (BIOLANG-v0.5-READER.md) or by a stated `strength: unknown`
+    # test: metabolism.high.met == 0.4 in O2=0       v0.4 stage 3: the program's metabolism, per arm of
+                                    the yields' spread (high, low); `in POOL=rate` sets that pool's
+                                    supply per hour (BIOLANG-v0.4-ECONOMY.md §6)
 
 GenomeOS is the first application of this toolchain; nothing here needs
 the genome layer, so it can be packaged apart (docs/ARCHITECTURE.md).
@@ -127,7 +130,11 @@ def evaluate(
     body_subjects = ("cells", "alive", "deaths")
     contexts = {_key(getattr(t, "context", {})): getattr(t, "context", {}) for t in tests}
     needs_run = any(
-        t[0] not in facts and t[0] not in body_subjects and not getattr(t, "context", None) for t in tests
+        t[0] not in facts
+        and t[0] not in body_subjects
+        and not t[0].startswith("metabolism.")
+        and not getattr(t, "context", None)
+        for t in tests
     )
     traj = None
     results: list[dict[str, Any]] = []
@@ -144,6 +151,22 @@ def evaluate(
             results.append({"test": "methylation rates are bound", "got": str(e)[:120], "ok": False})
         else:
             needs_run = False
+    # v0.4 stage 3: a `metabolism.` line is judged on the program's metabolism, once per context, and a
+    # context there names pools whose supply per hour is set (`in O2=0` is anoxia), never a cell
+    metabolism: dict[tuple, dict[str, float] | None] = {}
+    for t in tests:
+        ctx = getattr(t, "context", {}) or {}
+        if not t[0].startswith("metabolism.") or _key(ctx) in metabolism:
+            continue
+        from genomeos.runtime.metabolism import Metabolism, MetabolismError
+
+        try:
+            supply = {k: float(v) for k, v in ctx.items()}
+            metabolism[_key(ctx)] = Metabolism.from_module(module, supply=supply).readings()
+        except (MetabolismError, ValueError) as e:
+            metabolism[_key(ctx)] = None
+            where = " in " + ", ".join(f"{k}={v}" for k, v in ctx.items()) if ctx else ""
+            results.append({"test": f"metabolism runs{where}", "got": str(e)[:120], "ok": False})
     if getattr(module, "located", False):  # v0.4: the wild type, then each experiment's knockouts
         from genomeos.runtime.located import LocatedRuntime
 
@@ -160,7 +183,11 @@ def evaluate(
     in_context: dict[tuple, Any] = {}
     for key, ctx in contexts.items():
         wanted = [t for t in tests if _key(getattr(t, "context", {})) == key]
-        if not ctx or not module.rules or all(t[0] in facts for t in wanted):
+        if (
+            not ctx
+            or not module.rules
+            or all(t[0] in facts or t[0].startswith("metabolism.") for t in wanted)
+        ):
             continue
         if getattr(module, "located", False):
             from genomeos.runtime.located import LocatedRuntime
@@ -243,6 +270,8 @@ def evaluate(
             got = len(module.active_rules(ctx))
         elif subject == "held_rules":
             got = len(module.held_rules(ctx))  # the reader's holds and `strength: unknown`, each once
+        elif subject.startswith("metabolism."):
+            got = (metabolism.get(_key(ctx)) or {}).get(subject[len("metabolism.") :])
         elif ctx:
             kind, run = in_context.get(_key(ctx), (None, None))
             got = None

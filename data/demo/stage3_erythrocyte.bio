@@ -1,0 +1,58 @@
+# Stage 3, the glycolysis-only cell: a red blood cell has no mitochondria, so its ATP pool is refilled by
+# glycolysis alone (BIOLANG-v0.4-ECONOMY.md §6 gate (iii), §9.5 clause 5). What it may not claim is the
+# rest of that gate: the ATP and 2,3-BPG concentration ranges of Mulquiney & Kuchel 1999 are not held
+# here, and a concentration is a kinetic quantity this module of stoichiometry and capacities cannot
+# produce. It reports fluxes per hour.
+#
+# The pump rates and the uptake ceiling are declared, not measured, and registered before this file
+# existed (genomeos/runtime/metabolism_gate.py). The shunt fraction is the one measured-derived number.
+module demo.stage3_erythrocyte
+import bio.std.core_metabolism
+
+compartment Extracellular { evidence: curated "Alberts et al., Molecular Biology of the Cell 6e"; confidence: 0.9 }
+compartment PlasmaMembrane { parent: Extracellular; membrane: yes
+  evidence: curated "Alberts MBoC 6e"; confidence: 0.9 }
+compartment Cytosol { parent: PlasmaMembrane; volume: 1.0; absolute_volume: 94 fL
+  evidence: experimental "the mature erythrocyte has no nucleus and no mitochondria; cytosol 'averages 94 um3 at 300 mOsmol/kg' (Diez-Silva et al. 2010, MRS Bulletin 35:382)"
+  confidence: 0.7 }
+
+# no mitochondrion, so the pool names glycolysis only
+pool ATP { location: Cytosol; size: 1.5e8; regenerates: from Glycolysis; returns_as: ADP
+  evidence: inferred "a standing stock declared for a demonstration; nothing here reads it per hour"
+  confidence: 0.2 }
+pool Glucose { location: Cytosol; size: 1e8; regenerates: 5e8 /h
+  evidence: inferred "an uptake ceiling declared for a demonstration, not measured"; confidence: 0.2 }
+# the cell is full of oxygen it carries and does not use: lowering it must change nothing here
+pool O2 { location: Cytosol; size: 1e9; regenerates: 3e9 /h
+  evidence: inferred "an oxygen supply declared so that removing it can be shown to change nothing"
+  confidence: 0.2 }
+
+# the Rapoport-Luebering shunt: a fifth of the triose flux bypasses phosphoglycerate kinase to make
+# 2,3-BPG, at one ATP lost per triose, so a glucose yields 2 - 2 x 0.19 = 1.62 ATP here
+param bpg_shunt = 0.19 fraction {
+  evidence: curated "Mulquiney, Bubb & Kuchel 1999, Biochem J 342:567, abstract: 'the percentage of glycolytic carbon flux that passes through the 2,3-BPG shunt in the normal in vivo steady state was estimated to be 19%'"
+  confidence: 0.5 }
+
+event na_k_pumping { rate: 1e8 /h; cost: ATP 1 per event
+  evidence: curated "one ATP per Na+/K+-ATPase cycle; the rate is declared"; confidence: 0.3 }
+event ca_pumping { rate: 1e8 /h; cost: ATP 1 per event
+  evidence: curated "one Ca2+ per ATP at the plasma-membrane Ca2+-ATPase; the rate is declared"; confidence: 0.3 }
+allocation pump_share { pool: ATP; policy: proportional
+  evidence: inferred "no order between the two pumps is claimed"; confidence: 0.3 }
+
+# test: metabolism.copies == 0
+# test: metabolism.high.yield_anaerobic == 1.62
+# test: metabolism.high.atp_supply == 2e8
+# test: metabolism.high.atp.OXPHOS == 0
+# test: metabolism.high.atp.TCA == 0
+# test: metabolism.high.o2_uptake == 0
+# test: metabolism.high.glucose_uptake > 1.2345679e8
+# test: metabolism.high.glucose_uptake < 1.234568e8
+# test: metabolism.low.atp_supply == 2e8
+# test: metabolism.high.bpg_shunt_flux > 4.6913e7
+# test: metabolism.high.bpg_shunt_flux < 4.6914e7
+# oxygen does not reach it: the same supply with none
+# test: metabolism.high.atp_supply == 2e8 in O2=0
+# glucose removed: the glycolysis-only cell collapses
+# test: metabolism.high.atp_supply == 0 in Glucose=0
+# test: metabolism.high.factor.na_k_pumping == 0 in Glucose=0

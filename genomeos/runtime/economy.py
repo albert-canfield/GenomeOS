@@ -64,15 +64,26 @@ class Economy:
     `lengths` maps an entity id to the length its per-base or per-residue costs multiply — transcript
     nucleotides for a gene, residues for a protein. It is supplied by the caller because the runtime
     knows it and the IR does not always: a gene may carry a locus, a sequence, both or neither.
+
+    `capacity` (stage 3, v0.4 §6) replaces a pool's `size` as what its demand is held against, for the
+    pools it names. A pool's size is a standing stock, and a draw over an interval is held against what
+    can be supplied over it: the stage 3 metabolism passes the ATP made per hour, or a stock plus what
+    is made over a cycle. A pool it does not name is held against its size, exactly as in stage 2.
     """
 
     pools: dict[str, Pool]
     costs: dict[str, list[Cost]]
     allocations: dict[str, Allocation] = field(default_factory=dict)
     lengths: dict[str, float] = field(default_factory=dict)
+    capacity: dict[str, float] = field(default_factory=dict)
 
     @classmethod
-    def from_module(cls, module: Module, lengths: dict[str, float] | None = None) -> Economy:
+    def from_module(
+        cls,
+        module: Module,
+        lengths: dict[str, float] | None = None,
+        capacity: dict[str, float] | None = None,
+    ) -> Economy:
         pools = {e.id: e for e in module.entities.values() if isinstance(e, Pool)}
         allocations = {}
         for e in module.entities.values():
@@ -87,7 +98,13 @@ class Economy:
             got = list(getattr(ev, "costs", None) or [])
             if got:
                 costs[ev.id] = got
-        econ = cls(pools=pools, costs=costs, allocations=allocations, lengths=dict(lengths or {}))
+        econ = cls(
+            pools=pools,
+            costs=costs,
+            allocations=allocations,
+            lengths=dict(lengths or {}),
+            capacity=dict(capacity or {}),
+        )
         econ.check()
         return econ
 
@@ -110,8 +127,17 @@ class Economy:
                         f"{entity} charges {c.pool} per {c.per} and no length is known for it:"
                         " charging zero would make a long molecule as cheap as a short one"
                     )
+        for pool in sorted(self.capacity):
+            if pool not in self.pools:
+                problems.append(f"a capacity is given for {pool}, which no pool declares")
+            elif self.capacity[pool] < 0:
+                problems.append(f"the capacity given for {pool} is negative")
         if problems:
             raise EconomyError("; ".join(problems))
+
+    def capacity_of(self, pool: str) -> float:
+        """What a pool's demand is held against: a capacity given for it, or else its size."""
+        return float(self.capacity[pool]) if pool in self.capacity else float(self.pools[pool].size)
 
     # ---- demand and supply -----------------------------------------------------------------
     def draws(self, work: dict[str, float]) -> list[Draw]:
@@ -147,7 +173,7 @@ class Economy:
         demand = self.demand_by_pool(work)
         share: dict[str, dict[str, float]] = {}
         for pool, wanted in demand.items():
-            capacity = float(self.pools[pool].size)
+            capacity = self.capacity_of(pool)
             policy = (self.allocations.get(pool) or Allocation(id="", kind="allocation")).policy
             share[pool] = self._share(pool, policy, capacity, wanted, work)
         factors = dict.fromkeys(work, 1.0)
@@ -194,9 +220,9 @@ class Economy:
         return {
             "pools": {
                 pool: {
-                    "capacity": float(p.size),
+                    "capacity": self.capacity_of(pool),
                     "demand": round(demand.get(pool, 0.0), 6),
-                    "oversubscribed": demand.get(pool, 0.0) > float(p.size),
+                    "oversubscribed": demand.get(pool, 0.0) > self.capacity_of(pool),
                     "policy": (self.allocations.get(pool) or Allocation(id="", kind="allocation")).policy,
                 }
                 for pool, p in sorted(self.pools.items())

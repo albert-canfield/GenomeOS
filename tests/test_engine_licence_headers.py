@@ -109,9 +109,12 @@ DECLARE_NOTHING_TESTS = ("tests/test_unstated_confidence.py",)
 
 #: Shipped non-`.py` files: the standard library's BioLang modules. They carry prose comment headers
 #: and there is no SPDX convention for `.bio` at all, so this is an open question, not a defect.
+#: 2026-10-10: core_metabolism.bio joined, v0.4 stage 3 (lane-stage3, registered in e09edf7); it follows
+#: the other modules' prose header rather than settling the open question on its own. 7 -> 8 files.
 DECLARE_NOTHING_BIO = (
     "genomeos/std/ageing.bio",
     "genomeos/std/cell_types.bio",
+    "genomeos/std/core_metabolism.bio",
     "genomeos/std/development.bio",
     "genomeos/std/human_stages.bio",
     "genomeos/std/human_turnover.bio",

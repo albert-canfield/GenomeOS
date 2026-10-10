@@ -1,0 +1,66 @@
+# bio.std.core_metabolism — the reduced metabolic module of BioLang v0.4 stage 3
+# (docs/BIOLANG-v0.4-ECONOMY.md §6): glycolysis, the TCA cycle and oxidative phosphorylation, as the
+# textbook stoichiometry per glucose and per pyruvate, and the P/O ratios with their spread.
+#
+# The engine holds none of these numbers. `genomeos/runtime/metabolism.py` reads them from the program,
+# so a program that imports this module states the accounting it runs, and a program that states its
+# own (`param core_metabolism.po_nadh = 2.7 { ... }` after the import) overrides it with its evidence.
+#
+# Two ends of the spread are run side by side, never one chosen: the HIGH end uses P/O 2.5 (NADH) and
+# 1.5 (FADH2) and brings cytosolic NADH in through the malate-aspartate shuttle (as NADH); the LOW end
+# uses 2.3 and 1.4 and brings it in through the glycerol 3-phosphate shuttle (as FADH2). That gives 32
+# and 28 ATP per glucose oxidised in full; 2.5/1.5 through the glycerol 3-phosphate shuttle gives 30.
+module bio.std.core_metabolism
+
+# glycolysis, per glucose, to pyruvate: 2 ATP invested (hexokinase, phosphofructokinase), 4 made
+# (phosphoglycerate kinase and pyruvate kinase, twice each), 2 NADH from glyceraldehyde-3-phosphate
+# dehydrogenase
+param core_metabolism.glycolysis_atp = 2 {
+  evidence: curated "textbook stoichiometry of glycolysis: net 2 ATP per glucose (Alberts et al., Molecular Biology of the Cell 6e)"
+  confidence: 0.9 }
+param core_metabolism.glycolysis_nadh = 2 {
+  evidence: curated "textbook stoichiometry: 2 NADH per glucose at glyceraldehyde-3-phosphate dehydrogenase"
+  confidence: 0.9 }
+param core_metabolism.glycolysis_pyruvate = 2 {
+  evidence: curated "textbook stoichiometry: 2 pyruvate per glucose"
+  confidence: 0.9 }
+# the 2,3-BPG shunt bypasses phosphoglycerate kinase, so each triose sent through it makes one ATP
+# fewer; how much flux takes the shunt is a property of the cell (`param bpg_shunt`), not stated here
+param core_metabolism.shunt_atp_lost = 1 {
+  evidence: curated "the Rapoport-Luebering shunt bypasses the phosphoglycerate kinase step (1 ATP per triose)"
+  confidence: 0.9 }
+# without oxygen, lactate dehydrogenase reoxidises the glycolytic NADH on pyruvate
+param core_metabolism.lactate_per_pyruvate = 1 {
+  evidence: curated "textbook stoichiometry: pyruvate + NADH -> lactate + NAD+"
+  confidence: 0.9 }
+
+# pyruvate dehydrogenase and one turn of the TCA cycle, per pyruvate
+param core_metabolism.tca_nadh = 4 {
+  evidence: curated "textbook stoichiometry: 1 NADH at pyruvate dehydrogenase and 3 in the TCA cycle per pyruvate"
+  confidence: 0.9 }
+param core_metabolism.tca_fadh2 = 1 {
+  evidence: curated "textbook stoichiometry: 1 FADH2 at succinate dehydrogenase per turn"
+  confidence: 0.9 }
+param core_metabolism.tca_atp = 1 {
+  evidence: curated "textbook stoichiometry: 1 GTP (ATP equivalent) at succinyl-CoA synthetase per turn"
+  confidence: 0.9 }
+
+# oxidative phosphorylation: ATP per electron pair (the P/O ratio), and oxygen per pair
+param core_metabolism.po_nadh = 2.5 {
+  evidence: experimental "Hinkle 2005, BBA 1706:1: 'Values of about 2.5 with NADH-linked substrates and 1.5 with succinate are consistent with most reports'"
+  confidence: 0.7 }
+param core_metabolism.po_fadh2 = 1.5 {
+  evidence: experimental "Hinkle 2005, BBA 1706:1 (succinate-linked)"
+  confidence: 0.7 }
+param core_metabolism.po_nadh_low = 2.3 {
+  evidence: experimental "Hinkle 2005, BBA 1706:1: an H+/ATP of 10/3 is 'consistent with P/O ratios of 2.3 with NADH and 1.4 with succinate, values that are also possible'"
+  confidence: 0.5 }
+param core_metabolism.po_fadh2_low = 1.4 {
+  evidence: experimental "Hinkle 2005, BBA 1706:1 (succinate-linked, the 10/3 reading)"
+  confidence: 0.5 }
+param core_metabolism.o2_per_pair = 0.5 {
+  evidence: curated "two electrons reduce one oxygen atom, half an O2 (the P/O ratio is per O atom)"
+  confidence: 0.9 }
+
+# test: parameters == 13
+# test: unknown_parameters == 0
