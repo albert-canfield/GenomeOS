@@ -1,0 +1,1913 @@
+{
+  "result": "forge_calibration_inventory",
+  "date": "2026-10-10",
+  "what": "the inventory that could become a calibration record for BioForge's design answers: every (design question, BioForge's answer, published outcome) triple the repository holds or could pose, with the registered circularity rules applied (genomeos/forge/calibration_inventory.py)",
+  "registered": {
+    "commit": "5df76f2",
+    "on": "2026-10-10",
+    "minimum_independent_triples": 38
+  },
+  "programs_scanned": {
+    "data/organisms/celegans/acvu.bio": {
+      "design": 0,
+      "experiment": 4
+    },
+    "data/organisms/celegans/designs.bio": {
+      "design": 2,
+      "experiment": 0
+    },
+    "data/organisms/celegans/mutants.bio": {
+      "design": 0,
+      "experiment": 10
+    },
+    "data/organisms/celegans/plasticity.bio": {
+      "design": 0,
+      "experiment": 5
+    },
+    "data/organisms/human/haematopoiesis_designs.bio": {
+      "design": 2,
+      "experiment": 0
+    },
+    "data/organisms/human/haematopoiesis_mutants.bio": {
+      "design": 0,
+      "experiment": 9
+    },
+    "data/organisms/human/intestine_mutants.bio": {
+      "design": 0,
+      "experiment": 8
+    },
+    "data/organisms/human/oxphos.bio": {
+      "design": 0,
+      "experiment": 3
+    }
+  },
+  "counts": {
+    "design_blocks": 4,
+    "design_triples_with_a_published_outcome_in_the_repository": 3,
+    "design_triples_whose_outcome_is_only_a_rule_s_evidence": 1,
+    "design_triples_circular_by_rule": {
+      "same_source": 4,
+      "acceptance_check": 3,
+      "authored_frame": 4,
+      "evidence_is_the_model": 2
+    },
+    "design_triples_independent": 0,
+    "design_answers_tied": 1,
+    "experiment_blocks": 39,
+    "experiments_with_a_published_citation": 37,
+    "expressible_as_inverse_design_questions": 27,
+    "set_aside_published_experiments": 10,
+    "inverse_triples_circular_by_rule": {
+      "same_source": 27,
+      "acceptance_check": 27,
+      "authored_frame": 0,
+      "evidence_is_the_model": 0
+    },
+    "inverse_triples_independent": 0,
+    "independent_triples": 0,
+    "minimum_independent_triples": 38,
+    "shortfall": 38
+  },
+  "decision": "shortfall of 38: no calibration is registered and no match rate is computed; no inverse design question was posed to BioForge",
+  "what_a_calibration_would_need": "at least 38 design questions whose published outcome (a) is cited by no element of the model and by no gate registration the program names, (b) is not shipped as an experiment block or `# test:` line that bio test runs against the same model, and (c) is posed over a candidate list fixed by a rule written before the question (every factor the organism declares), with (d) a publication as the design's evidence. In this repository every published outcome is also an acceptance check of the model it would be scored on, so such questions can only come from publications held out before a module is written; none is held out today",
+  "design_triples": [
+    {
+      "program": "data/organisms/celegans/designs.bio",
+      "design": "two_intestinal_founders",
+      "answer": "-POP-1",
+      "solved": true,
+      "loss": 0.0,
+      "tied_with_the_answer": [],
+      "tie_broken_by": null,
+      "evaluations": 7,
+      "feasible_candidates": 2,
+      "varies_knobs": false,
+      "question": {
+        "targets": [
+          "type EPrecursor at 100 min = 2"
+        ],
+        "keeps": [
+          "type ABpPrecursor at 50 min = 1",
+          "type CPrecursor at 100 min = 1"
+        ],
+        "candidates": [
+          "POP-1",
+          "SKN-1",
+          "PIE-1",
+          "PAL-1",
+          "APX-1",
+          "GLP-1"
+        ]
+      },
+      "design_evidence": "Lin et al. 1995: without POP-1, MS takes the E fate",
+      "published_outcome": {
+        "experiment": "data/organisms/celegans/mutants.bio pop1",
+        "knockouts": [
+          "POP-1"
+        ],
+        "citation": "Lin et al. 1995, Cell 83:599",
+        "found_by": "the design's own citation"
+      },
+      "outcome_recorded_only_as_rule_evidence": null,
+      "answer_matches_the_recorded_outcome": true,
+      "circular": [
+        "same_source",
+        "acceptance_check",
+        "authored_frame"
+      ],
+      "independent": false
+    },
+    {
+      "program": "data/organisms/celegans/designs.bio",
+      "design": "two_ems_founders_no_germline",
+      "answer": "-PIE-1",
+      "solved": true,
+      "loss": 0.0,
+      "tied_with_the_answer": [],
+      "tie_broken_by": null,
+      "evaluations": 6,
+      "feasible_candidates": 6,
+      "varies_knobs": false,
+      "question": {
+        "targets": [
+          "type EMSPrecursor at 60 min = 2",
+          "type GermCell at 150 min = 0"
+        ],
+        "keeps": [],
+        "candidates": [
+          "POP-1",
+          "SKN-1",
+          "PIE-1",
+          "PAL-1",
+          "APX-1"
+        ]
+      },
+      "design_evidence": "Mello et al. 1992: without PIE-1, P2 takes the EMS fate",
+      "published_outcome": {
+        "experiment": "data/organisms/celegans/mutants.bio pie1",
+        "knockouts": [
+          "PIE-1"
+        ],
+        "citation": "Mello et al. 1992, Cell 70:163",
+        "found_by": "the design's own citation"
+      },
+      "outcome_recorded_only_as_rule_evidence": null,
+      "answer_matches_the_recorded_outcome": true,
+      "circular": [
+        "same_source",
+        "acceptance_check",
+        "authored_frame"
+      ],
+      "independent": false
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_designs.bio",
+      "design": "lose_neutrophils_keep_the_rest",
+      "answer": "-GFI1",
+      "solved": true,
+      "loss": 0.0,
+      "tied_with_the_answer": [],
+      "tie_broken_by": null,
+      "evaluations": 11,
+      "feasible_candidates": 2,
+      "varies_knobs": false,
+      "question": {
+        "targets": [
+          "type Neutrophil at 3 yr = 0"
+        ],
+        "keeps": [
+          "type Erythrocyte at 3 yr >= 2e13",
+          "type Monocyte at 3 yr >= 1e9",
+          "type BCell at 3 yr >= 1e11",
+          "type TCell at 3 yr >= 1e11"
+        ],
+        "candidates": [
+          "TAL1",
+          "GATA1",
+          "KLF1",
+          "SPI1",
+          "CEBPA",
+          "GFI1",
+          "IRF8",
+          "PAX5",
+          "NOTCH1",
+          "IKZF1"
+        ]
+      },
+      "design_evidence": "the module's requirements: GFI1 is needed by myeloblasts only, C/EBPa also by the GMP",
+      "published_outcome": null,
+      "outcome_recorded_only_as_rule_evidence": [
+        "GMP_to_Myeloblast: Hock et al. 2003 (GFI1: neutropenia); ~4 divisions myeloblast to metamyelocyte"
+      ],
+      "answer_matches_the_recorded_outcome": null,
+      "circular": [
+        "same_source",
+        "authored_frame",
+        "evidence_is_the_model"
+      ],
+      "independent": false
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_designs.bio",
+      "design": "no_lymphocytes_at_all",
+      "answer": "-IKZF1",
+      "solved": true,
+      "loss": 0.0,
+      "tied_with_the_answer": [
+        "-TCF3"
+      ],
+      "tie_broken_by": "label order (forge.run_design's final sort)",
+      "evaluations": 29,
+      "feasible_candidates": 22,
+      "varies_knobs": false,
+      "question": {
+        "targets": [
+          "type BCell at 3 yr = 0",
+          "type TCell at 3 yr = 0"
+        ],
+        "keeps": [
+          "type Erythrocyte at 3 yr >= 2e13",
+          "type Neutrophil at 3 yr >= 1e11"
+        ],
+        "candidates": [
+          "SPI1",
+          "PAX5",
+          "NOTCH1",
+          "IKZF1",
+          "TCF3",
+          "EBF1",
+          "GATA3"
+        ]
+      },
+      "design_evidence": "one factor upstream of both lineages, or one per lineage",
+      "published_outcome": {
+        "experiment": "data/organisms/human/haematopoiesis_mutants.bio ikzf1",
+        "knockouts": [
+          "IKZF1"
+        ],
+        "citation": "Georgopoulos et al. 1994, Cell 79:143",
+        "found_by": "an experiment over the same model whose knockouts are the answer and whose asserts include every target"
+      },
+      "outcome_recorded_only_as_rule_evidence": null,
+      "answer_matches_the_recorded_outcome": true,
+      "circular": [
+        "same_source",
+        "acceptance_check",
+        "authored_frame",
+        "evidence_is_the_model"
+      ],
+      "independent": false
+    }
+  ],
+  "experiment_triples": [
+    {
+      "program": "data/organisms/celegans/acvu.bio",
+      "experiment": "ablate_z1ppp",
+      "perturbation": {
+        "knockouts": [],
+        "adds": []
+      },
+      "citation": "Kimble 1981, Dev Biol 87:286",
+      "citation_keys": [
+        "Kimble 1981"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "no knockout",
+        "changes the environment (ablate=Z1ppp)"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:VentralUterine cites Kimble 1981",
+        "decisions:presents_lag2 cites Kimble 1981",
+        "decisions:gon herm anch cites Kimble 1981",
+        "decisions:uterine_flanking cites Kimble 1981",
+        "decisions:ablate_Z1ppp cites Kimble 1981",
+        "decisions:ablate_Z4aaa cites Kimble 1981"
+      ],
+      "independent": false,
+      "asserts": [
+        "type AnchorCell at 4200 min = 1"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/acvu.bio",
+      "experiment": "ablate_z4aaa",
+      "perturbation": {
+        "knockouts": [],
+        "adds": []
+      },
+      "citation": "Kimble 1981, Dev Biol 87:286",
+      "citation_keys": [
+        "Kimble 1981"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "no knockout",
+        "changes the environment (ablate=Z4aaa)"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:VentralUterine cites Kimble 1981",
+        "decisions:presents_lag2 cites Kimble 1981",
+        "decisions:gon herm anch cites Kimble 1981",
+        "decisions:uterine_flanking cites Kimble 1981",
+        "decisions:ablate_Z1ppp cites Kimble 1981",
+        "decisions:ablate_Z4aaa cites Kimble 1981"
+      ],
+      "independent": false,
+      "asserts": [
+        "type AnchorCell at 4200 min = 1"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/acvu.bio",
+      "experiment": "ablate_both",
+      "perturbation": {
+        "knockouts": [],
+        "adds": []
+      },
+      "citation": "Kimble 1981, Dev Biol 87:286",
+      "citation_keys": [
+        "Kimble 1981"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "no knockout",
+        "changes the environment (ablate=both)"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:VentralUterine cites Kimble 1981",
+        "decisions:presents_lag2 cites Kimble 1981",
+        "decisions:gon herm anch cites Kimble 1981",
+        "decisions:uterine_flanking cites Kimble 1981",
+        "decisions:ablate_Z1ppp cites Kimble 1981",
+        "decisions:ablate_Z4aaa cites Kimble 1981"
+      ],
+      "independent": false,
+      "asserts": [
+        "type AnchorCell at 4200 min = 0",
+        "type VentralUterine at 4200 min = 2"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/acvu.bio",
+      "experiment": "ablate_flanking",
+      "perturbation": {
+        "knockouts": [],
+        "adds": []
+      },
+      "citation": "Kimble 1981, Dev Biol 87:286",
+      "citation_keys": [
+        "Kimble 1981"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "no knockout",
+        "changes the environment (ablate=Z1ppa)"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:VentralUterine cites Kimble 1981",
+        "decisions:presents_lag2 cites Kimble 1981",
+        "decisions:gon herm anch cites Kimble 1981",
+        "decisions:uterine_flanking cites Kimble 1981",
+        "decisions:ablate_Z1ppp cites Kimble 1981",
+        "decisions:ablate_Z4aaa cites Kimble 1981"
+      ],
+      "independent": false,
+      "asserts": [
+        "type AnchorCell at 4200 min = 1"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "pop1",
+      "perturbation": {
+        "knockouts": [
+          "POP-1"
+        ],
+        "adds": []
+      },
+      "citation": "Lin et al. 1995, Cell 83:599",
+      "citation_keys": [
+        "Lin 1995"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:fate_MS cites Lin 1995",
+        "decisions:fate_E cites Lin 1995"
+      ],
+      "independent": false,
+      "asserts": [
+        "type EPrecursor at 100 min = 2",
+        "type MSPrecursor at 100 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "skn1",
+      "perturbation": {
+        "knockouts": [
+          "SKN-1"
+        ],
+        "adds": []
+      },
+      "citation": "Bowerman et al. 1992, Cell 68:1061",
+      "citation_keys": [
+        "Bowerman 1992"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:div_P0 cites Bowerman 1992",
+        "decisions:fate_EMS cites Bowerman 1992"
+      ],
+      "independent": false,
+      "asserts": [
+        "type CPrecursor at 100 min = 3",
+        "type MSPrecursor at 100 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "pie1",
+      "perturbation": {
+        "knockouts": [
+          "PIE-1"
+        ],
+        "adds": []
+      },
+      "citation": "Mello et al. 1992, Cell 70:163",
+      "citation_keys": [
+        "Mello 1992"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:EMSPrecursor cites Mello 1992",
+        "decisions:div_P0 cites Mello 1992",
+        "decisions:div_P1 cites Mello 1992",
+        "decisions:fate_EMS cites Mello 1992"
+      ],
+      "independent": false,
+      "asserts": [
+        "type EMSPrecursor at 60 min = 2",
+        "type GermCell at 200 min = 0",
+        "type ABaPrecursor at 50 min = 2"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "apx1",
+      "perturbation": {
+        "knockouts": [
+          "APX-1"
+        ],
+        "adds": []
+      },
+      "citation": "Mello et al. 1994, Cell 77:95",
+      "citation_keys": [
+        "Mello 1994"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:Notch_P2_ABp cites Mello 1994",
+        "decisions:fate_ABa cites Mello 1994",
+        "decisions:fate_ABp cites Mello 1994"
+      ],
+      "independent": false,
+      "asserts": [
+        "type ABaPrecursor at 50 min = 2",
+        "type ABpPrecursor at 50 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "glp1",
+      "perturbation": {
+        "knockouts": [
+          "GLP-1"
+        ],
+        "adds": []
+      },
+      "citation": "Priess, Schnabel & Schnabel 1987, Cell 51:601",
+      "citation_keys": [
+        "Priess 1987"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:ABaPrecursor cites Priess 1987",
+        "entities:ABpPrecursor cites Priess 1987",
+        "decisions:fate_ABa cites Priess 1987"
+      ],
+      "independent": false,
+      "asserts": [
+        "type ABaPrecursor at 50 min = 2"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "mom2",
+      "perturbation": {
+        "knockouts": [
+          "MOM-2"
+        ],
+        "adds": []
+      },
+      "citation": "Thorpe et al. 1997, Cell 90:695",
+      "citation_keys": [
+        "Thorpe 1997"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:Wnt_P2_EMS cites Thorpe 1997",
+        "decisions:div_EMS_no_wnt cites Thorpe 1997"
+      ],
+      "independent": false,
+      "asserts": [
+        "type MSPrecursor at 100 min = 2",
+        "type EPrecursor at 100 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "mom5",
+      "perturbation": {
+        "knockouts": [
+          "MOM-5"
+        ],
+        "adds": []
+      },
+      "citation": "Rocheleau et al. 1997, Cell 90:707",
+      "citation_keys": [
+        "Rocheleau 1997"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:Wnt_P2_EMS cites Rocheleau 1997",
+        "decisions:div_EMS_no_wnt cites Rocheleau 1997"
+      ],
+      "independent": false,
+      "asserts": [
+        "type MSPrecursor at 100 min = 2"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "pal1",
+      "perturbation": {
+        "knockouts": [
+          "PAL-1"
+        ],
+        "adds": []
+      },
+      "citation": "Hunter & Kenyon 1996, Cell 87:217",
+      "citation_keys": [
+        "Hunter 1996"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:div_P2 cites Hunter 1996",
+        "decisions:div_P3 cites Hunter 1996",
+        "decisions:fate_C cites Hunter 1996",
+        "decisions:fate_D cites Hunter 1996"
+      ],
+      "independent": false,
+      "asserts": [
+        "type CPrecursor at 200 min = 0",
+        "type DPrecursor at 200 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "par2",
+      "perturbation": {
+        "knockouts": [
+          "PAR-2"
+        ],
+        "adds": []
+      },
+      "citation": "Kemphues et al. 1988, Cell 52:311; Boyd et al. 1996, Development 122:3075; Du et al. 2014, Cell 156:359",
+      "citation_keys": [
+        "Kemphues 1988",
+        "Boyd 1996",
+        "Du 2014"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:div_P0 cites Kemphues 1988",
+        "decisions:div_P0_no_par3 cites Kemphues 1988",
+        "decisions:div_P0_no_par3 cites Boyd 1996",
+        "decisions:div_P1_no_par2 cites Boyd 1996",
+        "decisions:div_P0_no_par3 cites Du 2014",
+        "decisions:div_P1_no_par2 cites Du 2014"
+      ],
+      "independent": false,
+      "asserts": [
+        "type EMSPrecursor at 50 min = 2",
+        "type ABaPrecursor at 50 min = 2",
+        "type ABpPrecursor at 50 min = 0",
+        "type MSPrecursor at 100 min = 2",
+        "type EPrecursor at 100 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/mutants.bio",
+      "experiment": "par3",
+      "perturbation": {
+        "knockouts": [
+          "PAR-3"
+        ],
+        "adds": []
+      },
+      "citation": "Kemphues et al. 1988, Cell 52:311; Bowerman et al. 1993, Cell 74:443; Du et al. 2014, Cell 156:359",
+      "citation_keys": [
+        "Kemphues 1988",
+        "Bowerman 1993",
+        "Du 2014"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:div_P0 cites Kemphues 1988",
+        "decisions:div_P0_no_par3 cites Kemphues 1988",
+        "decisions:div_P0_no_par3 cites Bowerman 1993",
+        "decisions:div_P0_no_par3 cites Du 2014",
+        "decisions:div_P1_no_par2 cites Du 2014",
+        "decisions:fate_EMS cites Du 2014"
+      ],
+      "independent": false,
+      "asserts": [
+        "type EMSPrecursor at 20 min = 1",
+        "type ABpPrecursor at 50 min = 1",
+        "type EPrecursor at 100 min = 1"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/plasticity.bio",
+      "experiment": "hlh1_early",
+      "perturbation": {
+        "knockouts": [],
+        "adds": [
+          "MES-2",
+          "hsHLH-1"
+        ]
+      },
+      "citation": "Fukushige & Krause 2005, Development 132:1795",
+      "citation_keys": [
+        "Fukushige 2005"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "no knockout",
+        "adds a factor at a later time"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:ectopic_muscle cites Fukushige 2005",
+        "competences:early_plasticity cites Fukushige 2005",
+        "commitments:terminal_fate cites Fukushige 2005",
+        "commitments:differentiated cites Fukushige 2005"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Muscle at 800 min >= 550",
+        "type Neuron at 800 min = 0",
+        "type Intestine at 800 min = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/plasticity.bio",
+      "experiment": "hlh1_late",
+      "perturbation": {
+        "knockouts": [],
+        "adds": [
+          "MES-2",
+          "hsHLH-1"
+        ]
+      },
+      "citation": "Fukushige & Krause 2005, Development 132:1795",
+      "citation_keys": [
+        "Fukushige 2005"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "no knockout",
+        "adds a factor at a later time"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:ectopic_muscle cites Fukushige 2005",
+        "competences:early_plasticity cites Fukushige 2005",
+        "commitments:terminal_fate cites Fukushige 2005",
+        "commitments:differentiated cites Fukushige 2005"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Muscle at 800 min in 110..130",
+        "type Neuron at 800 min >= 200",
+        "type Intestine at 800 min >= 30"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/plasticity.bio",
+      "experiment": "hlh1_late_mes2",
+      "perturbation": {
+        "knockouts": [
+          "MES-2"
+        ],
+        "adds": [
+          "MES-2",
+          "hsHLH-1"
+        ]
+      },
+      "citation": "Yuzyuk et al. 2009, Dev Cell 16:699",
+      "citation_keys": [
+        "Yuzyuk 2009"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "adds a factor at a later time"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "competences:early_plasticity cites Yuzyuk 2009"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Muscle at 800 min >= 400",
+        "type Neuron at 800 min <= 60"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/plasticity.bio",
+      "experiment": "hlh1_late_pha4",
+      "perturbation": {
+        "knockouts": [
+          "PHA-4"
+        ],
+        "adds": [
+          "MES-2",
+          "hsHLH-1"
+        ]
+      },
+      "citation": "Yuzyuk et al. 2009, Dev Cell 16:699 (loss of pha-4/FoxA or end-1/GATA does not prolong plasticity)",
+      "citation_keys": [
+        "Yuzyuk 2009"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "adds a factor at a later time"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "competences:early_plasticity cites Yuzyuk 2009"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Muscle at 800 min in 110..130",
+        "type Neuron at 800 min >= 200"
+      ]
+    },
+    {
+      "program": "data/organisms/celegans/plasticity.bio",
+      "experiment": "hlh1_terminal_mes2",
+      "perturbation": {
+        "knockouts": [
+          "MES-2"
+        ],
+        "adds": [
+          "MES-2",
+          "hsHLH-1"
+        ]
+      },
+      "citation": "Fukushige & Krause 2005, Development 132:1795 (lost completely in terminally differentiated cells)",
+      "citation_keys": [
+        "Fukushige 2005"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "adds a factor at a later time"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "decisions:ectopic_muscle cites Fukushige 2005",
+        "competences:early_plasticity cites Fukushige 2005",
+        "commitments:terminal_fate cites Fukushige 2005",
+        "commitments:differentiated cites Fukushige 2005"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Neuron at 800 min >= 216",
+        "type Intestine at 800 min >= 26",
+        "type Hypodermis at 800 min >= 81",
+        "type GliaSheath at 800 min >= 20"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "gata1",
+      "perturbation": {
+        "knockouts": [
+          "GATA1"
+        ],
+        "adds": []
+      },
+      "citation": "Pevny et al. 1991, Nature 349:257; Fujiwara et al. 1996",
+      "citation_keys": [
+        "Pevny 1991",
+        "Fujiwara 1996"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:MEP cites Pevny 1991",
+        "decisions:CMP_to_MEP cites Pevny 1991",
+        "entities:MEP cites Fujiwara 1996",
+        "decisions:CMP_to_MEP cites Fujiwara 1996"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Erythrocyte at 3 yr = 0",
+        "type Neutrophil at 3 yr >= 1e9",
+        "type BCell at 3 yr >= 1e9",
+        "type TCell at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "klf1",
+      "perturbation": {
+        "knockouts": [
+          "KLF1"
+        ],
+        "adds": []
+      },
+      "citation": "Nuez et al. 1995, Nature 375:316; Perkins et al. 1995",
+      "citation_keys": [
+        "Nuez 1995",
+        "Perkins 1995"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:Erythroblast cites Nuez 1995",
+        "decisions:MEP_to_Erythroblast cites Nuez 1995",
+        "entities:Erythroblast cites Perkins 1995",
+        "decisions:MEP_to_Erythroblast cites Perkins 1995"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Erythrocyte at 3 yr = 0",
+        "type Neutrophil at 3 yr >= 1e9",
+        "type TCell at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "spi1",
+      "perturbation": {
+        "knockouts": [
+          "SPI1"
+        ],
+        "adds": []
+      },
+      "citation": "Scott et al. 1994, Science 265:1573",
+      "citation_keys": [
+        "Scott 1994"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:GMP cites Scott 1994",
+        "decisions:CMP_to_GMP cites Scott 1994"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Neutrophil at 3 yr = 0",
+        "type Monocyte at 3 yr = 0",
+        "type BCell at 3 yr = 0",
+        "type Erythrocyte at 3 yr >= 1e9",
+        "type TCell at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "cebpa",
+      "perturbation": {
+        "knockouts": [
+          "CEBPA"
+        ],
+        "adds": []
+      },
+      "citation": "Zhang et al. 1997, PNAS 94:569",
+      "citation_keys": [
+        "Zhang 1997"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:GMP cites Zhang 1997",
+        "decisions:CMP_to_GMP cites Zhang 1997"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Neutrophil at 3 yr = 0",
+        "type Erythrocyte at 3 yr >= 1e9",
+        "type BCell at 3 yr >= 1e9",
+        "type TCell at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "irf8",
+      "perturbation": {
+        "knockouts": [
+          "IRF8"
+        ],
+        "adds": []
+      },
+      "citation": "Holtschke et al. 1996, Cell 87:307",
+      "citation_keys": [
+        "Holtschke 1996"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:Monoblast cites Holtschke 1996",
+        "decisions:GMP_to_Monoblast cites Holtschke 1996"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Monocyte at 3 yr = 0",
+        "type Neutrophil at 3 yr >= 1e9",
+        "type Erythrocyte at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "pax5",
+      "perturbation": {
+        "knockouts": [
+          "PAX5"
+        ],
+        "adds": []
+      },
+      "citation": "Urbanek et al. 1994, Cell 79:901; Nutt et al. 1999",
+      "citation_keys": [
+        "Urbanek 1994",
+        "Nutt 1999"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:ProB cites Urbanek 1994",
+        "decisions:CLP_to_ProB cites Urbanek 1994"
+      ],
+      "independent": false,
+      "asserts": [
+        "type BCell at 3 yr = 0",
+        "type TCell at 3 yr >= 1e9",
+        "type Erythrocyte at 3 yr >= 1e9",
+        "type Neutrophil at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "notch1",
+      "perturbation": {
+        "knockouts": [
+          "NOTCH1"
+        ],
+        "adds": []
+      },
+      "citation": "Radtke et al. 1999, Immunity 10:547",
+      "citation_keys": [
+        "Radtke 1999"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:Thymocyte cites Radtke 1999",
+        "decisions:CLP_to_Thymocyte cites Radtke 1999"
+      ],
+      "independent": false,
+      "asserts": [
+        "type TCell at 3 yr = 0",
+        "type BCell at 3 yr >= 1e9",
+        "type Erythrocyte at 3 yr >= 1e9",
+        "type Neutrophil at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "ikzf1",
+      "perturbation": {
+        "knockouts": [
+          "IKZF1"
+        ],
+        "adds": []
+      },
+      "citation": "Georgopoulos et al. 1994, Cell 79:143",
+      "citation_keys": [
+        "Georgopoulos 1994"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:CLP cites Georgopoulos 1994",
+        "decisions:MPP_to_CLP cites Georgopoulos 1994"
+      ],
+      "independent": false,
+      "asserts": [
+        "type BCell at 3 yr = 0",
+        "type TCell at 3 yr = 0",
+        "type Erythrocyte at 3 yr >= 1e9",
+        "type Neutrophil at 3 yr >= 1e9"
+      ]
+    },
+    {
+      "program": "data/organisms/human/haematopoiesis_mutants.bio",
+      "experiment": "tal1",
+      "perturbation": {
+        "knockouts": [
+          "TAL1"
+        ],
+        "adds": []
+      },
+      "citation": "Shivdasani et al. 1995, Nature 373:432",
+      "citation_keys": [
+        "Shivdasani 1995"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:HSC cites Shivdasani 1995"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Erythrocyte at 3 yr = 0",
+        "type Neutrophil at 3 yr = 0",
+        "type Monocyte at 3 yr = 0",
+        "type BCell at 3 yr = 0",
+        "type TCell at 3 yr = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "tcf7l2",
+      "perturbation": {
+        "knockouts": [
+          "TCF7L2"
+        ],
+        "adds": []
+      },
+      "citation": "Korinek et al. 1998, Nat Genet 19:379",
+      "citation_keys": [
+        "Korinek 1998"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:ISC cites Korinek 1998",
+        "scripts/intestine_registration.py cites Korinek 1998"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Enterocyte at 1 yr = 0",
+        "type GobletCell at 1 yr = 0",
+        "type PanethCell at 1 yr = 0",
+        "type EnteroendocrineCell at 1 yr = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "ascl2",
+      "perturbation": {
+        "knockouts": [
+          "ASCL2"
+        ],
+        "adds": []
+      },
+      "citation": "van der Flier et al. 2009, Cell 136:903",
+      "citation_keys": [
+        "van der Flier 2009"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:ISC cites van der Flier 2009",
+        "scripts/intestine_registration.py cites van der Flier 2009"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Enterocyte at 1 yr = 0",
+        "type GobletCell at 1 yr = 0",
+        "type PanethCell at 1 yr = 0",
+        "type EnteroendocrineCell at 1 yr = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "rbpj",
+      "perturbation": {
+        "knockouts": [
+          "RBPJ"
+        ],
+        "adds": []
+      },
+      "citation": "van Es et al. 2005, Nature 435:959",
+      "citation_keys": [
+        "van Es 2005"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:TA cites van Es 2005",
+        "decisions:ISC_to_TA cites van Es 2005",
+        "scripts/intestine_registration.py cites van Es 2005"
+      ],
+      "independent": false,
+      "asserts": [
+        "type Enterocyte at 1 yr = 0",
+        "type GobletCell at 1 yr = 0",
+        "type PanethCell at 1 yr = 0",
+        "type EnteroendocrineCell at 1 yr = 0"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "atoh1",
+      "perturbation": {
+        "knockouts": [
+          "ATOH1"
+        ],
+        "adds": []
+      },
+      "citation": "Yang et al. 2001, Science 294:2155",
+      "citation_keys": [
+        "Yang 2001"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:SecretoryProgenitor cites Yang 2001",
+        "decisions:TA_to_SecretoryProgenitor cites Yang 2001",
+        "scripts/intestine_registration.py cites Yang 2001"
+      ],
+      "independent": false,
+      "asserts": [
+        "type GobletCell at 1 yr = 0",
+        "type PanethCell at 1 yr = 0",
+        "type EnteroendocrineCell at 1 yr = 0",
+        "type Enterocyte at 1 yr >= 1e+06"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "neurog3",
+      "perturbation": {
+        "knockouts": [
+          "NEUROG3"
+        ],
+        "adds": []
+      },
+      "citation": "Jenny et al. 2002, EMBO J 21:6338",
+      "citation_keys": [
+        "Jenny 2002"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "scripts/intestine_registration.py cites Jenny 2002"
+      ],
+      "independent": false,
+      "asserts": [
+        "type EnteroendocrineCell at 1 yr = 0",
+        "type Enterocyte at 1 yr >= 1e+06",
+        "type GobletCell at 1 yr >= 1e+06",
+        "type PanethCell at 1 yr >= 1e+06"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "gfi1",
+      "perturbation": {
+        "knockouts": [
+          "GFI1"
+        ],
+        "adds": []
+      },
+      "citation": "Shroyer et al. 2005, Genes Dev 19:2412",
+      "citation_keys": [
+        "Shroyer 2005"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "scripts/intestine_registration.py cites Shroyer 2005"
+      ],
+      "independent": false,
+      "asserts": [
+        "type GobletCell at 1 yr = 0",
+        "type PanethCell at 1 yr = 0",
+        "type Enterocyte at 1 yr >= 1e+06",
+        "type EnteroendocrineCell at 1 yr >= 1e+06"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "spdef",
+      "perturbation": {
+        "knockouts": [
+          "SPDEF"
+        ],
+        "adds": []
+      },
+      "citation": "Gregorieff et al. 2009, Gastroenterology 137:1333",
+      "citation_keys": [
+        "Gregorieff 2009"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "scripts/intestine_registration.py cites Gregorieff 2009"
+      ],
+      "independent": false,
+      "asserts": [
+        "type GobletCell at 1 yr = 0",
+        "type PanethCell at 1 yr = 0",
+        "type Enterocyte at 1 yr >= 1e+06",
+        "type EnteroendocrineCell at 1 yr >= 1e+06"
+      ]
+    },
+    {
+      "program": "data/organisms/human/intestine_mutants.bio",
+      "experiment": "sox9",
+      "perturbation": {
+        "knockouts": [
+          "SOX9"
+        ],
+        "adds": []
+      },
+      "citation": "Mori-Akiyama et al. 2007, Gastroenterology 133:539; Bastide et al. 2007, J Cell Biol 178:635",
+      "citation_keys": [
+        "Mori-Akiyama 2007",
+        "Bastide 2007"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": true,
+      "set_aside_because": [],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "scripts/intestine_registration.py cites Mori-Akiyama 2007",
+        "scripts/intestine_registration.py cites Bastide 2007"
+      ],
+      "independent": false,
+      "asserts": [
+        "type PanethCell at 1 yr = 0",
+        "type Enterocyte at 1 yr >= 1e+06",
+        "type GobletCell at 1 yr >= 1e+06",
+        "type EnteroendocrineCell at 1 yr >= 1e+06"
+      ]
+    },
+    {
+      "program": "data/organisms/human/oxphos.bio",
+      "experiment": "rho0",
+      "perturbation": {
+        "knockouts": [
+          "chrM"
+        ],
+        "adds": []
+      },
+      "citation": "King & Attardi 1989, Science 246:500",
+      "citation_keys": [
+        "King 1989"
+      ],
+      "published": true,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "the program grows no organism"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "scripts/located_mitochondrion.py cites King 1989"
+      ],
+      "independent": false,
+      "asserts": [
+        "CI@Mitochondrion == 0",
+        "CII@Mitochondrion > 0.05",
+        "CIII@Mitochondrion == 0",
+        "CIV@Mitochondrion == 0",
+        "CV@Mitochondrion == 0"
+      ]
+    },
+    {
+      "program": "data/organisms/human/oxphos.bio",
+      "experiment": "import_closed",
+      "perturbation": {
+        "knockouts": [
+          "TOM_TIM23",
+          "TOM_internal"
+        ],
+        "adds": []
+      },
+      "citation": "consequence of the routes (Wiedemann & Pfanner 2017); mitochondrial translation's own dependence on import is not modelled in stage 1",
+      "citation_keys": [
+        "Wiedemann 2017"
+      ],
+      "published": false,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "the program grows no organism"
+      ],
+      "circular": [
+        "same_source",
+        "acceptance_check"
+      ],
+      "same_source_where": [
+        "entities:TOM_TIM23 cites Wiedemann 2017",
+        "entities:TOM_internal cites Wiedemann 2017",
+        "entities:ATP5F1Ep cites Wiedemann 2017",
+        "entities:UQCR10p cites Wiedemann 2017",
+        "entities:ATP5MEp cites Wiedemann 2017",
+        "entities:NDUFA6p cites Wiedemann 2017"
+      ],
+      "independent": false,
+      "asserts": [
+        "CII@Mitochondrion == 0",
+        "CV@Mitochondrion == 0",
+        "stranded >= 80"
+      ]
+    },
+    {
+      "program": "data/organisms/human/oxphos.bio",
+      "experiment": "sdhb_without_presequence",
+      "perturbation": {
+        "knockouts": [
+          "SDHBp:presequence"
+        ],
+        "adds": []
+      },
+      "citation": "a mislocalisation must change the prediction",
+      "citation_keys": [],
+      "published": false,
+      "expressible_as_a_design_question": false,
+      "set_aside_because": [
+        "the program grows no organism"
+      ],
+      "circular": [
+        "acceptance_check"
+      ],
+      "same_source_where": [],
+      "independent": false,
+      "asserts": [
+        "CII@Mitochondrion == 0",
+        "CI@Mitochondrion > 0.05",
+        "stranded == 1"
+      ]
+    }
+  ],
+  "not_a_claim": "a census of what could be checked, not a check: no answer here is scored as right or wrong for calibration, and the one field comparing an answer with a recorded outcome (answer_matches_the_recorded_outcome) reports a circular match, which reproduces the model's own acceptance phenotype and is not a prediction",
+  "seconds": 41.3,
+  "money": "none: nothing is fetched, no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the BioLang programs under data/demo, genomeos/std, data/organisms in this repository",
+        "version": "the committed files, by sha256 in inputs"
+      },
+      {
+        "accession": "the citations recorded in those programs' evidence strings and in the gate registrations they name",
+        "version": "as committed; no publication was fetched or read"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "the organism programs the census parsed, with their imports",
+        "group": true,
+        "members": [
+          {
+            "path": "data/demo/celegans_lineage.bio",
+            "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+            "bytes": 4382
+          },
+          {
+            "path": "data/demo/cell_context.bio",
+            "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+            "bytes": 1659
+          },
+          {
+            "path": "data/demo/concentration_threshold.bio",
+            "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+            "bytes": 3525
+          },
+          {
+            "path": "data/demo/flag_organism.bio",
+            "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+            "bytes": 2920
+          },
+          {
+            "path": "data/demo/gastrulation.bio",
+            "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+            "bytes": 3765
+          },
+          {
+            "path": "data/demo/hoxd_order.bio",
+            "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+            "bytes": 3064
+          },
+          {
+            "path": "data/demo/lateral_inhibition.bio",
+            "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+            "bytes": 4042
+          },
+          {
+            "path": "data/demo/methylation_erosion.bio",
+            "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+            "bytes": 3260
+          },
+          {
+            "path": "data/demo/reader_gating.bio",
+            "sha256": "0334ee0b99c0aaff110adb1493462bf2af21b74ccc4e84c4be7cc6881be93f1e",
+            "bytes": 3513
+          },
+          {
+            "path": "data/demo/repressilator.bio",
+            "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+            "bytes": 2363
+          },
+          {
+            "path": "data/demo/segmentation_clock.bio",
+            "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+            "bytes": 1639
+          },
+          {
+            "path": "data/demo/stage2_pools.bio",
+            "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+            "bytes": 2117
+          },
+          {
+            "path": "data/demo/stage4_division.bio",
+            "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+            "bytes": 2322
+          },
+          {
+            "path": "data/organisms/celegans/acvu.bio",
+            "sha256": "4ec51b82b4b10908430af52c70cc4596138a9e94e1fe7baec0ee7f6f39706145",
+            "bytes": 10543
+          },
+          {
+            "path": "data/organisms/celegans/cell_types.bio",
+            "sha256": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c",
+            "bytes": 2604
+          },
+          {
+            "path": "data/organisms/celegans/designs.bio",
+            "sha256": "fb6e55433a51517be7c9684bfa6f8275ca5672b4a752078a8723c0a57299385c",
+            "bytes": 955
+          },
+          {
+            "path": "data/organisms/celegans/embryo.bio",
+            "sha256": "c3bf6a9b151f74547c3c0e2c0106ef85eadd82381ad97e87e0db133cb3b46ad3",
+            "bytes": 2118
+          },
+          {
+            "path": "data/organisms/celegans/embryo_contacts.bio",
+            "sha256": "aee021970ebafa59c7c8372e3ca38c0a4987e24bc8da9cde6925914bf2134169",
+            "bytes": 3020
+          },
+          {
+            "path": "data/organisms/celegans/embryo_factors.bio",
+            "sha256": "f674d6c1b591cad143b1f7c66a203dc3b35e84c09f03da482ac6598ed222834f",
+            "bytes": 3794
+          },
+          {
+            "path": "data/organisms/celegans/fates.bio",
+            "sha256": "b7ccefed754e4bbbd25ed1ff25b08d6d3db43838f9fddfc9a7cc130eb16d3298",
+            "bytes": 21509
+          },
+          {
+            "path": "data/organisms/celegans/founders.bio",
+            "sha256": "41cad2ec74552d79de29cc348e6ac51b0a1906980a3cec2f26d41c17c4b610e5",
+            "bytes": 7871
+          },
+          {
+            "path": "data/organisms/celegans/founders_contacts.bio",
+            "sha256": "35f52d00f904f2d2cdb923d373983c01bdd672160cab6640d88eafe7b0a58f83",
+            "bytes": 10983
+          },
+          {
+            "path": "data/organisms/celegans/lineage_embryo.bio",
+            "sha256": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+            "bytes": 239228
+          },
+          {
+            "path": "data/organisms/celegans/lineage_larva.bio",
+            "sha256": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+            "bytes": 123195
+          },
+          {
+            "path": "data/organisms/celegans/mutants.bio",
+            "sha256": "a083fef64ca7d797a3d01164fbc1cae51d25e12bdca60e69f7bf8291605ba701",
+            "bytes": 4459
+          },
+          {
+            "path": "data/organisms/celegans/plasticity.bio",
+            "sha256": "0b450393a8efb7fdf5e675a22b923687d20ee6d11982d82cf112afac3d2e673f",
+            "bytes": 6020
+          },
+          {
+            "path": "data/organisms/celegans/reader.bio",
+            "sha256": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+            "bytes": 792382
+          },
+          {
+            "path": "data/organisms/celegans/timers.bio",
+            "sha256": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+            "bytes": 13303
+          },
+          {
+            "path": "data/organisms/human/body.bio",
+            "sha256": "79c9baa7c90013a18f3d012864df1c50e55a2d9ddb84e25d02e466932ed91a9d",
+            "bytes": 5609
+          },
+          {
+            "path": "data/organisms/human/erythrocyte.bio",
+            "sha256": "0d3cc96e9d1826160839b2a12652bc4dcbc196f4aa7dd8ba2afdabc0a95b5f2f",
+            "bytes": 3199
+          },
+          {
+            "path": "data/organisms/human/haematopoiesis.bio",
+            "sha256": "41a822db0016898454ea86103305b69fc963a8ddda5f9168e091046b440912a7",
+            "bytes": 20643
+          },
+          {
+            "path": "data/organisms/human/haematopoiesis_designs.bio",
+            "sha256": "b5818f768dd55394b71a36f2e05260046d23caa7fe740832c3c909d61784a3de",
+            "bytes": 1207
+          },
+          {
+            "path": "data/organisms/human/haematopoiesis_mutants.bio",
+            "sha256": "fc76df6f7ae629522881f54c63fd5396de6e380d7b0ed1b770e5307dcb007196",
+            "bytes": 3401
+          },
+          {
+            "path": "data/organisms/human/intestine.bio",
+            "sha256": "e544fda061017a35b276539e94191879866a9ba6a667f416cf5f345149cf13f2",
+            "bytes": 10233
+          },
+          {
+            "path": "data/organisms/human/intestine_mutants.bio",
+            "sha256": "234244dbd2d40bd7f49fa0a750bc9a28383ac182fc65727497e90133a5b56ccb",
+            "bytes": 3812
+          },
+          {
+            "path": "data/organisms/human/noncoding_chr21.bio",
+            "sha256": "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192",
+            "bytes": 4979850
+          },
+          {
+            "path": "data/organisms/human/noncoding_chr21_v2.bio",
+            "sha256": "11bbff2f1a8ff41a49e0329aa2b3d9dae109638556a1e2a3fd13bcaefb367ecb",
+            "bytes": 4980025
+          },
+          {
+            "path": "data/organisms/human/noncoding_chr21_v3.bio",
+            "sha256": "17315af720e886466ba585832c9a99fb699fd128c92e0a093b2e06ea329cce93",
+            "bytes": 5276570
+          },
+          {
+            "path": "data/organisms/human/oxphos.bio",
+            "sha256": "0e212fa45dc96cf24b0db0117dbf3b6a704720fe2ae1f57d1115902d7be81d1a",
+            "bytes": 48211
+          },
+          {
+            "path": "data/organisms/human/tissues.bio",
+            "sha256": "e4db081f958a1db9c1d7bd841711f03e5dedd7a6f0d113f17bd6a6de1b02b175",
+            "bytes": 28403
+          }
+        ],
+        "sha256": "b06b1a8a56068719436a81f2c92fc08f182da4923a0dfcd9e4e88311f049a48e",
+        "bytes": 16641718,
+        "files": 40,
+        "partition": null
+      },
+      {
+        "path": "scripts/celegans_acvu.py",
+        "sha256": "65d0f7d13a9c3ee2a658232f0d67cf9e4fe60cc63d800e3ddc7a7e9d11d2db3a",
+        "bytes": 8440,
+        "partition": null,
+        "read_as": "gate registration named by a program"
+      },
+      {
+        "path": "scripts/intestine_registration.py",
+        "sha256": "01315eb0a667c661d04936eb322b7e169d602f854dbe07f95d785795c6ac9498",
+        "bytes": 12795,
+        "partition": null,
+        "read_as": "gate registration named by a program"
+      },
+      {
+        "path": "scripts/located_mitochondrion.py",
+        "sha256": "2ae75dd06976dc39df723b66597bfb1d2711573f6e1174cd992ab01e2691cdfc",
+        "bytes": 20876,
+        "partition": null,
+        "read_as": "gate registration named by a program"
+      }
+    ],
+    "input_count": 4,
+    "assembly": "n/a: organism programs; no genome sequence or coordinate is read",
+    "coordinates": "n/a: no genomic coordinates are read or written",
+    "parameters": {
+      "seed": 0,
+      "program_roots": [
+        "data/demo",
+        "genomeos/std",
+        "data/organisms"
+      ],
+      "confidence_level": 0.95,
+      "max_interval_width": 0.3333333333333333,
+      "minimum_independent_triples": 38,
+      "registration_commit": "5df76f2"
+    },
+    "exclusions": [
+      "design and experiment blocks outside the CI bio test roots (the compiled programs under data/knowledge are git-ignored and are not CI programs)",
+      "published experiments the design grammar cannot express (additions at a later time, ablations given as an environment, programs with no organism): counted and set aside"
+    ],
+    "partitions": "n/a: an inventory, nothing is trained, fitted or held out",
+    "code_cleanliness": {
+      "git_sha": "e06b1caa59aabc4c9a0cf573907868eb362e93c3",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/forge_calibration_inventory.py",
+        "form": "committed_repository_file",
+        "path": "scripts/forge_calibration_inventory.py",
+        "is_committed": true,
+        "declared_entry": "scripts/forge_calibration_inventory.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "genomeos/forge/design_answers.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/__init__.py",
+        "genomeos/organism/celegans.py",
+        "genomeos/organism/forge.py",
+        "genomeos/organism/reference.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/body.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/forge_calibration_inventory.py"
+      ],
+      "counting_path_count": 31,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "e06b1caa59aabc4c9a0cf573907868eb362e93c3",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/forge_calibration_inventory.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "e06b1caa59aabc4c9a0cf573907868eb362e93c3",
+      "code_cleanliness_git_sha": "e06b1caa59aabc4c9a0cf573907868eb362e93c3",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record e06b1ca"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 207,
+      "opens_under_data": 141,
+      "files_read": 40,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "scripts/celegans_acvu.py",
+        "scripts/intestine_registration.py",
+        "scripts/located_mitochondrion.py"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

@@ -20,6 +20,19 @@ evidence note, in a comment above the `confidence:` key of the emitted text, and
 `author_confidence` in the result record. BioForge states no number of its own, and its
 probability stays `None`.
 
+**Status on 2026-10-10: calibration inventory and CI path (lane-forgecal).** The registration
+in `genomeos/forge/calibration_inventory.py` (5df76f2) was committed before the census. It sets
+the minimum at 38 independent triples, the smallest n at which the exact 95% interval is
+narrower than 1/3 for every count. The census
+(`data/results/forge_calibration_inventory.json`, run on e06b1ca) finds 4 design triples and 27
+experiment blocks that could be posed as inverse design questions. All 31 are circular: they
+share a source with the model, are the model's own acceptance check, or come from a hand-written
+candidate list. So 0 are independent and the shortfall is 38: no calibration is registered and
+no rate is computed. The design programs now run in CI through
+`tests/test_forge_design_answers.py`. It pins each answer and its ties as a stability record,
+not an accuracy claim. `no_lymphocytes_at_all` reaches its targets with -IKZF1 and with -TCF3;
+IKZF1 is reported only because the final sort falls back to the label.
+
 *2026-09-22. Area H, third open item: "calibrate predicted confidence: how often a design's answer
 matches the published outcome". Registration and verdict in `genomeos/forge/calibration.py`; the
 facts the verdict rests on are pinned in `tests/test_forge_calibration.py`.*

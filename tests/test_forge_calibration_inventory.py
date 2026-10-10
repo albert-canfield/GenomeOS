@@ -4,6 +4,9 @@ record, pinned before the census that applies it (genomeos/forge/calibration_inv
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pytest
 
 from genomeos.forge.calibration_inventory import (
@@ -123,3 +126,40 @@ def test_a_shipped_experiment_in_an_organism_program_is_always_an_acceptance_che
     rec = experiment_record("toy.bio", m, m.experiments[0], model_evidence(m), {})
     assert rec["published"] and rec["expressible_as_a_design_question"]
     assert rec["circular"] == ["acceptance_check"] and not rec["independent"]
+
+
+# The census result, data/results/forge_calibration_inventory.json, written 2026-10-10 by
+# scripts/forge_calibration_inventory.py on a clean worktree of e06b1ca (lane-forgecal).
+RESULT = Path(__file__).resolve().parent.parent / "data" / "results" / "forge_calibration_inventory.json"
+
+
+def test_the_committed_inventory_is_what_the_code_computes() -> None:
+    """Shares the design run with tests/test_forge_design_answers.py through design_answers.results_for."""
+    from genomeos.forge.calibration_inventory import build_inventory, census_of
+
+    written = json.loads(RESULT.read_text(encoding="utf-8"))
+    assert census_of(written) == json.loads(json.dumps(build_inventory()))
+    assert written["result_manifest"]["complete"] and written["money"].startswith("none")
+
+
+def test_no_triple_is_independent_so_no_calibration_is_registered() -> None:
+    """Exact counts of 2026-10-10 (e06b1ca). Every published outcome in the repository is also an acceptance
+    check of the model it would be scored on, so the shortfall is the whole registered minimum."""
+    inv = json.loads(RESULT.read_text(encoding="utf-8"))
+    c = inv["counts"]
+    assert (c["design_blocks"], c["design_triples_independent"], c["design_answers_tied"]) == (4, 0, 1)
+    assert c["design_triples_circular_by_rule"] == {
+        "same_source": 4,
+        "acceptance_check": 3,
+        "authored_frame": 4,
+        "evidence_is_the_model": 2,
+    }
+    assert (c["experiment_blocks"], c["experiments_with_a_published_citation"]) == (39, 37)
+    assert (c["expressible_as_inverse_design_questions"], c["set_aside_published_experiments"]) == (27, 10)
+    assert c["inverse_triples_circular_by_rule"]["same_source"] == 27
+    assert c["inverse_triples_circular_by_rule"]["acceptance_check"] == 27
+    assert (c["independent_triples"], c["minimum_independent_triples"], c["shortfall"]) == (0, 38, 38)
+    assert inv["decision"].startswith("shortfall of 38: no calibration is registered")
+    # the three design answers that match a recorded outcome match the model's own acceptance experiment
+    matched = [d for d in inv["design_triples"] if d["answer_matches_the_recorded_outcome"]]
+    assert len(matched) == 3 and all("acceptance_check" in d["circular"] for d in matched)
