@@ -144,12 +144,111 @@
     $('#f-hover').innerHTML = h ? (h.intron ? `<b>${d.chrom}:${(h.genomic + 1).toLocaleString()}</b> <span class="muted">intron: removed by splicing, not in the mRNA</span>` : describe(h)) : '<span class="muted">hover a lane</span>';
   }
 
+  // ---- the tissue's own isoform beside the canonical (/api/flow?tissue=): GTEx v8 dominant isoform when
+  // the rule establishes it, else UNKNOWN with the API's reason shown verbatim; the canonical is never drawn
+  // or described as the tissue's.
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const REASON_GLOSS = {
+    no_isoform_data: () => 'no GTEx isoform table is cached for this gene',
+    tissue_not_measured: () => 'GTEx did not measure this tissue for the gene (names match exactly or after folding case and punctuation)',
+    low_expression: r => `the top isoform's median is below ${r.min_tpm} TPM`,
+    tie: r => `the next isoform's median is at least ${r.tie_ratio} of the top's`,
+    dominant_not_in_local_models: () => 'the top isoform is not in the local GENCODE models',
+    dominant_non_coding: () => 'the top isoform codes no protein in the local GENCODE models',
+  };
+  function cdsSpans(t) { // genomic [lo, hi) pieces of a trace's CDS, read back from its mRNA coordinates
+    const out = []; if (!t || t.cds_start < 0) return out;
+    for (const e of t.exons) {
+      const a = Math.max(e.mrna_start, t.cds_start), b = Math.min(e.mrna_end, t.cds_end); if (a >= b) continue;
+      const ga = t.mrna_to_genomic[a], gb = t.mrna_to_genomic[b - 1]; out.push([Math.min(ga, gb), Math.max(ga, gb) + 1]);
+    }
+    return out;
+  }
+  const exonsLacking = (a, b) => b.exons.filter(e => !a.exons.some(f => f.start < e.end && e.start < f.end)); // exons of b that a lacks
+  function callText(c) {
+    const nxt = c.next_transcript ? `, next ${esc(c.next_transcript)} ${c.next_tpm} TPM` : '';
+    return `<span class="mono">${esc(c.transcript || '-')}</span> ${c.tpm != null ? c.tpm + ' TPM' : 'no TPM'}${c.share != null ? `, share ${c.share}` : ''}${nxt}`;
+  }
+  function consText(s) { return s ? `${s.hgvs_c ? esc(s.hgvs_c) + ' → ' : ''}${s.hgvs_p ? esc(s.hgvs_p) + ' ' : ''}<b>${esc(s.consequence)}</b>` : ''; }
+  function tissueHtml(d) {
+    const t = d && d.tissue; if (!t) return '';
+    const c = t.call || {}, rule = c.rule || {}, name = `<span class="mono">${esc(t.tissue)}</span>`;
+    const canon = `canonical ${esc(t.canonical_transcript)}, ${t.canonical_protein_length} aa`;
+    let h;
+    if (t.status === 'ESTABLISHED') {
+      const iso = t.trace, lacks = iso ? exonsLacking(iso, d) : [], extra = iso ? exonsLacking(d, iso) : [];
+      const diff = lacks.length || extra.length ? ` · exons: ${lacks.length ? `lacks canonical exon${lacks.length === 1 ? '' : 's'} ${lacks.map(e => e.index).join(', ')}` : ''}${lacks.length && extra.length ? '; ' : ''}${extra.length ? `${extra.length} exon${extra.length === 1 ? '' : 's'} the canonical lacks` : ''} <span class="muted">(dashed in the drawing)</span>` : '';
+      h = `<div><b>tissue</b> ${name}: dominant isoform <b>${esc(t.transcript)}</b> <span class="mono">${esc(t.transcript_id)}</span>${t.same_as_canonical ? ' (the canonical itself)' : ''}, ${t.protein_length} aa; ${canon}${diff} · ${callText(c)} <span class="pill experimental">measured: GTEx v8 median, not this person's expression</span></div>`;
+    } else {
+      const gloss = REASON_GLOSS[t.reason];
+      h = `<div class="f-tissue-unknown"><b>tissue</b> ${name}: <span class="pill none">UNKNOWN</span> <span class="mono f-tissue-reason">${esc(t.reason)}</span>${gloss ? ` <span class="muted">(${esc(gloss(rule))})</span>` : ''} · ${callText(c)}; ${canon}
+        <div class="muted" style="font-size:11.5px">The tissue's isoform is not established, so it is not drawn and its consequence is UNKNOWN, never the canonical's.</div></div>`;
+    }
+    const v = d.variant_in_tissue;
+    if (v) {
+      const there = v.status === 'ESTABLISHED' ? consText({...v, hgvs_c: v.isoform ? v.isoform.hgvs_c : null}) : `<b>UNKNOWN</b> <span class="mono f-tissue-reason">${esc(v.reason)}</span>`;
+      h += `<div><b>variant</b> in ${esc(v.tissue)}${v.transcript ? ` on ${esc(v.transcript)}` : ''}: ${there} · on the canonical ${esc(v.canonical_transcript)}: ${consText(v.canonical)}${v.agreement ? ` · <span class="mono">${esc(v.agreement)}</span>` : ''}${v.status === 'ESTABLISHED' ? '' : ` <span class="muted">(the canonical's consequence, not the tissue's)</span>`} <span class="pill predicted">predicted by the local trace</span></div>`;
+    }
+    return h + `<div class="muted" style="font-size:11.5px">${esc(t.note)}; rule: the top isoform at least ${rule.min_tpm} TPM and the next below ${rule.tie_ratio} × the top's.</div>`;
+  }
+  window.flowTissueHtml = tissueHtml;
+  function drawTissue() {
+    const c = $('#f-tcanvas'), d = st.data; if (!c) return;
+    const t = d && d.tissue; c.style.display = t ? 'block' : 'none'; if (!t) return;
+    const W = c.clientWidth, H = c.clientHeight; if (!W) return;
+    const dpr = window.devicePixelRatio || 1; c.width = W * dpr; c.height = H * dpr;
+    const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    const css = getComputedStyle(document.documentElement);
+    const muted = css.getPropertyValue('--muted').trim() || '#777', bad = css.getPropertyValue('--bad').trim() || '#d1242f';
+    const pad = 70, span = W - 2 * pad, xg = p => pad + (p - d.gene_start) / (d.gene_end - d.gene_start) * span;
+    const iso = t.status === 'ESTABLISHED' ? t.trace : null, v = d.variant_in_tissue;
+    const text = (s, x, y, col, size, align) => { ctx.font = `${size || 12}px system-ui`; ctx.fillStyle = col || muted; ctx.textAlign = align || 'left'; ctx.fillText(s, x, y); ctx.textAlign = 'left'; };
+    text('exons on the DNA, same scale as above', 6, 12); text('protein, one residue scale', 6, 78);
+    text('canonical', pad - 6, 30, muted, 10, 'right'); text('canonical', pad - 6, 102, muted, 10, 'right');
+    text('tissue', pad - 6, 48, muted, 10, 'right'); text('tissue', pad - 6, 134, muted, 10, 'right');
+    const exRow = (tr, other, y) => {
+      ctx.strokeStyle = '#1f6feb'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xg(d.gene_start), y + 6); ctx.lineTo(xg(d.gene_end), y + 6); ctx.stroke();
+      for (const e of tr.exons) { ctx.fillStyle = '#8250df'; ctx.fillRect(xg(e.start), y, Math.max(1.5, xg(e.end) - xg(e.start)), 12); }
+      for (const [a, b] of cdsSpans(tr)) { ctx.fillStyle = '#d1242f'; ctx.fillRect(xg(a), y, Math.max(1.5, xg(b) - xg(a)), 12); }
+      ctx.strokeStyle = muted; ctx.setLineDash([2, 2]);
+      for (const e of exonsLacking(tr, other)) ctx.strokeRect(xg(e.start) - 1, y - 1, Math.max(2, xg(e.end) - xg(e.start)) + 2, 14);
+      ctx.setLineDash([]);
+    };
+    const L = Math.max(d.protein_length || 0, iso ? iso.protein_length : 0, 1), w = span / L;
+    const protRow = (tr, y, residue, label) => {
+      for (let i = 0; i < (tr.protein || '').length; i++) { ctx.fillStyle = AA_COL[tr.protein[i]] || '#999'; ctx.fillRect(pad + i * w, y, w + 0.3, 12); }
+      if (!residue) return;
+      const x = pad + (residue - 0.5) * w; ctx.fillStyle = '#d1242f';
+      ctx.beginPath(); ctx.moveTo(x, y - 1); ctx.lineTo(x - 4, y - 8); ctx.lineTo(x + 4, y - 8); ctx.closePath(); ctx.fill();
+      ctx.font = '11px system-ui'; const right = x + 7 + ctx.measureText(label).width > W;
+      text(label, right ? x - 7 : x + 7, y - 2, '#d1242f', 11, right ? 'right' : 'left');
+    };
+    exRow(d, iso || d, 20); protRow(d, 92, v ? v.canonical.residue : null, v ? (v.canonical.hgvs_p || v.canonical.consequence) : '');
+    if (iso) { exRow(iso, d, 38); protRow(iso, 124, v ? v.residue : null, v ? (v.hgvs_p || v.consequence) : ''); }
+    else for (const y of [48, 134]) text(`UNKNOWN: ${t.reason} (not established, so the canonical is not drawn in its place)`, pad, y, bad, 11);
+    const gpos = [d.variant && d.variant.genomic, v && v.isoform && v.isoform.genomic].find(x => x != null);
+    if (gpos != null && gpos >= d.gene_start && gpos < d.gene_end) { ctx.strokeStyle = '#d1242f'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(xg(gpos), 17); ctx.lineTo(xg(gpos), 53); ctx.stroke(); }
+  }
+  function fillTissues(d, asked) { // the selector: the tissues this gene's cached GTEx isoform table measures
+    const sel = $('#f-tissue'); if (!sel) return;
+    const list = d.tissues_measured || [], chosen = d.tissue ? (list.includes(d.tissue.tissue) ? d.tissue.tissue : asked) : '';
+    const opt = (val, label, off) => `<option value="${esc(val)}"${off ? ' disabled' : ''}>${esc(label)}</option>`;
+    sel.innerHTML = opt('', 'canonical only') + (list.length ? '' : opt('', `no GTEx isoform table cached for ${d.gene}`, true)) +
+      (chosen && !list.includes(chosen) ? opt(chosen, `${chosen} (not measured for ${d.gene})`) : '') + list.map(x => opt(x, x.replace(/_/g, ' '))).join('');
+    sel.value = chosen;
+  }
+  function setTissue(val) { const sel = $('#f-tissue'); if (!sel || !val) return; if (![...sel.options].some(o => o.value === val)) { const o = document.createElement('option'); o.value = val; o.textContent = val; sel.appendChild(o); } sel.value = val; }
+  function drawAll() { draw(); drawTissue(); }
+
   window.flowLoad = async function () {
     const gene = $('#f-gene').value.trim(), chrom = $('#f-chrom').value.trim(), variant = $('#f-variant').value.trim();
+    const tissue = $('#f-tissue') ? $('#f-tissue').value : '';
     $('#f-status').textContent = 'tracing…';
     try {
-      const d = await window.api(`/api/flow?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom)}${variant ? '&variant=' + encodeURIComponent(variant) : ''}`);
+      const d = await window.api(`/api/flow?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom)}${variant ? '&variant=' + encodeURIComponent(variant) : ''}${tissue ? '&tissue=' + encodeURIComponent(tissue) : ''}`);
       st.data = d; st.variant = d.variant || null; st.hover = null;
+      fillTissues(d, tissue);
+      $('#f-tissue-out').innerHTML = tissueHtml(d);
       setTimeout(() => document.querySelectorAll('.f-ind-var').forEach(a => a.onclick = ev => { ev.preventDefault(); $('#f-variant').value = a.dataset.v; $('#f-load').click(); }), 0);
       $('#f-status').textContent = `${d.gene} · ${d.transcript} (canonical of ${d.transcripts})`;
       const ev = d.evidence;
@@ -167,7 +266,7 @@
         const b = document.querySelector('nav button[data-tab="molecules"]'); if (b) b.click();
         setTimeout(() => $('#m-load').click(), 200);
       };
-      draw();
+      drawAll();
     } catch (e) { $('#f-status').textContent = e.message; }
   };
   window.lookupVariant = async function () {
@@ -190,18 +289,19 @@
     } catch (e) { $('#l-status').textContent = e.message; }
   };
   document.addEventListener('DOMContentLoaded', () => { const b = $('#l-run'); if (b) { b.onclick = window.lookupVariant; $('#l-variant').onkeydown = e => { if (e.key === 'Enter') window.lookupVariant(); }; } });
-  window.flowResize = draw;
+  window.flowResize = drawAll;
   document.addEventListener('DOMContentLoaded', () => {
     const c = canvas(); if (!c) return;
     c.addEventListener('mousemove', onMove); c.addEventListener('mouseleave', () => { st.hover = null; draw(); });
     $('#f-load').onclick = window.flowLoad;
     $('#f-gene').onkeydown = e => { if (e.key === 'Enter') window.flowLoad(); };
-    window.addEventListener('resize', draw);
+    if ($('#f-tissue')) $('#f-tissue').onchange = window.flowLoad;
+    window.addEventListener('resize', drawAll);
   });
   document.addEventListener('DOMContentLoaded', () => {
-    // deep link: #flow?gene=APP&chrom=chr21[&variant=chr21:25897620 C>T]
+    // deep link: #flow?gene=APP&chrom=chr21[&variant=chr21:25897620 C>T][&tissue=Brain_Cerebellum]
     const q = ((window.initialHash || location.hash).split('?')[1] || '');
-    const gm = q.match(/gene=([^&]+)/), cm = q.match(/chrom=([^&]+)/), vm = q.match(/variant=([^&]+)/);
-    if (gm && $('#f-gene') && (window.initialHash || location.hash).startsWith('#flow')) { $('#f-gene').value = decodeURIComponent(gm[1]); if (cm) $('#f-chrom').value = decodeURIComponent(cm[1]); if (vm) $('#f-variant').value = decodeURIComponent(vm[1]); setTimeout(() => $('#f-load').click(), 400); }
+    const gm = q.match(/gene=([^&]+)/), cm = q.match(/chrom=([^&]+)/), vm = q.match(/variant=([^&]+)/), tm = q.match(/tissue=([^&]+)/);
+    if (gm && $('#f-gene') && (window.initialHash || location.hash).startsWith('#flow')) { $('#f-gene').value = decodeURIComponent(gm[1]); if (cm) $('#f-chrom').value = decodeURIComponent(cm[1]); if (vm) $('#f-variant').value = decodeURIComponent(vm[1]); if (tm) setTissue(decodeURIComponent(tm[1])); setTimeout(() => $('#f-load').click(), 400); }
   });
 })();

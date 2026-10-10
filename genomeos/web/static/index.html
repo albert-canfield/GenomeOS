@@ -778,11 +778,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label>gene <input id="f-gene" value="APP" style="width:110px" class="mono"></label>
       <label data-tip="Chromosome with local sequence and annotation: chr21 and chrM.">chromosome <input id="f-chrom" value="chr21" style="width:80px" class="mono"></label>
       <label data-tip="One base change on the plus strand of the reference, 1-based: POSITION REF>ALT. Example for APP A673T: 25897620 C>T on chr21 (minus-strand gene, so C>T on the chromosome reads G>A in the mRNA: GCA→ACA)."><span>variant</span> <input id="f-variant" placeholder="25897620 C>T" style="width:150px" class="mono"></label>
+      <label data-tip="A GTEx v8 tissue this gene's cached isoform table measures. The trace is then also drawn on the tissue's dominant isoform (median transcript TPM across donors, not this person's own expression), with the variant's consequence on each transcript. When the rule does not establish the tissue's isoform, it and the consequence there are UNKNOWN with the reason; the canonical is never shown in its place."><span>tissue</span> <select id="f-tissue" class="mono" style="max-width:220px"><option value="">canonical only</option></select></label>
       <button class="primary" id="f-load" data-tip="Trace the canonical transcript of this gene from the local sequence."><i class="ic">🔁</i>Trace</button>
       <span class="muted" id="f-status"></span>
     </div>
     <canvas id="f-canvas" style="width:100%;height:290px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
     <div id="f-hover" style="margin-top:6px;font-size:12.5px"><span class="muted">hover a lane</span></div>
+    <canvas id="f-tcanvas" style="width:100%;height:150px;display:none;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
+    <div id="f-tissue-out" style="margin-top:6px;font-size:12.5px;line-height:1.6"></div>
     <div id="f-summary" style="margin-top:8px;font-size:12.5px;line-height:1.6"><span class="muted">Trace a gene. Every step is derived from the reference sequence with the evidence shown; the protein is what GenomeOS translates, which the Molecules tab checks against UniProt.</span></div>
   </div>
   <div class="card" style="margin-top:16px">

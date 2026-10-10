@@ -3293,8 +3293,14 @@ class Api:
         if tr is None:
             raise ApiError(f"{gene} has no transcripts")
         out = tr.to_dict()
+        from genomeos.flow.tissue import measured_tissues
+
+        # the Flow tab's tissue selector: the tissues this gene's cached GTEx isoform table measures
+        out["tissues_measured"] = measured_tissues(cached_isoforms(g.symbol))
         if tt is not None:
             out["tissue"] = tt.to_dict()
+            if tt.isoform is not None:  # drawn beside the canonical; absent whenever the call is UNKNOWN
+                out["tissue"]["trace"] = tt.isoform.to_dict()
         out["gene_start"], out["gene_end"] = g.locus.start, g.locus.end
         out["transcripts"] = len(g.transcripts)
         from genomeos.genome.regulation import regulation_of
