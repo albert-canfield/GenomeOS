@@ -1,0 +1,915 @@
+{
+  "result": "freshrna_result",
+  "date": "2026-10-10",
+  "lane": "lane-freshrna",
+  "registration": "data/results/freshrna_registration.json",
+  "registration_sha256": "d92310fa32720d45d4d5689c18c2df06c86c426ab13d1d1a534847b400f7442c",
+  "what": "M2i: the registered reading of M2h's fixed magnitude (+0.2146, a constant from ac5580b) against ENCODE RNA-seq of the same thirteen reader cell types that this project had never read. NOTHING IS FITTED IN THIS LANE",
+  "question": "M2h read the multiplicative composition closer to measured RNA than the no-rule baseline once the compiled rules were scaled by one fitted factor (+0.2146): held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894]. That reading was taken on RNA items 7, 7d and 7h had already read. Applying the SAME form and the SAME scale as a fixed constant, with nothing fitted, does the scaled run still come closer to measured log2(TPM+1) across the thirteen reader cell types than the no-rule baseline when the measured side is a DIFFERENT ENCODE RNA-seq measurement of those same thirteen cell types, one whose values this project has never opened?",
+  "nothing_is_fitted": "NOTHING IS FITTED IN THIS LANE. There is no free parameter of any kind: no scale, no intercept, no per-gene and no per-cell parameter, no threshold, no weighting and no transformation is estimated from the fresh RNA or from anything else. The single number the comparison needs, the scale, is the constant SCALE taken from `ac5580b` (SCALE_ORIGIN). The code REFUSES TO FIT: `fit_scale` raises NoFitError when called, and the run calls it nowhere, so a fit cannot be introduced by accident and cannot be introduced quietly. Because nothing is fitted, no training/held-out split is needed to protect the fresh measurement: no fresh value enters any estimate, so every gene of the population is out of sample by construction. The split is nevertheless used to DEFINE the primary population (POPULATION), for the one reason that M2h's +0.04339 was read on its held-out genes and the primary reading here must be the same genes, so the two numbers are comparable",
+  "scale": 0.2145911381525326,
+  "scale_origin": "+0.2145911381525326 (+0.2146 to four places), the scale M2h fitted on its 8,181 TRAINING genes and committed in data/results/magcal_result.json at `ac5580b` (per_form.multiplicative.scale). It enters this lane as a literal constant of this module and is not recomputed, re-estimated, rounded, refined or chosen from anything measured here",
+  "scope": "PRE-STATED AND DELIBERATELY NARROW. This is a fresh MEASUREMENT of the SAME thirteen cell types, so the only thing a 'better' reading here adds to M2h is that the gain SURVIVES FRESH MEASUREMENT NOISE: it REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS, and nothing wider. Written in advance, a 'better' reading here would NOT license any of the following: (1) that the gain or the scale TRANSPORTS TO NEW CELL TYPES -- none is added here, the stop list forbids adding one, and no cell type outside the reader's thirteen is measured; (2) that 'the model predicts expression' -- the registered words stay 'closer to measured RNA than the no-rule baseline on this measurement', and the effect is about 2% of the variance (SIZE); (3) independence from the ELEMENTS, the ATTRIBUTION or the READER -- the predictions P are 7h's committed rows, built from the same compiled programs, the same attributed elements and the same ENCODE DNase-seq reader calls as before, and none of that is re-measured here; (4) independence from the compiled programs' own provenance, including AlphaGenome's training on ENCODE and GTEx RNA-seq of these same biosamples; (5) that the scale is a mechanism, a dosage or a correction of any stage of the pipeline. What it would license is exactly one sentence: the magnitude M2h fitted on one measurement of these cells still beats no rule on a different measurement of the same cells",
+  "size": "carried with every 'better' reading, in the supervisor's arithmetic of 2026-10-10 and not softened: M2h's gain is about 2% OF THE VARIANCE. mean(D*P) = +0.2013 and mean(P^2) = +0.9337 on M2h's held-out side give the best scale 0.2013/0.9337 = 0.216 (against the fitted 0.2146) and a gain of mean(D*P)^2/mean(P^2) = 0.0434, which against mean(D^2) = 2.152 is 2.0% of the measured variance, a correlation of about r = 0.14 between the rules' predicted and the measured deviation. M2i is a NOTABLE result if it confirms, not a breakthrough: the same 2% figure is computed here on the fresh measurement and reported beside the reading",
+  "what_is_fresh": "the MEASURED side only. D is recomputed from the fresh quantifications; everything on the predictor side is unchanged and is NOT fresh: the compiled programs, the attributed elements, the fitted strengths, the reader's ENCODE DNase-seq open/held calls, the thirteen cell types and the prediction rows P are 7h's committed ones, and the scale is M2h's fitted constant. This test is therefore independent of the EARLIER RNA and of nothing else",
+  "non_overlap": {
+    "statement": "PROVED AT ACCESSION LEVEL, not by name, and required before the registration: the chosen thirteen experiments share NO experiment accession, NO gene-quantification file accession and NO REPLICATE LIBRARY ACCESSION with the twenty-seven quantifications of the thirteen experiments items 7, 7d, 7h and M2h read (nor with any other accession of the READ set). Every library is a separate library preparation and a separate sequencing run, so no replicate is shared. BIOSAMPLE accessions are a separate and weaker matter and are reported honestly: eleven of the thirteen terms are served by an experiment that shares no ENCODE biosample accession with the read set either; for TWO -- hepatocyte and cardiac muscle cell -- the chosen experiment draws on the same ENCODE biosample as the experiment item 7 read, because the portal carries no other unread qualifying experiment of those terms under the clauses above, and adding a biosample is forbidden. For those two cells the fresh measurement is therefore a fresh LIBRARY PREPARATION AND SEQUENCING RUN of the same biological material, not a fresh biological sample; its VALUES are still ones this project has never read, which is the exposure this lane exists to remove. The per-cell table is in the result",
+    "read_set_rule": "the READ set is built FROM THE RECORD, mechanically, not from memory: (a) every ENCODE accession (ENCSR, ENCFF, ENCLB, ENCBS) occurring in any git-tracked file of this repository, plus every one occurring in any of the last 3,000 commit messages, plus every one in the untracked data/knowledge/rna/tracks_*.json measured-RNA track records; MINUS (b) the accessions that occur ONLY as a REJECTED CANDIDATE of item 7's own selection, that is as a key of readergate_rna_sources.json's per-biosample `candidates` map other than the experiment it chose, or as a key of its `files_excluded` map. (b) is subtracted because item 7 enumerated those accessions from portal metadata and downloaded and opened none of them (that result's own words: values_read = 'none: each file was hashed and its header line read; no TPM value was opened', and only the chosen experiment's files were fetched at all), so their presence in the record is a metadata mention and not exposure to a value. Everything in the READ set is treated as read. The two lists -- the READ set and this lane's own accessions -- are committed in the sources file and in the result, and their intersection is shown",
+    "read_set_size": 954,
+    "this_lane": {
+      "experiments": [
+        "ENCSR000AEG",
+        "ENCSR000AEP",
+        "ENCSR000BYL",
+        "ENCSR000COU",
+        "ENCSR000EYT",
+        "ENCSR129VBC",
+        "ENCSR379YAE",
+        "ENCSR725TPW",
+        "ENCSR755LFM",
+        "ENCSR797RXV",
+        "ENCSR908ZAS",
+        "ENCSR985KAT",
+        "ENCSR992MUF"
+      ],
+      "files": [
+        "ENCFF073RKC",
+        "ENCFF155ZUU",
+        "ENCFF166LSM",
+        "ENCFF170TKR",
+        "ENCFF170TZG",
+        "ENCFF172AFC",
+        "ENCFF198VCX",
+        "ENCFF223GBX",
+        "ENCFF306DIV",
+        "ENCFF314OZK",
+        "ENCFF321HCT",
+        "ENCFF325KTI",
+        "ENCFF355TDA",
+        "ENCFF416QUL",
+        "ENCFF472HFI",
+        "ENCFF477OQB",
+        "ENCFF526TMF",
+        "ENCFF628SMT",
+        "ENCFF677KYO",
+        "ENCFF736CCO",
+        "ENCFF807ORH",
+        "ENCFF993LWR"
+      ],
+      "libraries": [
+        "ENCLB043ZZZ",
+        "ENCLB044ZZZ",
+        "ENCLB061ZZZ",
+        "ENCLB062ZZZ",
+        "ENCLB119UBE",
+        "ENCLB170HBR",
+        "ENCLB193VKK",
+        "ENCLB256SCK",
+        "ENCLB257SKY",
+        "ENCLB297WSF",
+        "ENCLB351QES",
+        "ENCLB387BDY",
+        "ENCLB404DIP",
+        "ENCLB426JGB",
+        "ENCLB439WFS",
+        "ENCLB555AMA",
+        "ENCLB555AMB",
+        "ENCLB615ALX",
+        "ENCLB635ELE",
+        "ENCLB670RJP",
+        "ENCLB693TEO",
+        "ENCLB989PZD"
+      ],
+      "biosamples": [
+        "ENCBS077RUJ",
+        "ENCBS087RNA",
+        "ENCBS088RNA",
+        "ENCBS089RNA",
+        "ENCBS090RNA",
+        "ENCBS100HNS",
+        "ENCBS341OKA",
+        "ENCBS343AKO",
+        "ENCBS372XQF",
+        "ENCBS428ENC",
+        "ENCBS520VFV",
+        "ENCBS549CYH",
+        "ENCBS574ZRE",
+        "ENCBS586ENC",
+        "ENCBS648NSQ",
+        "ENCBS731AAA",
+        "ENCBS734AAA",
+        "ENCBS796DWQ",
+        "ENCBS806KLM",
+        "ENCBS883DWI"
+      ]
+    },
+    "already_read": {
+      "experiments": [
+        "ENCSR000CPL",
+        "ENCSR000CTQ",
+        "ENCSR000CTT",
+        "ENCSR000CUC",
+        "ENCSR000EYP",
+        "ENCSR046XHI",
+        "ENCSR294NDO",
+        "ENCSR545DKY",
+        "ENCSR561FEE",
+        "ENCSR693GGB",
+        "ENCSR843RJV",
+        "ENCSR859HWB",
+        "ENCSR920UAO"
+      ],
+      "files": [
+        "ENCFF008KUV",
+        "ENCFF036KGP",
+        "ENCFF104BAF",
+        "ENCFF119KXQ",
+        "ENCFF131NEX",
+        "ENCFF137JZM",
+        "ENCFF209FDP",
+        "ENCFF247KYR",
+        "ENCFF296UGP",
+        "ENCFF308OYV",
+        "ENCFF378TYT",
+        "ENCFF416LVG",
+        "ENCFF462HXM",
+        "ENCFF492OTB",
+        "ENCFF497TJL",
+        "ENCFF556ISR",
+        "ENCFF562ECY",
+        "ENCFF619LYC",
+        "ENCFF631BAG",
+        "ENCFF645FNQ",
+        "ENCFF700JWD",
+        "ENCFF708WAL",
+        "ENCFF806MNX",
+        "ENCFF855KIJ",
+        "ENCFF862BQP",
+        "ENCFF935TRK",
+        "ENCFF958WFW"
+      ],
+      "libraries": [
+        "ENCLB075GEK",
+        "ENCLB178YZR",
+        "ENCLB211VHB",
+        "ENCLB221REA",
+        "ENCLB227WEO",
+        "ENCLB256WNI",
+        "ENCLB330LPJ",
+        "ENCLB334PQC",
+        "ENCLB365AUY",
+        "ENCLB431LEI",
+        "ENCLB492VNE",
+        "ENCLB518OAU",
+        "ENCLB555AKK",
+        "ENCLB555APT",
+        "ENCLB555APU",
+        "ENCLB555ATO",
+        "ENCLB555ATP",
+        "ENCLB555AWV",
+        "ENCLB555AWX",
+        "ENCLB555AWY",
+        "ENCLB555AXT",
+        "ENCLB687HNK",
+        "ENCLB764TBI",
+        "ENCLB806KQR",
+        "ENCLB816UYB",
+        "ENCLB881IUD",
+        "ENCLB919DEB"
+      ],
+      "biosamples": [
+        "ENCBS016SXN",
+        "ENCBS021ARD",
+        "ENCBS051SJH",
+        "ENCBS077RUJ",
+        "ENCBS195IGI",
+        "ENCBS330BBV",
+        "ENCBS343AKO",
+        "ENCBS362ENC",
+        "ENCBS365ENC",
+        "ENCBS370ENC",
+        "ENCBS373ENC",
+        "ENCBS463ZCZ",
+        "ENCBS520VFV",
+        "ENCBS563ENC",
+        "ENCBS564ENC",
+        "ENCBS569ENC",
+        "ENCBS608AFV",
+        "ENCBS626ENC",
+        "ENCBS627ENC",
+        "ENCBS716AAA",
+        "ENCBS741VGS",
+        "ENCBS775RGP",
+        "ENCBS806KLM"
+      ]
+    },
+    "intersection": {
+      "experiments": [],
+      "files": [],
+      "libraries": [],
+      "biosamples": [
+        "ENCBS077RUJ",
+        "ENCBS343AKO",
+        "ENCBS520VFV",
+        "ENCBS806KLM"
+      ]
+    },
+    "disjoint_experiments": true,
+    "disjoint_files": true,
+    "disjoint_libraries": true,
+    "disjoint_biosamples": false,
+    "cells_sharing_a_read_biosample": [
+      "cardiac muscle cell",
+      "hepatocyte"
+    ],
+    "intersection_with_the_whole_read_set": []
+  },
+  "assays": {
+    "K562": "polyA plus RNA-seq",
+    "HepG2": "polyA plus RNA-seq",
+    "GM12878": "polyA plus RNA-seq",
+    "IMR_90": "total RNA-seq",
+    "H1": "polyA plus RNA-seq",
+    "SK_N_SH": "polyA plus RNA-seq",
+    "astrocyte": "total RNA-seq",
+    "hepatocyte": "total RNA-seq",
+    "keratinocyte": "polyA plus RNA-seq",
+    "cardiac_muscle_cell": "total RNA-seq",
+    "CD14_positive_monocyte": "polyA plus RNA-seq",
+    "ovary": "polyA plus RNA-seq",
+    "testis": "polyA plus RNA-seq"
+  },
+  "fresh_experiments": {
+    "K562": "ENCSR000AEP",
+    "HepG2": "ENCSR985KAT",
+    "GM12878": "ENCSR000AEG",
+    "IMR_90": "ENCSR797RXV",
+    "H1": "ENCSR000COU",
+    "SK_N_SH": "ENCSR000BYL",
+    "astrocyte": "ENCSR129VBC",
+    "hepatocyte": "ENCSR908ZAS",
+    "keratinocyte": "ENCSR000EYT",
+    "cardiac_muscle_cell": "ENCSR379YAE",
+    "CD14_positive_monocyte": "ENCSR992MUF",
+    "ovary": "ENCSR725TPW",
+    "testis": "ENCSR755LFM"
+  },
+  "population": "PRIMARY: the 8,328 genes of M2h's HELD-OUT side of the multiplicative composition -- the genes of 7h's committed population (data/results/multrna_result.json's genes table, 16,509 genes, pinned by sha256) whose symbol is held out under M2h's committed split, int(sha256(symbol as UTF-8).hexdigest()[:8], 16) odd -- intersected with the genes the fresh measurement resolves, which is item 7's POPULATION clause (d) applied to the fresh tables unchanged: the gene's gene_id without its version must be on exactly one row of every one of the thirteen chosen experiments' tables (rows suffixed _PAR_Y not counted), and present in all of the chosen experiment's files. Each gene contributes its thirteen (gene, cell) pairs. No filter on expression, no filter on any measured value, and no gene is admitted that 7h did not admit. M2h's held-out side is the primary population for ONE reason: it is the population ac5580b's +0.04339 was read on, so the two numbers are comparable, and the scale was fitted without any of these genes. The split, the gene list and this rule are fixed by this registration and by the two committed results it reads, before any fresh value is opened. REPORTED BESIDE, deciding nothing: the same quantity on M2h's TRAINING genes (whose OLD RNA the scale was fitted on, and whose FRESH RNA is still unread) and on all of 7h's genes. Genes that drop out for want of a fresh row are counted and reported as attrition",
+  "metric": "Delta MSE = mean over the pairs of D'^2 - mean of (D' - SCALE*P)^2 = mean of (2*SCALE*D'*P - SCALE^2*P^2) (combine2.METRIC and magcal.METRIC with the fresh measured deviation and the fixed scale), positive when the scaled run's squared error is below the no-rule baseline's. The REGISTERED ENDPOINT is this quantity on the PRIMARY population at SCALE, with its FORM_INTERVAL_WORDS gene bootstrap interval",
+  "control": "M2h's within-gene cell permutation, with the one change that nothing is refitted (there is nothing to refit): for each permutation, each gene's thirteen P values are permuted among its own thirteen cells by an independent draw of the seeded generator, every gene keeping its own prediction values and its own range and every pair keeping its own fresh D', and the Delta MSE is recomputed at the same constant SCALE. Only the tie between a prediction and the cell it was made for is broken. PERMUTATIONS['count'] permutations at PERMUTATIONS['seed']; control p = (1 + permutations with Delta MSE >= observed) / (1 + count). It is reported in every reading and changes no verdict",
+  "decision": "1. If the HARNESS misses, the run stops before any fresh value is read (HARNESS_DEFECT). 2. Fewer than MIN_GENES genes in the primary population is NOT_TESTABLE and no comparison is read. 3. Otherwise, on the primary population's Delta MSE at the constant SCALE with its 98.33% gene bootstrap interval: lower bound > 0 -> BETTER; upper bound < 0 -> WORSE (the falsifier); the interval straddles 0 -> INCONCLUSIVE. There is no fourth branch: M2h's CALIBRATION_REMOVES branch existed to tell a dead fitted scale from a live one, and nothing is fitted here, so a straddle is simply INCONCLUSIVE. 4. The control p is reported in every verdict sentence and changes no verdict. 5. Every reading carries SCOPE's narrow statement of what it does and does not license, SIZE's 'about 2% of the variance' and NON_OVERLAP's two-cell biosample qualification. 6. A WORSE or an INCONCLUSIVE reading is reported FIRST and UNSOFTENED: it says that M2h's positive does not transport to a fresh measurement of the same cells, which is as valuable as a confirmation",
+  "falsifier": "the reading under test is M2h's: that at the one magnitude +0.2146 the multiplicative composition of the compiled rules is closer to measured RNA than running no rule. It is FALSIFIED here when the Delta MSE interval on the primary population EXCLUDES 0 ON THE BASELINE'S SIDE (upper bound < 0, outcome WORSE): on a measurement of the same cells that this project had never read, the same form at the same magnitude is further from measured RNA than no rule at all, and M2h's positive is a property of the measurement it was read on. An interval straddling 0 (INCONCLUSIVE) falsifies nothing and confirms nothing, and is also reported as a failure to transport. An interval excluding 0 on the rules' side (BETTER) is the registered confirmation, in SCOPE's narrow terms",
+  "stop_rule": "ONE run, from this registration's committed code, on the files the sources file pins by sha256. No form, scale, population, split, endpoint, metric, interval, control, decision, falsifier, scope or wording is changed after a fresh value is read; a defect found afterwards is reported beside the registered reading and corrected only under a new registration. The post-hoc quantities of POST_HOC are computed only after the registered reading is written and committed, are labelled post hoc, and decide nothing",
+  "limitations": [
+    "NOT A FRESH CELL TYPE. This is a fresh measurement of the SAME thirteen cell types, because docs/ROADMAP.md \u00a75's reinstated stop list says 'No more biosamples' and no reader biosample is added. Whether the gain transports to a cell type the reader has never held is untested here and cannot be tested here (SCOPE)",
+    "NOT INDEPENDENT OF THE PREDICTOR SIDE. The predictions P are 7h's committed rows: the same compiled programs, the same attributed elements, the same fitted strengths and the same ENCODE DNase-seq reader calls, and the scale is M2h's. Only the measured side is new, so this test removes exposure to the earlier RNA and no other dependence (WHAT_IS_FRESH)",
+    "A MIXED ASSAY. Nine cells' fresh measurement is polyA plus RNA-seq, as item 7's was; four (IMR-90, astrocyte, hepatocyte, cardiac muscle cell) are total RNA-seq, because the portal carries no unread qualifying polyA plus experiment of those terms. Total RNA-seq TPM includes non-polyadenylated transcripts, so for those four cells y' carries an assay difference item 7's y did not. Stated in advance: because the endpoint is 2*SCALE*mean(D'*P) - SCALE^2*mean(P^2) with SCALE and P fixed, a difference in D' that is unrelated to P leaves the expected Delta MSE unchanged and only widens the interval, and a difference that dilutes the biological signal can only shrink mean(D'*P). The mixed assay can therefore COST this test power or attenuate a real gain; it cannot manufacture one. A WORSE or INCONCLUSIVE reading must be read with that in mind, and a BETTER reading is not weakened by it. POST_HOC (4) reports the nine polyA plus cells on their own",
+    "DIFFERENT DONORS FOR THE TWO TISSUES, AND ONE EMBRYONIC. Of the thirteen terms, ovary and testis are ENCODE tissues, not cell lines: item 7 read an adult ovary (47 years) and an adult testis (44 years), and the unread experiments of those terms are a different adult ovary (30 years) and an EMBRYONIC testis. For those two cells the fresh measurement is a different donor, and for testis a different developmental stage, which is a larger difference than measurement noise and dilutes rather than inflates (same argument as the mixed assay)",
+    "TWO CELLS SHARE A BIOSAMPLE. For hepatocyte and cardiac muscle cell the fresh experiment draws on the same ENCODE biosample as the read one, with different libraries; it is a fresh library and sequencing run of the same biological material (NON_OVERLAP)",
+    "FEWER REPLICATES ON AVERAGE. Item 7's rule took, per cell, the experiment with the MOST qualifying files, so the unread experiments have on average fewer replicate files (22 files here against item 7's 27, and three cells are served by a single file). Fewer replicates means a noisier y', which again costs power rather than creating a gain",
+    "THE SIZE. Even a confirmation is a gain of about 2% of the measured variance, r about 0.14 (SIZE). It is a notable result, not a breakthrough, and the wording never becomes 'the model predicts expression'",
+    "THE P ROWS ARE THE COMMITTED TABLE'S FIVE-DECIMAL ROUNDINGS, which is why the harness admits TOLERANCE rather than exact equality",
+    "independence: each element's removal fold comes from AlphaGenome's RNA-seq gene scorer (an in-silico deletion, the argmax over 371 RNA-seq tracks), a model trained on ENCODE and GTEx RNA-seq, with RNA-seq tracks named for the reader biosamples among them, and on ENCODE DNase-seq; the reader's open/closed calls are ENCODE DNase-seq narrowPeak files of the same biosamples; the measured outcome is ENCODE polyA plus RNA-seq of those biosamples, data of the kind, and possibly the very experiments, the model was trained on. The cross-cell pattern of a gated prediction comes from the DNase calls alone and the size of each element's part from the model"
+  ],
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "m2h_reading": "the multiplicative composition (Zhou et al. 2024): better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; fitted scale +0.2146 [98.33% CI +0.2007, +0.2283], one number for the whole form, fitted on 8,181 training genes (106,353 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1)",
+  "alphagenome_requests": 0,
+  "money": "none: public files only, no key read",
+  "outcome": "BETTER",
+  "reading": "the multiplicative composition (Zhou et al. 2024): better; on a measurement of the same thirteen reader cell types that this project had never read, the reader-gated run scaled by M2h's fitted constant +0.2146 lowered the squared error of measured log2(TPM+1) across those cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline on this measurement, and M2h's gain REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS (Delta MSE +0.03727 [98.33% CI +0.03202, +0.04299] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; the scale is the constant +0.2146 taken from ac5580b and NOTHING IS FITTED IN THIS LANE). WHAT THIS DOES AND DOES NOT LICENSE: PRE-STATED AND DELIBERATELY NARROW. This is a fresh MEASUREMENT of the SAME thirteen cell types, so the only thing a 'better' reading here adds to M2h is that the gain SURVIVES FRESH MEASUREMENT NOISE: it REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS, and nothing wider. Written in advance, a 'better' reading here would NOT license any of the following: (1) that the gain or the scale TRANSPORTS TO NEW CELL TYPES -- none is added here, the stop list forbids adding one, and no cell type outside the reader's thirteen is measured; (2) that 'the model predicts expression' -- the registered words stay 'closer to measured RNA than the no-rule baseline on this measurement', and the effect is about 2% of the variance (SIZE); (3) independence from the ELEMENTS, the ATTRIBUTION or the READER -- the predictions P are 7h's committed rows, built from the same compiled programs, the same attributed elements and the same ENCODE DNase-seq reader calls as before, and none of that is re-measured here; (4) independence from the compiled programs' own provenance, including AlphaGenome's training on ENCODE and GTEx RNA-seq of these same biosamples; (5) that the scale is a mechanism, a dosage or a correction of any stage of the pipeline. What it would license is exactly one sentence: the magnitude M2h fitted on one measurement of these cells still beats no rule on a different measurement of the same cells. SIZE: carried with every 'better' reading, in the supervisor's arithmetic of 2026-10-10 and not softened: M2h's gain is about 2% OF THE VARIANCE. mean(D*P) = +0.2013 and mean(P^2) = +0.9337 on M2h's held-out side give the best scale 0.2013/0.9337 = 0.216 (against the fitted 0.2146) and a gain of mean(D*P)^2/mean(P^2) = 0.0434, which against mean(D^2) = 2.152 is 2.0% of the measured variance, a correlation of about r = 0.14 between the rules' predicted and the measured deviation. M2i is a NOTABLE result if it confirms, not a breakthrough: the same 2% figure is computed here on the fresh measurement and reported beside the reading. NON-OVERLAP: PROVED AT ACCESSION LEVEL, not by name, and required before the registration: the chosen thirteen experiments share NO experiment accession, NO gene-quantification file accession and NO REPLICATE LIBRARY ACCESSION with the twenty-seven quantifications of the thirteen experiments items 7, 7d, 7h and M2h read (nor with any other accession of the READ set). Every library is a separate library preparation and a separate sequencing run, so no replicate is shared. BIOSAMPLE accessions are a separate and weaker matter and are reported honestly: eleven of the thirteen terms are served by an experiment that shares no ENCODE biosample accession with the read set either; for TWO -- hepatocyte and cardiac muscle cell -- the chosen experiment draws on the same ENCODE biosample as the experiment item 7 read, because the portal carries no other unread qualifying experiment of those terms under the clauses above, and adding a biosample is forbidden. For those two cells the fresh measurement is therefore a fresh LIBRARY PREPARATION AND SEQUENCING RUN of the same biological material, not a fresh biological sample; its VALUES are still ones this project has never read, which is the exposure this lane exists to remove. The per-cell table is in the result",
+  "verdict_sentence": "the multiplicative composition (Zhou et al. 2024): better; on a measurement of the same thirteen reader cell types that this project had never read, the reader-gated run scaled by M2h's fitted constant +0.2146 lowered the squared error of measured log2(TPM+1) across those cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline on this measurement, and M2h's gain REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS (Delta MSE +0.03727 [98.33% CI +0.03202, +0.04299] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; the scale is the constant +0.2146 taken from ac5580b and NOTHING IS FITTED IN THIS LANE)",
+  "harness_check": {
+    "statement": "before any fresh value is opened: (1) every file of data/results/freshrna_sources.json is on disk with the sha256 the sources file pins, and the sources file's own accession lists reproduce the non-overlap (empty intersection of experiments, files and libraries with the READ set); (2) the genes table of P_SOURCE has 7h's committed 16,509 genes and 214,617 pairs, every gene with thirteen P and thirteen D and no symbol twice; (3) Delta MSE at scale 1 recomputed over all of 7h's pairs from that table equals 7h's committed delta_mse within TOLERANCE, which is the check that the P rows are the ones 7h's registered reading was computed on; (4) the constant SCALE equals SCALE_SOURCE's committed per_form.multiplicative.scale exactly; (5) M2h's committed held-out gene count and pair count are reproduced from the table and the split. THEN, with the fresh tables opened: (6) each of the thirteen tables has the row count and column names its sources entry records. A miss in any of them stops the run (HARNESS_DEFECT) and nothing is read",
+    "pinned_sha256_unmoved": true,
+    "scale_is_the_registered_constant": true,
+    "primary_gene_list_digest": "84e0db13fcc06ea1732a128db072cb71b4474c5d35ac447849eacb7eba7cd736",
+    "fresh_table_counts": {
+      "ENCFF472HFI": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF628SMT": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF073RKC": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF355TDA": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF170TZG": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF477OQB": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF325KTI": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF321HCT": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF736CCO": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF172AFC": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF677KYO": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF155ZUU": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF993LWR": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF526TMF": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF807ORH": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF198VCX": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF223GBX": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF166LSM": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF314OZK": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF170TKR": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF306DIV": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      },
+      "ENCFF416QUL": {
+        "rows": 59481,
+        "par_y_rows": 45,
+        "unique": 59481
+      }
+    },
+    "fresh_tables": 22,
+    "passed": true
+  },
+  "attrition": {
+    "resolved": 16509,
+    "dropped": 0,
+    "dropped_symbols": []
+  },
+  "primary": {
+    "label": "primary: M2h's held-out genes on the fresh measurement",
+    "genes": 8328,
+    "pairs": 108264,
+    "delta_mse": 0.03727241565491676,
+    "ci": [
+      0.03202429380417028,
+      0.04299157342045463
+    ],
+    "mean_D2": 1.614971412380872,
+    "mean_P2": 0.9337121967026681,
+    "mean_D_times_P": 0.18702836992490532
+  },
+  "control_p": 0.000999000999000999,
+  "control_delta_mse_median": -0.042935363195657036,
+  "control_delta_mse_max": -0.036231371144814395,
+  "variance_fraction": 0.02307930367632198,
+  "seconds": 7.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ac5580b",
+        "version": "M2h, the fixed scale"
+      },
+      {
+        "accession": "90e5c86",
+        "version": "7h, the committed P rows"
+      },
+      {
+        "accession": "ENCSR000AEP",
+        "version": "ENCODE portal, released 2014-07-07"
+      },
+      {
+        "accession": "ENCSR985KAT",
+        "version": "ENCODE portal, released 2014-06-30"
+      },
+      {
+        "accession": "ENCSR000AEG",
+        "version": "ENCODE portal, released 2014-07-07"
+      },
+      {
+        "accession": "ENCSR797RXV",
+        "version": "ENCODE portal, released 2021-01-04"
+      },
+      {
+        "accession": "ENCSR000COU",
+        "version": "ENCODE portal, released 2011-10-17"
+      },
+      {
+        "accession": "ENCSR000BYL",
+        "version": "ENCODE portal, released 2012-02-23"
+      },
+      {
+        "accession": "ENCSR129VBC",
+        "version": "ENCODE portal, released 2021-05-18"
+      },
+      {
+        "accession": "ENCSR908ZAS",
+        "version": "ENCODE portal, released 2014-12-17"
+      },
+      {
+        "accession": "ENCSR000EYT",
+        "version": "ENCODE portal, released 2012-01-17"
+      },
+      {
+        "accession": "ENCSR379YAE",
+        "version": "ENCODE portal, released 2016-01-14"
+      },
+      {
+        "accession": "ENCSR992MUF",
+        "version": "ENCODE portal, released 2021-10-12"
+      },
+      {
+        "accession": "ENCSR725TPW",
+        "version": "ENCODE portal, released 2013-07-31"
+      },
+      {
+        "accession": "ENCSR755LFM",
+        "version": "ENCODE portal, released 2013-07-31"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": null
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_registration.json",
+        "sha256": "d92310fa32720d45d4d5689c18c2df06c86c426ab13d1d1a534847b400f7442c",
+        "bytes": 62330,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": null
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": null
+      },
+      {
+        "path": "data/results/magcal_registration.json",
+        "sha256": "2b25645be58c526a6c69bb15be5822bd921e14fb6b2761e1bcc78b505a302c90",
+        "bytes": 45173,
+        "partition": null
+      },
+      {
+        "path": "data/results/multrna_registration.json",
+        "sha256": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7",
+        "bytes": 134997,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF472HFI.tsv",
+        "sha256": "dbf86a3654fa4f47ae3fc3a87b2754f2b7c01c7a2a60625623e7c915cf660c4f",
+        "bytes": 10967642,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF628SMT.tsv",
+        "sha256": "ad08091aab7f7662511c4255e45f01a72ddd3f12fd93779a45d2630773db7381",
+        "bytes": 10966441,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF073RKC.tsv",
+        "sha256": "70feb107b43e4cb83f2480274b20bcb62d340ef7343bbc3dc8f82c6d718771d8",
+        "bytes": 10891080,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF355TDA.tsv",
+        "sha256": "9ef0afe156652004c32884d86f9cd0d5dab3d27c693e8b65b9db3a3a97fac9e6",
+        "bytes": 10897631,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TZG.tsv",
+        "sha256": "89d9dfa96436dafe545299cabc8cdd91c232bb6366acce64d81cbfb265e9195f",
+        "bytes": 10959672,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF477OQB.tsv",
+        "sha256": "c8bfce24e1daacf75b810a7266c7eda67eb1d6914fe1bbddfea0d6a86250ee77",
+        "bytes": 10960675,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF325KTI.tsv",
+        "sha256": "12f2ddfbd068720f05cef0c6802c9fc4b4ea98bac83845d62cbba4f3649cffbe",
+        "bytes": 11066214,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF321HCT.tsv",
+        "sha256": "8de9f71bce82827ea583865983d1bbf06e36e4c7495632c22c3fb36076e9dc8f",
+        "bytes": 10888164,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF736CCO.tsv",
+        "sha256": "1b9be5e12f0b64dc1a593ad04b16365ce4ea900b1524ba59023a41fef41df877",
+        "bytes": 10852917,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF172AFC.tsv",
+        "sha256": "8ecde96d56f0be82b514df1126702d0ab69dc35cd227ebc39366a290434e8fdf",
+        "bytes": 11176308,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF677KYO.tsv",
+        "sha256": "82988197d3175947c2afc136d284c5fb4aeefffd83fca904a18f1642af459529",
+        "bytes": 11176683,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF155ZUU.tsv",
+        "sha256": "7e7092df9bb7a08ae2e2121653ce8e53f7fefdc86507aa349c628f4c26569db9",
+        "bytes": 11049242,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF993LWR.tsv",
+        "sha256": "28e2b1d02ac8e2cdaca8e921b1303f8ce33e79f6c2e9f711e6462350c4ecaa3a",
+        "bytes": 11039475,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF526TMF.tsv",
+        "sha256": "460e8b573206306ea33e0ee6bf6711cadc335633d8b89943aa8549a1260ac2a9",
+        "bytes": 10815847,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF807ORH.tsv",
+        "sha256": "7ad4ef9694c2900a3e0cd8a40dc64e9b095c88b2b73a5fce15a0995c0f9844dd",
+        "bytes": 10821121,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF198VCX.tsv",
+        "sha256": "6f67af2f60f8e7aa7403711a2cc815b8f7d5362497aababae5d6e4a8dc11cfa8",
+        "bytes": 10834428,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF223GBX.tsv",
+        "sha256": "00f6512a82d649bcdfd44a295c68d6cbf6769cb907793d978afb5beb27c79fb2",
+        "bytes": 10941052,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF166LSM.tsv",
+        "sha256": "257cba8f9cb77e33765f977643f21c40271d862ab563846afbe09f2831594c10",
+        "bytes": 10853636,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF314OZK.tsv",
+        "sha256": "7bbfe61b268e2c7847fb7f3670288e4ee1fdf12d41ee45bc56af1849b9758216",
+        "bytes": 10806152,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TKR.tsv",
+        "sha256": "efe0bd2de174518201586aa3a7b6264af3bc148b0d33fac4b2f37e331d6afb0b",
+        "bytes": 10790670,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF306DIV.tsv",
+        "sha256": "947d2df99c7c3517589a6e2780fc17c8187b7d67d76d9befb5abb8f82d27d56c",
+        "bytes": 10831170,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF416QUL.tsv",
+        "sha256": "26ebe77bfea175892c0da172c9f080cdce937f8ff0e377cb751da379502a3301",
+        "bytes": 11195080,
+        "partition": null
+      }
+    ],
+    "input_count": 29,
+    "assembly": "GRCh38, GENCODE V29 gene models",
+    "coordinates": "n/a: gene-level quantifications keyed by gene_id",
+    "parameters": {
+      "scale": 0.2145911381525326,
+      "nothing_is_fitted": "NOTHING IS FITTED IN THIS LANE. There is no free parameter of any kind: no scale, no intercept, no per-gene and no per-cell parameter, no threshold, no weighting and no transformation is estimated from the fresh RNA or from anything else. The single number the comparison needs, the scale, is the constant SCALE taken from `ac5580b` (SCALE_ORIGIN). The code REFUSES TO FIT: `fit_scale` raises NoFitError when called, and the run calls it nowhere, so a fit cannot be introduced by accident and cannot be introduced quietly. Because nothing is fitted, no training/held-out split is needed to protect the fresh measurement: no fresh value enters any estimate, so every gene of the population is out of sample by construction. The split is nevertheless used to DEFINE the primary population (POPULATION), for the one reason that M2h's +0.04339 was read on its held-out genes and the primary reading here must be the same genes, so the two numbers are comparable",
+      "interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "resamples": 2000,
+      "seed": 20261010,
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      }
+    },
+    "exclusions": [
+      "genes 7h did not admit",
+      "genes the fresh measurement does not resolve in all thirteen cells"
+    ],
+    "partitions": {
+      "primary": "the primary population is M2h's held-out genes, as the registration pins them",
+      "reported_beside": "M2h's training genes and all of 7h's genes, deciding nothing (POPULATION)"
+    },
+    "code_cleanliness": {
+      "git_sha": "b88f13693523a4ca806de12c4bc9591378079e78",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/freshrna_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/freshrna_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/freshrna_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/freshrna_run.py"
+      ],
+      "counting_path_count": 154,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "b88f13693523a4ca806de12c4bc9591378079e78",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/freshrna_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "b88f13693523a4ca806de12c4bc9591378079e78",
+      "code_cleanliness_git_sha": "b88f13693523a4ca806de12c4bc9591378079e78",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record b88f136"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 469,
+      "opens_under_data": 86,
+      "files_read": 29,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
