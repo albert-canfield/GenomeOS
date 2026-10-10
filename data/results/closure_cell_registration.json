@@ -1,0 +1,320 @@
+{
+  "result": "closure_cell_registration",
+  "date": "2026-10-10",
+  "lane": "lane-closurecell",
+  "item": "ROADMAP section 5 item 14, M3: closure at the cell level (area I, Next 5)",
+  "registered_in_its_own_commit": "This registration and the code that reads the outcome are committed before the first count of the screen is read. The inventory commit that precedes it holds the census and the frozen population; this commit holds the prediction, the baselines, the falsifier, the stop rule and the exact wording of every outcome. Nothing below is a number the run produces.",
+  "question": "The gene-level closure asked whether a gene's attributed elements go with the RNA the cell makes. This asks the next link: when the project says element e drives gene G on K562's own track, and K562 is a cell that depends on G, does silencing e in K562 cost the cell its share of a pooled culture?",
+  "chain_under_test": [
+    "the project's claim: e's deletion changes G on the K562 RNA track (predicted_coding_by_cell['K562'], signed so that a positive effect means e holds G up)",
+    "the premise about the cell: K562 (ACH-000551) has a Chronos gene effect at or below -0.5 for G in DepMap 24Q4 Public",
+    "the consequence measured: the guides targeting e are less abundant in ENCODE's CRISPRi proliferation screen in K562 than in ENCODE's control screen for it"
+  ],
+  "prediction": "Elements whose attributed gene is one K562 depends on are depleted in the CRISPRi screen relative to the control more than elements whose attributed gene is one K562 does not depend on, WHEN the element's nearest coding gene is in neither case a gene K562 depends on. The qualifier is the test: it is what makes the comparison about the attribution rather than about the neighbourhood.",
+  "measured_readout": "Per element, log2 of its share of the CRISPRi library over its share of the control library: counts per million of the summed counts of the targeting guides inside the element, pooled over the four replicates of each side, with a pseudocount of 1.0 on the element. Per-replicate-pair values are reported beside the pooled one and decide nothing.",
+  "readout_is_not": "This is relative guide abundance at harvest in CRISPRi-modified cells against unmodified cells carrying the same library. It is not a growth rate, not a count of doublings and not a measurement of gene G.",
+  "population": {
+    "frozen_at": "data/knowledge/closure_cell/closure_cell_population.json.gz",
+    "sha256": "107e18a6a6aed8319c3f2a78453903b791ac7a6490f234eac15e6a555052430a",
+    "elements": 47912,
+    "how_it_was_built": "every element of the project's all-enhancer deletion sweep with a named coding target, at least 3 of the screen library's guides inside it and a value on K562's own track; the census that built it read no count",
+    "digest_is_a_gate": "the run recomputes this sha256 and refuses to measure if it moved"
+  },
+  "arms": {
+    "sizes_known_in_advance": {
+      "attributed_not_neighbourhood_not": 5427,
+      "attributed_essential_neighbourhood_essential": 145,
+      "attributed_essential_neighbourhood_not": 35,
+      "negative_direction_attributed_essential": 31,
+      "attributed_not_neighbourhood_essential": 147,
+      "promoter_of_a_gene_k562_depends_on": 757
+    },
+    "meaning": {
+      "attributed_essential_neighbourhood_not": "the project attributes the element to a gene K562 depends on, and the element's nearest coding gene is one K562 does not depend on: the attribution carries the claim and proximity does not",
+      "attributed_not_neighbourhood_not": "neither the attributed gene nor the nearest coding gene is one K562 depends on: the floor",
+      "attributed_essential_neighbourhood_essential": "both the attributed gene and the nearest coding gene are genes K562 depends on: the claim holds, but proximity would make it too",
+      "attributed_not_neighbourhood_essential": "the nearest coding gene is one K562 depends on and the attributed gene is not: proximity carries the claim and the attribution does not"
+    },
+    "positive_control": {
+      "name": "promoter_of_a_gene_k562_depends_on",
+      "size": 757,
+      "what_it_is": "elements within 2000 bp of the TSS of a protein-coding gene K562 depends on. CRISPRi at a promoter silences that gene directly, so these must deplete; if they do not, the readout is not shown to work in this population. They are excluded from every other arm."
+    },
+    "direction_arm": {
+      "name": "negative_direction_attributed_essential",
+      "size": 31,
+      "what_it_is": "elements whose predicted effect on K562's own track has the opposite sign, attributed to a gene K562 depends on. The sign makes no depletion prediction, so this arm is reported apart and is in no comparison that decides."
+    }
+  },
+  "baselines": {
+    "the_gene_s_dependency_alone": "arm C (attributed_not_neighbourhood_essential): the element's NEAREST coding gene is one K562 depends on and its attributed gene is not. This is what distance-to-nearest-gene plus essentiality predicts, with the project's attribution contributing nothing, and it is the baseline the chain has to beat.",
+    "the_floor": "arm D (attributed_not_neighbourhood_not): neither gene is one K562 depends on. Every arm is read against this one.",
+    "both_at_once": "arm B (attributed_essential_neighbourhood_essential): the claim holds but proximity would make it too, so a separation here is not attributable to either.",
+    "the_assay_s_own_null": "the non-targeting guides of the same library, pooled per file. Their pooled log2 ratio is reported as the assay's zero and is not an arm."
+  },
+  "power_stated_in_advance": {
+    "what_the_number_is": "P(a random element of the arm sits below a random element of the floor arm), 0.5 under the null; the value given is the smallest such probability the test can detect at one-sided alpha 0.05 and power 0.8, and it can detect nothing smaller",
+    "floor_arm_size": 5427,
+    "attributed_essential_neighbourhood_not": {
+      "n": 35,
+      "smallest_detectable_probability": 0.6217
+    },
+    "attributed_essential_neighbourhood_essential": {
+      "n": 145,
+      "smallest_detectable_probability": 0.5604
+    },
+    "attributed_not_neighbourhood_essential": {
+      "n": 147,
+      "smallest_detectable_probability": 0.56
+    },
+    "promoter_of_a_gene_k562_depends_on": {
+      "n": 757,
+      "smallest_detectable_probability": 0.5279
+    },
+    "note_on_the_median": "no detectable shift in log2 units can be stated in advance: it depends on the spread of the readout, which is an outcome and is not read here"
+  },
+  "secondary_pooled_comparison": "Arms A and B pooled (every element whose attributed gene is one K562 depends on, whatever its neighbourhood) against arms C and D pooled, reported beside the primary because it has more elements. It DECIDES NOTHING and cannot: pooling puts back the proximity confound the arms were built to remove, since an element attributed to a gene K562 depends on usually sits next to that gene. It is in the result for the reader who wants the larger comparison, with arm C beside it as its control.",
+  "matched_control": "Arms A and D are matched by construction on the three things that could otherwise carry the contrast: the element is distal (more than 2000 bp from any coding TSS), its nearest coding gene is one K562 does not depend on, and its prediction clears the same magnitude bar on the same cell's track. They differ in one thing: whether the gene the project attributes the element to is one K562 depends on. The guide count per element is reported per arm so a coverage difference cannot be mistaken for the effect.",
+  "falsifier": "The chain is refuted on this readout if arm A's median log2 ratio is not below arm D's, or if the one-sided Mann-Whitney p for A below D is at or above 0.05, while the positive control does separate from D on the same two conditions. It is also refuted as an ADDITION if arm C separates from D and arm A does not: that is the neighbourhood doing the work the attribution claimed. Nothing here can establish that a separation is mediated by gene G: a pooled fitness screen cannot say through what an element acts.",
+  "stop_rule": "If arm A, arm D or the positive control holds fewer than 30 MEASURED elements -- measured meaning at least 3 of its guides seen in the files and at least 20 pooled control reads -- no comparison is run, the stopped_for_power wording is the result, and the counts are reported as they stand. The run also stops, with nothing written, if the population's digest has moved, if a streamed file's md5 does not match the md5 ENCODE publishes, or if more than 0.1% of a file's rows do not fit the layout.",
+  "thresholds": {
+    "min_guides_per_element": 3,
+    "min_pooled_control_count": 20,
+    "min_prediction_magnitude_on_the_cell_s_track": 0.1,
+    "essential_at_or_below": -0.5,
+    "not_essential_at_or_above": -0.1,
+    "promoter_window_bp": 2000,
+    "depletion_rate_cut": "the floor arm's own 5.0th percentile, so the floor arm's rate is 5.0% by construction",
+    "alpha": 0.05,
+    "power_the_detectable_separation_is_quoted_at": 0.8,
+    "sided": "one-sided, for depletion; the direction is part of the prediction",
+    "min_per_arm": 30
+  },
+  "decision_rule": {
+    "1_stop": "if any of arm A (attributed_essential_neighbourhood_not), arm D (attributed_not_neighbourhood_not) or the positive control holds fewer than 30 MEASURED elements, select stopped_for_power and compare nothing",
+    "2_instrument": "else if the positive control's median is not below arm D's, or its one-sided p is at or above 0.05, select readout_not_shown_to_work",
+    "3_chain": "else if arm A's median is below arm D's and the one-sided Mann-Whitney p for A below D is under 0.05, select chain_supported",
+    "4_proximity": "else if arm C (attributed_not_neighbourhood_essential) separates from arm D on the same two conditions while arm A does not, select proximity_explains_it",
+    "5_negative": "else select no_difference_detected",
+    "ties": "the thresholds are read as written: 'under 0.05' is strict, 'below' is strict, and a p that is exactly 0.05 does not pass"
+  },
+  "outcome_wordings": {
+    "chain_supported": "The cell-level closure holds in K562 for the elements the attribution carries on its own: over {n_a} elements whose attributed gene is one K562 depends on and whose nearest coding gene is not, the median log2 relative guide abundance in the CRISPRi screen against the control is {median_a}, against {median_d} over the {n_d} elements where neither gene is one K562 depends on (one-sided Mann-Whitney p {p_ad}); {rate_a} of {n_a} fall at or below the floor arm's 5th percentile, which is 5% of {n_d} by construction. The positive control works in the same population: {n_p} promoter elements of genes K562 depends on have median {median_p} (p {p_pd} against the same floor).",
+    "no_difference_detected": "No difference was detected at the cell level: over {n_a} elements whose attributed gene is one K562 depends on and whose nearest coding gene is not, the median log2 relative guide abundance in the CRISPRi screen against the control is {median_a}, against {median_d} over the {n_d} elements where neither gene is one K562 depends on (one-sided Mann-Whitney p {p_ad}); {rate_a} of {n_a} fall at or below the floor arm's 5th percentile, which is 5% of {n_d} by construction. The positive control does separate in the same population ({n_p} promoter elements of genes K562 depends on, median {median_p}, p {p_pd}), so the readout is responsive and this is a negative result about the attribution, not about the assay. No difference detected is not no difference.",
+    "proximity_explains_it": "What the screen separates is proximity and not the attribution: the {n_c} elements whose NEAREST coding gene is one K562 depends on while their attributed gene is not have median {median_c} against the floor's {median_d} over {n_d} elements (p {p_cd}), while the {n_a} elements the attribution carries on its own have median {median_a} (p {p_ad}). The positive control works in the same population ({n_p} promoter elements, median {median_p}, p {p_pd}). On this readout the attribution adds nothing to the neighbourhood.",
+    "readout_not_shown_to_work": "The result is uninterpretable as registered: the positive control does not separate. Over {n_p} promoter elements of genes K562 depends on the median log2 relative guide abundance is {median_p} against the floor arm's {median_d} over {n_d} elements (p {p_pd}), so this pairing of the screen with these element boundaries is not shown to detect a cell-level cost even where one must exist. The primary arms are reported for the record and decide nothing: {n_a} elements at median {median_a}, p {p_ad}.",
+    "stopped_for_power": "Stopped at the registered stop rule, with nothing compared: the arms the primary comparison needs hold {n_a} and {n_d} measured elements and the positive control {n_p}, against the registered minimum of {min_per_arm}. No comparison was run and no reading is offered."
+  },
+  "what_will_be_reported_whatever_happens": [
+    "every arm's size, measured count, mean, median and depletion rate, each with its denominator beside it",
+    "the mean guide count and the mean pooled control count per arm, so coverage is visible",
+    "the non-targeting guides' pooled ratio as the assay's zero",
+    "the per-replicate-pair readings beside the pooled one",
+    "the row census of each streamed file, the malformed-row count and the md5 check"
+  ],
+  "cannot_establish": [
+    "that a depleted element acts through the gene the project attributes it to: a pooled fitness screen measures the culture, not the gene",
+    "that an element with no depletion is not regulatory: the screen's power per element is set by its guide count and the gene's dependency, and absence here is not absence",
+    "anything about cells other than K562, or about any gene K562 does not depend on",
+    "any direction claim about elements whose predicted sign is negative: that arm is reported apart and decides nothing"
+  ],
+  "prior_exposure": "The proliferation readout of this screen has never been read in this project. Klann 2021 appears in two places and neither touches it: the ENCODE CRISPRi benchmark's expression-effect pairs under data/knowledge/crispri, and scripts/prior_only_test.py, which classified that benchmark slice unscorable. The eight guide-quantification files were opened once each for their first two megabytes, to fix the column layout, and no count value was kept; the census result records that probe.",
+  "money": "none: ENCODE and DepMap are public, and no model request of any kind is made",
+  "alphagenome_requests": 0,
+  "inventory_result": "closure_cell_inventory",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE4 functional characterisation (wgCERES, Gersbach and Reddy labs): ENCSR162HMH, a CRISPRi proliferation screen in K562, and ENCSR625TAF, ENCODE's control screen for it",
+        "version": "ENCODE portal, released; ENCODE data use policy (no restrictions)"
+      },
+      {
+        "accession": "DepMap CRISPRGeneEffect (Chronos), K562 = ACH-000551",
+        "version": "DepMap 24Q4 Public, doi:10.25452/figshare.plus.27993248.v1; DepMap Public 24Q4, Broad Institute, CC BY 4.0"
+      },
+      {
+        "accession": "the project's own census and frozen population for this test",
+        "version": "data/results/closure_cell_inventory.json as committed, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/closure_cell_inventory.json",
+        "sha256": "58a0d3d9a2d3b3b1c630573c287f533dbe263e1650797d5e17b4c82ab84e7d85",
+        "bytes": 45353,
+        "partition": "the census this registration's arm sizes are read from; it contains no outcome"
+      },
+      {
+        "path": "data/knowledge/closure_cell/closure_cell_population.json.gz",
+        "sha256": "107e18a6a6aed8319c3f2a78453903b791ac7a6490f234eac15e6a555052430a",
+        "bytes": 1428093,
+        "partition": "the frozen population, pinned by digest so the measured set cannot move"
+      }
+    ],
+    "assembly": "GRCh38 throughout; nothing is lifted",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the frozen population's own element intervals and the files' 3 bp guide intervals; this registration computes no coordinate of its own"
+    },
+    "parameters": {
+      "min_guides": 3,
+      "min_pooled_control_count": 20,
+      "min_effect": 0.1,
+      "essential": -0.5,
+      "not_essential": -0.1,
+      "promoter_window": 2000,
+      "pseudocount": 1.0,
+      "depletion_percentile": 5.0,
+      "min_per_arm": 30,
+      "alpha": 0.05
+    },
+    "exclusions": [
+      "every element the census left out: fewer than MIN_GUIDES guides, or no value on K562's own track",
+      "every element whose dependency call, for the attributed or the nearest coding gene, is borderline or unmeasured",
+      "promoter elements from every arm but the positive control",
+      "every count of the screen: none is read by this writer"
+    ],
+    "partitions": "n/a: a registration written before the measurement; nothing is evaluated",
+    "code_cleanliness": {
+      "git_sha": "ff04f9b90ab5cab2513325b475a755abea4aa0d6",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/closure_cell_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/closure_cell_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/closure_cell_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/roadmap_truth_pass.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/closure_cell.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/closure_cell_register.py"
+      ],
+      "counting_path_count": 75,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "ff04f9b90ab5cab2513325b475a755abea4aa0d6",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/roadmap_truth_pass.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/closure_cell_registration.json",
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/closure_cell_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "ff04f9b90ab5cab2513325b475a755abea4aa0d6",
+      "code_cleanliness_git_sha": "ff04f9b90ab5cab2513325b475a755abea4aa0d6",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record ff04f9b"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 87,
+      "opens_under_data": 4,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
