@@ -288,3 +288,35 @@ def test_a_multi_choice_that_adds_nothing_is_none_added():
     one = tc.score_one(fit, pop, anchor)
     out = tc.score(fit, pop, anchor, one, (tc.ONE, tc.MULTI), None)
     assert out["outcome"] == "NONE_ADDED" and out["falsified"]
+
+
+def test_top_k_is_the_k_the_committed_training_census_names():
+    import json
+    from pathlib import Path
+
+    import tracked_paths as tp
+
+    tp.must_be_present(tc.CENSUS)
+    census = json.loads(Path(tc.CENSUS).read_text())
+    assert census["top_k"] == tc.TOP_K == 6
+    assert census["heldout_read"] is False
+    assert census["census_rule"] == tc.CENSUS_RULE
+    assert tc.read_choices(tc.TOP_K) == (tc.ONE, tc.MULTI, tc.TOPK)
+
+
+def test_the_run_pins_its_own_code_and_reads_the_population_by_m1cs_ids():
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    import targetchoice_run as run
+
+    assert set(run.FROZEN) == {
+        "genomeos/attribution/targetchoice.py",
+        "scripts/targetchoice_census.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+    }
+    assert "genomeos/attribution/signaltrace.py" in run.STAGE_CODE
+    training = [pair(1, 2, "A", chrom="chr2"), pair(1, 2, "B", chrom="chr10")]
+    assert run.chromosomes_of(training, ["chrX:5-9:G", "chr2:1-2:A"]) == ["chr2", "chr10", "chrX"]

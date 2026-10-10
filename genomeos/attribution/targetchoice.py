@@ -49,9 +49,12 @@ CELL = st.CELL
 ONE = "one_target"
 MULTI = "multi_target"
 TOPK = "top_k"
-#: the k of the secondary choice, chosen on the training split by CENSUS_RULE before the registration;
-#: None until the census has run, and the secondary choice is then not read
-TOP_K: int | None = None
+#: the k of the secondary choice, chosen on the training split by CENSUS_RULE before the registration:
+#: data/results/targetchoice_census.json (3d85122, written at 41b2694 from the training split only) names
+#: k = 6, in-sample average precision 0.7098 against 0.6819 at k = 1 and 0.7096 for every candidate
+TOP_K: int | None = 6
+#: where TOP_K was read from, pinned by sha256 in the registration
+CENSUS = "data/results/targetchoice_census.json"
 #: the k the census tries, smallest first (ties go to the smaller k)
 K_TRIED = tuple(range(1, 11))
 
