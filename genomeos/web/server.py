@@ -3263,9 +3263,11 @@ class Api:
             out["knockout"]["symbol"] = knockout.upper()
         return out
 
-    def flow(self, gene: str, chrom: str, variant: str | None) -> dict:
-        """DNA → RNA → protein trace of a gene's canonical transcript, optionally with one base change."""
-        from genomeos.flow import trace_gene
+    def flow(self, gene: str, chrom: str, variant: str | None, tissue: str | None = None) -> dict:
+        """DNA → RNA → protein trace of a gene's canonical transcript, optionally with one base change;
+        with a tissue, also on that tissue's dominant isoform (UNKNOWN when it is not established)."""
+        from genomeos.flow import trace_gene, trace_gene_in_tissue
+        from genomeos.flow.tissue import cached_isoforms
         from genomeos.genome import IndexedGenome, default_gencode
 
         if not gene or not gene.replace("-", "").replace("_", "").isalnum():
@@ -3284,11 +3286,15 @@ class Api:
         genome = IndexedGenome(fa)
         try:
             tr = trace_gene(genome, g, module.entities[g.id].transcripts)
+            txs = module.entities[g.id].transcripts
+            tt = trace_gene_in_tissue(genome, g, txs, tissue, cached_isoforms(g.symbol)) if tissue else None
         finally:
             genome.close()
         if tr is None:
             raise ApiError(f"{gene} has no transcripts")
         out = tr.to_dict()
+        if tt is not None:
+            out["tissue"] = tt.to_dict()
         out["gene_start"], out["gene_end"] = g.locus.start, g.locus.end
         out["transcripts"] = len(g.transcripts)
         from genomeos.genome.regulation import regulation_of
@@ -3347,6 +3353,8 @@ class Api:
                 )
                 ref, alt = change.upper().split(">")
                 out["variant"] = tr.substitute(int(pos) - 1, ref, alt)  # user gives 1-based
+                if tt is not None:
+                    out["variant_in_tissue"] = tt.substitute(int(pos) - 1, ref, alt)
             except (ValueError, IndexError) as e:
                 raise ApiError("variant format: POSITION REF>ALT, e.g. 25897620 G>A (1-based)") from e
         return out
@@ -3528,7 +3536,10 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/flow":
                 return self._json(
                     self.api.flow(
-                        self._q(qs, "gene", ""), self._q(qs, "chrom", "chr21"), self._q(qs, "variant")
+                        self._q(qs, "gene", ""),
+                        self._q(qs, "chrom", "chr21"),
+                        self._q(qs, "variant"),
+                        self._q(qs, "tissue"),
                     )
                 )
             if u.path == "/api/protein":

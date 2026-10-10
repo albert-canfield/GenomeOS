@@ -196,3 +196,21 @@ def test_cached_isoforms_reads_the_cache_and_never_fetches(tmp_path):
     assert cached_isoforms("g1", tmp_path)["gene"] == "G1"
     (tmp_path / "gtex_isoforms_BAD.json").write_text("{not json")
     assert cached_isoforms("BAD", tmp_path) is None
+
+
+def test_flow_lines_show_the_tissue_isoform_or_unknown_never_the_canonical_in_its_place():
+    import pytest
+
+    from genomeos.flow.tissue_view import flow_lines, parse_variant
+
+    assert parse_variant("21 A>T") == (20, "A", "T")
+    assert parse_variant("c:2,1A>t") == (20, "A", "T")
+    with pytest.raises(ValueError):
+        parse_variant("21 AT>G")
+    g, gene, txs = _genome(), _gene(), _transcripts()
+    brain = flow_lines(trace_gene_in_tissue(g, gene, txs, "Brain_Cerebellum", ISO), (20, "A", "T"))
+    text = "\n".join(brain)
+    assert "ENST2.5" in text and "3 aa" in text and "canonical" in text
+    assert "in Brain_Cerebellum intron; on the canonical missense p.Asp3Val (class_changed)" in text
+    lung = "\n".join(flow_lines(trace_gene_in_tissue(g, gene, txs, "Lung", ISO), (20, "A", "T")))
+    assert "UNKNOWN (tie:" in lung and "in Lung UNKNOWN; on the canonical missense p.Asp3Val" in lung

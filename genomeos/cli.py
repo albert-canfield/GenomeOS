@@ -2741,6 +2741,15 @@ def cmd_flow(args: argparse.Namespace) -> int:
             )
     except Exception as e:  # noqa: BLE001
         print(f"             (UniProt unavailable: {e})")
+    if args.tissue:  # the isoform the tissue makes, beside the canonical (genomeos/flow/tissue.py)
+        from genomeos.flow import trace_gene_in_tissue
+        from genomeos.flow.tissue import cached_isoforms
+        from genomeos.flow.tissue_view import flow_lines, parse_variant
+
+        tt = trace_gene_in_tissue(
+            genome, g, m.entities[g.id].transcripts, args.tissue, cached_isoforms(g.symbol)
+        )
+        print("\n".join(flow_lines(tt, parse_variant(args.variant) if args.variant else None)))
     # cell behaviour: libraries
     kb = KnowledgeBase() if KnowledgeBase.available() else None
     libs = kb.libraries_of(g.symbol) if kb else []
@@ -5263,6 +5272,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--chrom", default="chr21")
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--gff3")
+    p.add_argument(
+        "--tissue", help="also trace the tissue's dominant isoform (GTEx v8, cached), e.g. Brain_Cerebellum"
+    )
+    p.add_argument("--variant", help="with --tissue: one base change, POSITION REF>ALT (1-based)")
     p.set_defaults(fn=cmd_flow)
 
     p = sub.add_parser("pathway", help="run a Reactome pathway as a reachability graph; knock a protein out")

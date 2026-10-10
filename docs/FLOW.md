@@ -164,3 +164,11 @@ coding only on a tissue's isoform. Both consequences are predictions of the
 local trace on GTEx's population-median isoform, not measurements and not
 this person's own expression; the genes are the project's cached set (mostly
 translation-disagreement genes), not a sample of the genome.
+
+Run it: `genomeos flow APP --chrom chr21 --tissue Brain_Cerebellum --variant "25891834 C>A"`
+prints the cerebellum's APP-202 (695 aa) beside the canonical APP-201 (770 aa)
+and the change on both, p.Gly625Val there and p.Gly700Val on the canonical
+(residue_changed); a tissue whose isoform is not established prints UNKNOWN
+and its reason. `/api/flow?gene=APP&chrom=chr21&tissue=Brain_Cerebellum&variant=…`
+adds `tissue` and `variant_in_tissue` to the JSON; the Flow tab does not yet
+draw them.
