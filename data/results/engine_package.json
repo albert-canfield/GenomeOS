@@ -1,11 +1,12 @@
 {
   "result": "engine_package",
-  "date": "2026-09-29",
+  "date": "2026-10-10",
   "name": "biolang",
   "built": {
     "files": 38,
     "rewritten": 23,
-    "package": "/Users/AlbertCanfield/SITES DEV/GenomeOS/build/biolang/biolang",
+    "package": "build/biolang/biolang",
+    "package outside repository": false,
     "dangling references": [],
     "version": "0.1.0",
     "test files": [
@@ -21,6 +22,7 @@
       "test_gastrulation.py",
       "test_grammar.py",
       "test_grn_clamp.py",
+      "test_grn_competition.py",
       "test_human_body.py",
       "test_lang.py",
       "test_lang_keys.py",
@@ -30,6 +32,7 @@
       "test_order.py",
       "test_plasticity.py",
       "test_pools.py",
+      "test_reader_construct.py",
       "test_recheck.py",
       "test_runtime.py",
       "test_sbml.py",
@@ -41,12 +44,13 @@
       "test_when_matcher.py",
       "test_when_not_equal.py"
     ],
-    "test functions": 209,
+    "test functions": 236,
     "fixtures": [
       "data/demo/cell_context.bio",
       "data/demo/gastrulation.bio",
       "data/demo/hoxd_order.bio",
       "data/demo/lateral_inhibition.bio",
+      "data/demo/reader_gating.bio",
       "data/demo/repressilator.bio",
       "data/demo/segmentation_clock.bio",
       "data/models/BIOMD0000000012.xml",
@@ -73,7 +77,8 @@
       "BIOLANG-v0.1.md",
       "BIOLANG-v0.2.md",
       "BIOLANG-v0.3.md",
-      "BIOLANG-v0.4-ECONOMY.md"
+      "BIOLANG-v0.4-ECONOMY.md",
+      "BIOLANG-v0.5-READER.md"
     ]
   },
   "checks": [
@@ -92,7 +97,7 @@
     {
       "check": "bio compile",
       "ok": true,
-      "output": "  \"organism\": null, |   \"regime\": null | }",
+      "output": "  \"regime\": null, |   \"readers\": [] | }",
       "error": ""
     },
     {
@@ -128,9 +133,9 @@
     {
       "check": "the engine's own pytest suite",
       "ok": true,
-      "output": "317 passed, 3 skipped, 3 xfailed in 53.57s",
+      "output": "366 passed, 3 skipped, 3 xfailed in 34.45s",
       "error": "",
-      "passed": 317,
+      "passed": 366,
       "failed": 0,
       "skipped": 3,
       "skip reasons": [
@@ -142,7 +147,7 @@
     {
       "check": "the grammar and the specs are in the package, and the grammar is what its parser renders",
       "ok": true,
-      "output": "DOCS 5 documents, grammar current, 6 files",
+      "output": "DOCS 6 documents, grammar current, 7 files",
       "error": ""
     },
     {
@@ -159,20 +164,18 @@
     }
   ],
   "passed": true,
+  "canonical run": true,
   "result_manifest": {
     "code": {
-      "git_sha": "56fad910910cb65e55dffbe2cf72a2d3748cf551",
+      "git_sha": "48c65e39d792041aef3dfdba4114f06797aca054",
       "dirty": false,
       "dirty_code_paths": [],
       "untracked_code_paths": [],
-      "dirty_result_paths": [
-        "data/results/clause2_design_power_calibrated.json",
-        "data/results/engine_package.json"
-      ],
+      "dirty_result_paths": [],
       "argv": [
         "scripts/package_engine.py"
       ],
-      "python": "3.14.3"
+      "python": "3.12.13"
     },
     "complete": false,
     "problems": [
@@ -183,6 +186,28 @@
       "missing parameters",
       "missing exclusions",
       "missing partitions"
-    ]
+    ],
+    "revision_stamps": {
+      "code_git_sha": "48c65e39d792041aef3dfdba4114f06797aca054",
+      "code_cleanliness_git_sha": null,
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": false,
+      "agree": null,
+      "revision_race": null,
+      "reading": "cannot say whether HEAD moved during the write: code_cleanliness.git_sha is absent. This is not a record that the two stamps agree"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 0,
+      "opens_under_data": 0,
+      "files_read": 0,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
   }
 }
