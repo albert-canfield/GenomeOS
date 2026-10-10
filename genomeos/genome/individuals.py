@@ -992,6 +992,27 @@ def _reference_base_reader(chrom: str, reference: Path = Path("data/reference"))
     return base_at, g
 
 
+#: What `trio()` tells the reader about its counts. Each number is the record's: area D's phasing
+#: (`data/results/trio_q100_phase.json`, `trio_q100_population.json`, commit 4d63910) and read allele
+#: fractions (`data/results/trio_vaf.json`, commit 0125926); `tests/test_trio_note.py` pins them.
+TRIO_NOTE = (
+    "a de novo candidate is a child call absent from both parents' files inside both parents' trusted "
+    "regions; germline de novo variation is about 60 to 100 per genome, and a candidate is not a germline "
+    "call. Where a larger count was checked (HG002 with HG003 and HG004, alleles normalised, trusted regions "
+    "applied), the 1,430 candidates are neither mostly representation artefacts nor mostly parent-side "
+    "misses: of 1,411 assessable, 1,382 sit on one parental chromosome of the Q100 assembly, 703 paternal "
+    "to 679 maternal (data/results/trio_q100_phase.json, 4d63910); 35 of those 1,148 SNVs (3.0%) are seen "
+    "in 88 HPRC haplotypes against 11,950 of 12,871 inherited calls (92.8%; exploratory, "
+    "data/results/trio_q100_population.json); and the 1,375 assessed sit at a median read allele fraction "
+    "of 0.442 against 0.495 for 1,282,858 inherited heterozygous SNVs (data/results/trio_vaf.json, "
+    "0125926): one shifted group, read as one clone's mutations carried in about 88% of cells, not germline "
+    "(HG002's DNA is from a cell line); 89 sit at 0.50 or above, so at most about 208 can be germline "
+    "(exploratory). For another trio, or alleles compared as written, the cause of an excess is not "
+    "measured. A Mendelian error is a homozygous child call with a parent lacking the allele, inside the "
+    "trusted regions"
+)
+
+
 def trio(
     child: str,
     father: str,
@@ -1114,10 +1135,7 @@ def trio(
         "date": time.strftime("%Y-%m-%d"),
         "evidence": "measured genotypes of three people; inheritance derived by comparing calls at the same "
         "position and alleles",
-        "note": "a de novo candidate is a child call absent from both parents' files inside both parents' "
-        "trusted regions: real de novo variation is about 60 to 100 per genome, so a larger count is "
-        "representation differences and residual no-calls; a Mendelian error is a homozygous child call "
-        "with a parent lacking the allele, inside the trusted regions",
+        "note": TRIO_NOTE,
     }
     d = root / child
     d.mkdir(parents=True, exist_ok=True)
