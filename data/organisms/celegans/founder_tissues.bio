@@ -1,0 +1,34 @@
+# Terminal tissue from founder identity, for the founders whose whole clone is one tissue (area E).
+#
+# The program's other terminal fates are written cell by cell by the observed lineage (`fate_<cell>` in
+# lineage_embryo.bio), and the factor rules of fates.bio only ever choose among types on a cell that
+# lookup has already made terminal: that is why area E's count of fates decided without the lookup
+# stood at 0 (d5215bf). These three rules write a terminal type from the founder identity instead, so a
+# program that imports them and leaves the lookup's fates out (embryo_nolookup.bio) decides the fates
+# of three clones without any `fate_<cell>` decision.
+#
+# WHAT IS CIRCULAR HERE, stated before any number. The content of each rule -- E's clone is intestine,
+# D's clone is body-wall muscle, P4's daughters are the germ line -- is Sulston et al. 1983's
+# observation, which is the same record the 555 embryonic fates are scored against. As predictions of
+# the wild type these rules therefore predict nothing: a fate they get right was written from the
+# answer. What they add is that the fate now follows whatever decided the founder identity. For E that
+# is a Wnt read at a measured contact (founders_contacts.bio, contacts_embryo_cshaper.tsv): no EMS-P2
+# contact, no polarised EMS, no E, no intestine. For D and P4 it is the maternal factors as segregated
+# by named divisions, and no contact at all. And a knockout that moves a founder now moves the clone's
+# terminal tissue too, where with the lookup present the lookup wrote the wild-type fate regardless.
+#
+# Not written, and why: C (its clone is hypodermis from Caa/Cpa and muscle from Cap/Cpp, plus two
+# neurons), MS (muscle, pharynx, gland, coelomocytes, valve, neurons) and every AB founder are not one
+# tissue, and a rule naming a sub-founder (`cell = Cap`) would be the lookup again under another name.
+#
+# A rule fires when the founder type is set, so every dividing descendant carries the tissue type, not
+# only the terminal cells: E is specified as intestine at E (Zhu 1997; Maduro 2005), and the type is
+# what its clone is committed to, with `commitment terminal_fate` holding it.
+# test: entities >= 3
+# test: unknowns == 0
+module organism.celegans.founder_tissues
+import cell_types.bio
+
+decision tissue_E { action: differentiate; when: cell_type = EPrecursor; to: Intestine; evidence: experimental "Sulston et al. 1983, Dev Biol 100:64 (E is the only founder of the intestine and its clone is nothing else); Zhu et al. 1997, Genes Dev 11:2883 (END-1 specifies the endoderm precursor); Maduro et al. 2005, Dev Biol 284:509 (END-1 and END-3 together specify E)"; confidence: 0.9 }
+decision tissue_D { action: differentiate; when: cell_type = DPrecursor; to: Muscle; evidence: experimental "Sulston et al. 1983 (D gives 20 body-wall muscles and nothing else); Hunter & Kenyon 1996, Cell 87:217 (PAL-1 is needed for the D fate); Baugh et al. 2005, Development 132:1843 (PAL-1 specifies the D muscle network)"; confidence: 0.85 }
+decision tissue_germline { action: differentiate; when: cell_type = GermCell; to: Reproductive; evidence: experimental "Sulston et al. 1983 (P4 gives Z2 and Z3, the primordial germ cells, labelled reproductive in the reference); Mello et al. 1996, Nature 382:710 (PIE-1 keeps the germ line)"; confidence: 0.8 }

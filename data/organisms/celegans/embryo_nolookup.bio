@@ -1,0 +1,67 @@
+# C. elegans from one cell with the observed lineage's 555 terminal fates taken out (area E).
+#
+# embryo_contacts.bio with three changes and no others:
+#   1. lineage_embryo_tree.bio in place of lineage_embryo.bio: the same divisions, daughters and deaths,
+#      and none of the 555 `fate_<cell>` decisions that wrote each terminal cell's type;
+#   2. founder_tissues.bio added: E's clone is intestine, D's is body-wall muscle, P4's daughters are the
+#      germ line, each written from the founder identity, which founders_contacts.bio decides;
+#   3. the contact table is the MEASURED one, contacts_embryo_cshaper.tsv (Cao et al. 2020, CShaper,
+#      Supplementary Data 5: the 479 contacts reproducible in all 17 embryos), not the curated one.
+# fates.bio is not imported: every rule in it is guarded on a terminal `cell_type` that only the lookup
+# set (d5215bf), so here it could fire only on the clones founder_tissues.bio types, where the
+# terminal-fate lock refuses any other answer.
+#
+# So every terminal type in this program is set by a founder decision, never by the answer sheet, and
+# what it gets right is area E's count of fates decided without the lookup. Most cells end with no
+# terminal type at all, which is the honest state of a program that does not know them.
+#
+# Run: genomeos grow data/organisms/celegans/embryo_nolookup.bio --until 800 --compare
+# Measured: scripts/celegans_nolookup.py, registered in data/results/celegans_nolookup_registration.json.
+module organism.celegans.embryo_nolookup
+# test: cells >= 2150
+# test: deaths == 131
+import cell_types.bio
+import timers.bio
+import founders_contacts.bio
+import founder_tissues.bio
+import reader.bio
+import lineage_embryo_tree.bio
+import lineage_larva.bio
+
+regime worm { fates: first }
+
+organism Celegans {
+  species: Caenorhabditis elegans
+  genome: WBcel235
+  root: P0
+  cell_type: Zygote
+  seed: 0
+  factors: SKN-1, PIE-1, PAL-1, POP-1, PAR-3, PAR-2, GLP-1, MOM-5
+  environment: temperature = 20
+  contacts: contacts_embryo_cshaper.tsv
+  observe: count, deaths, fates
+  assert: count at 0.5 min = 2
+  assert: count at 350 min in 240..310
+  assert: count at 500 min in 560..640
+  assert: deaths at 800 min in 100..115
+  reference: celegans
+  evidence: experimental "Sulston et al. 1983, Dev Biol 100:64; contacts measured by Cao et al. 2020, Nat Commun 11:6254 (CShaper, Supplementary Data 5, CC BY 4.0)"; confidence: 0.8
+}
+
+stage Cleavage { from: 0 min; to: 100 min; evidence: experimental "Sulston et al. 1983"; confidence: 0.8 }
+stage Gastrulation { from: 100 min; to: 350 min; evidence: experimental "Sulston et al. 1983 (E2 ingression at ~100 min)"; confidence: 0.8 }
+stage Morphogenesis { from: 350 min; to: 800 min; evidence: experimental "Sulston et al. 1983 (proliferation ends, elongation)"; confidence: 0.7 }
+stage Larva { from: 800 min; to: 5700 min; evidence: experimental "Sulston & Horvitz 1977 (L1-L4)"; confidence: 0.7 }
+stage Adult { from: 5700 min; evidence: experimental "Sulston & Horvitz 1977"; confidence: 0.7 }
+
+decision blastomere { action: differentiate; when: cell_type = Zygote; to: Blastomere; evidence: curated "every descendant of the zygote is a blastomere until it differentiates"; confidence: 0.9 }
+
+# The same lock as embryo_contacts.bio: a clone typed by its founder keeps the type.
+commitment terminal_fate {
+  establish: cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Mesoderm|Muscle|Neuron|Other|PharyngealMarginal|Rectal|Reproductive|TailSpike|Valve
+  locks: cell_type
+  inherit: daughters
+  release: never
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (the myogenic response is lost completely in terminally differentiated cells, and mes-2 does not restore it)"
+  confidence: 0.6
+}
