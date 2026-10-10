@@ -327,3 +327,118 @@ tissue RNA was found, and no adult or larval tissue accessibility was found to p
 FlyAtlas2. The tiles, both STARR-seq sets, Cusanovich, Reddington and Bozek are on dm3 and would
 need lifting to dm6 for the conservation tracks. UCSC gives no phyloP cut-off for dm6 either, so
 the cut would be re-derived here in the same way.
+
+## 8. Drosophila: the worm's domain-rule test on Calderon 2022 (2026-10-10, lane-fly)
+
+The worm test of sections 3 and 4, repeated on a second species and a second source. No money, no
+key, no model request.
+
+Code: `genomeos/attribution/simpler_fly.py` (imports `simpler.py`, unchanged),
+`scripts/simpler_fly_fetch.py`, `scripts/simpler_fly_run.py` (`inventory`, `register`, `score`),
+`tests/test_simpler_fly.py`. Results: `data/results/simpler_fly_inventory.json`,
+`simpler_fly_registration.json`, `simpler_fly_result.json`, each written from a clean worktree of the
+committed tree.
+
+### The data (fetched 2026-10-10)
+
+Calderon et al. 2022 (Science 377:eabn5800) profiled about 1M nuclei by sci-ATAC and about 0.5M cells
+by sci-RNA over 0–20 h embryos and annotated clusters in each modality. Disk before the fetch: 24 GiB
+free.
+
+| file | what is read | bytes | licence |
+|---|---|---|---|
+| `SupplementaryTables.xlsx` (authors' site, DEAP) | Table S2: ATAC cluster labels per time window; Table S4: ATAC marker accessible regions per cluster | 17,049,285 | not stated |
+| `peaks.bed` (DEAP) | the 110,185-peak set, dm6 | 2,532,609 | not stated |
+| `rna_meta.rds` (DEAP) | RNA cell to `manual_annot` label, 547,805 cells, 51 labels | 24,110,965 | not stated |
+| GEO GSE190147 `scirnaseq_gene_matrix` mtx, rows, columns | UMI counts, 23,932 genes × 547,805 cells, 212,703,167 non-zero entries | 697,773,156 + 88,224 + 19,958,916 | GEO record; no licence stated by the submitters |
+| Ensembl 104 `BDGP6.32` GFF3 | protein-coding genes, transcript 5' ends | 5,713,526 | Ensembl states no restrictions; gene models from FlyBase (CC BY 4.0) |
+
+The matrix was summed over cells by `manual_annot`, all windows pooled, the way the source's own
+pseudobulk script does it (`scripts/RNA/misc/make_germ_pseudobulk.R` on DEAP), and then deleted: the
+store keeps a 1,001,331-byte gene-by-label table. Every file's sha256 is in the inventory. Fetched
+767,226,681 bytes; scouting moved 17,768,866 more (the DEAP page, a range read of the matrix header,
+and the GFF3 of Ensembl 99, 104 and 113, compared on names only: release 104's 13,968 protein-coding
+gene names all appear among the matrix's row names, against 13,837 for 99 and 13,594 for 113). In
+all 784,995,547 bytes of the 1.5 GB budget; 70,454,856 kept. The ATAC peak-by-cell matrices (about
+15 GB) and the per-cluster bigWigs were not fetched: Table S4 is the source's own per-cluster call.
+
+### The node: decided before any RNA value was read
+
+Drosophila, unlike the worm, has insulator proteins (dCTCF, BEAF-32, CP190, Su(Hw)) and TADs, so a
+node in the human form (an element acts inside its boundary-delimited domain) could be built from a
+measured boundary set. **Decision: the worm's gene-structure rule, unchanged** (`simpler.domain_rule`,
+imported, not copied). No boundary set is used, and none was fetched. The reasons:
+
+1. This run is a replication. If the node changed together with the species, a disagreement with the
+   worm could not be attributed to either change.
+2. A boundary set is a choice among several (embryo stage or cell line, Hi-C resolution, caller), and
+   each choice is a free parameter the worm test did not have. Fly Hi-C boundaries are also reported
+   to sit mostly at active promoters (Ramírez et al. 2018, Nat Commun 9:189), so a boundary node and
+   a gene-structure node are not independent in the fly. How far they differ was not measured here.
+3. The human form of the node has its own registered tests. What is open is whether the worm's
+   positive result holds anywhere else.
+
+A boundary-node test would be its own registration, on a boundary set chosen and cited before it is
+run. This decision is committed with the frozen code, before the registration and before any RNA
+value was read.
+
+### One tissue vocabulary for both modalities
+
+Each modality was annotated separately by the source. The two label sets were grouped by name into
+the 14 tissues both modalities name: neural, ventral midline, epidermis, foregut and hindgut, tracheal
+system, salivary gland, Malpighian tubule, muscle, fat body, plasmatocytes, midgut, amnioserosa, germ
+cell, yolk (`ATAC_TISSUE`, `RNA_TISSUE`; primordia go with their tissue, the source's one
+Proventriculus ATAC cluster sits under its Midgut label and the RNA proventriculus follows it).
+Labels that name no tissue both modalities resolve are excluded on both sides: germ-layer and region
+anlagen or primordia (ectoderm, mesoderm, endoderm, mesectoderm, trunk mesoderm), blastoderm,
+maternal, ubiquitous, unknown, head ectoderm (no RNA label), crystal and procrystal cells (no ATAC
+label). The code refuses any label that is neither grouped nor excluded. RNA cells per tissue run
+from 1,145 (Malpighian tubule) to 76,961 (neural).
+
+### The registered test
+
+Registered in `simpler_fly.REGISTRATION` and `data/results/simpler_fly_registration.json`, committed
+before any RNA value was read. `score` refuses to run unless the registration and all five code files
+are committed and unchanged, every input matches its registered sha256, and the census recomputes.
+The grouping, the population and the class rule were fixed with the ATAC census in view, as the
+worm's were; cells per RNA label were seen, no gene's count was.
+
+- **Attribution and baseline.** The worm's domain rule and nearest annotated 5' end, on Ensembl 104
+  protein-coding genes of 2L, 2R, 3L, 3R, 4, X and Y (13,950 genes).
+- **Population.** Table S4 marker calls with adjusted p < 0.05 and a positive log fold change, joined
+  to Table S2's labels on (time window, cluster). A peak is single-tissue when every such call falls
+  in clusters of one tissue and none in an excluded label. Distal: midpoint more than 1 kb from every
+  annotated transcript 5' end of any biotype. Funnel: 17,422 marker rows (all at adjusted p < 0.05;
+  2,361 with a negative fold change), 6,442 peaks with a positive call, 83 with a call in an excluded
+  label, 2,566 in two or more tissues, 3,793 in exactly one; of these 2,518 distal, 460 promoter, 815
+  neither. Distal elements by tissue: neural 1,330, epidermis 579, muscle 301, midgut 224, yolk 47,
+  foregut and hindgut 21, tracheal system 11, plasmatocytes 2, amnioserosa 2, fat body 1; none for
+  ventral midline, salivary gland, Malpighian tubule or germ cell. Table S4 lists markers for 76 of
+  the source's 181 ATAC clusters, mostly between 6 and 16 h.
+- **Where the rules differ.** On 822 of 2,518 (32.6%): 644 inside gene bodies, 171 between genes
+  where another gene's 5' end is nearer, 7 convergent. 1,601 elements lie in a host gene, 917 between
+  genes. 102 1-Mb clusters.
+- **Endpoint.** Per tissue, UMI counts summed over that tissue's cells, all windows pooled, as counts
+  per million. Concordant: the attributed gene is at 5 CPM or more in the element's tissue and higher
+  there than in each of the other 13. The 5 CPM threshold copies the worm's 5 TPM; it was set before
+  any value was read. A protein-coding gene absent from the RNA rows is not concordant.
+- **Statistic, matched control, falsifier, decision.** The worm's, unchanged: the difference in
+  points with a 95% percentile cluster bootstrap over 1-Mb windows; a matched-distance control gene
+  per element; falsified if the domain rule's concordance is not above that control (one-sided
+  p ≥ 0.05); DOMAIN_RULE_AHEAD, NEAREST_AHEAD or NO_DIFFERENCE_DETECTED from the interval. The
+  replication is read from the same label: ahead replicates the worm's direction, no difference does
+  not replicate it, nearest ahead reverses it.
+- **Positive control.** The 460 single-tissue promoter elements (midpoint within 500 bp of a
+  protein-coding gene's 5' end), nearest-TSS gene against its matched control; if it does not
+  separate, the readout is declared unresponsive and the reading withheld.
+- **Power in advance.** With 822 differing elements of 2,518, the smallest difference with 80% power
+  at two-sided 5% is about 3.2 points before any inflation for clustering. The worm's difference was
+  +2.89. A worm-sized difference may therefore go undetected here, and a NO_DIFFERENCE_DETECTED would
+  not by itself say the fly differs from the worm.
+- **Stop rule.** One run; fewer than 200 differing elements would have stopped it unscored. Nothing
+  is changed after an RNA value is read.
+- **What it cannot establish.** Accessibility is not function. The two assays come from different
+  nuclei; the RNA is pooled over 0–20 h while a marker call may come from one window; the tissue
+  labels were assigned separately in each modality and grouped here by name. Inside gene bodies
+  accessibility can follow the host's own transcription. Trans-splicing, the worm's outron confound,
+  is rare in the fly, but the host confound stands.
