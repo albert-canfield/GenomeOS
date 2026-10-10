@@ -8,6 +8,7 @@ from dataclasses import fields
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import measured_unknown as mu
 
@@ -198,8 +199,9 @@ def test_population_of_chr21_is_the_organisers_real_unknown():
 # ---- the committed result ---------------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the inventory result is not written yet")
 def test_committed_inventory_reads_no_value_and_its_shortfall_follows_its_counts():
+    # the inventory is committed (7906142), so its absence is a broken checkout, not "not run here"
+    tp.must_be_present(RESULT, was="the inventory result is not written yet")
     d = json.loads(RESULT.read_text())
     assert d["population"]["gate"]["ok"] is True
     assert d["readout_values_read"] == 0

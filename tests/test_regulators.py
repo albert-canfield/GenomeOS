@@ -11,6 +11,7 @@ import random
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import regulators as rg
 
@@ -317,7 +318,12 @@ def test_every_outcome_has_its_wording():
 # --- guarded: the real clusters and the committed census -----------------------------------------------
 
 
-@pytest.mark.needs_local_data("data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz")
+@pytest.mark.needs_local_data(
+    "data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz",
+    how="curl -o data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz "
+    "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/"
+    "encRegTfbsClusteredWithCells.hg38.bed.gz (125 MB; sha256 in regulators.CLUSTER_SOURCE)",
+)
 def test_real_clusters_name_the_test_cells():
     cl = rg.load_clusters(chroms=("chr21",))
     fac = cl.factors_in()
@@ -326,8 +332,8 @@ def test_real_clusters_name_the_test_cells():
 
 
 def test_committed_census_matches_m1_denominator():
-    if not CENSUS.exists():
-        pytest.skip("data/results/regulators_census.json is not written yet")
+    # the census is committed (c267869), so its absence is a broken checkout, not "not run here"
+    tp.must_be_present(CENSUS, was="data/results/regulators_census.json is not written yet")
     d = json.loads(CENSUS.read_text())
     t = d["totals"]
     assert t["rules"] == 440_589  # M1's denominator, data/results/runrules_census.json
