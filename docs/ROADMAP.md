@@ -394,9 +394,9 @@ History: ROADMAP-HISTORY.md §3 B, lines 333–955.
 - **Missing.** The person's own expression: GM24385 has no ENCODE experiment and the GIAB direct-RNA
   runs are raw reads, so `individual protein` states GTEx's median and says why. Measured
   modification occupancy stays blocked. The libRoadRunner adapter does not exist
-  (`runtime/sbml.py` is the stand-in), and Schoeberl2002 still fails. Isoform expression is GTEx's
+  (`runtime/sbml.py` is the stand-in), and Schoeberl2002 still fails *(2026-10-10: on the stand-in only; it passes 33 of 33 on the libRoadRunner adapter, `bdb30d3`, and the stand-in's failure was a divergence that now raises)*. Isoform expression is GTEx's
   adult tissues, not a cell type or a stage.
-- **Next.** 1. The libRoadRunner adapter, scored first on Schoeberl2002 (§5, M6). 2. The
+- **Next.** 1. The libRoadRunner adapter, scored first on Schoeberl2002 (§5, M6): **done 2026-10-10** (`1dcf998`, `bdb30d3`; Schoeberl2002 33 of 33 on libRoadRunner, 0 of 33 on the stand-in). 2. The
   seven gene-keyed CPTAC profiles, once their isoforms are known. 3. The person's own expression in
   place of GTEx's median, which waits for a processed track of GM24385. 4. Measured modification
   occupancy, which waits for a source that publishes it.
@@ -1090,7 +1090,7 @@ Four rules govern the whole plan:
       - event rate units and `param` units are accepted unchecked.
     - D: a population distribution for the polygenic scores (today they are raw sums).
     - J: a species-tree null for the grammar by comparison.
-    - C: the libRoadRunner adapter (Schoeberl2002 still fails on the stand-in).
+    - C: **done 2026-10-10 (lane-roadrunner; `1dcf998` adapter, `b933129` references and tolerance committed before any scored run, `bdb30d3` result, `c0c03f2` divergence now raises):** `runtime/roadrunner.py` sits behind the `roadrunner` extra and is chosen by name; the stand-in stays the default and an absent extra raises, never falls back. Against BioModels curation figures, with the tolerance fixed before the runs (a level or time within max(10%, 3 figure pixels), a period within 3%), **Schoeberl2002 passes 33 of 33 checks at three EGF doses on libRoadRunner and fails all 33 on the stand-in**; Kholodenko2000, Elowitz2000 and Hornberg2005 pass on both engines, which agree within 6e-5 of each species' range. **Correction to the record:** the "flat cascade" of 2026-09-11 was RK4 diverging within 7 steps, with NaN clamped to zero by `max(0.0, nan)`; a diverged run now raises `FloatingPointError`. Open: CI with the extra (6 tests skip without it), the engine package declaring the extra, MaBoSS.
     - H: a population of design answers with published outcomes, so a design answer can carry a calibrated probability; and BIOFORGE-CONFIDENCE §6's second request, since `to_experiment()` still overwrites a program's own `confidence:` (now with UNSTATED).
 
 14. **The known-locus benchmark** (previous item 4): the frame drawn for the question it asks, and the re-score plan registered by lane-readerfix, which awaits the benchmark owner's decision. Recommendation: Albert names the coordinator as owner, and the frame is registered as its own lane.
