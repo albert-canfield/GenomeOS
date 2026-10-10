@@ -26,7 +26,7 @@ organism Celegans {
   root: P0
   cell_type: Zygote
   seed: 0
-  factors: SKN-1, PIE-1, PAL-1, POP-1, PAR-3, PAR-2, GLP-1, MOM-5
+  factors: SKN-1, PIE-1, POS-1, PAL-1, POP-1, PAR-3, PAR-2, GLP-1, MOM-5
   environment: temperature = 20
   contacts: contacts_embryo.tsv
   observe: count, deaths, fates

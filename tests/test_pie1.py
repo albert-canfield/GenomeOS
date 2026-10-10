@@ -12,13 +12,20 @@ caught.
 from __future__ import annotations
 
 import hashlib
+import json
+from pathlib import Path
 
 import pytest
 
+from genomeos.lang import parse_file
+from genomeos.organism.reference import ReferenceLineage
+from genomeos.runtime.body import Body
+from scripts.celegans_nolookup import counts, decided, founder_types, terminal_cells
 from scripts.pie1_registration import (
     BASE_COMMIT,
     CANDIDATES,
     EXCLUDED,
+    ORG,
     PAIRS,
     PREDICTIONS,
     REGISTRATION,
@@ -27,6 +34,7 @@ from scripts.pie1_registration import (
     base_files,
     registration_digest,
 )
+from tests.committed_data import committed
 
 #: registered 2026-10-10 by lane-pie1, before any candidate was grown
 REGISTRATION_DIGEST = "dca737065c4d9e9b59f35a2aed579401bed65c33bb3276db29d45ef2fd651052"
@@ -79,3 +87,72 @@ def test_every_registered_edit_applies_exactly_once(files, arm):
 def test_an_unregistered_candidate_is_refused(files):
     with pytest.raises(SystemExit):
         apply_edits(files, "C4")
+
+
+# ---- the run (01c64ba) and the one candidate it applied (2026-10-10) ----------------------------------
+
+RESULT = "data/results/pie1_corrections.json"
+
+
+@committed(RESULT)
+def test_the_committed_result_is_the_registered_run_and_c3_alone_survives():
+    d = json.loads(Path(RESULT).read_text())
+    assert d["registration_digest"] == REGISTRATION_DIGEST and d["base_commit"] == BASE_COMMIT
+    assert d["result_manifest"]["complete"] is True
+    assert all(a["void"] == [] for a in d["arms"].values())
+    v = d["verdicts"]
+    assert v["survivors"] == ["C3"] and v["surviving_pairs"] == [] and v["apply"] == "C3"
+    assert {k: a["survives"] for k, a in v["arms"].items()} == {
+        "C1": False,
+        "C2": False,
+        "C3": True,
+        "C1+C2": False,
+        "C1+C3": False,
+        "C2+C3": False,
+    }
+    # each rejection is the one registered in advance
+    assert any("PAR-2" in b for b in v["arms"]["C1"]["breaks"])
+    assert not any("MOM-2" in b for b in v["arms"]["C1"]["breaks"])
+    assert any("MOM-2 terminal" in b for b in v["arms"]["C2"]["breaks"])
+    assert any("MOM-5" in b for b in v["arms"]["C2"]["breaks"])
+    for arm in d["arms"].values():  # the wild type is untouched in every arm
+        w = arm["wild_type"]
+        assert (w["decided"], w["right"], w["wrong"], w["seeds_all_56_56_0"]) == (56, 56, 0, True)
+    pie1 = {k: _row(a["knockouts"]["PIE-1"]["terminal"]) for k, a in d["arms"].items()}
+    assert pie1["baseline"] == (0, 20, 0, 20) and pie1["C3"] == (34, 20, 0, 54)
+    held = v["arms"]["C3"]["pie1_readings"]
+    assert held["R3 E is not MS-like"] and not held["R5 extra intestine (Intestine above the wild type's 34)"]
+    # disclosed in 01c64ba: the baseline's Du et al. 2014 count on the no-lookup program is 10 / 1, not the
+    # registered 11 / 0, because tissue_E retypes pop-1's E-like MS to Intestine before 300 min
+    du = d["arms"]["baseline"]["du2014"]
+    assert (du["embryo_contacts"]["reproduced"], du["embryo_contacts"]["missed"]) == (11, 0)
+    assert du["embryo_nolookup"]["observed"]["pop-1"]["MS"] == "missed"
+
+
+def _row(c: dict) -> tuple[int, int, int, int]:
+    return (c["Intestine"], c["Muscle"], c["Reproductive"], c["decided"])
+
+
+def test_the_programs_carry_the_registered_c3_edits_verbatim_and_nothing_else(files):
+    edited, void = apply_edits(files, "C3")
+    assert void == []
+    for name in {f for f, _, _ in CANDIDATES["C3"]["edits"]}:
+        assert (Path(ORG) / name).read_text() == edited[name], name
+
+
+def test_the_applied_program_keeps_the_wild_type_and_moves_only_pie1():
+    ref = ReferenceLineage.load()
+    cells = terminal_cells(ref)
+    module = parse_file(Path(ORG) / "embryo_nolookup.bio")
+    targets = {d.id: d.to for d in module.decisions if d.action == "differentiate"}
+    wt = decided(Body(module, means=True).run(until=800), cells, ref, targets)
+    assert (wt["decided"], wt["right"], wt["wrong"]) == (56, 56, 0)
+    pie1 = Body(module, means=True, knockouts={"PIE-1"}).run(until=800)
+    f = founder_types(pie1, targets, ("P2", "ABp", "E"))
+    assert f == {"P2": "EMSPrecursor", "ABp": "ABaPrecursor", "E": "EPrecursor"}
+    assert _row(counts(decided(pie1, cells, ref, targets))) == (34, 20, 0, 54)
+    # par-2 keeps Du et al. 2014's E-to-MS: P2 holds neither PIE-1 nor POS-1 (the registered premise)
+    par2 = Body(module, means=True, knockouts={"PAR-2"}).run(until=800)
+    assert founder_types(par2, targets, ("E",)) == {"E": "MSPrecursor"}
+    mom2 = Body(module, means=True, knockouts={"MOM-2"}).run(until=800)
+    assert founder_types(mom2, targets, ("E",)) == {"E": "MSPrecursor"}

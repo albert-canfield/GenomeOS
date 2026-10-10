@@ -181,6 +181,10 @@ def test_the_program_still_decides_the_registered_fates_and_no_more():
     d = decided(Body(module, means=True).run(until=800), cells, ref, targets)
     assert (d["decided"], d["right"], d["wrong"]) == (56, 56, 0)
     assert d["by_founder"] == {"D": {"Muscle": 20}, "E": {"Intestine": 34}, "P4": {"Reproductive": 2}}
-    for factor, row in KNOCKOUTS.items():
+    # 2026-10-10, lane-pie1 (registration 2b4b2ff, result 01c64ba): the pie-1 correction C3 lets P2 present
+    # MOM-2 through POS-1 when PIE-1 is gone, so PIE-1's live row moves from (0, 20, 0, 20) to E's 34
+    # intestinal cells kept; the other seven are unchanged, and KNOCKOUTS stays the registered result's
+    live = KNOCKOUTS | {"PIE-1": (34, 20, 0, 54)}
+    for factor, row in live.items():
         k = decided(Body(module, means=True, knockouts={factor}).run(until=800), cells, ref, targets)
         assert _row(counts(k)) == row, factor
