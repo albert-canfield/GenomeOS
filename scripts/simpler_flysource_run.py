@@ -822,6 +822,8 @@ def score() -> None:
     out["result_manifest"] = _manifest(
         [
             (REGISTRATION_FILE, "the committed registration"),
+            (str(fs.FETCH_RECORD), "each input's registered sha256"),
+            (FLYNODE_REGISTRATION_FILE, "the registration this run carries its wording from"),
             (str(fs.CELL_TYPES_FILE), "the `RNAcluster` column only"),
             (str(fs.DAR_FILE), "the selected rows' region and cell type only"),
             (str(fn.BOUNDARY_FILE), "Table S4 (manual boundary positions)"),
