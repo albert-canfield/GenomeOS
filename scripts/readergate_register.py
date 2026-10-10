@@ -172,7 +172,7 @@ def main() -> int:
         "inputs": entries,
         "input_count": len(entries),
         "assembly": "GRCh38",
-        "coordinates": "element loci as the compiled programs write them; genes by gene_id",
+        "coordinates": {"base": 0, "interval": "half-open"},
         "parameters": {"min_genes": rg.MIN_GENES, "pseudocount": rg.PSEUDOCOUNT, "selection": rg.SELECTION},
         "exclusions": ["as POPULATION states"],
         "partitions": "n/a: a registration; no outcome read",

@@ -149,7 +149,7 @@ def manifest(rna_read: bool) -> dict:
         "inputs": inputs,
         "input_count": len(inputs),
         "assembly": "GRCh38; RNA genes matched by gene_id through data/cache/gencode_genes.tsv",
-        "coordinates": "element loci as the compiled programs write them",
+        "coordinates": {"base": 0, "interval": "half-open"},
         "parameters": {
             "selection": rg.SELECTION,
             "runtime": rg.RUNTIME,

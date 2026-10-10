@@ -128,7 +128,7 @@ def manifest(chroms: list[str]) -> dict:
         "inputs": inputs,
         "input_count": len(inputs),
         "assembly": "GRCh38",
-        "coordinates": "element loci as the compiled programs write them, 0-based half-open",
+        "coordinates": {"base": 0, "interval": "half-open"},
         "parameters": {"selection": rg.SELECTION, "runtime": rg.RUNTIME, "reader_state": cp.READER_STATE},
         "exclusions": ["genes with several rules or one measured rule", "genes the bridge does not resolve"],
         "partitions": "n/a: a census; no outcome read",
