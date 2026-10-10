@@ -59,8 +59,10 @@ SCOPE_COUNTS = {
     "invariant": 2,
     # 5 as registered 2026-10-03; 7 after the coordinator's two rulings the same day, on
     # attribution/silenceragree.py and attribution/silencerdoctrine.py. Both are in RECORD_ONLY
-    # below and both are named in the prose amendment.
-    "record_only": 7,
+    # below and both are named in the prose amendment. 9 since 2026-10-10: attribution/measured_unknown.py
+    # and attribution/eqtl_arm.py, each a head read under its own registration, named in the second
+    # prose amendment.
+    "record_only": 9,
     "already_moved": 9,
     "excluded_by_name": 9,
     "identity_free_today": 11,
@@ -83,7 +85,14 @@ ROW_SAYS_FIVE_THE_TREE_SAYS_OTHERWISE = (
     "`benchmark/loci_noncoding.py` -- its head reads are the evidence for a guard, not a "
     "consumer's input. Neither ruling moves any figure of this registration's own wave, which is "
     "still 18. The rate is the point: two modules in one hour, so this count is expected to keep "
-    "moving and the guard on it is what makes each move a decision.** `scripts/` holds 24 "
+    "moving and the guard on it is what makes each move a decision.** **Amended 2026-10-10, the "
+    "amendment above kept as written: the record count is 9, after two modules written that day "
+    "under their own registrations, `attribution/measured_unknown.py` (M5, 9293190 / 7906142) and "
+    "`attribution/eqtl_arm.py` (M5b, 68a273b / 6033113). Each reads the head as its own "
+    "registration's declared reading of a block's attribution -- the ground of "
+    "`benchmark/loci_gene_input.py` -- and each is a one-target reading in effect, which its "
+    "entry says; moving either is a re-run of that registration, not this wave, and neither moves "
+    "this wave's 18.** `scripts/` holds 24 "
     "further head-reading entry points, "
     "named below and OUT of this registration's scope. So the real figure for this wave is 18, not "
     "5. Of those 18, two are frozen inside the paid study's 52-file import closure "
@@ -415,12 +424,15 @@ CENSUS: tuple[dict[str, Any], ...] = (
     {
         "module": "genomeos/cli.py",
         "lines": (3840, 3848, 4109),
+        # Registered at 24adf33 as 3363, 3365, 3366, 4229 and 4276. Each is +5 since 85bae7b
+        # (2026-10-10, a peer's pgs percentile lines in cmd_individual, above all eight sites); the
+        # text of every line is unchanged. The head reads' shift is in MOVED_LINES below.
         "not_head_lines": {
-            3363: "a MISSENSE variant's predicted protein change",
-            3365: "the same missense variant's predicted score",
-            3366: "the same missense variant's predicted class",
-            4229: "a contact-map comparison's count of MEASURED Hi-C boundaries",
-            4276: "the same count, for insulation minima from the predicted contact map",
+            3368: "a MISSENSE variant's predicted protein change",
+            3370: "the same missense variant's predicted score",
+            3371: "the same missense variant's predicted class",
+            4234: "a contact-map comparison's count of MEASURED Hi-C boundaries",
+            4281: "the same count, for insulation minima from the predicted contact map",
         },
         "reads": "a stored element row -> r['predicted'], r['predicted_coding'], e['predicted']",
         "claims_today": "the printed lines `predicted target: <gene>`, `strongest coding gene: "
@@ -507,6 +519,25 @@ RECORD_ONLY: tuple[dict[str, str], ...] = (
         "module": "genomeos/benchmark/loci_gene_input.py",
         "why": "the gene-input layer's own registered reader, written 2026-10-03 by another lane and "
         "held by it on the board; its head tuple is the declared v1 reading",
+    },
+    {
+        "module": "genomeos/attribution/measured_unknown.py",
+        "why": "M5's census of public measurement over the 882 real-unknown blocks (code 9293190, "
+        "result 7906142), written 2026-10-10 under its own registration: it reads `predicted` and "
+        "`predicted_coding` to name each block's attributed genes and cells. Its counts of blocks "
+        "naming a gene are the yes/no THE_INVARIANT covers, but "
+        "`blocks_tested_against_an_attributed_gene` depends on WHICH gene, so it is a one-target "
+        "reading in effect; that reading is M5's declared one, so moving it is a re-run of M5 and "
+        "not this wave -- the ground of loci_gene_input.py above",
+    },
+    {
+        "module": "genomeos/attribution/eqtl_arm.py",
+        "why": "M5b's eQTL arm (code frozen 68a273b, calibration 6033113), written 2026-10-10 under "
+        "its own registration: `block_attribution` reads `predicted` to give each real-unknown block "
+        "ONE gene, the head of its strongest-moving element, and the arm's available blocks are "
+        "counted from that gene's TSS. A one-target reading in effect, frozen before its calibration "
+        "as M5b's declared reading, so moving it is a new M5b registration and not this wave -- the "
+        "ground of loci_gene_input.py above",
     },
 )
 
@@ -787,6 +818,27 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
         "projection dropped. `variants_in_elements` still gets its one `predicted` gene from "
         "`cached_prediction` unchanged, and the window is a new key beside it that exists only when "
         "a reader was asked for",
+    },
+    #: The two entries below are NOT moves (2026-10-10, lane-pushfix). cli.py and report.py are
+    #: unmoved and still read one head per element; this is the one additive place the guard reads a
+    #: module's current lines from, so a peer's line shift is recorded here rather than by editing
+    #: the registered lines.
+    "genomeos/cli.py": {
+        "now": (3845, 3853, 4114),
+        "was": (3840, 3848, 4109),
+        "what": "NOT MOVED BY THIS WAVE: no read changed. 85bae7b (2026-10-10, the pgs percentile "
+        "beside the raw score in cmd_individual) added five lines above every site, so the three "
+        "registered reads, `p = r['predicted']`, `pc = r.get('predicted_coding')` and "
+        "`p = e.get('predicted')`, sit 5 lines lower with their text unchanged, and so do the five "
+        "not_head_lines",
+    },
+    "genomeos/report.py": {
+        "now": (99, 100, 101, 105),
+        "was": (98, 99, 100, 104),
+        "what": "NOT MOVED BY THIS WAVE: no read changed. 544ffe9 (2026-10-10, item 15's SPDX "
+        "licence line) added one line at the top of the file, so the four registered reads of "
+        "`strongest_predicted` sit 1 line lower with their text unchanged; the module still cannot "
+        "move before regulation.py does",
     },
 }
 
