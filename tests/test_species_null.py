@@ -509,3 +509,44 @@ def test_null_b_reports_every_library_against_its_random_sets() -> None:
     assert set(by) == {"together", "random"}
     assert all(r["class"] in ("clear", "marginal", "at_or_below") for r in rows)
     assert by["together"]["mean_pair_jaccard"] == pytest.approx(1.0)
+
+
+# --------------------------------------------------------------------------- the registration
+
+REGISTRATION = Path("data/results/species_null_registration.json")
+
+
+def register_module():
+    rspec = importlib.util.spec_from_file_location(
+        "species_null_register", ROOT / "scripts" / "species_null_register.py"
+    )
+    assert rspec and rspec.loader
+    mod = importlib.util.module_from_spec(rspec)
+    rspec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_registration_as_written_holds_no_figure_and_the_module_s_words() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(REGISTRATION, was="the registration is not written yet")
+    written = json.loads(REGISTRATION.read_text())
+    assert written["result"] == "species_null_registration"
+    reg = register_module()
+    hits = [
+        k
+        for k in reg.forbidden_at_any_depth(written)
+        if not k.startswith(("result_manifest.", "nulls.A.outcome_wordings", "nulls.B.outcome_wordings"))
+        and "decision_rule" not in k
+    ]
+    assert hits == []
+    # the run fills these words and no others; the module that fills them must hold the same
+    assert written["nulls"]["A"]["outcome_wordings"] == sn.A_OUTCOMES
+    assert written["nulls"]["A"]["sensitivity_wording"] == sn.A_SENSITIVITY
+    assert written["nulls"]["B"]["outcome_wordings"] == sn.B_OUTCOMES
+    assert written["nulls"]["A"]["decision_rule"] == sn.A_RULE
+    assert written["nulls"]["B"]["decision_rule"] == sn.B_RULE
+    assert set(written["frozen_code"]["blobs"]) == set(reg.FROZEN)
+    assert written["tree_as_built"]["without_human_for_A"]["tips"] == 355
