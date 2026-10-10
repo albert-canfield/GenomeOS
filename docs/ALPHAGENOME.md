@@ -203,6 +203,18 @@ unphased sequence, so it does not see a diploid individual.
    → `uniform_samples` and do not equal the 71.2% and 90.2% the table above reads from
    `enhancer_targets_genome_wide.json`; both are kept as published.)*
 
+   *(Populations named 2026-10-10, lane-docfix, from `scripts/constrained_targets_genome_wide.py`
+   → `aggregate()` and the result files.)* The two uniform pairs describe the same 4,800 uniform
+   elements, aggregated two ways. 71.2% and 90.2% are pooled over the 2,291 named coding targets
+   (1,631 and 2,066 of 2,291). 70.7% and 86.0% are the unweighted mean of the 24 per-chromosome
+   fractions (each `constrained_targets_chr*.json` → `uniform_sample`, identical to the
+   `enhancer_targets_chr*.json` summaries), so each chromosome counts once whatever its number of
+   targets. The constrained column is pooled (1,082 and 1,350 of 1,504 named coding targets), so the
+   last two rows set a pooled figure against a per-chromosome mean. Like for like: pooled, 71.9%
+   against 71.2% and 89.8% against 90.2%; mean of chromosomes, 72.4% against 70.7% and 83.7% against
+   86.0%. Either way the two columns differ by under four points, and the reading below, "as often
+   as anyone's", is unchanged; the "89.8% against 86.0%" it quotes is the unlike pair.
+
    The first finding holds everywhere: constraint predicts function on 22 of
    24 chromosomes (chr9 and chr15 are the exceptions, at 62% and 61% against
    66% and 68%), from chr1's 65% to chr19's 92%, and the strong effects are a
