@@ -418,6 +418,13 @@ def _manifest(net: bool, bench) -> dict:
     committed = ROOT / "data/results" / f"{COMMITTED}.json"
     if committed.exists():
         inputs.append(mf.input_entry(committed))
+    # The distilled cohort the alterations are graded against, declared as the benchmark
+    # declares it: `grade` reads both files for every candidate, so they are inputs to this
+    # run as much as the fixtures are.
+    for name in ("cancer_msk_impact_2017", "cancer_alterations_msk_impact_2017"):
+        p = ROOT / "data/results" / f"{name}.json"
+        if p.exists():
+            inputs.append(mf.input_entry(p))
     knowledge, optional_absent = bench.declare_knowledge()
     inputs += knowledge
     sources = _sources() + [
