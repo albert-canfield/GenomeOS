@@ -494,6 +494,62 @@ endometrial, colon, TCGA breast and ovarian) stay uncommitted until their
 RefSeq isoforms are known; `mapping_drops_by_profile` in the result keeps
 every drop count per profile.
 
+## Gene-keyed profiles (2026-10-10)
+
+**What the 14.3% was, reproduced from the cache.** 31,424 of 219,035
+single-site entities whose symbol named one compiled entry had a residue
+letter that disagreed with the UniProt canonical (0.1435; colon 0.0426,
+breast 2020 0.1359, endometrial 0.1456, TCGA breast 0.1764 and PanCan
+0.1622, TCGA ovarian 0.1925 and PanCan 0.1847). The section above gives
+219,179, the same count before the 144 duplicate-site drops. It is a
+**residue** mismatch, the sign of positions on another isoform, not a
+gene-key mismatch. The gene keys failed separately: 8,085 single-site
+entities under 498 distinct symbols named no compiled entry (none named
+several), mostly retired symbols (MLLT4, now AFDN; SEPT9, now SEPTIN9) and
+symbols UniProt has since renamed (TNKS1BP1, compiled as CNOT12).
+
+**Registration (written and committed before the rule ran on any site;
+`genomeos/molecules/cptac_keys.py`, `REGISTRATION`;
+`data/results/cptac_genekeyed_registration.json`).**
+
+- Gene key, in order: HGNC approved symbol (refused if it is also another
+  record's previous symbol), else the previous symbol of exactly one HGNC
+  record, else the alias of exactly one record. The record's UniProt
+  accessions among the compiled definitions, else its Ensembl gene among
+  them, must give exactly one entry. More than one: ambiguous, refused.
+  None: unresolved. No guess at any step; every ambiguous and unresolved
+  symbol is listed with its entity count. No UniProt accession is carried by
+  these entities, so the accession tier of the RefSeq-keyed profiles does not
+  apply.
+- Candidate isoforms: the UniProt canonical plus every GENCODE v50
+  translation of the entry's Ensembl gene with a complete CDS (no `_NF` tag,
+  stop codon at the end and nowhere before), built from the local GFF3 and
+  GRCh38 files: 210,366 distinct translations on 19,835 genes; the UniProt
+  canonical is identical to one of them for 18,630 of the 18,992 compiled
+  entries that have any (an input check, not an outcome).
+- Position: every candidate carrying the entity's residue letter at its
+  position is carried onto the canonical by `ptm.transfer_position`
+  (identical sequence, else the unique 15-residue window). One canonical
+  position from every carrier: resolved. Carriers that disagree: ambiguous,
+  refused. No carrier: unresolved. Carriers with no canonical counterpart:
+  off the canonical, not joinable.
+- Gates, each per profile unless said: **G0** the same rule, symbol and
+  position only, on the RefSeq-keyed sites whose canonical position is known
+  from their named RefSeq protein, wrong resolutions under 2% pooled (if it
+  fails, all seven are retired); **G1** the units check of 2026-09-28,
+  median of site medians within ±0.5, recomputed on the resolved sites
+  (TCGA breast PanCan sat at -0.518 before, known at registration);
+  **G2** unresolved under 2% of the entities with a resolved gene key, the
+  bound registered on 2026-09-28 for a gene-keyed tier, unchanged; **G3**
+  estimated wrong resolutions under 2% of the resolved, estimated as the
+  unresolved count times the odds that a decoy (the same entity moved ±13
+  residues) resolves rather than stays unresolved.
+- A profile passing every gate is committed; its values are fetched only
+  then, summarised in memory as before. A profile failing any gate is
+  retired: counted, not committed. Expected: colon the likeliest to pass
+  G2, the four TCGA quantifications (RefSeq of about 2013) likely to fail
+  it, TCGA breast PanCan likely to fail G1.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had
