@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The protein knowledge graph, built from compiled definitions (no network).
 
 Nodes are proteins (by gene symbol), pathways, tissues and domains; edges

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Compile the proteins of a chromosome and keep one coverage summary.
 
 Every protein-coding gene of the chromosome goes through the compiler; the

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Reactome pathways as executable graphs.
 
 Reactome exports every pathway as SBML: species (proteins, complexes, small

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Base ↔ transcript ↔ codon ↔ residue mapping for one transcript.
 
 Coordinates: genomic positions are 0-based on the chromosome. mRNA positions

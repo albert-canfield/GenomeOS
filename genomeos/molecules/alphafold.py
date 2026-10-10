@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """AlphaFold DB (public): predicted 3-D structure with per-residue confidence.
 
 The model's pLDDT (0-100) sits in the B-factor column of the PDB file, so

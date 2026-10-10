@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Epigenetic clocks (task 3.1) from published coefficients, no dependencies.
 
 Horvath 2013 (353 CpGs, multi-tissue) and Hannum 2013 (71 CpGs, blood) are

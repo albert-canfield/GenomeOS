@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """BioTwin (task 3.3): one genome + one measured state + one environment.
 
 A Twin is a JSON document under data/twins/. `fork` copies it with a change;

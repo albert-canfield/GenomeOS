@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 from .alphafold import Structure, fetch_structure, parse_pdb
 from .compiler import ProteinState, compile_protein, coverage, states_from_definition, to_biolang
 from .report import protein_report

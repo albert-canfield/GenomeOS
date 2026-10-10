@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The DNA → RNA → protein relationship, as one traceable object.
 
 This is the home of the central-dogma relationship in GenomeOS. `trace()`

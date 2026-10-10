@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Calibration: turn a measurement into an engine parameter (rules from data).
 
 `calibrate_attrition` fits the one low-confidence knob of the ageing model,

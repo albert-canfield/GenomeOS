@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Verify the central dogma engine at chromosome scale.
 
 For every protein-coding gene with local models and a compiled UniProt

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """One gene, all its molecules: our transcripts and translated protein, the
 UniProt record, and the AlphaFold structure, with agreement checks."""
 

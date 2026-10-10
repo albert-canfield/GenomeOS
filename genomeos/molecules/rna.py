@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The RNA layer of a gene: its transcripts and where they are expressed.
 
 Transcripts come from the local gene models (GENCODE): isoforms with their

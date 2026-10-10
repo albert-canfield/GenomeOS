@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """UniProt (public REST, no key): the curated protein record for a gene."""
 
 from __future__ import annotations

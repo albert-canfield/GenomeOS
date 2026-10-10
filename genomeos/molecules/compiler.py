@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The federated protein compiler.
 
 One call compiles everything the public databases know about a protein into

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Methylation at clock CpGs from nanopore bedMethyl files, streamed (no disk).
 
 modkit/wf-human-variation bedMethyl rows: chrom, start, end, mod code (m = 5mC,
