@@ -159,6 +159,33 @@ def test_only_a_deep_deletion_creates_a_dependency(event):
     assert out == dep.empty()
 
 
+def test_a_shallow_deletion_beside_a_deep_one_adds_nothing_of_its_own():
+    alterations = grade(
+        [
+            GeneAlteration("CDKN2A", "deep_deletion", gistic=-2),
+            GeneAlteration("ARID1A", "shallow_deletion", gistic=-1),
+        ],
+        knowledge={},
+    )
+    out = dep.assess(alterations, {}, "CNS/Brain", view=view())
+    assert [r["gene"] for r in out["dependencies"]] == ["CDKN2A"]
+    assert {c["lost_gene"] for c in out["dependency_candidates"]} == {"CDKN2A"}
+
+
+@pytest.mark.parametrize(
+    "p,q,delta,verdict",
+    [
+        (0.04, 0.09, -0.3, "supported_in_lineage"),
+        (0.04, 0.2, -0.3, "nominal_in_lineage"),
+        (0.04, 0.2, 0.3, "not_supported_in_lineage"),
+        (0.001, 0.001, 0.2, "not_supported_in_lineage"),
+        (0.2, 0.3, -0.3, "not_supported_in_lineage"),
+    ],
+)
+def test_the_verdict_rule_is_the_sweeps(p, q, delta, verdict):
+    assert dep.lineage_verdict(p, q, delta) == verdict
+
+
 def test_a_diploid_count_is_not_a_deletion():
     assert dep.assess([], {"CDKN2A": 2.0, "MTAP": 0.9}, "CNS/Brain", view=view()) == dep.empty()
 

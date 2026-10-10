@@ -311,6 +311,15 @@ def lineage_test(
     return {k: row[k] for k in row if k not in ("lost", "loss", "dependency")}
 
 
+def lineage_verdict(p: float, q: float, delta: float) -> str:
+    """The sweep's verdict rule, read over this analysis's lineage tests."""
+    if q <= sl.FDR and delta < 0:
+        return "supported_in_lineage"
+    if p <= 0.05 and delta < 0:
+        return "nominal_in_lineage"
+    return "not_supported_in_lineage"
+
+
 def _sweep_row(pair: tuple[str, str, int, int, float, float, float, float]) -> dict[str, Any]:
     a, b, n_lost, n_kept, m_lost, m_kept, delta, q = pair
     return {
@@ -443,7 +452,7 @@ def assess(
             }
         )
 
-    wanted = [p for p in REGISTERED_PAIRS if p[0] in calls]
+    wanted = [p for p in REGISTERED_PAIRS if p[0] in set(deleted)]
     if not wanted:
         return {"dependencies": records, "dependency_candidates": [], "dependency_lineage": None}
     if view is None:
@@ -511,12 +520,7 @@ def assess(
         t = c["lineage"]
         t["q"] = q
         t["tests_in_this_analysis"] = len(tested)
-        if q <= sl.FDR and t["cliffs_delta"] < 0:
-            t["verdict"] = "supported_in_lineage"
-        elif t["p"] <= 0.05 and t["cliffs_delta"] < 0:
-            t["verdict"] = "nominal_in_lineage"
-        else:
-            t["verdict"] = "not_supported_in_lineage"
+        t["verdict"] = lineage_verdict(t["p"], q, t["cliffs_delta"])
         c["evidence"].append(_lineage_evidence(c["lost_gene"], c["gene"], t["name"], t).to_dict())
         t["p"] = round(t["p"], 8)
         t["q"] = round(q, 6)
