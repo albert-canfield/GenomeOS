@@ -344,3 +344,17 @@ def test_the_run_pins_its_own_code_and_the_code_it_calls():
     assert {"genomeos/attribution/targetchoice.py", "genomeos/attribution/measured_unknown.py"} <= set(
         run.STAGE_CODE
     )
+
+
+def test_the_committed_registration_binds_this_module():
+    import tracked_paths as tp
+
+    path = "data/results/secondtargets_registration.json"
+    tp.must_be_present(path)
+    reg = json.loads((ROOT / path).read_text())
+    assert {f: reg[f] for f in s2.BOUND} == s2.registered_fields()
+    assert reg["readout_values_read"] == 0 and reg["readout"]["held"] is False
+    assert s2.ids_sha256(reg["population_ids"]) == reg["population_sha256"]
+    assert reg["census"]["matched_shortlist_tests"] == len(reg["population_ids"]) == 872
+    assert reg["census"]["excluded_same_gene_in_benchmark"] + reg["census"]["independent"] == 128737
+    assert reg["frozen_code"]["commit"].startswith("d365cdd")
