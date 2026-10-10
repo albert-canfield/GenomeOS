@@ -442,6 +442,7 @@ def fetch() -> None:
         [ENCODE_SOURCE],
         [
             mf.input_entry("data/results/epigenome_manifest.json"),
+            mf.input_entry(f"data/results/{REGISTRATION}.json"),
             _portal_answers("ENCODE portal answers for the spinal cord marks and WGBS, as cached"),
             mf.files_entry(f"{BIOSAMPLE} DNase and mark peaks as fetched", fetched),
         ],
