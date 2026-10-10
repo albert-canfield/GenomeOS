@@ -1691,6 +1691,51 @@ module's ceiling, and real cells also cut demand. Not that the threshold sits wh
 measured thresholds sit: its position is the declared reserve. Not that a cell ferments only without
 oxygen: the routing assumes it, and the Warburg effect cannot be written in stage 3.
 
+### 9.7 Gate (b) for a per-demander policy, registered (2026-10-10), before the run
+
+§9.2 named the one change that could make gate (b) answerable — a share that saturates in each
+demander's own demand — and sized it: 0.485 decades per decade of compression. `91e2a85` built it.
+`allocation { pool: P; policy: saturable; half_saturation: K }` serves each demander `d K / (K + d)`
+of its own demand `d`, then enforces the pool on what is served (one cut, the pool used exactly). K is
+the program's number, kept in the allocation's `attrs`; a missing, unknown, zero, negative or
+non-finite K is refused by the parser and by the runtime, `half_saturation` under any other policy is
+refused, and a regime's default cannot be `saturable`. A demander is cut by its own saturation even
+when the pool is not short; that is the claim, and it is not a burden, because no other demander's
+demand enters its factor until the pool is short. `proportional`, `priority` and `competitive` are
+unchanged: `scale()` and `report()` were compared with `==` against the previous `economy.py` on 3,000
+random programs.
+
+The registration is `data/results/saturable_gate_registration.json`, written by
+`scripts/saturable_gate.py register` (code frozen in `504c536`) with no protein value read, and its
+binding words are `REGISTRATION` in that script; `run` refuses if either differs or if a pinned file
+changed. In short:
+
+- **Form.** One pool, Ribosomes, 5e6 (§5.1, as gate (b)); each gene charges 1 per chain at a work
+  rate equal to its TPM (gate (b)'s convention); the allocation is parsed from `.bio` text, and the
+  predictions are the runtime's factors, checked against the closed form to 1e-9.
+- **Parameters.** K (on a grid, log10 K from −1 to 7 in 0.01 steps, TPM units) and the constant c,
+  both **fitted on training genes only**; no independent measurement supplies a per-gene
+  half-saturation in TPM units, so none is cited. The capacity is §5.1's and is not fitted.
+- **Split.** Held out when the first 32 bits of sha256 of the gene symbol are odd, fixed before any
+  protein value was read. **Circularity guard: no protein value of a held-out gene enters any fit**;
+  a test replaces every held-out value and asserts that no fitted number moves.
+- **Metric and bar.** Gate (b)'s: log10 MAE on held-out genes against the one-to-one baseline fitted on
+  the same training genes; PASS needs an improvement of at least 0.05 with the 95% interval of 2,000
+  bootstrap resamples of held-out genes above 0, and gate (b)'s secondary in band.
+- **Reported beside the verdict.** The slope of the policy's held-out predictions on log10 TPM against
+  the registered 0.515 [0.499, 0.531]; a two-parameter straight-line comparator, which says whether an
+  improvement is specific to the saturable form; the gene-blind arms through the same runtime; the
+  K = capacity form §9.2 named; and whether the capacity binds at real demand.
+- **Planted contrasts, run at registration.** On a planted saturable truth the policy passes and
+  recovers log10 K 1.48 against 1.477, while `proportional` and `competitive` move the held-out error
+  by 0; on a null truth it does not pass; on a straight compressed truth (slope 0.5, no saturation) it
+  **passes the bar and the comparator line does better**.
+- **Stated before the run.** That last contrast is the expectation for real data too: the bar is
+  against a slope-1 baseline and the measured slope is 0.515, so almost any fitted compression is
+  expected to clear it. A PASS would therefore be weak evidence for the saturable form, and the
+  comparator is the reading that can tell the form from compression in general. Nor can the gate tell
+  a saturable allocation from noise in the transcript arm attenuating the slope.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a

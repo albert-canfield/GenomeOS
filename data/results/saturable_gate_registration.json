@@ -1,0 +1,277 @@
+{
+  "result": "saturable_gate_registration",
+  "date": "2026-10-10",
+  "lane": "lane-saturable",
+  "roadmap_item": "area A, Next 1: a per-demander saturable allocation policy, registered against gate (b)",
+  "policy_commit": "91e2a85",
+  "registration": {
+    "question": "does the per-demander `saturable` allocation policy (91e2a85), with its one parameter K fitted on training genes only, predict absolute protein copies from transcript abundance on held-out genes better than gate (b)'s one-to-one baseline fitted on the same training genes?",
+    "form": "prediction_i = log10 TPM_i + log10 f_i + c, where f_i is the factor `Economy.scale` returns for gene i under a program with ONE pool, Ribosomes, size 5e6 (\u00a75.1, the value gate (b) used), each gene charging 1 per chain with its work rate equal to its TPM (gate (b)'s convention), and `allocation { pool: Ribosomes; policy: saturable; half_saturation: K }`, parsed from .bio text. So f_i = (K / (K + TPM_i)) * cut, cut = min(1, 5e6 / sum_j TPM_j K / (K + TPM_j)) over every analysed gene. The ATP pool gate (b) also declared is left out: a gene-blind pool in the per-gene minimum could only clip, and gate (b) found neither pool binding at real demand",
+    "parameters": {
+      "K": "FITTED on the training genes only: the value on LOG10_K_GRID (log10 K from -1.00 to 7.00 in 0.01 steps, TPM units) minimising training log10 MAE, searched from the top so a tie keeps the larger K (closer to no saturation). No independent measurement supplies a per-gene half-saturation demand in TPM units, so none is cited",
+      "c": "FITTED on the training genes only: the median training residual, the L1-optimal constant",
+      "capacity": "5e6 ribosomes, \u00a75.1 (HeLa, BioNumbers), as gate (b); not fitted",
+      "baseline_c": "the median training residual of log10 copies minus log10 TPM; gate (b)'s baseline"
+    },
+    "data": "gate (b)'s join, rebuilt by gate (b)'s own readers (scripts/abundance_gate.py: paxdb, gtex, lengths): PaxDb integrated human whole-organism ppm times 5e9 proteins per cell, against GTEx v8 median TPM in Cells - Cultured fibroblasts, keeping a gene with at least 10 copies, TPM above 0 and a residue count (15,159 genes in gate (b)). The copy floor reads every gene's protein value, held-out genes included, as gate (b)'s denominator did; it selects the population and fits nothing",
+    "split": "held out when int(sha256(symbol as UTF-8).hexdigest()[:8], 16) is odd, training when even; fixed here, before any protein value of either half was read, and blind to every value",
+    "circularity_guard": "no protein value of a held-out gene enters any fit: K, c, the baseline's constant, the comparator's slope and intercept, the declared-capacity arm's constant and the gene-blind arms' constants are all fitted on training genes alone. Held-out TPM values do enter the pool's served total (the cut), because the program serves every gene from one pool; that is a transcript value, not an outcome. tests/test_saturable_gate.py replaces every held-out protein value and asserts every fitted number is unchanged",
+    "metric": "log10 MAE in protein copies per cell over the held-out genes (gate (b)'s primary), for the saturable arm and the baseline, each with its training-fitted constant",
+    "bar": "improvement = baseline MAE minus saturable MAE on held-out genes, at least 0.05 (gate (b)'s MIN_IMPROVEMENT_LOG10), with the 95% percentile interval of 2000 bootstrap resamples of the held-out genes (seed 20261010, every fitted number held fixed) above 0, AND gate (b)'s secondary in band (total protein per cell from the declared ribosome capacity within one order of magnitude of Milo 2013; computed from TPM and residue counts, no allocation in it, so it is the same number under any policy)",
+    "slope": "reported, not a verdict: the OLS slope of the saturable arm's held-out predictions on held-out log10 TPM (no protein value in it), against the registered 0.515 [0.499, 0.531] of measured protein on transcript; inside or outside that interval is stated. The baseline's is 1 by construction",
+    "comparator": "reported, not a verdict: a two-parameter straight line, prediction = b log10 TPM + a, b on SLOPE_GRID (0 to 1.5, steps 0.001, a tie keeping the b nearest 1) and a the median training residual, fitted on training genes. It has the saturable arm's parameter count and no mechanism, so it says whether an improvement is specific to the saturable form. Its held-out MAE minus the saturable arm's gets the same bootstrap",
+    "gene_blind_arms": "`proportional` and `competitive` through the same runtime, pool driven short by multiplying every work rate by 1e4 as gate (b) did, constant fitted on training: their held-out improvement over the baseline must be 0 within 1e-9, as gate (b) found",
+    "declared_capacity_arm": "reported, not a verdict: K set to the capacity itself (5e6), the form \u00a79.2 named, capacity / (capacity + demand_i), with only c fitted on training",
+    "instrument_checks": "INSTRUMENT_FAILED, and no reading made, if: the runtime's factors differ from the closed form above by more than 1e-9 in log10 on any gene; either gene-blind arm's held-out improvement differs from 0 by more than 1e-9; or fewer than 1,000 genes are held out",
+    "verdict_rule": {
+      "PASS": "improvement >= 0.05 AND its 95% interval's lower bound > 0 AND the secondary in band",
+      "NO_IMPROVEMENT_DETECTED": "anything else that is not INSTRUMENT_FAILED"
+    },
+    "readings": {
+      "PASS": "On held-out genes, the saturable policy's log10 MAE is {sat} against the fitted baseline's {base}: an improvement of {imp} [{lo}, {hi}], which clears gate (b)'s registered bar of 0.05.",
+      "NO_IMPROVEMENT_DETECTED": "On held-out genes, the saturable policy's log10 MAE is {sat} against the fitted baseline's {base}: an improvement of {imp} [{lo}, {hi}]; no improvement detected at gate (b)'s registered bar of 0.05.",
+      "INSTRUMENT_FAILED": "INSTRUMENT_FAILED: {why}. No reading is made.",
+      "comparator_line_better": "A two-parameter straight line does better than the saturable policy on the same held-out genes ({line} against {sat}, difference {d} [{lo}, {hi}]), so the improvement is not specific to the saturable form.",
+      "comparator_saturable_better": "The saturable policy's held-out log10 MAE is lower than a two-parameter straight line's ({sat} against {line}, difference {d} [{lo}, {hi}]).",
+      "comparator_not_separated": "The saturable policy and a two-parameter straight line are not separated on held-out genes ({sat} against {line}, difference {d} [{lo}, {hi}]).",
+      "slope": "The saturable policy's held-out predictions rise {p} decades per decade of transcript, {where} the registered 0.515 [0.499, 0.531] of measured protein.",
+      "boundary_top": "The fitted K is at the top of the grid: no saturation within it was preferred, and the policy reduces to the baseline.",
+      "boundary_bottom": "The fitted K is at the bottom of the grid: every gene is saturated and the policy predicts nearly one constant.",
+      "binding_no": "At real demand under the fitted K, the ribosome pool serves {served} against a capacity of 5e6, so the capacity does not bind; every factor below 1 comes from K, not from the pool.",
+      "binding_yes": "At real demand under the fitted K, the ribosome pool serves {served} against a capacity of 5e6, so the capacity binds and every factor carries a pool cut of {cut} beside K."
+    },
+    "falsifier": "the policy fails gate (b) on this join if its held-out improvement is below 0.05 or its interval reaches 0. A pass is falsified as a statement about the saturable FORM, though not as the registered reading, if the comparator line does better on the same genes",
+    "planted_contrasts": {
+      "what": "synthetic transcriptomes where the answer is known: 4000 genes p0000..p3999, log10 TPM uniform on [-1, 4] (numpy default_rng seed 20261010), Gaussian noise of sd 0.15 on log10 copies, shift 3.0; run through the same split, fits, runtime and verdict as the real data",
+      "saturable_truth": "log10 copies = log10(TPM * 30.0 / (30.0 + TPM)) + shift + noise. Expected: PASS; the fitted log10 K within 0.3 of log10 30; both gene-blind arms' improvement 0 within 1e-9, i.e. they cannot pass where the answer is per-gene saturation",
+      "null_truth": "log10 copies = log10 TPM + shift + noise. Expected: NO_IMPROVEMENT_DETECTED (the fitted form must not manufacture a pass where nothing saturates)",
+      "straight_truth": "log10 copies = 0.5 log10 TPM + shift + noise. Expected: the comparator reading is comparator_line_better, which shows the comparator can say an improvement is not specific to the saturable form"
+    },
+    "expectation_stated_before_the_run": "the bar is gate (b)'s, against a baseline whose slope is 1, and gate (b) measured 0.515. Any fitted compression is expected to beat a slope-1 baseline on such data: the planted straight truth (slope 0.5, no saturation in it) PASSES the bar with the line comparator better, and the dry run's synthetic protein arm, unrelated to TPM, also passes. So a PASS here is weak evidence for the saturable form; the comparator reading is the one that can tell the form from compression in general, and it is reported beside the verdict whatever it says",
+    "cannot_do": [
+      "a held-out improvement from a fitted per-gene compression is also what noise in the transcript arm would produce: GTEx fibroblast TPM against PaxDb's whole-organism average is two populations, and measurement noise in x attenuates a slope toward 0 with no biology in it. This gate cannot tell a saturable allocation from that attenuation; the comparator line only says whether the saturable shape adds anything beyond any compression",
+      "a pass licenses the wording 'on held-out genes, the policy's log10 MAE is X against Y' and no statement about how a cell allocates ribosomes",
+      "K is fitted, in TPM units; it is not a measured ribosome affinity and is not comparable to one",
+      "the covered-set trap of gate (b) stands: PaxDb holds what could be quantified"
+    ],
+    "exploration_preceded_this": "before writing this the lane had read gate (b)'s code, registration, amendment and tests, and the published aggregate numbers in BIOLANG-v0.4-ECONOMY.md \u00a79.2 and ROADMAP-HISTORY.md (the two MAEs, the slope and its interval, the factor 1.754e-4, the coverage counts, 1.36e10). It had read the header and two rows of the distilled GTEx file (DDX11L1 and WASH7P TPM) and no row of the PaxDb file. No per-gene protein value, no split, no fit and no error of this gate had been computed. Before registering, `dry` ran the code on the real transcript arm with a synthetic protein arm (PaxDb not opened) to check the code runs; nothing from it is kept",
+    "money": "none; no request is sent, no key is read; both arms are the cached files gate (b) fetched"
+  },
+  "planted_outcomes_at_registration": {
+    "saturable_truth": {
+      "verdict": "PASS",
+      "fitted_log10_k": 1.48,
+      "improvement": 0.501403,
+      "improvement_95": [
+        0.476808,
+        0.527183
+      ],
+      "comparator_key": "comparator_saturable_better",
+      "gene_blind_improvement": {
+        "proportional": 0.0,
+        "competitive": 0.0
+      }
+    },
+    "null_truth": {
+      "verdict": "NO_IMPROVEMENT_DETECTED",
+      "fitted_log10_k": 7.0,
+      "improvement": -2e-06,
+      "improvement_95": [
+        -6e-06,
+        1e-06
+      ],
+      "comparator_key": "comparator_not_separated",
+      "gene_blind_improvement": {
+        "proportional": -1.3877787807814457e-17,
+        "competitive": 0.0
+      }
+    },
+    "straight_truth": {
+      "verdict": "PASS",
+      "fitted_log10_k": 1.51,
+      "improvement": 0.339864,
+      "improvement_95": [
+        0.323833,
+        0.356655
+      ],
+      "comparator_key": "comparator_line_better",
+      "gene_blind_improvement": {
+        "proportional": 0.0,
+        "competitive": 0.0
+      }
+    }
+  },
+  "pinned_sha256": {
+    "scripts/saturable_gate.py": "6951d8153309019ed88b500f057031613cd757fd854d6a236e2b1ffe27588f86",
+    "genomeos/runtime/economy.py": "ea2464732e6cf07b73e4ed32a5f784a8cf96a647271a61077401a95e95010d7d",
+    "data/knowledge/paxdb/9606-WHOLE_ORGANISM-integrated.txt": "dbc2566f94d85117adb686a5acd99fc9fd1bad0ed7db7e803e332e0320f76a4a",
+    "data/knowledge/gtex/median_tpm_distilled.tsv": "4a5dc34f40516f6bfcf45239bde9227dc745b2b730b040edd7cf15aed2444c9f"
+  },
+  "what_the_run_will_write": "data/results/saturable_gate_result.json",
+  "protein_values_read": 0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "PaxDb 9606-WHOLE_ORGANISM-integrated",
+        "version": "as fetched by gate (b)"
+      },
+      {
+        "accession": "GTEx v8 gene median TPM, distilled by gate (b)",
+        "version": "v8"
+      },
+      {
+        "accession": "the packaged proteome, data/knowledge/proteins",
+        "version": "on disk"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/paxdb/9606-WHOLE_ORGANISM-integrated.txt",
+        "sha256": "dbc2566f94d85117adb686a5acd99fc9fd1bad0ed7db7e803e332e0320f76a4a",
+        "bytes": 644763,
+        "partition": "pinned by sha256; no value read"
+      },
+      {
+        "path": "data/knowledge/gtex/median_tpm_distilled.tsv",
+        "sha256": "4a5dc34f40516f6bfcf45239bde9227dc745b2b730b040edd7cf15aed2444c9f",
+        "bytes": 1162343,
+        "partition": "pinned by sha256; no value read"
+      }
+    ],
+    "assembly": "n/a: gene-level abundances joined by symbol",
+    "coordinates": "n/a: no genomic intervals",
+    "parameters": {
+      "seed": 20261010,
+      "bootstrap": 2000,
+      "log10_k_grid": [
+        -1.0,
+        7.0,
+        0.01
+      ],
+      "slope_grid": [
+        0.0,
+        1.5,
+        0.001
+      ],
+      "ribosome_capacity": 5000000.0,
+      "min_improvement_log10": 0.05,
+      "declared_tissue": "Cells - Cultured fibroblasts",
+      "min_copies": 10.0
+    },
+    "exclusions": [
+      "gate (b)'s: below 10 copies per cell, zero TPM in the declared tissue, no residue count"
+    ],
+    "partitions": "n/a: a registration",
+    "code_cleanliness": {
+      "git_sha": "504c536cdfba590bc2190b8c06a792e4a072301c",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/saturable_gate.py",
+        "form": "committed_repository_file",
+        "path": "scripts/saturable_gate.py",
+        "is_committed": true,
+        "declared_entry": "scripts/saturable_gate.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/silencerjoin.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/silencerjoin_decide.py",
+        "scripts/silencerjoin_run.py",
+        "scripts/therapeutic_benchmark.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_silencerjoin.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/abundance_gate.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/economy.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/abundance_gate.py",
+        "scripts/saturable_gate.py"
+      ],
+      "counting_path_count": 23,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "504c536cdfba590bc2190b8c06a792e4a072301c",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/silencerjoin.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/silencerjoin_decide.py",
+        "scripts/silencerjoin_run.py",
+        "scripts/therapeutic_benchmark.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_silencerjoin.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/silencerjoin.py",
+        "scripts/silencerjoin_decide.py",
+        "scripts/silencerjoin_run.py",
+        "tests/test_silencerjoin.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/saturable_gate.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "504c536cdfba590bc2190b8c06a792e4a072301c",
+      "code_cleanliness_git_sha": "504c536cdfba590bc2190b8c06a792e4a072301c",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 504c536"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 47,
+      "opens_under_data": 4,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
