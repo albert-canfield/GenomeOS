@@ -31,6 +31,10 @@ Opt-in rules (2026-10-10). `OPT_IN_ACTIVATOR_RULES` are rules a caller may selec
 `competition`, the strength-dependent form R3 left open: A = W / (K + W), W the sum of the terms and K
 the gene's `PROMOTER_HALF_SATURATION` attribute (Bothma et al. 2015 eLife 4:e07956, Methods eq. 9,
 read for n elements of one transcriptional efficiency). Weak engagement (W << K) adds; strong saturates.
+The second is `multiplicative` (lane-saturate, 2026-10-10): A = exp(G * W), G the gene's
+`MULTIPLICATIVE_GAIN` attribute, so each activator multiplies the drive by its own factor exp(G * t_i)
+whatever the others do: the log-link model Zhou et al. 2024 (Cell Genomics 100672) fitted to enhancer
+pairs in K562 single-cell CRISPRi, where enhancer effects combined multiplicatively.
 
 Unresolved inputs (review R3, 2026-09-28). A regulator the runtime holds no state
 for, and a regulated gene with no `max_rate`, are still integrated as zero, as they
@@ -136,11 +140,21 @@ COMBINATION_TEST = {
 #: ratio k_on/k_off = t_i / K and transcriptional efficiency r, gives r * W/K / (1 + W/K). One r per
 #: gene is this rule's assumption (the paper's eq. 9 lets each enhancer have its own), so the rule is
 #: monotone and cannot give the snail pair below its stronger single
-OPT_IN_ACTIVATOR_RULES = ("competition",)
+#: multiplicative: A = exp(G * W), W = sum of t_i. Zhou JL, Guruvayurappan K, Toneyan S, Chen HV, Chen
+#: AR, Koo P, McVicker G (2024) Analysis of single-cell CRISPR perturbations indicates that enhancers
+#: predominantly act multiplicatively. Cell Genomics 100672, doi 10.1016/j.xgen.2024.100672: a GLM
+#: with a log link, log mu = b0 + sum of b_i x_i, enhancer effects combining multiplicatively in K562.
+#: Removing or holding activator i divides A by exp(G * t_i) whatever the other terms are; with no
+#: activator A = exp(0) = 1, as under every rule
+OPT_IN_ACTIVATOR_RULES = ("competition", "multiplicative")
 #: the gene attribute `competition` reads as K, in the units of the terms; > 0. A gene declaring none
 #: takes DEFAULT_PROMOTER_HALF_SATURATION
 PROMOTER_HALF_SATURATION = "promoter_half_saturation"
 DEFAULT_PROMOTER_HALF_SATURATION = 1.0
+#: the gene attribute `multiplicative` reads as G, per unit of the terms; a finite number > 0. A gene
+#: declaring none takes DEFAULT_MULTIPLICATIVE_GAIN
+MULTIPLICATIVE_GAIN = "multiplicative_gain"
+DEFAULT_MULTIPLICATIVE_GAIN = 1.0
 #: a rule source ending in this reads zero by the caller's declaration, never by omission
 EXPLICIT_ZERO_SUFFIX = "@zero"
 
@@ -239,18 +253,27 @@ def _hill(x: float, k: float, n: float) -> float:
 
 
 def combine_activators(
-    terms: list[float], rule: str | None = None, half_saturation: float = DEFAULT_PROMOTER_HALF_SATURATION
+    terms: list[float],
+    rule: str | None = None,
+    half_saturation: float = DEFAULT_PROMOTER_HALF_SATURATION,
+    *,
+    gain: float = DEFAULT_MULTIPLICATIVE_GAIN,
 ) -> float:
     """A gene's activator drive A from its terms t_i = s_i * H(x_i), under `rule`.
 
     mean: sum(t) / n (the runtime's rule since the first commit); sum_capped: min(1, sum(t));
     max: max(t); or: 1 - prod(1 - t_i), independent binding of any one activator sufficing;
     competition (opt-in, OPT_IN_ACTIVATOR_RULES): W / (half_saturation + W), W = sum(t).
+    multiplicative (opt-in): exp(gain * W), W = sum(t), gain keyword-only.
     `rule` defaults to `ACTIVATOR_COMBINATION`, read at call time.
     """
     rule = ACTIVATOR_COMBINATION if rule is None else rule
+    if rule == "multiplicative" and not (math.isfinite(gain) and gain > 0):
+        raise ValueError(f"multiplicative needs a finite gain > 0, got {gain!r}")
     if not terms:
         return 1.0
+    if rule == "multiplicative":
+        return math.exp(gain * sum(terms))
     if rule == "competition":
         if not half_saturation > 0:
             raise ValueError(f"competition needs a half-saturation > 0, got {half_saturation!r}")
@@ -345,6 +368,16 @@ class NetworkRuntime:
                 if not k > 0:
                     raise ValueError(f"{g.id}: {PROMOTER_HALF_SATURATION} must be > 0, got {k!r}")
                 self.half_saturation[g.id] = k
+        # multiplicative reads each gene's G once, and refuses one that is not a finite number > 0
+        self.gain: dict[str, float] = {}
+        if activator_combination == "multiplicative":
+            for g in self.genes:
+                gain = float(g.attrs.get(MULTIPLICATIVE_GAIN, DEFAULT_MULTIPLICATIVE_GAIN))
+                if not (math.isfinite(gain) and gain > 0):
+                    raise ValueError(
+                        f"{g.id}: {MULTIPLICATIVE_GAIN} must be a finite number > 0, got {gain!r}"
+                    )
+                self.gain[g.id] = gain
 
     def _provenance(self) -> tuple[list[Transferred], list[str]]:
         """Which numbers this run takes from elsewhere, and which from DEFAULTS (item 12 S5)."""
@@ -418,6 +451,8 @@ class NetworkRuntime:
                 terms = [r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill) for r in acts]
                 if self.activator_combination == "competition":
                     a = combine_activators(terms, "competition", self.half_saturation[g.id])
+                elif self.activator_combination == "multiplicative":
+                    a = combine_activators(terms, "multiplicative", gain=self.gain[g.id])
                 else:
                     a = combine_activators(terms, self.activator_combination)
             rep = 1.0
