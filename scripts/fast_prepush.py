@@ -39,6 +39,18 @@ below sends the push to `scripts/check.sh` instead whenever one of these holds:
 THE TRADE, stated as the ruling states it: a red in a test file that did not change, and is not in
 ALWAYS_RUN, does not block a dev push. The daily CI and the promotion's full suite are where it is found.
 
+THE TRADE IS ABOUT UNKNOWN REDS, AND NEVER ABOUT A MEASURED ONE (2026-10-10, the supervisor's ruling,
+after the coordinator declined to record a reading that would have had this effect). It accepts a red
+nobody has seen, in a file nobody changed, for speed. It does NOT license recording a daily reading in
+order to put a red SOMEONE HAS ALREADY MEASURED outside the window, where the gate will not run it.
+The case that produced the rule: the latest green dev CI (`38050903675`, success, 2026-10-10) had tested
+`c00250f`, **343 commits behind HEAD**; `tests/test_inert_skip_guards.py` was failing at HEAD on a
+measured defect whose fix was written and verified; and that file is neither in ALWAYS_RUN nor in the
+window since `c00250f`, because it had not changed. So recording that true, green, same-day reading
+would have switched the gate to fast and made the known failure unreachable, with every individual step
+honest. STANDING RULE: no daily reading is recorded while a measured red sits in a test file outside the
+fast window. Fix the red, then record from a run whose sha contains the fix, then push.
+
 THE WINDOW IS SINCE THE LAST GREEN CI, NOT SINCE ORIGIN -- and that is the whole design, not a detail.
 A file changed in a commit that already reached origin while its CI run was red, cancelled or unread is
 INVISIBLE to a since-origin window. That is precisely how the six got out: they were pushed, CI went
