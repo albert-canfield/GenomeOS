@@ -2508,6 +2508,64 @@ product keeps. The wording belongs to the surface score's own section above and
 is left to the lane that owns it; the measurement here is that the branch fires
 on a record whose junction *is* stated.
 
+### Correction, 2026-10-10 (lane-svfix): the class and the reason now agree with the score
+
+Both findings above are fixed in the code (`f61aeed`, wording `448565a`). The
+case's runner was re-run in its registered mode at `448565a`: the case with the
+network, the ten rows offline. The measurements below are from that run.
+
+**The result file is not updated yet.** The committed
+`therapeutic_sv_case_result.json` still holds the `2b5a967` row. Committing the
+re-run replaces lines that lane-svcase committed, and the shared-checkout guard
+refused it. That commit waits for the coordinator.
+
+The section above is left as written. Its table recorded `target_class`
+`direct_surface` because that is what the run of `2b5a967` produced. This note
+supersedes that one entry.
+
+**The class.** `classify` and the score now read the surface dimension from one
+call, `pipeline.surface_score`. If that call answers `None` for a stated reason
+on a protein curated as reachable, the class is `unknown`. That class was
+already in the module's vocabulary as the one that says accessibility cannot be
+established, so no class was added. Its reason quotes the score's sentence. The
+FGFR3 row now reads `target_class` `unknown`. The rule covers every state in
+which the score refuses for a reason:
+
+- a 5' partner;
+- an unreported orientation;
+- mixed orientations;
+- a 3' partner whose curated arrangement is open (`ectodomain_uncertain`);
+- a product the record leaves `unknown`.
+
+**The reason.** A record that reports a junction is no longer told it reports
+none. The sentence now quotes the junction as the source stated it and says what
+is actually missing: "the record reports the junction (4:1806934 to 4:1739702
+(GRCh37)), but no junction is read into exon content here". This is the result
+manifest's own exclusion. When no junction is reported, the sentence is
+unchanged byte for byte. The value stays `None` either way. Reading a breakpoint
+into exon content is still not built.
+
+**What did not move.** `surface_accessibility` is still `null`. Rank 1, score
+0.457, the mechanism fields, the verdict and `pass` are unchanged.
+
+- Against the committed case row, the only differences in the re-run's row are
+  `target_class` and `seconds`.
+- The ten rows were re-scored offline with the fix in place. Against
+  `therapeutic_benchmark_v2.json` they are identical in every field but
+  `seconds`: 10 rows, 0 differences. The runner's own guard says the same.
+- Across the eleven tumours, FGFR3 is the only candidate the class rule reaches.
+
+One manifest input hash differs from the committed manifest:
+`data/knowledge/vep/vep_cache.jsonl`, 5,140 to 5,782 bytes. The file was
+appended at 16:27, before this lane started, and none of this lane's runs wrote
+to it.
+
+**Left open.** The rule reads `None` only. When the product verdict
+`not_anchored` gives a score of 0.0, the class does not read it, so a row could
+still say `direct_surface` with a surface figure of 0.0. In the eleven tumours
+none does: 7 candidates are `direct_surface` and none scores 0.0. Other records
+were not checked.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
