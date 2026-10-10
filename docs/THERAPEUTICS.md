@@ -2432,6 +2432,82 @@ surface dimension is unknown rather than a number. And a recovered target is a
 retrospective consistency between the ranking and what is already approved for
 the alteration — not evidence that any therapy works.
 
+### What the structural-variant run measured, 2026-10-10
+
+**Every registered quantity came out as registered, and the ten rows did not
+move.** The case was run with the network, as the benchmark runs a case; the ten
+were re-scored offline with the structural-variant reader as it was before this
+lane's change and as it is now.
+
+The case's row, verbatim (`data/results/therapeutic_sv_case_result.json`):
+
+| field | value |
+|---|---|
+| `candidates` | FGFR3, TSC1, TACC3, ARID1A |
+| `recovered` / `rank` | `true` / 1 |
+| `score` | 0.457 |
+| `target_class` | `direct_surface` |
+| `evidence_tier` / `alteration_evidence` | `observed_alteration` / 1.0 |
+| `surface_accessibility` | `null` |
+| `mechanism_reach` | `no_established_mechanism` |
+| `best_mechanism` / `best_mechanism_established` | `null` / `false` |
+| `nearest_provisional_mechanism` | `blocking_antibody`, `requirements_unanswered` `["surface_accessible"]` |
+| `mechanism_sane` / `mechanism_concerns` | `true` / `[]` |
+| `peptide_route` | `false` |
+| `outranked_by_hypotheses` / `outranked_by_unreachable` | `[]` / `[]` |
+| `rank_without_gate` | 1 |
+| `alteration_magnitude` | no copy count, no allele fraction, no position to look up; "Absent quantities are absent and are not imputed" |
+| `verdict` | "correctly not a surface target; approved drug is out of scope" |
+| `pass` | `true` |
+
+**The three quantities.** The target is recovered at rank 1, reached by the
+structural call alone — the VCF carries no FGFR3 variant and there is no
+copy-number table, so without the structural route FGFR3 is not a candidate at
+all. The route is called correctly: no surface route is claimed. The top
+mechanism is defensible: nothing heads the list, and the row names why —
+`blocking_antibody` at 0.25 with `surface_accessible` unanswered, "which is a
+question and not an option".
+
+**The stronger prediction held: `surface_accessibility` is `null`, not `0.0`.**
+It comes from `product_extent_unknown`, the 5'-partner branch, and the fixture is
+what reaches it: FGFR3's curated topology is the type-I arrangement the branch is
+written about — one transmembrane segment, one extracellular region, a signal
+peptide at 1–22, `plasma_membrane` true — and the fusion contributes it as the 5'
+partner, so the product keeps its N-terminus and the curated figure describes a
+protein the tumour may or may not make. **This is the first benchmark row to
+reach that branch at all**; the dimension is dropped from the mean as missing
+rather than answered, and the case's 0.457 is a mean over the dimensions that
+were answered.
+
+**The 3' partner, scored in the same run.** TACC3 is a candidate at rank 3,
+`intracellular_only`, score 0.242, `surface_accessibility` 0.0 — and the 0.0
+comes from its curated cytoplasmic localisation, not from the fusion, because
+`plasma_membrane is False` is read before the fusion states. `ectodomain_uncertain`
+is true for it and never reaches the number. One SV record thus produces two
+candidates with two different reasons, which is the thing a four-column fixture
+could not exercise: the file names both ends and the orientation is in the column
+names.
+
+**The ten rows.** `rows_compared` 10, `fields_that_differ` `[]`, and the
+before-run also reproduces the committed `therapeutic_benchmark_v2.json` row by
+row — "the offline before-run reproduces the committed rows field for field" over
+all ten. So the reader change is visible only where a table names its columns,
+and the published benchmark is untouched.
+
+**Two findings this case produced, neither of them a miss.** First,
+`target_class` reads `direct_surface` for FGFR3 while `surface_accessibility`
+refuses to answer: the class still comes from the curated annotation, so a row
+can be labelled a surface target and carry no surface figure. The class is not
+one of the three scored quantities and nothing in the ranking moved because of
+it, but a reader of the row sees a label the score does not support. Second, the
+sentence `product_extent_unknown` publishes says "no junction position is
+reported" — and this record reports both breakpoints, carried verbatim into the
+alteration as `4:1806934 to 4:1739702 (GRCh37)`. What is missing is not the
+position but the reading of it: nothing turns a breakpoint into the residues the
+product keeps. The wording belongs to the surface score's own section above and
+is left to the lane that owns it; the measurement here is that the branch fires
+on a record whose junction *is* stated.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a

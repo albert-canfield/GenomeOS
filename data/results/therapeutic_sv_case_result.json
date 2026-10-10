@@ -1,0 +1,527 @@
+{
+  "result": "therapeutic_sv_case_result",
+  "date": "2026-10-10",
+  "lane": "lane-svcase",
+  "registration": "therapeutic_sv_case_registration",
+  "roadmap_item": "area F, \"a scored structural-variant case\"",
+  "row": {
+    "case": "FGFR3-TACC3 urothelial carcinoma, one patient's record, the fusion's 5' partner",
+    "gene": "FGFR3",
+    "driver_call": "structural variant",
+    "approved": "erdafitinib (small molecule, pan-FGFR tyrosine kinase inhibitor), FDA accelerated approval 12 April 2019 and conversion to full approval 19 January 2024 for locally advanced or metastatic urothelial carcinoma with susceptible FGFR3 genetic alterations, determined by an approved companion diagnostic (therascreen FGFR RGQ RT-PCR) whose susceptible alterations include the FGFR3-TACC3 fusion; no antibody against FGFR3 is approved",
+    "approved_modality": "small_molecule",
+    "expected": "out_of_scope_expected",
+    "why": "the structural call is the measurement that selects the patient, as the amplification is for trastuzumab, so a pipeline that cannot read a caller's own fusion export misses every patient the label is written for; and the fusion's 5' partner is the arrangement where the product keeps the gene's own N-terminus, so the curated surface figure describes a protein that may or may not be the one the tumour makes and the score has to say so rather than answer 0.0 or read the annotation at full value",
+    "candidates": [
+      "FGFR3",
+      "TSC1",
+      "TACC3",
+      "ARID1A"
+    ],
+    "recovered": true,
+    "rank": 1,
+    "outranked_by_hypotheses": [],
+    "outranked_by_unreachable": [],
+    "rank_without_gate": 1,
+    "magnitude_tiebreaks": [],
+    "quantities_in_this_tumour": [
+      {
+        "gene": "TSC1",
+        "copies": null,
+        "vaf": 0.8,
+        "hotspot": false,
+        "gate": "no_established_mechanism",
+        "score": 0.451
+      },
+      {
+        "gene": "ARID1A",
+        "copies": null,
+        "vaf": 0.208,
+        "hotspot": false,
+        "gate": "no_established_mechanism",
+        "score": 0.24
+      }
+    ],
+    "seconds": 8.0,
+    "target_class": "direct_surface",
+    "score": 0.457,
+    "evidence_tier": "observed_alteration",
+    "mechanism_reach": "no_established_mechanism",
+    "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is blocking_antibody at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
+    "alteration_magnitude": {
+      "copies": null,
+      "copies_above_diploid": null,
+      "vaf": null,
+      "hotspot": null,
+      "quantities": []
+    },
+    "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+    "alteration_evidence": 1.0,
+    "surface_accessibility": null,
+    "best_mechanism": null,
+    "best_compatibility": null,
+    "best_mechanism_established": false,
+    "nearest_provisional_mechanism": "blocking_antibody",
+    "requirements_unanswered": [
+      "surface_accessible"
+    ],
+    "peptide_route": false,
+    "mechanism_concerns": [],
+    "mechanism_sane": true,
+    "verdict": "correctly not a surface target; approved drug is out of scope",
+    "pass": true
+  },
+  "structural_variant_record": [
+    {
+      "gene": "FGFR3",
+      "kind": "fusion",
+      "label": "FGFR3-TACC3 fusion",
+      "copies": null,
+      "gistic": null,
+      "partner": "TACC3",
+      "detail": "FGFR3-TACC3",
+      "in_frame": "in-frame",
+      "source": "patient structural-variant table (fgfr3_tacc3_urothelial.sv)",
+      "cohort_frequency": null,
+      "cohort_by_cancer_type": {},
+      "cohort_study": "",
+      "recurrent_partner": false,
+      "removes_product": false,
+      "score": 0.0,
+      "evidence": [
+        "FGFR3-TACC3 fusion in this tumour's structural-variant table"
+      ]
+    },
+    {
+      "gene": "TACC3",
+      "kind": "fusion",
+      "label": "TACC3-FGFR3 fusion",
+      "copies": null,
+      "gistic": null,
+      "partner": "FGFR3",
+      "detail": "FGFR3-TACC3",
+      "in_frame": "in-frame",
+      "source": "patient structural-variant table (fgfr3_tacc3_urothelial.sv)",
+      "cohort_frequency": null,
+      "cohort_by_cancer_type": {},
+      "cohort_study": "",
+      "recurrent_partner": false,
+      "removes_product": false,
+      "score": 0.0,
+      "evidence": [
+        "TACC3-FGFR3 fusion in this tumour's structural-variant table"
+      ]
+    }
+  ],
+  "regression_guard": {
+    "rows_compared": 10,
+    "fields_that_differ": [],
+    "fields_not_compared": [
+      "seconds"
+    ],
+    "against_committed": [],
+    "rows_against_committed": 10,
+    "verdict": "the ten rows are identical in every field but seconds",
+    "committed_verdict": "the offline before-run reproduces the committed rows field for field"
+  },
+  "note": "The eleventh benchmark case, registered on 2026-10-10 before it was run (therapeutic_sv_case_registration) and added to the benchmark's case list whatever the outcome. Three quantities are scored apart, as the benchmark scores them: whether the target is recovered, whether the route is called correctly, and whether the mechanism ranked first is defensible. The ten existing rows are the regression guard and are re-scored offline with the structural-variant reader as it was before this lane's change and as it is now. A recovered target is a retrospective consistency with what is already approved for the alteration, never evidence that a therapy works.",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "cBioPortal blca_tcga_pan_can_atlas_2018 (TCGA Bladder Urothelial Carcinoma, PanCancer Atlas): sample TCGA-CF-A3MG-01, the FGFR3-TACC3 structural variant and two of its somatic mutations",
+        "version": "public REST API as read 2026-10-10; the fixture files in data/demo/alterations are the pin, and their sha256 is in inputs"
+      },
+      {
+        "accession": "Ensembl REST assembly map and VEP (GRCh37 to GRCh38, fixture check)",
+        "version": "live service as read 2026-10-10, unversioned per request"
+      },
+      {
+        "accession": "FDA label for erdafitinib (BALVERSA), urothelial carcinoma with susceptible FGFR3 alterations",
+        "version": "accelerated approval 12 April 2019; full approval 19 January 2024"
+      },
+      {
+        "accession": "GenomeOS federated protein compiler: UniProt, Ensembl, InterPro, PDB, AlphaFold, Reactome, STRING, HPA",
+        "version": "live services, unversioned per request; the local store's sha256 is the pin"
+      },
+      {
+        "accession": "the ten benchmark tumours (data/demo) and their committed result",
+        "version": "this repository at the recorded commit"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/fgfr3_tacc3_urothelial.vcf",
+        "sha256": "a9bf02abec534aab82be44bc7c3113acd47a8ec6c73a05f613dfcfe775d68ddc",
+        "bytes": 689,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/fgfr3_tacc3_urothelial.sv",
+        "sha256": "f00c3d26892b2b2a09bbf258c9f1f8e1d1692dbcb32dd736b98223fa6b1bd49d",
+        "bytes": 279,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/egfr_l858r_lung.vcf",
+        "sha256": "36326a43fd7bc29c85669df45510db8c3ca47629e9f0d8ef3da223612ccb037c",
+        "bytes": 258,
+        "partition": null,
+        "case": "EGFR L858R, lung adenocarcinoma"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/erbb2_amplified_breast.vcf",
+        "sha256": "1b667cb2570de46de3ba4a25392d8ba349362f0e0eb897b8d4ee7f92ab9f9cc4",
+        "bytes": 287,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/erbb2_amplified_breast.cnv",
+        "sha256": "4b9a8ebb55883791de3c7b6aefeacf8fe4b7f8e3bc7773df016d96f8b708e216",
+        "bytes": 9,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/braf_v600e_melanoma.vcf",
+        "sha256": "92e2f6b7c3117e57be7914d310549f8b287ac7ea7a5ebc9ef58acabda7f35362",
+        "bytes": 237,
+        "partition": null,
+        "case": "BRAF V600E, melanoma"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/kras_g12c_lung.vcf",
+        "sha256": "df77820276e46102047a57985b06c593deeb03bd6a67601dce64cba95164c60f",
+        "bytes": 230,
+        "partition": null,
+        "case": "KRAS G12C, lung adenocarcinoma"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/pik3ca_h1047r_breast.vcf",
+        "sha256": "797b4bfab766487caef1882849fc61c2a76dfb8ee8e91b1e10d6f31c4aff556f",
+        "bytes": 233,
+        "partition": null,
+        "case": "PIK3CA H1047R, breast carcinoma"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/idh1_r132h_glioma.vcf",
+        "sha256": "54712481b46734f8b7efea21fc4d35a5556ac510b85d6d5325f8b7cd34641163",
+        "bytes": 229,
+        "partition": null,
+        "case": "IDH1 R132H, glioma and AML"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/erbb2_amplification_only.vcf",
+        "sha256": "eafd4aba8ccc40d757ac88b7a0d68c2b8de31cb463ad9df00a9d9a0de52f2563",
+        "bytes": 226,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/erbb2_amplification_only.cnv",
+        "sha256": "392e0a48c1f1c6aa545afa3844aa58c6727b0d6d19f131801a4a9662ec82d6df",
+        "bytes": 28,
+        "partition": null,
+        "case": "ERBB2-amplified breast carcinoma, reached only through the copy-number call"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/alk_eml4_fusion.vcf",
+        "sha256": "2690d5a51b289adacb6b3a0b8f9285b83ba07d71c2d8c62aeb9cfdcaf9c42841",
+        "bytes": 215,
+        "partition": null,
+        "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/alk_eml4_fusion.sv",
+        "sha256": "97bb964f90bf04383bdb313134bcdf3adf7985fd62adbeae27974ad86022aaf7",
+        "bytes": 44,
+        "partition": null,
+        "case": "EML4-ALK lung adenocarcinoma, a curated surface receptor that the fusion makes cytoplasmic"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/expression/bcell_lymphoma.vcf",
+        "sha256": "0745d43baa5d424073f2b1044e54bea12a03db595c8aef44250eddbaf8e6916b",
+        "bytes": 229,
+        "partition": null,
+        "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/expression/bcell_lymphoma_rna.tsv",
+        "sha256": "de0ebefe0c5712d36f963eb008a3a798b89889f46cc748ed31c4a86db8f171f4",
+        "bytes": 284,
+        "partition": null,
+        "case": "CD19 in a B-cell lymphoma, reached from the tumour's own RNA"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/erbb2_myc_gastroesophageal.vcf",
+        "sha256": "dcc1cec5deeba045dd0410eec20fd97d052d850a87c10b1f39c211b771c69485",
+        "bytes": 503,
+        "partition": null,
+        "case": "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/benchmark/erbb2_myc_gastroesophageal.cnv",
+        "sha256": "eb45d731793686b3096786244f98b930b533ba4f8857802cf331c5e8c15fb38f",
+        "bytes": 61,
+        "partition": null,
+        "case": "HER2-positive gastroesophageal adenocarcinoma with a co-amplified MYC"
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/therapeutic_benchmark_v2.json",
+        "sha256": "ed764d034cc4a84fc759c144b33b3c40ba2fa20715df1420d587a21df6770d34",
+        "bytes": 55727,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/cancer_msk_impact_2017.json",
+        "sha256": "1609f9235141e06094939edf6640ce5d246d79c30f67f24e26f47b2fa228874e",
+        "bytes": 165474,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/results/cancer_alterations_msk_impact_2017.json",
+        "sha256": "1bba8559e1dd462b0f13ae1fb9514f77789cd3a232f8d5679b4e3762803ca643",
+        "bytes": 138848,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/therapeutics",
+        "sha256": "1d5b73fdf71f1e5ef77d2090ec49d0bdc2a2eb272133b3b449c5b7da57a9369a",
+        "bytes": 48906477,
+        "partition": null,
+        "files": 992
+      },
+      {
+        "path": "data/knowledge/proteins",
+        "sha256": "1224cf852b9393f4b199a88c870daa049623230bd718e333377511053d08f652",
+        "bytes": 264901753,
+        "partition": null,
+        "files": 19454
+      },
+      {
+        "path": "data/knowledge/expression",
+        "sha256": "61691b70d6cd60093d15696073514559a0244dfcd207b6bb8062a0666fba552e",
+        "bytes": 1134119,
+        "partition": null,
+        "files": 102
+      },
+      {
+        "path": "data/knowledge/pathways",
+        "sha256": "8240272050d2de9aba10292d8a1fda78d34ccc70c42d92095a56e79a4d8b81d5",
+        "bytes": 13435655,
+        "partition": null,
+        "files": 56
+      },
+      {
+        "path": "data/knowledge/go-basic.obo",
+        "sha256": "b08d45b268b8c24ccb2513dbbbc7d4df9f6521c099b413f79eb31e06e0fa3bcc",
+        "bytes": 32227785,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/goa_human.gaf.gz",
+        "sha256": "db472faff1785878521693af62646546cea6af4a386609dd01c72c0554a46a30",
+        "bytes": 15041996,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/vep/vep_cache.jsonl",
+        "sha256": "e349b9533846933224187766b5c428f95c36de240bd24ae43f2750259bb1f238",
+        "bytes": 5140,
+        "partition": null
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": null
+      },
+      {
+        "path": "data/results/library_members.json",
+        "sha256": "410910040b2f1d07386787ca6fcb10fd79d00264815fed045550a45cf777b7c7",
+        "bytes": 643666,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38 for the VCF and the pipeline; the structural-variant record is the source's own GRCh37, which nothing in the pipeline reads as a coordinate",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "VCF positions are 1-based; the breakpoints are the record's own 1-based GRCh37 positions and are carried verbatim into the alteration's junction field"
+    },
+    "parameters": {
+      "case_network": true,
+      "ten_rows_network": false,
+      "top_genes": 8,
+      "indirect": true,
+      "fields_not_compared": [
+        "seconds"
+      ]
+    },
+    "exclusions": [
+      "small-molecule routes are not modelled: this case passes by not claiming a surface route",
+      "the committed benchmark result is not rewritten by this run",
+      "no breakpoint is read into exon content, so the product's extent stays unknown"
+    ],
+    "partitions": "n/a: a retrospective case registered before it was run, nothing fitted to it",
+    "inputs_optional_absent": {
+      "data/knowledge/Ensembl2Reactome.txt": {
+        "declared_instead": "data/results/library_members.json",
+        "fallback": "genomeos/lib/membership.py:98 falls back to the distilled membership store (Membership.distilled()) when this file is absent; pathway membership is then read from that store rather than from the lowest-level Reactome mapping. genomeos/storage.py distils that store FROM this file and records the raw mapping as disposable afterwards",
+        "note": "this input is not on this machine; the file above answered in its place and is declared and hashed above. Which branch ran is part of the record"
+      }
+    },
+    "offline_reproducible": false,
+    "code_cleanliness": {
+      "git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/therapeutic_sv_case.py",
+        "form": "committed_repository_file",
+        "path": "scripts/therapeutic_sv_case.py",
+        "is_committed": true,
+        "declared_entry": "scripts/therapeutic_sv_case.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/therapeutic_sv_case.py"
+      ],
+      "counting_path_count": 76,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/saturable_gate_result.json"
+      ],
+      "argv": [
+        "scripts/therapeutic_sv_case.py",
+        "run"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "code_cleanliness_git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record b81a32c"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 22531,
+      "opens_under_data": 22329,
+      "files_read": 20629,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
