@@ -214,8 +214,9 @@ def test_the_registration_states_the_population_the_code_reads() -> None:
     assert set(found) == independently
 
 
-def test_the_corpus_is_nineteen_programs_in_the_source_repository() -> None:
-    """The registered population figure, checked only where the whole corpus can be present.
+def test_the_corpus_is_twenty_programs_in_the_source_repository() -> None:
+    """The population figure in the source repository, checked only where the whole corpus can be
+    present. It was the registered figure, 19, until 2026-10-10 added a 20th program (comment below).
 
     The condition is `.git`, not a program's path. A witness path would defeat itself:
     `scripts/package_engine.py` scans the tests it selects for path literals under `data/` and
@@ -238,4 +239,10 @@ def test_the_corpus_is_nineteen_programs_in_the_source_repository() -> None:
             "pinned in data/results/number_provenance_registration.json, which digests every "
             "program by name."
         )
-    assert len(found) == 19
+    # 2026-10-10, `5682e6c` (lane-readerlang): data/demo/reader_gating.bio, the BioLang v0.5 reader demo,
+    # is the 20th program in a population directory. The registered population stays 19:
+    # data/results/number_provenance_registration.json names and digests the 19 it was registered on,
+    # and its result was taken over those 19. A re-run of this census would read 20, the 20th file's
+    # numbers all illustration with evidence `none`.
+    assert len(found) == 20
+    assert Path("data/demo/reader_gating.bio") in found

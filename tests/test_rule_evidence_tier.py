@@ -533,6 +533,29 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
 # copies rather than two corrected numbers: the claim worth keeping is not "the total is 44", it is
 # "an added generated program moves the generated side and nothing else", and only re-asserting both
 # sides measures that.
+#
+# 2026-10-10, `5682e6c` (lane-readerlang): `data/demo/reader_gating.bio`, the BioLang v0.5 reader demo,
+# joined the corpus. It is HAND-AUTHORED (tracked, no generator marker in its first lines), so unlike
+# v3 it moves the hand-authored side, and by exactly its own counts: 1 program, 2 written rules (an
+# activates and an inhibits, both carrying tiered numbers, so 6 slots), 3 rules the parser synthesises
+# from `produces`, 5 compiled. The figures below are edited in place, each to its old value plus that
+# file's own count (33+1, 22+2, 41+5, 19+3, 20+2, 60+6, 7+1, the totals and the calibrated files one
+# higher), and the generated side and the 24 untracked programs do not move.
+# `_the_reader_demo` pins the per-file counts the increments come from, so a total that moved for any
+# other reason does not pass by coincidence.
+
+READER_DEMO = "data/demo/reader_gating.bio"
+
+
+def _the_reader_demo(c: dict) -> None:
+    """The one program 5682e6c added: hand-authored, with the counts every increment below adds."""
+    (demo,) = [f for f in c["files"] if f["path"] == READER_DEMO]
+    assert demo["kind"] == "hand_authored", demo
+    assert demo["rules_written"] == 2
+    assert demo["rules_compiled"] == 5
+    assert demo["rules_synthesised_by_the_parser"] == 3
+    assert demo["rules_with_tiered_numbers"] == 2
+    assert demo["rules_scanned"] == demo["rules_written"]
 
 
 def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after_v3():
@@ -548,20 +571,23 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after
     tracked_files = [f for f in c["files"] if f["path"] in tracked]
     tracked_generated = [f for f in tracked_files if f["kind"] == "generated"]
     # the repository's own corpus: 44 = 33 hand-authored + 11 generated-and-committed, v3 being the
-    # eleventh and the only change since the 43 the superseded test above asserts
-    assert len(tracked_files) == 44
+    # eleventh and the only change since the 43 the superseded test above asserts. 2026-10-10,
+    # 5682e6c: 45 = 34 + 11, reader_gating.bio the 34th hand-authored program
+    assert len(tracked_files) == 45
     assert len(tracked_generated) == 11
     assert len(tracked_files) == len(hand) + len(tracked_generated)
     assert "data/organisms/human/noncoding_chr21_v3.bio" in {f["path"] for f in tracked_generated}
     assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
-    # not one of these moved, which is the claim: v3 joined the generated side
-    assert c["programs_hand_authored"] == 33
-    assert c["rules_hand_authored_written"] == 22
-    assert c["rules_hand_authored_compiled"] == 41
-    assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
-    assert c["rules_hand_authored_with_tiered_numbers"] == 20
-    assert c["slots_hand_authored"] == 60
-    assert c["programs_hand_authored_with_at_least_one_rule"] == 7
+    # not one of these moved, which is the claim: v3 joined the generated side. 2026-10-10, 5682e6c:
+    # each moved by reader_gating.bio's own count and nothing else (`_the_reader_demo`)
+    _the_reader_demo(c)
+    assert c["programs_hand_authored"] == 34
+    assert c["rules_hand_authored_written"] == 24
+    assert c["rules_hand_authored_compiled"] == 46
+    assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
+    assert c["rules_hand_authored_with_tiered_numbers"] == 22
+    assert c["slots_hand_authored"] == 66
+    assert c["programs_hand_authored_with_at_least_one_rule"] == 8
     assert c["default"] == ret.NOT_ASSESSED
     assert c["rules_generated_scanned"] is None
 
@@ -583,9 +609,11 @@ def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes_af
     assert len(untracked) == 24
     assert all(p.startswith(GENERATED_STORE + "/") for p in untracked), untracked
     assert all(f["kind"] == "generated" for f in c["files"] if f["path"] in set(untracked))
-    assert c["programs_total"] == 68
+    # 2026-10-10, 5682e6c: 68 -> 69 and 33 -> 34 for reader_gating.bio; the generated 35 and the
+    # untracked 24 unchanged
+    assert c["programs_total"] == 69
     assert c["programs_generated"] == 35
-    assert c["programs_hand_authored"] == 33
+    assert c["programs_hand_authored"] == 34
     assert c["programs_total"] == len(paths & tracked) + len(untracked)
 
 
@@ -605,15 +633,18 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
     assert len(fresh) < len(real), "this machine holds no untracked program, so this proves nothing"
     monkeypatch.setattr(cost_script, "bio_files", lambda: fresh)
     c = cost_script.cost(scan_generated=False)
-    assert c["programs_total"] == 44
-    assert c["programs_hand_authored"] == 33
+    # 2026-10-10, 5682e6c: every hand-authored figure plus reader_gating.bio's own count, the
+    # generated 11 unchanged
+    _the_reader_demo(c)
+    assert c["programs_total"] == 45
+    assert c["programs_hand_authored"] == 34
     assert c["programs_generated"] == 11
-    assert c["rules_hand_authored_written"] == 22
-    assert c["rules_hand_authored_compiled"] == 41
-    assert c["rules_hand_authored_synthesised_by_the_parser"] == 19
-    assert c["rules_hand_authored_with_tiered_numbers"] == 20
-    assert c["slots_hand_authored"] == 60
-    assert c["programs_hand_authored_with_at_least_one_rule"] == 7
+    assert c["rules_hand_authored_written"] == 24
+    assert c["rules_hand_authored_compiled"] == 46
+    assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
+    assert c["rules_hand_authored_with_tiered_numbers"] == 22
+    assert c["slots_hand_authored"] == 66
+    assert c["programs_hand_authored_with_at_least_one_rule"] == 8
     assert c["scan_calibration"]["calibrated"] is True
 
 
@@ -635,4 +666,5 @@ def test_the_line_scan_is_calibrated_against_the_parse_before_it_is_believed():
     c = cost_script.cost(scan_generated=False)
     assert c["scan_calibration"]["disagreements"] == []
     assert c["scan_calibration"]["calibrated"] is True
-    assert c["scan_calibration"]["files_compared"] == 33
+    # 2026-10-10, 5682e6c: 33 -> 34, the scan compared on reader_gating.bio too and agreed
+    assert c["scan_calibration"]["files_compared"] == 34
