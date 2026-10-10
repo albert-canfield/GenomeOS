@@ -639,3 +639,201 @@ that any element acts on the gene it is attributed to.
    item 2), not another node on this one.
 2. A boundary set from the marker calls' own stages (6-16 h embryos), author-called and dm6, if one is
    published under a stated licence; none was found on 2026-10-10.
+
+## 10. Stage 3: the worm's constraint-dose view, registered on a second source (2026-10-10, lane-wormdose)
+
+Item 1 of "What follows from stage 2". Stage 2's registered tier was FALSIFIED on Serizay 2020, and a
+view beside it, deciding nothing, was positive: the top third of elements by constrained fraction
+against the bottom third gave +6.69 [+2.11, +11.68]. That view was seen after stage 2's run, so it
+cannot be re-tested on that source. Here it is registered as a hypothesis on a second worm source
+before any of that source's RNA was read, with stage 1's comparison as a secondary. No money, no key,
+no model request.
+
+Code: `genomeos/attribution/simpler_dose.py` (imports `simpler.py` and `simpler_tiers.py`, both
+unchanged), `scripts/simpler_dose_run.py` (`fetch`, `inventory`, `tiers`, `register`, `score`),
+`tests/test_simpler_dose.py`. Results: `data/results/simpler_dose_inventory.json`,
+`simpler_dose_tiers.json`, `simpler_dose_registration.json` and `simpler_dose_result.json` (registration
+1 and its run), `simpler_dose_v2_registration.json` and `simpler_dose_v2_result.json` (registration 2
+and its run), `simpler_dose_v2_edges_posthoc.json` (post hoc, deciding nothing), each written from a
+clean worktree of the committed tree with the stores linked read-only. Commits: code `91c2e75`,
+inventory and per-element counts `e4b794a`, registration 1 `ff74444`, run 1 `b8d777a`, code for
+registration 2 `7a1b836`, registration 2 `5b930cb`, run 2 `c2adfa3`, post-hoc check `cc86cec` and
+`5807027`.
+
+### The source (fetched 2026-10-10)
+
+Jänes et al. 2018 (eLife 7:e37344) made ATAC-seq of whole wild-type animals at six stages (embryo, L1,
+L2, L3, L4, young adult) and, at the same six stages, strand-specific long nuclear RNA
+(chromatin-associated, over 200 nt, "long cap"), two biological replicates each. It is the same lab as
+Serizay 2020 but different samples: whole animals by stage, not sorted nuclei by tissue. The source does
+not say whether the ATAC and the RNA came from the same nuclei preparations.
+
+| file | what is read | bytes | sha256 | licence |
+|---|---|---|---|---|
+| `elife-37344-fig1-data1-v2.txt` | coordinates and the six wild-type ATAC heights (SPMR peak signal) | 3,835,944 | `18a4e546...77a05fc` | CC BY 4.0 |
+| `elife-37344-fig2-data1-v2.txt` | ce10 and ce11 coordinates and the element class only | 18,827,378 | `09bede4b...80e4656` | CC BY 4.0 |
+| `elife-37344-fig4-data1-v2.txt` | coordinates and the developmental-dynamics call only | 4,739,367 | `91cd4e53...7ac2bd2` | CC BY 4.0 |
+| `GSE114483_lcap_wt_<stage>_linear_<fwd,rev>.bw`, 12 files | long-cap coverage, DESeq2 size-factor normalised, averaged over two replicates | 349,972,704 | per file in the inventory | GEO; NCBI places no restriction, the submitters state none |
+
+377,375,393 bytes fetched against the 1.5 GB budget, plus 272,291 bytes of the eLife API record while
+choosing; 26.9 GB free before the fetch. The phyloP135way track was read by range request
+(61,558,764 bytes moved, nothing stored). Not used: Durham et al. 2021 (single-cell ATAC at L2, but
+its cell-type RNA would come from another study, so the endpoint would not be measured with the
+accessibility), Daugherty et al. 2017 (three stages; RNA in the same samples not established), GEO
+GSE141213 (2,386,268,160 bytes, over budget, and the same source as stages 1 and 2).
+
+### Adaptations, decided before any RNA value was read
+
+- **The group.** Stage 1's group was a tissue the source called ("accessible in exactly one of five
+  tissues"). This source gives no per-stage call. Among the putative enhancers the source calls
+  developmentally dynamic (`devel_is_dynamic`), an element's stage is the one with its highest ATAC
+  height of the six; a tie goes to the earlier stage (46 ties among 24,051 dynamic elements of both
+  classes).
+- **The RNA.** The source publishes no gene table, so a gene's value at a stage is coverage-TPM: the
+  mean long-cap coverage over the union of the exons of all its WBcel235 transcripts, on its own
+  strand, scaled per stage so the protein-coding genes of the six nuclear chromosomes sum to one
+  million. That is TPM's construction (reads per base, normalised to a million) on coverage instead
+  of counts.
+- **The endpoint.** Concordant: at least 5 coverage-TPM at the element's stage and strictly higher
+  than at each of the other five (stage 1's rule on six stages instead of five tissues).
+- **A strand check that can fail the run.** Own-strand coverage summed over the protein-coding genes
+  must exceed opposite-strand at all six stages (read as labelled) or fall below it at all six (fwd
+  and rev swapped); anything else is INSTRUMENT_FAILED.
+
+The source's own element-to-gene columns and its RNA-derived flag columns are never read.
+
+### The census, from positions, the ATAC calls and the conservation track only
+
+13,852 developmentally dynamic putative enhancers with a domain-rule gene (embryo 4,735, L1 974, L2
+1,955, L3 1,160, L4 1,958, young adult 3,070); 11,842 have a scored phyloP135way base left after exon
+removal. Tertile edges of the constrained fraction: 0.072848 and 0.19403 (stage 2's were 0.08 and
+0.190476). Top third 3,949, bottom third 3,922; in strata holding both arms (127 of 136), 3,941 and
+3,905; the smallest difference with 80% power at two-sided 5% is 3.16 points before clustering.
+**Overlap:** 3,849 of the 13,852 elements (3,407 of the 11,842 measured) overlap an element of stage
+2's population, because Serizay 2020 extends this lab's annotation; without them 2,760 top and 2,902
+bottom remain in support. The arms are unequal across stages (young adult 314 top against 1,266
+bottom; embryo 1,743 against 1,145), which the stage stratum absorbs. The secondary's rules differ on
+2,919 of 13,852 elements (21.1%). Positive control: 10,199 dynamic coding promoters.
+
+### The registered test
+
+Registered in `simpler_dose.REGISTRATION` and `data/results/simpler_dose_registration.json`
+(`ff74444`), which hashes all fifteen inputs; registration 2 (below) changes one line of it. `score` refuses unless the registration, the per-element
+counts, stage 2's tiers file and the five code files are committed and unchanged, every input matches
+its registered sha256 and the census recomputes.
+
+- **Claim.** Among the putative enhancers, the domain-rule gene is concordant with the element's own
+  stage more often for the top third by constrained fraction than for the bottom third, at the same
+  stage, position class, distance to that gene and measured length.
+- **Constraint.** Stage 2's instrument unchanged: phyloP135way by range request, cut 2.08, exon bases
+  removed; fraction = bases at or above the cut / scored bases left.
+- **Matched control.** The bottom third within the same strata: stage (6) × inside a gene body or
+  between genes × distance bin of the domain-rule gene's 5' end (stage 1's 8 bins) × measured-length
+  tertile.
+- **Statistic and decision.** `simpler_tiers.matched_difference`, unchanged: standardised to the top
+  third's strata, 95% percentile interval over 1-Mb windows (2,000 resamples); DOSE_ADDS,
+  NO_DIFFERENCE_DETECTED or DOSE_BELOW from the interval.
+- **Falsifier.** The arm label shuffled within strata 1,000 times; FALSIFIED if one-sided p ≥ 0.05.
+- **Positive control.** Dynamic coding promoters, nearest-TSS gene, against a gene at the same
+  distance bin (stage 1's control); if it does not separate, the readout is unresponsive and neither
+  reading is given.
+- **Secondary, its own label.** Stage 1's comparison on this source: domain rule against nearest TSS
+  on all 13,852 elements, stage 1's statistic, matched control and falsifier.
+- **Beside, deciding nothing.** Stage 2's numeric edges; the elements overlapping none of stage 2's
+  population (a DOSE_ADDS reading carries a registered caveat if that subset's interval does not exclude
+  zero); inside gene bodies and between genes; each stage; the middle third against the bottom; stage
+  2's 5% tier on this source.
+- **Stop rule.** One run; fewer than 200 per arm in support stops it unscored.
+- **Confound, stated in advance.** Stages 1 and 2 named transcription; whole-animal RNA adds that a
+  stage concordance can come from any tissue. A difference does not separate regulatory constraint from
+  transcription-linked constraint.
+
+### Run 1 (registration `ff74444`): stopped at the strand check
+
+Run once by `score` from a clean worktree of `ff74444`, 81 seconds of RNA reading. Outcome
+**INSTRUMENT_FAILED**; nothing was scored. The registered reading, verbatim:
+
+> INSTRUMENT_FAILED: the long-cap RNA tracks show neither own-strand coverage above opposite-strand at all six stages nor the reverse at all six, so the RNA's strand cannot be read; nothing is scored.
+
+The per-stage sums in the result were negative wherever a rev track entered. Counted per track over
+the six chromosomes, every non-zero value of the six fwd tracks is positive and every non-zero value of
+the six rev tracks is negative (43,188,260 to 61,500,850 bases per rev track): the GEO rev tracks store
+coverage as negative numbers, a display convention the registration had not anticipated.
+
+### Registration 2 (`5b930cb`): the same test, coverage read as its magnitude
+
+`simpler_dose.REGISTRATION_V2` is registration 1 with one change: each track value is read as its
+absolute value, and the strand check applies to those. A test pins that nothing else differs
+(population, census, constraint, edges, strata, endpoint, controls, falsifiers, stop rule, wording).
+What was seen of the RNA before it was written, recorded in the registration file: run 1's twelve
+per-stage sums and the sign counts above. No gene value was saved or read and no concordance was
+computed before run 2. `score2` refuses unless run 1's result and registration 2 are committed, and
+runs once.
+
+### Result (2026-10-10, registration `5b930cb`)
+
+Run once by `score2` from a clean worktree of `5b930cb`, 86 seconds of RNA reading, no request to any
+model. Strand check passed as labelled at all six stages (own-strand sums 1.2 to 3.5 million against
+25,000 to 54,000 opposite-strand). Outcome **NO_DIFFERENCE_DETECTED**; falsifier **NOT_FALSIFIED**;
+secondary **DOMAIN_RULE_AHEAD**. The registered reading, verbatim:
+
+> On C. elegans putative enhancers whose accessibility changes across development (Jänes et al. 2018, whole animals, six stages from embryo to young adult), each assigned to its stage of highest accessibility, with constraint measured on their exon-free bases (UCSC ce11 phyloP135way, stage 2's cut 2.08), the domain-rule gene is expressed at 5 coverage-TPM or more in long nuclear RNA and highest at the element's own stage for 1,631 of 3,938 elements in the top third by constrained fraction (41.4%), against 38.6% for the 4,094 in the bottom third at the same stage, position class, distance and measured length; difference +2.81 points, 95% -0.17 to +5.71 over 1-Mb clusters (within-stratum permutation p 0.00999; NOT_FALSIFIED). No difference was detected: the dose view seen beside stage 2 does not replicate on this source. This is not evidence that constrained elements lack function. The positive control separates: of 10,199 developmentally dynamic coding promoters, the nearest-TSS gene is stage-concordant for 3,936 (38.6%) against 22.3% at a matched distance (one-sided p 0.001). Secondary, stage 1's comparison on this source: on 13,852 elements the domain-rule gene is stage-concordant for 4,686 (33.8%) against 4,400 (31.8%) for the gene with the nearest 5' end; the rules differ on 2,919; difference +2.06 points, 95% +1.33 to +2.82 over 1-Mb clusters. On this endpoint the domain rule is ahead of nearest TSS, as in stage 1. The domain rule's genes match the element's stage more often than genes at a matched distance (19.3%, one-sided p 0.001). Conservation and accessibility are not function: this says the attributed gene is expressed when the element is open, not that the element acts on it, and it does not separate regulatory constraint from transcription-linked constraint. The RNA is from whole animals, so a stage concordance can come from any tissue.
+
+Every domain-rule gene has an RNA value (19,973 protein-coding genes). Beside the registered test,
+deciding nothing (matched the same way; percentile intervals over 1-Mb clusters; within-stratum
+permutation p):
+
+| view | top / bottom, in support | top | matched bottom | difference, points [95%] | p |
+|---|---|---|---|---|---|
+| stage 2's numeric edges (≥ 0.190476 against < 0.08) | 4,091 / 4,403 | 41.2% | 38.2% | +2.97 [+0.08, +5.83] | 0.005 |
+| elements overlapping none of stage 2's population | 2,757 / 3,033 | 44.0% | 38.4% | +5.59 [+2.20, +9.00] | 0.001 |
+| inside a gene body | 2,214 / 1,815 | 42.5% | 37.8% | +4.78 [+0.31, +9.10] | 0.004 |
+| between genes | 1,724 / 2,279 | 40.0% | 39.7% | +0.28 [-3.19, +3.84] | 0.44 |
+| middle third against bottom third | 3,776 / 4,097 | 31.7% | 31.5% | +0.24 [-1.69, +2.38] | 0.40 |
+| stage 2's 5% tier on this source | 8,888 / 2,930 | 35.4% | 33.3% | +2.13 [+0.14, +4.40] | 0.019 |
+| embryo | 1,739 / 1,192 | 59.6% | 49.3% | +10.24 [+4.42, +15.96] | 0.001 |
+| L1 | 250 / 317 | 32.0% | 27.5% | +4.53 [-4.96, +12.12] | 0.18 |
+| L2 | 819 / 376 | 48.6% | 54.5% | -5.94 [-13.92, +2.95] | 0.97 |
+| L3 | 318 / 326 | 11.3% | 7.7% | +3.62 [-2.26, +8.80] | 0.087 |
+| L4 | 498 / 573 | 8.4% | 12.4% | -3.95 [-9.26, +1.17] | 0.97 |
+| young adult | 314 / 1,310 | 12.4% | 19.4% | -6.96 [-12.12, -1.77] | 0.995 |
+
+The secondary inside gene bodies: +2.26 [+1.08, +3.53] on 7,701 elements; between genes: +1.82
+[+1.10, +2.54] on 6,151 (the rules differ on 794 of them).
+
+**A defect of this run, disclosed.** The run read the tertile edges as the census stored them,
+rounded to six decimals (0.072848 and 0.19403). The census had counted its arms on the exact edges,
+11/151 and 13/67. The stored lower edge lies above 11/151, so the 190 elements whose fraction is
+exactly 11/151 (189 of them in strata holding both arms) entered the bottom third in the run, while
+the census had them in the middle; 3
+elements at 13/67 left the top third. That is why the run's arms in support (3,938 and 4,094) differ
+from the census's (3,941 and 3,905). Stage 2's dose view was computed the same way, from its stored
+edges. Recomputed post hoc on the exact edges (`simpler_dose_v2_edges_posthoc.json`, deciding nothing):
++3.09 [+0.12, +6.13], p 0.004. The registered outcome stays run 2's. The decision turns on those 190
+elements, so neither reading is firm. Future censuses should store the edges unrounded.
+
+**What this says and what it does not.** On a second source the dose view is not shown to replicate
+under the registered decision: the difference is +2.81 points and its interval reaches zero
+(-0.17). On the whole population the three edge choices give +2.81, +2.97 and +3.09 points, under half
+of stage 2's +6.69, with lower bounds of -0.17, +0.08 and +0.12. The permutation, which does not
+resample the 1-Mb clusters, gives p 0.00999. The views beside it are consistent with the confound
+named in advance: the difference sits inside gene bodies (+4.78) and not between genes (+0.28), and
+the stages disagree (embryo +10.24, young adult -6.96). The middle third does no better than the
+bottom third (+0.24), so the difference is not graded across the lower two thirds. The elements stage
+2 did not hold give +5.59 [+2.20, +9.00], so the estimate is not carried by the elements stage 2 held.
+
+On this endpoint the domain rule is ahead of nearest TSS on this source, as in stage 1: +2.06 [+1.33,
++2.82], between genes (+1.82) as well as inside them (+2.26), and its genes match the element's stage
+more often than genes at a matched distance. The endpoint, stage 1's adapted to six stages, responds: the promoters'
+nearest genes separate from matched genes (38.6% against 22.3%).
+
+Conservation and accessibility are not function. Nothing here says that any element acts on the gene
+it is attributed to, and no view separates regulatory constraint from transcription-linked
+constraint.
+
+### What follows from stage 3
+
+1. Whether constraint carries information between genes, where transcription of a host cannot: the
+   between-gene stratum here is +0.28 [-3.19, +3.84]. A test of it needs its own registration and a
+   population that does not read this endpoint.
+2. Censuses that store tertile edges unrounded, so the run and the census count the same arms.
