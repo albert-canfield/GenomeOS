@@ -346,3 +346,20 @@ def test_combine2s_committed_registration_is_combine2_py_on_every_field_the_run_
     tp.must_be_present(path)
     assert sj.combine2_mismatch(json.loads(path.read_text())) == []
     assert sj.combine2_mismatch({**json.loads(path.read_text()), "theta": 0.4}) == ["theta"]
+
+
+def test_the_committed_registration_is_the_module_it_binds_and_reuses_signaltraces_population():
+    import tracked_paths as tp
+
+    reg_path = Path("data/results/s4joint_registration.json")
+    st_path = Path("data/results/signaltrace_registration.json")
+    tp.must_be_present(reg_path, st_path)
+    reg = json.loads(reg_path.read_text())
+    st_reg = json.loads(st_path.read_text())
+    assert {f: reg[f] for f in sj.BOUND} == sj.registered_fields()
+    assert reg["population_record"]["sha256"] == st_reg["population_sha256"]
+    assert reg["population_record"]["pairs"] == len(st_reg["population_ids"]) == 1918
+    assert reg["comparator_committed_verbatim"]["s4_bridge"].startswith("none kept")
+    assert reg["result_manifest"]["complete"] is True
+    assert reg["result_manifest"]["code_cleanliness"]["own_code_is_committed"] is True
+    assert reg["alphagenome_requests"] == 0
