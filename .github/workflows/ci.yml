@@ -72,8 +72,10 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
+      # `roadrunner` since 2026-10-10: tests/test_roadrunner.py's libRoadRunner checks are marked
+      # `requires_extra("roadrunner")` and skipped in every job until this flag was added here.
       - name: Install
-        run: uv sync --extra compose
+        run: uv sync --extra compose --extra roadrunner
       - name: Lint
         run: uv run ruff check . && uv run ruff format --check .
       # The shell scripts carry the commit and push guards and nothing linted them until
