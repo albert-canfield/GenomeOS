@@ -98,6 +98,10 @@ DATA_LEVELS: tuple[tuple[int, str, str], ...] = (
 
 CLONAL_VAF = 0.35
 
+#: How `cancer.tumour.grade` ends the evidence line of a record its population rule sets aside.
+#: With a matched normal that verdict is replaced, because the normal is the measurement.
+GERMLINE_VERDICT = "likely inherited, not somatic"
+
 #: Copies at or above which a gene counts as amplified rather than gained.
 AMPLIFIED_COPIES = 4.0
 AF_INFO = re.compile(r"(?:^|;)AF=([0-9.]+)")
@@ -267,8 +271,14 @@ def origin_of(
     vafs: dict[str, float],
     purity: float | None,
     copy_number: dict[str, float],
+    matched_normal: bool = False,
 ) -> VariantOrigin:
-    """The tumour DNA record a candidate must always be traceable back to."""
+    """The tumour DNA record a candidate must always be traceable back to.
+
+    `matched_normal` says whether the profile held the normal's own calls. With them, the record
+    reached here because `rank_variants` found it absent from the normal, and its basis says that;
+    without them, the population-frequency estimate is the basis, word for word as before.
+    """
     key = f"{v.chrom}:{v.pos}:{v.ref}:{v.alt}"
     vaf = vafs.get(key)
     cn = copy_number.get(v.gene)
@@ -287,7 +297,10 @@ def origin_of(
         variant_type=v.consequence,
         somatic_status="somatic_candidate" if not v.likely_germline else "likely_germline",
         somatic_basis=(
-            "no matched normal supplied; population frequency used to set inherited variants aside"
+            "absent from the matched normal's calls (same chromosome, position and alleles), so somatic "
+            "by subtraction"
+            if matched_normal
+            else "no matched normal supplied; population frequency used to set inherited variants aside"
         ),
         vaf=vaf,
         copy_number=cn,
@@ -351,7 +364,10 @@ def build_candidate(
     """Run every stage for one gene and return the assembled candidate."""
     alterations = list(alterations or [])
     c = TherapeuticTargetCandidate(gene=gene)
-    c.origins = [origin_of(v, profile.sample_id, vafs, profile.purity, profile.copy_number) for v in variants]
+    c.origins = [
+        origin_of(v, profile.sample_id, vafs, profile.purity, profile.copy_number, bool(profile.normal_vcf))
+        for v in variants
+    ]
     c.origins.extend(alteration_origin(a, profile.sample_id) for a in alterations)
 
     # --- stage 1: protein annotation
@@ -1216,7 +1232,18 @@ def rank_variants(
     ranked = grade(variants, vep, knowledge)
     if normal_vcf:
         for v in ranked:
+            if v.likely_germline:
+                # The population rule set it aside; the normal, which is the measurement, does not
+                # carry it. The frequency stays on the record, the verdict "likely inherited" does not.
+                v.evidence = [e for e in v.evidence if not e.endswith(GERMLINE_VERDICT)]
+                v.evidence.insert(
+                    0,
+                    f"population frequency {v.gnomad_af:.3g} (gnomAD), but absent from the matched normal's "
+                    "calls: somatic by subtraction",
+                )
             v.likely_germline = False
+        # grade() put the set-aside records last; with none set aside, the order is the score's
+        ranked.sort(key=lambda s: -s.score)
     return ranked
 
 

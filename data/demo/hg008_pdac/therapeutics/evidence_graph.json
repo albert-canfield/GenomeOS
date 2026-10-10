@@ -1,0 +1,2100 @@
+{
+ "schema": "GenomeOS.TherapeuticDesignDataset.EvidenceGraph",
+ "schema_version": "1.0",
+ "sample_id": "HG008-T",
+ "nodes": [
+  {
+   "id": "sample:HG008-T",
+   "kind": "sample",
+   "path": "data/demo/hg008_pdac/HG008-T.vcf"
+  },
+  {
+   "id": "gene:FGF23",
+   "kind": "gene",
+   "symbol": "FGF23"
+  },
+  {
+   "id": "protein:Q9GZV9",
+   "kind": "protein",
+   "name": "Fibroblast growth factor 23",
+   "uniprot": "Q9GZV9"
+  },
+  {
+   "id": "variant:chr12:4370506:C>T",
+   "kind": "variant",
+   "gene": "FGF23",
+   "consequence": "missense_variant",
+   "protein_change": "R198Q",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:FGF23",
+   "kind": "localisation",
+   "compartment": "secreted"
+  },
+  {
+   "id": "expression:FGF23",
+   "kind": "expression",
+   "summary": "detected in 4/20 queried healthy tissues; highest weighted heart muscle at 5.4 nTPM"
+  },
+  {
+   "id": "structure:FGF23",
+   "kind": "structure",
+   "pdb": [
+    "2P39",
+    "6S22",
+    "7YSH",
+    "5W21",
+    "7YSW"
+   ],
+   "predicted": "Q9GZV9"
+  },
+  {
+   "id": "peptides:FGF23",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:FGF23",
+   "kind": "target",
+   "target_class": "direct_surface"
+  },
+  {
+   "id": "mechanism:targeted_radionuclide",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:blocking_antibody",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:t_cell_engager",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:nk_cell_engager",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:adcc",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:adcp",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:complement_recruitment",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:adc",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "gene:ADAMTS8",
+   "kind": "gene",
+   "symbol": "ADAMTS8"
+  },
+  {
+   "id": "protein:Q9UP79",
+   "kind": "protein",
+   "name": "A disintegrin and metalloproteinase with thrombospondin motifs 8",
+   "uniprot": "Q9UP79"
+  },
+  {
+   "id": "variant:chr11:130416955:GGGTGTGGGCCGCCTGGA>G",
+   "kind": "variant",
+   "gene": "ADAMTS8",
+   "consequence": "frameshift_variant",
+   "protein_change": "L355P",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:ADAMTS8",
+   "kind": "localisation",
+   "compartment": "secreted"
+  },
+  {
+   "id": "expression:ADAMTS8",
+   "kind": "expression",
+   "summary": "detected in 8/20 queried healthy tissues; highest weighted lung at 33.2 nTPM"
+  },
+  {
+   "id": "structure:ADAMTS8",
+   "kind": "structure",
+   "pdb": [],
+   "predicted": "Q9UP79"
+  },
+  {
+   "id": "peptides:ADAMTS8",
+   "kind": "peptide_set",
+   "count": 12
+  },
+  {
+   "id": "target:ADAMTS8",
+   "kind": "target",
+   "target_class": "direct_surface"
+  },
+  {
+   "id": "gene:CYP2A13",
+   "kind": "gene",
+   "symbol": "CYP2A13"
+  },
+  {
+   "id": "protein:Q16696",
+   "kind": "protein",
+   "name": "Cytochrome P450 2A13",
+   "uniprot": "Q16696"
+  },
+  {
+   "id": "variant:chr19:41095002:C>T",
+   "kind": "variant",
+   "gene": "CYP2A13",
+   "consequence": "missense_variant",
+   "protein_change": "P402L",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:CYP2A13",
+   "kind": "localisation",
+   "compartment": "other_intracellular"
+  },
+  {
+   "id": "expression:CYP2A13",
+   "kind": "expression",
+   "summary": "detected in 1/20 queried healthy tissues; highest weighted liver at 1.9 nTPM"
+  },
+  {
+   "id": "structure:CYP2A13",
+   "kind": "structure",
+   "pdb": [
+    "2PG5",
+    "4EJI",
+    "2P85",
+    "4EJH",
+    "4EJG"
+   ],
+   "predicted": "Q16696"
+  },
+  {
+   "id": "peptides:CYP2A13",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:CYP2A13",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:ESRRG",
+   "kind": "gene",
+   "symbol": "ESRRG"
+  },
+  {
+   "id": "protein:P62508",
+   "kind": "protein",
+   "name": "Estrogen-related receptor gamma",
+   "uniprot": "P62508"
+  },
+  {
+   "id": "variant:chr1:216507109:C>A",
+   "kind": "variant",
+   "gene": "ESRRG",
+   "consequence": "stop_gained",
+   "protein_change": "E403*",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:ESRRG",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:ESRRG",
+   "kind": "expression",
+   "summary": "detected in 15/20 queried healthy tissues; highest weighted kidney at 27.1 nTPM"
+  },
+  {
+   "id": "structure:ESRRG",
+   "kind": "structure",
+   "pdb": [
+    "6XXC",
+    "6XY5",
+    "6Y18",
+    "6Y3W",
+    "6Y1D"
+   ],
+   "predicted": "P62508"
+  },
+  {
+   "id": "target:ESRRG",
+   "kind": "target",
+   "target_class": "intracellular_only"
+  },
+  {
+   "id": "gene:KRAS",
+   "kind": "gene",
+   "symbol": "KRAS"
+  },
+  {
+   "id": "protein:P01116",
+   "kind": "protein",
+   "name": "GTPase KRas",
+   "uniprot": "P01116"
+  },
+  {
+   "id": "variant:chr12:25245350:C>A",
+   "kind": "variant",
+   "gene": "KRAS",
+   "consequence": "missense_variant",
+   "protein_change": "G12V",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:KRAS",
+   "kind": "localisation",
+   "compartment": "cytoplasmic"
+  },
+  {
+   "id": "expression:KRAS",
+   "kind": "expression",
+   "summary": "detected in 20/20 queried healthy tissues; highest weighted cerebral cortex at 17.4 nTPM"
+  },
+  {
+   "id": "structure:KRAS",
+   "kind": "structure",
+   "pdb": [
+    "9IAY",
+    "9IAW",
+    "6P0Z",
+    "8ONV",
+    "9IB5"
+   ],
+   "predicted": "P01116"
+  },
+  {
+   "id": "peptides:KRAS",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:KRAS",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:NF1",
+   "kind": "gene",
+   "symbol": "NF1"
+  },
+  {
+   "id": "protein:P21359",
+   "kind": "protein",
+   "name": "Neurofibromin",
+   "uniprot": "P21359"
+  },
+  {
+   "id": "variant:chr17:31182664:A>C",
+   "kind": "variant",
+   "gene": "NF1",
+   "consequence": "missense_variant",
+   "protein_change": "K296T",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:NF1",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:NF1",
+   "kind": "expression",
+   "summary": "detected in 20/20 queried healthy tissues; highest weighted cerebral cortex at 18.5 nTPM"
+  },
+  {
+   "id": "structure:NF1",
+   "kind": "structure",
+   "pdb": [
+    "6OB3",
+    "3PG7",
+    "2D4Q",
+    "1NF1",
+    "2E2X"
+   ],
+   "predicted": "P21359"
+  },
+  {
+   "id": "peptides:NF1",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:NF1",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:TP53",
+   "kind": "gene",
+   "symbol": "TP53"
+  },
+  {
+   "id": "protein:P04637",
+   "kind": "protein",
+   "name": "Cellular tumor antigen p53",
+   "uniprot": "P04637"
+  },
+  {
+   "id": "variant:chr17:7675217:T>G",
+   "kind": "variant",
+   "gene": "TP53",
+   "consequence": "missense_variant",
+   "protein_change": "K132T",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:TP53",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:TP53",
+   "kind": "expression",
+   "summary": "detected in 20/20 queried healthy tissues; highest weighted bone marrow at 18.4 nTPM"
+  },
+  {
+   "id": "structure:TP53",
+   "kind": "structure",
+   "pdb": [
+    "9C5S",
+    "3D06",
+    "5MHC",
+    "8UQR",
+    "6GGC"
+   ],
+   "predicted": "P04637"
+  },
+  {
+   "id": "peptides:TP53",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:TP53",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:GDI2",
+   "kind": "gene",
+   "symbol": "GDI2"
+  },
+  {
+   "id": "protein:P50395",
+   "kind": "protein",
+   "name": "Rab GDP dissociation inhibitor beta",
+   "uniprot": "P50395"
+  },
+  {
+   "id": "variant:chr10:5794906:C>A",
+   "kind": "variant",
+   "gene": "GDI2",
+   "consequence": "stop_gained",
+   "protein_change": "E123*",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:GDI2",
+   "kind": "localisation",
+   "compartment": "cytoplasmic"
+  },
+  {
+   "id": "expression:GDI2",
+   "kind": "expression",
+   "summary": "detected in 20/20 queried healthy tissues; highest weighted liver at 225.4 nTPM"
+  },
+  {
+   "id": "structure:GDI2",
+   "kind": "structure",
+   "pdb": [],
+   "predicted": "P50395"
+  },
+  {
+   "id": "target:GDI2",
+   "kind": "target",
+   "target_class": "intracellular_only"
+  },
+  {
+   "id": "gene:DOK5",
+   "kind": "gene",
+   "symbol": "DOK5"
+  },
+  {
+   "id": "protein:Q9P104",
+   "kind": "protein",
+   "name": "Docking protein 5",
+   "uniprot": "Q9P104"
+  },
+  {
+   "id": "variant:chr20:54588516:C>G",
+   "kind": "variant",
+   "gene": "DOK5",
+   "consequence": "missense_variant",
+   "protein_change": "R70G",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:DOK5",
+   "kind": "localisation",
+   "compartment": "cytoplasmic"
+  },
+  {
+   "id": "expression:DOK5",
+   "kind": "expression",
+   "summary": "detected in 15/20 queried healthy tissues; highest weighted skeletal muscle at 43.1 nTPM"
+  },
+  {
+   "id": "structure:DOK5",
+   "kind": "structure",
+   "pdb": [
+    "1J0W"
+   ],
+   "predicted": "Q9P104"
+  },
+  {
+   "id": "peptides:DOK5",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:DOK5",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:FAM43A",
+   "kind": "gene",
+   "symbol": "FAM43A"
+  },
+  {
+   "id": "protein:Q8N2R8",
+   "kind": "protein",
+   "name": "Protein FAM43A",
+   "uniprot": "Q8N2R8"
+  },
+  {
+   "id": "variant:chr3:194687170:C>T",
+   "kind": "variant",
+   "gene": "FAM43A",
+   "consequence": "missense_variant",
+   "protein_change": "A115V",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:FAM43A",
+   "kind": "localisation",
+   "compartment": "other_intracellular"
+  },
+  {
+   "id": "expression:FAM43A",
+   "kind": "expression",
+   "summary": "detected in 19/20 queried healthy tissues; highest weighted kidney at 29.3 nTPM"
+  },
+  {
+   "id": "structure:FAM43A",
+   "kind": "structure",
+   "pdb": [],
+   "predicted": "Q8N2R8"
+  },
+  {
+   "id": "peptides:FAM43A",
+   "kind": "peptide_set",
+   "count": 38
+  },
+  {
+   "id": "target:FAM43A",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:SMAD4",
+   "kind": "gene",
+   "symbol": "SMAD4"
+  },
+  {
+   "id": "protein:Q13485",
+   "kind": "protein",
+   "name": "SMAD family member 4",
+   "uniprot": "Q13485"
+  },
+  {
+   "id": "variant:chr18:51047193:G>GA",
+   "kind": "variant",
+   "gene": "SMAD4",
+   "consequence": "frameshift_variant",
+   "protein_change": "D52R",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:SMAD4",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:SMAD4",
+   "kind": "expression",
+   "summary": "detected in 20/20 queried healthy tissues; highest weighted cerebellum at 14.5 nTPM"
+  },
+  {
+   "id": "structure:SMAD4",
+   "kind": "structure",
+   "pdb": [
+    "6YIC",
+    "5MEY",
+    "1YGS",
+    "5UWU",
+    "1U7F"
+   ],
+   "predicted": "Q13485"
+  },
+  {
+   "id": "peptides:SMAD4",
+   "kind": "peptide_set",
+   "count": 4
+  },
+  {
+   "id": "target:SMAD4",
+   "kind": "target",
+   "target_class": "neoantigen_hla"
+  },
+  {
+   "id": "gene:INSYN1",
+   "kind": "gene",
+   "symbol": "INSYN1"
+  },
+  {
+   "id": "protein:Q2T9L4",
+   "kind": "protein",
+   "name": "Inhibitory synaptic factor 1",
+   "uniprot": "Q2T9L4"
+  },
+  {
+   "id": "variant:chr15:73740342:G>A",
+   "kind": "variant",
+   "gene": "INSYN1",
+   "consequence": "stop_gained",
+   "protein_change": "R153*",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:INSYN1",
+   "kind": "localisation",
+   "compartment": "cytoplasmic"
+  },
+  {
+   "id": "expression:INSYN1",
+   "kind": "expression",
+   "summary": "detected in 16/20 queried healthy tissues; highest weighted heart muscle at 41.8 nTPM"
+  },
+  {
+   "id": "structure:INSYN1",
+   "kind": "structure",
+   "pdb": [],
+   "predicted": "Q2T9L4"
+  },
+  {
+   "id": "target:INSYN1",
+   "kind": "target",
+   "target_class": "intracellular_only"
+  },
+  {
+   "id": "gene:KIT",
+   "kind": "gene",
+   "symbol": "KIT"
+  },
+  {
+   "id": "protein:P10721",
+   "kind": "protein",
+   "name": "Mast/stem cell growth factor receptor Kit",
+   "uniprot": "P10721"
+  },
+  {
+   "id": "localisation:KIT",
+   "kind": "localisation",
+   "compartment": "transmembrane"
+  },
+  {
+   "id": "expression:KIT",
+   "kind": "expression",
+   "summary": "detected in 16/20 queried healthy tissues; highest weighted thyroid gland at 36.5 nTPM"
+  },
+  {
+   "id": "structure:KIT",
+   "kind": "structure",
+   "pdb": [
+    "2VIF",
+    "8PQD",
+    "8S14",
+    "1T46",
+    "3G0E"
+   ],
+   "predicted": "P10721"
+  },
+  {
+   "id": "target:KIT",
+   "kind": "target",
+   "target_class": "pathway_induced_surface"
+  },
+  {
+   "id": "gene:EGFR",
+   "kind": "gene",
+   "symbol": "EGFR"
+  },
+  {
+   "id": "protein:P00533",
+   "kind": "protein",
+   "name": "Epidermal growth factor receptor",
+   "uniprot": "P00533"
+  },
+  {
+   "id": "localisation:EGFR",
+   "kind": "localisation",
+   "compartment": "transmembrane"
+  },
+  {
+   "id": "expression:EGFR",
+   "kind": "expression",
+   "summary": "detected in 19/20 queried healthy tissues; highest weighted liver at 32.2 nTPM"
+  },
+  {
+   "id": "structure:EGFR",
+   "kind": "structure",
+   "pdb": [
+    "8A27",
+    "8A2D",
+    "5UG9",
+    "5HG8",
+    "8A2A"
+   ],
+   "predicted": "P00533"
+  },
+  {
+   "id": "target:EGFR",
+   "kind": "target",
+   "target_class": "pathway_induced_surface"
+  },
+  {
+   "id": "gene:PDGFRB",
+   "kind": "gene",
+   "symbol": "PDGFRB"
+  },
+  {
+   "id": "protein:P09619",
+   "kind": "protein",
+   "name": "Platelet-derived growth factor receptor beta",
+   "uniprot": "P09619"
+  },
+  {
+   "id": "localisation:PDGFRB",
+   "kind": "localisation",
+   "compartment": "transmembrane"
+  },
+  {
+   "id": "expression:PDGFRB",
+   "kind": "expression",
+   "summary": "detected in 19/20 queried healthy tissues; highest weighted lung at 93.2 nTPM"
+  },
+  {
+   "id": "structure:PDGFRB",
+   "kind": "structure",
+   "pdb": [
+    "1SHA",
+    "1H9O",
+    "1GQ5",
+    "3MJG",
+    "2IUI"
+   ],
+   "predicted": "P09619"
+  },
+  {
+   "id": "target:PDGFRB",
+   "kind": "target",
+   "target_class": "pathway_induced_surface"
+  },
+  {
+   "id": "gene:ERBB2",
+   "kind": "gene",
+   "symbol": "ERBB2"
+  },
+  {
+   "id": "protein:P04626",
+   "kind": "protein",
+   "name": "Receptor tyrosine-protein kinase erbB-2",
+   "uniprot": "P04626"
+  },
+  {
+   "id": "localisation:ERBB2",
+   "kind": "localisation",
+   "compartment": "transmembrane"
+  },
+  {
+   "id": "expression:ERBB2",
+   "kind": "expression",
+   "summary": "detected in 20/20 queried healthy tissues; highest weighted kidney at 83.9 nTPM"
+  },
+  {
+   "id": "structure:ERBB2",
+   "kind": "structure",
+   "pdb": [
+    "1MFG",
+    "8VB5",
+    "8JYR",
+    "8U8X",
+    "8JYQ"
+   ],
+   "predicted": "P04626"
+  },
+  {
+   "id": "target:ERBB2",
+   "kind": "target",
+   "target_class": "pathway_induced_surface"
+  }
+ ],
+ "edges": [
+  {
+   "from": "gene:FGF23",
+   "to": "protein:Q9GZV9",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr12:4370506:C>T",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr12:4370506:C>T",
+   "to": "gene:FGF23",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr12:4370506:C>T",
+   "to": "protein:Q9GZV9",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Arg198Gln",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9GZV9",
+   "to": "localisation:FGF23",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9GZV9",
+   "to": "expression:FGF23",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q9GZV9",
+   "to": "structure:FGF23",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9GZV9",
+   "to": "peptides:FGF23",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:FGF23",
+   "to": "target:FGF23",
+   "relation": "supports_target_class",
+   "evidence": "curated localisation places FGF23 at the secreted; no extracellular topological domain is curated, so the exposed region is not delimited",
+   "confidence": 0.9
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.563
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.516
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.476
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.446
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.432
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.418
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.412
+  },
+  {
+   "from": "target:FGF23",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "gene:ADAMTS8",
+   "to": "protein:Q9UP79",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr11:130416955:GGGTGTGGGCCGCCTGGA>G",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr11:130416955:GGGTGTGGGCCGCCTGGA>G",
+   "to": "gene:ADAMTS8",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr11:130416955:GGGTGTGGGCCGCCTGGA>G",
+   "to": "protein:Q9UP79",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Leu355ProfsTer4",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9UP79",
+   "to": "localisation:ADAMTS8",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9UP79",
+   "to": "expression:ADAMTS8",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q9UP79",
+   "to": "structure:ADAMTS8",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9UP79",
+   "to": "peptides:ADAMTS8",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:ADAMTS8",
+   "to": "target:ADAMTS8",
+   "relation": "supports_target_class",
+   "evidence": "curated localisation places ADAMTS8 at the secreted; no extracellular topological domain is curated, so the exposed region is not delimited",
+   "confidence": 0.9
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.436
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.404
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.369
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.35
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.342
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.34
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.334
+  },
+  {
+   "from": "target:ADAMTS8",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "gene:CYP2A13",
+   "to": "protein:Q16696",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr19:41095002:C>T",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr19:41095002:C>T",
+   "to": "gene:CYP2A13",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr19:41095002:C>T",
+   "to": "protein:Q16696",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Pro402Leu",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q16696",
+   "to": "localisation:CYP2A13",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q16696",
+   "to": "expression:CYP2A13",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q16696",
+   "to": "structure:CYP2A13",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q16696",
+   "to": "peptides:CYP2A13",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:CYP2A13",
+   "to": "target:CYP2A13",
+   "relation": "supports_target_class",
+   "evidence": "CYP2A13 is other intracellular and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.8
+  },
+  {
+   "from": "gene:ESRRG",
+   "to": "protein:P62508",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr1:216507109:C>A",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr1:216507109:C>A",
+   "to": "gene:ESRRG",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr1:216507109:C>A",
+   "to": "protein:P62508",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Glu403Ter",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P62508",
+   "to": "localisation:ESRRG",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P62508",
+   "to": "expression:ESRRG",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P62508",
+   "to": "structure:ESRRG",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:ESRRG",
+   "to": "target:ESRRG",
+   "relation": "supports_target_class",
+   "evidence": "ESRRG is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide",
+   "confidence": 0.9
+  },
+  {
+   "from": "gene:KRAS",
+   "to": "protein:P01116",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr12:25245350:C>A",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr12:25245350:C>A",
+   "to": "gene:KRAS",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr12:25245350:C>A",
+   "to": "protein:P01116",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Gly12Val",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P01116",
+   "to": "localisation:KRAS",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.85
+  },
+  {
+   "from": "protein:P01116",
+   "to": "expression:KRAS",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P01116",
+   "to": "structure:KRAS",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P01116",
+   "to": "peptides:KRAS",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:KRAS",
+   "to": "target:KRAS",
+   "relation": "supports_target_class",
+   "evidence": "KRAS is cytoplasmic and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.85
+  },
+  {
+   "from": "gene:NF1",
+   "to": "protein:P21359",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr17:31182664:A>C",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr17:31182664:A>C",
+   "to": "gene:NF1",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr17:31182664:A>C",
+   "to": "protein:P21359",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Lys296Thr",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P21359",
+   "to": "localisation:NF1",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P21359",
+   "to": "expression:NF1",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P21359",
+   "to": "structure:NF1",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P21359",
+   "to": "peptides:NF1",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:NF1",
+   "to": "target:NF1",
+   "relation": "supports_target_class",
+   "evidence": "NF1 is nuclear and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.9
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.245
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.234
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.232
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.226
+  },
+  {
+   "from": "target:NF1",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.207
+  },
+  {
+   "from": "gene:TP53",
+   "to": "protein:P04637",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr17:7675217:T>G",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr17:7675217:T>G",
+   "to": "gene:TP53",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr17:7675217:T>G",
+   "to": "protein:P04637",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Lys132Thr",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P04637",
+   "to": "localisation:TP53",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P04637",
+   "to": "expression:TP53",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P04637",
+   "to": "structure:TP53",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P04637",
+   "to": "peptides:TP53",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:TP53",
+   "to": "target:TP53",
+   "relation": "supports_target_class",
+   "evidence": "TP53 is nuclear and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.9
+  },
+  {
+   "from": "gene:GDI2",
+   "to": "protein:P50395",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr10:5794906:C>A",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr10:5794906:C>A",
+   "to": "gene:GDI2",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr10:5794906:C>A",
+   "to": "protein:P50395",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Glu123Ter",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P50395",
+   "to": "localisation:GDI2",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.85
+  },
+  {
+   "from": "protein:P50395",
+   "to": "expression:GDI2",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P50395",
+   "to": "structure:GDI2",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:GDI2",
+   "to": "target:GDI2",
+   "relation": "supports_target_class",
+   "evidence": "GDI2 is cytoplasmic; no circulating binder reaches it and this alteration yields no mutation-derived peptide",
+   "confidence": 0.85
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.177
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.173
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.157
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.155
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.152
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.151
+  },
+  {
+   "from": "target:GDI2",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.149
+  },
+  {
+   "from": "gene:DOK5",
+   "to": "protein:Q9P104",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr20:54588516:C>G",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr20:54588516:C>G",
+   "to": "gene:DOK5",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr20:54588516:C>G",
+   "to": "protein:Q9P104",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Arg70Gly",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9P104",
+   "to": "localisation:DOK5",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.65
+  },
+  {
+   "from": "protein:Q9P104",
+   "to": "expression:DOK5",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q9P104",
+   "to": "structure:DOK5",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q9P104",
+   "to": "peptides:DOK5",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:DOK5",
+   "to": "target:DOK5",
+   "relation": "supports_target_class",
+   "evidence": "DOK5 is cytoplasmic and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.65
+  },
+  {
+   "from": "gene:FAM43A",
+   "to": "protein:Q8N2R8",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr3:194687170:C>T",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr3:194687170:C>T",
+   "to": "gene:FAM43A",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr3:194687170:C>T",
+   "to": "protein:Q8N2R8",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Ala115Val",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q8N2R8",
+   "to": "localisation:FAM43A",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.6
+  },
+  {
+   "from": "protein:Q8N2R8",
+   "to": "expression:FAM43A",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q8N2R8",
+   "to": "structure:FAM43A",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q8N2R8",
+   "to": "peptides:FAM43A",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:FAM43A",
+   "to": "target:FAM43A",
+   "relation": "supports_target_class",
+   "evidence": "FAM43A is other intracellular and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.6
+  },
+  {
+   "from": "gene:SMAD4",
+   "to": "protein:Q13485",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr18:51047193:G>GA",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr18:51047193:G>GA",
+   "to": "gene:SMAD4",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr18:51047193:G>GA",
+   "to": "protein:Q13485",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Asp52ArgfsTer2",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q13485",
+   "to": "localisation:SMAD4",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q13485",
+   "to": "expression:SMAD4",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q13485",
+   "to": "structure:SMAD4",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q13485",
+   "to": "peptides:SMAD4",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:SMAD4",
+   "to": "target:SMAD4",
+   "relation": "supports_target_class",
+   "evidence": "SMAD4 is nuclear and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present",
+   "confidence": 0.9
+  },
+  {
+   "from": "gene:INSYN1",
+   "to": "protein:Q2T9L4",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:HG008-T",
+   "to": "variant:chr15:73740342:G>A",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr15:73740342:G>A",
+   "to": "gene:INSYN1",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr15:73740342:G>A",
+   "to": "protein:Q2T9L4",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Arg153Ter",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q2T9L4",
+   "to": "localisation:INSYN1",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.7
+  },
+  {
+   "from": "protein:Q2T9L4",
+   "to": "expression:INSYN1",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q2T9L4",
+   "to": "structure:INSYN1",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:INSYN1",
+   "to": "target:INSYN1",
+   "relation": "supports_target_class",
+   "evidence": "INSYN1 is cytoplasmic; no circulating binder reaches it and this alteration yields no mutation-derived peptide",
+   "confidence": 0.7
+  },
+  {
+   "from": "gene:KIT",
+   "to": "protein:P10721",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P10721",
+   "to": "localisation:KIT",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P10721",
+   "to": "expression:KIT",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P10721",
+   "to": "structure:KIT",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:KIT",
+   "to": "target:KIT",
+   "relation": "supports_target_class",
+   "evidence": "not altered in this tumour; reached as a surface protein associated with a disrupted driver, so it is a hypothesis about an induced phenotype, not an observed alteration",
+   "confidence": 0.95
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.657
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.566
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.536
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.496
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.481
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.479
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.476
+  },
+  {
+   "from": "target:KIT",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "gene:EGFR",
+   "to": "protein:P00533",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P00533",
+   "to": "localisation:EGFR",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P00533",
+   "to": "expression:EGFR",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P00533",
+   "to": "structure:EGFR",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:EGFR",
+   "to": "target:EGFR",
+   "relation": "supports_target_class",
+   "evidence": "not altered in this tumour; reached as a surface protein associated with a disrupted driver, so it is a hypothesis about an induced phenotype, not an observed alteration",
+   "confidence": 0.95
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.606
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.53
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.481
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.443
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.427
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.423
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.416
+  },
+  {
+   "from": "target:EGFR",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "gene:PDGFRB",
+   "to": "protein:P09619",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P09619",
+   "to": "localisation:PDGFRB",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P09619",
+   "to": "expression:PDGFRB",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P09619",
+   "to": "structure:PDGFRB",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:PDGFRB",
+   "to": "target:PDGFRB",
+   "relation": "supports_target_class",
+   "evidence": "not altered in this tumour; reached as a surface protein associated with a disrupted driver, so it is a hypothesis about an induced phenotype, not an observed alteration",
+   "confidence": 0.95
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.516
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.401
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.36
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.33
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.33
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.309
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.305
+  },
+  {
+   "from": "target:PDGFRB",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  },
+  {
+   "from": "gene:ERBB2",
+   "to": "protein:P04626",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P04626",
+   "to": "localisation:ERBB2",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P04626",
+   "to": "expression:ERBB2",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P04626",
+   "to": "structure:ERBB2",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:ERBB2",
+   "to": "target:ERBB2",
+   "relation": "supports_target_class",
+   "evidence": "not altered in this tumour; reached as a surface protein associated with a disrupted driver, so it is a hypothesis about an induced phenotype, not an observed alteration",
+   "confidence": 0.95
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.521
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.406
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.368
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.336
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.335
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.316
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.313
+  },
+  {
+   "from": "target:ERBB2",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.25
+  }
+ ],
+ "traversal": "every target is reachable back to the tumour DNA it came from, and forward to the mechanisms its biology supports",
+ "evidence": "126 nodes, 189 edges"
+}

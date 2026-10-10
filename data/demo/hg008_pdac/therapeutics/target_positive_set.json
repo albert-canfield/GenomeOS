@@ -1,0 +1,858 @@
+{
+ "schema": "GenomeOS.TherapeuticDesignDataset.PositiveTargets",
+ "schema_version": "1.0",
+ "sample_id": "HG008-T",
+ "targets": [
+  {
+   "target_id": "FGF23:Q9GZV9",
+   "gene": "FGF23",
+   "target_class": "direct_surface",
+   "recognition_mode": "expression_differential",
+   "states": [
+    "FGF23 displayed at tumour-level density"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "FGF23"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr12",
+     "position": 4370506,
+     "reference": "C",
+     "alternate": "T",
+     "gene": "FGF23",
+     "transcript": "ENST00000237837",
+     "protein_change": "R198Q",
+     "hgvsc": "c.593G>A",
+     "hgvsp": "p.Arg198Gln",
+     "residue": 198,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5309,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV52975564"
+     ],
+     "gnomad_af": 6.545e-05,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.7
+  },
+  {
+   "target_id": "ADAMTS8:Q9UP79",
+   "gene": "ADAMTS8",
+   "target_class": "direct_surface",
+   "recognition_mode": "expression_differential",
+   "states": [
+    "ADAMTS8 displayed at tumour-level density"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "ADAMTS8"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "lung (33.2 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr11",
+     "position": 130416955,
+     "reference": "GGGTGTGGGCCGCCTGGA",
+     "alternate": "G",
+     "gene": "ADAMTS8",
+     "transcript": "ENST00000257359",
+     "protein_change": "L355P",
+     "hgvsc": "c.1064_1080del",
+     "hgvsp": "p.Leu355ProfsTer4",
+     "residue": 355,
+     "variant_type": "frameshift_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5329,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.696
+  },
+  {
+   "target_id": "CYP2A13:Q16696",
+   "gene": "CYP2A13",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant CYP2A13 peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "CYP2A13"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr19",
+     "position": 41095002,
+     "reference": "C",
+     "alternate": "T",
+     "gene": "CYP2A13",
+     "transcript": "ENST00000330436",
+     "protein_change": "P402L",
+     "hgvsc": "c.1205C>T",
+     "hgvsp": "p.Pro402Leu",
+     "residue": 402,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 1.0,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV57837147"
+     ],
+     "gnomad_af": 0.0008,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "ESRRG:P62508",
+   "gene": "ESRRG",
+   "target_class": "intracellular_only",
+   "recognition_mode": "not_addressable",
+   "states": [
+    "none: the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "ESRRG"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "kidney (27.1 nTPM)",
+     "retina (33.5 nTPM)",
+     "stomach (33.1 nTPM)",
+     "placenta (10 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr1",
+     "position": 216507109,
+     "reference": "C",
+     "alternate": "A",
+     "gene": "ESRRG",
+     "transcript": "ENST00000408911",
+     "protein_change": "E403*",
+     "hgvsc": "c.1207G>T",
+     "hgvsp": "p.Glu403Ter",
+     "residue": 403,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5118,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "KRAS:P01116",
+   "gene": "KRAS",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant KRAS peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "KRAS"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "cerebral cortex (17.4 nTPM)",
+     "bone marrow (16.1 nTPM)",
+     "liver (13.1 nTPM)",
+     "colon (20 nTPM)",
+     "lung (11 nTPM)",
+     "retina (16.2 nTPM)",
+     "stomach (18.5 nTPM)",
+     "esophagus (17.1 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr12",
+     "position": 25245350,
+     "reference": "C",
+     "alternate": "A",
+     "gene": "KRAS",
+     "transcript": "ENST00000311936",
+     "protein_change": "G12V",
+     "hgvsc": "c.35G>T",
+     "hgvsp": "p.Gly12Val",
+     "residue": 12,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.7149,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV55497369",
+      "COSV55497419",
+      "COSV55497479"
+     ],
+     "gnomad_af": 8.999e-07,
+     "driver_frequency": 0.1501,
+     "hotspot": true
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "NF1:P21359",
+   "gene": "NF1",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant NF1 peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "NF1"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "cerebral cortex (18.5 nTPM)",
+     "retina (24.9 nTPM)",
+     "heart muscle (12.1 nTPM)",
+     "kidney (13.3 nTPM)",
+     "liver (11.6 nTPM)",
+     "thyroid gland (19.5 nTPM)",
+     "adrenal gland (10.8 nTPM)",
+     "pancreas (10.6 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr17",
+     "position": 31182664,
+     "reference": "A",
+     "alternate": "C",
+     "gene": "NF1",
+     "transcript": "ENST00000358273",
+     "protein_change": "K296T",
+     "hgvsc": "c.887A>C",
+     "hgvsp": "p.Lys296Thr",
+     "residue": 296,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 1.0,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": 0.054,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.624
+  },
+  {
+   "target_id": "TP53:P04637",
+   "gene": "TP53",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant TP53 peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "TP53"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "bone marrow (18.4 nTPM)",
+     "spleen (29.3 nTPM)",
+     "skin (35.4 nTPM)",
+     "liver (15.6 nTPM)",
+     "colon (27.1 nTPM)",
+     "lung (14.3 nTPM)",
+     "cerebral cortex (12.3 nTPM)",
+     "pancreas (17.2 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr17",
+     "position": 7675217,
+     "reference": "T",
+     "alternate": "G",
+     "gene": "TP53",
+     "transcript": "ENST00000269305",
+     "protein_change": "K132T",
+     "hgvsc": "c.395A>C",
+     "hgvsp": "p.Lys132Thr",
+     "residue": 132,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 1.0,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV52666637",
+      "COSV52701687",
+      "COSV52759171"
+     ],
+     "gnomad_af": 8.993e-07,
+     "driver_frequency": 0.4146,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "GDI2:P50395",
+   "gene": "GDI2",
+   "target_class": "intracellular_only",
+   "recognition_mode": "not_addressable",
+   "states": [
+    "none: the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "GDI2"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "liver (225.4 nTPM)",
+     "kidney (136.2 nTPM)",
+     "bone marrow (119.5 nTPM)",
+     "pancreas (155.7 nTPM)",
+     "lung (92.7 nTPM)",
+     "heart muscle (81.3 nTPM)",
+     "cerebral cortex (77 nTPM)",
+     "adrenal gland (105.4 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr10",
+     "position": 5794906,
+     "reference": "C",
+     "alternate": "A",
+     "gene": "GDI2",
+     "transcript": "ENST00000380191",
+     "protein_change": "E123*",
+     "hgvsc": "c.367G>T",
+     "hgvsp": "p.Glu123Ter",
+     "residue": 123,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.378,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.635
+  },
+  {
+   "target_id": "DOK5:Q9P104",
+   "gene": "DOK5",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant DOK5 peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "DOK5"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "skeletal muscle (43.1 nTPM)",
+     "heart muscle (17.2 nTPM)",
+     "cerebral cortex (14.7 nTPM)",
+     "hypothalamus (12.9 nTPM)",
+     "retina (10.8 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr20",
+     "position": 54588516,
+     "reference": "C",
+     "alternate": "G",
+     "gene": "DOK5",
+     "transcript": "ENST00000262593",
+     "protein_change": "R70G",
+     "hgvsc": "c.208C>G",
+     "hgvsp": "p.Arg70Gly",
+     "residue": 70,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.3669,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV52815843",
+      "COSV52820481"
+     ],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "FAM43A:Q8N2R8",
+   "gene": "FAM43A",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant FAM43A peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "FAM43A"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "kidney (29.3 nTPM)",
+     "heart muscle (25.8 nTPM)",
+     "spleen (47.6 nTPM)",
+     "skin (23.8 nTPM)",
+     "colon (14.1 nTPM)",
+     "esophagus (14.3 nTPM)",
+     "placenta (10.5 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr3",
+     "position": 194687170,
+     "reference": "C",
+     "alternate": "T",
+     "gene": "FAM43A",
+     "transcript": "ENST00000329759",
+     "protein_change": "A115V",
+     "hgvsc": "c.344C>T",
+     "hgvsp": "p.Ala115Val",
+     "residue": 115,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5381,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV61673377"
+     ],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "SMAD4:Q13485",
+   "gene": "SMAD4",
+   "target_class": "neoantigen_hla",
+   "recognition_mode": "peptide_hla",
+   "states": [
+    "mutant SMAD4 peptide presented by the patient's class I alleles"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "SMAD4"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "cerebellum (14.5 nTPM)",
+     "skeletal muscle (18.4 nTPM)",
+     "retina (12.6 nTPM)",
+     "pancreas (10.6 nTPM)",
+     "colon (11.1 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr18",
+     "position": 51047193,
+     "reference": "G",
+     "alternate": "GA",
+     "gene": "SMAD4",
+     "transcript": "ENST00000342988",
+     "protein_change": "D52R",
+     "hgvsc": "c.153dup",
+     "hgvsp": "p.Asp52ArgfsTer2",
+     "residue": 52,
+     "variant_type": "frameshift_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.8681,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": 0.0426,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "INSYN1:Q2T9L4",
+   "gene": "INSYN1",
+   "target_class": "intracellular_only",
+   "recognition_mode": "not_addressable",
+   "states": [
+    "none: the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "INSYN1"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "heart muscle (41.8 nTPM)",
+     "cerebral cortex (40.4 nTPM)",
+     "hypothalamus (27.3 nTPM)",
+     "cerebellum (19.2 nTPM)",
+     "kidney (13.7 nTPM)",
+     "skin (11.3 nTPM)",
+     "esophagus (11.2 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr15",
+     "position": 73740342,
+     "reference": "G",
+     "alternate": "A",
+     "gene": "INSYN1",
+     "transcript": "ENST00000569673",
+     "protein_change": "R153*",
+     "hgvsc": "c.457C>T",
+     "hgvsp": "p.Arg153Ter",
+     "residue": 153,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5212,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV65838057"
+     ],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "KIT:P10721",
+   "gene": "KIT",
+   "target_class": "pathway_induced_surface",
+   "recognition_mode": "pathway_induced",
+   "states": [
+    "KIT displayed at elevated density on this tumour, if expression confirms it"
+   ],
+   "region": {
+    "domain": null,
+    "start": 26,
+    "end": 524,
+    "extracellular": true,
+    "topology": "single-pass",
+    "orientation": "N-terminus outside",
+    "structural_accessibility": {
+     "value": null,
+     "unit": "",
+     "qualitative": null,
+     "source": "",
+     "level": "inferred",
+     "patient_specific": false,
+     "confidence": 0.0,
+     "reason": "solvent accessibility is not computed; it needs coordinates and a per-residue calculation"
+    },
+    "structurally_resolved": true
+   },
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "KIT"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "thyroid gland (36.5 nTPM)",
+     "lung (15.9 nTPM)",
+     "stomach (13.2 nTPM)",
+     "skin (13.7 nTPM)",
+     "esophagus (10.3 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [],
+   "design_readiness": 0.7
+  },
+  {
+   "target_id": "EGFR:P00533",
+   "gene": "EGFR",
+   "target_class": "pathway_induced_surface",
+   "recognition_mode": "pathway_induced",
+   "states": [
+    "EGFR displayed at elevated density on this tumour, if expression confirms it"
+   ],
+   "region": {
+    "domain": null,
+    "start": 25,
+    "end": 645,
+    "extracellular": true,
+    "topology": "single-pass",
+    "orientation": "N-terminus outside",
+    "structural_accessibility": {
+     "value": null,
+     "unit": "",
+     "qualitative": null,
+     "source": "",
+     "level": "inferred",
+     "patient_specific": false,
+     "confidence": 0.0,
+     "reason": "solvent accessibility is not computed; it needs coordinates and a per-residue calculation"
+    },
+    "structurally_resolved": true
+   },
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "EGFR"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "liver (32.2 nTPM)",
+     "skin (48.4 nTPM)",
+     "lung (14.1 nTPM)",
+     "cerebral cortex (11.5 nTPM)",
+     "pancreas (14.6 nTPM)",
+     "kidney (10.8 nTPM)",
+     "thyroid gland (18.7 nTPM)",
+     "esophagus (21.3 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [],
+   "design_readiness": 0.7
+  },
+  {
+   "target_id": "PDGFRB:P09619",
+   "gene": "PDGFRB",
+   "target_class": "pathway_induced_surface",
+   "recognition_mode": "pathway_induced",
+   "states": [
+    "PDGFRB displayed at elevated density on this tumour, if expression confirms it"
+   ],
+   "region": {
+    "domain": null,
+    "start": 33,
+    "end": 532,
+    "extracellular": true,
+    "topology": "single-pass",
+    "orientation": "N-terminus outside",
+    "structural_accessibility": {
+     "value": null,
+     "unit": "",
+     "qualitative": null,
+     "source": "",
+     "level": "inferred",
+     "patient_specific": false,
+     "confidence": 0.0,
+     "reason": "solvent accessibility is not computed; it needs coordinates and a per-residue calculation"
+    },
+    "structurally_resolved": true
+   },
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "PDGFRB"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "lung (93.2 nTPM)",
+     "heart muscle (73.5 nTPM)",
+     "kidney (47.1 nTPM)",
+     "thyroid gland (63.8 nTPM)",
+     "skin (62.2 nTPM)",
+     "cerebral cortex (22.1 nTPM)",
+     "skeletal muscle (36.4 nTPM)",
+     "colon (40.6 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [],
+   "design_readiness": 0.7
+  },
+  {
+   "target_id": "ERBB2:P04626",
+   "gene": "ERBB2",
+   "target_class": "pathway_induced_surface",
+   "recognition_mode": "pathway_induced",
+   "states": [
+    "ERBB2 displayed at elevated density on this tumour, if expression confirms it"
+   ],
+   "region": {
+    "domain": null,
+    "start": 23,
+    "end": 652,
+    "extracellular": true,
+    "topology": "single-pass",
+    "orientation": "N-terminus outside",
+    "structural_accessibility": {
+     "value": null,
+     "unit": "",
+     "qualitative": null,
+     "source": "",
+     "level": "inferred",
+     "patient_specific": false,
+     "confidence": 0.0,
+     "reason": "solvent accessibility is not computed; it needs coordinates and a per-residue calculation"
+    },
+    "structurally_resolved": true
+   },
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "ERBB2"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "kidney (83.9 nTPM)",
+     "heart muscle (53.9 nTPM)",
+     "esophagus (98.3 nTPM)",
+     "skin (87.2 nTPM)",
+     "colon (63.8 nTPM)",
+     "lung (34.1 nTPM)",
+     "liver (30.7 nTPM)",
+     "thyroid gland (53.6 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [],
+   "design_readiness": 0.7
+  }
+ ]
+}

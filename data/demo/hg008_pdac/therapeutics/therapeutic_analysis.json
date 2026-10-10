@@ -1,0 +1,4975 @@
+{
+ "sample": "data/demo/hg008_pdac/HG008-T.vcf",
+ "sample_id": "HG008-T",
+ "disclaimer": "GenomeOS generates computational research hypotheses. Therapeutic target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation.",
+ "data_level": 2,
+ "therapeutic_candidates": [
+  {
+   "gene": "FGF23",
+   "protein": "Fibroblast growth factor 23",
+   "uniprot": "Q9GZV9",
+   "target_class": "direct_surface",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant R198Q; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "established_mechanism",
+   "mechanism_reach_reason": "targeted_radionuclide reaches this target with every hard requirement answered, at compatibility 0.56",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.5309,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.53 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "its product is physically reachable from outside the cell; healthy-tissue expression is low across the queried organs",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr12",
+     "position": 4370506,
+     "reference": "C",
+     "alternate": "T",
+     "gene": "FGF23",
+     "transcript": "ENST00000237837",
+     "protein_change": "R198Q",
+     "hgvsc": "c.593G>A",
+     "hgvsp": "p.Arg198Gln",
+     "residue": 198,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5309,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV52975564"
+     ],
+     "gnomad_af": 6.545e-05,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.574,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.68,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.598,
+    "internalisation": null,
+    "evidence_strength": 0.85,
+    "coverage": 0.83,
+    "confidence": 0.705
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.563,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.516,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "t_cell_engager",
+     "compatibility": 0.476,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "T cell",
+     "status": "established"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.446,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.432,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.418,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    }
+   ],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000237837 translates to 251 residues against 251, diverging at residue 198 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "FGF23 is Fibroblast growth factor 23 (251 aa), accession Q9GZV9",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q9GZV9",
+     "url": "https://www.uniprot.org/uniprotkb/Q9GZV9",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "FGF23 is annotated at: Secreted",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "Q9GZV9",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot processing",
+     "source_type": "database",
+     "claim": "FGF23 has a signal peptide (1-24): it enters the secretory pathway",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "identifier": "Q9GZV9",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "FGF23 imaged in: Vesicles, Nuclear bodies, Centrosome, Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "FGF23 is annotated to extracellular region (GO:0005576), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "FGF23 has positive evidence of an outward-facing part: signal peptide",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for FGF23 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000118972",
+     "url": "https://www.proteinatlas.org/ENSG00000118972",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "FGF23: detected in 4/20 queried healthy tissues; highest weighted heart muscle at 5.4 nTPM; on-target/off-tumour risk low (no queried healthy tissue reaches 10 nTPM; highest is heart muscle at 5.4)",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "FGF23: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "FGF23 is classed 'Tissue enhanced' across healthy tissues (Detected in some)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location",
+     "source_type": "database",
+     "claim": "FGF23 is annotated both at the membrane and as secreted: an ectodomain or cleaved fragment circulates, which can absorb a binder before it reaches the cell",
+     "level": "human",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "FGF23 trafficking established for: shedding",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 198 of FGF23 is resolved in 4 structures; best 7YSH (CRYO_EM)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "7YSH",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q9GZV9 is available for FGF23; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q9GZV9",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q9GZV9"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of FGF23 around residue 198 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000237837, 756 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000237837",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000237837",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of FGF23, derived by applying c.593G>A to the coding sequence of ENST00000237837 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for FGF23 R198Q",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "1 agents against FGF23 have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000118972",
+     "url": "https://platform.opentargets.org/target/ENSG00000118972",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "FGF23 antibody tractability buckets: Approved Drug, UniProt loc high conf, GO CC high conf, UniProt SigP or TMHMM",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000118972",
+     "url": "https://platform.opentargets.org/target/ENSG00000118972",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "FGF23 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "FGF23 scores 0.574 over 83% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.705,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "internalisation is unknown, so payload-delivery mechanisms cannot be assessed",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "ADAMTS8",
+   "protein": "A disintegrin and metalloproteinase with thrombospondin motifs 8",
+   "uniprot": "Q9UP79",
+   "target_class": "direct_surface",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries frameshift_variant L355P; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "established_mechanism",
+   "mechanism_reach_reason": "targeted_radionuclide reaches this target with every hard requirement answered, at compatibility 0.44",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.5329,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.53 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "its product is physically reachable from outside the cell",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr11",
+     "position": 130416955,
+     "reference": "GGGTGTGGGCCGCCTGGA",
+     "alternate": "G",
+     "gene": "ADAMTS8",
+     "transcript": "ENST00000257359",
+     "protein_change": "L355P",
+     "hgvsc": "c.1064_1080del",
+     "hgvsp": "p.Leu355ProfsTer4",
+     "residue": 355,
+     "variant_type": "frameshift_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5329,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.48,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.68,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.257,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.83,
+    "confidence": 0.67
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.436,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.404,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "t_cell_engager",
+     "compatibility": 0.369,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "T cell",
+     "status": "established"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.35,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.342,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.34,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    }
+   ],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 12,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000257359 translates to 357 residues against 889, diverging at residue 355 and producing 3 residues that exist in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "ADAMTS8 is A disintegrin and metalloproteinase with thrombospondin motifs 8 (889 aa), accession Q9UP79",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q9UP79",
+     "url": "https://www.uniprot.org/uniprotkb/Q9UP79",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "ADAMTS8 is annotated at: Secreted, extracellular space, extracellular matrix",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "Q9UP79",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot processing",
+     "source_type": "database",
+     "claim": "ADAMTS8 has a signal peptide (1-26): it enters the secretory pathway",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "identifier": "Q9UP79",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "ADAMTS8 is annotated to extracellular region (GO:0005576)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "ADAMTS8 has positive evidence of an outward-facing part: signal peptide",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for ADAMTS8 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000134917",
+     "url": "https://www.proteinatlas.org/ENSG00000134917",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "ADAMTS8: detected in 8/20 queried healthy tissues; highest weighted lung at 33.2 nTPM; on-target/off-tumour risk moderate (lung is an organ without a spare and carries 33.2 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "ADAMTS8: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "ADAMTS8 is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location",
+     "source_type": "database",
+     "claim": "ADAMTS8 is annotated both at the membrane and as secreted: an ectodomain or cleaved fragment circulates, which can absorb a binder before it reaches the cell",
+     "level": "human",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "ADAMTS8 trafficking established for: shedding",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/InterPro domains",
+     "source_type": "database",
+     "claim": "ADAMTS8 residue 355 sits in the Peptidase M12B domain (219-429)",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q9UP79 is available for ADAMTS8; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q9UP79",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q9UP79"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of ADAMTS8 around residue 355 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000257359, 2670 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000257359",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000257359",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "12 peptides covering the altered region of ADAMTS8, derived by applying c.1064_1080del to the coding sequence of ENST00000257359 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "12 mutation-spanning peptides of length 8-11 derived for ADAMTS8 L355P",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "ADAMTS8 antibody tractability buckets: UniProt loc med conf, UniProt SigP or TMHMM, GO CC med conf",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000134917",
+     "url": "https://platform.opentargets.org/target/ENSG00000134917",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "ADAMTS8 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "ADAMTS8 scores 0.48 over 83% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.67,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "internalisation is unknown, so payload-delivery mechanisms cannot be assessed",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised",
+    "a premature stop or frameshift often triggers nonsense-mediated decay, which removes the transcript rather than producing a truncated protein; whether any product is made here is unmeasured and would need tumour RNA-seq",
+    "Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease."
+   ]
+  },
+  {
+   "gene": "CYP2A13",
+   "protein": "Cytochrome P450 2A13",
+   "uniprot": "Q16696",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant P402L; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 1.0,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 1.00 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "its alteration yields peptides that HLA could present, though the protein is internal; healthy-tissue expression is low across the queried organs",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr19",
+     "position": 41095002,
+     "reference": "C",
+     "alternate": "T",
+     "gene": "CYP2A13",
+     "transcript": "ENST00000330436",
+     "protein_change": "P402L",
+     "hgvsc": "c.1205C>T",
+     "hgvsp": "p.Pro402Leu",
+     "residue": 402,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 1.0,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV57837147"
+     ],
+     "gnomad_af": 0.0008,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.496,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.784,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.77,
+    "confidence": 0.622
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000330436 translates to 494 residues against 494, diverging at residue 402 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "CYP2A13 is Cytochrome P450 2A13 (494 aa), accession Q16696",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q16696",
+     "url": "https://www.uniprot.org/uniprotkb/Q16696",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "CYP2A13 is annotated at: Endoplasmic reticulum membrane; Microsome membrane",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "Q16696",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "CYP2A13 is annotated to cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for CYP2A13 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000197838",
+     "url": "https://www.proteinatlas.org/ENSG00000197838",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "CYP2A13: detected in 1/20 queried healthy tissues; highest weighted liver at 1.9 nTPM; on-target/off-tumour risk low (no queried healthy tissue reaches 10 nTPM; highest is liver at 1.9)",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "CYP2A13: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "CYP2A13 is classed 'Tissue enriched' across healthy tissues (Detected in single)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "CYP2A13: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 402 of CYP2A13 is resolved in 8 structures; best 2PG5 (X_RAY)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "2PG5",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q16696 is available for CYP2A13; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q16696",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q16696"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of CYP2A13 around residue 402 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000330436, 1485 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000330436",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000330436",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of CYP2A13, derived by applying c.1205C>T to the coding sequence of ENST00000330436 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for CYP2A13 P402L",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "CYP2A13 antibody tractability buckets: UniProt loc med conf",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000197838",
+     "url": "https://platform.opentargets.org/target/ENSG00000197838",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ClinPGx)",
+     "source_type": "publication",
+     "claim": "curated safety liability for CYP2A13: nicotine dependence",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000197838",
+     "url": "https://platform.opentargets.org/target/ENSG00000197838",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "CYP2A13 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "CYP2A13 scores 0.496 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.622,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "ESRRG",
+   "protein": "Estrogen-related receptor gamma",
+   "uniprot": "P62508",
+   "target_class": "intracellular_only",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries stop_gained E403*; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific, peptide_hla_target not met: no mutation-derived peptide could be derived, so there is no peptide/HLA complex to recognise)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.5118,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.51 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "ESRRG is altered in this tumour",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr1",
+     "position": 216507109,
+     "reference": "C",
+     "alternate": "A",
+     "gene": "ESRRG",
+     "transcript": "ENST00000408911",
+     "protein_change": "E403*",
+     "hgvsc": "c.1207G>T",
+     "hgvsp": "p.Glu403Ter",
+     "residue": 403,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5118,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.438,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.299,
+    "internalisation": null,
+    "evidence_strength": 0.85,
+    "coverage": 0.7,
+    "confidence": 0.595
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": false,
+    "novel_peptide_sequence": false,
+    "peptides": 0,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000408911 translates to 402 residues against 458 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "ESRRG is Estrogen-related receptor gamma (458 aa), accession P62508",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P62508",
+     "url": "https://www.uniprot.org/uniprotkb/P62508",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "ESRRG is annotated at: Nucleus",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P62508",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "ESRRG imaged in: Nucleoplasm",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "ESRRG is annotated to nucleus (GO:0005634)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for ESRRG across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000196482",
+     "url": "https://www.proteinatlas.org/ENSG00000196482",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "ESRRG: detected in 15/20 queried healthy tissues; highest weighted kidney at 27.1 nTPM; on-target/off-tumour risk moderate (kidney is an organ without a spare and carries 27.1 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "ESRRG: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "ESRRG is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "ESRRG: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/InterPro domains",
+     "source_type": "database",
+     "claim": "ESRRG residue 403 sits in the NR LBD domain (233-457)",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 403 of ESRRG is resolved in 32 structures; best 6I65 (X_RAY)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "6I65",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P62508 is available for ESRRG; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P62508",
+     "url": "https://alphafold.ebi.ac.uk/entry/P62508"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of ESRRG around residue 403 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000408911, 1377 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000408911",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000408911",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "ESRRG: reconstructed from ENST00000408911 and confirmed by sequence, not assumed from the variant class",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "ESRRG E403*: the altered ENST00000408911 translates to 402 residues against 458 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "1 agents against ESRRG have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000196482",
+     "url": "https://platform.opentargets.org/target/ENSG00000196482",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ToxCast)",
+     "source_type": "publication",
+     "claim": "curated safety liability for ESRRG: regulation of transcription factor activity",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000196482",
+     "url": "https://platform.opentargets.org/target/ENSG00000196482",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "ESRRG selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "ESRRG scores 0.438 over 70% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, presentation_confidence, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.595,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "a premature stop or frameshift often triggers nonsense-mediated decay, which removes the transcript rather than producing a truncated protein; whether any product is made here is unmeasured and would need tumour RNA-seq",
+    "Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease."
+   ]
+  },
+  {
+   "gene": "KRAS",
+   "protein": "GTPase KRas",
+   "uniprot": "P01116",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant G12V; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.7149,
+    "hotspot": true,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.71 at the observed variant; the observed position is a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "KRAS is a recurrent driver (15.0% of tumours); its alteration yields peptides that HLA could present, though the protein is internal; 2 approved therapies already engage it",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr12",
+     "position": 25245350,
+     "reference": "C",
+     "alternate": "A",
+     "gene": "KRAS",
+     "transcript": "ENST00000311936",
+     "protein_change": "G12V",
+     "hgvsc": "c.35G>T",
+     "hgvsp": "p.Gly12Val",
+     "residue": 12,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.7149,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV55497369",
+      "COSV55497419",
+      "COSV55497479"
+     ],
+     "gnomad_af": 8.999e-07,
+     "driver_frequency": 0.1501,
+     "hotspot": true
+    }
+   ],
+   "scores": {
+    "overall": 0.434,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.369,
+    "internalisation": null,
+    "evidence_strength": 0.95,
+    "coverage": 0.77,
+    "confidence": 0.731
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000311936 translates to 188 residues against 188, diverging at residue 12 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "KRAS is GTPase KRas (189 aa), accession P01116",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P01116",
+     "url": "https://www.uniprot.org/uniprotkb/P01116",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "KRAS is annotated at: Cell membrane; Cytoplasm; Endomembrane system",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P01116",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "KRAS imaged in: Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "KRAS is annotated to plasma membrane (GO:0005886), cytoplasm (GO:0005737), mitochondrion (GO:0005739)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "KRAS is held against the membrane by a lipid anchor (S-palmitoyl cysteine) with no transmembrane segment and no extracellular domain: it sits on the cytoplasmic face and a circulating binder cannot reach it, despite the 'Cell membrane' annotation",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for KRAS across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000133703",
+     "url": "https://www.proteinatlas.org/ENSG00000133703",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "KRAS: detected in 20/20 queried healthy tissues; highest weighted cerebral cortex at 17.4 nTPM; on-target/off-tumour risk moderate (cerebral cortex is an organ without a spare and carries 17.4 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "KRAS: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "KRAS is classed 'Low tissue specificity' across healthy tissues (Detected in all)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "KRAS: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 12 of KRAS is resolved in 478 structures; best 9IAY (X_RAY)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "9IAY",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P01116 is available for KRAS; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P01116",
+     "url": "https://alphafold.ebi.ac.uk/entry/P01116"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of KRAS around residue 12 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000311936, 567 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000311936",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000311936",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of KRAS, derived by applying c.35G>T to the coding sequence of ENST00000311936 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for KRAS G12V",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "2 approved small molecule therapies target KRAS: Adagrasib, Sotorasib",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000133703",
+     "url": "https://platform.opentargets.org/target/ENSG00000133703",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "1 agents against KRAS have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000133703",
+     "url": "https://platform.opentargets.org/target/ENSG00000133703",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "KRAS antibody tractability buckets: UniProt loc high conf, GO CC high conf",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000133703",
+     "url": "https://platform.opentargets.org/target/ENSG00000133703",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "KRAS selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "KRAS scores 0.434 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.731,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "NF1",
+   "protein": "Neurofibromin",
+   "uniprot": "P21359",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant K296T; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is blocking_antibody at compatibility 0.25 with surface_accessible unanswered, which is a question and not an option",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 1.0,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 1.00 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "NF1 is a recurrent driver (5.4% of tumours); its alteration yields peptides that HLA could present, though the protein is internal",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr17",
+     "position": 31182664,
+     "reference": "A",
+     "alternate": "C",
+     "gene": "NF1",
+     "transcript": "ENST00000358273",
+     "protein_change": "K296T",
+     "hgvsc": "c.887A>C",
+     "hgvsp": "p.Lys296Thr",
+     "residue": 296,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 1.0,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": 0.054,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.409,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.36,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.356,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.77,
+    "confidence": 0.622
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.25,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "t_cell_engager",
+     "compatibility": 0.25,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "T cell",
+     "status": "established"
+    },
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.25,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.245,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.234,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "complement_recruitment",
+     "compatibility": 0.232,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "complement cascade",
+     "status": "clinical"
+    }
+   ],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000358273 translates to 2839 residues against 2839, diverging at residue 296 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "NF1 is Neurofibromin (2839 aa), accession P21359",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P21359",
+     "url": "https://www.uniprot.org/uniprotkb/P21359",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "NF1 is annotated at: Cell membrane; Nucleus; Nucleus, nucleolus",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P21359",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "NF1 imaged in: Plasma membrane, Nucleoplasm, Microtubules",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "NF1 is annotated to plasma membrane (GO:0005886), nucleus (GO:0005634), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "NF1 is annotated at the membrane but with no transmembrane segment, no extracellular topological domain, no signal peptide and no cell-surface annotation: which side of the membrane it occupies is not established, so external accessibility cannot be claimed",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for NF1 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000196712",
+     "url": "https://www.proteinatlas.org/ENSG00000196712",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "NF1: detected in 20/20 queried healthy tissues; highest weighted cerebral cortex at 18.5 nTPM; on-target/off-tumour risk moderate (cerebral cortex is an organ without a spare and carries 18.5 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "NF1: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "NF1 is classed 'Low tissue specificity' across healthy tissues (Detected in all)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "NF1: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 296 of NF1 is resolved in 15 structures; best 7PGP (CRYO_EM)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "7PGP",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P21359 is available for NF1; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P21359",
+     "url": "https://alphafold.ebi.ac.uk/entry/P21359"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of NF1 around residue 296 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000358273, 8520 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000358273",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000358273",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of NF1, derived by applying c.887A>C to the coding sequence of ENST00000358273 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for NF1 K296T",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "NF1 antibody tractability buckets: UniProt loc high conf, GO CC high conf, Human Protein Atlas loc",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000196712",
+     "url": "https://platform.opentargets.org/target/ENSG00000196712",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "NF1 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "NF1 scores 0.409 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.622,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "TP53",
+   "protein": "Cellular tumor antigen p53",
+   "uniprot": "P04637",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant K132T; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 1.0,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 1.00 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "TP53 is a recurrent driver (41.5% of tumours); its alteration yields peptides that HLA could present, though the protein is internal",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr17",
+     "position": 7675217,
+     "reference": "T",
+     "alternate": "G",
+     "gene": "TP53",
+     "transcript": "ENST00000269305",
+     "protein_change": "K132T",
+     "hgvsc": "c.395A>C",
+     "hgvsp": "p.Lys132Thr",
+     "residue": 132,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 1.0,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV52666637",
+      "COSV52701687",
+      "COSV52759171"
+     ],
+     "gnomad_af": 8.993e-07,
+     "driver_frequency": 0.4146,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.394,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.357,
+    "internalisation": null,
+    "evidence_strength": 0.85,
+    "coverage": 0.77,
+    "confidence": 0.654
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000269305 translates to 393 residues against 393, diverging at residue 132 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "TP53 is Cellular tumor antigen p53 (393 aa), accession P04637",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P04637",
+     "url": "https://www.uniprot.org/uniprotkb/P04637",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "TP53 is annotated at: Cytoplasm; Cytoplasm, cytoskeleton, microtubule organizing center, centrosome; Endoplasmic reticulum; Mitochondrion matrix; Nucleus; Nucleus, PML body",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P04637",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "TP53 imaged in: Nucleoplasm, Vesicles, Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "TP53 is annotated to nucleus (GO:0005634), cytoplasm (GO:0005737), mitochondrion (GO:0005739)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for TP53 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000141510",
+     "url": "https://www.proteinatlas.org/ENSG00000141510",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "TP53: detected in 20/20 queried healthy tissues; highest weighted bone marrow at 18.4 nTPM; on-target/off-tumour risk moderate (bone marrow is an organ without a spare and carries 18.4 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "TP53: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "TP53 is classed 'Low tissue specificity' across healthy tissues (Detected in all)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "TP53: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 132 of TP53 is resolved in 201 structures; best 3D06 (X_RAY)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "3D06",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P04637 is available for TP53; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P04637",
+     "url": "https://alphafold.ebi.ac.uk/entry/P04637"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of TP53 around residue 132 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000269305, 1182 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000269305",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000269305",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of TP53, derived by applying c.395A>C to the coding sequence of ENST00000269305 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for TP53 K132T",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "9 agents against TP53 have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000141510",
+     "url": "https://platform.opentargets.org/target/ENSG00000141510",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ClinPGx)",
+     "source_type": "publication",
+     "claim": "curated safety liability for TP53: drug toxicity",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141510",
+     "url": "https://platform.opentargets.org/target/ENSG00000141510",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (AOP-Wiki)",
+     "source_type": "publication",
+     "claim": "curated safety liability for TP53: Tumorigenesis, Hepatocellular carcinoma",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141510",
+     "url": "https://platform.opentargets.org/target/ENSG00000141510",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ToxCast)",
+     "source_type": "publication",
+     "claim": "curated safety liability for TP53: regulation of transcription factor activity",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141510",
+     "url": "https://platform.opentargets.org/target/ENSG00000141510",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ClinPGx)",
+     "source_type": "publication",
+     "claim": "curated safety liability for TP53: neutropenia",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141510",
+     "url": "https://platform.opentargets.org/target/ENSG00000141510",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "TP53 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "TP53 scores 0.394 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.654,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "GDI2",
+   "protein": "Rab GDP dissociation inhibitor beta",
+   "uniprot": "P50395",
+   "target_class": "intracellular_only",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries stop_gained E123*; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "no modelled modality is established against this target; the nearest is adc at compatibility 0.25 with surface_accessible, internalisation unanswered, which is a question and not an option",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.378,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.38 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "GDI2 is altered in this tumour",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr10",
+     "position": 5794906,
+     "reference": "C",
+     "alternate": "A",
+     "gene": "GDI2",
+     "transcript": "ENST00000380191",
+     "protein_change": "E123*",
+     "hgvsc": "c.367G>T",
+     "hgvsp": "p.Glu123Ter",
+     "residue": 123,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.378,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.368,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.4,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.0,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.73,
+    "confidence": 0.589
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "adc",
+     "compatibility": 0.25,
+     "payload_required": true,
+     "cargo": "cytotoxic payload",
+     "effector": "released payload inside the tumour cell",
+     "status": "established"
+    },
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.177,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.173,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.157,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "complement_recruitment",
+     "compatibility": 0.155,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "complement cascade",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.152,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    }
+   ],
+   "neoantigen": {
+    "applicable": false,
+    "novel_peptide_sequence": false,
+    "peptides": 0,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000380191 translates to 122 residues against 445 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "GDI2 is Rab GDP dissociation inhibitor beta (445 aa), accession P50395",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P50395",
+     "url": "https://www.uniprot.org/uniprotkb/P50395",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "GDI2 is annotated at: Cytoplasm; Golgi apparatus, trans-Golgi network; Membrane",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P50395",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "GDI2 imaged in: Plasma membrane, Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "GDI2 is annotated to extracellular region (GO:0005576), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "GDI2 is annotated at the membrane but with no transmembrane segment, no extracellular topological domain, no signal peptide and no cell-surface annotation: which side of the membrane it occupies is not established, so external accessibility cannot be claimed",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for GDI2 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000057608",
+     "url": "https://www.proteinatlas.org/ENSG00000057608",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "GDI2: detected in 20/20 queried healthy tissues; highest weighted liver at 225.4 nTPM; on-target/off-tumour risk high (liver is an organ without a spare and carries 225.4 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "GDI2: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "GDI2 is classed 'Low tissue specificity' across healthy tissues (Detected in all)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location / Gene Ontology",
+     "source_type": "database",
+     "claim": "GDI2 reaches the lysosome, the compartment where an acid- or protease-cleaved payload would be released",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "GDI2 trafficking established for: lysosomal routing",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P50395 is available for GDI2; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P50395",
+     "url": "https://alphafold.ebi.ac.uk/entry/P50395"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of GDI2 around residue 123 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000380191, 1338 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000380191",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000380191",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "GDI2: reconstructed from ENST00000380191 and confirmed by sequence, not assumed from the variant class",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "GDI2 E123*: the altered ENST00000380191 translates to 122 residues against 445 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "GDI2 antibody tractability buckets: GO CC high conf, UniProt loc med conf",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000057608",
+     "url": "https://platform.opentargets.org/target/ENSG00000057608",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "GDI2 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "GDI2 scores 0.368 over 73% of the declared dimensions; unavailable: internalisation, presentation_confidence, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.589,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "a premature stop or frameshift often triggers nonsense-mediated decay, which removes the transcript rather than producing a truncated protein; whether any product is made here is unmeasured and would need tumour RNA-seq",
+    "Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease."
+   ]
+  },
+  {
+   "gene": "DOK5",
+   "protein": "Docking protein 5",
+   "uniprot": "Q9P104",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant R70G; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.3669,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.37 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "its alteration yields peptides that HLA could present, though the protein is internal",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr20",
+     "position": 54588516,
+     "reference": "C",
+     "alternate": "G",
+     "gene": "DOK5",
+     "transcript": "ENST00000262593",
+     "protein_change": "R70G",
+     "hgvsc": "c.208C>G",
+     "hgvsp": "p.Arg70Gly",
+     "residue": 70,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.3669,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV52815843",
+      "COSV52820481"
+     ],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.363,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.287,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.77,
+    "confidence": 0.622
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000262593 translates to 306 residues against 306, diverging at residue 70 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "DOK5 is Docking protein 5 (306 aa), accession Q9P104",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q9P104",
+     "url": "https://www.uniprot.org/uniprotkb/Q9P104",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "DOK5 imaged in: Focal adhesion sites",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "DOK5 is annotated to cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for DOK5 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000101134",
+     "url": "https://www.proteinatlas.org/ENSG00000101134",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "DOK5: detected in 15/20 queried healthy tissues; highest weighted skeletal muscle at 43.1 nTPM; on-target/off-tumour risk moderate (heart muscle is an organ without a spare and carries 17.2 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "DOK5: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "DOK5 is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "DOK5: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/InterPro domains",
+     "source_type": "database",
+     "claim": "DOK5 residue 70 sits in the PH domain (8-112)",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS structure",
+     "source_type": "derived",
+     "claim": "residue 70 of DOK5 is not covered by any deposited structure",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q9P104 is available for DOK5; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q9P104",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q9P104"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of DOK5 around residue 70 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000262593, 921 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000262593",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000262593",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of DOK5, derived by applying c.208C>G to the coding sequence of ENST00000262593 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for DOK5 R70G",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "DOK5 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "DOK5 scores 0.363 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.622,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "FAM43A",
+   "protein": "Protein FAM43A",
+   "uniprot": "Q8N2R8",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries missense_variant A115V; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, loss_of_function not met: restoration only applies to an inactivated gene; no loss-of-function alteration is present, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.5381,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.54 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "its alteration yields peptides that HLA could present, though the protein is internal",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr3",
+     "position": 194687170,
+     "reference": "C",
+     "alternate": "T",
+     "gene": "FAM43A",
+     "transcript": "ENST00000329759",
+     "protein_change": "A115V",
+     "hgvsc": "c.344C>T",
+     "hgvsp": "p.Ala115Val",
+     "residue": 115,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5381,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV61673377"
+     ],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.362,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.283,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.77,
+    "confidence": 0.622
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 38,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000329759 translates to 423 residues against 423, diverging at residue 115 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "FAM43A is Protein FAM43A (423 aa), accession Q8N2R8",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q8N2R8",
+     "url": "https://www.uniprot.org/uniprotkb/Q8N2R8",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "FAM43A imaged in: Vesicles",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for FAM43A across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000185112",
+     "url": "https://www.proteinatlas.org/ENSG00000185112",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "FAM43A: detected in 19/20 queried healthy tissues; highest weighted kidney at 29.3 nTPM; on-target/off-tumour risk moderate (kidney is an organ without a spare and carries 29.3 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "FAM43A: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "FAM43A is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "FAM43A: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q8N2R8 is available for FAM43A; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q8N2R8",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q8N2R8"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of FAM43A around residue 115 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000329759, 1272 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000329759",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000329759",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 peptides covering the altered region of FAM43A, derived by applying c.344C>T to the coding sequence of ENST00000329759 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "38 mutation-spanning peptides of length 8-11 derived for FAM43A A115V",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "FAM43A selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "FAM43A scores 0.362 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.622,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised"
+   ]
+  },
+  {
+   "gene": "SMAD4",
+   "protein": "SMAD family member 4",
+   "uniprot": "Q13485",
+   "target_class": "neoantigen_hla",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries frameshift_variant D52R; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific, surface_accessible not met: the protein is not reachable from outside the cell, so a circulating binder cannot engage it)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.8681,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.87 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "SMAD4 is a recurrent driver (4.3% of tumours); its alteration yields peptides that HLA could present, though the protein is internal",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr18",
+     "position": 51047193,
+     "reference": "G",
+     "alternate": "GA",
+     "gene": "SMAD4",
+     "transcript": "ENST00000342988",
+     "protein_change": "D52R",
+     "hgvsc": "c.153dup",
+     "hgvsp": "p.Asp52ArgfsTer2",
+     "residue": 52,
+     "variant_type": "frameshift_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.8681,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": 0.0426,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.347,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.406,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.77,
+    "confidence": 0.622
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": true,
+    "novel_peptide_sequence": true,
+    "peptides": 4,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000342988 translates to 52 residues against 552, diverging at residue 52 and producing 1 residue that exists in no reference protein"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "SMAD4 is SMAD family member 4 (552 aa), accession Q13485",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q13485",
+     "url": "https://www.uniprot.org/uniprotkb/Q13485",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "SMAD4 is annotated at: Cytoplasm; Nucleus",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "Q13485",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "SMAD4 imaged in: Nucleoplasm, Centrosome, Basal body, Vesicles, Primary cilium tip, Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "SMAD4 is annotated to nucleus (GO:0005634), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for SMAD4 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000141646",
+     "url": "https://www.proteinatlas.org/ENSG00000141646",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "SMAD4: detected in 20/20 queried healthy tissues; highest weighted cerebellum at 14.5 nTPM; on-target/off-tumour risk moderate (cerebellum is an organ without a spare and carries 14.5 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "SMAD4: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "SMAD4 is classed 'Low tissue specificity' across healthy tissues (Detected in all)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "SMAD4: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/InterPro domains",
+     "source_type": "database",
+     "claim": "SMAD4 residue 52 sits in the MH1 domain (18-142)",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "residue 52 of SMAD4 is resolved in 3 structures; best 5MEY (X_RAY)",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "5MEY",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q13485 is available for SMAD4; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q13485",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q13485"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of SMAD4 around residue 52 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000342988, 1659 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000342988",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000342988",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "4 peptides covering the altered region of SMAD4, derived by applying c.153dup to the coding sequence of ENST00000342988 and translating it",
+     "level": "inferred",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "4 mutation-spanning peptides of length 8-11 derived for SMAD4 D52R",
+     "level": "inferred",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "SMAD4 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "SMAD4 scores 0.347 over 77% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.622,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "no HLA genotype supplied, so no mutation-derived peptide can be prioritised",
+    "a premature stop or frameshift often triggers nonsense-mediated decay, which removes the transcript rather than producing a truncated protein; whether any product is made here is unmeasured and would need tumour RNA-seq",
+    "Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease."
+   ]
+  },
+  {
+   "gene": "INSYN1",
+   "protein": "Inhibitory synaptic factor 1",
+   "uniprot": "Q2T9L4",
+   "target_class": "intracellular_only",
+   "evidence_tier": "observed_alteration",
+   "evidence_tier_reason": "this tumour's own DNA carries stop_gained R153*; the alteration is observed in this patient and not inferred",
+   "mechanism_reach": "no_established_mechanism",
+   "mechanism_reach_reason": "every modelled modality was refused against this target (agonism_intended not established: nothing establishes that triggering this target is the therapeutic intent, and against a driver the tumour has already activated, agonism pushes the wrong way, intracellular_delivery not established: intracellular cargo delivery requires the target to carry the binder inside; no internalisation evidence exists, patient_hla not met: the patient's HLA genotype is not available, and peptide presentation is allele-specific, peptide_hla_target not met: no mutation-derived peptide could be derived, so there is no peptide/HLA complex to recognise)",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": 0.5212,
+    "hotspot": false,
+    "quantities": [
+     "vaf",
+     "hotspot"
+    ]
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; variant allele fraction 0.52 at the observed variant; the observed position is not a recorded hotspot. Absent quantities are absent and are not imputed",
+   "why": "INSYN1 is altered in this tumour",
+   "origin_variants": [
+    {
+     "sample_id": "HG008-T",
+     "chromosome": "chr15",
+     "position": 73740342,
+     "reference": "G",
+     "alternate": "A",
+     "gene": "INSYN1",
+     "transcript": "ENST00000569673",
+     "protein_change": "R153*",
+     "hgvsc": "c.457C>T",
+     "hgvsp": "p.Arg153Ter",
+     "residue": 153,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "absent from the matched normal's calls (same chromosome, position and alleles), so somatic by subtraction",
+     "vaf": 0.5212,
+     "copy_number": null,
+     "clonality": "clonal",
+     "cosmic": [
+      "COSV65838057"
+     ],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "scores": {
+    "overall": 0.339,
+    "alteration_evidence": 1.0,
+    "surface_accessibility": 0.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.186,
+    "internalisation": null,
+    "evidence_strength": 0.807,
+    "coverage": 0.7,
+    "confidence": 0.565
+   },
+   "recommended_mechanisms": [],
+   "neoantigen": {
+    "applicable": false,
+    "novel_peptide_sequence": false,
+    "peptides": 0,
+    "hla_alleles": [],
+    "presentation": "unestablished",
+    "reason": "the altered ENST00000569673 translates to 152 residues against 293 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence"
+   },
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "INSYN1 is Inhibitory synaptic factor 1 (293 aa), accession Q2T9L4",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "Q2T9L4",
+     "url": "https://www.uniprot.org/uniprotkb/Q2T9L4",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "INSYN1 is annotated at: Postsynaptic density",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "Q2T9L4",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "INSYN1 imaged in: Nucleoplasm, Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for INSYN1 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000205363",
+     "url": "https://www.proteinatlas.org/ENSG00000205363",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "INSYN1: detected in 16/20 queried healthy tissues; highest weighted heart muscle at 41.8 nTPM; on-target/off-tumour risk moderate (heart muscle is an organ without a spare and carries 41.8 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "INSYN1: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "INSYN1 is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "INSYN1: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure Q2T9L4 is available for INSYN1; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "Q2T9L4",
+     "url": "https://alphafold.ebi.ac.uk/entry/Q2T9L4"
+    },
+    {
+     "source": "GenomeOS epitope reasoning",
+     "source_type": "derived",
+     "claim": "topology of INSYN1 around residue 153 is not curated; whether the change is exposed cannot be established",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Ensembl REST (coding sequence)",
+     "source_type": "database",
+     "claim": "coding sequence of ENST00000569673, 882 nt",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENST00000569673",
+     "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000569673",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "INSYN1: reconstructed from ENST00000569673 and confirmed by sequence, not assumed from the variant class",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS neoantigen reasoning",
+     "source_type": "derived",
+     "claim": "INSYN1 R153*: the altered ENST00000569673 translates to 152 residues against 293 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "INSYN1 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "INSYN1 scores 0.339 over 70% of the declared dimensions; unavailable: internalisation, lysosomal_trafficking, presentation_confidence, structural_bindability, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.565,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "a premature stop or frameshift often triggers nonsense-mediated decay, which removes the transcript rather than producing a truncated protein; whether any product is made here is unmeasured and would need tumour RNA-seq",
+    "Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease."
+   ]
+  },
+  {
+   "gene": "KIT",
+   "protein": "Mast/stem cell growth factor receptor Kit",
+   "uniprot": "P10721",
+   "target_class": "pathway_induced_surface",
+   "evidence_tier": "association_hypothesis",
+   "evidence_tier_reason": "nothing about this gene was measured in this patient: it is on the list because a database associates it with a gene that was altered, which is evidence about the other gene",
+   "mechanism_reach": "established_mechanism",
+   "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.66",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": null,
+    "hotspot": null,
+    "quantities": []
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+   "why": "surface protein associated with disrupted KRAS; a candidate indirect route when the driver itself cannot be reached",
+   "origin_variants": [],
+   "scores": {
+    "overall": 0.616,
+    "alteration_evidence": 0.2,
+    "surface_accessibility": 1.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.359,
+    "internalisation": null,
+    "evidence_strength": 0.95,
+    "coverage": 0.68,
+    "confidence": 0.646
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.657,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.566,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.536,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    },
+    {
+     "mechanism": "t_cell_engager",
+     "compatibility": 0.496,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "T cell",
+     "status": "established"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.481,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.479,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    }
+   ],
+   "neoantigen": null,
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "KIT is Mast/stem cell growth factor receptor Kit (976 aa), accession P10721",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P10721",
+     "url": "https://www.uniprot.org/uniprotkb/P10721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "KIT has 1 curated transmembrane segment and 1 extracellular topological domain(s)",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P10721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "KIT exposes residues 26-524 (499 aa) outside the cell",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P10721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "KIT is annotated at: Cell membrane; Cytoplasm",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P10721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot processing",
+     "source_type": "database",
+     "claim": "KIT has a signal peptide (1-25): it enters the secretory pathway",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "identifier": "P10721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "KIT imaged in: Plasma membrane, Nucleoli fibrillar center",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "KIT is annotated to plasma membrane (GO:0005886), cell surface (GO:0009986), extracellular region (GO:0005576), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "KIT has positive evidence of an outward-facing part: Gene Ontology GO:0009986, curated extracellular topological domain, signal peptide",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for KIT across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://www.proteinatlas.org/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "KIT: detected in 16/20 queried healthy tissues; highest weighted thyroid gland at 36.5 nTPM; on-target/off-tumour risk moderate (lung is an organ without a spare and carries 15.9 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "KIT: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "KIT is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "KIT: no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "5 experimental structures cover the extracellular region of KIT (26-524); best 4K94 X_RAY",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "4K94",
+     "url": "https://www.ebi.ac.uk/pdbe/entry/pdb/4k94",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P10721 is available for KIT; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P10721",
+     "url": "https://alphafold.ebi.ac.uk/entry/P10721"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "20 approved small molecule therapies target KIT: Avapritinib, Cediranib, Dasatinib Anhydrous, Imatinib",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "18 agents against KIT have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "KIT antibody tractability buckets: Phase 1 Clinical, GO CC high conf, UniProt loc med conf, UniProt SigP or TMHMM, Human Protein Atlas loc",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for KIT: mastocytosis",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for KIT: Anaemia",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for KIT: neutropenia",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for KIT: haematotoxicity",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for KIT: neovascularization",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Force et al. (2011))",
+     "source_type": "publication",
+     "claim": "curated safety liability for KIT: heart disease",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000157404",
+     "url": "https://platform.opentargets.org/target/ENSG00000157404",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "KIT selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "KIT scores 0.616 over 68% of the declared dimensions; unavailable: clonality, internalisation, lysosomal_trafficking, presentation_confidence, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.646,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS pathway-induced reasoning",
+     "source_type": "derived",
+     "claim": "KIT is a surface protein with physical-evidence association to the disrupted driver KRAS (STRING combined score 0.99)",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "indirect candidate: KIT is not altered in this tumour. It is proposed because it is a surface protein associated with the disrupted driver KRAS. Whether the tumour actually displays more of it is unmeasured.",
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "clonality is unknown, so it is not known whether this alteration is present in every tumour cell or in a minority subclone",
+    "internalisation is unknown, so payload-delivery mechanisms cannot be assessed"
+   ]
+  },
+  {
+   "gene": "EGFR",
+   "protein": "Epidermal growth factor receptor",
+   "uniprot": "P00533",
+   "target_class": "pathway_induced_surface",
+   "evidence_tier": "association_hypothesis",
+   "evidence_tier_reason": "nothing about this gene was measured in this patient: it is on the list because a database associates it with a gene that was altered, which is evidence about the other gene",
+   "mechanism_reach": "established_mechanism",
+   "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.61",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": null,
+    "hotspot": null,
+    "quantities": []
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+   "why": "surface protein associated with disrupted KRAS; a candidate indirect route when the driver itself cannot be reached",
+   "origin_variants": [],
+   "scores": {
+    "overall": 0.5,
+    "alteration_evidence": 0.2,
+    "surface_accessibility": 1.0,
+    "tumour_selectivity": 0.5,
+    "normal_tissue_safety": 0.263,
+    "internalisation": null,
+    "evidence_strength": 0.95,
+    "coverage": 0.71,
+    "confidence": 0.674
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.606,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.53,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.481,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    },
+    {
+     "mechanism": "t_cell_engager",
+     "compatibility": 0.443,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "T cell",
+     "status": "established"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.427,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.423,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    }
+   ],
+   "neoantigen": null,
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "EGFR is Epidermal growth factor receptor (1210 aa), accession P00533",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P00533",
+     "url": "https://www.uniprot.org/uniprotkb/P00533",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "EGFR has 1 curated transmembrane segment and 1 extracellular topological domain(s)",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P00533",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "EGFR exposes residues 25-645 (621 aa) outside the cell",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P00533",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "EGFR is annotated at: Cell membrane; Endoplasmic reticulum membrane; Endosome; Endosome membrane; Golgi apparatus membrane; Nucleus; Nucleus membrane; Secreted",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P00533",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot processing",
+     "source_type": "database",
+     "claim": "EGFR has a signal peptide (1-24): it enters the secretory pathway",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "identifier": "P00533",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "EGFR imaged in: Golgi apparatus, Plasma membrane, Cell Junctions, Primary cilium, Basal body, Mid piece",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "EGFR is annotated to plasma membrane (GO:0005886), cell surface (GO:0009986), extracellular region (GO:0005576), nucleus (GO:0005634), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "EGFR has positive evidence of an outward-facing part: Gene Ontology GO:0009986, curated extracellular topological domain, signal peptide",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for EGFR across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://www.proteinatlas.org/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "EGFR: detected in 19/20 queried healthy tissues; highest weighted liver at 32.2 nTPM; on-target/off-tumour risk moderate (liver is an organ without a spare and carries 32.2 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "EGFR: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "EGFR is classed 'Tissue enhanced' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location / Gene Ontology",
+     "source_type": "database",
+     "claim": "EGFR is found in endosomes after uptake",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location",
+     "source_type": "database",
+     "claim": "EGFR is annotated both at the membrane and as secreted: an ectodomain or cleaved fragment circulates, which can absorb a binder before it reaches the cell",
+     "level": "human",
+     "confidence": 0.75,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "EGFR trafficking established for: endosomal routing, shedding",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "39 experimental structures cover the extracellular region of EGFR (25-645); best 3G5Y X_RAY",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "3G5Y",
+     "url": "https://www.ebi.ac.uk/pdbe/entry/pdb/3g5y",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P00533 is available for EGFR; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P00533",
+     "url": "https://alphafold.ebi.ac.uk/entry/P00533"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "5 approved antibody therapies target EGFR: Amivantamab, Cetuximab, Necitumumab, Nimotuzumab",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "1 approved antibody drug conjugate therapies target EGFR: Cetuximab Sarotalocan",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "22 approved small molecule therapies target EGFR: Afatinib, Afatinib Dimaleate, Aumolertinib, Brigatinib",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "53 agents against EGFR have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "EGFR antibody tractability buckets: Approved Drug, UniProt loc high conf, GO CC high conf, UniProt loc med conf, UniProt SigP or TMHMM, Human Protein Atlas loc",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for EGFR: alopecia",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for EGFR: ocular keratitis",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for EGFR: Hepatotoxicity",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for EGFR: Skin rash",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Brennan et al. (2024))",
+     "source_type": "publication",
+     "claim": "curated safety liability for EGFR: diarrhoea",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ClinPGx)",
+     "source_type": "publication",
+     "claim": "curated safety liability for EGFR: Diarrhea",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000146648",
+     "url": "https://platform.opentargets.org/target/ENSG00000146648",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "EGFR selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "EGFR scores 0.5 over 71% of the declared dimensions; unavailable: clonality, internalisation, presentation_confidence, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.674,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS pathway-induced reasoning",
+     "source_type": "derived",
+     "claim": "EGFR is a surface protein with physical-evidence association to the disrupted driver KRAS (STRING combined score 1.00)",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "indirect candidate: EGFR is not altered in this tumour. It is proposed because it is a surface protein associated with the disrupted driver KRAS. Whether the tumour actually displays more of it is unmeasured.",
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "clonality is unknown, so it is not known whether this alteration is present in every tumour cell or in a minority subclone",
+    "internalisation is unknown, so payload-delivery mechanisms cannot be assessed"
+   ]
+  },
+  {
+   "gene": "PDGFRB",
+   "protein": "Platelet-derived growth factor receptor beta",
+   "uniprot": "P09619",
+   "target_class": "pathway_induced_surface",
+   "evidence_tier": "association_hypothesis",
+   "evidence_tier_reason": "nothing about this gene was measured in this patient: it is on the list because a database associates it with a gene that was altered, which is evidence about the other gene",
+   "mechanism_reach": "established_mechanism",
+   "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": null,
+    "hotspot": null,
+    "quantities": []
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+   "why": "surface protein associated with disrupted KRAS; a candidate indirect route when the driver itself cannot be reached",
+   "origin_variants": [],
+   "scores": {
+    "overall": 0.5,
+    "alteration_evidence": 0.2,
+    "surface_accessibility": 1.0,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.038,
+    "internalisation": null,
+    "evidence_strength": 0.95,
+    "coverage": 0.71,
+    "confidence": 0.674
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.516,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.401,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    },
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.36,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.33,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "complement_recruitment",
+     "compatibility": 0.33,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "complement cascade",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.309,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    }
+   ],
+   "neoantigen": null,
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "PDGFRB is Platelet-derived growth factor receptor beta (1106 aa), accession P09619",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P09619",
+     "url": "https://www.uniprot.org/uniprotkb/P09619",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "PDGFRB has 1 curated transmembrane segment and 1 extracellular topological domain(s)",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P09619",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "PDGFRB exposes residues 33-532 (500 aa) outside the cell",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P09619",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "PDGFRB is annotated at: Cell membrane; Cytoplasmic vesicle; Lysosome lumen",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P09619",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot processing",
+     "source_type": "database",
+     "claim": "PDGFRB has a signal peptide (1-32): it enters the secretory pathway",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "identifier": "P09619",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "PDGFRB imaged in: Vesicles, Golgi apparatus",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "PDGFRB is annotated to plasma membrane (GO:0005886), cell surface (GO:0009986), nucleus (GO:0005634), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "PDGFRB has positive evidence of an outward-facing part: Gene Ontology GO:0009986, curated extracellular topological domain, signal peptide",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for PDGFRB across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000113721",
+     "url": "https://www.proteinatlas.org/ENSG00000113721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "PDGFRB: detected in 19/20 queried healthy tissues; highest weighted lung at 93.2 nTPM; on-target/off-tumour risk high (lung is an organ without a spare and carries 93.2 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "PDGFRB: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "PDGFRB is classed 'Low tissue specificity' across healthy tissues (Detected in many)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location / Gene Ontology",
+     "source_type": "database",
+     "claim": "PDGFRB reaches the lysosome, the compartment where an acid- or protease-cleaved payload would be released",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "PDGFRB trafficking established for: lysosomal routing",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "1 experimental structures cover the extracellular region of PDGFRB (33-532); best 3MJG X_RAY",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "3MJG",
+     "url": "https://www.ebi.ac.uk/pdbe/entry/pdb/3mjg",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P09619 is available for PDGFRB; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P09619",
+     "url": "https://alphafold.ebi.ac.uk/entry/P09619"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "18 approved small molecule therapies target PDGFRB: Cediranib, Dasatinib Anhydrous, Imatinib, Imatinib Mesylate",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000113721",
+     "url": "https://platform.opentargets.org/target/ENSG00000113721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "1 approved protein therapies target PDGFRB: Becaplermin",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000113721",
+     "url": "https://platform.opentargets.org/target/ENSG00000113721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "26 agents against PDGFRB have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000113721",
+     "url": "https://platform.opentargets.org/target/ENSG00000113721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "PDGFRB antibody tractability buckets: Advanced Clinical, GO CC high conf, UniProt loc med conf, UniProt SigP or TMHMM",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000113721",
+     "url": "https://platform.opentargets.org/target/ENSG00000113721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Force et al. (2011))",
+     "source_type": "publication",
+     "claim": "curated safety liability for PDGFRB: heart disease",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000113721",
+     "url": "https://platform.opentargets.org/target/ENSG00000113721",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "PDGFRB selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "PDGFRB scores 0.5 over 71% of the declared dimensions; unavailable: clonality, internalisation, presentation_confidence, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.674,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS pathway-induced reasoning",
+     "source_type": "derived",
+     "claim": "PDGFRB is a surface protein with physical-evidence association to the disrupted driver KRAS (STRING combined score 1.00)",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "indirect candidate: PDGFRB is not altered in this tumour. It is proposed because it is a surface protein associated with the disrupted driver KRAS. Whether the tumour actually displays more of it is unmeasured.",
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "clonality is unknown, so it is not known whether this alteration is present in every tumour cell or in a minority subclone",
+    "internalisation is unknown, so payload-delivery mechanisms cannot be assessed"
+   ]
+  },
+  {
+   "gene": "ERBB2",
+   "protein": "Receptor tyrosine-protein kinase erbB-2",
+   "uniprot": "P04626",
+   "target_class": "pathway_induced_surface",
+   "evidence_tier": "association_hypothesis",
+   "evidence_tier_reason": "nothing about this gene was measured in this patient: it is on the list because a database associates it with a gene that was altered, which is evidence about the other gene",
+   "mechanism_reach": "established_mechanism",
+   "mechanism_reach_reason": "blocking_antibody reaches this target with every hard requirement answered, at compatibility 0.52",
+   "alteration_magnitude": {
+    "copies": null,
+    "copies_above_diploid": null,
+    "vaf": null,
+    "hotspot": null,
+    "quantities": []
+   },
+   "alteration_magnitude_reason": "no copy count is present in this patient's data; no variant allele fraction was reported; no observed position to look up, so hotspot status does not apply. Absent quantities are absent and are not imputed",
+   "why": "surface protein associated with disrupted KRAS; a candidate indirect route when the driver itself cannot be reached",
+   "origin_variants": [],
+   "scores": {
+    "overall": 0.493,
+    "alteration_evidence": 0.2,
+    "surface_accessibility": 1.0,
+    "tumour_selectivity": 0.2,
+    "normal_tissue_safety": 0.06,
+    "internalisation": null,
+    "evidence_strength": 0.95,
+    "coverage": 0.71,
+    "confidence": 0.674
+   },
+   "recommended_mechanisms": [
+    {
+     "mechanism": "blocking_antibody",
+     "compatibility": 0.521,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "the tumour cell's own blocked pathway",
+     "status": "established"
+    },
+    {
+     "mechanism": "adcc",
+     "compatibility": 0.406,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "established"
+    },
+    {
+     "mechanism": "targeted_radionuclide",
+     "compatibility": 0.368,
+     "payload_required": true,
+     "cargo": "radionuclide",
+     "effector": "emitted radiation, including neighbouring cells",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "complement_recruitment",
+     "compatibility": 0.336,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "complement cascade",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "adcp",
+     "compatibility": 0.335,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "endogenous immune system",
+     "status": "clinical"
+    },
+    {
+     "mechanism": "nk_cell_engager",
+     "compatibility": 0.316,
+     "payload_required": false,
+     "cargo": "none",
+     "effector": "NK cell",
+     "status": "clinical"
+    }
+   ],
+   "neoantigen": null,
+   "evidence": [
+    {
+     "source": "UniProtKB/Swiss-Prot",
+     "source_type": "database",
+     "claim": "ERBB2 is Receptor tyrosine-protein kinase erbB-2 (1255 aa), accession P04626",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P04626",
+     "url": "https://www.uniprot.org/uniprotkb/P04626",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "ERBB2 has 1 curated transmembrane segment and 1 extracellular topological domain(s)",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P04626",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot topology",
+     "source_type": "database",
+     "claim": "ERBB2 exposes residues 23-652 (630 aa) outside the cell",
+     "level": "human",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "P04626",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot subcellular location",
+     "source_type": "database",
+     "claim": "ERBB2 is annotated at: Cell membrane; Cell projection, ruffle membrane; Cytoplasm; Cytoplasm, perinuclear region; Early endosome; Nucleus",
+     "level": "human",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "P04626",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB/Swiss-Prot processing",
+     "source_type": "database",
+     "claim": "ERBB2 has a signal peptide (1-22): it enters the secretory pathway",
+     "level": "human",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "identifier": "P04626",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (immunofluorescence)",
+     "source_type": "database",
+     "claim": "ERBB2 imaged in: Plasma membrane, Nucleoplasm, Cytosol",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Gene Ontology cellular component (goa_human)",
+     "source_type": "database",
+     "claim": "ERBB2 is annotated to plasma membrane (GO:0005886), nucleus (GO:0005634), cytoplasm (GO:0005737)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS accessibility",
+     "source_type": "derived",
+     "claim": "ERBB2 has positive evidence of an outward-facing part: curated extracellular topological domain, signal peptide",
+     "level": "inferred",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (consensus tissue RNA)",
+     "source_type": "database",
+     "claim": "normal-tissue RNA levels for ERBB2 across 20 queried tissues",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://www.proteinatlas.org/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS normal-tissue safety",
+     "source_type": "derived",
+     "claim": "ERBB2: detected in 20/20 queried healthy tissues; highest weighted kidney at 83.9 nTPM; on-target/off-tumour risk high (kidney is an organ without a spare and carries 83.9 nTPM (threshold 10))",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS evidence layering",
+     "source_type": "derived",
+     "claim": "ERBB2: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
+     "level": "inferred",
+     "confidence": 0.9,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Human Protein Atlas (tissue specificity class)",
+     "source_type": "database",
+     "claim": "ERBB2 is classed 'Low tissue specificity' across healthy tissues (Detected in all)",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "UniProtKB subcellular location / Gene Ontology",
+     "source_type": "database",
+     "claim": "ERBB2 is found in endosomes after uptake",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS trafficking",
+     "source_type": "derived",
+     "claim": "ERBB2 trafficking established for: endosomal routing",
+     "level": "inferred",
+     "confidence": 0.6,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "PDB (via UniProt cross-references)",
+     "source_type": "database",
+     "claim": "36 experimental structures cover the extracellular region of ERBB2 (23-652); best 8JYR X_RAY",
+     "level": "in_vitro",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "8JYR",
+     "url": "https://www.ebi.ac.uk/pdbe/entry/pdb/8jyr",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "AlphaFold DB",
+     "source_type": "prediction",
+     "claim": "predicted structure P04626 is available for ERBB2; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
+     "level": "computational",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "P04626",
+     "url": "https://alphafold.ebi.ac.uk/entry/P04626"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "5 approved antibody therapies target ERBB2: Margetuximab, Pertuzumab, Trastuzumab, Zanidatamab",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "3 approved antibody drug conjugate therapies target ERBB2: Trastuzumab Deruxtecan, Trastuzumab Duocarmazine, Trastuzumab Emtansine",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "10 approved small molecule therapies target ERBB2: Afatinib, Afatinib Dimaleate, Dacomitinib, Lapatinib",
+     "level": "clinical",
+     "confidence": 0.95,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets Platform / ChEMBL",
+     "source_type": "clinical_trial",
+     "claim": "30 agents against ERBB2 have entered clinical trials",
+     "level": "clinical",
+     "confidence": 0.85,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets tractability (antibody modality)",
+     "source_type": "database",
+     "claim": "ERBB2 antibody tractability buckets: Approved Drug, UniProt loc high conf, GO CC high conf, UniProt SigP or TMHMM, Human Protein Atlas loc",
+     "level": "human",
+     "confidence": 0.8,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (Force et al. (2011))",
+     "source_type": "publication",
+     "claim": "curated safety liability for ERBB2: heart disease",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ClinPGx)",
+     "source_type": "publication",
+     "claim": "curated safety liability for ERBB2: cardiotoxicity",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "Open Targets safety (ClinPGx)",
+     "source_type": "publication",
+     "claim": "curated safety liability for ERBB2: more sensitive to trastuzamab",
+     "level": "human",
+     "confidence": 0.7,
+     "patient_derived": false,
+     "identifier": "ENSG00000141736",
+     "url": "https://platform.opentargets.org/target/ENSG00000141736",
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS tumour selectivity",
+     "source_type": "derived",
+     "claim": "ERBB2 selectivity is a population-level prior, not a measurement of this tumour",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS scoring",
+     "source_type": "derived",
+     "claim": "ERBB2 scores 0.493 over 71% of the declared dimensions; unavailable: clonality, internalisation, presentation_confidence, tumour_expression",
+     "level": "inferred",
+     "confidence": 0.674,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS pathway-induced reasoning",
+     "source_type": "derived",
+     "claim": "ERBB2 is a surface protein with physical-evidence association to the disrupted driver KRAS (STRING combined score 1.00)",
+     "level": "inferred",
+     "confidence": 0.3,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ],
+   "limitations": [
+    "indirect candidate: ERBB2 is not altered in this tumour. It is proposed because it is a surface protein associated with the disrupted driver KRAS. Whether the tumour actually displays more of it is unmeasured.",
+    "surface expression in this tumour cannot be established: DNA evidence present, RNA evidence unavailable, protein evidence unavailable",
+    "clonality is unknown, so it is not known whether this alteration is present in every tumour cell or in a minority subclone",
+    "internalisation is unknown, so payload-delivery mechanisms cannot be assessed"
+   ]
+  }
+ ],
+ "combinations": [
+  {
+   "operator": "AND",
+   "targets": [
+    "FGF23",
+    "PDGFRB"
+   ],
+   "rationale": "requiring both FGF23 and PDGFRB lowers the worst weighted healthy-tissue load from 83.9 (lung) to 5.4 (heart muscle)",
+   "normal_tissues_excluded": [
+    "adrenal gland",
+    "cerebral cortex",
+    "colon",
+    "esophagus",
+    "heart muscle",
+    "hypothalamus",
+    "kidney",
+    "liver",
+    "lung",
+    "pancreas",
+    "placenta",
+    "skeletal muscle",
+    "skin",
+    "spleen",
+    "stomach",
+    "testis",
+    "thyroid gland"
+   ],
+   "normal_tissues_still_at_risk": [],
+   "selectivity_gain": 15.53,
+   "evidence": [
+    {
+     "source": "GenomeOS combination logic",
+     "source_type": "derived",
+     "claim": "FGF23 AND PDGFRB: 17 healthy tissues drop below the 10 nTPM concern threshold when both antigens are required",
+     "level": "inferred",
+     "confidence": 0.4,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS combination logic",
+     "source_type": "derived",
+     "claim": "bulk tissue RNA cannot show that two genes are expressed in the same cell; single-cell or co-staining data is required before this combination is treated as real",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ]
+  },
+  {
+   "operator": "AND",
+   "targets": [
+    "FGF23",
+    "ERBB2"
+   ],
+   "rationale": "requiring both FGF23 and ERBB2 lowers the worst weighted healthy-tissue load from 75.5 (kidney) to 5.4 (heart muscle)",
+   "normal_tissues_excluded": [
+    "cerebral cortex",
+    "colon",
+    "esophagus",
+    "heart muscle",
+    "kidney",
+    "liver",
+    "lung",
+    "pancreas",
+    "placenta",
+    "skeletal muscle",
+    "skin",
+    "stomach",
+    "testis",
+    "thyroid gland"
+   ],
+   "normal_tissues_still_at_risk": [],
+   "selectivity_gain": 13.98,
+   "evidence": [
+    {
+     "source": "GenomeOS combination logic",
+     "source_type": "derived",
+     "claim": "FGF23 AND ERBB2: 14 healthy tissues drop below the 10 nTPM concern threshold when both antigens are required",
+     "level": "inferred",
+     "confidence": 0.4,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS combination logic",
+     "source_type": "derived",
+     "claim": "bulk tissue RNA cannot show that two genes are expressed in the same cell; single-cell or co-staining data is required before this combination is treated as real",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ]
+  },
+  {
+   "operator": "AND",
+   "targets": [
+    "ADAMTS8",
+    "FGF23"
+   ],
+   "rationale": "requiring both ADAMTS8 and FGF23 lowers the worst weighted healthy-tissue load from 29.9 (lung) to 2.8 (heart muscle)",
+   "normal_tissues_excluded": [
+    "lung"
+   ],
+   "normal_tissues_still_at_risk": [],
+   "selectivity_gain": 10.67,
+   "evidence": [
+    {
+     "source": "GenomeOS combination logic",
+     "source_type": "derived",
+     "claim": "ADAMTS8 AND FGF23: 1 healthy tissues drop below the 10 nTPM concern threshold when both antigens are required",
+     "level": "inferred",
+     "confidence": 0.4,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    },
+    {
+     "source": "GenomeOS combination logic",
+     "source_type": "derived",
+     "claim": "bulk tissue RNA cannot show that two genes are expressed in the same cell; single-cell or co-staining data is required before this combination is treated as real",
+     "level": "inferred",
+     "confidence": 0.0,
+     "patient_derived": false,
+     "retrieved_at": "2026-10-10"
+    }
+   ]
+  }
+ ],
+ "dependencies": [],
+ "dependency_candidates": [],
+ "dependency_lineage": null,
+ "alterations": [],
+ "missing_data": [
+  {
+   "input": "tumour RNA-seq",
+   "missing": true,
+   "why": "no target's expression in this tumour can be established from DNA alone",
+   "candidates_affected": 16
+  },
+  {
+   "input": "HLA genotype",
+   "missing": true,
+   "why": "presentation is allele-specific; without it no mutant peptide can be prioritised",
+   "candidates_affected": 16
+  },
+  {
+   "input": "tumour purity and variant allele fraction",
+   "missing": true,
+   "why": "clonal and subclonal alterations cannot be separated, so an antigen on 10% of cells looks like one on 100%",
+   "candidates_affected": 16
+  },
+  {
+   "input": "copy number",
+   "missing": true,
+   "why": "amplification is one of the strongest reasons a surface target is over-displayed, and a homozygous deletion removes a target that a mutation list would still be offering",
+   "candidates_affected": 16
+  },
+  {
+   "input": "structural variants",
+   "missing": true,
+   "why": "a fusion creates a protein that exists in no healthy cell, which is the cleanest tumour specificity there is; a VCF of point mutations cannot show one",
+   "candidates_affected": 16
+  },
+  {
+   "input": "a cohort of the same cancer type",
+   "missing": true,
+   "why": "without one there is nothing to say how often this cancer type raises a gene above normal tissue, so selectivity falls back to a tissue-specificity class",
+   "candidates_affected": 16
+  },
+  {
+   "input": "tumour proteomics",
+   "missing": true,
+   "why": "RNA is not protein; abundance at the protein level is unmeasured",
+   "candidates_affected": 16
+  },
+  {
+   "input": "surface proteomics",
+   "missing": true,
+   "why": "the only direct measurement of what is actually displayed on the tumour cell surface",
+   "candidates_affected": 16
+  },
+  {
+   "input": "immunopeptidomics",
+   "missing": true,
+   "why": "the only evidence that a mutant peptide is genuinely presented rather than predicted",
+   "candidates_affected": 16
+  },
+  {
+   "input": "single-cell tumour data",
+   "missing": true,
+   "why": "heterogeneity and co-expression of two antigens in the same cell are otherwise unknowable",
+   "candidates_affected": 16
+  },
+  {
+   "input": "tumour expression of this gene",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 16
+  },
+  {
+   "input": "internalisation",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 16
+  },
+  {
+   "input": "patient HLA genotype",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 9
+  },
+  {
+   "input": "predicted peptide/HLA binding",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 9
+  },
+  {
+   "input": "predicted antigen processing",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 9
+  },
+  {
+   "input": "observed presentation",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 9
+  },
+  {
+   "input": "clonality",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 4
+  },
+  {
+   "input": "induced surface phenotype",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 4
+  }
+ ],
+ "providers": {
+  "protein_annotation": "GenomeOS federated protein compiler (UniProt, Ensembl, InterPro, PDB, AlphaFold, Reactome, STRING, HPA)",
+  "normal_expression": "Human Protein Atlas, CC BY-SA 4.0 (proteinatlas.org)",
+  "therapeutic_precedent": "Open Targets Platform, CC0 1.0 (platform.opentargets.org)",
+  "homology": "Ensembl REST comparative genomics (Apache 2.0 service, EMBL-EBI terms)",
+  "transcript_sequence": "Ensembl REST sequence endpoint (Apache 2.0 service, EMBL-EBI terms)",
+  "cohort_expression": "no cohort selected",
+  "neoantigen_predictor": "none configured",
+  "patient_rna": "not supplied"
+ }
+}

@@ -472,12 +472,20 @@ def _mechanism_ranking(candidates: list[TherapeuticTargetCandidate]) -> list[tup
 
 def global_limitations(analysis: dict[str, Any]) -> list[str]:
     level = analysis["data_level"]["level_reached"]
+    # The normal is named only when the profile held its calls; without them the sentence is the one
+    # every level-1 report has always carried.
+    normal = "matched_normal" in analysis["data_level"].get("inputs_present", [])
     out = [
         f"This analysis ran at data level {level} of 9. Conclusions that need a higher level are "
         "reported as unavailable, not estimated.",
         "Localisation, topology, trafficking and healthy-tissue expression are curated population-level "
         "knowledge about the gene, not measurements of this patient's tumour.",
-        "No matched normal sample means somatic status is estimated from population allele frequency; "
+        "A matched normal genome was supplied: every tumour record whose chromosome, position and alleles "
+        "appear among the normal's calls was removed, and the rest are somatic by that subtraction rather "
+        "than by population frequency. The match is exact, so a variant written differently in the two "
+        "files is not removed."
+        if normal
+        else "No matched normal sample means somatic status is estimated from population allele frequency; "
         "rare inherited variants cannot be separated from somatic ones.",
         "Mechanism compatibility scores describe how well the biology fits a mechanism class. They are "
         "not probabilities that a patient responds.",

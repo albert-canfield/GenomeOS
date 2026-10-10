@@ -1,0 +1,976 @@
+==============================================================================
+THERAPEUTIC TARGET ANALYSIS
+==============================================================================
+
+GenomeOS generates computational research hypotheses. Therapeutic target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation.
+
+Sample: data/demo/hg008_pdac/HG008-T.vcf   (HG008-T)
+Data level reached: 2 of 9
+  analysis ran at data level 2; conclusions that require a higher level are
+  reported as unavailable rather than estimated
+
+TUMOUR SUMMARY
+------------------------------------------------------------------------------
+  - 12 somatic alterations in 12 genes, plus 4 gene(s) reached indirectly
+  - 2 potential direct surface targets
+  - 9 genes yielding mutation-derived peptides for the HLA route
+  - 4 indirect / pathway-induced candidates
+  - 3 unsuitable, secreted or unknown
+
+TOP DIRECT SURFACE TARGETS
+------------------------------------------------------------------------------
+  gene      score   access  select  safety  intern  evid   best mechanism
+  FGF23     0.57    0.68    0.50    0.60    unknown 0.85   targeted_radionuclide 56%
+  ADAMTS8   0.48    0.68    0.50    0.26    unknown 0.81   targeted_radionuclide 44%
+
+TOP NEOANTIGEN / HLA CANDIDATES
+------------------------------------------------------------------------------
+  FGF23      38 peptides, HLA MISSING, presentation unestablished
+  ADAMTS8    12 peptides, HLA MISSING, presentation unestablished
+  CYP2A13    38 peptides, HLA MISSING, presentation unestablished
+  KRAS       38 peptides, HLA MISSING, presentation unestablished
+  NF1        38 peptides, HLA MISSING, presentation unestablished
+  TP53       38 peptides, HLA MISSING, presentation unestablished
+  DOK5       38 peptides, HLA MISSING, presentation unestablished
+  FAM43A     38 peptides, HLA MISSING, presentation unestablished
+  SMAD4      4 peptides, HLA MISSING, presentation unestablished
+  ESRRG      excluded: the altered ENST00000408911 translates to 402 residues against 458 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+  GDI2       excluded: the altered ENST00000380191 translates to 122 residues against 445 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+  INSYN1     excluded: the altered ENST00000569673 translates to 152 residues against 293 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+
+INDIRECT / PATHWAY-INDUCED SURFACE TARGETS
+------------------------------------------------------------------------------
+  gene      score   access  select  safety  intern  evid   best mechanism
+  KIT       0.62    1.00    0.50    0.36    unknown 0.95   blocking_antibody 66%
+  EGFR      0.50    1.00    0.50    0.26    unknown 0.95   blocking_antibody 61%
+  PDGFRB    0.50    1.00    0.20    0.04    unknown 0.95   blocking_antibody 52%
+  ERBB2     0.49    1.00    0.20    0.06    unknown 0.95   blocking_antibody 52%
+
+REJECTED OR LOW-PRIORITY TARGETS
+------------------------------------------------------------------------------
+  ESRRG      intracellular_only     ESRRG is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+  GDI2       intracellular_only     GDI2 is cytoplasmic; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+  INSYN1     intracellular_only     INSYN1 is cytoplasmic; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+
+NORMAL-TISSUE SAFETY CONCERNS
+------------------------------------------------------------------------------
+  FGF23      low       detected in 4/20 queried healthy tissues; highest weighted heart muscle at 5.4 nTPM
+  ADAMTS8    moderate  lung (33.2 nTPM)
+  CYP2A13    low       detected in 1/20 queried healthy tissues; highest weighted liver at 1.9 nTPM
+  ESRRG      moderate  kidney (27.1 nTPM), retina (33.5 nTPM), stomach (33.1 nTPM), placenta (10 nTPM)
+  KRAS       moderate  cerebral cortex (17.4 nTPM), bone marrow (16.1 nTPM), liver (13.1 nTPM), colon (20 nTPM), lung (11 nTPM)
+  NF1        moderate  cerebral cortex (18.5 nTPM), retina (24.9 nTPM), heart muscle (12.1 nTPM), kidney (13.3 nTPM), liver (11.6 nTPM)
+  TP53       moderate  bone marrow (18.4 nTPM), spleen (29.3 nTPM), skin (35.4 nTPM), liver (15.6 nTPM), colon (27.1 nTPM)
+  GDI2       high      liver (225.4 nTPM), kidney (136.2 nTPM), bone marrow (119.5 nTPM), pancreas (155.7 nTPM), lung (92.7 nTPM)
+  DOK5       moderate  skeletal muscle (43.1 nTPM), heart muscle (17.2 nTPM), cerebral cortex (14.7 nTPM), hypothalamus (12.9 nTPM), retina (10.8 nTPM)
+  FAM43A     moderate  kidney (29.3 nTPM), heart muscle (25.8 nTPM), spleen (47.6 nTPM), skin (23.8 nTPM), colon (14.1 nTPM)
+  SMAD4      moderate  cerebellum (14.5 nTPM), skeletal muscle (18.4 nTPM), retina (12.6 nTPM), pancreas (10.6 nTPM), colon (11.1 nTPM)
+  INSYN1     moderate  heart muscle (41.8 nTPM), cerebral cortex (40.4 nTPM), hypothalamus (27.3 nTPM), cerebellum (19.2 nTPM), kidney (13.7 nTPM)
+  KIT        moderate  thyroid gland (36.5 nTPM), lung (15.9 nTPM), stomach (13.2 nTPM), skin (13.7 nTPM), esophagus (10.3 nTPM)
+  EGFR       moderate  liver (32.2 nTPM), skin (48.4 nTPM), lung (14.1 nTPM), cerebral cortex (11.5 nTPM), pancreas (14.6 nTPM)
+  PDGFRB     high      lung (93.2 nTPM), heart muscle (73.5 nTPM), kidney (47.1 nTPM), thyroid gland (63.8 nTPM), skin (62.2 nTPM)
+  ERBB2      high      kidney (83.9 nTPM), heart muscle (53.9 nTPM), esophagus (98.3 nTPM), skin (87.2 nTPM), colon (63.8 nTPM)
+
+TRAFFICKING / INTERNALISATION
+------------------------------------------------------------------------------
+  FGF23      internalises unknown endosomal unknown lysosomal unknown shedding yes
+  ADAMTS8    internalises unknown endosomal unknown lysosomal unknown shedding yes
+  CYP2A13    internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  ESRRG      internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  KRAS       internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  NF1        internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  TP53       internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  GDI2       internalises unknown endosomal unknown lysosomal yes     shedding unknown
+  DOK5       internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  FAM43A     internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  SMAD4      internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  INSYN1     internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  KIT        internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  EGFR       internalises unknown endosomal yes     lysosomal unknown shedding yes
+  PDGFRB     internalises unknown endosomal unknown lysosomal yes     shedding unknown
+  ERBB2      internalises unknown endosomal yes     lysosomal unknown shedding unknown
+
+THERAPEUTIC MECHANISM RECOMMENDATIONS
+------------------------------------------------------------------------------
+  KIT        blocking_antibody          66%  cargo=none                   effector=the tumour cell's own blocked pathway
+  EGFR       blocking_antibody          61%  cargo=none                   effector=the tumour cell's own blocked pathway
+  KIT        targeted_radionuclide      57%  cargo=radionuclide           effector=emitted radiation, including neighbouring cells
+  FGF23      targeted_radionuclide      56%  cargo=radionuclide           effector=emitted radiation, including neighbouring cells
+  KIT        adcc                       54%  cargo=none                   effector=endogenous immune system
+  EGFR       targeted_radionuclide      53%  cargo=radionuclide           effector=emitted radiation, including neighbouring cells
+  ERBB2      blocking_antibody          52%  cargo=none                   effector=the tumour cell's own blocked pathway
+  FGF23      blocking_antibody          52%  cargo=none                   effector=the tumour cell's own blocked pathway
+  PDGFRB     blocking_antibody          52%  cargo=none                   effector=the tumour cell's own blocked pathway
+  KIT        t_cell_engager             50%  cargo=none                   effector=T cell
+
+  Scores above are computational compatibility scores. They are not response probabilities.
+
+  Existing therapeutic precedent:
+  - KIT: approved agents already engage this target (Avapritinib, Cediranib,
+    Dasatinib Anhydrous, Imatinib, Imatinib Mesylate), which supports
+    targeted_radionuclide as reachable modalities. An existing drug against
+    this gene does not mean it suits this patient's tumour, whose alteration,
+    expression and disease context may differ entirely.
+  - EGFR: approved agents already engage this target (Afatinib, Afatinib
+    Dimaleate, Amivantamab, Aumolertinib, Brigatinib, Cetuximab, Cetuximab
+    Sarotalocan, Necitumumab, Nimotuzumab, Panitumumab), which supports adc,
+    adcc, adcp, blocking_antibody, complement_recruitment, nk_cell_engager,
+    t_cell_engager, targeted_radionuclide as reachable modalities. An existing
+    drug against this gene does not mean it suits this patient's tumour, whose
+    alteration, expression and disease context may differ entirely.
+  - PDGFRB: approved agents already engage this target (Cediranib, Dasatinib
+    Anhydrous, Imatinib, Imatinib Mesylate, Masitinib), which supports
+    targeted_radionuclide as reachable modalities. An existing drug against
+    this gene does not mean it suits this patient's tumour, whose alteration,
+    expression and disease context may differ entirely.
+  - ERBB2: approved agents already engage this target (Afatinib, Afatinib
+    Dimaleate, Dacomitinib, Lapatinib, Lapatinib Ditosylate, Margetuximab,
+    Pertuzumab, Trastuzumab, Trastuzumab Deruxtecan, Trastuzumab Duocarmazine,
+    Trastuzumab Emtansine, Zanidatamab, Zenocutuzumab), which supports adc,
+    adcc, adcp, blocking_antibody, complement_recruitment, nk_cell_engager,
+    t_cell_engager, targeted_radionuclide as reachable modalities. An existing
+    drug against this gene does not mean it suits this patient's tumour, whose
+    alteration, expression and disease context may differ entirely.
+
+COMBINATION TARGET LOGIC
+------------------------------------------------------------------------------
+  FGF23 AND PDGFRB: requiring both FGF23 and PDGFRB lowers the worst weighted healthy-tissue load from 83.9 (lung) to 5.4 (heart muscle)
+    healthy tissues excluded: adrenal gland, cerebral cortex, colon, esophagus, heart muscle, hypothalamus, kidney, liver, lung, pancreas, placenta, skeletal muscle, skin, spleen, stomach, testis, thyroid gland
+  FGF23 AND ERBB2: requiring both FGF23 and ERBB2 lowers the worst weighted healthy-tissue load from 75.5 (kidney) to 5.4 (heart muscle)
+    healthy tissues excluded: cerebral cortex, colon, esophagus, heart muscle, kidney, liver, lung, pancreas, placenta, skeletal muscle, skin, stomach, testis, thyroid gland
+  ADAMTS8 AND FGF23: requiring both ADAMTS8 and FGF23 lowers the worst weighted healthy-tissue load from 29.9 (lung) to 2.8 (heart muscle)
+    healthy tissues excluded: lung
+
+EXPERIMENTAL MECHANISMS
+------------------------------------------------------------------------------
+  immune_marker_delivery         no candidate satisfies its requirements
+    tumour-selective delivery makes the cell display a strongly immunogenic surface marker, which pre-existing or adaptive antibodies then attack
+    - experimental: the whole chain from selective delivery to marker display to effective immune attack has no clinical precedent that GenomeOS can cite
+    - selectivity carries the entire safety argument, because any healthy cell that takes up the carrier is marked for destruction too
+  rna_delivery                   no candidate satisfies its requirements
+    a tumour-selective carrier delivers RNA that is translated inside the tumour cell
+    - endosomal escape is the unsolved step and is not modelled here
+    - lysosomal routing helps a cleavable payload and hurts RNA, which must escape before it
+  tumour_suppressor_restoration  no candidate satisfies its requirements
+    the inactivated gene's product is restored inside the tumour cell
+    - Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease.
+    - restoration must reach every malignant cell to matter, which is a delivery problem no current carrier solves
+  genome_editing                 no candidate satisfies its requirements
+    the tumour allele is corrected or disrupted in place
+    - Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease.
+    - editing must also reach the nucleus of every malignant cell; surface access is only the first of several barriers
+
+REQUIRED MISSING DATA
+------------------------------------------------------------------------------
+  - tumour RNA-seq: no target's expression in this tumour can be established from DNA alone
+  - HLA genotype: presentation is allele-specific; without it no mutant peptide can be prioritised
+  - tumour purity and variant allele fraction: clonal and subclonal alterations cannot be separated, so an antigen on 10% of cells looks like one on 100%
+  - copy number: amplification is one of the strongest reasons a surface target is over-displayed, and a homozygous deletion removes a target that a mutation list would still be offering
+  - structural variants: a fusion creates a protein that exists in no healthy cell, which is the cleanest tumour specificity there is; a VCF of point mutations cannot show one
+  - a cohort of the same cancer type: without one there is nothing to say how often this cancer type raises a gene above normal tissue, so selectivity falls back to a tissue-specificity class
+  - tumour proteomics: RNA is not protein; abundance at the protein level is unmeasured
+  - surface proteomics: the only direct measurement of what is actually displayed on the tumour cell surface
+  - immunopeptidomics: the only evidence that a mutant peptide is genuinely presented rather than predicted
+  - single-cell tumour data: heterogeneity and co-expression of two antigens in the same cell are otherwise unknowable
+  - tumour expression of this gene: unresolved for this analysis
+  - internalisation: unresolved for this analysis
+  - patient HLA genotype: unresolved for this analysis
+  - predicted peptide/HLA binding: unresolved for this analysis
+  - predicted antigen processing: unresolved for this analysis
+  - observed presentation: unresolved for this analysis
+  - clonality: unresolved for this analysis
+  - induced surface phenotype: unresolved for this analysis
+
+CANDIDATE DETAIL
+==============================================================================
+
+------------------------------------------------------------------------------
+TARGET: FGF23  (Fibroblast growth factor 23)
+------------------------------------------------------------------------------
+
+Classification:
+  direct surface
+  curated localisation places FGF23 at the secreted; no extracellular topological domain is curated, so the exposed region is not delimited
+
+Why interesting:
+  its product is physically reachable from outside the cell; healthy-tissue expression is low across the queried organs
+
+Tumour evidence:
+  chr12:4370506 C>T  missense_variant  R198Q
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: clonal (VAF 0.53)
+
+Normal tissue concern:
+  risk: low
+  no queried healthy tissue reaches 10 nTPM; highest is heart muscle at 5.4
+
+Surface accessibility:
+  secreted, confidence 0.90
+
+Internalisation:
+  internalises: unknown  shedding: yes
+
+Structure:
+  experimental entries: 6  predicted: Q9GZV9
+  epitope R198Q at residue 198: extracellular=unknown, structurally resolved=yes
+    reference NVLKPRARMTPAPAS -> mutant NVLKPRAQMTPAPAS
+
+Neoantigen / HLA route:
+  novel peptide sequence: yes
+  the altered ENST00000237837 translates to 251 residues against 251, diverging at residue 198 and producing 1 residue that exists in no reference protein
+  38 mutation-spanning peptides; example LNVLKPRAR -> LNVLKPRAQ
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  alteration_evidence        1.00
+      observed_alteration: this tumour's own DNA carries missense_variant
+      R198Q; the alteration is observed in this patient and not inferred
+  surface_accessibility      0.68
+      membrane localisation at confidence 0.85, reduced by 20% because no
+      extracellular topological domain is curated
+  tumour_selectivity         0.50
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enhanced' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.60
+      1 - log10(1 + 5.4) / log10(101), where 5.4 is heart muscle at 5.4 nTPM
+      weighted 1 (Human Protein Atlas consensus, population-level)
+  clonality                  1.00
+      variant allele fraction 0.53 indicates a clonal alteration
+  internalisation            unknown
+      no internalisation evidence found
+  lysosomal_trafficking      unknown
+      no trafficking annotation
+  structural_bindability     0.50
+      6 experimental structures exist but none is confined to the
+      extracellular region
+  neoantigen_strength        0.30
+      mutation-spanning peptides derived (0.30); ceiling without presentation
+      evidence is 0.60
+  presentation_confidence    0.00
+      no binding or processing evidence; presentation cannot be established
+  clinical_precedent         0.70
+      1 agents against this target have entered clinical trials
+  evidence_strength          0.85
+      strongest evidence level available is clinical, over 22 evidence records
+  shedding                   1.00
+      curated annotation indicates a released or secreted form circulates
+  OVERALL                    0.57       coverage 83%, confidence 0.70
+
+Compatible mechanisms (computational compatibility score):
+  1. targeted_radionuclide      56%  cargo=radionuclide, effector=emitted radiation, including neighbouring cells
+  2. blocking_antibody          52%  cargo=none, effector=the tumour cell's own blocked pathway
+  3. t_cell_engager             48%  cargo=none, effector=T cell
+  4. nk_cell_engager            45%  cargo=none, effector=NK cell
+  5. adcc                       43%  cargo=none, effector=endogenous immune system
+  6. adcp                       42%  cargo=none, effector=endogenous immune system
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - agonist_antibody:
+      agonism_intended not established: nothing establishes that triggering
+      this target is the therapeutic intent, and against a driver the tumour
+      has already activated, agonism pushes the wrong way
+  - genome_editing, immune_marker_delivery, rna_delivery:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      patient_hla not met: the patient's HLA genotype is not available, and
+      peptide presentation is allele-specific
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - internalisation is unknown, so payload-delivery mechanisms cannot be
+    assessed
+  - no HLA genotype supplied, so no mutation-derived peptide can be
+    prioritised
+
+Design readiness: 0.70 (coverage 90%)
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  clinical:
+    [Open Targets Platform / ChEMBL] 1 agents against FGF23 have entered
+    clinical trials
+  human:
+    [UniProtKB/Swiss-Prot] FGF23 is Fibroblast growth factor 23 (251 aa),
+    accession Q9GZV9
+    [UniProtKB/Swiss-Prot subcellular location] FGF23 is annotated at:
+    Secreted
+    [UniProtKB/Swiss-Prot processing] FGF23 has a signal peptide (1-24): it
+    enters the secretory pathway
+    [Human Protein Atlas (immunofluorescence)] FGF23 imaged in: Vesicles,
+    Nuclear bodies, Centrosome, Cytosol
+  in_vitro:
+    [PDB (via UniProt cross-references)] residue 198 of FGF23 is resolved in 4
+    structures; best 7YSH (CRYO_EM)
+  computational:
+    [AlphaFold DB] predicted structure Q9GZV9 is available for FGF23; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS accessibility] FGF23 has positive evidence of an outward-facing
+    part: signal peptide
+    [GenomeOS normal-tissue safety] FGF23: detected in 4/20 queried healthy
+    tissues; highest weighted heart muscle at 5.4 nTPM; on-target/off-tumour
+    risk low (no queried healthy tissue reaches 10 nTPM; highest is heart
+    muscle at 5.4)
+    [GenomeOS evidence layering] FGF23: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] FGF23 trafficking established for: shedding
+
+Recognition mode for design: expression_differential
+  the tumour and healthy cells carry the same protein sequence here; selectivity has to come from how much of it each displays, which is why tumour and normal expression data dominate this candidate's uncertainty
+
+------------------------------------------------------------------------------
+TARGET: ADAMTS8  (A disintegrin and metalloproteinase with thrombospondin motifs 8)
+------------------------------------------------------------------------------
+
+Classification:
+  direct surface
+  curated localisation places ADAMTS8 at the secreted; no extracellular topological domain is curated, so the exposed region is not delimited
+
+Why interesting:
+  its product is physically reachable from outside the cell
+
+Tumour evidence:
+  chr11:130416955 GGGTGTGGGCCGCCTGGA>G  frameshift_variant  L355P
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: clonal (VAF 0.53)
+
+Normal tissue concern:
+  risk: moderate
+  lung is an organ without a spare and carries 33.2 nTPM (threshold 10)
+  tissues above the concern threshold: lung (33.2 nTPM)
+
+Surface accessibility:
+  secreted, confidence 0.90
+
+Internalisation:
+  internalises: unknown  shedding: yes
+
+Structure:
+  experimental entries: 0  predicted: Q9UP79
+  epitope L355P at residue 355: extracellular=unknown, structurally resolved=no
+    reference SVIEDEGLQAAHTLA -> mutant SVIEDEGPQAAHTLA
+
+Neoantigen / HLA route:
+  novel peptide sequence: yes
+  the altered ENST00000257359 translates to 357 residues against 889, diverging at residue 355 and producing 3 residues that exist in no reference protein
+  12 mutation-spanning peptides; example  -> CSVIEDEGP
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  alteration_evidence        1.00
+      observed_alteration: this tumour's own DNA carries frameshift_variant
+      L355P; the alteration is observed in this patient and not inferred
+  surface_accessibility      0.68
+      membrane localisation at confidence 0.85, reduced by 20% because no
+      extracellular topological domain is curated
+  tumour_selectivity         0.50
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enhanced' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.26
+      1 - log10(1 + 29.9) / log10(101), where 29.9 is lung at 33.2 nTPM
+      weighted 0.9 (Human Protein Atlas consensus, population-level)
+  clonality                  1.00
+      variant allele fraction 0.53 indicates a clonal alteration
+  internalisation            unknown
+      no internalisation evidence found
+  lysosomal_trafficking      unknown
+      no trafficking annotation
+  structural_bindability     0.30
+      only a predicted structure is available; a prediction is not an
+      experimental epitope
+  neoantigen_strength        0.40
+      mutation-spanning peptides derived (0.30) the altered frame produces
+      residues with no wild-type counterpart, so a binder has nothing self to
+      be confused with (+0.10); ceiling without presentation evidence is 0.60
+  presentation_confidence    0.00
+      no binding or processing evidence; presentation cannot be established
+  clinical_precedent         0.40
+      no clinical agent, but Open Targets places this target in antibody-
+      tractability buckets: UniProt loc med conf, UniProt SigP or TMHMM, GO CC
+      med conf
+  evidence_strength          0.81
+      strongest evidence level available is human, over 20 evidence records
+  shedding                   1.00
+      curated annotation indicates a released or secreted form circulates
+  OVERALL                    0.48       coverage 83%, confidence 0.67
+
+Compatible mechanisms (computational compatibility score):
+  1. targeted_radionuclide      44%  cargo=radionuclide, effector=emitted radiation, including neighbouring cells
+  2. blocking_antibody          40%  cargo=none, effector=the tumour cell's own blocked pathway
+  3. t_cell_engager             37%  cargo=none, effector=T cell
+  4. nk_cell_engager            35%  cargo=none, effector=NK cell
+  5. adcp                       34%  cargo=none, effector=endogenous immune system
+  6. adcc                       34%  cargo=none, effector=endogenous immune system
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - agonist_antibody:
+      agonism_intended not established: nothing establishes that triggering
+      this target is the therapeutic intent, and against a driver the tumour
+      has already activated, agonism pushes the wrong way
+  - genome_editing, immune_marker_delivery, rna_delivery, tumour_suppressor_restoration:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      patient_hla not met: the patient's HLA genotype is not available, and
+      peptide presentation is allele-specific
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - internalisation is unknown, so payload-delivery mechanisms cannot be
+    assessed
+  - no HLA genotype supplied, so no mutation-derived peptide can be
+    prioritised
+  - a premature stop or frameshift often triggers nonsense-mediated decay,
+    which removes the transcript rather than producing a truncated protein;
+    whether any product is made here is unmeasured and would need tumour RNA-
+    seq
+  - Correcting or replacing one gene does not restore a normal cell. An
+    established malignancy carries several cooperating drivers, passenger
+    mutations, copy-number change, aneuploidy and epigenetic dysregulation;
+    reverting one of them removes one dependency, not the disease.
+
+Design readiness: 0.70 (coverage 90%)
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  human:
+    [UniProtKB/Swiss-Prot] ADAMTS8 is A disintegrin and metalloproteinase with
+    thrombospondin motifs 8 (889 aa), accession Q9UP79
+    [UniProtKB/Swiss-Prot subcellular location] ADAMTS8 is annotated at:
+    Secreted, extracellular space, extracellular matrix
+    [UniProtKB/Swiss-Prot processing] ADAMTS8 has a signal peptide (1-26): it
+    enters the secretory pathway
+    [Gene Ontology cellular component (goa_human)] ADAMTS8 is annotated to
+    extracellular region (GO:0005576)
+  computational:
+    [AlphaFold DB] predicted structure Q9UP79 is available for ADAMTS8; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS accessibility] ADAMTS8 has positive evidence of an outward-
+    facing part: signal peptide
+    [GenomeOS normal-tissue safety] ADAMTS8: detected in 8/20 queried healthy
+    tissues; highest weighted lung at 33.2 nTPM; on-target/off-tumour risk
+    moderate (lung is an organ without a spare and carries 33.2 nTPM
+    (threshold 10))
+    [GenomeOS evidence layering] ADAMTS8: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] ADAMTS8 trafficking established for: shedding
+
+Recognition mode for design: expression_differential
+  the tumour and healthy cells carry the same protein sequence here; selectivity has to come from how much of it each displays, which is why tumour and normal expression data dominate this candidate's uncertainty
+
+------------------------------------------------------------------------------
+TARGET: CYP2A13  (Cytochrome P450 2A13)
+------------------------------------------------------------------------------
+
+Classification:
+  neoantigen hla
+  CYP2A13 is other intracellular and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present
+
+Why interesting:
+  its alteration yields peptides that HLA could present, though the protein is internal; healthy-tissue expression is low across the queried organs
+
+Tumour evidence:
+  chr19:41095002 C>T  missense_variant  P402L
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: clonal (VAF 1.00)
+
+Normal tissue concern:
+  risk: low
+  no queried healthy tissue reaches 10 nTPM; highest is liver at 1.9
+
+Surface accessibility:
+  other intracellular, confidence 0.80
+
+Internalisation:
+  internalises: unknown
+  no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent
+
+Structure:
+  experimental entries: 8  predicted: Q16696
+  epitope P402L at residue 402: extracellular=unknown, structurally resolved=yes
+    reference LGSVLRDPRFFSNPR -> mutant LGSVLRDLRFFSNPR
+
+Neoantigen / HLA route:
+  novel peptide sequence: yes
+  the altered ENST00000330436 translates to 494 residues against 494, diverging at residue 402 and producing 1 residue that exists in no reference protein
+  38 mutation-spanning peptides; example MLGSVLRDP -> MLGSVLRDL
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  alteration_evidence        1.00
+      observed_alteration: this tumour's own DNA carries missense_variant
+      P402L; the alteration is observed in this patient and not inferred
+  surface_accessibility      0.00
+      curated localisation places other_intracellular inside the cell; a
+      circulating binder cannot reach it
+  tumour_selectivity         0.50
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enriched' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.78
+      1 - log10(1 + 1.7) / log10(101), where 1.7 is liver at 1.9 nTPM weighted
+      0.9 (Human Protein Atlas consensus, population-level)
+  clonality                  1.00
+      variant allele fraction 1.00 indicates a clonal alteration
+  internalisation            unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  lysosomal_trafficking      unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  structural_bindability     unknown
+      protein is not surface-reachable, so an extracellular epitope does not
+      arise
+  neoantigen_strength        0.30
+      mutation-spanning peptides derived (0.30); ceiling without presentation
+      evidence is 0.60
+  presentation_confidence    0.00
+      no binding or processing evidence; presentation cannot be established
+  clinical_precedent         0.40
+      no clinical agent, but Open Targets places this target in antibody-
+      tractability buckets: UniProt loc med conf
+  evidence_strength          0.81
+      strongest evidence level available is human, over 18 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.50       coverage 77%, confidence 0.62
+
+Compatible mechanisms (computational compatibility score):
+  (none passed their hard requirements)
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - adc, adcc, adcp, agonist_antibody, blocking_antibody, complement_recruitment, immune_marker_delivery, nk_cell_engager, rna_delivery, t_cell_engager, targeted_radionuclide:
+      surface_accessible not met: the protein is not reachable from outside
+      the cell, so a circulating binder cannot engage it
+  - genome_editing:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      patient_hla not met: the patient's HLA genotype is not available, and
+      peptide presentation is allele-specific
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - no HLA genotype supplied, so no mutation-derived peptide can be
+    prioritised
+
+Design readiness: 0.15 (coverage 77%)
+  blocked by: no therapeutic mechanism passes its hard requirements for this
+              target
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: no structure covers the region a binder would engage
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  human:
+    [UniProtKB/Swiss-Prot] CYP2A13 is Cytochrome P450 2A13 (494 aa), accession
+    Q16696
+    [UniProtKB/Swiss-Prot subcellular location] CYP2A13 is annotated at:
+    Endoplasmic reticulum membrane; Microsome membrane
+    [Gene Ontology cellular component (goa_human)] CYP2A13 is annotated to
+    cytoplasm (GO:0005737)
+    [Human Protein Atlas (consensus tissue RNA)] normal-tissue RNA levels for
+    CYP2A13 across 20 queried tissues
+  in_vitro:
+    [PDB (via UniProt cross-references)] residue 402 of CYP2A13 is resolved in
+    8 structures; best 2PG5 (X_RAY)
+  computational:
+    [AlphaFold DB] predicted structure Q16696 is available for CYP2A13; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS normal-tissue safety] CYP2A13: detected in 1/20 queried healthy
+    tissues; highest weighted liver at 1.9 nTPM; on-target/off-tumour risk low
+    (no queried healthy tissue reaches 10 nTPM; highest is liver at 1.9)
+    [GenomeOS evidence layering] CYP2A13: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] CYP2A13: no curated endocytosis, endosomal,
+    lysosomal or recycling annotation for this protein; internalisation is
+    unknown, not absent
+    [GenomeOS epitope reasoning] topology of CYP2A13 around residue 402 is not
+    curated; whether the change is exposed cannot be established
+
+Recognition mode for design: peptide_hla
+  the protein is not reachable from outside, but the alteration yields peptides that HLA could present; the target is the peptide/HLA complex, not the protein
+
+------------------------------------------------------------------------------
+TARGET: ESRRG  (Estrogen-related receptor gamma)
+------------------------------------------------------------------------------
+
+Classification:
+  intracellular only
+  ESRRG is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+
+Why interesting:
+  ESRRG is altered in this tumour
+
+Tumour evidence:
+  chr1:216507109 C>A  stop_gained  E403*
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: clonal (VAF 0.51)
+
+Normal tissue concern:
+  risk: moderate
+  kidney is an organ without a spare and carries 27.1 nTPM (threshold 10)
+  tissues above the concern threshold: kidney (27.1 nTPM), retina (33.5 nTPM), stomach (33.1 nTPM), placenta (10 nTPM)
+
+Surface accessibility:
+  nuclear, confidence 0.90
+
+Internalisation:
+  internalises: unknown
+  no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent
+
+Structure:
+  experimental entries: 12  predicted: P62508
+  epitope E403* at residue 403: extracellular=unknown, structurally resolved=yes
+    reference HEALQDYEAGQHMED -> mutant HEALQDY*AGQHMED
+
+Neoantigen / HLA route:
+  novel peptide sequence: no
+  the altered ENST00000408911 translates to 402 residues against 458 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  alteration_evidence        1.00
+      observed_alteration: this tumour's own DNA carries stop_gained E403*;
+      the alteration is observed in this patient and not inferred
+  surface_accessibility      0.00
+      curated localisation places nuclear inside the cell; a circulating
+      binder cannot reach it
+  tumour_selectivity         0.50
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enhanced' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.30
+      1 - log10(1 + 24.4) / log10(101), where 24.4 is kidney at 27.1 nTPM
+      weighted 0.9 (Human Protein Atlas consensus, population-level)
+  clonality                  1.00
+      variant allele fraction 0.51 indicates a clonal alteration
+  internalisation            unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  lysosomal_trafficking      unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  structural_bindability     unknown
+      protein is not surface-reachable, so an extracellular epitope does not
+      arise
+  neoantigen_strength        0.00
+      the altered ENST00000408911 translates to 402 residues against 458 with
+      no residue that differs from the reference: a truncation removes protein
+      rather than creating new sequence
+  presentation_confidence    unknown
+      peptide/HLA route does not apply to this variant
+  clinical_precedent         0.70
+      1 agents against this target have entered clinical trials
+  evidence_strength          0.85
+      strongest evidence level available is clinical, over 20 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.44       coverage 70%, confidence 0.59
+
+Compatible mechanisms (computational compatibility score):
+  (none passed their hard requirements)
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - adc, adcc, adcp, agonist_antibody, blocking_antibody, complement_recruitment, immune_marker_delivery, nk_cell_engager, rna_delivery, t_cell_engager, targeted_radionuclide:
+      surface_accessible not met: the protein is not reachable from outside
+      the cell, so a circulating binder cannot engage it
+  - genome_editing, tumour_suppressor_restoration:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      peptide_hla_target not met: no mutation-derived peptide could be
+      derived, so there is no peptide/HLA complex to recognise
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - a premature stop or frameshift often triggers nonsense-mediated decay,
+    which removes the transcript rather than producing a truncated protein;
+    whether any product is made here is unmeasured and would need tumour RNA-
+    seq
+  - Correcting or replacing one gene does not restore a normal cell. An
+    established malignancy carries several cooperating drivers, passenger
+    mutations, copy-number change, aneuploidy and epigenetic dysregulation;
+    reverting one of them removes one dependency, not the disease.
+
+Design readiness: 0.15 (coverage 77%)
+  blocked by: no therapeutic mechanism passes its hard requirements for this
+              target
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: no structure covers the region a binder would engage
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  clinical:
+    [Open Targets Platform / ChEMBL] 1 agents against ESRRG have entered
+    clinical trials
+  human:
+    [UniProtKB/Swiss-Prot] ESRRG is Estrogen-related receptor gamma (458 aa),
+    accession P62508
+    [UniProtKB/Swiss-Prot subcellular location] ESRRG is annotated at: Nucleus
+    [Human Protein Atlas (immunofluorescence)] ESRRG imaged in: Nucleoplasm
+    [Gene Ontology cellular component (goa_human)] ESRRG is annotated to
+    nucleus (GO:0005634)
+  in_vitro:
+    [PDB (via UniProt cross-references)] residue 403 of ESRRG is resolved in
+    32 structures; best 6I65 (X_RAY)
+  computational:
+    [AlphaFold DB] predicted structure P62508 is available for ESRRG; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS normal-tissue safety] ESRRG: detected in 15/20 queried healthy
+    tissues; highest weighted kidney at 27.1 nTPM; on-target/off-tumour risk
+    moderate (kidney is an organ without a spare and carries 27.1 nTPM
+    (threshold 10))
+    [GenomeOS evidence layering] ESRRG: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] ESRRG: no curated endocytosis, endosomal, lysosomal
+    or recycling annotation for this protein; internalisation is unknown, not
+    absent
+    [GenomeOS epitope reasoning] topology of ESRRG around residue 403 is not
+    curated; whether the change is exposed cannot be established
+
+Recognition mode for design: not_addressable
+  the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts
+
+------------------------------------------------------------------------------
+TARGET: KRAS  (GTPase KRas)
+------------------------------------------------------------------------------
+
+Classification:
+  neoantigen hla
+  KRAS is cytoplasmic and out of reach of a surface binder, but the alteration yields mutation-derived peptides that HLA could present
+
+Why interesting:
+  KRAS is a recurrent driver (15.0% of tumours); its alteration yields peptides that HLA could present, though the protein is internal; 2 approved therapies already engage it
+
+Tumour evidence:
+  chr12:25245350 C>A  missense_variant  G12V  driver in 15.0% of tumours  hotspot
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: clonal (VAF 0.71)
+
+Normal tissue concern:
+  risk: moderate
+  cerebral cortex is an organ without a spare and carries 17.4 nTPM (threshold 10)
+  tissues above the concern threshold: cerebral cortex (17.4 nTPM), bone marrow (16.1 nTPM), liver (13.1 nTPM), colon (20 nTPM), lung (11 nTPM), retina (16.2 nTPM), stomach (18.5 nTPM), esophagus (17.1 nTPM)
+
+Surface accessibility:
+  cytoplasmic, confidence 0.85
+
+Internalisation:
+  internalises: unknown
+  no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent
+
+Structure:
+  experimental entries: 12  predicted: P01116
+  epitope G12V at residue 12: extracellular=unknown, structurally resolved=yes
+    reference KLVVVGAGGVGKSAL -> mutant KLVVVGAVGVGKSAL
+
+Neoantigen / HLA route:
+  novel peptide sequence: yes
+  the altered ENST00000311936 translates to 188 residues against 188, diverging at residue 12 and producing 1 residue that exists in no reference protein
+  38 mutation-spanning peptides; example YKLVVVGAG -> YKLVVVGAV
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  alteration_evidence        1.00
+      observed_alteration: this tumour's own DNA carries missense_variant
+      G12V; the alteration is observed in this patient and not inferred
+  surface_accessibility      0.00
+      curated localisation places cytoplasmic inside the cell; a circulating
+      binder cannot reach it
+  tumour_selectivity         0.20
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Low tissue specificity' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.37
+      1 - log10(1 + 17.4) / log10(101), where 17.4 is cerebral cortex at 17.4
+      nTPM weighted 1 (Human Protein Atlas consensus, population-level)
+  clonality                  1.00
+      variant allele fraction 0.71 indicates a clonal alteration
+  internalisation            unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  lysosomal_trafficking      unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  structural_bindability     unknown
+      protein is not surface-reachable, so an extracellular epitope does not
+      arise
+  neoantigen_strength        0.30
+      mutation-spanning peptides derived (0.30); ceiling without presentation
+      evidence is 0.60
+  presentation_confidence    0.00
+      no binding or processing evidence; presentation cannot be established
+  clinical_precedent         1.00
+      2 approved therapies already engage this target
+  evidence_strength          0.95
+      strongest evidence level available is clinical, over 21 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.43       coverage 77%, confidence 0.73
+
+Compatible mechanisms (computational compatibility score):
+  (none passed their hard requirements)
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - adc, adcc, adcp, agonist_antibody, blocking_antibody, complement_recruitment, immune_marker_delivery, nk_cell_engager, rna_delivery, t_cell_engager, targeted_radionuclide:
+      surface_accessible not met: the protein is not reachable from outside
+      the cell, so a circulating binder cannot engage it
+  - genome_editing:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      patient_hla not met: the patient's HLA genotype is not available, and
+      peptide presentation is allele-specific
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - no HLA genotype supplied, so no mutation-derived peptide can be
+    prioritised
+
+Design readiness: 0.15 (coverage 77%)
+  blocked by: no therapeutic mechanism passes its hard requirements for this
+              target
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: no structure covers the region a binder would engage
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  clinical:
+    [Open Targets Platform / ChEMBL] 2 approved small molecule therapies
+    target KRAS: Adagrasib, Sotorasib
+    [Open Targets Platform / ChEMBL] 1 agents against KRAS have entered
+    clinical trials
+  human:
+    [UniProtKB/Swiss-Prot] KRAS is GTPase KRas (189 aa), accession P01116
+    [UniProtKB/Swiss-Prot subcellular location] KRAS is annotated at: Cell
+    membrane; Cytoplasm; Endomembrane system
+    [Human Protein Atlas (immunofluorescence)] KRAS imaged in: Cytosol
+    [Gene Ontology cellular component (goa_human)] KRAS is annotated to plasma
+    membrane (GO:0005886), cytoplasm (GO:0005737), mitochondrion (GO:0005739)
+  in_vitro:
+    [PDB (via UniProt cross-references)] residue 12 of KRAS is resolved in 478
+    structures; best 9IAY (X_RAY)
+  computational:
+    [AlphaFold DB] predicted structure P01116 is available for KRAS; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS accessibility] KRAS is held against the membrane by a lipid
+    anchor (S-palmitoyl cysteine) with no transmembrane segment and no
+    extracellular domain: it sits on the cytoplasmic face and a circulating
+    binder cannot reach it, despite the 'Cell membrane' annotation
+    [GenomeOS normal-tissue safety] KRAS: detected in 20/20 queried healthy
+    tissues; highest weighted cerebral cortex at 17.4 nTPM; on-target/off-
+    tumour risk moderate (cerebral cortex is an organ without a spare and
+    carries 17.4 nTPM (threshold 10))
+    [GenomeOS evidence layering] KRAS: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] KRAS: no curated endocytosis, endosomal, lysosomal
+    or recycling annotation for this protein; internalisation is unknown, not
+    absent
+
+Recognition mode for design: peptide_hla
+  the protein is not reachable from outside, but the alteration yields peptides that HLA could present; the target is the peptide/HLA complex, not the protein
+
+==============================================================================
+LIMITATIONS
+==============================================================================
+
+  - This analysis ran at data level 2 of 9. Conclusions that need a higher
+    level are reported as unavailable, not estimated.
+  - No tumour RNA or protein data was supplied, so for every candidate the
+    chain is: DNA evidence present, RNA evidence unavailable, protein evidence
+    unavailable, and surface expression cannot be established.
+  - Localisation, topology, trafficking and healthy-tissue expression are
+    curated population-level knowledge about the gene, not measurements of
+    this patient's tumour.
+  - A matched normal genome was supplied: every tumour record whose
+    chromosome, position and alleles appear among the normal's calls was
+    removed, and the rest are somatic by that subtraction rather than by
+    population frequency. The match is exact, so a variant written differently
+    in the two files is not removed.
+  - Mechanism compatibility scores describe how well the biology fits a
+    mechanism class. They are not probabilities that a patient responds.
+  - Correcting or replacing a single gene does not restore a normal cell:
+    established malignancies carry several cooperating alterations.
+  - GenomeOS produces no therapeutic sequence, construct, vector, formulation
+    or protocol.
+
+GenomeOS generates computational research hypotheses. Therapeutic target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation.

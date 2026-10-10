@@ -1,0 +1,357 @@
+{
+ "case": "GIAB HG008 (data/demo/hg008_pdac/provenance.json)",
+ "mode": "network",
+ "level_2": {
+  "level_reached": 2,
+  "highest_input_present": 2,
+  "inputs_present": [
+   "tumour_vcf",
+   "matched_normal"
+  ],
+  "tumour_records": 107,
+  "removed_by_the_normal": 0,
+  "records_ranked": 107,
+  "variants_total": 107,
+  "somatic_candidates": 107,
+  "likely_germline": 0,
+  "missing_data": [
+   "tumour RNA-seq",
+   "HLA genotype",
+   "tumour purity and variant allele fraction",
+   "copy number",
+   "structural variants",
+   "a cohort of the same cancer type",
+   "tumour proteomics",
+   "surface proteomics",
+   "immunopeptidomics",
+   "single-cell tumour data",
+   "tumour expression of this gene",
+   "internalisation",
+   "patient HLA genotype",
+   "predicted peptide/HLA binding",
+   "predicted antigen processing",
+   "observed presentation",
+   "clonality",
+   "induced surface phenotype"
+  ],
+  "candidates": [
+   {
+    "gene": "FGF23",
+    "target_class": "direct_surface",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "ADAMTS8",
+    "target_class": "direct_surface",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "CYP2A13",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "ESRRG",
+    "target_class": "intracellular_only",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "KRAS",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "NF1",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "TP53",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "GDI2",
+    "target_class": "intracellular_only",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "DOK5",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "FAM43A",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "SMAD4",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "INSYN1",
+    "target_class": "intracellular_only",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "KIT",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   },
+   {
+    "gene": "EGFR",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   },
+   {
+    "gene": "PDGFRB",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   },
+   {
+    "gene": "ERBB2",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   }
+  ]
+ },
+ "level_1_same_tumour_file": {
+  "level_reached": 1,
+  "highest_input_present": 1,
+  "inputs_present": [
+   "tumour_vcf"
+  ],
+  "tumour_records": 107,
+  "removed_by_the_normal": 0,
+  "records_ranked": 107,
+  "variants_total": 107,
+  "somatic_candidates": 106,
+  "likely_germline": 1,
+  "missing_data": [
+   "matched normal genome",
+   "tumour RNA-seq",
+   "HLA genotype",
+   "tumour purity and variant allele fraction",
+   "copy number",
+   "structural variants",
+   "a cohort of the same cancer type",
+   "tumour proteomics",
+   "surface proteomics",
+   "immunopeptidomics",
+   "single-cell tumour data",
+   "tumour expression of this gene",
+   "internalisation",
+   "patient HLA genotype",
+   "predicted peptide/HLA binding",
+   "predicted antigen processing",
+   "observed presentation",
+   "clonality",
+   "induced surface phenotype"
+  ],
+  "candidates": [
+   {
+    "gene": "FGF23",
+    "target_class": "direct_surface",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "ADAMTS8",
+    "target_class": "direct_surface",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "CYP2A13",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "ESRRG",
+    "target_class": "intracellular_only",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "KRAS",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "NF1",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "TP53",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "GDI2",
+    "target_class": "intracellular_only",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "DOK5",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "FAM43A",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "SMAD4",
+    "target_class": "neoantigen_hla",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "INSYN1",
+    "target_class": "intracellular_only",
+    "evidence_tier": "observed_alteration",
+    "somatic_status": [
+     "somatic_candidate"
+    ],
+    "expression_known": false
+   },
+   {
+    "gene": "KIT",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   },
+   {
+    "gene": "EGFR",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   },
+   {
+    "gene": "PDGFRB",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   },
+   {
+    "gene": "ERBB2",
+    "target_class": "pathway_induced_surface",
+    "evidence_tier": "association_hypothesis",
+    "somatic_status": [],
+    "expression_known": false
+   }
+  ]
+ },
+ "refused_at_level_2": [
+  "This analysis ran at data level 2 of 9. Conclusions that need a higher level are reported as unavailable, not estimated.",
+  "No tumour RNA or protein data was supplied, so for every candidate the chain is: DNA evidence present, RNA evidence unavailable, protein evidence unavailable, and surface expression cannot be established.",
+  "Localisation, topology, trafficking and healthy-tissue expression are curated population-level knowledge about the gene, not measurements of this patient's tumour.",
+  "A matched normal genome was supplied: every tumour record whose chromosome, position and alleles appear among the normal's calls was removed, and the rest are somatic by that subtraction rather than by population frequency. The match is exact, so a variant written differently in the two files is not removed.",
+  "Mechanism compatibility scores describe how well the biology fits a mechanism class. They are not probabilities that a patient responds.",
+  "Correcting or replacing a single gene does not restore a normal cell: established malignancies carry several cooperating alterations.",
+  "GenomeOS produces no therapeutic sequence, construct, vector, formulation or protocol."
+ ]
+}
