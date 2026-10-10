@@ -410,16 +410,27 @@ def test_available_counts_blocks_with_a_gene_near_enough_and_outside_the_block()
         {"chrom": "chr1", "start": 10_000, "end": 20_000, "gene": "IN", "element": [12_000, 12_200]},
         {"chrom": "chr1", "start": 10_000, "end": 20_000, "gene": "NONE", "element": [12_000, 12_200]},
     ]
-    tss = {"A": [("chr1", 60_000)], "FAR": [("chr1", 5_000_000)], "IN": [("chr1", 18_000)]}
+    rows_.append(
+        # a long block whose midpoint is within the cis window of its gene but whose element is not
+        {"chrom": "chr1", "start": 0, "end": 600_000, "gene": "EDGE", "element": [100, 300]}
+    )
+    tss = {
+        "A": [("chr1", 60_000)],
+        "FAR": [("chr1", 5_000_000)],
+        "IN": [("chr1", 18_000)],
+        "EDGE": [("chr1", 1_250_000)],
+    }
     got = ea.available(rows_, tss)
-    assert got["naming_a_gene"] == 4
-    assert got["usable_at_the_block_scale"] == 1 and got["usable_at_the_element_scale"] == 2
+    assert got["naming_a_gene"] == 5
+    assert got["usable_at_the_block_scale"] == 2 and got["usable_at_the_element_scale"] == 2
     assert got["not_usable"] == {
         "names_no_gene": 1,
         "beyond_the_cis_window": 1,
         "block_holds_the_tss": 1,
         "gene_without_a_tss_on_the_chromosome": 1,
+        "element_beyond_the_cis_window": 1,
     }
+    assert sum(got["distance_band_shares"]["element"].values()) == pytest.approx(1.0)
 
 
 # ---- the track as held ---------------------------------------------------------------------------

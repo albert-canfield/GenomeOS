@@ -1058,7 +1058,11 @@ def available(
         else:
             usable["block"].append(abs(tss - mid))
         es, ee = scaled(r["element"][0], r["element"][1], None)
-        if not holds_tss(es, ee, tss):
+        if abs(tss - (es + ee) // 2) > CIS_WINDOW:
+            reasons["element_beyond_the_cis_window"] += 1
+        elif holds_tss(es, ee, tss):
+            reasons["element_holds_the_tss"] += 1
+        else:
             usable["element"].append(abs(tss - (es + ee) // 2))
     return {
         "blocks": len(rows),
