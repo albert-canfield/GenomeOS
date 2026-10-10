@@ -1,0 +1,6219 @@
+{
+  "result": "regulators_census",
+  "date": "2026-10-10",
+  "lane": "lane-regulators",
+  "question": "how many compiled rules gain a factor as their source, on what evidence, per cell type",
+  "evidence_kinds": {
+    "occupancy_same_cell_with_motif": "measured occupancy in the rule's own cell, with the factor's own JASPAR profile matching inside the element; occupancy is not function",
+    "occupancy_same_cell": "measured occupancy in the rule's own cell, no match of the factor's profile (or no profile); possibly indirect; occupancy is not function",
+    "occupancy_other_cell": "measured occupancy only in other cell types: not a source in the rule's cell and never emitted there",
+    "motif_only": "predicted: a JASPAR match and no occupancy anywhere; a motif is not occupancy",
+    "unknown": "no evidence of either kind: the source stays UNKNOWN"
+  },
+  "totals": {
+    "rules": 440589,
+    "rules_gaining_a_source": 46889,
+    "share_gaining_a_source": 0.10642344679508567,
+    "by_kind": {
+      "occupancy_same_cell_with_motif": 30571,
+      "occupancy_same_cell": 16318,
+      "occupancy_other_cell": 327749,
+      "motif_only": 65951,
+      "unknown": 0
+    },
+    "candidate_pairs_in_own_cell": 611221,
+    "candidate_pairs_with_motif": 183619,
+    "direction_of_candidate_pairs": {
+      "activates": 122590,
+      "inhibits": 16042,
+      "unknown": 472589
+    },
+    "rules_with_a_directed_candidate": 27086,
+    "distinct_factors_used": 334,
+    "top_factors_by_rules": [
+      [
+        "CTCF",
+        15662
+      ],
+      [
+        "POLR2A",
+        9892
+      ],
+      [
+        "EP300",
+        9728
+      ],
+      [
+        "JUND",
+        8449
+      ],
+      [
+        "HDAC2",
+        7658
+      ],
+      [
+        "KDM1A",
+        7367
+      ],
+      [
+        "CREM",
+        7096
+      ],
+      [
+        "NCOR1",
+        6864
+      ],
+      [
+        "HDAC1",
+        6586
+      ],
+      [
+        "IKZF1",
+        6566
+      ],
+      [
+        "MAX",
+        6486
+      ],
+      [
+        "REST",
+        6444
+      ],
+      [
+        "SP1",
+        6321
+      ],
+      [
+        "YY1",
+        6065
+      ],
+      [
+        "TCF12",
+        5999
+      ],
+      [
+        "DPF2",
+        5941
+      ],
+      [
+        "ATF7",
+        5709
+      ],
+      [
+        "RNF2",
+        5471
+      ],
+      [
+        "NR2F6",
+        5444
+      ],
+      [
+        "RAD21",
+        5432
+      ],
+      [
+        "BHLHE40",
+        5063
+      ],
+      [
+        "FOXA1",
+        5038
+      ],
+      [
+        "MNT",
+        5034
+      ],
+      [
+        "FOXA2",
+        4900
+      ],
+      [
+        "ARID1B",
+        4619
+      ]
+    ],
+    "sources_per_rule_median": 2,
+    "sources_per_rule_max": 180,
+    "motif_matched_factors_per_rule_median": 361,
+    "rules_with_any_motif_match": 440589,
+    "elements": 440558,
+    "elements_with_any_occupancy": 374607
+  },
+  "contexts": {
+    "compiled_contexts": 317,
+    "contexts_with_chip": 71,
+    "rules_in_contexts_with_chip": 164149,
+    "rules_in_contexts_without_chip": 276440,
+    "chip_cell_labels_not_compiled": [
+      "22Rv1",
+      "AG04449",
+      "AG09309",
+      "AG09319",
+      "AG10803",
+      "C4_2B",
+      "DOHH2",
+      "GM06990",
+      "GM08714",
+      "GM10266",
+      "GM12864",
+      "GM12865",
+      "GM12873",
+      "GM12874",
+      "GM13977",
+      "GM20000",
+      "H54",
+      "HEK293",
+      "HEK293T",
+      "HFF_Myc",
+      "HL_60",
+      "Ishikawa",
+      "KMS_11",
+      "LNCAP",
+      "LNCaP_clone_FGC",
+      "Loucy",
+      "MM_1S",
+      "NB4",
+      "NCI_H929",
+      "NT2_D1",
+      "OCI_LY1",
+      "OCI_LY3",
+      "Parathyroid_adenoma",
+      "RWPE1",
+      "RWPE2",
+      "Raji",
+      "SH_SY5Y",
+      "SK_N_MC",
+      "SU_DHL_6",
+      "T47D",
+      "VCaP",
+      "WERI_Rb_1",
+      "WI38",
+      "astrocyte_of_the_cerebellum",
+      "astrocyte_of_the_spinal_cord",
+      "bipolar_neuron",
+      "brain_microvascular_endothelial_cell",
+      "cardiac_fibroblast",
+      "choroid_plexus_epithelial_cell",
+      "epithelial_cell_of_esophagus",
+      "epithelial_cell_of_prostate",
+      "erythroblast",
+      "fibroblast_of_mammary_gland",
+      "fibroblast_of_pulmonary_artery",
+      "medulloblastoma",
+      "neutrophil",
+      "retinal_pigment_epithelial_cell",
+      "tibial_artery"
+    ]
+  },
+  "per_cell_with_chip": {
+    "K562": {
+      "rules": 27445,
+      "rules_gaining_a_source": 13952,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 10606,
+        "occupancy_same_cell": 3346,
+        "occupancy_other_cell": 9331,
+        "motif_only": 4162,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 373501,
+      "candidate_pairs_with_motif": 99348,
+      "direction_of_candidate_pairs": {
+        "activates": 61280,
+        "inhibits": 8473,
+        "unknown": 303748
+      },
+      "rules_with_a_directed_candidate": 9544,
+      "distinct_factors": 248,
+      "top_factors_by_rules": [
+        [
+          "HDAC1",
+          4999
+        ],
+        [
+          "ARID1B",
+          4619
+        ],
+        [
+          "RNF2",
+          4604
+        ],
+        [
+          "DPF2",
+          4594
+        ],
+        [
+          "IKZF1",
+          4582
+        ],
+        [
+          "SMARCA4",
+          4532
+        ],
+        [
+          "CBFA2T3",
+          4523
+        ],
+        [
+          "HDAC2",
+          4385
+        ],
+        [
+          "POLR2A",
+          4229
+        ],
+        [
+          "MAX",
+          4216
+        ]
+      ],
+      "sources_per_rule_median": 8,
+      "sources_per_rule_max": 180,
+      "motif_matched_factors_per_rule_median": 362,
+      "rules_with_any_motif_match": 27445,
+      "factors_with_chip_in_this_cell": 249
+    },
+    "CD14_positive_monocyte": {
+      "rules": 15540,
+      "rules_gaining_a_source": 1299,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 664,
+        "occupancy_same_cell": 635,
+        "occupancy_other_cell": 12233,
+        "motif_only": 2008,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 1299,
+      "candidate_pairs_with_motif": 664,
+      "direction_of_candidate_pairs": {
+        "inhibits": 541,
+        "unknown": 758
+      },
+      "rules_with_a_directed_candidate": 541,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          1299
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 370,
+      "rules_with_any_motif_match": 15540,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "HepG2": {
+      "rules": 14779,
+      "rules_gaining_a_source": 8006,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 6233,
+        "occupancy_same_cell": 1773,
+        "occupancy_other_cell": 4639,
+        "motif_only": 2134,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 125352,
+      "candidate_pairs_with_motif": 44075,
+      "direction_of_candidate_pairs": {
+        "activates": 33618,
+        "inhibits": 1885,
+        "unknown": 89849
+      },
+      "rules_with_a_directed_candidate": 6004,
+      "distinct_factors": 119,
+      "top_factors_by_rules": [
+        [
+          "FOXA2",
+          3954
+        ],
+        [
+          "FOXA1",
+          3942
+        ],
+        [
+          "SP1",
+          3664
+        ],
+        [
+          "KDM1A",
+          3536
+        ],
+        [
+          "EP300",
+          3535
+        ],
+        [
+          "NR2F6",
+          3089
+        ],
+        [
+          "CREM",
+          3046
+        ],
+        [
+          "RXRA",
+          3015
+        ],
+        [
+          "HNF4A",
+          2960
+        ],
+        [
+          "ASH2L",
+          2897
+        ]
+      ],
+      "sources_per_rule_median": 9,
+      "sources_per_rule_max": 83,
+      "motif_matched_factors_per_rule_median": 367,
+      "rules_with_any_motif_match": 14779,
+      "factors_with_chip_in_this_cell": 119
+    },
+    "neural_cell": {
+      "rules": 9955,
+      "rules_gaining_a_source": 2394,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 1094,
+        "occupancy_same_cell": 1300,
+        "occupancy_other_cell": 6314,
+        "motif_only": 1247,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 5102,
+      "candidate_pairs_with_motif": 1204,
+      "direction_of_candidate_pairs": {
+        "inhibits": 781,
+        "unknown": 4321
+      },
+      "rules_with_a_directed_candidate": 627,
+      "distinct_factors": 6,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          1265
+        ],
+        [
+          "MXI1",
+          1218
+        ],
+        [
+          "SMC3",
+          839
+        ],
+        [
+          "RAD21",
+          795
+        ],
+        [
+          "EP300",
+          736
+        ],
+        [
+          "EZH2",
+          249
+        ]
+      ],
+      "sources_per_rule_median": 2,
+      "sources_per_rule_max": 6,
+      "motif_matched_factors_per_rule_median": 341,
+      "rules_with_any_motif_match": 9955,
+      "factors_with_chip_in_this_cell": 6
+    },
+    "GM23248": {
+      "rules": 6901,
+      "rules_gaining_a_source": 162,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 162,
+        "occupancy_other_cell": 5944,
+        "motif_only": 795,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 162,
+      "candidate_pairs_with_motif": 0,
+      "direction_of_candidate_pairs": {
+        "unknown": 162
+      },
+      "rules_with_a_directed_candidate": 0,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "EZH2",
+          162
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 364,
+      "rules_with_any_motif_match": 6901,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "GM12878": {
+      "rules": 6406,
+      "rules_gaining_a_source": 3267,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 2716,
+        "occupancy_same_cell": 551,
+        "occupancy_other_cell": 2275,
+        "motif_only": 864,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 56773,
+      "candidate_pairs_with_motif": 20201,
+      "direction_of_candidate_pairs": {
+        "activates": 15849,
+        "inhibits": 949,
+        "unknown": 39975
+      },
+      "rules_with_a_directed_candidate": 2544,
+      "distinct_factors": 118,
+      "top_factors_by_rules": [
+        [
+          "IKZF1",
+          1972
+        ],
+        [
+          "IKZF2",
+          1633
+        ],
+        [
+          "RUNX3",
+          1467
+        ],
+        [
+          "RELB",
+          1354
+        ],
+        [
+          "MTA2",
+          1266
+        ],
+        [
+          "DPF2",
+          1236
+        ],
+        [
+          "NFIC",
+          1185
+        ],
+        [
+          "BHLHE40",
+          1169
+        ],
+        [
+          "MEF2B",
+          1160
+        ],
+        [
+          "ATF7",
+          1116
+        ]
+      ],
+      "sources_per_rule_median": 10,
+      "sources_per_rule_max": 82,
+      "motif_matched_factors_per_rule_median": 366,
+      "rules_with_any_motif_match": 6406,
+      "factors_with_chip_in_this_cell": 122
+    },
+    "endothelial_cell_of_umbilical_vein": {
+      "rules": 6215,
+      "rules_gaining_a_source": 1401,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 980,
+        "occupancy_same_cell": 421,
+        "occupancy_other_cell": 3692,
+        "motif_only": 1122,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 2247,
+      "candidate_pairs_with_motif": 1295,
+      "direction_of_candidate_pairs": {
+        "activates": 1264,
+        "inhibits": 156,
+        "unknown": 827
+      },
+      "rules_with_a_directed_candidate": 977,
+      "distinct_factors": 4,
+      "top_factors_by_rules": [
+        [
+          "FOS",
+          771
+        ],
+        [
+          "GATA2",
+          619
+        ],
+        [
+          "POLR2A",
+          484
+        ],
+        [
+          "CTCF",
+          373
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 4,
+      "motif_matched_factors_per_rule_median": 365,
+      "rules_with_any_motif_match": 6215,
+      "factors_with_chip_in_this_cell": 4
+    },
+    "GM23338": {
+      "rules": 5689,
+      "rules_gaining_a_source": 1872,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 868,
+        "occupancy_same_cell": 1004,
+        "occupancy_other_cell": 3005,
+        "motif_only": 812,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 2296,
+      "candidate_pairs_with_motif": 976,
+      "direction_of_candidate_pairs": {
+        "activates": 264,
+        "inhibits": 392,
+        "unknown": 1640
+      },
+      "rules_with_a_directed_candidate": 639,
+      "distinct_factors": 5,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          823
+        ],
+        [
+          "NANOG",
+          744
+        ],
+        [
+          "EZH2",
+          359
+        ],
+        [
+          "ETS1",
+          291
+        ],
+        [
+          "REST",
+          79
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 4,
+      "motif_matched_factors_per_rule_median": 357,
+      "rules_with_any_motif_match": 5689,
+      "factors_with_chip_in_this_cell": 5
+    },
+    "keratinocyte": {
+      "rules": 5361,
+      "rules_gaining_a_source": 449,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 202,
+        "occupancy_same_cell": 247,
+        "occupancy_other_cell": 3981,
+        "motif_only": 931,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 449,
+      "candidate_pairs_with_motif": 202,
+      "direction_of_candidate_pairs": {
+        "inhibits": 168,
+        "unknown": 281
+      },
+      "rules_with_a_directed_candidate": 168,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          449
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 370,
+      "rules_with_any_motif_match": 5361,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "OCI_LY7": {
+      "rules": 5173,
+      "rules_gaining_a_source": 704,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 331,
+        "occupancy_same_cell": 373,
+        "occupancy_other_cell": 3780,
+        "motif_only": 689,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 704,
+      "candidate_pairs_with_motif": 331,
+      "direction_of_candidate_pairs": {
+        "inhibits": 239,
+        "unknown": 465
+      },
+      "rules_with_a_directed_candidate": 239,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          704
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 366,
+      "rules_with_any_motif_match": 5173,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "liver": {
+      "rules": 4289,
+      "rules_gaining_a_source": 2062,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 1810,
+        "occupancy_same_cell": 252,
+        "occupancy_other_cell": 1746,
+        "motif_only": 481,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 17045,
+      "candidate_pairs_with_motif": 7699,
+      "direction_of_candidate_pairs": {
+        "activates": 6235,
+        "inhibits": 445,
+        "unknown": 10365
+      },
+      "rules_with_a_directed_candidate": 1736,
+      "distinct_factors": 18,
+      "top_factors_by_rules": [
+        [
+          "SP1",
+          1492
+        ],
+        [
+          "HNF4A",
+          1488
+        ],
+        [
+          "RXRA",
+          1417
+        ],
+        [
+          "RAD21",
+          1245
+        ],
+        [
+          "YY1",
+          1242
+        ],
+        [
+          "MAX",
+          1095
+        ],
+        [
+          "REST",
+          1048
+        ],
+        [
+          "JUND",
+          1027
+        ],
+        [
+          "FOXA2",
+          946
+        ],
+        [
+          "ATF3",
+          884
+        ]
+      ],
+      "sources_per_rule_median": 8,
+      "sources_per_rule_max": 18,
+      "motif_matched_factors_per_rule_median": 365,
+      "rules_with_any_motif_match": 4289,
+      "factors_with_chip_in_this_cell": 18
+    },
+    "GM12892": {
+      "rules": 4092,
+      "rules_gaining_a_source": 461,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 97,
+        "occupancy_same_cell": 364,
+        "occupancy_other_cell": 3051,
+        "motif_only": 580,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 629,
+      "candidate_pairs_with_motif": 97,
+      "direction_of_candidate_pairs": {
+        "unknown": 629
+      },
+      "rules_with_a_directed_candidate": 0,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          316
+        ],
+        [
+          "YY1",
+          223
+        ],
+        [
+          "TAF1",
+          90
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 370,
+      "rules_with_any_motif_match": 4092,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "H1": {
+      "rules": 3748,
+      "rules_gaining_a_source": 1639,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 811,
+        "occupancy_same_cell": 828,
+        "occupancy_other_cell": 1462,
+        "motif_only": 647,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 8754,
+      "candidate_pairs_with_motif": 1574,
+      "direction_of_candidate_pairs": {
+        "activates": 1157,
+        "inhibits": 277,
+        "unknown": 7320
+      },
+      "rules_with_a_directed_candidate": 834,
+      "distinct_factors": 46,
+      "top_factors_by_rules": [
+        [
+          "ASH2L",
+          605
+        ],
+        [
+          "POLR2A",
+          547
+        ],
+        [
+          "SIN3A",
+          487
+        ],
+        [
+          "CTCF",
+          469
+        ],
+        [
+          "HDAC2",
+          418
+        ],
+        [
+          "TAF1",
+          391
+        ],
+        [
+          "KDM4A",
+          390
+        ],
+        [
+          "RAD21",
+          367
+        ],
+        [
+          "SP1",
+          343
+        ],
+        [
+          "RBBP5",
+          343
+        ]
+      ],
+      "sources_per_rule_median": 4,
+      "sources_per_rule_max": 25,
+      "motif_matched_factors_per_rule_median": 355,
+      "rules_with_any_motif_match": 3748,
+      "factors_with_chip_in_this_cell": 46
+    },
+    "foreskin_keratinocyte": {
+      "rules": 3581,
+      "rules_gaining_a_source": 495,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 211,
+        "occupancy_same_cell": 284,
+        "occupancy_other_cell": 2418,
+        "motif_only": 668,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 495,
+      "candidate_pairs_with_motif": 211,
+      "direction_of_candidate_pairs": {
+        "inhibits": 174,
+        "unknown": 321
+      },
+      "rules_with_a_directed_candidate": 174,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          495
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 359,
+      "rules_with_any_motif_match": 3581,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "GM12891": {
+      "rules": 3373,
+      "rules_gaining_a_source": 1066,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 439,
+        "occupancy_same_cell": 627,
+        "occupancy_other_cell": 1944,
+        "motif_only": 363,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 2151,
+      "candidate_pairs_with_motif": 514,
+      "direction_of_candidate_pairs": {
+        "activates": 148,
+        "unknown": 2003
+      },
+      "rules_with_a_directed_candidate": 148,
+      "distinct_factors": 6,
+      "top_factors_by_rules": [
+        [
+          "SPI1",
+          692
+        ],
+        [
+          "POU2F2",
+          444
+        ],
+        [
+          "POLR2A",
+          375
+        ],
+        [
+          "YY1",
+          254
+        ],
+        [
+          "TAF1",
+          233
+        ],
+        [
+          "PAX5",
+          153
+        ]
+      ],
+      "sources_per_rule_median": 2,
+      "sources_per_rule_max": 6,
+      "motif_matched_factors_per_rule_median": 375,
+      "rules_with_any_motif_match": 3373,
+      "factors_with_chip_in_this_cell": 6
+    },
+    "IMR_90": {
+      "rules": 2942,
+      "rules_gaining_a_source": 919,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 682,
+        "occupancy_same_cell": 237,
+        "occupancy_other_cell": 1622,
+        "motif_only": 401,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 2488,
+      "candidate_pairs_with_motif": 1126,
+      "direction_of_candidate_pairs": {
+        "activates": 675,
+        "inhibits": 140,
+        "unknown": 1673
+      },
+      "rules_with_a_directed_candidate": 621,
+      "distinct_factors": 12,
+      "top_factors_by_rules": [
+        [
+          "FOS",
+          464
+        ],
+        [
+          "CEBPB",
+          372
+        ],
+        [
+          "BHLHE40",
+          290
+        ],
+        [
+          "CTCF",
+          276
+        ],
+        [
+          "MAFK",
+          235
+        ],
+        [
+          "RAD21",
+          227
+        ],
+        [
+          "SMC3",
+          164
+        ],
+        [
+          "RCOR1",
+          155
+        ],
+        [
+          "NFE2L2",
+          147
+        ],
+        [
+          "USF2",
+          93
+        ]
+      ],
+      "sources_per_rule_median": 2,
+      "sources_per_rule_max": 10,
+      "motif_matched_factors_per_rule_median": 364,
+      "rules_with_any_motif_match": 2942,
+      "factors_with_chip_in_this_cell": 12
+    },
+    "heart_left_ventricle": {
+      "rules": 2829,
+      "rules_gaining_a_source": 464,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 123,
+        "occupancy_same_cell": 341,
+        "occupancy_other_cell": 1797,
+        "motif_only": 568,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 560,
+      "candidate_pairs_with_motif": 123,
+      "direction_of_candidate_pairs": {
+        "inhibits": 87,
+        "unknown": 473
+      },
+      "rules_with_a_directed_candidate": 87,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          284
+        ],
+        [
+          "POLR2A",
+          276
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 358,
+      "rules_with_any_motif_match": 2829,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "B_cell": {
+      "rules": 2496,
+      "rules_gaining_a_source": 363,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 200,
+        "occupancy_same_cell": 163,
+        "occupancy_other_cell": 1756,
+        "motif_only": 377,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 363,
+      "candidate_pairs_with_motif": 200,
+      "direction_of_candidate_pairs": {
+        "inhibits": 192,
+        "unknown": 171
+      },
+      "rules_with_a_directed_candidate": 192,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          363
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 361,
+      "rules_with_any_motif_match": 2496,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "AG04450": {
+      "rules": 1945,
+      "rules_gaining_a_source": 153,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 84,
+        "occupancy_same_cell": 69,
+        "occupancy_other_cell": 1389,
+        "motif_only": 403,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 153,
+      "candidate_pairs_with_motif": 84,
+      "direction_of_candidate_pairs": {
+        "inhibits": 76,
+        "unknown": 77
+      },
+      "rules_with_a_directed_candidate": 76,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          153
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 361,
+      "rules_with_any_motif_match": 1945,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "cardiac_muscle_cell": {
+      "rules": 1865,
+      "rules_gaining_a_source": 193,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 85,
+        "occupancy_same_cell": 108,
+        "occupancy_other_cell": 1360,
+        "motif_only": 312,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 193,
+      "candidate_pairs_with_motif": 85,
+      "direction_of_candidate_pairs": {
+        "inhibits": 75,
+        "unknown": 118
+      },
+      "rules_with_a_directed_candidate": 75,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          193
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 358,
+      "rules_with_any_motif_match": 1865,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "gastrocnemius_medialis": {
+      "rules": 1764,
+      "rules_gaining_a_source": 526,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 98,
+        "occupancy_same_cell": 428,
+        "occupancy_other_cell": 1025,
+        "motif_only": 213,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 648,
+      "candidate_pairs_with_motif": 98,
+      "direction_of_candidate_pairs": {
+        "inhibits": 85,
+        "unknown": 563
+      },
+      "rules_with_a_directed_candidate": 85,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          407
+        ],
+        [
+          "CTCF",
+          241
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 351,
+      "rules_with_any_motif_match": 1764,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "testis": {
+      "rules": 1751,
+      "rules_gaining_a_source": 251,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 95,
+        "occupancy_same_cell": 156,
+        "occupancy_other_cell": 1207,
+        "motif_only": 293,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 277,
+      "candidate_pairs_with_motif": 95,
+      "direction_of_candidate_pairs": {
+        "inhibits": 53,
+        "unknown": 224
+      },
+      "rules_with_a_directed_candidate": 53,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          201
+        ],
+        [
+          "POLR2A",
+          76
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 344,
+      "rules_with_any_motif_match": 1751,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "lower_leg_skin": {
+      "rules": 1713,
+      "rules_gaining_a_source": 68,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 36,
+        "occupancy_same_cell": 32,
+        "occupancy_other_cell": 1312,
+        "motif_only": 333,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 75,
+      "candidate_pairs_with_motif": 36,
+      "direction_of_candidate_pairs": {
+        "inhibits": 25,
+        "unknown": 50
+      },
+      "rules_with_a_directed_candidate": 25,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          64
+        ],
+        [
+          "POLR2A",
+          11
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 368,
+      "rules_with_any_motif_match": 1713,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "sigmoid_colon": {
+      "rules": 1566,
+      "rules_gaining_a_source": 320,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 55,
+        "occupancy_same_cell": 265,
+        "occupancy_other_cell": 1026,
+        "motif_only": 220,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 398,
+      "candidate_pairs_with_motif": 55,
+      "direction_of_candidate_pairs": {
+        "inhibits": 47,
+        "unknown": 351
+      },
+      "rules_with_a_directed_candidate": 47,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          180
+        ],
+        [
+          "CTCF",
+          114
+        ],
+        [
+          "EP300",
+          104
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 363,
+      "rules_with_any_motif_match": 1566,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "HeLa_S3": {
+      "rules": 1563,
+      "rules_gaining_a_source": 345,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 183,
+        "occupancy_same_cell": 162,
+        "occupancy_other_cell": 1018,
+        "motif_only": 200,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 750,
+      "candidate_pairs_with_motif": 284,
+      "direction_of_candidate_pairs": {
+        "activates": 205,
+        "inhibits": 7,
+        "unknown": 538
+      },
+      "rules_with_a_directed_candidate": 153,
+      "distinct_factors": 12,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          216
+        ],
+        [
+          "TBP",
+          157
+        ],
+        [
+          "MAFK",
+          102
+        ],
+        [
+          "MAFF",
+          98
+        ],
+        [
+          "NFE2L2",
+          83
+        ],
+        [
+          "REST",
+          31
+        ],
+        [
+          "GABPA",
+          29
+        ],
+        [
+          "SREBF2",
+          13
+        ],
+        [
+          "ZHX1",
+          11
+        ],
+        [
+          "EZH2",
+          5
+        ]
+      ],
+      "sources_per_rule_median": 2,
+      "sources_per_rule_max": 6,
+      "motif_matched_factors_per_rule_median": 369,
+      "rules_with_any_motif_match": 1563,
+      "factors_with_chip_in_this_cell": 12
+    },
+    "mammary_epithelial_cell": {
+      "rules": 1557,
+      "rules_gaining_a_source": 166,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 74,
+        "occupancy_same_cell": 92,
+        "occupancy_other_cell": 1154,
+        "motif_only": 237,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 166,
+      "candidate_pairs_with_motif": 74,
+      "direction_of_candidate_pairs": {
+        "inhibits": 47,
+        "unknown": 119
+      },
+      "rules_with_a_directed_candidate": 47,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          166
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 363,
+      "rules_with_any_motif_match": 1557,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "ascending_aorta": {
+      "rules": 1426,
+      "rules_gaining_a_source": 276,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 91,
+        "occupancy_same_cell": 185,
+        "occupancy_other_cell": 1096,
+        "motif_only": 54,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 276,
+      "candidate_pairs_with_motif": 91,
+      "direction_of_candidate_pairs": {
+        "inhibits": 22,
+        "unknown": 254
+      },
+      "rules_with_a_directed_candidate": 22,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          276
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 298,
+      "rules_with_any_motif_match": 1426,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "foreskin_fibroblast": {
+      "rules": 1369,
+      "rules_gaining_a_source": 192,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 72,
+        "occupancy_same_cell": 120,
+        "occupancy_other_cell": 1017,
+        "motif_only": 160,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 192,
+      "candidate_pairs_with_motif": 72,
+      "direction_of_candidate_pairs": {
+        "inhibits": 30,
+        "unknown": 162
+      },
+      "rules_with_a_directed_candidate": 30,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          192
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 336,
+      "rules_with_any_motif_match": 1369,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "neural_progenitor_cell": {
+      "rules": 1226,
+      "rules_gaining_a_source": 348,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 77,
+        "occupancy_same_cell": 271,
+        "occupancy_other_cell": 721,
+        "motif_only": 157,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 422,
+      "candidate_pairs_with_motif": 77,
+      "direction_of_candidate_pairs": {
+        "inhibits": 88,
+        "unknown": 334
+      },
+      "rules_with_a_directed_candidate": 88,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "EZH2",
+          224
+        ],
+        [
+          "CTCF",
+          198
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 332,
+      "rules_with_any_motif_match": 1226,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "myotube": {
+      "rules": 1061,
+      "rules_gaining_a_source": 101,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 55,
+        "occupancy_same_cell": 46,
+        "occupancy_other_cell": 816,
+        "motif_only": 144,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 101,
+      "candidate_pairs_with_motif": 55,
+      "direction_of_candidate_pairs": {
+        "inhibits": 52,
+        "unknown": 49
+      },
+      "rules_with_a_directed_candidate": 52,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          101
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 369,
+      "rules_with_any_motif_match": 1061,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "subcutaneous_adipose_tissue": {
+      "rules": 921,
+      "rules_gaining_a_source": 0,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 776,
+        "motif_only": 145,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 0,
+      "candidate_pairs_with_motif": 0,
+      "direction_of_candidate_pairs": {},
+      "rules_with_a_directed_candidate": 0,
+      "distinct_factors": 0,
+      "top_factors_by_rules": [],
+      "sources_per_rule_median": null,
+      "sources_per_rule_max": null,
+      "motif_matched_factors_per_rule_median": 369,
+      "rules_with_any_motif_match": 921,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "transverse_colon": {
+      "rules": 902,
+      "rules_gaining_a_source": 230,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 51,
+        "occupancy_same_cell": 179,
+        "occupancy_other_cell": 558,
+        "motif_only": 114,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 297,
+      "candidate_pairs_with_motif": 51,
+      "direction_of_candidate_pairs": {
+        "inhibits": 42,
+        "unknown": 255
+      },
+      "rules_with_a_directed_candidate": 42,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          136
+        ],
+        [
+          "CTCF",
+          112
+        ],
+        [
+          "EP300",
+          49
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 367,
+      "rules_with_any_motif_match": 902,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "smooth_muscle_cell": {
+      "rules": 819,
+      "rules_gaining_a_source": 89,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 43,
+        "occupancy_same_cell": 46,
+        "occupancy_other_cell": 613,
+        "motif_only": 117,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 89,
+      "candidate_pairs_with_motif": 43,
+      "direction_of_candidate_pairs": {
+        "inhibits": 42,
+        "unknown": 47
+      },
+      "rules_with_a_directed_candidate": 42,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          89
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 349,
+      "rules_with_any_motif_match": 819,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "adrenal_gland": {
+      "rules": 779,
+      "rules_gaining_a_source": 155,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 50,
+        "occupancy_same_cell": 105,
+        "occupancy_other_cell": 515,
+        "motif_only": 109,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 180,
+      "candidate_pairs_with_motif": 50,
+      "direction_of_candidate_pairs": {
+        "inhibits": 33,
+        "unknown": 147
+      },
+      "rules_with_a_directed_candidate": 33,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          95
+        ],
+        [
+          "POLR2A",
+          85
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 353,
+      "rules_with_any_motif_match": 779,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "fibroblast_of_lung": {
+      "rules": 751,
+      "rules_gaining_a_source": 74,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 36,
+        "occupancy_same_cell": 38,
+        "occupancy_other_cell": 541,
+        "motif_only": 136,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 74,
+      "candidate_pairs_with_motif": 36,
+      "direction_of_candidate_pairs": {
+        "inhibits": 29,
+        "unknown": 45
+      },
+      "rules_with_a_directed_candidate": 29,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          74
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 358,
+      "rules_with_any_motif_match": 751,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "MCF_7": {
+      "rules": 683,
+      "rules_gaining_a_source": 345,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 244,
+        "occupancy_same_cell": 101,
+        "occupancy_other_cell": 262,
+        "motif_only": 76,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 2609,
+      "candidate_pairs_with_motif": 750,
+      "direction_of_candidate_pairs": {
+        "activates": 671,
+        "inhibits": 37,
+        "unknown": 1901
+      },
+      "rules_with_a_directed_candidate": 228,
+      "distinct_factors": 74,
+      "top_factors_by_rules": [
+        [
+          "CTBP1",
+          124
+        ],
+        [
+          "GATA3",
+          122
+        ],
+        [
+          "FOS",
+          117
+        ],
+        [
+          "CTCF",
+          114
+        ],
+        [
+          "DPF2",
+          111
+        ],
+        [
+          "ZNF217",
+          106
+        ],
+        [
+          "FOXA1",
+          101
+        ],
+        [
+          "SMARCE1",
+          96
+        ],
+        [
+          "MYC",
+          94
+        ],
+        [
+          "MNT",
+          86
+        ]
+      ],
+      "sources_per_rule_median": 4,
+      "sources_per_rule_max": 48,
+      "motif_matched_factors_per_rule_median": 361,
+      "rules_with_any_motif_match": 683,
+      "factors_with_chip_in_this_cell": 76
+    },
+    "Peyer_s_patch": {
+      "rules": 670,
+      "rules_gaining_a_source": 167,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 40,
+        "occupancy_same_cell": 127,
+        "occupancy_other_cell": 395,
+        "motif_only": 108,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 211,
+      "candidate_pairs_with_motif": 40,
+      "direction_of_candidate_pairs": {
+        "inhibits": 18,
+        "unknown": 193
+      },
+      "rules_with_a_directed_candidate": 18,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          109
+        ],
+        [
+          "CTCF",
+          102
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 369,
+      "rules_with_any_motif_match": 670,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "MCF_10A": {
+      "rules": 636,
+      "rules_gaining_a_source": 231,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 181,
+        "occupancy_same_cell": 50,
+        "occupancy_other_cell": 331,
+        "motif_only": 74,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 457,
+      "candidate_pairs_with_motif": 306,
+      "direction_of_candidate_pairs": {
+        "activates": 266,
+        "unknown": 191
+      },
+      "rules_with_a_directed_candidate": 170,
+      "distinct_factors": 4,
+      "top_factors_by_rules": [
+        [
+          "FOS",
+          176
+        ],
+        [
+          "STAT3",
+          107
+        ],
+        [
+          "MYC",
+          92
+        ],
+        [
+          "POLR2A",
+          82
+        ]
+      ],
+      "sources_per_rule_median": 2,
+      "sources_per_rule_max": 4,
+      "motif_matched_factors_per_rule_median": 361,
+      "rules_with_any_motif_match": 636,
+      "factors_with_chip_in_this_cell": 4
+    },
+    "BE2C": {
+      "rules": 619,
+      "rules_gaining_a_source": 92,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 43,
+        "occupancy_same_cell": 49,
+        "occupancy_other_cell": 460,
+        "motif_only": 67,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 92,
+      "candidate_pairs_with_motif": 43,
+      "direction_of_candidate_pairs": {
+        "inhibits": 19,
+        "unknown": 73
+      },
+      "rules_with_a_directed_candidate": 19,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          92
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 339,
+      "rules_with_any_motif_match": 619,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "HCT116": {
+      "rules": 594,
+      "rules_gaining_a_source": 173,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 141,
+        "occupancy_same_cell": 32,
+        "occupancy_other_cell": 345,
+        "motif_only": 76,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 201,
+      "candidate_pairs_with_motif": 147,
+      "direction_of_candidate_pairs": {
+        "activates": 116,
+        "inhibits": 19,
+        "unknown": 66
+      },
+      "rules_with_a_directed_candidate": 133,
+      "distinct_factors": 4,
+      "top_factors_by_rules": [
+        [
+          "JUND",
+          80
+        ],
+        [
+          "CTCF",
+          75
+        ],
+        [
+          "ZFX",
+          44
+        ],
+        [
+          "EZH2",
+          2
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 360,
+      "rules_with_any_motif_match": 594,
+      "factors_with_chip_in_this_cell": 4
+    },
+    "right_lobe_of_liver": {
+      "rules": 527,
+      "rules_gaining_a_source": 112,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 25,
+        "occupancy_same_cell": 87,
+        "occupancy_other_cell": 353,
+        "motif_only": 62,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 129,
+      "candidate_pairs_with_motif": 25,
+      "direction_of_candidate_pairs": {
+        "inhibits": 28,
+        "unknown": 101
+      },
+      "rules_with_a_directed_candidate": 28,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          74
+        ],
+        [
+          "CTCF",
+          55
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 350,
+      "rules_with_any_motif_match": 527,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "thyroid_gland": {
+      "rules": 426,
+      "rules_gaining_a_source": 59,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 14,
+        "occupancy_same_cell": 45,
+        "occupancy_other_cell": 271,
+        "motif_only": 96,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 70,
+      "candidate_pairs_with_motif": 14,
+      "direction_of_candidate_pairs": {
+        "inhibits": 14,
+        "unknown": 56
+      },
+      "rules_with_a_directed_candidate": 14,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          38
+        ],
+        [
+          "POLR2A",
+          32
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 362,
+      "rules_with_any_motif_match": 426,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "BJ": {
+      "rules": 418,
+      "rules_gaining_a_source": 46,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 29,
+        "occupancy_same_cell": 17,
+        "occupancy_other_cell": 308,
+        "motif_only": 64,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 46,
+      "candidate_pairs_with_motif": 29,
+      "direction_of_candidate_pairs": {
+        "inhibits": 20,
+        "unknown": 26
+      },
+      "rules_with_a_directed_candidate": 20,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          46
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 363,
+      "rules_with_any_motif_match": 418,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "spleen": {
+      "rules": 411,
+      "rules_gaining_a_source": 60,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 24,
+        "occupancy_same_cell": 36,
+        "occupancy_other_cell": 271,
+        "motif_only": 80,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 65,
+      "candidate_pairs_with_motif": 24,
+      "direction_of_candidate_pairs": {
+        "inhibits": 17,
+        "unknown": 48
+      },
+      "rules_with_a_directed_candidate": 17,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          50
+        ],
+        [
+          "POLR2A",
+          15
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 345,
+      "rules_with_any_motif_match": 411,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "A673": {
+      "rules": 411,
+      "rules_gaining_a_source": 35,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 9,
+        "occupancy_same_cell": 26,
+        "occupancy_other_cell": 212,
+        "motif_only": 164,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 37,
+      "candidate_pairs_with_motif": 9,
+      "direction_of_candidate_pairs": {
+        "inhibits": 6,
+        "unknown": 31
+      },
+      "rules_with_a_directed_candidate": 6,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          26
+        ],
+        [
+          "EZH2",
+          11
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 345,
+      "rules_with_any_motif_match": 411,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "A549": {
+      "rules": 407,
+      "rules_gaining_a_source": 228,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 197,
+        "occupancy_same_cell": 31,
+        "occupancy_other_cell": 142,
+        "motif_only": 37,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 1484,
+      "candidate_pairs_with_motif": 710,
+      "direction_of_candidate_pairs": {
+        "activates": 747,
+        "inhibits": 16,
+        "unknown": 721
+      },
+      "rules_with_a_directed_candidate": 187,
+      "distinct_factors": 39,
+      "top_factors_by_rules": [
+        [
+          "FOSL2",
+          139
+        ],
+        [
+          "SP1",
+          131
+        ],
+        [
+          "FOXA1",
+          107
+        ],
+        [
+          "TCF12",
+          98
+        ],
+        [
+          "JUND",
+          96
+        ],
+        [
+          "NR3C1",
+          89
+        ],
+        [
+          "MAFK",
+          68
+        ],
+        [
+          "CEBPB",
+          63
+        ],
+        [
+          "GABPA",
+          63
+        ],
+        [
+          "SIN3A",
+          61
+        ]
+      ],
+      "sources_per_rule_median": 5,
+      "sources_per_rule_max": 25,
+      "motif_matched_factors_per_rule_median": 394,
+      "rules_with_any_motif_match": 407,
+      "factors_with_chip_in_this_cell": 43
+    },
+    "uterus": {
+      "rules": 368,
+      "rules_gaining_a_source": 102,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 24,
+        "occupancy_same_cell": 78,
+        "occupancy_other_cell": 221,
+        "motif_only": 45,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 133,
+      "candidate_pairs_with_motif": 24,
+      "direction_of_candidate_pairs": {
+        "inhibits": 17,
+        "unknown": 116
+      },
+      "rules_with_a_directed_candidate": 17,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          81
+        ],
+        [
+          "CTCF",
+          52
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 353,
+      "rules_with_any_motif_match": 368,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "SK_N_SH": {
+      "rules": 348,
+      "rules_gaining_a_source": 143,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 117,
+        "occupancy_same_cell": 26,
+        "occupancy_other_cell": 157,
+        "motif_only": 48,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 287,
+      "candidate_pairs_with_motif": 139,
+      "direction_of_candidate_pairs": {
+        "activates": 95,
+        "inhibits": 40,
+        "unknown": 152
+      },
+      "rules_with_a_directed_candidate": 116,
+      "distinct_factors": 11,
+      "top_factors_by_rules": [
+        [
+          "JUND",
+          84
+        ],
+        [
+          "CTCF",
+          50
+        ],
+        [
+          "RAD21",
+          41
+        ],
+        [
+          "REST",
+          20
+        ],
+        [
+          "SIN3A",
+          19
+        ],
+        [
+          "MXI1",
+          19
+        ],
+        [
+          "YY1",
+          16
+        ],
+        [
+          "USF1",
+          13
+        ],
+        [
+          "RCOR1",
+          10
+        ],
+        [
+          "TAF1",
+          10
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 9,
+      "motif_matched_factors_per_rule_median": 376,
+      "rules_with_any_motif_match": 348,
+      "factors_with_chip_in_this_cell": 13
+    },
+    "stomach": {
+      "rules": 316,
+      "rules_gaining_a_source": 48,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 24,
+        "occupancy_same_cell": 24,
+        "occupancy_other_cell": 230,
+        "motif_only": 38,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 53,
+      "candidate_pairs_with_motif": 24,
+      "direction_of_candidate_pairs": {
+        "inhibits": 11,
+        "unknown": 42
+      },
+      "rules_with_a_directed_candidate": 11,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          36
+        ],
+        [
+          "POLR2A",
+          15
+        ],
+        [
+          "EP300",
+          2
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 344,
+      "rules_with_any_motif_match": 316,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "esophagus_muscularis_mucosa": {
+      "rules": 310,
+      "rules_gaining_a_source": 54,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 22,
+        "occupancy_same_cell": 32,
+        "occupancy_other_cell": 204,
+        "motif_only": 52,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 64,
+      "candidate_pairs_with_motif": 22,
+      "direction_of_candidate_pairs": {
+        "inhibits": 13,
+        "unknown": 51
+      },
+      "rules_with_a_directed_candidate": 13,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          33
+        ],
+        [
+          "EP300",
+          21
+        ],
+        [
+          "POLR2A",
+          10
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 357,
+      "rules_with_any_motif_match": 310,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "PFSK_1": {
+      "rules": 297,
+      "rules_gaining_a_source": 60,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 60,
+        "occupancy_other_cell": 210,
+        "motif_only": 27,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 78,
+      "candidate_pairs_with_motif": 0,
+      "direction_of_candidate_pairs": {
+        "inhibits": 1,
+        "unknown": 77
+      },
+      "rules_with_a_directed_candidate": 1,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "TAF1",
+          50
+        ],
+        [
+          "REST",
+          28
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 317,
+      "rules_with_any_motif_match": 297,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "ovary": {
+      "rules": 264,
+      "rules_gaining_a_source": 36,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 12,
+        "occupancy_same_cell": 24,
+        "occupancy_other_cell": 173,
+        "motif_only": 55,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 44,
+      "candidate_pairs_with_motif": 12,
+      "direction_of_candidate_pairs": {
+        "inhibits": 12,
+        "unknown": 32
+      },
+      "rules_with_a_directed_candidate": 12,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          22
+        ],
+        [
+          "POLR2A",
+          15
+        ],
+        [
+          "EP300",
+          7
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 345,
+      "rules_with_any_motif_match": 264,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "PC_3": {
+      "rules": 258,
+      "rules_gaining_a_source": 49,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 16,
+        "occupancy_same_cell": 33,
+        "occupancy_other_cell": 200,
+        "motif_only": 9,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 49,
+      "candidate_pairs_with_motif": 16,
+      "direction_of_candidate_pairs": {
+        "inhibits": 7,
+        "unknown": 42
+      },
+      "rules_with_a_directed_candidate": 7,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          38
+        ],
+        [
+          "EZH2",
+          11
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 356,
+      "rules_with_any_motif_match": 258,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "PC_9": {
+      "rules": 249,
+      "rules_gaining_a_source": 32,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 15,
+        "occupancy_same_cell": 17,
+        "occupancy_other_cell": 192,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 32,
+      "candidate_pairs_with_motif": 15,
+      "direction_of_candidate_pairs": {
+        "inhibits": 15,
+        "unknown": 17
+      },
+      "rules_with_a_directed_candidate": 15,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          30
+        ],
+        [
+          "EZH2",
+          2
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 378,
+      "rules_with_any_motif_match": 249,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "esophagus_squamous_epithelium": {
+      "rules": 245,
+      "rules_gaining_a_source": 30,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 16,
+        "occupancy_same_cell": 14,
+        "occupancy_other_cell": 178,
+        "motif_only": 37,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 31,
+      "candidate_pairs_with_motif": 16,
+      "direction_of_candidate_pairs": {
+        "inhibits": 12,
+        "unknown": 19
+      },
+      "rules_with_a_directed_candidate": 12,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          23
+        ],
+        [
+          "POLR2A",
+          8
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 364,
+      "rules_with_any_motif_match": 245,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "hepatocyte": {
+      "rules": 241,
+      "rules_gaining_a_source": 45,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 22,
+        "occupancy_same_cell": 23,
+        "occupancy_other_cell": 159,
+        "motif_only": 37,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 46,
+      "candidate_pairs_with_motif": 22,
+      "direction_of_candidate_pairs": {
+        "inhibits": 12,
+        "unknown": 34
+      },
+      "rules_with_a_directed_candidate": 12,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          31
+        ],
+        [
+          "EZH2",
+          15
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 350,
+      "rules_with_any_motif_match": 241,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "astrocyte": {
+      "rules": 209,
+      "rules_gaining_a_source": 24,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 13,
+        "occupancy_same_cell": 11,
+        "occupancy_other_cell": 169,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 24,
+      "candidate_pairs_with_motif": 13,
+      "direction_of_candidate_pairs": {
+        "inhibits": 8,
+        "unknown": 16
+      },
+      "rules_with_a_directed_candidate": 8,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          24
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 311,
+      "rules_with_any_motif_match": 209,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "tibial_nerve": {
+      "rules": 206,
+      "rules_gaining_a_source": 67,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 19,
+        "occupancy_same_cell": 48,
+        "occupancy_other_cell": 110,
+        "motif_only": 29,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 97,
+      "candidate_pairs_with_motif": 19,
+      "direction_of_candidate_pairs": {
+        "inhibits": 11,
+        "unknown": 86
+      },
+      "rules_with_a_directed_candidate": 11,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "EP300",
+          46
+        ],
+        [
+          "CTCF",
+          34
+        ],
+        [
+          "POLR2A",
+          17
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 353,
+      "rules_with_any_motif_match": 206,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "body_of_pancreas": {
+      "rules": 196,
+      "rules_gaining_a_source": 60,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 15,
+        "occupancy_same_cell": 45,
+        "occupancy_other_cell": 112,
+        "motif_only": 24,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 72,
+      "candidate_pairs_with_motif": 15,
+      "direction_of_candidate_pairs": {
+        "inhibits": 7,
+        "unknown": 65
+      },
+      "rules_with_a_directed_candidate": 7,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          45
+        ],
+        [
+          "CTCF",
+          27
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 350,
+      "rules_with_any_motif_match": 196,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "Panc1": {
+      "rules": 159,
+      "rules_gaining_a_source": 29,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 19,
+        "occupancy_same_cell": 10,
+        "occupancy_other_cell": 119,
+        "motif_only": 11,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 33,
+      "candidate_pairs_with_motif": 21,
+      "direction_of_candidate_pairs": {
+        "inhibits": 4,
+        "unknown": 29
+      },
+      "rules_with_a_directed_candidate": 4,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          19
+        ],
+        [
+          "TCF7L2",
+          7
+        ],
+        [
+          "REST",
+          7
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 327,
+      "rules_with_any_motif_match": 159,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "Caco_2": {
+      "rules": 139,
+      "rules_gaining_a_source": 14,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 7,
+        "occupancy_same_cell": 7,
+        "occupancy_other_cell": 109,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 14,
+      "candidate_pairs_with_motif": 7,
+      "direction_of_candidate_pairs": {
+        "inhibits": 4,
+        "unknown": 10
+      },
+      "rules_with_a_directed_candidate": 4,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          14
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 365,
+      "rules_with_any_motif_match": 139,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "upper_lobe_of_left_lung": {
+      "rules": 135,
+      "rules_gaining_a_source": 29,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 10,
+        "occupancy_same_cell": 19,
+        "occupancy_other_cell": 89,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 36,
+      "candidate_pairs_with_motif": 10,
+      "direction_of_candidate_pairs": {
+        "inhibits": 7,
+        "unknown": 29
+      },
+      "rules_with_a_directed_candidate": 7,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          16
+        ],
+        [
+          "POLR2A",
+          11
+        ],
+        [
+          "EP300",
+          9
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 360,
+      "rules_with_any_motif_match": 135,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "vagina": {
+      "rules": 130,
+      "rules_gaining_a_source": 4,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 1,
+        "occupancy_same_cell": 3,
+        "occupancy_other_cell": 113,
+        "motif_only": 13,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 5,
+      "candidate_pairs_with_motif": 1,
+      "direction_of_candidate_pairs": {
+        "inhibits": 1,
+        "unknown": 4
+      },
+      "rules_with_a_directed_candidate": 1,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          3
+        ],
+        [
+          "CTCF",
+          2
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 2,
+      "motif_matched_factors_per_rule_median": 368,
+      "rules_with_any_motif_match": 130,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "prostate_gland": {
+      "rules": 123,
+      "rules_gaining_a_source": 10,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 5,
+        "occupancy_same_cell": 5,
+        "occupancy_other_cell": 85,
+        "motif_only": 28,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 10,
+      "candidate_pairs_with_motif": 5,
+      "direction_of_candidate_pairs": {
+        "inhibits": 1,
+        "unknown": 9
+      },
+      "rules_with_a_directed_candidate": 1,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          9
+        ],
+        [
+          "POLR2A",
+          1
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 373,
+      "rules_with_any_motif_match": 123,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "suprapubic_skin": {
+      "rules": 82,
+      "rules_gaining_a_source": 5,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 1,
+        "occupancy_same_cell": 4,
+        "occupancy_other_cell": 61,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 5,
+      "candidate_pairs_with_motif": 1,
+      "direction_of_candidate_pairs": {
+        "inhibits": 1,
+        "unknown": 4
+      },
+      "rules_with_a_directed_candidate": 1,
+      "distinct_factors": 2,
+      "top_factors_by_rules": [
+        [
+          "POLR2A",
+          3
+        ],
+        [
+          "CTCF",
+          2
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 359,
+      "rules_with_any_motif_match": 82,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "kidney_epithelial_cell": {
+      "rules": 81,
+      "rules_gaining_a_source": 11,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 4,
+        "occupancy_same_cell": 7,
+        "occupancy_other_cell": 61,
+        "motif_only": 9,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 11,
+      "candidate_pairs_with_motif": 4,
+      "direction_of_candidate_pairs": {
+        "inhibits": 3,
+        "unknown": 8
+      },
+      "rules_with_a_directed_candidate": 3,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          11
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 306,
+      "rules_with_any_motif_match": 81,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "gastroesophageal_sphincter": {
+      "rules": 80,
+      "rules_gaining_a_source": 18,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 6,
+        "occupancy_same_cell": 12,
+        "occupancy_other_cell": 49,
+        "motif_only": 13,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 26,
+      "candidate_pairs_with_motif": 6,
+      "direction_of_candidate_pairs": {
+        "inhibits": 7,
+        "unknown": 19
+      },
+      "rules_with_a_directed_candidate": 7,
+      "distinct_factors": 3,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          11
+        ],
+        [
+          "EP300",
+          8
+        ],
+        [
+          "POLR2A",
+          7
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 3,
+      "motif_matched_factors_per_rule_median": 352,
+      "rules_with_any_motif_match": 80,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "fibroblast_of_the_aortic_adventitia": {
+      "rules": 62,
+      "rules_gaining_a_source": 4,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 1,
+        "occupancy_same_cell": 3,
+        "occupancy_other_cell": 52,
+        "motif_only": 6,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 4,
+      "candidate_pairs_with_motif": 1,
+      "direction_of_candidate_pairs": {
+        "unknown": 4
+      },
+      "rules_with_a_directed_candidate": 0,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          4
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 371,
+      "rules_with_any_motif_match": 62,
+      "factors_with_chip_in_this_cell": 1
+    },
+    "breast_epithelium": {
+      "rules": 31,
+      "rules_gaining_a_source": 4,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 3,
+        "occupancy_same_cell": 1,
+        "occupancy_other_cell": 21,
+        "motif_only": 6,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 4,
+      "candidate_pairs_with_motif": 3,
+      "direction_of_candidate_pairs": {
+        "inhibits": 2,
+        "unknown": 2
+      },
+      "rules_with_a_directed_candidate": 2,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          4
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 356,
+      "rules_with_any_motif_match": 31,
+      "factors_with_chip_in_this_cell": 3
+    },
+    "omental_fat_pad": {
+      "rules": 16,
+      "rules_gaining_a_source": 0,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 12,
+        "motif_only": 4,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 0,
+      "candidate_pairs_with_motif": 0,
+      "direction_of_candidate_pairs": {},
+      "rules_with_a_directed_candidate": 0,
+      "distinct_factors": 0,
+      "top_factors_by_rules": [],
+      "sources_per_rule_median": null,
+      "sources_per_rule_max": null,
+      "motif_matched_factors_per_rule_median": 366,
+      "rules_with_any_motif_match": 16,
+      "factors_with_chip_in_this_cell": 2
+    },
+    "fibroblast_of_villous_mesenchyme": {
+      "rules": 10,
+      "rules_gaining_a_source": 1,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 1,
+        "occupancy_other_cell": 8,
+        "motif_only": 1,
+        "unknown": 0
+      },
+      "candidate_pairs_in_own_cell": 1,
+      "candidate_pairs_with_motif": 0,
+      "direction_of_candidate_pairs": {
+        "unknown": 1
+      },
+      "rules_with_a_directed_candidate": 0,
+      "distinct_factors": 1,
+      "top_factors_by_rules": [
+        [
+          "CTCF",
+          1
+        ]
+      ],
+      "sources_per_rule_median": 1,
+      "sources_per_rule_max": 1,
+      "motif_matched_factors_per_rule_median": 337,
+      "rules_with_any_motif_match": 10,
+      "factors_with_chip_in_this_cell": 1
+    }
+  },
+  "per_cell_without_chip": {
+    "placenta": {
+      "rules": 14275,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 12120,
+        "motif_only": 2155,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 372
+    },
+    "Whole_Blood": {
+      "rules": 11325,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 9934,
+        "motif_only": 1391,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 374
+    },
+    "psoas_muscle": {
+      "rules": 10222,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 8578,
+        "motif_only": 1644,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "small_intestine": {
+      "rules": 10006,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 8550,
+        "motif_only": 1456,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 370
+    },
+    "CD8_positive__alpha_beta_T_cell": {
+      "rules": 8872,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 7828,
+        "motif_only": 1044,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 343
+    },
+    "naive_thymus_derived_CD4_positive__alpha_beta_T_cell": {
+      "rules": 7952,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 6780,
+        "motif_only": 1172,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "Purkinje_cell": {
+      "rules": 7478,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 6659,
+        "motif_only": 819,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 341
+    },
+    "Karpas_422": {
+      "rules": 7475,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 6240,
+        "motif_only": 1235,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 368
+    },
+    "left_lobe_of_liver": {
+      "rules": 7120,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 6361,
+        "motif_only": 759,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 368
+    },
+    "common_myeloid_progenitor__CD34_positive": {
+      "rules": 6802,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 5275,
+        "motif_only": 1527,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "LHCN_M2": {
+      "rules": 5591,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 4816,
+        "motif_only": 775,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 371
+    },
+    "CD8_positive__alpha_beta_memory_T_cell": {
+      "rules": 5092,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 4324,
+        "motif_only": 768,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 356
+    },
+    "myocyte": {
+      "rules": 4699,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3777,
+        "motif_only": 922,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 372
+    },
+    "mammary_microvascular_endothelial_cell": {
+      "rules": 4539,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3865,
+        "motif_only": 674,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "heart": {
+      "rules": 4361,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3481,
+        "motif_only": 880,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "kidney": {
+      "rules": 4334,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3397,
+        "motif_only": 937,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "HFFc6": {
+      "rules": 4322,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3637,
+        "motif_only": 685,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 376
+    },
+    "CD4_positive__CD25_positive__alpha_beta_regulatory_T_cell": {
+      "rules": 4276,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3778,
+        "motif_only": 498,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 349
+    },
+    "CD4_positive__alpha_beta_memory_T_cell": {
+      "rules": 4224,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3558,
+        "motif_only": 666,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "IgD_negative_memory_B_cell": {
+      "rules": 4212,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3689,
+        "motif_only": 523,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "naive_thymus_derived_CD8_positive__alpha_beta_T_cell": {
+      "rules": 4129,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3595,
+        "motif_only": 534,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "peripheral_blood_mononuclear_cell": {
+      "rules": 3584,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2867,
+        "motif_only": 717,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 349
+    },
+    "immature_natural_killer_cell": {
+      "rules": 3572,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3013,
+        "motif_only": 559,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 350
+    },
+    "naive_B_cell": {
+      "rules": 3488,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 3052,
+        "motif_only": 436,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "dermis_blood_vessel_endothelial_cell": {
+      "rules": 3323,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2718,
+        "motif_only": 605,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "H9": {
+      "rules": 3203,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2658,
+        "motif_only": 545,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 351
+    },
+    "left_ventricle_myocardium_inferior": {
+      "rules": 3190,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2588,
+        "motif_only": 602,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "colonic_mucosa": {
+      "rules": 3166,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2608,
+        "motif_only": 558,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "Brain_Cerebellar_Hemisphere": {
+      "rules": 3054,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2462,
+        "motif_only": 592,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "CD4_positive__alpha_beta_T_cell": {
+      "rules": 3010,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2695,
+        "motif_only": 315,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "HT_29": {
+      "rules": 2814,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2630,
+        "motif_only": 184,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 345
+    },
+    "foreskin_melanocyte": {
+      "rules": 2698,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2187,
+        "motif_only": 511,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "Liver": {
+      "rules": 2649,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2134,
+        "motif_only": 515,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "esophagus_mucosa": {
+      "rules": 2619,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2312,
+        "motif_only": 307,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 374
+    },
+    "hair_follicular_keratinocyte": {
+      "rules": 2596,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2324,
+        "motif_only": 272,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 370
+    },
+    "left_colon": {
+      "rules": 2448,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2036,
+        "motif_only": 412,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 377
+    },
+    "mesendoderm": {
+      "rules": 2359,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2024,
+        "motif_only": 335,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 346
+    },
+    "heart_right_ventricle": {
+      "rules": 2322,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1800,
+        "motif_only": 522,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "Brain_Spinal_cord_cervical_c_1": {
+      "rules": 2280,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1866,
+        "motif_only": 414,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 372
+    },
+    "mammary_stem_cell": {
+      "rules": 2271,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 2138,
+        "motif_only": 133,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 314
+    },
+    "Right_ventricle_myocardium_superior": {
+      "rules": 2167,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1762,
+        "motif_only": 405,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "SK_MEL_5": {
+      "rules": 2151,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1775,
+        "motif_only": 376,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "left_ventricle_myocardium_superior": {
+      "rules": 2120,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1700,
+        "motif_only": 420,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "Muscle_Skeletal": {
+      "rules": 1887,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1606,
+        "motif_only": 281,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "HT1080": {
+      "rules": 1700,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1515,
+        "motif_only": 185,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 351
+    },
+    "NCI_H460": {
+      "rules": 1589,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1379,
+        "motif_only": 210,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 337
+    },
+    "trophoblast_cell": {
+      "rules": 1486,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1202,
+        "motif_only": 284,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "T_cell": {
+      "rules": 1245,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1058,
+        "motif_only": 187,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "mesenteric_fat_pad": {
+      "rules": 1194,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1034,
+        "motif_only": 160,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "forelimb_muscle": {
+      "rules": 1189,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 949,
+        "motif_only": 240,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "skeletal_muscle_myoblast": {
+      "rules": 1182,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 982,
+        "motif_only": 200,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 355
+    },
+    "renal_cortical_epithelial_cell": {
+      "rules": 1180,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 970,
+        "motif_only": 210,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 369
+    },
+    "H7": {
+      "rules": 1173,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 980,
+        "motif_only": 193,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "mononuclear_cell": {
+      "rules": 1148,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 1064,
+        "motif_only": 84,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 340
+    },
+    "Jurkat__Clone_E6_1": {
+      "rules": 1127,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 937,
+        "motif_only": 190,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "airway_epithelial_cell": {
+      "rules": 1121,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 997,
+        "motif_only": 124,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "hematopoietic_multipotent_progenitor_cell": {
+      "rules": 1095,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 946,
+        "motif_only": 149,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 340
+    },
+    "vein_endothelial_cell": {
+      "rules": 1094,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 885,
+        "motif_only": 209,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "Brain_Frontal_Cortex_BA9": {
+      "rules": 1064,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 893,
+        "motif_only": 171,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 348
+    },
+    "glutamatergic_neuron": {
+      "rules": 1054,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 918,
+        "motif_only": 136,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 336
+    },
+    "hindlimb_muscle": {
+      "rules": 1022,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 787,
+        "motif_only": 235,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "U_87_MG": {
+      "rules": 1020,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 919,
+        "motif_only": 101,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 374
+    },
+    "lung_microvascular_endothelial_cell": {
+      "rules": 978,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 895,
+        "motif_only": 83,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 376
+    },
+    "neurosphere": {
+      "rules": 975,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 816,
+        "motif_only": 159,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "Brain_Cerebellum": {
+      "rules": 973,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 812,
+        "motif_only": 161,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 351
+    },
+    "BLaER1": {
+      "rules": 953,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 776,
+        "motif_only": 177,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "natural_killer_cell": {
+      "rules": 921,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 740,
+        "motif_only": 181,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "Cells_EBV_transformed_lymphocytes": {
+      "rules": 879,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 749,
+        "motif_only": 130,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 368
+    },
+    "epithelial_cell_of_umbilical_artery": {
+      "rules": 876,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 786,
+        "motif_only": 90,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "melanocyte_of_skin": {
+      "rules": 785,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 667,
+        "motif_only": 118,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 372
+    },
+    "fibroblast_of_skin_of_back": {
+      "rules": 740,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 634,
+        "motif_only": 106,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "Calu3": {
+      "rules": 723,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 592,
+        "motif_only": 131,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 369
+    },
+    "Artery_Tibial": {
+      "rules": 706,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 574,
+        "motif_only": 132,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "esophagus": {
+      "rules": 703,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 555,
+        "motif_only": 148,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "thoracic_aorta_endothelial_cell": {
+      "rules": 701,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 559,
+        "motif_only": 142,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "subcutaneous_preadipocyte": {
+      "rules": 694,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 614,
+        "motif_only": 80,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 375
+    },
+    "Caki2": {
+      "rules": 686,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 611,
+        "motif_only": 75,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "cardiac_ventricle_fibroblast": {
+      "rules": 681,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 586,
+        "motif_only": 95,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "mesenchymal_stem_cell_of_adipose": {
+      "rules": 647,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 551,
+        "motif_only": 96,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "left_kidney": {
+      "rules": 644,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 545,
+        "motif_only": 99,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 353
+    },
+    "luminal_epithelial_cell_of_mammary_gland": {
+      "rules": 627,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 557,
+        "motif_only": 70,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 355
+    },
+    "lung": {
+      "rules": 623,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 487,
+        "motif_only": 136,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "dermis_lymphatic_vessel_endothelial_cell": {
+      "rules": 623,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 509,
+        "motif_only": 114,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "aorta": {
+      "rules": 613,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 518,
+        "motif_only": 95,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "pulmonary_artery_endothelial_cell": {
+      "rules": 602,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 506,
+        "motif_only": 96,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "cerebellum": {
+      "rules": 601,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 496,
+        "motif_only": 105,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 341
+    },
+    "frontal_cortex": {
+      "rules": 599,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 557,
+        "motif_only": 42,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 329
+    },
+    "neural_crest_cell": {
+      "rules": 593,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 513,
+        "motif_only": 80,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 340
+    },
+    "bronchial_epithelial_cell": {
+      "rules": 585,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 543,
+        "motif_only": 42,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 343
+    },
+    "fibroblast_of_skin_of_abdomen": {
+      "rules": 582,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 455,
+        "motif_only": 127,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "dorsolateral_prefrontal_cortex": {
+      "rules": 579,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 484,
+        "motif_only": 95,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 347
+    },
+    "SK_N_DZ": {
+      "rules": 578,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 508,
+        "motif_only": 70,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 331
+    },
+    "large_intestine": {
+      "rules": 575,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 462,
+        "motif_only": 113,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "smooth_muscle_cell_of_the_coronary_artery": {
+      "rules": 514,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 461,
+        "motif_only": 53,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 332
+    },
+    "brain": {
+      "rules": 511,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 431,
+        "motif_only": 80,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "bladder_microvascular_endothelial_cell": {
+      "rules": 504,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 423,
+        "motif_only": 81,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "Skin_Not_Sun_Exposed_Suprapubic": {
+      "rules": 496,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 385,
+        "motif_only": 111,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 370
+    },
+    "tracheal_epithelial_cell": {
+      "rules": 489,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 454,
+        "motif_only": 35,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 319
+    },
+    "Brain_Hippocampus": {
+      "rules": 453,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 385,
+        "motif_only": 68,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 371
+    },
+    "Adrenal_Gland": {
+      "rules": 441,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 378,
+        "motif_only": 63,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "endodermal_cell": {
+      "rules": 440,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 362,
+        "motif_only": 78,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 356
+    },
+    "right_renal_cortex_interstitium": {
+      "rules": 440,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 343,
+        "motif_only": 97,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "mesenchymal_stem_cell": {
+      "rules": 439,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 351,
+        "motif_only": 88,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "Kidney_Medulla": {
+      "rules": 434,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 355,
+        "motif_only": 79,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 369
+    },
+    "neuronal_stem_cell": {
+      "rules": 422,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 349,
+        "motif_only": 73,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 346
+    },
+    "SJCRH30": {
+      "rules": 413,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 361,
+        "motif_only": 52,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "placental_epithelial_cell": {
+      "rules": 412,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 362,
+        "motif_only": 50,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "glomerular_endothelial_cell": {
+      "rules": 408,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 307,
+        "motif_only": 101,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "hair_follicle_dermal_papilla_cell": {
+      "rules": 404,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 353,
+        "motif_only": 51,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "Testis": {
+      "rules": 401,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 325,
+        "motif_only": 76,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 347
+    },
+    "progenitor_cell_of_endocrine_pancreas": {
+      "rules": 397,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 337,
+        "motif_only": 60,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 356
+    },
+    "trophoblast": {
+      "rules": 397,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 329,
+        "motif_only": 68,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "mole": {
+      "rules": 387,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 333,
+        "motif_only": 54,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 346
+    },
+    "placental_basal_plate": {
+      "rules": 377,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 304,
+        "motif_only": 73,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 369
+    },
+    "endothelial_cell": {
+      "rules": 376,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 313,
+        "motif_only": 63,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "occipital_lobe": {
+      "rules": 371,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 329,
+        "motif_only": 42,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 349
+    },
+    "nasal_cavity_respiratory_epithelium_epithelial_cell_of_viscerocranial_mucosa": {
+      "rules": 362,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 322,
+        "motif_only": 40,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 342
+    },
+    "temporal_lobe": {
+      "rules": 361,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 325,
+        "motif_only": 36,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 342
+    },
+    "right_cardiac_atrium": {
+      "rules": 361,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 259,
+        "motif_only": 102,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "Cells_Cultured_fibroblasts": {
+      "rules": 356,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 300,
+        "motif_only": 56,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "pancreas": {
+      "rules": 342,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 292,
+        "motif_only": 50,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 347
+    },
+    "thymus": {
+      "rules": 342,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 259,
+        "motif_only": 83,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 377
+    },
+    "Ovary": {
+      "rules": 340,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 286,
+        "motif_only": 54,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 345
+    },
+    "smooth_muscle_cell_of_the_pulmonary_artery": {
+      "rules": 335,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 294,
+        "motif_only": 41,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "myoepithelial_cell_of_mammary_gland": {
+      "rules": 329,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 297,
+        "motif_only": 32,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 332
+    },
+    "chorion": {
+      "rules": 324,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 274,
+        "motif_only": 50,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "placental_pericyte": {
+      "rules": 317,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 283,
+        "motif_only": 34,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "Brain_Putamen_basal_ganglia": {
+      "rules": 314,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 255,
+        "motif_only": 59,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "bronchial_smooth_muscle_cell": {
+      "rules": 307,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 283,
+        "motif_only": 24,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 339
+    },
+    "mesenchymal_stem_cell_of_the_bone_marrow": {
+      "rules": 299,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 258,
+        "motif_only": 41,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 381
+    },
+    "MG63": {
+      "rules": 299,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 274,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 338
+    },
+    "smooth_muscle_cell_of_the_umbilical_artery": {
+      "rules": 296,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 255,
+        "motif_only": 41,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 331
+    },
+    "HUES64": {
+      "rules": 292,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 254,
+        "motif_only": 38,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 339
+    },
+    "lower_lobe_of_right_lung": {
+      "rules": 290,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 230,
+        "motif_only": 60,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "Adipose_Subcutaneous": {
+      "rules": 276,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 212,
+        "motif_only": 64,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "epithelial_cell_of_proximal_tubule": {
+      "rules": 268,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 232,
+        "motif_only": 36,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "dermis_microvascular_lymphatic_vessel_endothelial_cell": {
+      "rules": 265,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 195,
+        "motif_only": 70,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "muscle_of_trunk": {
+      "rules": 254,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 221,
+        "motif_only": 33,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "adipose_tissue": {
+      "rules": 238,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 202,
+        "motif_only": 36,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "Fallopian_Tube": {
+      "rules": 238,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 182,
+        "motif_only": 56,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "mesangial_cell": {
+      "rules": 236,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 211,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "skeletal_muscle_satellite_cell": {
+      "rules": 225,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 208,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 349
+    },
+    "Right_ventricle_myocardium_inferior": {
+      "rules": 223,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 179,
+        "motif_only": 44,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "mucosa_of_descending_colon": {
+      "rules": 221,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 183,
+        "motif_only": 38,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 372
+    },
+    "left_lung": {
+      "rules": 221,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 180,
+        "motif_only": 41,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "upper_lobe_of_right_lung": {
+      "rules": 217,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 194,
+        "motif_only": 23,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "smooth_muscle_cell_of_trachea": {
+      "rules": 209,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 183,
+        "motif_only": 26,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 349
+    },
+    "renal_pelvis": {
+      "rules": 209,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 181,
+        "motif_only": 28,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "M059J": {
+      "rules": 208,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 183,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 375
+    },
+    "endocrine_pancreas": {
+      "rules": 202,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 184,
+        "motif_only": 18,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 333
+    },
+    "cardiac_septum": {
+      "rules": 200,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 161,
+        "motif_only": 39,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "ectodermal_cell": {
+      "rules": 193,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 166,
+        "motif_only": 27,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 345
+    },
+    "cardiac_atrium_fibroblast": {
+      "rules": 193,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 166,
+        "motif_only": 27,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "Nerve_Tibial": {
+      "rules": 182,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 135,
+        "motif_only": 47,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "Colon_Sigmoid": {
+      "rules": 178,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 146,
+        "motif_only": 32,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 365
+    },
+    "Colon_Transverse": {
+      "rules": 176,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 139,
+        "motif_only": 37,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 369
+    },
+    "muscle_of_arm": {
+      "rules": 175,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 131,
+        "motif_only": 44,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 376
+    },
+    "urinary_bladder": {
+      "rules": 174,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 142,
+        "motif_only": 32,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 355
+    },
+    "Spleen": {
+      "rules": 172,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 147,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "fibroblast_of_skin_of_scalp": {
+      "rules": 172,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 142,
+        "motif_only": 30,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "right_atrium_auricular_region": {
+      "rules": 172,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 138,
+        "motif_only": 34,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "Brain_Cortex": {
+      "rules": 164,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 141,
+        "motif_only": 23,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 354
+    },
+    "chorionic_villus": {
+      "rules": 162,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 134,
+        "motif_only": 28,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 368
+    },
+    "thoracic_aorta": {
+      "rules": 161,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 134,
+        "motif_only": 27,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 350
+    },
+    "diencephalon": {
+      "rules": 158,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 133,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 351
+    },
+    "Pancreas": {
+      "rules": 156,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 136,
+        "motif_only": 20,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 354
+    },
+    "Thyroid": {
+      "rules": 152,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 121,
+        "motif_only": 31,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "spinal_cord": {
+      "rules": 151,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 119,
+        "motif_only": 32,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "tongue": {
+      "rules": 147,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 133,
+        "motif_only": 14,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 336
+    },
+    "Cervix_Ectocervix": {
+      "rules": 146,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 115,
+        "motif_only": 31,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 354
+    },
+    "muscle_of_leg": {
+      "rules": 142,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 120,
+        "motif_only": 22,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "Esophagus_Mucosa": {
+      "rules": 142,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 119,
+        "motif_only": 23,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 373
+    },
+    "myometrial_cell": {
+      "rules": 141,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 128,
+        "motif_only": 13,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 348
+    },
+    "muscle_of_back": {
+      "rules": 140,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 106,
+        "motif_only": 34,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "skeletal_muscle_tissue": {
+      "rules": 139,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 123,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 333
+    },
+    "endothelial_cell_of_coronary_artery": {
+      "rules": 138,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 115,
+        "motif_only": 23,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 343
+    },
+    "Minor_Salivary_Gland": {
+      "rules": 137,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 107,
+        "motif_only": 30,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 376
+    },
+    "A172": {
+      "rules": 134,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 124,
+        "motif_only": 10,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 370
+    },
+    "camera_type_eye": {
+      "rules": 131,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 113,
+        "motif_only": 18,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 322
+    },
+    "Heart_Left_Ventricle": {
+      "rules": 128,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 104,
+        "motif_only": 24,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 357
+    },
+    "mesodermal_cell": {
+      "rules": 127,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 110,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 343
+    },
+    "A375": {
+      "rules": 125,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 112,
+        "motif_only": 13,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 337
+    },
+    "parietal_lobe": {
+      "rules": 119,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 104,
+        "motif_only": 15,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 366
+    },
+    "amnion": {
+      "rules": 114,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 97,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "H4": {
+      "rules": 112,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 95,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 354
+    },
+    "T_helper_17_cell": {
+      "rules": 107,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 90,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 355
+    },
+    "Artery_Aorta": {
+      "rules": 106,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 89,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 370
+    },
+    "fibroblast_of_dermis": {
+      "rules": 103,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 96,
+        "motif_only": 7,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 343
+    },
+    "Kidney_Cortex": {
+      "rules": 102,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 86,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "Brain_Anterior_cingulate_cortex_BA24": {
+      "rules": 98,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 81,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 347
+    },
+    "Brain_Caudate_basal_ganglia": {
+      "rules": 97,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 78,
+        "motif_only": 19,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "Pituitary": {
+      "rules": 96,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 76,
+        "motif_only": 20,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "WTC11": {
+      "rules": 96,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 83,
+        "motif_only": 13,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 335
+    },
+    "Brain_Amygdala": {
+      "rules": 95,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 70,
+        "motif_only": 25,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "Brain_Nucleus_accumbens_basal_ganglia": {
+      "rules": 95,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 78,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "Stomach": {
+      "rules": 94,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 76,
+        "motif_only": 18,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 378
+    },
+    "posterior_vena_cava": {
+      "rules": 94,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 71,
+        "motif_only": 23,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 347
+    },
+    "skin_of_body": {
+      "rules": 90,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 70,
+        "motif_only": 20,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 344
+    },
+    "right_renal_pelvis": {
+      "rules": 90,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 72,
+        "motif_only": 18,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 360
+    },
+    "pericardium_fibroblast": {
+      "rules": 88,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 78,
+        "motif_only": 10,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 324
+    },
+    "umbilical_cord": {
+      "rules": 87,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 79,
+        "motif_only": 8,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 318
+    },
+    "mesothelial_cell_of_epicardium": {
+      "rules": 86,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 81,
+        "motif_only": 5,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 344
+    },
+    "smooth_muscle_cell_of_bladder": {
+      "rules": 84,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 76,
+        "motif_only": 8,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "sciatic_nerve": {
+      "rules": 80,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 64,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 355
+    },
+    "Esophagus_Muscularis": {
+      "rules": 77,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 60,
+        "motif_only": 17,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 371
+    },
+    "Small_Intestine_Terminal_Ileum": {
+      "rules": 76,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 62,
+        "motif_only": 14,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "Esophagus_Gastroesophageal_Junction": {
+      "rules": 71,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 53,
+        "motif_only": 18,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "G401": {
+      "rules": 69,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 62,
+        "motif_only": 7,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 310
+    },
+    "Daoy": {
+      "rules": 69,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 64,
+        "motif_only": 5,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 320
+    },
+    "Brain_Hypothalamus": {
+      "rules": 68,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 56,
+        "motif_only": 12,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 356
+    },
+    "articular_chondrocyte_of_knee_joint": {
+      "rules": 68,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 52,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 370
+    },
+    "left_renal_pelvis": {
+      "rules": 64,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 49,
+        "motif_only": 15,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 376
+    },
+    "chondrocyte": {
+      "rules": 64,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 53,
+        "motif_only": 11,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 353
+    },
+    "Heart_Atrial_Appendage": {
+      "rules": 62,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 51,
+        "motif_only": 11,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 359
+    },
+    "Skin_Sun_Exposed_Lower_leg": {
+      "rules": 61,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 46,
+        "motif_only": 15,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "Adipose_Visceral_Omentum": {
+      "rules": 61,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 53,
+        "motif_only": 8,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 362
+    },
+    "regular_cardiac_myocyte": {
+      "rules": 59,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 51,
+        "motif_only": 8,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 337
+    },
+    "Prostate": {
+      "rules": 58,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 44,
+        "motif_only": 14,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 342
+    },
+    "Lung": {
+      "rules": 56,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 40,
+        "motif_only": 16,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 351
+    },
+    "osteocyte": {
+      "rules": 55,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 45,
+        "motif_only": 10,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 367
+    },
+    "metanephros": {
+      "rules": 51,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 45,
+        "motif_only": 6,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 355
+    },
+    "bronchus_fibroblast_of_lung": {
+      "rules": 50,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 48,
+        "motif_only": 2,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 320
+    },
+    "osteoblast": {
+      "rules": 50,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 41,
+        "motif_only": 9,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 361
+    },
+    "Brain_Substantia_nigra": {
+      "rules": 49,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 39,
+        "motif_only": 10,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 345
+    },
+    "aortic_smooth_muscle_cell": {
+      "rules": 46,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 40,
+        "motif_only": 6,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 375
+    },
+    "renal_cortex_interstitium": {
+      "rules": 43,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 38,
+        "motif_only": 5,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "Uterus": {
+      "rules": 38,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 32,
+        "motif_only": 6,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 340
+    },
+    "ureter": {
+      "rules": 37,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 35,
+        "motif_only": 2,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 341
+    },
+    "RPMI7951": {
+      "rules": 34,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 29,
+        "motif_only": 5,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 375
+    },
+    "SJSA1": {
+      "rules": 34,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 29,
+        "motif_only": 5,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 347
+    },
+    "uterine_smooth_muscle_cell": {
+      "rules": 33,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 33,
+        "motif_only": 0,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 294
+    },
+    "epithelial_cell_of_alveolus_of_lung": {
+      "rules": 32,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 24,
+        "motif_only": 8,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 342
+    },
+    "type_B_pancreatic_cell": {
+      "rules": 30,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 26,
+        "motif_only": 4,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 364
+    },
+    "Breast_Mammary_Tissue": {
+      "rules": 29,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 25,
+        "motif_only": 4,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 363
+    },
+    "mucosa_of_gallbladder": {
+      "rules": 25,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 23,
+        "motif_only": 2,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 373
+    },
+    "Cervix_Endocervix": {
+      "rules": 23,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 20,
+        "motif_only": 3,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 353
+    },
+    "Artery_Coronary": {
+      "rules": 22,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 19,
+        "motif_only": 3,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 385
+    },
+    "left_renal_cortex_interstitium": {
+      "rules": 21,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 18,
+        "motif_only": 3,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 376
+    },
+    "lower_lobe_of_left_lung": {
+      "rules": 19,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 15,
+        "motif_only": 4,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 352
+    },
+    "left_cardiac_atrium": {
+      "rules": 18,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 17,
+        "motif_only": 1,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 371
+    },
+    "mesenchymal_stem_cell_of_Wharton_s_jelly": {
+      "rules": 16,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 14,
+        "motif_only": 2,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 369
+    },
+    "Vagina": {
+      "rules": 15,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 12,
+        "motif_only": 3,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 358
+    },
+    "motor_neuron": {
+      "rules": 15,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 11,
+        "motif_only": 4,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 336
+    },
+    "Bladder": {
+      "rules": 10,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 7,
+        "motif_only": 3,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 356
+    },
+    "right_lung": {
+      "rules": 9,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 6,
+        "motif_only": 3,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 353
+    },
+    "Jurkat": {
+      "rules": 5,
+      "by_kind": {
+        "occupancy_same_cell_with_motif": 0,
+        "occupancy_same_cell": 0,
+        "occupancy_other_cell": 5,
+        "motif_only": 0,
+        "unknown": 0
+      },
+      "motif_matched_factors_per_rule_median": 390
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "rules": 43700,
+      "rules_gaining_a_source": 4731
+    },
+    "chr2": {
+      "rules": 32929,
+      "rules_gaining_a_source": 3621
+    },
+    "chr3": {
+      "rules": 27692,
+      "rules_gaining_a_source": 2785
+    },
+    "chr4": {
+      "rules": 20653,
+      "rules_gaining_a_source": 2091
+    },
+    "chr5": {
+      "rules": 22779,
+      "rules_gaining_a_source": 2350
+    },
+    "chr6": {
+      "rules": 23780,
+      "rules_gaining_a_source": 2734
+    },
+    "chr7": {
+      "rules": 22604,
+      "rules_gaining_a_source": 2419
+    },
+    "chr8": {
+      "rules": 18561,
+      "rules_gaining_a_source": 1954
+    },
+    "chr9": {
+      "rules": 19278,
+      "rules_gaining_a_source": 1921
+    },
+    "chr10": {
+      "rules": 21033,
+      "rules_gaining_a_source": 2280
+    },
+    "chr11": {
+      "rules": 25768,
+      "rules_gaining_a_source": 2801
+    },
+    "chr12": {
+      "rules": 22823,
+      "rules_gaining_a_source": 2269
+    },
+    "chr13": {
+      "rules": 9711,
+      "rules_gaining_a_source": 953
+    },
+    "chr14": {
+      "rules": 13387,
+      "rules_gaining_a_source": 1444
+    },
+    "chr15": {
+      "rules": 14478,
+      "rules_gaining_a_source": 1441
+    },
+    "chr16": {
+      "rules": 14807,
+      "rules_gaining_a_source": 1541
+    },
+    "chr17": {
+      "rules": 21619,
+      "rules_gaining_a_source": 2484
+    },
+    "chr18": {
+      "rules": 9251,
+      "rules_gaining_a_source": 909
+    },
+    "chr19": {
+      "rules": 17282,
+      "rules_gaining_a_source": 2071
+    },
+    "chr20": {
+      "rules": 12708,
+      "rules_gaining_a_source": 1375
+    },
+    "chr21": {
+      "rules": 5176,
+      "rules_gaining_a_source": 551
+    },
+    "chr22": {
+      "rules": 9613,
+      "rules_gaining_a_source": 1018
+    },
+    "chrX": {
+      "rules": 10832,
+      "rules_gaining_a_source": 1144
+    },
+    "chrY": {
+      "rules": 125,
+      "rules_gaining_a_source": 2
+    }
+  },
+  "factors": {
+    "with_any_cluster": 340,
+    "curated_direction_class": {
+      "activator": 75,
+      "activator_and_repressor": 24,
+      "no_curated_direction": 198,
+      "repressor": 43
+    }
+  },
+  "compile_spec": "compile.py would read the git-ignored assignment table this lane writes (data/cache/regulators/assignment.tsv.gz: one row per compiled rule and factor occupying its element in the rule's own cell) and, per program: (1) declare one gene stub per factor it uses, as it declares target genes, so the factor is an entity a rule can name; (2) for each row whose direction is activates or inhibits, emit `rule <FACTOR> <direction> <GENE> { through: <element>; when: cell_type = <cell>; evidence: measured \"ENCODE TF ChIP-seq peak cluster, <cell>\" occupancy, not function; direction: curated GO term, factor-level }`, one rule per element, as v0.5 requires; (3) state no `strength:` it does not have. Two engine facts block a faithful emission today, and neither is compile.py's to change: the parser reads `strength` only as a number and a rule with no strength runs at 1.0 (genomeos/ir/model.py), so an unmeasured factor effect would run at full strength; and a row whose direction is unknown has no grammar token (Albert's decision queue, 'a grammar token for an unresolved direction'), so it must not be emitted as activates or inhibits. Until both are decided, the honest emission is the evidence as a comment, or a `binds` rule, which takes no `through` and runs nothing.",
+  "example_directed_rule": "rule CTCF inhibits SAMD11 { through: EH38E2776632; when: cell_type = transverse_colon; evidence: measured \"ENCODE TF ChIP-seq peak cluster, transverse_colon\" occupancy, not function; direction curated repressor at an element whose compiled rule inhibits the gene }",
+  "assignment_table": {
+    "path": "data/cache/regulators/assignment.tsv.gz",
+    "committed": false,
+    "rows": 611221,
+    "columns": "program element gene cell rule_action factor kind motif occupied_in_cells direction direction_basis"
+  },
+  "reading": "a rule gains a source when at least one factor has a ChIP-seq peak cluster over its element in the rule's own cell type: measured occupancy, which is not function. Only the cell types ENCODE profiled can gain one; every other rule keeps an UNKNOWN source whatever its motifs",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 166.9,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the compiled non-coding programs, scripts/compile_genome_programs.py",
+        "version": "the files on this machine, pinned by sha256 in inputs"
+      },
+      {
+        "accession": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/encRegTfbsClusteredWithCells.hg38.bed.gz",
+        "version": "Last-Modified 2020-01-27"
+      },
+      {
+        "accession": "https://jaspar.elixir.no/download/data/2026/CORE/JASPAR2026_CORE_vertebrates_non-redundant_pfms_jaspar.txt",
+        "version": "JASPAR 2026 CORE vertebrates, non-redundant"
+      },
+      {
+        "accession": "Gene Ontology annotations, goa_human.gaf",
+        "version": "the cached file, by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz",
+        "sha256": "542eb15d4d90236c2d3437b285396bbaddee023ca3d9d0e7efb767fcd1ef7899",
+        "bytes": 125375233,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/jaspar/core_vertebrates_2026.jaspar",
+        "sha256": "4005b5449ba07d9b58495f51143186e7e3959efd0ad670770fbddf57bf941e8f",
+        "bytes": 336314,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/goa_human.gaf.gz",
+        "sha256": "db472faff1785878521693af62646546cea6af4a386609dd01c72c0554a46a30",
+        "bytes": 15041996,
+        "partition": null
+      },
+      {
+        "path": "JASPAR matches per compiled element, cached",
+        "group": true,
+        "members": [
+          {
+            "path": "data/cache/regulators/motifs_chr1.json.gz",
+            "sha256": "6690da7aebc7a0ee6839bcb3b8be4b2a7550a94357f3fcdd6618f2f4385c92b4",
+            "bytes": 1521736
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr10.json.gz",
+            "sha256": "e7a9bb786214922a43ed316ed4cdeebab3fea8aee39c73f3d95634181a8fd0df",
+            "bytes": 736926
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr11.json.gz",
+            "sha256": "4ad680b57a36aea86165fc218cb0f74cd2985f255ad1fe89ed45a1e1fa2a5def",
+            "bytes": 892237
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr12.json.gz",
+            "sha256": "68deeae91cc487524e91919d0b8adc524ac0fe9cbd8f95ee065d9120e8ef2be7",
+            "bytes": 797164
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr13.json.gz",
+            "sha256": "4e4a9b05115173a2271c6932c7a5eb8c5918d9fdc31bbaa994695c869185c242",
+            "bytes": 341082
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr14.json.gz",
+            "sha256": "efc09b5ee89d48600eca3fd4ccecd5bc24862e7308031b55c1d7143fb8dffa07",
+            "bytes": 467720
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr15.json.gz",
+            "sha256": "ddce9f8f37d7b91f8d567e4046f005ee3e2ce83921ca6a1266980a9f4e23b8c9",
+            "bytes": 508467
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr16.json.gz",
+            "sha256": "895e7efe503b728c7541dfa62250b3822c5dd3ae42e20438ca4850db8a12f297",
+            "bytes": 514096
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr17.json.gz",
+            "sha256": "b89080ada171826fab7cd249fa238acc875b87d7b854d7268d639a0cb2de1c1c",
+            "bytes": 748737
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr18.json.gz",
+            "sha256": "ba3e3ff5003c24c4f59e2e7316f186a70f46c1fca93496be2bc269b8fe9f968b",
+            "bytes": 326681
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr19.json.gz",
+            "sha256": "436b4ca8c07f9683a5529a8e0dd56b6fdb367172d2c41f6aafab5406ec3fbaa0",
+            "bytes": 590806
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr2.json.gz",
+            "sha256": "ba05ee0596aa9186cbfb94a54163d836a1b35976f1fd53620b4a0290625ddf89",
+            "bytes": 1150043
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr20.json.gz",
+            "sha256": "46937752fe053688f5afab2f8c034f25aa3c772a7a883f825ba40de4cd3f8931",
+            "bytes": 445036
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr21.json.gz",
+            "sha256": "c9fdcc74dcdb7dcd4a33791956cd7a0067f3ee3b4a27897be33036fd9c85db1c",
+            "bytes": 183017
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr22.json.gz",
+            "sha256": "2ea02ac8bdd4b18b24253670e3c6913da9e16dfe210847dba2bccf9de7c43237",
+            "bytes": 333286
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr3.json.gz",
+            "sha256": "3e07695a9b235a4fb56c421fbe313fb05e1ce413c40f855970b7f9e51e80152e",
+            "bytes": 969970
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr4.json.gz",
+            "sha256": "266b397e4e5ed7d8bd7283a5e9484b3a6161c84c5a79c2c204b61339a9412743",
+            "bytes": 720938
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr5.json.gz",
+            "sha256": "1a85e0e89d5821dd80b7dad84effc1a9d337a1432c9a0fad598cd55235845f7c",
+            "bytes": 796184
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr6.json.gz",
+            "sha256": "6e731f2b8b86716d33a2d223fbc86bee11ef560cbe03db5e3b8c648194a86726",
+            "bytes": 834087
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr7.json.gz",
+            "sha256": "5135184f8fc68c8242fafba30a696a8b5b75361483e23e11348d386cf6bf35ab",
+            "bytes": 788863
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr8.json.gz",
+            "sha256": "65ddd37bc79141a499b8bd1faa4c73d3255d7b9a3b72fff317b4e7f2a171b001",
+            "bytes": 648967
+          },
+          {
+            "path": "data/cache/regulators/motifs_chr9.json.gz",
+            "sha256": "dbc4169d12c197d71d5fcc9c5ce4b24cf20972ac2894438357ca929167036f64",
+            "bytes": 669065
+          },
+          {
+            "path": "data/cache/regulators/motifs_chrX.json.gz",
+            "sha256": "9686dd35329c3112d7464e5cc7c942c7c5a6a586a0a14043aa41ceae1bc5f3f4",
+            "bytes": 380645
+          },
+          {
+            "path": "data/cache/regulators/motifs_chrY.json.gz",
+            "sha256": "9e1f04acf82a0557b32c5322c072327a7588dd77f28c8e75a3a767c9a2c7e3a8",
+            "bytes": 6588
+          }
+        ],
+        "sha256": "7ca11007c34ee358f39561c0b26bf1f4e483a29977793bcc21c3e60278d1b188",
+        "bytes": 15372341,
+        "files": 24,
+        "partition": null
+      }
+    ],
+    "input_count": 28,
+    "assembly": "GRCh38 for the compiled elements, the peak clusters and the reference sequence",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "motif_relative_score": 0.85,
+      "cell_aliases": {
+        "H1-hESC": "H1"
+      },
+      "go_activator": [
+        "GO:0001216",
+        "GO:0001228"
+      ],
+      "go_repressor": [
+        "GO:0001217",
+        "GO:0001227"
+      ],
+      "no_expression_read": "the census opens no expression, perturbation or model value"
+    },
+    "exclusions": [],
+    "partitions": "n/a: every compiled rule is counted",
+    "code_cleanliness": {
+      "git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/regulators_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/regulators_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/regulators_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/coords.py",
+        "genomeos/evidence.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/regulators_census.py"
+      ],
+      "counting_path_count": 48,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/regulators_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
+      "code_cleanliness_git_sha": "cfc30e412ecb6b48299585743e4f61768b0dad3d",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record cfc30e4"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 295,
+      "opens_under_data": 102,
+      "files_read": 51,
+      "files_written": 1,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
