@@ -94,9 +94,10 @@ def _manifest(
         ),
         "coordinates": {
             "base": 0,
-            "interval": "half-open for peaks (BED); the GFF3 is 1-based closed",
+            "interval": "half-open",
             "note": (
-                "the element midpoint (start + end) // 2 moves by at most 1 bp between the two conventions"
+                "the peaks are BED (0-based, half-open) and the GFF3 is 1-based closed; the element "
+                "midpoint (start + end) // 2 moves by at most 1 bp between the two conventions"
             ),
         },
         "parameters": parameters,
