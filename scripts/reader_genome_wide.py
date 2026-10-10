@@ -52,8 +52,11 @@ def chromosome_manifest(cell: str, chrom: str) -> dict:
     carries one: the files `read_chromosome` and its setup open for this chromosome, each hashed. The
     reading itself is unchanged; this records what it read."""
     gff = default_gencode({chrom})
-    ref = Path(f"data/reference/{chrom}.fa.gz")
-    files = [gff, ref, Path(f"{ref}.fai"), Path(f"{ref}.gzi"), Path(f"data/results/ccres_{chrom}.bed.gz")]
+    # the blocked .fa.gz with its two indexes, or a flat .fa beside it, whichever IndexedGenome seeks
+    ref = [
+        Path(f"data/reference/{chrom}{x}") for x in (".fa.gz", ".fa.gz.fai", ".fa.gz.gzi", ".fa", ".fa.fai")
+    ]
+    files = [gff, *ref, Path(f"data/results/ccres_{chrom}.bed.gz")]
     files += [rd.peaks_path(cell, chrom)] + [ep.peaks_path(cell, m, chrom) for m in rd.POISED_MARKS]
     # the accession from this chromosome's own peak file, which is declared below; the layer's
     # dnase_accession opens another chromosome's file, which this result did not read
