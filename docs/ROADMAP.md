@@ -531,8 +531,15 @@ History: ROADMAP-HISTORY.md §3 D, lines 1123–1344.
   `runtime/boolean.py` are stand-ins. `haematopoiesis.to_bio` still emits `fraction:` rather than
   `share:`.
 - **Next.** 1. Contact and geometry at division, or a measured cell-cycle regulator, for the worm's
-  next real number; set aside on 2026-10-10 for want of both (AREA-E-NEXT.md). 2. The second human mechanism module after haematopoiesis:
-  the small-intestinal crypt as registered in `460c46f`, then its run and its mutants. 3. A measured contact table for the embryo over time, to replace the curated one.
+  next real number; set aside on 2026-10-10 for want of both (AREA-E-NEXT.md), then **done 2026-10-10** (lane-wormcontact;
+  `3007896` measured contacts, `a3790d0`, `6bdecd4` registered, `09be446` result): fates decided without the
+  lookup, 0 → **56 of 555** embryonic terminal fates, 56 right and 0 wrong, **all circular** as wild-type
+  predictions (each founder-tissue rule was written from the clonal observation it is scored against); 34
+  follow a Wnt read at a measured contact, 22 maternal factors segregated by named divisions; all eight
+  registered predictions held. Terminal-level knockouts: pop-1, skn-1, pal-1, mom-2 and mom-5 reproduced in
+  direction; **pie-1 not** (the germ line is lost as published, but the program makes no intestine instead
+  of extra, because `presents_mom2` needs PIE-1 in P2). The shipped `embryo_factors.bio` stays at 0. 2. The second human mechanism module after haematopoiesis:
+  the small-intestinal crypt as registered in `460c46f`, then its run and its mutants. 3. A measured contact table for the embryo over time, to replace the curated one: **topology done 2026-10-10** (CShaper, Cao et al. 2020, CC BY 4.0, 479 pairs reproducible in 17 embryos, `3007896`; it carries no time or area, and ABa never touches P2).
   4. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12. 5. A `differentiate` that may be
   read after a stated delay. 6. `share:` in `haematopoiesis.to_bio`.
 - **Owner.** lane-organism holds `data/organisms/human/` and docs/AREA-E-NEXT.md from 2026-10-10
