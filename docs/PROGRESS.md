@@ -1506,3 +1506,47 @@ ROADMAP header with §1, §2, §2.1 and §8.
 - A: Albert's decisions, AstroREG-2 first.
 - B: model lanes, starting with compiled rules that run and the `reader` construct.
 - C: one engineering slot, starting with the fast gate and the engine-package writer.
+
+## 2026-10-10 (afternoon) — the plan restarted: four items done, the decoded genome run for the first time and found not yet to be a network, and every document current
+
+Albert approved the review's order of work ("proceed") and then asked for the whole project and
+its documentation brought to its current state, the roadmap reviewed and an execution plan
+prepared. Four model lanes and one engineering lane ran, beside five documentation passes. No
+model request was sent and no money spent.
+
+**What the model work found, each in its registered words.**
+- **Running the compiled rules (M1, `747b207`):** "no difference detected" against measured RNA
+  over 13,375 gene-tissue pairs in 54 GTEx tissues. The census before it is the larger finding:
+  **0 of 440,589 compiled rules names a gene as its source**, so the decoded genome runs as
+  one-gene systems and cannot produce a network effect. Giving the rules their regulators is now
+  §5 item 7b, and it is running.
+- **Closure at the cell level (M3, `80bf3db`):** ENCODE's CRISPRi proliferation screen in K562,
+  never seen by the model, read against its own control: "No difference was detected at the cell
+  level" over the 35 elements where the attribution stands alone, while the positive control
+  separates (757 promoters, p 5.0e-62), "so the readout is responsive and this is a negative result
+  about the attribution, not about the assay".
+- **The `reader` construct (M2, `5682e6c`):** chromatin now gates a rule in the language. A rule
+  acting through an element runs only where the cell's reader states it open; unknown is never
+  silently open. The compiler half is running (§5 item 7).
+- **Area E's second human mechanism module (M4, `ad8c662`):** the small-intestinal crypt, from a
+  closed list of eight sourced factors; 8 of 8 registered knockouts reproduce the registered
+  pattern, and one number was fitted and is named as the fit. `bio test` went from 227/227 to
+  288/288 over the day.
+
+**The record.**
+- ROADMAP was cut from 849 KB to 153 KB (`715138c`), with the old file kept byte for byte in
+  ROADMAP-HISTORY.md (`0c39ea6`).
+- §5 is now the execution plan: 17 items in three waves plus standing items, each with its owner,
+  files, dependency and what counts as done (`c17b51b`).
+- §6 proposes milestones 1.4 (the decoded genome runs) and 1.5 (human mechanism beyond blood), for
+  the owner to adopt or change.
+- Every design document opens with a dated status block (`3183b81`, `74a4a0c`, `dd84686`).
+- The codebase map names all 280 modules (`fc21c29`).
+- The work board was retired to its live entries, and the dead worktrees were pruned.
+
+**What waits on Albert.**
+- Resuming AstroREG-2 run 2. The resume code is being built; it needs his own sentence and a named
+  signer, because the supervisor session the code names is gone.
+- The promotion to `main`. `promote_main.sh` refused `c00250f`, which had passed CI, because `main`
+  carries PR #13's merge commits and `dev` does not. How to proceed is his decision.
+- The rest of the queue in §5 item 16.
