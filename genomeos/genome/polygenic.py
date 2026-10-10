@@ -8,10 +8,11 @@ table once (cached under data/knowledge/pgs, git-ignored), reads the person's ge
 chromosome and sums effect-allele dosages: a called variant gives its dosage; a position with no call
 inside the person's trusted regions is homozygous reference, so the dosage is 2 when the effect
 allele is the reference base and 0 otherwise; a position outside the trusted regions is missing and
-counted, never guessed. The weights are `curated` evidence, the sum `derived`; the number is a raw
-score with no reference distribution behind it, so it says where the person stands only against
-other people scored the same way, and every score's ancestry caveat is carried with it. Results go
-under the person's own directory, never under data/results.
+counted, never guessed. The weights are `curated` evidence, the sum `derived`. The raw sum alone
+says nothing about high or low, so each result also carries `reference` (genome/pgs_reference.py):
+the person's percentile in a distribution modelled from public allele frequencies of their declared
+group, or UNKNOWN when the group is not covered, and every score's ancestry caveat is carried with
+it. Results go under the person's own directory, never under data/results.
 """
 
 from __future__ import annotations
@@ -85,11 +86,23 @@ def scoring_file(pgs_id: str, knowledge: Path = KNOWLEDGE) -> Path:
     return p
 
 
-def weights(fh) -> tuple[dict[str, str], list[tuple[str, int, str, str, float]]]:
-    """(header fields, rows) of a scoring file: rows are (chrom, pos, effect, other, weight) on GRCh38."""
+def weight_table(
+    fh,
+) -> tuple[dict[str, str], list[tuple[str, int, str, str, float, str, float | None]]]:
+    """(header fields, rows) of a scoring file with the variant id and the authors' allele frequency.
+
+    Rows are (chrom, pos, effect, other, weight, rsID or "", the authors' effect-allele frequency or
+    None) on GRCh38, in file order; `weights` is this table cut to its first five fields, so a row's
+    index means the same variant in both.
+    """
     header: dict[str, str] = {}
-    rows: list[tuple[str, int, str, str, float]] = []
+    rows: list[tuple[str, int, str, str, float, str, float | None]] = []
     cols: dict[str, int] | None = None
+
+    def col(f: list[str], name: str) -> str:
+        i = cols.get(name) if cols else None
+        return f[i] if i is not None and i < len(f) else ""
+
     for line in fh:
         if line.startswith("#"):
             if "=" in line and not line.startswith("##"):
@@ -104,13 +117,15 @@ def weights(fh) -> tuple[dict[str, str], list[tuple[str, int, str, str, float]]]
         pos = f[cols["hm_pos"]] if "hm_pos" in cols else f[cols["chr_position"]]
         if not chrom or not pos:
             continue
-        other = f[cols["other_allele"]] if "other_allele" in cols and cols["other_allele"] < len(f) else ""
-        if not other and "hm_inferOtherAllele" in cols and cols["hm_inferOtherAllele"] < len(f):
-            other = f[cols["hm_inferOtherAllele"]]
+        other = col(f, "other_allele") or col(f, "hm_inferOtherAllele")
         try:
             w = float(f[cols["effect_weight"]])
         except ValueError:
             continue
+        try:
+            af = float(col(f, "allelefrequency_effect"))
+        except ValueError:
+            af = None
         rows.append(
             (
                 f"chr{chrom}" if not chrom.startswith("chr") else chrom,
@@ -118,9 +133,17 @@ def weights(fh) -> tuple[dict[str, str], list[tuple[str, int, str, str, float]]]
                 f[cols["effect_allele"]],
                 other,
                 w,
+                col(f, "hm_rsID") or col(f, "rsID"),
+                af,
             )
         )
     return header, rows
+
+
+def weights(fh) -> tuple[dict[str, str], list[tuple[str, int, str, str, float]]]:
+    """(header fields, rows) of a scoring file: rows are (chrom, pos, effect, other, weight) on GRCh38."""
+    header, rows = weight_table(fh)
+    return header, [r[:5] for r in rows]
 
 
 def _dosages(path: Path) -> dict[int, dict[str, int]]:
@@ -140,8 +163,18 @@ def _dosages(path: Path) -> dict[int, dict[str, int]]:
 
 
 def score_person(
-    name: str, pgs_id: str, root: Path | None = None, knowledge: Path = KNOWLEDGE, progress=None
+    name: str,
+    pgs_id: str,
+    root: Path | None = None,
+    knowledge: Path = KNOWLEDGE,
+    progress=None,
+    fetch_frequencies: bool = False,
 ) -> dict[str, Any]:
+    """The person's raw score, and where it falls in their declared group when that group is covered.
+
+    `fetch_frequencies` lets the reference step download the score's allele frequencies when they are
+    not cached yet (`pgs_reference.fetch_frequencies`); without it only a cached table is read.
+    """
     root = root or ROOT
     people = {p["name"]: p for p in list_individuals(root)}
     if name not in people:
@@ -151,8 +184,9 @@ def score_person(
     with gzip.open(scoring_file(pgs_id, knowledge), "rt") as fh:
         header, rows = weights(fh)
     by_chrom: dict[str, list] = {}
-    for r in rows:
-        by_chrom.setdefault(r[0], []).append(r)
+    for i, r in enumerate(rows):
+        by_chrom.setdefault(r[0], []).append((i, *r))
+    dosage: list[int | None] = [None] * len(rows)  # per row: the dosage used, None when not used
     total = 0.0
     n = called = assumed_ref = missing = mismatched = 0
     per_chrom: dict[str, dict[str, int]] = {}
@@ -168,7 +202,7 @@ def score_person(
         base_at, genome = _reference_base_reader(chrom)
         try:
             c = {"variants": 0, "called": 0, "assumed_reference": 0, "missing": 0, "allele_mismatch": 0}
-            for _, pos, eff, _other, w in items:
+            for i, _, pos, eff, _other, w in items:
                 n += 1
                 c["variants"] += 1
                 entry = dos.get(pos)
@@ -197,6 +231,7 @@ def score_person(
                     c["missing"] += 1
                     continue
                 total += w * d
+                dosage[i] = d
             per_chrom[chrom] = c
         finally:
             if genome is not None:
@@ -221,12 +256,19 @@ def score_person(
         "seconds": round(time.time() - t0, 1),
         "evidence": EVIDENCE,
         "confidence": CONFIDENCE,
-        "note": "a raw weighted sum, not a percentile: the catalog publishes weights, not the distribution "
-        "of the score in any population, so this number places the person only against others scored the "
-        "same way; the score was built and tested in the ancestries listed under score.ancestry, and its "
-        "effect sizes transfer poorly outside them",
+        "note": "a raw weighted sum; the catalog publishes weights, not the distribution of the score in "
+        "any population, so where the person falls is under `reference`: a percentile in a distribution "
+        "modelled from public allele frequencies of the person's declared group, or UNKNOWN when that "
+        "group is not covered. A percentile is a position among people, not a risk; the score was built "
+        "and tested in the ancestries listed under score.ancestry, and its effect sizes transfer poorly "
+        "outside them",
         "date": time.strftime("%Y-%m-%d"),
     }
+    from genomeos.genome import pgs_reference
+
+    out["reference"] = pgs_reference.person_reference(
+        name, pgs_id, rows, dosage, root=root, knowledge=knowledge, fetch=fetch_frequencies, progress=progress
+    )
     d = root / name
     d.mkdir(parents=True, exist_ok=True)
     (d / f"pgs_{pgs_id}.json").write_text(json.dumps(out, indent=1))
