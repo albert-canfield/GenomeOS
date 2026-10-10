@@ -102,6 +102,57 @@ Registered in `genomeos/attribution/simpler.py` (`REGISTRATION`) and
   carries a registered caveat if the difference is not carried by them. The annotated 5' end is not
   always the start of transcription: most worm transcripts are trans-spliced.
 
-## 4. Result
+## 4. Result (2026-10-10, registration `595d7c2`)
 
-Not yet run at the time of the registration commit.
+Run once by `scripts/simpler_worm_run.py score` on the committed registration, 11 seconds, no
+request to any model. Outcome **DOMAIN_RULE_AHEAD**; falsifier **NOT_FALSIFIED**. The registered
+reading, verbatim:
+
+> On 5,814 C. elegans putative enhancers accessible in exactly one of five tissues (Serizay et al. 2020, young adults), the gene the domain rule attributes is expressed at 5 TPM or more and highest in the element's own tissue for 3,174 of 5,814 (54.6%), against 3,006 of 5,814 (51.7%) for the gene with the nearest 5' end; the rules differ on 1,248 elements; difference +2.89 points, 95% +1.83 to +3.91 over 1-Mb clusters. On this endpoint the domain rule is ahead of nearest TSS. The domain rule's genes match the element's tissue more often than genes at a matched distance (24.1%, one-sided p 0.001), so position carries tissue information here. Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it.
+
+The positive control separates, so the readout is responsive: of 5,347 single-tissue coding
+promoters, the nearest-TSS gene is concordant for 3,749 (70.1%) against
+31.6% for genes at a matched distance (one-sided p 0.001, the floor of
+1,000 draws). 103 of the 11,628 attributed gene slots (two per element) name a gene absent
+from the RNA sheet; the registration counts them as not concordant.
+
+Beside the primary, deciding nothing (registered strata; percentile intervals over 1-Mb clusters):
+
+| stratum | elements | domain rule | nearest TSS | difference, points [95%] |
+|---|---|---|---|---|
+| inside a gene body | 3,479 | 55.0% | 52.7% | +2.33 [+0.71, +3.88] |
+| between genes | 2,335 | 53.9% | 50.2% | +3.73 [+2.79, +4.74] |
+| the 1,248 where the rules differ | 1,248 | 43.9% | 30.4% | +13.46 [+8.74, +18.02] |
+| germline | 470 | 60.2% | 59.8% | +0.43 [-3.07, +3.79] |
+| neurons | 1,434 | 50.8% | 46.2% | +4.60 [+2.54, +6.85] |
+| muscle | 1,432 | 45.5% | 41.3% | +4.12 [+2.11, +6.02] |
+| hypodermis | 1,487 | 56.6% | 56.5% | +0.13 [-2.21, +2.17] |
+| intestine | 991 | 67.6% | 63.7% | +3.94 [+0.89, +7.18] |
+
+The nearest-TSS gene is also above its own matched-distance control (26.8% expected,
+one-sided p 0.001). The difference is not confined to gene bodies: between genes it is +3.73
+points, so the registered host caveat was not triggered. That does not remove the confound the
+caveat names. Most worm transcripts are trans-spliced, and the outron upstream of the annotated 5'
+end is transcribed with the gene, so an element between genes that the rule attributes to the gene
+it sits upstream of can also lie in that gene's transcribed sequence. This run does not separate
+regulation from transcription in either stratum. Two of the five tissues (germline, hypodermis)
+show no difference on their own.
+
+What this does and does not say. On this endpoint the domain rule is ahead of nearest TSS: where
+the human node cannot be carried over, a node defined by gene structure names a gene expressed
+highest in the element's tissue for 54.6% of 5,814 elements against 51.7% for nearest TSS, on an
+endpoint the rule never read. It does not say that any element acts on the gene it is attributed
+to: accessibility is not function, and concordance of tissue is not a measured effect of the
+element. It is one stage (young adults), five tissues, one source.
+
+## 5. What follows
+
+1. Replication at a second stage or resolution, registered before it is run: Jänes 2018 (six
+   stages) or Durham 2021 (L2 cell types), same rule, same baseline, same control.
+2. The worm constraint tiers: nematode phyloP by range request (`attribution/bigwig.py`, no
+   download), with a threshold derived for nematodes rather than borrowed from Zoonomia; tested
+   against which elements are accessible in any tissue, which is not function either.
+3. Closure at the cell level on the worm's complete lineage: element, gene, cell fate, once
+   per-cell element activity and per-cell RNA can be joined on the lineage.
+4. Then Drosophila (genome-wide STARR-seq and embryo enhancer tiles exist; sizes and licences not
+   yet checked), fugu as the compact vertebrate, and mouse for transfer, each without a model request.

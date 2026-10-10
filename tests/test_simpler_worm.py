@@ -151,3 +151,16 @@ def test_census_recomputes_from_the_registered_inputs() -> None:
     chroms = simpler.read_genes(ROOT / simpler.GFF3)
     rows = simpler.attribute(simpler.read_elements(ROOT / simpler.TABLE_S2), chroms)
     assert simpler.census(rows) == reg["census"]
+
+
+def test_result_reading_is_the_registered_wording() -> None:
+    res = json.loads(RESULT.read_text())
+    reg = json.loads(REGISTRATION.read_text())
+    assert res["census"] == reg["census"]
+    assert res["registration_commit"]
+    assert res["positive_control"]["responsive"] is True
+    assert (
+        res["outcome"] == res["comparison"] == simpler.comparison_label(*res["primary"]["delta_ci95_points"])
+    )
+    assert simpler.reading({**res, "strata": res["strata_beside"]}) == res["reading"]
+    assert res["alphagenome_requests"] == 0

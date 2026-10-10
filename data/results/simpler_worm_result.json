@@ -1,0 +1,377 @@
+{
+  "result": "simpler_worm_result",
+  "date": "2026-10-10",
+  "registration_commit": "595d7c2",
+  "registered_inputs": {
+    "table_s2": {
+      "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+      "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70"
+    },
+    "gff3": {
+      "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+      "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9"
+    },
+    "protein_coding_genes": 19973
+  },
+  "census": {
+    "elements": 5814,
+    "elements_by_tissue": {
+      "Germline": 470,
+      "Neurons": 1434,
+      "Muscle": 1432,
+      "Hypod.": 1487,
+      "Intest.": 991
+    },
+    "domain_cases": {
+      "one_flank": 1,
+      "host": 3479,
+      "divergent": 874,
+      "faces_one": 1319,
+      "convergent_fallback": 141
+    },
+    "discordant": 1248,
+    "discordant_fraction": 0.2147,
+    "discordant_by_case": {
+      "host": 942,
+      "faces_one": 300,
+      "convergent_fallback": 6
+    },
+    "discordant_by_tissue": {
+      "Germline": 111,
+      "Neurons": 305,
+      "Muscle": 297,
+      "Hypod.": 323,
+      "Intest.": 212
+    },
+    "host_elements": 3479,
+    "intergenic_elements": 2335,
+    "intergenic_discordant": 306,
+    "clusters_1mb": 103,
+    "mde_points_unclustered": 1.701,
+    "positive_control_promoters": 5347,
+    "stop_rule_met": false
+  },
+  "primary": {
+    "n": 5814,
+    "domain_concordant": 3174,
+    "nearest_concordant": 3006,
+    "domain_rate_pct": 54.592,
+    "nearest_rate_pct": 51.703,
+    "delta_points": 2.89,
+    "delta_ci95_points": [
+      1.832,
+      3.912
+    ],
+    "clusters": 103
+  },
+  "control": {
+    "expected": 1401.799,
+    "expected_rate": 0.24111,
+    "draws": 1000,
+    "draws_at_or_above_observed": 0,
+    "p_one_sided": 0.001
+  },
+  "positive_control": {
+    "n": 5347,
+    "nearest_concordant": 3749,
+    "nearest_rate_pct": 70.114,
+    "control": {
+      "expected": 1688.843,
+      "expected_rate": 0.31585,
+      "draws": 1000,
+      "draws_at_or_above_observed": 0,
+      "p_one_sided": 0.001
+    },
+    "responsive": true
+  },
+  "nearest_against_its_control": {
+    "expected": 1558.383,
+    "expected_rate": 0.26804,
+    "draws": 1000,
+    "draws_at_or_above_observed": 0,
+    "p_one_sided": 0.001
+  },
+  "strata_beside": {
+    "host": {
+      "n": 3479,
+      "domain_concordant": 1915,
+      "nearest_concordant": 1834,
+      "domain_rate_pct": 55.045,
+      "nearest_rate_pct": 52.716,
+      "delta_points": 2.328,
+      "delta_ci95_points": [
+        0.706,
+        3.885
+      ],
+      "clusters": 103
+    },
+    "intergenic": {
+      "n": 2335,
+      "domain_concordant": 1259,
+      "nearest_concordant": 1172,
+      "domain_rate_pct": 53.919,
+      "nearest_rate_pct": 50.193,
+      "delta_points": 3.726,
+      "delta_ci95_points": [
+        2.785,
+        4.741
+      ],
+      "clusters": 102
+    },
+    "discordant_only": {
+      "n": 1248,
+      "domain_concordant": 548,
+      "nearest_concordant": 380,
+      "domain_rate_pct": 43.91,
+      "nearest_rate_pct": 30.449,
+      "delta_points": 13.462,
+      "delta_ci95_points": [
+        8.744,
+        18.024
+      ],
+      "clusters": 101
+    },
+    "tissue_Germline": {
+      "n": 470,
+      "domain_concordant": 283,
+      "nearest_concordant": 281,
+      "domain_rate_pct": 60.213,
+      "nearest_rate_pct": 59.787,
+      "delta_points": 0.426,
+      "delta_ci95_points": [
+        -3.067,
+        3.789
+      ],
+      "clusters": 96
+    },
+    "tissue_Neurons": {
+      "n": 1434,
+      "domain_concordant": 728,
+      "nearest_concordant": 662,
+      "domain_rate_pct": 50.767,
+      "nearest_rate_pct": 46.165,
+      "delta_points": 4.603,
+      "delta_ci95_points": [
+        2.535,
+        6.847
+      ],
+      "clusters": 101
+    },
+    "tissue_Muscle": {
+      "n": 1432,
+      "domain_concordant": 651,
+      "nearest_concordant": 592,
+      "domain_rate_pct": 45.461,
+      "nearest_rate_pct": 41.341,
+      "delta_points": 4.12,
+      "delta_ci95_points": [
+        2.113,
+        6.023
+      ],
+      "clusters": 101
+    },
+    "tissue_Hypod.": {
+      "n": 1487,
+      "domain_concordant": 842,
+      "nearest_concordant": 840,
+      "domain_rate_pct": 56.624,
+      "nearest_rate_pct": 56.49,
+      "delta_points": 0.134,
+      "delta_ci95_points": [
+        -2.215,
+        2.172
+      ],
+      "clusters": 103
+    },
+    "tissue_Intest.": {
+      "n": 991,
+      "domain_concordant": 670,
+      "nearest_concordant": 631,
+      "domain_rate_pct": 67.608,
+      "nearest_rate_pct": 63.673,
+      "delta_points": 3.935,
+      "delta_ci95_points": [
+        0.888,
+        7.177
+      ],
+      "clusters": 101
+    }
+  },
+  "attributed_genes_missing_from_rna_sheet": 103,
+  "comparison": "DOMAIN_RULE_AHEAD",
+  "falsifier": "NOT_FALSIFIED",
+  "outcome": "DOMAIN_RULE_AHEAD",
+  "reading": "On 5,814 C. elegans putative enhancers accessible in exactly one of five tissues (Serizay et al. 2020, young adults), the gene the domain rule attributes is expressed at 5 TPM or more and highest in the element's own tissue for 3,174 of 5,814 (54.6%), against 3,006 of 5,814 (51.7%) for the gene with the nearest 5' end; the rules differ on 1,248 elements; difference +2.89 points, 95% +1.83 to +3.91 over 1-Mb clusters. On this endpoint the domain rule is ahead of nearest TSS. The domain rule's genes match the element's tissue more often than genes at a matched distance (24.1%, one-sided p 0.001), so position carries tissue information here. Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it.",
+  "reading_is_the_registered_wording": "the reading is REGISTRATION['outcome_wording'] with its numbers filled in and no other word changed",
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "Genome Res 30(12), December 2020; supplement as served by Europe PMC on 2026-10-10"
+      },
+      {
+        "accession": "Ensembl gene models for WBcel235 (WBcel235.63.gff3.gz)",
+        "version": "release 63, the copy held in data/reference/celegans since 2026-09-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/simpler_worm_registration.json",
+        "sha256": "86f5de1347b601de9e51ad216882e5f746cf2280c84f0842b57be6f092b11718",
+        "bytes": 14687,
+        "partition": "the committed registration"
+      },
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "elements (ATAC_metrics) and the endpoint (RNA_metrics)"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "gene positions and strands"
+      }
+    ],
+    "assembly": "WBcel235 (ce11): Table S2 and the gene models are on the same build; nothing is lifted",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "the GFF3 is 1-based closed; Table S2 does not state its base, and the element midpoint (start + end) // 2 moves by at most 1 bp either way"
+    },
+    "parameters": {
+      "element_type": "putative_enhancer",
+      "promoter_type": "coding_promoter",
+      "tissues": [
+        "Germline",
+        "Neurons",
+        "Muscle",
+        "Hypod.",
+        "Intest."
+      ],
+      "detection_tpm": 5.0,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "control_draws": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "seed": 20261010,
+      "min_discordant": 200,
+      "alpha": 0.05
+    },
+    "exclusions": [
+      "elements of any class other than putative_enhancer (primary) and coding_promoter (positive control)",
+      "elements whose tissue call is not exactly one of the five tissues (Ubiq., Low, Unclassified, combinations)",
+      "genes that are not protein_coding in the GFF3, and the MtDNA genes",
+      "the source's own element-to-gene columns, never read: promoter_gene_id_fwd, promoter_locus_id_fwd, promoter_gene_id_rev, promoter_locus_id_rev, associated_gene_id, associated_locus_id, nb_associated_promoters, nb_associated_enhancers"
+    ],
+    "partitions": {
+      "population": "pinned by the committed registration's census",
+      "positive_control": "coding_promoter"
+    },
+    "code_cleanliness": {
+      "git_sha": "595d7c21406e8a8bcdbf41b5e844cace745bdea2",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/simpler_worm_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_worm_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_worm_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "genomeos/attribution/targetchoice.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py",
+        "tests/test_targetchoice.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_worm_run.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "595d7c21406e8a8bcdbf41b5e844cace745bdea2",
+      "dirty": true,
+      "dirty_code_paths": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "genomeos/attribution/targetchoice.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py",
+        "tests/test_targetchoice.py"
+      ],
+      "untracked_code_paths": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_worm_run.py",
+        "score"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "595d7c21406e8a8bcdbf41b5e844cace745bdea2",
+      "code_cleanliness_git_sha": "595d7c21406e8a8bcdbf41b5e844cace745bdea2",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 595d7c2"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 316,
+      "opens_under_data": 9,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
