@@ -1067,6 +1067,8 @@ Four rules govern the whole plan:
 
 11. **Done 2026-10-10 — E2, the engine package writer** (lane-enginepkg; `48c65e3` writer, `050a9b2` result). `scripts/package_engine.py` records the package path relative to the repository ("build/biolang/biolang"; a build outside it is recorded relative to `--out`, with a flag), and only the default build writes `data/results/engine_package.json`; any other `--out` or `--name` is a scratch run that writes beside its build and says data/results was not touched. The canonical result was rebuilt in a clean worktree of `48c65e3`: 12 of 12 checks, `dirty: false`, engine suite "366 passed, 3 skipped, 3 xfailed in 34.45s". It replaces both the stale result of 2026-09-29 and the uncommitted scratch rebuild of 2026-10-02, which was not committed.
 
+**Wave 2 — from the middle of October, in this order unless a result changes it.**
+
 12. **AstroREG-2 analyses**, after item 5 completes: the registered primary analysis and item (h), each from its committed registration only, reported verbatim. Then Albert's decision on the second cell type (725 requests), with the run-2 outcome in hand.
 
 13. **M6 — The dormant areas, one per free model slot** (from 2026-10-10 under Albert's "start working unstoppable on each lane", each area has a lane: A lane-engdebts, C lane-roadrunner, D lane-pgs, H lane-forgecal, J lane-speciesnull; and area F's Next 1, surface scoring that reads the alteration, is lane-surface).
