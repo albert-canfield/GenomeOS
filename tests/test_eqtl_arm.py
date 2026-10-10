@@ -395,11 +395,18 @@ def test_available_counts_blocks_with_a_gene_near_enough_and_outside_the_block()
 # ---- the track as held ---------------------------------------------------------------------------
 
 
+#: a chr21 stretch that lies inside the gap between two of the 882 blocks (16,862,874 to 23,957,862,
+#: checked on the blocks' coordinates); the test excludes everything else on the chromosome, so it
+#: decodes no record whose variant lies in a block. Until 2026-10-10 this test excluded only
+#: chr21:30-35 Mb and so decoded the chromosome's other records, asserting only that PIPs lie in [0, 1]
+#: and that Whole_Blood is a tissue; nothing was printed or counted. The calibration result says so.
+CLEAR = (18_000_000, 22_000_000)
+
+
 @pytest.mark.needs_local_data("data/knowledge/eqtl_arm/gtexDapg.bb", how=DAPG_HOW)
 def test_the_held_track_has_the_expected_fields_and_decodes_nothing_inside_an_exclusion():
-    ex = ea.Exclusion(blocks(("chr21", 30_000_000, 35_000_000)), margin=0)
+    ex = ea.Exclusion(blocks(("chr21", 0, CLEAR[0]), ("chr21", CLEAR[1], 50_000_000)), margin=0)
     f = ea.DapgTrack(ex).chromosome("chr21")
     assert len(f.pos) > 0 and np.all(np.diff(f.pos) >= 0)
-    assert not np.any((f.pos >= 30_000_000) & (f.pos < 35_000_000))
+    assert np.all((f.pos >= CLEAR[0]) & (f.pos < CLEAR[1]))
     assert float(f.pip.min()) >= 0.0 and float(f.pip.max()) <= 1.0
-    assert "Whole_Blood" in f.tissues
