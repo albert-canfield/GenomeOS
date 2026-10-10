@@ -471,6 +471,27 @@ def length_edges(measured: list[int]) -> list[float]:
     return [float(np.quantile(m, q)) for q in LENGTH_QUANTILES] if len(m) else []
 
 
+def fraction_edges(rows: list[dict[str, Any]]) -> list[float]:
+    """Tertile edges of the constrained fraction (above / measured) over the measured elements."""
+    f = np.array([r["above"] / r["measured"] for r in rows if r["measured"] > 0], dtype=np.float64)
+    return [float(np.quantile(f, q)) for q in LENGTH_QUANTILES] if len(f) else []
+
+
+def by_fraction_tertile(rows: list[dict[str, Any]], fedges: list[float]) -> list[dict[str, Any]]:
+    """Top tertile of the constrained fraction relabelled constrained, bottom tertile not
+    constrained, the middle left out: the dose view of the same track, deciding nothing."""
+    out = []
+    for r in rows:
+        if r["measured"] <= 0 or len(fedges) < 2:
+            continue
+        f = r["above"] / r["measured"]
+        if f >= fedges[1] and f > fedges[0]:
+            out.append({**r, "tier": "constrained"})
+        elif f < fedges[0]:
+            out.append({**r, "tier": "not_constrained"})
+    return out
+
+
 def stratum(row: dict[str, Any], edges: list[float]) -> tuple[str, bool, int, int]:
     """Tissue, inside a gene body or not, distance bin of the domain-rule gene, measured-length bin."""
     return (
@@ -543,6 +564,7 @@ def census(rows: list[dict[str, Any]], edges: list[float]) -> dict[str, Any]:
         "constrained_in_support": n_c,
         "not_constrained_in_support": n_u,
         "mde_points_unclustered": round(100 * mde, 3) if mde is not None else None,
+        "fraction_tertile_edges": [round(x, 6) for x in fraction_edges(rows)],
         "stop_rule_met": n_c < MIN_PER_TIER or n_u < MIN_PER_TIER,
     }
 
@@ -710,6 +732,9 @@ def score(
     for t in simpler.TISSUES:
         strata[t] = matched_difference([r for r in rows if r["tissue"] == t], edges)
     strata[f"track_{SECONDARY}"] = matched_difference(secondary, edges)
+    strata["fraction_top_vs_bottom_tertile"] = matched_difference(
+        by_fraction_tertile(rows, cen["fraction_tertile_edges"]), edges
+    )
     res = {
         "outcome": label,
         "falsifier": falsifier,
@@ -810,8 +835,11 @@ REGISTRATION: dict[str, Any] = {
     ),
     "strata_beside": (
         "Deciding nothing: inside gene bodies and between genes apart; each tissue; the phyloP26way "
-        "tiers on the same elements; the unmatched counts. If the primary is CONSTRAINT_ADDS and the "
-        "between-genes lower bound is <= 0, the between-genes caveat is appended."
+        "tiers on the same elements; the dose view (the primary's constrained fraction, top tertile "
+        "against bottom tertile at edges fixed in the census, matched the same way), named because "
+        "the 5% rule puts most measured elements in the constrained tier when 7.2% of the worm's "
+        "non-exon scored bases pass the cut; the unmatched counts. If the primary is CONSTRAINT_ADDS "
+        "and the between-genes lower bound is <= 0, the between-genes caveat is appended."
     ),
     "confound": (
         "Stage 1 named transcription: an element inside a gene body can be open where its host is "

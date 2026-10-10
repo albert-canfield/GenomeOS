@@ -221,3 +221,14 @@ def test_stored_cut_is_benjamini_hochberg_on_the_stored_histogram() -> None:
         assert t["instrument_check"]["passed"] is (cds > intron)
     for row in d["elements"]:
         assert 0 <= row[4] <= row[3] and 0 <= row[6] <= row[5]
+
+
+def test_fraction_tertiles_split_top_from_bottom_and_drop_the_middle() -> None:
+    rows = [{"measured": 100, "above": a, "tier": "x"} for a in range(0, 30)] + [{"measured": 0, "above": 0}]
+    fedges = st.fraction_edges(rows)
+    assert len(fedges) == 2 and fedges[0] < fedges[1]
+    out = st.by_fraction_tertile(rows, fedges)
+    top = [r["above"] for r in out if r["tier"] == "constrained"]
+    bottom = [r["above"] for r in out if r["tier"] == "not_constrained"]
+    assert min(top) > max(bottom)
+    assert len(top) + len(bottom) < 30 and abs(len(top) - len(bottom)) <= 2
