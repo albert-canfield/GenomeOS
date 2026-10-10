@@ -6,11 +6,15 @@ genes read in one cell type but not another."""
 
 from __future__ import annotations
 
+import gzip
 import sys
 import time
 from pathlib import Path
 
+from genomeos import manifest as mf
 from genomeos.genome import Annotation, IndexedGenome, default_gencode
+from genomeos.genome import epigenome as ep
+from genomeos.genome import reader as rd
 from genomeos.genome.domains import infer_domains
 from genomeos.genome.reader import compare, fetch_peaks, load_peaks, normalise_family, read_chromosome, slug
 from genomeos.genome.regulatory import load_ccres
@@ -34,6 +38,65 @@ DEFAULT_CELLS = [
 ]
 RERUN = "--rerun" in sys.argv  # start the summary afresh (after a change to what "read" means)
 CELLS = [a for a in sys.argv[1:] if a != "--rerun"] or DEFAULT_CELLS
+
+ENTRY = "scripts/reader_genome_wide.py"
+#: the code this roll-up is answerable for: itself, the reader and the layer the marks come from
+OWN_CODE = (ENTRY, "genomeos/genome/reader.py", "genomeos/genome/epigenome.py")
+
+
+def chromosome_manifest(cell: str, chrom: str) -> dict:
+    """The provenance of one per-chromosome reading (2026-10-10, lane-readerneural).
+
+    A per-chromosome name that is not on the legacy allowlist (any biosample added after the result
+    contract, e.g. spinal cord) enters the registry only with a complete manifest, so every reading
+    carries one: the files `read_chromosome` and its setup open for this chromosome, each hashed. The
+    reading itself is unchanged; this records what it read."""
+    gff = default_gencode({chrom})
+    ref = Path(f"data/reference/{chrom}.fa.gz")
+    files = [gff, ref, Path(f"{ref}.fai"), Path(f"{ref}.gzi"), Path(f"data/results/ccres_{chrom}.bed.gz")]
+    files += [rd.peaks_path(cell, chrom)] + [ep.peaks_path(cell, m, chrom) for m in rd.POISED_MARKS]
+    # the accession from this chromosome's own peak file, which is declared below; the layer's
+    # dnase_accession opens another chromosome's file, which this result did not read
+    with gzip.open(rd.peaks_path(cell, chrom), "rt") as fh:
+        head = fh.readline()
+    accession = head[1:].split()[0] if head.startswith("#") else "unknown: no header line"
+    return {
+        "sources": [
+            {
+                "accession": f"ENCODE DNase-seq narrowPeak for {cell}: {accession}",
+                "version": "released GRCh38, the largest peak file for the biosample term "
+                "(reader.find_dnase_file)",
+                "licence": "ENCODE data use policy",
+            },
+            {
+                "accession": f"ENCODE Histone ChIP-seq peaks for {cell} ({', '.join(rd.POISED_MARKS)}), "
+                "as pinned in data/results/epigenome_manifest.json",
+                "version": "default analysis, replicated before pseudoreplicated narrowPeak",
+                "licence": "ENCODE data use policy",
+            },
+            {"accession": "GENCODE v50 comprehensive annotation (GFF3)", "version": "v50"},
+            {"accession": "GRCh38 reference sequence", "version": "GRCh38"},
+            {
+                "accession": "ENCODE cCREs (registry)",
+                "version": "as cached in data/results/ccres_<chrom>.bed.gz",
+            },
+        ],
+        "inputs": [
+            mf.files_entry(f"reader inputs for {cell} on {chrom}", [f for f in files if Path(f).exists()])
+        ],
+        "assembly": "GRCh38",
+        "coordinates": {"base": 0, "interval": "half-open"},
+        "code": {},
+        "parameters": {
+            "promoter_window_bp": rd.PROMOTER_WINDOW,
+            "node_open_min_density_per_100kb": rd.NODE_OPEN_MIN_DENSITY,
+            "node_open_reference_density_per_100kb": rd.NODE_OPEN_REFERENCE_DENSITY,
+            "marks": list(rd.POISED_MARKS),
+        },
+        "exclusions": ["genes that are not protein_coding in GENCODE v50 are not called"],
+        "partitions": "n/a: a reading of one biosample on one chromosome, no evaluation split",
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE),
+    }
 
 
 def panel_or_refuse(cells: list[str], published: list[str], what: str) -> None:
@@ -88,6 +151,8 @@ def main() -> None:
         todo = [cell for cell in CELLS if cell not in rows]
         if not todo:
             continue
+        # the window each per-chromosome result is reconciled against opens with its own reading
+        mf.trace_begin()
         ann = Annotation.from_gff3(default_gencode({chrom}), {chrom})
         g = IndexedGenome(f"data/reference/{chrom}.fa.gz")
         length = g.lengths[chrom]
@@ -98,7 +163,11 @@ def main() -> None:
         for cell in todo:
             heartbeat("reader_genome_wide")
             r = read_chromosome(cell, chrom, ann, domains, ccres)
-            save_result(f"reader_{slug(cell)}_{chrom}", {k: v for k, v in r.items() if k != "_read_all"})
+            save_result(
+                f"reader_{slug(cell)}_{chrom}",
+                {k: v for k, v in r.items() if k != "_read_all"},
+                manifest=chromosome_manifest(cell, chrom),
+            )
             rows[cell] = {
                 k: r[k]
                 for k in (

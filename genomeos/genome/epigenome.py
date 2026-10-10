@@ -68,7 +68,10 @@ USER_AGENT = "GenomeOS/0.9 (epigenome layer; released GRCh38 files read by range
 #: the reader's biosamples (scripts/reader_genome_wide.py DEFAULT_CELLS). The first eleven are
 #: cultured -- six lines, two differentiated from a stem line, three primary cells; testis and
 #: ovary (2026-09-22) are the first bulk tissue and the first gonadal lineage in the layer, and
-#: carry peaks and methylation but no fold-change signal profiles yet.
+#: carry peaks and methylation but no fold-change signal profiles yet. Spinal cord (2026-10-10,
+#: lane-readerneural, data/results/reader_neural_registration.json) is the first embryonic tissue and
+#: the first primary neural tissue: ENCODE's fetal spinal cord, DNase from a 59-day embryo and the
+#: marks from a 108- and a 113-day embryo, peaks only.
 CELL_TYPES = (
     "K562",
     "HepG2",
@@ -83,10 +86,13 @@ CELL_TYPES = (
     "CD14-positive monocyte",
     "testis",
     "ovary",
+    "spinal cord",
 )
-#: biosamples that are bulk post-mortem tissue rather than a cultured population: a single donor,
-#: a mixture of cell types, and only pseudoreplicated peak calls on this portal.
-TISSUE_CELL_TYPES = ("testis", "ovary")
+#: biosamples that are bulk tissue rather than a cultured population: a single donor per experiment,
+#: a mixture of cell types, and only pseudoreplicated peak calls on this portal. Testis and ovary are
+#: adult post-mortem tissue; spinal cord is fetal, and its DNase and its marks come from different
+#: embryos.
+TISSUE_CELL_TYPES = ("testis", "ovary", "spinal cord")
 MARKS = {
     "H3K4me3": "promoter",
     "H3K27ac": "active enhancer or active promoter",
