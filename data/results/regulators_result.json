@@ -1,0 +1,1994 @@
+{
+  "result": "regulators_result",
+  "date": "2026-10-10",
+  "lane": "lane-regulators",
+  "registration": "regulators_registration",
+  "question": "when ENCODE knocked down a transcription factor in K562 or HepG2, did the genes whose compiled rules in that cell pass through an element the factor occupies there change more than the other genes of the same compiled programme, more than genes near the factor's peaks, and more than another factor's assigned genes?",
+  "outcome": "not_factor_specific",
+  "reading": "the compiled regulator assignment did not anticipate a factor's knockdown better than another factor's assignment did: mean stratified AUROC 0.5022 for the factor's own assigned genes against a median of 0.5016 for another factor's, control p = 0.4026 over 34 factor-cell units; the paired difference against genes near the factor's peaks, -0.0150 [95% CI -0.0228, -0.0071], is reported and decides nothing",
+  "analysis": {
+    "units": 34,
+    "mean_paired_difference": -0.015028706954541737,
+    "ci95": [
+      -0.02280189840116456,
+      -0.0070742136876111176
+    ],
+    "mean_auroc_rules": 0.5021527469141608,
+    "mean_auroc_baseline": 0.5171814538687025,
+    "control_median_mean_auroc": 0.5015887878129607,
+    "control_p": 0.4025974025974026,
+    "alone_in_cell": [],
+    "per_unit": [
+      {
+        "factor": "ARID3A",
+        "cell": "K562",
+        "auroc_rules": 0.4933856823522669,
+        "auroc_baseline": 0.50219075419503
+      },
+      {
+        "factor": "ATF3",
+        "cell": "K562",
+        "auroc_rules": 0.503821835096961,
+        "auroc_baseline": 0.5340986206678872
+      },
+      {
+        "factor": "BACH1",
+        "cell": "K562",
+        "auroc_rules": 0.5195056797021349,
+        "auroc_baseline": 0.4881681376867403
+      },
+      {
+        "factor": "CDC5L",
+        "cell": "K562",
+        "auroc_rules": 0.5345134846144707,
+        "auroc_baseline": 0.5325531987801118
+      },
+      {
+        "factor": "CTCF",
+        "cell": "K562",
+        "auroc_rules": 0.5213842046005399,
+        "auroc_baseline": 0.5494368953536768
+      },
+      {
+        "factor": "E2F6",
+        "cell": "K562",
+        "auroc_rules": 0.4990822881615173,
+        "auroc_baseline": 0.5020948628194849
+      },
+      {
+        "factor": "FOXK2",
+        "cell": "K562",
+        "auroc_rules": 0.5127642005365423,
+        "auroc_baseline": 0.5059681287068641
+      },
+      {
+        "factor": "GATA1",
+        "cell": "K562",
+        "auroc_rules": 0.4943367657254171,
+        "auroc_baseline": 0.521550684176059
+      },
+      {
+        "factor": "HMBOX1",
+        "cell": "K562",
+        "auroc_rules": 0.4874219998519467,
+        "auroc_baseline": 0.4878170827717805
+      },
+      {
+        "factor": "HNRNPK",
+        "cell": "HepG2",
+        "auroc_rules": 0.4887670643878319,
+        "auroc_baseline": 0.564671085299769
+      },
+      {
+        "factor": "HNRNPK",
+        "cell": "K562",
+        "auroc_rules": 0.4962649998911079,
+        "auroc_baseline": 0.5192299278057317
+      },
+      {
+        "factor": "JUND",
+        "cell": "K562",
+        "auroc_rules": 0.4878319410613148,
+        "auroc_baseline": 0.5178584776134669
+      },
+      {
+        "factor": "MAX",
+        "cell": "K562",
+        "auroc_rules": 0.49443230151228734,
+        "auroc_baseline": 0.49755169597179827
+      },
+      {
+        "factor": "MEIS2",
+        "cell": "K562",
+        "auroc_rules": 0.5069994646680942,
+        "auroc_baseline": 0.49786665721140777
+      },
+      {
+        "factor": "MITF",
+        "cell": "K562",
+        "auroc_rules": 0.5208498284507785,
+        "auroc_baseline": 0.5381015452538631
+      },
+      {
+        "factor": "MXI1",
+        "cell": "K562",
+        "auroc_rules": 0.4939459436014949,
+        "auroc_baseline": 0.48969336666251273
+      },
+      {
+        "factor": "NR2F2",
+        "cell": "K562",
+        "auroc_rules": 0.4996506063354101,
+        "auroc_baseline": 0.5325960758203117
+      },
+      {
+        "factor": "RCOR1",
+        "cell": "K562",
+        "auroc_rules": 0.5000063392647721,
+        "auroc_baseline": 0.5124676228399119
+      },
+      {
+        "factor": "RFX5",
+        "cell": "K562",
+        "auroc_rules": 0.519959954949318,
+        "auroc_baseline": 0.5313791807591132
+      },
+      {
+        "factor": "RNF2",
+        "cell": "K562",
+        "auroc_rules": 0.5158224979034293,
+        "auroc_baseline": 0.5527652216002685
+      },
+      {
+        "factor": "SIX5",
+        "cell": "K562",
+        "auroc_rules": 0.5072371124606182,
+        "auroc_baseline": 0.5564747203992976
+      },
+      {
+        "factor": "SMAD5",
+        "cell": "K562",
+        "auroc_rules": 0.49297157123036023,
+        "auroc_baseline": 0.5412511838201293
+      },
+      {
+        "factor": "STAT1",
+        "cell": "K562",
+        "auroc_rules": 0.49111766246272626,
+        "auroc_baseline": 0.5222582672350833
+      },
+      {
+        "factor": "STAT2",
+        "cell": "K562",
+        "auroc_rules": 0.48953901320553045,
+        "auroc_baseline": 0.4698163648069871
+      },
+      {
+        "factor": "STAT5A",
+        "cell": "K562",
+        "auroc_rules": 0.5000879304612742,
+        "auroc_baseline": 0.49651481952272536
+      },
+      {
+        "factor": "TEAD4",
+        "cell": "K562",
+        "auroc_rules": 0.4814217626504852,
+        "auroc_baseline": 0.4942206159769754
+      },
+      {
+        "factor": "THAP1",
+        "cell": "K562",
+        "auroc_rules": 0.5240569668976135,
+        "auroc_baseline": 0.5625645174790057
+      },
+      {
+        "factor": "TRIM28",
+        "cell": "K562",
+        "auroc_rules": 0.48973988210938857,
+        "auroc_baseline": 0.4976049377652921
+      },
+      {
+        "factor": "UBTF",
+        "cell": "K562",
+        "auroc_rules": 0.479804120640286,
+        "auroc_baseline": 0.5054667376394217
+      },
+      {
+        "factor": "USF2",
+        "cell": "K562",
+        "auroc_rules": 0.49759493670886074,
+        "auroc_baseline": 0.5394446752084865
+      },
+      {
+        "factor": "XRCC5",
+        "cell": "HepG2",
+        "auroc_rules": 0.5320226734591376,
+        "auroc_baseline": 0.4853656430771002
+      },
+      {
+        "factor": "XRCC5",
+        "cell": "K562",
+        "auroc_rules": 0.5086415025225195,
+        "auroc_baseline": 0.524616373695163
+      },
+      {
+        "factor": "ZBTB33",
+        "cell": "K562",
+        "auroc_rules": 0.48623511904761907,
+        "auroc_baseline": 0.506418489742348
+      },
+      {
+        "factor": "ZNF384",
+        "cell": "K562",
+        "auroc_rules": 0.5019760585574137,
+        "auroc_baseline": 0.5040928631720835
+      }
+    ]
+  },
+  "experiments": [
+    {
+      "factor": "ARID3A",
+      "cell": "K562",
+      "accession": "ENCSR169DSM",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.6194306442709566,
+      "universe": 3068,
+      "rule_arm": 777,
+      "baseline_arm": 777,
+      "baseline_overlap_with_rule_arm": 401
+    },
+    {
+      "factor": "ARID3A",
+      "cell": "K562",
+      "accession": "ENCSR898UNK",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.9131765992345542,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "ATF3",
+      "cell": "K562",
+      "accession": "ENCSR045TQN",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.7737226277372263,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "ATF3",
+      "cell": "K562",
+      "accession": "ENCSR123IMQ",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.2712115598369767,
+      "universe": 3297,
+      "rule_arm": 1311,
+      "baseline_arm": 1311,
+      "baseline_overlap_with_rule_arm": 671
+    },
+    {
+      "factor": "BACH1",
+      "cell": "K562",
+      "accession": "ENCSR190RZZ",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.38059855521155833,
+      "universe": 3298,
+      "rule_arm": 274,
+      "baseline_arm": 274,
+      "baseline_overlap_with_rule_arm": 81
+    },
+    {
+      "factor": "BACH1",
+      "cell": "K562",
+      "accession": "ENCSR793ISR",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.6260494123290957,
+      "universe": 3131,
+      "rule_arm": 263,
+      "baseline_arm": 263,
+      "baseline_overlap_with_rule_arm": 78
+    },
+    {
+      "factor": "BHLHE40",
+      "cell": "K562",
+      "accession": "ENCSR626SFM",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.9265674098458776,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "CDC5L",
+      "cell": "K562",
+      "accession": "ENCSR544ZMX",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.3503517131835716,
+      "universe": 2838,
+      "rule_arm": 227,
+      "baseline_arm": 227,
+      "baseline_overlap_with_rule_arm": 65
+    },
+    {
+      "factor": "CTCF",
+      "cell": "HepG2",
+      "accession": "ENCSR871XPX",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.8164570454060968,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "CTCF",
+      "cell": "K562",
+      "accession": "ENCSR067CAG",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.46765249537892783,
+      "universe": 2877,
+      "rule_arm": 1016,
+      "baseline_arm": 1016,
+      "baseline_overlap_with_rule_arm": 451
+    },
+    {
+      "factor": "CTCF",
+      "cell": "K562",
+      "accession": "ENCSR613LSQ",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.6277454056476917,
+      "universe": 2993,
+      "rule_arm": 1073,
+      "baseline_arm": 1073,
+      "baseline_overlap_with_rule_arm": 475
+    },
+    {
+      "factor": "E2F6",
+      "cell": "K562",
+      "accession": "ENCSR820EGA",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.6699480448455017,
+      "universe": 3131,
+      "rule_arm": 954,
+      "baseline_arm": 954,
+      "baseline_overlap_with_rule_arm": 444
+    },
+    {
+      "factor": "E4F1",
+      "cell": "K562",
+      "accession": "ENCSR916PCG",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.8190476190476191,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "FOXK2",
+      "cell": "K562",
+      "accession": "ENCSR773VKE",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.5749432423666775,
+      "universe": 3298,
+      "rule_arm": 1314,
+      "baseline_arm": 1314,
+      "baseline_overlap_with_rule_arm": 707
+    },
+    {
+      "factor": "GATA1",
+      "cell": "K562",
+      "accession": "ENCSR850LOZ",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.5391916185026965,
+      "universe": 3215,
+      "rule_arm": 1150,
+      "baseline_arm": 1150,
+      "baseline_overlap_with_rule_arm": 670
+    },
+    {
+      "factor": "GATA2",
+      "cell": "K562",
+      "accession": "ENCSR557BMX",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.7690127916026421,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "HMBOX1",
+      "cell": "K562",
+      "accession": "ENCSR942XXL",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.3969101659355331,
+      "universe": 3214,
+      "rule_arm": 1093,
+      "baseline_arm": 1093,
+      "baseline_overlap_with_rule_arm": 619
+    },
+    {
+      "factor": "HNRNPK",
+      "cell": "HepG2",
+      "accession": "ENCSR853ZJS",
+      "assay": "shRNA RNA-seq",
+      "knockdown_ratio": 0.3554829572886156,
+      "universe": 2433,
+      "rule_arm": 210,
+      "baseline_arm": 210,
+      "baseline_overlap_with_rule_arm": 42
+    },
+    {
+      "factor": "HNRNPK",
+      "cell": "K562",
+      "accession": "ENCSR529JNJ",
+      "assay": "shRNA RNA-seq",
+      "knockdown_ratio": 0.29514411701441173,
+      "universe": 2893,
+      "rule_arm": 169,
+      "baseline_arm": 169,
+      "baseline_overlap_with_rule_arm": 26
+    },
+    {
+      "factor": "JUND",
+      "cell": "K562",
+      "accession": "ENCSR389OCD",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.4255963650132526,
+      "universe": 3298,
+      "rule_arm": 1606,
+      "baseline_arm": 1606,
+      "baseline_overlap_with_rule_arm": 962
+    },
+    {
+      "factor": "MAFK",
+      "cell": "K562",
+      "accession": "ENCSR640PVZ",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.7626774847870184,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "MAX",
+      "cell": "K562",
+      "accession": "ENCSR675SDG",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.46597353497164457,
+      "universe": 3131,
+      "rule_arm": 1751,
+      "baseline_arm": 1751,
+      "baseline_overlap_with_rule_arm": 1143
+    },
+    {
+      "factor": "MEIS2",
+      "cell": "K562",
+      "accession": "ENCSR733TFF",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.6212722197737625,
+      "universe": 3297,
+      "rule_arm": 1380,
+      "baseline_arm": 1380,
+      "baseline_overlap_with_rule_arm": 766
+    },
+    {
+      "factor": "MITF",
+      "cell": "K562",
+      "accession": "ENCSR905SEH",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.5193333333333333,
+      "universe": 3297,
+      "rule_arm": 966,
+      "baseline_arm": 966,
+      "baseline_overlap_with_rule_arm": 408
+    },
+    {
+      "factor": "MXI1",
+      "cell": "K562",
+      "accession": "ENCSR631RKH",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.571963616907437,
+      "universe": 3125,
+      "rule_arm": 551,
+      "baseline_arm": 551,
+      "baseline_overlap_with_rule_arm": 198
+    },
+    {
+      "factor": "NR2C2",
+      "cell": "K562",
+      "accession": "ENCSR808HQN",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.8317546233649076,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "NR2F2",
+      "cell": "K562",
+      "accession": "ENCSR688UTN",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.6454910254324603,
+      "universe": 3297,
+      "rule_arm": 1300,
+      "baseline_arm": 1300,
+      "baseline_overlap_with_rule_arm": 720
+    },
+    {
+      "factor": "NRF1",
+      "cell": "K562",
+      "accession": "ENCSR299HUJ",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.7080893515506397,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "RCOR1",
+      "cell": "K562",
+      "accession": "ENCSR390GWL",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.6960634726884346,
+      "universe": 3128,
+      "rule_arm": 646,
+      "baseline_arm": 646,
+      "baseline_overlap_with_rule_arm": 290
+    },
+    {
+      "factor": "RFX5",
+      "cell": "K562",
+      "accession": "ENCSR619EYC",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.32329760403530894,
+      "universe": 3298,
+      "rule_arm": 75,
+      "baseline_arm": 75,
+      "baseline_overlap_with_rule_arm": 13
+    },
+    {
+      "factor": "RNF2",
+      "cell": "K562",
+      "accession": "ENCSR043UMW",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.30695629687095943,
+      "universe": 3298,
+      "rule_arm": 1853,
+      "baseline_arm": 1853,
+      "baseline_overlap_with_rule_arm": 1239
+    },
+    {
+      "factor": "SIX5",
+      "cell": "K562",
+      "accession": "ENCSR104QKG",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.3465413028878441,
+      "universe": 3298,
+      "rule_arm": 68,
+      "baseline_arm": 68,
+      "baseline_overlap_with_rule_arm": 6
+    },
+    {
+      "factor": "SMAD2",
+      "cell": "K562",
+      "accession": "ENCSR016WTN",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.44244935543278086,
+      "universe": 2990,
+      "rule_arm": 2,
+      "excluded": "arm_too_small"
+    },
+    {
+      "factor": "SMAD5",
+      "cell": "K562",
+      "accession": "ENCSR649MBU",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.5795706883789785,
+      "universe": 3011,
+      "rule_arm": 616,
+      "baseline_arm": 616,
+      "baseline_overlap_with_rule_arm": 237
+    },
+    {
+      "factor": "SMAD5",
+      "cell": "K562",
+      "accession": "ENCSR731FEO",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.2678421494542401,
+      "universe": 3297,
+      "rule_arm": 634,
+      "baseline_arm": 634,
+      "baseline_overlap_with_rule_arm": 234
+    },
+    {
+      "factor": "SP1",
+      "cell": "K562",
+      "accession": "ENCSR650QAK",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.8394126636103912,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "STAT1",
+      "cell": "K562",
+      "accession": "ENCSR184VVN",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.31344262295081965,
+      "universe": 3215,
+      "rule_arm": 433,
+      "baseline_arm": 433,
+      "baseline_overlap_with_rule_arm": 163
+    },
+    {
+      "factor": "STAT2",
+      "cell": "K562",
+      "accession": "ENCSR469EFL",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.26776944947014736,
+      "universe": 3298,
+      "rule_arm": 536,
+      "baseline_arm": 536,
+      "baseline_overlap_with_rule_arm": 232
+    },
+    {
+      "factor": "STAT5A",
+      "cell": "K562",
+      "accession": "ENCSR174FUO",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.4946090774097747,
+      "universe": 3120,
+      "rule_arm": 1167,
+      "baseline_arm": 1167,
+      "baseline_overlap_with_rule_arm": 682
+    },
+    {
+      "factor": "STAT5A",
+      "cell": "K562",
+      "accession": "ENCSR376CFR",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.5535963958365697,
+      "universe": 3297,
+      "rule_arm": 1213,
+      "baseline_arm": 1213,
+      "baseline_overlap_with_rule_arm": 702
+    },
+    {
+      "factor": "TEAD4",
+      "cell": "K562",
+      "accession": "ENCSR550FIL",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.3112033195020747,
+      "universe": 3298,
+      "rule_arm": 1561,
+      "baseline_arm": 1561,
+      "baseline_overlap_with_rule_arm": 954
+    },
+    {
+      "factor": "THAP1",
+      "cell": "K562",
+      "accession": "ENCSR294ZCD",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.6404040404040405,
+      "universe": 3298,
+      "rule_arm": 115,
+      "baseline_arm": 115,
+      "baseline_overlap_with_rule_arm": 13
+    },
+    {
+      "factor": "TRIM28",
+      "cell": "K562",
+      "accession": "ENCSR591QYK",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.33808388631254277,
+      "universe": 3298,
+      "rule_arm": 1262,
+      "baseline_arm": 1262,
+      "baseline_overlap_with_rule_arm": 669
+    },
+    {
+      "factor": "UBTF",
+      "cell": "K562",
+      "accession": "ENCSR312FIT",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.6635220125786163,
+      "universe": 2846,
+      "rule_arm": 823,
+      "baseline_arm": 823,
+      "baseline_overlap_with_rule_arm": 389
+    },
+    {
+      "factor": "UBTF",
+      "cell": "K562",
+      "accession": "ENCSR608ORR",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.7895310097385956,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "USF2",
+      "cell": "K562",
+      "accession": "ENCSR052BWT",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.239300362598823,
+      "universe": 3298,
+      "rule_arm": 99,
+      "baseline_arm": 99,
+      "baseline_overlap_with_rule_arm": 8
+    },
+    {
+      "factor": "XRCC5",
+      "cell": "HepG2",
+      "accession": "ENCSR732IYM",
+      "assay": "shRNA RNA-seq",
+      "knockdown_ratio": 0.39506685706867456,
+      "universe": 2561,
+      "rule_arm": 797,
+      "baseline_arm": 797,
+      "baseline_overlap_with_rule_arm": 360
+    },
+    {
+      "factor": "XRCC5",
+      "cell": "K562",
+      "accession": "ENCSR276GMG",
+      "assay": "CRISPR RNA-seq",
+      "knockdown_ratio": 0.6921850079744817,
+      "universe": 3037,
+      "rule_arm": 475,
+      "baseline_arm": 475,
+      "baseline_overlap_with_rule_arm": 165
+    },
+    {
+      "factor": "ZBTB33",
+      "cell": "K562",
+      "accession": "ENCSR223QTD",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.354720744680851,
+      "universe": 3215,
+      "rule_arm": 571,
+      "baseline_arm": 571,
+      "baseline_overlap_with_rule_arm": 191
+    },
+    {
+      "factor": "ZMIZ1",
+      "cell": "K562",
+      "accession": "ENCSR509YMP",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.9400630914826499,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "ZNF143",
+      "cell": "K562",
+      "accession": "ENCSR781XJD",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.8249158249158248,
+      "excluded": "knockdown_below_threshold"
+    },
+    {
+      "factor": "ZNF384",
+      "cell": "K562",
+      "accession": "ENCSR103URL",
+      "assay": "CRISPRi RNA-seq",
+      "knockdown_ratio": 0.6505691617799241,
+      "universe": 3215,
+      "rule_arm": 606,
+      "baseline_arm": 606,
+      "baseline_overlap_with_rule_arm": 206
+    },
+    {
+      "factor": "ZNF384",
+      "cell": "K562",
+      "accession": "ENCSR965CCM",
+      "assay": "siRNA RNA-seq",
+      "knockdown_ratio": 0.7550984217059762,
+      "excluded": "knockdown_below_threshold"
+    }
+  ],
+  "experiments_excluded": {
+    "knockdown_below_threshold": 14,
+    "arm_too_small": 1
+  },
+  "descriptives_not_verdicts": {
+    "rule_arm_with_motif": [
+      {
+        "unit": "ARID3A K562",
+        "accession": "ENCSR169DSM",
+        "genes": 607,
+        "auroc": 0.49960957922825694
+      },
+      {
+        "unit": "ATF3 K562",
+        "accession": "ENCSR123IMQ",
+        "genes": 1057,
+        "auroc": 0.5089610966554547
+      },
+      {
+        "unit": "BACH1 K562",
+        "accession": "ENCSR190RZZ",
+        "genes": 237,
+        "auroc": 0.5194847399499398
+      },
+      {
+        "unit": "BACH1 K562",
+        "accession": "ENCSR793ISR",
+        "genes": 228,
+        "auroc": 0.5452288689755389
+      },
+      {
+        "unit": "CTCF K562",
+        "accession": "ENCSR067CAG",
+        "genes": 484,
+        "auroc": 0.5174766962930848
+      },
+      {
+        "unit": "CTCF K562",
+        "accession": "ENCSR613LSQ",
+        "genes": 513,
+        "auroc": 0.527599800911698
+      },
+      {
+        "unit": "E2F6 K562",
+        "accession": "ENCSR820EGA",
+        "genes": 676,
+        "auroc": 0.507225092206227
+      },
+      {
+        "unit": "FOXK2 K562",
+        "accession": "ENCSR773VKE",
+        "genes": 858,
+        "auroc": 0.5148608652688436
+      },
+      {
+        "unit": "GATA1 K562",
+        "accession": "ENCSR850LOZ",
+        "genes": 1096,
+        "auroc": 0.49503439399605187
+      },
+      {
+        "unit": "HMBOX1 K562",
+        "accession": "ENCSR942XXL",
+        "genes": 1047,
+        "auroc": 0.4915276857169549
+      },
+      {
+        "unit": "JUND K562",
+        "accession": "ENCSR389OCD",
+        "genes": 1463,
+        "auroc": 0.4878299880516709
+      },
+      {
+        "unit": "MAX K562",
+        "accession": "ENCSR675SDG",
+        "genes": 1443,
+        "auroc": 0.5011115513753623
+      },
+      {
+        "unit": "MEIS2 K562",
+        "accession": "ENCSR733TFF",
+        "genes": 1264,
+        "auroc": 0.5063976938454107
+      },
+      {
+        "unit": "MITF K562",
+        "accession": "ENCSR905SEH",
+        "genes": 345,
+        "auroc": 0.554617676266137
+      },
+      {
+        "unit": "MXI1 K562",
+        "accession": "ENCSR631RKH",
+        "genes": 478,
+        "auroc": 0.49111608477493274
+      },
+      {
+        "unit": "NR2F2 K562",
+        "accession": "ENCSR688UTN",
+        "genes": 952,
+        "auroc": 0.508708249825427
+      },
+      {
+        "unit": "SMAD5 K562",
+        "accession": "ENCSR649MBU",
+        "genes": 126,
+        "auroc": 0.4641186726814823
+      },
+      {
+        "unit": "SMAD5 K562",
+        "accession": "ENCSR731FEO",
+        "genes": 127,
+        "auroc": 0.5097239256125948
+      },
+      {
+        "unit": "STAT1 K562",
+        "accession": "ENCSR184VVN",
+        "genes": 404,
+        "auroc": 0.48878286740464766
+      },
+      {
+        "unit": "STAT2 K562",
+        "accession": "ENCSR469EFL",
+        "genes": 245,
+        "auroc": 0.48947424878316953
+      },
+      {
+        "unit": "STAT5A K562",
+        "accession": "ENCSR174FUO",
+        "genes": 1122,
+        "auroc": 0.519217070619635
+      },
+      {
+        "unit": "STAT5A K562",
+        "accession": "ENCSR376CFR",
+        "genes": 1162,
+        "auroc": 0.47739760750292315
+      },
+      {
+        "unit": "TEAD4 K562",
+        "accession": "ENCSR550FIL",
+        "genes": 750,
+        "auroc": 0.4937853166905625
+      },
+      {
+        "unit": "THAP1 K562",
+        "accession": "ENCSR294ZCD",
+        "genes": 97,
+        "auroc": 0.5359402888203797
+      },
+      {
+        "unit": "USF2 K562",
+        "accession": "ENCSR052BWT",
+        "genes": 76,
+        "auroc": 0.5003477193700143
+      },
+      {
+        "unit": "ZBTB33 K562",
+        "accession": "ENCSR223QTD",
+        "genes": 77,
+        "auroc": 0.5259222333000997
+      },
+      {
+        "unit": "ZNF384 K562",
+        "accession": "ENCSR103URL",
+        "genes": 456,
+        "auroc": 0.5002069536423841
+      }
+    ],
+    "k562_units_alone": {
+      "units": 32,
+      "mean_paired_difference": -0.01505403268514123,
+      "ci95": [
+        -0.02174523636684486,
+        -0.008463914806909337
+      ]
+    },
+    "direction_signs": [
+      {
+        "unit": "CDC5L K562",
+        "accession": "ENCSR544ZMX",
+        "direction": "activates",
+        "genes": 206,
+        "share_with_predicted_sign": 0.5388349514563107,
+        "share_among_other_universe_genes": 0.6204519341248563
+      },
+      {
+        "unit": "CTCF K562",
+        "accession": "ENCSR067CAG",
+        "direction": "inhibits",
+        "genes": 379,
+        "share_with_predicted_sign": 0.712401055408971,
+        "share_among_other_universe_genes": 0.6663084363245567
+      },
+      {
+        "unit": "CTCF K562",
+        "accession": "ENCSR613LSQ",
+        "direction": "inhibits",
+        "genes": 399,
+        "share_with_predicted_sign": 0.49624060150375937,
+        "share_among_other_universe_genes": 0.465625
+      },
+      {
+        "unit": "E2F6 K562",
+        "accession": "ENCSR820EGA",
+        "direction": "inhibits",
+        "genes": 145,
+        "share_with_predicted_sign": 0.6827586206896552,
+        "share_among_other_universe_genes": 0.647220946256316
+      },
+      {
+        "unit": "GATA1 K562",
+        "accession": "ENCSR850LOZ",
+        "direction": "activates",
+        "genes": 1114,
+        "share_with_predicted_sign": 0.33213644524236985,
+        "share_among_other_universe_genes": 0.324455205811138
+      },
+      {
+        "unit": "JUND K562",
+        "accession": "ENCSR389OCD",
+        "direction": "activates",
+        "genes": 1516,
+        "share_with_predicted_sign": 0.5316622691292876,
+        "share_among_other_universe_genes": 0.4905437352245863
+      },
+      {
+        "unit": "MAX K562",
+        "accession": "ENCSR675SDG",
+        "direction": "inhibits",
+        "genes": 342,
+        "share_with_predicted_sign": 0.347953216374269,
+        "share_among_other_universe_genes": 0.3934782608695652
+      },
+      {
+        "unit": "MEIS2 K562",
+        "accession": "ENCSR733TFF",
+        "direction": "activates",
+        "genes": 1309,
+        "share_with_predicted_sign": 0.44385026737967914,
+        "share_among_other_universe_genes": 0.46635367762128327
+      },
+      {
+        "unit": "MXI1 K562",
+        "accession": "ENCSR631RKH",
+        "direction": "inhibits",
+        "genes": 41,
+        "share_with_predicted_sign": 0.3902439024390244,
+        "share_among_other_universe_genes": 0.3776223776223776
+      },
+      {
+        "unit": "NR2F2 K562",
+        "accession": "ENCSR688UTN",
+        "direction": "inhibits",
+        "genes": 122,
+        "share_with_predicted_sign": 0.2540983606557377,
+        "share_among_other_universe_genes": 0.3420130195292939
+      },
+      {
+        "unit": "RFX5 K562",
+        "accession": "ENCSR619EYC",
+        "direction": "activates",
+        "genes": 70,
+        "share_with_predicted_sign": 0.7285714285714285,
+        "share_among_other_universe_genes": 0.63201985727583
+      },
+      {
+        "unit": "SIX5 K562",
+        "accession": "ENCSR104QKG",
+        "direction": "activates",
+        "genes": 59,
+        "share_with_predicted_sign": 0.7288135593220338,
+        "share_among_other_universe_genes": 0.7226006191950465
+      },
+      {
+        "unit": "SMAD5 K562",
+        "accession": "ENCSR649MBU",
+        "direction": "inhibits",
+        "genes": 66,
+        "share_with_predicted_sign": 0.5757575757575758,
+        "share_among_other_universe_genes": 0.5290187891440501
+      },
+      {
+        "unit": "SMAD5 K562",
+        "accession": "ENCSR731FEO",
+        "direction": "inhibits",
+        "genes": 69,
+        "share_with_predicted_sign": 0.21739130434782608,
+        "share_among_other_universe_genes": 0.31355613969207663
+      },
+      {
+        "unit": "STAT5A K562",
+        "accession": "ENCSR174FUO",
+        "direction": "activates",
+        "genes": 1148,
+        "share_with_predicted_sign": 0.705574912891986,
+        "share_among_other_universe_genes": 0.6717869943676396
+      },
+      {
+        "unit": "STAT5A K562",
+        "accession": "ENCSR376CFR",
+        "direction": "activates",
+        "genes": 1195,
+        "share_with_predicted_sign": 0.7506276150627615,
+        "share_among_other_universe_genes": 0.7615163147792706
+      },
+      {
+        "unit": "TEAD4 K562",
+        "accession": "ENCSR550FIL",
+        "direction": "activates",
+        "genes": 1500,
+        "share_with_predicted_sign": 0.656,
+        "share_among_other_universe_genes": 0.6827864133563616
+      },
+      {
+        "unit": "THAP1 K562",
+        "accession": "ENCSR294ZCD",
+        "direction": "inhibits",
+        "genes": 21,
+        "share_with_predicted_sign": 0.09523809523809523,
+        "share_among_other_universe_genes": 0.37480364436066604
+      },
+      {
+        "unit": "USF2 K562",
+        "accession": "ENCSR052BWT",
+        "direction": "activates",
+        "genes": 93,
+        "share_with_predicted_sign": 0.6881720430107527,
+        "share_among_other_universe_genes": 0.5692403876211316
+      },
+      {
+        "unit": "ZBTB33 K562",
+        "accession": "ENCSR223QTD",
+        "direction": "inhibits",
+        "genes": 188,
+        "share_with_predicted_sign": 0.44680851063829785,
+        "share_among_other_universe_genes": 0.47239031770045387
+      }
+    ]
+  },
+  "limitations": [
+    "occupancy is not function: a factor bound at an element need not regulate the gene, and a knockdown also acts through indirect paths, so a response is not a validated connection",
+    "the knockdown lowers the factor's RNA; protein loss and timing are undocumented per experiment",
+    "two to four replicates per arm: the response is a fold change, not a test statistic",
+    "ENCODE profiled factors by ChIP in few cell types, so the test covers K562 and HepG2 only",
+    "the clusters are ENCODE 3's uniform peaks (2020), not the ENCODE4 set"
+  ],
+  "files_read": 145,
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 84.7,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "https://www.encodeproject.org",
+        "version": "files pinned by md5 in the registration"
+      },
+      {
+        "accession": "data/results/regulators_registration.json",
+        "version": "the committed registration"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/regulators_registration.json",
+        "sha256": "4bcc1241ee244ef685b13e155301d7ecc8ac834eab799bd8d888391787a50154",
+        "bytes": 123268,
+        "partition": null
+      },
+      {
+        "path": "data/cache/regulators/test_inputs.json.gz",
+        "sha256": "f2a4d3e29ef92bed5d0fe218cc1dd6f3c49d6f6a0423631876c945736fbc35ea",
+        "bytes": 4758818,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/regulators/knockdown/fetched.json",
+        "sha256": "15bb3531ccda005ac7413fd9e02d702f6070b776677169378286919155b4af01",
+        "bytes": 24652,
+        "partition": null
+      },
+      {
+        "path": "ENCODE knockdown and control gene quantifications",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF003GEH.tsv.gz",
+            "sha256": "f9ef7d45956214c148af05a65827bae712fcde7f3f45e1b27d3443e5e1063461",
+            "bytes": 3242458
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF022QAO.tsv.gz",
+            "sha256": "727b242bcbf3997d18f14423f643714443db98537a8a1945b483e566435291c6",
+            "bytes": 3234582
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF028EPW.tsv.gz",
+            "sha256": "98acb7fd93760511e569bee15681ec58d627eae5076fb1920fdab755faecb5ff",
+            "bytes": 3302650
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF029MBI.tsv.gz",
+            "sha256": "8531c7589114210e81aacbe61ea00d3fa4ec7084e24ab5d44898dfa6e5fb55d0",
+            "bytes": 3259880
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF047QKO.tsv.gz",
+            "sha256": "64ade79cb0ab9b43170838c367bda808ba4bf333d6e326717d95c7f70be26ea3",
+            "bytes": 3233079
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF047VVT.tsv.gz",
+            "sha256": "d2b35451ed488d16b51fec426de370ea3a662e2afc14a281cfd6b58607d696ba",
+            "bytes": 3259159
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF049GWW.tsv.gz",
+            "sha256": "a976e16aa4200f9cb5ee59bb6ffe18a242476ab0b4cbc7535f3202e594ac5b2c",
+            "bytes": 3244014
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF059FQH.tsv.gz",
+            "sha256": "38adba39aa73e2071c0b59f70f9f76cc05e17afffeaf802f7fac15ed9e4ff0b7",
+            "bytes": 3296019
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF062TMG.tsv.gz",
+            "sha256": "b9de36dce5c6c7be6e5493b2c5b7ce31f2c82a2bf5b33ebae14b0ac7d807ec5d",
+            "bytes": 3281368
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF086OAC.tsv.gz",
+            "sha256": "d0bf66090532b2354ce003f9c96459985e81e5dca17a64603a0b216725da3dee",
+            "bytes": 3267669
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF098JGO.tsv.gz",
+            "sha256": "b42df7f41eec9ab812b0f52e5f8a1afddcde1aa8146519f40100dd96c1d03c4e",
+            "bytes": 3285812
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF100QXE.tsv.gz",
+            "sha256": "28f4aa4bafb8e917f7d006b5997ad59979abf3e6594205daff2959660f978cf4",
+            "bytes": 3300127
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF109FHQ.tsv.gz",
+            "sha256": "fd3cf0eca50842d3cab507c14fca054b00ed99e1c70c647693573cfb215a1733",
+            "bytes": 3259974
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF109SDJ.tsv.gz",
+            "sha256": "4bd13c60723e8d846324510e8e81d626f75f084a9d044c505f1833a12298dfde",
+            "bytes": 3253597
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF112RNN.tsv.gz",
+            "sha256": "a7414503436bb7f5e5fb11fe63a88eeaaa7288c20e99c7055308d6a771ae32cb",
+            "bytes": 3233918
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF113KXF.tsv.gz",
+            "sha256": "79d1158da281d7fbb7a0f0bc5116e1524b7b1a2cd8ce930a9a4cf3eff1e5f983",
+            "bytes": 3251395
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF124KLX.tsv.gz",
+            "sha256": "8b71ea5cafdd06981024b053634883f2fbb3dc9ed836de55cc2f550e74fe5896",
+            "bytes": 3285528
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF132PGY.tsv.gz",
+            "sha256": "96b17ba3f2697addaaab20f6cc94842aeeaef0afe4cefa774311b707051934b8",
+            "bytes": 3232571
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF133FXL.tsv.gz",
+            "sha256": "2877f0be57bcccf7418cbbdf7c636ce4a2d7e21a2ef93e05745a95b60e6d9f5f",
+            "bytes": 3226952
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF142QVE.tsv.gz",
+            "sha256": "b417610daa5ec870d6d5d5b601f33211555ccc721682516e9f632b45dfb5afda",
+            "bytes": 3250454
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF145UQS.tsv.gz",
+            "sha256": "eb064cd98547d6e7e1b4e5d6d10a104c6639eb55fedf94cd4198c8424cefe9c4",
+            "bytes": 3253792
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF145VMS.tsv.gz",
+            "sha256": "300c5ba82d2167fcd618697a3505cf4b8333554ce1ae2a997a736f550750405f",
+            "bytes": 3245711
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF145YOO.tsv.gz",
+            "sha256": "210f5b893e3d8f7404387979025dd1af07b4504d39ad8a07dca2c29855e8ad5c",
+            "bytes": 3244193
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF151BRB.tsv.gz",
+            "sha256": "0da1f83af14617d75ce102eddef3d78f618059116e2ecf936a09ba6f795f4ca2",
+            "bytes": 3263146
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF174VEX.tsv.gz",
+            "sha256": "8801666924faa554f4267c85523643cf4d2afe5d3e4ec7fb725eab66ff9760de",
+            "bytes": 3273271
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF178RMO.tsv.gz",
+            "sha256": "77311b982985b875a1b2cd29fd010bf767ec08f5ccb9152d8217f13e3909a3e5",
+            "bytes": 3250551
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF183ONQ.tsv.gz",
+            "sha256": "aebbf092dcc268f5561c063c1085896c1257462e308c16575ac03b7db0cedb13",
+            "bytes": 3275754
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF191PYC.tsv.gz",
+            "sha256": "4f88f65942ccb05a63b0eea31a07805f2553d25713e252debb7c2668b02fcfea",
+            "bytes": 3215374
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF199EEY.tsv.gz",
+            "sha256": "8588a8afa4474795ff2d030cea672a0ccdd8018d8b198162fe23b1c352cc37d8",
+            "bytes": 3232625
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF213FRV.tsv.gz",
+            "sha256": "740340c4f39935c9d8a14afac26221aba3ef3d26437a940166be6533f997f8b6",
+            "bytes": 3281885
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF242RSI.tsv.gz",
+            "sha256": "0cec55d2fb8d154ff8fdda585b0f3a6b9fd9b356aa4a4045007b647870359871",
+            "bytes": 3223013
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF245QGX.tsv.gz",
+            "sha256": "8c9978a7f41bbee6b5d6c72c36faa700afcdc3901fd6ee70d2762d727fbcb40c",
+            "bytes": 3259378
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF249JKV.tsv.gz",
+            "sha256": "28fd03879eaf4580f4f12b9cf0350226dbeb299f243e0287fed2ac51ad481b8f",
+            "bytes": 3259048
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF249WBF.tsv.gz",
+            "sha256": "fe0a1bb9c49459a9c07955821ac0062fa6ac10df8ee14175e18f49acd82f1e13",
+            "bytes": 3266716
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF250HBH.tsv.gz",
+            "sha256": "04c3fa1758ea443af52a4df40fdcad214826ac794180237b91dacc3534636ce0",
+            "bytes": 3250207
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF254DIG.tsv.gz",
+            "sha256": "f506df35ae1c78b086db8c65e1eb2248cbb45cf621387f718fe06880c5c26490",
+            "bytes": 3235210
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF258CIX.tsv.gz",
+            "sha256": "4e364a16fa301b316957d754d306b71f2fbf6034a7fb33d47df0ebf848857f3f",
+            "bytes": 3242498
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF266WGJ.tsv.gz",
+            "sha256": "d83d236a01a724414e3cb20efc08614bcc9ab783c92b67ed3c99a83b1710ce60",
+            "bytes": 3244208
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF272LLI.tsv.gz",
+            "sha256": "291569bf4af9e44d661203c5eebc98a6986e334fa4000caa5add071e20e1fe8d",
+            "bytes": 3206568
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF273TDZ.tsv.gz",
+            "sha256": "a7854f860fb43ef59591bef63a9d2c987fdc0460b769c0c4874f2d9cbc74cc0d",
+            "bytes": 3246027
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF279WUL.tsv.gz",
+            "sha256": "c2abe6018e4d1c6704bb01d8d6c4c1780d25da21c6d2372d1306c35f76987fbd",
+            "bytes": 3268168
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF286LEV.tsv.gz",
+            "sha256": "410c4ec45ced53dd12c88e761fd1e28c6f8fabb71cbb65d3f289e43cbb304c74",
+            "bytes": 3308626
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF289BIS.tsv.gz",
+            "sha256": "068a04fede7d90e0e30261629776997dbbc4cf839c60766ea3e87ecfd6e34ecc",
+            "bytes": 3245321
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF291IDL.tsv.gz",
+            "sha256": "9577edeec36d00fc8a14fa1c0c9d551a5baabfb3724ffde03805d9c4ac8894b3",
+            "bytes": 3253019
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF295GVC.tsv.gz",
+            "sha256": "a10f32ee0ff3691ac0dcdcd99a25fc95bbdfb47ab66638742b8e3f56d06d3903",
+            "bytes": 3246201
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF304OTT.tsv.gz",
+            "sha256": "f4bae9a66371b25a1e1d354a95733f0228670ad18a481065e5abf93410fc1d1a",
+            "bytes": 3216977
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF317SHF.tsv.gz",
+            "sha256": "65f1d4d502147429797fcdf90d34972eebdb990d5a9665bfbeee12f638b1a44d",
+            "bytes": 3239433
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF319UOJ.tsv.gz",
+            "sha256": "3dd16f57e6a38ad74eed320bda47c48f9ece469d5816ae333590fca167caea71",
+            "bytes": 3224486
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF320IEG.tsv.gz",
+            "sha256": "cad17c68d6157c1c8433f857be05c7963527ef3c58b6d5e7be45f774b5ff12bb",
+            "bytes": 3250915
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF321VZR.tsv.gz",
+            "sha256": "5c17a144b7ecd0360d979225ae3a74c7426918d5f21b339a17a961a5802c2bd4",
+            "bytes": 3215454
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF326RTK.tsv.gz",
+            "sha256": "315877593226687793bdfc859038467552606091fbab44614f46a1140ef8005b",
+            "bytes": 3256796
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF332UTN.tsv.gz",
+            "sha256": "ebe6cd5fa8b7c81648befa4734e8a44fc89e2080e4b81648dabc77e8b7a061bf",
+            "bytes": 3259480
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF345BJP.tsv.gz",
+            "sha256": "d4c05d6248fda3232497a04d3bf17fa96944483c265906bab61bef569baa8c15",
+            "bytes": 3231810
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF351VJZ.tsv.gz",
+            "sha256": "a7628d10de57bab496914749a146c2210b2fa4e479da665a266caa9f32fe74cc",
+            "bytes": 3270510
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF353YGI.tsv.gz",
+            "sha256": "79ea67984c1cc2613247b7a16fbf0a8f37535adcf610410bb2c0eb58a236f483",
+            "bytes": 3225493
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF355JMG.tsv.gz",
+            "sha256": "e31fac51737f767d5a131e00cae47a83d305e5654fba81cfe4c02f8c8d063ac5",
+            "bytes": 3245645
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF363EKJ.tsv.gz",
+            "sha256": "6f0c9ef5d457fbd8cd63a19a963001e91d0d8f1a10cdf12c6931703dc1817e87",
+            "bytes": 3247718
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF365RCN.tsv.gz",
+            "sha256": "12a18aaf35df76a989bcc60ab7d3df2d8435ed2f152d16c0c7d172559290f6b3",
+            "bytes": 3270463
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF365SGO.tsv.gz",
+            "sha256": "fbdacb85652387f600e84be2c4f638d535df825fedd47e96ff9211c0ca46ec94",
+            "bytes": 3224509
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF366OWS.tsv.gz",
+            "sha256": "fc528507fe0f814aea2bb1a2c0f1ec81cfd2d960091543bb941fb266fd6a066d",
+            "bytes": 3237628
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF369XNQ.tsv.gz",
+            "sha256": "6b964faa2133f86554d5a546be47bfeba6396503e202cc84ad89a1f603434991",
+            "bytes": 3230428
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF373THD.tsv.gz",
+            "sha256": "3a573e58e069fb3a59b6019cfd0198a83dc82871cf10a54069532bed71bcba74",
+            "bytes": 3258863
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF403TSW.tsv.gz",
+            "sha256": "8c01428eacd3da42457c7a54fb1eac1320604c0990ae75e33ad61502d82edad0",
+            "bytes": 3259772
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF407HJZ.tsv.gz",
+            "sha256": "5d059ede30b9907371925593ec58bd4a431a1b2825ed6ab9a386af1030da73b6",
+            "bytes": 3216221
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF412VND.tsv.gz",
+            "sha256": "eec34b12f9f42d2d2ec15e2a9612804c5b08a8baf8e4975d4af412112d1763a0",
+            "bytes": 3232850
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF415CGN.tsv.gz",
+            "sha256": "6b6c44b1cd88eedb80dde26e7d5e104a4a0b0af322410f0c231c95dff7ce923c",
+            "bytes": 3246314
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF427PDU.tsv.gz",
+            "sha256": "20b63eed1e2653f274e3e635b482b952b60883315e5df60ee173ebc11e689141",
+            "bytes": 3263521
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF428KYN.tsv.gz",
+            "sha256": "8c7513ee2b34d02628e7c4d550b5f1e17dbb881aeb17881251d41a61c4a914ac",
+            "bytes": 3236460
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF430UEB.tsv.gz",
+            "sha256": "30337d1b409f3b25c5ee9b11ad9cbe84363ea3e924b5ccd4227ea4b246af739c",
+            "bytes": 3293638
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF433TGC.tsv.gz",
+            "sha256": "177d7dde05b6d3cf7fc41315dbc47a45ab52fef0553aa8a04fa254e27ae5f3e8",
+            "bytes": 3311563
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF462ZWJ.tsv.gz",
+            "sha256": "eff57b8bc927b29780c48f84e275881c1a4e02cb487f0cc6fd445713fe4d9213",
+            "bytes": 3273720
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF471NDF.tsv.gz",
+            "sha256": "2fd86a9ea2cfb9d98044793796fc95f5e33c31758bc72b4ba1551d284e86df05",
+            "bytes": 3269006
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF483TOV.tsv.gz",
+            "sha256": "6d795412b4f555114289596b137204f7527492dc8de33baa54b4fae7fb1ec276",
+            "bytes": 3264475
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF488AVA.tsv.gz",
+            "sha256": "f617ed7e0b49bf57e487886aff71dfccbcc07e248ee0afe8600c3ba72eab1f6e",
+            "bytes": 3252556
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF491LIJ.tsv.gz",
+            "sha256": "2c9bb9b8dd3aec9b623e4b98a2a850aec188b4495b1bc1c72c8ccf6fd8071a78",
+            "bytes": 3222087
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF492RYO.tsv.gz",
+            "sha256": "59a56e2a543228859ee4d949b71c8ed5e8d47fe5cb4c8b41ee4c77eb9285f256",
+            "bytes": 3261778
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF500LTM.tsv.gz",
+            "sha256": "14d38af9d60686eeba962fa1d67f7612f37c43f0291928e96e2c3c1b207b46f0",
+            "bytes": 3243738
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF503GQZ.tsv.gz",
+            "sha256": "4ddccab13874225b3a625ea2987c8d5f26a97c3c4aee4aac65efd2e73128b861",
+            "bytes": 3220372
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF513KVW.tsv.gz",
+            "sha256": "b4a6ca029c020a216cd164eb37d483037b04f65c30a46012d6e246ed46e3ca3f",
+            "bytes": 3275529
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF516FRU.tsv.gz",
+            "sha256": "02e8fbc549501afa4fb8eb3c4ace0be58591aa7ea08f66f874024a49394157e7",
+            "bytes": 3267009
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF516IKR.tsv.gz",
+            "sha256": "39f6da46c764c434b9e2538d8c40447fe66f0312dc00b9c2b43b37a83cea8d1d",
+            "bytes": 3235385
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF520EWS.tsv.gz",
+            "sha256": "3cca35b6ec81225542247dd1ea7d9d801b7de5ae4cc41cb2cebec3f00061587d",
+            "bytes": 3253188
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF521BDY.tsv.gz",
+            "sha256": "9056fc92fc5f30aec5079590bfc79e1307ad3100de288cca5bf2c793a895dd6f",
+            "bytes": 3282531
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF535DMT.tsv.gz",
+            "sha256": "3cacf5cf74e91a6e563bc54fa4fa1e12e6d6fd73992a56bac84696064255c913",
+            "bytes": 3233195
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF540WJL.tsv.gz",
+            "sha256": "ececd747ce6f053a33b2dde1a00200dcba53c328bce93bdd54c72c51706b420e",
+            "bytes": 3266910
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF545SQK.tsv.gz",
+            "sha256": "d50e73d3e15ef3918ecc30d8dbf678df80e0bc1b8ff0e988869d3785769711ac",
+            "bytes": 3264165
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF547PJN.tsv.gz",
+            "sha256": "e7e298116568ff3f3ead3be01876010e862aad8947b541f9c6e7f1cc03349f4c",
+            "bytes": 3247952
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF548ZDN.tsv.gz",
+            "sha256": "6b01823b01f74695e4649110eefb5e218b2e980eaebb9729922d13b730bd2e9d",
+            "bytes": 3214986
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF550STS.tsv.gz",
+            "sha256": "9176fde2bf512a7941c6d1cc0b773fc096646a7e186c05863568444020e8f395",
+            "bytes": 3247445
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF559KTZ.tsv.gz",
+            "sha256": "446a6fdaa885061251cd615b964c6ac690d2749b696733519cdf4388d0170cee",
+            "bytes": 3203341
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF564BJO.tsv.gz",
+            "sha256": "8d5bc20b92a409a8d6dbd36a21fdb38df5e5356a09274282df464770f7df67fc",
+            "bytes": 3265998
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF574CVU.tsv.gz",
+            "sha256": "c05dc86de68dd4ea4b93aae3175bd65ae349e8172ea88ccc3fc39046a21d4008",
+            "bytes": 3293023
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF575GSF.tsv.gz",
+            "sha256": "b56a65c19a33722f182b1a1f77f452161828200cf431cc6ce1fc8974e8a4d89e",
+            "bytes": 3241540
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF577UBR.tsv.gz",
+            "sha256": "46cc5db936e167063a30dfb2f65dea57b25f0c14619ad5c7a4f43225ca99fc6d",
+            "bytes": 3257074
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF587DSG.tsv.gz",
+            "sha256": "c2afdc9adbabd436be890b66a7917185689592200e467cb507fefe971e7fb378",
+            "bytes": 3237684
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF594SXN.tsv.gz",
+            "sha256": "e988b9c5e6d9373e706351d1fb08463e09b30a6bc247d8a878754b7566d024a5",
+            "bytes": 3220239
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF600XQG.tsv.gz",
+            "sha256": "6acd2c6c784c59b926158932ca653dc1a4323f6ed737c4bbd833ef9b4412a772",
+            "bytes": 3241735
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF609MSB.tsv.gz",
+            "sha256": "cd1f13a30306824e8f0d59626ddeda39c73880c710113cf734c8804ea539343d",
+            "bytes": 3247733
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF613BCM.tsv.gz",
+            "sha256": "4bf1c24470988fcae67909b6cbc832e30a0a2b258cac02fbf702baf6cf941cdd",
+            "bytes": 3234258
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF631VWY.tsv.gz",
+            "sha256": "18804ad3fc70d1f6f11d315c39969560191d073f937b8756371bd8a2c1ca8fd4",
+            "bytes": 3266006
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF636KJN.tsv.gz",
+            "sha256": "98d6d92c4ae66956fc33aa26bd7fbeb0443e36a56bc69c958595cb846a62ed2f",
+            "bytes": 3226069
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF640VXF.tsv.gz",
+            "sha256": "46b3935bcb71133600ec963535b451756c636cfee9868bfdb3793ac5dde97676",
+            "bytes": 3229324
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF649WWS.tsv.gz",
+            "sha256": "b8819a2e44dcf4334225d3c28f9a630643791ca81ed242ab77b1df084bcee277",
+            "bytes": 3207692
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF652NGN.tsv.gz",
+            "sha256": "9ac1f779f2d4fee89003097cf4ab70cad3e79aa73b8244520b95ff904e2a91cc",
+            "bytes": 3230039
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF653GGH.tsv.gz",
+            "sha256": "98b1efded4d7e75bf2baeeba298c079505990612c1c6a6aeff6c411fbfb86da5",
+            "bytes": 3273044
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF672FOX.tsv.gz",
+            "sha256": "247a6a30de82d457da31f1534e2f2270c8a420f0c8d2cca121732c69b0b7e0da",
+            "bytes": 3234022
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF679QYZ.tsv.gz",
+            "sha256": "d9da41f1f66761020838d762bba1ec4dbc5b33f907239cfeddd63f76f6b24cec",
+            "bytes": 3288221
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF686UEE.tsv.gz",
+            "sha256": "b29e74fe2be16b881c209d384a995db977783badfd5e88b706435a4b8b4418ca",
+            "bytes": 3266221
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF689GNL.tsv.gz",
+            "sha256": "db8b2a267a9bf471dab08d3568bdbdb6c2390df71c793aa93d75daa83f865e68",
+            "bytes": 3248255
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF707HOB.tsv.gz",
+            "sha256": "816f453fafc3a913da1cf6356e01438dcef842c03b128d0ca32f47ea48de6f34",
+            "bytes": 3295388
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF713RSE.tsv.gz",
+            "sha256": "ee9f0b4ca21c25020f9fb776a23fc59aa28fd4a1c1b7c479c0e309a2bfb2376a",
+            "bytes": 3229431
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF726SRJ.tsv.gz",
+            "sha256": "0c29345035d383f5fb2ffcb4b8f2a00acbc4cd764323b8fccbda1f78056124ff",
+            "bytes": 3296264
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF736HEU.tsv.gz",
+            "sha256": "cd1aee9f2c75ccfd9321dcfdfe54574295cca966fb66563eeb669118ed65bbcf",
+            "bytes": 3250602
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF743ARY.tsv.gz",
+            "sha256": "ec846a7fa85316a539115349375a373ad82b26ab7d766fdb7b3b8d28bf20f4d0",
+            "bytes": 3225510
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF754MBP.tsv.gz",
+            "sha256": "88836fde3ade1a84eee6cde2b3e5e4dcf5945e2b311e49a2b365d73fef0e4a69",
+            "bytes": 3245994
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF758XNJ.tsv.gz",
+            "sha256": "b547036c854a3e2627cc4dff31557c81cdd9a39d44dd3a0c1d7cb98753091042",
+            "bytes": 3247521
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF765IMX.tsv.gz",
+            "sha256": "52e0a7df48dad65ecb1666536530670a1d5e58341c82712ecec132e0cfb1f639",
+            "bytes": 3239397
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF770NIM.tsv.gz",
+            "sha256": "c687c96ee30d07706838c754b078f6216dfc8fe21fdaf883dd0c665f8ca717ce",
+            "bytes": 3244966
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF774RTC.tsv.gz",
+            "sha256": "e4586cc28acaa5601f2409a4dfe0cc54e3f9f49c9d3ec364058d73ac3d4accfe",
+            "bytes": 3237861
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF784VLY.tsv.gz",
+            "sha256": "3b979da1c42788347409e4e74bf7a656701f30631c426b25b644bdb8e7ef452f",
+            "bytes": 3235853
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF785WTG.tsv.gz",
+            "sha256": "fa606c35004a8b70be1b47d5133673bcb884109b134db97ef9d3ce0dad7ad4dc",
+            "bytes": 3214963
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF786RQN.tsv.gz",
+            "sha256": "05a95709278396ee3ec13839bd8c470ac60e5f73d91350d2e227859fb037e5de",
+            "bytes": 3237276
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF803IXT.tsv.gz",
+            "sha256": "0a0164276f5414c7d2f26692359ab59f0593216b9bbe197e20afdaa2899d3054",
+            "bytes": 3232852
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF803WYX.tsv.gz",
+            "sha256": "d7bca63ff0f063e97b6c9bdcbfd0cbf9ddf32f1489510e50ed259f7ff567c1c7",
+            "bytes": 3263149
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF812TLM.tsv.gz",
+            "sha256": "c61fa7003ee97820b22095d5691953ecbe86a8211cbfd70b01add1c5b37dd8a3",
+            "bytes": 3268100
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF847HBG.tsv.gz",
+            "sha256": "d0f6204bc7c0df24a29863832d546a5317ceceba2a2b0f07040fcce6ba04eac6",
+            "bytes": 3290855
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF852DSL.tsv.gz",
+            "sha256": "54ea2261656986ab79a2849a3d011833556417c34da1683e0e80614c72eaddb1",
+            "bytes": 3211492
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF853QNF.tsv.gz",
+            "sha256": "777c5e732c65f7ca68bb7a82ecd387fb411c304c7c104d4141c34fa8cb2854ba",
+            "bytes": 3239362
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF854FQE.tsv.gz",
+            "sha256": "ca1fcc7f993031550267bee68bd0f15743ef864a5126224e42f9930508441151",
+            "bytes": 3254587
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF882AFA.tsv.gz",
+            "sha256": "aa7d3e2852c9e92dc92693e9b28468f5bfcb04ec19a6d358f2b42d735a61a67b",
+            "bytes": 3215511
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF882RGJ.tsv.gz",
+            "sha256": "1e36ffbd1d182a9c1c4913506ece9210e5cf28bea42b41c11980f8faacad601a",
+            "bytes": 3240430
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF894GOT.tsv.gz",
+            "sha256": "84cf50dee7064cac8c9169964781fde56d51589096506cffd75e6dbce8546925",
+            "bytes": 3237824
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF900YES.tsv.gz",
+            "sha256": "0817ae94bc21e8eea56d27fe579fcddef0161afa39e499ac9f0f2a2c85c04158",
+            "bytes": 3235640
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF926MKW.tsv.gz",
+            "sha256": "2d9be2c0a30a759c7eb61db59d48d372acbcdc3e553f6fd17e0aed20e3559ca3",
+            "bytes": 3243229
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF931WTP.tsv.gz",
+            "sha256": "a542f3539a55bf9d32405cd0dd3dcca8e2053b8fb3e5a11464af853061729af1",
+            "bytes": 3238566
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF942BFC.tsv.gz",
+            "sha256": "7fe5039f692bae44b8b9ebf6822f8dbdb94a5314b4260f0cd20fc4b1e93c2dab",
+            "bytes": 3216739
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF945RLS.tsv.gz",
+            "sha256": "4b46cb531906a89c2c23a80d7269dbb224620f6470fbc1b262af0373bf4692c1",
+            "bytes": 3253110
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF948BGE.tsv.gz",
+            "sha256": "9868cbcd99aa2e2961be433bfdafe02c577ef8571949abf37d7c0a67283cd0df",
+            "bytes": 3233450
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF955BZZ.tsv.gz",
+            "sha256": "53cdbbf63578787b41a9907154b6d9649f5d05a4b38aec0e11ce2f3bb1cd1e19",
+            "bytes": 3295365
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF970MDB.tsv.gz",
+            "sha256": "ef2ee970aeb037ef48ab7e27887060fd86f8c030268e4fdb6ffe383e443ca689",
+            "bytes": 3288944
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF979IBU.tsv.gz",
+            "sha256": "5b2e6f1cec1eaa6f7bf546bd57071a13714966f183ec1eb99d19b47b661fcf4f",
+            "bytes": 3284813
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF986FFE.tsv.gz",
+            "sha256": "9f31ce409a6e19f8a39c729b7a938affcfef42cb4549a9a716f6c55952c7c862",
+            "bytes": 3264952
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF989NPI.tsv.gz",
+            "sha256": "2a5d05798b81185397f8ea1a79b4a8ea716ccb8e8f35e429084e9df8270e102d",
+            "bytes": 3264088
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF995GDM.tsv.gz",
+            "sha256": "da73d53bfad3a5d9661521f092921bf7a9d515ba9315f8c43077979496957e3f",
+            "bytes": 3203127
+          },
+          {
+            "path": "data/knowledge/regulators/knockdown/ENCFF995USC.tsv.gz",
+            "sha256": "8883430cedcc1685401e7a292e657b7fdfb818cda2da7037265e9902278091b6",
+            "bytes": 3250799
+          }
+        ],
+        "sha256": "64349d5b58822285dd61c90e7352b865977308533f115999ec4484d951037917",
+        "bytes": 471294218,
+        "files": 145,
+        "partition": null
+      }
+    ],
+    "input_count": 4,
+    "assembly": "GRCh38; the knockdown files' own GENCODE annotation per unit",
+    "coordinates": "n/a: per-gene expression",
+    "parameters": {
+      "test_cells": [
+        "K562",
+        "HepG2"
+      ],
+      "kd_assays": [
+        "CRISPRi RNA-seq",
+        "siRNA RNA-seq",
+        "shRNA RNA-seq",
+        "CRISPR RNA-seq"
+      ],
+      "target_class": "transcription factor",
+      "kd_max_ratio": 0.7,
+      "kd_min_control_tpm": 1.0,
+      "expressed_tpm": 1.0,
+      "pseudo_tpm": 1.0,
+      "neighbour_bp": 10000,
+      "peak_window": 50000,
+      "min_arm": 10,
+      "strata": 10,
+      "floor_units": 20,
+      "bootstrap_b": 10000,
+      "bootstrap_seed": 20261010,
+      "permutations": 1000,
+      "permutation_seed": 20261011,
+      "control_alpha": 0.05
+    },
+    "exclusions": [
+      {
+        "reason": "arm_too_small",
+        "count": 1
+      },
+      {
+        "reason": "knockdown_below_threshold",
+        "count": 14
+      }
+    ],
+    "partitions": "n/a: the endpoint is outside every training set this project fitted",
+    "code_cleanliness": {
+      "git_sha": "f55dff6b5d78ca493a22e23c81b2ba35594153dc",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/regulators_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/regulators_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/regulators_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/regulators_run.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "f55dff6b5d78ca493a22e23c81b2ba35594153dc",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/regulators_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "f55dff6b5d78ca493a22e23c81b2ba35594153dc",
+      "code_cleanliness_git_sha": "f55dff6b5d78ca493a22e23c81b2ba35594153dc",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record f55dff6"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 546,
+      "opens_under_data": 515,
+      "files_read": 148,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
