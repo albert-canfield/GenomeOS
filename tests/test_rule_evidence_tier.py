@@ -558,6 +558,24 @@ def _the_reader_demo(c: dict) -> None:
     assert demo["rules_scanned"] == demo["rules_written"]
 
 
+INTESTINE = "data/organisms/human/intestine.bio"
+INTESTINE_MUTANTS = "data/organisms/human/intestine_mutants.bio"
+
+
+def _the_intestine_programs(c: dict) -> None:
+    """The two programs 7646bd7 added: a generated module (its header says so) and a mutant file that
+    writes experiments and no rules, which is why every rule and slot figure below stays put."""
+    (module,) = [f for f in c["files"] if f["path"] == INTESTINE]
+    assert module["kind"] == "generated", module
+    (mutants,) = [f for f in c["files"] if f["path"] == INTESTINE_MUTANTS]
+    assert mutants["kind"] == "hand_authored", mutants
+    assert mutants["rules_written"] == 0
+    assert mutants["rules_compiled"] == 0
+    assert mutants["rules_synthesised_by_the_parser"] == 0
+    assert mutants["rules_with_tiered_numbers"] == 0
+    assert mutants["rules_scanned"] == mutants["rules_written"]
+
+
 def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after_v3():
     """Supersedes `test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported`."""
     c = cost_script.cost(scan_generated=False)
@@ -572,16 +590,18 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after
     tracked_generated = [f for f in tracked_files if f["kind"] == "generated"]
     # the repository's own corpus: 44 = 33 hand-authored + 11 generated-and-committed, v3 being the
     # eleventh and the only change since the 43 the superseded test above asserts. 2026-10-10,
-    # 5682e6c: 45 = 34 + 11, reader_gating.bio the 34th hand-authored program
-    assert len(tracked_files) == 45
-    assert len(tracked_generated) == 11
+    # 5682e6c: 45 = 34 + 11, reader_gating.bio the 34th hand-authored program. 2026-10-10, 7646bd7:
+    # 47 = 35 + 12, the small-intestinal module generated and its mutant file hand-authored
+    assert len(tracked_files) == 47
+    assert len(tracked_generated) == 12
     assert len(tracked_files) == len(hand) + len(tracked_generated)
     assert "data/organisms/human/noncoding_chr21_v3.bio" in {f["path"] for f in tracked_generated}
     assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
     # not one of these moved, which is the claim: v3 joined the generated side. 2026-10-10, 5682e6c:
     # each moved by reader_gating.bio's own count and nothing else (`_the_reader_demo`)
     _the_reader_demo(c)
-    assert c["programs_hand_authored"] == 34
+    _the_intestine_programs(c)
+    assert c["programs_hand_authored"] == 35
     assert c["rules_hand_authored_written"] == 24
     assert c["rules_hand_authored_compiled"] == 46
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
@@ -610,10 +630,12 @@ def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes_af
     assert all(p.startswith(GENERATED_STORE + "/") for p in untracked), untracked
     assert all(f["kind"] == "generated" for f in c["files"] if f["path"] in set(untracked))
     # 2026-10-10, 5682e6c: 68 -> 69 and 33 -> 34 for reader_gating.bio; the generated 35 and the
-    # untracked 24 unchanged
-    assert c["programs_total"] == 69
-    assert c["programs_generated"] == 35
-    assert c["programs_hand_authored"] == 34
+    # untracked 24 unchanged. 2026-10-10, 7646bd7: 69 -> 71, the generated 35 -> 36 for
+    # intestine.bio and the hand-authored 34 -> 35 for intestine_mutants.bio; the untracked 24
+    # unchanged, because both are committed programs
+    assert c["programs_total"] == 71
+    assert c["programs_generated"] == 36
+    assert c["programs_hand_authored"] == 35
     assert c["programs_total"] == len(paths & tracked) + len(untracked)
 
 
@@ -634,11 +656,13 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
     monkeypatch.setattr(cost_script, "bio_files", lambda: fresh)
     c = cost_script.cost(scan_generated=False)
     # 2026-10-10, 5682e6c: every hand-authored figure plus reader_gating.bio's own count, the
-    # generated 11 unchanged
+    # generated 11 unchanged. 2026-10-10, 7646bd7: 45 -> 47, one program on each side, and the rule
+    # figures below do not move because the mutant file writes experiments and no rules
     _the_reader_demo(c)
-    assert c["programs_total"] == 45
-    assert c["programs_hand_authored"] == 34
-    assert c["programs_generated"] == 11
+    _the_intestine_programs(c)
+    assert c["programs_total"] == 47
+    assert c["programs_hand_authored"] == 35
+    assert c["programs_generated"] == 12
     assert c["rules_hand_authored_written"] == 24
     assert c["rules_hand_authored_compiled"] == 46
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
@@ -666,5 +690,6 @@ def test_the_line_scan_is_calibrated_against_the_parse_before_it_is_believed():
     c = cost_script.cost(scan_generated=False)
     assert c["scan_calibration"]["disagreements"] == []
     assert c["scan_calibration"]["calibrated"] is True
-    # 2026-10-10, 5682e6c: 33 -> 34, the scan compared on reader_gating.bio too and agreed
-    assert c["scan_calibration"]["files_compared"] == 34
+    # 2026-10-10, 5682e6c: 33 -> 34, the scan compared on reader_gating.bio too and agreed.
+    # 2026-10-10, 7646bd7: 34 -> 35, the scan compared on intestine_mutants.bio too and agreed
+    assert c["scan_calibration"]["files_compared"] == 35
