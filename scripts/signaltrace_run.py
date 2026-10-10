@@ -221,8 +221,10 @@ def manifest(entries: list[dict[str, Any]]) -> dict[str, Any]:
             "held-out pairs in cell types other than K562: the anchor is a K562 result",
             "a pair a stage drops is kept in the population with 0 in that stage's two columns",
         ],
-        "partitions": "training: the fit rows only (covered K562 training pairs); heldout: the scored"
-        " population (its K562 pairs); no held-out pair enters a fit",
+        "partitions": {
+            "training": "the fit rows only: the covered K562 training pairs",
+            "heldout": "the scored population: the held-out file's K562 pairs; no held-out pair enters a fit",
+        },
         "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
     }
 
