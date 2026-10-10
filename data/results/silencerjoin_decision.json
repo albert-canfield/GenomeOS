@@ -1,0 +1,390 @@
+{
+  "result": "silencerjoin_decision",
+  "date": "2026-10-10",
+  "question": "Which scored elements may carry molecular_role silencer from an assay, in which cell line, beside (never in place of) the derived direction call?",
+  "source": {
+    "screen": "ReSE (repressive ability of silencer elements), a lentiviral screen scoring cell survival under transcriptional repression of an apoptosis-inducing fusion protein",
+    "paper": "Pang B, Snyder MP. Systematic identification of silencers in human cells. Nat Genet 2020;52(3):254-263",
+    "doi": "10.1038/s41588-020-0578-5",
+    "curated_into": "RefSeq Functional Elements, reached through NCBI Gene esummary",
+    "query": "ReSE[All Fields] AND human[orgn]",
+    "licence": "NCBI places no restrictions on the use or distribution of the data it holds; RefSeq content created by the US government is not subject to copyright",
+    "cost": "none. Free NCBI eutils, no API key. 0 AlphaGenome requests, 0 paid requests, no money."
+  },
+  "source_reuse": "the probe's own cache, fetched 2026-10-03 by scripts/silenceragree_fetch.py and pinned by sha256 in data/results/silenceragree.json; read in place, not re-fetched, so this join and the registered check read the same bytes",
+  "silencerdb_not_used": "SilencerDB's validated tier is coordinate-identical to ReSE and states no licence anywhere; ReSE alone is used",
+  "fragments_before_the_join": {
+    "joinable": 4992,
+    "by_validation_line": {
+      "K562": 3483,
+      "HepG2": 1420,
+      "HepG2+K562": 89
+    },
+    "length_bp": {
+      "min": 100,
+      "median": 192,
+      "max": 1560
+    },
+    "accounting": {
+      "records_returned": 5478,
+      "joinable_intervals": 4992,
+      "rejected": {
+        "not_the_assayed_fragment": 480,
+        "no_genomicinfo": 4,
+        "unplaced_on_grch38": 2
+      },
+      "rejected_reason": "ReSE is named somewhere in the record but the record is not itself the assayed fragment, so its genomicinfo span is a parent region (measured: median 3.55x the fragment, up to 138.9x) and joining on it would attribute the assay to sequence the assay never carried",
+      "build_tag_on_every_description": {
+        "GRCh37": 4998
+      },
+      "grch38_span_equals_the_fragment_length": 4760,
+      "grch38_span_differs_in_length": 232,
+      "relocated_to_another_chromosome_by_the_lift": 1,
+      "coordinates_joined_on": "genomicinfo, which is GRCh38 (NC_*.1x accessions)"
+    }
+  },
+  "rule": {
+    "role_rule": "reciprocal_half",
+    "role_overlap": 0.5,
+    "statement": "a ReSE fragment [fs, fe) attaches to a scored element [es, ee) when the shared bases are at least ROLE_OVERLAP of the element's width AND at least ROLE_OVERLAP of the fragment's width: the measured layer's production rule (attribution/measured.py RECIPROCAL_OVERLAP, reciprocal_half), adopted rather than invented",
+    "one_fragment_one_element": "a fragment attaching to two or more elements under the rule sets the role on none of them and is counted",
+    "fragment_coordinates": "half-open [chrstart, chrstop + 1) from NCBI genomicinfo, which gives the 0-based first and last base: 4,760 of 4,992 GRCh38 spans have chrstop - chrstart + 1 equal to the 1-based inclusive length of the record's GRCh37 description (silenceragree accounting). The GRCh37 description is never joined against",
+    "element_coordinates": "half-open [start, end) as stored in the scored element files",
+    "does_not_set_the_role": [
+      "a shared base below the rule",
+      "a fragment containing the element, or contained in it, below the rule",
+      "a fragment validated in another cell line",
+      "a fragment attaching to several elements",
+      "the sensitivity thresholds below"
+    ],
+    "sensitivity_reported_only": {
+      "reciprocal": [
+        0.25,
+        0.75
+      ],
+      "min_side": 0.5,
+      "any_shared_base": true
+    },
+    "joined_population": "every scored element in data/knowledge/alphagenome/all_elements, whether or not a target is named: the role is about the element's sequence, not about the prediction"
+  },
+  "cell_line_mapping": {
+    "rese_to_scored_line": {
+      "HepG2": "HepG2",
+      "K562": "K562"
+    },
+    "scored_lines": [
+      "GM12878",
+      "HepG2",
+      "IMR-90",
+      "K562"
+    ],
+    "covered": [
+      "HepG2",
+      "K562"
+    ],
+    "not_covered": [
+      "GM12878",
+      "IMR-90"
+    ],
+    "parsed_from": "the record summary's clause 'identified as a functional silencer in <cell line>' (silenceragree.CELL_CLAUSE); a fragment naming both lines gives the role in both, a fragment naming neither gives it in none and is counted"
+  },
+  "readings": {
+    "role": {
+      "molecular_role": "silencer",
+      "evidence_status": "measured/ReSE",
+      "evidence": "ReSE lentiviral screen of repressive ability (cell survival under transcriptional repression of an apoptosis-inducing fusion), Pang and Snyder, Nat Genet 2020, doi 10.1038/s41588-020-0578-5, curated into RefSeq Functional Elements and read from NCBI Gene"
+    },
+    "unknown": {
+      "molecular_role": "unknown",
+      "evidence_status": "unknown",
+      "reasons": {
+        "line_not_covered": "ReSE validated silencers in K562 and HepG2 only and no record names this cell line, so the source cannot read a role here; this is UNKNOWN, not a negative",
+        "validated_in_another_line_only": "a fragment attached under the rule was validated in another cell line only; the source does not say whether it was tested in this one, so the role here is not read",
+        "fragment_attaches_to_several_elements": "a fragment validated in this line overlaps this element but attaches to more than one element under the rule, so the assay cannot say which element carried the repression",
+        "overlap_below_the_rule": "a fragment validated in this line shares bases with this element but below the rule (under half of the element or under half of the fragment)",
+        "no_validated_fragment_attached": "no fragment validated in this line attaches to this element; the source lists validated fragments only and not the fragments the screen tested without effect, so absence here is not a negative"
+      }
+    },
+    "reason_precedence": [
+      "validated_in_another_line_only",
+      "fragment_attaches_to_several_elements",
+      "overlap_below_the_rule",
+      "no_validated_fragment_attached"
+    ]
+  },
+  "reported": [
+    {
+      "field": "by_cell_line",
+      "what": "per scored line: elements given the role; elements read UNKNOWN, split by reason; fragments validated in the line, placed on one element, on several, below the rule only, and on no scored element"
+    },
+    {
+      "field": "derived_call_on_the_role_elements",
+      "what": "per covered line, of the elements given the role: how many have a named predicted target, how many of those carry the derived repressive direction (the derived silencer_like call) and how many the activating one, and how many have no named target"
+    },
+    {
+      "field": "coverage_gap",
+      "what": "per scored line: the scored elements whose role the source cannot read, and why, and the fragments validated there that no scored element carries; for a line the source does not cover, all of them"
+    },
+    {
+      "field": "sensitivity",
+      "what": "elements that would receive the role at reciprocal 0.25 and 0.75, at min-side 0.5, and at any shared base, per covered line; reported, never applied"
+    },
+    {
+      "field": "elements",
+      "what": "one row per scored element sharing at least one base with any ReSE fragment: its overlaps, its derived direction as committed, and its reading in each of the four scored lines"
+    }
+  ],
+  "derived_call": "A description and not a test. The registered check of the derived call against these same assay-validated silencers already ran (registration c3ebf70, result a5a43b3: 420 of 1,181, 35.563% against a matched control's 37.707%, NO_SIGNAL). It is not re-run here, no control is drawn and no interval is computed, so these counts carry no reading of agreement.",
+  "what_the_role_licenses": "That a ReSE fragment attached to the element under the rule repressed a reporter in that cell line, in a lentiviral screen outside the fragment's native locus. That is what molecular_role silencer with evidence_status measured/ReSE states, in that line and no other.",
+  "what_the_role_does_not_license": "It names no target gene and no effect of the element in its own chromosome. It confirms nothing about the derived direction call, which is unchanged and is reported beside it. It attaches no probability (review R4). An element without the role is not shown to lack one: every reading without the role is UNKNOWN with its reason.",
+  "stop_list": "checked against ROADMAP section 5, the stop list of 2026-09-27 reinstated: this adds no biosample, no area J work and no AlphaGenome request",
+  "cost": "none: 0 model requests, no key, no money, no network (the cache is read in place)",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ReSE screen-validated silencers in RefSeq Functional Elements, NCBI Gene esummary, query 'ReSE[All Fields] AND human[orgn]'",
+        "version": "fetched 2026-10-03 by scripts/silenceragree_fetch.py; 5,478 records; public domain: NCBI places no restrictions on the use or distribution of the data it holds"
+      },
+      {
+        "accession": "Pang B, Snyder MP. Systematic identification of silencers in human cells. Nat Genet 2020;52(3):254-263",
+        "version": "10.1038/s41588-020-0578-5"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/.claude/worktrees/silencerjoin/data/cache/silenceragree/rese_records.json",
+        "sha256": "d45f2fa965cc1b537d7b420f63a0b7a1b0708cc417542a6279a6e10a0492fd01",
+        "bytes": 12189659,
+        "partition": "the external source; data/cache is never committed"
+      }
+    ],
+    "assembly": "GRCh38; the ReSE intervals are NCBI genomicinfo and never the GRCh37 coordinates in each record's description",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "a fragment is [chrstart, chrstop + 1) from genomicinfo; elements are [start, end) as stored"
+    },
+    "parameters": {
+      "role_rule": "reciprocal_half",
+      "role_overlap": 0.5,
+      "reciprocal_sensitivity": [
+        0.25,
+        0.75
+      ],
+      "min_side_sensitivity": 0.5,
+      "cell_line_map": {
+        "HepG2": "HepG2",
+        "K562": "K562"
+      }
+    },
+    "exclusions": [
+      "480 records naming ReSE only outside the description (genomicinfo is a parent span)",
+      "4 with no genomicinfo, 2 unplaced on GRCh38",
+      "SilencerDB entirely: no licence is stated anywhere in it"
+    ],
+    "partitions": "n/a: a decision written before a join; no evaluation partition exists",
+    "code_cleanliness": {
+      "git_sha": "fcd6c6ab30d4735fa5fdffbb9e362e81ed52d649",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/silencerjoin_decide.py",
+        "form": "committed_repository_file",
+        "path": "scripts/silencerjoin_decide.py",
+        "is_committed": true,
+        "declared_entry": "scripts/silencerjoin_decide.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/silenceragree.py",
+        "genomeos/attribution/silencerjoin.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/silencerjoin_decide.py"
+      ],
+      "counting_path_count": 145,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "fcd6c6ab30d4735fa5fdffbb9e362e81ed52d649",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/silencerjoin_decide.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "fcd6c6ab30d4735fa5fdffbb9e362e81ed52d649",
+      "code_cleanliness_git_sha": "fcd6c6ab30d4735fa5fdffbb9e362e81ed52d649",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record fcd6c6a"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 155,
+      "opens_under_data": 2,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
