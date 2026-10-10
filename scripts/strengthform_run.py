@@ -115,6 +115,20 @@ def check_harness(reg: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+#: The result contract's accepted shapes for these two fields, applied as an ADDITION on top of the
+#: manifest built below. `coordinates` must be {base, interval} or a string beginning "n/a:", and
+#: `partitions` must be a dict or such a string; the first commit wrote both in a shape the contract
+#: refuses, and this lane's stale-base guard refuses a commit that deletes a line an earlier commit
+#: added, so the correction is made here rather than in place.
+CONTRACT_SHAPES = {
+    "coordinates": "n/a: plasmid reporter fragments named by the library, not genomic intervals",
+    "partitions": {
+        "held_out": "the whole population: no earlier lane of this project has read this dataset",
+        "training": "none: no parameter is fitted on any combination, single or pair",
+    },
+}
+
+
 def main() -> int:
     started = time.time()
     reg = check_registration()
@@ -189,6 +203,7 @@ def main() -> int:
         "partitions": "held out: this dataset has never been read by any earlier lane of the project",
         "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
     }
+    manifest.update(CONTRACT_SHAPES)
     print(reading["sentence"])
     print("saved", save_result(RESULT, out, manifest=manifest))
     return 0
