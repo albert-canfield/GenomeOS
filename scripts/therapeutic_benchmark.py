@@ -2,11 +2,19 @@
 # Part of the GenomeOS application; see LICENSING.md.
 """Retrospective benchmark: does the therapeutic pipeline recover known targets?
 
-Ten tumours whose target and whose approved therapy are public knowledge are
+Eleven tumours whose target and whose approved therapy are public knowledge are
 run through `genomeos therapeutic`, and the result is compared with what is
 actually approved for that alteration. The point is falsifiability: until a
 pipeline is asked to reproduce something already known, its rankings are
 assertions.
+
+The eleventh was registered on 2026-10-10 and added before it was scored
+(`SV_CASE_REGISTERED`). The committed result file holds the ten rows of the
+2026-10-02 run; the eleventh case's own row, and the measurement that the ten
+did not move, are `data/results/therapeutic_sv_case_result.json`, written by
+`scripts/therapeutic_sv_case.py`, because rewriting this file means a fresh
+network run of every case and the ten rows are a regression guard that a run
+of its own should not disturb.
 
 Six of the nine targets are reached through a point mutation, which for a long
 time was the whole benchmark and was a narrower test than it read as: the
@@ -330,8 +338,87 @@ CASES: tuple[dict, ...] = (
             "written on, the list cannot be acted on, and the gate is the rule that has to stop it"
         ),
     },
+    {
+        # The eleventh case, pre-registered 2026-10-10 before it was run (see
+        # SV_CASE_REGISTERED below), and the roadmap row's open item: a scored
+        # structural-variant case. The benchmark already had a fusion, and that
+        # one is the 3' partner, where the answer is settled - ALK keeps none of
+        # its outward-facing part and the pipeline says 0.0. This is the other
+        # arrangement, and it is the one the pipeline has to leave open. FGFR3
+        # is the fusion's 5' partner: it contributes the product's N-terminus,
+        # so its signal peptide and the start of its ectodomain ARE in the
+        # protein the tumour makes, and whether its own transmembrane segment is
+        # depends on where the junction falls. The record reports both
+        # breakpoints and nothing reads them into exon content, so the honest
+        # answer is that the product's extent is unknown - not 0.0, which is the
+        # 3' partner's answer, and not the curated full-length figure.
+        #
+        # It is also the first benchmark case that is one patient's own record
+        # rather than a hand-written file or a cohort summary: sample
+        # TCGA-CF-A3MG-01 of blca_tcga_pan_can_atlas_2018 (TCGA Bladder
+        # Urothelial Carcinoma, PanCancer Atlas) as the cBioPortal public REST
+        # API returns it. The structural call is read from that export in its
+        # own column names, which is what the case tests at the input end: the
+        # positional reader took the sample identifier for a gene.
+        #
+        # The VCF carries two of the same tumour's 125 somatic mutations, ARID1A
+        # R1287T and TSC1 R190P, at the allele fractions its read counts give
+        # (0.208 and 0.800) and lifted to GRCh38; FGFR3 is not mutated in this
+        # sample at all, so the structural call is the only route to it.
+        "case": "FGFR3-TACC3 urothelial carcinoma, one patient's record, the fusion's 5' partner",
+        "dir": "alterations",
+        "vcf": "fgfr3_tacc3_urothelial.vcf",
+        "sv": "fgfr3_tacc3_urothelial.sv",
+        "call": "structural variant",
+        "gene": "FGFR3",
+        "approved": (
+            "erdafitinib (small molecule, pan-FGFR tyrosine kinase inhibitor), FDA accelerated "
+            "approval 12 April 2019 and conversion to full approval 19 January 2024 for locally "
+            "advanced or metastatic urothelial carcinoma with susceptible FGFR3 genetic "
+            "alterations, determined by an approved companion diagnostic (therascreen FGFR RGQ "
+            "RT-PCR) whose susceptible alterations include the FGFR3-TACC3 fusion; no antibody "
+            "against FGFR3 is approved"
+        ),
+        "modality": "small_molecule",
+        "expect": "out_of_scope_expected",
+        "why": (
+            "the structural call is the measurement that selects the patient, as the amplification is "
+            "for trastuzumab, so a pipeline that cannot read a caller's own fusion export misses every "
+            "patient the label is written for; and the fusion's 5' partner is the arrangement where the "
+            "product keeps the gene's own N-terminus, so the curated surface figure describes a protein "
+            "that may or may not be the one the tumour makes and the score has to say so rather than "
+            "answer 0.0 or read the annotation at full value"
+        ),
+    },
 )
 
+
+#: Pre-registered 2026-10-10, before the eleventh case was run, alongside the dated
+#: section of docs/THERAPEUTICS.md, data/results/therapeutic_sv_case_registration.json and
+#: the pins in tests/test_therapeutic_sv_case.py.
+#:
+#: The case is one public tumour's record and not a cohort summary: sample
+#: TCGA-CF-A3MG-01 of blca_tcga_pan_can_atlas_2018, FGFR3 (site1, 5') to TACC3
+#: (site2, 3'), in-frame, somatic, in the cBioPortal export's own column names and
+#: GRCh37 coordinates, with two of that sample's own mutations in the VCF and no
+#: FGFR3 variant of any kind. It was registered as the eleventh row WHATEVER the
+#: outcome, so this list carries it before the scores were known.
+#:
+#: What is predicted. (1) FGFR3 is recovered, reached by the structural call alone.
+#: (2) The route: erdafitinib and every other approved FGFR inhibitor is a small
+#: molecule and no antibody against FGFR3 is approved, so the correct answer is
+#: `out_of_scope_expected` and the case passes by not claiming a surface route.
+#: (3) `surface_accessibility` is None rather than 0.0 or a curated full-length
+#: value: FGFR3 is the fusion's 5' PARTNER, so unlike ALK it keeps its own signal
+#: peptide and the start of its outward face, and which part of it the product
+#: contains is not on the record. 0.0 would be the 3' partner's answer and a
+#: value above 0.5 would be a surface route claimed for a product nobody read.
+#: (4) The top mechanism is defensible: nothing requiring an extracellular epitope
+#: heads the list while accessibility is unknown.
+#:
+#: The falsifiers. (a) FGFR3 absent from the ranked candidates. (b) Any of the ten
+#: earlier rows changing in any field but `seconds`. (c) A surface route claimed.
+SV_CASE_REGISTERED = "2026-10-10"
 
 #: Pre-registered 2026-09-28, before the tenth case was run, alongside the dated
 #: section of docs/THERAPEUTICS.md and the pins in tests/test_therapeutic_benchmark.py.
@@ -990,6 +1077,23 @@ def main() -> int:
             "ERBB2 is recovered as a surface target at rank 1 with an established blocking antibody, "
             "outranked_by_unreachable is empty and the pin of 0 holds across ten cases, and the nine "
             "earlier rows came out identical field by field apart from their per-case timings."
+        ),
+        "structural_variant_case": (
+            "The eleventh case, pre-registered 2026-10-10 before it was run and added to this list "
+            "whatever the outcome: FGFR3-TACC3 in urothelial carcinoma, the first benchmark case that "
+            "is one patient's own record - sample TCGA-CF-A3MG-01 of blca_tcga_pan_can_atlas_2018 as "
+            "the cBioPortal public REST API returns it, read from that export's own column names. The "
+            "benchmark's other fusion, EML4-ALK, is the arrangement where the answer is settled: ALK "
+            "is the 3' partner, keeps none of its outward-facing part, and the score says 0.0. This is "
+            "the other arrangement. FGFR3 is the 5' partner, so the product carries its signal peptide "
+            "and the start of its ectodomain, and whether its own membrane anchor is in the product "
+            "depends on where the junction falls - which the record states as two breakpoints that "
+            "nothing reads into exon content. Registered predictions: FGFR3 recovered through the "
+            "structural call alone; the route out_of_scope_expected, since erdafitinib and every other "
+            "approved FGFR inhibitor is a small molecule and no antibody against FGFR3 is approved, so "
+            "the case passes by not claiming a surface route; surface_accessibility None rather than "
+            "0.0 or a curated full-length value; and a defensible top mechanism. The scores and the "
+            "ten rows' before and after are in data/results/therapeutic_sv_case_result.json."
         ),
         "gate_moved_the_target": gate_moved,
         "magnitude_tiebreak_groups": tie_groups,
