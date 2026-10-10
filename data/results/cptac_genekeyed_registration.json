@@ -1,0 +1,436 @@
+{
+  "result": "cptac_genekeyed_registration",
+  "date": "2026-10-10",
+  "registered_by": "lane-cptac",
+  "registered_on": "2026-10-10",
+  "registration": {
+    "question": "Can the seven gene-keyed CPTAC phospho profiles be committed beside the three RefSeq-keyed ones, with their gene keys and isoform positions resolved by a fixed rule and never guessed?",
+    "what_the_14_3_percent_was": "a residue-letter mismatch on the UniProt canonical (31,424 of 219,035 single-site entities whose symbol named one compiled entry), i.e. positions on another isoform; not a gene-key mismatch. The gene-key drop was separate: 8,085 single-site entities whose symbol named no compiled entry.",
+    "gene_key_rule": [
+      "1. the symbol is an HGNC approved symbol, and is no other record's previous symbol",
+      "2. else the symbol is the previous symbol of exactly one HGNC record",
+      "3. else the symbol is an alias of exactly one HGNC record",
+      "a symbol that is approved for one record and previous for another, or previous or alias for several records, is ambiguous and refused; a symbol HGNC does not know is unresolved",
+      "the record's UniProt accessions among the compiled definitions must be exactly one entry; with none, the record's Ensembl gene among the compiled definitions' genes must be exactly one entry; more than one: ambiguous, refused; none: unresolved (no compiled definition)"
+    ],
+    "candidate_isoforms": "the UniProt canonical sequence of the compiled entry, plus every GENCODE v50 translation of the entry's Ensembl gene (its compiled genomic_origin gene, else the HGNC record's) whose CDS is complete: no cds_start_NF, cds_end_NF, mRNA_start_NF or mRNA_end_NF tag, CDS length a multiple of three after the phase, translation reaching the final codon (a stop) with no earlier stop",
+    "position_rule": "every candidate that carries the entity's residue letter at its position is carried onto the canonical with ptm.transfer_position (identical sequence, else the 15-residue window occurring exactly once), the canonical letter checked; one canonical position from every carrier: resolved; carriers that disagree, or one carrier with a canonical position and another without: ambiguous, refused; carriers none of which has a canonical counterpart: carried off the canonical (not joinable, not counted as unresolved); no carrier: unresolved",
+    "duplicates": "several entities on one canonical site in one profile: all dropped, as on 2026-09-28",
+    "calibration": "the same rule, symbol and position only, on the RefSeq-keyed sites whose canonical position is known from their named RefSeq protein (data/cache/cptac/mapped.json); wrong = resolved to another accession or position",
+    "decoy": "each gene-keyed single-site entity with a resolved gene key, its position moved by -13 and +13 residues (same letter), run through the position rule; the estimated wrong resolutions in a profile are its unresolved sites times (decoys resolved / decoys unresolved), i.e. the chance a site whose isoform is absent from the candidates is carried by a candidate at that position anyway",
+    "decoy_offsets": [
+      -13,
+      13
+    ],
+    "gates": {
+      "G0_rule_wrong_rate_on_refseq_truth_below": 0.02,
+      "G1_median_of_site_medians_within": [
+        -0.5,
+        0.5
+      ],
+      "G2_unresolved_rate_below": 0.02,
+      "G3_estimated_wrong_rate_below": 0.02
+    },
+    "gates_meaning": {
+      "G0": "pooled over the four RefSeq-keyed profiles; if it fails the rule is not fit and all seven profiles are retired",
+      "G1": "the 2026-09-28 units check, recomputed on the profile's resolved sites on curated phospho sites; known before this registration: brca_tcga_pan_can_atlas_2018 sat at -0.518 under the canonical-only mapping",
+      "G2": "unresolved / single-site entities with a resolved gene key; the bound is the 2026-09-28 gene_keyed_mismatch_bound (0.02), unchanged, and the unresolved count is that registration's mismatch measured against every candidate isoform instead of the canonical alone",
+      "G3": "estimated wrong resolutions / sites resolved to a canonical position"
+    },
+    "not_gated": "gene keys that are ambiguous or unresolved cost coverage, not correctness: every one is listed with its entity count, and its share is reported; ambiguous sites are refused and counted",
+    "committed": "a profile passing G0 to G3 is committed: its resolved sites on curated phospho sites get relative_abundance_in_tumours from that study, as for the three RefSeq-keyed profiles (tumours with a value, median log2 ratio to the study's pooled reference; values summarised in memory, never per tumour in the repository); a profile failing any gate is retired: counted, not committed",
+    "wording_committed": "{profile}: committed. Gene keys by the registered HGNC rule; positions carried from the isoform that carries the residue onto the UniProt canonical: {resolved} of {sites} single-site entities resolved, {unresolved} unresolved ({unresolved_rate}), {ambiguous} ambiguous, estimated wrong resolutions {estimated_wrong_rate}. Values are relative abundance measured in that study's tumours, not occupancy, not in a person.",
+    "wording_retired": "{profile}: retired, not committed: {failed}. Its sites stay counted only; the gene-keyed positions cannot be placed on an isoform under the registered rule closely enough to commit.",
+    "expected": "colon 2019 (canonical mismatch 4.3%) the likeliest to pass G2; breast 2020 and endometrial 2020 uncertain; the four TCGA quantifications (canonical mismatch 16.2% to 19.2%, RefSeq of about 2013) likely to fail G2 because GENCODE v50 lacks some of their isoforms; TCGA breast PanCan likely to fail G1 as before. No coverage expectation is registered."
+  },
+  "profiles": [
+    "brca_cptac_2020_phosphoproteome",
+    "ucec_cptac_2020_phosphoproteome",
+    "coad_cptac_2019_phosphoprotein_quantification",
+    "brca_tcga_phosphoprotein_quantification",
+    "ov_tcga_phosphoprotein_quantification",
+    "brca_tcga_pan_can_atlas_2018_phosphoprotein_quantification",
+    "ov_tcga_pan_can_atlas_2018_phosphoprotein_quantification"
+  ],
+  "calibration_profiles": [
+    "luad_cptac_2020_phosphoproteome",
+    "gbm_cptac_2021_phosphoproteome",
+    "paad_cptac_2021_phosphoproteome",
+    "brain_cptac_2020_phosphoprotein"
+  ],
+  "reproduced_before_registration": {
+    "gene_keyed_residue_mismatch": "31,424 of 219,035 single-site entities (0.1435)",
+    "per_profile": {
+      "brca_cptac_2020_phosphoproteome": "3,449 of 25,375 (0.1359)",
+      "ucec_cptac_2020_phosphoproteome": "10,354 of 71,125 (0.1456)",
+      "coad_cptac_2019_phosphoprotein_quantification": "1,292 of 30,331 (0.0426)",
+      "brca_tcga_phosphoprotein_quantification": "9,922 of 56,244 (0.1764)",
+      "ov_tcga_phosphoprotein_quantification": "3,094 of 16,075 (0.1925)",
+      "brca_tcga_pan_can_atlas_2018_phosphoprotein_quantification": "2,594 of 15,993 (0.1622)",
+      "ov_tcga_pan_can_atlas_2018_phosphoprotein_quantification": "719 of 3,892 (0.1847)"
+    },
+    "gene_key_drops": "8,085 single-site entities, 498 distinct symbols, none naming several compiled entries (all named none)",
+    "note": "docs/PROTEIN.md gives 219,179: the same count before the 144 duplicate-site drops; both round to 14.3%"
+  },
+  "inputs_fixed_at_registration": {
+    "hgnc_complete_set": {
+      "path": "data/cache/cptac/hgnc_complete_set.txt",
+      "sha256": "64fcdfcdf9bc0853ec502e0e4c7d6eb12647b2ca8b0e635ea04bdb584856baf7",
+      "url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt"
+    },
+    "gencode_v50_translations": {
+      "path": "data/cache/cptac/gencode_v50_translations.json.gz",
+      "sha256": "b44baca808cfcb5e42e0494970c5645dd9aba33a3a4090edc98895307c87bc04"
+    },
+    "refseq_keyed_mapping": {
+      "path": "data/cache/cptac/mapped.json",
+      "sha256": "006eb443c2641f505315e40c3d9e1de4576413535619b8c8164252d6471a0675"
+    },
+    "cbioportal_entity_lists": {
+      "meta_brain_cptac_2020_phosphoprotein.json": "535a4a5118cc52eb028d6bcf72bc7758465f452a2d4110446911d5310350f9e4",
+      "meta_brca_cptac_2020_phosphoproteome.json": "57a95c7233354c69e67b683cec43eee07bb657c3aaca9eb1f9823ade70b24a79",
+      "meta_brca_tcga_pan_can_atlas_2018_phosphoprotein_quantification.json": "a0849673d25aed111afb25ac18bc813f35be609a5a72f00586b45ddf07b52cfb",
+      "meta_brca_tcga_phosphoprotein_quantification.json": "aa1b79335315e3c00501902b8779c3ae02eab8fba4894a827a2080f7352c3174",
+      "meta_coad_cptac_2019_phosphoprotein_quantification.json": "2d6089e991da1a4158ccf040c86d5d6d9b067de8694eed968b05d2898a86a1bb",
+      "meta_gbm_cptac_2021_phosphoproteome.json": "b5deff62f79da11d79ca8c3d041f5ace25e916473b99c14af90839204e7b0012",
+      "meta_luad_cptac_2020_phosphoproteome.json": "6e6e3b7b8119241e882ea407468fa5106971d457ea410f46a9a94d2d4559e44c",
+      "meta_lusc_cptac_2021_phosphoproteome.json": "34f4929ef20980e3aca7795845081111c210e16fc6cf6a0f87a3747c4828b240",
+      "meta_ov_tcga_pan_can_atlas_2018_phosphoprotein_quantification.json": "38030e4a21b66690b8cb1b2f5500b750d8ea50a576c2bd140fea58c8322512f5",
+      "meta_ov_tcga_phosphoprotein_quantification.json": "e639360b51c87151cfeec069c501434c0e1945559e8d3ad3e6ee3ba85c7862c2",
+      "meta_paad_cptac_2021_phosphoproteome.json": "1d3f1fd1b56e212dbbd75c896a6b17f3ae36e8f36f5364f8bd6d4b2d03fa0afa",
+      "meta_ucec_cptac_2020_phosphoproteome.json": "d2cb9d718ff0ff20c29005980d376cbea951e45815d73dbe6fc30be0e278d4ee"
+    }
+  },
+  "gencode_translations": {
+    "source": "GENCODE v50 per-chromosome GFF3 (data/reference/gencode_v50_chr*.gff3.gz) and GRCh38 chromosome FASTA (data/reference/chr*.fa.gz), CDS rows only",
+    "gff3_sha256": {
+      "gencode_v50_chr1.gff3.gz": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+      "gencode_v50_chr2.gff3.gz": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+      "gencode_v50_chr3.gff3.gz": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+      "gencode_v50_chr4.gff3.gz": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+      "gencode_v50_chr5.gff3.gz": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+      "gencode_v50_chr6.gff3.gz": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+      "gencode_v50_chr7.gff3.gz": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+      "gencode_v50_chr8.gff3.gz": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+      "gencode_v50_chr9.gff3.gz": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+      "gencode_v50_chr10.gff3.gz": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+      "gencode_v50_chr11.gff3.gz": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+      "gencode_v50_chr12.gff3.gz": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+      "gencode_v50_chr13.gff3.gz": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+      "gencode_v50_chr14.gff3.gz": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+      "gencode_v50_chr15.gff3.gz": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+      "gencode_v50_chr16.gff3.gz": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+      "gencode_v50_chr17.gff3.gz": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+      "gencode_v50_chr18.gff3.gz": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+      "gencode_v50_chr19.gff3.gz": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+      "gencode_v50_chr20.gff3.gz": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+      "gencode_v50_chr21.gff3.gz": "8530ce0b27f225090a917bcc7c30ef0478bb43ead61573f19f0626c3e9621a0f",
+      "gencode_v50_chr22.gff3.gz": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+      "gencode_v50_chrX.gff3.gz": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+      "gencode_v50_chrY.gff3.gz": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+      "gencode_v50_chrM.gff3.gz": "bf206a4e1c39f40f3e474ab181e9436d7191c7bd2d701ff49f9748e6b8fbb163"
+    },
+    "transcripts": {
+      "kept": 340050,
+      "incomplete CDS tag": 30671,
+      "CDS length not a multiple of three": 91,
+      "stop before the final codon, or no final stop": 74
+    },
+    "genes": 19835,
+    "distinct_translations": 210366
+  },
+  "input_checks": {
+    "compiled_entries": 19173,
+    "with_gencode_translations": 18992,
+    "uniprot_canonical_identical_to_a_gencode_translation": 18630,
+    "note": "an input check of the translation build, not an outcome of the rule"
+  },
+  "outcome_seen": false,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "cBioPortal:brca_cptac_2020_phosphoproteome",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:ucec_cptac_2020_phosphoproteome",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:coad_cptac_2019_phosphoprotein_quantification",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:brca_tcga_phosphoprotein_quantification",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:ov_tcga_phosphoprotein_quantification",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:brca_tcga_pan_can_atlas_2018_phosphoprotein_quantification",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:ov_tcga_pan_can_atlas_2018_phosphoprotein_quantification",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:luad_cptac_2020_phosphoproteome",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:gbm_cptac_2021_phosphoproteome",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:paad_cptac_2021_phosphoproteome",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "cBioPortal:brain_cptac_2020_phosphoprotein",
+        "version": "generic-assay entity lists, public API, fetched 2026-09-27/28",
+        "licence": "ODbL-1.0"
+      },
+      {
+        "accession": "HGNC complete set",
+        "version": "fetched 2026-10-10",
+        "licence": "CC0 1.0"
+      },
+      {
+        "accession": "GENCODE v50 (GRCh38.p14)",
+        "version": "per-chromosome GFF3",
+        "licence": "public"
+      },
+      {
+        "accession": "UniProtKB/Swiss-Prot compiled definitions",
+        "version": "2026_03",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/cptac",
+        "sha256": "6885cb93e16793b2b3e8877714ec2def9e0c1f7a9f5254c140156f20a28eae6b",
+        "bytes": 122895764,
+        "partition": null,
+        "files": 30
+      },
+      {
+        "path": "data/knowledge/proteins",
+        "sha256": "bc95154a13209afca6f3925daf85d8fab239ff3ceb532c648b1bb9e239caa657",
+        "bytes": 264811558,
+        "partition": null,
+        "files": 19453
+      },
+      {
+        "path": "data/cache/cptac/hgnc_complete_set.txt",
+        "sha256": "64fcdfcdf9bc0853ec502e0e4c7d6eb12647b2ca8b0e635ea04bdb584856baf7",
+        "bytes": 16973159,
+        "partition": null
+      },
+      {
+        "path": "data/cache/cptac/gencode_v50_translations.json.gz",
+        "sha256": "b44baca808cfcb5e42e0494970c5645dd9aba33a3a4090edc98895307c87bc04",
+        "bytes": 9319479,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a for the result: protein residue positions on UniProt canonical sequences; the candidate isoforms were translated from GRCh38 with GENCODE v50",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "residue positions"
+    },
+    "code": {
+      "git_sha": "39c7ccca3ab600f7e97c342884bf39d67fb4bfa0",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/simpler_flynode_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_flynode.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/simpler_flynode.py",
+        "scripts/simpler_flynode_run.py",
+        "tests/test_simpler_flynode.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/cptac_genekeyed.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "parameters": {
+      "flank": 7,
+      "decoy_offsets": [
+        -13,
+        13
+      ]
+    },
+    "exclusions": [
+      "multi-site and unlocalised entities (parse stage of scripts/cptac_phospho.py)",
+      "gene keys that are ambiguous or unresolved under the registered HGNC rule",
+      "sites that are ambiguous, carried only off the canonical, or unresolved",
+      "several entities on one canonical site in one profile",
+      "profiles failing any registered gate"
+    ],
+    "partitions": {
+      "calibration": "the RefSeq-keyed profiles' mapped sites, whose canonical position is known",
+      "application": "the seven gene-keyed profiles"
+    },
+    "code_cleanliness": {
+      "git_sha": "39c7ccca3ab600f7e97c342884bf39d67fb4bfa0",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/cptac_genekeyed.py",
+        "form": "committed_repository_file",
+        "path": "scripts/cptac_genekeyed.py",
+        "is_committed": true,
+        "declared_entry": "scripts/cptac_genekeyed.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/simpler_flynode_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_flynode.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/cptac_keys.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/cptac_genekeyed.py",
+        "scripts/cptac_phospho.py"
+      ],
+      "counting_path_count": 78,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "39c7ccca3ab600f7e97c342884bf39d67fb4bfa0",
+      "code_cleanliness_git_sha": "39c7ccca3ab600f7e97c342884bf39d67fb4bfa0",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 39c7ccc"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 39039,
+      "opens_under_data": 38953,
+      "files_read": 19483,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
