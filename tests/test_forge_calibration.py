@@ -49,11 +49,13 @@ def _run() -> dict[str, tuple[int, int, float | None, float | None, float, bool]
 
 def test_the_emitted_confidence_is_no_longer_the_constant_and_states_no_probability() -> None:
     """Review R4 retired the 0.3 on the emitted experiment. The old pin asserted it was still there;
-    this one asserts the replacement: no number is stated, and no probability is claimed."""
+    this one asserts the replacement: BioForge states no number of its own. Since 2026-10-10 (area H,
+    §6's second request) the experiment carries the design author's stated confidence unchanged."""
     per_design = _run()
     assert len(per_design) == CENSUS["design_blocks_in_data"] == 4
     confidences = {v[3] for v in per_design.values()}
-    assert confidences == {UNSTATED_CONFIDENCE} and THE_CONSTANT not in confidences
+    assert UNSTATED_CONFIDENCE not in confidences and THE_CONSTANT not in confidences
+    assert all(v[3] == v[4] for v in per_design.values())
 
 
 def test_the_confidence_ignores_everything_the_search_computes() -> None:
@@ -62,10 +64,11 @@ def test_the_confidence_ignores_everything_the_search_computes() -> None:
     evaluations = {v[0] for v in per_design.values()}
     feasible = {v[1] for v in per_design.values()}
     assert len(evaluations) > 1 and len(feasible) > 1, "the inputs no longer vary; the pin is vacuous"
-    assert {v[3] for v in per_design.values()} == {UNSTATED_CONFIDENCE}
-    # the design's own stated confidence is parsed and still not carried onto the answer
+    # the one number on the answer is the design author's, carried unchanged since 2026-10-10: it
+    # varies only where the authors' numbers vary, never with what the search computes
     stated = {v[4] for v in per_design.values()}
     assert stated != {UNSTATED_CONFIDENCE} and len(stated) > 1
+    assert all(v[3] == v[4] for v in per_design.values())
 
 
 def test_every_outcome_is_positive_so_there_is_no_negative_case() -> None:

@@ -134,8 +134,10 @@ experiment judged { knockout: F; until: 10 min; evidence: inferred "a guess"; co
 
 
 def test_the_forge_experiment_agrees_with_the_text_it_emits():
-    """BioForge states no confidence on its experiment; the parsed text and the returned object used
-    to disagree, because the object carried a plain 0.0 that `confidence_stated` read as judged."""
+    """BioForge states no confidence of its own on its experiment; the parsed text and the returned
+    object used to disagree, because the object carried a plain 0.0 that `confidence_stated` read as
+    judged. Since 2026-10-10 the experiment carries the design author's stated confidence (area H), and
+    the text and the object still agree: stated and equal where the author stated one."""
     from genomeos.organism.forge import UNSTATED_CONFIDENCE, run_designs
 
     assert not confidence_stated(UNSTATED_CONFIDENCE) and UNSTATED_CONFIDENCE == 0.0
@@ -143,4 +145,5 @@ def test_the_forge_experiment_agrees_with_the_text_it_emits():
     r = next(x for x in results if x.to_experiment() is not None)
     ex = r.to_experiment()
     reparsed = parse(f"module t\n{r.to_bio()}").experiments[0]
-    assert confidence_stated(ex.confidence) is confidence_stated(reparsed.confidence) is False
+    assert confidence_stated(ex.confidence) is confidence_stated(reparsed.confidence) is True
+    assert ex.confidence == reparsed.confidence == r.design.confidence

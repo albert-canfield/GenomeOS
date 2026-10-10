@@ -257,3 +257,14 @@ WHAT_WOULD_CHANGE_IT: tuple[str, ...] = (
     " 0.6024 that n=4 gives at its best needs more. The repository holds 2 to 4. n is the smallest of"
     " the five obstructions and the only one that more of the same work would fix.",
 )
+
+# 2026-10-10, area H (docs/BIOFORGE-CONFIDENCE.md §6, second request). DISCARDED_BY_THE_CONFIDENCE's last
+# entry is the 2026-09-22 reading and is kept as written: `to_experiment()` no longer discards the design
+# block's own `confidence:`. The emitted experiment carries the AUTHOR's stated number unchanged (UNSTATED
+# when none is stated), labelled as the author's on the evidence note, in the emitted text and as
+# `author_confidence` in the result record. BioForge's own probability is unchanged: None, with the reason.
+AUTHOR_CONFIDENCE_CARRIED = (
+    "the design author's stated confidence reaches the emitted experiment unchanged and labelled as the"
+    " author's; BioForge states no number of its own and its probability stays None (no calibration"
+    " record)"
+)

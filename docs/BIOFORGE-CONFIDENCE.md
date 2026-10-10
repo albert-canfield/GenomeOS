@@ -13,6 +13,13 @@ two asks, the first is done and the second is not: the literal is gone, and a pr
 `confidence:` is still overwritten by `to_experiment()`, now with the parser's UNSTATED
 rather than with 0.3.
 
+**Status on 2026-10-10, later (lane-forgecal).** §6's second request is done: `to_experiment()`
+now carries the design author's stated `confidence:` onto the emitted experiment unchanged, or
+UNSTATED where the author stated none. It is labelled as the author's on the experiment's
+evidence note, in a comment above the `confidence:` key of the emitted text, and as
+`author_confidence` in the result record. BioForge states no number of its own, and its
+probability stays `None`.
+
 *2026-09-22. Area H, third open item: "calibrate predicted confidence: how often a design's answer
 matches the published outcome". Registration and verdict in `genomeos/forge/calibration.py`; the
 facts the verdict rests on are pinned in `tests/test_forge_calibration.py`.*

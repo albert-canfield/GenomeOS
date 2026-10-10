@@ -17,10 +17,20 @@ import itertools
 import math
 import random
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from genomeos.certainty import Certainty
-from genomeos.ir import UNSTATED, Design, Evidence, EvidenceKind, Experiment, Module, to_minutes
+from genomeos.ir import (
+    UNSTATED,
+    Design,
+    Evidence,
+    EvidenceKind,
+    Experiment,
+    Module,
+    confidence_stated,
+    confidence_to_json,
+    to_minutes,
+)
 from genomeos.runtime.body import Body, evaluate_assert
 
 FORGE_EVIDENCE = Evidence(EvidenceKind.PREDICTED, "BioForge search over the organism program (not validated)")
@@ -65,6 +75,17 @@ BUDGET_KNOWN_CASE = {
 # item 12 S1 (2026-09-28) it is the parser's own UNSTATED rather than a plain 0.0, which
 # `confidence_stated` read as a judged zero while the emitted text, parsed, gave UNSTATED.
 UNSTATED_CONFIDENCE = UNSTATED
+# Area H, 2026-10-10 (docs/BIOFORGE-CONFIDENCE.md §6, second request): `to_experiment()` used to overwrite
+# the design block's own `confidence:` with the value above, so an author who wrote `confidence: 0.6` saw
+# it vanish from the answer. The emitted experiment now carries the AUTHOR's stated confidence unchanged
+# (UNSTATED when the author stated none), labelled as the author's on the experiment's evidence note, as
+# a comment in the emitted text and as its own key in `to_dict`. It is never BioForge's: BioForge's
+# probability stays None in `certainty()`, and nothing the search computes reads or moves the author's
+# number. A program that wants no number on the answer states none on its design.
+AUTHOR_CONFIDENCE_NOTE = (
+    "confidence: stated by the author of design {name} and carried unchanged; it is not BioForge's,"
+    " whose probability is unavailable (no calibration record)"
+)
 EFFECT_UNIT = "normalised target distance removed (wild-type loss minus answer loss; 0 = no change)"
 MODEL_SCORE_NAME = "loss: normalised distance from every target holding; 0 = all hold; lower ranks first"
 UNCERTAINTY_NOTE = (
@@ -196,6 +217,14 @@ class DesignResult:
         b = self.best
         return b is not None and b.feasible and b.loss < 1e-9
 
+    @property
+    def author_confidence_stated(self) -> bool:
+        """True when the design block's author wrote a `confidence:`; False for the parser's UNSTATED."""
+        return confidence_stated(self.design.confidence)
+
+    def author_confidence_note(self) -> str:
+        return AUTHOR_CONFIDENCE_NOTE.format(name=self.design.name) if self.author_confidence_stated else ""
+
     def to_experiment(self) -> Experiment | None:
         b = self.best
         if b is None or not b.feasible:
@@ -207,8 +236,11 @@ class DesignResult:
             until=self.until,
             asserts=list(self.design.targets) + list(self.design.keeps),
             expect=f"BioForge: {b.label()} reaches {'; '.join(self.design.targets)}",
-            evidence=FORGE_EVIDENCE,
-            confidence=UNSTATED_CONFIDENCE,  # was a fixed 0.3 until review item R4; see design_certainty
+            # the author's confidence, labelled as the author's on the evidence note (area H, 2026-10-10);
+            # a 0.3 until review item R4, then UNSTATED whatever the author wrote; BioForge's own
+            # probability is in design_certainty and stays None
+            evidence=replace(FORGE_EVIDENCE, note=self.author_confidence_note()),
+            confidence=self.design.confidence,
         )
 
     def certainty(self) -> Certainty | None:
@@ -233,6 +265,9 @@ class DesignResult:
         parts.append(f'  expect: "{ex.expect}"')
         parts += [f"  assert: {a}" for a in ex.asserts]
         parts.append(f'  evidence: predicted "{ex.evidence.source}"')
+        if self.author_confidence_stated:
+            parts.append(f"  # {ex.evidence.note}")
+            parts.append(f"  confidence: {ex.confidence:g}")
         cert = self.certainty()
         if cert is not None:
             parts += ["  " + line for line in cert.comment_lines()]
@@ -260,6 +295,9 @@ class DesignResult:
             ],
             "experiment": self.to_bio(),
             "certainty": None if (c := self.certainty()) is None else c.to_dict(),
+            # the design author's stated confidence, null when none was stated; never BioForge's
+            "author_confidence": confidence_to_json(self.design.confidence),
+            "author_confidence_note": self.author_confidence_note(),
         }
 
     def format(self, top: int = 6) -> str:

@@ -24,6 +24,7 @@ from pathlib import Path
 import pytest
 
 from genomeos.certainty import Calibration, Certainty, Probability
+from genomeos.ir import confidence_stated
 from genomeos.lang import parse, parse_file
 from genomeos.organism.forge import UNSTATED_CONFIDENCE, Knob, design_certainty, run_designs
 
@@ -69,6 +70,8 @@ def test_an_unavailable_probability_stays_unavailable_and_says_why() -> None:
 
 
 def test_bioforge_emits_no_probability_and_no_invented_confidence() -> None:
+    """Since 2026-10-10 (area H, BIOFORGE-CONFIDENCE §6) the one number on the answer is the design
+    author's stated confidence, carried unchanged and labelled as the author's; BioForge adds none."""
     results = _shipped()
     assert len(results) == 4
     for r in results:
@@ -76,12 +79,39 @@ def test_bioforge_emits_no_probability_and_no_invented_confidence() -> None:
         assert c is not None and c.probability is None and c.probability_unavailable
         assert c.evidence_category == "predicted"
         ex = r.to_experiment()
-        assert ex is not None and ex.confidence == UNSTATED_CONFIDENCE == 0.0
+        assert ex is not None and confidence_stated(r.design.confidence)
+        assert ex.confidence == r.design.confidence and ex.confidence != UNSTATED_CONFIDENCE
+        assert (
+            f"author of design {r.design.name}" in ex.evidence.note and "not BioForge's" in ex.evidence.note
+        )
         bio = r.to_bio()
-        assert "; confidence:" not in bio and "0.3" not in bio  # no confidence key, no old constant
+        assert f"confidence: {r.design.confidence:g}" in bio and bio.count("confidence: ") == 2  # note + key
+        assert "0.3" not in bio  # no old constant
         assert "probability: unavailable" in bio
         d = r.to_dict()
         assert d["certainty"]["probability"] is None and d["certainty"]["evidence_category"] == "predicted"
+        assert (
+            d["author_confidence"] == r.design.confidence and "not BioForge's" in d["author_confidence_note"]
+        )
+
+
+def test_a_design_that_states_no_confidence_emits_none() -> None:
+    """The author's number survives only where the author wrote one: no `confidence:` on the design, no
+    `confidence:` key on the answer, UNSTATED on the object and null in the record."""
+    src = """
+module toy.design
+import bio.std.development
+organism T { root: R; cell_type: Zygote; resolution: populations }
+timer cycle { duration: 60 min; when: cell_type = Zygote }
+decision grow { action: divide; when: cell_type = Zygote; fraction: 1.0 }
+design pace { vary: timer cycle duration 10..120; target: count at 300 min in 30..34; until: 300 min }
+"""
+    m = parse(src)
+    r = run_designs(m, None, seed=1)[0]
+    ex = r.to_experiment()
+    assert ex is not None and not confidence_stated(ex.confidence) and ex.evidence.note == ""
+    assert "confidence: " not in r.to_bio() and r.to_dict()["author_confidence"] is None
+    assert r.certainty().probability is None
 
 
 def test_effect_magnitude_alone_never_raises_the_reported_certainty() -> None:
@@ -89,8 +119,10 @@ def test_effect_magnitude_alone_never_raises_the_reported_certainty() -> None:
     results = _shipped()
     effects = {r.certainty().effect_estimate for r in results}
     assert len(effects) > 1, "the shipped designs no longer differ in effect; this check is vacuous"
-    reported = {(r.certainty().probability, r.to_experiment().confidence) for r in results}
-    assert reported == {(None, UNSTATED_CONFIDENCE)}
+    # the probability is None for every effect, and the one number on the experiment is the author's,
+    # read off the design block, so it equals what the author wrote whatever the effect
+    assert {r.certainty().probability for r in results} == {None}
+    assert all(r.to_experiment().confidence == r.design.confidence for r in results)
     # and directly: sweep the effect over nine orders of magnitude at a fixed answer loss
     sweep = [design_certainty(0.0, baseline) for baseline in (0.0, 1e-6, 0.1, 1.0, 10.0, 1e3)]
     assert [c.effect_estimate for c in sweep] == sorted(c.effect_estimate for c in sweep)
