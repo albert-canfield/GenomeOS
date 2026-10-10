@@ -232,6 +232,7 @@ def tiers() -> None:
         [
             (TABLE, "elements and their tissue call only (sheet ATAC_metrics)"),
             (GFF, "gene positions and strands; exon, CDS and gene spans"),
+            (STAGE1_REGISTRATION, "stage 1's census, read only to check the population count"),
         ],
         {"rna": "the RNA sheet (RNA_metrics) is not opened by this step"},
     )
@@ -289,6 +290,7 @@ def register() -> None:
             (TIERS_FILE, "the committed tiers (no RNA read)"),
             (TABLE, "elements and their tissue call only (sheet ATAC_metrics)"),
             (GFF, "gene positions and strands"),
+            (STAGE1_REGISTRATION, "stage 1's census, read only to check the population count"),
         ],
         {"population": "fixed here, before the RNA sheet (RNA_metrics) was read against any tier"},
     )
@@ -335,6 +337,7 @@ def score() -> None:
             (TIERS_FILE, "the committed tiers"),
             (TABLE, "elements (ATAC_metrics) and the endpoint (RNA_metrics)"),
             (GFF, "gene positions and strands"),
+            (STAGE1_REGISTRATION, "stage 1's census, read only to check the population count"),
         ],
         {"endpoint": "RNA_metrics read once, after the registration was committed"},
     )
