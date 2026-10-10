@@ -1,0 +1,235 @@
+{
+  "result": "simpler_flynode_inventory",
+  "date": "2026-10-10",
+  "question": "one small public boundary set for dm6 embryos: what was fetched, its size, hash, licence and why",
+  "fetched": [
+    {
+      "url": "https://cdn.elifesciences.org/articles/29550/elife-29550-supp1-v2.xlsx",
+      "what": "Stadler MR, Haines JE, Eisen MB (2017) Convergence of topological domain boundaries, insulators, and polytene interbands revealed by high-resolution mapping of chromatin contacts in the early Drosophila melanogaster embryo. eLife 6:e29550, doi:10.7554/eLife.29550; supplementary file 1 (GEO GSE100370 holds the reads)",
+      "bytes": 386317,
+      "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4",
+      "licence": "CC BY 4.0 (eLife: the article and its supplementary files)",
+      "kept": true,
+      "name": "elife-29550-supp1-v2.xlsx"
+    }
+  ],
+  "fetched_bytes": 386317,
+  "scouting_bytes": 11639184,
+  "lane_download_bytes": 12025501,
+  "budget_bytes": 200000000,
+  "disk_free_bytes_before": 27064115200,
+  "lists": {
+    "manual": {
+      "sheet": "Manual Boundaries",
+      "rows_in_sheet": 3134,
+      "boundary_rows": 3129,
+      "boundaries": 3121,
+      "boundaries_by_chromosome": {
+        "chr2L": 632,
+        "chr2R": 602,
+        "chr3L": 590,
+        "chr3R": 751,
+        "chr4": 18,
+        "chrX": 528
+      },
+      "bin_end_minus_start": {}
+    },
+    "computational": {
+      "sheet": "Computational Boundaries",
+      "rows_in_sheet": 2669,
+      "boundary_rows": 2666,
+      "boundaries": 2666,
+      "boundaries_by_chromosome": {
+        "chr2L": 461,
+        "chr2R": 563,
+        "chr3L": 508,
+        "chr3R": 637,
+        "chr4": 31,
+        "chrX": 466
+      },
+      "bin_end_minus_start": {
+        "499": 2666
+      }
+    },
+    "representative": {
+      "sheet": "Representative Boundaries",
+      "rows_in_sheet": 957,
+      "boundary_rows": 954,
+      "boundaries": 954,
+      "boundaries_by_chromosome": {
+        "chr2L": 161,
+        "chr2R": 225,
+        "chr3L": 177,
+        "chr3R": 239,
+        "chr4": 6,
+        "chrX": 146
+      },
+      "bin_end_minus_start": {
+        "499": 954
+      }
+    }
+  },
+  "why_this_set": "embryos; dm6 as published, so nothing is lifted; 500-bp resolution, finer than the spacing of fly genes (a 10-kb boundary call, as in Cavalheiro et al. 2023, is coarser than many fly intergenic gaps); boundaries called by the authors, so no caller or threshold is chosen here; a stated licence (CC BY 4.0); 386,317 bytes.",
+  "stage": "nuclear cycle 14, 2-3 h. The marker calls come mostly from 6-16 h and the RNA from 0-20 h. That boundaries formed at zygotic genome activation persist later is the sources' report (Hug et al. 2017, Cavalheiro et al. 2023), not checked here.",
+  "considered": [
+    {
+      "source": "Stadler, Haines, Eisen 2017, eLife 6:e29550, supplementary file 1",
+      "what": "Hi-C boundaries of nc14 embryos at 500-bp resolution: manual, computational, representative",
+      "assembly": "dm6 as given (dm3 alongside)",
+      "licence": "CC BY 4.0",
+      "used": true
+    },
+    {
+      "source": "the same tables as deposited at GEO GSE100370 (Supplemental_tables_fullSub.xlsx)",
+      "what": "an earlier version of the same lists",
+      "assembly": "dm3 coordinates only",
+      "licence": "GEO record; no licence stated by the submitters",
+      "used": false,
+      "why_not": "dm3 would need lifting; the published eLife file gives dm6"
+    },
+    {
+      "source": "Cavalheiro et al. 2023, Sci Adv 9:eade1085, table S1",
+      "what": "boundaries of nc14 embryos scored for insulator depletion, HiCExplorer at 10 kb",
+      "assembly": "dm6",
+      "licence": "CC BY 4.0",
+      "used": false,
+      "why_not": "10-kb bins are coarser than many fly intergenic gaps, and the table lists boundaries as rows of a differential analysis (878) rather than the 772 the text reports"
+    },
+    {
+      "source": "Ogiyama et al. 2018, Mol Cell 71:73, GEO GSE103625",
+      "what": "Hi-C contact matrices over embryo stages",
+      "assembly": "dm6",
+      "licence": "GEO record; no licence stated by the submitters",
+      "used": false,
+      "why_not": "no published boundary list: calling one would choose a caller and a threshold here"
+    },
+    {
+      "source": "Hug et al. 2017, Cell 169:216",
+      "what": "Hi-C over zygotic genome activation",
+      "assembly": "dm6",
+      "licence": "not open access",
+      "used": false,
+      "why_not": "no openly licensed boundary list found"
+    },
+    {
+      "source": "Ramirez et al. 2018, Nat Commun 9:189",
+      "what": "high-resolution boundaries",
+      "assembly": "not checked",
+      "licence": "CC BY 4.0",
+      "used": false,
+      "why_not": "Kc167 cells, not embryos"
+    }
+  ],
+  "money": "none; no model request",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Stadler MR, Haines JE, Eisen MB (2017) Convergence of topological domain boundaries, insulators, and polytene interbands revealed by high-resolution mapping of chromatin contacts in the early Drosophila melanogaster embryo. eLife 6:e29550, doi:10.7554/eLife.29550; supplementary file 1 (GEO GSE100370 holds the reads)",
+        "version": "eLife supplementary file 1, v2, as served on 2026-10-10"
+      },
+      {
+        "accession": "Calderon D, Blecher-Gonen R, Huang X, Secchia S, Kentro J, Daza RM, Martin B, Dulja A, Schaub C, Trapnell C, Larschan E, O'Connor-Giles KM, Furlong EEM, Shendure J (2022) The continuum of Drosophila embryonic development at single-cell resolution. Science 377:eabn5800, doi:10.1126/science.abn5800; supplementary tables, peak set and cell annotations from the authors' site (DEAP), RNA counts from GEO GSE190147",
+        "version": "as fetched by lane-fly on 2026-10-10 (registration fd81e37)"
+      },
+      {
+        "accession": "Ensembl release 104, Drosophila melanogaster BDGP6.32 (dm6) GFF3",
+        "version": "Ensembl release 104"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_flynode/fetch_record.json",
+        "sha256": "d35599efd094349dc3df89be75788a704b2b5b046582083c274887b1aa40e5fb",
+        "bytes": 777,
+        "partition": "the fetch record"
+      },
+      {
+        "path": "data/knowledge/simpler_flynode/elife-29550-supp1-v2.xlsx",
+        "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4",
+        "bytes": 386317,
+        "partition": "Tables S4, S5 and S7 only"
+      }
+    ],
+    "assembly": "dm6 (BDGP6.32): the boundaries as the file gives them, the peaks, the RNA and the gene models",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the peaks are BED (0-based, half-open), the GFF3 1-based closed, and a boundary is the 500-bp bin start + 250; positions move by at most 1 bp between the conventions"
+    },
+    "parameters": {
+      "download_budget_bytes": 200000000
+    },
+    "exclusions": [
+      "sheets other than Tables S4, S5 and S7 are not read"
+    ],
+    "partitions": "n/a: an inventory has no evaluation partition",
+    "code_cleanliness": {
+      "git_sha": "90a48c701618c43c232af3a0123aef5e59b682fd",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_flynode_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_flynode_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_flynode_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_flynode_run.py"
+      ],
+      "counting_path_count": 9,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "90a48c701618c43c232af3a0123aef5e59b682fd",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_flynode_run.py",
+        "inventory"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "90a48c701618c43c232af3a0123aef5e59b682fd",
+      "code_cleanliness_git_sha": "90a48c701618c43c232af3a0123aef5e59b682fd",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 90a48c7"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 311,
+      "opens_under_data": 6,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

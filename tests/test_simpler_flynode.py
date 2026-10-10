@@ -240,3 +240,71 @@ def test_registration_words_the_limits() -> None:
     assert "a boundary is not a regulatory unit by itself" in reg["outcome_wording"]["tail"]
     assert "200" in reg["stop_rule"] and "falsified" in reg["falsifier"]
     assert reg["boundary_set"]["licence"].startswith("CC BY 4.0")
+
+
+REGISTRATION = ROOT / "data/results/simpler_flynode_registration.json"
+INVENTORY = ROOT / "data/results/simpler_flynode_inventory.json"
+LOCAL_HOW = (
+    "the Stadler 2017 boundary file lives in the git-ignored data/knowledge/simpler_flynode "
+    "(scripts/simpler_flynode_run.py fetch) and the Calderon 2022 tables in data/knowledge/simpler_fly"
+)
+
+
+def test_committed_registration_is_the_module_registration() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(REGISTRATION, was="registration not yet written")
+    reg = json.loads(REGISTRATION.read_text())
+    assert reg["written_before_any_rna_value_was_read"] is True
+    assert reg["registration"] == json.loads(json.dumps(fn.REGISTRATION))
+    cen = reg["census"]
+    p, bg, al = cen["primary_outside_the_boundary_gene"], cen["between_genes"], cen["all_distal"]
+    for pop in (p, bg, al):
+        assert (
+            pop["elements"] == sum(pop["elements_by_tissue"].values()) == sum(pop["boundary_cases"].values())
+        )
+        assert pop["differ_from_nearest_tss"] == pop["boundary_cases"][fn.MOVES]
+    # The numbers the registration's text quotes are the census's.
+    assert (p["elements"], bg["elements"], al["elements"]) == (1634, 917, 2518)
+    assert p["gene_structure_names_a_host"] == 717 and p["elements"] - bg["elements"] == 717
+    assert (bg["differ_from_nearest_tss"], p["differ_from_nearest_tss"]) == (90, 234)
+    assert p["differ_from_nearest_tss_where_the_nearest_gene_contains_the_element"] == 115
+    assert p["differ_from_nearest_tss_where_the_boundary_gene_contains_the_element"] == 0
+    assert p["differ_from_nearest_tss"] >= fn.MIN_DISCORDANT and not cen["stop_rule_met"]
+    assert reg["boundary_lists"]["manual"]["boundaries"] == 3121
+    assert reg["result_manifest"]["complete"] is True and reg["result_manifest"]["code"]["dirty"] is False
+
+
+def test_inventory_counts_its_downloads_within_budget() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(INVENTORY, was="inventory not yet written")
+    inv = json.loads(INVENTORY.read_text())
+    assert inv["fetched_bytes"] == sum(f["bytes"] for f in inv["fetched"]) == 386_317
+    assert inv["lane_download_bytes"] == inv["fetched_bytes"] + inv["scouting_bytes"] <= inv["budget_bytes"]
+    assert [f["licence"] for f in inv["fetched"]] == [fn.BOUNDARY_LICENCE]
+    assert [f["url"] for f in inv["fetched"]] == [fn.BOUNDARY_URL]
+    assert sum(1 for c in inv["considered"] if c["used"]) == 1
+
+
+@pytest.mark.needs_local_data(str(fn.STORE), how=LOCAL_HOW)
+@pytest.mark.needs_local_data(str(sf.STORE), how=LOCAL_HOW)
+def test_census_recomputes_from_the_registered_inputs() -> None:
+    import json
+
+    reg = json.loads(REGISTRATION.read_text())
+    for entry in reg["registered_inputs"].values():
+        assert simpler.sha256(ROOT / entry["path"]) == entry["sha256"]
+    chroms, tss, _ = sf.read_annotation(ROOT / sf.GFF3)
+    calls, _ = sf.tissue_calls(sf.read_markers(ROOT / sf.SUPP), sf.read_cluster_labels(ROOT / sf.SUPP))
+    els, _ = sf.elements(calls, sf.read_peaks(ROOT / sf.PEAKS), chroms, tss)
+    rows = simpler.attribute(els, chroms)
+    sets = {k: fn.read_boundaries(ROOT / fn.BOUNDARY_FILE, k)[0] for k in fn.SHEETS}
+    main = fn.attribute(rows, chroms, sets[fn.PRIMARY_SET])
+    alts = {k: fn.attribute(rows, chroms, v) for k, v in sets.items() if k != fn.PRIMARY_SET}
+    arm = fn.read_arm_lengths(ROOT / sf.GFF3)
+    assert fn.census(main, alts, sets[fn.PRIMARY_SET], arm) == reg["census"]
