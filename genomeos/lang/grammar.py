@@ -446,38 +446,28 @@ DIRECTIVES = {
     "module": "module <dotted.name>",
     "import": "import <dotted.name> | <relative/path.bio> | bio.std.<name>",
 }
-IR_TYPES = [
-    "Evidence",
-    "Entity",
-    "Compartment",
-    "Transport",
-    "Regime",
-    "Region",
-    "RegulatoryElement",
-    "Domain",
-    "Signal",
-    "Gene",
-    "Transcript",
-    "Protein",
-    "CellType",
-    "Effect",
-    "Event",
-    "Parameter",
-    "Rule",
-    "Reader",
-    "Field",
-    "Timer",
-    "Stage",
-    "Decision",
-    "Experiment",
-    "Design",
-    "Organism",
-    "Module",
-]
+
+
+def _ir_types() -> list[str]:
+    """Every dataclass defined in `genomeos.ir.model`, in the order the module defines them.
+
+    Derived rather than kept by hand: a hand list stood at 26 of 32 on 2026-10-10 (`Pool`,
+    `Allocation`, `Cost`, `Order`, `Competence` and `Commitment` were missing) and `check()` could
+    not see the gap, because it only asked whether each listed name existed. A dataclass imported
+    into the module from elsewhere (`Locus`, from `genomeos.coords`) is not a BioIR type."""
+    return [
+        name
+        for name, obj in vars(ir).items()
+        if isinstance(obj, type) and dataclasses.is_dataclass(obj) and obj.__module__ == ir.__name__
+    ]
+
+
+IR_TYPES = _ir_types()
 
 
 def check() -> list[str]:
-    """Differences between this table and the parser: block kinds missing on either side."""
+    """Differences between this table and the parser (block kinds missing on either side), and IR
+    dataclasses the package does not export."""
     problems = []
     for kind in _parser._KINDS:
         if kind not in BLOCKS:
@@ -485,9 +475,12 @@ def check() -> list[str]:
     for kind in BLOCKS:
         if kind not in _parser._KINDS:
             problems.append(f"grammar table describes {kind!r} but the parser does not accept it")
+    exported = set(ir.__all__)
     for name in IR_TYPES:
-        if not hasattr(ir, name):
-            problems.append(f"IR type {name!r} is listed but not exported")
+        if name not in exported:
+            problems.append(f"IR dataclass {name!r} is not exported in genomeos.ir.model.__all__")
+    if not IR_TYPES:
+        problems.append("no IR dataclass found in genomeos.ir.model")
     return problems
 
 
@@ -548,7 +541,8 @@ def render() -> str:
     out += [
         "## BioIR types",
         "",
-        "Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them as JSON",
+        f"The {len(IR_TYPES)} dataclasses `genomeos.ir.model` defines, in its order (the list is derived",
+        "from the module, not kept by hand); `Module.to_dict()` / `from_dict()` round-trip them as JSON",
         f"(`bioir_version` {VERSION}).",
         "",
         "A confidence a block leaves out is `UNSTATED`: 0.0 in any calculation, told apart from a stated",

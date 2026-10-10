@@ -400,7 +400,8 @@ May contain `transcript` blocks.
 
 ## BioIR types
 
-Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them as JSON
+The 32 dataclasses `genomeos.ir.model` defines, in its order (the list is derived
+from the module, not kept by hand); `Module.to_dict()` / `from_dict()` round-trip them as JSON
 (`bioir_version` 0.4).
 
 A confidence a block leaves out is `UNSTATED`: 0.0 in any calculation, told apart from a stated
@@ -409,26 +410,32 @@ the file `records_unstated_confidence: true`; a file without that mark predates 
 
 - **Evidence**: `kind`, `source`, `organism`, `note`
 - **Entity**: `id`, `kind`, `attrs`, `evidence`, `confidence`
-- **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`, `absolute_volume_fl`
-- **Transport**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `from_compartment`, `to_compartment`, `cargo`, `capacity`, `affinity`, `via`, `via_threshold`
-- **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `fates`, `recheck`, `allocation`, `seed`, `evidence`, `confidence`
 - **Region**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `role`
 - **RegulatoryElement**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `cls`, `targets`, `domain`, `source`
-- **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`
-- **Signal**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `mode`, `ligand`, `receptor`, `sender`, `receiver`, `sets`, `value`, `field_name`, `threshold`, `reads`
 - **Gene**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `symbol`, `locus`, `transcripts`, `basal_rate`, `location`, `costs`
 - **Transcript**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `gene_id`, `exons`, `cds`, `cds_segments`, `cds_phase`, `tags`
 - **Protein**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `sequence`, `half_life_h`, `accession`, `isoforms`, `domains`, `structures`, `pathways`, `interactions`, `location`, `signals`, `initial`, `costs`
 - **CellType**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `name`, `parent`, `expresses`, `ontology_id`
+- **Reader**: `cell_type`, `states`, `evidence`, `confidence`
 - **Effect**: `target`, `op`, `value`, `unit`
 - **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `costs`, `partition`, `evidence`, `confidence`
 - **Parameter**: `name`, `value`, `unit`, `evidence`, `confidence`
 - **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`, `context_evidence`, `through`
-- **Reader**: `cell_type`, `states`, `evidence`, `confidence`
+- **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`
+- **Order**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `groups`, `axis`, `direction`, `observe`, `threshold`
+- **Signal**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `mode`, `ligand`, `receptor`, `sender`, `receiver`, `sets`, `value`, `field_name`, `threshold`, `reads`
+- **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`, `absolute_volume_fl`
+- **Cost**: `pool`, `amount`, `per`
+- **Pool**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `location`, `size`, `regeneration`, `regenerates_from`, `returns_as`
+- **Allocation**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `pool`, `policy`, `order`, `objective`
+- **Transport**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `from_compartment`, `to_compartment`, `cargo`, `capacity`, `affinity`, `via`, `via_threshold`
+- **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `fates`, `recheck`, `allocation`, `seed`, `evidence`, `confidence`
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`
 - **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `share`, `priority`, `competence`, `evidence`, `confidence`
+- **Competence**: `name`, `when`, `allows`, `closes_at`, `closes_generation`, `closes_on_commitment`, `closed_by`, `evidence`, `confidence`
+- **Commitment**: `name`, `programme`, `establish`, `locks`, `inherit`, `release`, `evidence`, `confidence`
 - **Experiment**: `name`, `knockouts`, `adds`, `add_at`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
 - **Design**: `name`, `knockout_any_of`, `add_any_of`, `at_most`, `vary`, `until`, `targets`, `keeps`, `evidence`, `confidence`
 - **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `contacts`, `cell_network`, `replicates`, `placement`, `evidence`, `confidence`
