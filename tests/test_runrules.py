@@ -15,6 +15,7 @@ import random
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import bridge
 from genomeos.attribution import runrules as rr
@@ -272,8 +273,8 @@ def test_no_outcome_sentence_strengthens():
 
 def test_the_committed_registration_matches_the_code_that_applies_it():
     reg_path = Path("data/results/runrules_registration.json")
-    if not reg_path.exists():
-        pytest.skip("registration not yet written")
+    # tracked by git since 008f5c6, so its absence is a broken checkout and never a skip
+    tp.must_be_present(reg_path, was="registration not yet written")
     reg = json.loads(reg_path.read_text())
     src = Path("scripts/runrules_run.py").read_text()
     bound = ast.literal_eval("{" + src.split("BOUND = {", 1)[1].split("\n}\n", 1)[0] + "\n}")
