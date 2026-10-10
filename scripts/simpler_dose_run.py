@@ -8,6 +8,7 @@
     uv run python scripts/simpler_dose_run.py score       # refuses unless the registration is committed
     uv run python scripts/simpler_dose_run.py register2   # after run 1 stopped at its strand check
     uv run python scripts/simpler_dose_run.py score2      # registration 2, run once
+    uv run python scripts/simpler_dose_run.py edges_posthoc   # post hoc, deciding nothing: edge rounding
 
 The phyloP track is read by HTTP range request and never stored. No model request is sent and no key
 is read. docs/SIMPLER-GENOMES.md section 10 holds the reasoning.
@@ -47,6 +48,9 @@ RESULT_FILE = f"data/results/{RESULT}.json"
 REGISTRATION2 = "simpler_dose_v2_registration"
 RESULT2 = "simpler_dose_v2_result"
 REGISTRATION2_FILE = f"data/results/{REGISTRATION2}.json"
+RESULT2_FILE = f"data/results/{RESULT2}.json"
+#: Post hoc, deciding nothing: run 2's primary with the census's unrounded tertile edges.
+EDGES_POSTHOC = "simpler_dose_v2_edges_posthoc"
 STAGE2_TIERS = "data/results/simpler_worm_tiers.json"
 ENTRY = "scripts/simpler_dose_run.py"
 OWN_CODE = (
@@ -529,6 +533,79 @@ def score(version: int = 1) -> None:
     print(out["reading"])
 
 
+def edges_posthoc() -> None:
+    """Post hoc, deciding nothing. Run 2 read the tertile edges as the census stored them (rounded to
+    six decimals) while the census counted its arms on the exact edges; this computes run 2's primary
+    both ways, so the disclosure in the doc rests on a committed result rather than a scratch run."""
+    for rel in (REGISTRATION2_FILE, RESULT2_FILE, TIERS_FILE, STAGE2_TIERS, *OWN_CODE):
+        if not _committed(rel):
+            sys.exit(f"refused: {rel} must be committed and unchanged")
+    mf.trace_begin()
+    reg = json.loads(Path(REGISTRATION2_FILE).read_text())
+    run2 = json.loads(Path(RESULT2_FILE).read_text())
+    chroms, rows, _, _, cen, _ = _build()
+    if json.loads(json.dumps(cen)) != reg["census"]:
+        sys.exit("refused: the census does not recompute to the registered one")
+    exact = st.fraction_edges(rows)
+    exons = sd.read_gene_exons(simpler.GFF3)
+    cov = sd.coverage(sd.LCAP, exons, magnitude=True)
+    strand = sd.orientation(cov, exons)
+    genes = {g.gid for ch in chroms.values() for g in ch.genes}
+    expr = sd.expression(cov, exons, strand["verdict"], genes)
+    for r in rows:
+        r["c_domain"] = int(sd.concordant(expr.get(r["domain_gene"]), r["tissue"]))
+    ledges = cen["length_edges_measured_bases"]
+    stored = st.matched_difference(sd.by_edges(rows, cen["fraction_tertile_edges"]), ledges)
+    unrounded = st.matched_difference(sd.by_edges(rows, exact), ledges)
+    if stored["delta_points"] != run2["primary"]["delta_points"]:
+        sys.exit("refused: the stored-edge primary does not reproduce run 2")
+    out = {
+        "result": EDGES_POSTHOC,
+        "date": time.strftime("%Y-%m-%d"),
+        "post_hoc_deciding_nothing": True,
+        "why": (
+            "Run 2 (registration 5b930cb) read the tertile edges as the census stored them, rounded to six "
+            "decimals; the census counted its arms on the exact edges. The stored lower edge 0.072848 is "
+            "above the exact 11/151 and the stored upper edge 0.19403 above the exact 13/67, so elements "
+            "whose fraction equals either exact edge sit in a different arm. The registered outcome is "
+            "run 2's; this computes the primary both ways and decides nothing."
+        ),
+        "run_2_commit": _commit_of(RESULT2_FILE),
+        "run_2_outcome": run2["outcome"],
+        "edges_stored": cen["fraction_tertile_edges"],
+        "edges_exact": exact,
+        "stored_edges_as_run": stored,
+        "exact_edges_post_hoc": unrounded,
+        "exact_edges_label_if_it_had_been_registered": sd.dose_label(*unrounded["delta_ci95_points"]),
+        "alphagenome_requests": 0,
+        "money": "none",
+    }
+    out["result_manifest"] = _manifest(
+        [
+            (REGISTRATION2_FILE, "registration 2, its census"),
+            (RESULT2_FILE, "run 2, to check the stored-edge primary reproduces"),
+            (TIERS_FILE, "the committed per-element counts"),
+            (STAGE2_TIERS, "stage 2's population coordinates, for the overlap"),
+            (str(sd.FIG1), "coordinates and the six wild-type ATAC heights"),
+            (str(sd.FIG2), "coordinates (ce10, ce11) and the class only"),
+            (str(sd.FIG4), "coordinates and the developmental-dynamics call only"),
+            (GFF, "gene positions, strands and exons"),
+            *_lcap_inputs("the endpoint, read as magnitude, after run 2 was committed"),
+        ],
+        {"post_hoc": "after run 2 was committed; deciding nothing"},
+    )
+    print(save_result(EDGES_POSTHOC, out))
+    for k in ("stored_edges_as_run", "exact_edges_post_hoc"):
+        v = out[k]
+        print(
+            k,
+            v["constrained_in_support"],
+            v["not_constrained_in_support"],
+            v["delta_points"],
+            v["delta_ci95_points"],
+        )
+
+
 if __name__ == "__main__":
     os.chdir(ROOT)
     {
@@ -539,4 +616,5 @@ if __name__ == "__main__":
         "score": score,
         "register2": register2,
         "score2": lambda: score(2),
+        "edges_posthoc": edges_posthoc,
     }[sys.argv[1]]()

@@ -464,3 +464,15 @@ def test_registration_two_changes_only_the_reading_of_the_rna() -> None:
     assert {k for k in a1 if a1[k] != a2[k]} == {"rna", "strand_check"}
     assert a2["rna"].startswith(a1["rna"]) and "absolute value" in a2["rna"]
     assert r2["outcome_wording"] == r1["outcome_wording"]
+
+
+def test_rounded_stored_edges_move_elements_at_an_exact_edge() -> None:
+    """The defect run 2 disclosed: the census stores edges rounded to six decimals, and an element
+    whose fraction equals the exact lower edge (11/151) is middle on the exact edge, bottom on the
+    stored one."""
+    row = {"measured": 151, "above": 11}
+    assert sd.by_edges([row], [11 / 151, 13 / 67]) == []
+    assert [r["tier"] for r in sd.by_edges([row], [0.072848, 0.19403])] == ["not_constrained"]
+    top = {"measured": 67, "above": 13}
+    assert [r["tier"] for r in sd.by_edges([top], [11 / 151, 13 / 67])] == ["constrained"]
+    assert sd.by_edges([top], [0.072848, 0.19403]) == []
