@@ -206,7 +206,7 @@ After this date:
    private index with explicit paths (below), never `git add -A`.
 4. **Push once per finished piece**, not per file. The `pre-push` hook in
    this checkout checks out the commit being pushed into a temporary
-   worktree and runs `scripts/check.sh` there, so another session's
+   worktree and runs the gate there (below), so another session's
    half-edited files neither block nor pass your push; a red result refuses
    the push, and a red push is what produces the failure notifications. Set
    `GENOMEOS_SKIP_CHECK=1` only for a documentation-only push. The hook is
@@ -214,13 +214,35 @@ After this date:
    installs it in a fresh clone. It is a fixed wrapper that runs the
    committed `scripts/pre-push.sh` of HEAD, so a change to the gate takes
    effect only once it is committed.
-   **The fast gate is ruled but not in force (2026-10-10).** On 2026-10-03 the
-   supervisor ruled that a push to `dev` should take a fast gate (lint, format,
-   the always-run tests and the test files changed since the last green CI,
-   `scripts/fast_prepush.py`), with the full suite kept for the daily CI, the
-   promotion to `main` and any paid path. The script is built and tested; the
-   hook does not call it yet, so every push still runs the full suite (about 9
-   minutes on an idle machine). Wiring it is ROADMAP §5, E1.
+   **The fast gate is in force (2026-10-10, ROADMAP §5, E1).** As the
+   supervisor ruled on 2026-10-03, a push to `dev` takes the fast gate,
+   `scripts/fast_prepush.py --gate`: `ruff check` and `ruff format --check`
+   over the project, then ALWAYS_RUN and the test files changed since the
+   last green CI (a stale record widens that window, never narrows it), in
+   both legs, normal and store-free. Its verdict is `fast-<tree>.json`, scope
+   `"fast"`, beside the project verdicts and never read as one: the retry in
+   `scripts/push_own.sh` and a push with `GENOMEOS_SKIP_CHECK=1` still require
+   a project verdict, so after a fast gate either refuses and the push is
+   simply run again. **The stated trade: a red in a test file that did not
+   change, and is not in ALWAYS_RUN, does not block a dev push.** The full
+   suite (`scripts/check.sh` and a project verdict for the exact tree) stays
+   where it decides something, and the hook takes it instead when:
+   - **the daily CI is red or unread.** Whoever reads CI first thing each
+     morning records the reading:
+     `uv run python scripts/last_green_ci.py --daily success --sha SHA --run-id ID`
+     (`--daily failure` for a red run, or `--daily-from-cache` after
+     `scripts/ci_status_cache.py`). With no reading, a reading that is not
+     `success`, or one more than 26 hours old, every dev push takes the full
+     gate until a green reading is recorded. A green reading also moves the
+     last-green record, which is where the fast window starts.
+   - **the push is to `main` or to a `promote-<sha>` branch.** The push that
+     `scripts/promote_main.sh --prepare` makes runs the local full suite on
+     the sha being promoted, and `promote_main.sh` still requires CI green on
+     that exact sha, so main's bar does not move.
+   - **`GENOMEOS_FULL_GATE=1` is set.** The switch for the push of a sha a
+     paid run will be sent from (`GENOMEOS_FULL_GATE=1 scripts/push_own.sh`),
+     whose CI is then read on that exact sha; anyone may also set it to take
+     the full suite on a dev push.
 5. **Record**: a line in docs/PROGRESS.md (append-only) with the evidence,
    a lesson in docs/LESSONS.md if data taught one, a row in
    docs/DECISIONS.md if a decision was taken, the ROADMAP counts when a

@@ -6,6 +6,26 @@
     uv run python scripts/last_green_ci.py --from-cache      # from data/cache/ci_status.json's latest_success
     uv run python scripts/last_green_ci.py --show            # print what is recorded, change nothing
 
+    # the DAILY READING, which decides whether a dev push may take the fast gate at all
+    uv run python scripts/last_green_ci.py --daily success --sha 747b7ff --run-id 1812345678
+    uv run python scripts/last_green_ci.py --daily failure --sha 747b7ff --run-id 18123456789
+    uv run python scripts/last_green_ci.py --daily-from-cache   # the latest completed dev run in the cache
+
+THE DAILY READING, added 2026-10-10 when the fast gate was wired (ROADMAP section 5, E1). The ruling of
+2026-10-03 keeps the full suite where it decides something, and the first place it names is "the daily
+CI, read first thing each morning -- if it is red or unread, pushes revert to the full gate until it is
+green". A push hook cannot ask GitHub (the reason above), so the reading is written down here, beside
+the last-green record, as `<common>/genomeos-check/daily-ci`: the conclusion of the latest completed CI
+run on dev, its sha and run id, and `read_at`, the moment CI was actually read. `scripts/fast_prepush.py
+--decide` reads it and takes the FULL gate when it is absent (unread), when its conclusion is anything
+but `success` (red, cancelled, skipped: not green), or when `read_at` is older than its limit (unread
+today). A green reading also moves the last-green record to the same sha, because it is one. A red one
+leaves the last-green record where it is: the window still starts at the last sha CI passed on.
+
+`--daily-from-cache` takes `read_at` from the cache's own `written` stamp and NOT from the clock: the
+cache is a reading taken when `scripts/ci_status_cache.py` ran, and copying a ten-day-old cache now must
+not be recorded as a reading taken this morning.
+
 WHY A FILE AND NOT A `gh` CALL. The fast pre-push's window is "test files changed since the last sha
 with a GREEN CI run", and the obvious way to get that sha is to ask GitHub. That would put a network
 round trip, a rate limit and an authentication failure mode on EVERY push, in a hook whose whole value
@@ -52,6 +72,10 @@ ROOT = Path(__file__).resolve().parent.parent
 
 #: the one name of the file, so the reader and the writer cannot drift apart
 FILENAME = "last-green-ci"
+#: the daily reading of CI, which `scripts/fast_prepush.py --decide` reads; see the docstring
+DAILY_FILENAME = "daily-ci"
+#: the one conclusion that is green; every other GitHub conclusion keeps the full gate
+GREEN = "success"
 #: the directory under the git COMMON dir, shared by the checkout and every worktree of it
 DIRNAME = "genomeos-check"
 #: where `scripts/ci_status_cache.py` leaves its reading of CI, for `--from-cache`
@@ -116,21 +140,115 @@ def write(root: Path, sha: str, run_id: str | None, date: str | None, now: datet
     return record
 
 
+def _run_fields(run: dict) -> tuple[str | None, str | None, str | None]:
+    """(sha, run id, date) of one run row, in EITHER spelling of the keys.
+
+    `gh run list --json` spells them headSha/databaseId/updatedAt, and `scripts/ci_status_cache.py`
+    writes its rows through `_run_row`, which spells them sha/id/created. Until 2026-10-10 this read only
+    the first spelling, so against the real cache file it found no sha and refused every time (checked
+    on this checkout's cache of 2026-09-30: `latest_success` carries `sha` and no `headSha`).
+    """
+    sha = run.get("headSha") or run.get("sha")
+    rid = run.get("databaseId", run.get("id"))
+    date = run.get("updatedAt") or run.get("createdAt") or run.get("created")
+    return (str(sha) if sha else None), (str(rid) if rid is not None else None), date
+
+
 def from_cache(cache: Path = CI_STATUS_CACHE) -> tuple[str, str | None, str | None]:
     """(sha, run id, date) out of `scripts/ci_status_cache.py`'s file. Reads disk; no request."""
     d = json.loads(cache.read_text())
     run = d.get("latest_success")
-    if not isinstance(run, dict) or not run.get("headSha"):
+    sha, rid, date = _run_fields(run) if isinstance(run, dict) else (None, None, None)
+    if not sha:
         raise SystemExit(
-            f"last_green_ci: {cache} records no latest_success with a headSha, so there is no green "
+            f"last_green_ci: {cache} records no latest_success with a sha, so there is no green "
             f"sha to write. Run scripts/ci_status_cache.py, or pass --sha yourself."
         )
-    rid = run.get("databaseId")
-    return (
-        str(run["headSha"]),
-        (str(rid) if rid is not None else None),
-        run.get("updatedAt") or run.get("createdAt"),
+    return sha, rid, date
+
+
+def daily_read_path(root: Path = ROOT) -> Path:
+    return git_common_dir(root) / DIRNAME / DAILY_FILENAME
+
+
+def write_daily(
+    root: Path,
+    conclusion: str,
+    sha: str,
+    run_id: str | None,
+    date: str | None,
+    read_at: datetime | None = None,
+    now: datetime | None = None,
+) -> dict:
+    """Write the daily reading, and on a green one move the last-green record to the same sha.
+
+    The sha is resolved first and a sha this checkout lacks is refused before ANYTHING is written, for
+    the reason `write` gives: a reading the gate cannot connect to a commit is worse than none, and
+    none is the designed, harmless case (the full gate).
+    """
+    conclusion = conclusion.strip().lower()
+    if not conclusion:
+        raise SystemExit("last_green_ci: --daily needs a conclusion (success, failure, cancelled, ...)")
+    full = subprocess.run(
+        ["git", "rev-parse", "--verify", f"{sha}^{{commit}}"], cwd=root, capture_output=True, text=True
     )
+    if full.returncode != 0:
+        raise SystemExit(
+            f"last_green_ci: {sha!r} is not a commit in this checkout, so no reading was written "
+            f"({full.stderr.strip()}). Fetch it first."
+        )
+    stamp = now or datetime.now(UTC)
+    record = {
+        "conclusion": conclusion,
+        "green": conclusion == GREEN,
+        "sha": full.stdout.strip(),
+        "short": full.stdout.strip()[:7],
+        "run_id": str(run_id) if run_id is not None else None,
+        "date": date,
+        "read_at": (read_at or stamp).isoformat(),
+        "written": stamp.isoformat(),
+        "written_by": "scripts/last_green_ci.py --daily",
+    }
+    if record["green"]:
+        write(root, record["sha"], run_id, date, now=read_at or stamp)
+    path = daily_read_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(record, indent=1) + "\n")
+    tmp.replace(path)
+    return record
+
+
+def daily_from_cache(cache: Path = CI_STATUS_CACHE) -> tuple[str, str, str | None, str | None, datetime]:
+    """(conclusion, sha, run id, date, read_at) of the latest COMPLETED run on dev in the cache.
+
+    `read_at` is the cache's own `written` stamp: when CI was read, not when this copied it.
+    """
+    d = json.loads(cache.read_text())
+    runs = [r for r in d.get("runs") or [] if isinstance(r, dict)]
+    on_dev = [
+        r
+        for r in runs
+        if r.get("status") == "completed" and (r.get("branch") or r.get("headBranch")) == "dev"
+    ]
+    on_dev.sort(key=lambda r: str(r.get("created") or r.get("createdAt") or ""), reverse=True)
+    if not on_dev:
+        raise SystemExit(
+            f"last_green_ci: {cache} lists no completed CI run on dev, so there is no daily reading to "
+            f"record. Run scripts/ci_status_cache.py, or pass --daily CONCLUSION --sha SHA yourself."
+        )
+    run = on_dev[0]
+    sha, rid, date = _run_fields(run)
+    written = d.get("written")
+    if not sha or not run.get("conclusion") or not written:
+        raise SystemExit(
+            f"last_green_ci: the latest dev run in {cache} lacks a sha, a conclusion or the cache's "
+            f"written stamp ({sha!r}, {run.get('conclusion')!r}, {written!r}); nothing recorded."
+        )
+    read_at = datetime.fromisoformat(str(written).replace("Z", "+00:00"))
+    if read_at.tzinfo is None:
+        read_at = read_at.replace(tzinfo=UTC)
+    return str(run["conclusion"]), sha, rid, date, read_at
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -140,17 +258,36 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--date", help="the run's timestamp, ISO 8601")
     ap.add_argument("--from-cache", action="store_true", help="take all three from data/cache/ci_status.json")
     ap.add_argument("--show", action="store_true", help="print the record and change nothing")
+    ap.add_argument(
+        "--daily",
+        metavar="CONCLUSION",
+        help="record the daily reading of CI: success, failure, cancelled, ...",
+    )
+    ap.add_argument(
+        "--daily-from-cache", action="store_true", help="the daily reading from data/cache/ci_status.json"
+    )
     ap.add_argument("--root", type=Path, default=ROOT)
     args = ap.parse_args(argv)
 
     if args.show:
-        path = last_green_path(args.root)
-        if not path.exists():
-            print(json.dumps({"path": str(path), "exists": False}, indent=1))
-            return 1
-        print(
-            json.dumps({"path": str(path), "exists": True, "record": json.loads(path.read_text())}, indent=1)
-        )
+        out = {}
+        for name, path in (("last_green", last_green_path(args.root)), ("daily", daily_read_path(args.root))):
+            out[name] = {"path": str(path), "exists": path.exists()}
+            if path.exists():
+                out[name]["record"] = json.loads(path.read_text())
+        print(json.dumps(out, indent=1))
+        return 0 if out["last_green"]["exists"] else 1
+
+    if args.daily_from_cache:
+        conclusion, sha, run_id, date, read_at = daily_from_cache()
+        record = write_daily(args.root, conclusion, sha, run_id, date, read_at=read_at)
+        print(json.dumps({"path": str(daily_read_path(args.root)), "record": record}, indent=1))
+        return 0
+    if args.daily:
+        if not args.sha:
+            ap.error("--daily needs --sha (and --run-id and --date when known)")
+        record = write_daily(args.root, args.daily, args.sha, args.run_id, args.date)
+        print(json.dumps({"path": str(daily_read_path(args.root)), "record": record}, indent=1))
         return 0
 
     if args.from_cache:

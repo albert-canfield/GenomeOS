@@ -4,6 +4,23 @@
 # session's half-edited files in this checkout neither block nor pass the push.
 # Skip once with GENOMEOS_SKIP_CHECK=1 only for a documentation-only push.
 #
+# TWO GATES, AND WHICH ONE A PUSH TAKES (wired 2026-10-10, ROADMAP section 5, E1, as the supervisor ruled
+# on 2026-10-03; CONTRIBUTING step 4). A push to refs/heads/dev takes the FAST gate:
+# `scripts/fast_prepush.py --gate` runs `ruff check` and `ruff format --check` over the project, then
+# ALWAYS_RUN and the test files changed since the last green CI (with the stale-sha widening), in BOTH
+# legs, normal and store-free. Its verdict is `fast-<tree>.json`, scope "fast", which nothing here or in
+# genomeos/verdict.py ever reads as a project verdict. THE FULL GATE -- `scripts/check.sh` and a
+# project-scoped status file for the exact tree, unchanged below -- is taken instead when
+# `fast_prepush.py --decide` says so, and it says so whenever:
+#   * the daily CI is red or unread (`scripts/last_green_ci.py --daily` records the reading), until a
+#     reading is green;
+#   * the push is to main, or to the promote-<sha> branch `scripts/promote_main.sh --prepare` pushes, so
+#     the sha that goes to main has its local full suite and main's bar does not move;
+#   * GENOMEOS_FULL_GATE=1 is set: the switch for the push of a sha a PAID run will be sent from.
+# The gate starts as full and becomes fast only on the decider's explicit "GATE fast", so a decider that
+# cannot run, or an older commit that has no decider, takes the full gate. THE STATED TRADE: a red in a
+# test file that did not change, and is not in ALWAYS_RUN, does not block a dev push.
+#
 # THE VERDICT IS READ FROM THE FILE THE CHECK WROTE, NOT FROM ITS EXIT CODE. The exit
 # code is still required to be 0 -- that refusal is untouched -- but on its own it is not
 # evidence: on 2026-10-02 a `scripts/check.sh ... | tail` reported 0 over four real
@@ -81,7 +98,7 @@ status=0
 # shellcheck disable=SC2034  # git's pre-push protocol sends four fields per ref on stdin and they
 # are positional: local_ref and remote_sha are read because they are there, not because we use them
 while read -r local_ref local_sha remote_ref remote_sha; do
-  case "$remote_ref" in refs/heads/dev|refs/heads/main) ;; *) continue ;; esac
+  case "$remote_ref" in refs/heads/dev|refs/heads/main|refs/heads/promote-*) ;; *) continue ;; esac
   [ "$local_sha" = "0000000000000000000000000000000000000000" ] && continue
   tmp=$(mktemp -d "${TMPDIR:-/tmp}/genomeos-push.XXXXXX")
   # The tree of the commit being pushed, which is what the verdict must name. A clean worktree
@@ -114,26 +131,65 @@ while read -r local_ref local_sha remote_ref remote_sha; do
       echo "pre-push: REFUSED: the data stores could not be linked read-only into $tmp" >&2
       status=1
     fi
-    (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" scripts/check.sh) || status=1
-    # And now the verdict itself, from the file. Run from the clean worktree so the reader is the
-    # committed one and not whatever a peer has half-edited in the shared checkout; the status
-    # directory is the common .git either way, so both see the same files. No pipe anywhere here:
-    # `v=$(cmd)` keeps the command's own exit status, which `cmd | tail` does not, and BOTH the
-    # status and the printed token are required, so a shell that reads only one is still safe.
-    # If the reader cannot run at all it exits non-zero and this refuses: it fails closed.
-    if v=$(cd "$tmp" && python3 -m genomeos.verdict require --tree "$expect_tree" --scope project 2>&1); then
-      case "$v" in
-        "GENOMEOS_VERDICT_OK $expect_tree "*) echo "pre-push: verdict read from the status file: $v" ;;
-        *)
-          echo "pre-push: REFUSED: the verdict reader exited 0 without naming this tree:" >&2
-          echo "$v" >&2
-          status=1
-          ;;
-      esac
+    # WHICH GATE. Full unless the decider, from the commit being pushed, says "GATE fast" in so many
+    # words: an older commit without `--decide`, a decider that crashes, or any other first line all
+    # leave it full. Its stdout only is captured, so a warning on stderr cannot change the match.
+    gate=full
+    if decision=$(cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" \
+          uv run python scripts/fast_prepush.py --decide --remote-ref "$remote_ref"); then
+      case "$decision" in "GATE fast: "*) gate=fast ;; esac
+      echo "pre-push: the gate for $remote_ref, from scripts/fast_prepush.py --decide:"
+      echo "$decision"
     else
-      echo "$v" >&2
-      echo "pre-push: REFUSED: no green verdict exists for the tree being pushed ($expect_tree)." >&2
-      status=1
+      echo "pre-push: the gate decider did not answer, so this push takes the FULL gate" >&2
+    fi
+    if [ "$gate" = fast ]; then
+      echo "pre-push: FAST gate: lint, format, ALWAYS_RUN and the changed test files, normal and store-free."
+      echo "pre-push:   its verdict is scope \"fast\" and is NOT a project verdict; the full suite runs in the"
+      echo "pre-push:   daily CI, before the promotion to main and on any paid path (GENOMEOS_FULL_GATE=1)."
+      (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" \
+        uv run python scripts/fast_prepush.py --gate --sha "$local_sha" --tree "$expect_tree" \
+        --remote-ref "$remote_ref") || status=1
+      # The fast verdict, from ITS file and by the same rules as the project one below: the exit code
+      # AND the printed token naming this tree are both required, stdout only, and it fails closed.
+      if v=$(cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" \
+            uv run python scripts/fast_prepush.py --require-fast --tree "$expect_tree"); then
+        case "$v" in
+          "GENOMEOS_FAST_OK $expect_tree "*) echo "pre-push: fast verdict read from its status file: $v" ;;
+          *)
+            echo "pre-push: REFUSED: the fast verdict reader exited 0 without naming this tree:" >&2
+            echo "$v" >&2
+            status=1
+            ;;
+        esac
+      else
+        echo "$v" >&2
+        echo "pre-push: REFUSED: no green fast verdict exists for the tree being pushed ($expect_tree)." >&2
+        status=1
+      fi
+    else
+      echo "pre-push: FULL gate: scripts/check.sh on the whole project, and a project verdict for this tree."
+      (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" scripts/check.sh) || status=1
+      # And now the verdict itself, from the file. Run from the clean worktree so the reader is the
+      # committed one and not whatever a peer has half-edited in the shared checkout; the status
+      # directory is the common .git either way, so both see the same files. No pipe anywhere here:
+      # `v=$(cmd)` keeps the command's own exit status, which `cmd | tail` does not, and BOTH the
+      # status and the printed token are required, so a shell that reads only one is still safe.
+      # If the reader cannot run at all it exits non-zero and this refuses: it fails closed.
+      if v=$(cd "$tmp" && python3 -m genomeos.verdict require --tree "$expect_tree" --scope project 2>&1); then
+        case "$v" in
+          "GENOMEOS_VERDICT_OK $expect_tree "*) echo "pre-push: verdict read from the status file: $v" ;;
+          *)
+            echo "pre-push: REFUSED: the verdict reader exited 0 without naming this tree:" >&2
+            echo "$v" >&2
+            status=1
+            ;;
+        esac
+      else
+        echo "$v" >&2
+        echo "pre-push: REFUSED: no green verdict exists for the tree being pushed ($expect_tree)." >&2
+        status=1
+      fi
     fi
     # Wait for anything still running IN the worktree before taking the directory away. On 2026-10-02
     # a peer's `pkill -f "scripts/check.sh"` killed the check here; this line removed the worktree at

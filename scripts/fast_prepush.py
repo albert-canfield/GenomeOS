@@ -6,6 +6,11 @@
     uv run python scripts/fast_prepush.py --plan      # print the window and the selection, run nothing
     uv run python scripts/fast_prepush.py --only store-free
 
+    # what scripts/pre-push.sh calls, from a clean worktree of the commit being pushed
+    uv run python scripts/fast_prepush.py --decide --remote-ref refs/heads/dev
+    uv run python scripts/fast_prepush.py --gate --sha SHA --tree TREE --remote-ref refs/heads/dev
+    uv run python scripts/fast_prepush.py --require-fast --tree TREE
+
 WHAT IT IS FOR, and it is one defect class and not a second full gate. On 2026-10-03 three CI runs went
 red -- 3 failures, then 6 -- on failures the LOCAL FULL SUITE COULD NOT SEE: every one was a test that
 assumes this machine's git-ignored data (`data/knowledge`, `data/cache`, `data/reference`). This
@@ -15,8 +20,24 @@ full gate costs 17 to 26 minutes and still misses it, because the environment it
 that hides it. The leg below removes the environment instead of adding tests, and it catches exactly
 this class, in about a minute, at the hand that wrote the code.
 
-It does NOT replace `scripts/pre-push.sh`. That gate still runs, unchanged, and still refuses a push
-without a status-file verdict for the exact tree. This is a fast path in front of it.
+WIRED INTO `scripts/pre-push.sh` ON 2026-10-10 (ROADMAP section 5, E1), as the supervisor ruled on
+2026-10-03 (ROADMAP-HISTORY, the row beside `1b2e768`; CONTRIBUTING step 4). Until then this paragraph
+said the script did not replace the gate, and it did not: nothing called it. Now a push to `dev` takes
+THE FAST GATE -- `ruff check` and `ruff format --check` over the project, then ALWAYS_RUN and the window
+below in BOTH legs -- and its verdict is a status file of scope "fast" (`fast-<tree>.json`, beside and
+never in place of the project verdicts). THE FULL SUITE STAYS WHERE IT DECIDES SOMETHING, and `--decide`
+below sends the push to `scripts/check.sh` instead whenever one of these holds:
+
+  * the daily CI is RED or UNREAD: `<common>/genomeos-check/daily-ci`, written by
+    `scripts/last_green_ci.py --daily`, is absent, says anything but `success`, or was read more than
+    DAILY_READ_MAX_SECONDS ago -- the full gate until a reading is green;
+  * the push is not to `refs/heads/dev`: `main`, and the `promote-<sha>` branch that
+    `scripts/promote_main.sh --prepare` pushes, so the sha promoted to main has its local full suite;
+  * `GENOMEOS_FULL_GATE=1` is in the environment: the switch for a sha a PAID run will be sent from,
+    and for anyone who wants the full suite on a dev push.
+
+THE TRADE, stated as the ruling states it: a red in a test file that did not change, and is not in
+ALWAYS_RUN, does not block a dev push. The daily CI and the promotion's full suite are where it is found.
 
 THE WINDOW IS SINCE THE LAST GREEN CI, NOT SINCE ORIGIN -- and that is the whole design, not a detail.
 A file changed in a commit that already reached origin while its CI run was red, cancelled or unread is
@@ -87,6 +108,7 @@ import ast
 import json
 import os
 import re
+import socket
 import subprocess
 import sys
 import tempfile
@@ -108,6 +130,24 @@ STALE_SECONDS = 48 * 3600
 REMOTE_REF = "origin/dev"
 #: the pathspec the window is taken over
 TESTS_PATHSPEC = "tests/*.py"
+#: the one ref whose push MAY take the fast gate; every other ref the hook checks takes the full one
+DEV_REF = "refs/heads/dev"
+#: set (to anything but 0) and a push takes the full gate whatever else holds: the paid-path switch
+FULL_GATE_ENV = "GENOMEOS_FULL_GATE"
+#: a daily reading of CI older than this is UNREAD. "Read first thing each morning": this morning's
+#: reading is current, and yesterday morning's lapses a day later, with two hours' slack for a morning
+#: that starts later than the one before. One number, here, so the hook and its tests cannot disagree.
+DAILY_READ_MAX_SECONDS = 26 * 3600
+#: the fast verdict's own schema and scope. NOT genomeos/verdict.py's schema, so that even a fast file
+#: copied to a project verdict's name is refused there by its schema check before its scope is read.
+FAST_SCHEMA = "genomeos-fast-gate/1"
+FAST_SCOPE = "fast"
+#: printed by `--require-fast` on success, and required by the shell caller as well as the exit code
+FAST_OK_TOKEN = "GENOMEOS_FAST_OK"
+#: `--require-fast` exits with this when the answer is no, as genomeos/verdict.py's `require` does
+EXIT_REFUSED = 3
+#: fast verdicts older than this are pruned when a new one is written, as the project verdicts are
+FAST_PRUNE_AFTER_SECONDS = 14 * 24 * 3600
 
 
 def git(root: Path, *args: str, check: bool = True) -> str:
@@ -616,6 +656,304 @@ def remove_worktree(root: Path, tree: Path) -> dict:
     return {"ok": r.returncode == 0, "exit": r.returncode, "detail": (r.stdout + r.stderr).strip()[-1200:]}
 
 
+# ----------------------------------------------------------------------------- the gate: which one
+
+
+def read_daily(root: Path) -> tuple[dict | None, Path, str | None]:
+    """(the daily reading of CI, where it was looked for, why there is none). Never raises on a bad file."""
+    path = last_green_ci.daily_read_path(root)
+    if not path.exists():
+        return None, path, "no such file"
+    try:
+        record = json.loads(path.read_text())
+    except (OSError, ValueError) as e:
+        return None, path, f"unreadable ({e.__class__.__name__}: {e})"
+    if not isinstance(record, dict) or not record.get("conclusion") or not record.get("read_at"):
+        return None, path, "readable but names no conclusion or no read_at"
+    return record, path, None
+
+
+def gate_decision(
+    root: Path,
+    remote_ref: str,
+    env: dict[str, str] | None = None,
+    now: datetime | None = None,
+    max_age: int = DAILY_READ_MAX_SECONDS,
+) -> dict:
+    """Which gate a push takes. "fast" only when NOTHING below asks for the full suite.
+
+    Every reason found is listed and not only the first, so the push says all of what it knows. It does
+    not raise on anything it reads: a reading it cannot make is itself a reason for the full gate, and
+    `scripts/pre-push.sh` starts from the full gate and leaves it only on this function's explicit
+    "fast", so a crash here costs nine minutes and never a check.
+    """
+    env = dict(os.environ) if env is None else env
+    now = now or datetime.now(UTC)
+    full: list[str] = []
+    asked = str(env.get(FULL_GATE_ENV, "")).strip()
+    if asked not in ("", "0"):
+        full.append(
+            f"{FULL_GATE_ENV}={asked} asks for the full suite (the switch for a promotion or a paid-path sha)"
+        )
+    if remote_ref != DEV_REF:
+        full.append(
+            f"the push is to {remote_ref}, not {DEV_REF}: main and the promote-<sha> branches keep the full "
+            f"suite, so main's bar does not move"
+        )
+    record, path, why = read_daily(root)
+    fast_reason = ""
+    if record is None:
+        full.append(
+            f"the daily CI is UNREAD: no reading ({why}) at {path}. Record one after reading CI: "
+            f"`uv run python scripts/last_green_ci.py --daily CONCLUSION --sha SHA --run-id ID`"
+        )
+    else:
+        conclusion = str(record.get("conclusion")).strip().lower()
+        short = record.get("short") or str(record.get("sha") or "")[:7]
+        if conclusion != last_green_ci.GREEN:
+            full.append(
+                f"the daily CI is RED: the reading taken {record.get('read_at')} says {conclusion!r} on "
+                f"{short}. The full gate holds until a reading is green."
+            )
+        age = _age_seconds({"written": record.get("read_at")}, now)
+        if age is None:
+            full.append(f"the daily reading's read_at {record.get('read_at')!r} is not a time: UNREAD")
+        elif age > max_age:
+            full.append(
+                f"the daily CI is UNREAD today: the last reading was taken {age / 3600:.1f} h ago, over the "
+                f"{max_age / 3600:.0f} h limit"
+            )
+        elif age < -600:
+            full.append(f"the daily reading's read_at {record.get('read_at')} is in the future: UNREAD")
+        else:
+            fast_reason = (
+                f"a dev push, and the daily CI was read {conclusion} on {short} {age / 3600:.1f} h ago"
+            )
+    return {
+        "mode": "full" if full else "fast",
+        "reasons": full or [fast_reason],
+        "remote_ref": remote_ref,
+        "daily": record,
+        "daily_path": str(path),
+    }
+
+
+# ----------------------------------------------------------------------------- the gate: the fast one
+
+
+def fast_status_dir(root: Path) -> Path:
+    """The directory the project verdicts live in, honouring the same override genomeos/verdict.py does."""
+    override = os.environ.get("GENOMEOS_CHECK_STATUS_DIR")
+    if override:
+        return Path(override)
+    return last_green_ci.git_common_dir(root) / last_green_ci.DIRNAME
+
+
+def fast_status_path(root: Path, tree: str) -> Path:
+    """`fast-<tree>.json`, and NEVER `status-<tree>.json` or `latest.json`.
+
+    genomeos/verdict.py's `require` reads `status-<tree>.json` and nothing else, and the project's
+    status files are keyed by TREE ALONE, so a fast verdict written under that name would do two wrong
+    things at once: it could be read as the project verdict for its tree, and it would DESTROY the real
+    project verdict for the same tree. Under its own name it can do neither; its own schema and its
+    scope "fast" refuse it there even if somebody copies it across.
+    """
+    return fast_status_dir(root) / f"fast-{tree}.json"
+
+
+def tree_hash(root: Path) -> str:
+    """The working-tree hash genomeos/verdict.py records, so the fast verdict names its tree the same way."""
+    r = subprocess.run(
+        [PYTHON, "-m", "genomeos.verdict", "tree"],
+        cwd=root,
+        env=leg_env(root, root),
+        capture_output=True,
+        text=True,
+    )
+    return r.stdout.strip() if r.returncode == 0 else ""
+
+
+def ruff_leg(root: Path, args: list[str], label: str) -> dict:
+    """One ruff run over the project, as `scripts/check.sh` runs it, with this interpreter's ruff."""
+    started = time.monotonic()
+    r = subprocess.run(
+        [PYTHON, "-m", "ruff", *args], cwd=root, env=leg_env(root, root), capture_output=True, text=True
+    )
+    tail = (r.stdout + r.stderr).strip().splitlines()
+    return {
+        "leg": label,
+        "ok": r.returncode == 0,
+        "exit": r.returncode,
+        "seconds": round(time.monotonic() - started, 1),
+        "summary": tail[-1][:300] if tail else "",
+        "output_tail": "\n".join(tail[-40:]) if r.returncode != 0 else "",
+    }
+
+
+def write_fast_status(root: Path, payload: dict) -> Path:
+    """Atomically, beside the project verdicts and under a name they never read; prune the old ones."""
+    path = fast_status_path(root, payload["tree"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=".tmp-fast-", suffix=".json", dir=str(path.parent))
+    try:
+        with os.fdopen(fd, "w") as fh:
+            json.dump(payload, fh, indent=2, sort_keys=True, default=str)
+            fh.write("\n")
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+    except BaseException:
+        os.unlink(tmp)
+        raise
+    now = time.time()
+    for old in path.parent.glob("fast-*.json"):
+        try:
+            if old != path and now - old.stat().st_mtime > FAST_PRUNE_AFTER_SECONDS:
+                old.unlink()
+        except OSError:
+            continue
+    return path
+
+
+def gate(root: Path, sha: str, tree: str, remote_ref: str = DEV_REF, now: datetime | None = None) -> dict:
+    """THE FAST GATE, as ruled on 2026-10-03: lint, format, then ALWAYS_RUN and the window in both legs.
+
+    Run by `scripts/pre-push.sh` inside its clean worktree of the commit being pushed, so `root` is that
+    worktree, its stores are the read-only clones, and the normal leg runs THERE (with the import-path
+    assertion, so it cannot silently test the shared checkout). Stops at the first red leg, as
+    `scripts/check.sh` does. Writes its verdict to `fast-<tree>.json` with scope "fast", green only if
+    every leg is green AND the tree measured before and after is the tree being pushed.
+    """
+    started = time.time()
+    result: dict = {
+        "schema": FAST_SCHEMA,
+        "scope": FAST_SCOPE,
+        "project_verdict": False,
+        "what_this_is": (
+            "the FAST gate's verdict for one dev push (ruff check, ruff format --check, ALWAYS_RUN and the "
+            "test files changed since the last green CI, normal and store-free). It is NOT a project "
+            "verdict: genomeos/verdict.py never reads this file, and the full suite runs in the daily CI, "
+            "before the promotion to main and on any paid path."
+        ),
+        "sha": sha,
+        "tree": tree,
+        "remote_ref": remote_ref,
+        "legs": [],
+        "failed_leg": "",
+        "root": str(root),
+        "host": socket.gethostname(),
+        "pid": os.getpid(),
+        "started_at": datetime.fromtimestamp(started, UTC).isoformat(),
+    }
+    result["tree_begin"] = tree_hash(root)
+    legs: list[dict] = result["legs"]
+    files: list[str] = []
+    for args, label in ((["check", "."], "ruff-check"), (["format", "--check", "."], "ruff-format")):
+        leg = ruff_leg(root, args, label)
+        legs.append(leg)
+        print(f"fast-gate: {label}: exit {leg['exit']} in {leg['seconds']}s -- {leg['summary']}")
+        if not leg["ok"]:
+            result["failed_leg"] = label
+            print(leg["output_tail"], file=sys.stderr)
+            break
+    if not result["failed_leg"]:
+        p = plan(root, now=now)
+        result["plan"] = p
+        for notice in p["window"]["notices"] + p["selection"]["notices"]:
+            print(notice)
+        files = p["selection"]["files"]
+        print(
+            f"fast-gate: window {p['window']['case']} from {(p['window']['base'] or 'none')[:12]}: "
+            f"{p['selection']['changed_count']} changed test file(s), {len(files)} to run with ALWAYS_RUN"
+        )
+        imported = assert_import_path(root, root)
+        result["import_path"] = imported
+        if not imported["ok"]:
+            result["failed_leg"] = "normal"
+            print(imported["why"], file=sys.stderr)
+        else:
+            normal = run_pytest(root, root, files, "normal")
+            legs.append(normal)
+            print(
+                f"fast-gate: normal leg: exit {normal['exit']} in {normal['seconds']}s "
+                f"-- {normal.get('summary')}"
+            )
+            if not normal["ok"]:
+                result["failed_leg"] = "normal"
+                print(normal.get("output_tail", ""), file=sys.stderr)
+    if not result["failed_leg"]:
+        sf = store_free_leg(root, files, sha=sha)
+        legs.append({"leg": "store-free", **sf})
+        if sf.get("stores"):
+            print(f"fast-gate: store-free assertion: {sf['stores']['why']}")
+        if sf.get("import_path"):
+            print(f"fast-gate: import-path assertion: {sf['import_path']['why']}")
+        if sf.get("pytest"):
+            print(
+                f"fast-gate: store-free leg: exit {sf['pytest']['exit']} in {sf['pytest']['seconds']}s "
+                f"-- {sf['pytest'].get('summary', '')}"
+            )
+        if not sf["ok"]:
+            result["failed_leg"] = "store-free"
+            print(sf.get("why", ""), file=sys.stderr)
+            if sf.get("pytest"):
+                print(sf["pytest"].get("output_tail", ""), file=sys.stderr)
+    result["tree_end"] = tree_hash(root)
+    same_tree = result["tree_begin"] == result["tree_end"] == tree
+    if result["failed_leg"]:
+        result["verdict"], result["reason"] = "red", f"the {result['failed_leg']} leg is red"
+    elif not same_tree:
+        result["verdict"] = "red"
+        result["reason"] = (
+            f"the tree moved or was not the one pushed: begin {result['tree_begin'] or 'unreadable'}, "
+            f"end {result['tree_end'] or 'unreadable'}, pushed {tree}"
+        )
+    else:
+        result["verdict"], result["reason"] = "green", "every fast leg green on the tree being pushed"
+    result["finished_at"] = datetime.now(UTC).isoformat()
+    result["seconds"] = round(time.time() - started, 1)
+    result["path"] = str(write_fast_status(root, result))
+    print(f"fast-gate: verdict {result['verdict']} ({result['reason']}) -> {result['path']}")
+    return result
+
+
+def require_fast(root: Path, tree: str, out=None, err=None) -> int:
+    """Answer, for ONE tree, whether a complete green FAST verdict exists. Anything else refuses."""
+    out = sys.stdout if out is None else out
+    err = sys.stderr if err is None else err
+    tree = tree.strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", tree):
+        print(f"fast-gate: REFUSED: {tree!r} is not a tree hash", file=err)
+        return EXIT_REFUSED
+    path = fast_status_path(root, tree)
+    try:
+        status = json.loads(path.read_text())
+    except (OSError, ValueError) as e:
+        print(f"fast-gate: REFUSED: no readable fast verdict for tree {tree} at {path} ({e})", file=err)
+        return EXIT_REFUSED
+    problems = []
+    if status.get("schema") != FAST_SCHEMA:
+        problems.append(f"schema {status.get('schema')!r}, not {FAST_SCHEMA!r}")
+    if status.get("scope") != FAST_SCOPE:
+        problems.append(f"scope {status.get('scope')!r}, not {FAST_SCOPE!r}")
+    for key in ("tree", "tree_begin", "tree_end"):
+        if status.get(key) != tree:
+            problems.append(f"{key}={status.get(key)!r}, not this tree")
+    if status.get("verdict") != "green":
+        problems.append(f"verdict {status.get('verdict')!r}: {status.get('reason')}")
+    if problems:
+        print(f"fast-gate: REFUSED for tree {tree}: " + "; ".join(problems), file=err)
+        return EXIT_REFUSED
+    selection = (status.get("plan") or {}).get("selection") or {}
+    window = (status.get("plan") or {}).get("window") or {}
+    print(
+        f"{FAST_OK_TOKEN} {tree} scope={FAST_SCOPE} files={selection.get('count')} "
+        f"window={window.get('case')} finished={status.get('finished_at')}",
+        file=out,
+    )
+    return 0
+
+
 # ----------------------------------------------------------------------------- the whole path
 
 
@@ -633,8 +971,30 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--sha", default="HEAD", help="the commit the store-free worktree is made of")
     ap.add_argument("--root", type=Path, default=ROOT)
     ap.add_argument("--json", action="store_true", help="print the whole result as JSON at the end")
+    ap.add_argument("--decide", action="store_true", help="print which gate a push takes, GATE fast|full")
+    ap.add_argument("--gate", action="store_true", help="run the fast gate and write its fast-<tree> verdict")
+    ap.add_argument("--require-fast", action="store_true", help="refuse unless a green fast verdict exists")
+    ap.add_argument("--tree", help="the tree of the commit being pushed (--gate, --require-fast)")
+    ap.add_argument("--remote-ref", default=DEV_REF, help="the ref being pushed to (--decide, --gate)")
     args = ap.parse_args(argv)
     root = args.root
+
+    if args.decide:
+        d = gate_decision(root, args.remote_ref)
+        # ONE first line the hook matches on; the reasons after it are for the person pushing
+        print(f"GATE {d['mode']}: {len(d['reasons'])} reason(s)")
+        for reason in d["reasons"]:
+            print(f"  - {reason}")
+        return 0
+    if args.require_fast:
+        if not args.tree:
+            ap.error("--require-fast needs --tree")
+        return require_fast(root, args.tree)
+    if args.gate:
+        sha = git(root, "rev-parse", "--verify", f"{args.sha}^{{commit}}")
+        tree = args.tree or git(root, "rev-parse", f"{sha}^{{tree}}")
+        result = gate(root, sha, tree, args.remote_ref)
+        return 0 if result["verdict"] == "green" else 1
 
     p = plan(root)
     for notice in p["window"]["notices"] + p["selection"]["notices"]:
