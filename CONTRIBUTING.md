@@ -1,6 +1,7 @@
 # Working on GenomeOS
 
-Open source, MIT licence. These rules apply to people and to automated
+Open source: Apache 2.0 for the BioLang engine, AGPL-3.0-or-later for the
+GenomeOS application ([LICENSING.md](LICENSING.md)). These rules apply to people and to automated
 sessions alike; the working rules for several sessions sharing one checkout
 are in [docs/ROADMAP.md](docs/ROADMAP.md) §8 and the reasons in
 [docs/LESSONS.md](docs/LESSONS.md).
@@ -210,11 +211,33 @@ After this date:
    the push, and a red push is what produces the failure notifications. Set
    `GENOMEOS_SKIP_CHECK=1` only for a documentation-only push. The hook is
    local to the checkout (`.git/hooks/pre-push`); `scripts/install-hooks.sh`
-   installs it in a fresh clone.
+   installs it in a fresh clone. It is a fixed wrapper that runs the
+   committed `scripts/pre-push.sh` of HEAD, so a change to the gate takes
+   effect only once it is committed.
+   **The fast gate is ruled but not in force (2026-10-10).** On 2026-10-03 the
+   supervisor ruled that a push to `dev` should take a fast gate (lint, format,
+   the always-run tests and the test files changed since the last green CI,
+   `scripts/fast_prepush.py`), with the full suite kept for the daily CI, the
+   promotion to `main` and any paid path. The script is built and tested; the
+   hook does not call it yet, so every push still runs the full suite (about 9
+   minutes on an idle machine). Wiring it is ROADMAP §5 item 14.
 5. **Record**: a line in docs/PROGRESS.md (append-only) with the evidence,
    a lesson in docs/LESSONS.md if data taught one, a row in
    docs/DECISIONS.md if a decision was taken, the ROADMAP counts when a
    milestone moves.
+
+In practice two scripts do this, and they are what to use:
+
+```
+scripts/commit_own.sh -F msg-<lane>-<purpose>-<epoch>.txt -L <lane> path/a.py tests/test_a.py
+scripts/push_own.sh                            # pushes the sha that was checked, not the branch name
+```
+
+`commit_own.sh` commits whole files that are yours through a private index,
+with the stale-base guard and the message checks described below; a shared
+file that also carries a peer's hunk takes the manual sequence with only your
+hunk staged (the `shared-checkout` skill has the long form). The sequence the
+scripts run, for reading:
 
 ```
 uv run pytest -q tests/test_your_file.py       # your targeted tests, not the suite

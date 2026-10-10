@@ -6,6 +6,8 @@ total_tokens: 1809245
 remapped: 2026-09-22T21:05:00Z
 remapped_commit: 005803f
 remapped_files: 1365
+counts_updated: 2026-10-10
+counts_commit: 06d0761
 remapped_python_lines: 152160
 ---
 
@@ -27,6 +29,14 @@ is shaped this way, [ARCHITECTURE.md](ARCHITECTURE.md) and
 Measured at `005803f`: **1,365 tracked files** — `genomeos/` 235, `tests/` 199,
 `scripts/` 123, `docs/` 35, `data/` 761 — and **152,160 lines of Python**. The
 token figures below are from the 2026-09-21 scan and were not re-measured.
+
+**Counts at `06d0761` (2026-10-10), so the map is read as older than the code:**
+1,982 tracked files — `genomeos/` 298, `tests/` 391, `scripts/` 284, `docs/` 37,
+`data/` 959 — and 334,398 lines of tracked Python (149,999 in `genomeos/`). The
+module descriptions below were not re-mapped: 120 of the 279 modules in
+`genomeos/` are not named here, 49 of them in `attribution/`, and the package
+`provenance/` and `tests/conftest.py` came after the map. The refresh is ROADMAP
+§5 item 14, E5.
 
 Measured at that commit: `genomeos/` 222 files and about 991k tokens,
 `tests/` 180 files and 316k, `scripts/` 107 files and 246k, `docs/` 33 files
@@ -143,8 +153,9 @@ genomeos/
   organism/ benchmark/              run programs, score against literature
   cancer/ therapeutics/ twin/       the applications
   flow/ forge/ web/
-scripts/    107 standalone runners; nothing imports them
-tests/      180 files, no conftest.py
+  provenance/                       what each number of a hand-written program rests on (from lang/, 2026-10-03)
+scripts/    107 standalone runners at the map (284 on 2026-10-10); nothing imports them
+tests/      180 files at the map (391 on 2026-10-10); one conftest.py since 2026-10-02
 data/       reference, knowledge caches (git-ignored), results (committed)
 docs/       33 documents; ROADMAP.md is the single plan
 ```
@@ -419,7 +430,9 @@ The workflow scripts are the ones to know:
 180 files, 316k tokens, function-based pytest throughout; no
 `unittest.TestCase` anywhere.
 
-**There is no `conftest.py`.** Every fixture is local to its file. Where a
+**One `conftest.py`, since 2026-10-02**: an autouse fixture that gives each test its own
+input-tracing window for `genomeos/manifest.py`, and the `requires_extra` marker. Every
+other fixture is local to its file. Where a
 fixture must be shared, a test file loads another test file through
 `importlib`: `test_panel_union.py` execs `test_panel_leftover.py` to reuse
 its chromosome, and `test_panel_union_five.py` chains through both, "so

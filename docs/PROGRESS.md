@@ -1464,3 +1464,45 @@ happen to be spelled `seconds`), and a free diagnosis of why the gastrulation mo
 0.694–0.773, so something in the program was being compensated for by the wrong sign. Registered with
 a closed, **sourced** candidate list, a pairwise pass, and a deliberately weak bound, because matching
 the census would be tuning.
+
+## 2026-10-10 — a week without a commit, a paid run found stopped a third of the way, and the plan rewritten around executing what was decoded
+
+**What 2026-10-03 left out of this log.** Albert approved AstroREG-2 run 2 first-hand that evening, in
+his words: "Record the sign-off and start run 2 under my approval: at most 1,232 requests, its own
+ledger, pilot check on the first 10 answers" (`f029d47`). The coordinator sent it from `06d0761` at
+23:49:31, and the pilot passed: no `pilot_stop`, and all ten answers were usable, which the supervisor's
+own read agreed with. **At 23:57:59 the ledger stops**: 364 requests, 363 answers, all usable. The last
+line is a request with no answer, and there is no `error` line and no stop event. No session was left to
+notice. The answers cover 5 of the 23 chromosome clusters, below the registered 10-cluster floor, so on
+their own they decide nothing. The ledger is still untracked. Whether to resume is Albert's decision
+(ROADMAP §5 item 14, A1; the recommendation is to resume, with the four steps it lists).
+
+**The week.** No commit, no running job, no live coordinator or supervisor. The daily CI on `06d0761`
+was green on every run from 2026-10-04 to 2026-10-09.
+
+**The review, at Albert's request.** The code is healthy:
+- 5,784 tests collected;
+- lint and format clean;
+- 44 programs at 227/227 in `bio test`;
+- 63 commands and 19 views.
+
+The direction is not:
+- Model work was about a third of the 684 commits after 2026-09-28 (a 60-subject sample), against the
+  two thirds Albert's direction of 2026-10-03 asked for.
+- Area I took almost all of it, while D, E and J have been dormant for two to four weeks.
+- The largest gap against the ambition is executing what was decoded: 22,580 of 440,589 compiled rules
+  can be simulated, on mouse rates; `context_evidence` gates nothing; and the human body program is
+  counts outside haematopoiesis.
+
+**Documents brought current**: README, CONTRIBUTING, docs/README.md, ARCHITECTURE, DECISIONS, and the
+ROADMAP header with §1, §2, §2.1 and §8.
+- Three documents still called the licence MIT.
+- README said "~80 tests" and "a dozen views".
+- CONTRIBUTING never introduced `commit_own.sh` or `push_own.sh`, and said nothing of the fast gate,
+  which is ruled but not wired.
+- DECISIONS stopped at D43; D44 now points to the five decisions recorded elsewhere since.
+
+**The order of work from today is ROADMAP §5 item 14**:
+- A: Albert's decisions, AstroREG-2 first.
+- B: model lanes, starting with compiled rules that run and the `reader` construct.
+- C: one engineering slot, starting with the fast gate and the engine-package writer.

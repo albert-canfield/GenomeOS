@@ -33,16 +33,20 @@ GenomeOS is that middle layer.
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-Python package mapping (v0.1):
+Python package mapping (as first written for v0.1, brought current 2026-10-10;
+[CODEBASE_MAP.md](CODEBASE_MAP.md) has the module-level map):
 
 | Layer | Package | Status |
 |---|---|---|
-| Genome engine | `genomeos.genome` | working: FASTA (gz), Sequence, Locus, Genome.fetch |
-| BioIR | `genomeos.ir` | working: Entity/Gene/Protein/Region/Rule/Parameter/Module, JSON round-trip |
-| BioLang | `genomeos.lang` | working: v0.1 grammar, compile-time reference checks |
-| BioVM | `genomeos.runtime` | working: central dogma, network runtime, cell ageing runtime |
-| Compiler from external data | — | not started (Phase 1 of the action plan) |
-| BioLib, BioTwin, BioForge | — | designed only |
+| Genome engine | `genomeos.genome` | working: FASTA (gz), Sequence, Locus, Genome.fetch, anatomy, UNKNOWN classes, domains, reader, segments |
+| BioIR | `genomeos.ir` | working: 25 types (BioIR 0.4), JSON round-trip, `UNKNOWN` and `UNSTATED` as values |
+| BioLang | `genomeos.lang` | working: v0.4 grammar (26 block kinds), compile-time reference checks; the grammar document is generated from the parser |
+| BioVM | `genomeos.runtime` | working: central dogma, network (ODE), Boolean, SBML, cell ageing, spatial, segmentation, gastrulation, Body, division, economy, debugger, uncertainty, composition |
+| Compiler from external data | `genomeos.molecules`, `genomeos.knowledge`, `genomeos.attribution` | working: the proteome and knowledge graph from public databases; the non-coding attributions compiled to BioLang on 24 chromosomes |
+| BioLib | `genomeos.lib`, `genomeos.std` | working: 45 libraries with data-computed membership; the `bio.std` prelude in BioLang |
+| BioTwin | `genomeos.twin` | working: fork, run, diff on an imported genome |
+| BioForge | `genomeos.forge`, `genomeos.organism.forge` | working: design search, experiments as input; no stated probability (no calibration record) |
+| Provenance | `genomeos.provenance` | working: what each number of a hand-written program rests on |
 
 ## 3. The state model
 
@@ -74,9 +78,9 @@ of engines that a scheduler composes, not one `tick()` loop.
 | Continuous (ODE/SDE) | gene networks, signalling, metabolism | `grn.NetworkRuntime` (RK4, Euler-Maruyama) | wrap libRoadRunner for SBML-scale models |
 | Discrete stochastic events | division, senescence, death, mutation | `cell.CellRuntime` (Poisson/hazard) | keep; add differentiation events |
 | Stochastic molecular (SSA/rule-based) | promoter binding, complexes | — | PySB / BioNetGen adapter |
-| Boolean / logical | large GRNs per cell | — | MaBoSS adapter |
-| Spatial multicellular | morphogen gradients, development | — | CompuCell3D or Tissue Forge adapter |
-| Composition / scheduling | all of the above in one organism | — | evaluate process-bigraph (Vivarium 2.0) |
+| Boolean / logical | large GRNs per cell | `runtime/boolean.py` (attractors; a stand-in until the MaBoSS adapter) | MaBoSS adapter |
+| Spatial multicellular | morphogen gradients, development | `runtime/spatial.py`, and space inside the Body runtime | CompuCell3D or Tissue Forge adapter |
+| Composition / scheduling | all of the above in one organism | `runtime/compose.py` on process-bigraph (D13) | keep |
 
 **Composition decision (from the September 2026 research pass).** Vivarium
 2.0's `process-bigraph` already provides typed hierarchical state, processes
@@ -174,8 +178,9 @@ Boundaries we keep now so that the split is possible without a rewrite:
 3. **Standard library in BioLang, not Python.** What a program needs from the
    environment (cell types, ageing events, signals) is written as `bio.std.*`
    modules with evidence, so a future `biolang` package ships them unchanged.
-4. **One thin entry point.** `genomeos bio FILE` (planned, v0.3) runs a file's
-   `experiment` blocks; a `bio` alias is a one-line rename. The web UI and the
+4. **One thin entry point.** `bio` (its own console script since v0.3, and the
+   entry point of the separately installable `biolang` package) checks,
+   compiles, runs and tests a file. The web UI and the
    other commands are GenomeOS features on top, never dependencies of the run.
 5. **No dependencies in the language core.** Parser, IR and built-in engines
    stay pure Python; heavier engines (process-bigraph, roadrunner, MaBoSS) are

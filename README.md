@@ -50,15 +50,15 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
 
 ## Project family
 
-| Component | Role | Status (2026-09-27) |
+| Component | Role | Status (2026-10-10) |
 |---|---|---|
-| **BioLang** | biological programming language / DSL | v0.3: 18 block kinds from `gene` to `organism` and `experiment`; evidence on every block; programs test themselves |
-| **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | 0.3: 20 types with JSON round-trip, `UNKNOWN` as a value |
+| **BioLang** | biological programming language / DSL | v0.4: 26 block kinds from `gene` to `organism`, `experiment` and `design`; evidence on every block; programs test themselves; the grammar is generated from the parser ([docs/BIOLANG-GRAMMAR.md](docs/BIOLANG-GRAMMAR.md)) |
+| **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | 0.4: 25 types with JSON round-trip, `UNKNOWN` as a value |
 | **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | eleven engines (central dogma, network, Boolean, SBML, ageing, spatial, segmentation, gastrulation, Body, debugger, uncertainty); process-bigraph composition |
-| **`bio`** | the toolchain on its own | `bio check | compile | run | test | repl` |
+| **`bio`** | the toolchain on its own | `bio check | compile | run | test | repl`; packaged as the separately installable `biolang` engine (milestone 2.0, 2026-09-27) |
 | **BioLib** | reusable biological modules (`cell.core`, `animal.development`, `organs.heart`, ...) | 45 libraries with data-computed membership from GO and Reactome |
 | **BioTwin** | a specific genome + specific biological state | HG002 with measured state; fork, run, diff; genome-wide, 4,048,342 PASS variants on 22 autosomes with 0 reference mismatches |
-| **BioForge** | in-silico design and experiment system | design search under constraints; experiments are input, 19 published mutants run in CI; the emitted confidence is a hand-set constant and is documented as uncalibratable |
+| **BioForge** | in-silico design and experiment system | design search under constraints; experiments are input, 19 published mutants run in CI; a design answer carries no stated probability, because no calibration record exists for any outcome ([docs/BIOFORGE-CONFIDENCE.md](docs/BIOFORGE-CONFIDENCE.md)) |
 
 Where each stands in detail, what is missing and what comes next:
 [docs/ROADMAP.md](docs/ROADMAP.md) §2.1; the document index is
@@ -75,10 +75,13 @@ Where each stands in detail, what is missing and what comes next:
   somatic mutation accumulation, epigenetic-clock drift and senescence. Every
   parameter carries its evidence and confidence, so the output reports how much
   of it is measured versus guessed.
-- **BioIR v0.1 types.** Entities, loci, rules with context, evidence levels,
-  confidence, and an explicit `UNKNOWN` role. See [docs/BIOIR-v0.1.md](docs/BIOIR-v0.1.md).
-- **BioLang v0.1.** A declarative language that compiles to BioIR with
-  compile-time reference checks. The repressilator is the first program.
+- **BioIR types.** Entities, loci, rules with context, evidence levels,
+  confidence, and an explicit `UNKNOWN` role. The first design is
+  [docs/BIOIR-v0.1.md](docs/BIOIR-v0.1.md); the current 25 types are listed in
+  [docs/BIOLANG-GRAMMAR.md](docs/BIOLANG-GRAMMAR.md).
+- **BioLang.** A declarative language that compiles to BioIR with
+  compile-time reference checks. The repressilator was the first program; the
+  worm, the blood system and the human body are written in it now.
 - **BioLib catalogue.** 45 biological "libraries" found in the genome, in five
   layers: core, blueprint, timer, systems, parts. `genomeos libs -v`.
 - **Therapeutic target reasoning.** From a tumour VCF: protein localisation and
@@ -93,7 +96,7 @@ Validated on real human DNA: the mitochondrial genome translates to the known
 proteins (MT-CO1 513 aa, MT-CO2 227 aa, MT-ATP6 226 aa) and chromosome 21
 loads in half a second.
 
-## Status (1.0, 2026-09-27)
+## Status (1.0, reviewed 2026-10-10)
 
 What exists, measured separately, because these are different claims:
 
@@ -123,10 +126,11 @@ evidence per task.
 
 **Milestone 1.0 was reached on 2026-09-22**: the `experiment` block, published
 perturbations as tests, BioForge taking experiments as input, and the Evidence
-explorer. `bio test` runs 41 programs at 220/220 checks in CI, including ten
+explorer. `bio test` runs 44 programs at 227/227 checks in CI, including ten
 worm mutants and nine blood mutants. 1.1 (human mechanism), 1.2 (therapeutics
-benchmark, now 10/10 targets recovered by all four routes) and 1.3 (the 98%) are
-each partly met and the roadmap says for each exactly which clause is not.
+benchmark, now 10/10 targets recovered by all four routes) and 2.0 (BioLang
+standalone) were reached on 2026-09-27, each on a criterion fixed before the run;
+1.3 (the 98%) is partly met, and the roadmap (§6) says which clause is not and why.
 *(2026-09-30: the 10/10 counts ten benchmark tumour cases, the tenth hand-written from cohort medians.
 Three quantities are scored apart: the target gene is recovered, the modality verdict is correct, and the
 top-ranked mechanism is defensible. It is not ten independently validated therapies; see
@@ -142,7 +146,7 @@ was retired rather than corrected, and a locus benchmark headline of 0.88 reads
 nearest gene is simply correct. [docs/LESSONS.md](docs/LESSONS.md) keeps the
 transferable half of each one.
 
-What 0.9 means, measured:
+What milestone 0.9 (the whole genome) established, measured:
 
 - **every chromosome**: 25 fetched and analysed, UNKNOWN space classified at 98.5% with curated repeats, CTCF nodes on 24, open chromatin read for eleven cell types
 - **the whole proteome**: 19,478 coding genes compiled from seven public databases, translation verified against UniProt on 19,249 of them (90.9% identical to the canonical entry, 97.8% exact for some isoform), and packaged as a 2.3 MB library that answers offline
@@ -172,7 +176,7 @@ What 0.9 means, measured:
 - a federated protein compiler: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING and the Human Protein Atlas compiled into one definition per protein keyed by UniProt accession, evidence and confidence per section, predicted never treated as observed (`genomeos protein X --compile`, docs/PROTEIN.md)
 - nodes above genes: domains between CTCF boundaries with the genes and enhancers inside (`genomeos domains`)
 - therapeutic target reasoning: for every tumour alteration, where the protein sits and whether a binder can physically reach it, how the tumour differs from healthy tissue, what happens after binding, the peptide/HLA route, and which of 15 therapeutic mechanisms the biology supports, each with its evidence level and its missing data (`genomeos therapeutic`, docs/THERAPEUTICS.md)
-- a local web UI with a dozen views, including a Progress tab with live background jobs and the project's task log
+- a local web UI with 19 views, including a Progress tab with live background jobs, the sessions' work board and the project's task log
 
 ## Licence and credits
 
@@ -207,7 +211,7 @@ uv run genomeos grow data/organisms/human/body.bio --until "20 yr"              
 uv run genomeos serve --open           # light web UI at http://127.0.0.1:8765
 uv run bio test data/demo              # the BioLang toolchain on its own: check, compile, run, test, repl
 uv run genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --report
-uv run pytest                          # ~80 tests; real-data tests skip until data is fetched
+uv run pytest                          # ~5,800 tests; real-data tests skip until data is fetched
 uv run ruff check .
 ```
 
@@ -215,7 +219,11 @@ More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`
 `clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`, `grow`,
 `flow`, `regulation`, `domains`, `repeats`, `rna`, `protein --compile|--bio`, `proteome`,
 `graph`, `pathway`, `lookup`, `report`, `verify`, `unknown`, `cancer compare|tumour|expression`, `therapeutic`,
-`design`, `data fetch --chrom C [--individual]`; the `bio` toolchain: `bio check|compile|run|test|repl`.
+`design`, `data fetch --chrom C [--individual]`; the non-coding genome: `budget`, `closure`,
+`organise`, `segments`, `reader`, `epigenome`, `decompile`, `signals`, `anatomy`, `motifs`,
+`duplications`, `across`, `profiling`, `origin`, `variation`, `syntax`, `mouse`;
+molecules and state: `ptm`, `methylation`, `calibrate`; the record: `evidence`, `work`;
+the `bio` toolchain: `bio check|compile|run|test|repl`. `uv run genomeos --help` lists all 63.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`
 (AlphaGenome client; the key goes in a git-ignored `.env`, see docs/DATA.md; without it
 the feature loads disabled and `genomeos predict --status` says how to enable it),
@@ -224,9 +232,12 @@ the feature loads disabled and `genomeos predict --status` says how to enable it
 The web UI is a single HTML page served by the standard library: Start,
 Genome, Anatomy, Blocks (2-D block map with domains, genes, UNKNOWN classes
 and ENCODE elements), Flow (DNA → RNA → protein, linked lanes), Program,
-Ageing, Twin, Space, Debugger, Molecules (protein definition and AlphaFold
-structure), Cancer, Targets (therapeutic candidates, mechanisms and the
-evidence behind each), Progress and Libraries.
+Cells (what each cell type reads from chromatin), Cell (one cell type inside
+one program: the rules it runs and drops), Evidence (every stated fact with its
+kind and confidence), Ageing, Twin, Space, Organism (one cell to the worm, or a
+human body as populations), Debugger, Molecules (protein definition and
+AlphaFold structure), Cancer, Targets (therapeutic candidates, mechanisms and
+the evidence behind each), Progress and Libraries.
 
 To work with a real human chromosome:
 
@@ -264,11 +275,16 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 
 ## Documents
 
+The full index, with every document's role, is [docs/README.md](docs/README.md). The ones to start from:
+
+- [docs/ROADMAP.md](docs/ROADMAP.md) — the one plan: scope, architecture, areas, and the ordered next steps (§5 item 14 is the current order)
+- [docs/PROGRESS.md](docs/PROGRESS.md) — the append-only record of what was done and measured, day by day
 - [docs/GENOME-AS-CODE.md](docs/GENOME-AS-CODE.md) — the reverse-engineering guide: timers, blueprint, parts list, system integration
-- [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) — phased plan to an operative platform, with tests per task
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — layers, engines, state model, uncertainty as a type
-- [docs/BIOIR-v0.1.md](docs/BIOIR-v0.1.md) — the intermediate representation
-- [docs/BIOLANG-v0.1.md](docs/BIOLANG-v0.1.md) — the language
+- [docs/BIOLANG-GRAMMAR.md](docs/BIOLANG-GRAMMAR.md) — the language as it is, generated from the parser; the versioned design notes are [BIOLANG-v0.1](docs/BIOLANG-v0.1.md) to [v0.4](docs/BIOLANG-v0.4-ECONOMY.md) and [BIOIR-v0.1](docs/BIOIR-v0.1.md)
+- [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md) — the 98%: attributing a function to the non-coding genome, every test and every withdrawal
+- [docs/CRISPRI-RESULT.md](docs/CRISPRI-RESULT.md) — the one independent prediction result so far, and its limits
+- [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) — the first phased plan, executed; kept as history
 - [docs/LANDSCAPE.md](docs/LANDSCAPE.md) — existing systems (research pass, Sept 2026) and what GenomeOS adds
 - [docs/DATA.md](docs/DATA.md) — open genome data for testing, URLs verified
 - [docs/STORAGE.md](docs/STORAGE.md) — stream, distil, discard: keeping the project small on disk
@@ -282,7 +298,6 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/CANCER.md](docs/CANCER.md) — healthy versus tumour: somatic differences, drivers from cBioPortal, targets, agent packet
 - [docs/THERAPEUTICS.md](docs/THERAPEUTICS.md) — therapeutic targeting: accessibility, selectivity, trafficking, neoantigens, mechanism compatibility, and the design dataset
 - [docs/DESIGN-MINIMAL-CELL.md](docs/DESIGN-MINIMAL-CELL.md) — how much genome a neuron needs, and why it still is not a small extract
-- [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
 
 ## Goals
 
