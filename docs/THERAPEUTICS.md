@@ -2339,6 +2339,99 @@ Each dependency is a knockout in culture. **A cell-line dependency is a
 hypothesis for this tumour, not a measurement in it, and not evidence that any
 therapy works.**
 
+## The structural-variant case, pre-registered 2026-10-10
+
+Area F's third open item is the one the ten cases never asked: **a scored
+structural-variant case**. The benchmark does hold a fusion, and that is exactly
+why the item stayed open. EML4-ALK is the arrangement where the answer is
+settled — ALK is the fusion's 3' partner, the product begins with EML4 and
+carries neither ALK's signal peptide nor its ectodomain, so `ectodomain_lost`
+answers `0.0` and the case passes by refusing a surface route rather than by
+leaving the question open. The arrangement nothing has scored is the other one,
+where the gene under test is the **5' partner**: its own N-terminus *is* in the
+product, so its signal peptide and the start of its outward face survive, and
+whether its membrane anchor does depends on where the junction falls.
+`product_extent_unknown` has answered `None` across that whole region since
+2026-09-21 and no benchmark row has ever exercised it.
+
+**The case, chosen and written down before the pipeline was run on it.**
+FGFR3-TACC3 in urothelial carcinoma: sample **TCGA-CF-A3MG-01** of
+`blca_tcga_pan_can_atlas_2018` (TCGA Bladder Urothelial Carcinoma, PanCancer
+Atlas), as the cBioPortal public REST API returns it. FGFR3 is site1 and so the
+5' partner, TACC3 is site2 and the 3'; chr4 1,806,934 to 1,739,702 on GRCh37;
+in-frame; somatic. Eight FGFR3-TACC3 records are in that study, six of them
+in-frame. The VCF carries two of the same tumour's 125 somatic mutations —
+ARID1A R1287T and TSC1 R190P, at the allele fractions its read counts give,
+0.208 and 0.800 — lifted to GRCh38 through the Ensembl assembly map, each lifted
+position checked against the record's reference allele and against the protein
+change the record names. **FGFR3 is not mutated in this sample at all**, which
+is what makes the structural call the only route to it. The terms: TCGA
+open-access somatic data served by cBioPortal, with no controlled-access data
+and no identifier beyond the TCGA sample barcode.
+
+**The published target.** Erdafitinib, a small-molecule pan-FGFR tyrosine kinase
+inhibitor, carries an FDA label for locally advanced or metastatic urothelial
+carcinoma with susceptible FGFR3 genetic alterations — accelerated approval 12
+April 2019, converted to full approval 19 January 2024 — determined by an
+approved companion diagnostic, the therascreen FGFR RGQ RT-PCR kit, whose
+susceptible alterations include the FGFR3-TACC3 fusion. **The structural call is
+the measurement that selects the patient**, the way the amplification is for
+trastuzumab. No antibody against FGFR3 is approved, so the expected verdict is
+`out_of_scope_expected` and the case passes by not claiming a surface route.
+
+**Different in kind from the ten, in three ways.** The existing fusion case is
+the 3' partner and this one the 5'. The existing fixtures are four-column files
+written by hand; this is a caller's own export, read by its column names — which
+the pipeline could not do: the positional reader took the first column, the
+sample identifier, for a gene and the fourth, a chromosome, for the end of the
+product, so a record the pipeline already reads correctly from the same portal's
+REST API could not be read from the file the portal exports. And it is the first
+benchmark case that is **one patient's record** rather than a hand-written file
+or a cohort summary.
+
+**What the case must produce, registered as three separate quantities and a
+guard** (`data/results/therapeutic_sv_case_registration.json`, committed before
+the run):
+
+| Quantity | Counts as recovered | Counts as a miss |
+|---|---|---|
+| the target | FGFR3 among the ranked candidates, reached by the structural call alone | FGFR3 absent: TARGET LOST |
+| the route | no surface route claimed: `surface_accessibility` `None` or at most 0.5, the benchmark's own rule for an out-of-scope case | `surface_accessibility` above 0.5 — a surface route offered against a product whose extent nothing read, for a target with no approved antibody |
+| the top mechanism | `mechanism_sane` true | `mechanism_sane` false |
+
+The rank is **recorded and not predicted**: what is registered is that a target
+reached only through a structural call must be reachable at all. One prediction
+is registered more strongly than the pass rule: `surface_accessibility` is
+`None`, **not `0.0`** and not a curated full-length value. `0.0` is the 3'
+partner's answer; a published `0.0` here would be a mis-reading of the
+arrangement even though the benchmark's pass rule would accept it, and it is
+registered as a finding rather than as a pass.
+
+**The regression guard.** The ten existing rows must be identical, field for
+field, with the structural-variant reader as it was before this lane's change
+and as it is now, `seconds` excluded as wall-clock time. The before run is also
+compared with the committed `data/results/therapeutic_benchmark_v2.json`, so the
+baseline is shown to reproduce the committed record rather than only to agree
+with itself. The ten are re-scored **offline**, because the providers fetch what
+a local store lacks from live services that pin no version, and a field-for-field
+comparison has to hold the network out of it; the new case is run **with** the
+network, the mode the benchmark's own result records.
+
+**The eleventh row was registered as added whatever the outcome**, and it is in
+`scripts/therapeutic_benchmark.py`'s case list from the commit that carries the
+registration, before any score. The committed benchmark result keeps the ten rows
+of the 2026-10-02 run — rewriting it means a fresh network run of every case, and
+the ten rows are the guard — so the eleventh row and the guard's measurement are
+published in `data/results/therapeutic_sv_case_result.json`, and the next full
+benchmark run writes the eleventh row into the benchmark file itself.
+
+**What this does not do.** It does not read a breakpoint into exon content. The
+record states both breakpoints and nothing in the pipeline turns them into the
+residues the product keeps, which is why the registered answer for this case's
+surface dimension is unknown rather than a number. And a recovered target is a
+retrospective consistency between the ranking and what is already approved for
+the alteration — not evidence that any therapy works.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
