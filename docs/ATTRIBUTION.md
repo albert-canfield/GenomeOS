@@ -4,8 +4,8 @@
 - Measured: 0.45% of the unknown space (4,554,153 of 1,008,756,271 bases) and 0.52% of the real unknown (160,447 of 30,602,182 bases) overlap any assay held here. Every model over that space extrapolates from about half a percent of it.
 - Milestone 1.3 (the 98%): every block carries a tier; clause 2 is not met (unknown blocks name a coding gene less often than matched random windows); clause 3 is split, and its designed experiment (284,001 oligos) is built and unrun.
 - Withdrawn: the tier reading of 2026-09-16 (withdrawn 2026-09-17); the 593,765-target band table (retired 2026-09-22 rather than corrected); every interval from fewer than 10 chromosome clusters (2026-10-02).
-- Superseded: since review R7 (2026-09-28) the tiers stored as `fossil` and `neutral` read repeat_unconstrained and unconstrained_unknown. The code and results list just below is the one of 2026-09-13 and is not complete; "What comes next, in order" near the end is the plan of 2026-09-13, and the current order of work is ROADMAP §5 item 14.
-- Open: the paid AstroREG-2 run 2 stopped at 363 of its 1,232 answers on 2026-10-03; resume or close is Albert's decision (ROADMAP §5 item 14, A1) and no result from it is described. Model lanes M1 to M3 of item 14 (compiled rules that run, the `reader` construct, closure at the cell level) started on 2026-10-10 and have no result yet.
+- Superseded: since review R7 (2026-09-28) the tiers stored as `fossil` and `neutral` read repeat_unconstrained and unconstrained_unknown. The code and results list just below is the one of 2026-09-13 and is not complete; "What comes next, in order" near the end is the plan of 2026-09-13, and the current order of work is ROADMAP §5.
+- Open: the paid AstroREG-2 run 2 stopped at 363 of its 1,232 answers on 2026-10-03; resume or close is Albert's decision (ROADMAP §5, A1) and no result from it is described. Model lanes M1 to M3 of the execution plan (ROADMAP §5) (compiled rules that run, the `reader` construct, closure at the cell level) started on 2026-10-10 and have no result yet.
 
 Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py`,
 `budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`, `lexicon.py`, `human_panel.py`),
@@ -33,7 +33,7 @@ the section of this record that holds its registration, run and limits.
 | The one independent prediction | +0.136 [+0.073, +0.227] on 1,918 held-out K562 CRISPRi pairs; +0.141 [+0.079, +0.232] on the 1,744 a scored element covers; against ENCODE-rE2G on matched inputs no difference detected, +0.0593 [−0.001, +0.1485]; HCT116 +0.022, passes, not replicated, interval withdrawn (5 clusters) | `crispri_published_v2.json`, `crispri_benchmark_v2.json`, `re2g_likeforlike.json` | "The CRISPRi benchmark rebuilt…"; "The paired comparison against ENCODE-rE2G, run"; docs/CRISPRI-RESULT.md |
 | Direction | measured decreases called 96 of 116, increases 15 of 36 (chance); `silencer_like`, a direction, is not enriched on ReSE's assay-validated records: −2.144 points, [−5.897, +1.158], NO_SIGNAL | `crispri_direction_both.json`, `silenceragree.json` | docs/NODES-READER-WRITER.md; "The repression calls…" (2026-10-02) |
 | Do the compiled rules run? | 22,580 of 440,589 can be simulated, every rate borrowed from mouse NIH 3T3 fibroblasts; no fixed activator-combination rule survives the measured enhancer pairs | `bridge_audit.json`, `activator_combination_choice.json` | "The result: no compiled rule can be simulated as compiled…" (R3); docs/DESIGN-MINIMAL-CELL.md |
-| A paid run in flight | AstroREG-2 run 2 stopped at 363 of 1,232 answers; no result is described | | ROADMAP §5 item 14 |
+| A paid run in flight | AstroREG-2 run 2 stopped at 363 of 1,232 answers; no result is described | | ROADMAP §5 |
 
 ## The question, and the house
 

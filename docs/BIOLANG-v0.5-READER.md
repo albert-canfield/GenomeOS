@@ -9,7 +9,7 @@ rule selection in `genomeos/lang/` and `genomeos/ir/`, nothing from the applicat
 
 ## Why
 
-Area B, Next 1 (ROADMAP §3 B; §5 item 14, M2). Every cell carries the same genome and differs in which
+Area B, Next 1 (ROADMAP §3 B; §5, M2). Every cell carries the same genome and differs in which
 parts it can read (NODES-READER-WRITER.md §2; v0.4 §7.2, "specialisation is state"). The project
 decodes that per cell type: open, poised or silent, on every chromosome. Until v0.5 a program could
 record that reading only as a rule's `context_evidence`, which gates nothing and which the engine does

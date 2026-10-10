@@ -277,7 +277,7 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 
 The full index, with every document's role, is [docs/README.md](docs/README.md). The ones to start from:
 
-- [docs/ROADMAP.md](docs/ROADMAP.md) — the one plan: scope, architecture, areas, and the ordered next steps (§5 item 14 is the current order)
+- [docs/ROADMAP.md](docs/ROADMAP.md) — the one plan: scope, architecture, areas, and the ordered next steps (§5 is the execution plan)
 - [docs/PROGRESS.md](docs/PROGRESS.md) — the append-only record of what was done and measured, day by day
 - [docs/GENOME-AS-CODE.md](docs/GENOME-AS-CODE.md) — the reverse-engineering guide: timers, blueprint, parts list, system integration
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — layers, engines, state model, uncertainty as a type

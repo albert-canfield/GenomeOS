@@ -8,7 +8,7 @@ skipped test named in the `tree_moved` section is still skipped for the reason g
 "Removal waits on a policy decision" (`tests/test_context_evidence.py`). Later reds are not
 in this file and are not covered by it: the eight CI failures of 2026-10-09 to 2026-10-10
 from three unrelated causes are recorded in the commits `06d0761` and `c00250f` and in
-docs/ROADMAP.md §5 item 14.
+docs/ROADMAP.md §5.
 
 A red verdict in `.git/genomeos-check/` is a statement about a tree. Four of the reds written on
 2026-10-02 were statements about nothing in any tree: two because `git check-ignore` could not answer

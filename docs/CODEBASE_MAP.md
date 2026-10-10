@@ -27,7 +27,7 @@ is left out on purpose. **Every one of the 280 Python modules under
 
 **Three readings.** First mapped on 2026-09-21 at `9a40c18`; re-read on
 2026-09-22 at `005803f`, eighty commits later; re-mapped whole on 2026-10-10
-(ROADMAP §5 item 14, E5), when 120 of the then 279 modules — 49 of them in
+(the review of 2026-10-10), when 120 of the then 279 modules — 49 of them in
 `attribution/` — the package `provenance/` and `tests/conftest.py` had all come
 after the map. The first two readings stay in the frontmatter's `first_*` and
 `remapped*` fields. Seven commits landed while this reading was made and are in

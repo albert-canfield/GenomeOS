@@ -6,7 +6,7 @@
 - Changed 2026-09-28 (review R4): an output carries its fold change and a certainty record and states no confidence. The "capped at 0.7" sentences below describe stored results and the code before that date; dated notes sit beside them.
 - Against measurement: on held-out K562 CRISPRi pairs the deletion feature adds +0.136 [+0.073, +0.227] (1,918 pairs) and +0.141 [+0.079, +0.232] (1,744), and against ENCODE-rE2G on matched inputs no difference is detected (docs/CRISPRI-RESULT.md). It calls the direction of a measured decrease 96 times in 116 and of a measured increase 15 times in 36, which is chance (`crispri_direction_both.json`; docs/NODES-READER-WRITER.md).
 - `silencer_like` (a rise on deletion; 230,839 of the 612,323) is a direction, not a function, and is not enriched on ReSE's assay-validated records, a powered null (`silenceragree.json`, 2026-10-03; the sentence under use 2).
-- Open: AstroREG-2 run 2, a paid run of this model, stopped at 363 of its 1,232 answers on 2026-10-03; whether to resume or close it is Albert's decision (ROADMAP §5 item 14, A1), and no result from it is described anywhere.
+- Open: AstroREG-2 run 2, a paid run of this model, stopped at 363 of its 1,232 answers on 2026-10-03; whether to resume or close it is Albert's decision (ROADMAP §5, A1), and no result from it is described anywhere.
 
 Researched 2026-09-11 from the AlphaGenome documentation, the client source,
 the Nature paper (Avsec et al., *Nature* 649, 1206-1218, 28 January 2026) and

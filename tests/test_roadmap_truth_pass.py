@@ -135,12 +135,16 @@ def test_every_result_named_in_a_data_bullet_exists(found: dict) -> None:
 def test_milestone_states_have_one_reading(found: dict) -> None:
     """The ✅/◑ markers are parsed by the same function the web status card uses."""
     ms = found["milestones"]
-    assert ms["total"] == 7, f"the milestone table changed shape: {ms['milestones']}"
+    # 9 since 2026-10-10: the review's execution plan proposed 1.4 and 1.5, for the owner to
+    # adopt or change; both are planned, and neither may read as reached by a marker alone
+    assert ms["total"] == 9, f"the milestone table changed shape: {ms['milestones']}"
     states = {m["milestone"]: m["state"] for m in ms["milestones"]}
     assert states["1.3 the 98%"] == "partial", (
         "1.3 is held not met by area I's unknown-scoring measurement; a ✅ here would "
         "need that measurement answered, not a marker change"
     )
+    assert states["1.4 the decoded genome runs (proposed 2026-10-10)"] == "planned"
+    assert states["1.5 human mechanism beyond blood (proposed 2026-10-10)"] == "planned"
 
 
 def test_the_chromosome_counter_counts_chromosomes_not_files(tmp_path, monkeypatch) -> None:

@@ -3,7 +3,7 @@
 Reviewed and reorganised on 2026-09-17 against the code, the tests, the
 result files and the running jobs (first written 2026-09-11). Reviewed again on
 2026-10-10: the header, §1, §2, §2.1 and §8 were brought current, and the order of
-work from that date is §5 item 14. This is the one document that says what
+work from that date is the execution plan in §5. This is the one document that says what
 GenomeOS is, how it is built, what each area is for, what is done, what is
 missing and what comes next. Evidence per finished task stays in
 [PROGRESS.md](PROGRESS.md); the original phased plan is kept as history in
@@ -12,16 +12,19 @@ missing and what comes next. Evidence per finished task stays in
 The roadmap as it stood before this cut, every row and correction verbatim, is
 [ROADMAP-HISTORY.md](ROADMAP-HISTORY.md), frozen at `c00250f` and read-only.
 
-Measured state on 2026-10-10: **1,556 commits**, 63 `genomeos` commands plus the
+Measured state on the morning of 2026-10-10: **1,556 commits**, 63 `genomeos` commands plus the
 `bio` toolchain, **5,784 tests** collected (5,571 passed in CI on `06d0761`, and every
 daily CI run since has been green), 44 `.bio` programs at 227/227 `bio test` checks,
 lint clean, every human chromosome fetched and analysed, the whole human proteome
 compiled and verified against UniProt, a genome-wide knowledge graph, the whole
 worm grown from one cell, a human body grown as populations, haematopoiesis as
 mechanism, and the engine packaged and installable on its own. Milestones 0.9, 1.0,
-1.1, 1.2 and 2.0 are reached; 1.3 (the 98%) is partly met (§6). No commit has landed
-since 2026-10-03, and the paid AstroREG-2 run 2 stopped at 363 of its 1,232 answers
-(§5 item 14). On 2026-09-17 the same line read 536 commits and 1,050 tests.
+1.1, 1.2 and 2.0 are reached; 1.3 (the 98%) is partly met (§6). No commit had landed
+from 2026-10-03 until that morning, and the paid AstroREG-2 run 2 stopped at 363 of its
+1,232 answers (§5 item 5). Work resumed the same day under the execution plan in §5: the
+`reader` construct landed in the language, and the first two registered tests of what
+the decoded genome predicts when run returned "no difference detected" (§5 items 1 and 3).
+On 2026-09-17 the same line read 536 commits and 1,050 tests.
 
 Both genome-wide sweeps are finished: **961,227 enhancer elements deleted** in
 AlphaGenome across 24 chromosomes, and the **HPRC panel of 90 human genomes read on
@@ -123,8 +126,8 @@ attached. "Missing for complete" is what separates it from the ambition.
 
 | Component | Version | Functional today | Missing for complete |
 |---|---|---|---|
-| **BioLang** (language) | v0.4 | 26 block kinds plus the `module` and `import` directives (v0.3's 18 counted the directives): v0.3's `gene` to `experiment`, then `field`, `design`, `competence`, `commitment`, `order` and the v0.4 structure and economy blocks (`compartment`, `transport`, `pool`, `allocation`, `regime`); evidence and confidence on every block; `bio.std` prelude; programs test themselves; the grammar is generated from the parser (BIOLANG-GRAMMAR.md, a test fails when it is stale) and unknown block keys are refused | the `reader` construct, so a rule's context comes from chromatin (§5 item 14, M2); `population` and `writer` constructs; a registry for shared libraries; std modules for signalling and human development; v0.4 stage 3 (energy and mitochondria) |
-| **BioIR** (representation) | 0.4 | 25 types with JSON round-trip, listed in BIOLANG-GRAMMAR.md (v0.3's 20 plus Compartment, Transport, Regime, Field and Design); `UNKNOWN` as a value and `UNSTATED` for a confidence nobody stated | ProteinState and Population as types; `Locus` moved under `ir` |
+| **BioLang** (language) | v0.4 + v0.5 `reader` | 27 block kinds plus the `module` and `import` directives (v0.3's 18 counted the directives; v0.5's `reader` landed 2026-10-10, `5682e6c`): v0.3's `gene` to `experiment`, then `field`, `design`, `competence`, `commitment`, `order` and the v0.4 structure and economy blocks (`compartment`, `transport`, `pool`, `allocation`, `regime`); evidence and confidence on every block; `bio.std` prelude; programs test themselves; the grammar is generated from the parser (BIOLANG-GRAMMAR.md, a test fails when it is stale) and unknown block keys are refused | the `reader` construct, so a rule's context comes from chromatin (§5, M2); `population` and `writer` constructs; a registry for shared libraries; std modules for signalling and human development; v0.4 stage 3 (energy and mitochondria) |
+| **BioIR** (representation) | 0.4 | 26 types with JSON round-trip, listed in BIOLANG-GRAMMAR.md (v0.3's 20 plus Compartment, Transport, Regime, Field, Design and, since 2026-10-10, Reader; the generated list omits six dataclasses, §5 item 13); `UNKNOWN` as a value and `UNSTATED` for a confidence nobody stated | ProteinState and Population as types; `Locus` moved under `ir` |
 | **BioVM** (engines) | 0.3 | twelve engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces |
 | **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs 44 programs at 227/227 checks in CI; packaged with the engine as the separately installable `biolang` package with its own test suite (milestone 2.0, 2026-09-27) | `bio fmt`; language server; publication to a package index (the owner's) |
 | **BioLib** (libraries) | 45 libraries + the proteome | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module; **the whole human proteome packaged** (19,283 proteins in 2.3 MB, `genomeos protein X --lib`, answers offline) | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
@@ -331,13 +334,13 @@ History: ROADMAP-HISTORY.md §3 A, lines 160–332.
   nowhere. A neural or embryonic biosample beyond SK-N-SH and H1 is not added, and §5 item 10's stop
   list says no more biosamples until a reading needs one. The `reader` construct has its engine half
   and no generated reader blocks yet.
-- **Next.** 1. The `reader` construct's data half (§5 item 14, M2): reader blocks generated per cell
+- **Next.** 1. The `reader` construct's data half (§5, M2b): reader blocks generated per cell
   type from the reader and epigenome results, so a compiled rule's context is gated by chromatin.
   The engine half landed on 2026-10-10 (`5682e6c`); its three open language decisions (UNKNOWN held
   or refused, poised, the version number) are Albert's, in BIOLANG-v0.5-READER.md. 2. A curated
   silencer source joined in the pipeline beside the derived call. 3. Measured Hi-C node edges beyond
   chr21. 4. The read-by-marks call shown in the Blocks lane.
-- **Owner.** lane-readercompile works on Next 1 from 2026-10-10 (§5 item 14, M2b: the compiler emits
+- **Owner.** lane-readercompile works on Next 1 from 2026-10-10 (§5, M2b: the compiler emits
   reader gating), holding `attribution/compile.py` and `attribution/readergate.py`; the area's own
   files are unowned since 2026-10-03, and lanes are assigned in §5.
 
@@ -393,7 +396,7 @@ History: ROADMAP-HISTORY.md §3 B, lines 333–955.
   modification occupancy stays blocked. The libRoadRunner adapter does not exist
   (`runtime/sbml.py` is the stand-in), and Schoeberl2002 still fails. Isoform expression is GTEx's
   adult tissues, not a cell type or a stage.
-- **Next.** 1. The libRoadRunner adapter, scored first on Schoeberl2002 (§5 item 14, M6). 2. The
+- **Next.** 1. The libRoadRunner adapter, scored first on Schoeberl2002 (§5, M6). 2. The
   seven gene-keyed CPTAC profiles, once their isoforms are known. 3. The person's own expression in
   place of GTEx's median, which waits for a processed track of GM24385. 4. Measured modification
   occupancy, which waits for a source that publishes it.
@@ -458,7 +461,7 @@ History: ROADMAP-HISTORY.md §3 C, lines 956–1122.
   The note `trio()` writes into every trio result (`genome/individuals.py`, around line 1111) still
   says a count above 60 to 100 is "representation differences and residual no-calls", which DATA.md
   records as wrong after normalisation.
-- **Next.** 1. A population distribution for the polygenic scores (§5 item 14, M6). 2. Correct the
+- **Next.** 1. A population distribution for the polygenic scores (§5, M6). 2. Correct the
   `trio()` note to what the phasing and the read fractions found. 3. The tissue's own transcript in
   the trace. 4. A per-candidate germline call, which waits for DNA that never went through culture.
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
@@ -528,7 +531,7 @@ History: ROADMAP-HISTORY.md §3 D, lines 1123–1344.
   4. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12. 5. A `differentiate` that may be
   read after a stated delay. 6. `share:` in `haematopoiesis.to_bio`.
 - **Owner.** lane-organism holds `data/organisms/human/` and docs/AREA-E-NEXT.md from 2026-10-10
-  (§5 item 14, M4); lanes are assigned in §5.
+  (§5, M4); lanes are assigned in §5.
 
 History: ROADMAP-HISTORY.md §3 E, lines 1345–1655; gastrulation rows in §5 item 10, lines 4312–4320.
 
@@ -661,8 +664,8 @@ History: ROADMAP-HISTORY.md §3 F, lines 1656–1908; the 1.2 notes in §6, line
   "known phenotypes it must reproduce" list per library from a biologist, which is a person this
   project does not have rather than a task. *(2026-10-10: "Next item 4" is the history's; the live
   AlphaGenome test stays out of CI because it needs a paid key as a repository secret, and the fast
-  pre-push gate ruled on 2026-10-03 is not wired, §5 item 14, E1.)*
-- **Next.** 1. Back up `dev` to `main` and cut the 1.0.0 tag, both Albert's (§5 item 14, A2). 2. A
+  pre-push gate ruled on 2026-10-03 is not wired, §5, E1.)*
+- **Next.** 1. Back up `dev` to `main` and cut the 1.0.0 tag, both Albert's (§5, A2). 2. A
   PyPI package, outward-facing and the owner's. 3. The AlphaGenome live test in CI, which waits on a
   paid key as a repository secret, Albert's decision. 4. A "known phenotypes it must reproduce" list
   per library, which needs a biologist. 5. The fast pre-push gate wired as ruled on 2026-10-03 (E1).
@@ -865,7 +868,7 @@ History: ROADMAP-HISTORY.md §3 H, lines 1986–2057.
   pointed, not of the genome. A fourth increment is a no-go.
 - **AstroREG-2 run 2 stopped (2026-10-03).** Registered (`0f4c372`) and sent under Albert's sign-off
   (`f029d47`), it stopped at 363 of its 1,232 answers, 5 of 23 chromosome clusters, below the
-  10-cluster floor: the 363 paid answers decide nothing on their own (§5 item 14). The resume code
+  10-cluster floor: the 363 paid answers decide nothing on their own (§5). The resume code
   (`f0f3cbb`) and a post-run runner (`393ccbc`) landed on 2026-10-10.
 - **M1, a run of the compiled rules against measured RNA (2026-10-10, `8420637` census, `008f5c6` registered, `747b207` result).** The census first: 0 of 440,589 compiled rules has a gene as its
   source, so a run of the compiled programs is one independent one-gene system per regulated gene.
@@ -886,10 +889,10 @@ History: ROADMAP-HISTORY.md §3 H, lines 1986–2057.
   stopped (§5 item 10's stop list) and the oligo library is not ordered (D8), so clause 2 moves only on
   public measurement. Closure has run at the gene level on two chromosomes and once at the cell level, on 35
   elements of one screen, and not at the organism level. No simpler genome has been read.
-- **Next.** 1. Compiled rules that run (§5 item 14, M1): after the registered run's "no difference
+- **Next.** 1. Compiled rules that run (§5, M1): after the registered run's "no difference
   detected" (`747b207`), the next step, raising the simulable share or the strength-dependent
   combination form R3 left open, is registered before it is run. 2. AstroREG-2
-  run 2, resumed or closed (§5 item 14, A1), which waits on Albert's own words: the resume code
+  run 2, resumed or closed (§5, A1), which waits on Albert's own words: the resume code
   landed in `f0f3cbb`. 3. The model's second targets as a shortlist (the 52 off-gate pairs above a
   drop of 0.1, refused a band at 26 and 24 pairs), held against an independent perturbation; no level
   claim is registered again until a screen exists on both sides of a split. 4. Milestone 1.3 clause 2
@@ -972,7 +975,7 @@ History: ROADMAP-HISTORY.md §3 I, lines 2058–3293; the area's §5 rows are it
   read in enhancers); a species-tree null, the only thing that would let a pair be called a
   dependency; and a model that reads the sequence itself, scored on §17's own held-out elements, the
   one readout §17 names as able to overturn its negative.
-- **Next.** 1. A species-tree null for library pairs (§5 item 14, M6). 2. Enhancer pair logic outside
+- **Next.** 1. A species-tree null for library pairs (§5, M6). 2. Enhancer pair logic outside
   promoters, starting with GATA plus T-box in heart. 3. A sequence model scored on
   GRAMMAR-BY-COMPARISON §17's held-out elements.
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
@@ -999,31 +1002,139 @@ ROADMAP-HISTORY.md §4 (lines 3563–3603). Results land in `data/results` and a
 | Job | Needs | Owner |
 |---|---|---|
 | One-off jobs, each finished on its date: telomere length from HG002 reads (2026-09-12), measured Hi-C boundaries against the node edges (2026-09-12), Packer 2019 disagreements resolved to one labelling depth (2026-09-11), the mouse chromosome as the second mammal (2026-09-11), Sender & Milo turnover as maintenance timers in `bio.std` (2026-09-11), the retrospective therapeutic benchmark (six cases on 2026-09-11, ten since 2026-09-30) | **done**, each on its date | — |
-| AlphaGenome live predictions for UNKNOWN regulatory blocks | `ALPHAGENOME_API_KEY` and Albert's grant. The stop list of §5 item 10 (2026-09-27) says no AlphaGenome requests on the 882 blocks, and item 14 allows no model requests unless Albert grants them, so this row waits on him and is argued against by the plan | Albert |
+| AlphaGenome live predictions for UNKNOWN regulatory blocks | `ALPHAGENOME_API_KEY` and Albert's grant. The stop list of §5 item 10 (2026-09-27) says no AlphaGenome requests on the 882 blocks, and the execution plan in §5 allows no model requests unless Albert grants them, so this row waits on him and is argued against by the plan | Albert |
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each; pick the studies | unowned since 2026-10-03 |
 
 ---
 
-## 5. Next steps, consolidated
+## 5. Next steps, consolidated: the execution plan from 2026-10-10
 
-**Placeholder (2026-10-10): the execution plan is written by the coordinator in the next commit.**
+**How this section works.** This is the order of work from the review of 2026-10-10 (item 14 of the
+previous list, kept in [ROADMAP-HISTORY.md](ROADMAP-HISTORY.md)), approved by Albert the same day
+("proceed"). Each numbered item names its owner (a lane on the work board), the files it holds, what it
+waits on, and what counts as done. The Progress tab reads the items below.
 
-14. **The review of 2026-10-10, and the order of work from that date: settle the stopped paid run, then put the model lanes back on executing what was decoded.** Albert asked for a full review of the project and its documents on 2026-10-10. It found the project still since 2026-10-03 22:50 (no commit, no running job, no live coordinator or supervisor), the daily CI green on `06d0761` every day from 2026-10-04 to 2026-10-09, the paid AstroREG-2 run 2 stopped at 363 of its 1,232 answers with nothing in the record saying so, model work at about a third of the commits against the two-thirds direction, and the plan's own text behind its rows. The order below replaces §8's "order of model work" and runs A (Albert's decisions) beside B (model lanes, at least two of every three slots) and C (engineering, one slot, only where it unblocks A or B).
+Four rules govern the whole plan:
+- **Model first.** At least two of every three lane slots go to model work, meaning work the model can be held to. One slot at most goes to engineering, and only when that work unblocks a model item or a decision.
+- **Register before reading.** Every test commits its registration, with its frozen analysis code, before any outcome is read. A negative result is a result and is reported in its registered words.
+- **One paid run at a time.** A model request is sent only under Albert's own words, given in his own session, and recorded verbatim.
+- **The coordinator dispatches and reviews.** Lanes write code and commit on `dev`; the coordinator pushes between pieces, folds the rows in here, and keeps at least three lanes working while open items remain.
 
-   **State, measured 2026-10-10.**
+**Wave 0 — started 2026-10-10.**
 
-   | Fact | Value |
-   |---|---|
-   | commits on `dev` | 1,556; the last at 2026-10-03 22:50 (`06d0761`) |
-   | `main` | `a1ce607` (PR #13, the work to 2026-10-01); `dev` not promoted since |
-   | tests | 5,784 collected; 5,571 passed in CI on `06d0761`; six daily CI runs green since; lint and format clean |
-   | `bio test` | 44 programs, 227/227 checks |
-   | product | 63 `genomeos` commands, 19 web views, version 1.0.0, no git tag |
-   | milestones | 0.9, 1.0, 1.1, 1.2, 2.0 reached; 1.3 partly met, clause 2 not met (§6) |
-   | jobs | 91 in the registry, none running or stalled |
-   | disk | 92% used, 37 GiB free |
+1. **Done 2026-10-10 — M1, compiled rules that run** (lane-runrules; `8420637` census, `008f5c6` registered, `747b207` result; 0 model requests). Census: 0 of 440,589 compiled rules has a gene as its source, so a run has no network effects and each regulated gene is its own one-gene system. Every resolved pair runs "on" at its borrowed rate in every cell (0 of 160,392 has no basal rate), so a run cannot predict "off". A run's only cross-tissue prediction is element present over element absent, which equals its input observation; the planned on/off test was therefore replaced by a level test, on GTEx v8 because the reader's cell lines have no cached RNA values. Registered reading: "no difference detected: running the compiled rules did not change the squared error of measured log2(TPM+1) against the no-rule baseline by a detectable amount (Delta MSE -0.01565 [95% CI -0.04284, +0.01612] over 13,375 gene-tissue pairs, 8,451 genes, 54 GTEx tissues; control p = 0.000999)". Genes were higher in their rule's tissue in 41.7% of pairs. The rules come from AlphaGenome tracks trained on GTEx, so the outcome is not independent of them, and no reading is evidence of a mechanism. Open, as its own registration: the promoter-competition form (no pair in this population has two mechanisms). Next: item 7b.
 
-   **What the review found.**
+2. **Done 2026-10-10 — M2, the `reader` construct, engine half** (lane-readerlang, `5682e6c`, `56f0e65`). `reader <CellType> { open/poised/closed/unknown: elements }` with evidence and confidence, and `through: E` on an activates/inhibits rule. The gate is at rule selection (`Module.active_rules`): a rule runs only where the cell's reader states E open. Poised, closed and every kind of unknown hold it at strength 0, reported with the reason and never run. It is held, not dropped, because a gene with no activator runs at full max_rate: on the demo, closed and held 0.05, dropped 60.05. A reader states accessibility, not function. The language has 27 block kinds and BioIR 26 types; `bio test` 45 files at 246/246 (the 44 existing unchanged); 34 new tests. Spec in docs/BIOLANG-v0.5-READER.md, demo in data/demo/reader_gating.bio. Open for Albert, each built on the most conservative choice: whether unknown holds or refuses the run, whether poised ever lets a rule run, and the version number (v0.4 §10 decision 1). Next: item 7.
+
+3. **Done 2026-10-10 — M3, closure at the cell level** (lane-closurecell; `ff04f9b` census, `ffe4919` registered, `80bf3db` result; 0 model requests). `attribution/closure_cell.py` chains element → gene → cell: the sweep's K562-track prediction, K562's DepMap 24Q4 dependency on the attributed gene, and a readout the project had never seen, ENCODE's genome-wide CRISPRi proliferation screen in K562 (ENCSR162HMH) against its own control (ENCSR625TAF); 1.39 GB was streamed with every md5 matching ENCODE's, then discarded. Of 440,252 attributed elements, 47,912 carry at least three library guides. The arms cross the attributed gene's dependency with the nearest coding gene's, which leaves 35 elements where the attribution stands alone, against a floor of 5,427, with 757 promoter elements as the positive control. The detectable separation, 0.622, was stated in advance. Registered reading: "No difference was detected at the cell level: over 35 elements whose attributed gene is one K562 depends on and whose nearest coding gene is not, the median log2 relative guide abundance in the CRISPRi screen against the control is -0.012, against +0.006 over the 5427 elements where neither gene is one K562 depends on (one-sided Mann-Whitney p 0.1024) … The positive control does separate in the same population (757 promoter elements of genes K562 depends on, median -0.047, p 5.0e-62), so the readout is responsive and this is a negative result about the attribution, not about the assay. No difference detected is not no difference." Beside it, deciding nothing: depletion tracks the attributed gene where both genes are essential (145, p 1.1e-05), not proximity (147, p 0.874). Open: the files carry no non-targeting guide row, so the assay's zero is not established; mediation through the gene cannot be established from a pooled screen.
+
+4. **A1 prep — AstroREG-2 run 2 made resumable, nothing sent** (lane-resumeprep; `attribution/astrorun.py`, `scripts/astroreg2_send.py`). Done when all of these hold:
+   - a sender flag carries the operator-supplied authorisation, and the run still refuses without it;
+   - the cache check exempts only elements answered in run 2's own ledger;
+   - a dry check writes nothing to any ledger;
+   - each refusal still fires on a planted case;
+   - the registered post-run analyses (the primary analysis and item h) have a committed runner, tested on synthetic answers only, that refuses real answers until the run is complete.
+
+5. **A1 — Resume run 2 — Albert's decision.** Recommendation: resume. 868 requests remain, exactly the cap's remainder, and the 363 already paid for decide nothing alone. Two things are needed from him:
+   - his own sentence authorising a resume of run 2 on its ledger;
+   - who signs as supervisor, because the code names `genomeos-fe` and that session is gone.
+
+   Then, in order: the signer's re-sign is committed; CI passes on that sha; the send runs as a registered job under `caffeinate`; the supervisor-equivalent read covers all answers; the registered analyses run through item 4's runner; and the ledger is committed as its own commit. To close instead: commit the ledger and record the run as stopped incomplete.
+
+6. **A2 — Back up `dev` to `main`, then tag 1.0.0 — Albert's step.** On 2026-10-10 CI was green on `c00250f` (run 38040550668: test, test-bare and live-readers all success), and `enforce_admins` was on. `scripts/promote_main.sh --dry-run c00250f` refused: "c00250f does not contain origin/main (a1ce607); moving main there is not a fast-forward". `main` carries PR #13's merge commits (`054eb46`, `a1ce607`), which `dev` does not; `main`'s files are identical to `747b7ff`'s, which `dev` contains. How to proceed is Albert's decision. After the merge: `scripts/promote_main.sh --verify <sha>`, then the 1.0.0 tag on the merged commit (milestone 1.0 was reached on 2026-09-22, and §6 records the tag as the owner's). After that, promote daily, at most every two days, on a green CI sha.
+
+**Wave 1 — as wave-0 lanes finish, refilling slots so three lanes run and two are model.**
+
+7. **M2b — The `reader` construct, application half** (lane-readercompile from 2026-10-10; `attribution/compile.py`). The compiler emits a `cell_type` and a `reader` block per reader cell type from the decoded chromatin, puts `through: <element>` on each enhancer-to-gene rule, and maps `not_assessable` to `unknown`, never to `closed`. Compiled programs then gate their rules per cell type. This gives a run its first cross-cell prediction that does not restate its own input (M1). Done when: a registered comparison of gated against ungated runs, scored against measured RNA in the reader's own cell types, is reported in its registered words. M1 found no RNA values cached for those cells, so the public ENCODE gene quantifications are fetched first and their size and source recorded.
+
+7b. **M1b — Compiled rules with gene sources: the decoded genome as a network** (lane-regulators, running since 2026-10-10, in new files until item 7 releases `compile.py`). M1 found that no compiled rule names a gene as its source, so the compiled programme cannot produce a single network effect, and the BioVM runs it as one-gene systems. A regulator → element → gene rule needs the factor that binds the element. Area J's operators (JASPAR motifs) and the measured factor occupancy the project holds are the candidate sources, each with its evidence kind; a factor without evidence stays UNKNOWN. Done when: a registered census of how many rules gain a source, and on what evidence; then a registered test of one network-level prediction (for example, a factor knockdown's targets against a published perturbation), reported in its registered words. It follows item 7 on `compile.py`, in series.
+
+8. **Done 2026-10-10 — M4, area E's second human mechanism module: the small-intestinal crypt** (lane-organism; `460c46f` choice and registration, `7646bd7` module, `ad8c662` result; 0 model requests). The choice was written before anything was built (docs/AREA-E-NEXT.md): the worm's next number needs runtime machinery or a data source nobody has, so mechanism went where the body program is counts. The closed list is eight gating factors, each with a fetched loss-of-function citation (TCF7L2, ASCL2, RBPJ, ATOH1, NEUROG3, GFI1, SPDEF, SOX9), and five excluded with the reason. **All eight registered knockouts reproduce the registered pattern, 32 of 32 lineage checks, and nothing about a mutant was fitted.** One number was fitted, the villus residence at 4.70 d, which closes the module to the published 1.2e11 cells and 2.2e10 per day; that is the fit, not a result. Two registered readings about the formalism were wrong and are pinned in tests: conservation does produce Gfi1-/- supernumerary enteroendocrine cells (6.25×; direction published, magnitude unmeasured) and inflates enterocytes 1.64× without ATOH1, where the source reports them unaffected. `bio test` 246/246 → 288/288. Open: colon and stomach are still counts; the tuft lineage waits on a sourced share or residence; gates are presence or absence, so no hypomorph; body.bio is deliberately not wired, because tissues.bio counts the same cells.
+
+9. **M5 — Milestone 1.3, clause 2, from public measurement** (lane-measuredunknown, running since 2026-10-10). D8 forbids synthesis, so the clause can only move on a public MPRA or CRISPR screen whose elements overlap the constrained-unknown blocks. The lane searches for one, reports what exists with sizes and licences, and registers a test only if a fair one is possible.
+
+10. **E1 — Wire the fast gate** (`scripts/pre-push.sh`, `scripts/fast_prepush.py`, CONTRIBUTING step 4). As ruled on 2026-10-03: a push to `dev` runs lint, format, the always-run tests and the test files changed since the last green CI. The full suite stays for the daily CI, the promotion to `main` and any paid path.
+
+11. **E2 — Engine package writer** (`scripts/package_engine.py`, `data/results/engine_package.json`, after M2 lands). Record the package path relative to the repository; never save the canonical result from a `--out` run; rebuild on a clean HEAD, which replaces the uncommitted scratch rebuild in the tree.
+
+**Wave 2 — from the middle of October, in this order unless a result changes it.**
+
+12. **AstroREG-2 analyses**, after item 5 completes: the registered primary analysis and item (h), each from its committed registration only, reported verbatim. Then Albert's decision on the second cell type (725 requests), with the run-2 outcome in hand.
+
+13. **M6 — The dormant areas, one per free model slot.**
+    - A, the engine's debts found by the documentation pass (`3183b81`):
+      - v0.4 §2 caps confidence at 0.3 for any stage that has not passed its gate, and no engine code applies it; it holds only where a program's author writes it;
+      - `policy: optimise` compiles and the runtime refuses it, and `regenerates:` is stored and read by nothing;
+      - the generated grammar lists 26 of 32 IR dataclasses (`Pool`, `Allocation`, `Cost`, `Order`, `Competence`, `Commitment` are missing), because the list is kept by hand and `grammar.check()` cannot see the gap;
+      - the version labels (0.4) lag v0.5's `reader`;
+      - event rate units and `param` units are accepted unchecked.
+    - D: a population distribution for the polygenic scores (today they are raw sums).
+    - J: a species-tree null for the grammar by comparison.
+    - C: the libRoadRunner adapter (Schoeberl2002 still fails on the stand-in).
+    - H: a population of design answers with published outcomes, so a design answer can carry a calibrated probability; and BIOFORGE-CONFIDENCE §6's second request, since `to_experiment()` still overwrites a program's own `confidence:` (now with UNSTATED).
+
+14. **The known-locus benchmark** (previous item 4): the frame drawn for the question it asks, and the re-score plan registered by lane-readerfix, which awaits the benchmark owner's decision. Recommendation: Albert names the coordinator as owner, and the frame is registered as its own lane.
+
+15. **Engineering backlog, one slot at most:**
+    - the remaining one-target consumers (`syntax_tiling` and the two deliberately not moved);
+    - the CPTAC seven profiles, uncommitted at 14.3% mismatch;
+    - the removal tool's orphan path, for `.claude/worktrees/lane-quarantine`;
+    - disk: 92% used and 37 GiB free in the morning of 2026-10-10, then 93% and 33 GiB free by midday (`dd84686`);
+    - from the documentation pass (`dd84686`):
+      - a comment in `tests/test_engine_licence_headers.py` still gives the old engine-test count (31/30; it is 32 tests, 31 Apache-headed);
+      - DESIGN-MINIMAL-CELL does not yet carry the SOX17-repressor mesoderm result (registration `430b510`, result `53d9936`);
+      - the ACKNOWLEDGEMENTS tables lag the code (DepMap, CPTAC and Ochoa, 4DN, AlphaMissense, PGS Catalog and lentiMPRA are used but not tabled);
+    - figures that disagree with their result files (`74a4a0c`):
+      - CRISPRI-RESULT's coverage row "every held-out K562 pair" gives the weighted rebuild [0.0734, 0.2270], while that row's own unweighted estimator rebuilds to [0.0749, 0.2258] (`crispri_published_v2.json`, `coverage_arms_k562_heldout.arm1_all_pairs`; README's figure is correct);
+      - ALPHAGENOME's constrained-versus-uniform table says "of 2,995" where `enhancer_targets_genome_wide.json` gives 2,994, and its 70.7% and 86.0% (`constrained_targets_genome_wide.json`, `uniform_samples`) differ from the 71.2% and 90.2% in the table above it;
+      - area I's node-independence bullet says "Eleven components … nine CLEAN, two EVALUATION-ONLY, one EXPOSED", while `node_independence_audit.json` lists 10 components: 7 CLEAN, 2 EVALUATION-ONLY, 1 EXPOSED (kept verbatim with a dated note in area I, not reconciled);
+    - from the codebase-map refresh (`fc21c29`):
+      - `benchmark/loci_gene_input_plan.py` is imported by nothing;
+      - 94 of 249 application modules and the 7 `std/*.bio` engine files carry no licence header, and no test checks presence;
+      - `genome/` imports six `attribution` modules, and `predict/alphagenome_adapter.py` imports the paid-run guard `attribution.astrorun`, so the application's layers run both ways;
+      - the `parser.py` docstring says v0.3 while the grammar says 0.4 and the parser accepts v0.5's `reader`;
+      - the map itself is 62 KB.
+
+**Standing.**
+
+16. **Albert's decision queue**, each with its recommendation; the previous item rows hold the detail.
+    - Resume of run 2 and its signer: item 5.
+    - Promotion merge and the 1.0.0 tag: item 6.
+    - The second cell type and E2/E3: hold both until item 12.
+    - S8 floor values.
+    - A grammar token for an unresolved direction, and `dirv2` in programs.
+    - Re-cutting the published chr21 programme to v3.
+    - The cell-provenance proposal.
+    - N1b step 2.
+    - The hook rule for `push_own.sh`.
+    - `.gitignore` lines for the caches.
+    - The `.env` backup.
+    - The `manifest_headlines.json` writer. Recommendation: a new-named registry through a committed writer, with the old bytes kept and marked superseded.
+
+17. **Keeping the record current.** At each lane's end:
+    - the coordinator folds its row into the item above and marks it with `**done YYYY-MM-DD**`;
+    - PROGRESS.md gets the day's entry;
+    - the area's Next list in §3 changes in the same commit, because the Progress tab reads it;
+    - the board is retired weekly (`genomeos work retire`).
+
+### The review of 2026-10-10: the state it measured and what it found
+
+*Albert asked for a full review on 2026-10-10; the order of work it set is the plan above, which supersedes the A, B and C lists the review first carried. The full item as first committed is in `c00250f`, and ROADMAP-HISTORY.md keeps the roadmap as it stood before the restructure.*
+
+**State, measured 2026-10-10.**
+
+| Fact | Value |
+|---|---|
+| commits on `dev` | 1,556; the last at 2026-10-03 22:50 (`06d0761`) |
+| `main` | `a1ce607` (PR #13, the work to 2026-10-01); `dev` not promoted since |
+| tests | 5,784 collected; 5,571 passed in CI on `06d0761`; six daily CI runs green since; lint and format clean |
+| `bio test` | 44 programs, 227/227 checks |
+| product | 63 `genomeos` commands, 19 web views, version 1.0.0, no git tag |
+| milestones | 0.9, 1.0, 1.1, 1.2, 2.0 reached; 1.3 partly met, clause 2 not met (§6) |
+| jobs | 91 in the registry, none running or stalled |
+| disk | 92% used, 37 GiB free |
+
+**What the review found.**
 
    1. **AstroREG-2 run 2 stopped at 363 of 1,232 answers, and no row recorded the launch until this one.** Albert's words, first-hand on 2026-10-03 (`f029d47`): "Record the sign-off and start run 2 under my approval: at most 1,232 requests, its own ledger, pilot check on the first 10 answers." The coordinator sent it from `06d0761` at 23:49:31; the pilot passed (no `pilot_stop`, all ten answers usable, the supervisor's independent read agreeing). `data/ledgers/astroreg2_run2.jsonl` holds 364 requests and 363 answers, every answer usable; its last line is request 364 (element `EH38E3663949`) at 23:57:59, with no answer, no `error` line and no stop event. The sender writes an `error` line on any Python exception, Ctrl-C included, so the process most likely ended by a signal or the host sleeping (not established). Request 364 counts as charged by design: the ledger line is written before the request. The ledger is untracked, and `data/results/astroreg2_send.json` was never written. The answers cover chr1 to chr4 and 14 of the 27 elements on chr5: 5 of the 23 chromosome clusters. Under the registered rules that is below the 10-cluster floor, so item (h) would read "inconclusive" and the primary analysis has no ci95. **The 363 paid answers decide nothing on their own.**
    2. **Model work is about a third of the commits, against two thirds.** Of 684 commits from 2026-09-28 to 2026-10-03, a random sample of 60 subjects (seed 7) reads as 20 model work, 7 records of model results and 33 verification, tooling or process. Commits touching science code were 14% to 26% a day, and the share did not rise after the 2026-10-02 rule.
@@ -1031,60 +1142,12 @@ ROADMAP-HISTORY.md §4 (lines 3563–3603). Results land in `data/results` and a
    4. **The largest gap against §1 is execution, not decoding.** 22,580 of 440,589 compiled rules can be simulated, and every rate they use is borrowed from mouse NIH 3T3 fibroblasts (R3, `e921fae`). No fixed activator-combination rule survives the measured enhancer pairs (R3, `93caf61`), and the strength-dependent form is open as its own registration. `context_evidence` gates nothing, because the `reader` construct is unbuilt (area B, Next 1). Outside haematopoiesis, the human body program is counts, not mechanism.
    5. **The plan's text has fallen behind its rows.** Several areas' Next lists name work that was done and recorded only in §5 rows: H's three items (`16a0434` and the two R4 rows), J's whole list, A's refusal of unknown block keys, F's neoantigen provider, and E's `share:`. The Progress tab reads those lists, so it overstates what is left. The header, §1 (which still said MIT), §2, §2.1 and §8 were stale and are corrected in the same commit as this item.
    6. **Engineering loose ends.**
-      - The fast gate ruled on 2026-10-03 is not wired: `scripts/pre-push.sh` still runs the full `scripts/check.sh`, and `1b2e768` was the ruling's row only.
-      - `data/results/engine_package.json` carries an uncommitted scratch rebuild (a temporary path, a dirty tree, the engine suite at "1 failed, 349 passed"), because `scripts/package_engine.py` saves the canonical result on every run, a `--out` scratch run included.
-      - 395 commit-message files and one already-applied patch sit untracked at the repository root.
-      - 121 work-board entries belong to sessions that are gone.
-      - Three push worktrees are prunable, and `.claude/worktrees/lane-quarantine` holds an orphan data copy whose removal waits for the removal tool's orphan path.
-      - This file is 849 KB and 5,192 lines, too long for a person to read and costly for a session.
-
-   **A. Albert's decisions.** Money, permissions and releases are his; each comes with the recommendation from the record.
-
-   - **A1. AstroREG-2 run 2: resume or close.** Recommendation: **resume**. 868 requests remain, which is exactly the cap's remainder. Request 364 counts as charged and is not re-sent, so the run ends at no more than 1,231 answers. The 363 already paid for answer nothing alone (finding 1).
-     A resume needs, in order:
-     1. Albert's own words authorising a resume of run 2 on its ledger. `astrorun.py` treats a resume as a new authorisation, not a continuation, and refuses a run 3 by name.
-     2. A code change, because the committed sender cannot resume: the whole-plan cache check refuses the 363 cached elements, and no flag passes `resume_authorisation`. The same change must stop a dry check from writing a `resume` line to the ledger.
-     3. The supervisor's re-sign, and CI green on that sha.
-     4. The send run as a registered job under `caffeinate`, so the host cannot sleep under it.
-
-     After it completes, the registered post-run order holds unchanged: a read over all answers, the registered analyses from their committed registrations only, then the ledger committed as its own commit. To close instead: commit the ledger as its own commit, record the run as stopped incomplete, and read no registered analysis.
-   - **A2. Back up `dev` to `main`.** `06d0761` has seven green CI runs; use `scripts/promote_main.sh` once `enforce_admins` is verified on. Recommendation: promote, then cut the 1.0.0 tag, which §6 leaves to the owner.
-   - **A3. The rest waiting on him, each at its own row.**
-     - The second cell type (725 requests, item 13) and E2/E3 (at least 1,308 requests, item 10 W3). Recommendation: hold both until A1 is settled, one paid run at a time.
-     - The S8 floor values (item 12).
-     - A grammar token for an unresolved direction, and writing `dirv2` into programs (item 13).
-     - Re-cutting the published chr21 programme to v3 (item 13).
-     - The cell-provenance proposal (item 13).
-     - N1b step 2 (item 13).
-     - The hook rule for `push_own.sh` (item 13).
-     - The `.gitignore` lines for the caches (item 13).
-     - The `.env` backup (item 12, S6).
-     - The writer for `manifest_headlines.json`. This is on the work board only: the file is pinned by sha256 in `c4_alphagenome_ablation.json`, has no committed writer, and all five of its declared inputs have moved. Recommendation: a new-named registry through a committed writer, with the old bytes kept and marked superseded.
-
-   **B. Model lanes, in order.** Each needs a registration before its run and a result file, and no model requests unless A grants them.
-
-   - **M1. Compiled rules that run.** Raise the simulable share of the compiled programme, and register in advance what a run of it predicts. The first test: the on/off state per cell type of genes the compiled rules drive, against measured RNA in the reader's cell types. Include the strength-dependent (promoter-competition) combination form that R3 left open. Files: `runtime/grn.py`, `attribution/bridge.py`, `compile.py`. `compile.py` is a bottleneck file, so M1 and M2 run in series.
-   - **M2. The `reader` construct** (area B, Next 1). Chromatin state per cell type gates a rule's context in the language, so `context_evidence` stops being inert. The parser half is the engine's (Apache) and the data half the application's.
-   - **M3. Closure at the cell level** (area I, Next 5). A deleted element moves its gene and the cell's program, scored on public perturbation data (DepMap and the published CRISPRi screens) with no model requests.
-   - **M4. Area E, which has no owner.** The worm's next real number needs contact and geometry at division, or a measured cell-cycle regulator (area E's last count: "0 decided without the lookup"). Alternatively, the second human mechanism module after haematopoiesis. The mesoderm band restored by a sourced repressor (`b1e8839`, registered at `0790d51`) is the gastrulation starting point.
-   - **M5. Milestone 1.3 clause 2 from public measurement.** D8 forbids synthesis, so the clause can only move on a public MPRA or CRISPR screen whose elements overlap the constrained-unknown blocks. The lane searches for one, and registers a test only if it finds one.
-   - **M6. The dormant areas, one when a slot is free.**
-     - D: a population distribution for the polygenic scores.
-     - J: a species-tree null.
-     - C: the libRoadRunner adapter (Schoeberl2002 still fails).
-     - H: a population of design answers to calibrate against.
-
-   **C. Engineering, one slot at most.**
-
-   - **E1.** Wire `scripts/fast_prepush.py` into `scripts/pre-push.sh` as ruled on 2026-10-03. The full suite stays for the daily CI, the promotion to `main` and any paid path, and CONTRIBUTING step 4 changes in the same commit.
-   - **E2.** Make `scripts/package_engine.py` record the package path relative to the repository, and stop it saving the canonical result from a `--out` run. Then rebuild `engine_package.json` on a clean HEAD, which replaces the scratch diff.
-   - **E3.** Reversible housekeeping, told to the peers first:
-     - `msg-*.txt` and `patch-*.patch` added to `.git/info/exclude`;
-     - the 378 message files whose first line matches a landed commit moved to an archive folder, and the 17 that do not read one by one;
-     - `genomeos work retire` for the 121 stale board entries;
-     - `git worktree prune`, and the ten empty `.claude/worktrees` directories removed.
-   - **E4.** Split this file. Move the history rows of items 1 to 13 verbatim to `docs/ROADMAP-HISTORY.md`, so nothing is lost, and leave each item its last status. Bring every area's Next list up to its §5 rows. `genomeos/roadmap.py`, the truth pass and the doctrine guard read both files.
-   - **E5.** Refresh `docs/CODEBASE_MAP.md`: 120 of 279 modules are unnamed in it, and `provenance/` and `tests/conftest.py` are missing.
+   - The fast gate ruled on 2026-10-03 is not wired: `scripts/pre-push.sh` still runs the full `scripts/check.sh`, and `1b2e768` was the ruling's row only.
+   - `data/results/engine_package.json` carries an uncommitted scratch rebuild (a temporary path, a dirty tree, the engine suite at "1 failed, 349 passed"), because `scripts/package_engine.py` saves the canonical result on every run, a `--out` scratch run included.
+   - 395 commit-message files and one already-applied patch sit untracked at the repository root.
+   - 121 work-board entries belong to sessions that are gone.
+   - Three push worktrees are prunable, and `.claude/worktrees/lane-quarantine` holds an orphan data copy whose removal waits for the removal tool's orphan path.
+   - This file is 849 KB and 5,192 lines, too long for a person to read and costly for a session.
 
 **Items 1–13 of §5 as they ended**, with where their full rows are kept. Nothing here is current
 work unless the row says open.
@@ -1100,7 +1163,7 @@ work unless the row says open.
 | 5. Albert's language decisions, then economy stage 2 | Stage 2 built 2026-09-21: gate (a) passed on three clauses of four, gate (b) **FAILED**; the leftovers and stage 3 are in area A | lines 4011–4060 |
 | 6. Four lanes opened 2026-09-16 | Done: all four landed on 2026-09-16 (`d3c5c52`, `5a31c39`, `2305bee` and area J's), three of them negatives | lines 4061–4121 |
 | 7. Two lanes opened 2026-09-17 | Done: calibration landed with its reliability claim FAILED on the held-out population (`bdc2364`); area J's transfer landed (`b7e1405`) | lines 4122–4160 |
-| 8. Disk | **Open**: 92% used, 37 GiB free on 2026-10-10 (item 14) | lines 4161–4170 |
+| 8. Disk | **Open**: 92% used, 37 GiB free on 2026-10-10 (§5) | lines 4161–4170 |
 | 9. A coordinating session, from 2026-09-21 | A standing process rather than an item; §8 says how the work is organised | lines 4171–4233 |
 | 10. The execution plan of 2026-09-27 | Waves 0–3 as below; its stop list and lane rules are kept in the history | lines 4234–4387 |
 | 10 · W0 node containment, `unknown_scoring`, repository size | **Done** 2026-09-27 (`05b71ae`, `2b77663`; `77de3bb`, `7f7c8c1`; `753edb8`) | lines 4339–4342 |
@@ -1130,7 +1193,7 @@ work unless the row says open.
 | 13 · E2/E3 | A no-go at 0 requests (2026-10-02) | line 4688 |
 | 13 · P1 | Done 2026-09-29: replicated, not activity (`d19ccac`, `a48e9e8`) | line 4769 |
 | 13 · the second cell type | 725 requests approved on conditions, then recommended against; the owner's | lines 4758–4760 |
-| 13 · AstroREG-2 run 2 | The launch checklist written 2026-10-03; run 2 then started and stopped at 363 of 1,232 answers (item 14, A1) | lines 4724–4725 |
+| 13 · AstroREG-2 run 2 | The launch checklist written 2026-10-03; run 2 then started and stopped at 363 of 1,232 answers (§5, A1) | lines 4724–4725 |
 
 **The rows below are kept as history in this file because the Progress tab quotes them.** They are
 the two external reviews' tables (items 11 and 12), item 13's opening and the rows that closed
@@ -1310,6 +1373,8 @@ ROADMAP-HISTORY.md §6 (lines 4923–5176).
 | **1.2 therapeutics benchmark** ✅ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | **Reached 2026-09-27 (`bdd5058`).** Clause by clause. *Approved targets recovered from public tumours*: nine cases, **9/9 recovered, 9/9 routes called correctly, 9/9 top mechanisms defensible**, and since 2026-09-27 every target also ranks first among the candidates measured in its own tumour (CD19 second, behind a candidate from the same RNA call), with no case where a hypothesis measured nowhere outranks it (`outranked_by_hypotheses` 12 rows → 0, `BURIED_SURFACE_TARGETS` 2 → 0, `AMPLIFIED_TARGET_RANK` 4 → 1, every score byte-identical). *CNA and SV*: scored cases driven by an amplification (`3aee02f`) and a fusion (`deee0a2`). *`cancer.*` libraries*: landed 2026-09-14 (`9c0e6ce`). One precision: the evidence tier passed on an **amended** design; the registered one (`5013406`) fired its own falsifier and is left in the record. The benchmark holds ten cases at 10/10/10 since 2026-09-30 (area F). Detail: ROADMAP-HISTORY.md line 4931 |
 | **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (**284,001 oligos** over 878 blocks, 41,037 of the test arm from blocks no assay has touched; this said 312,129 until 2026-09-27, the first build's count before the orderability filter dropped 4,264 untouched windows, and 45,301 − 4,264 = 41,037 exactly) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above. The attribution read on 2026-09-16 was withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier. Clause 2 is held not met (the notes below); clause 3 is split as the goal cell says, its experiment designed and not ordered (D8). Detail: ROADMAP-HISTORY.md line 4932 |
 | **2.0 BioLang standalone** ✅ | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites. **Reached 2026-09-27 (`5720c7c`), on the second clause as restated that morning in section 5 item 10, before the work began:** "GenomeOS depends on it" was a means, and is read as "the engine is separately installable and independently tested", because the repository is deliberately not split while nothing outside it consumes the engine. The package is `biolang` **0.1.0**, **9 of 9 checks** in an interpreter where `import genomeos` fails, the ninth being its own pytest suite of **24 files and 157 tests — 154 passed, 3 skipped**. *(The committed `engine_package.json` of 2026-09-29 reads 12 of 12 checks; area A.)* **Not done, and not a clause: publication to PyPI**, which is outward-facing and the owner's. Detail: ROADMAP-HISTORY.md line 4933 |
+| **1.4 the decoded genome runs** (proposed 2026-10-10) | the compiled programme runs in the BioVM per cell type with its unresolved parts reported; chromatin gates its rules through the language (`reader`), generated from the decoded data; compiled rules carry the regulator that binds each element, so a run has network effects; one registered test at gene level and one at cell level of what a run predicts, against measurement the model never saw, each reported in its registered words whatever the outcome | proposed by the review of 2026-10-10, for the owner to adopt or change. Clause 1 holds in part since 2026-10-10 (M1, `747b207`: every resolved pair runs, as one-gene systems); clause 2's engine half landed (`5682e6c`) and its data half is §5 item 7; clause 3 is §5 item 7b; clause 4's first two tests were run (M1 `747b207` and M3 `80bf3db`, both "no difference detected"), and a test whose run has network effects waits on clause 3 |
+| **1.5 human mechanism beyond blood** (proposed 2026-10-10) | a second human mechanism module in the body program, written from a closed sourced list, its published mutants as `experiment` blocks in CI, every fitted number named as fitted | proposed by the review of 2026-10-10, for the owner to adopt or change; §5 item 8 (M4, the small-intestinal crypt: registered at `460c46f`, module `7646bd7`, result `ad8c662`, eight of eight registered knockouts reproduced with one number fitted and named) |
 
 **1.3's clauses, condensed** (the notes of 2026-09-27 to 2026-09-29 are ROADMAP-HISTORY.md lines
 4935–5110). Clause 1 is met. Clause 2, against four matched controls (`0c8b82d`, `faeb0da`, `a7f207f`,
@@ -1413,7 +1478,7 @@ ambition in §1 before it is started.
 
 - **At least 2 of every 3 lane slots are MODEL lanes** (raised from 2 of every 4 after Albert's
   direction of 2026-10-03 that git and verification had taken the project's focus; on 2026-10-10
-  the measured share was about a third, §5 item 14) (correct, or complete) —
+  the measured share was about a third, §5) (correct, or complete) —
   work that adds or repairs something the model can be held to. A VERIFICATION
   lane takes a slot only when it blocks a model result or a promotion, or when
   it fixes a defect found in published figures. Tooling for its own sake waits
@@ -1423,7 +1488,7 @@ ambition in §1 before it is started.
   hand-installed packages, and a verdict that could read green about a tree that
   no longer existed. That work was worth doing and the proportion still was not
   right, so the ratio is written down rather than left to judgement.
-- **The order of model work from 2026-10-10 is §5 item 14** (A, B, C). As it stood on
+- **The order of work from 2026-10-10 is the execution plan in §5** (items 1 to 17). As it stood on
   2026-10-02, kept for the record: AstroREG once its
   calibration and the owner's answer are in; then a registered test of the
   increase-derived links, with the links answerable IN THEIR OWN CELL counted
@@ -1438,7 +1503,7 @@ ambition in §1 before it is started.
   `scripts/check.sh` (lint, format, the whole suite, `bio test`) on the pushed
   sha in a clean worktree and refuses a red push; a lane runs the full suite
   itself only for a paid path or a verification tool (since 2026-10-02). The
-  fast gate ruled on 2026-10-03 is not wired yet (§5 item 14, E1).
+  fast gate ruled on 2026-10-03 is not wired yet (§5, E1).
   CONTRIBUTING.md has the commands.
 - Each session owns files (listed in §3) and commits through a private
   index; shared files (`cli.py`, `server.py`, `index.html`, `README.md`,

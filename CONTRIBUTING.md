@@ -220,7 +220,7 @@ After this date:
    `scripts/fast_prepush.py`), with the full suite kept for the daily CI, the
    promotion to `main` and any paid path. The script is built and tested; the
    hook does not call it yet, so every push still runs the full suite (about 9
-   minutes on an idle machine). Wiring it is ROADMAP §5 item 14.
+   minutes on an idle machine). Wiring it is ROADMAP §5, E1.
 5. **Record**: a line in docs/PROGRESS.md (append-only) with the evidence,
    a lesson in docs/LESSONS.md if data taught one, a row in
    docs/DECISIONS.md if a decision was taken, the ROADMAP counts when a
