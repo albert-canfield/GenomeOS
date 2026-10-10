@@ -1028,18 +1028,24 @@ Four rules govern the whole plan:
 
 3. **Done 2026-10-10 — M3, closure at the cell level** (lane-closurecell; `ff04f9b` census, `ffe4919` registered, `80bf3db` result; 0 model requests). `attribution/closure_cell.py` chains element → gene → cell: the sweep's K562-track prediction, K562's DepMap 24Q4 dependency on the attributed gene, and a readout the project had never seen, ENCODE's genome-wide CRISPRi proliferation screen in K562 (ENCSR162HMH) against its own control (ENCSR625TAF); 1.39 GB was streamed with every md5 matching ENCODE's, then discarded. Of 440,252 attributed elements, 47,912 carry at least three library guides. The arms cross the attributed gene's dependency with the nearest coding gene's, which leaves 35 elements where the attribution stands alone, against a floor of 5,427, with 757 promoter elements as the positive control. The detectable separation, 0.622, was stated in advance. Registered reading: "No difference was detected at the cell level: over 35 elements whose attributed gene is one K562 depends on and whose nearest coding gene is not, the median log2 relative guide abundance in the CRISPRi screen against the control is -0.012, against +0.006 over the 5427 elements where neither gene is one K562 depends on (one-sided Mann-Whitney p 0.1024) … The positive control does separate in the same population (757 promoter elements of genes K562 depends on, median -0.047, p 5.0e-62), so the readout is responsive and this is a negative result about the attribution, not about the assay. No difference detected is not no difference." Beside it, deciding nothing: depletion tracks the attributed gene where both genes are essential (145, p 1.1e-05), not proximity (147, p 0.874). Open: the files carry no non-targeting guide row, so the assay's zero is not established; mediation through the gene cannot be established from a pooled screen.
 
-4. **A1 prep — AstroREG-2 run 2 made resumable, nothing sent** (lane-resumeprep; `attribution/astrorun.py`, `scripts/astroreg2_send.py`). Done when all of these hold:
-   - a sender flag carries the operator-supplied authorisation, and the run still refuses without it;
-   - the cache check exempts only elements answered in run 2's own ledger;
-   - a dry check writes nothing to any ledger;
-   - each refusal still fires on a planted case;
-   - the registered post-run analyses (the primary analysis and item h) have a committed runner, tested on synthetic answers only, that refuses real answers until the run is complete.
+4. **Done 2026-10-10 — A1 prep, AstroREG-2 run 2 made resumable on Albert's word; nothing sent** (lane-resumeprep; `f0f3cbb`, `393ccbc`; no key read, no network, ledger and cache untouched). `--resume-authorisation WORDS` has no default and is refused when blank, or for a fresh or completed ledger; on `--send` the words go verbatim into the ledger before the first new charge. Only this ledger's 363 paired answers are exempt from the cache rule; an uncharged cached element, a request-364-shaped element, and an element answered in run 1's ledger are still refused. A dry check writes nothing (both ledgers byte-identical afterwards). At the real numbers a resume buys exactly 868 in plan order and never request 364, and the pilot does not re-fire. Seven mutations were caught; 281 targeted tests pass. `scripts/astroreg2_analyse.py --run 2` refuses today and computes item (h) as registered. **The primary claim's assembly is refused:** the recording path writes `by_cell` only for K562, HepG2, GM12878 and IMR-90, so the registered `crispri` path finds no astrocyte value on any paid answer (the values exist only in the full vectors), and the screen pairs carry no distance. A blind amendment of the primary claim's assembly therefore comes before any answer is read, whether or not the run resumes. Comparison (b), the 667-column split (adapter v2 records 371 columns) and the secondary are not computed, each with its reason. The lane left an orphan `.claude/worktrees/resumeprep-check`, which waits on the removal tool's orphan path.
 
 5. **A1 — Resume run 2 — Albert's decision.** Recommendation: resume. 868 requests remain, exactly the cap's remainder, and the 363 already paid for decide nothing alone. Two things are needed from him:
    - his own sentence authorising a resume of run 2 on its ledger;
    - who signs as supervisor, because the code names `genomeos-fe` and that session is gone.
 
-   Then, in order: the signer's re-sign is committed; CI passes on that sha; the send runs as a registered job under `caffeinate`; the supervisor-equivalent read covers all answers; the registered analyses run through item 4's runner; and the ledger is committed as its own commit. To close instead: commit the ledger and record the run as stopped incomplete.
+   Then, in order:
+   1. one commit changes `SUPERVISOR_SESSION`, quoting his words;
+   2. the closure files are held fixed (the closure differs from the signed one in five files today: the two A1-prep files, and `ir/model.py`, `lang/grammar.py` and `lang/parser.py` from the `reader` construct);
+   3. the named signer reviews the dry run and commits its own sign-off line (`by` equal to `SUPERVISOR_SESSION`, `run_id` 2, "dry run reviewed", the digest, and the signed closure equal to the sender's closure at that commit);
+   4. CI passes on that sha;
+   5. from a worktree at that sha, on mains power, the operator runs `caffeinate -ims uv run python scripts/astroreg2_send.py --run 2 --resume-authorisation "<Albert's words, verbatim>"` as the dry check, then the same with `--send`;
+   6. a read over all answers;
+   7. the blind amendment of the primary claim's assembly (item 4), registered before any answer is read;
+   8. the registered analyses, through item 4's runner;
+   9. the ledger committed as its own commit.
+
+   To close instead: commit the ledger and record the run as stopped incomplete.
 
 6. **A2 — Back up `dev` to `main`, then tag 1.0.0 — Albert's step.** On 2026-10-10 CI was green on `c00250f` (run 38040550668: test, test-bare and live-readers all success), and `enforce_admins` was on. `scripts/promote_main.sh --dry-run c00250f` refused: "c00250f does not contain origin/main (a1ce607); moving main there is not a fast-forward". `main` carries PR #13's merge commits (`054eb46`, `a1ce607`), which `dev` does not; `main`'s files are identical to `747b7ff`'s, which `dev` contains. How to proceed is Albert's decision. After the merge: `scripts/promote_main.sh --verify <sha>`, then the 1.0.0 tag on the merged commit (milestone 1.0 was reached on 2026-09-22, and §6 records the tag as the owner's). After that, promote daily, at most every two days, on a green CI sha.
 
@@ -1053,7 +1059,7 @@ Four rules govern the whole plan:
 
 9. **M5 — Milestone 1.3, clause 2, from public measurement** (lane-measuredunknown, running since 2026-10-10). D8 forbids synthesis, so the clause can only move on a public MPRA or CRISPR screen whose elements overlap the constrained-unknown blocks. The lane searches for one, reports what exists with sizes and licences, and registers a test only if a fair one is possible.
 
-10. **E1 — Wire the fast gate** (`scripts/pre-push.sh`, `scripts/fast_prepush.py`, CONTRIBUTING step 4). As ruled on 2026-10-03: a push to `dev` runs lint, format, the always-run tests and the test files changed since the last green CI. The full suite stays for the daily CI, the promotion to `main` and any paid path.
+10. **E1 — Wire the fast gate** (lane-fastgate, running since 2026-10-10; `scripts/pre-push.sh`, `scripts/fast_prepush.py`, CONTRIBUTING step 4). As ruled on 2026-10-03: a push to `dev` runs lint, format, the always-run tests and the test files changed since the last green CI. The full suite stays for the daily CI, the promotion to `main` and any paid path.
 
 11. **E2 — Engine package writer** (`scripts/package_engine.py`, `data/results/engine_package.json`, after M2 lands). Record the package path relative to the repository; never save the canonical result from a `--out` run; rebuild on a clean HEAD, which replaces the uncommitted scratch rebuild in the tree.
 
