@@ -1,0 +1,281 @@
+{
+  "result": "pgs_reference_registration",
+  "date": "2026-10-10",
+  "what": "pre-registration of the readings of the polygenic reference distributions (ROADMAP \u00a75 item 13, area D), written before the HPRC panel is read for any score",
+  "module": "genomeos/genome/pgs_reference.py",
+  "scores": {
+    "PGS000004": 313,
+    "PGS000115": 223,
+    "PGS000297": 3290,
+    "PGS000018": 1745158
+  },
+  "panel_people": {
+    "AFR": 23,
+    "AMR": 16,
+    "EAS": 4,
+    "SAS": 1
+  },
+  "model": "mean = sum 2 p w; variance = sum 2 p (1 - p) w^2 (Hardy-Weinberg, independence); percentile = 100 * Phi((S - mean) / sd) over the variants with a group frequency and a person genotype",
+  "frequencies": "gnomAD v4 genome groups (afr, ami, amr, asj, eas, fin, mid, nfe, sas) and 1000 Genomes phase 3 superpopulations, through Ensembl REST; scores above 20,000 variants are not looked up",
+  "rules": {
+    "coverage_floor": 0.8,
+    "coverage_floor_reads": "a percentile needs the variants with both a group frequency and a person genotype to carry at least this share of the score's total |weight|; below it the percentile is UNKNOWN",
+    "panel_min_people": 10,
+    "ld": "R1. Per score, within each HPRC ancestry group with at least panel_min_people people, the variance of the people's scores (over SNVs placed in every haplotype of the group) is divided by the independence variance from the same people's allele frequencies (heterozygosity corrected by 2n/(2n-1)); groups are pooled by degrees of freedom and a 95% interval taken from the chi-square distribution. Independence HOLDS for the score when that interval contains 1, and FAILS otherwise. When it holds, a person's percentile interval spans the interval of the ratio. When it fails, the person's percentile is UNKNOWN and the independence number is kept only as a diagnostic, because no LD correction measured in the panel's groups is borrowed for another group",
+    "calibration": "R2. For each HPRC group with at least panel_min_people people, each person's score (over SNVs placed in every haplotype of the group and with a gnomAD frequency in the matching gnomAD group: AFR->afr, AMR->amr) is turned into z = (score - mean) / sd under the gnomAD model. The model is CONSISTENT with the group when the 95% t interval of the mean z contains 0 and the 95% chi-square interval of the variance of z contains 1, and NOT CONSISTENT otherwise. This is descriptive: the HPRC groups are admixed Caribbean, West African and Latin American cohorts, not the gnomAD groups themselves, and it changes no person's percentile",
+    "author_frequencies": "R3. Where the scoring file carries the authors' effect-allele frequency, the gnomAD nfe frequency of each matched variant is compared with it; a variant whose nfe frequency sits nearer 1 - author than author by more than 0.1 is counted as a possible allele flip. Descriptive"
+  },
+  "not_claimed": "no accuracy of any person's percentile is claimed: the percentile is descriptive, a position in a modelled distribution, and is not compared with any measured trait",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "PGS Catalog harmonised scoring files (hmPOS GRCh38) and score metadata for PGS000004, PGS000115, PGS000297, PGS000018",
+        "version": "as fetched on 2026-09-12 into data/knowledge/pgs, digested in inputs; EBI terms of use"
+      },
+      {
+        "accession": "Ensembl REST POST /variation/homo_sapiens?pops=1: gnomAD v4 genome groups (gnomADg:*, CC0 1.0) and 1000 Genomes phase 3 superpopulations",
+        "version": "per-score tables fetched on the date each records, cached as data/knowledge/pgs/<id>_af.json.gz and digested in inputs"
+      },
+      {
+        "accession": "HPRC release 1 in the UCSC hprc90way Cactus alignment (88 haplotype assemblies of 44 people, Liao et al. 2023), distilled by genomeos/attribution/human_panel.py",
+        "version": "the distilled store under data/knowledge/human_panel, digested in inputs"
+      },
+      {
+        "accession": "panel sample names from NCBI Datasets; populations from https://raw.githubusercontent.com/human-pangenomics/HPP_Year1_Data_Freeze_v1.0/main/sample_metadata/hprc_year1_sample_metadata.txt",
+        "version": "cached as data/knowledge/pgs/hprc_samples.json, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/pgs/PGS000004_hmPOS_GRCh38.txt.gz",
+        "sha256": "68d7894cec4ddc5294c3b24294aae021b8187350ba589ea8acde8ba88d33c191",
+        "bytes": 6685,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000018_hmPOS_GRCh38.txt.gz",
+        "sha256": "ed5dcd5359213364a182dd7972edf524cc3e161f8332ca54ca5515c95cbf8d2a",
+        "bytes": 37129288,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000115_hmPOS_GRCh38.txt.gz",
+        "sha256": "b6865a331014b7a13f92f310a0d0930bab046a60a9281415c3d6e4a52fcf4358",
+        "bytes": 6775,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000297_hmPOS_GRCh38.txt.gz",
+        "sha256": "163c0409f4059ab302873e82f9f568be5be4b361cc4c4a8526b6296cbbe391e7",
+        "bytes": 73921,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/hprc_samples.json",
+        "sha256": "023122de48f053255b66fa1e3029e47ba2d80e90ce75d5f71f62ce82480dfac1",
+        "bytes": 8802,
+        "partition": null
+      },
+      {
+        "path": "HPRC panel store (meta, sites, blocks per chromosome)",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/human_panel/chr21/meta.json",
+            "sha256": "ac9019e27b70ef05c11caaf29597b3773b20ebf12ae8cfe3a42a40c4d99bab09",
+            "bytes": 2167
+          }
+        ],
+        "sha256": "3ea1018198407782b606924891fba1f212ef55662a7ec1c48f7ce62d6001e3da",
+        "bytes": 2167,
+        "files": 1,
+        "partition": "reference panel"
+      }
+    ],
+    "input_count": 6,
+    "assembly": "GRCh38/hg38: PGS Catalog hmPOS positions, Ensembl GRCh38 mappings and the hg38-referenced HPRC alignment",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed"
+    },
+    "parameters": {
+      "rules": {
+        "coverage_floor": 0.8,
+        "coverage_floor_reads": "a percentile needs the variants with both a group frequency and a person genotype to carry at least this share of the score's total |weight|; below it the percentile is UNKNOWN",
+        "panel_min_people": 10,
+        "ld": "R1. Per score, within each HPRC ancestry group with at least panel_min_people people, the variance of the people's scores (over SNVs placed in every haplotype of the group) is divided by the independence variance from the same people's allele frequencies (heterozygosity corrected by 2n/(2n-1)); groups are pooled by degrees of freedom and a 95% interval taken from the chi-square distribution. Independence HOLDS for the score when that interval contains 1, and FAILS otherwise. When it holds, a person's percentile interval spans the interval of the ratio. When it fails, the person's percentile is UNKNOWN and the independence number is kept only as a diagnostic, because no LD correction measured in the panel's groups is borrowed for another group",
+        "calibration": "R2. For each HPRC group with at least panel_min_people people, each person's score (over SNVs placed in every haplotype of the group and with a gnomAD frequency in the matching gnomAD group: AFR->afr, AMR->amr) is turned into z = (score - mean) / sd under the gnomAD model. The model is CONSISTENT with the group when the 95% t interval of the mean z contains 0 and the 95% chi-square interval of the variance of z contains 1, and NOT CONSISTENT otherwise. This is descriptive: the HPRC groups are admixed Caribbean, West African and Latin American cohorts, not the gnomAD groups themselves, and it changes no person's percentile",
+        "author_frequencies": "R3. Where the scoring file carries the authors' effect-allele frequency, the gnomAD nfe frequency of each matched variant is compared with it; a variant whose nfe frequency sits nearer 1 - author than author by more than 0.1 is counted as a possible allele flip. Descriptive"
+      },
+      "max_fetch_variants": 20000,
+      "populations": [
+        "gnomADg:afr",
+        "gnomADg:ami",
+        "gnomADg:amr",
+        "gnomADg:asj",
+        "gnomADg:eas",
+        "gnomADg:fin",
+        "gnomADg:mid",
+        "gnomADg:nfe",
+        "gnomADg:sas",
+        "1000GENOMES:phase_3:AFR",
+        "1000GENOMES:phase_3:AMR",
+        "1000GENOMES:phase_3:EAS",
+        "1000GENOMES:phase_3:EUR",
+        "1000GENOMES:phase_3:SAS"
+      ]
+    },
+    "exclusions": [
+      "the panel's hs1 (T2T-CHM13) row is not a person and is not read"
+    ],
+    "partitions": {
+      "panel groups": "groups of at least 10 people are pooled (R1) and judged (R2); smaller groups are reported only"
+    },
+    "code_cleanliness": {
+      "git_sha": "948cfc9b7fdd1e4d2fa1a148de49231b2598960f",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/pgs_reference.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pgs_reference.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pgs_reference.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/pgs_reference.py"
+      ],
+      "counting_path_count": 87,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "948cfc9b7fdd1e4d2fa1a148de49231b2598960f",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pgs_reference.py",
+        "--register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "948cfc9b7fdd1e4d2fa1a148de49231b2598960f",
+      "code_cleanliness_git_sha": "948cfc9b7fdd1e4d2fa1a148de49231b2598960f",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 948cfc9"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 221,
+      "opens_under_data": 12,
+      "files_read": 6,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
