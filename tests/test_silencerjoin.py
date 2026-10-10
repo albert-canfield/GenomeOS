@@ -244,6 +244,17 @@ def test_the_counts_per_line_on_a_synthetic_store(tmp_path: Path, monkeypatch: p
     assert k["fragments_validated_in_the_line"] == sum(k["fragments"].values())
 
 
+def test_the_coverage_gap_names_every_unread_element_and_why(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    gap = _synthetic(tmp_path, monkeypatch)["coverage_gap"]
+    assert set(gap) == set(sj.SCORED_CELL_LINES)
+    assert gap["GM12878"]["elements_whose_role_is_not_read"] == 5 and gap["GM12878"]["share_not_read"] == 1.0
+    assert "validated_fragments_no_scored_element_carries" not in gap["IMR-90"]
+    assert gap["K562"]["elements_whose_role_is_not_read"] == sum(gap["K562"]["by_reason"].values()) == 3
+    assert gap["K562"]["validated_fragments_no_scored_element_carries"] == 1
+
+
 def test_the_derived_call_is_described_not_tested(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     out = _synthetic(tmp_path, monkeypatch)["derived_call_on_the_role_elements"]
     assert out["K562"] == {
@@ -291,3 +302,9 @@ def test_no_sentence_gives_a_derived_element_the_repressive_function(rel: str) -
 def test_the_decision_refuses_a_field_only_a_join_could_fill() -> None:
     assert decide.forbidden({"rule": {}, "readings": {}}) == []
     assert decide.forbidden({"a": [{"by_cell_line": {}}]}) == ["/a[0]/by_cell_line"]
+
+
+def test_what_is_reported_names_the_join_fields_only_as_values() -> None:
+    """The decision states what the result will report without carrying a field a join fills."""
+    assert decide.forbidden({"reported": sj.REPORTED}) == []
+    assert {r["field"] for r in sj.REPORTED} >= {"by_cell_line", "coverage_gap", "elements"}

@@ -207,20 +207,38 @@ def rule() -> dict[str, Any]:
     }
 
 
-REPORTED = {
-    "by_cell_line": "per scored line: elements given the role; elements read UNKNOWN, split by reason; "
-    "fragments validated in the line, placed on one element, on several, below the rule only, and on "
-    "no scored element",
-    "derived_call_on_the_role_elements": "per covered line, of the elements given the role: how many "
-    "have a named predicted target, how many of those carry the derived repressive direction (the "
-    "derived silencer_like call) and how many the activating one, and how many have no named target",
-    "coverage_gap": "per scored line: the scored elements whose role the source cannot read, and why; "
-    "for a line the source does not cover, all of them",
-    "sensitivity": "elements that would receive the role at reciprocal 0.25 and 0.75, at min-side 0.5, "
-    "and at any shared base, per covered line; reported, never applied",
-    "elements": "one row per scored element sharing at least one base with any ReSE fragment: its "
-    "overlaps, its derived direction as committed, and its reading in each of the four scored lines",
-}
+#: What the result reports, as (field, what) pairs, so the field names a join fills appear here only as
+#: values and the decision cannot be mistaken for, or refused as, a result.
+REPORTED = [
+    {
+        "field": "by_cell_line",
+        "what": "per scored line: elements given the role; elements read UNKNOWN, split by reason; "
+        "fragments validated in the line, placed on one element, on several, below the rule only, and "
+        "on no scored element",
+    },
+    {
+        "field": "derived_call_on_the_role_elements",
+        "what": "per covered line, of the elements given the role: how many have a named predicted "
+        "target, how many of those carry the derived repressive direction (the derived silencer_like "
+        "call) and how many the activating one, and how many have no named target",
+    },
+    {
+        "field": "coverage_gap",
+        "what": "per scored line: the scored elements whose role the source cannot read, and why, and "
+        "the fragments validated there that no scored element carries; for a line the source does not "
+        "cover, all of them",
+    },
+    {
+        "field": "sensitivity",
+        "what": "elements that would receive the role at reciprocal 0.25 and 0.75, at min-side 0.5, and "
+        "at any shared base, per covered line; reported, never applied",
+    },
+    {
+        "field": "elements",
+        "what": "one row per scored element sharing at least one base with any ReSE fragment: its "
+        "overlaps, its derived direction as committed, and its reading in each of the four scored lines",
+    },
+]
 
 # ---- the fragments ---------------------------------------------------------------------------------
 
@@ -487,6 +505,25 @@ def by_cell_line(
     return out
 
 
+def coverage_gap(lines: dict[str, Any]) -> dict[str, Any]:
+    """Per scored line, the scored elements whose role the source cannot read, and why."""
+    out: dict[str, Any] = {}
+    for line, c in lines.items():
+        gap = {
+            "source_covers_the_line": c["source_covers_the_line"],
+            "elements_scored": c["elements_scored"],
+            "elements_whose_role_is_not_read": c["elements_read_unknown"],
+            "share_not_read": round(c["elements_read_unknown"] / c["elements_scored"], 6)
+            if c["elements_scored"]
+            else None,
+            "by_reason": c["unknown_by_reason"],
+        }
+        if c["source_covers_the_line"]:
+            gap["validated_fragments_no_scored_element_carries"] = c["fragments"]["on_no_scored_element"]
+        out[line] = gap
+    return out
+
+
 def derived_call_on_role_elements(rows: list[dict[str, Any]]) -> dict[str, Any]:
     """Per covered line, the committed derived direction of the elements given the role. Not a test."""
     out: dict[str, Any] = {"reading": NOT_A_TEST}
@@ -558,6 +595,7 @@ def build(elements_dir: Path = ELEMENTS_DIR) -> dict[str, Any]:
     for chrom, ids in sorted(by_chrom.items()):
         directions.update(derived_directions(chrom, ids, elements_dir))
     rows = element_rows(pairs, spans_of, directions)
+    lines = by_cell_line(rows, pairs, frags, scored)
     on_scored = {f["chrom"] for f in frags} & set(chroms)
     return {
         "rule": rule(),
@@ -574,7 +612,8 @@ def build(elements_dir: Path = ELEMENTS_DIR) -> dict[str, Any]:
             "pairs_sharing_a_base": len(pairs),
             "pairs_by_label": dict(sorted(Counter(p["attaches"] for p in pairs).items())),
         },
-        "by_cell_line": by_cell_line(rows, pairs, frags, scored),
+        "by_cell_line": lines,
+        "coverage_gap": coverage_gap(lines),
         "derived_call_on_the_role_elements": derived_call_on_role_elements(rows),
         "sensitivity": sensitivity(pairs),
         "elements": rows,
