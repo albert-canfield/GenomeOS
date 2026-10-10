@@ -1081,6 +1081,8 @@ ROADMAP-HISTORY.md §4 (lines 3563–3603). Results land in `data/results` and a
 | AlphaGenome live predictions for UNKNOWN regulatory blocks | `ALPHAGENOME_API_KEY` and Albert's grant. The stop list of §5 item 10 (2026-09-27) says no AlphaGenome requests on the 882 blocks, and the execution plan in §5 allows no model requests unless Albert grants them, so this row waits on him and is argued against by the plan | Albert |
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each; pick the studies | unowned since 2026-10-03 |
 
+*The cohort-expression row, 2026-10-10 (lane-cohortexpr, `bc9eed7`, docs/CANCER.md): blocked before any fetch, nothing fetched.* Nothing in the therapeutic pipeline reads `expression_*.json` (the cohort provider fetches live through its own cache, and the ten benchmark rows name no cohort study), so the files cannot move a benchmark row. The rule, fixed before any fetch: one TCGA PanCancer Atlas 2018 study per tumour type in the benchmark (luad, skcm, lgg, laml, dlbc, stad; brca exists). `save_result` refuses a new name without a complete manifest, and `cancer/cbioportal.py` keeps no file whose sha256 a manifest could name; the lane's addition of the six names to `data/results_legacy.txt` was refused by the harness and is not retried. The route that keeps the manifest contract is a disk cache in `cbioportal.py`; the job waits behind the model lanes.
+
 ---
 
 ## 5. Next steps, consolidated: the execution plan from 2026-10-10
