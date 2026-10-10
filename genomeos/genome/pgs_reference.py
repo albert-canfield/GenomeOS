@@ -37,7 +37,7 @@ import time
 import urllib.error
 import urllib.request
 from bisect import bisect_left
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from statistics import NormalDist
 from typing import Any
@@ -228,7 +228,7 @@ def match_record(row: tuple, record: dict | None) -> tuple[str, dict[str, list]]
     return "matched", freqs
 
 
-def _request(path: str, payload: dict | None = None, tries: int = 7) -> tuple[Any, int]:
+def _request(path: str, payload: dict | None = None, tries: int = 12) -> tuple[Any, int]:
     url = path if path.startswith("http") else ENSEMBL + path
     data = json.dumps(payload).encode() if payload is not None else None
     headers = {"Accept": "application/json", "User-Agent": USER_AGENT}
@@ -242,14 +242,14 @@ def _request(path: str, payload: dict | None = None, tries: int = 7) -> tuple[An
             return json.loads(body), len(body)
         except urllib.error.HTTPError as ex:
             if ex.code in (429, 500, 502, 503, 504) and k < tries - 1:
-                time.sleep(min(float(ex.headers.get("Retry-After") or 2**k), 90))
+                time.sleep(min(float(ex.headers.get("Retry-After") or 2**k), 60))
                 continue
             if ex.code in (400, 404):
                 return None, 0
             raise
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
             if k < tries - 1:
-                time.sleep(min(2**k, 90))
+                time.sleep(min(2**k, 60))
                 continue
             raise
     return None, 0
@@ -302,27 +302,57 @@ def fetch_frequencies(
     t0 = time.time()
     fetched = requests = 0
     ids = [r[5] if r[5].startswith("rs") else "" for r in rows]
-    # rows the file gives no id are placed by position, a few lookups at a time: Ensembl answers one
-    # overlap request in 6 to 25 seconds, and its limit is 15 requests a second
-    need = [i for i, x in enumerate(ids) if not x]
-    with ThreadPoolExecutor(max_workers=6) as pool:
-        for i, (found, nb) in zip(need, pool.map(lambda i: _id_at(rows[i]), need), strict=True):
-            ids[i] = found
+    # Progress is kept in a partial file, so a run that Ensembl's 503s stop resumes where it ended.
+    partial = knowledge / f"{pgs_id}_af_partial.json.gz"
+    state: dict[str, dict] = {"ids": {}, "records": {}}
+    if partial.exists():
+        with gzip.open(partial, "rt") as fh:
+            state = json.load(fh)
+
+    def save() -> None:
+        knowledge.mkdir(parents=True, exist_ok=True)
+        with gzip.open(partial, "wt") as fh:
+            json.dump(state, fh)
+
+    # rows the file gives no id are placed by position, a few lookups at a time: Ensembl answered one
+    # overlap request in 6 to 25 seconds on 2026-10-10, and its limit is 15 requests a second
+    no_id = [i for i, x in enumerate(ids) if not x]
+    need = [i for i in no_id if str(i) not in state["ids"]]
+    failed = 0
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        futures = {pool.submit(_id_at, rows[i]): i for i in need}
+        for n, fut in enumerate(as_completed(futures), 1):
+            try:
+                found, nb = fut.result()
+            except (urllib.error.URLError, TimeoutError, OSError):
+                failed += 1
+                continue
+            state["ids"][str(futures[fut])] = found
             fetched += nb
             requests += 1
-    by_position = len(need)
-    if progress and need:
-        progress(f"{pgs_id}: {sum(1 for i in need if ids[i]):,} of {len(need):,} position-only rows placed")
-    unique = sorted({x for x in ids if x})
-    records: dict[str, dict] = {}
+            if n % 25 == 0:
+                save()
+    save()
+    if failed:
+        raise RuntimeError(f"{pgs_id}: {failed} position lookups failed after retries; run again to resume")
+    for i in no_id:
+        ids[i] = state["ids"][str(i)]
+    by_position = len(no_id)
+    if progress and no_id:
+        progress(f"{pgs_id}: {sum(1 for i in no_id if ids[i]):,} of {len(no_id):,} position-only rows placed")
+    unique = sorted({x for x in ids if x} - set(state["records"]))
     for k in range(0, len(unique), BATCH):
-        d, nb = _request("/variation/homo_sapiens?pops=1", {"ids": unique[k : k + BATCH]})
+        chunk = unique[k : k + BATCH]
+        d, nb = _request("/variation/homo_sapiens?pops=1", {"ids": chunk})
         fetched += nb
         requests += 1
-        records.update(d or {})
+        for x in chunk:
+            state["records"][x] = (d or {}).get(x)
+        save()
         if progress:
             progress(f"{pgs_id}: {min(k + BATCH, len(unique)):,} of {len(unique):,} ids")
         time.sleep(0.1)
+    records = {x: v for x, v in state["records"].items() if v is not None}
     variants = []
     for i, r in enumerate(rows):
         status, freqs = match_record(r, records.get(ids[i]) if ids[i] else None)
@@ -352,6 +382,7 @@ def fetch_frequencies(
     knowledge.mkdir(parents=True, exist_ok=True)
     with gzip.open(af_path(pgs_id, knowledge), "wt") as fh:
         json.dump(table, fh)
+    partial.unlink(missing_ok=True)
     return table
 
 

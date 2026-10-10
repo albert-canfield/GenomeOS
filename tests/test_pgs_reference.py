@@ -353,3 +353,38 @@ def test_dossier_carries_the_percentile_column(tmp_path, monkeypatch):
     assert "| PGS1 | t |  | 3 of 4 | +1.0000 | 10.0 (5.0-18.0), nfe |" in page
     assert "| PGS2 | u |  | 3 of 4 | +1.0000 | UNKNOWN |" in page
     assert "not a risk" in page
+
+
+def test_fetch_places_rows_without_id_and_matches_records(tmp_path, monkeypatch):
+    know = tmp_path / "pgs"
+    know.mkdir()
+    with gzip.open(know / "PGS999998_hmPOS_GRCh38.txt.gz", "wt") as fh:
+        fh.write(SCORING)
+    monkeypatch.setattr(ref, "_id_at", lambda row: ("rs3", 10))
+    posted = []
+
+    def fake_request(path, payload=None):
+        posted.append(sorted(payload["ids"]))
+        recs = {
+            "rs1": {
+                "mappings": [{"seq_region_name": "21", "start": 1000, "allele_string": "G/A"}],
+                "populations": [
+                    {"population": "gnomADg:asj", "allele": "A", "allele_count": 30, "frequency": 0.3}
+                ],
+            },
+            "rs3": {
+                "mappings": [{"seq_region_name": "21", "start": 3000, "allele_string": "A/G"}],
+                "populations": [],
+            },
+        }
+        return {k: v for k, v in recs.items() if k in payload["ids"]}, 100
+
+    monkeypatch.setattr(ref, "_request", fake_request)
+    t = ref.fetch_frequencies("PGS999998", know)
+    assert posted == [["rs1", "rs2", "rs3"]]
+    status = [v[7] for v in t["variants"]]
+    assert status == ["matched", "no_record", "matched"] and t["ids_found_by_position"] == 1
+    assert t["variants"][0][8]["gnomADg:asj"] == [0.3, 100]
+    assert t["variants"][2][8] == {}  # placed, but Ensembl lists no population for it
+    assert not (know / "PGS999998_af_partial.json.gz").exists()
+    assert ref.load_frequencies("PGS999998", know) == json.loads(json.dumps(t))
