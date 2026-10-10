@@ -837,3 +837,231 @@ constraint.
    between-gene stratum here is +0.28 [-3.19, +3.84]. A test of it needs its own registration and a
    population that does not read this endpoint.
 2. Censuses that store tertile edges unrounded, so the run and the census count the same arms.
+
+## 11. Drosophila: the between-gene question decided on a richer source (2026-10-10, lane-flysource)
+
+Item 1 of "What follows from the boundary node", and item 2 of it answered in the negative. Section 9
+asked the boundary question on Calderon et al. 2022's 917 between-gene elements and found the two
+rules named the same gene for all but 90, under the stop rule's 200, so it had to move to a wider
+population and the between-gene question — the one where no rule can win on the host gene's own
+transcription — stayed open. Its "what follows" named two routes: a boundary set from the marker
+calls' own stages (6-16 h), and a source with more between-gene elements. This lane closes the first
+by counting and takes the second. No money, no key, no model request.
+
+Code: `genomeos/attribution/simpler_flysource.py` (imports `simpler.py`, `simpler_fly.py` and
+`simpler_flynode.py`, all unchanged), `scripts/simpler_flysource_run.py` (`fetch`, `inventory`,
+`register`, `score`), `tests/test_simpler_flysource.py`. Results:
+`data/results/simpler_flysource_inventory.json`, `simpler_flysource_registration.json`,
+`simpler_flysource_result.json`. Commits: code frozen `3eb24cd`, inventory `da543c3`, registration
+`ff063e6`, three guard and manifest fixes `7aef5af`, `de4b574` and `c7eda3d`.
+
+**The stop list of 2026-09-27 was read, not ignored.** docs/ROADMAP.md section 5 reinstates "No more
+biosamples: 1.1 needs its readings to mean what their names say." That clause is about the human
+reader's biosamples — the 13 reader cells of READER_TERMS. This lane adds none and names none. A
+Drosophila Hi-C boundary list, and a Drosophila accessibility or RNA source, are not reader
+biosamples and are not covered by that clause.
+
+### Route (a) is closed by arithmetic, not by a failed search
+
+Under the registered boundary rule a between-gene element changes gene only when its nearest 5' end
+lies across a boundary AND the domain it leaves holds another 5' end. More boundaries meet the first
+condition more often and the second LESS often, because the domains shrink until they hold no other
+5' end and the rule falls back to nearest TSS. So what the rule can move is a curve in the boundary
+count, not a growing function. Traced on the real element and gene positions, over 11 densities from
+2,000 to 100,000 boundaries with 5 uniform placements each:
+
+| boundaries | mean spacing | between-gene elements that change gene (mean) | best draw | empty domains |
+|---|---|---|---|---|
+| 2,000 | 68.8 kb | 66.6 | 70 | 36.6 |
+| 3,121 | 44.1 kb | 78.4 | **98** | 73.2 |
+| 4,500 | 30.6 kb | 79.2 | 98 | 125.2 |
+| 5,500 | 25.0 kb | 84.6 | 92 | 157.0 |
+| 7,000 | 19.6 kb | 80.0 | 94 | 207.6 |
+| 8,000 | 17.2 kb | 81.0 | 94 | 238.0 |
+| 12,000 | 11.5 kb | 65.8 | 76 | 332.2 |
+| 20,000 | 6.9 kb | 62.8 | 72 | 447.2 |
+| 35,000 | 3.9 kb | 37.0 | 43 | 615.6 |
+| 60,000 | 2.3 kb | 18.6 | 24 | 739.8 |
+| 100,000 | 1.4 kb | 6.8 | 9 | 825.6 |
+
+The best single draw at any density is 98 of 917, half the stop rule's 200. Uniform placement is if
+anything generous: measured fly boundaries sit mostly at active promoters (Ramírez et al. 2018), and
+a boundary at the nearest 5' end is exactly the case where the rule does NOT move. One boundary
+placed inside each element's own gap reaches 415, so the limit is where the boundaries lie and not
+the rule itself. **No measured, density-plausible fly boundary set decides the between-gene question
+on that population, whatever its stage.** Four measured sets, counted on those same 917: Stadler et
+al. 2017's manual nc14 list 90 (the number section 9 registered, re-counted here), Dolsten et al.
+2025's Micro-C atlas 69, Kaushal et al. 2021's larval CNS 54, Kaushal et al. 2022's 2-6 h embryos 39.
+Each reader reproduces its source's own stated count — 3,121, 3,521 (its text says 3,673), 3,458 and
+2,334 — so each list is read as the authors give it and no caller or threshold is chosen here.
+
+### What the 6-16 h search found, recorded
+
+| source | stage | assembly | licence | boundary list? |
+|---|---|---|---|---|
+| Mohana et al. 2023, Cell 186:3826, GSE214707 | **6-8 h, 10-12 h and 14-16 h embryos**, sorted neuroblast, glia, neuron | dm6 expected | publisher user licence, not CC; GEO states no terms | **no**: loop anchors and 28 meta-domains only |
+| Dolsten et al. 2025, Cell Genomics 5:101002, Table S2 | nc1-8, nc14, stages 10-12 (latest about 6-8 h) | Release 6 | CC BY-NC-ND 4.0 | yes, 3,521 spans at 400-bp bins — used, beside |
+| Schuettengruber et al. 2014, GSE61471 | 16-18 h embryos | dm3 | CC BY-NC-ND 3.0; GEO file states none | yes, 1,305 domains |
+| Sexton et al. 2012, Cell 148:458, Table S1 | 16-18 h embryos | dm3 | publisher open-archive licence | yes, 1,169 domains |
+| Pollex et al. 2024, Mol Cell 84:822 | 2-4, 6-8 and 16-18 h embryos | dm6 | CC BY 4.0 | no: 1,213 gene-gene loops only |
+| Ogiyama et al. 2018, Mol Cell 71:73 | cycles 1-8 to stage 16 (about 13-16 h) | dm3 | publisher open-archive licence | no: loops and ChIP peaks, nothing at stage 16 |
+| Szabó et al. 2018, Sci Adv 4:eaar8082 | 16-18 h embryos | dm3 | CC BY-NC | no: matrices and a PDF |
+| Ing-Simmons et al. 2021, Nat Genet 53:487 | late nc14 and stage 10 | dm6 (r6.30) | CC BY 4.0 | its 1,491 domains are not deposited as a table |
+| Kaushal et al. 2021, Nat Commun 12:1011, data 3 | third-instar larval CNS | dm6 | CC BY 4.0 | yes, 3,458 bins at 2 kb — used, beside |
+| Kaushal et al. 2022, Sci Adv 8:eabl8834, data S2 | 2-6 h embryos | dm6 | CC BY 4.0 | yes, 2,334 bins at 2 kb — used, beside |
+| Cavalheiro et al. 2023, Sci Adv 9:eade1085 | 2-3 h (nc14) | dm6 | CC BY 4.0 | yes, but 10-kb bins: section 9's reason, unchanged |
+| 4D Nucleome; modENCODE | — | — | — | the 4DN portal returns no D. melanogaster experiment sets; modENCODE publishes no Hi-C |
+
+**Mohana et al. 2023 is the answer to section 9 item 2 and it is a negative one.** It is the one study
+whose Hi-C covers 6-8 h, 10-12 h AND 14-16 h embryos, in sorted nervous-system cell types — the very
+window and the very cell types the question is about — and it publishes loops, not boundaries.
+Calling boundaries from its `.mcool` matrices (about 1.07 GB for the three embryonic stages) would
+choose a caller and a threshold here, which is the free parameter section 9 refused. The 8-14 h
+window has no author-called boundary list anywhere. Schuettengruber 2014 and Sexton 2012 do give
+author-called 16-18 h domain lists, but at 1,305 and 1,169 domains they sit below the sweep's lowest
+rung, which moves 66.6 on average and 70 at best, so neither can reach 200; both are also dm3 and
+would need a liftover this lane does not add.
+
+### The source that reaches the stop rule (fetched 2026-10-10)
+
+Disk free before the fetch: 23,918,862,336 bytes. Kept 605,943,011; moved 97,819,071 in the fetch and
+86,475,446 while scouting; 692,418,457 of the 1 GB budget.
+
+| file | what is read | bytes | licence |
+|---|---|---|---|
+| `cellTypeInfo.tsv` (flybrain.aertslab.org) | the `RNAcluster` column: the source's own map from each accessibility cell type to a cluster of the RNA atlas | 7,241 | **not stated** |
+| `tbl_DARs.txt` (same) | the lvl1 / vsRest / WholeBrain / Up rows' region and cell type only | 85,509,169 | **not stated** |
+| `Davie_Janssens_Koldere_et_al_2018_AdultBrain.loom` (same) | the endpoint: gene counts per cell, and each cell's `cell_type` | 519,015,198 | **not stated** |
+| `dolsten2025_TableS2.xlsx` (Europe PMC) | sheet `boundaries`: 3,521 spans (beside) | 1,087,877 | CC BY-NC-ND 4.0 |
+| `kaushal2022_data_file_s2.xlsx` (Europe PMC) | the 2,334 bins marked `exist.WT_0` (beside) | 183,298 | CC BY 4.0 |
+| `kaushal2021_larval_cns_data_s3.xlsx` (Springer) | the 3,458 bins marked `exist.wildtype` (beside) | 140,228 | CC BY 4.0 |
+
+Janssens et al. 2022 (Nature 601:630) profiled 240,919 nuclei of larval, pupal and adult brain by
+single-cell ATAC and published, per cell type, the regions it calls differentially accessible. Its
+`cellTypeInfo.tsv` declares, for 43 of those cell types, which cluster of Davie et al. 2018's brain
+RNA atlas (Cell 174:982) is its counterpart. **That declared map is what makes one vocabulary cover
+both modalities**, which is lane-fly's design, and it is the source's own: nothing is grouped by hand
+here. Two of the 43 cell types (T4 and T5) name the same RNA cluster (T4/T5), so the LABEL is the RNA
+cluster — 42 of them — and a region accessible in T4 and T5 and nothing else carries one label, not
+two. All 42 declared names are present in the loom's `cell_type` attribute, so the map resolves end
+to end; the reader refuses any file whose declared set is not the frozen one. Cell types with no
+declared counterpart are excluded on both sides. The element source states no licence on its article
+page, its data portal or its GEO record, and the loom's portal states none either: both are recorded,
+not inferred, which is the standing Calderon et al. 2022 had in section 8. The DAR table's
+`closestGene` column is never read — it is the source's own answer to the question being asked.
+
+### The census, and the population it fixed
+
+Of 31,699 regions called up in at least one of the 42 labels, 18,129 are up in more than one and are
+excluded, 2,018 fall in neither class, 1,500 are promoter elements (the positive control) and 10,052
+are distal. Of those distal elements **3,265 lie in no protein-coding gene body**, and under the
+primary boundary set the rule names a different gene from nearest TSS for **216** of them, across 125
+1-Mb clusters: over the stop rule's 200, where section 9 had 90. For none of the 216 does the
+nearest-TSS gene contain the element, and for none of the 3,265 does the gene-structure rule name a
+host — which is the whole reason for this population. Power in advance: about 1.3 points at 80%,
+two-sided 5%, before clustering, against the 2.9 points section 9 could bound. Beside: 209 differ
+under Dolsten 2025, 174 under Kaushal 2021's larval CNS, 162 under Kaushal 2022.
+
+### The registered test
+
+Registered in `simpler_flysource.REGISTRATION` and `data/results/simpler_flysource_registration.json`
+(`ff063e6`), written with `written_before_any_rna_value_was_read: true`. `score` refuses to run unless
+the registration and all six code files are committed and unchanged, every input matches its
+registered sha256, every boundary list recomputes and the census recomputes.
+
+- **The node and the boundary set are carried unchanged.** simpler_flynode's boundary rule, and
+  simpler_flynode's primary set — Stadler et al. 2017's manual nc14 list, 3,121 boundaries — so a
+  disagreement with section 9 is attributable to the source and not to the boundaries as well. That is
+  simpler_fly.py's own reason (section 8 item 1) applied the other way round. The one thing
+  parameterised is the bin width, because each candidate list calls boundaries at its own resolution
+  (500 bp, 800 bp, 2 kb) and the rule counts a 5' end inside a flanking bin as in the domain; the
+  tests check the rule reproduces simpler_flynode's row by row at simpler_flynode's bin.
+- **Outcome.** Boundary rule against nearest TSS on the 3,265; percentile cluster bootstrap over 1-Mb
+  windows; BOUNDARY_RULE_AHEAD, NEAREST_AHEAD or NO_DIFFERENCE_DETECTED.
+- **Second registered comparison.** Boundary rule against the worm's gene-structure rule on the same
+  elements, with its own label, not the outcome. Two comparisons on one population, each at 95%, no
+  correction for the pair.
+- **Endpoint, matched control, falsifier, positive control.** simpler_fly's, with the 42-label
+  vocabulary and nothing else changed.
+- **Beside, deciding nothing.** The same boundaries rotated along each arm by one uniform offset
+  (number and spacing kept, 1,000 draws); the three other measured boundary sets; the elements where
+  the rules differ alone; all distal elements; the gene-structure rule against nearest TSS; labels with
+  50 or more population elements.
+- **What is worse here, registered as such.** The stage gap is WIDER than section 9's, not narrower:
+  the primary boundaries come from 2-3 h embryos while the elements and the RNA come from
+  larval-to-adult brain. That is the price of a population large enough to ask the question; it is in
+  the reading's tail and it is not tested here. Kaushal et al. 2021's larval CNS set, reported beside,
+  is the only one whose tissue matches.
+- **Stop rule.** One run; fewer than 200 differing between-gene elements would have stopped it
+  unscored.
+
+### Result (2026-10-10, registration `ff063e6`)
+
+Outcome **NO_DIFFERENCE_DETECTED**; second comparison **NO_DIFFERENCE_DETECTED**; falsifier
+**NOT_FALSIFIED**. The registered reading, verbatim:
+
+> On 3,265 D. melanogaster brain distal elements called differentially accessible in exactly one of 42 cell types (Janssens et al. 2022, larval to adult brain, the source's own lvl1 call against the rest of the brain) and lying in no protein-coding gene body, the gene with the nearest 5' end inside the element's domain, delimited by 3,121 Hi-C boundaries of nuclear-cycle-14 embryos (Stadler et al. 2017, the authors' manual call), is expressed at 5 counts per million or more and highest in the element's own cell type, in RNA summed over that cell type's cells (Davie et al. 2018, the counterpart cluster the accessibility source itself declares), for 151 of 3,265 (4.6%), against 147 of 3,265 (4.5%) for the gene with the nearest 5' end on the arm; the rules differ on 216 of 3,265 elements; difference +0.12 points, 95% -0.25 to +0.61 over 1-Mb clusters. No difference detected between the boundary rule and nearest TSS. With 216 elements differing, a difference smaller than about 1.3 points could go undetected; section 9 could only bound it at 2.9 points, on 90 differing elements. Against the gene-structure rule on the same elements (150 of 3,265, 4.6%; the two differ on 789, and neither names a host here), the difference is +0.03 points, 95% -0.50 to +0.60: no difference detected between the two nodes. The boundary rule's genes match the element's cell type more often than genes at a matched distance (2.0%, one-sided p 0.001), so position carries cell-type information here. With the same boundaries rotated along each arm the rule averages 4.5% on these elements (one-sided p 0.149), so the measured positions are not shown to carry more than the boundaries' number and spacing. On all 10,052 distal elements (beside, deciding nothing; the rules differ on 869) the boundary rule is concordant for 656 (6.5%) against 662 (6.6%) for nearest TSS, -0.06 points [-0.36, +0.24], and against 882 (8.8%) for the gene-structure rule, -2.25 points [-2.88, -1.66]. 3,911 of the attributed genes on this population are absent from the RNA atlas's rows and are counted as not concordant. Accessibility is not function, and a boundary is not a regulatory unit by itself: this says the attributed gene is expressed where the element is open, not that the element acts on it. The boundaries come from 2-3 h embryos while the elements and the RNA come from larval-to-adult brain, a wider stage gap than section 9's; accessibility and RNA come from different nuclei and different studies; and the element source states no licence.
+
+The positive control separates, so the readout is responsive: of 1,500 single-label promoter elements
+the nearest-TSS gene is concordant for 300 (20.0%) against 4.9% at a matched distance (one-sided
+p 0.001). The RNA atlas holds 11,652 rows, of which 10,477 match a protein-coding FBgn, and 47,124 of
+its 118,687 cells carry one of the 42 labels.
+
+Beside the outcome, deciding nothing (percentile intervals over 1-Mb clusters):
+
+| comparison | elements (differ) | first rule | second rule | difference, points [95%] |
+|---|---|---|---|---|
+| boundary vs nearest, where they differ | 216 (216) | 7.4% | 5.6% | +1.85 [-4.21, +8.41] |
+| gene structure vs nearest, population | 3,265 (672) | 4.6% | 4.5% | +0.09 [-0.19, +0.41] |
+| Dolsten 2025 vs nearest | 3,265 (209) | 4.3% | 4.5% | -0.21 [-0.56, +0.09] |
+| Kaushal 2021 larval CNS vs nearest | 3,265 (174) | 4.4% | 4.5% | -0.06 [-0.40, +0.32] |
+| Kaushal 2022 embryo vs nearest | 3,265 (162) | 4.5% | 4.5% | +0.03 [-0.32, +0.39] |
+| boundary vs nearest, T1 | 101 (16) | 8.9% | 5.0% | +3.96 [+0.00, +12.00] |
+| boundary vs nearest, PB4/5 | 296 (21) | 6.1% | 5.1% | +1.01 [+0.00, +2.75] |
+| boundary vs nearest, PLM | 93 (6) | 20.4% | 23.7% | -3.23 [-7.37, +0.00] |
+| boundary vs nearest, T3 | 78 (6) | 2.6% | 6.4% | -3.85 [-12.00, +0.00] |
+
+### What this says and what it does not
+
+1. **The between-gene question is now answered on this endpoint, and the answer is no difference.**
+   Section 9 could not ask it: 90 differing elements bounded the difference only at 2.9 points. Here
+   216 differ and the difference is +0.12 [-0.25, +0.61], so anything above about 1.3 points is
+   excluded. A boundary-delimited domain does not pick the expressed gene better than the arm's
+   nearest 5' end where neither rule can name a host.
+2. **The two nodes are not told apart between genes, now with power.** Section 9's -3.67 for the
+   gene-structure rule came from a population where it named the host for 717 of 1,634 elements, and
+   its between-gene stratum was -0.87 [-2.36, +0.63] on 226 differing elements. Here neither rule names
+   a host anywhere, the two differ on 789, and the difference is +0.03 [-0.50, +0.60]. On all 10,052
+   distal elements the gene-structure rule is again ahead (-2.25 [-2.88, -1.66]) — and again only where
+   it can name the host. **So the gene-structure rule's lead over the boundary rule, in both sections,
+   is consistent with coming entirely from the host gene it names.**
+3. **Position carries cell-type information; the measured boundary positions are not shown to.** The
+   falsifier does not fire (2.0% at a matched distance, p 0.001), so where an element is tells you
+   something about which gene is expressed in its cell type. But rotated boundaries average 4.5%
+   against the measured 4.5% (p 0.149), which repeats section 9's finding on a population four times
+   the size: what the rule uses is how many boundaries there are and how they are spaced, not where
+   they were measured.
+4. **What could hide a difference.** 3,911 of the 9,795 attributed gene slots on this population name
+   a gene absent from the RNA atlas's 11,652 rows and are counted as not concordant, which lowers every
+   rate and is the largest weakness of this run; the concordance rates here (4.5%) are well below
+   section 9's (5.1%) for that reason. The 42 labels cover 47,124 of the atlas's 118,687 cells. The
+   primary boundaries come from 2-3 h embryos and the elements from larval-to-adult brain. Accessibility
+   and RNA come from different nuclei and different studies, and the element source states no licence.
+   Accessibility is not function, and a boundary is not a regulatory unit by itself: nothing here says
+   that any element acts on the gene it is attributed to.
+
+### What follows from the richer source
+
+1. **The tissue-matched registration.** Kaushal et al. 2021's larval CNS boundaries (3,458, dm6,
+   CC BY 4.0, 2 kb) are the only measured set whose tissue matches these elements, and they move 174
+   of the 3,265 — under the stop rule, so they cannot be the primary of this population. A population
+   drawn to pass 200 under THAT set, with the brain elements and brain RNA, would be the first fly test
+   with boundaries, accessibility and RNA from one tissue. It needs its own registration.
+2. **The missing RNA rows.** 3,911 of 9,795 attributed gene slots name a gene the atlas does not carry.
+   A source whose RNA covers the whole protein-coding set would raise every rate and narrow every
+   interval without changing the design; Treese et al. 2026's optic-lobe multiome (GEO GSE305940,
+   76,777 peaks, 259 joint clusters, dm6, same nuclei for both modalities) is the candidate, and its
+   per-label counts sit inside a 16.1 GB `.rds`, over this lane's 1 GB budget. Its licence also could
+   not be read from the publisher page and must be checked by hand.
+3. **Not another boundary set on either population.** Route (a)'s sweep settles that, and the only
+   6-16 h Hi-C of the right cell types (Mohana et al. 2023) publishes no boundary list.

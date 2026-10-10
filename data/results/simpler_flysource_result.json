@@ -1,0 +1,1329 @@
+{
+  "result": "simpler_flysource_result",
+  "date": "2026-10-10",
+  "registration_commit": "ff063e6",
+  "registered_inputs": {
+    "cellTypeInfo.tsv": {
+      "path": "data/knowledge/simpler_flysource/cellTypeInfo.tsv",
+      "sha256": "60cc4ddfa3facb369e6524060e303a3434635050d765c12ac91f1e6dff90f0db"
+    },
+    "tbl_DARs.txt": {
+      "path": "data/knowledge/simpler_flysource/tbl_DARs.txt",
+      "sha256": "6d9e5a9426d9174c716d97e62a768fbcfe65b5c99a8b40f6738f98435e935639"
+    },
+    "Davie_Janssens_Koldere_et_al_2018_AdultBrain.loom": {
+      "path": "data/knowledge/simpler_flysource/Davie_Janssens_Koldere_et_al_2018_AdultBrain.loom",
+      "sha256": "c8944de37549c0c31c216e690ab2e84b51e489b14102a0cd232d84f9c490e859"
+    },
+    "dolsten2025_TableS2.xlsx": {
+      "path": "data/knowledge/simpler_flysource/dolsten2025_TableS2.xlsx",
+      "sha256": "e183ae655679b3e4237b12e36b48929c79e2335a837a7e4a6a5f4571458bc201"
+    },
+    "kaushal2022_data_file_s2.xlsx": {
+      "path": "data/knowledge/simpler_flysource/kaushal2022_data_file_s2.xlsx",
+      "sha256": "fa365d603cf8eba3fbfd810ac69c2dd623c7732f02d01ba14597d06a092e1d92"
+    },
+    "kaushal2021_larval_cns_data_s3.xlsx": {
+      "path": "data/knowledge/simpler_flysource/kaushal2021_larval_cns_data_s3.xlsx",
+      "sha256": "20347bf37f672de615c09162e9711f9fce1ee63534f170d7735e218282611a0d"
+    },
+    "boundaries_stadler": {
+      "path": "data/knowledge/simpler_flynode/elife-29550-supp1-v2.xlsx",
+      "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4"
+    },
+    "flynode_registration": {
+      "path": "data/results/simpler_flynode_registration.json",
+      "sha256": "07a54fca360237b631b059842821792bfd949b44fb9b09d928ed6b30133d9fe3"
+    },
+    "gff3": {
+      "path": "data/knowledge/simpler_fly/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+      "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc"
+    }
+  },
+  "rna_summary": {
+    "rows_in_the_rna_atlas": 11652,
+    "protein_coding_genes_matched_to_an_fbgn": 10477,
+    "cells_in_the_rna_atlas": 118687,
+    "cells_under_a_label": 47124,
+    "cells_per_label": {
+      "15a": 894,
+      "15b": 417,
+      "26": 1113,
+      "90": 538,
+      "97": 510,
+      "98": 506,
+      "A/B*-KC": 828,
+      "A/B-KC": 1507,
+      "AST": 3353,
+      "C2": 776,
+      "C3": 790,
+      "CSM": 662,
+      "CTX": 792,
+      "Dm3": 1868,
+      "Dm8/Dm11": 783,
+      "ENS": 4151,
+      "G-KC": 2654,
+      "L2/L3": 718,
+      "LLPC1": 931,
+      "Mi1": 1097,
+      "Mi15": 606,
+      "Mi9": 1030,
+      "PB4/5": 471,
+      "PLM": 372,
+      "PNG": 757,
+      "PR": 431,
+      "Pm4": 1001,
+      "Poxn": 194,
+      "SUB": 263,
+      "T1": 1193,
+      "T2": 1167,
+      "T2a": 1438,
+      "T3": 1274,
+      "T4/T5": 4808,
+      "Tm1/TmY8": 819,
+      "Tm2": 795,
+      "Tm20": 1144,
+      "Tm3": 909,
+      "Tm4": 807,
+      "Tm9": 1312,
+      "TmY3": 603,
+      "TmY5a": 842
+    },
+    "label_count_totals": {
+      "15a": 1004305.0,
+      "15b": 506018.0,
+      "26": 1201162.0,
+      "90": 1572671.0,
+      "97": 519812.0,
+      "98": 5377801.0,
+      "A/B*-KC": 2166702.0,
+      "A/B-KC": 2885160.0,
+      "AST": 4348900.0,
+      "C2": 1077350.0,
+      "C3": 1464224.0,
+      "CSM": 1555964.0,
+      "CTX": 1290606.0,
+      "Dm3": 1936491.0,
+      "Dm8/Dm11": 1261617.0,
+      "ENS": 6603107.0,
+      "G-KC": 6569544.0,
+      "L2/L3": 1670686.0,
+      "LLPC1": 1587733.0,
+      "Mi1": 2863536.0,
+      "Mi15": 810021.0,
+      "Mi9": 1588210.0,
+      "PB4/5": 891743.0,
+      "PLM": 1490462.0,
+      "PNG": 1910107.0,
+      "PR": 955166.0,
+      "Pm4": 2099411.0,
+      "Poxn": 914575.0,
+      "SUB": 782455.0,
+      "T1": 3374419.0,
+      "T2": 1662780.0,
+      "T2a": 2168311.0,
+      "T3": 1515704.0,
+      "T4/T5": 6176042.0,
+      "Tm1/TmY8": 1719644.0,
+      "Tm2": 1496447.0,
+      "Tm20": 1449520.0,
+      "Tm3": 1420674.0,
+      "Tm4": 1199102.0,
+      "Tm9": 1647512.0,
+      "TmY3": 1020815.0,
+      "TmY5a": 1541123.0
+    }
+  },
+  "census": {
+    "population_funnel": {
+      "regions_up_in_at_least_one_label": 31699,
+      "more_than_one_label": 18129,
+      "chromosome_not_used": 0,
+      "neither_class": 2018,
+      "distal": 10052,
+      "promoter": 1500
+    },
+    "between_genes": {
+      "elements": 3265,
+      "elements_by_label": {
+        "15a": 84,
+        "15b": 12,
+        "26": 145,
+        "90": 214,
+        "97": 47,
+        "98": 105,
+        "A/B*-KC": 137,
+        "A/B-KC": 160,
+        "AST": 68,
+        "C2": 4,
+        "C3": 36,
+        "CSM": 6,
+        "CTX": 31,
+        "Dm3": 107,
+        "Dm8/Dm11": 90,
+        "ENS": 25,
+        "G-KC": 168,
+        "L2/L3": 6,
+        "LLPC1": 53,
+        "Mi1": 16,
+        "Mi15": 51,
+        "Mi9": 40,
+        "PB4/5": 296,
+        "PLM": 93,
+        "PNG": 61,
+        "PR": 97,
+        "Poxn": 46,
+        "SUB": 38,
+        "T1": 101,
+        "T2": 115,
+        "T2a": 59,
+        "T3": 78,
+        "T4/T5": 104,
+        "Tm2": 42,
+        "Tm20": 92,
+        "Tm3": 13,
+        "Tm4": 31,
+        "Tm9": 110,
+        "TmY3": 180,
+        "TmY5a": 104
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 3013,
+        "boundary_moves": 216,
+        "empty_domain": 36
+      },
+      "differ_from_nearest_tss": 216,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+      "differ_from_gene_structure": 789,
+      "gene_structure_names_a_host": 0,
+      "clusters_1mb": 125,
+      "mde_points_unclustered_vs_nearest_tss": 1.26,
+      "mde_points_unclustered_vs_gene_structure": 2.409
+    },
+    "all_distal": {
+      "elements": 10052,
+      "elements_by_label": {
+        "15a": 209,
+        "15b": 31,
+        "26": 405,
+        "90": 830,
+        "97": 124,
+        "98": 264,
+        "A/B*-KC": 396,
+        "A/B-KC": 428,
+        "AST": 319,
+        "C2": 18,
+        "C3": 101,
+        "CSM": 33,
+        "CTX": 147,
+        "Dm3": 304,
+        "Dm8/Dm11": 261,
+        "ENS": 76,
+        "G-KC": 448,
+        "L2/L3": 23,
+        "LLPC1": 137,
+        "Mi1": 45,
+        "Mi15": 147,
+        "Mi9": 89,
+        "PB4/5": 710,
+        "PLM": 568,
+        "PNG": 329,
+        "PR": 583,
+        "Poxn": 126,
+        "SUB": 181,
+        "T1": 273,
+        "T2": 301,
+        "T2a": 160,
+        "T3": 204,
+        "T4/T5": 316,
+        "Tm2": 163,
+        "Tm20": 235,
+        "Tm3": 32,
+        "Tm4": 120,
+        "Tm9": 274,
+        "TmY3": 424,
+        "TmY5a": 218
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 8996,
+        "boundary_moves": 869,
+        "empty_domain": 187
+      },
+      "differ_from_nearest_tss": 869,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 321,
+      "differ_from_gene_structure": 4498,
+      "gene_structure_names_a_host": 6787,
+      "clusters_1mb": 131,
+      "mde_points_unclustered_vs_nearest_tss": 0.821,
+      "mde_points_unclustered_vs_gene_structure": 1.868
+    },
+    "alternative_boundary_sets_between_genes": {
+      "dolsten_2025_atlas": {
+        "elements": 3265,
+        "elements_by_label": {
+          "15a": 84,
+          "15b": 12,
+          "26": 145,
+          "90": 214,
+          "97": 47,
+          "98": 105,
+          "A/B*-KC": 137,
+          "A/B-KC": 160,
+          "AST": 68,
+          "C2": 4,
+          "C3": 36,
+          "CSM": 6,
+          "CTX": 31,
+          "Dm3": 107,
+          "Dm8/Dm11": 90,
+          "ENS": 25,
+          "G-KC": 168,
+          "L2/L3": 6,
+          "LLPC1": 53,
+          "Mi1": 16,
+          "Mi15": 51,
+          "Mi9": 40,
+          "PB4/5": 296,
+          "PLM": 93,
+          "PNG": 61,
+          "PR": 97,
+          "Poxn": 46,
+          "SUB": 38,
+          "T1": 101,
+          "T2": 115,
+          "T2a": 59,
+          "T3": 78,
+          "T4/T5": 104,
+          "Tm2": 42,
+          "Tm20": 92,
+          "Tm3": 13,
+          "Tm4": 31,
+          "Tm9": 110,
+          "TmY3": 180,
+          "TmY5a": 104
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 2971,
+          "boundary_moves": 209,
+          "empty_domain": 85
+        },
+        "differ_from_nearest_tss": 209,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 804,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 125,
+        "mde_points_unclustered_vs_nearest_tss": 1.24,
+        "mde_points_unclustered_vs_gene_structure": 2.432
+      },
+      "kaushal_2021_wt_larval_cns": {
+        "elements": 3265,
+        "elements_by_label": {
+          "15a": 84,
+          "15b": 12,
+          "26": 145,
+          "90": 214,
+          "97": 47,
+          "98": 105,
+          "A/B*-KC": 137,
+          "A/B-KC": 160,
+          "AST": 68,
+          "C2": 4,
+          "C3": 36,
+          "CSM": 6,
+          "CTX": 31,
+          "Dm3": 107,
+          "Dm8/Dm11": 90,
+          "ENS": 25,
+          "G-KC": 168,
+          "L2/L3": 6,
+          "LLPC1": 53,
+          "Mi1": 16,
+          "Mi15": 51,
+          "Mi9": 40,
+          "PB4/5": 296,
+          "PLM": 93,
+          "PNG": 61,
+          "PR": 97,
+          "Poxn": 46,
+          "SUB": 38,
+          "T1": 101,
+          "T2": 115,
+          "T2a": 59,
+          "T3": 78,
+          "T4/T5": 104,
+          "Tm2": 42,
+          "Tm20": 92,
+          "Tm3": 13,
+          "Tm4": 31,
+          "Tm9": 110,
+          "TmY3": 180,
+          "TmY5a": 104
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 3057,
+          "boundary_moves": 174,
+          "empty_domain": 34
+        },
+        "differ_from_nearest_tss": 174,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 792,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 125,
+        "mde_points_unclustered_vs_nearest_tss": 1.131,
+        "mde_points_unclustered_vs_gene_structure": 2.413
+      },
+      "kaushal_2022_wt_embryo": {
+        "elements": 3265,
+        "elements_by_label": {
+          "15a": 84,
+          "15b": 12,
+          "26": 145,
+          "90": 214,
+          "97": 47,
+          "98": 105,
+          "A/B*-KC": 137,
+          "A/B-KC": 160,
+          "AST": 68,
+          "C2": 4,
+          "C3": 36,
+          "CSM": 6,
+          "CTX": 31,
+          "Dm3": 107,
+          "Dm8/Dm11": 90,
+          "ENS": 25,
+          "G-KC": 168,
+          "L2/L3": 6,
+          "LLPC1": 53,
+          "Mi1": 16,
+          "Mi15": 51,
+          "Mi9": 40,
+          "PB4/5": 296,
+          "PLM": 93,
+          "PNG": 61,
+          "PR": 97,
+          "Poxn": 46,
+          "SUB": 38,
+          "T1": 101,
+          "T2": 115,
+          "T2a": 59,
+          "T3": 78,
+          "T4/T5": 104,
+          "Tm2": 42,
+          "Tm20": 92,
+          "Tm3": 13,
+          "Tm4": 31,
+          "Tm9": 110,
+          "TmY3": 180,
+          "TmY5a": 104
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 3093,
+          "boundary_moves": 162,
+          "empty_domain": 10
+        },
+        "differ_from_nearest_tss": 162,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 790,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 125,
+        "mde_points_unclustered_vs_nearest_tss": 1.092,
+        "mde_points_unclustered_vs_gene_structure": 2.41
+      }
+    },
+    "positive_control_promoters": 1500,
+    "labels": 42,
+    "stop_rule_met": false
+  },
+  "boundaries": 3121,
+  "primary": {
+    "n": 3265,
+    "a": "boundary_gene",
+    "b": "nearest_gene",
+    "differ": 216,
+    "a_concordant": 151,
+    "b_concordant": 147,
+    "a_rate_pct": 4.625,
+    "b_rate_pct": 4.502,
+    "delta_points": 0.123,
+    "delta_ci95_points": [
+      -0.254,
+      0.611
+    ],
+    "clusters": 125
+  },
+  "primary_vs_gene_structure": {
+    "n": 3265,
+    "a": "boundary_gene",
+    "b": "domain_gene",
+    "differ": 789,
+    "a_concordant": 151,
+    "b_concordant": 150,
+    "a_rate_pct": 4.625,
+    "b_rate_pct": 4.594,
+    "delta_points": 0.031,
+    "delta_ci95_points": [
+      -0.496,
+      0.602
+    ],
+    "clusters": 125
+  },
+  "all_distal": {
+    "n": 10052,
+    "a": "boundary_gene",
+    "b": "nearest_gene",
+    "differ": 869,
+    "a_concordant": 656,
+    "b_concordant": 662,
+    "a_rate_pct": 6.526,
+    "b_rate_pct": 6.586,
+    "delta_points": -0.06,
+    "delta_ci95_points": [
+      -0.36,
+      0.237
+    ],
+    "clusters": 131
+  },
+  "all_distal_vs_gene_structure": {
+    "n": 10052,
+    "a": "boundary_gene",
+    "b": "domain_gene",
+    "differ": 4498,
+    "a_concordant": 656,
+    "b_concordant": 882,
+    "a_rate_pct": 6.526,
+    "b_rate_pct": 8.774,
+    "delta_points": -2.248,
+    "delta_ci95_points": [
+      -2.882,
+      -1.662
+    ],
+    "clusters": 131
+  },
+  "control": {
+    "expected": 65.11,
+    "expected_rate": 0.01994,
+    "draws": 1000,
+    "draws_at_or_above_observed": 0,
+    "p_one_sided": 0.001
+  },
+  "positive_control": {
+    "n": 1500,
+    "nearest_concordant": 300,
+    "nearest_rate_pct": 20.0,
+    "control": {
+      "expected": 73.308,
+      "expected_rate": 0.04887,
+      "draws": 1000,
+      "draws_at_or_above_observed": 0,
+      "p_one_sided": 0.001
+    },
+    "responsive": true
+  },
+  "rotation_beside": {
+    "draws": 1000,
+    "observed": 151,
+    "mean_rotated": 146.339,
+    "mean_rotated_rate_pct": 4.482,
+    "draws_at_or_above_observed": 148,
+    "p_one_sided": 0.14885
+  },
+  "beside": {
+    "population_where_the_rules_differ": {
+      "n": 216,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 216,
+      "a_concordant": 16,
+      "b_concordant": 12,
+      "a_rate_pct": 7.407,
+      "b_rate_pct": 5.556,
+      "delta_points": 1.852,
+      "delta_ci95_points": [
+        -4.206,
+        8.407
+      ],
+      "clusters": 64
+    },
+    "population_gene_structure_vs_nearest_tss": {
+      "n": 3265,
+      "a": "domain_gene",
+      "b": "nearest_gene",
+      "differ": 672,
+      "a_concordant": 150,
+      "b_concordant": 147,
+      "a_rate_pct": 4.594,
+      "b_rate_pct": 4.502,
+      "delta_points": 0.092,
+      "delta_ci95_points": [
+        -0.194,
+        0.409
+      ],
+      "clusters": 125
+    },
+    "dolsten_2025_atlas_vs_nearest_tss": {
+      "n": 3265,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 209,
+      "a_concordant": 140,
+      "b_concordant": 147,
+      "a_rate_pct": 4.288,
+      "b_rate_pct": 4.502,
+      "delta_points": -0.214,
+      "delta_ci95_points": [
+        -0.561,
+        0.089
+      ],
+      "clusters": 125
+    },
+    "kaushal_2021_wt_larval_cns_vs_nearest_tss": {
+      "n": 3265,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 174,
+      "a_concordant": 145,
+      "b_concordant": 147,
+      "a_rate_pct": 4.441,
+      "b_rate_pct": 4.502,
+      "delta_points": -0.061,
+      "delta_ci95_points": [
+        -0.404,
+        0.318
+      ],
+      "clusters": 125
+    },
+    "kaushal_2022_wt_embryo_vs_nearest_tss": {
+      "n": 3265,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 162,
+      "a_concordant": 148,
+      "b_concordant": 147,
+      "a_rate_pct": 4.533,
+      "b_rate_pct": 4.502,
+      "delta_points": 0.031,
+      "delta_ci95_points": [
+        -0.319,
+        0.386
+      ],
+      "clusters": 125
+    },
+    "label_15a": {
+      "n": 84,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 3,
+      "a_concordant": 1,
+      "b_concordant": 1,
+      "a_rate_pct": 1.19,
+      "b_rate_pct": 1.19,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 53
+    },
+    "label_26": {
+      "n": 145,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 5,
+      "a_concordant": 4,
+      "b_concordant": 4,
+      "a_rate_pct": 2.759,
+      "b_rate_pct": 2.759,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 70
+    },
+    "label_90": {
+      "n": 214,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 16,
+      "a_concordant": 39,
+      "b_concordant": 39,
+      "a_rate_pct": 18.224,
+      "b_rate_pct": 18.224,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        -1.389,
+        1.402
+      ],
+      "clusters": 80
+    },
+    "label_98": {
+      "n": 105,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 15,
+      "a_concordant": 5,
+      "b_concordant": 4,
+      "a_rate_pct": 4.762,
+      "b_rate_pct": 3.81,
+      "delta_points": 0.952,
+      "delta_ci95_points": [
+        0.0,
+        2.83
+      ],
+      "clusters": 23
+    },
+    "label_A/B*-KC": {
+      "n": 137,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 4,
+      "a_concordant": 0,
+      "b_concordant": 0,
+      "a_rate_pct": 0.0,
+      "b_rate_pct": 0.0,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 70
+    },
+    "label_A/B-KC": {
+      "n": 160,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 12,
+      "a_concordant": 5,
+      "b_concordant": 5,
+      "a_rate_pct": 3.125,
+      "b_rate_pct": 3.125,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 75
+    },
+    "label_AST": {
+      "n": 68,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 3,
+      "a_concordant": 8,
+      "b_concordant": 8,
+      "a_rate_pct": 11.765,
+      "b_rate_pct": 11.765,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 44
+    },
+    "label_Dm3": {
+      "n": 107,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 6,
+      "a_concordant": 3,
+      "b_concordant": 3,
+      "a_rate_pct": 2.804,
+      "b_rate_pct": 2.804,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 56
+    },
+    "label_Dm8/Dm11": {
+      "n": 90,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 3,
+      "a_concordant": 4,
+      "b_concordant": 4,
+      "a_rate_pct": 4.444,
+      "b_rate_pct": 4.444,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 54
+    },
+    "label_G-KC": {
+      "n": 168,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 9,
+      "a_concordant": 1,
+      "b_concordant": 1,
+      "a_rate_pct": 0.595,
+      "b_rate_pct": 0.595,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 83
+    },
+    "label_LLPC1": {
+      "n": 53,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 1,
+      "a_concordant": 0,
+      "b_concordant": 0,
+      "a_rate_pct": 0.0,
+      "b_rate_pct": 0.0,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 37
+    },
+    "label_Mi15": {
+      "n": 51,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 3,
+      "a_concordant": 0,
+      "b_concordant": 0,
+      "a_rate_pct": 0.0,
+      "b_rate_pct": 0.0,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 37
+    },
+    "label_PB4/5": {
+      "n": 296,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 21,
+      "a_concordant": 18,
+      "b_concordant": 15,
+      "a_rate_pct": 6.081,
+      "b_rate_pct": 5.068,
+      "delta_points": 1.014,
+      "delta_ci95_points": [
+        0.0,
+        2.749
+      ],
+      "clusters": 98
+    },
+    "label_PLM": {
+      "n": 93,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 6,
+      "a_concordant": 19,
+      "b_concordant": 22,
+      "a_rate_pct": 20.43,
+      "b_rate_pct": 23.656,
+      "delta_points": -3.226,
+      "delta_ci95_points": [
+        -7.368,
+        0.0
+      ],
+      "clusters": 58
+    },
+    "label_PNG": {
+      "n": 61,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 6,
+      "a_concordant": 3,
+      "b_concordant": 2,
+      "a_rate_pct": 4.918,
+      "b_rate_pct": 3.279,
+      "delta_points": 1.639,
+      "delta_ci95_points": [
+        0.0,
+        5.556
+      ],
+      "clusters": 40
+    },
+    "label_PR": {
+      "n": 97,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 12,
+      "a_concordant": 7,
+      "b_concordant": 7,
+      "a_rate_pct": 7.216,
+      "b_rate_pct": 7.216,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 55
+    },
+    "label_T1": {
+      "n": 101,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 16,
+      "a_concordant": 9,
+      "b_concordant": 5,
+      "a_rate_pct": 8.911,
+      "b_rate_pct": 4.95,
+      "delta_points": 3.96,
+      "delta_ci95_points": [
+        0.0,
+        12.0
+      ],
+      "clusters": 61
+    },
+    "label_T2": {
+      "n": 115,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 9,
+      "a_concordant": 1,
+      "b_concordant": 1,
+      "a_rate_pct": 0.87,
+      "b_rate_pct": 0.87,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 61
+    },
+    "label_T2a": {
+      "n": 59,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 2,
+      "a_concordant": 1,
+      "b_concordant": 1,
+      "a_rate_pct": 1.695,
+      "b_rate_pct": 1.695,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 38
+    },
+    "label_T3": {
+      "n": 78,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 6,
+      "a_concordant": 2,
+      "b_concordant": 5,
+      "a_rate_pct": 2.564,
+      "b_rate_pct": 6.41,
+      "delta_points": -3.846,
+      "delta_ci95_points": [
+        -12.0,
+        0.0
+      ],
+      "clusters": 51
+    },
+    "label_T4/T5": {
+      "n": 104,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 6,
+      "a_concordant": 2,
+      "b_concordant": 2,
+      "a_rate_pct": 1.923,
+      "b_rate_pct": 1.923,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 60
+    },
+    "label_Tm20": {
+      "n": 92,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 4,
+      "a_concordant": 1,
+      "b_concordant": 1,
+      "a_rate_pct": 1.087,
+      "b_rate_pct": 1.087,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 61
+    },
+    "label_Tm9": {
+      "n": 110,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 6,
+      "a_concordant": 0,
+      "b_concordant": 0,
+      "a_rate_pct": 0.0,
+      "b_rate_pct": 0.0,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 65
+    },
+    "label_TmY3": {
+      "n": 180,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 11,
+      "a_concordant": 5,
+      "b_concordant": 4,
+      "a_rate_pct": 2.778,
+      "b_rate_pct": 2.222,
+      "delta_points": 0.556,
+      "delta_ci95_points": [
+        0.0,
+        1.84
+      ],
+      "clusters": 76
+    },
+    "label_TmY5a": {
+      "n": 104,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 2,
+      "a_concordant": 1,
+      "b_concordant": 1,
+      "a_rate_pct": 0.962,
+      "b_rate_pct": 0.962,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        0.0,
+        0.0
+      ],
+      "clusters": 67
+    }
+  },
+  "attributed_genes_missing_from_rna_rows": 3911,
+  "flynode": {
+    "registration": "f5985f7",
+    "boundaries_manual": 3121,
+    "between_gene_elements": 917,
+    "between_gene_elements_that_change_gene": 90,
+    "primary_elements": 1634,
+    "primary_elements_that_change_gene": 234,
+    "median_domain_bp_around_a_primary_element": 84000,
+    "outcome": "NO_DIFFERENCE_DETECTED"
+  },
+  "comparison": "NO_DIFFERENCE_DETECTED",
+  "comparison_vs_gene_structure": "NO_DIFFERENCE_DETECTED",
+  "falsifier": "NOT_FALSIFIED",
+  "outcome": "NO_DIFFERENCE_DETECTED",
+  "reading": "On 3,265 D. melanogaster brain distal elements called differentially accessible in exactly one of 42 cell types (Janssens et al. 2022, larval to adult brain, the source's own lvl1 call against the rest of the brain) and lying in no protein-coding gene body, the gene with the nearest 5' end inside the element's domain, delimited by 3,121 Hi-C boundaries of nuclear-cycle-14 embryos (Stadler et al. 2017, the authors' manual call), is expressed at 5 counts per million or more and highest in the element's own cell type, in RNA summed over that cell type's cells (Davie et al. 2018, the counterpart cluster the accessibility source itself declares), for 151 of 3,265 (4.6%), against 147 of 3,265 (4.5%) for the gene with the nearest 5' end on the arm; the rules differ on 216 of 3,265 elements; difference +0.12 points, 95% -0.25 to +0.61 over 1-Mb clusters. No difference detected between the boundary rule and nearest TSS. With 216 elements differing, a difference smaller than about 1.3 points could go undetected; section 9 could only bound it at 2.9 points, on 90 differing elements. Against the gene-structure rule on the same elements (150 of 3,265, 4.6%; the two differ on 789, and neither names a host here), the difference is +0.03 points, 95% -0.50 to +0.60: no difference detected between the two nodes. The boundary rule's genes match the element's cell type more often than genes at a matched distance (2.0%, one-sided p 0.001), so position carries cell-type information here. With the same boundaries rotated along each arm the rule averages 4.5% on these elements (one-sided p 0.149), so the measured positions are not shown to carry more than the boundaries' number and spacing. On all 10,052 distal elements (beside, deciding nothing; the rules differ on 869) the boundary rule is concordant for 656 (6.5%) against 662 (6.6%) for nearest TSS, -0.06 points [-0.36, +0.24], and against 882 (8.8%) for the gene-structure rule, -2.25 points [-2.88, -1.66]. 3,911 of the attributed genes on this population are absent from the RNA atlas's rows and are counted as not concordant. Accessibility is not function, and a boundary is not a regulatory unit by itself: this says the attributed gene is expressed where the element is open, not that the element acts on it. The boundaries come from 2-3 h embryos while the elements and the RNA come from larval-to-adult brain, a wider stage gap than section 9's; accessibility and RNA come from different nuclei and different studies; and the element source states no licence.",
+  "reading_is_the_registered_wording": "the reading is REGISTRATION['outcome_wording'] with its numbers filled in and no other word changed",
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Janssens J, Aibar S, Taskiran II, et al. (2022) Decoding gene regulation in the fly brain. Nature 601:630-636, doi:10.1038/s41586-021-04262-z; the authors' differentially accessible region table (tbl_DARs.txt) and cell-type table (cellTypeInfo.tsv) from flybrain.aertslab.org; GEO GSE163697 holds the reads",
+        "version": "as served on 2026-10-10"
+      },
+      {
+        "accession": "Davie K, Janssens J, Koldere D, et al. (2018) A single-cell transcriptome atlas of the ageing Drosophila brain. Cell 174:982-998; the loom served by flybrain.aertslab.org as the RNA atlas whose clusters Janssens et al. 2022's cellTypeInfo.tsv names as the counterpart of each accessibility cell type",
+        "version": "as served on 2026-10-10"
+      },
+      {
+        "accession": "Stadler MR, Haines JE, Eisen MB (2017) Convergence of topological domain boundaries, insulators, and polytene interbands revealed by high-resolution mapping of chromatin contacts in the early Drosophila melanogaster embryo. eLife 6:e29550, doi:10.7554/eLife.29550; supplementary file 1 (GEO GSE100370 holds the reads)",
+        "version": "eLife supplementary file 1, v2"
+      },
+      {
+        "accession": "Ensembl release 104, Drosophila melanogaster BDGP6.32 (dm6) GFF3",
+        "version": "Ensembl release 104"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/simpler_flysource_registration.json",
+        "sha256": "dc92a22b636189c457625ce9432974197946688ad45bfc813b2103b0b4007de0",
+        "bytes": 35390,
+        "partition": "the committed registration"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/fetch_record.json",
+        "sha256": "9728022f302b7b80b2ec4dfbf5fce193f958f373d70bdf444677e2aac41372f6",
+        "bytes": 3859,
+        "partition": "each input's registered sha256"
+      },
+      {
+        "path": "data/results/simpler_flynode_registration.json",
+        "sha256": "07a54fca360237b631b059842821792bfd949b44fb9b09d928ed6b30133d9fe3",
+        "bytes": 30206,
+        "partition": "the registration this run carries its wording from"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/cellTypeInfo.tsv",
+        "sha256": "60cc4ddfa3facb369e6524060e303a3434635050d765c12ac91f1e6dff90f0db",
+        "bytes": 7241,
+        "partition": "the `RNAcluster` column only"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/tbl_DARs.txt",
+        "sha256": "6d9e5a9426d9174c716d97e62a768fbcfe65b5c99a8b40f6738f98435e935639",
+        "bytes": 85509169,
+        "partition": "the selected rows' region and cell type only"
+      },
+      {
+        "path": "data/knowledge/simpler_flynode/elife-29550-supp1-v2.xlsx",
+        "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4",
+        "bytes": 386317,
+        "partition": "Table S4 (manual boundary positions)"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/dolsten2025_TableS2.xlsx",
+        "sha256": "e183ae655679b3e4237b12e36b48929c79e2335a837a7e4a6a5f4571458bc201",
+        "bytes": 1087877,
+        "partition": "sheet `boundaries` (beside)"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/kaushal2022_data_file_s2.xlsx",
+        "sha256": "fa365d603cf8eba3fbfd810ac69c2dd623c7732f02d01ba14597d06a092e1d92",
+        "bytes": 183298,
+        "partition": "`exist.WT_0` rows (beside)"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/kaushal2021_larval_cns_data_s3.xlsx",
+        "sha256": "20347bf37f672de615c09162e9711f9fce1ee63534f170d7735e218282611a0d",
+        "bytes": 140228,
+        "partition": "`exist.wildtype` rows (beside)"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+        "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc",
+        "bytes": 5713526,
+        "partition": "gene and transcript positions and strands, and arm lengths"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/Davie_Janssens_Koldere_et_al_2018_AdultBrain.loom",
+        "sha256": "c8944de37549c0c31c216e690ab2e84b51e489b14102a0cd232d84f9c490e859",
+        "bytes": 519015198,
+        "partition": "the endpoint: counts summed by label"
+      }
+    ],
+    "assembly": "dm6 (BDGP6.32): the regions, the boundaries, the gene models; RNA by gene name",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the DAR regions are chr:start-end as the source writes them, the GFF3 is 1-based closed, and a boundary is its span's midpoint; positions move by at most 1 bp"
+    },
+    "parameters": {
+      "dar_selection": {
+        "clResolution": "lvl1",
+        "DAR_contrast": "vsRest",
+        "DAR_within": "WholeBrain",
+        "DAR_type": "Up"
+      },
+      "never_read": [
+        "closestGene"
+      ],
+      "labels": [
+        "15a",
+        "15b",
+        "26",
+        "90",
+        "97",
+        "98",
+        "A/B*-KC",
+        "A/B-KC",
+        "AST",
+        "C2",
+        "C3",
+        "CSM",
+        "CTX",
+        "Dm3",
+        "Dm8/Dm11",
+        "ENS",
+        "G-KC",
+        "L2/L3",
+        "LLPC1",
+        "Mi1",
+        "Mi15",
+        "Mi9",
+        "PB4/5",
+        "PLM",
+        "PNG",
+        "PR",
+        "Pm4",
+        "Poxn",
+        "SUB",
+        "T1",
+        "T2",
+        "T2a",
+        "T3",
+        "T4/T5",
+        "Tm1/TmY8",
+        "Tm2",
+        "Tm20",
+        "Tm3",
+        "Tm4",
+        "Tm9",
+        "TmY3",
+        "TmY5a"
+      ],
+      "boundary_sets": {
+        "stadler_manual_nc14": {
+          "half_bin": 250,
+          "primary": true
+        },
+        "dolsten_2025_atlas": {
+          "half_bin": 400,
+          "primary": false
+        },
+        "kaushal_2022_wt_embryo": {
+          "half_bin": 1000,
+          "primary": false
+        },
+        "kaushal_2021_wt_larval_cns": {
+          "half_bin": 1000,
+          "primary": false
+        }
+      },
+      "primary_boundary_set": "stadler_manual_nc14",
+      "detection_cpm": 5.0,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "control_draws": 1000,
+      "rotation_draws": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "seed": 20261010,
+      "stop_rule": 200,
+      "alpha": 0.05,
+      "sweep_counts": [
+        2000,
+        3121,
+        4500,
+        5500,
+        7000,
+        8000,
+        12000,
+        20000,
+        35000,
+        60000,
+        100000
+      ],
+      "sweep_draws": 5
+    },
+    "exclusions": [
+      "accessibility cell types for which the source declares no RNA counterpart, on both sides",
+      "DAR rows outside lvl1 / vsRest / WholeBrain / Up",
+      "regions the source calls up in more than one label",
+      "regions within 1 kb of a transcript 5' end (kept only as the positive control)",
+      "regions whose midpoint lies in a protein-coding gene body (reported beside, not the population)",
+      "regions on chromosomes other than 2L, 2R, 3L, 3R, 4, X, Y",
+      "the DAR table's `closestGene` column, which is the source's own answer to the question asked"
+    ],
+    "partitions": {
+      "population": "pinned by the committed registration's census",
+      "positive_control": "promoter elements"
+    },
+    "code_cleanliness": {
+      "git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/simpler_flysource_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_flysource_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_flysource_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_flysource_run.py"
+      ],
+      "counting_path_count": 10,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/trainexp_independence.json"
+      ],
+      "argv": [
+        "scripts/simpler_flysource_run.py",
+        "score"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "code_cleanliness_git_sha": "18de3750d645eb95279a96bb94e5e95b6f12b07e",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 18de375"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 354,
+      "opens_under_data": 29,
+      "files_read": 11,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
