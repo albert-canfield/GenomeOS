@@ -37,6 +37,7 @@ import time
 import urllib.error
 import urllib.request
 from bisect import bisect_left
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from statistics import NormalDist
 from typing import Any
@@ -301,14 +302,17 @@ def fetch_frequencies(
     t0 = time.time()
     fetched = requests = 0
     ids = [r[5] if r[5].startswith("rs") else "" for r in rows]
-    by_position = 0
-    for i, r in enumerate(rows):
-        if not ids[i]:
-            ids[i], nb = _id_at(r)
+    # rows the file gives no id are placed by position, a few lookups at a time: Ensembl answers one
+    # overlap request in 6 to 25 seconds, and its limit is 15 requests a second
+    need = [i for i, x in enumerate(ids) if not x]
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        for i, (found, nb) in zip(need, pool.map(lambda i: _id_at(rows[i]), need), strict=True):
+            ids[i] = found
             fetched += nb
             requests += 1
-            by_position += 1
-            time.sleep(0.07)
+    by_position = len(need)
+    if progress and need:
+        progress(f"{pgs_id}: {sum(1 for i in need if ids[i]):,} of {len(need):,} position-only rows placed")
     unique = sorted({x for x in ids if x})
     records: dict[str, dict] = {}
     for k in range(0, len(unique), BATCH):
