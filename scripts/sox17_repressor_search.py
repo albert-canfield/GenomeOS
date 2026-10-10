@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Set-one-in over a closed list of SOURCED repressors of SOX17, each added alone.
 
 lane-mesoderm's diagnosis (d340e5c) is the input: SOX17's repression factor in the runtime is

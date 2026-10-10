@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """AstroREG-2's registered post-run analyses. REFUSES unless the run's ledger shows the run complete.
 
     uv run python scripts/astroreg2_analyse.py --run 2

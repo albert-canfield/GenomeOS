@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Amendment 1 to the AstroREG registration: the calibration gate for RECONSTRUCTING the frozen
 activity columns from ENCODE alignments, written before a single read is counted.
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The test human on every chromosome: apply HG002's benchmark variants to each local
 chromosome, keep the statistics (variants applied per haplotype, SNVs, indels, length
 change, reference mismatches), and keep no haplotype FASTA (stream, distil, discard).

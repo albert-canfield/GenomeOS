@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """List the wiring feasibility counts the result file keeps only as aggregates.
 
     uv run --frozen python scripts/wiring_counts.py

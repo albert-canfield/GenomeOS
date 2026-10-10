@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """AstroREG-2's gate: does the ENDPOINT move when the activity columns are reconstructed?
 
     uv run --with pysam==0.23.0 --python 3.12 python scripts/astroreg2_endpoint.py

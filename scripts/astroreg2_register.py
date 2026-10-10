@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """AstroREG-2: a NEW registration whose gate is ENDPOINT VALIDITY, not scale, written before anything
 is computed.
 

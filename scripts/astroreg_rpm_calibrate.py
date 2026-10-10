@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Reconstruct DHS.RPM and H3K27ac.RPM from the ENCODE alignments, and put the result to the gate
 registered in data/results/astroreg_calibration_registration.json before any of this was run.
 

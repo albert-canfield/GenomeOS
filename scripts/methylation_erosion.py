@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Does the methylation engine's solo-WCGW prediction hold in the WGBS this project already has?
 
 The engine (`genomeos/runtime/methylation.py`) runs the published mechanism: replication makes a

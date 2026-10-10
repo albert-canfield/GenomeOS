@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Compile the proteome of every chromosome, smallest first; keep one coverage
 summary per chromosome (data/results/proteome_<chrom>.json) and the compiled
 definitions in the local knowledge cache. Resumable: a chromosome with a

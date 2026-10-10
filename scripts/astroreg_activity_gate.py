@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Whether the frozen model can be applied to the astrocyte pairs at all, decided before any money
 is spent.
 

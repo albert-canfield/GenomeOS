@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Whole-genome anatomy by stream, distil, discard.
 
 For each human chromosome: download the chromosome FASTA and the rows of the

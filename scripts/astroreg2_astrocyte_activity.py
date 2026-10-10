@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The astrocyte activity columns, reconstructed under amendment 2's rule, and the ZERO RATE BY LABEL.
 
     uv run --with pysam==0.23.0 --python 3.12 python scripts/astroreg2_astrocyte_activity.py

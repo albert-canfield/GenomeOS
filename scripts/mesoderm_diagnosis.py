@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Leave-one-out and set-one-in over the closed candidate list registered for the
 mesoderm band the Tbxt->SOX17 sign correction removed (5cbce26).
 

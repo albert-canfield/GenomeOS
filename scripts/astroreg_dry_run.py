@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The AstroREG request list, enumerated and priced, with NOTHING SENT.
 
 This is what the executor reads before any money is spent, so its one job is to be exactly the list

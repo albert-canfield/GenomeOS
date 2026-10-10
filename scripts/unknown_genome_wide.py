@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Investigate the UNKNOWN blocks of every human chromosome: stream, distil, discard.
 
 Once: stream the ENCODE cCRE registry (64 MB) and keep a small per-chromosome

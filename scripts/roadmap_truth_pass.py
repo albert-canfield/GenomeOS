@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Check docs/ROADMAP.md's current-state claims against machine-checkable values.
 
 Since 2026-10-10 the roadmap is two files: docs/ROADMAP.md, the current plan, and

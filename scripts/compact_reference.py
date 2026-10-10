@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Keep each chromosome once, as blocked gzip, instead of twice.
 
 The reference cache holds every chromosome as a flat `chrN.fa` for random

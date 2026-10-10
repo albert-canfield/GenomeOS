@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Reader v1 on every chromosome for a few cell types: fetch each cell type's ENCODE DNase
 peaks once (all chromosomes kept), then read every local chromosome. Keeps one summary
 (data/results/reader_genome_wide.json) with per-chromosome and genome-wide counts and the

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Score the reader's per-biosample family against assay depth, on the registration
 committed in docs/NODES-READER-WRITER.md ("Is the rest of the reader's family assay
 depth too?", 41bc7d6).
