@@ -239,3 +239,51 @@ def test_the_eleven_cell_subset_reproduces_m2i_on_thirteen_and_fits_nothing():
     assert len(d["cells_kept"]) == 11
     assert sorted(d["cells_dropped"]) == sorted(tx.excluded_cells(fr.CELLS, tx.SHARED_BIOSAMPLE_CELLS))
     assert "POST HOC" in d["reading"]
+
+
+# ---- (f) the recorded constants are the measurement, not a retyping -----------------------------
+
+
+def test_the_recorded_sentence_is_exactly_what_the_function_produces():
+    """`INDEPENDENCE_SENTENCE` must be `independence_sentence` on thirteen `probable` entries."""
+    assert tx.independence_sentence([_entry(tx.CLASS_PROBABLE)] * 13) == tx.INDEPENDENCE_SENTENCE
+
+
+def test_the_recorded_tallies_cover_both_whole_sets():
+    assert sum(v["experiments"] for v in tx.FRESH_TALLY.values()) == 13
+    assert sum(v["files"] for v in tx.FRESH_TALLY.values()) == 22
+    assert sum(v["experiments"] for v in tx.ALREADY_READ_TALLY.values()) == 13
+    assert sum(v["files"] for v in tx.ALREADY_READ_TALLY.values()) == 27
+
+
+def test_no_accession_match_was_recorded_because_the_method_was_unavailable():
+    assert tx.METADATA_AS_READ["rna_seq_rows_carrying_an_encode_accession"] == 0
+    assert tx.METADATA_AS_READ["accession_matching_available_for_rna_seq"] is False
+    assert tx.FRESH_TALLY[tx.CLASS_MATCHED]["experiments"] == 0
+    assert tx.ALREADY_READ_TALLY[tx.CLASS_MATCHED]["experiments"] == 0
+
+
+def test_the_eleven_cell_interval_brackets_its_point_estimate_and_excludes_zero():
+    m = tx.ELEVEN_CELL_MEASURED
+    lo, hi = m["ci"]
+    assert lo < m["delta_mse"] < hi
+    assert lo > 0.0
+    assert sorted(m["cells_dropped"]) == sorted(tx.excluded_cells(fr.CELLS, tx.SHARED_BIOSAMPLE_CELLS))
+
+
+@needs_track_metadata
+@pytest.mark.skipif(not RESULT.exists(), reason="data/results/trainexp_independence.json not written yet")
+def test_the_recorded_constants_match_the_written_result():
+    """Where the result file exists, the committed constants must be its values, not a retyping."""
+    d = json.loads(RESULT.read_text())
+    m, e = d["matching"], d["eleven_cell_subset"]
+    assert m["rna_seq_rows"] == tx.METADATA_AS_READ["rna_seq_rows"]
+    assert m["rna_seq_rows_carrying_an_accession"] == 0
+    assert m["fresh_thirteen"]["tally"] == tx.FRESH_TALLY
+    assert m["already_read_twenty_seven"]["tally"] == tx.ALREADY_READ_TALLY
+    assert m["sentence_for_every_m2i_better"] == tx.INDEPENDENCE_SENTENCE
+    assert e["eleven_cells"]["delta_mse"] == tx.ELEVEN_CELL_MEASURED["delta_mse"]
+    assert tuple(e["eleven_cells"]["ci"]) == tx.ELEVEN_CELL_MEASURED["ci"]
+    assert e["eleven_cells"]["genes"] == tx.ELEVEN_CELL_MEASURED["genes"]
+    assert e["eleven_cells"]["pairs"] == tx.ELEVEN_CELL_MEASURED["pairs"]
+    assert e["thirteen_cells"]["delta_mse"] == tx.ELEVEN_CELL_MEASURED["thirteen_cell_delta_mse"]

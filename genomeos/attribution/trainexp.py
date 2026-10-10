@@ -305,3 +305,72 @@ ELEVEN_CELL_NOTE = (
     " M2i's own nine-polyA-plus subset recentres, and the interval is M2i's gene-level percentile"
     " bootstrap at its registered resamples, seed and percentiles."
 )
+
+
+# ---- what was MEASURED, 2026-10-10, and why it is recorded here ---------------------------------
+#
+# These are the values `scripts/trainexp_match.py` computed on 2026-10-10 from the metadata and the
+# quantifications named above. They are recorded in committed code because the result file they were
+# written into, `data/results/trainexp_independence.json`, COULD NOT BE COMMITTED: `commit_own.sh`
+# refused it (exit 2) because another lane's uncommitted `genomeos/attribution/onetarget2.py` -- a
+# fix held outside a commit, which this lane is not permitted to touch -- sits on the static import
+# closure of anything that reaches `context_evidence` (the authority for the thirteen biosample
+# CURIEs), so the revision the result would stamp names a tree that does not contain all the code on
+# its counting path. The refusal is correct and was not routed around: `--force` was not used, the
+# result file stays written locally and uncommitted, and these constants plus the commit message are
+# the record. Re-running the script once `onetarget2.py` is committed reproduces every value here.
+
+#: The recorded track metadata as it was read, measured not assumed.
+METADATA_AS_READ = {
+    "rows": 2841,
+    "rna_seq_rows": 667,
+    "rna_seq_distinct_track_names": 371,
+    "rna_seq_rows_carrying_an_encode_accession": 0,
+    "accessions_anywhere_in_the_file": (
+        "ENCSR072YCM",
+        "ENCSR182QNJ",
+        "ENCSR740IPL",
+        "ENCSR797DEF",
+        "ENCSR801ECP",
+        "ENCSR860TYZ",
+    ),
+    "those_accessions_output": "procap, none of them rna_seq",
+    "accession_matching_available_for_rna_seq": False,
+}
+
+#: M2i's thirteen fresh experiments: experiments and files per class, by biosample CURIE + assay.
+FRESH_TALLY = {
+    CLASS_MATCHED: {"experiments": 0, "files": 0},
+    CLASS_PROBABLE: {"experiments": 13, "files": 22},
+    CLASS_UNKNOWN: {"experiments": 0, "files": 0},
+}
+
+#: Items 7/7d/7h's twenty-seven already-read quantifications, thirteen experiments, all polyA plus.
+#: The one `unknown` is astrocyte (ENCSR920UAO, CL:0000127), which the metadata records RNA-seq
+#: tracks of under total RNA-seq but not under polyA plus RNA-seq.
+ALREADY_READ_TALLY = {
+    CLASS_MATCHED: {"experiments": 0, "files": 0},
+    CLASS_PROBABLE: {"experiments": 12, "files": 26},
+    CLASS_UNKNOWN: {"experiments": 1, "files": 1},
+}
+
+#: THE SENTENCE to be carried beside every M2i "better", word for word. Produced by
+#: `independence_sentence` on the thirteen fresh entries as they classified, and asserted equal to it.
+INDEPENDENCE_SENTENCE = (
+    "fresh to this project; its independence from AlphaGenome's training data is unknown for 13 of 13"
+    " -- AlphaGenome's recorded track metadata carries no ENCODE accession for any RNA-seq track, and"
+    " a track of the same biosample and assay exists for 13 of 13, which is suggestive of training"
+    " exposure and settles nothing either way"
+)
+
+#: The eleven-cell subset, POST HOC and deciding nothing: M2i's constant scale, M2i's interval method.
+ELEVEN_CELL_MEASURED = {
+    "delta_mse": 0.0459557845802319,
+    "ci": (0.040272388859847665, 0.05209648171116512),
+    "genes": 8328,
+    "pairs": 91608,
+    "thirteen_cell_delta_mse": 0.03727241565491676,
+    "thirteen_cell_ci": (0.03202429380417028, 0.04299157342045463),
+    "thirteen_reproduces_the_committed_result": True,
+    "cells_dropped": ("hepatocyte", "cardiac_muscle_cell"),
+}
