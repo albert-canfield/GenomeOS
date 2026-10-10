@@ -1,0 +1,288 @@
+{
+  "result": "therapeutic_sv_case_registration",
+  "date": "2026-10-10",
+  "lane": "lane-svcase",
+  "roadmap_item": "area F, \"a scored structural-variant case\" (docs/ROADMAP.md section 3)",
+  "registered_before_the_run": true,
+  "case": {
+    "case": "FGFR3-TACC3 urothelial carcinoma, one patient's record, the fusion's 5' partner",
+    "gene": "FGFR3",
+    "partner": "TACC3",
+    "sample": "TCGA-CF-A3MG-01",
+    "study": "blca_tcga_pan_can_atlas_2018",
+    "study_name": "TCGA Bladder Urothelial Carcinoma, PanCancer Atlas (2018)",
+    "source": "cBioPortal public REST API, structural-variant profile blca_tcga_pan_can_atlas_2018_structural_variants and mutation profile blca_tcga_pan_can_atlas_2018_mutations, read 2026-10-10",
+    "terms": "TCGA open-access somatic data, served by cBioPortal, whose terms ask that the study and the portal be cited (Cerami et al. 2012; Gao et al. 2013); no controlled-access data and no patient identifier beyond the TCGA sample barcode",
+    "record": {
+      "site1_gene": "FGFR3",
+      "site1_end": "5'",
+      "site1": "chr4:1,806,934 (GRCh37)",
+      "site2_gene": "TACC3",
+      "site2_end": "3'",
+      "site2": "chr4:1,739,702 (GRCh37)",
+      "frame": "in-frame (site2EffectOnFrame)",
+      "status": "SOMATIC",
+      "event": "FGFR3-TACC3",
+      "cohort": "8 FGFR3-TACC3 records in this study, 6 of them in-frame"
+    },
+    "vcf": {
+      "variants": [
+        "ARID1A R1287T, chr1:26,773,490 G>C (GRCh38), allele fraction 0.208 from 5 alt and 19 ref reads",
+        "TSC1 R190P, chr9:132,921,913 C>G (GRCh38), allele fraction 0.800 from 36 alt and 9 ref reads"
+      ],
+      "lift": "the record is GRCh37 and the other benchmark fixtures are GRCh38, so both positions were lifted through the Ensembl REST assembly map; each lifted position carries the record's reference allele and annotates to the protein change the record names (checked against Ensembl VEP REST before the fixture was committed)",
+      "no_fgfr3_variant": "FGFR3 is not mutated in this sample's 125 somatic mutations, so the structural call is the only route to it"
+    },
+    "published_target": "erdafitinib, a small-molecule pan-FGFR tyrosine kinase inhibitor: FDA accelerated approval 12 April 2019 (BLC2001) and conversion to full approval 19 January 2024 (THOR) for locally advanced or metastatic urothelial carcinoma with susceptible FGFR3 genetic alterations, determined by an approved companion diagnostic (therascreen FGFR RGQ RT-PCR), whose susceptible alterations include the FGFR3-TACC3 fusion. No antibody against FGFR3 is approved",
+    "modality": "small_molecule",
+    "expect": "out_of_scope_expected",
+    "different_in_kind": "the benchmark's existing fusion case has the gene under test as the 3' partner, where the product keeps none of its outward-facing part and the answer is settled at 0.0. Here the gene under test is the 5' partner, so the product carries its own N-terminus and the curated surface figure may or may not describe the protein the tumour makes. It is also the first benchmark case read from a caller's own export rather than from a four-column file written by hand, and the first that is one patient's record rather than a hand-written file or a cohort summary"
+  },
+  "registered": {
+    "recovered": {
+      "quantity": "recovered, and rank among the ranked candidates",
+      "counts_as_recovered": "FGFR3 appears among the ranked candidates, reached by the structural call alone (the VCF carries no FGFR3 variant and there is no copy-number table)",
+      "counts_as_a_miss": "FGFR3 absent from the candidates: TARGET LOST",
+      "rank_is_recorded_not_predicted": "the rank is published and no threshold is registered for it; what is registered is that a target reached only through a structural call must be reachable at all"
+    },
+    "route": {
+      "quantity": "verdict and pass, against expect=out_of_scope_expected",
+      "counts_as_correct": "the pipeline does not claim a surface route: surface_accessibility is None or at most 0.5, which is the benchmark's own rule for an out-of-scope case",
+      "counts_as_a_miss": "surface_accessibility above 0.5 \u2014 a surface route offered against a product whose extent nothing read, for a target with no approved antibody",
+      "predicted_more_strongly": "surface_accessibility is None, not 0.0 and not a curated full-length value: 0.0 is the 3' partner's answer and FGFR3 is the 5' partner. A published 0.0 here would be a mis-reading of the arrangement even though the benchmark's pass rule would accept it, and it is registered as a finding rather than as a pass"
+    },
+    "top_mechanism": {
+      "quantity": "best_mechanism, best_mechanism_established and mechanism_sane",
+      "counts_as_correct": "mechanism_sane is true: no mechanism needing an extracellular epitope heads the list while the product's extent is unknown, no agonist heads it against an activating driver, and a mechanism that heads it on an unanswered requirement is a concern rather than a pass",
+      "counts_as_a_miss": "mechanism_sane false",
+      "expected": "no established preferred mechanism, with the open requirement named in requirements_unanswered, since the modelled modalities are antibody-like and the surface question is unanswered for this product"
+    },
+    "regression_guard": {
+      "quantity": "every field of the ten existing benchmark rows",
+      "requirement": "the ten rows are identical, field for field, with the structural-variant reader as it was before this lane's change and as it is now; `seconds` is excluded because it is wall-clock time",
+      "also_checked": "the offline before-run is compared with the committed data/results/therapeutic_benchmark_v2.json row by row, so that the baseline is shown to reproduce the committed record rather than only to agree with itself",
+      "counts_as_a_miss": "any compared field of any of the ten rows differing"
+    }
+  },
+  "eleventh_row": {
+    "added": "whatever the outcome",
+    "where": "scripts/therapeutic_benchmark.py CASES, committed with this registration and before the case was scored",
+    "committed_result_not_rewritten": "data/results/therapeutic_benchmark_v2.json keeps the ten rows of the 2026-10-02 run. Rewriting it means a fresh network run of every case, and the ten rows are this lane's regression guard; the eleventh row and the guard's measurement are published in data/results/therapeutic_sv_case_result.json instead, and the next full benchmark run writes the eleventh row into the benchmark file itself"
+  },
+  "falsifiers": [
+    "FGFR3 absent from the ranked candidates",
+    "any compared field of any of the ten existing rows differing between the before and after runs",
+    "a surface route claimed for FGFR3 (surface_accessibility above 0.5)",
+    "mechanism_sane false"
+  ],
+  "not_claimed": "a recovered target is a retrospective consistency between the pipeline's ranking and what is already approved for that alteration. It is not evidence that any therapy works, and no sequence, construct, dose or protocol is produced (docs/ROADMAP.md section 1)",
+  "reader_change": {
+    "why_before_the_run": "the record as cBioPortal exports it could not be read at all: the positional reader took the first column, the sample identifier, for a gene and the fourth, a chromosome, for the end of the product. The named-column reading was committed first, with the ALK fixture's parse pinned field for field, and this registration follows it",
+    "what_it_does_not_do": "it does not read a breakpoint into exon content. The record states both breakpoints and nothing in the pipeline turns them into the residues the product keeps, which is why the registered answer for this case's surface dimension is unknown"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "cBioPortal blca_tcga_pan_can_atlas_2018 (TCGA Bladder Urothelial Carcinoma, PanCancer Atlas): sample TCGA-CF-A3MG-01, the FGFR3-TACC3 structural variant and two of its somatic mutations",
+        "version": "public REST API as read 2026-10-10; the fixture files in data/demo/alterations are the pin, and their sha256 is in inputs"
+      },
+      {
+        "accession": "Ensembl REST assembly map and VEP (GRCh37 to GRCh38, fixture check)",
+        "version": "live service as read 2026-10-10, unversioned per request"
+      },
+      {
+        "accession": "FDA label for erdafitinib (BALVERSA), urothelial carcinoma with susceptible FGFR3 alterations",
+        "version": "accelerated approval 12 April 2019; full approval 19 January 2024"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/fgfr3_tacc3_urothelial.vcf",
+        "sha256": "a9bf02abec534aab82be44bc7c3113acd47a8ec6c73a05f613dfcfe775d68ddc",
+        "bytes": 689,
+        "partition": null
+      },
+      {
+        "path": "/Users/AlbertCanfield/SITES DEV/GenomeOS/data/demo/alterations/fgfr3_tacc3_urothelial.sv",
+        "sha256": "f00c3d26892b2b2a09bbf258c9f1f8e1d1692dbcb32dd736b98223fa6b1bd49d",
+        "bytes": 279,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38 for the VCF; the structural-variant record is the source's own GRCh37, which nothing in the pipeline reads as a coordinate",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed"
+    },
+    "parameters": {
+      "registered_before_the_run": true,
+      "eleventh_row": "added whatever the outcome"
+    },
+    "exclusions": [
+      "no score is in this file: it is the registration, written before the case was run"
+    ],
+    "partitions": "n/a: a retrospective case registered before it was run, nothing fitted to it",
+    "code_cleanliness": {
+      "git_sha": "017012bbae8826ca5dc1a2d4b24227b3b7d1167b",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/therapeutic_sv_case.py",
+        "form": "committed_repository_file",
+        "path": "scripts/therapeutic_sv_case.py",
+        "is_committed": true,
+        "declared_entry": "scripts/therapeutic_sv_case.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/silencerjoin.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/silencerjoin_decide.py",
+        "scripts/silencerjoin_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_silencerjoin.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/therapeutic_sv_case.py"
+      ],
+      "counting_path_count": 76,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "9d2ab1f5d3668b1e67a32d9bae7e4af0b8650bf5",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/silencerjoin.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/silencerjoin_decide.py",
+        "scripts/silencerjoin_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_silencerjoin.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/silencerjoin.py",
+        "scripts/silencerjoin_decide.py",
+        "scripts/silencerjoin_run.py",
+        "tests/test_silencerjoin.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/therapeutic_sv_case.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "9d2ab1f5d3668b1e67a32d9bae7e4af0b8650bf5",
+      "code_cleanliness_git_sha": "017012bbae8826ca5dc1a2d4b24227b3b7d1167b",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": false,
+      "revision_race": true,
+      "reading": "revision race: the cleanliness block sampled 017012b and the write stamped 9d2ab1f, so HEAD moved while this result was being written"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 172,
+      "opens_under_data": 2,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
