@@ -1635,3 +1635,29 @@ Two notes that decide nothing. In the pair null the simulated deviations swamp t
 its miscalibration; the next pair null adds a tip-noise term and is calibrated on random pairs before
 any pair is read. The Dollo model alone falls below the observed co-occurrence of almost every random
 gene set, so only the comparison with real genes is read.
+
+## 23. A pair null with tip noise, calibrated before it was read (2026-10-10)
+
+Registered before it was run (lane-pairnull: frozen code `5b614d0`, registration `3abde37`, result
+`c61a335`). The null is Pagel's lambda on §22's tree (on this tree, Brownian motion plus white noise at
+the tips), each side's deviation scaled by the binomial sd of its origin-stratum make-up, with lambda,
+rate and root fitted by REML for each side. No library pair was computed until the null put at most 10%
+of random pairs at p ≤ 0.05 and at most 1% at q ≤ 0.05, on §22's 860 random pairs and again on 860 new
+ones: 44 and 66 of 860, none at q (§22's Brownian null on the first set: 205).
+
+**Registered reading:** "154 of 860 testable library pairs are more alike than age and shared ancestry
+predict under Pagel's lambda on binomially scaled deviations along the Ensembl Compara species tree
+(Grafen branch lengths; lambda, rate and root fitted by REML for each side; Benjamini-Hochberg q at or
+below 0.05): 6 of the 35 pairs §14 called more alike than age, and 148 that §14 did not call. The other
+29 of §14's 35 do not survive this null. The null passed the registered calibration on two independent
+sets of random age-matched pairs (44 of 860 and 66 of 860 at p at or below 0.05) and sees 42 of 42
+libraries against their own random halves at p at or below 0.05. This is agreement of orthologue
+presence across species beyond age and this model of shared ancestry: co-occurrence across species is
+not a dependency, it does not show that one library acts on the other, and an orthologue's presence is
+not function. No library pair is called a dependency."
+
+Notes that decide nothing: §11's developmental pairs survive (axes–segmentation q 0.0006), but under
+this null their expected r falls far below the age-expected r (0.30 against 0.985). The calibration used
+random gene sets, whose deviations are small (library sides fit lambda 0.84–0.90, random sides
+0.65–0.77), so the null was not checked on two large library deviations; a mixed calibration, each
+library against random sets of its partner's make-up, comes before the 154 are read further.
