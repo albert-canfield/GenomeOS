@@ -200,6 +200,19 @@ def test_the_lane_draws_marks_apart_and_loads_the_card_without_touching_the_page
     assert "readcall.js" not in (STATIC / "index.html").read_text()
 
 
+def test_the_page_tooltips_name_the_same_calls_the_card_shows_and_never_call_unknown_closed():
+    html = (STATIC / "index.html").read_text()
+    reader_tip = html.split('id="b-reader"')[0].rsplit('data-tip="', 1)[1]
+    cells_tip = html.split('data-tab="cells"', 1)[1].split('data-tip="', 1)[1].split('">', 1)[0]
+    for tip in (reader_tip, cells_tip):
+        assert "read on DNase" in tip and "read by marks" in tip and "poised" in tip
+        assert "closed" in tip  # the hollow dot, the old `silent_genes` call; kept, not renamed
+        assert "active" not in tip.lower() and "expressed" not in tip.lower()
+    assert "UNKNOWN calls and the reason" in reader_tip
+    unknown_tail = reader_tip.split("UNKNOWN", 1)[1][:40]
+    assert "closed" not in unknown_tail and "silent" not in unknown_tail
+
+
 def _render(payloads: list[dict], selected: str = "") -> list[str]:
     """window.readCallHtml from static/readcall.js, run in node."""
     harness = (
