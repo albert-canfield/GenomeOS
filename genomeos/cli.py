@@ -4429,6 +4429,7 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
         indirect=not args.no_indirect,
         hla_predictor=args.hla_predictor,
         log=sys.stdout,
+        lineage=args.lineage or "",
     )
     if args.report:
         print(text_report(a, detail=args.detail))
@@ -4459,6 +4460,13 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
                 ["gene", "class", "score", "access", "select", "safety", "intern", "best mechanism"],
             )
         )
+        deps = a.get("dependency_candidates") or []
+        if deps:
+            print("\ndependencies a deep deletion creates (cell lines, not this tumour; a hypothesis):")
+            for d in deps:
+                print(
+                    f"  {d['gene']} from {d['lost_gene']} loss: {d['lineage']['verdict'].replace('_', ' ')}"
+                )
         print(f"\n{DISCLAIMER}")
     if args.spec:
         for c in a["candidates"]:
@@ -5597,6 +5605,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--cohort",
         help="cBioPortal study id of the same cancer type, e.g. brca_tcga_pan_can_atlas_2018; "
         "gives how often each gene is raised above normal tissue in that cancer",
+    )
+    p.add_argument(
+        "--lineage",
+        default="",
+        help="the tumour's DepMap OncotreeLineage, e.g. 'CNS/Brain' or 'Lung'; read only by the "
+        "dependency evidence a deep deletion creates, to choose lineage-matched cell lines",
     )
     p.add_argument("--top", type=int, default=12, help="genes to analyse, by variant rank")
     p.add_argument("--detail", type=int, default=5, help="candidates to expand in the report")

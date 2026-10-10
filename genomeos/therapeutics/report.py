@@ -362,6 +362,7 @@ def text_report(analysis: dict[str, Any], detail: int = 5) -> str:
         lines.append(
             "  (no combination assessed: needs two or more surface candidates with healthy-tissue data)"
         )
+    lines += dependency_section(analysis)
     lines += ["", "EXPERIMENTAL MECHANISMS", THIN]
     for mechanism, spec in MECHANISMS.items():
         if spec.status != "experimental":
@@ -396,6 +397,24 @@ def text_report(analysis: dict[str, Any], detail: int = 5) -> str:
     lines += _bullets(global_limitations(analysis))
     lines += ["", DISCLAIMER, ""]
     return "\n".join(lines)
+
+
+def dependency_section(analysis: dict[str, Any]) -> list[str]:
+    """What each deep deletion makes indispensable, from cell lines; empty when nothing was deleted."""
+    records = analysis.get("dependencies") or []
+    if not records:
+        return []
+    lines = ["", "DEPENDENCIES A DEEP DELETION CREATES (cell-line evidence, not this tumour)", THIN]
+    for r in records:
+        partners = ", ".join(r.get("partners") or []) or "none"
+        lines.extend(
+            _wrap(f"{r['event']}: {r['status'].replace('_', ' ')} ({partners}); {r['status_reason']}", "  ")
+        )
+    for c in analysis.get("dependency_candidates") or []:
+        verdict = c["lineage"]["verdict"].replace("_", " ")
+        lines.append(f"  {c['gene']} (from {c['lost_gene']} loss): {verdict}")
+        lines.extend(_wrap(c["reading"], "    "))
+    return lines
 
 
 def _summary_table(candidates: list[TherapeuticTargetCandidate]) -> list[str]:
@@ -639,6 +658,11 @@ def machine_report(analysis: dict[str, Any]) -> dict[str, Any]:
             for c in analysis["candidates"]
         ],
         "combinations": [x.to_dict() for x in analysis.get("combinations", [])],
+        # Registered 2026-10-10: what each deep deletion makes indispensable, from
+        # DepMap cell lines, kept apart from the target ranking it never enters.
+        "dependencies": analysis.get("dependencies", []),
+        "dependency_candidates": analysis.get("dependency_candidates", []),
+        "dependency_lineage": analysis.get("dependency_lineage"),
         "alterations": analysis.get("alterations", []),
         "missing_data": analysis["missing_data"],
         "providers": analysis["providers"],

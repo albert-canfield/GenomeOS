@@ -36,6 +36,7 @@ from genomeos.cancer.alterations import grade as grade_alterations
 from genomeos.cancer.alterations import rows as _table_rows
 from genomeos.cancer.tumour import CODING, TumourVariant
 
+from . import dependency as dependency_evidence
 from . import logic as combination_logic
 from . import mechanisms as mech
 from . import product
@@ -127,6 +128,11 @@ class PatientProfile:
     alterations: list[GeneAlteration] = field(default_factory=list)
     alterations_path: str = ""
     structural_variants_path: str = ""
+    #: The tumour's lineage as a DepMap OncotreeLineage ("Lung", "CNS/Brain"), as
+    #: the caller states it. Read only by the dependency evidence a deep deletion
+    #: creates, to choose lineage-matched cell lines; never inferred from the
+    #: tumour's mutations. Empty means not stated.
+    lineage: str = ""
 
     def levels(self) -> dict[str, Any]:
         have = {
@@ -702,7 +708,7 @@ def limitations_for(c: TherapeuticTargetCandidate) -> list[str]:
         out.append(
             "a homozygous deletion was called in this tumour: every mechanism that has to recognise the "
             "gene's product fails on it, and the deletion's value is the dependency it creates, which "
-            "this pipeline does not model"
+            "is listed under dependency_candidates with cell-line evidence, never measured in this tumour"
         )
     if any(o.alteration_kind in ("amplification", "gain") for o in c.origins):
         out.append(
@@ -1110,6 +1116,16 @@ def analyse(
     # what the tumour data measure about how much — copies, allele fraction,
     # hotspot status — compared like with like and never imputed.
     candidates[:] = _break_ties_on_magnitude(candidates)
+    # The dependency a deep deletion creates, registered 2026-10-10 (docs/THERAPEUTICS.md):
+    # read after the ranking is final and kept in its own list, so it adds candidates
+    # and evidence and cannot raise, lower or reorder a target candidate.
+    dependencies = dependency_evidence.assess(
+        profile.alterations,
+        profile.copy_number,
+        profile.lineage,
+        [c.gene for c in candidates],
+        profile.alterations_path,
+    )
     return {
         # the live provider bundle, so the dataset stage can still ask questions;
         # it is never serialised (machine_report and dataset take what they need)
@@ -1123,6 +1139,7 @@ def analyse(
         "expression_hits": [h.to_dict() for h in expression_hits],
         "candidates": candidates,
         "combinations": combos,
+        **dependencies,
         "missing_data": missing_data_report(candidates, profile),
         "providers": providers.versions(),
         "input_hashes": {
@@ -1201,12 +1218,17 @@ def analyse_vcf(
     hla_predictor: str = "",
     log: Any = None,
     vep_append_to: Any = None,
+    lineage: str = "",
 ) -> dict[str, Any]:
     """End to end: a tumour VCF in, a therapeutic target analysis out.
 
     `vep_append_to` is handed to `rank_variants` and on to `annotate_vep`: where new VEP annotations
     are written, the cache's own directory under `data/knowledge` by default. A published result's
     writer names a run-local directory so that its own rebuild is not hashing bytes it wrote.
+
+    `lineage` is the tumour's DepMap OncotreeLineage as the caller states it. Only the dependency
+    evidence of a deep deletion reads it (`therapeutics/dependency.py`); unstated, that evidence's
+    lineage verdict is unknown and says so.
     """
     from genomeos.results import load_result
 
@@ -1228,6 +1250,7 @@ def analyse_vcf(
         alterations_path=cnv or "",
         structural_variants_path=sv or "",
         cohort_study=cohort,
+        lineage=lineage,
     )
     kb = None
     try:
