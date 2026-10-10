@@ -1,0 +1,1991 @@
+{
+  "result": "pgs_reference",
+  "date": "2026-10-10",
+  "what": "reference distributions of the default polygenic scores from public allele frequencies, and the HPRC panel's check of the independence variance (R1) and of the gnomAD model (R2)",
+  "registration": {
+    "result": "pgs_reference_registration",
+    "code": {
+      "git_sha": "948cfc9b7fdd1e4d2fa1a148de49231b2598960f",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pgs_reference.py",
+        "--register"
+      ],
+      "python": "3.12.13"
+    }
+  },
+  "panel_people": {
+    "AFR": 23,
+    "AMR": 16,
+    "EAS": 4,
+    "SAS": 1
+  },
+  "rules": {
+    "coverage_floor": 0.8,
+    "coverage_floor_reads": "a percentile needs the variants with both a group frequency and a person genotype to carry at least this share of the score's total |weight|; below it the percentile is UNKNOWN",
+    "panel_min_people": 10,
+    "ld": "R1. Per score, within each HPRC ancestry group with at least panel_min_people people, the variance of the people's scores (over SNVs placed in every haplotype of the group) is divided by the independence variance from the same people's allele frequencies (heterozygosity corrected by 2n/(2n-1)); groups are pooled by degrees of freedom and a 95% interval taken from the chi-square distribution. Independence HOLDS for the score when that interval contains 1, and FAILS otherwise. When it holds, a person's percentile interval spans the interval of the ratio. When it fails, the person's percentile is UNKNOWN and the independence number is kept only as a diagnostic, because no LD correction measured in the panel's groups is borrowed for another group",
+    "calibration": "R2. For each HPRC group with at least panel_min_people people, each person's score (over SNVs placed in every haplotype of the group and with a gnomAD frequency in the matching gnomAD group: AFR->afr, AMR->amr) is turned into z = (score - mean) / sd under the gnomAD model. The model is CONSISTENT with the group when the 95% t interval of the mean z contains 0 and the 95% chi-square interval of the variance of z contains 1, and NOT CONSISTENT otherwise. This is descriptive: the HPRC groups are admixed Caribbean, West African and Latin American cohorts, not the gnomAD groups themselves, and it changes no person's percentile",
+    "author_frequencies": "R3. Where the scoring file carries the authors' effect-allele frequency, the gnomAD nfe frequency of each matched variant is compared with it; a variant whose nfe frequency sits nearer 1 - author than author by more than 0.1 is counted as a possible allele flip. Descriptive"
+  },
+  "scores": {
+    "PGS000004": {
+      "name": "PRS313_BC",
+      "trait": "Breast cancer",
+      "publication": {
+        "author": "Mavaddat N",
+        "journal": "Am J Hum Genet",
+        "year": "2018",
+        "doi": "10.1016/j.ajhg.2018.11.002"
+      },
+      "score_ancestry": {
+        "dev": {
+          "EUR": 100
+        },
+        "eval": {
+          "NR": 3.1,
+          "AFR": 6.2,
+          "AMR": 3.1,
+          "ASN": 4.7,
+          "EAS": 3.1,
+          "EUR": 71.9,
+          "MAE": 6.2,
+          "MAO": 1.6
+        },
+        "gwas": {
+          "EUR": 100
+        }
+      },
+      "variants_in_score": 313,
+      "snv_rows": 265,
+      "frequencies": {
+        "status": "fetched",
+        "date": "2026-10-10",
+        "requests": 50,
+        "bytes": 3657492,
+        "ids_found_by_position": 313,
+        "indels_matched_by_haplotype": 11,
+        "lookup": {
+          "matched": 266,
+          "no_id_at_position": 33,
+          "matched_by_haplotype": 11,
+          "position_mismatch": 3
+        }
+      },
+      "groups": {
+        "gnomADg:afr": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.271255,
+          "sd": 0.503812,
+          "se_mean": 0.003563,
+          "median_allele_number": 41467
+        },
+        "gnomADg:ami": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.054578,
+          "sd": 0.531412,
+          "se_mean": 0.025255,
+          "median_allele_number": 910
+        },
+        "gnomADg:amr": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.263907,
+          "sd": 0.534554,
+          "se_mean": 0.006271,
+          "median_allele_number": 15275
+        },
+        "gnomADg:asj": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.102879,
+          "sd": 0.542197,
+          "se_mean": 0.01314,
+          "median_allele_number": 3470
+        },
+        "gnomADg:eas": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.551678,
+          "sd": 0.479472,
+          "se_mean": 0.009602,
+          "median_allele_number": 5166
+        },
+        "gnomADg:fin": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.070095,
+          "sd": 0.539564,
+          "se_mean": 0.007531,
+          "median_allele_number": 10564
+        },
+        "gnomADg:mid": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.279698,
+          "sd": 0.542017,
+          "se_mean": 0.045522,
+          "median_allele_number": 294
+        },
+        "gnomADg:nfe": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.019103,
+          "sd": 0.543319,
+          "se_mean": 0.002984,
+          "median_allele_number": 67963
+        },
+        "gnomADg:sas": {
+          "variants_with_frequency": 268,
+          "variants_in_score": 313,
+          "coverage": 0.8562,
+          "weight_share_with_frequency": 0.87,
+          "weight_sq_share_without_frequency": 0.1278,
+          "mean": 0.214516,
+          "sd": 0.532392,
+          "se_mean": 0.011075,
+          "median_allele_number": 4818
+        },
+        "1000GENOMES:phase_3:AFR": {
+          "variants_with_frequency": 274,
+          "variants_in_score": 313,
+          "coverage": 0.8754,
+          "weight_share_with_frequency": 0.8822,
+          "weight_sq_share_without_frequency": 0.1217,
+          "mean": 0.346776,
+          "sd": 0.502816,
+          "se_mean": 0.019557,
+          "median_allele_number": 1322
+        },
+        "1000GENOMES:phase_3:AMR": {
+          "variants_with_frequency": 274,
+          "variants_in_score": 313,
+          "coverage": 0.8754,
+          "weight_share_with_frequency": 0.8822,
+          "weight_sq_share_without_frequency": 0.1217,
+          "mean": 0.28259,
+          "sd": 0.526227,
+          "se_mean": 0.028249,
+          "median_allele_number": 694
+        },
+        "1000GENOMES:phase_3:EAS": {
+          "variants_with_frequency": 274,
+          "variants_in_score": 313,
+          "coverage": 0.8754,
+          "weight_share_with_frequency": 0.8822,
+          "weight_sq_share_without_frequency": 0.1217,
+          "mean": 0.505518,
+          "sd": 0.476793,
+          "se_mean": 0.021238,
+          "median_allele_number": 1008
+        },
+        "1000GENOMES:phase_3:EUR": {
+          "variants_with_frequency": 274,
+          "variants_in_score": 313,
+          "coverage": 0.8754,
+          "weight_share_with_frequency": 0.8822,
+          "weight_sq_share_without_frequency": 0.1217,
+          "mean": 0.014023,
+          "sd": 0.545428,
+          "se_mean": 0.024319,
+          "median_allele_number": 1006
+        },
+        "1000GENOMES:phase_3:SAS": {
+          "variants_with_frequency": 274,
+          "variants_in_score": 313,
+          "coverage": 0.8754,
+          "weight_share_with_frequency": 0.8822,
+          "weight_sq_share_without_frequency": 0.1217,
+          "mean": 0.149153,
+          "sd": 0.526272,
+          "se_mean": 0.023799,
+          "median_allele_number": 978
+        }
+      },
+      "author_check": {
+        "population": "gnomADg:nfe",
+        "variants_compared": 268,
+        "variants_with_author_frequency": 313,
+        "pearson_r": 0.9934,
+        "mean_abs_difference": 0.0062,
+        "possible_flips": 0,
+        "possible_flips_palindromic": 0
+      },
+      "panel": {
+        "snv_rows_read": 265,
+        "ld": {
+          "groups": {
+            "EAS": {
+              "people": 4,
+              "snv_rows_placed_in_every_haplotype": 261,
+              "monomorphic_in_group": 95,
+              "empirical_var": 0.04121654,
+              "independence_var": 0.22827897,
+              "ratio": 0.1806,
+              "pooled": false
+            },
+            "AMR": {
+              "people": 16,
+              "snv_rows_placed_in_every_haplotype": 257,
+              "monomorphic_in_group": 16,
+              "empirical_var": 0.30723105,
+              "independence_var": 0.26428922,
+              "ratio": 1.1625,
+              "pooled": true
+            },
+            "AFR": {
+              "people": 23,
+              "snv_rows_placed_in_every_haplotype": 257,
+              "monomorphic_in_group": 35,
+              "empirical_var": 0.22875825,
+              "independence_var": 0.23388745,
+              "ratio": 0.9781,
+              "pooled": true
+            },
+            "SAS": {
+              "people": 1,
+              "snv_rows_placed_in_every_haplotype": 264,
+              "monomorphic_in_group": 182,
+              "empirical_var": null,
+              "independence_var": 0.25811234,
+              "ratio": null,
+              "pooled": false
+            }
+          },
+          "pooled": {
+            "groups": [
+              "AMR",
+              "AFR"
+            ],
+            "df": 37,
+            "ratio": 1.0583,
+            "ci": [
+              0.7034,
+              1.7723
+            ],
+            "reading": "holds"
+          }
+        },
+        "calibration": {
+          "EAS": {
+            "gnomad_group": "gnomADg:eas",
+            "variants": 257,
+            "mean_z": -1.0938,
+            "var_z": 0.1244,
+            "reading": "not judged: fewer than 10 people"
+          },
+          "AMR": {
+            "gnomad_group": "gnomADg:amr",
+            "variants": 255,
+            "mean_z": -0.2389,
+            "var_z": 1.046,
+            "mean_z_ci": [
+              -0.7839,
+              0.3061
+            ],
+            "var_z_ci": [
+              0.5708,
+              2.5131
+            ],
+            "reading": "consistent"
+          },
+          "AFR": {
+            "gnomad_group": "gnomADg:afr",
+            "variants": 255,
+            "mean_z": -0.1956,
+            "var_z": 0.9409,
+            "mean_z_ci": [
+              -0.615,
+              0.2239
+            ],
+            "var_z_ci": [
+              0.5627,
+              1.8874
+            ],
+            "reading": "consistent"
+          }
+        }
+      }
+    },
+    "PGS000115": {
+      "name": "LDL-C_20",
+      "trait": "LDL cholesterol",
+      "publication": {
+        "author": "Trinder M",
+        "journal": "JAMA Cardiol",
+        "year": "2020",
+        "doi": "10.1001/jamacardio.2019.5954"
+      },
+      "score_ancestry": {
+        "eval": {
+          "AFR": 11.1,
+          "EAS": 11.1,
+          "EUR": 55.6,
+          "MAE": 22.2
+        },
+        "gwas": {
+          "AFR": 19.3,
+          "AMR": 8.3,
+          "EUR": 72.4
+        }
+      },
+      "variants_in_score": 223,
+      "snv_rows": 223,
+      "frequencies": {
+        "status": "fetched",
+        "date": "2026-10-10",
+        "requests": 2,
+        "bytes": 2728069,
+        "ids_found_by_position": 0,
+        "indels_matched_by_haplotype": 0,
+        "lookup": {
+          "matched": 223
+        }
+      },
+      "groups": {
+        "gnomADg:afr": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.394373,
+          "sd": 0.260833,
+          "se_mean": 0.001811,
+          "median_allele_number": 41485
+        },
+        "gnomADg:ami": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.705838,
+          "sd": 0.277842,
+          "se_mean": 0.013022,
+          "median_allele_number": 912
+        },
+        "gnomADg:amr": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.611415,
+          "sd": 0.26473,
+          "se_mean": 0.003029,
+          "median_allele_number": 15279
+        },
+        "gnomADg:asj": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.65901,
+          "sd": 0.265232,
+          "se_mean": 0.006368,
+          "median_allele_number": 3470
+        },
+        "gnomADg:eas": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.633244,
+          "sd": 0.212882,
+          "se_mean": 0.004189,
+          "median_allele_number": 5170
+        },
+        "gnomADg:fin": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.6583,
+          "sd": 0.27857,
+          "se_mean": 0.003831,
+          "median_allele_number": 10571
+        },
+        "gnomADg:mid": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.725825,
+          "sd": 0.268798,
+          "se_mean": 0.022145,
+          "median_allele_number": 294
+        },
+        "gnomADg:nfe": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.63159,
+          "sd": 0.272187,
+          "se_mean": 0.001476,
+          "median_allele_number": 67974
+        },
+        "gnomADg:sas": {
+          "variants_with_frequency": 222,
+          "variants_in_score": 223,
+          "coverage": 0.9955,
+          "weight_share_with_frequency": 0.9981,
+          "weight_sq_share_without_frequency": 0.0002,
+          "mean": 0.633094,
+          "sd": 0.259265,
+          "se_mean": 0.005281,
+          "median_allele_number": 4819
+        },
+        "1000GENOMES:phase_3:AFR": {
+          "variants_with_frequency": 221,
+          "variants_in_score": 223,
+          "coverage": 0.991,
+          "weight_share_with_frequency": 0.9086,
+          "weight_sq_share_without_frequency": 0.2747,
+          "mean": 0.355765,
+          "sd": 0.257522,
+          "se_mean": 0.010016,
+          "median_allele_number": 1322
+        },
+        "1000GENOMES:phase_3:AMR": {
+          "variants_with_frequency": 221,
+          "variants_in_score": 223,
+          "coverage": 0.991,
+          "weight_share_with_frequency": 0.9086,
+          "weight_sq_share_without_frequency": 0.2747,
+          "mean": 0.580409,
+          "sd": 0.263172,
+          "se_mean": 0.014128,
+          "median_allele_number": 694
+        },
+        "1000GENOMES:phase_3:EAS": {
+          "variants_with_frequency": 221,
+          "variants_in_score": 223,
+          "coverage": 0.991,
+          "weight_share_with_frequency": 0.9086,
+          "weight_sq_share_without_frequency": 0.2747,
+          "mean": 0.629898,
+          "sd": 0.211068,
+          "se_mean": 0.009402,
+          "median_allele_number": 1008
+        },
+        "1000GENOMES:phase_3:EUR": {
+          "variants_with_frequency": 221,
+          "variants_in_score": 223,
+          "coverage": 0.991,
+          "weight_share_with_frequency": 0.9086,
+          "weight_sq_share_without_frequency": 0.2747,
+          "mean": 0.663217,
+          "sd": 0.273734,
+          "se_mean": 0.012205,
+          "median_allele_number": 1006
+        },
+        "1000GENOMES:phase_3:SAS": {
+          "variants_with_frequency": 221,
+          "variants_in_score": 223,
+          "coverage": 0.991,
+          "weight_share_with_frequency": 0.9086,
+          "weight_sq_share_without_frequency": 0.2747,
+          "mean": 0.59711,
+          "sd": 0.257565,
+          "se_mean": 0.011647,
+          "median_allele_number": 978
+        }
+      },
+      "author_check": {
+        "population": "gnomADg:nfe",
+        "variants_compared": 222,
+        "variants_with_author_frequency": 223,
+        "pearson_r": 0.9955,
+        "mean_abs_difference": 0.0173,
+        "possible_flips": 0,
+        "possible_flips_palindromic": 0
+      },
+      "panel": {
+        "snv_rows_read": 223,
+        "ld": {
+          "groups": {
+            "EAS": {
+              "people": 4,
+              "snv_rows_placed_in_every_haplotype": 221,
+              "monomorphic_in_group": 76,
+              "empirical_var": 0.0199221,
+              "independence_var": 0.03494109,
+              "ratio": 0.5702,
+              "pooled": false
+            },
+            "AMR": {
+              "people": 16,
+              "snv_rows_placed_in_every_haplotype": 218,
+              "monomorphic_in_group": 13,
+              "empirical_var": 0.06329887,
+              "independence_var": 0.05727051,
+              "ratio": 1.1053,
+              "pooled": true
+            },
+            "AFR": {
+              "people": 23,
+              "snv_rows_placed_in_every_haplotype": 220,
+              "monomorphic_in_group": 32,
+              "empirical_var": 0.0210721,
+              "independence_var": 0.0622008,
+              "ratio": 0.3388,
+              "pooled": true
+            },
+            "SAS": {
+              "people": 1,
+              "snv_rows_placed_in_every_haplotype": 223,
+              "monomorphic_in_group": 149,
+              "empirical_var": null,
+              "independence_var": 0.11290106,
+              "ratio": null,
+              "pooled": false
+            }
+          },
+          "pooled": {
+            "groups": [
+              "AMR",
+              "AFR"
+            ],
+            "df": 37,
+            "ratio": 0.6344,
+            "ci": [
+              0.4216,
+              1.0623
+            ],
+            "reading": "holds"
+          }
+        },
+        "calibration": {
+          "EAS": {
+            "gnomad_group": "gnomADg:eas",
+            "variants": 221,
+            "mean_z": -0.5889,
+            "var_z": 0.4399,
+            "reading": "not judged: fewer than 10 people"
+          },
+          "AMR": {
+            "gnomad_group": "gnomADg:amr",
+            "variants": 218,
+            "mean_z": 0.2196,
+            "var_z": 0.9061,
+            "mean_z_ci": [
+              -0.2876,
+              0.7268
+            ],
+            "var_z_ci": [
+              0.4944,
+              2.177
+            ],
+            "reading": "consistent"
+          },
+          "AFR": {
+            "gnomad_group": "gnomADg:afr",
+            "variants": 220,
+            "mean_z": -0.3773,
+            "var_z": 0.3102,
+            "mean_z_ci": [
+              -0.6181,
+              -0.1364
+            ],
+            "var_z_ci": [
+              0.1856,
+              0.6223
+            ],
+            "reading": "not consistent"
+          }
+        }
+      }
+    },
+    "PGS000297": {
+      "name": "GRS3290_Height",
+      "trait": "Height",
+      "publication": {
+        "author": "Xie T",
+        "journal": "Circ Genom Precis Med",
+        "year": "2020",
+        "doi": "10.1161/circgen.119.002775"
+      },
+      "score_ancestry": {
+        "eval": {
+          "EUR": 90.9,
+          "GME": 9.1
+        },
+        "gwas": {
+          "NR": 34.2,
+          "EUR": 65.8
+        }
+      },
+      "variants_in_score": 3290,
+      "snv_rows": 3290,
+      "frequencies": {
+        "status": "fetched",
+        "date": "2026-10-10",
+        "requests": 17,
+        "bytes": 39154779,
+        "ids_found_by_position": 0,
+        "indels_matched_by_haplotype": 0,
+        "lookup": {
+          "matched": 3288,
+          "effect_allele_not_at_id": 2
+        }
+      },
+      "groups": {
+        "gnomADg:afr": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.358194,
+          "sd": 0.581095,
+          "se_mean": 0.004041,
+          "median_allele_number": 41474
+        },
+        "gnomADg:ami": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.686301,
+          "sd": 0.588071,
+          "se_mean": 0.027576,
+          "median_allele_number": 910
+        },
+        "gnomADg:amr": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 53.969625,
+          "sd": 0.599109,
+          "se_mean": 0.006861,
+          "median_allele_number": 15278
+        },
+        "gnomADg:asj": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.29045,
+          "sd": 0.592811,
+          "se_mean": 0.014242,
+          "median_allele_number": 3470
+        },
+        "gnomADg:eas": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 53.51133,
+          "sd": 0.549659,
+          "se_mean": 0.010828,
+          "median_allele_number": 5170
+        },
+        "gnomADg:fin": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.399352,
+          "sd": 0.590479,
+          "se_mean": 0.008136,
+          "median_allele_number": 10570
+        },
+        "gnomADg:mid": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.27463,
+          "sd": 0.595637,
+          "se_mean": 0.04915,
+          "median_allele_number": 294
+        },
+        "gnomADg:nfe": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.773752,
+          "sd": 0.595488,
+          "se_mean": 0.003232,
+          "median_allele_number": 67973
+        },
+        "gnomADg:sas": {
+          "variants_with_frequency": 3287,
+          "variants_in_score": 3290,
+          "coverage": 0.9991,
+          "weight_share_with_frequency": 0.999,
+          "weight_sq_share_without_frequency": 0.0008,
+          "mean": 54.132242,
+          "sd": 0.589393,
+          "se_mean": 0.01202,
+          "median_allele_number": 4819
+        },
+        "1000GENOMES:phase_3:AFR": {
+          "variants_with_frequency": 3272,
+          "variants_in_score": 3290,
+          "coverage": 0.9945,
+          "weight_share_with_frequency": 0.9942,
+          "weight_sq_share_without_frequency": 0.0054,
+          "mean": 54.256777,
+          "sd": 0.563085,
+          "se_mean": 0.021903,
+          "median_allele_number": 1322
+        },
+        "1000GENOMES:phase_3:AMR": {
+          "variants_with_frequency": 3273,
+          "variants_in_score": 3290,
+          "coverage": 0.9948,
+          "weight_share_with_frequency": 0.9946,
+          "weight_sq_share_without_frequency": 0.0052,
+          "mean": 53.871488,
+          "sd": 0.594358,
+          "se_mean": 0.031907,
+          "median_allele_number": 694
+        },
+        "1000GENOMES:phase_3:EAS": {
+          "variants_with_frequency": 3271,
+          "variants_in_score": 3290,
+          "coverage": 0.9942,
+          "weight_share_with_frequency": 0.9938,
+          "weight_sq_share_without_frequency": 0.0059,
+          "mean": 53.422723,
+          "sd": 0.548835,
+          "se_mean": 0.024447,
+          "median_allele_number": 1008
+        },
+        "1000GENOMES:phase_3:EUR": {
+          "variants_with_frequency": 3272,
+          "variants_in_score": 3290,
+          "coverage": 0.9945,
+          "weight_share_with_frequency": 0.9941,
+          "weight_sq_share_without_frequency": 0.0057,
+          "mean": 54.412593,
+          "sd": 0.594592,
+          "se_mean": 0.026512,
+          "median_allele_number": 1006
+        },
+        "1000GENOMES:phase_3:SAS": {
+          "variants_with_frequency": 3272,
+          "variants_in_score": 3290,
+          "coverage": 0.9945,
+          "weight_share_with_frequency": 0.9941,
+          "weight_sq_share_without_frequency": 0.0057,
+          "mean": 54.03763,
+          "sd": 0.585555,
+          "se_mean": 0.02648,
+          "median_allele_number": 978
+        }
+      },
+      "author_check": null,
+      "panel": {
+        "snv_rows_read": 3290,
+        "ld": {
+          "groups": {
+            "EAS": {
+              "people": 4,
+              "snv_rows_placed_in_every_haplotype": 3280,
+              "monomorphic_in_group": 1148,
+              "empirical_var": 0.13200179,
+              "independence_var": 0.29673273,
+              "ratio": 0.4449,
+              "pooled": false
+            },
+            "AMR": {
+              "people": 16,
+              "snv_rows_placed_in_every_haplotype": 3255,
+              "monomorphic_in_group": 167,
+              "empirical_var": 0.53949466,
+              "independence_var": 0.35832851,
+              "ratio": 1.5056,
+              "pooled": true
+            },
+            "AFR": {
+              "people": 23,
+              "snv_rows_placed_in_every_haplotype": 3240,
+              "monomorphic_in_group": 389,
+              "empirical_var": 0.49222496,
+              "independence_var": 0.31809336,
+              "ratio": 1.5474,
+              "pooled": true
+            },
+            "SAS": {
+              "people": 1,
+              "snv_rows_placed_in_every_haplotype": 3286,
+              "monomorphic_in_group": 2202,
+              "empirical_var": null,
+              "independence_var": 0.34988326,
+              "ratio": null,
+              "pooled": false
+            }
+          },
+          "pooled": {
+            "groups": [
+              "AMR",
+              "AFR"
+            ],
+            "df": 37,
+            "ratio": 1.5292,
+            "ci": [
+              1.0164,
+              2.5609
+            ],
+            "reading": "fails"
+          }
+        },
+        "calibration": {
+          "EAS": {
+            "gnomad_group": "gnomADg:eas",
+            "variants": 3277,
+            "mean_z": 1.0645,
+            "var_z": 0.4434,
+            "reading": "not judged: fewer than 10 people"
+          },
+          "AMR": {
+            "gnomad_group": "gnomADg:amr",
+            "variants": 3253,
+            "mean_z": 0.2564,
+            "var_z": 1.5149,
+            "mean_z_ci": [
+              -0.3995,
+              0.9122
+            ],
+            "var_z_ci": [
+              0.8266,
+              3.6398
+            ],
+            "reading": "consistent"
+          },
+          "AFR": {
+            "gnomad_group": "gnomADg:afr",
+            "variants": 3237,
+            "mean_z": 0.3713,
+            "var_z": 1.4743,
+            "mean_z_ci": [
+              -0.1538,
+              0.8964
+            ],
+            "var_z_ci": [
+              0.8818,
+              2.9574
+            ],
+            "reading": "consistent"
+          }
+        }
+      }
+    },
+    "PGS000018": {
+      "name": "metaGRS_CAD",
+      "trait": "Coronary artery disease",
+      "publication": {
+        "author": "Inouye M",
+        "journal": "J Am Coll Cardiol",
+        "year": "2018",
+        "doi": "10.1016/j.jacc.2018.07.079"
+      },
+      "score_ancestry": {
+        "dev": {
+          "MAE": 100
+        },
+        "eval": {
+          "AFR": 8.3,
+          "AMR": 16.7,
+          "EUR": 63.9,
+          "GME": 2.8,
+          "MAE": 8.3
+        },
+        "gwas": {
+          "AFR": 0.8,
+          "AMR": 1.1,
+          "EAS": 3,
+          "EUR": 37,
+          "GME": 0.6,
+          "MAE": 50.9,
+          "SAS": 6.7
+        }
+      },
+      "variants_in_score": 1745158,
+      "snv_rows": 1745158,
+      "frequencies": {
+        "status": "not fetched",
+        "reason": "1,745,158 variants exceed the per-variant lookup cap of 20,000; a dense score also breaks the independence variance"
+      },
+      "panel": {
+        "snv_rows_read": 1745143,
+        "ld": {
+          "groups": {
+            "EAS": {
+              "people": 4,
+              "snv_rows_placed_in_every_haplotype": 1737226,
+              "monomorphic_in_group": 1125278,
+              "empirical_var": 0.05580713,
+              "independence_var": 0.04697223,
+              "ratio": 1.1881,
+              "pooled": false
+            },
+            "AMR": {
+              "people": 16,
+              "snv_rows_placed_in_every_haplotype": 1719853,
+              "monomorphic_in_group": 548507,
+              "empirical_var": 0.39794251,
+              "independence_var": 0.0686923,
+              "ratio": 5.7931,
+              "pooled": true
+            },
+            "AFR": {
+              "people": 23,
+              "snv_rows_placed_in_every_haplotype": 1714177,
+              "monomorphic_in_group": 777618,
+              "empirical_var": 0.08862208,
+              "independence_var": 0.06600879,
+              "ratio": 1.3426,
+              "pooled": true
+            },
+            "SAS": {
+              "people": 1,
+              "snv_rows_placed_in_every_haplotype": 1740739,
+              "monomorphic_in_group": 1429473,
+              "empirical_var": null,
+              "independence_var": 0.06952339,
+              "ratio": null,
+              "pooled": false
+            }
+          },
+          "pooled": {
+            "groups": [
+              "AMR",
+              "AFR"
+            ],
+            "df": 37,
+            "ratio": 3.1898,
+            "ci": [
+              2.12,
+              5.3415
+            ],
+            "reading": "fails"
+          }
+        },
+        "calibration": {}
+      }
+    }
+  },
+  "note": "a percentile is a position among people of the stated group on this one score, modelled from public allele frequencies under Hardy-Weinberg and independence between variants; it is not a risk, not an absolute probability of the trait, and it says nothing outside the group it names",
+  "seconds": 96.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "PGS Catalog harmonised scoring files (hmPOS GRCh38) and score metadata for PGS000004, PGS000115, PGS000297, PGS000018",
+        "version": "as fetched on 2026-09-12 into data/knowledge/pgs, digested in inputs; EBI terms of use"
+      },
+      {
+        "accession": "Ensembl REST POST /variation/homo_sapiens?pops=1: gnomAD v4 genome groups (gnomADg:*, CC0 1.0) and 1000 Genomes phase 3 superpopulations",
+        "version": "per-score tables fetched on the date each records, cached as data/knowledge/pgs/<id>_af.json.gz and digested in inputs"
+      },
+      {
+        "accession": "HPRC release 1 in the UCSC hprc90way Cactus alignment (88 haplotype assemblies of 44 people, Liao et al. 2023), distilled by genomeos/attribution/human_panel.py",
+        "version": "the distilled store under data/knowledge/human_panel, digested in inputs"
+      },
+      {
+        "accession": "panel sample names from NCBI Datasets; populations from https://raw.githubusercontent.com/human-pangenomics/HPP_Year1_Data_Freeze_v1.0/main/sample_metadata/hprc_year1_sample_metadata.txt",
+        "version": "cached as data/knowledge/pgs/hprc_samples.json, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/pgs/PGS000004.json",
+        "sha256": "ea9c6f441c56c48d6d2c6756cb0091dc99e63842934f4798efb559294fd1c058",
+        "bytes": 679,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000004_af.json.gz",
+        "sha256": "6ee2d9060ed4147ee2e1a404c2f4815606fddac6d649815237e73ec7b9aca273",
+        "bytes": 28676,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000004_hmPOS_GRCh38.txt.gz",
+        "sha256": "68d7894cec4ddc5294c3b24294aae021b8187350ba589ea8acde8ba88d33c191",
+        "bytes": 6685,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000018.json",
+        "sha256": "f3ee589c40e193619f213c4295f4bab2ee61eef61a09cc572098fecbef63b5aa",
+        "bytes": 741,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000018_hmPOS_GRCh38.txt.gz",
+        "sha256": "ed5dcd5359213364a182dd7972edf524cc3e161f8332ca54ca5515c95cbf8d2a",
+        "bytes": 37129288,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000115.json",
+        "sha256": "a5f0192b60804a27b9c79d0be89df96fd8f92472b4be2f2e6c272fbb00ddde02",
+        "bytes": 625,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000115_af.json.gz",
+        "sha256": "c5499deffd4b711a6f52cc2df1c2b451e7af950b3ee6339ab19d512577023f19",
+        "bytes": 22993,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000115_hmPOS_GRCh38.txt.gz",
+        "sha256": "b6865a331014b7a13f92f310a0d0930bab046a60a9281415c3d6e4a52fcf4358",
+        "bytes": 6775,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000297.json",
+        "sha256": "d66ef7902e2e6aa3337aa978b03540483a921968e2ed7b9efa65dce55d6338c5",
+        "bytes": 577,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000297_af.json.gz",
+        "sha256": "b1b811c91b188e0636189e6e328fda8f3eeca10c082339b6bbfd2a8071451f03",
+        "bytes": 306904,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/PGS000297_hmPOS_GRCh38.txt.gz",
+        "sha256": "163c0409f4059ab302873e82f9f568be5be4b361cc4c4a8526b6296cbbe391e7",
+        "bytes": 73921,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/pgs/hprc_samples.json",
+        "sha256": "023122de48f053255b66fa1e3029e47ba2d80e90ce75d5f71f62ce82480dfac1",
+        "bytes": 8802,
+        "partition": null
+      },
+      {
+        "path": "data/results/pgs_reference_registration.json",
+        "sha256": "ade0bf18fdb5cc2d5672cb853675a01d0eab6e084a50d68c2db07340832c04ed",
+        "bytes": 16223,
+        "partition": null
+      },
+      {
+        "path": "HPRC panel store (meta, sites, blocks per chromosome)",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/human_panel/chr1/blocks.tsv.gz",
+            "sha256": "149a87c70cda7252ba8c93b4731a162d921bca6f4f5b2a0c67f34846dff4aeaf",
+            "bytes": 843007
+          },
+          {
+            "path": "data/knowledge/human_panel/chr1/meta.json",
+            "sha256": "24f4e48277c9736ffb99c7294f6dd1fb9835b7be5e9d7a2c72a9f1f71422b1df",
+            "bytes": 2170
+          },
+          {
+            "path": "data/knowledge/human_panel/chr1/sites.tsv.gz",
+            "sha256": "2d4ae559ce92e31113858530cbdfef50849acee095514bd603c5d47a63b22442",
+            "bytes": 25421315
+          },
+          {
+            "path": "data/knowledge/human_panel/chr10/blocks.tsv.gz",
+            "sha256": "4124c81c9fe9d3e06caabd0d6dbc60014ab8b9c5fa3c119794910d301ab45c1b",
+            "bytes": 495291
+          },
+          {
+            "path": "data/knowledge/human_panel/chr10/meta.json",
+            "sha256": "16ba96442888bb8855b74d30ea2a23eab7658d597c62ea3fa321e60aa1a6c82e",
+            "bytes": 2169
+          },
+          {
+            "path": "data/knowledge/human_panel/chr10/sites.tsv.gz",
+            "sha256": "7ea974397724693d6940fe89a13dbfc6dc6ad69665b40c7146abfdb3552fbd38",
+            "bytes": 16569436
+          },
+          {
+            "path": "data/knowledge/human_panel/chr11/blocks.tsv.gz",
+            "sha256": "27c8eade40b2656969299a8388d1c0323490088c0d239bbd236c07e80267731e",
+            "bytes": 466281
+          },
+          {
+            "path": "data/knowledge/human_panel/chr11/meta.json",
+            "sha256": "1029a59f88a2b9f86e5bad8ca1dd512770547ad3f2fdf19962a9822da9eb1410",
+            "bytes": 2169
+          },
+          {
+            "path": "data/knowledge/human_panel/chr11/sites.tsv.gz",
+            "sha256": "af83c73a40b35494aeb259a7899b294a964b60ddc9f8d7c7b1f9a420e58b1b5b",
+            "bytes": 15471422
+          },
+          {
+            "path": "data/knowledge/human_panel/chr12/blocks.tsv.gz",
+            "sha256": "401766dbb3ca079e9aa16bb5f357f4fc0e4e4ae8e8a2c06707762450da81fe74",
+            "bytes": 491277
+          },
+          {
+            "path": "data/knowledge/human_panel/chr12/meta.json",
+            "sha256": "c78e553304a9763c51a959151fbfd574b0e19d26e60a7e864741ab41cf945f15",
+            "bytes": 2169
+          },
+          {
+            "path": "data/knowledge/human_panel/chr12/sites.tsv.gz",
+            "sha256": "9c53e41eb264a1b1c558152a51d0b8f98fc254c6c81d6016974fd5ae17bcb622",
+            "bytes": 15061635
+          },
+          {
+            "path": "data/knowledge/human_panel/chr13/blocks.tsv.gz",
+            "sha256": "74b1044853624629e93dd6670e87d89fbbf9e0c1745f7808436dcb4e0371075d",
+            "bytes": 342114
+          },
+          {
+            "path": "data/knowledge/human_panel/chr13/meta.json",
+            "sha256": "3b756e26ab514e261b11497986edf4cfec15d2a6ca97debfd912ee418c15ab5a",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr13/sites.tsv.gz",
+            "sha256": "6a13a90f539f97767c7a11736dce4087e023f06306d7df766fd3ecaab7c050b9",
+            "bytes": 11455217
+          },
+          {
+            "path": "data/knowledge/human_panel/chr14/blocks.tsv.gz",
+            "sha256": "204f4c3fb607430f141ad0d0d0d558be777de21f827aeab6b1e76b17e98d4689",
+            "bytes": 338802
+          },
+          {
+            "path": "data/knowledge/human_panel/chr14/meta.json",
+            "sha256": "ab6094a1d65a77a23c622daad48f64019f81f7575d4e748862642f510b21e4e6",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr14/sites.tsv.gz",
+            "sha256": "3e04c5b144f00c2f2f50f66a82377c6f44c854eb5ae9fc7e9a287fe5c3051024",
+            "bytes": 10632180
+          },
+          {
+            "path": "data/knowledge/human_panel/chr15/blocks.tsv.gz",
+            "sha256": "7e544f87e959ae9d0b03152567f4a64c70276e6f3174ad702d897807092b5cb2",
+            "bytes": 329595
+          },
+          {
+            "path": "data/knowledge/human_panel/chr15/meta.json",
+            "sha256": "3da2c87f11740a4c2fba31fd4e0ee7e898a240ab94ef451e229704d0984ce044",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr15/sites.tsv.gz",
+            "sha256": "ff6d6053b6f34380a5f44153b3379bd879eb6c8c8f63387b2ae7cea733e388b3",
+            "bytes": 10206810
+          },
+          {
+            "path": "data/knowledge/human_panel/chr16/blocks.tsv.gz",
+            "sha256": "b005c810b2cda58a6b98e9a91943a9fbd97130cd5f0cf63a9bc1b28787c5143e",
+            "bytes": 349117
+          },
+          {
+            "path": "data/knowledge/human_panel/chr16/meta.json",
+            "sha256": "61b7ca94f4d9e34e583e2544e277b48598355bdc10da78e32f15e9bb8d30fa8f",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr16/sites.tsv.gz",
+            "sha256": "52f3f01c421221732e4e0bf5eff3a08573a2092a8a444e2d7aa11f8487d3ca1a",
+            "bytes": 11643497
+          },
+          {
+            "path": "data/knowledge/human_panel/chr17/blocks.tsv.gz",
+            "sha256": "12ac4573ed41350f80c41381a8e3478c13bca96f68ceda3262ce93710c7af5b3",
+            "bytes": 364120
+          },
+          {
+            "path": "data/knowledge/human_panel/chr17/meta.json",
+            "sha256": "3686d21a434c0cd27f2d3f120d676ad54edb96235acc766416eed0535affeadb",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr17/sites.tsv.gz",
+            "sha256": "a7f64224429e7f99ae82ffd8f35f19d1a401fe25fcc8948dc1875216be50f3ba",
+            "bytes": 10613522
+          },
+          {
+            "path": "data/knowledge/human_panel/chr18/blocks.tsv.gz",
+            "sha256": "52675cef2cd23c7700cd3d5c2721b0b1f230ba835c2d1d37d57fffb6cfbb53c8",
+            "bytes": 267512
+          },
+          {
+            "path": "data/knowledge/human_panel/chr18/meta.json",
+            "sha256": "4cea03a4ebbe51e521379b4ccc4248762466fa60652e5fcb20dc1725a9e8492b",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr18/sites.tsv.gz",
+            "sha256": "038ae050975b5551a3ea0c62d6fd9b3133aed1c16233c912d71b390ac3d22164",
+            "bytes": 9099686
+          },
+          {
+            "path": "data/knowledge/human_panel/chr19/blocks.tsv.gz",
+            "sha256": "23ba83b5475666dc42d6657551203f0bb5c243d87c8737d5373430d04fdad2dc",
+            "bytes": 312120
+          },
+          {
+            "path": "data/knowledge/human_panel/chr19/meta.json",
+            "sha256": "4afcb237f1de45dc3c298f2582f37db223f46d0b8e9a4498ea9691ebac0a6b14",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr19/sites.tsv.gz",
+            "sha256": "6d74465c6241845bc709f291e05c6a0c3e9d7529f2b7cba1b356efeb03b68d46",
+            "bytes": 9582374
+          },
+          {
+            "path": "data/knowledge/human_panel/chr2/blocks.tsv.gz",
+            "sha256": "10b4a32f758fb3e829b37dab87c8bd3aee83fd18fe14c18954125917f473d61b",
+            "bytes": 856018
+          },
+          {
+            "path": "data/knowledge/human_panel/chr2/meta.json",
+            "sha256": "0c920d91b087639a0a076f15d2a4403d6f84102587f6fe185a45401ef5a46958",
+            "bytes": 2170
+          },
+          {
+            "path": "data/knowledge/human_panel/chr2/sites.tsv.gz",
+            "sha256": "575e9285881c32efd2d71c2907fe7de77efd6e5314da96feb3597d52c2354fe2",
+            "bytes": 27448689
+          },
+          {
+            "path": "data/knowledge/human_panel/chr20/blocks.tsv.gz",
+            "sha256": "b8d3e81ba1f46e32c14a2aaabf344411632bba71941b68926242ff47e2926225",
+            "bytes": 239904
+          },
+          {
+            "path": "data/knowledge/human_panel/chr20/meta.json",
+            "sha256": "18aca4d39719b3f7596859141b5004ee71c7fc9f8b5459e6639e665118710cd3",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr20/sites.tsv.gz",
+            "sha256": "80d0ce8d2ed49e3a6b65cdd0de2fd20fbda000c9cc5af0a48b94db77866b7fce",
+            "bytes": 8409754
+          },
+          {
+            "path": "data/knowledge/human_panel/chr21/blocks.tsv.gz",
+            "sha256": "9312f4b47935b5066c9ae3546e63d28d6c699bc19bcbb4f0f8c03737611356d9",
+            "bytes": 151097
+          },
+          {
+            "path": "data/knowledge/human_panel/chr21/meta.json",
+            "sha256": "ac9019e27b70ef05c11caaf29597b3773b20ebf12ae8cfe3a42a40c4d99bab09",
+            "bytes": 2167
+          },
+          {
+            "path": "data/knowledge/human_panel/chr21/sites.tsv.gz",
+            "sha256": "b780cc6c76dd2aedb38450116b5ac4dc37b2861ce8fbf13570faf04fb7dc5b8c",
+            "bytes": 6199137
+          },
+          {
+            "path": "data/knowledge/human_panel/chr22/blocks.tsv.gz",
+            "sha256": "c64490ab27672661422af8a1578afe4e1af198db5ac46e2de301e880a6927862",
+            "bytes": 180373
+          },
+          {
+            "path": "data/knowledge/human_panel/chr22/meta.json",
+            "sha256": "547c309f13a25356f855418d5e52d273923d5ecd04de7f74db3742301e412cb3",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr22/sites.tsv.gz",
+            "sha256": "5e202471ed4982ede21764ff89c82e9200766cb6ccea5dac342bce890f5ce75c",
+            "bytes": 6473471
+          },
+          {
+            "path": "data/knowledge/human_panel/chr3/blocks.tsv.gz",
+            "sha256": "122364d356724ce7ae5086a2d63e76d501fa2fcb1e672f0ee1f3c84c2583e1ca",
+            "bytes": 670592
+          },
+          {
+            "path": "data/knowledge/human_panel/chr3/meta.json",
+            "sha256": "c07e79970c5e17c4baefcf49c25ccc39b7c37cf10f20659b7f1ca9eb332adea7",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr3/sites.tsv.gz",
+            "sha256": "d380f056a3786d4f3047cfe694c728e78808f4504138dd7b26bc7d0a8cf35e73",
+            "bytes": 20937045
+          },
+          {
+            "path": "data/knowledge/human_panel/chr4/blocks.tsv.gz",
+            "sha256": "6db0222f6efcf0bae736da410f4a5982e9e3ada5a78e6373ef6bea4137a81ca7",
+            "bytes": 661347
+          },
+          {
+            "path": "data/knowledge/human_panel/chr4/meta.json",
+            "sha256": "97ab0fa146f80af848305c66069a0fd7483711d67be4831f446e57b398882bc7",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr4/sites.tsv.gz",
+            "sha256": "543b6630ae3e951982877ef637837da67ab8b662ecdf8671d1241a514590c6ee",
+            "bytes": 22181217
+          },
+          {
+            "path": "data/knowledge/human_panel/chr5/blocks.tsv.gz",
+            "sha256": "36e391d8260a853ea8fa738bdf3e4b5dcf4f16f83a4285dec35c54616c35a72c",
+            "bytes": 628737
+          },
+          {
+            "path": "data/knowledge/human_panel/chr5/meta.json",
+            "sha256": "a2c205ff4a72288fbd63ff63d3c13284143c7bf6aa9d54ab972e0c7d89bd75a6",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr5/sites.tsv.gz",
+            "sha256": "ca87ae88fb8b292aa42419de8ad3dcee352aaa6ad73279b5abefdb92f1676060",
+            "bytes": 20571163
+          },
+          {
+            "path": "data/knowledge/human_panel/chr6/blocks.tsv.gz",
+            "sha256": "2bf4b7946842dcee321f3e1af41c6f86ec2214045c2623aeda2029ed18a0f9e7",
+            "bytes": 609523
+          },
+          {
+            "path": "data/knowledge/human_panel/chr6/meta.json",
+            "sha256": "a7bb2f7b866e48ab30511fa17723891b72c166b477185b0f64a24008d27ec522",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr6/sites.tsv.gz",
+            "sha256": "3a269a3848f42b3211e3744d609869d3b1c2f84e5d7fc8c805a83cbfe31c304c",
+            "bytes": 18918400
+          },
+          {
+            "path": "data/knowledge/human_panel/chr7/blocks.tsv.gz",
+            "sha256": "ea374d4cb9e0f55f5a3b040878e93387995bddddf39290dac0f7b1655adb88cd",
+            "bytes": 605463
+          },
+          {
+            "path": "data/knowledge/human_panel/chr7/meta.json",
+            "sha256": "29a067b8460f11ccff3662643d8cab76ed227aa8dbef207ea3df866d4196000f",
+            "bytes": 2168
+          },
+          {
+            "path": "data/knowledge/human_panel/chr7/sites.tsv.gz",
+            "sha256": "6f3d18eb78debf8c70610ef79c9b7a5caac2b040bbe59b18f3e6f780cf7885a4",
+            "bytes": 19603270
+          },
+          {
+            "path": "data/knowledge/human_panel/chr8/blocks.tsv.gz",
+            "sha256": "92b4127997019f179b2c334c3bb1060a847017934e52882e1b5a4bb87f9597f0",
+            "bytes": 521040
+          },
+          {
+            "path": "data/knowledge/human_panel/chr8/meta.json",
+            "sha256": "1f550c758703362877e4d9a24daccc41c47af325aaa5ebe428bb098a046fd29e",
+            "bytes": 2167
+          },
+          {
+            "path": "data/knowledge/human_panel/chr8/sites.tsv.gz",
+            "sha256": "60c15eeccc28a7af3a45523ad8753e836b09440c9b5055df6db71bf5c8d8a3b4",
+            "bytes": 18264443
+          },
+          {
+            "path": "data/knowledge/human_panel/chr9/blocks.tsv.gz",
+            "sha256": "6ffe0543e164bf43629cf374c2628f2ec21b88ec7cfc371f83ec7624eedd0063",
+            "bytes": 484466
+          },
+          {
+            "path": "data/knowledge/human_panel/chr9/meta.json",
+            "sha256": "5136b0ad4cd2e840f080e92e8c8fb1652eb37ff3ca696dcb8c60dd855a61dae2",
+            "bytes": 2167
+          },
+          {
+            "path": "data/knowledge/human_panel/chr9/sites.tsv.gz",
+            "sha256": "4a6c6044f26a1d415ec4db969f9405b09034ddac810e241b178c13afddde0352",
+            "bytes": 15525725
+          }
+        ],
+        "sha256": "98a8a137a63b4e2415181953b1f595d77caf639e08cba6cd4e36ec21500a08d3",
+        "bytes": 340544904,
+        "files": 66,
+        "partition": "reference panel"
+      },
+      {
+        "path": "hg38 reference sequence and its indexes",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/chr1.fa.gz",
+            "sha256": "828d314f67e2415f126431a270561ec331d7ce75a7c9eb5d5bd3c92cf38aacb9",
+            "bytes": 75707504
+          },
+          {
+            "path": "data/reference/chr1.fa.gz.fai",
+            "sha256": "b93f31e77bada79b6e93a4156a3d5555f2ff01ec9beece1041bd4316636d7f9b",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr1.fa.gz.gzi",
+            "sha256": "d2e8b072a750cebaf3bf58b0c2830ac54994e7aabdf3b05d3a3901c3bc9267ff",
+            "bytes": 62232
+          },
+          {
+            "path": "data/reference/chr10.fa.gz",
+            "sha256": "e815b740c23080498ad9ca85aeefbb6e83bf416be943c87931c30f775cb8f074",
+            "bytes": 43709951
+          },
+          {
+            "path": "data/reference/chr10.fa.gz.fai",
+            "sha256": "a5bd8d51f36163ec2d12322f4c9ebb27554a44b37d3fd657f4bda082a086e652",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr10.fa.gz.gzi",
+            "sha256": "7f294faec87f9f688675dd071623952395574bfb28151ec7f5ada5e6b6132b93",
+            "bytes": 33448
+          },
+          {
+            "path": "data/reference/chr11.fa.gz",
+            "sha256": "de4fb00b1ee30f73f1ce02f17a8efe86dff0466513d1733470fc6021f03df752",
+            "bytes": 43717971
+          },
+          {
+            "path": "data/reference/chr11.fa.gz.fai",
+            "sha256": "a239664652b93914be554809c58427e79208917583e1f915013e7f09ff14f6e0",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr11.fa.gz.gzi",
+            "sha256": "e0a5f9d5701786ca47c3f66b7a3332dfc566213a7ed631b0b7280a5e0034095d",
+            "bytes": 33768
+          },
+          {
+            "path": "data/reference/chr12.fa.gz",
+            "sha256": "c63d8421ca3201761c905b395810ebf67d288a636fbcba039b9caf4286d98119",
+            "bytes": 43469034
+          },
+          {
+            "path": "data/reference/chr12.fa.gz.fai",
+            "sha256": "1c01ea1c034dde781510aa13ff42e85d89f7348b0dd3bafcf043d24e07803d1e",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr12.fa.gz.gzi",
+            "sha256": "7b7226fb23bade92b4a1e35a5d31bab7f3708b8e0b9dde49984ae1afcaaff2b4",
+            "bytes": 33320
+          },
+          {
+            "path": "data/reference/chr13.fa.gz",
+            "sha256": "0b2fa02797f24d32d0f81d79e816d845a5faf1d09dd449df92fee5f7dc03180a",
+            "bytes": 32288981
+          },
+          {
+            "path": "data/reference/chr13.fa.gz.fai",
+            "sha256": "ea29ed6eb9751cd6d5b82ff9809047ca6c7ca01799828137f8ede9b45d60467d",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr13.fa.gz.gzi",
+            "sha256": "e8f11e81a5695547a078bb528cbcc37a934bba8cadd3f5062797a77927fb7008",
+            "bytes": 28584
+          },
+          {
+            "path": "data/reference/chr14.fa.gz",
+            "sha256": "0f831812f76805b24318b4afec75369e72ed23901ec3e58716f22eb0b71482d1",
+            "bytes": 29652602
+          },
+          {
+            "path": "data/reference/chr14.fa.gz.fai",
+            "sha256": "0df468f00233874383381914eb654f91d3003720e7a241c183f70c8974030a3b",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr14.fa.gz.gzi",
+            "sha256": "0d49668503509db91f0692d32431d082b71fbce6d3be97f0a8e8d9446089179e",
+            "bytes": 26760
+          },
+          {
+            "path": "data/reference/chr15.fa.gz",
+            "sha256": "b69617ecc744fbbc2090c65b7891e26d3e4e04afd0b3ef5f4ae307857c9a3ece",
+            "bytes": 27555619
+          },
+          {
+            "path": "data/reference/chr15.fa.gz.fai",
+            "sha256": "82d22292e9cada50cce925c088d0ba8d173117222b3fcda15b43bd554b38e040",
+            "bytes": 24
+          },
+          {
+            "path": "data/reference/chr15.fa.gz.gzi",
+            "sha256": "245fcab8e26c2e492e787828865bd1d83fd533882d9cdd9765b562f6145e0b84",
+            "bytes": 25496
+          },
+          {
+            "path": "data/reference/chr16.fa.gz",
+            "sha256": "fe45607f12de02223958fbdc27d9093ba0662cf98df1f66717125c0fea2a220a",
+            "bytes": 26434295
+          },
+          {
+            "path": "data/reference/chr16.fa.gz.fai",
+            "sha256": "4962857863c84e6d5b72321e8b173cb47a1576bb90bd7378c521b79b36edf566",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr16.fa.gz.gzi",
+            "sha256": "8336f48479815edca712934ce1112f9f8094a262aea4665a9996c9c24eb48873",
+            "bytes": 22584
+          },
+          {
+            "path": "data/reference/chr17.fa.gz",
+            "sha256": "3112040e9d49c99b395a6272d071c96857a86b315eb5d8d905102286214d3791",
+            "bytes": 26214112
+          },
+          {
+            "path": "data/reference/chr17.fa.gz.fai",
+            "sha256": "9597aca42ec115a11a5212f8098780c759627cceb30ca8e03cf2243df2c90a3d",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr17.fa.gz.gzi",
+            "sha256": "b67fb7966b83f63e74059e5915cb4b30cade6f13e17499a462ce7e06a75d7a76",
+            "bytes": 20808
+          },
+          {
+            "path": "data/reference/chr18.fa.gz",
+            "sha256": "0f48c53c54fc52b2cd8cf924c53962bf07531e97829fedbc6a27b17bb745b02d",
+            "bytes": 25458085
+          },
+          {
+            "path": "data/reference/chr18.fa.gz.fai",
+            "sha256": "2cb3e60b228e33ba7dbb547089d01ea6f022a93b4e939372a982bded3b6d1e94",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr18.fa.gz.gzi",
+            "sha256": "7634ff5eaa785b8859900d60bde2a18ab791f554e400d76b4a02c20b18b45caf",
+            "bytes": 20088
+          },
+          {
+            "path": "data/reference/chr19.fa.gz",
+            "sha256": "e7d3ea398d679c2247fe247aee7f611f15010f5b05444b727dbc9ece9a78a875",
+            "bytes": 18025567
+          },
+          {
+            "path": "data/reference/chr19.fa.gz.fai",
+            "sha256": "753857e3850afd6bfdd138e9341d4bfc9acb4997b4931c2722469aa64894115b",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr19.fa.gz.gzi",
+            "sha256": "561270ac37fcb0be94a4ec6b6c7f7bea33e72786d7e9c3a818c6c14a5e30dd49",
+            "bytes": 14648
+          },
+          {
+            "path": "data/reference/chr2.fa",
+            "sha256": "c3e11120f5f1fffb315b7b7562de9ef3d30e27a5d31fea7bde7b3f0e02fd142e",
+            "bytes": 247037406
+          },
+          {
+            "path": "data/reference/chr2.fa.fai",
+            "sha256": "70bdaeaa6711c723c4c5b2cfb1617aea9d718d9b8624890fb1da1d976f3117fd",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr2.fa.gz",
+            "sha256": "748007e198312d16d6277dcdd48d4f050109273cacf1a7a09860f965f2060555",
+            "bytes": 78561132
+          },
+          {
+            "path": "data/reference/chr20.fa.gz",
+            "sha256": "fcc7e6698c6b68d43ff9fb316758549693432c488547276821be988d9ccbed5e",
+            "bytes": 20592866
+          },
+          {
+            "path": "data/reference/chr20.fa.gz.fai",
+            "sha256": "081e289f1f48b9c9548bb74a9f43b0596c47c6bf59ec986d988839264baf0570",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr20.fa.gz.gzi",
+            "sha256": "d66c853fb71bf36950bbee7c18746715640f46eec99b2360a1e61a2a4852d068",
+            "bytes": 16104
+          },
+          {
+            "path": "data/reference/chr21.fa.gz",
+            "sha256": "61aaf88c7d3ddef8c0726a1fbbaee6be9dac209a5bb05294e4bdc3db552c9a9c",
+            "bytes": 12844216
+          },
+          {
+            "path": "data/reference/chr21.fa.gz.fai",
+            "sha256": "c98f0f7e9a3e8c2ad7a89aac749d4dbe8dc156690b5f492296e6e8bf50a53fdb",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr21.fa.gz.gzi",
+            "sha256": "dc6b50836526089b65080f5cc1d6ab7c7297464c6c1e067ea50afa3d2232454a",
+            "bytes": 11672
+          },
+          {
+            "path": "data/reference/chr22.fa.gz",
+            "sha256": "fdc31d88b392c6bbbe8a8c8084a234a31419c1ea1b2c095033b097223272ae48",
+            "bytes": 12368087
+          },
+          {
+            "path": "data/reference/chr22.fa.gz.fai",
+            "sha256": "26356feb528bad613ba1637331b248f7fb5b09cd3e94a9f85f5166d268817fda",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr22.fa.gz.gzi",
+            "sha256": "dec39c764c036f8f26c130ab000fade5faf6db32aacbe89cffae333097625291",
+            "bytes": 12712
+          },
+          {
+            "path": "data/reference/chr3.fa.gz",
+            "sha256": "6bb0a25d5bbf7f3d0c466e2f81baba91c3e3b31c27597cb889a49e40f6ed5943",
+            "bytes": 65345852
+          },
+          {
+            "path": "data/reference/chr3.fa.gz.fai",
+            "sha256": "1e4e1e6e4758587c54fc3cabc88df61042f6bb150d5e223778fbbbb56b45b164",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr3.fa.gz.gzi",
+            "sha256": "2adaf25a8a1732189a66c160cf4283f657f2baaa92e0b019436a0cac3d13ec45",
+            "bytes": 49576
+          },
+          {
+            "path": "data/reference/chr4.fa.gz",
+            "sha256": "62faff0e7381ae0ded0d2e7358c8d90c12e5b7e50e87fa0a4805fdc1825acfc2",
+            "bytes": 62714098
+          },
+          {
+            "path": "data/reference/chr4.fa.gz.fai",
+            "sha256": "15712947b3e44eb2c61c6e26eb56e3522d2f9371a35debfd3a58fd09570a6804",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr4.fa.gz.gzi",
+            "sha256": "c56d1753949830fc9c521c6e75861e068b94c2ce1f1cb59686582fbb3a6ce248",
+            "bytes": 47560
+          },
+          {
+            "path": "data/reference/chr5.fa.gz",
+            "sha256": "e2cffbc5b0a94cd120ad65a563d35bc8bb0ed7530d534340d8a31d4e5d5737a5",
+            "bytes": 59560680
+          },
+          {
+            "path": "data/reference/chr5.fa.gz.fai",
+            "sha256": "3ac07246eadc7cad05eb8860600a22e5d83fa5d88fb1adf566b1a8c6696f1ca4",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr5.fa.gz.gzi",
+            "sha256": "cbfdb2daf47ee73e260323715740ba7593e0652d793c956f02e9bac42be081e7",
+            "bytes": 45384
+          },
+          {
+            "path": "data/reference/chr6.fa.gz",
+            "sha256": "26b010de0ae3e4a10fb2f2b4c4fa0f6b52041642fa7749e507ac0d336671df8e",
+            "bytes": 56304281
+          },
+          {
+            "path": "data/reference/chr6.fa.gz.fai",
+            "sha256": "e83e5ac789db3ca9060bf73e6a1c68699784afb24deb70d474ec6e6ad09f7f20",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr6.fa.gz.gzi",
+            "sha256": "e71a004240bc67124e9be7f440a7d2670163be399e42cc8709b99aa18c205fb7",
+            "bytes": 42696
+          },
+          {
+            "path": "data/reference/chr7.fa.gz",
+            "sha256": "0e12684d743b41f2ea77f229b57db2516e238f84999b4e48abdb8c0bbeeb3c0c",
+            "bytes": 51714090
+          },
+          {
+            "path": "data/reference/chr7.fa.gz.fai",
+            "sha256": "eda5a503df39a2dfdb80f2069118f6b55382ef564f265bbe17111e3b338613d4",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr7.fa.gz.gzi",
+            "sha256": "6c80c3fe323c653093fbe9db823d6bde94e3332613c2329c7dfafd6b25bc3bd4",
+            "bytes": 39832
+          },
+          {
+            "path": "data/reference/chr8.fa.gz",
+            "sha256": "ab8287e4fa09fa6b8e9bb58a79edc1a48588577b0c4df534246981078c146325",
+            "bytes": 47688473
+          },
+          {
+            "path": "data/reference/chr8.fa.gz.fai",
+            "sha256": "7e4ca3a11738da78832043845b1db5f8b1e5e890f3c017e15d8721102a050817",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr8.fa.gz.gzi",
+            "sha256": "749696ecfa70939be1c43c5765db8a4f4bcd0d508c0d7a711c55e3a1b2ac127a",
+            "bytes": 36280
+          },
+          {
+            "path": "data/reference/chr9.fa.gz",
+            "sha256": "984a2143e6bdb232b4d0e6efb539b96ef8d6bd579ba882de29a5615fbb5e0f6a",
+            "bytes": 39939594
+          },
+          {
+            "path": "data/reference/chr9.fa.gz.fai",
+            "sha256": "355c6eacc7b33dae746cc6dc848b397f3ba33a3e4ce2fd4e727bf901be4c3f89",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr9.fa.gz.gzi",
+            "sha256": "77c158d1d862e7fc95d3d3c9ce016484ea26be3eba4728eb655e8691f01b160f",
+            "bytes": 34600
+          }
+        ],
+        "sha256": "2381209a2ba3df9c8d44ab63cb6fe220a90e951a669badd992cb19e808ce13dc",
+        "bytes": 1147563160,
+        "files": 66,
+        "partition": null
+      }
+    ],
+    "input_count": 15,
+    "assembly": "GRCh38/hg38: PGS Catalog hmPOS positions, Ensembl GRCh38 mappings and the hg38-referenced HPRC alignment",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed"
+    },
+    "parameters": {
+      "rules": {
+        "coverage_floor": 0.8,
+        "coverage_floor_reads": "a percentile needs the variants with both a group frequency and a person genotype to carry at least this share of the score's total |weight|; below it the percentile is UNKNOWN",
+        "panel_min_people": 10,
+        "ld": "R1. Per score, within each HPRC ancestry group with at least panel_min_people people, the variance of the people's scores (over SNVs placed in every haplotype of the group) is divided by the independence variance from the same people's allele frequencies (heterozygosity corrected by 2n/(2n-1)); groups are pooled by degrees of freedom and a 95% interval taken from the chi-square distribution. Independence HOLDS for the score when that interval contains 1, and FAILS otherwise. When it holds, a person's percentile interval spans the interval of the ratio. When it fails, the person's percentile is UNKNOWN and the independence number is kept only as a diagnostic, because no LD correction measured in the panel's groups is borrowed for another group",
+        "calibration": "R2. For each HPRC group with at least panel_min_people people, each person's score (over SNVs placed in every haplotype of the group and with a gnomAD frequency in the matching gnomAD group: AFR->afr, AMR->amr) is turned into z = (score - mean) / sd under the gnomAD model. The model is CONSISTENT with the group when the 95% t interval of the mean z contains 0 and the 95% chi-square interval of the variance of z contains 1, and NOT CONSISTENT otherwise. This is descriptive: the HPRC groups are admixed Caribbean, West African and Latin American cohorts, not the gnomAD groups themselves, and it changes no person's percentile",
+        "author_frequencies": "R3. Where the scoring file carries the authors' effect-allele frequency, the gnomAD nfe frequency of each matched variant is compared with it; a variant whose nfe frequency sits nearer 1 - author than author by more than 0.1 is counted as a possible allele flip. Descriptive"
+      },
+      "max_fetch_variants": 20000,
+      "populations": [
+        "gnomADg:afr",
+        "gnomADg:ami",
+        "gnomADg:amr",
+        "gnomADg:asj",
+        "gnomADg:eas",
+        "gnomADg:fin",
+        "gnomADg:mid",
+        "gnomADg:nfe",
+        "gnomADg:sas",
+        "1000GENOMES:phase_3:AFR",
+        "1000GENOMES:phase_3:AMR",
+        "1000GENOMES:phase_3:EAS",
+        "1000GENOMES:phase_3:EUR",
+        "1000GENOMES:phase_3:SAS"
+      ]
+    },
+    "exclusions": [
+      "the panel's hs1 (T2T-CHM13) row is not a person and is not read",
+      "PGS000004: 48 non-SNV rows are not read on the panel",
+      "PGS000004: 36 rows carry no frequency (lookup: {'matched': 266, 'no_id_at_position': 33, 'matched_by_haplotype': 11, 'position_mismatch': 3})",
+      "PGS000297: 2 rows carry no frequency (lookup: {'matched': 3288, 'effect_allele_not_at_id': 2})",
+      "PGS000018: no allele frequencies (1,745,158 variants above the lookup cap)"
+    ],
+    "partitions": {
+      "panel groups": "groups of at least 10 people are pooled (R1) and judged (R2); smaller groups are reported only"
+    },
+    "code_cleanliness": {
+      "git_sha": "ca5eaf519c98b4502a356ad384e35cec169b7f16",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/pgs_reference.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pgs_reference.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pgs_reference.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/pgs_reference.py"
+      ],
+      "counting_path_count": 92,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "ca5eaf519c98b4502a356ad384e35cec169b7f16",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pgs_reference.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "ca5eaf519c98b4502a356ad384e35cec169b7f16",
+      "code_cleanliness_git_sha": "ca5eaf519c98b4502a356ad384e35cec169b7f16",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record ca5eaf5"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 1157,
+      "opens_under_data": 934,
+      "files_read": 145,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

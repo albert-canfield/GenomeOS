@@ -425,3 +425,27 @@ def test_indel_lookup_refuses_a_row_placed_under_two_readings(monkeypatch):
     assert ref._indel_lookup(row, window_at) == ("rs1", "A", 5)
     monkeypatch.setattr(ref, "_request", lambda path, payload=None: ([ins, dele], 5))
     assert ref._indel_lookup(row, window_at) == ("", "", 5)
+
+
+def test_committed_result_is_group_level_and_follows_the_registered_rules():
+    import tracked_paths as tp
+
+    tp.must_be_present(ref.RESULT, ref.REGISTRATION)
+    res = json.loads(ref.RESULT.read_text())
+    reg = json.loads(ref.REGISTRATION.read_text())
+    assert res["rules"] == reg["rules"] == ref.RULES
+    assert res["result_manifest"]["complete"] is True
+    text = ref.RESULT.read_text()
+    # no person's genotype, score or name: only group summaries
+    for name in ("HG002", "HG003", "HG004", "NA21309", "HG01123"):
+        assert name not in text
+    for s, e in res["scores"].items():
+        pooled = e["panel"]["ld"]["pooled"]
+        lo, hi = pooled["ci"]
+        assert pooled["reading"] == ("holds" if lo <= 1 <= hi else "fails"), s
+        if e["frequencies"]["status"] == "fetched":
+            g = e["groups"]["gnomADg:asj"]
+            assert 0 < g["variants_with_frequency"] <= e["variants_in_score"]
+            assert g["sd"] > 0
+        else:
+            assert e["variants_in_score"] > ref.MAX_FETCH_VARIANTS and "groups" not in e
