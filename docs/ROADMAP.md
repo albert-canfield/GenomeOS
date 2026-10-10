@@ -402,7 +402,12 @@ History: ROADMAP-HISTORY.md §3 B, lines 333–955.
   (`runtime/sbml.py` is the stand-in), and Schoeberl2002 still fails *(2026-10-10: on the stand-in only; it passes 33 of 33 on the libRoadRunner adapter, `bdb30d3`, and the stand-in's failure was a divergence that now raises)*. Isoform expression is GTEx's
   adult tissues, not a cell type or a stage.
 - **Next.** 1. The libRoadRunner adapter, scored first on Schoeberl2002 (§5, M6): **done 2026-10-10** (`1dcf998`, `bdb30d3`; Schoeberl2002 33 of 33 on libRoadRunner, 0 of 33 on the stand-in). 2. The
-  seven gene-keyed CPTAC profiles, once their isoforms are known. 3. The person's own expression in
+  seven gene-keyed CPTAC profiles, once their isoforms are known: **done 2026-10-10** (lane-cptac; `39c7ccc` rule, `ca5eaf5`
+  registered, `8043a39` result): the 14.3% was a residue mismatch (positions on other isoforms), not gene keys; under a rule
+  registered first (HGNC symbol tiers, then isoform positions from GENCODE v50, ambiguity refused), 0.32% wrong of 80,185
+  RefSeq-keyed sites of known position; six of seven profiles committed (unresolved 1.06–1.70%, estimated wrong
+  0.50–0.78%), TCGA breast PanCan retired on the units check (−0.515); 28–31% of sites ambiguous and refused. Relative
+  abundance measured in those tumours, not occupancy, not in a person. 3. The person's own expression in
   place of GTEx's median, which waits for a processed track of GM24385. 4. Measured modification
   occupancy, which waits for a source that publishes it.
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
