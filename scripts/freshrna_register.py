@@ -222,6 +222,11 @@ def main() -> int:
         ),
         "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
     }
+    # `save_result` wants `partitions` as a dict (or "n/a: why"); name the two, keeping the prose above
+    manifest["partitions"] = {
+        "primary": manifest["partitions"],
+        "reported_beside": "M2h's training genes and all of 7h's genes, deciding nothing (POPULATION)",
+    }
     print("saved", save_result(RESULT, payload, manifest=manifest))
     return 0
 

@@ -366,6 +366,11 @@ def main() -> int:
         "partitions": "the primary population is M2h's held-out genes, as the registration pins them",
         "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
     }
+    # `save_result` wants `partitions` as a dict (or "n/a: why"); name the two, keeping the prose above
+    manifest["partitions"] = {
+        "primary": manifest["partitions"],
+        "reported_beside": "M2h's training genes and all of 7h's genes, deciding nothing (POPULATION)",
+    }
     out = registered_run()
     rows = out.pop("_rows", [])
     if args.post_hoc:
