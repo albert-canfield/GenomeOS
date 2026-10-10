@@ -1,0 +1,461 @@
+{
+  "result": "reader_neural_registration",
+  "date": "2026-10-10",
+  "registered": "2026-10-10, before any spinal cord file was fetched and before any spinal cord reading existed; written by scripts/reader_neural.py register",
+  "item": "ROADMAP area B: a neural or embryonic biosample beyond SK-N-SH and H1",
+  "choice": {
+    "biosample": "spinal cord",
+    "ontology_term": "UBERON:0002240",
+    "classification": "tissue; the term's DNase-seq experiments (6) and its Histone ChIP-seq experiments for the three reader marks (3) are all from human embryos, 59 to 113 days",
+    "why": [
+      "the reader held no primary tissue of the nervous system and nothing embryonic that was not a cell line: its neural biosamples were SK-N-SH (a neuroblastoma line) and astrocyte (cultured primary cells), its embryonic one H1 (a stem line), its tissues adult testis and ovary",
+      "of the human nervous system tissue terms with released GRCh38 DNase-seq peaks, three also have released GRCh38 Histone ChIP-seq for all three marks the reader uses (H3K27me3, H3K27ac, H3K4me3): spinal cord (all embryonic), caudate nucleus (adult) and dorsolateral prefrontal cortex (adult, mostly diagnosed donors). Spinal cord is the one that is neural and embryonic at once, so one biosample answers both halves of the item"
+    ],
+    "alternatives_considered": {
+      "brain": "DNase peak files for the term mix adult (53 to 90+ years), fetal (56 to 142 days) and organoid samples, and the term has no H3K27ac experiment, so the reader would run without its marks on a file the size rule draws from that mixture",
+      "dorsolateral prefrontal cortex": "adult cortex with DNase and all three marks, but 114 of the 181 Histone ChIP-seq experiments for the three marks carry a diagnosis (Alzheimer's disease, mild or other cognitive impairment) and the reader's rules (largest DNase file; marks from the biosample summary covering most marks) cannot exclude a diagnosed donor",
+      "head of caudate nucleus, posterior cingulate gyrus, frontal cortex, middle frontal gyrus": "DNase without an H3K27ac experiment",
+      "caudate nucleus": "adult striatum with DNase and all three marks (Roadmap, donors aged 75 and 81 years; the DNase from other adult donors): adult brain but not early development. It is the recorded next candidate if an adult brain biosample is wanted",
+      "cerebellum, midbrain, medulla oblongata, globus pallidus, Ammon's horn, superior temporal gyrus, occipital lobe, inferior parietal cortex, pons, putamen, cerebellar cortex": "no human GRCh38 H3K27ac or H3K27me3 experiment for the term (cerebellum has one human H3K4me3)",
+      "neural progenitor cell (from H9), neuronal stem cell (from H1), neural cell (from H1)": "all three marks, but in vitro differentiated from a stem line rather than tissue, and two derive from H1, a line the reader already holds; neural cell has no DNase",
+      "neurosphere": "cultured, no DNase peak file"
+    },
+    "dnase": {
+      "accession": "ENCFF041JKB",
+      "size": 5013707,
+      "candidates": 21,
+      "rule": "reader.find_dnase_file: the largest released GRCh38 DNase narrowPeak for the term",
+      "experiment": "ENCSR910OQF",
+      "replicates": "biological replicate 1 of the experiment's 2 (replicate 1: female embryo, 59 days, donor ENCDO294EUZ; replicate 2, not read: male embryo, 72 days)",
+      "assay": "DNase-seq, peaks (bed narrowPeak), GRCh38"
+    },
+    "marks": {
+      "H3K4me3": {
+        "experiment": "ENCSR036HAT",
+        "biosample": "Homo sapiens spinal cord tissue female embryo (113 days)",
+        "peaks": {
+          "accession": "ENCFF282GYH",
+          "output_type": "pseudoreplicated peaks",
+          "size": 726493,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2020/10/10/7fa381a3-d407-4023-9025-e1659b712e13/ENCFF282GYH.bed.gz"
+        },
+        "value": null
+      },
+      "H3K27ac": {
+        "experiment": "ENCSR209QGZ",
+        "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+        "peaks": {
+          "accession": "ENCFF516MFW",
+          "output_type": "pseudoreplicated peaks",
+          "size": 1428915,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2020/10/10/83e9481a-3fb2-4bd4-9947-e8620c5b909c/ENCFF516MFW.bed.gz"
+        },
+        "value": null
+      },
+      "H3K4me1": {
+        "experiment": "ENCSR863GVT",
+        "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+        "peaks": {
+          "accession": "ENCFF205KTX",
+          "output_type": "pseudoreplicated peaks",
+          "size": 2937425,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2020/11/12/b37aecce-645c-42bf-bbc8-8bb556dccc15/ENCFF205KTX.bed.gz"
+        },
+        "value": null
+      },
+      "H3K27me3": {
+        "experiment": "ENCSR855JPU",
+        "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+        "peaks": {
+          "accession": "ENCFF470ARP",
+          "output_type": "pseudoreplicated peaks",
+          "size": 871411,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2020/11/12/c2f888bf-3b96-4623-a1d0-081cc6509eb4/ENCFF470ARP.bed.gz"
+        },
+        "value": null
+      },
+      "H3K9me3": {
+        "experiment": "ENCSR262LFG",
+        "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+        "peaks": {
+          "accession": "ENCFF674GTJ",
+          "output_type": "pseudoreplicated peaks",
+          "size": 958277,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2020/11/12/a27848aa-8e48-435d-9d18-a523f8141ed4/ENCFF674GTJ.bed.gz"
+        },
+        "value": null
+      }
+    },
+    "methylation": {
+      "experiment": "ENCSR458MAV",
+      "biosample": "Homo sapiens spinal cord tissue female embryo (115 days)",
+      "value": null,
+      "reason": null
+    },
+    "caveats": [
+      "the DNase comes from a 59-day embryo and the marks from a 108-day (H3K27me3, H3K27ac, H3K4me1, H3K9me3) and a 113-day embryo (H3K4me3): the poised and read-by-marks calls combine chromatin of different embryos at different ages",
+      "every mark is one biological replicate with pseudoreplicated peaks",
+      "bulk tissue: a mixture of progenitors, neurons, glia and non-neural cells",
+      "the DNase donor is female, so chrY carries only stray peaks"
+    ],
+    "licence": "ENCODE data use policy: released data, cite ENCODE and the Roadmap Epigenomics Consortium",
+    "size_check": {
+      "peak_bytes_to_fetch": 11936228,
+      "not_fetched": "fold-change signal bigWigs and WGBS (about 1.7 GB and 0.8 GB); the reader reads peaks only",
+      "limit_bytes": 1500000000,
+      "disk_free_bytes_at_registration": 26030592000
+    }
+  },
+  "run": "scripts/reader_genome_wide.py 'spinal cord': the unchanged read_chromosome over the local chromosomes, the same promoter window (TSS +/- 1 kb), the same poised and read-by-marks rules, the same node thresholds; the per-chromosome readings stay local except chr21, as for every biosample",
+  "sanity_check": {
+    "question": "does the new biosample's reader call the promoters of a closed, cited list of ventral neural tube genes read more often than K562's, beyond each biosample's genome-wide read share?",
+    "genes": [
+      {
+        "symbol": "PAX7",
+        "chrom": "chr1",
+        "role": "progenitor, class I (dorsal-ventral code)"
+      },
+      {
+        "symbol": "IRX3",
+        "chrom": "chr16",
+        "role": "progenitor, class I"
+      },
+      {
+        "symbol": "DBX1",
+        "chrom": "chr11",
+        "role": "progenitor, class I"
+      },
+      {
+        "symbol": "DBX2",
+        "chrom": "chr12",
+        "role": "progenitor, class I"
+      },
+      {
+        "symbol": "PAX6",
+        "chrom": "chr11",
+        "role": "progenitor, class I"
+      },
+      {
+        "symbol": "NKX6-1",
+        "chrom": "chr4",
+        "role": "progenitor, class II"
+      },
+      {
+        "symbol": "NKX2-2",
+        "chrom": "chr20",
+        "role": "progenitor, class II"
+      },
+      {
+        "symbol": "EVX1",
+        "chrom": "chr7",
+        "role": "V0 interneuron marker"
+      },
+      {
+        "symbol": "EN1",
+        "chrom": "chr2",
+        "role": "V1 interneuron marker"
+      },
+      {
+        "symbol": "VSX2",
+        "chrom": "chr14",
+        "role": "V2 interneuron marker (Chx10)"
+      },
+      {
+        "symbol": "MNX1",
+        "chrom": "chr7",
+        "role": "motor neuron marker (HB9)"
+      },
+      {
+        "symbol": "ISL1",
+        "chrom": "chr5",
+        "role": "motor neuron marker"
+      },
+      {
+        "symbol": "SIM1",
+        "chrom": "chr6",
+        "role": "V3 interneuron marker"
+      }
+    ],
+    "citations": [
+      "Briscoe J, Pierani A, Jessell TM, Ericson J (2000). A homeodomain protein code specifies progenitor cell identity and neuronal fate in the ventral neural tube. Cell 101:435-445. doi:10.1016/S0092-8674(00)80853-3 (class I PAX7, IRX3, DBX1, DBX2, PAX6; class II NKX6-1, NKX2-2)",
+      "Jessell TM (2000). Neuronal specification in the spinal cord: inductive signals and transcriptional codes. Nat Rev Genet 1:20-29. doi:10.1038/35049541 (the progenitor code and the markers of the ventral neuron classes V0 EVX1, V1 EN1, V2 CHX10/VSX2, MN HB9/MNX1 and ISL1, V3 SIM1)"
+    ],
+    "comparator": "K562, the reader's existing reading (data/results/reader_K562_<chrom>.json)",
+    "read_call": "the reader's own per-gene call, unchanged: a gene that is protein_coding once on its registered chromosome in GENCODE v50 is read when that chromosome's reading does not list it in silent_genes (closed and poised promoters); read by its marks counts as read",
+    "denominator": "n = the listed genes found once as protein_coding on their registered chromosome; a gene not found is excluded and named",
+    "counts": "a, k = genes read in spinal cord, in K562; b = read in spinal cord and not K562; c = read in K562 and not spinal cord",
+    "genome_wide_read_share": "sum of genes_read over sum of coding_genes over the 24 per-chromosome readings of each biosample",
+    "excess": "e = a/n minus spinal cord's genome-wide read share; e_K = k/n minus K562's",
+    "test": "one-sided exact sign test on the discordant genes, P(X >= b), X ~ Binomial(b + c, 1/2), alpha 0.05",
+    "decision": {
+      "PASS": "b > c, e > e_K and p <= 0.05",
+      "FAIL (the falsifier)": "b <= c, or e <= e_K",
+      "UNDECIDED": "b > c and e > e_K, but p > 0.05"
+    },
+    "wording": {
+      "PASS": "Sanity check passed. Fetal spinal cord's reader calls {a} of {n} registered ventral neural tube genes read and K562's {k} of {n} ({b} read only in spinal cord, {c} only in K562; one-sided exact sign test p = {p}). Over the genome the two read {sc_read:,} of {sc_coding:,} and {k_read:,} of {k_coding:,} coding genes, so the excess at these genes is {e_sc:+.3f} in spinal cord against {e_k:+.3f} in K562. The new biosample's promoter calls look like neural tissue's at these genes. This checks the biosample's label; accessibility is not function, and it says nothing about what any of these genes does.",
+      "FAIL": "Sanity check failed ({why}). Fetal spinal cord's reader calls {a} of {n} registered ventral neural tube genes read and K562's {k} of {n} ({b} read only in spinal cord, {c} only in K562; one-sided exact sign test p = {p}); over the genome the two read {sc_read:,} of {sc_coding:,} and {k_read:,} of {k_coding:,} coding genes (excess {e_sc:+.3f} against {e_k:+.3f}). The new biosample's reader results are not to be used in any comparison until the failure is explained.",
+      "UNDECIDED": "Sanity check undecided. The direction is as registered: fetal spinal cord's reader calls {a} of {n} registered ventral neural tube genes read and K562's {k} of {n}, and the excess over each genome-wide read share ({sc_read:,} of {sc_coding:,}; {k_read:,} of {k_coding:,}) is {e_sc:+.3f} against {e_k:+.3f}; but {b} genes read only in spinal cord against {c} only in K562 cannot be told from chance at the registered 0.05 (one-sided exact sign test p = {p}). The biosample may be used with this stated beside any use. Accessibility is not function."
+    },
+    "on_fail": "the new biosample's reader results are not used in any comparison until the failure is explained; nothing is re-run with another list, comparator or threshold",
+    "descriptive_only": "the same counts for every other biosample on the panel are reported beside the verdict, labelled descriptive; they are not a test"
+  },
+  "not_claimed": [
+    "accessibility is not function: an open or marked promoter is necessary for transcription, not proof of it",
+    "the check tests the biosample's label at thirteen genes, not the reader's accuracy in it"
+  ],
+  "consumers_left_unchanged": {
+    "context_evidence.READER_TERMS": "thirteen; spinal cord would enter as 'spinal cord': 'UBERON:0002240', a term AlphaGenome's track metadata carries (embryonic spinal cord DNase and RNA-seq tracks)",
+    "compile.reader_cells and readergate.CELLS": "derive from READER_TERMS, so they follow it; readergate's registered test is over thirteen cells and needs a measured RNA experiment per biosample (ENCODE holds polyA plus RNA-seq for embryonic spinal cord); widening it is a new registration, not an edit"
+  },
+  "panel_before": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "H1",
+    "IMR-90",
+    "SK-N-SH",
+    "cardiac muscle cell",
+    "keratinocyte",
+    "hepatocyte",
+    "astrocyte",
+    "CD14-positive monocyte",
+    "testis",
+    "ovary"
+  ],
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE portal (https://www.encodeproject.org): DNase-seq and Histone ChIP-seq metadata and released GRCh38 peak files",
+        "version": "queried 2026-10-10",
+        "licence": "ENCODE data use policy (https://www.encodeproject.org/help/citing-encode/)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/reader_genome_wide.json",
+        "sha256": "214f5d0d5f06ae2f298542e54978d1d40d1c91e43ec68d5e1fd6af0bd820e5e3",
+        "bytes": 152902,
+        "partition": null
+      },
+      {
+        "path": "ENCODE portal answers for the spinal cord marks and WGBS, as cached",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/epigenome/portal/1349c1bfee01201a4864168a91beac0b37b36b27.json.gz",
+            "sha256": "feb768d50268eb1e0567e48a6e6eb054bf9b7461ed7bb6ac74bc44260821329c",
+            "bytes": 2920
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/583ca444cfba0997d7f2714579d5122fe35eefab.json.gz",
+            "sha256": "9a45028e00f85ce7f6a81cedd1022e2a5d6bb0c792b74a726822176f04f9fecd",
+            "bytes": 2921
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/5c6bca357602d5a82278d6ec308cf6e7e0131b56.json.gz",
+            "sha256": "740ffab2f7c59aa5a152df00477c78eb9a109f4f0b1d1b9a9689afd37c02c0e4",
+            "bytes": 4382
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/5d07e36dec795cab337c5f5717ff00d666860ee7.json.gz",
+            "sha256": "9414a32de8ae9a9970b187481de1c6ead81510bf786fb7489ac972ff826543fc",
+            "bytes": 3970
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/5faa31fe9c1722a9b8e895d3a9b6976f2de5df8a.json.gz",
+            "sha256": "98fa0db11ea5187605533c3f19409dc03f257d3f24c85af3edba0561adf4763d",
+            "bytes": 1043
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/683e6a67c76c8153ab69a44249fcb8db785e99e1.json.gz",
+            "sha256": "07b840b4fbecda71ddf7b9f7f122c6de906ca98b1bb181a8ea5a3889de5526bc",
+            "bytes": 2908
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/699f50363b3df3dbd34f7bffd81b71c5b9615972.json.gz",
+            "sha256": "2892634593b141e514f41fb8a120a3493d7b878769fb715f413c870fe5d8a4d2",
+            "bytes": 2924
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/6b206a334124f66fd77872eee5f1cd2cde4162f4.json.gz",
+            "sha256": "09880f6b86cbcc436dccc109ac540f344ce7b2834028e5d90e9f20c4e2d08b35",
+            "bytes": 3030
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/6c6d3b95a3157f3e51b312bf9dccaee4de72db09.json.gz",
+            "sha256": "7375adde766b61c3844b3bb1ba5fef6b08e6de338b7fadd58f97bcdf28e432af",
+            "bytes": 4022
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/71378d56f94a7aebd66a9252787bac4bbe60d2a2.json.gz",
+            "sha256": "f0535e75b1cffba6735450fa3a8e92a2d744270206ad596a1aa3f9f41fdd2fb1",
+            "bytes": 2345
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/7926b64d3a777d0649abc6fdf3f750b792f791e3.json.gz",
+            "sha256": "e88141ada4a42d5943d0d11d45c430e433301f7187b4e8bb66e20c9f594fe62d",
+            "bytes": 1034
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/84ba7ab3e0967738370360dc0e07e79a8f1a9b77.json.gz",
+            "sha256": "296a1e767b5a368f8d95b23daaf08a75d647266309a9229de850870dfa0de22c",
+            "bytes": 1041
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/89677d1942ccd4080195b70717fd2033b66af0e5.json.gz",
+            "sha256": "82a32d164e3e912af2f8fb58190d01735299de5d876e9838b1af130d3ddb068c",
+            "bytes": 2909
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/c94bdb0597c70ccdb050bb9d42414b425a7d9389.json.gz",
+            "sha256": "0ae25608088ae3345526b94a294240c61ba94af66c920830483a1d46323dc54e",
+            "bytes": 4081
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/dd4ac85fc00b79fab6d6572ac05d0be2556f3c8d.json.gz",
+            "sha256": "64d4c30df3f102b0a2d6764ada61d4e98f58d9a09acdb85a92b71e2bb04d304d",
+            "bytes": 4094
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/ece17b88b561691adf57757d6e13e47b53db78de.json.gz",
+            "sha256": "4b4bfd2382dda92a980d5cf1446b7bdf24036ac487d2156367ec9f6d71e1a05a",
+            "bytes": 1052
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/fff8425e60939613853ab516d57686c4004917d5.json.gz",
+            "sha256": "9e3c761a4eb4cf87a79df4827a9eb2e963c5958361983ee7d45b9a19addfa093",
+            "bytes": 1038
+          }
+        ],
+        "sha256": "9909c812b1a3077d3f365bc99a4bd9c7c3c8b7874641d59f8cf8a6eed7a9be75",
+        "bytes": 45714,
+        "files": 17,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "code": {
+      "git_sha": "0d92e667ac47a887185841b1cbfefc0b76fb27c5",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/reader_neural.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "parameters": {
+      "alpha": 0.05,
+      "genes": 13,
+      "comparator": "K562",
+      "expected_dnase": "ENCFF041JKB"
+    },
+    "exclusions": [],
+    "partitions": "n/a: a registration, no evaluation split",
+    "code_cleanliness": {
+      "git_sha": "0d92e667ac47a887185841b1cbfefc0b76fb27c5",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/reader_neural.py",
+        "form": "committed_repository_file",
+        "path": "scripts/reader_neural.py",
+        "is_committed": true,
+        "declared_entry": "scripts/reader_neural.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/reader_neural.py"
+      ],
+      "counting_path_count": 22,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "0d92e667ac47a887185841b1cbfefc0b76fb27c5",
+      "code_cleanliness_git_sha": "0d92e667ac47a887185841b1cbfefc0b76fb27c5",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 0d92e66"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 132,
+      "opens_under_data": 36,
+      "files_read": 18,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

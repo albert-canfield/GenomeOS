@@ -85,3 +85,22 @@ def test_a_gene_is_read_unless_the_reading_lists_it_silent_or_poised():
     assert rn.gene_reads(reading, "PAX6") is True
     assert rn.gene_reads(reading, "PAX7") is False
     assert rn.gene_reads(reading, "NKX2-2") is False  # poised genes are listed in silent_genes too
+
+
+def test_the_committed_registration_holds_the_code_s_list_wording_and_choice():
+    """`check` refuses when the code and the committed registration differ; this says so earlier.
+
+    `data/results/reader_neural_registration.json` is tracked (2026-10-10): if it is absent that is a
+    broken checkout and this raises, rather than skipping and reporting a pass it did not earn.
+    """
+    import json
+
+    with open(os.path.join(_ROOT, "data", "results", "reader_neural_registration.json")) as fh:
+        reg = json.load(fh)
+    sc = reg["sanity_check"]
+    assert [(g["symbol"], g["chrom"]) for g in sc["genes"]] == [(s, c) for s, c, _ in rn.GENES]
+    assert sc["wording"] == rn.WORDING
+    assert reg["choice"]["biosample"] == rn.BIOSAMPLE == "spinal cord"
+    assert reg["choice"]["dnase"]["accession"] == rn.EXPECTED_DNASE
+    # registered before the biosample joined the panel
+    assert rn.BIOSAMPLE not in reg["panel_before"] and len(reg["panel_before"]) == 13
