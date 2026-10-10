@@ -214,8 +214,12 @@ def main() -> int:
             mf.input_entry(REG, partition=None),
             mf.input_entry(Path(reg["test_inputs"]["path"]), partition=None),
             mf.input_entry(LEDGER, partition=None),
+            mf.files_entry(
+                "ENCODE knockdown and control gene quantifications",
+                [rg.KD_DIR / f"{acc}.tsv.gz" for acc in sorted(cache)],
+            ),
         ],
-        "input_count": 3,
+        "input_count": 4,
         "assembly": "GRCh38; the knockdown files' own GENCODE annotation per unit",
         "coordinates": "n/a: per-gene expression",
         "parameters": rg.TEST_CONSTANTS,

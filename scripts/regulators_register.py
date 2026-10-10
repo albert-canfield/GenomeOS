@@ -77,6 +77,13 @@ def frozen_code() -> dict:
     }
 
 
+def gencode_inputs() -> list[Path]:
+    """The files `holdout.genes()` reads: its cache when present, the GENCODE files otherwise."""
+    paths = ho.gencode_paths()
+    cached = ho._cache_path("genes", ho._files_key(paths))
+    return [cached] if cached.exists() else paths
+
+
 def gene_index() -> dict[str, tuple[str, str, int]]:
     """Symbol -> (Ensembl id, chromosome, TSS) from GENCODE v50, a protein-coding gene preferred."""
     out: dict[str, tuple[int, str, str, int]] = {}
@@ -325,10 +332,14 @@ def main(argv: list[str] | None = None) -> int:
             mf.input_entry(ASSIGNMENT, partition=None),
             mf.input_entry(TEST_INPUTS, partition=None),
             mf.input_entry(RESULTS_DIR / "regulators_census.json", partition=None),
+            mf.files_entry(
+                "the compiled programs", [Path(COMPILED_DIR) / f"noncoding_{c}.bio" for c in rg.CHROMS]
+            ),
+            mf.files_entry("GENCODE v50 genes, as attribution.holdout reads them", gencode_inputs()),
         ],
-        "input_count": 5,
+        "input_count": 7,
         "assembly": "GRCh38; GENCODE v50 for symbols and TSS; the knockdown files' own annotation per unit",
-        "coordinates": "TSS 0-based; peak midpoints of half-open clusters",
+        "coordinates": {"base": 0, "interval": "half-open"},
         "parameters": rg.TEST_CONSTANTS,
         "exclusions": [{"reason": k, "count": v} for k, v in sorted(not_admitted.items())],
         "partitions": "n/a: the endpoint is outside every training set this project fitted",

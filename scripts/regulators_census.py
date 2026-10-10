@@ -105,6 +105,7 @@ def manifest(chroms: list[str]) -> dict:
         mf.input_entry(rg.CLUSTERS, partition=None),
         mf.input_entry(mo.JASPAR_PATH, partition=None),
         mf.input_entry(rg.GOA, partition=None),
+        mf.files_entry("JASPAR matches per compiled element, cached", [motif_cache(c) for c in chroms]),
     ]
     return {
         "sources": [
@@ -125,7 +126,7 @@ def manifest(chroms: list[str]) -> dict:
         "inputs": inputs,
         "input_count": len(inputs),
         "assembly": "GRCh38 for the compiled elements, the peak clusters and the reference sequence",
-        "coordinates": "half-open element intervals; a cluster overlaps an element when they share a base",
+        "coordinates": {"base": 0, "interval": "half-open"},
         "parameters": {
             "motif_relative_score": mo.RELATIVE_SCORE,
             "cell_aliases": rg.CELL_ALIASES,
