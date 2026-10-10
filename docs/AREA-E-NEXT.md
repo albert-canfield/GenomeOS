@@ -178,3 +178,104 @@ Both are pinned in `tests/test_intestine.py` so they cannot be read later as cla
   wired either: `body.bio` counts the same cells as populations of `tissues.bio`, so importing a
   mechanism module beside it would count the small-intestinal epithelium twice. The module stands
   beside the body program exactly as `haematopoiesis.bio` does.
+
+---
+
+# The colon, written before anything was built (2026-10-10, lane-colon)
+
+The line left open above — "the colon and the stomach are not modelled, so the body program's
+`GutEpithelium` population (1.97e11) is still counts" — is what this section closes for the colon.
+The authoritative, machine-readable form of everything below is `REGISTRATION` in
+`scripts/colon_registration.py`, committed before a single number of the module was fitted, so that
+the closed list provably cannot grow. Every citation here was fetched in this lane (PubMed
+E-utilities and PMC full text) and the sentence each gate rests on is quoted in that file.
+
+## How the colon differs from the small intestine
+
+| | small intestine (the module above) | colon (this module) |
+| --- | --- | --- |
+| geometry | crypt and villus; cells are born in the crypt and shed from the villus tip | crypt and a flat surface epithelium, no villus: "The colon has crypts but no villi" (van Es et al. 2012, Mol Cell Biol 32:1918) |
+| mature lineages | four: enterocyte, goblet, enteroendocrine, Paneth | three: colonocyte, goblet, enteroendocrine (Katz et al. 2002: "differentiating to form one of three cell types: colonocytes, goblet cells and enteroendocrine cells") |
+| the secretory-cell niche at the crypt base | Paneth cells, residence ~15 d | no Paneth cells; Reg4+ **deep crypt secretory cells** are intermingled with the Lgr5+ stem cells and serve as the Paneth equivalent (Sasaki et al. 2016, PNAS 113:E5399) |
+| goblet share | ~4% of duodenal epithelial cells (Karam 1999, a review) | **20% of colonic epithelial cells are mature goblet cells** in the wild-type mouse colon (Katz et al. 2002, measured) |
+| goblet terminal differentiation | GFI1 and SPDEF | **KLF4**, excluded from the small-intestinal module for being colon-specific, is a gate here |
+| stem cells per crypt | ~14 Lgr5+ (Snippert et al. 2010) | ~20 Lgr5+ (Sasaki et al. 2016), plus 12-14 Reg4+ deep crypt secretory cells in the caecum and distal colon |
+| counts (the same source the body program uses) | 1.2e11 cells, 2.2e10/day, lifespan 5.3 d | **6.0e10 cells, 1.7e10/day, lifespan 3.4 d** (Sender & Milo 2021, Nat Med 27:45) |
+
+Two differences decide the shape of the module. First, with no villus and no Paneth cells there is no
+long-lived resident lineage: every mature colonic cell rides the same crypt-to-surface conveyor and is
+shed at the surface, which is why one shared residence is a defensible inference here and was not in
+the small intestine. Second, the goblet lineage is 20% of the epithelium rather than 4%, so every
+consequence of deleting it is five times larger.
+
+## The closed, sourced list: seven gates, each with a fetched COLON phenotype
+
+A factor well sourced in the small intestine is not a source for the colon. Each gate below rests on
+a sentence about the colon, quoted in the registration.
+
+| # | Factor | Step | Published colon phenotype of its loss | Source | Registered as |
+| --- | --- | --- | --- | --- | --- |
+| C1 | TCF7L2 (Tcf4) | the stem compartment | an adult inducible deletion abolishes the proliferating cells of the colon within 7 days | van Es et al. 2012, Mol Cell Biol 32:1918 | **contested**: Angus-Hill et al. 2011, PNAS 108:4914 report adult colonic crypts lacking Tcf4 *enlarged*, with proliferative and differentiated cells present |
+| C2 | RBPJ (Notch effector) | the transit-amplifying compartment | the proliferative crypt compartment is lost completely and converts into goblet cells, in the colon as in the proximal intestine | Pellegrinet et al. 2011, Gastroenterology 140:1230 | partial: a conversion is not expressible |
+| C3 | ATOH1 | the secretory progenitor | the secretory lineages are nearly absent in the colon | Lo et al. 2016, Cell Mol Gastroenterol Hepatol 3:51 | full |
+| C4 | NEUROG3 | enteroendocrine output | no enteroendocrine cells anywhere along the intestinal tract, the colon included, goblet cells remaining | Mellitzer et al. 2010, J Clin Invest 120:1708; Jenny et al. 2002, EMBO J 21:6338 | full |
+| C5 | GFI1 | goblet output | about a third the normal number of goblet cells, the reduction also seen in the colon; colonic PYY cells sixfold up | Shroyer et al. 2005, Genes Dev 19:2412 | partial: a reduction read as a deletion |
+| C6 | SOX9 | goblet output | a strong reduction of the colonic goblet population, enteroendocrine and absorptive cells comparable | Bastide et al. 2007, J Cell Biol 178:635 | partial: a reduction read as a deletion |
+| C7 | KLF4 | goblet output | Klf4-/- newborns have 90% fewer colonic goblet cells, colonocytes and enteroendocrine cells normal | Katz et al. 2002, Development 129:2619 | **contested**: Pellegrinet et al. 2011 found an adult inducible deletion changed no goblet number in small intestine or colon |
+
+Excluded, each with the fetched reason — the list is closed and none of these enters the module:
+
+- **ASCL2** (van der Flier et al. 2009, Cell 136:903) — the record states the *small intestine*;
+  carrying the gate across would be an assumption, not a source.
+- **SPDEF** (Gregorieff et al. 2009, Gastroenterology 137:1333) — a gate of the small-intestinal
+  module; its abstract says "intestinal epithelium" without naming the colon and the publisher's full
+  text refused the fetch (HTTP 403), so there is no colon sentence to quote.
+- **REG4** (Sasaki et al. 2016) — the colon's Paneth equivalent and the one lineage this module would
+  add to the small-intestinal pattern, but the experiment ablates the *cells* with diphtheria toxin
+  rather than removing a factor, and no share of output or residence time exists for them. The
+  measured 12-14 per crypt is recorded in the registration and used for nothing.
+- **POU2F3** (Gerbe et al. 2016, Nature 529:226) — tuft cells: sourced factor, unsourced quantities.
+- **HES1** (Jensen et al. 2000, Nat Genet 24:36) — the phenotype is an increase.
+- **NOX1** (Coant et al. 2010, Mol Cell Biol 30:2636) — colon-specific and well sourced, but the
+  phenotype is a conversion towards goblet cells at the cost of colonocytes; gating the colonocyte
+  branch on it would predict a loss with no compensating gain.
+- **DLL1 with DLL4** (Pellegrinet et al. 2011) — single Dll1 loss is an increase (1.83-fold goblet),
+  and the double loss is the RBPJ phenotype already gated at C2.
+
+## Which numbers are fitted, and to what
+
+- **Fitted (one knob):** `surface_residence_days`, shared by colonocytes, goblet and enteroendocrine
+  cells, fitted so that every compartment's pool sums to the published 6.0e10. The published mean
+  residence is 3.4 d and the two measured numbers imply 3.53 d on their own.
+- **Measured, used as given:** 6.0e10 cells, 1.7e10 replaced per day, lifespan 3.4 d (Sender & Milo
+  2021); 20% goblet share of colonic epithelial cells (Katz et al. 2002); ~20 Lgr5+ cells per colonic
+  crypt (Sasaki et al. 2016).
+- **Inferred, not fitted:** that the measured 20% *standing* share can be used as the goblet share of
+  daily *output* — which holds because all three mature residences are the one shared number; the
+  enteroendocrine output share 0.004, inside the <1% bound; the colonocyte share as the remainder;
+  the stem division interval (1 d), the transit-amplifying transit (2.5 d) and divisions (5), and the
+  secretory progenitor residence (1 d), none with a primary colon citation fetched here.
+- **Not claimed:** the colonic stem pool and the crypt count it implies; and the 20% goblet share,
+  which comes back **by construction** and is not a check.
+
+## Registered in advance about the formalism
+
+R1 the two contested gates cannot be settled by a run, so the result must count agreement with a
+named paper and never "seven of seven". R2 **a number, registered before the run**: blocking the
+goblet route (gfi1, sox9, klf4) will leave the enteroendocrine pool at about **51 times** its
+wild-type value, because the secretory progenitor backs up until its one open outflow carries the
+whole inflow: 1 / (0.004 / 0.204) = 51.0. R3 without ATOH1 the colonocytes will stand *above* the
+wild type (direction only; the transit-amplifying compartment carries a growth term and a cap).
+R4 RBPJ's published conversion into goblet cells will read as a deletion of every lineage. R5 three
+of the seven phenotypes are reductions and are stated as deletions, which is worse here than in the
+small intestine because the lineage is 20% of the epithelium and not 4%. R6 three mature lineages,
+not four, is the whole structural difference between the two programs once the villus is gone.
+
+## Wiring into `body.bio` / `tissues.bio`: not wired, and why
+
+Not wired, for exactly the reason lane-organism did not wire the small intestine. `tissues.bio` says
+of its one gut population: `cell_type GutEpithelium { ... evidence: curated "Cell Ontology; grouped
+from Small intestine epithelia, Colon epithelia, Stomach epithelia" }`, 1.97e11 cells and 4.03e10
+replaced per day. The colon's 6.0e10 cells are already inside that number, so importing this module
+beside it would count the colonic epithelium twice. It stands beside the body program as
+`haematopoiesis.bio` and `intestine.bio` do.
