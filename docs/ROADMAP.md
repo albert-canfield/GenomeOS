@@ -337,7 +337,13 @@ History: ROADMAP-HISTORY.md §3 A, lines 160–332.
   call, and the reachable curated source covers half the scored cell lines (0 validated silencers of
   23,894 in GM12878). Measured Hi-C node edges exist on chr21 only. The read-by-marks call is shown
   nowhere. A neural or embryonic biosample beyond SK-N-SH and H1 is not added, and §5 item 10's stop
-  list says no more biosamples until a reading needs one. The `reader` construct has its engine half
+  list says no more biosamples until a reading needs one. *(2026-10-10: the coordinator assigned one anyway without reading this
+  sentence, a slip recorded here; lane-readerneural added ENCODE embryonic spinal cord (UBERON:0002240) as the reader's 14th
+  biosample, `2e624a8` registered, `2768b40` reading, `4444a2f` check: 13,669 of 20,094 coding genes read, DNase and marks from
+  different embryos (59 against 108 and 113 days); registered sanity check passed, 6 of 13 ventral neural-tube genes read
+  against K562's 0 of 13 (p = 0.01562), which checks the label, not function. It is kept because it moved no earlier row and
+  spent nothing; READER_TERMS, compile and readergate stay at 13, and widening them is a new registration with an RNA source.)*
+  The `reader` construct has its engine half
   and no generated reader blocks yet.
 - **Next.** 1. The `reader` construct's data half (§5, M2b): reader blocks generated per cell
   type from the reader and epigenome results, so a compiled rule's context is gated by chromatin.
