@@ -241,6 +241,24 @@ def test_the_reader_opens_no_outcome_when_it_is_not_asked_to(tmp_path):
 # --- the real table, where it is on this machine ---------------------------------------------
 
 
+def test_the_committed_results_sentence_is_the_one_its_own_intervals_render():
+    """The committed reading must be renderable from the committed numbers, and nothing else."""
+    import json
+
+    result = json.loads(Path("data/results/strengthform_result.json").read_text())
+    population = result["population"]
+    rendered = sf.reading(
+        result["intervals"],
+        own_mse=result["mse"][sf.FORM],
+        n=population["informative_combinations"],
+        clusters=population["unordered_enhancer_pairs"],
+        promoters=len(population["combinations_per_promoter"]),
+    )
+    assert rendered["sentence"] == result["reading"]
+    assert rendered["words"] == result["words"]
+    assert rendered["falsified"] == result["falsified"]
+
+
 @pytest.mark.needs_local_data(str(sf.STORE), how=LOCAL_HOW)
 def test_the_pinned_table_is_the_one_on_disk():
     import hashlib

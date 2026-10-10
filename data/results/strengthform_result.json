@@ -1,0 +1,434 @@
+{
+  "result": "strengthform_result",
+  "date": "2026-10-10",
+  "lane": "lane-strengthform",
+  "roadmap_item": "area I Next 1 (ROADMAP \u00a75 item 11, review R3): the strength-dependent combination form R3 left open, registered before it is run",
+  "registration": "data/results/strengthform_registration.json",
+  "reading": "the strength-dependent combination form (promoter competition, Bothma et al. 2015 eLife 4:e07956 Methods eqs. 7-9, THETA = 0.5 declared and nothing fitted on any pair), run once on the held-out enhancer-enhancer-promoter combinations of Martinez-Ara et al. 2024 (GSE240586, mouse E14tg2a embryonic stem cells): not better than every rule lane-combine compared (additive_envelope); over 58384 combinations (1594 unordered enhancer pairs, 8 promoters) its mean squared error of the measured boost index is 0.2025 log2 squared, and against each comparator: no_rule: better (Delta MSE +6.2147 [95% CI +5.9874, +6.4490]); mean: better (Delta MSE +0.5357 [95% CI +0.5182, +0.5538]); max: better (Delta MSE +0.1440 [95% CI +0.1343, +0.1540]); additive_envelope: worse (Delta MSE -0.0463 [95% CI -0.0488, -0.0440]); multiplicative: better (Delta MSE +0.5821 [95% CI +0.4912, +0.6795]). The claim that the strength-dependent form is better than those rules is FALSIFIED on this population.",
+  "words": {
+    "no_rule": "better",
+    "mean": "better",
+    "max": "better",
+    "additive_envelope": "worse",
+    "multiplicative": "better"
+  },
+  "falsified": true,
+  "mse": {
+    "competition": 0.20245474735443353,
+    "no_rule": 6.417140640094722,
+    "mean": 0.7381778467812445,
+    "max": 0.34649543628109986,
+    "additive_envelope": 0.15614057155113306,
+    "multiplicative": 0.7845969164956541
+  },
+  "intervals": {
+    "no_rule": {
+      "delta_mse": 6.214685892740288,
+      "ci_low": 5.987449250644483,
+      "ci_high": 6.449003668700906,
+      "draws": 2000
+    },
+    "mean": {
+      "delta_mse": 0.535723099426811,
+      "ci_low": 0.5182391335349721,
+      "ci_high": 0.5538018376709908,
+      "draws": 2000
+    },
+    "max": {
+      "delta_mse": 0.14404068892666633,
+      "ci_low": 0.13428157086694492,
+      "ci_high": 0.1539763181570796,
+      "draws": 2000
+    },
+    "additive_envelope": {
+      "delta_mse": -0.04631417580330047,
+      "ci_low": -0.048820947933672615,
+      "ci_high": -0.04397614272559186,
+      "draws": 2000
+    },
+    "multiplicative": {
+      "delta_mse": 0.5821421691412205,
+      "ci_low": 0.49115675256946734,
+      "ci_high": 0.6794556376851788,
+      "draws": 2000
+    }
+  },
+  "population": {
+    "informative_combinations": 58384,
+    "unordered_enhancer_pairs": 1594,
+    "combinations_per_promoter": {
+      "P1_SOX2": 6475,
+      "P2_KLF2": 8640,
+      "P3_OTX2": 7819,
+      "P4_FGF5": 2046,
+      "P5_Lefty1": 9269,
+      "P6_Nanog": 7755,
+      "P7_Ap1m1": 8139,
+      "P8_Tbx3": 8241
+    },
+    "counts": {
+      "rows": 110180,
+      "class_EE": 99342,
+      "class_not_EE": 10838,
+      "no_baseline": 0,
+      "single_missing": 35342,
+      "single_not_above_baseline": 5606,
+      "no_promoter_maximum": 0,
+      "activity_not_positive": 10,
+      "informative": 58384
+    }
+  },
+  "secondary_deciding_nothing": {
+    "what": "the share of informative combinations above the additive expectation (supra-additive, which no monotone rule of the terms can produce) and below the stronger single (which contradicts every monotone rule, the Bothma snail case lane-combine used), reported as counts and deciding nothing",
+    "above_the_additive_expectation": 34848,
+    "below_the_stronger_single": 12432,
+    "of": 58384
+  },
+  "harness": {
+    "census_reproduced": true,
+    "singles_reproduced": [
+      {
+        "bmax": 0.25,
+        "b": 0.05,
+        "term": 0.10276845445380829,
+        "with_a_null_partner": 0.050000000000794416
+      },
+      {
+        "bmax": 0.25,
+        "b": 0.25,
+        "term": 1.0,
+        "with_a_null_partner": 0.25000000000021033
+      },
+      {
+        "bmax": 1.0,
+        "b": 0.05,
+        "term": 0.01794894602804479,
+        "with_a_null_partner": 0.050000000000932424
+      },
+      {
+        "bmax": 1.0,
+        "b": 0.5,
+        "term": 0.26120387496374153,
+        "with_a_null_partner": 0.5000000000004448
+      },
+      {
+        "bmax": 1.0,
+        "b": 1.0,
+        "term": 1.0,
+        "with_a_null_partner": 1.000000000000125
+      },
+      {
+        "bmax": 3.0,
+        "b": 0.05,
+        "term": 0.002525284128130997,
+        "with_a_null_partner": 0.0500000000009612
+      },
+      {
+        "bmax": 3.0,
+        "b": 0.5,
+        "term": 0.0304887438261136,
+        "with_a_null_partner": 0.500000000000666
+      },
+      {
+        "bmax": 3.0,
+        "b": 3.0,
+        "term": 1.0,
+        "with_a_null_partner": 3.000000000000031
+      }
+    ],
+    "worst_single_reproduction_error_log2": 9.61196400250941e-13,
+    "planted_two_equal_maximal_singles": {
+      "competition": 1.2223924213364477,
+      "no_rule": 0.0,
+      "mean": 1.0,
+      "max": 1.0,
+      "additive_envelope": [
+        1.0,
+        1.584962500721156
+      ],
+      "multiplicative": 2.0
+    },
+    "planted_additive_expectation": 1.584962500721156
+  },
+  "alphagenome_requests": 0,
+  "money": "none",
+  "seconds": 31.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GEO GSE240586",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "Martinez-Ara M, Comoglio F, van Steensel B (2024) Large-scale analysis of the integration of enhancer-enhancer signals by promoters. eLife 12:e91994, doi 10.7554/eLife.91994",
+        "version": "2024"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/strengthform/GSE240586_EEP_normalized_data_MMA2023030806.tsv.gz",
+        "sha256": "8a0160c0022546187831710230d7a521ca32f4d7db602ceb9ddad403665d191c",
+        "bytes": 12830477,
+        "partition": "held out: never read by any earlier lane"
+      },
+      {
+        "path": "data/results/strengthform_registration.json",
+        "sha256": "18acbe41b4227aa8c4f6bbc948f064545e918720f328b381ed1662becab993b6",
+        "bytes": 22075,
+        "partition": null
+      }
+    ],
+    "input_count": 2,
+    "assembly": "n/a: a barcoded episomal reporter library, not genomic coordinates",
+    "coordinates": "n/a: plasmid reporter fragments named by the library, not genomic intervals",
+    "parameters": {
+      "form": "competition",
+      "theta": 0.5,
+      "half_saturation": 1.0,
+      "comparators": [
+        "no_rule",
+        "mean",
+        "max",
+        "additive_envelope",
+        "multiplicative"
+      ],
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20261010
+    },
+    "exclusions": [
+      "class EE (both fragments are enhancers, by the table's own class column)",
+      "the promoter's Baseline > 0",
+      "both single boost indices present (not NA) and finite",
+      "both single boost indices > 0: both singles activate above the promoter's baseline",
+      "the promoter's largest single boost index > 0",
+      "the combination's activity_all > 0"
+    ],
+    "partitions": {
+      "held_out": "the whole population: no earlier lane of this project has read this dataset",
+      "training": "none: no parameter is fitted on any combination, single or pair"
+    },
+    "code_cleanliness": {
+      "git_sha": "10ca354dc4320e625918d39fc66acff14d830ac8",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/strengthform_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/strengthform_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/strengthform_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/strengthform.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/strengthform_register.py",
+        "scripts/strengthform_run.py"
+      ],
+      "counting_path_count": 149,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "10ca354dc4320e625918d39fc66acff14d830ac8",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/strengthform_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "10ca354dc4320e625918d39fc66acff14d830ac8",
+      "code_cleanliness_git_sha": "10ca354dc4320e625918d39fc66acff14d830ac8",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 10ca354"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 284,
+      "opens_under_data": 6,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
