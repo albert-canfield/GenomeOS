@@ -280,3 +280,18 @@ def test_the_committed_registration_matches_the_code_that_applies_it():
     assert bound, "the run script binds no field"
     for field, const in bound.items():
         assert reg[field] == json.loads(json.dumps(getattr(rr, const))), field
+
+
+def test_the_gtex_row_is_read_by_symbol_not_by_program_identifier():
+    m = parse(
+        "gene NKX2_1 { symbol: NKX2-1 }\nelement E1 { class: enhancer }\n"
+        + _rule("E1", "activates", "NKX2_1", "Lung", -0.5),
+        "s",
+    )
+    pair = rr.run_pair(rr.one_gene_module(m, "NKX2_1"), "NKX2_1", {"cell_type": "Lung"}, {}, BORROWED)
+    assert pair is not None and pair["gene"] == "NKX2_1" and pair["symbol"] == "NKX2-1"
+    tissues = list(rr.GTEX_V8_TISSUES)
+    pop, why = rr.assemble([pair], {"NKX2_1": {"Lung"}}, {"NKX2-1": [1.0] * 54}, tissues)
+    assert len(pop) == 1 and not why
+    pop, why = rr.assemble([pair], {"NKX2_1": {"Lung"}}, {"NKX2_1": [1.0] * 54}, tissues)
+    assert pop == [] and why == {"symbol_not_on_exactly_one_gtex_row": 1}

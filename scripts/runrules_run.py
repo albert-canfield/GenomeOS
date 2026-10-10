@@ -213,7 +213,19 @@ def main() -> int:
     tissues, tpm, gtex_counts = rr.load_gtex(rr.GTEX)
     pop, why = rr.assemble(pairs, gene_tissues, tpm, tissues)
     scored = rr.score(pop)
-    cols = ("gene", "tissue", "element", "chrom", "action", "rho", "m", "D", "tier", "on_in_rule_tissue")
+    cols = (
+        "gene",
+        "symbol",
+        "tissue",
+        "element",
+        "chrom",
+        "action",
+        "rho",
+        "m",
+        "D",
+        "tier",
+        "on_in_rule_tissue",
+    )
     out = {
         **base,
         "gtex": gtex_counts,

@@ -187,7 +187,8 @@ POPULATION = (
     " compiled programs, G has EXACTLY ONE mechanism (bridge.mechanism_key) active in C, and"
     " bridge.parameterize resolves it on the borrowed tier (rates = data/results/gene_rates.json,"
     " borrowed_rate = its genome median), i.e. the pair is runnable at least in relative units; AND G's"
-    " symbol names exactly one row of the GTEx table; AND G has at least MIN_REFERENCE_TISSUES panel"
+    " symbol (its `symbol:` field, not the program identifier, which turns '-' and '.' into '_') names"
+    " exactly one row of the GTEx table's Description column; AND G has at least MIN_REFERENCE_TISSUES panel"
     " tissues in which it has no compiled regulatory rule of any kind (its reference tissues R(G)). No"
     " filter on expression is applied: no measured value selects a pair"
 )
@@ -473,8 +474,11 @@ def run_pair(
     rho = b.observations[key].rho
     present, absent = levels[bridge.INTACT], levels[bridge.REMOVED]
     m = math.log2(present / absent)
+    entity = small.entities.get(gene)
     return {
         "gene": gene,
+        # the program's gene id is `compile.ident(symbol)` (NKX2-1 -> NKX2_1); the GTEx row is read by symbol
+        "symbol": str(getattr(entity, "symbol", "") or gene),
         "tissue": ctx["cell_type"],
         "element": element,
         "action": "activates" if rho < 1.0 else "inhibits",
@@ -535,7 +539,7 @@ def assemble(
     panel = list(col)
     out, why = [], Counter()
     for p in pairs:
-        row = tpm.get(p["gene"])
+        row = tpm.get(p.get("symbol") or p["gene"])
         if row is None:
             why["symbol_not_on_exactly_one_gtex_row"] += 1
             continue
