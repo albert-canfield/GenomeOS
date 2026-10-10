@@ -1,0 +1,475 @@
+{
+  "result": "envelope_census",
+  "date": "2026-10-10",
+  "lane": "lane-envelope",
+  "roadmap_item": "area I: the additive envelope (lane-strengthform's one unbeaten comparator) as its own combination form on 7d's population, established from the fits before any RNA value is opened",
+  "form": "sum_capped",
+  "lower_end_form": "max",
+  "definition": "lane-strengthform's `additive_envelope` (strengthform.COMPARATORS, strengthform.INTERVAL_RULES) is the INTERVAL max(b1, b2) <= boost <= log2(2**b1 + 2**b2 - 1), computed in that lane's predicted_boost as lower = log2(1 + grn.combine_activators(linear, 'max')) and upper = log2(1 + sum(linear)) on linear = [2**b1 - 1, 2**b2 - 1], with zero error anywhere between the ends (strengthform.squared_error). Its UPPER end is additivity above the baseline, P = (S1 - B) + (S2 - B) + B, which in the engine's [0, 1] drive units is the uncapped sum of the terms; with the cap sum_capped carries it is A = min(1, W), W = sum of s_i*H(x_i), which IS grn.combine_activators's 'sum_capped' (grn.ACTIVATOR_RULES). Its LOWER end is grn's 'max'. The form registered on RNA here is the upper end with its cap, as the brief fixes it; no free number is added and runtime/grn.py is not changed",
+  "identity_rule": "two identities, verified numerically by identity_checks rather than asserted: (1) in the engine's drive units, min(1, sum(t)) equals grn.combine_activators(t, 'sum_capped') on random term vectors; (2) in the assay's boost units, log2(1 + sum(2**b_i - 1)) equals the upper end strengthform.predicted_boost('additive_envelope', ...) returns, and log2(1 + max(2**b_i - 1)) equals its lower end, which is also what grn's 'max' gives. So the envelope's two ends are two rules the engine already carries, and the upper end is the form lane-capsumrna ran against RNA",
+  "identity": {
+    "draws": 20000,
+    "seed": 20261010,
+    "upper_end_is_sum_capped_in_drive_units": 0.0,
+    "upper_end_is_the_uncapped_additive_sum_in_boost_units": 0.0,
+    "lower_end_is_the_stronger_single_in_boost_units": 0.0,
+    "lower_end_is_grn_max": 0.0,
+    "worst": 0.0,
+    "tolerance": 1e-12,
+    "holds": true
+  },
+  "rna_side": "because the envelope's upper end with its cap is the SAME engine rule at the SAME conventions as lane-capsumrna's form (grn 'sum_capped' at combine2's CONVENTIONS), that lane's committed census is this form's census on 7d's population and is read here, not re-derived: the counts come from data/results/capsumrna_census.json (commits 43dd4ac, 8994fca, f74dca5). The structural reason is combine2.STRUCTURE's: under the reader's hold the mean is linear in the element terms, and so is a sum below its cap, so on its uncapped root the capped sum gives the mean's level in every reader cell. No RNA value is opened by this lane",
+  "capsumrna_census": {
+    "source": "data/results/capsumrna_census.json",
+    "commits": [
+      "43dd4ac",
+      "8994fca",
+      "f74dca5"
+    ],
+    "form": "sum_capped",
+    "eligible_for_a_fit": 17983,
+    "capped_sum_status": {
+      "basal_not_positive": 12500,
+      "sum_past_the_cap": 2649,
+      "runnable": 2162,
+      "inhibitor_strength_above_1": 543,
+      "fit_not_unique": 126,
+      "capped_root_only": 3
+    },
+    "unique_fit": {
+      "genes": 2165,
+      "by_status": {
+        "runnable": 2162,
+        "capped_root_only": 3
+      },
+      "informative": 2032,
+      "informative_symbol_on_one_gene_id": 2031,
+      "max_abs_difference_from_mean_log2": 6.661338147750939e-16,
+      "differs_from_the_mean": {
+        "genes": 3,
+        "informative": 3,
+        "informative_symbol_on_one_gene_id": 3
+      },
+      "informative_under_all_four": 1498,
+      "informative_under_all_four_symbol_on_one_gene_id": 1498,
+      "uncapped_informative_share_of_the_means_informative_genes": 0.4246
+    },
+    "two_roots": {
+      "genes": 126,
+      "informative_on_the_capped_root": 125,
+      "informative_on_the_capped_root_symbol_on_one_gene_id": 125,
+      "summed_drop_quantiles": {
+        "0.1": 0.5147477235613545,
+        "0.25": 0.5770256084274518,
+        "0.5": 0.6647193055825152,
+        "0.75": 0.7732491097446033,
+        "0.9": 0.8674104257138612
+      }
+    },
+    "size_check": {
+      "genes_whose_unique_fit_differs_from_the_mean": 3,
+      "min_genes": 100,
+      "under_7d_decision_2": "NOT_TESTABLE",
+      "registration_written": false,
+      "rna_opened": false
+    },
+    "sentence": "of the 17,983 multi-element genes combine2.classify admits, the capped sum at combine2's conventions fits 2,288 on its uncapped root (15,695 are not fitted: 12500 basal_not_positive, 2649 sum_past_the_cap, 546 inhibitor_strength_above_1); on every one of them its prediction in the thirteen reader cells is the runtime's mean's (largest difference 6.7e-16 in log2), and the runtime under activator_combination='sum_capped' gives the closed form on every informative gene it ran, on either root (2,282 runs of a gene on a root, 0 of them failing the harness). 126 of the 2,288 also have a second, capped root, on which the capped sum differs from the mean (125 informative under it). 3 genes have only a capped root (3 informative under it, 3 of those with a symbol on one gene_id), the mean having no fit for them (3 inhibitor_strength_above_1). 2,165 genes have a unique fit, 3 of them with a prediction other than the mean's; 2,032 are informative and 1,498 informative under all four forms, before the RNA tables' row check",
+    "decision": "register_on_the_genes_that_differ",
+    "rna_opened": false
+  },
+  "uncapped_root_fits": 2288,
+  "genes_whose_unique_fit_differs_from_the_mean": 3,
+  "decision_rule": "fixed before any count is read, and unchanged by any of them. (1) The form registered on RNA is the envelope's upper end with its cap, which identity_checks must show to be grn's 'sum_capped'; if the identity fails, nothing is registered and the failure is the result. (2) Given the identity, the form's census on 7d's population is lane-capsumrna's committed census, and the genes on which the form could be told apart from what 7d has already read are the genes whose fit is unique and whose prediction is not the mean's. (3) 7d's DECISION 2 applies unchanged: fewer than combine2.MIN_GENES = 100 such genes is NOT_TESTABLE -- no registration is written, no comparison is read, and no RNA value is opened. (4) The genes with a second, capped root are lane-rootpick's registered decision; this lane picks no root and reports their count as that lane's question",
+  "decision": "not_testable_below_7d_minimum",
+  "size_check": {
+    "genes_whose_unique_fit_differs_from_the_mean": 3,
+    "min_genes": 100,
+    "under_7d_decision_2": "NOT_TESTABLE",
+    "registration_written": false,
+    "rna_opened": false
+  },
+  "two_root_ambiguity_is_lane_rootpicks": {
+    "genes": 126,
+    "note": "those genes have a second, capped root beside the uncapped one; the definition does not choose between them. That choice is lane-rootpick's registered decision and this lane picks no root"
+  },
+  "sentence": "the additive envelope, lane-strengthform's one unbeaten comparator, is an INTERVAL between two rules runtime/grn.py already carries: its lower end is 'max' and its upper end, with the cap it names, is 'sum_capped' (both identities exact to 0 in the checks run here). As its own combination form on 7d's population the upper end is therefore the form lane-capsumrna ran: of the 17,983 multi-element genes combine2.classify admits it fits 2,288 on its uncapped root, on every one of which its prediction in the 13 reader cells is the runtime's mean's (largest difference 6.66e-16 in log2), 2,165 genes have a unique fit and 3 of those a prediction other than the mean's. 3 is below 7d's DECISION 2 minimum of 100 genes, so the envelope as its own form is NOT_TESTABLE on this design, nothing is registered and no RNA value was opened. The 126 genes with a second, capped root are lane-rootpick's registered decision and no root is picked here",
+  "alphagenome_requests": 0,
+  "money": "none",
+  "new_biosample": "none: the thirteen reader cells unchanged, READER_TERMS untouched",
+  "pair_side_descriptive": {
+    "what": "descriptive, registering nothing and deciding nothing: on lane-strengthform's own combinations, read and committed by that lane (data/results/strengthform_result.json, fc328c5) and recomputed through its own frozen code, each end of the envelope as a POINT form beside the interval, with the share of combinations inside the interval (which score zero under an interval rule) and the same cluster bootstrap that lane registered (seed and draws from strengthform). paired_bootstrap is checked against that lane's committed intervals for its five registered comparators before any point form is reported, so the procedure is the registered one. No registered reading is restated or revised",
+    "source": "data/results/strengthform_result.json",
+    "commits": [
+      "7d23bc3",
+      "10ca354",
+      "fc328c5"
+    ],
+    "combinations": 58384,
+    "unordered_enhancer_pairs": 1594,
+    "promoters": 8,
+    "inside_the_interval": 11104,
+    "inside_the_interval_share": 0.1902,
+    "mse": {
+      "competition": 0.20245474735443353,
+      "no_rule": 6.417140640094722,
+      "mean": 0.7381778467812445,
+      "max": 0.34649543628109986,
+      "additive_envelope": 0.15614057155113306,
+      "multiplicative": 0.7845969164956541,
+      "envelope_upper_point": 0.20201587509017033,
+      "envelope_lower_point": 0.34649543628109986
+    },
+    "difference_from_the_strength_dependent_form": {
+      "no_rule": {
+        "delta_mse": 6.214685892740288,
+        "ci_low": 5.987449250644483,
+        "ci_high": 6.449003668700906,
+        "draws": 2000
+      },
+      "mean": {
+        "delta_mse": 0.535723099426811,
+        "ci_low": 0.5182391335349721,
+        "ci_high": 0.5538018376709908,
+        "draws": 2000
+      },
+      "max": {
+        "delta_mse": 0.14404068892666633,
+        "ci_low": 0.13428157086694492,
+        "ci_high": 0.1539763181570796,
+        "draws": 2000
+      },
+      "additive_envelope": {
+        "delta_mse": -0.04631417580330047,
+        "ci_low": -0.048820947933672615,
+        "ci_high": -0.04397614272559186,
+        "draws": 2000
+      },
+      "multiplicative": {
+        "delta_mse": 0.5821421691412205,
+        "ci_low": 0.49115675256946734,
+        "ci_high": 0.6794556376851788,
+        "draws": 2000
+      },
+      "envelope_upper_point": {
+        "delta_mse": -0.00043887226426320147,
+        "ci_low": -0.0046279135843696195,
+        "ci_high": 0.004063568582028332,
+        "draws": 2000
+      },
+      "envelope_lower_point": {
+        "delta_mse": 0.14404068892666633,
+        "ci_low": 0.13428157086694492,
+        "ci_high": 0.1539763181570796,
+        "draws": 2000
+      }
+    },
+    "words": {
+      "no_rule": "better",
+      "mean": "better",
+      "max": "better",
+      "additive_envelope": "worse",
+      "multiplicative": "better",
+      "envelope_upper_point": "no difference detected",
+      "envelope_lower_point": "better"
+    },
+    "committed_intervals_reproduced": {
+      "source": "data/results/strengthform_result.json",
+      "comparators": [
+        "additive_envelope",
+        "max",
+        "mean",
+        "multiplicative",
+        "no_rule"
+      ],
+      "worst": 0.0,
+      "problems": []
+    },
+    "sentence": "descriptive and deciding nothing, on lane-strengthform's committed combinations: of 58384 combinations 11104 (19.0%) fall inside the envelope and score zero under an interval rule. As POINT forms the ends are not the interval: the upper end's MSE is 0.2020 against the interval's 0.1561 and the strength-dependent form's 0.2025, a difference from that form of -0.0004 [95% CI -0.0046, +0.0041] (no difference detected), while the interval's difference is -0.0463 [95% CI -0.0488, -0.0440] (worse) and the lower end's is +0.1440 [95% CI +0.1343, +0.1540] (better). So the margin lane-strengthform's registered reading reports against additive_envelope is the interval's, not either end's as a form; that reading stands as registered and is not revised"
+  },
+  "seconds": 80.1,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/capsumrna_census.json",
+        "version": "f74dca5"
+      },
+      {
+        "accession": "GEO GSE240586",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/capsumrna_census.json",
+        "sha256": "57213d2a2a5f1870c8d369ea838405ffcd389a8d10d2dacf723e56aadfb03c30",
+        "bytes": 105614,
+        "partition": null
+      },
+      {
+        "path": "data/results/strengthform_result.json",
+        "sha256": "83ee005089ef1086b116b324c3a223441d56b254f97c251e4d64924b26015f88",
+        "bytes": 18007,
+        "partition": "held_out"
+      },
+      {
+        "path": "data/cache/strengthform/GSE240586_EEP_normalized_data_MMA2023030806.tsv.gz",
+        "sha256": "8a0160c0022546187831710230d7a521ca32f4d7db602ceb9ddad403665d191c",
+        "bytes": 12830477,
+        "partition": "held_out"
+      }
+    ],
+    "input_count": 3,
+    "assembly": "GRCh38 for the RNA side; n/a for the reporter library",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "form": "sum_capped",
+      "lower_end_form": "max",
+      "reference_form": "competition",
+      "min_genes": 100,
+      "identity_draws": 20000,
+      "identity_seed": 20261010,
+      "identity_tolerance": 1e-12,
+      "bootstrap_draws": 2000,
+      "bootstrap_seed": 20261010,
+      "selection": "reader_cells"
+    },
+    "exclusions": [
+      "the RNA side reads no RNA value: the counts are lane-capsumrna's committed census of the same engine rule at the same conventions",
+      "the pair side is descriptive and registers nothing; its outcomes were read and committed by lane-strengthform (fc328c5)"
+    ],
+    "partitions": {
+      "held_out": "lane-strengthform's combinations, held out from every other lane",
+      "training": "none: nothing is fitted here"
+    },
+    "code_cleanliness": {
+      "git_sha": "b0eefdc6e6dc382bfdb2faa7dca69aab42612885",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/envelope_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/envelope_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/envelope_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/envelope.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/strengthform.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/envelope_census.py"
+      ],
+      "counting_path_count": 149,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "fbce7756d030ce45dfc2f56debb5193e628f41e7",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/simpler_flysource.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/envelope_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "fbce7756d030ce45dfc2f56debb5193e628f41e7",
+      "code_cleanliness_git_sha": "b0eefdc6e6dc382bfdb2faa7dca69aab42612885",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": false,
+      "revision_race": true,
+      "reading": "revision race: the cleanliness block sampled b0eefdc and the write stamped fbce775, so HEAD moved while this result was being written"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 281,
+      "opens_under_data": 6,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
