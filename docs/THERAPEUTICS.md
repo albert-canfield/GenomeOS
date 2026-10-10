@@ -2254,6 +2254,91 @@ offline re-run of the sweep from the same cache: the partners would then be a
 transcription and not the sweep's. A test re-derives them wherever the cache is
 present.
 
+### What the run measured, 2026-10-10
+
+Built at `1181068` and `e26ebf9`, measured with
+`scripts/depmap_dependency_rescore.py` (`064ad9e`, committed before it ran),
+offline, every case run with the wiring replaced by the empty answer and then as
+built. A second run on the committed code gave byte-identical output.
+
+**The benchmark did not move, in any field.** All ten rows are identical with
+the wiring off and on, and identical to the committed
+`therapeutic_benchmark_v2.json` rows field for field: EGFR, ERBB2, BRAF, KRAS,
+PIK3CA, IDH1, the copy-number ERBB2, ALK and the gastroesophageal ERBB2 at rank 1,
+CD19 at rank 2, scores 0.5, 0.494, 0.427, 0.369, 0.438, 0.345, 0.494, 0.559, 0.5
+and 0.494, every verdict as committed. No case carries a deep deletion and no
+case gained a dependency candidate. Every target candidate in every case kept
+its gene, overall score, evidence tier, mechanism reach, class, preferred
+mechanism and position. The committed result file is left untouched.
+
+**The fixture with a deep deletion came out as predicted.** With no lineage
+stated, the CDKN2A glioma yields one deleted gene with registered partners and
+two dependency candidates, WDR77 then PRMT5, both lineage verdicts `unknown`
+because the lineage was not stated. MTAP's and CDKN2B's state is unknown, and
+each record names it. The target list (EGFR, BRAF, CDKN2A, HSP90AA1, HSP90AB1)
+is identical with the wiring off and on.
+
+**With CNS/Brain stated, both are `supported_in_lineage`**, which meets the
+expectation (WDR77 supported, PRMT5 at least nominal):
+
+| Partner | Lines that deleted CDKN2A | Lines that kept it | Median gene effect, deleted against kept | Cliff's delta | p | q (2 tests) |
+|---|---|---|---|---|---|---|
+| WDR77 | 47 | 28 | −1.588 against −1.420 | −0.260 | 0.031 | 0.031 |
+| PRMT5 | 47 | 28 | −1.049 against −0.935 | −0.339 | 0.0074 | 0.015 |
+
+Two readings keep this from being stronger than it is. **Both groups need
+both genes.** Every median is below −0.9, near the −1 that marks the median
+common-essential gene. The lineage test shows a deeper need in the deleted
+lines, not a need the loss creates from nothing. And the kept group is only 28
+lines, because most glioma lines carry the 9p21 deletion.
+
+**Exploratory, computed after the registered run and with no pass condition:
+in these lines the dependency rides on MTAP.** The same CNS/Brain lines, with
+the tumour's MTAP state supplied so the same-event restriction applies:
+
+| This tumour's MTAP | CDKN2A-deleted lines read | WDR77: delta, p | PRMT5: delta, p |
+|---|---|---|---|
+| kept (2 copies) | 18 | +0.020, 0.55: `not_supported_in_lineage` | −0.167, 0.18: `not_supported_in_lineage` |
+| deleted too | 29 | −0.433, 0.0025: `supported_in_lineage` | −0.446, 0.0020: `supported_in_lineage` |
+
+The registration wrote the restriction in for this case, and on real lines it
+decides the answer. A CDKN2A-deleted glioma that kept MTAP finds no support in
+its lineage's cell lines, and one that lost MTAP too finds the clearest support
+here. The fixture states no MTAP call, so its supported verdicts above mix the
+two kinds of line, and its record says so. In practice the MTAP copy state is
+what to supply next.
+
+**The demo tumour (data level 1, no copy-number table) holds still**: no deep
+deletion, no dependency candidate, the target list identical with the wiring
+off and on.
+
+**Every regression condition holds.** (1) and (2) are measured above. (3) holds
+by construction, and a test checks that no dependency gene reaches the target
+list, the machine report's targets or the design dataset. (4) to (7) are each
+held by a test. Fourteen guards were each removed or inverted in a detached
+worktree, and every one turns at least one test red. The first pass found two
+that no test reached: promoting a nominal result to supported (two partners
+cannot give a nominal verdict under BH, so the rule is now `lineage_verdict`,
+with five cases) and reading partners from every called gene (a tumour with a
+deep and a shallow deletion now holds it). 32 tests.
+
+**Two corrections to the registration text, neither moving a number.** The
+trigger is `cancer/alterations.py`'s own deep-deletion call, as registered, and
+that call counts exactly 0.5 copies as deep, so "below 0.5" in the trigger
+paragraph misstated the rule it pointed at. On the DepMap side *deleted* stays
+strictly below 0.5, as registered. And the verdict rule now lives in
+`lineage_verdict`, which is the same rule as before.
+
+**What stays unknown.** A lineage that is not stated, or that has fewer than 5
+deleted or 20 kept lines, answers `unknown`. Loss by a truncating or damaging
+point mutation, where the ARID1A and SMARCA4 dependencies mostly live, is not a
+trigger. PTEN, RB1 and SMAD4 deletions are `not_asked`, because the sweep never
+asked about them. The partners are pan-cancer pairs from a sweep with no lineage
+covariate, and the lineage test checks them only where the lineage has the lines.
+Each dependency is a knockout in culture. **A cell-line dependency is a
+hypothesis for this tumour, not a measurement in it, and not evidence that any
+therapy works.**
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
