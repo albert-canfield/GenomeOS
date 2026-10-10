@@ -393,3 +393,24 @@ def test_m2ds_committed_census_is_what_the_census_quotes():
     per = json.loads(path.read_text())["descriptives_not_verdicts"]["per_form"]
     assert {f: per[f]["reached_genes"] for f in ("mean", "competition")} == {"mean": 210, "competition": 210}
     assert {f: per[f]["runnable"] for f in ("mean", "competition")} == {"mean": 10, "competition": 2}
+
+
+def test_the_committed_registration_is_the_module_it_binds_and_reuses_signaltraces_population():
+    import tracked_paths as tp
+
+    reg_path = Path("data/results/saturate_registration.json")
+    st_path = Path("data/results/signaltrace_registration.json")
+    tp.must_be_present(reg_path, st_path)
+    reg = json.loads(reg_path.read_text())
+    st_reg = json.loads(st_path.read_text())
+    assert {f: reg[f] for f in sa.BOUND} == sa.registered_fields()
+    assert reg["population_record"]["sha256"] == st_reg["population_sha256"]
+    assert reg["population_record"]["pairs"] == len(st_reg["population_ids"]) == 1918
+    assert reg["comparator_committed_verbatim"]["s4_bridge"].startswith("none kept")
+    assert {f: v["runnable"] for f, v in reg["m2d_committed_verbatim"]["census"].items()} == {
+        "mean": 10,
+        "competition": 2,
+    }
+    assert reg["result_manifest"]["complete"] is True
+    assert reg["result_manifest"]["code_cleanliness"]["own_code_is_committed"] is True
+    assert reg["alphagenome_requests"] == 0
