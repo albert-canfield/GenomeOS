@@ -348,6 +348,7 @@ May contain `transcript` blocks.
 | `genome` | `chrM, ... | nuclear` | chromosomes read here |
 | `translation` | `yes | no` | ribosomes are present |
 | `copies` | `integer` | copies per cell |
+| `heteroplasmy` | `m.POS REF>ALT = fraction, ...` | v0.4 stage 3: the fraction of the copies carrying each mtDNA variant; needs genome chrM; the stage 3 metabolism takes those copies' OXPHOS capacity away |
 
 ### `transport`
 
@@ -371,7 +372,7 @@ May contain `transcript` blocks.
 |---|---|---|
 | `location` | `Id` | the compartment the pool is in |
 | `size` | `number | unknown` | capacity in molecules; unknown refuses a burden claim |
-| `regenerates` | `number /h | from Id, Id` | a rate, or the processes that refill it when a rate is the wrong shape (ATP) |
+| `regenerates` | `number /h | from Id, Id` | a rate (held per hour), or the processes that refill it when a rate is the wrong shape: v0.4 stage 3 runs Glycolysis, TCA and OXPHOS with bio.std.core_metabolism's stoichiometry |
 | `returns_as` | `Id` | what a drawn unit becomes when the work ends (ATP returns as ADP) |
 
 ### `allocation`
@@ -437,7 +438,7 @@ the file `records_unstated_confidence: true`; a file without that mark predates 
 - **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`
 - **Order**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `groups`, `axis`, `direction`, `observe`, `threshold`
 - **Signal**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `mode`, `ligand`, `receptor`, `sender`, `receiver`, `sets`, `value`, `field_name`, `threshold`, `reads`
-- **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`, `absolute_volume_fl`
+- **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`, `absolute_volume_fl`, `heteroplasmy`
 - **Cost**: `pool`, `amount`, `per`
 - **Pool**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `location`, `size`, `regeneration`, `regenerates_from`, `returns_as`
 - **Allocation**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `pool`, `policy`, `order`, `objective`

@@ -333,6 +333,69 @@ def _list(value: str) -> list[str]:
     return [x.strip() for x in value.split(",") if x.strip()]
 
 
+_RATE = re.compile(r"^([-+0-9.eE]+)\s*(\S*)$")
+
+
+def _per_hour(value: str, key: str, line_no: int) -> float:
+    """A rate in the program's unit, held per hour. Until stage 3 (2026-10-10) a pool's `regenerates`
+    rate kept the number and dropped the unit, so `/min` ran as `/h`; no runtime read it then, and the
+    stage 3 metabolism is the first that does. A bare number is per hour, as `Pool` documents."""
+    m = _RATE.match(value.strip())
+    if not m:
+        raise BioLangError(f"line {line_no}: {key} expects a rate such as `2e9 /h`, got {value!r}")
+    rate = _float(m.group(1), key, line_no)
+    if not m.group(2):
+        return rate
+    try:
+        unit = check_rate_unit(m.group(2))
+    except ValueError as err:
+        raise BioLangError(f"line {line_no}: {key}: {err}") from None
+    per = unit[1:] if unit.startswith("/") else unit[2:]
+    return rate * 60.0 / to_minutes(1.0, per)
+
+
+#: an mtDNA substitution as HGVS writes it on the m. reference, `m.3243A>G` (v0.4 §6, stage 3)
+_MT_VARIANT = re.compile(r"^m\.([1-9]\d*)([ACGT])>([ACGT])$")
+
+
+def _heteroplasmy(value: str, cp: Compartment, line_no: int) -> dict[str, float]:
+    """`m.3243A>G = 0.7, ...`: the fraction of the compartment's copies that carry each variant.
+
+    Refused rather than guessed: a compartment that does not read chrM has no mitochondrial genome for
+    a copy to carry a variant of; a fraction is of copies, so it lies within 0..1; and two variants are
+    taken to sit in different copies (nothing here knows their linkage), so their fractions add and may
+    not pass 1."""
+    if not cp.mitochondrial:
+        raise BioLangError(
+            f"line {line_no}: compartment {cp.id!r} declares heteroplasmy but its genome does not read "
+            "chrM; a mitochondrial variant needs the copies that carry it (`genome: chrM`)"
+        )
+    out: dict[str, float] = {}
+    for piece in _list(value):
+        variant, sep, frac = piece.partition("=")
+        variant = variant.replace(" ", "")
+        m = _MT_VARIANT.match(variant)
+        if not sep or not m or m.group(2) == m.group(3):
+            raise BioLangError(
+                f"line {line_no}: heteroplasmy {piece!r}: expected `m.<position><ref>><alt> = <fraction>`,"
+                " a substitution such as m.3243A>G = 0.7"
+            )
+        f = _float(frac, "heteroplasmy", line_no)
+        if not 0.0 <= f <= 1.0:
+            raise BioLangError(
+                f"line {line_no}: heteroplasmy {variant} = {f:g}: a fraction of copies, within 0..1"
+            )
+        if variant in out:
+            raise BioLangError(f"line {line_no}: heteroplasmy names {variant} twice")
+        out[variant] = f
+    if sum(out.values()) > 1.0 + 1e-12:
+        raise BioLangError(
+            f"line {line_no}: heteroplasmy fractions sum to {sum(out.values()):g}: variants are taken to sit "
+            "in different copies, so together they cannot exceed the copies there are"
+        )
+    return out
+
+
 def _volume_fl(value: str, key: str, line_no: int) -> float:
     """An absolute volume with its unit, in femtolitres. A bare number is refused, because the
     compartment already has a bare number that means a fraction of the cell (v0.4 §4.1)."""
@@ -1053,6 +1116,8 @@ def _compile_block(b: Block, module: Module) -> None:
         cp.genome = _list(p.get("genome", ""))
         if "copies" in p:
             cp.copies = int(_float(p["copies"], "copies", b.line))
+        if "heteroplasmy" in p:
+            cp.heteroplasmy = _heteroplasmy(p["heteroplasmy"], cp, b.line)
         module.add(cp)
     elif b.kind == "pool":
         pl = Pool(id=b.header, kind="pool", evidence=ev, confidence=conf)
@@ -1069,7 +1134,7 @@ def _compile_block(b: Block, module: Module) -> None:
             if raw.lower().startswith("from "):
                 pl.regenerates_from = _list(raw[5:])
             else:
-                pl.regeneration = _float(raw.split("/")[0], "regenerates", b.line)
+                pl.regeneration = _per_hour(raw, "regenerates", b.line)
         pl.returns_as = p.get("returns_as", "")
         module.add(pl)
     elif b.kind == "allocation":

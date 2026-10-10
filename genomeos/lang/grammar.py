@@ -311,6 +311,11 @@ BLOCKS: dict[str, dict] = {
             "genome": ("chrM, ... | nuclear", "chromosomes read here"),
             "translation": ("yes | no", "ribosomes are present"),
             "copies": ("integer", "copies per cell"),
+            "heteroplasmy": (
+                "m.POS REF>ALT = fraction, ...",
+                "v0.4 stage 3: the fraction of the copies carrying each mtDNA variant; needs genome chrM; "
+                "the stage 3 metabolism takes those copies' OXPHOS capacity away",
+            ),
         },
     },
     "transport": {
@@ -332,7 +337,8 @@ BLOCKS: dict[str, dict] = {
             "size": ("number | unknown", "capacity in molecules; unknown refuses a burden claim"),
             "regenerates": (
                 "number /h | from Id, Id",
-                "a rate, or the processes that refill it when a rate is the wrong shape (ATP)",
+                "a rate (held per hour), or the processes that refill it when a rate is the wrong shape: "
+                "v0.4 stage 3 runs Glycolysis, TCA and OXPHOS with bio.std.core_metabolism's stoichiometry",
             ),
             "returns_as": ("Id", "what a drawn unit becomes when the work ends (ATP returns as ADP)"),
         },

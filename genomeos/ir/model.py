@@ -494,7 +494,14 @@ class Compartment(Entity):
     than instead of it (§10 decision 2, resolved 2026-09-19). The fraction is what the tree needs and
     what the programs state; the absolute volume is what a threshold can be divided by, and a fraction
     of a cell cannot express cells of different volume. UNKNOWN means the program did not say, and a
-    concentration at this compartment is then refused rather than guessed."""
+    concentration at this compartment is then refused rather than guessed.
+
+    `heteroplasmy` (stage 3, §6) maps an mtDNA variant (`m.3243A>G`) to the fraction of this
+    compartment's `copies` that carry it, so each copy may carry its own genome. It needs a compartment
+    whose genome reads chrM. The engine holds no table of which variants are pathogenic: the stage 3
+    metabolism removes the OXPHOS capacity of the copies that carry a declared variant, so a variant is
+    declared here because the program models it as disabling. Two variants are taken to sit in different
+    copies (the engine knows no linkage), so their fractions add and may not pass 1."""
 
     parent: str = ""
     membrane: bool = False
@@ -503,6 +510,7 @@ class Compartment(Entity):
     translation: bool = False
     copies: int = 1
     absolute_volume_fl: float | _Unknown = UNKNOWN
+    heteroplasmy: dict[str, float] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.kind = "compartment"
@@ -511,6 +519,15 @@ class Compartment(Entity):
         """Whether a gene on `chrom` is read in this compartment."""
         mito = chrom in ("chrM", "MT", "M")
         return chrom in self.genome or ("nuclear" in self.genome and not mito)
+
+    @property
+    def mitochondrial(self) -> bool:
+        """Whether this compartment reads the mitochondrial genome (chrM, MT or M): a mitochondrion."""
+        return any(c in MITO_CHROMOSOMES for c in self.genome)
+
+
+#: the names the mitochondrial chromosome goes by; `nuclear` excludes them (Compartment.reads)
+MITO_CHROMOSOMES = ("chrM", "MT", "M")
 
 
 #: what a cost is charged per. The unit decides what multiplies the amount, so it is a closed set
@@ -1362,6 +1379,7 @@ __all__ = [
     "BIOIR_VERSION",
     "COST_UNITS",
     "DECISION_ACTIONS",
+    "MITO_CHROMOSOMES",
     "MOLAR_UNITS",
     "PARAM_COUNT_UNITS",
     "PARAM_PER_UNITS",
