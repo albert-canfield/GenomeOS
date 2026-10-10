@@ -104,3 +104,18 @@ def test_the_committed_registration_holds_the_code_s_list_wording_and_choice():
     assert reg["choice"]["dnase"]["accession"] == rn.EXPECTED_DNASE
     # registered before the biosample joined the panel
     assert rn.BIOSAMPLE not in reg["panel_before"] and len(reg["panel_before"]) == 13
+
+
+def test_the_committed_result_is_the_registered_decision_on_its_own_counts():
+    """The tracked result (4444a2f, 2026-10-10) says what `verdict` says on the counts it records, and
+    the per-gene calls add up to those counts; a missing tracked file raises rather than skips."""
+    import json
+
+    with open(os.path.join(_ROOT, "data", "results", "reader_neural_result.json")) as fh:
+        res = json.load(fh)
+    v = rn.verdict(res["counts"])
+    assert (res["outcome"], res["reading"]) == (v["outcome"], v["reading"])
+    calls = res["per_gene"].values()
+    assert res["counts"]["a"] == sum(g["spinal_cord"] for g in calls) == 6
+    assert res["counts"]["k"] == sum(g["K562"] for g in calls) == 0
+    assert res["counts"]["n"] == len(res["per_gene"]) == 13 and res["outcome"] == "PASS"
