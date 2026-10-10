@@ -308,3 +308,89 @@ def test_what_is_reported_names_the_join_fields_only_as_values() -> None:
     """The decision states what the result will report without carrying a field a join fills."""
     assert decide.forbidden({"reported": sj.REPORTED}) == []
     assert {r["field"] for r in sj.REPORTED} >= {"by_cell_line", "coverage_gap", "elements"}
+
+
+# ---------------------------------------------------------------- the committed decision and result
+# Tracked files: a missing one RAISES here (it is in the tree or the commit is broken), never skips.
+
+DECISION_FILE = ROOT / "data/results/silencerjoin_decision.json"
+RESULT_FILE = ROOT / "data/results/silencerjoin.json"
+
+
+def _decision() -> dict:
+    return json.loads(DECISION_FILE.read_text())
+
+
+def _result() -> dict:
+    return json.loads(RESULT_FILE.read_text())
+
+
+def test_the_committed_decision_holds_no_join_outcome() -> None:
+    assert decide.forbidden(_decision()) == []
+
+
+def test_the_result_was_joined_under_the_committed_decisions_rule_and_mapping() -> None:
+    d, r = _decision(), _result()
+    assert d["rule"] == r["rule"] == sj.rule()
+    assert d["cell_line_mapping"]["rese_to_scored_line"] == sj.CELL_LINE_MAP
+    assert r["decision"]["file"] == "data/results/silencerjoin_decision.json"
+    assert len(r["result_manifest"]["parameters"]["decision_commit"]) == 40
+
+
+def test_neither_committed_file_joins_the_derived_keys_population() -> None:
+    """The doctrine pins the 77 results carrying the derived key; this layer stands beside them."""
+    for path in (DECISION_FILE, RESULT_FILE):
+        assert f'"{sd.KEY}"' not in path.read_text()
+
+
+def test_every_role_in_the_result_is_a_same_line_fragment_meeting_the_rule() -> None:
+    for row in _result()["elements"]:
+        by_fragment = {o["fragment"]: o for o in row["overlaps"]}
+        for line, reading in row["by_cell_line"].items():
+            if reading["molecular_role"] == "unknown":
+                assert reading["evidence_status"] == "unknown" and reading["reason"] in sj.REASONS
+                continue
+            assert reading["molecular_role"] == "silencer" and reading["evidence_status"] == "measured/ReSE"
+            assert line in sj.COVERED and reading["cell_line"] == line
+            for uid in reading["fragments"]:
+                o = by_fragment[uid]
+                assert line in o["lines"] and o["attaches"] == "unique" and o["reciprocal"] >= sj.ROLE_OVERLAP
+
+
+def test_the_result_counts_agree_with_its_own_rows() -> None:
+    r = _result()
+    rows, scored = r["elements"], r["population"]["elements_scored"]
+    assert len(rows) == r["population"]["elements_sharing_a_base_with_a_fragment"]
+    for line, c in r["by_cell_line"].items():
+        given = sum(1 for x in rows if x["by_cell_line"][line]["molecular_role"] == "silencer")
+        assert c["elements_given_the_role"] == given
+        assert given + c["elements_read_unknown"] == scored
+        assert sum(c["unknown_by_reason"].values()) == c["elements_read_unknown"]
+        if c["source_covers_the_line"]:
+            assert sum(c["fragments"].values()) == c["fragments_validated_in_the_line"]
+            assert r["sensitivity"]["by_threshold"]["reciprocal_0.5"][line] == given
+            dc = r["derived_call_on_the_role_elements"][line]
+            assert dc["elements_given_the_role"] == given
+            assert dc["with_a_named_predicted_target"] + dc["with_no_named_predicted_target"] == given
+            assert (
+                dc["carrying_the_derived_repressive_direction"]
+                + dc["carrying_the_derived_activating_direction"]
+                == dc["with_a_named_predicted_target"]
+            )
+        else:
+            assert given == 0 and c["unknown_by_reason"] == {sj.LINE_NOT_COVERED: scored}
+
+
+def test_the_headline_counts_as_committed() -> None:
+    """Pinned so a regeneration that moves them is seen, not absorbed."""
+    r = _result()
+    assert r["population"]["elements_scored"] == 961_227
+    assert {k: v["elements_given_the_role"] for k, v in r["by_cell_line"].items()} == {
+        "GM12878": 0,
+        "HepG2": 283,
+        "IMR-90": 0,
+        "K562": 543,
+    }
+    assert r["derived_call_on_the_role_elements"]["given_the_role_in_both_covered_lines"] == 9
+    assert r["by_cell_line"]["K562"]["fragments"]["on_no_scored_element"] == 2_462
+    assert r["by_cell_line"]["HepG2"]["fragments"]["on_no_scored_element"] == 1_007
