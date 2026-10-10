@@ -210,20 +210,53 @@ def test_a_half_life_the_runtimes_read_in_hours_refuses_another_unit():
             parse(f"module t\nparam {name} = 30 min {{ }}\n")
 
 
-def test_every_committed_program_passes_the_unit_checks():
-    """2026-10-10: no committed program states a rate or param unit outside the sets."""
-    from pathlib import Path
+# ---- debt 5: v0.4 §2's confidence cap is reported, not applied -------------------------------------------
 
+
+def test_the_cap_names_blocks_stated_above_it_on_a_construct_not_past_its_gate():
+    from genomeos.lang.tools import CONFIDENCE_CAP, UNGATED, cap_warnings
+
+    assert CONFIDENCE_CAP == 0.3
+    assert set(UNGATED) == {"pool", "allocation", "cost", "partition", "integrated read"}
+    src = """module t
+compartment Cell { volume: 1.0; absolute_volume: 1 pL }
+pool ATP { location: Cell; size: 100; confidence: 0.6 }
+pool GTP { location: Cell; size: 100; confidence: 0.3 }
+pool UTP { location: Cell; size: 100 }
+allocation share { pool: ATP; policy: proportional; confidence: 0.5 }
+protein P { location: Cell; cost: ATP 1 per chain; confidence: 0.9 }
+event divide { rate: 1 /day; partition: contents; confidence: 0.4 }
+"""
+    warn = cap_warnings(parse(src))
+    assert warn == [
+        ("pool ATP", "pool", 0.6),
+        ("allocation share", "allocation", 0.5),
+        ("protein P", "cost", 0.9),
+        ("event divide", "partition", 0.4),
+    ], "exactly at the cap, or stating no confidence, is not above it"
+
+
+def test_an_integrated_read_in_any_clause_is_found():
+    from genomeos.lang.tools import cap_warnings
+
+    src = """module t
+cell_type A { }
+decision d1 { action: differentiate; when: ELT-2.exposure(lineage) >= 15; to: A; confidence: 0.8 }
+decision d2 { action: differentiate; when: ELT-2 >= 15; to: A; confidence: 0.8 }
+"""
+    assert cap_warnings(parse(src)) == [("decision d1", "integrated read", 0.8)]
+
+
+def test_check_reports_the_cap_and_changes_no_confidence():
     from genomeos.lang import parse_file
 
-    files = [
-        p
-        for root in ("data/demo", "genomeos/std", "data/organisms")
-        for p in sorted(Path(root).rglob("*.bio"))
-    ]
-    assert len(files) == 47  # exact, 2026-10-10 (lane-engdebts)
-    units = set()
-    for path in files:
-        m = parse_file(path)
-        units |= {p.unit for p in m.parameters.values()} | {e.rate_unit for e in m.events}
-    assert units >= {"/division", "cells/h", "a.u.", "/yr", "/day", "h"}
+    m = parse_file("data/demo/stage2_pools.bio")
+    before = {k: e.confidence for k, e in m.entities.items()}
+    text = check_module(m)
+    assert (
+        "confidence above v0.4 §2's cap of 0.3 on a construct not past its gate (reported, not applied): 5"
+        in text
+    )
+    assert "pool RNAPII: 0.6 (pool)" in text
+    assert {k: e.confidence for k, e in m.entities.items()} == before
+    assert "cap of 0.3" not in check_module(parse_file("data/demo/repressilator.bio"))

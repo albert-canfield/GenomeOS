@@ -10,8 +10,9 @@ import re
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import READER_OPEN, READER_STATES, UNKNOWN, Module, Rule, confidence_stated
+from genomeos.ir import READER_OPEN, READER_STATES, UNKNOWN, Allocation, Module, Pool, Rule, confidence_stated
 from genomeos.lang import parse_file
+from genomeos.lang.parser import _READ as _INTEGRATED_READ
 
 
 def load_module(path: str | Path) -> Module:
@@ -104,6 +105,7 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
         lines.append(f"  UNKNOWN regions: {len(unknowns)}")
         lines += [f"    {u.id}  {u.locus}" for u in unknowns]
     lines += confidence_lines(module, means=False)
+    lines += cap_lines(module)
     if module.located:
         from genomeos.lang.located import layout
 
@@ -116,6 +118,78 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
         lines.append(f"    routes that do not reach a declared place: {len(lay.notes)}")
         lines += [f"      {n}" for n in lay.notes[:20]]
     return "\n".join(lines)
+
+
+#: BIOLANG-v0.4-ECONOMY.md §2: anything computed from a construct whose stage has not passed its gate
+#: is `inferred` and capped at this confidence, whatever the author wrote, until the pass is recorded
+#: there. No engine code applies the cap; `bio check` REPORTS the blocks a program states above it
+#: (lane-engdebts, 2026-10-10) and changes no number.
+CONFIDENCE_CAP = 0.3
+_STAGE2 = "stage 2: gate (a) passed on three clauses of four, gate (b) failed (§9.2)"
+#: The constructs §9 records as built but not past their gate, on 2026-10-10. A construct leaves this
+#: table only when §9 records its pass; one not built yet (stage 3, homeostat, role) has no block to list.
+UNGATED = {
+    "pool": _STAGE2,
+    "allocation": _STAGE2,
+    "cost": _STAGE2,
+    "partition": "stage 4: the gate as §8 words it is refuted (§9.4)",
+    "integrated read": "fate: implemented 2026-09-15; the gate is area E's to run and §9 records no pass",
+}
+
+
+def cap_warnings(module: Module) -> list[tuple[str, str, float]]:
+    """(block, construct, stated confidence) for each block that uses a construct in UNGATED and
+    STATES a confidence above CONFIDENCE_CAP. A block that states none is not above anything and is
+    not listed. A block is listed once per construct it uses."""
+    found: list[tuple[str, str, object]] = []
+    for e in module.entities.values():
+        if isinstance(e, Pool):
+            found.append((f"pool {e.id}", "pool", e))
+        elif isinstance(e, Allocation):
+            found.append((f"allocation {e.id}", "allocation", e))
+        if getattr(e, "costs", None):
+            found.append((f"{e.kind} {e.id}", "cost", e))
+    for ev in module.events:
+        if ev.costs:
+            found.append((f"event {ev.id}", "cost", ev))
+        if ev.partition != "duplicate":
+            found.append((f"event {ev.id}", "partition", ev))
+    blocks = [
+        *(("rule", r.id, r) for r in module.rules),
+        *(("event", ev.id, ev) for ev in module.events),
+        *(("decision", d.id, d) for d in module.decisions),
+        *(("timer", t.name, t) for t in module.timers),
+        *(("competence", c.name, c) for c in module.competences),
+        *(("commitment", c.name, c) for c in module.commitments),
+        *(("signal", sg.id, sg) for sg in module.signals()),
+    ]
+    for kind, name, obj in blocks:
+        clauses = [v for f in obj.__dataclass_fields__ if isinstance(v := getattr(obj, f), dict)]
+        if any(_INTEGRATED_READ.match(str(k)) for c in clauses for k in c):
+            found.append((f"{kind} {name}", "integrated read", obj))
+    return [
+        (block, construct, float(obj.confidence))
+        for block, construct, obj in found
+        if confidence_stated(obj.confidence) and obj.confidence > CONFIDENCE_CAP
+    ]
+
+
+def cap_lines(module: Module) -> list[str]:
+    """The check report's v0.4 §2 lines: blocks stated above the cap, by construct, at most
+    HELD_NAMED named. A warning: no confidence is changed."""
+    warn = cap_warnings(module)
+    if not warn:
+        return []
+    by = {c: sum(1 for _, cc, _ in warn if cc == c) for c in UNGATED}
+    lines = [
+        f"  confidence above v0.4 §2's cap of {CONFIDENCE_CAP} on a construct not past its gate "
+        f"(reported, not applied): {len(warn)} " + "; ".join(f"{c} {n}" for c, n in by.items() if n)
+    ]
+    lines += [f"    {c}: {UNGATED[c]}" for c, n in by.items() if n]
+    lines += [f"    {block}: {conf:g} ({construct})" for block, construct, conf in warn[:HELD_NAMED]]
+    if len(warn) > HELD_NAMED:
+        lines.append(f"    ... and {len(warn) - HELD_NAMED} more")
+    return lines
 
 
 def reader_lines(module: Module, context: dict[str, str]) -> list[str]:
