@@ -214,7 +214,7 @@ def test_the_registration_states_the_population_the_code_reads() -> None:
     assert set(found) == independently
 
 
-def test_the_corpus_is_twenty_programs_in_the_source_repository() -> None:
+def test_the_corpus_is_twenty_three_programs_in_the_source_repository() -> None:
     """The population figure in the source repository, checked only where the whole corpus can be
     present. It was the registered figure, 19, until 2026-10-10 added a 20th program (comment below).
 
@@ -244,5 +244,14 @@ def test_the_corpus_is_twenty_programs_in_the_source_repository() -> None:
     # data/results/number_provenance_registration.json names and digests the 19 it was registered on,
     # and its result was taken over those 19. A re-run of this census would read 20, the 20th file's
     # numbers all illustration with evidence `none`.
-    assert len(found) == 20
+    # 2026-10-10, `fa5a4f1` (lane-stage3): v0.4 stage 3 adds data/demo/stage3_energy.bio,
+    # data/demo/stage3_erythrocyte.bio and genomeos/std/core_metabolism.bio, the 21st to 23rd programs.
+    # The registered population still stays 19, for the reason above.
+    assert len(found) == 23
     assert Path("data/demo/reader_gating.bio") in found
+    for added in (
+        "data/demo/stage3_energy.bio",
+        "data/demo/stage3_erythrocyte.bio",
+        "genomeos/std/core_metabolism.bio",
+    ):
+        assert Path(added) in found, added
