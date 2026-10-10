@@ -82,6 +82,7 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 | Horvath 2013, Hannum 2013 | epigenetic clock coefficients | publications cited |
 | Hart et al. 2017 (CEGv2) | core-essential gene set | publication cited |
 | BioModels | SBML reference models | CC0 |
+| Cohen et al. 2015 (PLoS Comput Biol 11:e1004571, S1 File) | the metastasis model in MaBoSS format (data/models/cohen2015_metastasis.bnd, .cfg) and its Fig 3 probabilities, the reference the MaBoSS adapter is scored against | CC BY 4.0 |
 | Zoonomia (Christmas et al. 2023), UCSC phyloP and phastCons tracks | constraint across 241 placental mammals per base, conserved elements | publication cited; UCSC tracks free for all uses |
 | gnomAD genomic constraint (Chen et al. 2024, "Gnocchi") | constraint within 76,156 human genomes per kilobase | gnomAD open terms, publication cited |
 | VISTA Enhancer Browser | transgenic mouse enhancer outcomes, the measured ground truth for elements | free for academic and commercial use, publication cited |
