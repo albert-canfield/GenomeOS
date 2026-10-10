@@ -1,0 +1,2201 @@
+{
+  "result": "tobio_share_registration",
+  "date": "2026-10-10",
+  "lane": "lane-shareadopt",
+  "area": "E",
+  "decision": "docs/ROADMAP.md area E (a8423e5): adopt share: in haematopoiesis.to_bio with the growth re-solved for 1 - sum(f), as its own registered lane",
+  "stop_list": "not on the 2026-09-27 stop list (docs/ROADMAP.md section 5): this is the human haematopoiesis module, not the worm's fate ceiling",
+  "prior_measurement": "lane-tobioshare (2026-10-10, no commit): same numbers as share: collapse the pools (CMP 0.13 of solved, wild-type asserts fail); growth re-solved for 1 - sum(f): 16 of 44 growth numbers move by up to +2.2%, every assert and the nine mutants pass, pools 1.038-1.04 of solved at 3 yr (Monocyte 0.9075 -> 1.0401 against today's generator); single-child flows identical as share:. Its trajectories between 0 d and 3 yr were not read for this registration.",
+  "change": {
+    "generator": "genomeos/organism/haematopoiesis.py (application file, AGPL)",
+    "plan": "plan() solves each compartment's growth step for the share rule: (1 + g) * (1 - sum(f_i)) = 1 - o / A, where the f_i are the per-step outflow fractions to the children and o / A the share the inflow supplies (HSC: (1 + g) * (1 - f) = 1), replacing (1 + g) * prod(1 - f_i). The Fill-stage steps divide by the same retained term, so they move with it.",
+    "to_bio": "the eight sibling-partition flows (a parent with two children) are written as `share:` with the same numbers: CLP_to_ProB, CLP_to_Thymocyte, CMP_to_GMP, CMP_to_MEP, GMP_to_Monoblast, GMP_to_Myeloblast, MPP_to_CLP, MPP_to_CMP",
+    "unchanged": "single-child flows (HSC_to_MPP, MEP_to_Erythroblast, the five terminal-to-mature flows) stay `fraction:` with their numbers; the five mature losses, every name, every evidence string, haematopoiesis_mutants.bio and haematopoiesis_designs.bio are byte-identical",
+    "expected_diff": "exactly the 8 partition lines change key (value identical) and exactly the 16 divide numbers of the four branching compartments change value: CLP_amplify, CLP_fill_10pc, CLP_fill_1pc, CLP_fill_2x, CMP_amplify, CMP_fill_10pc, CMP_fill_1pc, CMP_fill_2x, GMP_amplify, GMP_fill_10pc, GMP_fill_1pc, GMP_fill_2x, MPP_amplify, MPP_fill_10pc, MPP_fill_1pc, MPP_fill_2x; a single-child compartment keeps 1 - f = prod(1 - f), so its numbers cannot move. A diff of any other shape is not the registered change and is not adopted.",
+    "regenerated_by": "to_bio() and mutants_bio(), the functions genomeos/storage.py's human_cell_turnover distiller calls, written to the two program files (the distiller itself also refetches Sender & Milo and rewrites tissues.bio, which this change does not touch)"
+  },
+  "criteria": {
+    "a": "every wild-type assert of haematopoiesis.bio (3) and every assert of all nine experiments of haematopoiesis_mutants.bio (36) passes",
+    "b": "wild type: every compartment's pool within +-5% of its solved value (plan()[id]['pool']) at every sample of the Steady stage (from 90 d, the program's own stage boundary) every 30 days to 1080 d and at 3 yr: 35 samples x 11 compartments. 'Compartment' is read as the module's COMPARTMENTS (HSC through Thymocyte), the cell types whose pool plan() solves. The five mature types are reported at 3 yr against output x lifespan but are not in (b): they approach it with their lifespan as time constant (TCell 320 d), so no generator puts them within 5% from 90 d; the wild-type asserts test three of them at 3 yr. Fill-stage samples (0 to 60 d) are reported, not judged.",
+    "c": "every growth number (the `fraction:` of every `action: divide` decision, 44 in all) that changes is listed old -> new with its relative change, and each is named as fitted: it must sit on a decision whose evidence tier is `inferred` (none sourced). Holds when the list is complete and no changed number is on a curated or experimental decision.",
+    "d": "every committed result or reading that depends on the module (listed under `dependents`, identified before the change) is measured before (this file) and after (the result), and every change is listed.",
+    "e": "falsifier: any wild-type assert or mutant assert failing, or any compartment sample outside +-5% in (b), or a diff that is not the registered change, means the change is NOT adopted and the generator is restored to its committed state."
+  },
+  "dependents": [
+    {
+      "what": "the module itself: data/organisms/human/haematopoiesis.bio (milestone 1.1's module) and the two programs that import it, haematopoiesis_mutants.bio and haematopoiesis_designs.bio",
+      "measured_as": "program decisions (key, value, evidence tier); wild-type trajectory, asserts, turnover, populations; nine experiments' asserts; two design answers"
+    },
+    {
+      "what": "`bio test data/demo genomeos/std data/organisms` (CI): 58 files, 410/410 at 36cabe9; haematopoiesis.bio 3/3, haematopoiesis_designs.bio 3/3, haematopoiesis_mutants.bio 39/39",
+      "measured_as": "bio_test"
+    },
+    {
+      "what": "tests/test_haematopoiesis.py: file equality with the generator, plan bounds (0 < growth < 1.1 x step_out), pools and mature types within 0.8-1.2 at 3 yr, turnover within 0.9-1.1 of the summed outputs, 16 populations, three knockouts",
+      "measured_as": "plan_growth_within_test_bound, wild_type, mutants (the test file is run as acceptance)"
+    },
+    {
+      "what": "design answers pinned in tests/test_forge_design_answers.py (lose_neutrophils_keep_the_rest -> -GFI1, 11 evaluations, 2 feasible; no_lymphocytes_at_all -> -IKZF1 tied with -TCF3, 29 evaluations, 22 feasible) and recorded in data/results/forge_calibration_inventory.json; also run by tests/test_design_budget.py and tests/test_forge_certainty.py",
+      "measured_as": "designs"
+    },
+    {
+      "what": "README.md and docs/ORGANISM-FROM-ONE-CELL.md readings: '2.8e11 cells replaced per day', 'pools within 15% of design after three years', 'nine knockouts reproducing their published phenotypes', the design answers GFI1 and IKZF1 (also docs/BIOLANG-v0.3.md: 'IKZF1 or TCF3 alone'; docs/BIOFORGE-CONFIDENCE.md: GFI1, IKZF1)",
+      "measured_as": "readings"
+    },
+    {
+      "what": "docs/BIOLANG-v0.4-ECONOMY.md section 7.3: haematopoiesis with its designs and mutants gives identical results under `fates: first` and `fates: last`, 0 ambiguous points",
+      "measured_as": "fates_modes"
+    },
+    {
+      "what": "data/results/forge_calibration_inventory.json: its result_manifest.inputs holds the only committed digest of haematopoiesis.bio (sha256 41a822db..., 20643 bytes), which any change to the program makes stale, and its design_triples hold the two blood answers with evaluations, feasible counts and loss. The file is BioForge's and held by lane-pushfix; this lane does not rewrite it. tests/test_forge_calibration_inventory.py:146 re-runs the designs against it (RUN_ONLY_KEYS leaves result_manifest out); tests/test_forge_calibration.py needs every design solved",
+      "measured_as": "program_sha256; designs"
+    },
+    {
+      "what": "data/results/activator_combination_census.json and activator_combination_choice.json: a directory digest of data/organisms in their manifests (already stale before this change: 26 files recorded, 40 now; no test reads it); their haematopoiesis entries count activators (0), which neither the key nor the numbers can move",
+      "measured_as": "not re-measured: listed as a digest that goes staler"
+    },
+    {
+      "what": "censuses that glob every program, read before the change and found not to depend on it: biolang_key_census (share is an accepted decision key), when_census (rule and event when clauses only), amounts_or_concentrations and mandatory_locations (compartments and entities only), rule_evidence_tier and rule_cell_provenance (rule blocks only; the program has none), number_provenance (data/organisms excluded), compiled_defaults (nothing pinned)",
+      "measured_as": "not re-measured"
+    }
+  ],
+  "before": {
+    "program_sha256": "41a822db0016898454ea86103305b69fc963a8ddda5f9168e091046b440912a7",
+    "decisions": {
+      "HSC_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.190206,
+        "evidence": "inferred"
+      },
+      "HSC_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0249739,
+        "evidence": "inferred"
+      },
+      "HSC_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.00333269,
+        "evidence": "inferred"
+      },
+      "hsc_renew": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.00083992,
+        "evidence": "inferred"
+      },
+      "HSC_to_MPP": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.000839215,
+        "evidence": "experimental"
+      },
+      "MPP_to_CMP": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0168485,
+        "evidence": "experimental"
+      },
+      "MPP_to_CLP": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0188658,
+        "evidence": "experimental"
+      },
+      "CMP_to_MEP": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0524386,
+        "evidence": "experimental"
+      },
+      "CMP_to_GMP": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0308947,
+        "evidence": "experimental"
+      },
+      "MEP_to_Erythroblast": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0833333,
+        "evidence": "experimental"
+      },
+      "GMP_to_Myeloblast": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0793147,
+        "evidence": "experimental"
+      },
+      "GMP_to_Monoblast": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.00401861,
+        "evidence": "experimental"
+      },
+      "CLP_to_ProB": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0756303,
+        "evidence": "experimental"
+      },
+      "CLP_to_Thymocyte": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.00770308,
+        "evidence": "experimental"
+      },
+      "MPP_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.232845,
+        "evidence": "inferred"
+      },
+      "MPP_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0616939,
+        "evidence": "inferred"
+      },
+      "MPP_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0392774,
+        "evidence": "inferred"
+      },
+      "MPP_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.036693,
+        "evidence": "inferred"
+      },
+      "CMP_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.295028,
+        "evidence": "inferred"
+      },
+      "CMP_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.115244,
+        "evidence": "inferred"
+      },
+      "CMP_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0916968,
+        "evidence": "inferred"
+      },
+      "CMP_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0875665,
+        "evidence": "inferred"
+      },
+      "CLP_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.296493,
+        "evidence": "inferred"
+      },
+      "CLP_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.116505,
+        "evidence": "inferred"
+      },
+      "CLP_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0929316,
+        "evidence": "inferred"
+      },
+      "CLP_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0887967,
+        "evidence": "inferred"
+      },
+      "MEP_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.297317,
+        "evidence": "inferred"
+      },
+      "MEP_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.117215,
+        "evidence": "inferred"
+      },
+      "MEP_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0936262,
+        "evidence": "inferred"
+      },
+      "MEP_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0894886,
+        "evidence": "inferred"
+      },
+      "GMP_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.296866,
+        "evidence": "inferred"
+      },
+      "GMP_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.116827,
+        "evidence": "inferred"
+      },
+      "GMP_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0932461,
+        "evidence": "inferred"
+      },
+      "GMP_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0891099,
+        "evidence": "inferred"
+      },
+      "Erythroblast_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.233252,
+        "evidence": "inferred"
+      },
+      "Erythroblast_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0620438,
+        "evidence": "inferred"
+      },
+      "Erythroblast_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.03962,
+        "evidence": "inferred"
+      },
+      "Erythroblast_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0358796,
+        "evidence": "inferred"
+      },
+      "Myeloblast_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.233252,
+        "evidence": "inferred"
+      },
+      "Myeloblast_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0620438,
+        "evidence": "inferred"
+      },
+      "Myeloblast_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.03962,
+        "evidence": "inferred"
+      },
+      "Myeloblast_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0347222,
+        "evidence": "inferred"
+      },
+      "Monoblast_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.297317,
+        "evidence": "inferred"
+      },
+      "Monoblast_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.117215,
+        "evidence": "inferred"
+      },
+      "Monoblast_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0936262,
+        "evidence": "inferred"
+      },
+      "Monoblast_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0795455,
+        "evidence": "inferred"
+      },
+      "ProB_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.251797,
+        "evidence": "inferred"
+      },
+      "ProB_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0780144,
+        "evidence": "inferred"
+      },
+      "ProB_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0552533,
+        "evidence": "inferred"
+      },
+      "ProB_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0509868,
+        "evidence": "inferred"
+      },
+      "Thymocyte_fill_2x": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.203535,
+        "evidence": "inferred"
+      },
+      "Thymocyte_fill_10pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0364524,
+        "evidence": "inferred"
+      },
+      "Thymocyte_fill_1pc": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0145689,
+        "evidence": "inferred"
+      },
+      "Thymocyte_amplify": {
+        "action": "divide",
+        "key": "fraction",
+        "value": 0.0119541,
+        "evidence": "inferred"
+      },
+      "Erythroblast_to_Erythrocyte": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0357143,
+        "evidence": "experimental"
+      },
+      "Myeloblast_to_Neutrophil": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0357143,
+        "evidence": "experimental"
+      },
+      "Monoblast_to_Monocyte": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0833333,
+        "evidence": "experimental"
+      },
+      "ProB_to_BCell": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.05,
+        "evidence": "experimental"
+      },
+      "Thymocyte_to_TCell": {
+        "action": "differentiate",
+        "key": "fraction",
+        "value": 0.0119048,
+        "evidence": "experimental"
+      },
+      "Erythrocyte_loss": {
+        "action": "die",
+        "key": "fraction",
+        "value": 0.00210084,
+        "evidence": "experimental"
+      },
+      "Neutrophil_loss": {
+        "action": "die",
+        "key": "fraction",
+        "value": 0.0378788,
+        "evidence": "experimental"
+      },
+      "Monocyte_loss": {
+        "action": "die",
+        "key": "fraction",
+        "value": 0.0714286,
+        "evidence": "experimental"
+      },
+      "BCell_loss": {
+        "action": "die",
+        "key": "fraction",
+        "value": 0.00396825,
+        "evidence": "experimental"
+      },
+      "TCell_loss": {
+        "action": "die",
+        "key": "fraction",
+        "value": 0.00078125,
+        "evidence": "experimental"
+      }
+    },
+    "program_lines": {
+      "HSC_fill_2x": "decision HSC_fill_2x { action: divide; when: cell_type = HSC, TAL1 = present, RUNX1 = present, GATA2 = present, stage = Fill, count = <5e+04; fraction: 0.190206; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "HSC_fill_10pc": "decision HSC_fill_10pc { action: divide; when: cell_type = HSC, TAL1 = present, RUNX1 = present, GATA2 = present, stage = Fill, count = <9e+04; fraction: 0.0249739; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "HSC_fill_1pc": "decision HSC_fill_1pc { action: divide; when: cell_type = HSC, TAL1 = present, RUNX1 = present, GATA2 = present, stage = Fill, count = <1e+05; fraction: 0.00333269; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "hsc_renew": "decision hsc_renew { action: divide; when: cell_type = HSC, TAL1 = present, RUNX1 = present, GATA2 = present, count = >=9.9e+04; fraction: 0.00083992; after: 0.25 d; evidence: inferred \"self-renewal balances the outflow: one division per 298 days per HSC\"; confidence: 0.3 }",
+      "HSC_to_MPP": "decision HSC_to_MPP { action: differentiate; when: cell_type = HSC, GATA2 = present, MYB = present, RUNX1 = present, TAL1 = present; to: MPP; fraction: 0.000839215; after: 0.25 d; evidence: experimental \"Busch et al. 2015 (a self-renewing progenitor tier, not HSCs, supplies the steady state); Mucenski et al. 1991 (MYB)\"; confidence: 0.7 }",
+      "MPP_to_CMP": "decision MPP_to_CMP { action: differentiate; when: cell_type = MPP, GATA2 = present, MYB = present; to: CMP; fraction: 0.0168485; after: 0.25 d; evidence: experimental \"Akashi et al. 2000, Nature 404:193 (CMP)\"; confidence: 0.7 }",
+      "MPP_to_CLP": "decision MPP_to_CLP { action: differentiate; when: cell_type = MPP, GATA2 = present, IKZF1 = present, MYB = present, TCF3 = present; to: CLP; fraction: 0.0188658; after: 0.25 d; evidence: experimental \"Kondo et al. 1997 (CLP); Georgopoulos et al. 1994 (Ikaros: no lymphoid lineages)\"; confidence: 0.7 }",
+      "CMP_to_MEP": "decision CMP_to_MEP { action: differentiate; when: cell_type = CMP, GATA1 = present, GATA2 = present; to: MEP; fraction: 0.0524386; after: 0.25 d; evidence: experimental \"Pevny et al. 1991; Fujiwara et al. 1996 (GATA1: no erythroid or megakaryocytic lineage)\"; confidence: 0.7 }",
+      "CMP_to_GMP": "decision CMP_to_GMP { action: differentiate; when: cell_type = CMP, CEBPA = present, GATA2 = present, SPI1 = present; to: GMP; fraction: 0.0308947; after: 0.25 d; evidence: experimental \"Scott et al. 1994 (PU.1: no myeloid or B lineages); Zhang et al. 1997 (C/EBPa)\"; confidence: 0.7 }",
+      "MEP_to_Erythroblast": "decision MEP_to_Erythroblast { action: differentiate; when: cell_type = MEP, GATA1 = present, KLF1 = present; to: Erythroblast; fraction: 0.0833333; after: 0.25 d; evidence: experimental \"Nuez et al. 1995; Perkins et al. 1995 (KLF1/EKLF: no mature erythrocytes); ~5 divisions from proerythroblast to reticulocyte\"; confidence: 0.7 }",
+      "GMP_to_Myeloblast": "decision GMP_to_Myeloblast { action: differentiate; when: cell_type = GMP, CEBPA = present, GFI1 = present, SPI1 = present; to: Myeloblast; fraction: 0.0793147; after: 0.25 d; evidence: experimental \"Hock et al. 2003 (GFI1: neutropenia); ~4 divisions myeloblast to metamyelocyte\"; confidence: 0.7 }",
+      "GMP_to_Monoblast": "decision GMP_to_Monoblast { action: differentiate; when: cell_type = GMP, CEBPA = present, IRF8 = present, SPI1 = present; to: Monoblast; fraction: 0.00401861; after: 0.25 d; evidence: experimental \"Holtschke et al. 1996 (IRF8/ICSBP: monocyte and macrophage deficiency)\"; confidence: 0.7 }",
+      "CLP_to_ProB": "decision CLP_to_ProB { action: differentiate; when: cell_type = CLP, EBF1 = present, IKZF1 = present, PAX5 = present, SPI1 = present, TCF3 = present; to: ProB; fraction: 0.0756303; after: 0.25 d; evidence: experimental \"Bain et al. 1994 (E2A); Lin & Grosschedl 1995 (EBF1); Urbanek et al. 1994 (PAX5: block at pro-B)\"; confidence: 0.7 }",
+      "CLP_to_Thymocyte": "decision CLP_to_Thymocyte { action: differentiate; when: cell_type = CLP, GATA3 = present, IKZF1 = present, NOTCH1 = present, TCF3 = present, TCF7 = present; to: Thymocyte; fraction: 0.00770308; after: 0.25 d; evidence: experimental \"Radtke et al. 1999 (Notch1: no T cells); Verbeek et al. 1995 (TCF-1); Ting et al. 1996 (GATA-3)\"; confidence: 0.7 }",
+      "MPP_fill_2x": "decision MPP_fill_2x { action: divide; when: cell_type = MPP, GATA2 = present, MYB = present, stage = Fill, count = <1.925e+07; fraction: 0.232845; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "MPP_fill_10pc": "decision MPP_fill_10pc { action: divide; when: cell_type = MPP, GATA2 = present, MYB = present, stage = Fill, count = <3.465e+07; fraction: 0.0616939; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "MPP_fill_1pc": "decision MPP_fill_1pc { action: divide; when: cell_type = MPP, GATA2 = present, MYB = present, stage = Fill, count = <3.85e+07; fraction: 0.0392774; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "MPP_amplify": "decision MPP_amplify { action: divide; when: cell_type = MPP, GATA2 = present, MYB = present, count = <1.15e+08; fraction: 0.036693; after: 0.25 d; evidence: inferred \"14 divisions per transit of 7 days; pool 3.85e+07\"; confidence: 0.3 }",
+      "CMP_fill_2x": "decision CMP_fill_2x { action: divide; when: cell_type = CMP, GATA2 = present, stage = Fill, count = <2.491e+08; fraction: 0.295028; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "CMP_fill_10pc": "decision CMP_fill_10pc { action: divide; when: cell_type = CMP, GATA2 = present, stage = Fill, count = <4.483e+08; fraction: 0.115244; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "CMP_fill_1pc": "decision CMP_fill_1pc { action: divide; when: cell_type = CMP, GATA2 = present, stage = Fill, count = <4.982e+08; fraction: 0.0916968; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "CMP_amplify": "decision CMP_amplify { action: divide; when: cell_type = CMP, GATA2 = present, count = <1.49e+09; fraction: 0.0875665; after: 0.25 d; evidence: inferred \"6 divisions per transit of 3 days; pool 4.98e+08\"; confidence: 0.3 }",
+      "CLP_fill_2x": "decision CLP_fill_2x { action: divide; when: cell_type = CLP, IKZF1 = present, TCF3 = present, stage = Fill, count = <2.789e+08; fraction: 0.296493; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "CLP_fill_10pc": "decision CLP_fill_10pc { action: divide; when: cell_type = CLP, IKZF1 = present, TCF3 = present, stage = Fill, count = <5.02e+08; fraction: 0.116505; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "CLP_fill_1pc": "decision CLP_fill_1pc { action: divide; when: cell_type = CLP, IKZF1 = present, TCF3 = present, stage = Fill, count = <5.578e+08; fraction: 0.0929316; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "CLP_amplify": "decision CLP_amplify { action: divide; when: cell_type = CLP, IKZF1 = present, TCF3 = present, count = <1.67e+09; fraction: 0.0887967; after: 0.25 d; evidence: inferred \"6 divisions per transit of 3 days; pool 5.58e+08\"; confidence: 0.3 }",
+      "MEP_fill_2x": "decision MEP_fill_2x { action: divide; when: cell_type = MEP, GATA1 = present, stage = Fill, count = <1.003e+10; fraction: 0.297317; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "MEP_fill_10pc": "decision MEP_fill_10pc { action: divide; when: cell_type = MEP, GATA1 = present, stage = Fill, count = <1.806e+10; fraction: 0.117215; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "MEP_fill_1pc": "decision MEP_fill_1pc { action: divide; when: cell_type = MEP, GATA1 = present, stage = Fill, count = <2.006e+10; fraction: 0.0936262; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "MEP_amplify": "decision MEP_amplify { action: divide; when: cell_type = MEP, GATA1 = present, count = <6.02e+10; fraction: 0.0894886; after: 0.25 d; evidence: inferred \"6 divisions per transit of 3 days; pool 2.01e+10\"; confidence: 0.3 }",
+      "GMP_fill_2x": "decision GMP_fill_2x { action: divide; when: cell_type = GMP, SPI1 = present, CEBPA = present, stage = Fill, count = <5.91e+09; fraction: 0.296866; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "GMP_fill_10pc": "decision GMP_fill_10pc { action: divide; when: cell_type = GMP, SPI1 = present, CEBPA = present, stage = Fill, count = <1.064e+10; fraction: 0.116827; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "GMP_fill_1pc": "decision GMP_fill_1pc { action: divide; when: cell_type = GMP, SPI1 = present, CEBPA = present, stage = Fill, count = <1.182e+10; fraction: 0.0932461; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "GMP_amplify": "decision GMP_amplify { action: divide; when: cell_type = GMP, SPI1 = present, CEBPA = present, count = <3.55e+10; fraction: 0.0891099; after: 0.25 d; evidence: inferred \"6 divisions per transit of 3 days; pool 1.18e+10\"; confidence: 0.3 }",
+      "Erythroblast_fill_2x": "decision Erythroblast_fill_2x { action: divide; when: cell_type = Erythroblast, GATA1 = present, KLF1 = present, stage = Fill, count = <7.49e+11; fraction: 0.233252; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Erythroblast_fill_10pc": "decision Erythroblast_fill_10pc { action: divide; when: cell_type = Erythroblast, GATA1 = present, KLF1 = present, stage = Fill, count = <1.348e+12; fraction: 0.0620438; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Erythroblast_fill_1pc": "decision Erythroblast_fill_1pc { action: divide; when: cell_type = Erythroblast, GATA1 = present, KLF1 = present, stage = Fill, count = <1.498e+12; fraction: 0.03962; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Erythroblast_amplify": "decision Erythroblast_amplify { action: divide; when: cell_type = Erythroblast, GATA1 = present, KLF1 = present, count = <4.49e+12; fraction: 0.0358796; after: 0.25 d; evidence: inferred \"5 divisions per transit of 7 days; pool 1.5e+12\"; confidence: 0.3 }",
+      "Myeloblast_fill_2x": "decision Myeloblast_fill_2x { action: divide; when: cell_type = Myeloblast, CEBPA = present, GFI1 = present, stage = Fill, count = <2.1e+11; fraction: 0.233252; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Myeloblast_fill_10pc": "decision Myeloblast_fill_10pc { action: divide; when: cell_type = Myeloblast, CEBPA = present, GFI1 = present, stage = Fill, count = <3.78e+11; fraction: 0.0620438; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Myeloblast_fill_1pc": "decision Myeloblast_fill_1pc { action: divide; when: cell_type = Myeloblast, CEBPA = present, GFI1 = present, stage = Fill, count = <4.2e+11; fraction: 0.03962; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Myeloblast_amplify": "decision Myeloblast_amplify { action: divide; when: cell_type = Myeloblast, CEBPA = present, GFI1 = present, count = <1.26e+12; fraction: 0.0347222; after: 0.25 d; evidence: inferred \"4 divisions per transit of 7 days; pool 4.2e+11\"; confidence: 0.3 }",
+      "Monoblast_fill_2x": "decision Monoblast_fill_2x { action: divide; when: cell_type = Monoblast, SPI1 = present, IRF8 = present, stage = Fill, count = <2.28e+09; fraction: 0.297317; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Monoblast_fill_10pc": "decision Monoblast_fill_10pc { action: divide; when: cell_type = Monoblast, SPI1 = present, IRF8 = present, stage = Fill, count = <4.104e+09; fraction: 0.117215; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Monoblast_fill_1pc": "decision Monoblast_fill_1pc { action: divide; when: cell_type = Monoblast, SPI1 = present, IRF8 = present, stage = Fill, count = <4.56e+09; fraction: 0.0936262; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Monoblast_amplify": "decision Monoblast_amplify { action: divide; when: cell_type = Monoblast, SPI1 = present, IRF8 = present, count = <1.37e+10; fraction: 0.0795455; after: 0.25 d; evidence: inferred \"3 divisions per transit of 3 days; pool 4.56e+09\"; confidence: 0.3 }",
+      "ProB_fill_2x": "decision ProB_fill_2x { action: divide; when: cell_type = ProB, SPI1 = present, TCF3 = present, EBF1 = present, PAX5 = present, stage = Fill, count = <1.35e+10; fraction: 0.251797; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "ProB_fill_10pc": "decision ProB_fill_10pc { action: divide; when: cell_type = ProB, SPI1 = present, TCF3 = present, EBF1 = present, PAX5 = present, stage = Fill, count = <2.43e+10; fraction: 0.0780144; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "ProB_fill_1pc": "decision ProB_fill_1pc { action: divide; when: cell_type = ProB, SPI1 = present, TCF3 = present, EBF1 = present, PAX5 = present, stage = Fill, count = <2.7e+10; fraction: 0.0552533; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "ProB_amplify": "decision ProB_amplify { action: divide; when: cell_type = ProB, SPI1 = present, TCF3 = present, EBF1 = present, PAX5 = present, count = <8.1e+10; fraction: 0.0509868; after: 0.25 d; evidence: inferred \"5 divisions per transit of 5 days; pool 2.7e+10\"; confidence: 0.3 }",
+      "Thymocyte_fill_2x": "decision Thymocyte_fill_2x { action: divide; when: cell_type = Thymocyte, NOTCH1 = present, TCF7 = present, GATA3 = present, stage = Fill, count = <2.31e+10; fraction: 0.203535; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Thymocyte_fill_10pc": "decision Thymocyte_fill_10pc { action: divide; when: cell_type = Thymocyte, NOTCH1 = present, TCF7 = present, GATA3 = present, stage = Fill, count = <4.158e+10; fraction: 0.0364524; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Thymocyte_fill_1pc": "decision Thymocyte_fill_1pc { action: divide; when: cell_type = Thymocyte, NOTCH1 = present, TCF7 = present, GATA3 = present, stage = Fill, count = <4.62e+10; fraction: 0.0145689; after: 0.25 d; evidence: inferred \"an adult compartment starts at its steady pool\"; confidence: 0.3 }",
+      "Thymocyte_amplify": "decision Thymocyte_amplify { action: divide; when: cell_type = Thymocyte, NOTCH1 = present, TCF7 = present, GATA3 = present, count = <1.39e+11; fraction: 0.0119541; after: 0.25 d; evidence: inferred \"7 divisions per transit of 21 days; pool 4.62e+10\"; confidence: 0.3 }",
+      "Erythroblast_to_Erythrocyte": "decision Erythroblast_to_Erythrocyte { action: differentiate; when: cell_type = Erythroblast; to: Erythrocyte; fraction: 0.0357143; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: 2.14e+11 Erythrocyte per day\"; confidence: 0.7 }",
+      "Myeloblast_to_Neutrophil": "decision Myeloblast_to_Neutrophil { action: differentiate; when: cell_type = Myeloblast; to: Neutrophil; fraction: 0.0357143; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: 6e+10 Neutrophil per day\"; confidence: 0.7 }",
+      "Monoblast_to_Monocyte": "decision Monoblast_to_Monocyte { action: differentiate; when: cell_type = Monoblast; to: Monocyte; fraction: 0.0833333; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: 1.52e+09 Monocyte per day\"; confidence: 0.7 }",
+      "ProB_to_BCell": "decision ProB_to_BCell { action: differentiate; when: cell_type = ProB; to: BCell; fraction: 0.05; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: 5.4e+09 BCell per day\"; confidence: 0.7 }",
+      "Thymocyte_to_TCell": "decision Thymocyte_to_TCell { action: differentiate; when: cell_type = Thymocyte; to: TCell; fraction: 0.0119048; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: 2.2e+09 TCell per day\"; confidence: 0.7 }",
+      "Erythrocyte_loss": "decision Erythrocyte_loss { action: die; when: cell_type = Erythrocyte; fraction: 0.00210084; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: lifespan 119 days\"; confidence: 0.7 }",
+      "Neutrophil_loss": "decision Neutrophil_loss { action: die; when: cell_type = Neutrophil; fraction: 0.0378788; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: lifespan 6.6 days\"; confidence: 0.7 }",
+      "Monocyte_loss": "decision Monocyte_loss { action: die; when: cell_type = Monocyte; fraction: 0.0714286; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: lifespan 3.5 days\"; confidence: 0.7 }",
+      "BCell_loss": "decision BCell_loss { action: die; when: cell_type = BCell; fraction: 0.00396825; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: lifespan 63 days\"; confidence: 0.7 }",
+      "TCell_loss": "decision TCell_loss { action: die; when: cell_type = TCell; fraction: 0.00078125; after: 0.25 d; evidence: experimental \"Sender & Milo 2021, Nat Med 27:45: lifespan 320 days\"; confidence: 0.7 }"
+    },
+    "plan": {
+      "HSC": {
+        "pool": 100000.0,
+        "step_out": 0.0008392147719860077,
+        "retained": 0.999160785228014,
+        "growth_fraction": 0.0008399196449593305
+      },
+      "MPP": {
+        "pool": 38499145.5078125,
+        "step_out": 0.03571428571428571,
+        "retained": 0.9646035743856683,
+        "growth_fraction": 0.03669304855091848
+      },
+      "CMP": {
+        "pool": 498164062.5,
+        "step_out": 0.08333333333333333,
+        "retained": 0.9182867423276049,
+        "growth_fraction": 0.08756651994696285
+      },
+      "CLP": {
+        "pool": 557812500.0,
+        "step_out": 0.08333333333333333,
+        "retained": 0.9172492526422334,
+        "growth_fraction": 0.08879665346121746
+      },
+      "MEP": {
+        "pool": 20062500000.0,
+        "step_out": 0.08333333333333333,
+        "retained": 0.9166666666666666,
+        "growth_fraction": 0.08948863636363646
+      },
+      "GMP": {
+        "pool": 11820000000.0,
+        "step_out": 0.08333333333333333,
+        "retained": 0.9169854017968342,
+        "growth_fraction": 0.0891099408013658
+      },
+      "Erythroblast": {
+        "pool": 1498000000000.0,
+        "step_out": 0.03571428571428571,
+        "retained": 0.9642857142857143,
+        "growth_fraction": 0.03587962962962954
+      },
+      "Myeloblast": {
+        "pool": 420000000000.0,
+        "step_out": 0.03571428571428571,
+        "retained": 0.9642857142857143,
+        "growth_fraction": 0.0347222222222221
+      },
+      "Monoblast": {
+        "pool": 4560000000.0,
+        "step_out": 0.08333333333333333,
+        "retained": 0.9166666666666666,
+        "growth_fraction": 0.07954545454545459
+      },
+      "ProB": {
+        "pool": 27000000000.0,
+        "step_out": 0.05,
+        "retained": 0.95,
+        "growth_fraction": 0.050986842105263275
+      },
+      "Thymocyte": {
+        "pool": 46200000000.0,
+        "step_out": 0.011904761904761904,
+        "retained": 0.9880952380952381,
+        "growth_fraction": 0.011954066265060126
+      }
+    },
+    "plan_growth_within_test_bound": true,
+    "wild_type": {
+      "asserts": [
+        {
+          "assert": "type Erythrocyte at 3 yr in 2.16e+13..2.93e+13",
+          "ok": true,
+          "value": 26672715145546.258
+        },
+        {
+          "assert": "type Neutrophil at 3 yr in 3.37e+11..4.55e+11",
+          "ok": true,
+          "value": 391021127663.05164
+        },
+        {
+          "assert": "type TCell at 3 yr in 5.63e+11..8.1e+11",
+          "ok": true,
+          "value": 677915970417.9694
+        }
+      ],
+      "final_counts": {
+        "BCell": 347855253620.6302,
+        "CLP": 569312913.6770996,
+        "CMP": 517111888.56014824,
+        "Erythroblast": 1564252321748.998,
+        "Erythrocyte": 26672715145546.258,
+        "GMP": 11647452778.431734,
+        "HSC": 100154.16988240734,
+        "MEP": 20857267885.162674,
+        "MPP": 39947842.66904131,
+        "Monoblast": 4138120895.809082,
+        "Monocyte": 4827985893.636243,
+        "Myeloblast": 414670407506.16425,
+        "Neutrophil": 391021127663.05164,
+        "ProB": 27589528485.290455,
+        "TCell": 677915970417.9694,
+        "Thymocyte": 45941139191.28267
+      },
+      "turnover_per_day": 292405490848.6555,
+      "summed_mature_outputs_per_day": 283120000000.0,
+      "populations": 16,
+      "unknown": {},
+      "ambiguous_fates": 0,
+      "samples": [
+        {
+          "day": 0,
+          "counts": {
+            "HSC": 1.0
+          }
+        },
+        {
+          "day": 30,
+          "counts": {
+            "BCell": 44121749.320941314,
+            "CLP": 68747079.03142557,
+            "CMP": 62447974.01648935,
+            "Erythroblast": 264248975.6899614,
+            "Erythrocyte": 40612164.921945825,
+            "GMP": 68813960.61177725,
+            "HSC": 99409.47329409681,
+            "MEP": 123264244.48876314,
+            "MPP": 25181945.770703707,
+            "Monoblast": 6549703.523130944,
+            "Monocyte": 1812261.820470038,
+            "Myeloblast": 140406767.51974937,
+            "Neutrophil": 18721605.74953719,
+            "ProB": 195711202.39343545,
+            "TCell": 1003340.0886665843,
+            "Thymocyte": 18425956.625280794
+          }
+        },
+        {
+          "day": 60,
+          "counts": {
+            "BCell": 108661644615.65944,
+            "CLP": 610081518.2320622,
+            "CMP": 543633578.3706944,
+            "Erythroblast": 1559922048173.776,
+            "Erythrocyte": 3829754523611.476,
+            "GMP": 12932678037.792366,
+            "HSC": 100154.11737723899,
+            "MEP": 21890493802.014606,
+            "MPP": 39970640.745684214,
+            "Monoblast": 5021924802.673197,
+            "Monocyte": 5820882239.99299,
+            "Myeloblast": 438931865421.79877,
+            "Neutrophil": 389402111051.09674,
+            "ProB": 28567595728.92161,
+            "TCell": 40662283553.42627,
+            "Thymocyte": 46786429716.38529
+          }
+        },
+        {
+          "day": 90,
+          "counts": {
+            "BCell": 204427909897.35687,
+            "CLP": 608464322.3371061,
+            "CMP": 543637504.8907739,
+            "Erythroblast": 1569262988251.2903,
+            "Erythrocyte": 8908988383591.299,
+            "GMP": 12921905039.401852,
+            "HSC": 100154.11889802551,
+            "MEP": 21890348412.59283,
+            "MPP": 39969977.42665119,
+            "Monoblast": 5017435396.147776,
+            "Monocyte": 5834380528.321713,
+            "Myeloblast": 443624860977.63245,
+            "Neutrophil": 417143061009.1176,
+            "ProB": 28725107825.698254,
+            "TCell": 100845364920.52211,
+            "Thymocyte": 46784807958.057144
+          }
+        },
+        {
+          "day": 120,
+          "counts": {
+            "BCell": 264476262704.1381,
+            "CLP": 602803800.947736,
+            "CMP": 539810915.7760724,
+            "Erythroblast": 1577398797413.4001,
+            "Erythrocyte": 12888391673805.37,
+            "GMP": 12814163835.052977,
+            "HSC": 100154.12041881208,
+            "MEP": 21879219193.431328,
+            "MPP": 39969314.286137156,
+            "Monoblast": 4695038455.030195,
+            "Monocyte": 5505244738.364431,
+            "Myeloblast": 446806815895.80597,
+            "Neutrophil": 420721646471.2132,
+            "ProB": 28824717340.99918,
+            "TCell": 155636858819.76367,
+            "Thymocyte": 46780095317.539
+          }
+        },
+        {
+          "day": 150,
+          "counts": {
+            "BCell": 302053961876.8455,
+            "CLP": 597961230.8153245,
+            "CMP": 536536945.35893285,
+            "Erythroblast": 1584314718060.9312,
+            "Erythrocyte": 16008696248589.49,
+            "GMP": 12710503391.297556,
+            "HSC": 100154.12193959864,
+            "MEP": 21849076146.40305,
+            "MPP": 39968651.32409429,
+            "Monoblast": 4576489957.802774,
+            "Monocyte": 5350710935.556218,
+            "Myeloblast": 448356616513.14844,
+            "Neutrophil": 422495491925.9186,
+            "ProB": 28863959511.02266,
+            "TCell": 205513714606.64618,
+            "Thymocyte": 46770979299.313354
+          }
+        },
+        {
+          "day": 180,
+          "counts": {
+            "BCell": 325442843818.80975,
+            "CLP": 593818219.9505651,
+            "CMP": 533735607.94025475,
+            "Erythroblast": 1590013992742.801,
+            "Erythrocyte": 18456878196670.848,
+            "GMP": 12611995546.169027,
+            "HSC": 100154.12346038524,
+            "MEP": 21805649339.959793,
+            "MPP": 39967988.54047454,
+            "Monoblast": 4517172892.64468,
+            "Monocyte": 5276707115.25608,
+            "Myeloblast": 448697230174.1827,
+            "Neutrophil": 423045911878.2548,
+            "ProB": 28859422553.686462,
+            "TCell": 250910386760.79193,
+            "Thymocyte": 46758152545.99661
+          }
+        },
+        {
+          "day": 210,
+          "counts": {
+            "BCell": 339851645132.01697,
+            "CLP": 590273512.7234279,
+            "CMP": 531338494.9513767,
+            "Erythroblast": 1594546920049.308,
+            "Erythrocyte": 20378320998813.785,
+            "GMP": 12519316367.507874,
+            "HSC": 100154.12498117186,
+            "MEP": 21753408433.332478,
+            "MPP": 39967325.93522994,
+            "Monoblast": 4476134256.039757,
+            "Monocyte": 5227261031.11941,
+            "Myeloblast": 448159308766.3268,
+            "Neutrophil": 422704153226.802,
+            "ProB": 28823950477.41792,
+            "TCell": 292223309877.0145,
+            "Thymocyte": 46742206831.985275
+          }
+        },
+        {
+          "day": 240,
+          "counts": {
+            "BCell": 348566208951.19104,
+            "CLP": 587240509.5026814,
+            "CMP": 529287099.280148,
+            "Erythroblast": 1597994350708.7195,
+            "Erythrocyte": 21886236937450.207,
+            "GMP": 12432838266.594158,
+            "HSC": 100154.1265019585,
+            "MEP": 21695807497.38871,
+            "MPP": 39966663.50831251,
+            "Monoblast": 4441841331.551324,
+            "Monocyte": 5186592119.020394,
+            "Myeloblast": 447000007989.83545,
+            "Neutrophil": 421726964199.3579,
+            "ProB": 28767414842.34447,
+            "TCell": 329814175013.783,
+            "Thymocyte": 46723647670.188156
+          }
+        },
+        {
+          "day": 270,
+          "counts": {
+            "BCell": 353666544502.99194,
+            "CLP": 584645145.309141,
+            "CMP": 527531382.1340629,
+            "Erythroblast": 1600455328379.299,
+            "Erythrocyte": 23068933018724.312,
+            "GMP": 12352703737.87428,
+            "HSC": 100154.12802274518,
+            "MEP": 21635485369.8119,
+            "MPP": 39966001.25967424,
+            "Monoblast": 4411069842.964325,
+            "Monocyte": 5150284725.143154,
+            "Myeloblast": 445418067751.3307,
+            "Neutrophil": 420313065591.2557,
+            "ProB": 28697335494.316143,
+            "TCell": 364012931168.92773,
+            "Thymocyte": 46702906804.467026
+          }
+        },
+        {
+          "day": 300,
+          "counts": {
+            "BCell": 356474447710.7007,
+            "CLP": 582424075.5180689,
+            "CMP": 526028547.3356267,
+            "Erythroblast": 1602037976814.3193,
+            "Erythrocyte": 23995416058663.72,
+            "GMP": 12278884113.925547,
+            "HSC": 100154.12954353186,
+            "MEP": 21574429287.624866,
+            "MPP": 39965339.18926727,
+            "Monoblast": 4382911174.139136,
+            "Monocyte": 5117098593.881273,
+            "Myeloblast": 443565894688.3396,
+            "Neutrophil": 418615141268.57513,
+            "ProB": 28619378859.412827,
+            "TCell": 395120533821.4742,
+            "Thymocyte": 46680352893.815056
+          }
+        },
+        {
+          "day": 330,
+          "counts": {
+            "BCell": 357833395644.84094,
+            "CLP": 580523124.1676462,
+            "CMP": 524741993.0262203,
+            "Erythroblast": 1602852913845.9407,
+            "Erythrocyte": 24719718214113.75,
+            "GMP": 12211226128.637762,
+            "HSC": 100154.13106431859,
+            "MEP": 21514108230.1679,
+            "MPP": 39964677.29704369,
+            "Monoblast": 4357079636.960262,
+            "Monocyte": 5086653461.537431,
+            "Myeloblast": 441559239202.659,
+            "Neutrophil": 416749430734.05493,
+            "ProB": 28537757097.670208,
+            "TCell": 423411460900.71246,
+            "Thymocyte": 46656300650.0059
+          }
+        },
+        {
+          "day": 360,
+          "counts": {
+            "BCell": 358283933411.05396,
+            "CLP": 578895956.863247,
+            "CMP": 523640415.1003518,
+            "Erythroblast": 1603008617775.6072,
+            "Erythrocyte": 25284236764069.832,
+            "GMP": 12149488587.003376,
+            "HSC": 100154.13258510531,
+            "MEP": 21455581312.712025,
+            "MPP": 39964015.5829555,
+            "Monoblast": 4333440945.393552,
+            "Monocyte": 5058782352.787661,
+            "Myeloblast": 439484941180.8604,
+            "Neutrophil": 414803408328.60583,
+            "ProB": 28455547088.31791,
+            "TCell": 449136015051.1738,
+            "Thymocyte": 46631018652.56305
+          }
+        },
+        {
+          "day": 390,
+          "counts": {
+            "BCell": 358173865602.3611,
+            "CLP": 577502945.7689508,
+            "CMP": 522697040.40884095,
+            "Erythroblast": 1602608289350.1855,
+            "Erythrocyte": 25722314477039.418,
+            "GMP": 12093371029.981594,
+            "HSC": 100154.1341058921,
+            "MEP": 21399585659.567234,
+            "MPP": 39963354.04695497,
+            "Monoblast": 4311886068.671846,
+            "Monocyte": 5033357194.238985,
+            "Myeloblast": 437407124426.7888,
+            "Neutrophil": 412841925815.0046,
+            "ProB": 28374944681.84722,
+            "TCell": 472522429655.52,
+            "Thymocyte": 46604736032.49842
+          }
+        },
+        {
+          "day": 420,
+          "counts": {
+            "BCell": 357727713909.8432,
+            "CLP": 576310198.8830729,
+            "CMP": 521888970.9481757,
+            "Erythroblast": 1601747847555.336,
+            "Erythrocyte": 26060234878813.977,
+            "GMP": 12042535943.49044,
+            "HSC": 100154.1356266789,
+            "MEP": 21346607426.157467,
+            "MPP": 39962692.688994035,
+            "Monoblast": 4292301599.2864428,
+            "Monocyte": 5010246721.369196,
+            "Myeloblast": 435372144712.0902,
+            "Neutrophil": 410912120432.00714,
+            "ProB": 28297466764.51906,
+            "TCell": 493778794755.75653,
+            "Thymocyte": 46577648188.557274
+          }
+        },
+        {
+          "day": 450,
+          "counts": {
+            "BCell": 357090674463.10333,
+            "CLP": 575288729.8188533,
+            "CMP": 521196622.97190756,
+            "Erythroblast": 1600514774098.5515,
+            "Erythrocyte": 26318766639731.12,
+            "GMP": 11996625779.86044,
+            "HSC": 100154.13714746566,
+            "MEP": 21296939007.19356,
+            "MPP": 39962031.50902491,
+            "Monoblast": 4274566150.0639853,
+            "Monocyte": 4989310313.993523,
+            "Myeloblast": 433412536325.99817,
+            "Neutrophil": 409047330981.5787,
+            "ProB": 28224111321.641968,
+            "TCell": 513094817774.8914,
+            "Thymocyte": 46549921676.00968
+          }
+        },
+        {
+          "day": 480,
+          "counts": {
+            "BCell": 356356571822.04535,
+            "CLP": 574413747.7531956,
+            "CMP": 520603247.2850692,
+            "Erythroblast": 1598987583080.7646,
+            "Erythrocyte": 26514360408252.176,
+            "GMP": 11955275828.173426,
+            "HSC": 100154.13866825252,
+            "MEP": 21250724941.908813,
+            "MPP": 39961370.50699966,
+            "Monoblast": 4258553003.727531,
+            "Monocyte": 4970400673.272486,
+            "Myeloblast": 431550153971.04645,
+            "Neutrophil": 407270216894.0583,
+            "ProB": 28155483761.13162,
+            "TCell": 530643432783.8295,
+            "Thymocyte": 46521698387.75508
+          }
+        },
+        {
+          "day": 510,
+          "counts": {
+            "BCell": 355585738357.725,
+            "CLP": 573664050.1500571,
+            "CMP": 520094518.9711724,
+            "Erythroblast": 1597235741759.3772,
+            "Erythrocyte": 26660077624542.88,
+            "GMP": 11918123778.562561,
+            "HSC": 100154.14018903936,
+            "MEP": 21207998589.843346,
+            "MPP": 39960709.68287056,
+            "Monoblast": 4244133619.3377657,
+            "Monocyte": 4953367909.419614,
+            "Myeloblast": 429798668357.88184,
+            "Neutrophil": 405595237068.67017,
+            "ProB": 28091896189.71393,
+            "TCell": 546582270978.9866,
+            "Thymocyte": 46493099130.17458
+          }
+        },
+        {
+          "day": 540,
+          "counts": {
+            "BCell": 354816526763.6635,
+            "CLP": 573021503.382596,
+            "CMP": 519658186.50213164,
+            "Erythroblast": 1595319907778.5376,
+            "Erythrocyte": 26766312528628.754,
+            "GMP": 11884816667.880486,
+            "HSC": 100154.14170982625,
+            "MEP": 21168711287.223484,
+            "MPP": 39960049.03658953,
+            "Monoblast": 4231180649.9758115,
+            "Monocyte": 4938063152.329201,
+            "Myeloblast": 428165542964.1288,
+            "Neutrophil": 404030614685.42126,
+            "ProB": 28033445055.98622,
+            "TCell": 561055004031.5354,
+            "Thymocyte": 46464226681.3361
+          }
+        },
+        {
+          "day": 570,
+          "counts": {
+            "BCell": 354072779700.833,
+            "CLP": 572470598.531408,
+            "CMP": 519283771.6360131,
+            "Erythroblast": 1593292379663.7727,
+            "Erythrocyte": 26841354477824.75,
+            "GMP": 11855015764.41241,
+            "HSC": 100154.14323061315,
+            "MEP": 21132755392.311,
+            "MPP": 39959388.568109,
+            "Monoblast": 4219570243.0825086,
+            "Monocyte": 4924341332.46481,
+            "Myeloblast": 426653594606.2533,
+            "Neutrophil": 402579889605.69653,
+            "ProB": 27980071534.357895,
+            "TCell": 574192571035.8569,
+            "Thymocyte": 46435168406.4803
+          }
+        },
+        {
+          "day": 600,
+          "counts": {
+            "BCell": 353368717430.9354,
+            "CLP": 571998071.4776541,
+            "CMP": 518962312.7515896,
+            "Erythroblast": 1591197682285.4055,
+            "Erythrocyte": 26891826839033.64,
+            "GMP": 11828399842.732826,
+            "HSC": 100154.14475140008,
+            "MEP": 21099982377.92958,
+            "MPP": 39958728.27738106,
+            "Monoblast": 4209183683.4659085,
+            "Monocyte": 4912063181.247412,
+            "Myeloblast": 425262220513.52374,
+            "Neutrophil": 401243140214.816,
+            "ProB": 27931608178.147934,
+            "TCell": 586114298918.9644,
+            "Thymocyte": 46405998494.867226
+          }
+        },
+        {
+          "day": 630,
+          "counts": {
+            "BCell": 352712165035.26324,
+            "CLP": 571592577.9848917,
+            "CMP": 518686145.33264893,
+            "Erythroblast": 1589073228645.9517,
+            "Erythrocyte": 26923030375964.754,
+            "GMP": 11804667212.396639,
+            "HSC": 100154.14627218703,
+            "MEP": 21070216922.12148,
+            "MPP": 39958068.16435793,
+            "Monoblast": 4199908497.0403047,
+            "Monocyte": 4901096585.802338,
+            "Myeloblast": 423988358522.9967,
+            "Neutrophil": 400017940650.8901,
+            "ProB": 27887814683.170593,
+            "TCell": 596928925370.6925,
+            "Thymocyte": 46376779872.7899
+          }
+        },
+        {
+          "day": 660,
+          "counts": {
+            "BCell": 352106703234.2479,
+            "CLP": 571244415.810376,
+            "CMP": 518448714.22500825,
+            "Erythroblast": 1586950014766.9346,
+            "Erythrocyte": 26939212633095.016,
+            "GMP": 11783536792.600325,
+            "HSC": 100154.14779297398,
+            "MEP": 21043267776.3657,
+            "MPP": 39957408.228991844,
+            "Monoblast": 4191639130.1447477,
+            "Monocyte": 4891317433.716601,
+            "Myeloblast": 422827234064.3945,
+            "Neutrophil": 398900106546.7033,
+            "ProB": 27848405045.78073,
+            "TCell": 606735532612.5723,
+            "Thymocyte": 46347565839.62783
+          }
+        },
+        {
+          "day": 690,
+          "counts": {
+            "BCell": 351553114948.0997,
+            "CLP": 570945287.0386982,
+            "CMP": 518244413.0674481,
+            "Erythroblast": 1584853316476.1387,
+            "Erythrocyte": 26943779883065.78,
+            "GMP": 11764748466.486752,
+            "HSC": 100154.14931376098,
+            "MEP": 21018936048.995506,
+            "MPP": 39956748.47123494,
+            "Monoblast": 4184277302.2331505,
+            "Monocyte": 4882610064.398573,
+            "Myeloblast": 421772937160.1939,
+            "Neutrophil": 397884272076.3473,
+            "ProB": 27813067947.661133,
+            "TCell": 615624399637.8019,
+            "Thymocyte": 46318401467.02994
+          }
+        },
+        {
+          "day": 720,
+          "counts": {
+            "BCell": 351050366326.41864,
+            "CLP": 570688094.815853,
+            "CMP": 518068446.9634129,
+            "Erythroblast": 1582803366206.6726,
+            "Erythrocyte": 26939464409889.22,
+            "GMP": 11748062901.110857,
+            "HSC": 100154.150834548,
+            "MEP": 20997021424.38028,
+            "MPP": 39956088.89103961,
+            "Monoblast": 4177732111.70351,
+            "Monocyte": 4874867422.467375,
+            "Myeloblast": 420818864238.77423,
+            "Neutrophil": 396964332759.5468,
+            "ProB": 27781481834.0433,
+            "TCell": 623677779922.0721,
+            "Thymocyte": 46289324795.51188
+          }
+        },
+        {
+          "day": 750,
+          "counts": {
+            "BCell": 350596276621.85004,
+            "CLP": 570466769.5045396,
+            "CMP": 517916715.0296118,
+            "Erythroblast": 1580815995066.2803,
+            "Erythrocyte": 26928456983212.09,
+            "GMP": 11733260980.3251,
+            "HSC": 100154.15235533503,
+            "MEP": 20977326741.892033,
+            "MPP": 39955429.488358036,
+            "Monoblast": 4171919958.7815623,
+            "Monocyte": 4867990989.757788,
+            "Myeloblast": 419958052754.7301,
+            "Neutrophil": 396133781745.15027,
+            "ProB": 27753325856.554752,
+            "TCell": 630970611021.6213,
+            "Thymocyte": 46260367857.791306
+          }
+        },
+        {
+          "day": 780,
+          "counts": {
+            "BCell": 350187977674.9235,
+            "CLP": 570276120.0021877,
+            "CMP": 517785709.9445329,
+            "Erythroblast": 1578903230865.1672,
+            "Erythrocyte": 26912512135998.85,
+            "GMP": 11720142966.409924,
+            "HSC": 100154.1538761221,
+            "MEP": 20959661279.178238,
+            "MPP": 39954770.26314247,
+            "Monoblast": 4166764336.1565247,
+            "Monocyte": 4861890556.752903,
+            "Myeloblast": 419183431115.84357,
+            "Neutrophil": 395385961859.3578,
+            "ProB": 27728287613.393257,
+            "TCell": 637571161937.5011,
+            "Thymocyte": 46231557553.94137
+          }
+        },
+        {
+          "day": 810,
+          "counts": {
+            "BCell": 349822229492.6261,
+            "CLP": 570111706.5795916,
+            "CMP": 517672432.0363109,
+            "Erythroblast": 1577073846864.2642,
+            "Erythrocyte": 26893032133192.098,
+            "GMP": 11708527480.853947,
+            "HSC": 100154.15539690918,
+            "MEP": 20943843018.89102,
+            "MPP": 39954111.21534515,
+            "Monoblast": 4162195527.2553043,
+            "Monocyte": 4856483881.334594,
+            "Myeloblast": 418488001978.1315,
+            "Neutrophil": 394714251313.7118,
+            "ProB": 27706068427.35889,
+            "TCell": 643541623630.3738,
+            "Thymocyte": 46202916399.80915
+          }
+        },
+        {
+          "day": 840,
+          "counts": {
+            "BCell": 349495636308.28125,
+            "CLP": 569969732.1252112,
+            "CMP": 517574315.8055134,
+            "Erythroblast": 1575333859013.7454,
+            "Erythrocyte": 26871134192079.246,
+            "GMP": 11698250374.20076,
+            "HSC": 100154.15691769632,
+            "MEP": 20929700124.35927,
+            "MPP": 39953452.34491844,
+            "Monoblast": 4158150243.2747164,
+            "Monocyte": 4851696272.254735,
+            "Myeloblast": 417864973385.85126,
+            "Neutrophil": 394112197421.651,
+            "ProB": 27686386747.698727,
+            "TCell": 648938647615.2333,
+            "Thymocyte": 46174463167.046524
+          }
+        },
+        {
+          "day": 870,
+          "counts": {
+            "BCell": 349204793140.687,
+            "CLP": 569846949.1310447,
+            "CMP": 517489167.0830208,
+            "Erythroblast": 1573686971627.1592,
+            "Erythrocyte": 26847704493909.09,
+            "GMP": 11689163538.428686,
+            "HSC": 100154.15843848341,
+            "MEP": 20917071805.7123,
+            "MPP": 39952793.65181453,
+            "Monoblast": 4154571223.020528,
+            "Monocyte": 4847460126.26726,
+            "Myeloblast": 417307849338.71185,
+            "Neutrophil": 393573609808.5863,
+            "ProB": 27668980137.627625,
+            "TCell": 653813837147.2697,
+            "Thymocyte": 46146213430.43895
+          }
+        },
+        {
+          "day": 900,
+          "counts": {
+            "BCell": 348946383425.24225,
+            "CLP": 569740580.1416079,
+            "CMP": 517415109.2836735,
+            "Erythroblast": 1572134972966.5752,
+            "Erythrocyte": 26823441739813.066,
+            "GMP": 11681133702.175798,
+            "HSC": 100154.15995927059,
+            "MEP": 20905808721.992603,
+            "MPP": 39952135.13598584,
+            "Monoblast": 4151406813.923918,
+            "Monocyte": 4843714441.061189,
+            "Myeloblast": 416810489032.0719,
+            "Neutrophil": 393092622288.5675,
+            "ProB": 27653606209.977146,
+            "TCell": 658214195126.0808,
+            "Thymocyte": 46118180035.95486
+          }
+        },
+        {
+          "day": 930,
+          "counts": {
+            "BCell": 348717242006.02167,
+            "CLP": 569648249.717328,
+            "CMP": 517350537.43917,
+            "Erythroblast": 1570678083247.947,
+            "Erythrocyte": 26798892397800.91,
+            "GMP": 11674041238.65719,
+            "HSC": 100154.16148005775,
+            "MEP": 20895773035.435623,
+            "MPP": 39951476.79738469,
+            "Monoblast": 4148610548.067559,
+            "Monocyte": 4840404320.69699,
+            "Myeloblast": 416367142131.0475,
+            "Neutrophil": 392663730715.31146,
+            "ProB": 27640042793.97387,
+            "TCell": 662182532492.8551,
+            "Thymocyte": 46090373500.98755
+          }
+        },
+        {
+          "day": 960,
+          "counts": {
+            "BCell": 348514393541.0603,
+            "CLP": 569567926.2457349,
+            "CMP": 517294078.8842395,
+            "Erythroblast": 1569315258231.6675,
+            "Erythrocyte": 26774479319689.844,
+            "GMP": 11667779007.840363,
+            "HSC": 100154.16300084497,
+            "MEP": 20886838210.18308,
+            "MPP": 39950818.63596349,
+            "Monoblast": 4146140723.443693,
+            "Monocyte": 4837480485.920398,
+            "Myeloblast": 415972465920.29144,
+            "Neutrophil": 392281812611.6331,
+            "ProB": 27628087552.81528,
+            "TCell": 665757840571.732,
+            "Thymocyte": 46062802356.607445
+          }
+        },
+        {
+          "day": 990,
+          "counts": {
+            "BCell": 348335073475.6181,
+            "CLP": 569497872.1750464,
+            "CMP": 517244559.63310224,
+            "Erythroblast": 1568044451935.004,
+            "Erythrocyte": 26750525045178.04,
+            "GMP": 11662251247.935743,
+            "HSC": 100154.1645216322,
+            "MEP": 20878888628.27423,
+            "MPP": 39950160.65167446,
+            "Monoblast": 4143959997.81188,
+            "Monocyte": 4834898798.303016,
+            "Myeloblast": 415621528948.0844,
+            "Neutrophil": 391942133170.297,
+            "ProB": 27617557221.372257,
+            "TCell": 668975630509.9885,
+            "Thymocyte": 46035473440.21786
+          }
+        },
+        {
+          "day": 1020,
+          "counts": {
+            "BCell": 348176736727.1193,
+            "CLP": 569436601.45107,
+            "CMP": 517200975.6225949,
+            "Erythroblast": 1566862842164.3557,
+            "Erythrocyte": 26727270830267.562,
+            "GMP": 11657372526.183277,
+            "HSC": 100154.16604241946,
+            "MEP": 20871819080.027695,
+            "MPP": 39949502.84447008,
+            "Monoblast": 4142035000.2816834,
+            "Monocyte": 4832619804.465883,
+            "Myeloblast": 415309804799.95825,
+            "Neutrophil": 391640341245.3026,
+            "ProB": 27608286593.467907,
+            "TCell": 671868242699.8457,
+            "Thymocyte": 46008392145.79379
+          }
+        },
+        {
+          "day": 1050,
+          "counts": {
+            "BCell": 348037057809.05524,
+            "CLP": 569382843.1148039,
+            "CMP": 517162468.1175752,
+            "Erythroblast": 1565767022573.8545,
+            "Erythrocyte": 26704892219980.945,
+            "GMP": 11653066754.992933,
+            "HSC": 100154.16756320673,
+            "MEP": 20865534173.21901,
+            "MPP": 39948845.21430273,
+            "Monoblast": 4140335963.998067,
+            "Monocyte": 4830608304.541833,
+            "Myeloblast": 415033158847.74713,
+            "Neutrophil": 391372458170.5077,
+            "ProB": 27600127356.70461,
+            "TCell": 674465128815.7141,
+            "Thymocyte": 45981562637.84403
+          }
+        },
+        {
+          "day": 1080,
+          "counts": {
+            "BCell": 347913925109.53705,
+            "CLP": 569335510.1690009,
+            "CMP": 517128302.67613953,
+            "Erythroblast": 1564753164857.4734,
+            "Erythrocyte": 26683511816323.562,
+            "GMP": 11649266276.501736,
+            "HSC": 100154.169083994,
+            "MEP": 20859947695.23853,
+            "MPP": 39948187.76112469,
+            "Monoblast": 4138836381.9578757,
+            "Monocyte": 4828832947.408361,
+            "Myeloblast": 414787830187.6163,
+            "Neutrophil": 391134861615.6506,
+            "ProB": 27592946848.069244,
+            "TCell": 676793108872.6241,
+            "Thymocyte": 45954988034.34826
+          }
+        },
+        {
+          "day": 1095.75,
+          "counts": {
+            "BCell": 347855253620.6302,
+            "CLP": 569312913.6770996,
+            "CMP": 517111888.56014824,
+            "Erythroblast": 1564252321748.998,
+            "Erythrocyte": 26672715145546.258,
+            "GMP": 11647452778.431734,
+            "HSC": 100154.16988240734,
+            "MEP": 20857267885.162674,
+            "MPP": 39947842.66904131,
+            "Monoblast": 4138120895.809082,
+            "Monocyte": 4827985893.636243,
+            "Myeloblast": 414670407506.16425,
+            "Neutrophil": 391021127663.05164,
+            "ProB": 27589528485.290455,
+            "TCell": 677915970417.9694,
+            "Thymocyte": 45941139191.28267
+          }
+        }
+      ]
+    },
+    "fates_modes": {
+      "first_ambiguous": 0,
+      "last_ambiguous": 0,
+      "same_types": true,
+      "max_rel_diff": 0.0
+    },
+    "mutants": {
+      "gata1": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type Erythrocyte at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Neutrophil at 3 yr >= 1e9",
+            "ok": true,
+            "value": 1145933609936.9321
+          },
+          {
+            "assert": "type BCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 347855253620.6302
+          },
+          {
+            "assert": "type TCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 677915970417.9694
+          }
+        ]
+      },
+      "klf1": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type Erythrocyte at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Neutrophil at 3 yr >= 1e9",
+            "ok": true,
+            "value": 391021127663.05164
+          },
+          {
+            "assert": "type TCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 677915970417.9694
+          }
+        ]
+      },
+      "spi1": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type Neutrophil at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Monocyte at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type BCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Erythrocyte at 3 yr >= 1e9",
+            "ok": true,
+            "value": 71967130857096.89
+          },
+          {
+            "assert": "type TCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 1034170821037.3639
+          }
+        ]
+      },
+      "cebpa": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type Neutrophil at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Erythrocyte at 3 yr >= 1e9",
+            "ok": true,
+            "value": 71967130857096.89
+          },
+          {
+            "assert": "type BCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 347855253620.6302
+          },
+          {
+            "assert": "type TCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 677915970417.9694
+          }
+        ]
+      },
+      "irf8": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type Monocyte at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Neutrophil at 3 yr >= 1e9",
+            "ok": true,
+            "value": 1143657640037.3518
+          },
+          {
+            "assert": "type Erythrocyte at 3 yr >= 1e9",
+            "ok": true,
+            "value": 26672715145546.258
+          }
+        ]
+      },
+      "pax5": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type BCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type TCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 1034170821037.3639
+          },
+          {
+            "assert": "type Erythrocyte at 3 yr >= 1e9",
+            "ok": true,
+            "value": 26672715145546.258
+          },
+          {
+            "assert": "type Neutrophil at 3 yr >= 1e9",
+            "ok": true,
+            "value": 391021127663.05164
+          }
+        ]
+      },
+      "notch1": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type TCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type BCell at 3 yr >= 1e9",
+            "ok": true,
+            "value": 981559753287.4877
+          },
+          {
+            "assert": "type Erythrocyte at 3 yr >= 1e9",
+            "ok": true,
+            "value": 26672715145546.258
+          },
+          {
+            "assert": "type Neutrophil at 3 yr >= 1e9",
+            "ok": true,
+            "value": 391021127663.05164
+          }
+        ]
+      },
+      "ikzf1": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type BCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type TCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Erythrocyte at 3 yr >= 1e9",
+            "ok": true,
+            "value": 67798397638628.81
+          },
+          {
+            "assert": "type Neutrophil at 3 yr >= 1e9",
+            "ok": true,
+            "value": 1085326706189.7378
+          }
+        ]
+      },
+      "tal1": {
+        "all_ok": true,
+        "asserts": [
+          {
+            "assert": "type Erythrocyte at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Neutrophil at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type Monocyte at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type BCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          },
+          {
+            "assert": "type TCell at 3 yr = 0",
+            "ok": true,
+            "value": 0
+          }
+        ]
+      }
+    },
+    "designs": [
+      {
+        "program": "data/organisms/human/haematopoiesis_designs.bio",
+        "design": "lose_neutrophils_keep_the_rest",
+        "answer": "-GFI1",
+        "solved": true,
+        "loss": 0.0,
+        "tied_with_the_answer": [],
+        "tie_broken_by": null,
+        "evaluations": 11,
+        "feasible_candidates": 2,
+        "varies_knobs": false
+      },
+      {
+        "program": "data/organisms/human/haematopoiesis_designs.bio",
+        "design": "no_lymphocytes_at_all",
+        "answer": "-IKZF1",
+        "solved": true,
+        "loss": 0.0,
+        "tied_with_the_answer": [
+          "-TCF3"
+        ],
+        "tie_broken_by": "label order (forge.run_design's final sort)",
+        "evaluations": 29,
+        "feasible_candidates": 22,
+        "varies_knobs": false
+      }
+    ],
+    "bio_test": {
+      "exit": 0,
+      "files": 58,
+      "passed": 410,
+      "total": 410,
+      "summary": "58 files, 410/410 checks passed",
+      "haematopoiesis_files": {
+        "data/organisms/human/haematopoiesis.bio": "3/3",
+        "data/organisms/human/haematopoiesis_designs.bio": "3/3",
+        "data/organisms/human/haematopoiesis_mutants.bio": "39/39"
+      },
+      "failures": []
+    },
+    "readings": {
+      "cells_replaced_per_day": 292405490848.6555,
+      "max_abs_pool_deviation_at_3yr_all_16_types": 0.09251734741028905,
+      "ratios_at_3yr": {
+        "HSC": 1.0015416988240733,
+        "MPP": 1.0376293328623316,
+        "CMP": 1.0380353130353481,
+        "CLP": 1.0206169881046043,
+        "MEP": 1.039614598637392,
+        "GMP": 0.9854020963140215,
+        "Erythroblast": 1.0442271840781028,
+        "Myeloblast": 0.9873104940622959,
+        "Monoblast": 0.907482652589711,
+        "ProB": 1.021834388344091,
+        "Thymocyte": 0.9943969521922655,
+        "Erythrocyte": 1.047385343027812,
+        "Neutrophil": 0.9874270900582112,
+        "Monocyte": 0.9075161454203464,
+        "BCell": 1.02250221522819,
+        "TCell": 0.9629488216164338
+      },
+      "knockouts_reproducing": 9,
+      "design_answers": {
+        "lose_neutrophils_keep_the_rest": "-GFI1",
+        "no_lymphocytes_at_all": "-IKZF1"
+      }
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Sender & Milo 2021, Nat Med 27:45 (the outputs and lifespans in the generator)",
+        "version": "as in genomeos/organism/haematopoiesis.py"
+      },
+      {
+        "accession": "the committed generator and programs",
+        "version": "pinned by sha256 and code.git_sha"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/organisms/human/haematopoiesis.bio",
+        "sha256": "41a822db0016898454ea86103305b69fc963a8ddda5f9168e091046b440912a7",
+        "bytes": 20643,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/haematopoiesis_mutants.bio",
+        "sha256": "fc76df6f7ae629522881f54c63fd5396de6e380d7b0ed1b770e5307dcb007196",
+        "bytes": 3401,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/haematopoiesis_designs.bio",
+        "sha256": "b5818f768dd55394b71a36f2e05260046d23caa7fe740832c3c909d61784a3de",
+        "bytes": 1207,
+        "partition": null
+      },
+      {
+        "path": "data/demo/celegans_lineage.bio",
+        "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+        "bytes": 4382,
+        "partition": null
+      },
+      {
+        "path": "data/demo/cell_context.bio",
+        "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+        "bytes": 1659,
+        "partition": null
+      },
+      {
+        "path": "data/demo/concentration_threshold.bio",
+        "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+        "bytes": 3525,
+        "partition": null
+      },
+      {
+        "path": "data/demo/flag_organism.bio",
+        "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+        "bytes": 2920,
+        "partition": null
+      },
+      {
+        "path": "data/demo/gastrulation.bio",
+        "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+        "bytes": 3765,
+        "partition": null
+      },
+      {
+        "path": "data/demo/hoxd_order.bio",
+        "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+        "bytes": 3064,
+        "partition": null
+      },
+      {
+        "path": "data/demo/lateral_inhibition.bio",
+        "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+        "bytes": 4042,
+        "partition": null
+      },
+      {
+        "path": "data/demo/methylation_erosion.bio",
+        "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+        "bytes": 3260,
+        "partition": null
+      },
+      {
+        "path": "data/demo/reader_gating.bio",
+        "sha256": "0334ee0b99c0aaff110adb1493462bf2af21b74ccc4e84c4be7cc6881be93f1e",
+        "bytes": 3513,
+        "partition": null
+      },
+      {
+        "path": "data/demo/repressilator.bio",
+        "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+        "bytes": 2363,
+        "partition": null
+      },
+      {
+        "path": "data/demo/segmentation_clock.bio",
+        "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+        "bytes": 1639,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage2_pools.bio",
+        "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+        "bytes": 2117,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage3_energy.bio",
+        "sha256": "90f6b710e35590f702ecb03bb565741ae28eb7115880e8c3e4cb2c2a7005b765",
+        "bytes": 5558,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage3_erythrocyte.bio",
+        "sha256": "73f13ff8a858c7bc5d7ca72c8c54ae933ff3272cb27ae3c4b00414a7916c865c",
+        "bytes": 3632,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage4_division.bio",
+        "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+        "bytes": 2322,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/acvu.bio",
+        "sha256": "4ec51b82b4b10908430af52c70cc4596138a9e94e1fe7baec0ee7f6f39706145",
+        "bytes": 10543,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/cell_types.bio",
+        "sha256": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c",
+        "bytes": 2604,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/contacts_acvu.tsv",
+        "sha256": "f760e59bcff87dfb18b9daac44bc411c197790999356dea4a9799427a255f684",
+        "bytes": 1582,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/contacts_embryo.tsv",
+        "sha256": "812a36f45c1876cf894a5b7f058e6faf24f7e284b4a1f0e0d12c014926369f47",
+        "bytes": 3993,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/contacts_embryo_cshaper.tsv",
+        "sha256": "c03b60aaf3ad3f502592f615bd6eb5a3dac5a1f0064290b7acab0b6fa7bf4270",
+        "bytes": 10422,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/designs.bio",
+        "sha256": "fb6e55433a51517be7c9684bfa6f8275ca5672b4a752078a8723c0a57299385c",
+        "bytes": 955,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo.bio",
+        "sha256": "c3bf6a9b151f74547c3c0e2c0106ef85eadd82381ad97e87e0db133cb3b46ad3",
+        "bytes": 2118,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo_contacts.bio",
+        "sha256": "2ca48ec4b82b943c336131aa4c45971ddd42d672bc2d31261df63288eb97a94f",
+        "bytes": 3027,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo_factors.bio",
+        "sha256": "f674d6c1b591cad143b1f7c66a203dc3b35e84c09f03da482ac6598ed222834f",
+        "bytes": 3794,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo_nolookup.bio",
+        "sha256": "7602286f1716ca6f55247f8e1714659c4242209511214db8164e1503e1a7bac1",
+        "bytes": 3784,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/fates.bio",
+        "sha256": "b7ccefed754e4bbbd25ed1ff25b08d6d3db43838f9fddfc9a7cc130eb16d3298",
+        "bytes": 21509,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/founder_tissues.bio",
+        "sha256": "09359ffb0aa4662cd92b6b54cb3b86e14691de58f3e54535ef5e465b58e50502",
+        "bytes": 3324,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/founders.bio",
+        "sha256": "41cad2ec74552d79de29cc348e6ac51b0a1906980a3cec2f26d41c17c4b610e5",
+        "bytes": 7871,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/founders_contacts.bio",
+        "sha256": "0b7fb261f01ae6d024c579bd7e023d0f493112f1797a28e5deb253b312a1827f",
+        "bytes": 12269,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/lineage_embryo.bio",
+        "sha256": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+        "bytes": 239228,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/lineage_embryo_tree.bio",
+        "sha256": "dcd531be104158ee09de633ecf1d060e5ee0ef2b37d2a94de89c34bfd125d151",
+        "bytes": 145834,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/lineage_larva.bio",
+        "sha256": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+        "bytes": 123195,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/mutants.bio",
+        "sha256": "a083fef64ca7d797a3d01164fbc1cae51d25e12bdca60e69f7bf8291605ba701",
+        "bytes": 4459,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/mutants_nolookup.bio",
+        "sha256": "f4dce6f6c7f3c7363731ad3e08ea4150bc15353e3994eddb00e6dd4af730a839",
+        "bytes": 5097,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/plasticity.bio",
+        "sha256": "0b450393a8efb7fdf5e675a22b923687d20ee6d11982d82cf112afac3d2e673f",
+        "bytes": 6020,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/reader.bio",
+        "sha256": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+        "bytes": 792382,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/timers.bio",
+        "sha256": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+        "bytes": 13303,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/body.bio",
+        "sha256": "79c9baa7c90013a18f3d012864df1c50e55a2d9ddb84e25d02e466932ed91a9d",
+        "bytes": 5609,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/colon.bio",
+        "sha256": "1d1b88c34fe5bd70377a3479276a31f0f17f4dbc87b20b19bd4248c55e9497e6",
+        "bytes": 10979,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/colon_mutants.bio",
+        "sha256": "a2c4b0483b9222a22c8a05829228f3aa10a9a1276a4edcf1629af0133b5b1102",
+        "bytes": 4111,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/erythrocyte.bio",
+        "sha256": "0d3cc96e9d1826160839b2a12652bc4dcbc196f4aa7dd8ba2afdabc0a95b5f2f",
+        "bytes": 3199,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/intestine.bio",
+        "sha256": "e544fda061017a35b276539e94191879866a9ba6a667f416cf5f345149cf13f2",
+        "bytes": 10233,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/intestine_mutants.bio",
+        "sha256": "234244dbd2d40bd7f49fa0a750bc9a28383ac182fc65727497e90133a5b56ccb",
+        "bytes": 3812,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/noncoding_chr21.bio",
+        "sha256": "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192",
+        "bytes": 4979850,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/noncoding_chr21_v2.bio",
+        "sha256": "11bbff2f1a8ff41a49e0329aa2b3d9dae109638556a1e2a3fd13bcaefb367ecb",
+        "bytes": 4980025,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/noncoding_chr21_v3.bio",
+        "sha256": "17315af720e886466ba585832c9a99fb699fd128c92e0a093b2e06ea329cce93",
+        "bytes": 5276570,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/oxphos.bio",
+        "sha256": "0e212fa45dc96cf24b0db0117dbf3b6a704720fe2ae1f57d1115902d7be81d1a",
+        "bytes": 48211,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/stomach.bio",
+        "sha256": "8c26a44939cf10a288242427d8f3ff1200d30c6ba17d34046df1f775c76390bc",
+        "bytes": 15380,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/stomach_mutants.bio",
+        "sha256": "12ca662bd76389530478baf413599072476f08cd52870daac177424af6d3b08a",
+        "bytes": 3983,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/tissues.bio",
+        "sha256": "e4db081f958a1db9c1d7bd841711f03e5dedd7a6f0d113f17bd6a6de1b02b175",
+        "bytes": 28403,
+        "partition": null
+      }
+    ],
+    "assembly": "n/a: no genome coordinates; a population model",
+    "coordinates": "n/a: no genome coordinates; a population model",
+    "parameters": {
+      "stage": "register",
+      "sample_days": [
+        0,
+        30,
+        60,
+        90,
+        120,
+        150,
+        180,
+        210,
+        240,
+        270,
+        300,
+        330,
+        360,
+        390,
+        420,
+        450,
+        480,
+        510,
+        540,
+        570,
+        600,
+        630,
+        660,
+        690,
+        720,
+        750,
+        780,
+        810,
+        840,
+        870,
+        900,
+        930,
+        960,
+        990,
+        1020,
+        1050,
+        1080,
+        1095.75
+      ],
+      "steady_from_days": 90,
+      "pool_tolerance": 0.05,
+      "bio_test_roots": [
+        "data/demo",
+        "genomeos/std",
+        "data/organisms"
+      ],
+      "genomeos_imported_from": "genomeos"
+    },
+    "exclusions": [
+      "the five mature types are reported, not judged, in (b): see criteria.b"
+    ],
+    "partitions": "n/a: a deterministic model run; no training or held-out data",
+    "code_cleanliness": {
+      "git_sha": "e08f7bc50765c8ee35e17185f62211519a5033ba",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/tobio_share_compare.py",
+        "form": "committed_repository_file",
+        "path": "scripts/tobio_share_compare.py",
+        "is_committed": true,
+        "declared_entry": "scripts/tobio_share_compare.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/bio.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "genomeos/forge/design_answers.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lang/tools.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/__init__.py",
+        "genomeos/organism/celegans.py",
+        "genomeos/organism/experiment.py",
+        "genomeos/organism/forge.py",
+        "genomeos/organism/haematopoiesis.py",
+        "genomeos/organism/reference.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/body.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/economy.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/metabolism.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/roadrunner.py",
+        "genomeos/runtime/sbml.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/tobio_share_compare.py"
+      ],
+      "counting_path_count": 39,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "e08f7bc50765c8ee35e17185f62211519a5033ba",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/tobio_share_compare.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "e08f7bc50765c8ee35e17185f62211519a5033ba",
+      "code_cleanliness_git_sha": "e08f7bc50765c8ee35e17185f62211519a5033ba",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record e08f7bc"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 536,
+      "opens_under_data": 348,
+      "files_read": 53,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
