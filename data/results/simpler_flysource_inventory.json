@@ -1,0 +1,905 @@
+{
+  "result": "simpler_flysource_inventory",
+  "date": "2026-10-10",
+  "question": "a 6-16 h fly boundary set, or a source with more between-gene elements: what exists, under what licence, at what stage, and how many between-gene elements each would put in the population and move -- counted from positions only, before any outcome was read",
+  "route_a_boundary_sets": [
+    {
+      "name": "Stadler, Haines, Eisen 2017, eLife 6:e29550, Table S4 (manual)",
+      "stage": "2-3 h embryos (nuclear cycle 14)",
+      "assembly": "dm6 as given",
+      "licence": "CC BY 4.0",
+      "boundaries": 3121,
+      "bin_bp": 500,
+      "bytes": 386317,
+      "counted": true,
+      "key": "stadler_manual_nc14",
+      "note": "lane-flynode's set, re-counted here; the primary set of this registration",
+      "on_calderon_917_between_gene_elements": {
+        "between_gene_elements": 917,
+        "change_gene": 90,
+        "nearest_5p_end_in_domain": 795,
+        "empty_domain_falls_back_to_nearest_tss": 32,
+        "all_distal_elements": 2518,
+        "all_distal_change_gene": 273
+      },
+      "on_this_lanes_brain_elements": {
+        "between_gene_elements": 3265,
+        "change_gene": 216,
+        "nearest_5p_end_in_domain": 3013,
+        "empty_domain_falls_back_to_nearest_tss": 36,
+        "all_distal_elements": 10052,
+        "all_distal_change_gene": 869
+      }
+    },
+    {
+      "name": "Dolsten et al. 2025, Cell Genomics 5:101002, Table S2",
+      "stage": "a Micro-C atlas of nc1-8, nc14 and stages 10-12; the latest stage is about 6-8 h, so this is the only counted set that reaches the marker window's lower end",
+      "assembly": "BDGP Release 6 (dm6)",
+      "licence": "CC BY-NC-ND 4.0",
+      "boundaries": 3521,
+      "bin_bp": 400,
+      "bytes": 1087877,
+      "counted": true,
+      "key": "dolsten_2025_atlas",
+      "note": "the authors' own union list; per-stage calls would need a threshold chosen here, so the union is used as shipped. The text states 3,673 boundaries and the sheet holds 3,521",
+      "on_calderon_917_between_gene_elements": {
+        "between_gene_elements": 917,
+        "change_gene": 69,
+        "nearest_5p_end_in_domain": 829,
+        "empty_domain_falls_back_to_nearest_tss": 19,
+        "all_distal_elements": 2518,
+        "all_distal_change_gene": 173
+      },
+      "on_this_lanes_brain_elements": {
+        "between_gene_elements": 3265,
+        "change_gene": 209,
+        "nearest_5p_end_in_domain": 2971,
+        "empty_domain_falls_back_to_nearest_tss": 85,
+        "all_distal_elements": 10052,
+        "all_distal_change_gene": 663
+      }
+    },
+    {
+      "name": "Kaushal et al. 2022, Sci Adv 8:eabl8834, data file S2",
+      "stage": "2-6 h embryos",
+      "assembly": "dm6",
+      "licence": "CC BY 4.0",
+      "boundaries": 2334,
+      "bin_bp": 2000,
+      "bytes": 183298,
+      "counted": true,
+      "key": "kaushal_2022_wt_embryo",
+      "note": "TopDom; the authors' own `exist.WT_0` call, no threshold chosen here",
+      "on_calderon_917_between_gene_elements": {
+        "between_gene_elements": 917,
+        "change_gene": 39,
+        "nearest_5p_end_in_domain": 872,
+        "empty_domain_falls_back_to_nearest_tss": 6,
+        "all_distal_elements": 2518,
+        "all_distal_change_gene": 195
+      },
+      "on_this_lanes_brain_elements": {
+        "between_gene_elements": 3265,
+        "change_gene": 162,
+        "nearest_5p_end_in_domain": 3093,
+        "empty_domain_falls_back_to_nearest_tss": 10,
+        "all_distal_elements": 10052,
+        "all_distal_change_gene": 607
+      }
+    },
+    {
+      "name": "Kaushal et al. 2021, Nat Commun 12:1011, supplementary data 3",
+      "stage": "third-instar larval central nervous system (not embryos)",
+      "assembly": "dm6",
+      "licence": "CC BY 4.0",
+      "boundaries": 3458,
+      "bin_bp": 2000,
+      "bytes": 140228,
+      "counted": true,
+      "key": "kaushal_2021_wt_larval_cns",
+      "note": "the only candidate whose TISSUE matches the element source's (brain), so it is the stage-and-tissue-matched set this lane found; beside here only because the primary set is carried from f5985f7 unchanged",
+      "on_calderon_917_between_gene_elements": {
+        "between_gene_elements": 917,
+        "change_gene": 54,
+        "nearest_5p_end_in_domain": 840,
+        "empty_domain_falls_back_to_nearest_tss": 23,
+        "all_distal_elements": 2518,
+        "all_distal_change_gene": 163
+      },
+      "on_this_lanes_brain_elements": {
+        "between_gene_elements": 3265,
+        "change_gene": 174,
+        "nearest_5p_end_in_domain": 3057,
+        "empty_domain_falls_back_to_nearest_tss": 34,
+        "all_distal_elements": 10052,
+        "all_distal_change_gene": 640
+      }
+    },
+    {
+      "name": "Mohana et al. 2023, Cell 186:3826, GEO GSE214707",
+      "stage": "6-8 h, 10-12 h AND 14-16 h embryos, FACS-sorted neuroblast, glia and neuron",
+      "assembly": "dm6 expected; not confirmed",
+      "licence": "the publisher's user licence, not Creative Commons; the GEO data state no terms",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": 4009000960,
+      "counted": false,
+      "why_not": "THE KEY FINDING OF ROUTE (a): this is the one study whose Hi-C covers 6-16 h embryos, in the very cell types the question is about, but it publishes LOOP anchors and meta-domains and no boundary or insulation list. Boundaries would have to be called from its .mcool matrices (about 1.07 GB for the three embryonic stages), which chooses a caller and a threshold here -- the free parameter lane-flynode refused"
+    },
+    {
+      "name": "Schuettengruber et al. 2014, Cell Reports 9:219, GEO GSE61471",
+      "stage": "16-18 h embryos",
+      "assembly": "dm3",
+      "licence": "CC BY-NC-ND 3.0 at the article; the GEO file states no terms",
+      "boundaries": 1305,
+      "bin_bp": null,
+      "bytes": 11396,
+      "counted": false,
+      "why_not": "a genuine late-embryo author-called domain list, but 1,305 domains is a LOWER density than every set counted here, and the density sweep's lowest rung (2,000 boundaries) moves 65 on average and 69 at best, so it cannot reach 200; and its dm3 coordinates would need a liftover, which is a tool and an error source this lane does not add"
+    },
+    {
+      "name": "Sexton et al. 2012, Cell 148:458, Table S1",
+      "stage": "16-18 h embryos (deep map); 4-12 h pilot",
+      "assembly": "dm3",
+      "licence": "the publisher's open-archive user licence, not Creative Commons",
+      "boundaries": 1169,
+      "bin_bp": 10000,
+      "bytes": 122880,
+      "counted": false,
+      "why_not": "1,169 domains: the same density argument as the row above, and dm3"
+    },
+    {
+      "name": "Pollex et al. 2024, Mol Cell 84:822",
+      "stage": "2-4 h, 6-8 h and 16-18 h embryos",
+      "assembly": "dm6",
+      "licence": "CC BY 4.0",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": 107268,
+      "counted": false,
+      "why_not": "gene-gene loops only: 1,213 loops across the three stages, no boundary list"
+    },
+    {
+      "name": "Ogiyama et al. 2018, Mol Cell 71:73, GEO GSE103625",
+      "stage": "cycles 1-8 to embryonic stage 16 (about 13-16 h)",
+      "assembly": "dm3",
+      "licence": "the publisher's open-archive user licence; GEO states no terms",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": null,
+      "counted": false,
+      "why_not": "lane-flynode's reason, confirmed in more detail: loops and ChIP peaks only, and nothing at all for stage 16; the processed files are contact matrices"
+    },
+    {
+      "name": "Szabo et al. 2018, Sci Adv 4:eaar8082",
+      "stage": "16-18 h embryos",
+      "assembly": "dm3",
+      "licence": "CC BY-NC",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": null,
+      "counted": false,
+      "why_not": "no boundary list: contact matrices and a PDF supplement"
+    },
+    {
+      "name": "Ing-Simmons et al. 2021, Nat Genet 53:487",
+      "stage": "late nc14 (about 2.5-3 h) and stage 10 (about 4-5 h)",
+      "assembly": "dm6 (FlyBase r6.30)",
+      "licence": "CC BY 4.0",
+      "boundaries": 1491,
+      "bin_bp": 2000,
+      "bytes": 510265,
+      "counted": false,
+      "why_not": "its 1,491 domains and insulation scores are not deposited as a table; the supplementary workbook holds enhancer-gene assignments and read statistics only"
+    },
+    {
+      "name": "Cavalheiro et al. 2023, Sci Adv 9:eade1085, table S1",
+      "stage": "2-3 h embryos (nuclear cycle 14)",
+      "assembly": "dm6",
+      "licence": "CC BY 4.0",
+      "boundaries": 878,
+      "bin_bp": 10000,
+      "bytes": 159931,
+      "counted": false,
+      "why_not": "lane-flynode's reason, unchanged: 10-kb bins are coarser than many fly intergenic gaps, and the table lists 878 rows of a differential analysis against the 772 its text reports"
+    },
+    {
+      "name": "Hug et al. 2017, Cell 169:216",
+      "stage": "nuclear cycles 12-14",
+      "assembly": "dm6",
+      "licence": "not open access",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": null,
+      "counted": false,
+      "why_not": "lane-flynode's reason, unchanged: no openly licensed boundary list found"
+    },
+    {
+      "name": "Ramirez et al. 2018 (Kc167), Eagen et al. 2017 (Kc167), Chathoth and Zabet 2019 (BG3 and Kc167)",
+      "stage": "n/a: cell lines",
+      "assembly": "dm3 and dm6",
+      "licence": "CC BY 4.0, the publisher's user licence, and CC BY",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": null,
+      "counted": false,
+      "why_not": "lane-flynode's reason, extended: cell lines, not embryos or tissue. Chathoth and Zabet's BG3 is larval-CNS-derived and dm6, so it is the nearest cell-line analogue of the larval-CNS set counted above, which is published from tissue and preferred for that"
+    },
+    {
+      "name": "4D Nucleome; modENCODE",
+      "stage": "n/a",
+      "assembly": "n/a",
+      "licence": "n/a",
+      "boundaries": null,
+      "bin_bp": null,
+      "bytes": null,
+      "counted": false,
+      "why_not": "the 4DN portal returns no Drosophila melanogaster experiment sets, and modENCODE publishes no Hi-C or boundary release"
+    }
+  ],
+  "route_a_is_closed_by_arithmetic": {
+    "why": "under the registered rule a between-gene element changes gene only when its nearest 5' end lies across a boundary AND the domain it leaves holds another 5' end. More boundaries meet the first condition more often and the second less often, so what the rule can move is a curve in the boundary count and not a growing function",
+    "density_sweep_on_calderon_917": {
+      "placement": "uniform within each arm, arms weighted by length",
+      "draws_per_count": 5,
+      "seed": 20261010,
+      "rungs": [
+        {
+          "boundaries": 2000,
+          "mean_spacing_bp": 68773,
+          "change_gene_mean": 66.6,
+          "change_gene_min": 62,
+          "change_gene_max": 70,
+          "empty_domain_mean": 36.6
+        },
+        {
+          "boundaries": 3121,
+          "mean_spacing_bp": 44071,
+          "change_gene_mean": 78.4,
+          "change_gene_min": 53,
+          "change_gene_max": 98,
+          "empty_domain_mean": 73.2
+        },
+        {
+          "boundaries": 4500,
+          "mean_spacing_bp": 30566,
+          "change_gene_mean": 79.2,
+          "change_gene_min": 60,
+          "change_gene_max": 98,
+          "empty_domain_mean": 125.2
+        },
+        {
+          "boundaries": 5500,
+          "mean_spacing_bp": 25008,
+          "change_gene_mean": 84.6,
+          "change_gene_min": 82,
+          "change_gene_max": 92,
+          "empty_domain_mean": 157.0
+        },
+        {
+          "boundaries": 7000,
+          "mean_spacing_bp": 19649,
+          "change_gene_mean": 80.0,
+          "change_gene_min": 72,
+          "change_gene_max": 94,
+          "empty_domain_mean": 207.6
+        },
+        {
+          "boundaries": 8000,
+          "mean_spacing_bp": 17193,
+          "change_gene_mean": 81.0,
+          "change_gene_min": 63,
+          "change_gene_max": 94,
+          "empty_domain_mean": 238.0
+        },
+        {
+          "boundaries": 12000,
+          "mean_spacing_bp": 11462,
+          "change_gene_mean": 65.8,
+          "change_gene_min": 59,
+          "change_gene_max": 76,
+          "empty_domain_mean": 332.2
+        },
+        {
+          "boundaries": 20000,
+          "mean_spacing_bp": 6877,
+          "change_gene_mean": 62.8,
+          "change_gene_min": 52,
+          "change_gene_max": 72,
+          "empty_domain_mean": 447.2
+        },
+        {
+          "boundaries": 35000,
+          "mean_spacing_bp": 3929,
+          "change_gene_mean": 37.0,
+          "change_gene_min": 27,
+          "change_gene_max": 43,
+          "empty_domain_mean": 615.6
+        },
+        {
+          "boundaries": 60000,
+          "mean_spacing_bp": 2292,
+          "change_gene_mean": 18.6,
+          "change_gene_min": 13,
+          "change_gene_max": 24,
+          "empty_domain_mean": 739.8
+        },
+        {
+          "boundaries": 100000,
+          "mean_spacing_bp": 1375,
+          "change_gene_mean": 6.8,
+          "change_gene_min": 3,
+          "change_gene_max": 9,
+          "empty_domain_mean": 825.6
+        }
+      ],
+      "best_rung": {
+        "boundaries": 3121,
+        "mean_spacing_bp": 44071,
+        "change_gene_mean": 78.4,
+        "change_gene_min": 53,
+        "change_gene_max": 98,
+        "empty_domain_mean": 73.2
+      },
+      "best_single_draw_change_gene": 98,
+      "reaches_stop_rule_at_any_density": false
+    },
+    "tailored_ceiling_on_calderon_917": {
+      "boundaries_placed": 917,
+      "min_gap_bp": 600,
+      "between_gene_elements": 917,
+      "change_gene": 415,
+      "nearest_5p_end_in_domain": 0,
+      "empty_domain_falls_back_to_nearest_tss": 502,
+      "all_distal_elements": 2518,
+      "all_distal_change_gene": 441
+    },
+    "reading": "On Calderon et al. 2022's 917 between-gene elements the number of elements the boundary rule names a different gene for peaks at 98 across 11 densities from 2,000 to 100,000 boundaries, 5 uniform placements each, and never reaches the stop rule's 200. The four measured sets give 69 (dolsten_2025_atlas), 54 (kaushal_2021_wt_larval_cns), 39 (kaushal_2022_wt_embryo), 90 (stadler_manual_nc14). A set with one boundary placed inside each element's own gap reaches 415, so the limit is where the boundaries lie and not the rule. Measured fly boundaries sit mostly at active promoters, which is the case where the rule does NOT move, so a uniform placement is if anything generous. No measured, density-plausible fly boundary set decides the between-gene question on this population, whatever its stage; the source has to change, and it does here"
+  },
+  "route_b_sources": [
+    {
+      "name": "Calderon et al. 2022, Science 377:eabn5800 (lane-fly's source)",
+      "what": "sci-ATAC and sci-RNA over 0-20 h embryos, 14 tissues in both modalities",
+      "assembly": "dm6",
+      "licence": "not stated",
+      "counted": true,
+      "note": "the population section 9 could not decide on",
+      "between_gene_elements": 917,
+      "between_gene_elements_that_change_gene": 90,
+      "counted_under": "stadler_manual_nc14"
+    },
+    {
+      "name": "Janssens et al. 2022, Nature 601:630 + Davie et al. 2018, Cell 174:982",
+      "what": "single-cell accessibility of larval-to-adult brain with the source's own declared map from each cell type to a cluster of the 2018 brain RNA atlas; 42 shared labels",
+      "assembly": "dm6",
+      "licence": "not stated on the article page, the data portal or the GEO record",
+      "counted": true,
+      "note": "the source this registration uses",
+      "between_gene_elements": 3265,
+      "between_gene_elements_that_change_gene": 216,
+      "counted_under": "stadler_manual_nc14"
+    },
+    {
+      "name": "Treese et al. 2026, PNAS 123:e2614314123, GEO GSE305940",
+      "what": "10x Multiome of the optic lobe, 259 joint clusters, 76,777 consensus peaks",
+      "assembly": "BDGP6 (dm6)",
+      "licence": "not verified: the publisher page refused the request; not inferred",
+      "counted": false,
+      "why_not": "its element table (36.6 MB) is affordable, but the registered endpoint needs counts per label and those are inside a 16.1 GB .rds, over the 1 GB budget; the published marker tables give marker calls, not counts, which would change the endpoint. On count alone this is the larger source and it is the first thing to try if the budget is raised"
+    },
+    {
+      "name": "Wang et al. 2025, Cell 188:4734 (Flysta3D-v2)",
+      "what": "whole-organism scATAC (40 clusters) and scRNA (45 clusters), embryo to pupa",
+      "assembly": "not stated in the text read; the article page refused the request",
+      "licence": "Mendeley Data states CC BY 4.0 for the processed matrices",
+      "counted": false,
+      "why_not": "no small peak list is published; the element coordinates need 18.7 GB of .Rds"
+    },
+    {
+      "name": "van Nierop y Sanchez et al. 2025, Nat Commun 16:6766",
+      "what": "10x Multiome of the adult testis apical tip, 25 clusters, 46,619 regions",
+      "assembly": "BDGP6.32 (dm6)",
+      "licence": "CC BY 4.0",
+      "counted": false,
+      "why_not": "the best-licensed candidate, but 25 labels in one tissue; no per-label count table under 1 GB was found, and the per-label element counts would be below the brain's"
+    },
+    {
+      "name": "Bravo Gonzalez-Blas et al. 2020, Mol Syst Biol 16:e9438",
+      "what": "eye-antennal disc scATAC (22 clusters) and scRNA (17 clusters), 38,179 regions",
+      "assembly": "fly genome; the exact build not confirmed",
+      "licence": "CC BY 4.0",
+      "counted": false,
+      "why_not": "17-22 labels in one disc: fewer labels and fewer regions than the brain source"
+    },
+    {
+      "name": "Cusanovich et al. 2018, Nature 555:538",
+      "what": "sci-ATAC of 2-4, 6-8 and 10-12 h embryos; 35,963 distal elements",
+      "assembly": "dm3",
+      "licence": "not Creative Commons; the publisher's conditions of use",
+      "counted": false,
+      "why_not": "no matched RNA on the same labels, and dm3 would need lifting"
+    },
+    {
+      "name": "Reddington et al. 2020, Dev Cell 55:648",
+      "what": "DNase and RNA on the same sorted lineages, 2-12 h",
+      "assembly": "dm3",
+      "licence": "all rights reserved",
+      "counted": false,
+      "why_not": "about six lineage labels: too few for a one-label-only element call; dm3"
+    },
+    {
+      "name": "Fly Cell Atlas (Li et al. 2022, Science 375:eabk2432)",
+      "what": "adult single-nucleus RNA, 15 tissues, over 250 cell types",
+      "assembly": "n/a",
+      "licence": "the portal states all rights reserved",
+      "counted": false,
+      "why_not": "RNA only: no matched accessibility is published to pair with it"
+    }
+  ],
+  "counts_on_this_lanes_brain_elements": {
+    "stadler_manual_nc14": {
+      "between_gene_elements": 3265,
+      "change_gene": 216,
+      "nearest_5p_end_in_domain": 3013,
+      "empty_domain_falls_back_to_nearest_tss": 36,
+      "all_distal_elements": 10052,
+      "all_distal_change_gene": 869
+    },
+    "dolsten_2025_atlas": {
+      "between_gene_elements": 3265,
+      "change_gene": 209,
+      "nearest_5p_end_in_domain": 2971,
+      "empty_domain_falls_back_to_nearest_tss": 85,
+      "all_distal_elements": 10052,
+      "all_distal_change_gene": 663
+    },
+    "kaushal_2022_wt_embryo": {
+      "between_gene_elements": 3265,
+      "change_gene": 162,
+      "nearest_5p_end_in_domain": 3093,
+      "empty_domain_falls_back_to_nearest_tss": 10,
+      "all_distal_elements": 10052,
+      "all_distal_change_gene": 607
+    },
+    "kaushal_2021_wt_larval_cns": {
+      "between_gene_elements": 3265,
+      "change_gene": 174,
+      "nearest_5p_end_in_domain": 3057,
+      "empty_domain_falls_back_to_nearest_tss": 34,
+      "all_distal_elements": 10052,
+      "all_distal_change_gene": 640
+    }
+  },
+  "fetched": {
+    "cellTypeInfo.tsv": {
+      "bytes": 7241,
+      "sha256": "60cc4ddfa3facb369e6524060e303a3434635050d765c12ac91f1e6dff90f0db",
+      "licence": "not stated: the article is subscription-only (Europe PMC records no licence and no PMCID) and the data portal flybrain.aertslab.org states no licence, no terms of use and no copyright line; the GEO record states no terms either. Recorded, not inferred. This is the same standing as Calderon et al. 2022, which lane-fly used and recorded the same way (section 8)",
+      "what": "the source's own accessibility cell type -> RNA cluster map (`RNAcluster` column)"
+    },
+    "tbl_DARs.txt": {
+      "bytes": 85509169,
+      "sha256": "6d9e5a9426d9174c716d97e62a768fbcfe65b5c99a8b40f6738f98435e935639",
+      "licence": "not stated: the article is subscription-only (Europe PMC records no licence and no PMCID) and the data portal flybrain.aertslab.org states no licence, no terms of use and no copyright line; the GEO record states no terms either. Recorded, not inferred. This is the same standing as Calderon et al. 2022, which lane-fly used and recorded the same way (section 8)",
+      "what": "the source's differentially accessible regions; only the lvl1 / vsRest / WholeBrain / Up rows and only their region, cell type and selection columns are read"
+    },
+    "Davie_Janssens_Koldere_et_al_2018_AdultBrain.loom": {
+      "bytes": 519015198,
+      "sha256": "c8944de37549c0c31c216e690ab2e84b51e489b14102a0cd232d84f9c490e859",
+      "licence": "not stated by the portal that serves the loom; recorded, not inferred",
+      "what": "the endpoint: gene counts per cell, with each cell's `cell_type`"
+    },
+    "dolsten2025_TableS2.xlsx": {
+      "bytes": 1087877,
+      "sha256": "e183ae655679b3e4237b12e36b48929c79e2335a837a7e4a6a5f4571458bc201",
+      "licence": "CC BY-NC-ND 4.0 (Cell Genomics open-access article)",
+      "what": "Table S2, sheet `boundaries`: the Micro-C atlas's 3,521 boundary spans (beside)"
+    },
+    "kaushal2022_data_file_s2.xlsx": {
+      "bytes": 183298,
+      "sha256": "fa365d603cf8eba3fbfd810ac69c2dd623c7732f02d01ba14597d06a092e1d92",
+      "licence": "CC BY 4.0 (Science Advances)",
+      "what": "data file S2: the 2-kb bins marked `exist.WT_0` in wild-type 2-6 h embryos (beside)"
+    },
+    "kaushal2021_larval_cns_data_s3.xlsx": {
+      "bytes": 140228,
+      "sha256": "20347bf37f672de615c09162e9711f9fce1ee63534f170d7735e218282611a0d",
+      "licence": "CC BY 4.0 (Nature Communications)",
+      "what": "supplementary data 3: the 2-kb bins marked `exist.wildtype` in wild-type third-instar larval central nervous system -- the one set whose tissue matches the elements' (beside)"
+    }
+  },
+  "fetched_bytes": 97819071,
+  "kept_bytes": 605943011,
+  "scouting_bytes": 86475446,
+  "lane_bytes_moved": 692418457,
+  "budget_bytes": 1000000000,
+  "disk_free_bytes_before": 23918862336,
+  "boundary_lists": {
+    "stadler_manual_nc14": {
+      "sheet": "Manual Boundaries",
+      "rows_in_sheet": 3134,
+      "boundary_rows": 3129,
+      "boundaries": 3121,
+      "boundaries_by_chromosome": {
+        "chr2L": 632,
+        "chr2R": 602,
+        "chr3L": 590,
+        "chr3R": 751,
+        "chr4": 18,
+        "chrX": 528
+      },
+      "bin_end_minus_start": {}
+    },
+    "dolsten_2025_atlas": {
+      "boundaries": 3521,
+      "by_chromosome": {
+        "chr2L": 605,
+        "chr2R": 719,
+        "chr3L": 712,
+        "chr3R": 799,
+        "chr4": 38,
+        "chrX": 648
+      },
+      "span_widths_bp": {
+        "800": 3521
+      },
+      "rows_off_the_used_arms": 0
+    },
+    "kaushal_2022_wt_embryo": {
+      "boundaries": 2334,
+      "by_chromosome": {
+        "chr2L": 405,
+        "chr2R": 459,
+        "chr3L": 498,
+        "chr3R": 514,
+        "chr4": 24,
+        "chrX": 434
+      },
+      "span_widths_bp": {
+        "2000": 2334
+      },
+      "rows_off_the_used_arms": 0
+    },
+    "kaushal_2021_wt_larval_cns": {
+      "boundaries": 3458,
+      "by_chromosome": {
+        "chr2L": 606,
+        "chr2R": 691,
+        "chr3L": 723,
+        "chr3R": 792,
+        "chr4": 35,
+        "chrX": 611
+      },
+      "span_widths_bp": {
+        "2000": 3458
+      },
+      "rows_off_the_used_arms": 0
+    }
+  },
+  "population_funnel": {
+    "regions_up_in_at_least_one_label": 31699,
+    "more_than_one_label": 18129,
+    "chromosome_not_used": 0,
+    "neither_class": 2018,
+    "distal": 10052,
+    "promoter": 1500
+  },
+  "verdict": {
+    "stop_rule": 200,
+    "stop_rule_is": "at least this many between-gene elements must change gene under the boundary rule for the test to be decidable; it is the record's, not this lane's (section 9)",
+    "candidates_counted": 2,
+    "candidates_not_counted": 7,
+    "qualifying": [
+      "Janssens et al. 2022, Nature 601:630 + Davie et al. 2018, Cell 174:982"
+    ],
+    "best_counted": {
+      "name": "Janssens et al. 2022, Nature 601:630 + Davie et al. 2018, Cell 174:982",
+      "between_gene_elements": 3265,
+      "between_gene_elements_that_change_gene": 216
+    },
+    "outcome": "SOURCE_QUALIFIES"
+  },
+  "stop_list": "docs/ROADMAP.md section 5's 'No more biosamples' clause is about the human reader's 13 biosamples (READER_TERMS). None is added or named here. A Drosophila Hi-C boundary list and a Drosophila accessibility or RNA source are not reader biosamples",
+  "money": "none; no model request, no key read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Janssens J, Aibar S, Taskiran II, et al. (2022) Decoding gene regulation in the fly brain. Nature 601:630-636, doi:10.1038/s41586-021-04262-z; the authors' differentially accessible region table (tbl_DARs.txt) and cell-type table (cellTypeInfo.tsv) from flybrain.aertslab.org; GEO GSE163697 holds the reads",
+        "version": "as served on 2026-10-10"
+      },
+      {
+        "accession": "Davie K, Janssens J, Koldere D, et al. (2018) A single-cell transcriptome atlas of the ageing Drosophila brain. Cell 174:982-998; the loom served by flybrain.aertslab.org as the RNA atlas whose clusters Janssens et al. 2022's cellTypeInfo.tsv names as the counterpart of each accessibility cell type",
+        "version": "as served on 2026-10-10"
+      },
+      {
+        "accession": "Stadler MR, Haines JE, Eisen MB (2017) Convergence of topological domain boundaries, insulators, and polytene interbands revealed by high-resolution mapping of chromatin contacts in the early Drosophila melanogaster embryo. eLife 6:e29550, doi:10.7554/eLife.29550; supplementary file 1 (GEO GSE100370 holds the reads)",
+        "version": "eLife supplementary file 1, v2"
+      },
+      {
+        "accession": "Ensembl release 104, Drosophila melanogaster BDGP6.32 (dm6) GFF3",
+        "version": "Ensembl release 104"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_flysource/fetch_record.json",
+        "sha256": "9728022f302b7b80b2ec4dfbf5fce193f958f373d70bdf444677e2aac41372f6",
+        "bytes": 3859,
+        "partition": "the fetch record"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/cellTypeInfo.tsv",
+        "sha256": "60cc4ddfa3facb369e6524060e303a3434635050d765c12ac91f1e6dff90f0db",
+        "bytes": 7241,
+        "partition": "the `RNAcluster` column only"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/tbl_DARs.txt",
+        "sha256": "6d9e5a9426d9174c716d97e62a768fbcfe65b5c99a8b40f6738f98435e935639",
+        "bytes": 85509169,
+        "partition": "the selected rows' region and cell type only"
+      },
+      {
+        "path": "data/knowledge/simpler_flynode/elife-29550-supp1-v2.xlsx",
+        "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4",
+        "bytes": 386317,
+        "partition": "Table S4 (manual boundary positions)"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/dolsten2025_TableS2.xlsx",
+        "sha256": "e183ae655679b3e4237b12e36b48929c79e2335a837a7e4a6a5f4571458bc201",
+        "bytes": 1087877,
+        "partition": "sheet `boundaries`: chrom, start, end"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/kaushal2022_data_file_s2.xlsx",
+        "sha256": "fa365d603cf8eba3fbfd810ac69c2dd623c7732f02d01ba14597d06a092e1d92",
+        "bytes": 183298,
+        "partition": "chr, position and `exist.WT_0`"
+      },
+      {
+        "path": "data/knowledge/simpler_flysource/kaushal2021_larval_cns_data_s3.xlsx",
+        "sha256": "20347bf37f672de615c09162e9711f9fce1ee63534f170d7735e218282611a0d",
+        "bytes": 140228,
+        "partition": "chr, position and `exist.wildtype`"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/peaks.bed",
+        "sha256": "c99bee0ba98a2638f6ba58b1354a3aff4c59f8a4afd31db3616ff999020dd07c",
+        "bytes": 2532609,
+        "partition": "Calderon's peak set, for the density sweep's population"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/SupplementaryTables.xlsx",
+        "sha256": "d80dd18c611953d4a5f53599b00bd5449387815e96cfa8ac8adf0ba54b7d443c",
+        "bytes": 17049285,
+        "partition": "Calderon's Table S2 and Table S4, for the density sweep's population"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+        "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc",
+        "bytes": 5713526,
+        "partition": "gene and transcript positions and strands, and arm lengths"
+      }
+    ],
+    "assembly": "dm6 (BDGP6.32): the regions, the boundaries, the gene models; RNA by gene name",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the DAR regions are chr:start-end as the source writes them, the GFF3 is 1-based closed, and a boundary is its span's midpoint; positions move by at most 1 bp"
+    },
+    "parameters": {
+      "dar_selection": {
+        "clResolution": "lvl1",
+        "DAR_contrast": "vsRest",
+        "DAR_within": "WholeBrain",
+        "DAR_type": "Up"
+      },
+      "never_read": [
+        "closestGene"
+      ],
+      "labels": [
+        "15a",
+        "15b",
+        "26",
+        "90",
+        "97",
+        "98",
+        "A/B*-KC",
+        "A/B-KC",
+        "AST",
+        "C2",
+        "C3",
+        "CSM",
+        "CTX",
+        "Dm3",
+        "Dm8/Dm11",
+        "ENS",
+        "G-KC",
+        "L2/L3",
+        "LLPC1",
+        "Mi1",
+        "Mi15",
+        "Mi9",
+        "PB4/5",
+        "PLM",
+        "PNG",
+        "PR",
+        "Pm4",
+        "Poxn",
+        "SUB",
+        "T1",
+        "T2",
+        "T2a",
+        "T3",
+        "T4/T5",
+        "Tm1/TmY8",
+        "Tm2",
+        "Tm20",
+        "Tm3",
+        "Tm4",
+        "Tm9",
+        "TmY3",
+        "TmY5a"
+      ],
+      "boundary_sets": {
+        "stadler_manual_nc14": {
+          "half_bin": 250,
+          "primary": true
+        },
+        "dolsten_2025_atlas": {
+          "half_bin": 400,
+          "primary": false
+        },
+        "kaushal_2022_wt_embryo": {
+          "half_bin": 1000,
+          "primary": false
+        },
+        "kaushal_2021_wt_larval_cns": {
+          "half_bin": 1000,
+          "primary": false
+        }
+      },
+      "primary_boundary_set": "stadler_manual_nc14",
+      "detection_cpm": 5.0,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "control_draws": 1000,
+      "rotation_draws": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "seed": 20261010,
+      "stop_rule": 200,
+      "alpha": 0.05,
+      "sweep_counts": [
+        2000,
+        3121,
+        4500,
+        5500,
+        7000,
+        8000,
+        12000,
+        20000,
+        35000,
+        60000,
+        100000
+      ],
+      "sweep_draws": 5
+    },
+    "exclusions": [
+      "accessibility cell types for which the source declares no RNA counterpart, on both sides",
+      "DAR rows outside lvl1 / vsRest / WholeBrain / Up",
+      "regions the source calls up in more than one label",
+      "regions within 1 kb of a transcript 5' end (kept only as the positive control)",
+      "regions whose midpoint lies in a protein-coding gene body (reported beside, not the population)",
+      "regions on chromosomes other than 2L, 2R, 3L, 3R, 4, X, Y",
+      "the DAR table's `closestGene` column, which is the source's own answer to the question asked"
+    ],
+    "partitions": "n/a: an inventory has no evaluation partition",
+    "code_cleanliness": {
+      "git_sha": "3eb24cdf579306e61fc507ccb3617eb8f8522f10",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/simpler_flysource_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_flysource_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_flysource_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/freshrna_fetch.py",
+        "scripts/freshrna_register.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_flysource_run.py"
+      ],
+      "counting_path_count": 10,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "3eb24cdf579306e61fc507ccb3617eb8f8522f10",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/freshrna_fetch.py",
+        "scripts/freshrna_register.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/freshrna.py",
+        "scripts/freshrna_fetch.py",
+        "scripts/freshrna_register.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/maxform_census.json",
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/simpler_flysource_run.py",
+        "inventory"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "3eb24cdf579306e61fc507ccb3617eb8f8522f10",
+      "code_cleanliness_git_sha": "3eb24cdf579306e61fc507ccb3617eb8f8522f10",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 3eb24cd"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 333,
+      "opens_under_data": 27,
+      "files_read": 10,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
