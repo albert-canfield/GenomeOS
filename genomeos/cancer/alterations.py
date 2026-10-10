@@ -215,6 +215,136 @@ def read_cna_table(path: str, fmt: str = "auto") -> list[GeneAlteration]:
     return out
 
 
+#: The column names a structural-variant table may carry, normalised to
+#: lower-case alphanumerics, against the field each one fills. Two naming
+#: families are here on purpose. `gene`/`partner` is this project's own
+#: four-column form, where the gene order is a naming convention; `site1`/`site2`
+#: is how a caller and a cBioPortal export name the two ends of the event, and
+#: there the order IS the measurement — site1 is the 5' partner and site2 the 3'
+#: (genomeos/cancer/cbioportal.py says the same of the API's rows).
+SV_COLUMNS: dict[str, str] = {
+    "gene": "gene",
+    "gene1": "gene",
+    "site1": "site1",
+    "site1gene": "site1",
+    "site1hugosymbol": "site1",
+    "partner": "partner",
+    "gene2": "partner",
+    "site2": "site2",
+    "site2gene": "site2",
+    "site2hugosymbol": "site2",
+    "class": "detail",
+    "svclass": "detail",
+    "variantclass": "detail",
+    "eventinfo": "event",
+    "end": "orientation",
+    "orientation": "orientation",
+    "inframe": "in_frame",
+    "site2effectonframe": "in_frame",
+    "annotation": "annotation",
+    "site1chromosome": "site1chr",
+    "site1position": "site1pos",
+    "site2chromosome": "site2chr",
+    "site2position": "site2pos",
+    "ncbibuild": "build",
+}
+
+#: What a caller writes where it has no value. Treated as absent, never as text.
+SV_ABSENT = frozenset({"", "na", "n/a", "nan", "none", "null", "."})
+
+
+def _sv_field(name: str) -> str:
+    return SV_COLUMNS.get("".join(ch for ch in name.lower() if ch.isalnum()), "")
+
+
+def _sv_header(cells: list[str]) -> dict[str, int] | None:
+    """The row read as a header, or None when it is not one.
+
+    A header is a row that names at least one gene column and at least one
+    further column this reader understands. Anything else is data, and the
+    positional reading applies — which is what keeps a file with no header
+    working, and what keeps a one-word header from being read as a table.
+    """
+    found: dict[str, int] = {}
+    for i, cell in enumerate(cells):
+        field = _sv_field(cell)
+        if field and field not in found:
+            found[field] = i
+    if not ({"gene", "site1"} & set(found)) or len(found) < 2:
+        return None
+    return found
+
+
+def _sv_value(cells: list[str], header: dict[str, int], field: str) -> str:
+    i = header.get(field)
+    if i is None or i >= len(cells):
+        return ""
+    value = cells[i].strip()
+    return "" if value.lower() in SV_ABSENT else value
+
+
+def _sv_junction(cells: list[str], header: dict[str, int]) -> str:
+    """The junction as the source states it: its own annotation, else the breakpoints."""
+    annotation = _sv_value(cells, header, "annotation")
+    if annotation:
+        return annotation
+    left = _sv_value(cells, header, "site1chr"), _sv_value(cells, header, "site1pos")
+    right = _sv_value(cells, header, "site2chr"), _sv_value(cells, header, "site2pos")
+    if not (all(left) and all(right)):
+        return ""
+    build = _sv_value(cells, header, "build")
+    where = f"{left[0]}:{left[1]} to {right[0]}:{right[1]}"
+    return f"{where} ({build})" if build else where
+
+
+def _sv_named(lines: list[str], header: dict[str, int], p: Path) -> list[GeneAlteration]:
+    """A table whose header names its columns, one record per gene it names as a site.
+
+    A `site1`/`site2` pair carries the orientation in the column names: site1 is
+    the 5' partner and site2 the 3', so each row yields a record for each end
+    with the other as its partner. A `gene`/`partner` pair does not — the gene
+    order in a fusion's name is a naming convention — so it yields the one
+    record the positional reading yields, and its orientation comes only from an
+    explicit `end` or `orientation` column.
+    """
+    out: list[GeneAlteration] = []
+    for line in lines:
+        cells = line.split("\t") if "\t" in line else line.split(",")
+        if not any(c.strip() for c in cells):
+            continue
+        sides: list[tuple[str, str, str]] = []  # gene, partner, orientation
+        if "site1" in header or "site2" in header:
+            first = _sv_value(cells, header, "site1").upper()
+            second = _sv_value(cells, header, "site2").upper()
+            if first:
+                sides.append((first, second, "5'"))
+            if second:
+                sides.append((second, first, "3'"))
+        else:
+            gene = _sv_value(cells, header, "gene").upper()
+            if gene:
+                raw = _sv_value(cells, header, "orientation").rstrip("'").rstrip("’")
+                sides.append(
+                    (gene, _sv_value(cells, header, "partner").upper(), {"5": "5'", "3": "3'"}.get(raw, ""))
+                )
+        detail = _sv_value(cells, header, "detail") or _sv_value(cells, header, "event")
+        junction = _sv_junction(cells, header)
+        for gene, partner, orientation in sides:
+            a = GeneAlteration(
+                gene,
+                "fusion",
+                partner=partner,
+                detail=detail,
+                in_frame=_sv_value(cells, header, "in_frame"),
+                orientation=orientation,
+                junction=junction,
+                source=f"patient structural-variant table ({p.name})",
+            )
+            a.evidence.append(f"{a.label()} in this tumour's structural-variant table")
+            out.append(a)
+    return out
+
+
 def read_sv_table(path: str) -> list[GeneAlteration]:
     """Gene, partner, optionally the event class, and optionally the orientation.
 
@@ -223,10 +353,25 @@ def read_sv_table(path: str) -> list[GeneAlteration]:
     fusion whose orientation is unknown must stay unknown rather than be
     guessed — the gene order in a fusion's name is a naming convention, not a
     measurement.
+
+    A table whose first row names its columns is read by those names instead
+    (`SV_COLUMNS`), which is what lets a caller's own export be read rather than
+    rewritten into four columns by hand. Positionally, a cBioPortal
+    structural-variant export reads its sample identifier as the gene and its
+    chromosome as the orientation, inventing a candidate named after the sample:
+    a record the pipeline already reads correctly from the REST API could not be
+    read from the file the same portal exports.
     """
     p = Path(path)
     if not p.exists():
         return []
+    lines = [ln for ln in p.read_text().splitlines() if ln.strip() and not ln.lstrip().startswith("#")]
+    if not lines:
+        return []
+    first = lines[0].split("\t") if "\t" in lines[0] else lines[0].split(",")
+    header = _sv_header(first)
+    if header is not None:
+        return _sv_named(lines[1:], header, p)
     out: list[GeneAlteration] = []
     for parts in rows(p):
         gene = parts[0].upper()

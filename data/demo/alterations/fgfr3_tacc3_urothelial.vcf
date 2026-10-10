@@ -1,0 +1,7 @@
+##fileformat=VCFv4.2
+##source=GenomeOS therapeutic benchmark: FGFR3-TACC3 urothelial carcinoma (TCGA-CF-A3MG-01, blca_tcga_pan_can_atlas_2018). The driver is the structural variant in the .sv table; this VCF carries two of the same tumour s own somatic point mutations and NO FGFR3 variant, so FGFR3 can reach the candidate list only through the structural call
+##reference=GRCh38
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele fraction of the alternate allele in the tumour, from the record s alt and ref read counts">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	UROTHELIAL
+chr1	26773490	.	G	C	.	PASS	AF=0.208	GT:AF	0/1:0.208
+chr9	132921913	.	C	G	.	PASS	AF=0.800	GT:AF	0/1:0.800
