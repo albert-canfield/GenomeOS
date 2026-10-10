@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The work board: who is working on what right now, so the Progress tab says it instead of anyone asking.
 
 Several contributors work on one checkout at once. Each keeps one entry, written by

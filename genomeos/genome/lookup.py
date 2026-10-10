@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Look one variant up through every layer GenomeOS has.
 
 `lookup("chr21", 25897620, "C", "T")` returns, with the evidence of each:

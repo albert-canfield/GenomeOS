@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """A REGISTRATION ONLY: what a re-score under the repaired gene-input reader would be (2026-10-03).
 
 This module holds no code that scores anything. It is committed on its own, before any locus is

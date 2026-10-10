@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Is a compiled rule's `when: cell_type` a property of the ELEMENT, the GENE, or the LOCUS?
 
 A compiled rule line reads `rule <element> activates <gene> { ... when: cell_type = X ... }`.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Every fact the project states, with the evidence behind it: the Evidence explorer's data.
 
 GenomeOS puts evidence and a confidence on every BioLang block, and the promise is that a

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """A gene dossier: every layer GenomeOS knows about one gene, in one document.
 
 `genomeos report APP --chrom chr21` (or `/api/report`) assembles, from local

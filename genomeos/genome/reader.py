@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Reader v1: which nodes a cell type reads.
 
 The genome is the same in every cell; what differs is which parts are open.

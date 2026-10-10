@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """GenomeOS light web UI: a stdlib HTTP server exposing the runtime as JSON.
 
     genomeos serve            # http://127.0.0.1:8765

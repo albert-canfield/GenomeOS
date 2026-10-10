@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Design budgets from the libraries: what a cell type needs, and what it costs.
 
 Answers questions like "how much of the genome does a neuron need?" by

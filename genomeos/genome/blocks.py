@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Blocks of a chromosome window for the 2-D block viewer/editor.
 
 A block is any delimited stretch we can name: gene, transcript, exon, CDS,

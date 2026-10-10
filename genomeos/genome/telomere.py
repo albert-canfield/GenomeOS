@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Telomere length from sequencing reads (task 3.2), TelSeq-style.
 
 Reads with at least `k` TTAGGG (or CCCTAA) repeats are counted as telomeric.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Background jobs started from the UI or CLI, with progress visible.
 
 A job is a subprocess writing a log under data/jobs/<name>.log. Progress is

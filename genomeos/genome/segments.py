@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Segment parser v1: chain learned signals into candidate genes, never asserting.
 
 The sequence grammar (docs/SEQUENCE-GRAMMAR.md) reads: start codon in a

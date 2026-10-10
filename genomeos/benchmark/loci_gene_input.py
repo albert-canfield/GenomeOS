@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The gene-input layer's reader, versioned: v1 as it has always read, v2 repaired (2026-10-03).
 
 `loci.read_gene_input` is the gene-input layer: every already-scored element inside a locus's

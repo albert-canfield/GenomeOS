@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Reads per million mapped reads in an element, computed from alignments by its own definition.
 
 This is the quantity `DHS.RPM` and `H3K27ac.RPM` are, and that is the whole reason this module is

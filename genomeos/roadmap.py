@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The roadmap as data: docs/ROADMAP.md read into areas, planned steps and finished items.
 
 The Progress tab shows what is planned and what is done without anyone restating it, so the

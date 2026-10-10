@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The discovery view: set-valued CRISPRi evidence from A's discovery-only review, read-only.
 
 A's discovery-only review (registration a9ab0db, result 66051ee) asked which screened CRISPRi
