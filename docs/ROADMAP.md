@@ -1065,13 +1065,13 @@ Four rules govern the whole plan:
 
 10. **Done 2026-10-10 — E1, the fast gate is wired** (lane-fastgate, `41b14b7`; `scripts/pre-push.sh`, `scripts/fast_prepush.py`, `scripts/last_green_ci.py`, CONTRIBUTING steps 2 and 4). A `dev` push runs `ruff check` and `ruff format --check`, then the always-run tests and the test files changed since the last green CI, in both the normal and store-free legs. Its verdict is `fast-<tree>.json`, scope "fast", which `genomeos/verdict.py` never reads as a project verdict. The full suite returns when the daily CI is red or unread (`last_green_ci.py --daily`, older than 26 h counts as unread), on `main` and `promote-<sha>` branches, and under `GENOMEOS_FULL_GATE=1`, the switch for a paid-path sha. The trade, as ruled: a red in an unchanged test file does not block a `dev` push. 21 planted tests pass, 13 of which fail against the unwired hook. The full `scripts/check.sh` was green on tree `85eb696` (`tree_begin == tree_end ==` the commit tree; 5,909 passed, 0 failed, 15 skipped). Until a daily CI reading is recorded, every push stays on the full gate; the last-green record is `747b7ff`, so the first fast window would be 156 changed test files. After a fast push, `push_own.sh`'s retry and `GENOMEOS_SKIP_CHECK=1` refuse, because they need a project verdict.
 
-11. **E2 — Engine package writer** (`scripts/package_engine.py`, `data/results/engine_package.json`, after M2 lands). Record the package path relative to the repository; never save the canonical result from a `--out` run; rebuild on a clean HEAD, which replaces the uncommitted scratch rebuild in the tree.
+11. **E2 — Engine package writer** (lane-enginepkg, running since 2026-10-10; the verdict-hash fix landed as `7e15a22`; `scripts/package_engine.py`, `data/results/engine_package.json`, after M2 lands). Record the package path relative to the repository; never save the canonical result from a `--out` run; rebuild on a clean HEAD, which replaces the uncommitted scratch rebuild in the tree.
 
 **Wave 2 — from the middle of October, in this order unless a result changes it.**
 
 12. **AstroREG-2 analyses**, after item 5 completes: the registered primary analysis and item (h), each from its committed registration only, reported verbatim. Then Albert's decision on the second cell type (725 requests), with the run-2 outcome in hand.
 
-13. **M6 — The dormant areas, one per free model slot.**
+13. **M6 — The dormant areas, one per free model slot** (from 2026-10-10 under Albert's "start working unstoppable on each lane", each area has a lane: A lane-engdebts, C lane-roadrunner, D lane-pgs, H lane-forgecal, J lane-speciesnull; and area F's Next 1, surface scoring that reads the alteration, is lane-surface).
     - A, the engine's debts found by the documentation pass (`3183b81`) and by item 7b:
       - a rule with no stated strength runs at 1.0; `strength: unknown` must be expressible and must hold the rule rather than run it at full strength (7b);
       - v0.4 §2 caps confidence at 0.3 for any stage that has not passed its gate, and no engine code applies it; it holds only where a program's author writes it;
@@ -1086,7 +1086,7 @@ Four rules govern the whole plan:
 
 14. **The known-locus benchmark** (previous item 4): the frame drawn for the question it asks, and the re-score plan registered by lane-readerfix, which awaits the benchmark owner's decision. Recommendation: Albert names the coordinator as owner, and the frame is registered as its own lane.
 
-15. **Engineering backlog, one slot at most:**
+15. **Engineering backlog, one slot at most** (the documentation findings below are lane-docfix, and the engine package writer is lane-enginepkg, item 11):
     - the remaining one-target consumers (`syntax_tiling` and the two deliberately not moved);
     - the CPTAC seven profiles, uncommitted at 14.3% mismatch;
     - the removal tool's orphan path, for `.claude/worktrees/lane-quarantine`;
