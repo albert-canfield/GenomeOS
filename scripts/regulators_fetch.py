@@ -33,7 +33,10 @@ def fetch(f: dict) -> dict:
     md5, n = hashlib.md5(usedforsecurity=False), 0
     tmp = out.with_suffix(".part")
     req = urllib.request.Request(PORTAL + f["href"])
-    with urllib.request.urlopen(req, timeout=300) as r, gzip.open(tmp, "wb", mtime=0) as gz:
+    with (
+        urllib.request.urlopen(req, timeout=300) as r,
+        gzip.GzipFile(filename=str(tmp), mode="wb", mtime=0) as gz,
+    ):
         for chunk in iter(lambda: r.read(1 << 20), b""):
             md5.update(chunk)
             n += len(chunk)
