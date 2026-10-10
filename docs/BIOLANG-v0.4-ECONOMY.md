@@ -334,6 +334,11 @@ optional, as this paragraph agreed in advance.** It is expressible, it is
 charged, it reproduces a burden of the documented shape, and at proteome scale
 it does not improve a single prediction.
 
+*(2026-10-10: a fourth runnable policy, `saturable`, gives each demander its own factor
+`K / (K + d)` in its own demand `d`, with K the program's `half_saturation`; §9.7 registered gate (b)
+for it and §9.8 has the run: on held-out genes its log10 MAE is 0.949823 against the baseline's
+0.949969, no improvement detected at the 0.05 bar, and the pool layer stays optional.)*
+
 ## 6. Energy and mitochondria (stage 3, implemented 2026-10-10; ten registered clauses met, the gate as worded partly not askable)
 
 A reduced metabolic module (glycolysis, TCA, oxidative phosphorylation) in
@@ -1744,6 +1749,54 @@ the write and the file was not opened. The fix (`411b8ff`, `4f71f08`, insertions
 `data/results/saturable_gate_registration_amendment1.json`, whose binding words are the registration's.
 The reading is run 2's only if the two payloads are identical; otherwise run 1's is the registered run.
 
+### 9.8 Gate (b) for the per-demander policy as measured (2026-10-10)
+
+**The registered reading, verbatim:** *On held-out genes, the saturable policy's log10 MAE is 0.949823
+against the fitted baseline's 0.949969: an improvement of 0.000146 [0.000023, 0.000287]; no improvement
+detected at gate (b)'s registered bar of 0.05.*
+
+| Reading | Number |
+|---|---|
+| genes analysed (gate (b)'s join, rebuilt) | 15,159: 7,562 training, 7,597 held out |
+| K fitted on training | log10 K 4.39, about 24,547 TPM; 1 gene of 15,159 has a TPM above it |
+| held-out log10 MAE, baseline / saturable | 0.949969 / 0.949823 |
+| improvement | **0.000146** [0.000023, 0.000287], bar 0.05: **NO_IMPROVEMENT_DETECTED** |
+| comparator line (b = 0.608 fitted on training), held-out MAE | 0.879610, better than the saturable arm by 0.070212 [0.061179, 0.079399] |
+| slope of the policy's held-out predictions on log10 TPM | 0.999, outside the registered 0.515 [0.499, 0.531] |
+| K = capacity arm (the form §9.2 named) | 0.949968 |
+| `proportional`, `competitive` (pool short) | one factor each; held-out improvement 0.0 and 1.1e-16 |
+| runtime against closed form | largest gap 0.0 in log10 |
+| secondary, total protein per cell (no allocation in it) | 1.36e10, within the band, as in gate (b) |
+
+The comparator reading, verbatim: *A two-parameter straight line does better than the saturable
+policy on the same held-out genes (0.879610 against 0.949823, difference -0.070212 [-0.079399,
+-0.061179]), so the improvement is not specific to the saturable form.*
+
+**Whether the capacity binds at real demand, as a stated fact:** at the fitted K the ribosome pool
+serves 7.859e5 against a capacity of 5e6, out of a demand of 8.712e5, so **the capacity does not
+bind**; every factor below 1 comes from K, not from the pool. As in gate (b), §5.1's capacity is not
+reached at the demand a real transcriptome implies.
+
+**The expectation registered before the run is refuted.** It said almost any fitted compression would
+clear a slope-1 baseline. The saturable form did not: it has slope 1 below K and flattens above it, and
+the K that minimises training error sits where it touches one gene, so it supplies almost none of the
+0.485 decades per decade. A straight line in log-log, with the same number of fitted parameters, does
+lower the held-out error. That is a statement about which functional form fits this join, not about
+how a cell allocates ribosomes.
+
+**Amendment 1's comparison, and a defect in it.** Run 2 compared its payload with run 1's key for key
+and found one difference: `registration_amendment`, the key that names the amendment file written after
+run 1, which run 1 therefore could not carry. The comparison should have left that key out. Every
+other key, the verdict, the reading and every number among them, is identical. By the registered rule
+run 1's payload is the registered run, and its reading is the one above word for word. Run 1's file
+was deleted when run 2 wrote the result (`save_result` removes a superseded quarantine copy,
+genomeos/results.py); its sha256 is kept among run 2's declared inputs.
+
+**Consequence.** Gate (b) is still failed for the pool layer, now with a per-demander policy as well
+as the three gene-blind ones, and §5.3's consequence stands: the pool layer stays optional. Results:
+`data/results/saturable_gate_registration.json`, `saturable_gate_registration_amendment1.json` and
+`saturable_gate_result.json`; code `scripts/saturable_gate.py`; tests `tests/test_saturable_gate.py`.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
@@ -1820,6 +1873,9 @@ The reading is run 2's only if the two payloads are identical; otherwise run 1's
    of precursors (Lynch & Marinov). They differ several-fold.
 5. **Default allocation.** `competitive` for transports is a choice of
    mechanism; pools may deserve no default at all, forcing every program to name one.
+   **Status 2026-10-10 (§9.7, §9.8).** A fourth runnable policy, the per-demander `saturable`, was
+   put to gate (b) on held-out genes: no improvement detected at the registered bar (0.000146
+   [0.000023, 0.000287] against 0.05). Gate (b) still cannot choose a default; the decision stays open.
 6. **The protein turnover set** for stage 4, and whether a human set is
    required or a mouse one (Schwanhäusser et al. 2011, Nature 473:337) is acceptable.
    **Still open, and stage 4 shipped without it (2026-09-28, §9.4).** Every clause

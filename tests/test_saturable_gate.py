@@ -15,6 +15,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -93,3 +94,35 @@ def test_the_grid_and_the_registered_readings_are_what_the_registration_says() -
         assert key in REGISTRATION["readings"]
     assert "no protein value of a held-out gene enters any fit" in REGISTRATION["circularity_guard"]
     assert "explains" not in json.dumps(REGISTRATION["readings"])
+
+
+# ---- the registered run (2026-10-10) ----------------------------------------------------------------
+# No skipif: the registration, its amendment and the result are TRACKED, so they are in every checkout.
+
+RESULTS = Path(__file__).resolve().parents[1] / "data" / "results"
+
+
+def test_both_registrations_carry_the_binding_words_unchanged() -> None:
+    for name in ("saturable_gate_registration", "saturable_gate_registration_amendment1"):
+        got = json.loads((RESULTS / f"{name}.json").read_text())
+        assert got["registration"] == json.loads(json.dumps(REGISTRATION)), name
+        assert got["protein_values_read"] == 0, name
+
+
+def test_the_recorded_run_reads_no_improvement_detected() -> None:
+    got = json.loads((RESULTS / "saturable_gate_result.json").read_text())
+    assert got["verdict"] == "NO_IMPROVEMENT_DETECTED"
+    assert got["reading"] == (
+        "On held-out genes, the saturable policy's log10 MAE is 0.949823 against the fitted"
+        " baseline's 0.949969: an improvement of 0.000146 [0.000023, 0.000287]; no improvement"
+        " detected at gate (b)'s registered bar of 0.05."
+    )
+    assert got["analysed_genes"] == 15159
+    assert (got["split"]["training"], got["split"]["held_out"]) == (7562, 7597)
+    assert got["instrument"]["failed"] is False
+    for policy, row in got["gene_blind_arms"].items():
+        assert row["distinct_factors"] == 1 and abs(row["improvement_over_baseline"]) <= 1e-9, policy
+    assert got["comparator_key"] == "comparator_line_better"
+    assert got["binding"]["capacity_binds"] is False
+    # amendment 1: the one key run 1 could not carry is the only one that differs
+    assert got["run_1_quarantined_payload"]["keys_that_differ"] == ["registration_amendment"]
