@@ -1,0 +1,5082 @@
+{
+  "result": "pie1_corrections",
+  "date": "2026-10-10",
+  "registration": "scripts/pie1_registration.py",
+  "registration_digest": "dca737065c4d9e9b59f35a2aed579401bed65c33bb3276db29d45ef2fd651052",
+  "base_commit": "1c2ae677a7e0eecbe36ae47d1e8a3c947ae171e0",
+  "base_sha256": {
+    "founders_contacts.bio": "35f52d00f904f2d2cdb923d373983c01bdd672160cab6640d88eafe7b0a58f83",
+    "embryo_nolookup.bio": "72d2e4be67ea63456c53efa3e3a0180656d6e018983454b69cf56def500d4bac",
+    "embryo_contacts.bio": "aee021970ebafa59c7c8372e3ca38c0a4987e24bc8da9cde6925914bf2134169"
+  },
+  "headline": "C3 is applied: P2 presents MOM-2 while it holds PIE-1 OR POS-1; POS-1 is a maternal factor segregated to the germ precursors as PIE-1 is, and lost from both daughters of P1 without PAR-2 as PIE-1 is. With it the pie-1 knockout keeps E's intestine (Intestine 34), loses the germ line, and P2 still takes the EMS fate and ABp the ABa fate; the published EXTRA intestine is still not reproduced. The wild type stays 56 / 56 / 0 and no other knockout changes. pie-1's E outcome follows from a rule written from Oldenbroek et al. 2013's measurement of mom-2 translation, not from the pie-1 phenotype; it is consistency with that measurement, not a prediction of the phenotype",
+  "verdicts": {
+    "arms": {
+      "C1": {
+        "breaks": [
+          "(b) PAR-2 founders changed {'EMS': ['EMSPrecursor', 'EMSPolarised'], 'E': ['MSPrecursor', 'EPrecursor']}",
+          "(c) Du et al. 2014 par-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 par-2 E missed on embryo_nolookup"
+        ],
+        "survives": false,
+        "pie1_readings": {
+          "R1 P2 takes the EMS fate": true,
+          "R2 ABp takes the ABa fate": true,
+          "R3 E is not MS-like": true,
+          "R4 no germ line (Reproductive 0)": true,
+          "R5 extra intestine (Intestine above the wild type's 34)": false
+        },
+        "moves_pie1": true
+      },
+      "C2": {
+        "breaks": [
+          "(b) MOM-2 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(b) MOM-2 terminal {'Intestine': 0, 'Muscle': 20, 'Reproductive': 2, 'decided': 22} -> {'Intestine': 34, 'Muscle': 20, 'Reproductive': 2, 'decided': 56}",
+          "(b) MOM-5 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(b) MOM-5 terminal {'Intestine': 0, 'Muscle': 20, 'Reproductive': 2, 'decided': 22} -> {'Intestine': 34, 'Muscle': 20, 'Reproductive': 2, 'decided': 56}",
+          "(b) PAR-2 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(c) Du et al. 2014 mom-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 par-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 mom-2 E missed on embryo_nolookup",
+          "(c) Du et al. 2014 par-2 E missed on embryo_nolookup"
+        ],
+        "survives": false,
+        "pie1_readings": {
+          "R1 P2 takes the EMS fate": true,
+          "R2 ABp takes the ABa fate": true,
+          "R3 E is not MS-like": true,
+          "R4 no germ line (Reproductive 0)": true,
+          "R5 extra intestine (Intestine above the wild type's 34)": false
+        },
+        "moves_pie1": true
+      },
+      "C3": {
+        "breaks": [],
+        "survives": true,
+        "pie1_readings": {
+          "R1 P2 takes the EMS fate": true,
+          "R2 ABp takes the ABa fate": true,
+          "R3 E is not MS-like": true,
+          "R4 no germ line (Reproductive 0)": true,
+          "R5 extra intestine (Intestine above the wild type's 34)": false
+        },
+        "moves_pie1": true
+      },
+      "C1+C2": {
+        "breaks": [
+          "(b) MOM-2 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(b) MOM-2 terminal {'Intestine': 0, 'Muscle': 20, 'Reproductive': 2, 'decided': 22} -> {'Intestine': 34, 'Muscle': 20, 'Reproductive': 2, 'decided': 56}",
+          "(b) MOM-5 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(b) MOM-5 terminal {'Intestine': 0, 'Muscle': 20, 'Reproductive': 2, 'decided': 22} -> {'Intestine': 34, 'Muscle': 20, 'Reproductive': 2, 'decided': 56}",
+          "(b) PAR-2 founders changed {'EMS': ['EMSPrecursor', 'EMSPolarised'], 'E': ['MSPrecursor', 'EPrecursor']}",
+          "(c) Du et al. 2014 mom-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 par-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 mom-2 E missed on embryo_nolookup",
+          "(c) Du et al. 2014 par-2 E missed on embryo_nolookup"
+        ],
+        "survives": false,
+        "pie1_readings": {
+          "R1 P2 takes the EMS fate": true,
+          "R2 ABp takes the ABa fate": true,
+          "R3 E is not MS-like": true,
+          "R4 no germ line (Reproductive 0)": true,
+          "R5 extra intestine (Intestine above the wild type's 34)": false
+        },
+        "moves_pie1": true
+      },
+      "C1+C3": {
+        "breaks": [
+          "(b) PAR-2 founders changed {'EMS': ['EMSPrecursor', 'EMSPolarised'], 'E': ['MSPrecursor', 'EPrecursor']}",
+          "(c) Du et al. 2014 par-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 par-2 E missed on embryo_nolookup"
+        ],
+        "survives": false,
+        "pie1_readings": {
+          "R1 P2 takes the EMS fate": true,
+          "R2 ABp takes the ABa fate": true,
+          "R3 E is not MS-like": true,
+          "R4 no germ line (Reproductive 0)": true,
+          "R5 extra intestine (Intestine above the wild type's 34)": false
+        },
+        "moves_pie1": true
+      },
+      "C2+C3": {
+        "breaks": [
+          "(b) MOM-2 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(b) MOM-2 terminal {'Intestine': 0, 'Muscle': 20, 'Reproductive': 2, 'decided': 22} -> {'Intestine': 34, 'Muscle': 20, 'Reproductive': 2, 'decided': 56}",
+          "(b) MOM-5 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(b) MOM-5 terminal {'Intestine': 0, 'Muscle': 20, 'Reproductive': 2, 'decided': 22} -> {'Intestine': 34, 'Muscle': 20, 'Reproductive': 2, 'decided': 56}",
+          "(b) PAR-2 founders changed {'E': ['MSPrecursor', 'EPrecursor']}",
+          "(c) Du et al. 2014 mom-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 par-2 E missed on embryo_contacts",
+          "(c) Du et al. 2014 mom-2 E missed on embryo_nolookup",
+          "(c) Du et al. 2014 par-2 E missed on embryo_nolookup"
+        ],
+        "survives": false,
+        "pie1_readings": {
+          "R1 P2 takes the EMS fate": true,
+          "R2 ABp takes the ABa fate": true,
+          "R3 E is not MS-like": true,
+          "R4 no germ line (Reproductive 0)": true,
+          "R5 extra intestine (Intestine above the wild type's 34)": false
+        },
+        "moves_pie1": true
+      }
+    },
+    "survivors": [
+      "C3"
+    ],
+    "surviving_pairs": [],
+    "apply": "C3",
+    "base_pie1": {
+      "R1 P2 takes the EMS fate": true,
+      "R2 ABp takes the ABa fate": true,
+      "R3 E is not MS-like": false,
+      "R4 no germ line (Reproductive 0)": true,
+      "R5 extra intestine (Intestine above the wild type's 34)": false
+    }
+  },
+  "arms": {
+    "baseline": {
+      "arm": "baseline",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 20
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 11,
+          "missed": 0,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "reproduced"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 10,
+          "missed": 1,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "reproduced"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    },
+    "C1": {
+      "arm": "C1",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 54
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 10,
+          "missed": 1,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 9,
+          "missed": 2,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    },
+    "C2": {
+      "arm": "C2",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 54
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": false,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": false,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 9,
+          "missed": 2,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "missed"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [],
+            "mom-5": [],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 8,
+          "missed": 3,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "missed"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [],
+            "mom-5": [],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    },
+    "C3": {
+      "arm": "C3",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 54
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 11,
+          "missed": 0,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "reproduced"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 10,
+          "missed": 1,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "reproduced"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    },
+    "C1+C2": {
+      "arm": "C1+C2",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 54
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": false,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": false,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 9,
+          "missed": 2,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "missed"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [],
+            "mom-5": [],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 8,
+          "missed": 3,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "missed"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [],
+            "mom-5": [],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    },
+    "C1+C3": {
+      "arm": "C1+C3",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 54
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "MSPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 10,
+          "missed": 1,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 9,
+          "missed": 2,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "reproduced"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "mom-5": [
+              "E:MSPrecursor",
+              "EMS:EMSPrecursor",
+              "Ea:MSPrecursor",
+              "Ep:MSPrecursor"
+            ],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    },
+    "C2+C3": {
+      "arm": "C2+C3",
+      "void": [],
+      "wild_type": {
+        "decided": 56,
+        "right": 56,
+        "wrong": 0,
+        "by_founder": {
+          "D": {
+            "Muscle": 20
+          },
+          "E": {
+            "Intestine": 34
+          },
+          "P4": {
+            "Reproductive": 2
+          }
+        },
+        "by_rule": {
+          "tissue_D": 20,
+          "tissue_E": 34,
+          "tissue_germline": 2
+        },
+        "founders": {
+          "ABa": "ABaPrecursor",
+          "ABp": "ABpPrecursor",
+          "EMS": "EMSPolarised",
+          "MS": "MSPrecursor",
+          "E": "EPrecursor",
+          "C": "CPrecursor",
+          "D": "DPrecursor",
+          "P4": "GermCell"
+        },
+        "founders_correct": 8,
+        "seeds_all_56_56_0": true,
+        "seeds": {
+          "0": [
+            56,
+            56,
+            0
+          ],
+          "1": [
+            56,
+            56,
+            0
+          ],
+          "2": [
+            56,
+            56,
+            0
+          ],
+          "3": [
+            56,
+            56,
+            0
+          ],
+          "4": [
+            56,
+            56,
+            0
+          ],
+          "5": [
+            56,
+            56,
+            0
+          ],
+          "6": [
+            56,
+            56,
+            0
+          ],
+          "7": [
+            56,
+            56,
+            0
+          ],
+          "8": [
+            56,
+            56,
+            0
+          ],
+          "9": [
+            56,
+            56,
+            0
+          ],
+          "10": [
+            56,
+            56,
+            0
+          ],
+          "11": [
+            56,
+            56,
+            0
+          ],
+          "12": [
+            56,
+            56,
+            0
+          ],
+          "13": [
+            56,
+            56,
+            0
+          ],
+          "14": [
+            56,
+            56,
+            0
+          ],
+          "15": [
+            56,
+            56,
+            0
+          ],
+          "16": [
+            56,
+            56,
+            0
+          ],
+          "17": [
+            56,
+            56,
+            0
+          ],
+          "18": [
+            56,
+            56,
+            0
+          ],
+          "19": [
+            56,
+            56,
+            0
+          ]
+        }
+      },
+      "knockouts": {
+        "POP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "EPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 111,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 133
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "MS": {
+              "Intestine": 77
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "SKN-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "Blastomere",
+            "P2": "Blastomere",
+            "MS": "CPrecursor",
+            "E": "CPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 0,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 22
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "PIE-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 0,
+            "decided": 54
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "APX-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "GLP-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": null
+        },
+        "PAL-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "Blastomere",
+            "D": "Blastomere",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 0,
+            "Reproductive": 2,
+            "decided": 36
+          },
+          "terminal_by_founder": {
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": true,
+          "published_terminal_phenotype_reproduced": true
+        },
+        "MOM-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": false,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "MOM-5": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          },
+          "terminal": {
+            "Intestine": 34,
+            "Muscle": 20,
+            "Reproductive": 2,
+            "decided": 56
+          },
+          "terminal_by_founder": {
+            "D": {
+              "Muscle": 20
+            },
+            "E": {
+              "Intestine": 34
+            },
+            "P4": {
+              "Reproductive": 2
+            }
+          },
+          "founder_phenotype_reproduced": false,
+          "published_terminal_phenotype_reproduced": false
+        },
+        "PAR-2": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABaPrecursor",
+            "EMS": "EMSPrecursor",
+            "P2": "EMSPrecursor",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "EMSPrecursor"
+          }
+        },
+        "PAR-3": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        },
+        "POS-1": {
+          "founders": {
+            "ABa": "ABaPrecursor",
+            "ABp": "ABpPrecursor",
+            "EMS": "EMSPolarised",
+            "P2": "Blastomere",
+            "MS": "MSPrecursor",
+            "E": "EPrecursor",
+            "C": "CPrecursor",
+            "D": "DPrecursor",
+            "P4": "GermCell"
+          }
+        }
+      },
+      "du2014": {
+        "embryo_contacts": {
+          "reproduced": 9,
+          "missed": 2,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "missed"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "reproduced"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [],
+            "mom-5": [],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [
+              "MSa:EPrecursor",
+              "MSp:EPrecursor"
+            ],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        },
+        "embryo_nolookup": {
+          "reproduced": 8,
+          "missed": 3,
+          "not_modelled": 14,
+          "observed": {
+            "apx-1": {
+              "ABp": "reproduced"
+            },
+            "glp-1": {
+              "ABp": "reproduced",
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpla": "not modelled"
+            },
+            "mom-2": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled",
+              "E": "missed"
+            },
+            "mom-5": {
+              "ABar": "not modelled",
+              "ABpra": "not modelled"
+            },
+            "par-2": {
+              "ABp": "reproduced",
+              "ABar": "not modelled",
+              "P2": "reproduced",
+              "E": "missed"
+            },
+            "par-3": {
+              "AB": "reproduced",
+              "ABar": "not modelled",
+              "ABala": "not modelled"
+            },
+            "pie-1": {
+              "ABp": "reproduced",
+              "P2": "reproduced"
+            },
+            "pop-1": {
+              "ABpla": "not modelled",
+              "MS": "missed"
+            },
+            "skn-1": {
+              "ABalp": "not modelled",
+              "ABara": "not modelled",
+              "ABpra": "not modelled",
+              "EMS": "reproduced"
+            }
+          },
+          "predicted_not_observed": {
+            "apx-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "glp-1": [
+              "ABpl:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor"
+            ],
+            "mom-2": [],
+            "mom-5": [],
+            "par-2": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "par-3": [],
+            "pie-1": [
+              "ABpl:ABaPrecursor",
+              "ABpla:ABaPrecursor",
+              "ABplp:ABaPrecursor",
+              "ABpr:ABaPrecursor",
+              "ABpra:ABaPrecursor",
+              "ABprp:ABaPrecursor",
+              "P3:EMSPrecursor",
+              "P4:EMSPrecursor"
+            ],
+            "pop-1": [],
+            "skn-1": [
+              "E:CPrecursor",
+              "Ea:CPrecursor",
+              "Ep:CPrecursor",
+              "MS:CPrecursor",
+              "MSa:CPrecursor",
+              "MSp:CPrecursor"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "WormWeb C. elegans cell lineage, json-celllineage.js (Sulston et al. 1983; Sulston and Horvitz 1977)",
+        "version": "as fetched and distilled into data/results/celegans_lineage_cells.json (first 0a8aa05, 2026-09-11); the page carries no release number, so the distilled file's sha256 pins it",
+        "url": "http://wormweb.org/js/json-celllineage.js",
+        "licence": "CC BY"
+      },
+      {
+        "accession": "Mello CC, Draper BW, Krause M, Weintraub H, Priess JR (1992) Cell 70:163-176, PMID 1623520, doi:10.1016/0092-8674(92)90542-k",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10; full text NOT retrievable (cell.com and sciencedirect.com 403; Unpaywall and Semantic Scholar list no open copy)"
+      },
+      {
+        "accession": "Seydoux G, Mello CC, Pettitt J, Wood WB, Priess JR, Fire A (1996) Nature 382:713-716, PMID 8751441",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Mello CC, Schubert C, Draper B, Zhang W, Lobel R, Priess JR (1996) Nature 382:710-712, PMID 8751440",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Tenenhaus C, Schubert C, Seydoux G (1998) Dev Biol 200:212-224, PMID 9705228",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Tenenhaus C, Subramaniam K, Dunn MA, Seydoux G (2001) Genes Dev 15:1031-1040, PMID 11316796",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Thorpe CJ, Schlesinger A, Carter JC, Bowerman B (1997) Cell 90:695-705, PMID 9288749",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Rocheleau CE, Downs WD, Lin R, Wittmann C, et al. (1997) Cell 90:707-716, PMID 9288750",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Oldenbroek M, Robertson SM, Guven-Ozkan T, Spike C, Greenstein D, Lin R (2013) Development 140:4614-4623, PMID 24131629, PMC3817945, doi:10.1242/dev.096313",
+        "version": "abstract from NCBI efetch db=pmc; results text from journals.biologists.com through a fetch tool that returns quoted sentences (each quote below was asked for verbatim and re-asked once; one paraphrase the tool produced on the first pass was rejected and re-checked), 2026-10-10"
+      },
+      {
+        "accession": "Mango SE, Thorpe CJ, Martin PR, Chamberlain SH, Bowerman B (1994) Development 120:2305-2315, PMID 7925031",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Tabara H, Hill RJ, Mello CC, Priess JR, Kohara Y (1999) Development 126:1-11, PMID 9834181",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Guedes S, Priess JR (1997) Development 124:731-739, PMID 9043088",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Bei Y, Hogan J, Berkowitz LA, Soto M, Rocheleau CE, et al. (2002) Dev Cell 3:113-125, PMID 12110172",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Goldstein B (1992) Nature 357:255-257, PMID 1589023",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Du Z, Santella A, He F, Tiongson M, Bao Z (2014) Cell 156:359-372, PMID 24439388; the Fate_regulation table distilled in data/results/celegans_digital_development.json",
+        "version": "full text from NCBI efetch db=pmc (PMC3998820); table rows read from the committed distillation, 2026-10-10"
+      },
+      {
+        "accession": "Boyd L, Guo S, Levitan D, Stinchcomb DT, Kemphues KJ (1996) Development 122:3075-3084, PMID 8898221",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Cheeks RJ, Canman JC, Gabriel WN, Meyer N, Strome S, Goldstein B (2004) Curr Biol 14:851-862, PMID 15186741",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Lin R, Hill RJ, Priess JR (1998) Cell 92:229-239, PMID 9458047",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      },
+      {
+        "accession": "Bowerman B, Draper BW, Mello CC, Priess JR (1993) Cell 74:443-452, PMID 8348611",
+        "version": "abstract fetched from NCBI E-utilities (efetch db=pubmed, rettype=abstract), 2026-10-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/celegans_lineage_cells.json",
+        "sha256": "93635ad98a08e4641c9f8719d63cc3420ecee6fd161c0d8fab897720fb6d4ab6",
+        "bytes": 305885,
+        "partition": null
+      },
+      {
+        "path": "data/results/celegans_digital_development.json",
+        "sha256": "83369c8721336526d6b1d4384b324121d0e6ab7ff62b19cb30c95ff123df7086",
+        "bytes": 18436,
+        "partition": null
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/acvu.bio",
+        "sha256": "4ec51b82b4b10908430af52c70cc4596138a9e94e1fe7baec0ee7f6f39706145",
+        "bytes": 10543,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/cell_types.bio",
+        "sha256": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c",
+        "bytes": 2604,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/contacts_acvu.tsv",
+        "sha256": "f760e59bcff87dfb18b9daac44bc411c197790999356dea4a9799427a255f684",
+        "bytes": 1582,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/contacts_embryo.tsv",
+        "sha256": "812a36f45c1876cf894a5b7f058e6faf24f7e284b4a1f0e0d12c014926369f47",
+        "bytes": 3993,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/contacts_embryo_cshaper.tsv",
+        "sha256": "c03b60aaf3ad3f502592f615bd6eb5a3dac5a1f0064290b7acab0b6fa7bf4270",
+        "bytes": 10422,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/contacts_embryo_cshaper_detected.tsv",
+        "sha256": "03e469c054028a8bf2aaffb5be91e270a51dcfe22f9e88c3e56f51d48e698fe8",
+        "bytes": 65370,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/designs.bio",
+        "sha256": "fb6e55433a51517be7c9684bfa6f8275ca5672b4a752078a8723c0a57299385c",
+        "bytes": 955,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/embryo.bio",
+        "sha256": "c3bf6a9b151f74547c3c0e2c0106ef85eadd82381ad97e87e0db133cb3b46ad3",
+        "bytes": 2118,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/embryo_contacts.bio",
+        "sha256": "aee021970ebafa59c7c8372e3ca38c0a4987e24bc8da9cde6925914bf2134169",
+        "bytes": 3020,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/embryo_factors.bio",
+        "sha256": "f674d6c1b591cad143b1f7c66a203dc3b35e84c09f03da482ac6598ed222834f",
+        "bytes": 3794,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/embryo_nolookup.bio",
+        "sha256": "72d2e4be67ea63456c53efa3e3a0180656d6e018983454b69cf56def500d4bac",
+        "bytes": 3777,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/fates.bio",
+        "sha256": "b7ccefed754e4bbbd25ed1ff25b08d6d3db43838f9fddfc9a7cc130eb16d3298",
+        "bytes": 21509,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/founder_tissues.bio",
+        "sha256": "09359ffb0aa4662cd92b6b54cb3b86e14691de58f3e54535ef5e465b58e50502",
+        "bytes": 3324,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/founders.bio",
+        "sha256": "41cad2ec74552d79de29cc348e6ac51b0a1906980a3cec2f26d41c17c4b610e5",
+        "bytes": 7871,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/founders_contacts.bio",
+        "sha256": "35f52d00f904f2d2cdb923d373983c01bdd672160cab6640d88eafe7b0a58f83",
+        "bytes": 10983,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/lineage_embryo.bio",
+        "sha256": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+        "bytes": 239228,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/lineage_embryo_tree.bio",
+        "sha256": "dcd531be104158ee09de633ecf1d060e5ee0ef2b37d2a94de89c34bfd125d151",
+        "bytes": 145834,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/lineage_larva.bio",
+        "sha256": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+        "bytes": 123195,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/mutants.bio",
+        "sha256": "a083fef64ca7d797a3d01164fbc1cae51d25e12bdca60e69f7bf8291605ba701",
+        "bytes": 4459,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/mutants_nolookup.bio",
+        "sha256": "a22f1ebd44a91efd4d3b349b51af564e2476a126bfa4067d9a1a49cf3d0231da",
+        "bytes": 4584,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/plasticity.bio",
+        "sha256": "0b450393a8efb7fdf5e675a22b923687d20ee6d11982d82cf112afac3d2e673f",
+        "bytes": 6020,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/reader.bio",
+        "sha256": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+        "bytes": 792382,
+        "partition": null,
+        "kept": false
+      },
+      {
+        "path": "git 1c2ae677a7e0:data/organisms/celegans/timers.bio",
+        "sha256": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+        "bytes": 13303,
+        "partition": null,
+        "kept": false
+      }
+    ],
+    "assembly": "n/a: a cell lineage and per-cell factor presence; nothing is placed on a genome",
+    "coordinates": "n/a: cells are named by their lineage path, not by a genomic interval",
+    "parameters": {
+      "until_min": 800.0,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "timers": "means",
+      "base_commit": "1c2ae677a7e0eecbe36ae47d1e8a3c947ae171e0"
+    },
+    "exclusions": [
+      {
+        "X1": "MOM-2 presented at a reduced amount without PIE-1 (about 0.46 of the wild type, from the 54% reduction)",
+        "X2": "presents_apx1 loses its PIE-1 condition",
+        "X3": "a pie-1 P2 divides as EMS does: its daughters take MS-like and E-like fates, which is where the published EXTRA intestine would come from",
+        "X4": "a MOM-2 gate on PAR-2 itself, or on MEX-1, chosen because it separates par-2 from pie-1",
+        "X5": "C3 with POS-1 kept by P2 (or shared by both daughters) in par-2"
+      }
+    ],
+    "partitions": "n/a: no evaluation split; every cell is read",
+    "code_cleanliness": {
+      "git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/pie1_registration.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pie1_registration.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pie1_registration.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/multrna_census.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_fly.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/__init__.py",
+        "genomeos/organism/atlas_levels.py",
+        "genomeos/organism/celegans.py",
+        "genomeos/organism/diff.py",
+        "genomeos/organism/digital_development.py",
+        "genomeos/organism/experiment.py",
+        "genomeos/organism/fate_rules.py",
+        "genomeos/organism/human.py",
+        "genomeos/organism/provenance.py",
+        "genomeos/organism/reference.py",
+        "genomeos/organism/tf_atlas.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/body.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/pie1_registration.py"
+      ],
+      "counting_path_count": 34,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/multrna_census.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_fly.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "scripts/multrna_census.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_simpler_fly.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pie1_registration.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "code_cleanliness_git_sha": "26e9ef72615b2f29dad5b17f89c6143aa6ebe141",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 26e9ef7"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 1019,
+      "opens_under_data": 4,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "git 1c2ae677a7e0:data/organisms/celegans/acvu.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/cell_types.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/contacts_acvu.tsv",
+        "git 1c2ae677a7e0:data/organisms/celegans/contacts_embryo.tsv",
+        "git 1c2ae677a7e0:data/organisms/celegans/contacts_embryo_cshaper.tsv",
+        "git 1c2ae677a7e0:data/organisms/celegans/contacts_embryo_cshaper_detected.tsv",
+        "git 1c2ae677a7e0:data/organisms/celegans/designs.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/embryo.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/embryo_contacts.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/embryo_factors.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/embryo_nolookup.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/fates.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/founder_tissues.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/founders.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/founders_contacts.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/lineage_embryo.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/lineage_embryo_tree.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/lineage_larva.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/mutants.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/mutants_nolookup.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/plasticity.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/reader.bio",
+        "git 1c2ae677a7e0:data/organisms/celegans/timers.bio"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
