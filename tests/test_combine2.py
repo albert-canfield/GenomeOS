@@ -8,10 +8,14 @@ Every program here is synthetic and written in the generator's own line format, 
 
 from __future__ import annotations
 
+import ast
+import json
 import math
 import random
+from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import combine2 as c2
 from genomeos.attribution import compile as cp
@@ -329,3 +333,21 @@ def test_the_registered_words_state_the_independence_caveat_and_claim_no_functio
     assert "Bothma" in c2.FORM_SOURCES["competition"] and "eqs. 7-9" in c2.FORM_SOURCES["competition"]
     assert c2.THETA == 0.5 and c2.FORMS == ("mean", "competition")
     assert c2.FORM_INTERVAL == (1.25, 98.75)
+
+
+def test_no_outcome_sentence_strengthens():
+    for s in [*c2.OUTCOMES.values(), *c2.HEAD_TO_HEAD.values()]:
+        for word in ("proves", "validated", "equal", "mechanism", "function"):
+            assert word not in s.lower()
+
+
+def test_the_committed_registration_matches_the_code_that_applies_it():
+    reg_path = Path("data/results/combine2_registration.json")
+    # tracked by git from its registration commit, so its absence is a broken checkout, never a skip
+    tp.must_be_present(reg_path, was="registration not yet written")
+    reg = json.loads(reg_path.read_text())
+    src = Path("scripts/combine2_run.py").read_text()
+    bound = ast.literal_eval("{" + src.split("BOUND = {", 1)[1].split("\n}\n", 1)[0] + "\n}")
+    assert len(bound) >= 30, "the run script binds too few fields"
+    for field, const in bound.items():
+        assert reg[field] == json.loads(json.dumps(getattr(c2, const))), field
