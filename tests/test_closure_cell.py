@@ -121,25 +121,32 @@ def test_the_arms_separate_the_attribution_from_the_neighbourhood():
 # ---- the published layout ------------------------------------------------------------------------
 
 
-#: One row as ENCODE publishes it, taken from the first line of ENCFF995GEZ: eighteen fields, a
-#: 3 bp target interval, the replicate's count at field 5 and the guide type at field 16.
+#: The FIRST LINE of ENCFF945GIJ, byte for byte: seventeen tab-separated fields, a 3 bp target
+#: interval, the replicate's count at field 4 and the guide type at field 15. The BED name at
+#: field 3 holds a pipe, `NA|chr1:605582-605585:+`, and that single character is what the first
+#: version of this test got wrong -- it was transcribed from a shell pipeline that turned tabs into
+#: pipes, so the name read as two fields and every index past it was one too high.
 A_PUBLISHED_ROW = (
-    "chr1\t605582\t605585\tNA\tchr1:605582-605585:+\t446\t+\tchr1:605582-605585:+\t"
+    "chr1\t605582\t605585\tNA|chr1:605582-605585:+\t490\t+\tchr1:605582-605585:+\t"
     "NA\tNA\tNA\tNA\tNA\tNA\tAACCACAGGGAGAGCTGCCG\tGAACCACAGGGAGAGCTGCCG\ttargeting\tNA"
 )
 
 
 def test_the_published_row_parses_and_a_malformed_one_is_refused_rather_than_guessed_at():
     row = cc.parse_guide_row(A_PUBLISHED_ROW)
-    assert row == ("chr1", 605582, 605585, 446.0, "targeting")
+    assert row == ("chr1", 605582, 605585, 490.0, "targeting")
     fields = A_PUBLISHED_ROW.split("\t")
-    assert len(fields) == cc.FIELD_COUNT
-    assert fields[cc.FIELDS["count"]] == "446"
+    assert len(fields) == cc.FIELD_COUNT == 17
+    assert fields[cc.FIELDS["count"]] == "490"
     assert fields[cc.FIELDS["guide_type"]] == cc.TARGETING
+    assert fields[cc.FIELDS["strand"]] == "+"
+    assert fields[cc.FIELDS["name"]] == "NA|chr1:605582-605585:+"
     assert cc.parse_guide_row("\t".join(fields[:-1])) is None  # a field short
-    assert cc.parse_guide_row(A_PUBLISHED_ROW.replace("\t446\t", "\tNA\t")) is None
+    assert cc.parse_guide_row(A_PUBLISHED_ROW.replace("\t490\t", "\tNA\t")) is None
     assert cc.parse_guide_row(A_PUBLISHED_ROW.replace("chr1\t", "1\t", 1)) is None
     assert cc.parse_guide_row(A_PUBLISHED_ROW.replace("605582\t605585", "605585\t605582", 1)) is None
+    # the defect the probe caught: splitting the name's pipe gives eighteen fields and no row
+    assert cc.parse_guide_row(A_PUBLISHED_ROW.replace("NA|chr1", "NA\tchr1", 1)) is None
 
 
 def test_every_row_is_counted_somewhere_and_the_totals_close():
@@ -150,12 +157,12 @@ def test_every_row_is_counted_somewhere_and_the_totals_close():
     census = cc.new_census()
     non_targeting = {"guides": 0.0, "count": 0.0}
     control_row = A_PUBLISHED_ROW.replace("\ttargeting\t", "\tnegative_control\t").replace(
-        "\t446\t", "\t50\t"
+        "\t490\t", "\t50\t"
     )
     off = A_PUBLISHED_ROW.replace("chr1\t605582\t605585", "chr1\t900000\t900003", 1).replace(
-        "\t446\t", "\t7\t"
+        "\t490\t", "\t7\t"
     )
-    unplaced = A_PUBLISHED_ROW.replace("chr1\t", "chrUn_KI270742v1\t", 1).replace("\t446\t", "\t3\t")
+    unplaced = A_PUBLISHED_ROW.replace("chr1\t", "chrUn_KI270742v1\t", 1).replace("\t490\t", "\t3\t")
     for line in (A_PUBLISHED_ROW, control_row, off, unplaced, "\t".join(["x"] * 3), ""):
         cc.fold_row(line, index, per_element, guides, census, non_targeting)
     assert census["rows"] == 5  # the empty line is no row
@@ -164,12 +171,12 @@ def test_every_row_is_counted_somewhere_and_the_totals_close():
     assert census["non_targeting"] == 1
     assert census["outside_the_population"] == 1
     assert census["unplaced_chromosome"] == 1
-    assert per_element == {"EH_A": 446.0}
+    assert per_element == {"EH_A": 490.0}
     assert guides == {"EH_A": 1}
     assert non_targeting == {"guides": 1.0, "count": 50.0}
     assert census["count_outside_the_population"] == 10.0
     total = sum(per_element.values()) + non_targeting["count"] + census["count_outside_the_population"]
-    assert total == 446.0 + 50.0 + 7.0 + 3.0
+    assert total == 490.0 + 50.0 + 7.0 + 3.0
 
 
 # ---- the statistics ------------------------------------------------------------------------------

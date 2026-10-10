@@ -474,12 +474,33 @@ def mann_whitney_u(a: list[float], b: list[float]) -> dict[str, Any]:
 
 # ---- the screen's own files, streamed -----------------------------------------------------------
 
-#: The guide-quantification layout, by position, as the files themselves show it. ENCODE publishes
-#: these as a BED-like TSV with no header line, so every row is checked against this rather than
-#: against a column name: the chromosome, a 3 bp target interval, the replicate's count at field 5
-#: and the guide's type at field 16. A row that does not fit is counted, never guessed at.
-FIELDS = {"chrom": 0, "start": 1, "end": 2, "count": 5, "strand": 6, "guide_type": 16}
-FIELD_COUNT = 18
+#: The guide-quantification layout, by position, as the files themselves show it: seventeen
+#: tab-separated fields, no header line. The chromosome and a 3 bp target interval first, then the
+#: BED name, the replicate's count, the strand, the perturbation target's id, six unused fields,
+#: the spacer and guide sequences, the guide's type and a note. A row that does not fit is counted,
+#: never guessed at.
+#:
+#: These indices were WRONG when this module was first written, and the census' layout probe is
+#: what found it: the BED name is `NA|chr1:605582-605585:+`, one field holding a pipe, and reading
+#: the file through a `tr '\t' '|'` pipeline had split it in two, which pushed every index past it
+#: up by one. The probe reported 17 fields on 13,978 of 13,978 rows and 0 rows matching the
+#: declared layout, before a single count had been read. The malformed-row gate in the run would
+#: have refused the file too, since the strand sat where the count was expected and does not parse
+#: as a number -- but it would have refused after streaming 173 MB, and the probe cost 2 MB.
+FIELDS = {
+    "chrom": 0,
+    "start": 1,
+    "end": 2,
+    "name": 3,
+    "count": 4,
+    "strand": 5,
+    "target_id": 6,
+    "spacer": 13,
+    "guide": 14,
+    "guide_type": 15,
+    "notes": 16,
+}
+FIELD_COUNT = 17
 TARGETING = "targeting"
 GuideIndex = dict[str, tuple[list[tuple[int, int, Any]], dict[int, list[int]]]]
 
