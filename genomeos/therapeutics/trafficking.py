@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """What happens after the binder attaches.
 
 Binding is the beginning, not the end:

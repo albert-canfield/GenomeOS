@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Peptide/HLA binding predictors as optional features.
 
 GenomeOS never invents an affinity. A predictor is wired in only if the user

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Normal-cell protection as a first-class result, not a footnote.
 
 A candidate must not rank highly merely because it is abundant on cancer.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 from .alterations import GeneAlteration, detect_cna_format, read_cna_table, read_sv_table
 from .alterations import grade as grade_alterations
 from .cbioportal import DRIVER_PANEL, CBioPortal

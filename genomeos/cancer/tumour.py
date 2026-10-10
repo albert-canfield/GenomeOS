@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Tumour-only analysis: a tumour's DNA without a matched normal.
 
 Without the normal sample the germline cannot be subtracted, so it is

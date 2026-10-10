@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Structural context, and the epitope a mutation may create on the outside.
 
 The highest-value target class in the whole pipeline is a tumour-specific

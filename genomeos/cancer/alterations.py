@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The alterations that are not point mutations: copy number and structure.
 
 A tumour breaks a gene in three ways and a VCF of point mutations carries

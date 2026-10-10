@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Component scores, and one overall score whose arithmetic is on the page.
 
 A single opaque number is useless for research: it cannot be argued with. So

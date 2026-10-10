@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The therapeutic-target domain model.
 
 Five things are kept apart on purpose, because collapsing them is what makes

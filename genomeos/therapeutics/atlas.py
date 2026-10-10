@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Healthy-tissue RNA for the whole surface universe, shipped with the package.
 
 Every candidate the pipeline scores needs the same question answered: how much

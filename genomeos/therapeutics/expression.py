@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Accessibility is not specificity.
 
 A protein can be beautifully exposed on the tumour cell and still be a bad

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Where the protein is, and which part of it a binder could actually touch.
 
 A mutated gene is not a surface target. RUNX1 is mutated in leukaemia and is

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The `cancer.*` library layer: which genes break, how, and in which cancers.
 
 The BioLib catalogue names the toolkits a healthy genome uses. This layer

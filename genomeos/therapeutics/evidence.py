@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Evidence: what is known, how it is known, and how sure we are.
 
 Every conclusion in the therapeutics pipeline points back to an Evidence

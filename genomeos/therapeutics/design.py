@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The Therapeutic Design Dataset.
 
 The output a downstream binder-design system needs, so it never has to redo

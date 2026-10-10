@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Healthy versus tumour: somatic differences, drivers, cancer type, targets.
 
 Inputs are two variant lists (VCFs) from the same person: a healthy sample

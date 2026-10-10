@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The peptide/HLA route: how an intracellular mutation becomes visible outside.
 
 An intracellular mutation is not a dead end. Proteasomes chop the mutant

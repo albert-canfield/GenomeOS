@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Two antigens can be more selective than either one.
 
 There is rarely a perfectly tumour-specific antigen. There is often a pair

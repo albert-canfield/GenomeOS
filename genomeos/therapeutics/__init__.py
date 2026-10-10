@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Cancer targeting and therapeutic mechanism reasoning.
 
 From one tumour's molecular alterations: what distinguishes those cells from

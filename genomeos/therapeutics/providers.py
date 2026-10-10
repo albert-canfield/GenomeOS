@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Provider abstractions over the biological databases.
 
 Business logic never talks to an API. It asks a provider, and a provider

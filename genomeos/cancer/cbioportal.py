@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """cBioPortal client (public REST API, no key, standard library only).
 
 https://www.cbioportal.org/api — studies, cancer types, clinical attributes,

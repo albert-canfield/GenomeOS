@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The therapeutic analysis report, for a person and for a machine.
 
 Two outputs from the same analysis. The text report is written to be argued

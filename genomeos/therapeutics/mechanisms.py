@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Therapeutic mechanism selection.
 
 Not "which payload", because most therapeutic mechanisms carry no payload at
