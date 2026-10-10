@@ -124,6 +124,7 @@
     try {
       const r = await window.api('/api/therapeutics', {
         vcf: $('#th-vcf').value,
+        normal: $('#th-normal').value,
         hla: $('#th-hla').value.trim(),
         cohort: $('#th-cohort').value.trim(),
         top: +$('#th-top').value || 8,
@@ -152,6 +153,7 @@
   window.therapeuticsInit = function (files) {
     const vopts = (files.vcfs || []).map((v) => `<option value="${v.path}">${v.path}</option>`).join('');
     $('#th-vcf').innerHTML = vopts;
+    $('#th-normal').innerHTML = '<option value="">none (data level 1)</option>' + vopts;
     const t = (files.vcfs || []).find((v) => v.path.includes('cancer_tumour'));
     if (t) $('#th-vcf').value = t.path;
     $('#th-run').onclick = run;

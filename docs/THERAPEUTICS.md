@@ -1852,6 +1852,10 @@ genomeos cancer tumour --vcf t.vcf --cnv copy_number.tsv --sv fusions.tsv
 # offline, against the caches only
 genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --offline
 
+# the demo at data level 2: one public tumour (GIAB HG008) with its matched normal genome
+genomeos therapeutic --tumour data/demo/hg008_pdac/HG008-T.vcf \
+  --normal data/demo/hg008_pdac/HG008-N-D.vcf --report
+
 # from the tumour-only cancer pipeline
 genomeos cancer tumour --vcf data/demo/cancer_tumour.vcf --therapeutic
 
@@ -2696,6 +2700,101 @@ stays byte for byte as it was.
 
 Both are held before and after this lane's code changes. The committed
 `data/demo/therapeutics/` files are not rewritten.
+
+### What the run measured, 2026-10-10
+
+The demo is `data/demo/hg008_pdac/` (README, `provenance.json`,
+`level_comparison.json`, and the level-2 analysis in `therapeutics/`). It was
+built and run by `scripts/demo_hg008_level2.py`. The run used the network, as
+the level-1 demo's committed outputs did. The VEP annotations it fetched are
+kept beside the demo, so it also runs offline.
+
+**The inputs.** Both md5s matched NIST's.
+
+- **The region set.** 234,760 intervals, 39,601,470 bases.
+- **The tumour.** 107 of its 11,142 calls fall inside.
+- **The normal.** 33,714 of its 5,023,572 calls fall inside. None lacks an
+  alternate allele and none is multi-allelic. 33,051 are PASS and 663 carry a
+  CNN tranche filter.
+- **Size.** The directory is 2.5 MB.
+
+One correction to the plan above: the source tumour records carry no GT, so
+none is written. The allele fraction is computed from AD. It differs from
+NYGC's own AF by at most 0.0037.
+
+**The level.** The pair reaches level 2, with `highest_input_present` 2. The
+same tumour file alone reaches level 1.
+
+**What the normal removed.** None of the 107 records. NYGC's set was already
+filtered on the normal, so a small number was expected; it is zero.
+
+**What level 2 changed: one record.** The record is chrX:24066124 G>GT
+(EIF2S3, intronic).
+
+- Its VEP annotation carries a gnomAD frequency of 0.8185, so level 1 sets it
+  aside as likely inherited: 106 somatic candidates of 107.
+- The normal's calls do not carry it, so level 2 keeps it: 107 of 107.
+- NYGC's pileup of the normal reads 105 reference reads and 1 alternate read at
+  that position.
+- The VEP figure is the largest frequency among the alleles annotated at that
+  position, so it need not be this allele's.
+
+No candidate moved. The 16 candidates and their classes are the same at both
+levels.
+
+**What the report says, and what it refuses.**
+
+- It says "Data level reached: 2 of 9".
+- Every origin's basis reads "absent from the matched normal's calls (same
+  chromosome, position and alleles), so somatic by subtraction".
+- The missing data no longer lists the matched normal. It leads with tumour
+  RNA-seq.
+
+What it refuses is everything above level 2:
+
+- **Expression in this tumour, for every candidate.** The chain reads DNA
+  evidence present, RNA evidence unavailable, protein evidence unavailable, and
+  surface expression cannot be established.
+- **Presentation.** Each of the nine peptide-route genes reads "HLA MISSING,
+  presentation unestablished".
+- **Anything that needs proteomics, immunopeptidomics or single-cell data.**
+
+**The candidates.** Twelve altered genes and four reached indirectly. The
+pancreatic drivers are among the twelve: KRAS G12V (0.434), NF1 K296T, TP53
+K132T and a SMAD4 frameshift. The two highest overall scores are FGF23 R198Q
+(0.574) and ADAMTS8 (0.48). Both are classed `direct_surface` because their
+products are secreted: "its product is physically reachable from outside the
+cell". That is the pipeline's existing reading of accessibility. It is
+recorded here and not changed.
+
+**The guards held.** The guard compared, before and after this lane's code
+changes:
+
+- the eleven benchmark rows, scored offline, in every field but `seconds`;
+- the level-1 demo's offline machine report and text report.
+
+The before run was at `bf7455b`. The after run had this lane's code patch
+applied alone on `81e57ba`, and nothing in therapeutics, cancer or the
+benchmark changed between those two commits. The serialised outputs were
+identical byte for byte: 11 rows, 0 differences.
+
+**The code.** Three things now depend on whether a normal was held:
+
+- an origin's `somatic_basis`;
+- the limitation sentence;
+- in `rank_variants`, `grade()`'s verdict "likely inherited, not somatic". It is
+  replaced by "absent from the matched normal's calls", with the frequency kept,
+  and the records are re-sorted by score.
+
+Without a normal, each reads as before.
+
+**The web.** The Targets tab has a normal VCF selector, which defaults to none.
+The API already accepted a normal.
+
+**What would raise it.** Level 3 needs tumour RNA from batch 0823p23, quantified.
+HLA (Kourami on HG008-N, level 7) and copy number (BIC-seq2, level 4) are
+published. Supplying either would be recorded as an input above the break, and
+the level would stay 2.
 
 ## What this is not
 
