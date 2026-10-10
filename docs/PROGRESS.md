@@ -1550,3 +1550,167 @@ model request was sent and no money spent.
 - The promotion to `main`. `promote_main.sh` refused `c00250f`, which had passed CI, because `main`
   carries PR #13's merge commits and `dev` does not. How to proceed is his decision.
 - The rest of the queue in §5 item 16.
+
+## 2026-10-10 (evening) — the compiled rules read better once their magnitude is corrected, the gain replicates on RNA this project had never read, and the ceiling is what AlphaGenome was trained on
+
+Twenty lanes under Albert's "work unstoppable on each lane". **This entry is the record of the day
+pending the ROADMAP fold:** the coordinator's session is harness-denied on docs/ROADMAP.md (an
+additive note refused as Instruction Poisoning, then a read-only `sed` of the same file refused as
+Modify Shared Resources; neither retried nor routed around, and a peer offering to place the rows was
+declined as the same re-route). Every reading below is quoted as its lane registered it.
+
+**The result of the day, and its honest size.** Every composition form had read *worse* than running
+no rule at all (items 7, 7d, 7h). M2h (lane-magcal; `2b0b604` code, `fbce775` registered, `ac5580b`
+result) fitted **one scale per form on training genes only** and applied it unchanged to genes held
+out by sha256 of the symbol: *"the multiplicative composition (Zhou et al. 2024): better; on genes
+held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes
+lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the
+no-rule baseline's … (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894] over 108,264
+gene-cell pairs, 8,328 genes; control p = 0.000999; fitted scale +0.2146 [98.33% CI +0.2007,
++0.2283])"*. The same held-out genes read **−0.5311 uncalibrated**, and mean(D·P) there is **+0.2013
+and positive**: the −0.53 was the cost of running real information about **five times too large**.
+**Honest size: about 2% of mean(D²), r ≈ 0.15.** The runtime mean read *"inconclusive"*; promoter
+competition read *"calibration removes the rules: no magnitude of the compiled rules improves on no
+rule … This is a negative result and is not 'no difference detected'"*. That negative branch was
+written into the registration **before** the run, by the supervisor, precisely so a scale fitted to
+zero could not switch the model off and report a null — and a dead scale can manufacture a straddle
+but not a win, which is why the win is the one branch the trap cannot fake.
+
+**It replicates on a measurement this project had never read.** M2i (lane-freshrna; `8cb0134`
+registered, `f6e71c6` result) took the scale as the **fixed constant +0.2146**, fitted nothing —
+`fit_scale` raises `NoFitError` and the run never calls it — and read 13 ENCODE RNA-seq experiments
+of the same thirteen cell types, non-overlap proved at experiment, file **and replicate-library**
+level against a 954-accession read set built from the record: *"… and M2h's gain REPLICATES ON A
+FRESH MEASUREMENT OF THE SAME CELLS (Delta MSE +0.03727 [98.33% CI +0.03202, +0.04299] over 108,264
+gene-cell pairs, 8,328 genes; control p = 0.000999 …)"*. Post hoc and deciding nothing: the 1-Mb
+locus-cluster interval is [+0.03216, +0.04302] over 2,122 clusters, so locus dependence does not move
+it; the scale the fresh RNA would imply is +0.2003 against +0.2146 used; and the **eleven cells whose
+biosamples were not reused** give +0.04596 [+0.04027, +0.05210], so dropping those two **raises** the
+gain rather than explaining it.
+
+**And the ceiling, measured.** lane-trainexp (`ff1934f`, `18de375`): AlphaGenome's recorded track
+metadata holds **667 `rna_seq` rows (371 tracks × 2 strands) and ZERO ENCODE accessions on any of
+them** — the only six accessions in the file are PRO-cap — so accession matching is impossible and
+only biosample-plus-assay matching remains, which is suggestive only. The sentence that travels with
+every M2i "better": *"fresh to this project; its independence from AlphaGenome's training data is
+unknown for 13 of 13 — AlphaGenome's recorded track metadata carries no ENCODE accession for any
+RNA-seq track, and a track of the same biosample and assay exists for 13 of 13, which is suggestive
+of training exposure and settles nothing either way"*. **Even an accession-level "not a training
+track" would not make it independent**, because AlphaGenome was trained on RNA-seq of these same
+thirteen cell types; the strong test needs cell types outside that domain, which needs a biosample the
+stop list forbids. **So: notable, strengthened, replicated — not a breakthrough.**
+
+**The rebuild of the only positive.** lane-rebuild0 (`9aa410f`): `ac5580b` rebuilt from committed
+bytes at its writer's own sha — **0 value differences over 484 compared leaves**, 500 = 484 compared
++ 16 not compared (14 the manifest's `code` block, 1 date, 1 timing), with 4 leaves compared then
+exempted and named by path. Provenance: traced `opens` **395 committed against 816 rebuilt**,
+diagnosed as **environment on the rebuilt side only** (210 worktree, 174 venv, 89 interpreter, and
+the 6 under `data/results` all declared inputs plus the registry file `save_result` reads) — the
+committed side records only a count, so this shows the rebuilt 816 holds no undeclared read and not
+that the committed 395 held none. `foreign_uncommitted_code_on_the_counting_path` is **0** against a
+**computed** 153-file import closure, with seven other lanes' uncommitted files present and none on
+it. So the claim is **"0 value differences over 484 compared leaves"**, never "reproduces exactly".
+
+**Six registered negatives, honoured rather than tuned away.**
+- **A per-demander saturable allocation policy** (lane-saturable; `9d2ab1f` registered, `626592e`):
+  *"on held-out genes, the saturable policy's log10 MAE is 0.949823 against the fitted baseline's
+  0.949969 … no improvement detected at gate (b)'s registered bar of 0.05"*. A straight line does
+  better (0.879610); the capacity does not bind at real demand.
+- **The strength-dependent combination form** (lane-strengthform; `10ca354`, `fc328c5`), on held-out
+  mouse ES-cell pairs no lane had read: *"not better than every rule lane-combine compared
+  (additive_envelope)"* — better than no_rule, mean, max and multiplicative, **worse than the
+  additive envelope** (−0.0463 [−0.0488, −0.0440]). FALSIFIED; the runtime default stays the mean.
+- **`max` and `or`** (lane-maxform; `b3c560b`): `max` is **NOT_TESTABLE at 0 of 17,983 genes,
+  structurally** — it fits only the 283 one-activator genes, where it *is* the mean, and has no fit
+  where two activators each carry a measured drop, so **non-linearity under the reader's hold is
+  necessary and not sufficient**. `or`: *"calibration removes the rules: no magnitude of the compiled
+  rules improves on no rule"*, and uncalibrated **−0.6709 [−0.8275, −0.5487]** — no magnitude carries
+  information for that form. So of every form tried, **only the multiplicative one carries
+  information at any magnitude**.
+- **The capped sum and the additive envelope are not distinct forms here** (lane-capsumrna `f74dca5`;
+  lane-envelope `df02887`): the envelope is an **interval**, its lower end grn's `max` and its upper
+  end `sum_capped` (four identity checks exact over 20,000 draws), and the capped sum equals the mean
+  on all 2,288 genes it fits (max 6.7e-16). **So the envelope's win over competition on pairs was the
+  interval's margin, not a better point rule.** lane-rootpick (`c0f0285`) then settled the ambiguity
+  the fits could not: `A = min(1, W)` is flat above W = 1, so **the ground is in the bridge, not the
+  form** — the rule takes **the root that adds no assumption beyond the declared split (the cap does
+  not bind unless identified)**, a parsimony convention and not something the bridge licenses, and
+  under it the capped sum **differs from the mean on 0 genes**. The rejected alternative would have
+  crossed the gate at 128 against MIN_GENES 100, and the asymmetry was registered before the count.
+- **The worm's dose view on a second source** (lane-wormdose; `5b930cb`, `c2adfa3`): *"difference
+  +2.81 points, 95% -0.17 to +5.71 … No difference was detected: the dose view seen beside stage 2
+  does not replicate on this source. This is not evidence that constrained elements lack function."*
+  Disclosed: the run read tertile edges rounded to 6 decimals; post hoc on exact edges +3.09 [+0.12,
+  +6.13], deciding nothing.
+- **Cell-level closure on a second screen** (lane-closure2; `1017045`): `NO_CANDIDATE_QUALIFIES` —
+  of ten public screens only K562 and HepG2 are reachable, and the best gives 12 discordant elements
+  against M3's 35.
+- **No public panel for the person's own group** (lane-pgspanel; `63e2d4a`): *"No public
+  individual-level panel qualifies for Ashkenazi Jewish (asj): of 12 candidates examined, the largest
+  count … is 21 (ebc_jew2010), against the gate's minimum of 100 fixed before these counts were
+  taken … This is a statement about what is published, not about the person."* So PGS000297 and
+  PGS000018 stay UNKNOWN.
+
+**The fly's between-gene question, and what it does to the series.** lane-flysource (`ff063e6`
+registered, `ce168cb`): route (a) is **closed by counting** — at most **98 of 917** elements move at
+any boundary density over 11 densities and 5 placements each, and the only 6–16 h Hi-C publishes
+loops, not boundaries. Route (b), on Janssens 2022 + Davie 2018 with the source's own 42 labels,
+3,265 between-gene elements and 216 moving: **NO DIFFERENCE DETECTED, +0.12 [−0.25, +0.61]**,
+excluding anything above about 1.3 points where §9 could only bound 2.9. **And the qualification that
+matters: in the fly the domain rule's lead appears only where a host gene can be named (all distal
+−2.25 [−2.88, −1.66] for the boundary rule) and is absent between genes (+0.03 [−0.50, +0.60], 789
+elements), consistent with the fly embryo's +2.70 coming from host-gene transcription. The worm's
+between-gene lead is a different measurement and is NOT qualified by this** — it held where no host
+gene can be named (+3.73 [+2.79, +4.74], 2,335 elements, SIMPLER-GENOMES.md:124), under its own
+trans-splicing caveat.
+
+**Built, not measured.** A curated silencer source joined beside the derived call (lane-silencerjoin;
+`112a4f4`): ReSE, public domain, reciprocal-half overlap, same cell line only — `molecular_role:
+silencer` with `evidence_status: measured/ReSE` on **543 elements in K562 and 283 in HepG2**, with
+GM12878 and IMR-90 **UNKNOWN for all 961,227** because no record covers them, and about two thirds of
+validated fragments landing on no scored element. `silencer_like` unchanged. · A **scored
+structural-variant case** as the benchmark's eleventh (lane-svcase `2b5a967`, lane-svfix `448565a`):
+FGFR3-TACC3 recovered at rank 1, score 0.457, **no surface route claimed** (`surface_accessibility`
+null from `product_extent_unknown`), verdict *"correctly not a surface target; approved drug is out of
+scope"*; the ten earlier rows identical but `seconds`. · The **demo above data level 1**
+(lane-demolevel `8d6dd8c`): GIAB HG008 with its matched normal reaches **level 2**; a TCGA MAF is
+level 1 because the subtraction happened upstream, and no level rule was changed. · The reader's call
+**shown** in the Blocks lane with UNKNOWN carrying its reason and never drawn as closed
+(lane-marksview `611f319`, tooltips `1bda1fb`). · `bio check` now **refuses `policy: optimise`**, so
+no program passes a check it cannot run (lane-deadkeys `05a2700`) — **and that lane corrected the
+plan: `regenerates:` IS read**, as `from P, P` by `runtime/metabolism.py` and as a rate on Glucose
+and O₂, contrary to §5 item 13 A. · A **third human mechanism module registered and not built**
+(lane-module3 `6e39c6c`): the interfollicular epidermis on six criteria written first, seven gates
+each on a fetched sentence with **two contested in advance** so no run can read seven of seven — the
+module write was halted by the harness and the lane stopped, 0 of 7 knockouts run.
+
+**Five instruments that could not detect what they were pointed at, all found today.** An inert skip
+guard keyed on a tracked file, so its skip can never fire (`tests/test_closure_cell2.py:237`,
+reddening `tests/test_inert_skip_guards.py`). · `score`'s boundary guard comparing int dict keys with
+their JSON string copies, so it **could never pass**. · A leaf-by-leaf comparison returning "0
+differences" where a byte-compare showed 151,927 against 90,107 — undiagnosed, caught only by reading
+the byte counts behind the zero. · `manifest_rebuild.py:309`'s `"reconciles": total == compared +
+(total - compared)`, **true for every input** including `compared` greater than `total`. · And a
+known-lossy exemption whose own text says it *"will hide a genuine change in the set of files this
+writer opens outside data/"*, doing exactly that at 395 against 816. A census of which guards have no
+planted violation that turns them red is queued.
+
+**A sixth defect, systemic:** a declared input group built as a filesystem glob filtered by
+`.exists()` makes the declaration **a function of the machine rather than of the commit**, so it
+**silently shrinks when a store is partial instead of refusing**. An AST scan finds **18 call sites**
+(a one-line grep found 17; the missed call spans four lines). Interim: across 130 committed results
+declaring such a group, the reader-DNase group declares 312 in all 13 — **real as a mechanism, so far
+unrealised there** — while other groups do vary, and which variations are legitimate scope and which
+are silent shrink is the census's question.
+
+**What waits on Albert.** (1) **Plug the Mac in** — it ran the evening on battery. (2) **Backup**:
+the run-2 spend ledger, untracked for a week and the only record of 364 charged requests (sha256
+dda420a0…2944), and the three push-blocking forced commits — the one-target census classification
+(preserved unapplied at `20c230e`, proved on clean HEAD at 41 passed / ALWAYS_RUN 216/6/0), the forge
+inventory fix and the inert-guard fix — so 363 commits reach GitHub. Every push takes the **full**
+gate today, measured: no daily CI reading is recorded. (3) **Run 2, resumed or closed** — a re-sign is
+needed either way. (4) **The biosample stop**: lift it for exactly one out-of-domain RNA test of
+M2h's scale, conditional on an inventory finding a cell type absent from AlphaGenome's RNA tracks with
+accessibility and RNA from one source. It is the only test that could turn a notable in-domain result
+into an independent one. (5) The ROADMAP fold, blocked in the coordinator's session. (6) The halted
+epidermis module write.
