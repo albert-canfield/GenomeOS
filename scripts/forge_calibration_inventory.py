@@ -100,7 +100,7 @@ def main() -> int:
     path = save_result(NAME, inv, manifest=result_manifest(mf.traced_reads(), scripts))
     c = inv["counts"]
     print(
-        f"wrote {path.relative_to(ROOT)}: {c['design_blocks']} design triples,"
+        f"wrote {path}: {c['design_blocks']} design triples,"
         f" {c['experiment_blocks']} experiment blocks"
         f" ({c['expressible_as_inverse_design_questions']} expressible as design questions);"
         f" independent {c['independent_triples']} of a registered minimum {c['minimum_independent_triples']}."
