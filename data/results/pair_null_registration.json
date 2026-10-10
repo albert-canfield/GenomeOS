@@ -1,0 +1,342 @@
+{
+  "result": "pair_null_registration",
+  "date": "2026-10-10",
+  "lane": "lane-pairnull",
+  "item": "area J, the calibrated pair null: the next step GRAMMAR-BY-COMPARISON \u00a722 named",
+  "registered_in_its_own_commit": "Written after the code was frozen in a commit and before the calibration or any library pair was computed under either tip-noise null. The run reads once, against this file, in the order of the decision rule, and stops where a rule fails.",
+  "question": "Is there a pair null with a tip-noise term that finds random age-matched gene sets alike no more often than it should, and if there is, which of \u00a714's 35 of 860 library pairs stay more alike than age and this model of shared ancestry predict?",
+  "readings_retested": {
+    "section_14": {
+      "section": "GRAMMAR-BY-COMPARISON \u00a714 (2026-09-12)",
+      "result_file": "data/results/profiling_genome_wide.json (null.pairs, 860 tested; null.significant_q05, 35 rows)",
+      "quotes": [
+        "**What is more alike than age predicts.** 35 of 860 pairs at a false discovery rate of 5%, led by the immune and signalling libraries: immune against the ligand-receptor protocol (observed \u22120.76, age-matched \u22120.93, z 9.3), degradation and cytoskeleton against the same protocol (z 8.5), the cell cycle against immunity (z 6.7), blood with the growth-longevity axis (observed +0.72 against \u22120.27)."
+      ]
+    },
+    "section_22": {
+      "section": "GRAMMAR-BY-COMPARISON \u00a722 (2026-10-10), the Brownian species-tree null",
+      "result_file": "data/results/species_null_result.json (A_library_pairs: outcome null_not_calibrated)",
+      "quotes": [
+        "No reading: the species-tree null is not calibrated on this data. Of 860 pairs of random gene sets drawn to the tested pairs' origin-stratum make-up, 205 (23.8%) have a tree-null p at or below 0.05, above the registered ceiling of 10%, so the null finds random genes alike more often than it should and a library pair's p under it is not evidence.",
+        "In the pair null the simulated deviations swamp the age expectation (null means \u22120.14 to +0.04 where the age-expected r is \u22120.96 to +0.99), which is the likely cause of its miscalibration; the next pair null adds a tip-noise term and is calibrated on random pairs before any pair is read."
+      ]
+    },
+    "named_rows_reported_individually": [
+      [
+        "systems.immune",
+        "systems.ligand_receptor_protocol"
+      ],
+      [
+        "core.degradation",
+        "systems.ligand_receptor_protocol"
+      ],
+      [
+        "core.cytoskeleton",
+        "systems.ligand_receptor_protocol"
+      ],
+      [
+        "core.cell_cycle",
+        "systems.immune"
+      ],
+      [
+        "blueprint.organ_blood_immune",
+        "timer.growth_longevity_axis"
+      ],
+      [
+        "blueprint.axes",
+        "blueprint.segmentation"
+      ],
+      [
+        "blueprint.organ_heart",
+        "blueprint.organ_musculoskeletal"
+      ],
+      [
+        "blueprint.germ_layers",
+        "blueprint.organ_nervous"
+      ],
+      [
+        "core.replication",
+        "systems.ligand_receptor_protocol"
+      ]
+    ],
+    "what_is_already_known": "\u00a722 computed every library pair's p under its Brownian null and reported nine of them; those p values were read under a null that failed calibration and decide nothing here. No library pair has been computed under either tip-noise null, and none is until rules 2 and 3 pass."
+  },
+  "document": {
+    "path": "docs/GRAMMAR-BY-COMPARISON.md",
+    "blob_at_registration": "a63f1ce3554d50217297cd32f73cc44c7a0424cc"
+  },
+  "null": {
+    "statistic": "\u00a714's own: Pearson r over the 355 species between two libraries' residual profiles (share of the members exclusive to each side with an orthologue in the species, minus the share of all 19,391 genes), r_exclusive, recomputed and required to match the stored value; one-sided, more alike",
+    "decomposition": "each side's profile P = E + D, with E the age expectation (the exact mean profile of \u00a714's matched draw: per origin stratum, the members' count times the mean profile of every gene of that stratum, over the members with an origin; species_null.age_expectation) and D the deviation. The null holds E and replaces D by an independent draw from a model fitted to D",
+    "family": {
+      "model": "D = h * y, y ~ N(mu 1, sigma^2 V(lambda)), V(lambda) = lambda R + (1 - lambda) I, R the Brownian covariance of the species tree on Grafen branch lengths (a correlation matrix, since the Grafen tree is ultrametric with the root at height 1). V is Pagel's lambda and, on this tree, exactly Brownian motion plus independent white noise at the tips (tip noise)",
+      "fit": "per side, on the side's own deviation, by REML on the species where h is positive: sigma^2 and mu profiled, lambda the maximiser over a grid of 1,001 points on [0, 1] (the first when two tie). Random sets and libraries are fitted by the same code",
+      "simulation": "a side's draw is h * (mu + sigma (sqrt(lambda) b + sqrt(1 - lambda) w)), b a unit-diagonal Brownian draw along the tree and w unit white noise; side one uses banks one, side two banks two, each bank P_SIMS draws, shared by every pair (each p exact, different pairs' p values dependent through the shared draws); p = (draws with r at or above the observed + 1) / (draws + 1)",
+      "members_in_registered_order": {
+        "1_lambda_binomial": {
+          "name": "Pagel's lambda on binomially scaled deviations",
+          "h": "the binomial sd of the side's origin-stratum make-up at each species, sqrt(sum_k n_k p_k (1 - p_k) / sum_k n_k), p_k the share of stratum k's genes with an orthologue there; zero where every stratum of the make-up is all present or all absent, and there D is exactly zero for random sets and libraries alike",
+          "why_first": "a share cannot move at a species where its strata are fixed (104 species for a Eukaryota-born set, 341 for a Catarrhini-born one, read from the strata means before registration) and can move most where they are half present; the scaled model has the same three parameters as the plain one and draws variance only where a deviation can occur"
+        },
+        "2_lambda": {
+          "name": "Pagel's lambda on the deviations as they stand",
+          "h": "1 at every species",
+          "why_second": "the null \u00a722 named, without the scale; tried only if the first fails the first calibration set"
+        }
+      },
+      "brownian_plus_white_noise": "not a separate member: on the ultrametric Grafen tree it is the same model as Pagel's lambda, with sigma_BM^2 = lambda sigma^2 and tau^2 = (1 - lambda) sigma^2"
+    },
+    "tree": "the tree \u00a722 built and registered (species_null_registration.json tree_as_built.without_human_for_A): Ensembl Compara's pan tree of Ensembl Genomes r63 with the vertebrate tree of r116 grafted in, 355 tips; its topology digest is recorded below and checked by the run",
+    "branch_lengths": "Grafen, rho 1, the length \u00a722 registered. The equal-length sensitivity of \u00a722 is not repeated: with a tip-noise term fitted per side, the deep-against-shallow share of variance is fitted rather than fixed by the lengths",
+    "calibration": {
+      "what": "for every testable pair, one random pair of gene sets, each set drawn to its side's origin-stratum make-up without replacement per stratum (\u00a714's draw, species_null.matched_rows), tested exactly as a library pair. Random pairs only: no library pair is read",
+      "first_set": "seed 20261011 in species_null.null_a's draw order: the very random pairs \u00a722's Brownian null was calibrated on. \u00a722's Brownian null is recomputed on them (its own banks, seed and draws) and its count at p at or below 0.05 is reported beside \u00a722's; that figure decides nothing",
+      "second_set": "seed 20261016, the same draw: the confirmation set, computed only for the selected null",
+      "rule": "a null passes a set when at most 10% of its random pairs have p at or below 0.05 AND at most 1% have a Benjamini-Hochberg q, computed over that set's random pairs, at or below 0.05",
+      "why_10_percent": "\u00a722's ceiling, kept so the two nulls are judged alike: twice the nominal rate leaves room for the shared banks and the estimated parameters, and refuses a null like \u00a722's (23.8%)",
+      "why_the_tail_ceiling": "the reading is made at q at or below 0.05 over 860 pairs, which lives in the null's far tail (p near 0.05 k / 860); a null calibrated at 0.05 but heavy in that tail would make survivors of random genes. Under a calibrated null with every pair null, any Benjamini-Hochberg discovery happens at most about 5 times in 100; 1% of the pairs (8 of 860) leaves room for the dependence of shared draws and refuses a null like \u00a722's, which put 49 of 860 random pairs at q at or below 0.05",
+      "selection": "the first null in the registered order that passes the first set; it must pass the second set too before any library pair is read. Selection uses random pairs only",
+      "failure": "neither passes the first set: no reading (null_not_calibrated). The selected null fails the second: no reading (not_confirmed). Either is recorded as the result, and no library pair is computed under the null"
+    },
+    "multiple_testing": "Benjamini-Hochberg over every testable library pair, q at or below 0.05, as \u00a714 and \u00a722 did",
+    "power": {
+      "what": "each library split at random into two halves (\u00a722's split, its seed 20261012), tested as a pair under the selected null: the halves share the library's history, so a null that never sees them as alike cannot see a pair",
+      "floor": "fewer than 50% of libraries at p at or below 0.05 and a result with no survivor is read as low power",
+      "when": "computed only after rule 3 passes"
+    },
+    "falsifier": "\u00a714's reading that a pair is more alike than age predicts is not distinguished from age plus this model of shared ancestry, for every one of its 35 pairs whose q under the selected null is above 0.05, provided the null passed both calibration sets",
+    "descriptive_only": "the fitted lambda and rate of every side, the null's mean and sd per pair, the lambda quartiles of random and library sides, \u00a722's Brownian null recomputed on the first calibration set, and the calibration figures of the null not selected; none decides",
+    "parameters": {
+      "P_SIMS": 50000,
+      "P_SEED": 20261015,
+      "CAL1_SEED": 20261011,
+      "CAL2_SEED": 20261016,
+      "HALVES_SEED": 20261012,
+      "LAMBDA_GRID": 1001,
+      "P_ALPHA": 0.05,
+      "Q_ALPHA": 0.05,
+      "CAL_MAX_SHARE": 0.1,
+      "CAL_MAX_Q_SHARE": 0.01,
+      "HALVES_MIN_SHARE": 0.5,
+      "MIN_MEMBERS": 8,
+      "SCALE_EPS": 1e-12,
+      "MODELS": [
+        "lambda_binomial",
+        "lambda"
+      ],
+      "brownian_recomputed_with": {
+        "A_SIMS": 50000,
+        "A_SEED": 20261010
+      }
+    },
+    "decision_rule": {
+      "1_reproduce": "if the testable pairs are not \u00a714's (same pairs, same count) or any pair's recomputed r_exclusive differs from the stored one by more than 0.0001, select not_reproduced and run no calibration",
+      "2_calibration": "else compute both nulls on the first calibration set (one random pair of gene sets per testable pair, each set drawn to its side's origin-stratum make-up with \u00a722's seed and order, so the random pairs \u00a722 drew); a null passes when at most 10% of these pairs have p at or below 0.05 and at most 1% have a Benjamini-Hochberg q, over the calibration pairs, at or below 0.05; the selected null is the first that passes in the registered order (lambda_binomial, then lambda); if neither passes, select null_not_calibrated and read no library pair",
+      "3_confirmation": "else compute the selected null on a second calibration set drawn the same way with its own seed; if it does not pass the same two ceilings there, select not_confirmed and read no library pair",
+      "4_none": "else read every testable library pair once under the selected null, with Benjamini-Hochberg q over them; if no pair has q at or below 0.05, select none_survive_low_power when fewer than half of the libraries' random halves have p at or below 0.05, otherwise none_survive",
+      "5_some": "else select some_survive",
+      "ties": "'at or below' and 'at most' include equality; 'fewer than half' is strict",
+      "always": "the calibration sentence is appended to every outcome except not_reproduced and decides nothing beyond rules 2 and 3"
+    },
+    "outcome_wordings": {
+      "not_reproduced": "No reading: \u00a714's observed statistic did not reproduce. {n_mismatch} of {n_tested} testable library pairs differ from the stored r_exclusive by more than 0.0001, or the testable pairs are not \u00a714's {n_tested_14}, so the pairs this null would judge are not the pairs \u00a714 judged. No calibration was run and no library pair was read.",
+      "null_not_calibrated": "No reading: neither tip-noise null passes the registered calibration (at most 10% of random age-matched pairs at p at or below 0.05 and at most 1% at q at or below 0.05), so a library pair's p under either would not be evidence, and no library pair was read under either. \u00a714's {n_14} of {n_tested} pairs stand as written, with their caveat.",
+      "not_confirmed": "No reading: {null_name} passed the registered calibration on the first {n_cal} random pairs but not on {n_cal2} independent random pairs drawn the same way, where {cal2_hits} ({cal2_share}) have p at or below 0.05 and {cal2_q} have q at or below 0.05, against ceilings of 10% and 1%. No library pair was read. \u00a714's {n_14} of {n_tested} pairs stand as written, with their caveat.",
+      "none_survive": "None of the {n_tested} testable library pairs is more alike than age and shared ancestry predict under {null_name} along the Ensembl Compara species tree (Grafen branch lengths; lambda, rate and root fitted by REML for each side): no pair has a Benjamini-Hochberg q at or below 0.05, and that includes all {n_14} pairs \u00a714 called more alike than age at the same false discovery rate. The null passed the registered calibration on two independent sets of random age-matched pairs ({cal1_hits} of {n_cal} and {cal2_hits} of {n_cal2} at p at or below 0.05) and sees {halves_hits} of {n_halves} libraries against their own random halves at p at or below 0.05. On this model \u00a714's {n_14} pairs are not distinguished from what age and shared ancestry give, and no library pair is called a dependency.",
+      "none_survive_low_power": "None of the {n_tested} testable library pairs is more alike than age and shared ancestry predict under {null_name} along the Ensembl Compara species tree (Grafen branch lengths; lambda, rate and root fitted by REML for each side): no pair has a Benjamini-Hochberg q at or below 0.05, including the {n_14} pairs \u00a714 called more alike than age. This is weak evidence against them: the null passed the registered calibration ({cal1_hits} of {n_cal} and {cal2_hits} of {n_cal2} random age-matched pairs at p at or below 0.05) but sees only {halves_hits} of {n_halves} libraries against their own random halves at p at or below 0.05, below the registered half, so the test has little power and a pair's failure does not show that it is age and shared ancestry. No library pair is called a dependency.",
+      "some_survive": "{n_surv} of {n_tested} testable library pairs are more alike than age and shared ancestry predict under {null_name} along the Ensembl Compara species tree (Grafen branch lengths; lambda, rate and root fitted by REML for each side; Benjamini-Hochberg q at or below 0.05): {k_14} of the {n_14} pairs \u00a714 called more alike than age, and {k_new} that \u00a714 did not call. The other {lost_14} of \u00a714's {n_14} do not survive this null. The null passed the registered calibration on two independent sets of random age-matched pairs ({cal1_hits} of {n_cal} and {cal2_hits} of {n_cal2} at p at or below 0.05) and sees {halves_hits} of {n_halves} libraries against their own random halves at p at or below 0.05. This is agreement of orthologue presence across species beyond age and this model of shared ancestry: co-occurrence across species is not a dependency, it does not show that one library acts on the other, and an orthologue's presence is not function. No library pair is called a dependency."
+    },
+    "calibration_sentence": " The first calibration set is \u00a722's own {n_cal} random pairs, on which \u00a722's Brownian null recomputed here puts {bm_c1_hits} at p at or below 0.05 ({bm_c1_hits_22} in \u00a722). On it, Pagel's lambda on binomially scaled deviations puts {cal_bin_hits} ({cal_bin_share}) at p at or below 0.05 and {cal_bin_q} at q at or below 0.05, and Pagel's lambda on the deviations as they stand puts {cal_lam_hits} ({cal_lam_share}) and {cal_lam_q}; the registered order tries the scaled null first."
+  },
+  "tree_as_built": {
+    "tips": 355,
+    "nodes": 588,
+    "topology_sha256": "f050023e292f8c597884716dd92204ee0c710e98fb612df95e0f1a1db2c04ec2",
+    "grafen_diagonal_is_one": true,
+    "same_as": "species_null_registration.json tree_as_built.without_human_for_A"
+  },
+  "gates": [
+    "this file committed and unmodified",
+    "the files in frozen_code at the blobs pinned there",
+    "the two tree files at the sha256 species_null pins, and the pruned topology at the digest in tree_as_built",
+    "every input result at the sha256 recorded in result_manifest.inputs",
+    "rule 1 (reproduction) before rule 2, rule 2 (calibration) before rule 3, rule 3 (confirmation) before any library pair"
+  ],
+  "frozen_code": {
+    "head": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+    "blobs": {
+      "genomeos/knowledge/pair_null.py": "929b53f526a6f92b7579569033ca31f030d4c547",
+      "genomeos/knowledge/species_null.py": "4db342b9fd40c4d42bc723c29172843c5938e324",
+      "scripts/pair_null_run.py": "0fead6ddcc0d6be0242588fe4f2dfd59ad232c0b"
+    },
+    "last_commit": {
+      "genomeos/knowledge/pair_null.py": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+      "genomeos/knowledge/species_null.py": "5a87e2f45a1fb71935171349b5e2224f8f3faca6",
+      "scripts/pair_null_run.py": "5b614d0b5dc69a62c5f02d27465f95625adfa61b"
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Ensembl Genomes pan-taxonomic Compara species tree",
+        "version": "release 63, https://ftp.ensemblgenomes.ebi.ac.uk/pub/pan_ensembl/release-63/compara/species_trees/default_protein-trees_default.nh"
+      },
+      {
+        "accession": "Ensembl Compara vertebrate species tree",
+        "version": "release 116, https://ftp.ensembl.org/pub/release-116/compara/species_trees/default_protein-trees_default.nh"
+      },
+      {
+        "accession": "the project's area J results",
+        "version": "as committed, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/species_tree/pan_default_protein-trees_default.nh",
+        "sha256": "e3f0237f4360a09d01c2a754412563e135d00d45c2c3dedb3cc5f7f4496a63b7",
+        "bytes": 7280,
+        "partition": "the species tree, pan-taxonomic half"
+      },
+      {
+        "path": "data/knowledge/species_tree/vert_default_protein-trees_default.nh",
+        "sha256": "2033c3eb2a6ab20f530737ffc66babb8e5e39edbb396ec6d315960db65142e66",
+        "bytes": 6139,
+        "partition": "the species tree, vertebrate half"
+      },
+      {
+        "path": "data/results/origin_presence_genome_wide.json",
+        "sha256": "4f7b8f9649001540a2b281f3318ed7b4f9bc4dc135087d3274ea29c450d02a8b",
+        "bytes": 2094536,
+        "partition": "the presence matrix: one bit per gene per species"
+      },
+      {
+        "path": "data/results/origin_genome_wide.json",
+        "sha256": "ec3710a8a6a5dbb117a1e2b3ff0bf242e6323537946aa29af4a53c2a83dcb34a",
+        "bytes": 6398244,
+        "partition": "each gene's origin stratum, which the age expectation, the matched draws and the binomial scale read"
+      },
+      {
+        "path": "data/results/library_members.json",
+        "sha256": "410910040b2f1d07386787ca6fcb10fd79d00264815fed045550a45cf777b7c7",
+        "bytes": 643666,
+        "partition": "the computed membership of the libraries, as \u00a714 and \u00a722 read it"
+      },
+      {
+        "path": "data/results/profiling_genome_wide.json",
+        "sha256": "c2d90ce58b730a2695fc298e92cf86c880ce996ce3f5e08293c6539e35c13aad",
+        "bytes": 714065,
+        "partition": "\u00a714's stored pairs, read for the reproduction gate and for which 35 \u00a714 called; no figure of it is an input to the null"
+      },
+      {
+        "path": "data/results/species_null_result.json",
+        "sha256": "07d62c81bc0933508e4c522d9435f60157f4e3c8d5b901b3dd204ed89bde3e2b",
+        "bytes": 845557,
+        "partition": "\u00a722's result, read for one figure only: how many of its random pairs its Brownian null put at p at or below 0.05 (A_library_pairs.grafen.calibration), set beside the same figure recomputed here; no figure of it is an input to the null"
+      }
+    ],
+    "assembly": "n/a: species presence of orthologues and a species tree; no genomic coordinate",
+    "coordinates": "n/a: no interval is computed or read",
+    "parameters": {
+      "P_SIMS": 50000,
+      "P_SEED": 20261015,
+      "CAL1_SEED": 20261011,
+      "CAL2_SEED": 20261016,
+      "HALVES_SEED": 20261012,
+      "LAMBDA_GRID": 1001,
+      "P_ALPHA": 0.05,
+      "Q_ALPHA": 0.05,
+      "CAL_MAX_SHARE": 0.1,
+      "CAL_MAX_Q_SHARE": 0.01,
+      "HALVES_MIN_SHARE": 0.5,
+      "MIN_MEMBERS": 8,
+      "SCALE_EPS": 1e-12,
+      "MODELS": [
+        "lambda_binomial",
+        "lambda"
+      ],
+      "brownian_recomputed_with": {
+        "A_SIMS": 50000,
+        "A_SEED": 20261010
+      }
+    },
+    "exclusions": [
+      "every figure the null would produce: none is computed by this writer",
+      "the species list is read from the presence matrix to build the tree; no profile is read, and the other results are hashed so the run can refuse inputs that moved"
+    ],
+    "partitions": "n/a: a registration written before the measurement; nothing is evaluated",
+    "code_cleanliness": {
+      "git_sha": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/pair_null_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pair_null_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pair_null_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/pair_null.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/species_null.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/pair_null_register.py"
+      ],
+      "counting_path_count": 16,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pair_null_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+      "code_cleanliness_git_sha": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 5b614d0"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 59,
+      "opens_under_data": 12,
+      "files_read": 7,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

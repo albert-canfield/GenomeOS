@@ -3,7 +3,10 @@
 
 from __future__ import annotations
 
+import importlib.util
+import json
 import re
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -326,3 +329,42 @@ def test_no_wording_calls_a_pair_a_dependency() -> None:
             assert re.search(r"no library pair is called a dependency", text, re.IGNORECASE), text
             assert "is a dependency" not in text.replace("is not a dependency", "")
     assert "not a dependency" in pn.P_OUTCOMES["some_survive"]
+
+
+# --------------------------------------------------------------------------- the registration
+
+REGISTRATION = Path("data/results/pair_null_registration.json")
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def register_module():
+    spec = importlib.util.spec_from_file_location(
+        "pair_null_register", ROOT / "scripts" / "pair_null_register.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_registration_as_written_holds_no_figure_and_the_module_s_words() -> None:
+    import tracked_paths as tp
+
+    tp.must_be_present(REGISTRATION, was="the registration is not written yet")
+    written = json.loads(REGISTRATION.read_text())
+    assert written["result"] == "pair_null_registration"
+    reg = register_module()
+    hits = [
+        k
+        for k in reg.forbidden_at_any_depth(written)
+        if not k.startswith(("result_manifest.", "null.outcome_wordings", "null.decision_rule"))
+    ]
+    assert hits == []
+    # the run fills these words and no others; the module that fills them must hold the same
+    assert written["null"]["outcome_wordings"] == pn.P_OUTCOMES
+    assert written["null"]["calibration_sentence"] == pn.CAL_SENTENCE
+    assert written["null"]["decision_rule"] == pn.P_RULE
+    assert set(written["frozen_code"]["blobs"]) == set(reg.FROZEN)
+    assert written["tree_as_built"]["tips"] == 355 and written["tree_as_built"]["grafen_diagonal_is_one"]
+    assert written["null"]["parameters"]["MODELS"] == list(pn.MODELS)
+    assert written["null"]["parameters"]["CAL1_SEED"] == sn.A_CAL_SEED
