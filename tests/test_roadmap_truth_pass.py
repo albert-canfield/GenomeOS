@@ -1,8 +1,9 @@
 """The roadmap truth pass asserts only what cannot go stale, and these tests pin that.
 
-Two invariants hold over docs/ROADMAP.md and must keep holding: every commit it cites
-is an ancestor of HEAD or carries a recorded reason why not, and every result it names
-in a Data bullet exists on disk. Both are about existence, so a failure is a defect and
+Two invariants hold over docs/ROADMAP.md and its frozen history, docs/ROADMAP-HISTORY.md
+(since 2026-10-10), and must keep holding: every commit either cites is an ancestor of
+HEAD or carries a recorded reason why not, and every result either names in a Data
+bullet exists on disk. Both are about existence, so a failure is a defect and
 never merely an old figure.
 
 The counts the script prints are deliberately *not* asserted: areas B, C and J state
@@ -41,6 +42,23 @@ def test_every_cited_commit_is_an_ancestor_or_has_a_recorded_reason(found: dict)
         "the work never landed on dev or the row cites a relabelled commit: "
         f"{[u['commit'] for u in unexplained]}"
     )
+
+
+def test_the_frozen_history_is_read_with_the_plan(found: dict) -> None:
+    """Since 2026-10-10 the plan is cut to its current state and its rows live in the history.
+
+    docs/ROADMAP-HISTORY.md holds the roadmap as it stood at c00250f, verbatim, and most of the
+    commits the record cites are cited only there. Reading the plan alone would let the count above
+    pass on a fraction of the citations and leave the history's unchecked, so both documents are
+    read, each must yield its own citations, and the history's Data bullets are checked like the
+    plan's.
+    """
+    per_document = found["commits"]["cited per document"]
+    assert set(per_document) == {"docs/ROADMAP.md", "docs/ROADMAP-HISTORY.md"}
+    assert per_document["docs/ROADMAP-HISTORY.md"] > 400, "the history's citations went unread"
+    assert per_document["docs/ROADMAP.md"] > 100, "the plan's own citations went unread"
+    docs = {r["doc"] for r in found["data bullets"]}
+    assert docs == {"docs/ROADMAP.md", "docs/ROADMAP-HISTORY.md"}
 
 
 def _is_ancestor_of_head(rev: str) -> bool | None:

@@ -1,5 +1,12 @@
 """Check docs/ROADMAP.md's current-state claims against machine-checkable values.
 
+Since 2026-10-10 the roadmap is two files: docs/ROADMAP.md, the current plan, and
+docs/ROADMAP-HISTORY.md, the whole roadmap as it stood at ``c00250f``, frozen and kept
+verbatim. Both are read. A commit cited in either must be an ancestor of HEAD, and a
+result named in either's Data bullets must exist, because the history is the record the
+plan points into and a dangling citation there is as much a defect as one in the plan.
+The milestone states are read from the current plan only.
+
 A narrative sentence about a number is not the number. Prose in an area section is
 evidence about its own date; the value lives in a test pin, a committed result under
 ``data/results/``, a constant in a module, or git itself. This script checks the three
@@ -47,6 +54,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ROADMAP = ROOT / "docs" / "ROADMAP.md"
+#: The roadmap as it stood at c00250f on 2026-10-10, frozen and kept verbatim. Its citations
+#: are read with the plan's: the plan was cut to its current state on that date and the rows it
+#: no longer carries, with the commits they cite, live here.
+HISTORY = ROOT / "docs" / "ROADMAP-HISTORY.md"
 RESULTS = ROOT / "data" / "results"
 
 SHA = re.compile(r"`([0-9a-f]{7,10})`")
@@ -209,19 +220,39 @@ def check_milestones(text: str) -> dict:
     }
 
 
+def _documents() -> dict[str, str]:
+    """The plan and, when present, its frozen history, by their path in the repository."""
+    docs = {"docs/ROADMAP.md": ROADMAP.read_text()}
+    if HISTORY.exists():
+        docs["docs/ROADMAP-HISTORY.md"] = HISTORY.read_text()
+    return docs
+
+
 def run() -> dict:
-    text = ROADMAP.read_text()
-    lines = text.splitlines()
+    docs = _documents()
+    text = docs["docs/ROADMAP.md"]
+    commits = check_commits("\n".join(docs.values()))
+    commits["cited per document"] = {name: len(set(SHA.findall(body))) for name, body in docs.items()}
+    bullets = []
+    for name, body in docs.items():
+        bullets += [{**row, "doc": name} for row in check_data_bullets(body.splitlines())]
     return {
-        "commits": check_commits(text),
-        "data bullets": check_data_bullets(lines),
+        "commits": commits,
+        "data bullets": bullets,
         "milestones": check_milestones(text),
     }
+
+
+def _short(row: dict) -> str:
+    """The line's document as a prefix: L for the plan, H for the frozen history."""
+    return "H" if row.get("doc", "").endswith("ROADMAP-HISTORY.md") else "L"
 
 
 def report(found: dict) -> int:
     commits = found["commits"]
     print(f"commits cited {commits['cited']}, ancestors of HEAD {commits['ancestors of HEAD']}")
+    for name, n in commits.get("cited per document", {}).items():
+        print(f"  {name}: {n} cited")
     for stray in commits["not ancestors"]:
         why = stray["expected"] or "UNEXPLAINED — the history does not carry this claim"
         print(f"  not an ancestor: {stray['commit']}  {stray['commit line']}  [{why}]")
@@ -238,13 +269,13 @@ def report(found: dict) -> int:
             mark = "ok" if row["exists"] else "MISSING"
             if not row["exists"]:
                 missing.append(row)
-            print(f"  L{row['line']:>5}  {row['claim']:<44} {mark}")
+            print(f"  {_short(row)}{row['line']:>5}  {row['claim']:<44} {mark}")
         else:
             stated = "-" if row["stated"] is None else str(row["stated"])
             chroms = row["chromosomes on disk"]
             drift = "" if row["stated"] in (None, chroms) else "   <- differs"
             print(
-                f"  L{row['line']:>5}  {row['claim']:<44} "
+                f"  {_short(row)}{row['line']:>5}  {row['claim']:<44} "
                 f"stated {stated:>4}  chromosomes {chroms:>4}  "
                 f"files {row['files with the prefix']:>4}{drift}"
             )
