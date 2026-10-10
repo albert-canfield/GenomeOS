@@ -15,7 +15,7 @@ by other tools and diffed by humans.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from enum import Enum, StrEnum
 from typing import Any
 
@@ -254,6 +254,45 @@ class CellType(Entity):
         self.kind = "cell_type"
 
 
+#: What a `reader` may state of an element in one cell type (BIOLANG-v0.5-READER.md). `unknown` is a
+#: value, not a gap: it says the state was not read, and it is neither open nor closed.
+READER_STATES = ("open", "poised", "closed", "unknown")
+#: The one state in which a rule acting `through` the element runs. `poised` is not it: the project's
+#: reader counts a poised promoter as not read (docs/NODES-READER-WRITER.md, "Openness is not reading").
+READER_OPEN = "open"
+READER_UNKNOWN = "unknown"
+
+
+@dataclass(slots=True)
+class Reader:
+    """Which elements one cell type can read, as a measurement states them (v0.5).
+
+    `states` maps an `element` or `region` id to one of READER_STATES. A reader states chromatin
+    accessibility and marks, not function: an open element is one a rule may act through in that
+    cell, never evidence that it does. Several readers may describe one cell type (one per assay,
+    each with its own evidence); they must not give one element two states.
+    """
+
+    cell_type: str
+    states: dict[str, str] = field(default_factory=dict)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = UNSTATED
+
+
+def _state_in(element: str, cell_type: str, states: dict[str, tuple[str, Reader]] | None) -> tuple[str, str]:
+    """(state, why) for one element, given the cell type and its readers' states."""
+    if not cell_type:
+        return READER_UNKNOWN, "the context names no cell_type, so no reader applies"
+    if states is None:
+        return READER_UNKNOWN, f"no reader for cell_type {cell_type}"
+    found = states.get(element)
+    if found is None:
+        return READER_UNKNOWN, f"the reader of {cell_type} does not state {element}"
+    state, rd = found
+    source = f" {rd.evidence.source}" if rd.evidence.source else ""
+    return state, f"the reader of {cell_type} states {element} {state} ({rd.evidence.kind.value}{source})"
+
+
 @dataclass(slots=True)
 class Effect:
     target: str  # a state variable, e.g. "telomere_bp"
@@ -341,6 +380,12 @@ class Rule:
     #: `not_assessable`, a reading that was attempted and could not be taken. It records a
     #: measurement beside the rule and changes nothing the rule does: `applies` does not read it.
     context_evidence: str = ""
+    #: v0.5 (docs/BIOLANG-v0.5-READER.md): the `element` or `region` this activates/inhibits rule acts
+    #: through, or "" for a rule that names none, which no reader gates. The program's `reader` blocks
+    #: say whether a cell type can read that element; `Module.active_rules` holds the rule at strength
+    #: 0 in a cell whose reader does not state it `open`. `applies` does not read it, because the
+    #: readers belong to the module and not to the rule.
+    through: str = ""
 
     def applies(self, context: dict[str, str]) -> bool:
         for key, wanted in self.when.items():
@@ -882,6 +927,7 @@ class Module:
     commitments: list[Commitment] = field(default_factory=list)
     organism: Organism | None = None
     regime: Regime | None = None
+    readers: list[Reader] = field(default_factory=list)  # v0.5: which elements each cell type reads
 
     def add(self, entity: Entity) -> None:
         if entity.id in self.entities:
@@ -937,6 +983,7 @@ class Module:
         self.designs.extend(other.designs)
         self.competences.extend(other.competences)
         self.commitments.extend(other.commitments)
+        self.readers.extend(other.readers)
         if self.organism is None:
             self.organism = other.organism
         if self.regime is None:
@@ -945,13 +992,81 @@ class Module:
             self.parameters.setdefault(k, v)
 
     def active_rules(self, context: dict[str, str]) -> list[Rule]:
-        """Rules whose `when` matches and whose genes are expressed in the context's cell type."""
+        """The rules a cell's network is built from: `when` matches and both genes are expressed in the
+        context's cell type, and then the reader (v0.5, docs/BIOLANG-v0.5-READER.md).
+
+        A rule acting `through` an element that the cell's reader does not state `open` (it reads
+        `poised`, `closed` or `unknown`) is HELD: it is returned as a copy at strength 0, so it
+        contributes nothing, and it is not dropped. Dropping it would be wrong in the network runtime,
+        where a gene with no activator rule at all is transcribed at its full max_rate: closing a gene's
+        only enhancer would then drive the gene to maximum, the opposite of what closed means. Held, the
+        gene keeps its activator and the activator's term is zero. `reader_gate` names every held rule
+        and why. Rules without `through` are selected exactly as before.
+        """
+        selected = self._selected(context)
+        if not any(r.through for r in selected):
+            return selected
+        held = {id(r) for r, state, _ in self.reader_gate(context, selected) if state != READER_OPEN}
+        return [replace(r, strength=0.0) if id(r) in held else r for r in selected]
+
+    def _selected(self, context: dict[str, str]) -> list[Rule]:
+        """The rules the `when` and `expresses` gates pass, before the reader."""
         silenced = self.silenced_genes(context)
         return [
             r
             for r in self.rules
             if r.applies(context) and r.source not in silenced and r.target not in silenced
         ]
+
+    def reader_cell(self, context: dict[str, str]) -> str:
+        """The cell type a context names, as the id its readers use ("" when it names none). A context
+        may name a cell type by its id or by its `name`, as `silenced_genes` accepts."""
+        ct = context.get("cell_type") or ""
+        cell = next((c for c in self.cell_types() if c.id == ct or c.name == ct), None) if ct else None
+        return cell.id if cell is not None else ct
+
+    def reader_states(self, cell_type: str) -> dict[str, tuple[str, Reader]]:
+        """element -> (state, the reader that states it), over every reader of one cell type.
+
+        Raises ValueError when two readers of the cell type give one element different states: the
+        engine does not choose between measurements."""
+        out: dict[str, tuple[str, Reader]] = {}
+        for rd in self.readers:
+            if rd.cell_type != cell_type:
+                continue
+            for element, state in rd.states.items():
+                if element in out and out[element][0] != state:
+                    raise ValueError(
+                        f"cell_type {cell_type!r}: {element!r} is {out[element][0]} in one reader and "
+                        f"{state} in another; state it once, or keep the readings in separate programs"
+                    )
+                out.setdefault(element, (state, rd))
+        return out
+
+    def reader_state(self, element: str, context: dict[str, str]) -> tuple[str, str]:
+        """(state, why) for one element in the context's cell. Every way of not knowing reads
+        `unknown` and says which it is: no cell type in the context, no reader for the cell type, a
+        reader that does not mention the element, or a reader that states it `unknown`."""
+        return _state_in(element, *self._reading(context))
+
+    def _reading(self, context: dict[str, str]) -> tuple[str, dict[str, tuple[str, Reader]] | None]:
+        """The context's cell type and its readers' states, read once per selection (None: no reader)."""
+        ct = self.reader_cell(context)
+        if not ct or not any(rd.cell_type == ct for rd in self.readers):
+            return ct, None
+        return ct, self.reader_states(ct)
+
+    def reader_gate(
+        self, context: dict[str, str], rules: list[Rule] | None = None
+    ) -> list[tuple[Rule, str, str]]:
+        """(rule, state, why) for every rule that acts `through` an element, among `rules` (default:
+        the rules whose `when` and `expresses` gates pass in this context). A rule runs only where
+        the state is READER_OPEN; every other state, `unknown` included, holds it."""
+        gated = [r for r in (self._selected(context) if rules is None else rules) if r.through]
+        if not gated:
+            return []
+        reading = self._reading(context)
+        return [(r, *_state_in(r.through, *reading)) for r in gated]
 
     def silenced_genes(self, context: dict[str, str]) -> set[str]:
         ct = context.get("cell_type")
@@ -1035,6 +1150,7 @@ class Module:
             "commitments": [conv(c) for c in self.commitments],
             "organism": conv(self.organism) if self.organism else None,
             "regime": conv(self.regime) if self.regime else None,
+            "readers": [conv(rd) for rd in self.readers],
         }
 
     @classmethod
@@ -1142,6 +1258,11 @@ class Module:
             rd.pop("__type__", None)
             rd["evidence"] = evid(conf(rd).get("evidence", {}))
             m.regime = Regime(**rd)
+        for rdd in data.get("readers", []):  # v0.5; a file written before readers existed has none
+            rdd = dict(rdd)
+            rdd.pop("__type__", None)
+            rdd["evidence"] = evid(conf(rdd).get("evidence", {}))
+            m.readers.append(Reader(**rdd))
         return m
 
 
@@ -1151,6 +1272,9 @@ __all__ = [
     "DECISION_ACTIONS",
     "MOLAR_UNITS",
     "PARTITION_MODES",
+    "READER_OPEN",
+    "READER_STATES",
+    "READER_UNKNOWN",
     "REGIME_ALLOCATIONS",
     "REGIME_FATES",
     "REGIME_RECHECKS",
@@ -1191,6 +1315,7 @@ __all__ = [
     "Organism",
     "Parameter",
     "Protein",
+    "Reader",
     "Regime",
     "Region",
     "RegulatoryElement",

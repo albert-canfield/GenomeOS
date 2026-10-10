@@ -16,6 +16,9 @@
     # test: confidence >= 0.6       mean confidence over the rules that state one
     # test: alive == 961             organism programs: cells (born), alive, deaths at the last stage;
                                     the program's own `assert:` lines are checked too
+    # test: B.mRNA final > 10 in cell_type=K562     v0.5: judged on a run in that context
+    # test: active_rules == 3 in cell_type=K562     rules in that cell's network; held_rules: the
+                                    ones its reader holds at strength 0 (BIOLANG-v0.5-READER.md)
 
 GenomeOS is the first application of this toolchain; nothing here needs
 the genome layer, so it can be packaged apart (docs/ARCHITECTURE.md).
@@ -33,7 +36,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import UNKNOWN, Module, confidence_stated
+from genomeos.ir import READER_OPEN, UNKNOWN, Module, confidence_stated
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
 from genomeos.lang.tools import (
@@ -59,20 +62,47 @@ OPS = {
     "!=": operator.ne,
 }
 TEST_LINE = re.compile(
-    r"^\s*#\s*test:\s*(\S+)\s+(final|peaks|min|max)?\s*(>=|<=|==|!=|>|<)\s*(-?[\d.]+(?:[eE][-+]?\d+)?)\s*$"
+    r"^\s*#\s*test:\s*(\S+)\s+(final|peaks|min|max)?\s*(>=|<=|==|!=|>|<)\s*(-?[\d.]+(?:[eE][-+]?\d+)?)"
+    r"(?:\s+in\s+(\S.*?))?\s*$"
 )
+
+
+class CheckLine(tuple):
+    """One `# test:` line: the (subject, measure, op, value) tuple it always was, so it unpacks and
+    compares as before, plus the context it is judged in (`in k=v, k=v`; empty for none)."""
+
+    def __new__(cls, subject: str, measure: str, op: str, value: float, context: dict | None = None):
+        line = super().__new__(cls, (subject, measure, op, value))
+        line.context = dict(context or {})
+        return line
+
+
+def _context(text: str) -> dict[str, str]:
+    """`cell_type=K562, stage=late` -> {"cell_type": "K562", "stage": "late"}."""
+    out = {}
+    for clause in text.split(","):
+        k, sep, v = clause.partition("=")
+        if not sep or not k.strip() or not v.strip():
+            raise ValueError(f"a test context is `k=v, k=v`; got {text!r}")
+        out[k.strip()] = v.strip()
+    return out
+
+
+def _key(context: dict[str, str]) -> tuple:
+    return tuple(sorted(context.items()))
 
 
 # ---- test --------------------------------------------------------------------------
 
 
 def parse_tests(text: str) -> list[tuple[str, str, str, float]]:
-    """(subject, measure, op, value) for every `# test:` line."""
+    """(subject, measure, op, value) for every `# test:` line, each a `CheckLine` carrying its context."""
     out = []
     for line in text.splitlines():
         m = TEST_LINE.match(line)
         if m:
-            out.append((m.group(1), m.group(2) or "final", m.group(3), float(m.group(4))))
+            ctx = _context(m.group(5)) if m.group(5) else {}
+            out.append(CheckLine(m.group(1), m.group(2) or "final", m.group(3), float(m.group(4)), ctx))
     return out
 
 
@@ -82,9 +112,22 @@ def evaluate(
     """Run the module once (if any test needs a trajectory) and judge each test line."""
     from genomeos.runtime import NetworkRuntime
 
-    facts = ("rules", "entities", "unknowns", "confidence", "events", "parameters", "unknown_parameters")
+    facts = (
+        "rules",
+        "entities",
+        "unknowns",
+        "confidence",
+        "events",
+        "parameters",
+        "unknown_parameters",
+        "active_rules",
+        "held_rules",
+    )
     body_subjects = ("cells", "alive", "deaths")
-    needs_run = any(s not in facts and s not in body_subjects for s, *_ in tests)
+    contexts = {_key(getattr(t, "context", {})): getattr(t, "context", {}) for t in tests}
+    needs_run = any(
+        t[0] not in facts and t[0] not in body_subjects and not getattr(t, "context", None) for t in tests
+    )
     traj = None
     results: list[dict[str, Any]] = []
     located = None
@@ -111,6 +154,20 @@ def evaluate(
     if needs_run and module.rules and located is None:
         vm = NetworkRuntime(module, context={}, seed=0)
         traj = vm.run(hours=hours, dt=0.05, initial={})
+    # v0.5: a line judged `in` a context runs the program once per distinct context, so the same rules
+    # can be read in two cell types side by side
+    in_context: dict[tuple, Any] = {}
+    for key, ctx in contexts.items():
+        wanted = [t for t in tests if _key(getattr(t, "context", {})) == key]
+        if not ctx or not module.rules or all(t[0] in facts for t in wanted):
+            continue
+        if getattr(module, "located", False):
+            from genomeos.runtime.located import LocatedRuntime
+
+            in_context[key] = ("located", LocatedRuntime(module, context=ctx).run(hours=hours, dt=0.05))
+        else:
+            run = NetworkRuntime(module, context=ctx, seed=0).run(hours=hours, dt=0.05, initial={})
+            in_context[key] = ("network", run)
     # an organism program (stages declared): grow it to the last stage; its own `assert:` lines are claims
     body = None
     stages = getattr(module, "stages", None) or []
@@ -175,10 +232,24 @@ def evaluate(
                     )
         except Exception as e:  # noqa: BLE001  (the organism layer reports its own failure as a claim)
             results.append({"test": "organism grows to its last stage", "got": str(e)[:80], "ok": False})
-    for subject, measure, op, value in tests:
+    for line in tests:
+        subject, measure, op, value = line
+        ctx = getattr(line, "context", {}) or {}
         got: float | None
         if subject == "rules":
             got = len(module.rules)
+        elif subject == "active_rules":
+            got = len(module.active_rules(ctx))
+        elif subject == "held_rules":
+            got = sum(1 for _, state, _ in module.reader_gate(ctx) if state != READER_OPEN)
+        elif ctx:
+            kind, run = in_context.get(_key(ctx), (None, None))
+            got = None
+            if kind == "located":
+                got = located_measure(run, subject, measure)
+            elif kind == "network" and subject in run.levels:
+                xs = run.levels[subject]
+                got = {"final": xs[-1], "peaks": run.peaks(subject), "min": min(xs), "max": max(xs)}[measure]
         elif subject == "entities":
             got = len(module.entities)
         elif subject == "unknowns":
@@ -205,10 +276,18 @@ def evaluate(
         ok = got is not None and not (isinstance(got, float) and math.isnan(got)) and OPS[op](got, value)
         fact = subject in facts or subject in body_subjects
         label = f"{subject} {op} {value:g}" if fact else f"{subject} {measure} {op} {value:g}"
+        if ctx:
+            label += " in " + ", ".join(f"{k}={v}" for k, v in ctx.items())
         results.append({"test": label, "got": got, "ok": ok})
-    if traj is not None:
-        bad = [s for s in traj.species if any(math.isnan(x) or math.isinf(x) for x in traj.levels[s])]
-        results.append({"test": "no NaN or infinite level", "got": bad or "clean", "ok": not bad})
+    runs = [("", traj)] if traj is not None else []
+    runs += [
+        (" in " + ", ".join(f"{k}={v}" for k, v in contexts[key].items()), run)
+        for key, (kind, run) in in_context.items()
+        if kind == "network"
+    ]
+    for where, run in runs:
+        bad = [s for s in run.species if any(math.isnan(x) or math.isinf(x) for x in run.levels[s])]
+        results.append({"test": f"no NaN or infinite level{where}", "got": bad or "clean", "ok": not bad})
     return results
 
 

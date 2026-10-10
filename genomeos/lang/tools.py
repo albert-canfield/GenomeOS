@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import UNKNOWN, Module, confidence_stated
+from genomeos.ir import READER_OPEN, READER_STATES, UNKNOWN, Module, confidence_stated
 from genomeos.lang import parse_file
 
 
@@ -81,6 +81,14 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
             f"silenced: {silenced or 'none'}"
         )
         lines += [f"    {r.id}" for r in active]
+        lines += reader_lines(module, context)
+    elif module.readers or any(r.through for r in module.rules):
+        cells = sorted({rd.cell_type for rd in module.readers})
+        through = sum(1 for r in module.rules if r.through)
+        lines.append(
+            f"  readers: {len(module.readers)} for {len(cells)} cell types ({', '.join(cells) or 'none'}); "
+            f"{through} rules act through an element (`--context cell_type=X` shows which run there)"
+        )
     lines += confidence_lines(module, weak=False)
     unknown_params = [p.name for p in module.parameters.values() if p.value is UNKNOWN]
     if unknown_params:
@@ -107,6 +115,22 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
     return "\n".join(lines)
 
 
+def reader_lines(module: Module, context: dict[str, str]) -> list[str]:
+    """v0.5: the rules the context's reader holds at strength 0, each with the state and why. A rule
+    held because nothing was read (`unknown`) is listed as such, never folded into closed."""
+    gate = module.reader_gate(context)
+    if not gate:
+        return []
+    held = [(r, state, why) for r, state, why in gate if state != READER_OPEN]
+    by_state = {s: sum(1 for _, st, _ in held if st == s) for s in READER_STATES if s != READER_OPEN}
+    counts = ", ".join(f"{s} {n}" for s, n in by_state.items())
+    lines = [
+        f"  reader: {len(gate) - len(held)} of {len(gate)} gated rules run; held at strength 0: {counts}"
+    ]
+    lines += [f"    held {r.id}: {state}; {why}" for r, state, why in held]
+    return lines
+
+
 def compile_module(module: Module) -> str:
     return json.dumps(module.to_dict(), indent=2)
 
@@ -130,6 +154,7 @@ def run_module(
         f"module {module.name}: {len(vm.active_rules)}/{len(module.rules)} rules active in context "
         f"{context or '{}'}; {hours} h simulated"
     ]
+    lines += reader_lines(module, context or {})
     for s in traj.species:
         xs = traj.levels[s]
         lines.append(f"  {s:<16} {spark(xs)}  final={xs[-1]:8.2f}  peaks={traj.peaks(s)}")

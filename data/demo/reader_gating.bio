@@ -1,0 +1,66 @@
+# BioLang v0.5 demo: one rule set, five cell types, and the reader decides which rules each cell runs.
+#
+# The regulatory rules are written once. The `reader` blocks state, per cell type, whether the
+# enhancer ENH1 and the silencer SIL1 can be read there. A rule with `through: E` runs in a cell only
+# where a reader states E `open`. Anywhere else (poised, closed, unknown, or a cell no reader
+# describes) it is HELD at strength 0: TGT keeps its activator and falls to its basal rate. It is never
+# read as unregulated, which in the network runtime would mean transcribed at its full max_rate.
+#
+# Every gene, element and state below is an illustration chosen to show the gate, not a reading of
+# any real cell, and the evidence lines say `none` for that reason. A reader states accessibility,
+# not function: an open element is one a rule may act through, never evidence that it does.
+# docs/BIOLANG-v0.5-READER.md has the construct.
+module demo.reader_gating
+
+gene ACT { max: 40; basal: 1; produces: Act; evidence: none "illustration" }
+gene RPR { max: 40; basal: 1; produces: Rpr; evidence: none "illustration" }
+gene TGT { max: 60; basal: 0.05; produces: Tgt; evidence: none "illustration" }
+protein Act { half_life: 2; evidence: none "illustration" }
+protein Rpr { half_life: 2; evidence: none "illustration" }
+protein Tgt { half_life: 2; evidence: none "illustration" }
+
+element ENH1 { class: enhancer; targets: TGT; evidence: none "illustration" }
+element SIL1 { class: unknown; molecular_role: silencer; targets: TGT; evidence: none "illustration" }
+
+cell_type OpenCell { evidence: none "illustration" }
+cell_type RepressedCell { evidence: none "illustration" }
+cell_type ClosedCell { evidence: none "illustration" }
+cell_type PoisedCell { evidence: none "illustration" }
+cell_type UnreadCell { evidence: none "illustration" }   # no reader describes it
+
+reader OpenCell { open: ENH1; closed: SIL1; evidence: none "illustration: chosen, not read" }
+reader RepressedCell { open: ENH1, SIL1; evidence: none "illustration: chosen, not read" }
+reader ClosedCell { closed: ENH1, SIL1; evidence: none "illustration: chosen, not read" }
+reader PoisedCell { poised: ENH1; unknown: SIL1; evidence: none "illustration: chosen, not read" }
+
+rule Act activates TGT {
+  through: ENH1
+  strength: 1.0; threshold: 5; hill: 2
+  evidence: none "illustration"
+}
+rule Rpr inhibits TGT {
+  through: SIL1
+  strength: 0.8; threshold: 5; hill: 2
+  evidence: none "illustration"
+}
+
+# Three produces rules and two gated rules in every cell's network; the reader decides how many of
+# the two are held there.
+# test: rules == 5
+# test: active_rules == 5 in cell_type=OpenCell
+# test: held_rules == 1 in cell_type=OpenCell
+# test: held_rules == 0 in cell_type=RepressedCell
+# test: held_rules == 2 in cell_type=ClosedCell
+# test: held_rules == 2 in cell_type=PoisedCell
+# test: held_rules == 2 in cell_type=UnreadCell
+#
+# The same two rules, read in five cells. ENH1 open: TGT near its max.
+# test: TGT.mRNA final > 50 in cell_type=OpenCell
+# ENH1 and SIL1 both open: the repressor acts too, and TGT sits between.
+# test: TGT.mRNA final < 30 in cell_type=RepressedCell
+# test: TGT.mRNA final > 5 in cell_type=RepressedCell
+# ENH1 closed, poised, or unread: the activator is made but cannot act, and TGT stays at its basal rate.
+# test: TGT.mRNA final < 1 in cell_type=ClosedCell
+# test: TGT.mRNA final < 1 in cell_type=PoisedCell
+# test: TGT.mRNA final < 1 in cell_type=UnreadCell
+# test: Act final > 100 in cell_type=ClosedCell

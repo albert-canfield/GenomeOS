@@ -26,6 +26,8 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     order <Id> { members: A, B|C, D; axis: position; direction: decreasing }  # B|C: one step, not ordered
     competence <Id> { allows: Muscle; closes: at 180 min; closed_by: MES-2; when: ... }
     commitment <Id> { establish: cell_type = Muscle; locks: cell_type; inherit: daughters; release: never }
+    reader <CellType> { open: E1, E2; poised: E3; closed: E4; unknown: E5 }   # v0.5
+    rule <A> activates <B> { through: E1 }   # v0.5: held at strength 0 where E1 is not open
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
 one line. Blocks may nest (transcript inside gene). `#` starts a comment.
@@ -48,6 +50,7 @@ from genomeos.ir import (
     DECISION_ACTIONS,
     MOLAR_UNITS,
     PARTITION_MODES,
+    READER_STATES,
     REGIME_ALLOCATIONS,
     REGIME_FATES,
     REGIME_RECHECKS,
@@ -79,6 +82,7 @@ from genomeos.ir import (
     Parameter,
     Pool,
     Protein,
+    Reader,
     Regime,
     Region,
     RegulatoryElement,
@@ -122,6 +126,7 @@ _KINDS = (
     "pool",
     "allocation",
     "regime",
+    "reader",
 )
 # `cost` repeats because one gene draws on more than one pool: a transcript costs RNAPII once and
 # ATP per nucleotide, and those are two costs rather than one compound value (v0.4 §5.2).
@@ -416,6 +421,52 @@ def _common(b: Block) -> tuple[Evidence, float]:
 # ------------------------------------------------------------- compiling ---
 
 
+#: the regulatory actions a reader can gate: the two whose effect the network reads through a strength
+_GATED_ACTIONS = (Action.ACTIVATE, Action.INHIBIT)
+
+
+def _through(value: str, rule: Rule, line_no: int) -> str:
+    """A rule's `through:`, one element id, on a rule whose effect a reader can hold (v0.5)."""
+    names = _list(value)
+    if len(names) != 1 or len(names[0].split()) != 1:
+        raise BioLangError(
+            f"line {line_no}: rule {rule.id!r} has through {value!r}; `through` names exactly one "
+            "element. A rule acting through two elements is two rules"
+        )
+    if rule.action not in _GATED_ACTIONS:
+        raise BioLangError(
+            f"line {line_no}: rule {rule.id!r} {rule.action.value} {rule.target!r} cannot act `through` "
+            "an element: a reader gates only activates and inhibits rules, whose effect a strength "
+            "carries"
+        )
+    return names[0]
+
+
+def _reader(b: Block, ev: Evidence, conf: float) -> Reader:
+    """`reader <CellType> { open: ...; poised: ...; closed: ...; unknown: ... }` (v0.5)."""
+    cell = b.header.strip()
+    if not cell or len(cell.split()) != 1:
+        raise BioLangError(f"line {b.line}: reader header must be one cell_type id, got {b.header!r}")
+    states: dict[str, str] = {}
+    for state in READER_STATES:
+        for element in _list(b.props.get(state, "")):
+            if len(element.split()) != 1:
+                raise BioLangError(f"line {b.line}: reader {cell!r}: {state} lists {element!r}, not an id")
+            if element in states:
+                again = "twice" if states[element] == state else f"both {states[element]} and {state}"
+                raise BioLangError(
+                    f"line {b.line}: reader {cell!r} states {element!r} {again}; one element has one "
+                    "state in one cell type"
+                )
+            states[element] = state
+    if not states:
+        raise BioLangError(
+            f"line {b.line}: reader {cell!r} states no element; it needs at least one of "
+            f"{', '.join(READER_STATES)}"
+        )
+    return Reader(cell_type=cell, states=states, evidence=ev, confidence=conf)
+
+
 def _compile_block(b: Block, module: Module) -> None:
     _check_keys(b)
     ev, conf = _common(b)
@@ -612,7 +663,11 @@ def _compile_block(b: Block, module: Module) -> None:
             rule.when = _parse_when(p["when"])
         if "context_evidence" in p:
             rule.context_evidence = p["context_evidence"].strip()
+        if "through" in p:
+            rule.through = _through(p["through"], rule, b.line)
         module.rules.append(rule)
+    elif b.kind == "reader":
+        module.readers.append(_reader(b, ev, conf))
     elif b.kind == "param":
         pm = _PARAM.match(b.header)
         if not pm:
@@ -1120,6 +1175,7 @@ def _check_references(module: Module) -> None:
     org = module.organism
     if org and org.cell_type and org.cell_type not in cell_types:
         raise BioLangError(f"organism {org.name!r} starts as undeclared cell_type {org.cell_type!r}")
+    _check_readers(module, cell_types)
     if not module.located:
         stray = [e.id for e in module.transports()] + [
             e.id for e in [*module.genes(), *module.proteins()] if getattr(e, "location", None)
@@ -1130,6 +1186,36 @@ def _check_references(module: Module) -> None:
     if errors:
         more = f" (and {len(errors) - 1} more)" if len(errors) > 1 else ""
         raise BioLangError(f"located program: {errors[0]}{more}")
+
+
+def _check_readers(module: Module, cell_types: set[str]) -> None:
+    """v0.5: a reader names a declared cell_type and declared elements, readers of one cell type agree,
+    and a rule's `through` names a declared element. The located runtime selects its rules without
+    the reader, so a located program may not use `through` yet: it would run where it is closed."""
+    readable = {e.id for e in module.entities.values() if isinstance(e, RegulatoryElement | Region)}
+    for rd in module.readers:
+        if rd.cell_type not in cell_types:
+            raise BioLangError(f"reader {rd.cell_type!r} reads an undeclared cell_type {rd.cell_type!r}")
+        stray = [e for e in rd.states if e not in readable]
+        if stray:
+            raise BioLangError(
+                f"reader {rd.cell_type!r} states {stray[0]!r}, which is not a declared element or region"
+            )
+    for ct in {rd.cell_type for rd in module.readers}:
+        try:
+            module.reader_states(ct)
+        except ValueError as e:
+            raise BioLangError(f"readers disagree: {e}") from None
+    for r in module.rules:
+        if r.through and r.through not in readable:
+            raise BioLangError(
+                f"rule {r.id!r} acts through {r.through!r}, which is not a declared element or region"
+            )
+    if module.located and any(r.through for r in module.rules):
+        raise BioLangError(
+            "a located program cannot use `through` yet: the located runtime does not read the reader, "
+            "so a rule held in a closed cell would run there (BIOLANG-v0.5-READER.md)"
+        )
 
 
 # `import <scheme>:<name>` asks a registered resolver for BioLang text: the engine defines the hook,
