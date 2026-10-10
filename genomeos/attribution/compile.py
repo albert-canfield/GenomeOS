@@ -987,6 +987,281 @@ def compile_chromosome(
     return text
 
 
+# ==== the reader layer: BioLang v0.5 gating (M2b, lane-readercompile, 2026-10-10) ======================
+# The engine half (5682e6c, docs/BIOLANG-v0.5-READER.md) added `reader <CellType> { open: ...; closed:
+# ...; unknown: ... }` and `through: E` on an activates/inhibits rule: `Module.active_rules` runs such a
+# rule only in a cell whose reader states E `open` and holds it at strength 0 everywhere else. This is
+# the application half the spec asks for ("What the application half needs"): one `cell_type` block and
+# one `reader` block per reader biosample, the program's own element ids listed under the state reader
+# v1's DNase call gives them there, and `through: <element>` on every enhancer-to-gene rule.
+#
+# It is applied to a program's TEXT (`gate_program`), so it can gate a program already on disk - the 24
+# generated chromosomes a census or a run was pinned to - without recompiling its inputs. Nothing else
+# in the program moves: every block keeps its bytes except the rule lines, which gain `through` (and,
+# under SELECTION_READER_CELLS, a predicted rule a different `when`), the module line, and the comment
+# paragraph and blocks added.
+
+#: reader v1's element-level reading (genomeos.attribution.context_evidence's three states) -> the
+#: engine's reader state. `not_assessable` is `unknown`, never `closed` (the spec's words): no reading
+#: was taken there. `not_open_in_reader` is `closed` in the sense reader v1 itself uses the word for a
+#: promoter window ("a promoter the DNase file calls closed"): no narrowPeak overlaps the element. That
+#: is the absence of a call at the reader's registered threshold, not a measurement of shut chromatin
+#: (context_evidence.NOT_CLOSED); the engine holds a `closed` rule exactly as it holds an `unknown` one,
+#: so the word changes what a report counts and nothing a run does.
+READER_STATE = {"open_in_reader": "open", "not_open_in_reader": "closed", "not_assessable": "unknown"}
+READER_CLOSED_MEANS = (
+    "closed here is reader v1's own word for a window no DNase narrowPeak of the biosample overlaps: the"
+    " absence of a call at the reader's registered threshold, not a measurement of shut chromatin"
+)
+READER_POISED_NOTE = (
+    "no element is stated poised: reader v1 calls poised only at promoters (an H3K27me3 peak without an"
+    " H3K27ac peak in a TSS window), and an element-level poised call has not been made"
+)
+READER_NOT_FUNCTION = (
+    "a reader states accessibility, not function: an open element is one a rule may act through in that"
+    " cell, never evidence that it does, and a held rule is not shown to be inactive"
+)
+#: the two ways a gated rule may be selected. COMPILED_CELL keeps the rule's compiled `when` (the argmax
+#: track for a predicted rule, the screened cell for a measured one), so the reader can only hold a rule
+#: in that one cell. READER_CELLS gives every PREDICTED rule a `when` naming the reader cell types, so
+#: the rule is offered in each of them and the reader decides where it runs; its compiled cell stays in
+#: its evidence text. A measured rule keeps the cell its screen silenced in under both.
+SELECTION_COMPILED_CELL = "compiled_cell"
+SELECTION_READER_CELLS = "reader_cells"
+SELECTIONS = (SELECTION_COMPILED_CELL, SELECTION_READER_CELLS)
+
+_ELEMENT_OPEN = re.compile(r"^element (\S+) \{$")
+_LOCUS_LINE = re.compile(r"^  locus: (chr[0-9A-Za-z_]+):(\d+)-(\d+)$")
+_RULE_LINE = re.compile(
+    r"^rule (\S+) (activates|inhibits) (\S+) \{ (strength: [^;]*; )(when: cell_type = [^;]*; )(.*)$"
+)
+
+
+def reader_cells() -> list[tuple[str, str]]:
+    """(reader v1 biosample, the cell_type id a gated program declares it under), in reader v1's order."""
+    from genomeos.attribution import context_evidence as ce
+
+    return [(b, ident(b)) for b in ce.READER_TERMS]
+
+
+def element_reading(biosample: str, chrom: str, start: int, end: int, readers: Any) -> str:
+    """Reader v1's element-level reading of one interval in one biosample: one of context_evidence.STATES.
+
+    The same call `context_evidence.state_for` makes once a rule's cell has been mapped to a biosample,
+    taken here for every biosample: open when a narrowPeak overlaps the interval, not open when none
+    does inside the peak file's measured span, not assessable beyond that span or with no file.
+    """
+    from genomeos.attribution import context_evidence as ce
+
+    span = readers.span(biosample, chrom)
+    if span is None or not (end > span[0] and start < span[1]):
+        return ce.STATE_NOT_ASSESSABLE
+    idx = readers.index(biosample, chrom)
+    return ce.STATE_OPEN if idx.overlapping(start, end) else ce.STATE_NOT_OPEN
+
+
+def program_elements(text: str) -> list[tuple[str, str, int, int]]:
+    """(element id, chrom, start, end) for every `element` block of a compiled program, in order."""
+    out: list[tuple[str, str, int, int]] = []
+    current = None
+    for ln in text.splitlines():
+        m = _ELEMENT_OPEN.match(ln)
+        if m:
+            current = m.group(1)
+            continue
+        if current is not None:
+            loc = _LOCUS_LINE.match(ln)
+            if loc:
+                out.append((current, loc.group(1), int(loc.group(2)), int(loc.group(3))))
+                current = None
+            elif ln == "}":
+                current = None
+    return out
+
+
+def element_states(
+    elements: list[tuple[str, str, int, int]], readers: Any, cells: list[tuple[str, str]] | None = None
+) -> dict[str, dict[str, str]]:
+    """cell_type id -> element id -> engine reader state, for every reader biosample and element."""
+    cells = cells or reader_cells()
+    return {
+        cid: {e: READER_STATE[element_reading(b, chrom, s, t, readers)] for e, chrom, s, t in elements}
+        for b, cid in cells
+    }
+
+
+def peak_source(biosample: str, chrom: str, results_dir: Path = RESULTS_DIR) -> str:
+    """The ENCODE accession and path of the narrowPeak file a reading came from, from its header line."""
+    from genomeos.genome import reader as rd
+
+    path = Path(results_dir) / rd.peaks_path(biosample, chrom).name
+    if not path.exists():
+        return f"no narrowPeak file for {biosample} on {chrom} ({path.as_posix()})"
+    with gzip.open(path, "rt") as fh:
+        first = fh.readline().strip()
+    acc = first.lstrip("# ").split(" ", 1)[0] if first.startswith("#") else "accession not recorded"
+    return f"ENCODE DNase-seq narrowPeak {acc} (GRCh38, released), {path.as_posix()}"
+
+
+def reader_layer_lines(
+    states: dict[str, dict[str, str]], sources: dict[str, str], terms: dict[str, str] | None = None
+) -> list[str]:
+    """The `cell_type` and `reader` blocks of one gated program, with a comment line of counts per cell."""
+    from genomeos.ir import READER_STATES
+
+    terms = terms or {}
+    lines = [
+        "",
+        f"# ---- the reader (BioLang v0.5): which of these elements {len(states)} cell types can read",
+        "# State by reader v1's own call on the element's interval, one ENCODE DNase-seq narrowPeak set per",
+        "# biosample: open where a narrowPeak overlaps it, closed where none does, unknown where the file",
+        "# covers nothing at the locus.",
+        *("# " + ln for ln in _wrap(_text(READER_CLOSED_MEANS) + ".")),
+        *("# " + ln for ln in _wrap(_text(READER_POISED_NOTE) + ".")),
+        *("# " + ln for ln in _wrap(_text(READER_NOT_FUNCTION) + ".")),
+    ]
+    for cid in states:
+        term = terms.get(cid, "")
+        lines.append(
+            f'cell_type {cid} {{ evidence: curated "ENCODE biosample {cid}'
+            + (f" {term}" if term else "")
+            + '" a cell type reader v1 read genome-wide }'
+        )
+    for cid, by_el in states.items():
+        counts = Counter(by_el.values())
+        lines.append(
+            f"# {cid}: "
+            + ", ".join(f"{st} {counts.get(st, 0)}" for st in READER_STATES)
+            + f" of {len(by_el)}"
+        )
+        lists = [
+            f"{st}: " + ", ".join(e for e, s in by_el.items() if s == st)
+            for st in READER_STATES
+            if counts.get(st)
+        ]
+        lines.append(
+            f"reader {cid} {{ "
+            + "; ".join(lists)
+            + f'; evidence: experimental "{_text(sources.get(cid, "source not recorded"))}" '
+            + "open, a narrowPeak overlaps the element, closed, none does, unknown, the file covers nothing"
+            + " at the locus }"
+        )
+    return lines
+
+
+def gate_rule_line(line: str, selection: str, cells: list[str]) -> str:
+    """One compiled rule line with `through: <its element>`, and under READER_CELLS a predicted rule's
+    `when` naming the reader cell types. A line that is not an activates/inhibits rule is returned as is.
+    """
+    if selection not in SELECTIONS:
+        raise ValueError(f"selection {selection!r} is not one of {SELECTIONS}")
+    m = _RULE_LINE.match(line)
+    if m is None:
+        return line
+    rid, action, gene, strength, when, rest = m.groups()
+    if "through:" in rest:
+        raise ValueError(f"{rid}: this rule already acts through an element; refusing to gate it twice")
+    if selection == SELECTION_READER_CELLS and 'evidence: predicted "' in rest:
+        when = f"when: cell_type = {'|'.join(cells)}; "
+    return f"rule {rid} {action} {gene} {{ {strength}{when}through: {rid}; {rest}"
+
+
+def gate_program(
+    text: str,
+    chrom: str,
+    results_dir: Path = RESULTS_DIR,
+    selection: str = SELECTION_READER_CELLS,
+    readers: Any = None,
+) -> tuple[str, dict[str, Any]]:
+    """A compiled program with the reader layer, and the counts it was written with.
+
+    Every `element` block is read for its locus and given one state per reader biosample; every
+    activates/inhibits rule line gains `through: <its source>` (a compiled rule's source is always its
+    own element); the `cell_type` and `reader` blocks are appended. Refuses a program that already has
+    a reader, a rule whose element is not a declared element, a rule line it could not gate, or a rule
+    count that moved.
+    """
+    import hashlib
+
+    from genomeos.attribution import context_evidence as ce
+
+    if selection not in SELECTIONS:
+        raise ValueError(f"selection {selection!r} is not one of {SELECTIONS}")
+    if re.search(r"^reader ", text, flags=re.M):
+        raise ValueError(f"{chrom}: the program already carries a reader; refusing to gate it twice")
+    lines = text.splitlines()
+    if not lines or not lines[0].startswith("module "):
+        raise ValueError(f"{chrom}: a compiled program opens with its module line")
+    readers = readers if readers is not None else ce.Readers(Path(results_dir))
+    cells = reader_cells()
+    ids = [cid for _, cid in cells]
+    elements = program_elements(text)
+    declared = {e for e, *_ in elements}
+    states = element_states(elements, readers, cells)
+    sources = {cid: peak_source(b, chrom, results_dir) for b, cid in cells}
+    out: list[str] = []
+    gated: Counter[str] = Counter()
+    for ln in lines:
+        new = gate_rule_line(ln, selection, ids)
+        if new is not ln:
+            rid = ln.split(" ", 2)[1]
+            if rid not in declared:
+                raise ValueError(f"{chrom}: rule {rid} acts through an element the program does not declare")
+            gated["predicted" if 'evidence: predicted "' in ln else "experimental"] += 1
+        out.append(new)
+    n_rules = sum(1 for ln in lines if ln.startswith("rule "))
+    if n_rules != sum(1 for ln in out if ln.startswith("rule ")) or sum(gated.values()) != n_rules:
+        raise ValueError(
+            f"{chrom}: {n_rules} rule lines but {sum(gated.values())} were gated; a rule left ungated"
+            " would run in every cell its `when` names, whatever the reader says"
+        )
+    base = hashlib.sha256(text.encode()).hexdigest()
+    selection_note = {
+        SELECTION_COMPILED_CELL: (
+            "Every rule keeps its compiled `when`, so the reader can hold a rule only in its compiled"
+            " cell, and in a compiled cell no reader describes, every rule is held (unknown)."
+        ),
+        SELECTION_READER_CELLS: (
+            "Every PREDICTED rule's `when` names the reader cell types instead of its compiled cell, which"
+            " stays in its evidence text, so the rule is offered in each reader cell and runs only where"
+            " that cell's reader states its element open; it runs in no other cell, its compiled one"
+            " included unless that is a reader cell, because no reader describes those. The header"
+            " paragraph about `when: cell_type` below describes the program this one was derived from,"
+            " not these rules. A measured rule keeps the cell its screen silenced in."
+        ),
+    }[selection]
+    header = [
+        out[0] + ".reader",
+        "",
+        f"# READER LAYER (BioLang v0.5), added by genomeos.attribution.compile.gate_program with selection"
+        f" `{selection}`",
+        f"# to the compiled program whose text has sha256 {base}.",
+        *("# " + ln for ln in _wrap(selection_note)),
+        "# Every activates/inhibits rule acts `through` its own element, and the `reader` blocks at the",
+        "# end say which elements each cell type can read. Only `open` runs a rule; closed and unknown",
+        "# hold it at strength 0 (docs/BIOLANG-v0.5-READER.md).",
+        *("# " + ln for ln in _wrap(_text(READER_NOT_FUNCTION) + ".")),
+    ]
+    terms = {ident(b): t for b, t in ce.READER_TERMS.items()}
+    text_out = "\n".join([*header, *out[1:], *reader_layer_lines(states, sources, terms)]) + "\n"
+    return text_out, {
+        "chrom": chrom,
+        "selection": selection,
+        "base_sha256": base,
+        "gated_sha256": hashlib.sha256(text_out.encode()).hexdigest(),
+        "elements": len(elements),
+        "rules_gated": dict(gated),
+        "states_by_cell": {cid: dict(Counter(s.values())) for cid, s in states.items()},
+        "sources": sources,
+    }
+
+
+def _wrap(s: str, width: int = 97) -> list[str]:
+    import textwrap
+
+    return textwrap.wrap(s, width=width, break_long_words=False)
+
+
 def write_program(
     chrom: str, out: Path | None = None, results_dir: Path = RESULTS_DIR, layer: Any = None
 ) -> Path:

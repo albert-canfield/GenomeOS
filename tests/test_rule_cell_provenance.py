@@ -294,8 +294,8 @@ def test_applies_reads_the_when_clause_and_not_the_mark() -> None:
 # --- P1: the compiler has exactly two sites that put a cell on a rule --------------------------------
 
 
-@committed(COMPILER)
-def test_the_compiler_emits_a_rule_line_from_exactly_two_sites() -> None:
+def _rule_line_sites() -> list[str]:
+    """The functions of the compiler that build a line beginning `rule ` (an f-string), by syntax tree."""
     tree = ast.parse(must_be_committed(COMPILER).read_text())
     sites = []
     for func in ast.walk(tree):
@@ -307,7 +307,52 @@ def test_the_compiler_emits_a_rule_line_from_exactly_two_sites() -> None:
             first = node.values[0]
             if isinstance(first, ast.Constant) and str(first.value).startswith("rule "):
                 sites.append(func.name)
+    return sorted(sites)
+
+
+# SUPERSEDED 2026-10-10 by lane-readercompile (M2b, the reader construct's application half), and kept
+# rather than edited: `compile.gate_rule_line` is a THIRD function that writes a `rule` line. It emits
+# no new rule; it rewrites a compiled rule line for the reader layer (BioLang v0.5), adding `through:`
+# and, under `compile.SELECTION_READER_CELLS`, replacing a PREDICTED rule's argmax cell with the
+# thirteen reader cell types (a measured rule keeps the cell its screen silenced in). So P1's "no third
+# route puts a cell on a compiled rule" is false of the compiler from that commit, for gated programs.
+# No tracked program is gated, so the population this file counts did not move. `strict=True` so the
+# suite reds if the third site is removed and this pin would pass on a stale figure. Replaced by
+# `test_the_compiler_emits_a_rule_line_from_two_sites_and_rewrites_one_in_the_reader_layer`.
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "superseded 2026-10-10: compile.gate_rule_line (lane-readercompile, M2b) rewrites compiled rule "
+        "lines for the reader layer, a third site. Replaced by "
+        "test_the_compiler_emits_a_rule_line_from_two_sites_and_rewrites_one_in_the_reader_layer."
+    ),
+)
+@committed(COMPILER)
+def test_the_compiler_emits_a_rule_line_from_exactly_two_sites() -> None:
+    sites = _rule_line_sites()
     assert sorted(sites) == ["_measured_blocks", "compile_chromosome"], sites
+
+
+@committed(COMPILER)
+def test_the_compiler_emits_a_rule_line_from_two_sites_and_rewrites_one_in_the_reader_layer() -> None:
+    """Supersedes the test above. The two EMITTING sites are unchanged; the third rewrites a line those
+    two wrote, and the cell it can put on a rule is the line's own or the reader cell types, nothing
+    else: shown on both selections, and on a measured rule, which keeps its screened cell under both."""
+    from genomeos.attribution import compile as compiler
+
+    assert _rule_line_sites() == ["_measured_blocks", "compile_chromosome", "gate_rule_line"]
+    cells = [cid for _, cid in compiler.reader_cells()]
+    predicted = 'rule E activates G { strength: 0.1; when: cell_type = placenta; evidence: predicted "x" }'
+    measured = (
+        'rule E_measured activates G { strength: 0.1; when: cell_type = K562; evidence: experimental "y" }'
+    )
+    keep = compiler.gate_rule_line(predicted, compiler.SELECTION_COMPILED_CELL, cells)
+    assert "when: cell_type = placenta; through: E; " in keep
+    moved = compiler.gate_rule_line(predicted, compiler.SELECTION_READER_CELLS, cells)
+    assert f"when: cell_type = {'|'.join(cells)}; through: E; " in moved
+    for selection in compiler.SELECTIONS:
+        out = compiler.gate_rule_line(measured, selection, cells)
+        assert "when: cell_type = K562; through: E_measured; " in out
 
 
 def test_the_injected_values_ARE_the_application_objects_and_the_engine_holds_no_copy() -> None:
