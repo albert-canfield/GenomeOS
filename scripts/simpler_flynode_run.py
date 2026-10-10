@@ -295,6 +295,7 @@ def register() -> None:
             (str(sf.SUPP), "Table S2 and Table S4 only (ATAC cluster labels and marker calls)"),
             (str(sf.PEAKS), "the peak set"),
             (str(sf.GFF3), "gene and transcript positions and strands, and arm lengths"),
+            (str(sf.RNA), "hashed only, against simpler_fly's registered sha256; no value is read here"),
         ],
         PARAMETERS,
         EXCLUSIONS,
