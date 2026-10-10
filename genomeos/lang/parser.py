@@ -54,6 +54,7 @@ from pathlib import Path
 
 from genomeos.coords import Locus
 from genomeos.ir import (
+    ALLOCATION_POLICIES,
     COST_UNITS,
     DECISION_ACTIONS,
     MOLAR_UNITS,
@@ -1143,10 +1144,23 @@ def _compile_block(b: Block, module: Module) -> None:
         if not al.pool:
             raise BioLangError(f"line {b.line}: an allocation must name the pool it divides")
         al.policy = p.get("policy", "proportional").strip()
-        if al.policy not in REGIME_ALLOCATIONS:
+        if al.policy not in ALLOCATION_POLICIES:
             raise BioLangError(
                 f"line {b.line}: allocation policy {al.policy!r}:"
-                f" expected one of {', '.join(REGIME_ALLOCATIONS)}"
+                f" expected one of {', '.join(ALLOCATION_POLICIES)}"
+            )
+        if "half_saturation" in p:
+            if al.policy != "saturable":
+                raise BioLangError(
+                    f"line {b.line}: half_saturation is read only by policy saturable, and policy"
+                    f" {al.policy} would ignore it"
+                )
+            al.attrs["half_saturation"] = _float(p["half_saturation"], "half_saturation", b.line)
+        k = al.attrs.get("half_saturation")
+        if al.policy == "saturable" and not (isinstance(k, float) and math.isfinite(k) and k > 0):
+            raise BioLangError(
+                f"line {b.line}: policy saturable needs a finite half_saturation above 0 (the"
+                " demand at which one demander is served half of what it asks)"
             )
         al.order = _list(p.get("order", ""))
         if al.policy == "priority" and not al.order:

@@ -348,11 +348,16 @@ BLOCKS: dict[str, dict] = {
         "props": {
             "pool": ("Id", "the pool this policy divides; required"),
             "policy": (
-                "proportional | priority | competitive | optimise",
+                "proportional | priority | competitive | saturable | optimise",
                 "the scientific claim, named in the program and never hidden in the engine",
             ),
             "order": ("Id, Id", "priority: the order demands are served in"),
             "objective": ("text", "optimise: the declared objective; always a modelling device"),
+            "half_saturation": (
+                "number",
+                "saturable, required and read by no other policy: the demand, in the pool's units,"
+                " at which one demander is served half of what it asks",
+            ),
         },
     },
     "regime": {

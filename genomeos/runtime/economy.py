@@ -31,6 +31,7 @@ be credited to something else.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -43,6 +44,16 @@ PER_LENGTH = ("nucleotide", "residue")
 
 class EconomyError(ValueError):
     """A program whose costs cannot be charged as written."""
+
+
+def _half_saturation(al: Allocation | None) -> float | None:
+    """A `saturable` allocation's K (`attrs["half_saturation"]`) when it is a finite number above 0,
+    else None, to be refused."""
+    k = (al.attrs if al is not None else {}).get("half_saturation", UNKNOWN)
+    if isinstance(k, bool) or not isinstance(k, (int, float)):
+        return None
+    k = float(k)
+    return k if math.isfinite(k) and k > 0 else None
 
 
 @dataclass
@@ -127,6 +138,12 @@ class Economy:
                         f"{entity} charges {c.pool} per {c.per} and no length is known for it:"
                         " charging zero would make a long molecule as cheap as a short one"
                     )
+        for pool, al in sorted(self.allocations.items()):
+            if al.policy == "saturable" and _half_saturation(al) is None:
+                problems.append(
+                    f"{pool} is allocated by `saturable` with no finite half_saturation above 0:"
+                    " the runtime does not choose K"
+                )
         for pool in sorted(self.capacity):
             if pool not in self.pools:
                 problems.append(f"a capacity is given for {pool}, which no pool declares")
@@ -186,6 +203,8 @@ class Economy:
         self, pool: str, policy: str, capacity: float, wanted: float, work: dict[str, float]
     ) -> dict[str, float]:
         demanders = {d.entity: d.demand for d in self.draws(work) if d.pool == pool and d.demand > 0}
+        if policy == "saturable":
+            return self._saturable(pool, capacity, demanders)
         if wanted <= capacity or not demanders:
             return dict.fromkeys(demanders, 1.0)
         if policy == "proportional":
@@ -212,6 +231,30 @@ class Economy:
                 " does not solve an objective, so the program must state a policy that can be run"
             )
         raise EconomyError(f"pool {pool}: unknown allocation policy {policy!r}")
+
+    def _saturable(self, pool: str, capacity: float, demanders: dict[str, float]) -> dict[str, float]:
+        """Per-demander saturation (v0.4 §5.3, added 2026-10-10 by lane-saturable).
+
+        Each demander is served `d * K / (K + d)` of its own demand `d`: its factor `K / (K + d)`
+        falls in ITS OWN demand, which is the gene index the three policies above lack. Then the pool
+        is enforced on what is served: if the served total exceeds the capacity, every served amount
+        is cut by the same `capacity / served`, so the pool is never overdrawn.
+
+        Two consequences, stated because they differ from the other policies. A demander is cut by
+        its own saturation even when the pool is not short; that is the claim this policy makes, and
+        it is not a burden, because no other demander's demand enters its factor until the pool is
+        short. And K is the program's number, never the engine's: a missing or non-positive K is
+        refused rather than defaulted.
+        """
+        k = _half_saturation(self.allocations.get(pool))
+        if k is None:
+            raise EconomyError(
+                f"pool {pool} is allocated by `saturable` with no finite half_saturation above 0:"
+                " the runtime does not choose K, so the program must state it"
+            )
+        served = sum(d * k / (k + d) for d in demanders.values())
+        cut = capacity / served if served > capacity else 1.0
+        return {e: (k / (k + d)) * cut for e, d in demanders.items()}
 
     def report(self, work: dict[str, float]) -> dict[str, Any]:
         """Demand, capacity and the resulting factor per pool — what a burden claim has to show."""

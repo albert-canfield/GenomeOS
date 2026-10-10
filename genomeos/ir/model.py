@@ -592,6 +592,13 @@ class Allocation(Entity):
     Any rank improvement credited to allocation would be credited to something else — length cost,
     half-life, translation efficiency — so the gate reads absolute error in log copy numbers and total
     protein per cell, not rank.
+
+    *(2026-10-10, lane-saturable.)* `saturable` is the one policy whose share carries the demander:
+    each demander is served `d * K / (K + d)` of its own demand `d`, so its factor `K / (K + d)` falls
+    in its own demand and not in the pool's total, and the pool's capacity is then enforced on what
+    is served. K is the block's `half_saturation`, in the pool's demand units, kept in
+    `attrs["half_saturation"]` as a gene's `max` is kept in `attrs["max_rate"]`; only `saturable`
+    reads it, and with no K the parser and the runtime refuse rather than choose one.
     """
 
     pool: str = ""
@@ -652,6 +659,8 @@ class Regime:
 REGIME_TREATMENTS = ("continuous", "stochastic", "auto")
 REGIME_UPDATES = ("continuous", "synchronous", "asynchronous", "event")
 REGIME_ALLOCATIONS = ("competitive", "proportional", "priority", "optimise")
+#: an `allocation` block may also name `saturable`; a regime's default may not, since it carries no K
+ALLOCATION_POLICIES = (*REGIME_ALLOCATIONS, "saturable")
 REGIME_FATES = ("first", "last")
 REGIME_RECHECKS = ("crossings", "none")
 
@@ -1394,6 +1403,7 @@ __all__ = [
     "READER_UNKNOWN",
     "STRENGTH_UNKNOWN_WHY",
     "REGIME_ALLOCATIONS",
+    "ALLOCATION_POLICIES",
     "REGIME_FATES",
     "REGIME_RECHECKS",
     "REGIME_TREATMENTS",

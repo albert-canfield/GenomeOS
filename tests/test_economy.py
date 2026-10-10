@@ -117,3 +117,82 @@ def test_the_reduction_disappears_when_the_pool_is_not_the_constraint() -> None:
 
     assert huge.scale({"A": 10_000.0, "B": 10.0}) == {"A": 1.0, "B": 1.0}
     assert huge.report({"A": 10_000.0, "B": 10.0})["any_constrained"] is False
+
+
+# ---- `saturable`: the per-demander policy (2026-10-10, lane-saturable) ------------------------------
+
+
+def sat(size: float = 1e12, k: float | object = 1_000.0) -> Economy:
+    return econ(size=size, policy="saturable", attrs={"half_saturation": k})
+
+
+def test_saturable_gives_each_demander_its_own_factor_falling_in_its_own_demand() -> None:
+    """The gene index the other three policies lack: K / (K + d) per demander."""
+    got = sat().scale({"A": 1_500.0, "B": 500.0})
+
+    assert got["A"] == pytest.approx(1_000.0 / 2_500.0)
+    assert got["B"] == pytest.approx(1_000.0 / 1_500.0)
+    assert got["A"] < got["B"], "the larger demand is cut more"
+
+
+def test_saturable_is_not_a_burden_while_the_pool_is_not_short() -> None:
+    """Gate (a)'s falsifier, kept: with the pool not the constraint, another demander's demand never
+    enters B's factor. B is cut by its own saturation only, and that cut does not move."""
+    e = sat(size=1e12)
+    b = [e.scale({"A": burden, "B": 10.0})["B"] for burden in (10.0, 1_000.0, 1e6)]
+
+    assert b[0] == b[1] == b[2] == pytest.approx(1_000.0 / 1_010.0)
+
+
+def test_saturable_enforces_the_pool_on_what_is_served_and_then_burdens() -> None:
+    """When the served total exceeds the capacity, every served amount is cut by one factor, so the
+    pool is used exactly; raising A then lowers B, which is the documented burden direction."""
+    e = sat(size=500.0)
+    work = {"A": 1_500.0, "B": 500.0}
+    got = e.scale(work)
+    served = sum(work[x] * got[x] for x in work)
+
+    assert served == pytest.approx(500.0)
+    assert got["A"] < got["B"]
+    b = [e.scale({"A": burden, "B": 500.0})["B"] for burden in (500.0, 5_000.0, 50_000.0)]
+    assert b[0] > b[1] > b[2]
+
+
+@pytest.mark.parametrize("k", [UNKNOWN, 0.0, -5.0, float("nan"), float("inf")])
+def test_saturable_without_a_usable_k_is_refused_not_defaulted(k: object) -> None:
+    e = sat(k=k)
+    with pytest.raises(EconomyError, match="half_saturation"):
+        e.check()
+    with pytest.raises(EconomyError, match="does not choose K"):
+        e.scale({"A": 1.0, "B": 1.0})
+
+
+def test_the_three_existing_policies_are_unchanged_by_saturable() -> None:
+    """Pinned values, computed by the policies as they stood at 5c620d3, before saturable existed."""
+    work = {"A": 1_500.0, "B": 500.0}
+    assert econ().scale(work) == {"A": 0.5, "B": 0.5}
+    assert econ(policy="competitive").scale(work) == {"A": 1_000.0 / 3_000.0, "B": 1_000.0 / 3_000.0}
+    assert econ(policy="priority", order=["B"]).scale(work) == {"A": 500.0 / 1_500.0, "B": 1.0}
+    assert econ(size=1e12, policy="competitive").scale(work) == {"A": 1.0, "B": 1.0}
+
+
+def test_a_program_declares_saturable_with_its_k_and_the_parser_refuses_the_rest() -> None:
+    from genomeos.lang import parse
+    from genomeos.lang.parser import BioLangError
+
+    head = "module t\n\ncompartment Cytosol { volume: 1.0; translation: yes }\n"
+    head += "pool Ribosomes { location: Cytosol; size: 5e6 }\n"
+    m = parse(head + "allocation share { pool: Ribosomes; policy: saturable; half_saturation: 40 }")
+    al = m.entities["share"]
+    assert (al.policy, al.attrs["half_saturation"]) == ("saturable", 40.0)
+    Economy.from_module(m)  # runs: K is stated
+
+    for body, why in (
+        ("allocation s { pool: Ribosomes; policy: saturable }", "needs a finite half_saturation"),
+        ("allocation s { pool: Ribosomes; policy: saturable; half_saturation: 0 }", "above 0"),
+        ("allocation s { pool: Ribosomes; policy: saturable; half_saturation: unknown }", "expects a number"),
+        ("allocation s { pool: Ribosomes; policy: proportional; half_saturation: 40 }", "read only by"),
+        ("regime r { allocation: saturable }", "regime allocation must be one of"),
+    ):
+        with pytest.raises(BioLangError, match=why):
+            parse(head + body)
