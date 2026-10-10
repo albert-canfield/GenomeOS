@@ -467,7 +467,11 @@ History: ROADMAP-HISTORY.md §3 C, lines 956–1122.
   says a count above 60 to 100 is "representation differences and residual no-calls", which DATA.md
   records as wrong after normalisation.
 - **Next.** 1. A population distribution for the polygenic scores (§5, M6). 2. Correct the
-  `trio()` note to what the phasing and the read fractions found. 3. The tissue's own transcript in
+  `trio()` note to what the phasing and the read fractions found: **done 2026-10-10** (lane-trionote, `d62820a`):
+  the note now carries the phasing (1,382 of 1,411 assessable candidates on one parental chromosome, 703 paternal to
+  679 maternal) and the read fractions (median 0.442 over 1,375 against 0.495 for inherited heterozygous SNVs), says
+  "neither mostly representation artefacts nor mostly parent-side misses", and gives at most about 208 germline,
+  exploratory; every number is pinned to its result file by `tests/test_trio_note.py`. 3. The tissue's own transcript in
   the trace: **done 2026-10-10** (lane-twintrace; `26e9ef7` registered, `4a3566b` result, `bf26d7e` CLI and API):
   `trace_gene_in_tissue` and `genomeos flow --tissue` follow the tissue's GTEx dominant isoform (at least 1 TPM, the next
   below 0.9 of it) or answer UNKNOWN with a reason, never canonical in its place; over 299 coding SNVs of HG002 in 46
