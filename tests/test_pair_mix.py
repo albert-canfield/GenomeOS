@@ -3,7 +3,10 @@
 
 from __future__ import annotations
 
+import importlib.util
+import json
 import re
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -293,3 +296,48 @@ def test_the_null_calibrated_is_the_one_section_23_read() -> None:
     assert pm.MIX_SEED not in {
         pn.P_SEED, pn.CAL1_SEED, pn.CAL2_SEED, pn.HALVES_SEED, sn.A_SEED, sn.B_SEED, sn.B_SIM_SEED,
     }  # fmt: skip
+
+
+# --------------------------------------------------------------------------- the registration
+
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRATION = Path("data/results/pair_mix_registration.json")
+
+
+def register_module():
+    spec = importlib.util.spec_from_file_location(
+        "pair_mix_register", ROOT / "scripts" / "pair_mix_register.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_registration_as_written_holds_no_figure_and_the_module_s_words() -> None:
+    import tracked_paths as tp
+
+    tp.must_be_present(REGISTRATION, was="the registration is not written yet")
+    written = json.loads(REGISTRATION.read_text())
+    assert written["result"] == "pair_mix_registration"
+    reg = register_module()
+    hits = [
+        k
+        for k in reg.forbidden_at_any_depth(written)
+        if not k.startswith(
+            ("result_manifest.", "mixed_calibration.outcome_wordings", "mixed_calibration.decision_rule")
+        )
+    ]
+    assert hits == []
+    # the run fills these words and no others; the module that fills them must hold the same
+    mix = written["mixed_calibration"]
+    assert mix["outcome_wordings"] == pm.MIX_OUTCOMES
+    assert mix["pooled_sentence"] == pm.POOLED_SENTENCE
+    assert mix["decision_rule"] == pm.MIX_RULE
+    assert set(mix["what_happens_to_the_154"]) == set(pm.MIX_OUTCOMES)
+    assert mix["parameters"]["MODEL"] == pm.MODEL and mix["parameters"]["MIX_SEED"] == pm.MIX_SEED
+    assert set(written["frozen_code"]["blobs"]) == set(reg.FROZEN)
+    assert written["null_parameters"]["equal_to_section_23_registration"]
+    assert written["tree_as_built"]["tips"] == 355 and written["tree_as_built"]["grafen_diagonal_is_one"]
+    inputs = {Path(e["path"]).name for e in written["result_manifest"]["inputs"]}
+    assert {"pair_null_result.json", "pair_null_registration.json", "profiling_genome_wide.json"} <= inputs

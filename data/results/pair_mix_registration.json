@@ -1,0 +1,293 @@
+{
+  "result": "pair_mix_registration",
+  "date": "2026-10-10",
+  "lane": "lane-pairmix",
+  "item": "area J, the mixed calibration of the pair null: the step GRAMMAR-BY-COMPARISON \u00a723 named before its 154 pairs are read further",
+  "registered_in_its_own_commit": "Written after the code was frozen in a commit and before any mixed pair was drawn or computed. The run reads once, against this file, in the order of the decision rule, and stops where rule 1 fails.",
+  "question": "Does the null \u00a723 read its 154 pairs under find a real library alike to random gene sets of its partner's origin-stratum make-up no more often than its two ceilings allow, when one side carries a library-sized deviation and the other a random one?",
+  "readings_checked": {
+    "section_23": {
+      "section": "GRAMMAR-BY-COMPARISON \u00a723 (2026-10-10), the tip-noise pair null",
+      "result_file": "data/results/pair_null_result.json (outcome some_survive; library_pairs, 860 tested; figures.n_surv 154)",
+      "registered_reading_quoted": [
+        "154 of 860 testable library pairs are more alike than age and shared ancestry predict under Pagel's lambda on binomially scaled deviations along the Ensembl Compara species tree (Grafen branch lengths; lambda, rate and root fitted by REML for each side; Benjamini-Hochberg q at or below 0.05): 6 of the 35 pairs \u00a714 called more alike than age, and 148 that \u00a714 did not call. The other 29 of \u00a714's 35 do not survive this null."
+      ],
+      "caveat_quoted": [
+        "The calibration used random gene sets, whose deviations are small (library sides fit lambda 0.84\u20130.90, random sides 0.65\u20130.77), so the null was not checked on two large library deviations; a mixed calibration, each library against random sets of its partner's make-up, comes before the 154 are read further."
+      ]
+    },
+    "what_is_already_known": [
+      "\u00a723's read: every library pair's p and q under the null, its 154 pairs at q at or below 0.05, and the quartiles of the library sides' fitted lambda (0.844, 0.876, 0.898). A library side's fit depends on its own deviation only, so the library sides of the mixed pairs fit exactly these values; the random sides' fits are not known",
+      "before this registration, three library pairs (testable pairs 1, 401 and 860, all published in \u00a723's result) were recomputed under the null to check that the computation is deterministic: each count of null draws at or above r and each fitted lambda equalled \u00a723's stored value. The stratum pools were read for their sizes (the Homo, Hominoidea and Haplorrhini strata hold one gene each, Primates three), which is why a draw can fall short. No mixed pair has been computed, and no random gene set of the mixed draw has been drawn"
+    ],
+    "what_this_does_not_check": "a pair of two real libraries whose deviations are independent cannot be built from the data, because whether two real libraries' deviations are independent is the question \u00a723 asked; the mixed pairs check the null with one library-sized deviation and one random one, which is the case \u00a723's random pairs did not reach"
+  },
+  "document": {
+    "path": "docs/GRAMMAR-BY-COMPARISON.md",
+    "blob_at_registration": "1fbcc0fb20dcb8afcddf2bcf227f68bbdded7aaf"
+  },
+  "mixed_calibration": {
+    "null_calibrated": {
+      "model": "lambda_binomial",
+      "name": "Pagel's lambda on binomially scaled deviations",
+      "what": "the null \u00a723 selected and read the 154 under: Pagel's lambda along \u00a722's tree on each side's deviation from its age expectation, scaled by the binomial sd of the side's origin-stratum make-up, lambda, rate and root fitted by REML per side; the same banks (P_SEED, P_SIMS draws, side one on bank one, side two on bank two) and the same code (pair_null.pair_test)"
+    },
+    "mixed_pairs": {
+      "what": "for every testable library pair (a, b), with the exclusive members \u00a714 tested: (1) first_library_real, a's exclusive members on side one against a random gene set on side two drawn to the origin-stratum make-up of b's exclusive members; (2) second_library_real, a random gene set on side one drawn to the make-up of a's exclusive members against b's exclusive members on side two. Each library keeps the side and bank it had in \u00a723's read, and a random set's age expectation is its partner library's",
+      "draw": "seed 20261017, one numpy generator, testable pairs in \u00a714's order; per pair the random set beside the first library is drawn first, then the one beside the second. Each is \u00a714's draw (per stratum, strata in sorted order, without replacement) from each stratum's genes LESS the library side's members, so the two sides share no gene, as a library pair's exclusive sides share none; where the reduced pool is smaller than the make-up asks, the draw takes what is left and the shortfall is recorded",
+      "why_one_draw_per_mixed_pair": "as \u00a723's calibration drew one random pair per testable pair: the calibration asks how often the null calls a mixed pair alike across 860 pairs, not whether any one pair is",
+      "count": "two directions, each as large as the number of testable pairs (860 when \u00a714's pairs reproduce)"
+    },
+    "statistic": "\u00a714's own, as \u00a723 tested it: Pearson r over the 355 species between the two sides' residual profiles, one-sided, more alike; p = (null draws with r at or above the observed + 1) / (draws + 1)",
+    "ceilings": {
+      "rule": "in EACH direction, at most 10% of the mixed pairs have p at or below 0.05 AND at most 1% have a Benjamini-Hochberg q, over that direction's mixed pairs, at or below 0.05",
+      "why_these": "\u00a723's two ceilings, unchanged, so the null is held to the bar it passed on random pairs; each direction is a set of 860 as each of \u00a723's two calibration sets was, and both must pass as both of \u00a723's had to",
+      "pooled": "the 1,720 mixed pairs pooled, with Benjamini-Hochberg over all of them, are reported and decide nothing"
+    },
+    "reproduction_gate": "before any mixed pair is drawn: \u00a714's r_exclusive for every testable pair (pair_null.reproduce, tolerance 0.0001), and every library pair's count of null draws at or above its r under the null, which must equal \u00a723's stored count exactly (the computation is deterministic), and the pairs at q at or below 0.05 recomputed, which must be \u00a723's",
+    "descriptive_only": "the pooled figure, the fitted lambda (n, min, quartiles, max) of library and random sides of the mixed pairs, the shortfall of the random draws, each library's count of its mixed pairs at p at or below 0.05, and how many of \u00a723's 154 have one or both mixed pairs at p at or below 0.05 (one random draw each: too noisy to judge any one pair); none decides",
+    "parameters": {
+      "MODEL": "lambda_binomial",
+      "MIX_SEED": 20261017,
+      "DIRECTIONS": [
+        "first_library_real",
+        "second_library_real"
+      ],
+      "P_SIMS": 50000,
+      "P_SEED": 20261015,
+      "LAMBDA_GRID": 1001,
+      "SCALE_EPS": 1e-12,
+      "P_ALPHA": 0.05,
+      "Q_ALPHA": 0.05,
+      "CAL_MAX_SHARE": 0.1,
+      "CAL_MAX_Q_SHARE": 0.01,
+      "MIN_MEMBERS": 8
+    },
+    "decision_rule": {
+      "1_reproduce": "recompute \u00a714's r_exclusive for every testable pair (pair_null.reproduce) and every library pair's p under the null \u00a723 read (Pagel's lambda on binomially scaled deviations, \u00a723's banks and fits); if the testable pairs are not \u00a714's, any r_exclusive differs from the stored one by more than 0.0001, the pairs with a p are not \u00a723's, any pair's count of null draws at or above its r differs from the count \u00a723 stored, or the set of pairs with a Benjamini-Hochberg q at or below 0.05 is not \u00a723's, select not_reproduced and compute no mixed pair",
+      "2_mixed": "else draw the mixed pairs (MIX_SEED, in testable-pair order; per pair, first the random set beside the first library, drawn to the make-up of the second library's exclusive members, then the random set beside the second library, drawn to the make-up of the first's; each from the stratum pools less the library side's members) and test each under the same null with each library on the side it had in \u00a723's read; the first-library-real and second-library-real mixed pairs are two sets, each as large as the number of testable pairs",
+      "3_verdict": "select calibrated when, in EACH direction, at most 10% of the mixed pairs have p at or below 0.05 AND at most 1% have a Benjamini-Hochberg q, computed over that direction's mixed pairs, at or below 0.05; otherwise select not_calibrated",
+      "consequence": "calibrated: \u00a723's 154 pairs stand as read and no re-reading is needed; not_calibrated: \u00a723's 154 pairs are withdrawn to no reading, together with \u00a723's finding about \u00a714's 35, and \u00a714's 35 stand as written with their caveat; not_reproduced: nothing is decided about \u00a723, whose reading stands as registered with its caveat",
+      "ties": "'at or below' and 'at most' include equality",
+      "always": "the pooled sentence is appended to calibrated and not_calibrated; it, every lambda figure, the shortfall of the random draws and every per-library or per-pair figure are descriptive and decide nothing"
+    },
+    "outcome_wordings": {
+      "not_reproduced": "No reading: the null \u00a723 read was not reproduced, so a calibration computed here would not be a calibration of that null. {n_mismatch_14} of {n_tested} testable library pairs differ from \u00a714's stored r_exclusive by more than 0.0001 (the testable pairs being \u00a714's: {same_pairs_14}), {n_mismatch_read} have a count of null draws at or above their r other than the count \u00a723 stored (the pairs being \u00a723's: {same_pairs_23}), and {n_23_recomputed} pairs, against \u00a723's {n_23}, have a Benjamini-Hochberg q at or below 0.05 (the same pairs: {same_survivors}). No mixed pair was computed. \u00a723's reading stands as registered, with its caveat that the null was not checked when a side carries a library-sized deviation.",
+      "calibrated": "The mixed calibration passes, and \u00a723's reading stands as read: its {n_23} of {n_tested} library pairs ({k_23_14} of \u00a714's {n_14} among them) need no re-reading. Each testable library pair's two libraries were set, one at a time, against a random gene set drawn to the partner's origin-stratum make-up and sharing no gene with the library, so one side of each mixed pair carries a real library's deviation and the other a random one. Under Pagel's lambda on binomially scaled deviations, the null \u00a723 read, {a_hits} of {n_a} ({a_share}) mixed pairs with the first library real and {b_hits} of {n_b} ({b_share}) with the second library real have p at or below 0.05, and {a_q} and {b_q} have a Benjamini-Hochberg q at or below 0.05, within the registered ceilings of 10% and 1% in each direction. The library sides fit lambda {lam_lib} (quartiles) and the random sides of the mixed pairs {lam_rand}. This checks the null and reads no pair anew: co-occurrence across species is not a dependency, and no library pair is called a dependency.",
+      "not_calibrated": "No reading: the mixed calibration fails, and \u00a723's {n_23} of {n_tested} library pairs are withdrawn to no reading. Each testable library pair's two libraries were set, one at a time, against a random gene set drawn to the partner's origin-stratum make-up and sharing no gene with the library, so one side of each mixed pair carries a real library's deviation and the other a random one. Under Pagel's lambda on binomially scaled deviations, the null \u00a723 read, {a_hits} of {n_a} ({a_share}) mixed pairs with the first library real and {b_hits} of {n_b} ({b_share}) with the second library real have p at or below 0.05, and {a_q} and {b_q} have a Benjamini-Hochberg q at or below 0.05, against registered ceilings of 10% and 1% in each direction: the null finds a real library alike to random genes more often than it should when one side carries a library-sized deviation, so a library pair's p under it is not evidence. Withdrawn with the {n_23} is \u00a723's finding that {lost_23_14} of \u00a714's {n_14} do not survive this null; \u00a714's {n_14} of {n_tested} pairs stand as written, with their caveat. The library sides fit lambda {lam_lib} (quartiles) and the random sides of the mixed pairs {lam_rand}. No library pair is called a dependency."
+    },
+    "pooled_sentence": " Pooled over the {n_pool} mixed pairs, {pool_hits} ({pool_share}) have p at or below 0.05 and {pool_q} have a Benjamini-Hochberg q, over all of them, at or below 0.05; the pooled figure decides nothing.",
+    "what_happens_to_the_154": {
+      "calibrated": "\u00a723's 154 of 860 stand as read; no re-reading is needed, and none is made",
+      "not_calibrated": "\u00a723's 154 of 860 are withdrawn to no reading, with \u00a723's finding that 29 of \u00a714's 35 do not survive the null; \u00a714's 35 stand as written, with their caveat",
+      "not_reproduced": "nothing is decided about \u00a723; its reading stands as registered, with its caveat, and the mixed calibration remains to be done"
+    }
+  },
+  "null_parameters": {
+    "equal_to_section_23_registration": true,
+    "checked": {
+      "P_SIMS": 50000,
+      "P_SEED": 20261015,
+      "LAMBDA_GRID": 1001,
+      "SCALE_EPS": 1e-12,
+      "P_ALPHA": 0.05,
+      "Q_ALPHA": 0.05,
+      "CAL_MAX_SHARE": 0.1,
+      "CAL_MAX_Q_SHARE": 0.01
+    }
+  },
+  "tree_as_built": {
+    "tips": 355,
+    "nodes": 588,
+    "topology_sha256": "f050023e292f8c597884716dd92204ee0c710e98fb612df95e0f1a1db2c04ec2",
+    "grafen_diagonal_is_one": true,
+    "same_as": "pair_null_registration.json tree_as_built"
+  },
+  "gates": [
+    "this file committed and unmodified",
+    "the files in frozen_code at the blobs pinned there",
+    "the two tree files at the sha256 species_null pins, and the pruned topology at the digest in tree_as_built",
+    "every input result at the sha256 recorded in result_manifest.inputs",
+    "rule 1 (reproduction of \u00a714's statistic and \u00a723's read) before any mixed pair is drawn"
+  ],
+  "frozen_code": {
+    "head": "e52fd21984e7155547f58fe5058f8b6693839922",
+    "blobs": {
+      "genomeos/knowledge/pair_mix.py": "e234b3181c823ff8d61f67e4f76f8ee1daf36ff5",
+      "genomeos/knowledge/pair_null.py": "929b53f526a6f92b7579569033ca31f030d4c547",
+      "genomeos/knowledge/species_null.py": "4db342b9fd40c4d42bc723c29172843c5938e324",
+      "scripts/pair_mix_run.py": "30c1ce4343534cfa818155198f0b7b71cb074229"
+    },
+    "last_commit": {
+      "genomeos/knowledge/pair_mix.py": "e52fd21984e7155547f58fe5058f8b6693839922",
+      "genomeos/knowledge/pair_null.py": "5b614d0b5dc69a62c5f02d27465f95625adfa61b",
+      "genomeos/knowledge/species_null.py": "5a87e2f45a1fb71935171349b5e2224f8f3faca6",
+      "scripts/pair_mix_run.py": "e52fd21984e7155547f58fe5058f8b6693839922"
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Ensembl Genomes pan-taxonomic Compara species tree",
+        "version": "release 63, https://ftp.ensemblgenomes.ebi.ac.uk/pub/pan_ensembl/release-63/compara/species_trees/default_protein-trees_default.nh"
+      },
+      {
+        "accession": "Ensembl Compara vertebrate species tree",
+        "version": "release 116, https://ftp.ensembl.org/pub/release-116/compara/species_trees/default_protein-trees_default.nh"
+      },
+      {
+        "accession": "the project's area J results",
+        "version": "as committed, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/species_tree/pan_default_protein-trees_default.nh",
+        "sha256": "e3f0237f4360a09d01c2a754412563e135d00d45c2c3dedb3cc5f7f4496a63b7",
+        "bytes": 7280,
+        "partition": "the species tree, pan-taxonomic half"
+      },
+      {
+        "path": "data/knowledge/species_tree/vert_default_protein-trees_default.nh",
+        "sha256": "2033c3eb2a6ab20f530737ffc66babb8e5e39edbb396ec6d315960db65142e66",
+        "bytes": 6139,
+        "partition": "the species tree, vertebrate half"
+      },
+      {
+        "path": "data/results/origin_presence_genome_wide.json",
+        "sha256": "4f7b8f9649001540a2b281f3318ed7b4f9bc4dc135087d3274ea29c450d02a8b",
+        "bytes": 2094536,
+        "partition": "the presence matrix: one bit per gene per species"
+      },
+      {
+        "path": "data/results/origin_genome_wide.json",
+        "sha256": "ec3710a8a6a5dbb117a1e2b3ff0bf242e6323537946aa29af4a53c2a83dcb34a",
+        "bytes": 6398244,
+        "partition": "each gene's origin stratum, which the age expectation, the matched draws and the binomial scale read"
+      },
+      {
+        "path": "data/results/library_members.json",
+        "sha256": "410910040b2f1d07386787ca6fcb10fd79d00264815fed045550a45cf777b7c7",
+        "bytes": 643666,
+        "partition": "the computed membership of the libraries, as \u00a714, \u00a722 and \u00a723 read it"
+      },
+      {
+        "path": "data/results/profiling_genome_wide.json",
+        "sha256": "c2d90ce58b730a2695fc298e92cf86c880ce996ce3f5e08293c6539e35c13aad",
+        "bytes": 714065,
+        "partition": "\u00a714's stored pairs, read for the reproduction gate and for which 35 \u00a714 called; no figure of it is an input to the null"
+      },
+      {
+        "path": "data/results/pair_null_registration.json",
+        "sha256": "0b7974bde676ba95395ed0b6bc9aa252bdb200a2a602ef68cf8ecb523ad3f2f3",
+        "bytes": 26695,
+        "partition": "\u00a723's registration, read for the null's registered parameters, which the registration and the run check equal the code's"
+      },
+      {
+        "path": "data/results/pair_null_result.json",
+        "sha256": "a52fedf35841fcfb19d15405f55bc8f43bea0d61db8635b0dfd0671a5c495f57",
+        "bytes": 1341709,
+        "partition": "\u00a723's read: every library pair's stored count of null draws at or above its r and q, for the reproduction gate, and \u00a723's figures (154 survivors, 6 of \u00a714's 35, 29 lost) that the outcome wording names; no figure of it is an input to the null"
+      }
+    ],
+    "assembly": "n/a: species presence of orthologues and a species tree; no genomic coordinate",
+    "coordinates": "n/a: no interval is computed or read",
+    "parameters": {
+      "MODEL": "lambda_binomial",
+      "MIX_SEED": 20261017,
+      "DIRECTIONS": [
+        "first_library_real",
+        "second_library_real"
+      ],
+      "P_SIMS": 50000,
+      "P_SEED": 20261015,
+      "LAMBDA_GRID": 1001,
+      "SCALE_EPS": 1e-12,
+      "P_ALPHA": 0.05,
+      "Q_ALPHA": 0.05,
+      "CAL_MAX_SHARE": 0.1,
+      "CAL_MAX_Q_SHARE": 0.01,
+      "MIN_MEMBERS": 8
+    },
+    "exclusions": [
+      "every figure the mixed calibration would produce: none is computed by this writer",
+      "the species list is read from the presence matrix to build the tree; no profile is read, and the other results are hashed so the run can refuse inputs that moved"
+    ],
+    "partitions": "n/a: a registration written before the measurement; nothing is evaluated",
+    "code_cleanliness": {
+      "git_sha": "e52fd21984e7155547f58fe5058f8b6693839922",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/pair_mix_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pair_mix_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pair_mix_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/pair_mix.py",
+        "genomeos/knowledge/pair_null.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/species_null.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/pair_mix_register.py"
+      ],
+      "counting_path_count": 17,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "e52fd21984e7155547f58fe5058f8b6693839922",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/pair_mix_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "e52fd21984e7155547f58fe5058f8b6693839922",
+      "code_cleanliness_git_sha": "e52fd21984e7155547f58fe5058f8b6693839922",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record e52fd21"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 68,
+      "opens_under_data": 14,
+      "files_read": 8,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
