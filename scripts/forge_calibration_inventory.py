@@ -45,7 +45,10 @@ def result_manifest(reads: list[str], scripts: list[str]) -> dict[str, Any]:
         mf.files_entry("the organism programs the census parsed, with their imports", reads, partition=None)
     ]
     inputs += [
-        mf.input_entry(ROOT / s, partition=None, read_as="gate registration named by a program")
+        {
+            **mf.input_entry(ROOT / s, partition=None, read_as="gate registration named by a program"),
+            "path": s,
+        }
         for s in scripts
     ]
     return {
