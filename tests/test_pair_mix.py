@@ -341,3 +341,36 @@ def test_the_registration_as_written_holds_no_figure_and_the_module_s_words() ->
     assert written["tree_as_built"]["tips"] == 355 and written["tree_as_built"]["grafen_diagonal_is_one"]
     inputs = {Path(e["path"]).name for e in written["result_manifest"]["inputs"]}
     assert {"pair_null_result.json", "pair_null_registration.json", "profiling_genome_wide.json"} <= inputs
+
+
+RESULT = Path("data/results/pair_mix_result.json")
+
+
+def test_the_committed_reading_is_the_rule_applied_to_its_own_figures() -> None:
+    import hashlib
+
+    import tracked_paths as tp
+
+    tp.must_be_present(
+        RESULT,
+        REGISTRATION,
+        Path("data/results/profiling_genome_wide.json"),
+        Path("data/results/pair_null_result.json"),
+    )
+    out = json.loads(RESULT.read_text())
+    assert out["registration"]["registration_sha256"] == hashlib.sha256(REGISTRATION.read_bytes()).hexdigest()
+    stored_14 = json.loads(Path("data/results/profiling_genome_wide.json").read_text())["null"]
+    s23 = json.loads(Path("data/results/pair_null_result.json").read_text())
+    mix = out.get("mixed_calibration")
+    key, text, _ = pm.select_mix(
+        out["reproduction"]["section_14"], out["reproduction"]["section_23"], stored_14, s23["figures"], mix
+    )
+    assert (key, text) == (out["outcome"], out["reading"])
+    registered = json.loads(REGISTRATION.read_text())["mixed_calibration"]["what_happens_to_the_154"]
+    assert out["section_23_consequence_registered"] == registered[key]
+    if mix is not None:
+        # each direction's figures are the registered summary of its own rows
+        for k in pm.DIRECTIONS:
+            ps = [r["p_pair"] for r in mix["rows"][k] if r["p_pair"] is not None]
+            assert pn.summarise(ps) == mix[k]
+            assert len(ps) == out["reproduction"]["section_14"]["n_tested"]
