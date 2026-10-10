@@ -1,0 +1,1550 @@
+{
+  "result": "readergate_rna_sources",
+  "date": "2026-10-10",
+  "lane": "lane-readercompile",
+  "what": "the measured RNA for M2b: one ENCODE polyA plus RNA-seq experiment per reader biosample",
+  "selection_rule": "per reader biosample, from the ENCODE portal: every released GRCh38 'gene quantifications' TSV with genome_annotation V29 (the ENCODE4 uniform RNA-seq pipeline, RSEM) of assay 'polyA plus RNA-seq', on the biosample's ontology term name, from a human experiment the portal lists as not perturbed (perturbed=false) and that carries no ERROR audit, and whose file biosample summary names no subcellular fraction, treatment, disease or genetic modification (none of 'fraction', 'treated', 'with ', 'genetically', 'transfected', 'knockdown'). polyA plus is the one assay with such an experiment for all thirteen (SK-N-SH has no whole-cell untreated total RNA-seq in this query). Of the qualifying experiments the one with the most qualifying files is taken, ties broken by the latest date_released and then the lowest accession; the gene's TPM in the biosample is the mean of its TPM over that experiment's qualifying files (its replicates). Chosen from portal metadata alone; no value of any file was read to choose",
+  "values_read": "none: each file was hashed and its header line read; no TPM value was opened",
+  "licence": "ENCODE Consortium data: free to download and use without restriction under the ENCODE data use policy; cite the ENCODE Consortium and the experiment accession (https://www.encodeproject.org/help/citing-encode/)",
+  "bytes_total": 294686471,
+  "files_total": 27,
+  "biosamples": {
+    "K562": {
+      "biosample": "K562",
+      "experiment": "ENCSR545DKY",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR545DKY/",
+      "date_released": "2016-04-21",
+      "lab": "Eric L\u00e9cuyer, IRCM",
+      "biosample_summary": "Homo sapiens K562",
+      "files": [
+        {
+          "accession": "ENCFF416LVG",
+          "url": "https://www.encodeproject.org/files/ENCFF416LVG/@@download/ENCFF416LVG.tsv",
+          "path": "data/cache/readergate/rna/ENCFF416LVG.tsv",
+          "bytes": 11045406,
+          "md5": "346f20c471175be8e82fcf9c31e1bb22",
+          "sha256": "a4472fba10cc026061e4cf4b44b34984208b7d55727039b350fcc42cdc201b50",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF556ISR",
+          "url": "https://www.encodeproject.org/files/ENCFF556ISR/@@download/ENCFF556ISR.tsv",
+          "path": "data/cache/readergate/rna/ENCFF556ISR.tsv",
+          "bytes": 11051063,
+          "md5": "6a840e9e0ee2fe310d3865a72cb3cf7e",
+          "sha256": "1625aac3366ca40f12a7f32ee60690af156ca4cb131380ca2ab3a1f793806f90",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000AEM": 2,
+        "ENCSR000AEO": 2,
+        "ENCSR000AEP": 2,
+        "ENCSR000AEQ": 2,
+        "ENCSR000CPH": 2,
+        "ENCSR000EYO": 2,
+        "ENCSR545DKY": 2,
+        "ENCSR637VLS": 2
+      },
+      "files_excluded": {
+        "ENCFF180ZJI": "biosample summary 'cytosolic fraction'",
+        "ENCFF939LDL": "biosample summary 'insoluble cytoplasmic fraction'",
+        "ENCFF241QPH": "biosample summary 'membrane fraction'",
+        "ENCFF389LDF": "experiment ENCSR000CWH is not a human unperturbed released one",
+        "ENCFF142LZQ": "biosample summary 'nuclear fraction'",
+        "ENCFF246WQF": "biosample summary 'nuclear fraction'",
+        "ENCFF643FJJ": "biosample summary 'insoluble cytoplasmic fraction'",
+        "ENCFF350SNO": "experiment ENCSR000CWJ is not a human unperturbed released one",
+        "ENCFF679WFF": "biosample summary 'cytosolic fraction'",
+        "ENCFF225RLI": "experiment ENCSR000CWI is not a human unperturbed released one",
+        "ENCFF619VQI": "biosample summary 'cytosolic fraction'",
+        "ENCFF501IXI": "biosample summary 'nuclear fraction'",
+        "ENCFF492MOB": "biosample summary 'nuclear fraction'",
+        "ENCFF176WAF": "biosample summary 'membrane fraction'",
+        "ENCFF300NAD": "biosample summary 'cytosolic fraction'",
+        "ENCFF820BZI": "experiment ENCSR000CWG is not a human unperturbed released one"
+      }
+    },
+    "HepG2": {
+      "biosample": "HepG2",
+      "experiment": "ENCSR561FEE",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR561FEE/",
+      "date_released": "2016-04-21",
+      "lab": "Eric L\u00e9cuyer, IRCM",
+      "biosample_summary": "Homo sapiens HepG2",
+      "files": [
+        {
+          "accession": "ENCFF119KXQ",
+          "url": "https://www.encodeproject.org/files/ENCFF119KXQ/@@download/ENCFF119KXQ.tsv",
+          "path": "data/cache/readergate/rna/ENCFF119KXQ.tsv",
+          "bytes": 10941050,
+          "md5": "46aa1f5468845f015473b610f22c43b2",
+          "sha256": "ad85a35465dbc374da0b18169d99d28d54830516da23c0f3b938cef889059052",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF308OYV",
+          "url": "https://www.encodeproject.org/files/ENCFF308OYV/@@download/ENCFF308OYV.tsv",
+          "path": "data/cache/readergate/rna/ENCFF308OYV.tsv",
+          "bytes": 10927740,
+          "md5": "9cb5604cccb95238a27d96fd8dd9385c",
+          "sha256": "fd69f0241f74cdfc40390bfb5a0854188cf571e85af127899518f375e4c0218b",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000CPE": 2,
+        "ENCSR000EYR": 2,
+        "ENCSR329MHM": 2,
+        "ENCSR561FEE": 2,
+        "ENCSR985KAT": 2
+      },
+      "files_excluded": {
+        "ENCFF781LKS": "biosample summary 'cytosolic fraction'",
+        "ENCFF349PPC": "biosample summary 'nuclear fraction'",
+        "ENCFF210FWG": "biosample summary 'nuclear fraction'",
+        "ENCFF729LCL": "biosample summary 'nuclear fraction'",
+        "ENCFF418CMQ": "biosample summary 'membrane fraction'",
+        "ENCFF279TNV": "biosample summary 'membrane fraction'",
+        "ENCFF786CFB": "biosample summary 'cytosolic fraction'",
+        "ENCFF877KTY": "biosample summary 'nuclear fraction'",
+        "ENCFF644XSV": "biosample summary 'cytosolic fraction'",
+        "ENCFF006QOZ": "biosample summary 'insoluble cytoplasmic fraction'",
+        "ENCFF336WOX": "biosample summary 'insoluble cytoplasmic fraction'",
+        "ENCFF138OAS": "biosample summary 'cytosolic fraction'"
+      }
+    },
+    "GM12878": {
+      "biosample": "GM12878",
+      "experiment": "ENCSR843RJV",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR843RJV/",
+      "date_released": "2016-06-13",
+      "lab": "Barbara Wold, Caltech",
+      "biosample_summary": "Homo sapiens GM12878",
+      "files": [
+        {
+          "accession": "ENCFF700JWD",
+          "url": "https://www.encodeproject.org/files/ENCFF700JWD/@@download/ENCFF700JWD.tsv",
+          "path": "data/cache/readergate/rna/ENCFF700JWD.tsv",
+          "bytes": 11055889,
+          "md5": "7d03eaf274513f5c3a537dad84d24d25",
+          "sha256": "65cf1c81071e7efd670d3f18ab07599ca79aa9cdc6b4c29e0c487dfb5f54ae60",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF935TRK",
+          "url": "https://www.encodeproject.org/files/ENCFF935TRK/@@download/ENCFF935TRK.tsv",
+          "path": "data/cache/readergate/rna/ENCFF935TRK.tsv",
+          "bytes": 11058921,
+          "md5": "12201723207a8f34d4c2c3c9d48fd70e",
+          "sha256": "6d7cb94f2884771f18cd9a9ed53baba8cf8b87b91b2503ec79e4d3b25052aac5",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000AED": 2,
+        "ENCSR000AEF": 2,
+        "ENCSR000AEG": 2,
+        "ENCSR000AEH": 2,
+        "ENCSR000COQ": 2,
+        "ENCSR000EYN": 2,
+        "ENCSR077AZT": 1,
+        "ENCSR297UBP": 2,
+        "ENCSR843RJV": 2,
+        "ENCSR889TRN": 2
+      },
+      "files_excluded": {
+        "ENCFF387YXX": "biosample summary 'nuclear fraction'",
+        "ENCFF089PEL": "biosample summary 'nuclear fraction'",
+        "ENCFF395EXV": "biosample summary 'cytosolic fraction'",
+        "ENCFF697ITP": "biosample summary 'cytosolic fraction'"
+      }
+    },
+    "IMR_90": {
+      "biosample": "IMR-90",
+      "experiment": "ENCSR000CTQ",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR000CTQ/",
+      "date_released": "2012-06-21",
+      "lab": "Thomas Gingeras, CSHL",
+      "biosample_summary": "Homo sapiens IMR-90",
+      "files": [
+        {
+          "accession": "ENCFF631BAG",
+          "url": "https://www.encodeproject.org/files/ENCFF631BAG/@@download/ENCFF631BAG.tsv",
+          "path": "data/cache/readergate/rna/ENCFF631BAG.tsv",
+          "bytes": 10815641,
+          "md5": "dd9b9b192173016b88a27b280b00b8a9",
+          "sha256": "c46a9519fb3772d36aee00fba331de895f55536bb86017ee41a5bea821fd2712",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF958WFW",
+          "url": "https://www.encodeproject.org/files/ENCFF958WFW/@@download/ENCFF958WFW.tsv",
+          "path": "data/cache/readergate/rna/ENCFF958WFW.tsv",
+          "bytes": 10826472,
+          "md5": "ece0fcdab212b82b0fdbd06cc0274eee",
+          "sha256": "5b61c921e46b0ac2a41419115a9bac53364ffb4e02797582e7ae35fb961d37ef",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000CTQ": 2
+      },
+      "files_excluded": {
+        "ENCFF879QMA": "biosample summary 'cytosolic fraction'",
+        "ENCFF942MTU": "biosample summary 'cytosolic fraction'",
+        "ENCFF198QFQ": "biosample summary 'nuclear fraction'",
+        "ENCFF685UUT": "biosample summary 'nuclear fraction'"
+      }
+    },
+    "H1": {
+      "biosample": "H1",
+      "experiment": "ENCSR000EYP",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR000EYP/",
+      "date_released": "2012-01-17",
+      "lab": "Barbara Wold, Caltech",
+      "biosample_summary": "Homo sapiens H1",
+      "files": [
+        {
+          "accession": "ENCFF131NEX",
+          "url": "https://www.encodeproject.org/files/ENCFF131NEX/@@download/ENCFF131NEX.tsv",
+          "path": "data/cache/readergate/rna/ENCFF131NEX.tsv",
+          "bytes": 10887814,
+          "md5": "e0e1f13bf0b17a71bc51f02d3999cdde",
+          "sha256": "54fa5aa9fc0b026bec8192f83732fe3354af1d0cbb85dda7e1919209b3d233fc",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF247KYR",
+          "url": "https://www.encodeproject.org/files/ENCFF247KYR/@@download/ENCFF247KYR.tsv",
+          "path": "data/cache/readergate/rna/ENCFF247KYR.tsv",
+          "bytes": 10907070,
+          "md5": "72be08e77286542d3a604293cdab58ed",
+          "sha256": "357780017d983a71d7345a42e8ca78a9cd06e449cb165824039cc849f60ba3e1",
+          "biological_replicates": [
+            3
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF296UGP",
+          "url": "https://www.encodeproject.org/files/ENCFF296UGP/@@download/ENCFF296UGP.tsv",
+          "path": "data/cache/readergate/rna/ENCFF296UGP.tsv",
+          "bytes": 10863851,
+          "md5": "6e02fdafb7e267bfa8d01fa8730840f3",
+          "sha256": "af1402a93a5beecbb6615c9f1710837df61b50798fab098971233a4e730ff43a",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF562ECY",
+          "url": "https://www.encodeproject.org/files/ENCFF562ECY/@@download/ENCFF562ECY.tsv",
+          "path": "data/cache/readergate/rna/ENCFF562ECY.tsv",
+          "bytes": 10855931,
+          "md5": "ec562fd98a0d7160941197139a84c69a",
+          "sha256": "365fc92512220ec9045e916d1f129846d6081bce31f3532fa43572235ba2b310",
+          "biological_replicates": [
+            4
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000BZU": 1,
+        "ENCSR000COU": 2,
+        "ENCSR000EYP": 4,
+        "ENCSR043RSE": 1,
+        "ENCSR643QIZ": 2,
+        "ENCSR670WQY": 1,
+        "ENCSR962TBJ": 1
+      },
+      "files_excluded": {
+        "ENCFF497FXX": "biosample summary 'cytosolic fraction'",
+        "ENCFF819LFK": "biosample summary 'nuclear fraction'"
+      }
+    },
+    "SK_N_SH": {
+      "biosample": "SK-N-SH",
+      "experiment": "ENCSR000CTT",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR000CTT/",
+      "date_released": "2012-06-21",
+      "lab": "Thomas Gingeras, CSHL",
+      "biosample_summary": "Homo sapiens SK-N-SH",
+      "files": [
+        {
+          "accession": "ENCFF378TYT",
+          "url": "https://www.encodeproject.org/files/ENCFF378TYT/@@download/ENCFF378TYT.tsv",
+          "path": "data/cache/readergate/rna/ENCFF378TYT.tsv",
+          "bytes": 10841213,
+          "md5": "f0fb265b32d8fda670852bdc980d8a5d",
+          "sha256": "d05011b309ace2054e3467b0fcf320c0274b0dd02988ba07d17ebf773b965cc3",
+          "biological_replicates": [
+            3
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF645FNQ",
+          "url": "https://www.encodeproject.org/files/ENCFF645FNQ/@@download/ENCFF645FNQ.tsv",
+          "path": "data/cache/readergate/rna/ENCFF645FNQ.tsv",
+          "bytes": 10808590,
+          "md5": "b9a97cc7d3485d3d6580abed8add215b",
+          "sha256": "871d747ddd4330eed0c2acf24c5341385e8726495f4a4725db1ffaf72c471afd",
+          "biological_replicates": [
+            4
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000BYL": 2,
+        "ENCSR000CTT": 2
+      },
+      "files_excluded": {
+        "ENCFF098ROF": "experiment ENCSR000CPN is not a human unperturbed released one",
+        "ENCFF425UDJ": "experiment ENCSR000CPN is not a human unperturbed released one",
+        "ENCFF192RQD": "biosample summary 'cytosolic fraction'",
+        "ENCFF119UFR": "biosample summary 'cytosolic fraction'",
+        "ENCFF731GNM": "biosample summary 'nuclear fraction'",
+        "ENCFF103IDM": "biosample summary 'nuclear fraction'"
+      }
+    },
+    "astrocyte": {
+      "biosample": "astrocyte",
+      "experiment": "ENCSR920UAO",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR920UAO/",
+      "date_released": "2013-07-31",
+      "lab": "Joseph Costello, UCSF",
+      "biosample_summary": "Homo sapiens astrocyte",
+      "files": [
+        {
+          "accession": "ENCFF855KIJ",
+          "url": "https://www.encodeproject.org/files/ENCFF855KIJ/@@download/ENCFF855KIJ.tsv",
+          "path": "data/cache/readergate/rna/ENCFF855KIJ.tsv",
+          "bytes": 10764318,
+          "md5": "7a33dbe88864af6e2ef757674d7265d6",
+          "sha256": "f79955c9c3f59aeb8e51dd1492265d99d9e255c3f6de14f5a524e402f167dc39",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR920UAO": 1
+      },
+      "files_excluded": {}
+    },
+    "hepatocyte": {
+      "biosample": "hepatocyte",
+      "experiment": "ENCSR859HWB",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR859HWB/",
+      "date_released": "2016-05-03",
+      "lab": "Barbara Wold, Caltech",
+      "biosample_summary": "Homo sapiens hepatocyte originated from H9",
+      "files": [
+        {
+          "accession": "ENCFF462HXM",
+          "url": "https://www.encodeproject.org/files/ENCFF462HXM/@@download/ENCFF462HXM.tsv",
+          "path": "data/cache/readergate/rna/ENCFF462HXM.tsv",
+          "bytes": 11048008,
+          "md5": "4e1e64ea8be8d71da4cb2180c9846cdb",
+          "sha256": "b74393938674fee7430d721055be244ffb06c362cd0de5d3358518dde2a2bede",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF497TJL",
+          "url": "https://www.encodeproject.org/files/ENCFF497TJL/@@download/ENCFF497TJL.tsv",
+          "path": "data/cache/readergate/rna/ENCFF497TJL.tsv",
+          "bytes": 11052999,
+          "md5": "fd6217dc9eabe478275b24201dd5fe4e",
+          "sha256": "468fa287623c5d18e183b6136be2ec6853896aeee381a764b8e1127c25185711",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR859HWB": 2
+      },
+      "files_excluded": {}
+    },
+    "keratinocyte": {
+      "biosample": "keratinocyte",
+      "experiment": "ENCSR000CPL",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR000CPL/",
+      "date_released": "2011-10-17",
+      "lab": "Thomas Gingeras, CSHL",
+      "biosample_summary": "Homo sapiens keratinocyte female",
+      "files": [
+        {
+          "accession": "ENCFF008KUV",
+          "url": "https://www.encodeproject.org/files/ENCFF008KUV/@@download/ENCFF008KUV.tsv",
+          "path": "data/cache/readergate/rna/ENCFF008KUV.tsv",
+          "bytes": 10938365,
+          "md5": "43873c1bbfab8a8f80716e84cd81370e",
+          "sha256": "dfa00f842aa921197242ee67330bc19c26f907158d88287f8441ccf5ca2c46b7",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF036KGP",
+          "url": "https://www.encodeproject.org/files/ENCFF036KGP/@@download/ENCFF036KGP.tsv",
+          "path": "data/cache/readergate/rna/ENCFF036KGP.tsv",
+          "bytes": 10921229,
+          "md5": "5e4ead7a54d30d118cf76ede2f151d69",
+          "sha256": "6fff5f14481ba818fcfe6fb3d93724bcf0149c71cdce61ba31d6cc6b335c6080",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF104BAF",
+          "url": "https://www.encodeproject.org/files/ENCFF104BAF/@@download/ENCFF104BAF.tsv",
+          "path": "data/cache/readergate/rna/ENCFF104BAF.tsv",
+          "bytes": 10856204,
+          "md5": "ffbb0b009fee1af877892e2299a61ccb",
+          "sha256": "66148b3be1a4161b7e2afb42d45c4f25588bdebaa30e8eb2ffc02e64768d88ff",
+          "biological_replicates": [
+            5
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000CPL": 3,
+        "ENCSR000EYT": 2,
+        "ENCSR270XRV": 1
+      },
+      "files_excluded": {
+        "ENCFF091QAX": "biosample summary 'female cytosolic fraction'",
+        "ENCFF158FVF": "biosample summary 'female nuclear fraction'",
+        "ENCFF511FNY": "biosample summary 'female cytosolic fraction'",
+        "ENCFF008POC": "biosample summary 'female nuclear fraction'"
+      }
+    },
+    "cardiac_muscle_cell": {
+      "biosample": "cardiac muscle cell",
+      "experiment": "ENCSR294NDO",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR294NDO/",
+      "date_released": "2016-05-03",
+      "lab": "Barbara Wold, Caltech",
+      "biosample_summary": "Homo sapiens cardiac muscle cell originated from RUES2",
+      "files": [
+        {
+          "accession": "ENCFF137JZM",
+          "url": "https://www.encodeproject.org/files/ENCFF137JZM/@@download/ENCFF137JZM.tsv",
+          "path": "data/cache/readergate/rna/ENCFF137JZM.tsv",
+          "bytes": 11048743,
+          "md5": "078baba605f4896f50752e411a97ee08",
+          "sha256": "1bb3ecd720ff3fdf88724fb4260216bbcdf3d31376eeedb75a5640a56b3dbb0a",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF619LYC",
+          "url": "https://www.encodeproject.org/files/ENCFF619LYC/@@download/ENCFF619LYC.tsv",
+          "path": "data/cache/readergate/rna/ENCFF619LYC.tsv",
+          "bytes": 11056794,
+          "md5": "6b4408e9ef6ec971fc7ed1640d7d3fc1",
+          "sha256": "42676e44d72ccd1179a4de9773ba3b35b890fae3f743f805ab2a60f7bf1074cf",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR294NDO": 2
+      },
+      "files_excluded": {}
+    },
+    "CD14_positive_monocyte": {
+      "biosample": "CD14-positive monocyte",
+      "experiment": "ENCSR000CUC",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR000CUC/",
+      "date_released": "2012-06-21",
+      "lab": "Thomas Gingeras, CSHL",
+      "biosample_summary": "Homo sapiens CD14-positive monocyte female",
+      "files": [
+        {
+          "accession": "ENCFF492OTB",
+          "url": "https://www.encodeproject.org/files/ENCFF492OTB/@@download/ENCFF492OTB.tsv",
+          "path": "data/cache/readergate/rna/ENCFF492OTB.tsv",
+          "bytes": 10739006,
+          "md5": "184ccbf6d12bdf850ec16585828e2202",
+          "sha256": "9d04682a64303529982da4c399a736e42446d90c9fd5e76ff883cd8a31e6799a",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF806MNX",
+          "url": "https://www.encodeproject.org/files/ENCFF806MNX/@@download/ENCFF806MNX.tsv",
+          "path": "data/cache/readergate/rna/ENCFF806MNX.tsv",
+          "bytes": 10705014,
+          "md5": "10872d84a4cf295de2d12bf3474d5d45",
+          "sha256": "5b2e56c70c381c55a5ed52f734e0efbe59c85f5e4f3e4a3a51af594667ec13df",
+          "biological_replicates": [
+            2
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR000CUC": 2,
+        "ENCSR384HOK": 1,
+        "ENCSR467YDA": 1,
+        "ENCSR992MUF": 1
+      },
+      "files_excluded": {
+        "ENCFF046FZP": "biosample summary 'with multiple sclerosis'",
+        "ENCFF134XBC": "biosample summary 'with multiple sclerosis'",
+        "ENCFF323LPC": "biosample summary 'with multiple sclerosis'"
+      }
+    },
+    "ovary": {
+      "biosample": "ovary",
+      "experiment": "ENCSR046XHI",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR046XHI/",
+      "date_released": "2014-12-08",
+      "lab": "Michael Snyder, Stanford",
+      "biosample_summary": "Homo sapiens ovary tissue female adult (47 years)",
+      "files": [
+        {
+          "accession": "ENCFF209FDP",
+          "url": "https://www.encodeproject.org/files/ENCFF209FDP/@@download/ENCFF209FDP.tsv",
+          "path": "data/cache/readergate/rna/ENCFF209FDP.tsv",
+          "bytes": 10923510,
+          "md5": "8c1dd39ce1642b7082c029884eb8d576",
+          "sha256": "1ffa55e5b6fdd8955f562373047e15689b7682d4431e8aa33bd5d30dab991b30",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR046XHI": 1,
+        "ENCSR725TPW": 1,
+        "ENCSR727VTD": 1
+      },
+      "files_excluded": {}
+    },
+    "testis": {
+      "biosample": "testis",
+      "experiment": "ENCSR693GGB",
+      "experiment_url": "https://www.encodeproject.org/experiments/ENCSR693GGB/",
+      "date_released": "2014-12-08",
+      "lab": "Michael Snyder, Stanford",
+      "biosample_summary": "Homo sapiens testis tissue male adult (44 years)",
+      "files": [
+        {
+          "accession": "ENCFF708WAL",
+          "url": "https://www.encodeproject.org/files/ENCFF708WAL/@@download/ENCFF708WAL.tsv",
+          "path": "data/cache/readergate/rna/ENCFF708WAL.tsv",
+          "bytes": 10886816,
+          "md5": "b9d3a891f372f1d85934dd6040c922e2",
+          "sha256": "11e7a71a87db260a0404fffe7368153779f95be652daedc58f3dd86226ebf88f",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        },
+        {
+          "accession": "ENCFF862BQP",
+          "url": "https://www.encodeproject.org/files/ENCFF862BQP/@@download/ENCFF862BQP.tsv",
+          "path": "data/cache/readergate/rna/ENCFF862BQP.tsv",
+          "bytes": 10858814,
+          "md5": "a6ed277c9334058e8f4c5731c35b06f1",
+          "sha256": "566ce91dca52d1982b9edceed9754f39126830bbf7d21d67243b63bef040bf71",
+          "biological_replicates": [
+            1
+          ],
+          "header": [
+            "gene_id",
+            "transcript_id(s)",
+            "length",
+            "effective_length",
+            "expected_count",
+            "TPM",
+            "FPKM",
+            "posterior_mean_count",
+            "posterior_standard_deviation_of_count",
+            "pme_TPM",
+            "pme_FPKM",
+            "TPM_ci_lower_bound",
+            "TPM_ci_upper_bound",
+            "TPM_coefficient_of_quartile_variation",
+            "FPKM_ci_lower_bound",
+            "FPKM_ci_upper_bound",
+            "FPKM_coefficient_of_quartile_variation"
+          ]
+        }
+      ],
+      "candidates": {
+        "ENCSR693GGB": 2,
+        "ENCSR755LFM": 1
+      },
+      "files_excluded": {}
+    }
+  },
+  "alphagenome_requests": 0,
+  "money": "none: public files, no key read",
+  "seconds": 144.2,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCSR545DKY",
+        "version": "ENCODE portal, released 2016-04-21"
+      },
+      {
+        "accession": "ENCSR561FEE",
+        "version": "ENCODE portal, released 2016-04-21"
+      },
+      {
+        "accession": "ENCSR843RJV",
+        "version": "ENCODE portal, released 2016-06-13"
+      },
+      {
+        "accession": "ENCSR000CTQ",
+        "version": "ENCODE portal, released 2012-06-21"
+      },
+      {
+        "accession": "ENCSR000EYP",
+        "version": "ENCODE portal, released 2012-01-17"
+      },
+      {
+        "accession": "ENCSR000CTT",
+        "version": "ENCODE portal, released 2012-06-21"
+      },
+      {
+        "accession": "ENCSR920UAO",
+        "version": "ENCODE portal, released 2013-07-31"
+      },
+      {
+        "accession": "ENCSR859HWB",
+        "version": "ENCODE portal, released 2016-05-03"
+      },
+      {
+        "accession": "ENCSR000CPL",
+        "version": "ENCODE portal, released 2011-10-17"
+      },
+      {
+        "accession": "ENCSR294NDO",
+        "version": "ENCODE portal, released 2016-05-03"
+      },
+      {
+        "accession": "ENCSR000CUC",
+        "version": "ENCODE portal, released 2012-06-21"
+      },
+      {
+        "accession": "ENCSR046XHI",
+        "version": "ENCODE portal, released 2014-12-08"
+      },
+      {
+        "accession": "ENCSR693GGB",
+        "version": "ENCODE portal, released 2014-12-08"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/readergate/rna/ENCFF416LVG.tsv",
+        "sha256": "a4472fba10cc026061e4cf4b44b34984208b7d55727039b350fcc42cdc201b50",
+        "bytes": 11045406,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF556ISR.tsv",
+        "sha256": "1625aac3366ca40f12a7f32ee60690af156ca4cb131380ca2ab3a1f793806f90",
+        "bytes": 11051063,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF119KXQ.tsv",
+        "sha256": "ad85a35465dbc374da0b18169d99d28d54830516da23c0f3b938cef889059052",
+        "bytes": 10941050,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF308OYV.tsv",
+        "sha256": "fd69f0241f74cdfc40390bfb5a0854188cf571e85af127899518f375e4c0218b",
+        "bytes": 10927740,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF700JWD.tsv",
+        "sha256": "65cf1c81071e7efd670d3f18ab07599ca79aa9cdc6b4c29e0c487dfb5f54ae60",
+        "bytes": 11055889,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF935TRK.tsv",
+        "sha256": "6d7cb94f2884771f18cd9a9ed53baba8cf8b87b91b2503ec79e4d3b25052aac5",
+        "bytes": 11058921,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF631BAG.tsv",
+        "sha256": "c46a9519fb3772d36aee00fba331de895f55536bb86017ee41a5bea821fd2712",
+        "bytes": 10815641,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF958WFW.tsv",
+        "sha256": "5b61c921e46b0ac2a41419115a9bac53364ffb4e02797582e7ae35fb961d37ef",
+        "bytes": 10826472,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF131NEX.tsv",
+        "sha256": "54fa5aa9fc0b026bec8192f83732fe3354af1d0cbb85dda7e1919209b3d233fc",
+        "bytes": 10887814,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF247KYR.tsv",
+        "sha256": "357780017d983a71d7345a42e8ca78a9cd06e449cb165824039cc849f60ba3e1",
+        "bytes": 10907070,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF296UGP.tsv",
+        "sha256": "af1402a93a5beecbb6615c9f1710837df61b50798fab098971233a4e730ff43a",
+        "bytes": 10863851,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF562ECY.tsv",
+        "sha256": "365fc92512220ec9045e916d1f129846d6081bce31f3532fa43572235ba2b310",
+        "bytes": 10855931,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF378TYT.tsv",
+        "sha256": "d05011b309ace2054e3467b0fcf320c0274b0dd02988ba07d17ebf773b965cc3",
+        "bytes": 10841213,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF645FNQ.tsv",
+        "sha256": "871d747ddd4330eed0c2acf24c5341385e8726495f4a4725db1ffaf72c471afd",
+        "bytes": 10808590,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF855KIJ.tsv",
+        "sha256": "f79955c9c3f59aeb8e51dd1492265d99d9e255c3f6de14f5a524e402f167dc39",
+        "bytes": 10764318,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF462HXM.tsv",
+        "sha256": "b74393938674fee7430d721055be244ffb06c362cd0de5d3358518dde2a2bede",
+        "bytes": 11048008,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF497TJL.tsv",
+        "sha256": "468fa287623c5d18e183b6136be2ec6853896aeee381a764b8e1127c25185711",
+        "bytes": 11052999,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF008KUV.tsv",
+        "sha256": "dfa00f842aa921197242ee67330bc19c26f907158d88287f8441ccf5ca2c46b7",
+        "bytes": 10938365,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF036KGP.tsv",
+        "sha256": "6fff5f14481ba818fcfe6fb3d93724bcf0149c71cdce61ba31d6cc6b335c6080",
+        "bytes": 10921229,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF104BAF.tsv",
+        "sha256": "66148b3be1a4161b7e2afb42d45c4f25588bdebaa30e8eb2ffc02e64768d88ff",
+        "bytes": 10856204,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF137JZM.tsv",
+        "sha256": "1bb3ecd720ff3fdf88724fb4260216bbcdf3d31376eeedb75a5640a56b3dbb0a",
+        "bytes": 11048743,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF619LYC.tsv",
+        "sha256": "42676e44d72ccd1179a4de9773ba3b35b890fae3f743f805ab2a60f7bf1074cf",
+        "bytes": 11056794,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF492OTB.tsv",
+        "sha256": "9d04682a64303529982da4c399a736e42446d90c9fd5e76ff883cd8a31e6799a",
+        "bytes": 10739006,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF806MNX.tsv",
+        "sha256": "5b2e56c70c381c55a5ed52f734e0efbe59c85f5e4f3e4a3a51af594667ec13df",
+        "bytes": 10705014,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF209FDP.tsv",
+        "sha256": "1ffa55e5b6fdd8955f562373047e15689b7682d4431e8aa33bd5d30dab991b30",
+        "bytes": 10923510,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF708WAL.tsv",
+        "sha256": "11e7a71a87db260a0404fffe7368153779f95be652daedc58f3dd86226ebf88f",
+        "bytes": 10886816,
+        "partition": null
+      },
+      {
+        "path": "data/cache/readergate/rna/ENCFF862BQP.tsv",
+        "sha256": "566ce91dca52d1982b9edceed9754f39126830bbf7d21d67243b63bef040bf71",
+        "bytes": 10858814,
+        "partition": null
+      }
+    ],
+    "input_count": 27,
+    "assembly": "GRCh38, GENCODE V29 gene models (ENCODE4 uniform RNA-seq pipeline)",
+    "coordinates": "n/a: gene-level quantifications keyed by gene_id",
+    "parameters": {
+      "assay": "polyA plus RNA-seq",
+      "exclude_words": [
+        "fraction",
+        "treated",
+        "with ",
+        "genetically",
+        "transfected",
+        "knockdown"
+      ]
+    },
+    "exclusions": [
+      "files of experiments that are perturbed, non-human, unreleased or carry an ERROR audit",
+      "files whose biosample summary names a fraction, treatment, disease or modification",
+      "every experiment but the one RNA_SELECTION takes per biosample"
+    ],
+    "partitions": "n/a: the measured outcome of a registered test; no value read here",
+    "code_cleanliness": {
+      "git_sha": "f080df85c69df34b21f26e42baaa6d2043dc8ede",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/readergate_fetch.py",
+        "form": "committed_repository_file",
+        "path": "scripts/readergate_fetch.py",
+        "is_committed": true,
+        "declared_entry": "scripts/readergate_fetch.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/measured_unknown.py",
+        "scripts/measured_unknown_inventory.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/readergate_fetch.py"
+      ],
+      "counting_path_count": 139,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "f080df85c69df34b21f26e42baaa6d2043dc8ede",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/measured_unknown.py",
+        "scripts/measured_unknown_inventory.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/measured_unknown.py",
+        "scripts/measured_unknown_inventory.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/readergate_fetch.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "f080df85c69df34b21f26e42baaa6d2043dc8ede",
+      "code_cleanliness_git_sha": "f080df85c69df34b21f26e42baaa6d2043dc8ede",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record f080df8"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 336,
+      "opens_under_data": 108,
+      "files_read": 27,
+      "files_written": 27,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
