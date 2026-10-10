@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from genomeos.genome import pgs_panel as pp
@@ -67,3 +69,51 @@ def test_candidates_are_unique_and_carry_their_access():
     assert len(keys) == len(set(keys))
     assert all(c["access"] in pp.ACCESS_LEVELS for c in pp.CANDIDATES)
     assert {"1kgp3", "hgdp", "sgdp", "hprc2", "giab", "aadr_ho", "tagc"} <= set(keys)
+
+
+def test_committed_inventory_stops_the_lane_on_its_own_counts():
+    import json
+
+    import tracked_paths as tp
+
+    path = Path("data/results/pgs_panel_inventory.json")
+    tp.must_be_present(path)
+    res = json.loads(path.read_text())
+    assert res["gate"] == pp.GATE
+    assert res["declared_group"] == "asj"
+    assert res["result_manifest"]["complete"] is True
+    assert res["scores_left_unknown"] == pp.LEFT_UNKNOWN
+
+    # the outcome is the one the committed counts give under the committed gate
+    evaluations = [
+        pp.evaluate(
+            {
+                "key": c["candidate"],
+                "access": c["access"],
+                "terms": c["terms"],
+                "data": c["data"],
+            },
+            "asj",
+            c["declared_group_people"],
+        )
+        for c in res["candidates"]
+    ]
+    assert res["outcome"] == pp.outcome(evaluations, "asj") == "NO_PANEL_QUALIFIES"
+    assert all(
+        e["meets_size_access_label"] == c["meets_size_access_label"]
+        for e, c in zip(evaluations, res["candidates"], strict=True)
+    )
+
+    # the largest open-access count is read from the candidates, and is below the minimum
+    openly = [
+        c["declared_group_people"]
+        for c in res["candidates"]
+        if c["access"] == "open" and c["declared_group_people"] is not None
+    ]
+    assert res["largest_count_open_access"]["people"] == max(openly) < pp.GATE["min_people"]
+
+    # no panel person is named, and the reading says the person's UNKNOWN stands
+    text = path.read_text()
+    for name in ("ashkenazy", "GRC1211", "SAKD", "HGDP00001", "NA21142"):
+        assert name not in text
+    assert "UNKNOWN" in res["reading"] and "not a risk" in res["note"]
