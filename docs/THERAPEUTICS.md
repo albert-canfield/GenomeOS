@@ -1909,6 +1909,136 @@ not presentation: proteasomal cleavage, TAP transport and immunopeptidomics stay
 unestablished, so presentation confidence remains capped at 0.25 on binding
 alone.
 
+## The surface score reads the alteration, pre-registered 2026-10-10
+
+Area F's second open item is a decision before it is a build: *should* a surface
+score read the alteration? The two sections above answered it for the fusion and
+left every other alteration class untouched, so `surface_accessibility` still
+answers from the gene's curated annotation for a premature stop that removes the
+only membrane anchor, for a splice change that drops the signal peptide, and for
+an in-frame deletion inside the curated outward face. This registers the answer
+**yes, with a scope line**, because the argument that settled the fusion settles
+these too: once `ectodomain_lost` put the product question into the score and
+published `0.0` for ALK, reading the full-length annotation for a product the
+tumour does not make is an unknown defaulted to the maximum.
+
+**What is read, and from where.** `genomeos/therapeutics/product.py` turns one
+`VariantOrigin` into an *extent*: which reference residues the tumour's product
+still contains, which spans it removes, and whether a novel tail replaces the
+rest. Two sources, in this order. First the reconstructed altered sequence
+already built for the peptide route (`neoantigen.altered_protein`: the
+transcript's coding sequence with the HGVS coding change applied, both proteins
+translated and compared), which gives the first altered residue and the mutant
+length as measurements. Failing that, the HGVS protein notation carried on the
+origin — `hgvsp`, and never the short `protein_change` form, which renders
+`p.Gln1430ArgfsTer12` as `Q1430R` and would read a frameshift as a
+substitution. The extent is then held against the curated topology map that
+`localise` compiles from UniProt features: the transmembrane segments, the
+extracellular segments and the signal peptide (docs/PROTEIN.md).
+
+**What each class is answered with.** `retained` leaves the dimension exactly as
+it reads today; `reduced` keeps the membrane figure and recomputes the
+extracellular-span bonus over the surviving residues; `not anchored` returns
+`0.0` with the reason; `unknown` returns `None`, so the dimension is dropped from
+the mean and counted as missing rather than defaulted.
+
+| Alteration class | Registered answer |
+|---|---|
+| missense or protein-altering substitution | retained: no residue is removed |
+| in-frame insertion or duplication | retained, with the downstream coordinate shift named |
+| premature stop whose last retained residue lies C-terminal to every curated transmembrane and extracellular segment | retained (a cytoplasmic-tail truncation), with decay named as unread |
+| premature stop whose product ends before the single curated transmembrane segment | **not anchored, 0.0** |
+| premature stop whose cut falls inside a curated transmembrane segment, inside the curated outward face, or between the passes of a multi-pass protein | **unknown** |
+| frameshift whose reference part ends before the curated anchor | **unknown**: the curated anchor is not in the product and the novel tail is not characterised |
+| frameshift whose reference part already contains every curated segment | retained, with decay named as unread |
+| in-frame deletion removing a whole single transmembrane segment | **not anchored, 0.0** |
+| in-frame deletion overlapping a curated extracellular segment | **reduced**: the anchor survives and the bonus reads the surviving span |
+| in-frame deletion elsewhere | retained |
+| splice donor or acceptor change | **unknown**: which exons the transcript keeps is not reconstructed, so whether the signal peptide, the outward face or the anchor survives cannot be read |
+| start lost | **unknown**: whether a downstream start makes a protein that reaches the membrane is not on the record |
+| stop lost | retained: nothing is removed; the extension is not characterised |
+| amplification, gain, shallow deletion | retained: no sequence change to the product |
+| deep deletion | retained here: it removes the gene rather than editing a product, and `_product_present` already refuses every mechanism for it |
+| fusion | unchanged: `ectodomain_lost`, `ectodomain_uncertain` and `product_extent_unknown` keep precedence over everything registered here |
+| no origin at all (the expression route) | retained: unchanged |
+
+**Numbering is confirmed before any definite answer.** `hgvsp` numbers the VEP
+transcript and the topology numbers the UniProt canonical sequence, and the
+repository holds a case where the two differ: the demo's RUNX1 Y480* is called
+on a 481-residue transcript while the canonical entry is 453 residues. So a
+`not anchored` verdict requires the numbering to be confirmed — either the
+notation's wild-type residue matches the curated sequence at that position, or
+the rebuilt reference length equals the curated sequence's length. Unconfirmed,
+the verdict is capped at `unknown`. The curated sequence reaches the predicate
+as `TherapeuticTargetCandidate.reference_sequence`, which this change adds and
+sets from the same UniProt record the topology comes from.
+
+**Nonsense-mediated decay stays unread, and is named.** Whether a premature stop
+is degraded or escaped turns on the exon structure and the position of the last
+exon-exon junction, and `VariantOrigin` carries no exon coordinates, so this
+change does not predict it. It matters in one direction only: where the anchor
+is lost, decay and escape give the same surface answer, and where the anchor
+survives, decay would mean no product rather than an unreachable one. Every
+truncating verdict therefore carries the sentence that decay is not read, and
+the existing truncation note in `pipeline.py` is left as the place that says a
+product may not be made at all.
+
+**Composition over several origins.** Each origin is read on its own and the
+candidate takes the strongest answer: `retained` or `reduced` if any origin's
+product keeps the outward face and its anchor, `not anchored` only if every
+origin removes it, and `unknown` otherwise. That is deliberately the
+missed-target direction, it keeps 3fe7c27's control (a 5' fusion *plus* a
+missense still reads the annotation, because the missense keeps the product
+whole), and it is monotone in the record: better evidence can only move an
+`unknown` to an answer.
+
+**Scope: where no anchor is curated, this says nothing.** The predicate speaks
+only for a candidate whose curated record carries at least one transmembrane
+segment with coordinates — an anchor there is to lose. The reason is that an
+unknown must not improve a candidate: dropping a dimension raises a mean
+whenever the dropped value is below it, and for a protein with no curated
+transmembrane segment the surface figure is already the discounted one (0.8 ×
+the compartment confidence) and sits low. BRAF is the worked case at 0.36; a
+truncating mutation in BRAF leaves that 0.36 exactly where it is rather than
+replacing it with a dropped dimension and raising BRAF's overall. Two further
+exclusions, both out of scope and both left reading the annotation: a GPI anchor
+with no curated transmembrane segment, whose attachment site is not a region the
+record carries, and a multi-pass protein that keeps some of its passes.
+
+**The gate moves with the score.** `mechanisms._surface` answers `False` for
+`not anchored` and `None` for `unknown`, so a blocking antibody is not offered
+as established against a product with no membrane anchor. Leaving the gate
+permissive while the score answered `0.0` would recreate, with the sides
+swapped, exactly the disagreement the two sections above closed.
+
+**Expected movement in the ten benchmark cases: none, in any field.** The ten
+cases are six missense point mutations, two copy-number calls, one fusion (ALK
+as the 3' partner, already `0.0`) and one expression call; not one carries a
+truncating, splice-site or in-frame-indel alteration, and the six substitutions
+remove no residue. The prediction is therefore that every row comes out
+identical — rank, score, target class, evidence tier, accessibility, mechanism,
+compatibility, verdict — and it is a real prediction rather than a formality,
+because the composition rule and the scope line are what make it so: a reading
+that fired on a substitution, or spoke for a protein with no curated anchor,
+would move these rows.
+
+**What counts as a regression.** (1) Any of the ten targets losing its recovered
+route. (2) Any of the five surface cases falling to or below 0.5 accessibility,
+or losing its established mechanism. (3) `BURIED_SURFACE_TARGETS` above 0, or
+`KNOWN_MECHANISM_DEFECTS` above 0. (4) Any committed row field moving at all,
+per the prediction above. (5) Any candidate's overall score *rising* anywhere —
+on the ten cases or on the constructed fixtures — because this change can only
+remove a value or lower one, never add evidence. (6) A `not anchored` verdict
+reached without confirmed numbering, or a verdict of any kind for a protein with
+no curated transmembrane segment.
+
+**What would falsify the design.** A fixture where the same alteration is read
+`retained` by the sequence and `not anchored` by the notation, or the reverse,
+with the numbering confirmed in both: that would mean the two sources are not
+reading the same product and one of them has to go. And the grid check that no
+two verdicts can hold at once for one candidate, which is the property the
+fusion states were given a test for.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
