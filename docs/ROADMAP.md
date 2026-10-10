@@ -618,7 +618,14 @@ History: ROADMAP-HISTORY.md §3 E, lines 1345–1655; gastrulation rows in §5 i
   reference is 20 tissues of population consensus, not a matched normal.
 - **Next.** 1. Wire the deep-deletion dependency (DepMap) into the pipeline's evidence, registered
   before it is scored. 2. Decide whether a surface score reads the alteration, then build it, since
-  it moves every case's numbers. 3. A demo case at a data level above 1. 4. Cohort expression for
+  it moves every case's numbers: **done 2026-10-10** (lane-surface; `7c0f234` registered, `1350f51`,
+  `7242ea8`, `9602c6d` measured). `therapeutics/product.py` reads the product's extent from the
+  reconstructed altered sequence or from `hgvsp` and holds it against the curated topology: a stop
+  before the only curated transmembrane segment answers 0.0, an in-frame deletion of the whole
+  anchor 0.0, a deletion inside the outward face scores the residues that survive; a frameshift, a
+  cut inside the anchor, a splice-site change, a lost start and an indel with no span answer
+  unknown, and decay is not predicted and is named. **The ten benchmark rows are identical in every
+  field**, and no overall score rose anywhere. 3. A demo case at a data level above 1. 4. Cohort expression for
   the other TCGA studies (§4).
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
 
