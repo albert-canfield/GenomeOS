@@ -1,0 +1,208 @@
+{
+  "result": "rootpick_result",
+  "date": "2026-10-10",
+  "question": "which root the capped sum's fit takes where two exist, and what that does to the population -- decided from the bridge's licensing and not from which root fits better",
+  "root_rule": "where both roots exist, the fit takes the UNCAPPED root, whose element-driven share q = D is the one the declared split fixes; where only the CAPPED root exists, the gene is UNKNOWN and leaves the population, because its single fit rests on a ceiling the bridge does not identify. The cap is a ceiling and never a target: a fit equally consistent with an unbound cap does not assert saturation",
+  "ground": "attribution/bridge.py: 'V and s are NOT separately identified: only their product is. DECLARED_STRENGTH fixes the split by convention and by nothing else'; 'what DECLARED_STRENGTH does NOT license: it is not a measurement that the element saturates its gene'; and DECLARED_STRENGTH_LICENSES = 'the absolute scale of one gene's transcription and its basal fraction, in molecules/(cell*h); not the ceiling, not the strength, and not the response to any perturbation but this removal'. The capped root exists only when W > 1, which is a statement about the ceiling; the uncapped root's q = D is the declared split itself",
+  "falsifier": "the rule is WRONG if any measurement in the bridge's own tier table identifies the ceiling or identifies s separately from V -- then the capped branch is licensed and the rule's ground dissolves. It is also wrong if a gene's two roots can be distinguished by an observable the fit already uses (a removal or T), because then the fit was not underdetermined and no rule was needed. Neither is a question about which root fits the RNA better, and a better fit on the capped branch would NOT refute it",
+  "inconclusive": "if the bridge's tiers neither identify nor exclude the ceiling, the rule is not established and the genes stay as lane-capsumrna left them: counted, run, never chosen. This lane then reports 'the ground is not in the record' and changes no classification",
+  "prior_exposure": "this lane read, before fixing the rule: runtime/grn.py's combine_activators; attribution/capsumrna.py's docstring, FORM, fit and STRUCTURE strings; attribution/bridge.py's DECLARED_STRENGTH block; and the PREDICTOR-SIDE counts of data/results/capsumrna_census.json, which that file states are 'a count on the predictor side, before any RNA value is read'. NO RNA value, no measured level, no fit residual and no outcome of any kind was read. The coordinator's brief supplied the figures 126 and 3 before any of this",
+  "does_not_claim": "not that the cap never binds in nature; not that the capped root is numerically wrong; not that sum_capped is a bad form; and nothing at all about the mean, competition or multiplicative, which are single-valued by construction (mean and sum-below-cap are linear, competition W/(h+W) and multiplicative exp(gain*W) are strictly monotone in W and so invertible)",
+  "forecloses": "taking the CAPPED root on the ambiguous genes would have given 125 informative capped roots plus the 3 capped_root_only genes = 128, ABOVE lane-capsumrna's MIN_GENES gate of 100, and would have made the capped sum a testable form against RNA. This rule gives ZERO genes whose prediction differs from the mean, so it FORECLOSES that test entirely. The rule chosen is the one that loses the result; that asymmetry is the point and is recorded before any count",
+  "forms": {
+    "sum_capped": "AMBIGUOUS: min(1, W) is flat above W = 1, so the inverse is not a function there",
+    "mean": "single-valued: sum(t)/n is linear in the terms",
+    "competition": "single-valued: W/(h + W) is strictly monotone in W, so invertible",
+    "multiplicative": "single-valued: exp(gain*W) is strictly monotone in W, so invertible",
+    "max": "not fitted as a share in this family; outside this lane's scope and said so",
+    "or": "not fitted as a share in this family; outside this lane's scope and said so"
+  },
+  "as_committed_by_capsumrna": {
+    "basal_not_positive": 12500,
+    "sum_past_the_cap": 2649,
+    "runnable": 2162,
+    "inhibitor_strength_above_1": 543,
+    "fit_not_unique": 126,
+    "capped_root_only": 3
+  },
+  "under_this_rule": {
+    "admitted": 2288,
+    "admitted_by_status": {
+      "runnable": 2162,
+      "fit_not_unique": 126
+    },
+    "unknown_under_this_rule": 3,
+    "unknown_by_status": {
+      "capped_root_only": 3
+    },
+    "differs_from_the_mean": 0,
+    "why_zero": "the uncapped root gives the mean's level on every admitted gene, and the only status whose prediction differed from the mean's is UNKNOWN under this rule"
+  },
+  "the_rejected_choice": {
+    "if_the_capped_root_were_taken": 128,
+    "min_genes_gate": 100,
+    "would_have_crossed_the_gate": true,
+    "note": "recorded because the rule chosen is the one that LOSES the testable population; the rejected alternative is the one that would have bought a result"
+  },
+  "committed_readings_that_would_move": {
+    "capsumrna_census.reader_selection.capped_sum_status.capped_root_only": {
+      "committed": 3,
+      "under_this_rule": 0,
+      "why": "its single fit rests on a ceiling the bridge does not identify"
+    },
+    "capsumrna_census.reader_selection.unique_fit.differs_from_the_mean.genes": {
+      "committed": 3,
+      "under_this_rule": 0,
+      "why": "the uncapped root gives the mean's level on every admitted gene, and the only status whose prediction differed is UNKNOWN under this rule"
+    },
+    "the_NOT_TESTABLE_verdict_s_basis": {
+      "committed": "NOT_TESTABLE because only 3 unique genes differ from the mean, below MIN_GENES 100",
+      "under_this_rule": "stronger and different in kind: ZERO genes differ from the mean, so on this population the capped sum is not a DISTINCT FORM at all rather than a distinct form with too few genes to test"
+    }
+  },
+  "nothing_was_rewritten": "no committed result's bytes were touched. The three readings above are reported for the coordinator to place with the supervisor, as instructed, and this lane stopped here",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/capsumrna_census.json (lane-capsumrna, 2026-10-10)",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/capsumrna_census.json",
+        "sha256": "57213d2a2a5f1870c8d369ea838405ffcd389a8d10d2dacf723e56aadfb03c30",
+        "bytes": 105614,
+        "partition": null
+      }
+    ],
+    "input_count": 1,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "root_rule": "where both roots exist, the fit takes the UNCAPPED root, whose element-driven share q = D is the one the declared split fixes; where only the CAPPED root exists, the gene is UNKNOWN and leaves the population, because its single fit rests on a ceiling the bridge does not identify. The cap is a ceiling and never a target: a fit equally consistent with an unbound cap does not assert saturation",
+      "ground": "attribution/bridge.py: 'V and s are NOT separately identified: only their product is. DECLARED_STRENGTH fixes the split by convention and by nothing else'; 'what DECLARED_STRENGTH does NOT license: it is not a measurement that the element saturates its gene'; and DECLARED_STRENGTH_LICENSES = 'the absolute scale of one gene's transcription and its basal fraction, in molecules/(cell*h); not the ceiling, not the strength, and not the response to any perturbation but this removal'. The capped root exists only when W > 1, which is a statement about the ceiling; the uncapped root's q = D is the declared split itself",
+      "min_genes_gate": 100,
+      "verdict_by_status": {
+        "runnable": "admit, uncapped root (unchanged)",
+        "fit_not_unique": "admit, uncapped root (was: counted, run, never chosen)",
+        "capped_root_only": "UNKNOWN, leaves the population (was: admitted as its one fit)",
+        "sum_past_the_cap": "no fit at these conventions (unchanged)",
+        "inhibitor_strength_above_1": "the mean's refusal (unchanged)",
+        "basal_not_positive": "the mean's refusal (unchanged)"
+      }
+    },
+    "exclusions": [
+      "no RNA, no measured level, no fit residual and no outcome: this is a reclassification of committed predictor-side counts under a rule registered before it ran"
+    ],
+    "code_cleanliness": {
+      "git_sha": "eea998b21f23775dd3d3db0c1c04c06247d3e21b",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/rootpick_count.py",
+        "form": "committed_repository_file",
+        "path": "scripts/rootpick_count.py",
+        "is_committed": true,
+        "declared_entry": "scripts/rootpick_count.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/envelope.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/envelope_census.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/magcal_register.py",
+        "scripts/magcal_run.py",
+        "tests/test_envelope.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_magcal.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/rootpick.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/rootpick_count.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "partitions": {
+      "none": "a single population, lane-capsumrna's reader selection; no partition is taken, and the absence of one is not a claim of independence"
+    },
+    "code": {
+      "git_sha": "eea998b21f23775dd3d3db0c1c04c06247d3e21b",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/envelope.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/envelope_census.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/magcal_register.py",
+        "scripts/magcal_run.py",
+        "tests/test_envelope.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_magcal.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/envelope.py",
+        "genomeos/attribution/magcal.py",
+        "scripts/envelope_census.py",
+        "scripts/magcal_register.py",
+        "scripts/magcal_run.py",
+        "tests/test_envelope.py",
+        "tests/test_magcal.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/rootpick_count.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "eea998b21f23775dd3d3db0c1c04c06247d3e21b",
+      "code_cleanliness_git_sha": "eea998b21f23775dd3d3db0c1c04c06247d3e21b",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record eea998b"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 20,
+      "opens_under_data": 2,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
