@@ -471,8 +471,8 @@ def build_inventory(root: Path | None = None) -> dict[str, Any]:
     }
 
 
-#: keys the writing run adds beside the census (its manifest, its wall time, its spend); not the census
-RUN_ONLY_KEYS = ("result_manifest", "seconds", "money")
+#: keys the run and save_result add beside the census (manifest, wall time, spend, date, name); not the census
+RUN_ONLY_KEYS = ("result_manifest", "seconds", "money", "date", "result")
 
 
 def census_of(payload: dict[str, Any]) -> dict[str, Any]:
