@@ -337,3 +337,20 @@ def test_no_word_claims_function_or_strengthens():
         assert bad not in words
     assert "7d's run has already read the RNA" in cs.DECISION
     assert math.isclose(cs.CLOSED_FORM_TOLERANCE, c2.CLOSED_FORM_TOLERANCE)
+
+
+def test_the_committed_census_keeps_its_decision_and_opens_no_rna():
+    import json
+
+    d = json.loads((Path(__file__).resolve().parents[1] / "data/results/capsumrna_census.json").read_text())
+    s = d["reader_selection"]
+    assert d["decision"] == cs.decide(s) and d["size_check"] == cs.size_check(s)
+    assert s["rna_read"] == "none" and d["size_check"]["rna_opened"] is False
+    assert (
+        d["size_check"]["under_7d_decision_2"] == "NOT_TESTABLE"
+        and not d["size_check"]["registration_written"]
+    )
+    assert s["unique_fit"]["max_abs_difference_from_mean_log2"] <= cs.CLOSED_FORM_TOLERANCE
+    assert all(s["roots"][r]["harness_failing_genes"] == 0 for r in ("uncapped", "capped"))
+    assert d["committed_censuses_reproduced"]["problems"] == []
+    assert d["result_manifest"]["code_cleanliness"]["own_code_is_committed"] is True
