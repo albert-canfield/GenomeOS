@@ -1,0 +1,893 @@
+{
+  "result": "simpler_dose_v2_result",
+  "date": "2026-10-10",
+  "registration_version": 2,
+  "registration_commit": "5b930cb",
+  "coverage_read_as_magnitude": true,
+  "strand_check": {
+    "per_stage": {
+      "emb": {
+        "sense": 1207754.664,
+        "antisense": 25433.6
+      },
+      "l1": {
+        "sense": 1366502.702,
+        "antisense": 49690.124
+      },
+      "l2": {
+        "sense": 1471516.03,
+        "antisense": 54434.937
+      },
+      "l3": {
+        "sense": 1909271.188,
+        "antisense": 31508.145
+      },
+      "l4": {
+        "sense": 2146943.947,
+        "antisense": 31972.149
+      },
+      "ya": {
+        "sense": 3489076.81,
+        "antisense": 32966.375
+      }
+    },
+    "verdict": "as_labelled"
+  },
+  "positive_control": {
+    "n": 10199,
+    "concordant": 3936,
+    "rate_pct": 38.592,
+    "matched_control": {
+      "expected": 2277.376,
+      "expected_rate": 0.22329,
+      "draws": 1000,
+      "draws_at_or_above_observed": 0,
+      "p_one_sided": 0.001
+    },
+    "separates": true
+  },
+  "outcome": "NO_DIFFERENCE_DETECTED",
+  "falsifier": "NOT_FALSIFIED",
+  "primary": {
+    "n": 8058,
+    "constrained_in_support": 3938,
+    "not_constrained_in_support": 4094,
+    "constrained_concordant_in_support": 1631,
+    "constrained_rate_pct": 41.417,
+    "matched_not_constrained_rate_pct": 38.608,
+    "delta_points": 2.809,
+    "delta_ci95_points": [
+      -0.166,
+      5.71
+    ],
+    "bootstrap": {
+      "reps": 2000,
+      "clusters_1mb": 102,
+      "reps_without_support": 0
+    },
+    "permutation": {
+      "perms": 1000,
+      "seed": 20261011,
+      "at_or_above_observed": 9,
+      "p_one_sided": 0.00999
+    },
+    "unmatched": {
+      "constrained": 3946,
+      "constrained_concordant": 1636,
+      "not_constrained": 4112,
+      "not_constrained_concordant": 1171
+    }
+  },
+  "beside": {
+    "stage2_edges": {
+      "n": 8520,
+      "constrained_in_support": 4091,
+      "not_constrained_in_support": 4403,
+      "constrained_concordant_in_support": 1684,
+      "constrained_rate_pct": 41.164,
+      "matched_not_constrained_rate_pct": 38.191,
+      "delta_points": 2.973,
+      "delta_ci95_points": [
+        0.077,
+        5.83
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 4,
+        "p_one_sided": 0.005
+      },
+      "unmatched": {
+        "constrained": 4099,
+        "constrained_concordant": 1689,
+        "not_constrained": 4421,
+        "not_constrained_concordant": 1254
+      }
+    },
+    "not_overlapping_stage2": {
+      "n": 5828,
+      "constrained_in_support": 2757,
+      "not_constrained_in_support": 3033,
+      "constrained_concordant_in_support": 1213,
+      "constrained_rate_pct": 43.997,
+      "matched_not_constrained_rate_pct": 38.41,
+      "delta_points": 5.587,
+      "delta_ci95_points": [
+        2.199,
+        8.995
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 0,
+        "p_one_sided": 0.001
+      },
+      "unmatched": {
+        "constrained": 2772,
+        "constrained_concordant": 1222,
+        "not_constrained": 3056,
+        "not_constrained_concordant": 870
+      }
+    },
+    "inside_gene_body": {
+      "n": 4039,
+      "constrained_in_support": 2214,
+      "not_constrained_in_support": 1815,
+      "constrained_concordant_in_support": 942,
+      "constrained_rate_pct": 42.547,
+      "matched_not_constrained_rate_pct": 37.771,
+      "delta_points": 4.777,
+      "delta_ci95_points": [
+        0.312,
+        9.101
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 3,
+        "p_one_sided": 0.004
+      },
+      "unmatched": {
+        "constrained": 2219,
+        "constrained_concordant": 944,
+        "not_constrained": 1820,
+        "not_constrained_concordant": 533
+      }
+    },
+    "between_genes": {
+      "n": 4019,
+      "constrained_in_support": 1724,
+      "not_constrained_in_support": 2279,
+      "constrained_concordant_in_support": 689,
+      "constrained_rate_pct": 39.965,
+      "matched_not_constrained_rate_pct": 39.683,
+      "delta_points": 0.282,
+      "delta_ci95_points": [
+        -3.185,
+        3.841
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 437,
+        "p_one_sided": 0.43756
+      },
+      "unmatched": {
+        "constrained": 1727,
+        "constrained_concordant": 692,
+        "not_constrained": 2292,
+        "not_constrained_concordant": 638
+      }
+    },
+    "middle_vs_bottom": {
+      "n": 7896,
+      "constrained_in_support": 3776,
+      "not_constrained_in_support": 4097,
+      "constrained_concordant_in_support": 1197,
+      "constrained_rate_pct": 31.7,
+      "matched_not_constrained_rate_pct": 31.465,
+      "delta_points": 0.235,
+      "delta_ci95_points": [
+        -1.686,
+        2.376
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 103,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 403,
+        "p_one_sided": 0.4036
+      },
+      "unmatched": {
+        "constrained": 3784,
+        "constrained_concordant": 1199,
+        "not_constrained": 4112,
+        "not_constrained_concordant": 1171
+      }
+    },
+    "tier_5pct": {
+      "n": 11842,
+      "constrained_in_support": 8888,
+      "not_constrained_in_support": 2930,
+      "constrained_concordant_in_support": 3150,
+      "constrained_rate_pct": 35.441,
+      "matched_not_constrained_rate_pct": 33.315,
+      "delta_points": 2.126,
+      "delta_ci95_points": [
+        0.139,
+        4.397
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 103,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 18,
+        "p_one_sided": 0.01898
+      },
+      "unmatched": {
+        "constrained": 8908,
+        "constrained_concordant": 3157,
+        "not_constrained": 2934,
+        "not_constrained_concordant": 849
+      }
+    },
+    "stage_emb": {
+      "n": 2934,
+      "constrained_in_support": 1739,
+      "not_constrained_in_support": 1192,
+      "constrained_concordant_in_support": 1036,
+      "constrained_rate_pct": 59.574,
+      "matched_not_constrained_rate_pct": 49.339,
+      "delta_points": 10.235,
+      "delta_ci95_points": [
+        4.418,
+        15.957
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 0,
+        "p_one_sided": 0.001
+      },
+      "unmatched": {
+        "constrained": 1742,
+        "constrained_concordant": 1039,
+        "not_constrained": 1192,
+        "not_constrained_concordant": 595
+      }
+    },
+    "stage_l1": {
+      "n": 573,
+      "constrained_in_support": 250,
+      "not_constrained_in_support": 317,
+      "constrained_concordant_in_support": 80,
+      "constrained_rate_pct": 32.0,
+      "matched_not_constrained_rate_pct": 27.467,
+      "delta_points": 4.533,
+      "delta_ci95_points": [
+        -4.955,
+        12.124
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 182,
+        "p_one_sided": 0.18282
+      },
+      "unmatched": {
+        "constrained": 254,
+        "constrained_concordant": 82,
+        "not_constrained": 319,
+        "not_constrained_concordant": 84
+      }
+    },
+    "stage_l2": {
+      "n": 1195,
+      "constrained_in_support": 819,
+      "not_constrained_in_support": 376,
+      "constrained_concordant_in_support": 398,
+      "constrained_rate_pct": 48.596,
+      "matched_not_constrained_rate_pct": 54.54,
+      "delta_points": -5.944,
+      "delta_ci95_points": [
+        -13.922,
+        2.945
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 972,
+        "p_one_sided": 0.97203
+      },
+      "unmatched": {
+        "constrained": 819,
+        "constrained_concordant": 398,
+        "not_constrained": 376,
+        "not_constrained_concordant": 201
+      }
+    },
+    "stage_l3": {
+      "n": 647,
+      "constrained_in_support": 318,
+      "not_constrained_in_support": 326,
+      "constrained_concordant_in_support": 36,
+      "constrained_rate_pct": 11.321,
+      "matched_not_constrained_rate_pct": 7.705,
+      "delta_points": 3.616,
+      "delta_ci95_points": [
+        -2.262,
+        8.796
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 101,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 86,
+        "p_one_sided": 0.08691
+      },
+      "unmatched": {
+        "constrained": 319,
+        "constrained_concordant": 36,
+        "not_constrained": 328,
+        "not_constrained_concordant": 27
+      }
+    },
+    "stage_l4": {
+      "n": 1073,
+      "constrained_in_support": 498,
+      "not_constrained_in_support": 573,
+      "constrained_concordant_in_support": 42,
+      "constrained_rate_pct": 8.434,
+      "matched_not_constrained_rate_pct": 12.383,
+      "delta_points": -3.949,
+      "delta_ci95_points": [
+        -9.264,
+        1.172
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 967,
+        "p_one_sided": 0.96703
+      },
+      "unmatched": {
+        "constrained": 498,
+        "constrained_concordant": 42,
+        "not_constrained": 575,
+        "not_constrained_concordant": 56
+      }
+    },
+    "stage_ya": {
+      "n": 1636,
+      "constrained_in_support": 314,
+      "not_constrained_in_support": 1310,
+      "constrained_concordant_in_support": 39,
+      "constrained_rate_pct": 12.42,
+      "matched_not_constrained_rate_pct": 19.38,
+      "delta_points": -6.959,
+      "delta_ci95_points": [
+        -12.118,
+        -1.766
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 995,
+        "p_one_sided": 0.995
+      },
+      "unmatched": {
+        "constrained": 314,
+        "constrained_concordant": 39,
+        "not_constrained": 1322,
+        "not_constrained_concordant": 208
+      }
+    }
+  },
+  "domain_genes_absent_from_rna": 0,
+  "secondary": {
+    "n": 13852,
+    "differ": 2919,
+    "domain_concordant": 4686,
+    "nearest_concordant": 4400,
+    "domain_rate_pct": 33.829,
+    "nearest_rate_pct": 31.764,
+    "delta_points": 2.065,
+    "delta_ci95_points": [
+      1.326,
+      2.816
+    ],
+    "clusters": 103,
+    "outcome": "DOMAIN_RULE_AHEAD",
+    "matched_control": {
+      "expected": 2679.711,
+      "expected_rate": 0.19345,
+      "draws": 1000,
+      "draws_at_or_above_observed": 0,
+      "p_one_sided": 0.001
+    },
+    "falsifier": "NOT_FALSIFIED",
+    "inside_gene_body": {
+      "n": 7701,
+      "differ": 2125,
+      "domain_concordant": 2667,
+      "nearest_concordant": 2493,
+      "domain_rate_pct": 34.632,
+      "nearest_rate_pct": 32.372,
+      "delta_points": 2.259,
+      "delta_ci95_points": [
+        1.075,
+        3.525
+      ],
+      "clusters": 103
+    },
+    "between_genes": {
+      "n": 6151,
+      "differ": 794,
+      "domain_concordant": 2019,
+      "nearest_concordant": 1907,
+      "domain_rate_pct": 32.824,
+      "nearest_rate_pct": 31.003,
+      "delta_points": 1.821,
+      "delta_ci95_points": [
+        1.1,
+        2.543
+      ],
+      "clusters": 102
+    }
+  },
+  "reading": "On C. elegans putative enhancers whose accessibility changes across development (J\u00e4nes et al. 2018, whole animals, six stages from embryo to young adult), each assigned to its stage of highest accessibility, with constraint measured on their exon-free bases (UCSC ce11 phyloP135way, stage 2's cut 2.08), the domain-rule gene is expressed at 5 coverage-TPM or more in long nuclear RNA and highest at the element's own stage for 1,631 of 3,938 elements in the top third by constrained fraction (41.4%), against 38.6% for the 4,094 in the bottom third at the same stage, position class, distance and measured length; difference +2.81 points, 95% -0.17 to +5.71 over 1-Mb clusters (within-stratum permutation p 0.00999; NOT_FALSIFIED). No difference was detected: the dose view seen beside stage 2 does not replicate on this source. This is not evidence that constrained elements lack function. The positive control separates: of 10,199 developmentally dynamic coding promoters, the nearest-TSS gene is stage-concordant for 3,936 (38.6%) against 22.3% at a matched distance (one-sided p 0.001). Secondary, stage 1's comparison on this source: on 13,852 elements the domain-rule gene is stage-concordant for 4,686 (33.8%) against 4,400 (31.8%) for the gene with the nearest 5' end; the rules differ on 2,919; difference +2.06 points, 95% +1.33 to +2.82 over 1-Mb clusters. On this endpoint the domain rule is ahead of nearest TSS, as in stage 1. The domain rule's genes match the element's stage more often than genes at a matched distance (19.3%, one-sided p 0.001). Conservation and accessibility are not function: this says the attributed gene is expressed when the element is open, not that the element acts on it, and it does not separate regulatory constraint from transcription-linked constraint. The RNA is from whole animals, so a stage concordance can come from any tissue.",
+  "rna_summary": {
+    "genes_with_value": 19973,
+    "protein_coding_genes": 19973,
+    "seconds": 86.2
+  },
+  "census": {
+    "elements": 13852,
+    "elements_by_stage": {
+      "emb": 4735,
+      "l1": 974,
+      "l2": 1955,
+      "l3": 1160,
+      "l4": 1958,
+      "ya": 3070
+    },
+    "measured": 11842,
+    "not_measured": 2010,
+    "overlap_stage2_population": 3849,
+    "overlap_stage2_population_measured": 3407,
+    "fraction_tertile_edges": [
+      0.072848,
+      0.19403
+    ],
+    "length_edges_measured_bases": [
+      151.0,
+      151.0
+    ],
+    "dose_arms": {
+      "top": 3949,
+      "bottom": 3922
+    },
+    "dose_arms_by_stage": {
+      "emb": {
+        "top": 1743,
+        "bottom": 1145
+      },
+      "l1": {
+        "top": 254,
+        "bottom": 300
+      },
+      "l2": {
+        "top": 819,
+        "bottom": 357
+      },
+      "l3": {
+        "top": 320,
+        "bottom": 316
+      },
+      "l4": {
+        "top": 499,
+        "bottom": 538
+      },
+      "ya": {
+        "top": 314,
+        "bottom": 1266
+      }
+    },
+    "dose_arms_inside_gene_body": {
+      "top": 2222,
+      "bottom": 1734
+    },
+    "dose_arms_between_genes": {
+      "top": 1727,
+      "bottom": 2188
+    },
+    "strata": 136,
+    "strata_with_both_arms": 127,
+    "top_in_support": 3941,
+    "bottom_in_support": 3905,
+    "mde_points_unclustered": 3.161,
+    "stage2_edges_arms_in_support": {
+      "top": 4091,
+      "bottom": 4403
+    },
+    "not_overlapping_stage2_arms_in_support": {
+      "top": 2760,
+      "bottom": 2902
+    },
+    "tier_5pct": {
+      "constrained": 8908,
+      "not_constrained": 2934
+    },
+    "secondary": {
+      "discordant": 2919,
+      "discordant_fraction": 0.2107,
+      "discordant_inside_gene_body": 2125,
+      "mde_points_unclustered": 1.092,
+      "stop_rule_met": false
+    },
+    "positive_control_promoters": 10199,
+    "positive_control_promoters_by_stage": {
+      "emb": 2370,
+      "l1": 472,
+      "l2": 1583,
+      "l3": 1008,
+      "l4": 1653,
+      "ya": 3113
+    },
+    "clusters_1mb": 103,
+    "stop_rule_met": false
+  },
+  "reading_is_the_registered_wording": "the reading is REGISTRATION['outcome_wording'] with its numbers filled in and no other word changed",
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "J\u00e4nes J et al. (2018) Chromatin accessibility dynamics across C. elegans development and ageing. eLife 7:e37344; source data (Figures 1, 2 and 4) and GEO GSE114483 (long cap RNA, wild type)",
+        "version": "eLife source data v2 and GEO GSE114483, as served on 2026-10-10"
+      },
+      {
+        "accession": "Ensembl gene models for WBcel235 (WBcel235.63.gff3.gz)",
+        "version": "release 63, the copy held in data/reference/celegans since 2026-09-10"
+      },
+      {
+        "accession": "UCSC ce11 phyloP135way: https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/ce11.phyloP135way.bw",
+        "version": "range-read 2026-10-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/simpler_dose_v2_registration.json",
+        "sha256": "383afa111f76e60054cef33aef25fee0ad593b04399fa340e55c6af18037e559",
+        "bytes": 35667,
+        "partition": "the committed registration"
+      },
+      {
+        "path": "data/results/simpler_dose_result.json",
+        "sha256": "c01f74f337941e58fb7ea3d825cf1178f46a2921a5a03c0f37f5d8673c0ee543",
+        "bytes": 16846,
+        "partition": "run 1, which must be committed before run 2"
+      },
+      {
+        "path": "data/results/simpler_dose_tiers.json",
+        "sha256": "6c3ffd986fac3c7aa6242ebad4871849c2d70943692055163172b20ab45789d3",
+        "bytes": 456376,
+        "partition": "the committed per-element counts"
+      },
+      {
+        "path": "data/results/simpler_worm_tiers.json",
+        "sha256": "73aca3d7ba74176b6d25a395cc15d04fb140ea5a3652ec7cd0de535ac2dee828",
+        "bytes": 313614,
+        "partition": "stage 2's population coordinates, for the overlap"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/elife-37344-fig1-data1-v2.txt",
+        "sha256": "18a4e546affaab1d87a8bcb6fc0ac42dab452e6f2ca655654142ca72277a05fc",
+        "bytes": 3835944,
+        "partition": "coordinates and the six wild-type ATAC heights"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/elife-37344-fig2-data1-v2.txt",
+        "sha256": "09bede4b3b2acdefa87aec2dffb518a21e1e1336cb2dc8a2712045ffc80e4656",
+        "bytes": 18827378,
+        "partition": "coordinates (ce10, ce11) and the class only"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/elife-37344-fig4-data1-v2.txt",
+        "sha256": "91cd4e5335ece8f9059a37e8ea17dd90eab5705163777ac25c3fdb40a7ac2bd2",
+        "bytes": 4739367,
+        "partition": "coordinates and the developmental-dynamics call only"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "gene positions, strands and exons"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_emb_linear_fwd.bw",
+        "sha256": "c1f0bc9cbe11dcac0505a3ee761a1e1c1af29713f2f2662b2f647c887295573c",
+        "bytes": 28588834,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_emb_linear_rev.bw",
+        "sha256": "1eae67818e4fe13e6ee5fa796eb6bc2c46730058f8d622d43ca64f060f401354",
+        "bytes": 27839625,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l1_linear_fwd.bw",
+        "sha256": "1fe578a608dc6d5bc96b4f08abe47b3d7467728795f5b0c32aa5415ddb4ab933",
+        "bytes": 33889181,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l1_linear_rev.bw",
+        "sha256": "b14d1acd85a9843603a12c0c3dea5ee7bebed813fc688fb3dda62c5df2bf3c09",
+        "bytes": 33250390,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l2_linear_fwd.bw",
+        "sha256": "37487528cc734645fde85a97fbdd93e5978ff375694595150600ced1907fa17c",
+        "bytes": 35058628,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l2_linear_rev.bw",
+        "sha256": "1c4d17c40b7096b15a6d1069d53a8ced927c5f58b6712180b73f66239168b489",
+        "bytes": 34395798,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l3_linear_fwd.bw",
+        "sha256": "d48f0c79c9fabfb2411da1f50da56f274788e9ed087b0eb2824cd245d324f6b3",
+        "bytes": 28575916,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l3_linear_rev.bw",
+        "sha256": "d0869b1a0b468f70ae826e4fab377f277f6a13cbafac9b6f5e86f60a885de26c",
+        "bytes": 27868414,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l4_linear_fwd.bw",
+        "sha256": "4c966cc1bf141cf933df14c1522dc6cca3d3e5673dae99759467dabdea6627e7",
+        "bytes": 29296652,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l4_linear_rev.bw",
+        "sha256": "ebaac491a415563db09967a8c8241b09e8e29daabdc206227660410091b73bb1",
+        "bytes": 28556737,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_ya_linear_fwd.bw",
+        "sha256": "8658ada6d9316e9777c3b7b90c5694daabe9540e32c4495ba16f036c79e7aab3",
+        "bytes": 21618472,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_ya_linear_rev.bw",
+        "sha256": "391dc3b26a1cfbb9da28e51360afbeaaa1529263642b9ce5fc5088f3b13668c1",
+        "bytes": 21034057,
+        "partition": "the endpoint: long-cap linear coverage, read once after the registration"
+      }
+    ],
+    "assembly": "WBcel235 (ce11): the source's ce11 columns, the GEO tracks, the gene models and phyloP",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the source data are bed-style (0-based, half-open); bigWig is 0-based half-open; the GFF3 (1-based closed) is converted on reading"
+    },
+    "parameters": {
+      "stages": [
+        "emb",
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "ya"
+      ],
+      "detection_coverage_tpm": 5.0,
+      "constraint_track": "phyloP135way",
+      "constraint_cut": 2.08,
+      "constrained_min_fraction_for_the_5pct_tier": 0.05,
+      "stage2_edges": [
+        0.08,
+        0.190476
+      ],
+      "min_per_arm": 200,
+      "min_discordant_secondary": 200,
+      "permutations": 1000,
+      "bootstrap": 2000,
+      "control_draws": 1000,
+      "cluster_bp": 1000000,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "seed": 20261010,
+      "alpha": 0.05,
+      "range_budget_bytes": 200000000,
+      "download_budget_bytes": 1500000000
+    },
+    "exclusions": [
+      "elements of classes other than putative_enhancer (population) and coding_promoter (positive control)",
+      "elements the source does not call developmentally dynamic (devel_is_dynamic False)",
+      "the ageing (glp-1) samples and their columns",
+      "exon bases of any WBcel235 transcript, removed from every element before its constrained fraction",
+      "elements with no scored base left after exon removal: no fraction, out of the dose test, counted",
+      "the source's own element-to-gene columns, never read (simpler_dose.NEVER_READ)",
+      "the RNA-derived flag columns of Figure 2 source data (lcap_*_passed_*), never read"
+    ],
+    "partitions": {
+      "endpoint": "the long-cap tracks, read once, after the registration was committed"
+    },
+    "code_cleanliness": {
+      "git_sha": "5b930cbfaee76b1e3c0d5ab7148e7488b40276bd",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_dose_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_dose_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_dose_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_dose.py",
+        "genomeos/attribution/simpler_tiers.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/simpler_dose_run.py"
+      ],
+      "counting_path_count": 41,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5b930cbfaee76b1e3c0d5ab7148e7488b40276bd",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_dose_run.py",
+        "score2"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "5b930cbfaee76b1e3c0d5ab7148e7488b40276bd",
+      "code_cleanliness_git_sha": "5b930cbfaee76b1e3c0d5ab7148e7488b40276bd",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 5b930cb"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 116,
+      "opens_under_data": 58,
+      "files_read": 20,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
