@@ -487,7 +487,7 @@ History: ROADMAP-HISTORY.md §3 C, lines 956–1122.
   below 0.9 of it) or answer UNKNOWN with a reason, never canonical in its place; over 299 coding SNVs of HG002 in 46
   genes with cached isoform tables, the predicted consequence differs in class or residue number in 551 of 5,705
   established variant-tissue pairs (10,441 of 16,146 UNKNOWN, mostly low expression); a census of disagreement between
-  two predictions, not an accuracy claim, on the project's cached genes. Open: the Flow tab does not draw it yet; a
+  two predictions, not an accuracy claim, on the project's cached genes. Open: ~~the Flow tab does not draw it yet~~ (drawn 2026-10-10, lane-flowtab, `cfa1e48`: a tissue selector, both isoforms' exons on one genomic scale and both proteins on one residue scale with the variant's consequence on each, UNKNOWN shown with the API's reason verbatim and never the canonical in the tissue's place; checked in headless Chrome); a
   genome-wide census needs the GTEx transcript TPM table; a small fix (a REF the genome does not carry must not read as
   residue_changed) was refused its forced commit and dropped, with 0 of 5,246 SNVs affected in the census. 4. A per-candidate germline call, which waits for DNA that never went through culture.
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
