@@ -927,7 +927,13 @@ History: ROADMAP-HISTORY.md §3 H, lines 1986–2057.
   run 2, resumed or closed (§5, A1), which waits on Albert's own words: the resume code
   landed in `f0f3cbb`. 3. The model's second targets as a shortlist (the 52 off-gate pairs above a
   drop of 0.1, refused a band at 26 and 24 pairs), held against an independent perturbation; no level
-  claim is registered again until a screen exists on both sides of a split. 4. Milestone 1.3 clause 2
+  claim is registered again until a screen exists on both sides of a split: **run 2026-10-10, no difference
+  detected** (lane-secondtargets; `18da8cb` registered, `30b2f74` amendment 1 before any value, `3e8ef45`
+  result; `d4dacb3` NOT_RUN kept): of 141 independent Gasperini 2019 K562 tests of a compiled element's second
+  or further target, 6 (4.25%) are screen hits against 1.95% for distance-matched genes at the same element
+  the shortlist does not name, +2.31 points [95% CI −1.91, +6.29]; the nearest gene 4.96%; positive control
+  369 of 374. Amendment 1 changed the fold-column name and made the identifier join case-insensitive, the
+  latter a disclosed departure from its stop rule decided from identifiers alone. 4. Milestone 1.3 clause 2
   from public measurement (M5, lane-measuredunknown): a public MPRA or CRISPR screen whose elements
   overlap the constrained-unknown blocks, searched for first and registered only if found. 5. Closure beyond the
   gene level (M3): the registered cell-level run detected no difference on 35 elements (`80bf3db`);
