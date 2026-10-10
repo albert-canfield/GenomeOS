@@ -93,6 +93,15 @@ row is unweighted average precision, and its own 2,000-draw rebuild is **+0.1361
 estimator on the same 1,918 pairs (`heldout_published_pairs`), the one README cites. The point,
 +0.1361, is the same under both.
 
+*(Path made exact 2026-10-10, lane-docfix.)* Both intervals re-read from `crispri_published_v2.json`.
+The weighted K562 figure sits at `heldout_published_pairs.per_cell_type_weighted.K562.deletion_gain`
+(+0.1361 [+0.0734, +0.2270], 22 clusters, 2,000 of 2,000 draws), and beside it at
+`beside_the_2026_09_27_result.rows.heldout_K562.this_run`, whose 200-draw value of 2026-09-27 was
+[+0.0768, +0.2277]. The unweighted one is also at `beside_the_2026_09_27_result.rows.arm1_k562_all_pairs`.
+The top-level `heldout_published_pairs.deletion_gain`, +0.1095 [+0.059, +0.1737], is a third
+population, all 4,378 held-out pairs pooled over the five held-out cell types (K562 1,918, WTC11
+1,921, HCT116 396, Jurkat 75, GM12878 68) with 190 positives, and is neither figure.
+
 ## Limits
 
 1. **One cell type.** The second held-out cell type with usable n is HCT116 (396 pairs, 34
