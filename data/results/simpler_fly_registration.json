@@ -1,0 +1,437 @@
+{
+  "result": "simpler_fly_registration",
+  "date": "2026-10-10",
+  "written_before_any_rna_value_was_read": true,
+  "registered_inputs": {
+    "supplementary_tables": {
+      "path": "data/knowledge/simpler_fly/SupplementaryTables.xlsx",
+      "sha256": "d80dd18c611953d4a5f53599b00bd5449387815e96cfa8ac8adf0ba54b7d443c"
+    },
+    "peaks": {
+      "path": "data/knowledge/simpler_fly/peaks.bed",
+      "sha256": "c99bee0ba98a2638f6ba58b1354a3aff4c59f8a4afd31db3616ff999020dd07c"
+    },
+    "gff3": {
+      "path": "data/knowledge/simpler_fly/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+      "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc"
+    },
+    "rna_by_annotation": {
+      "path": "data/knowledge/simpler_fly/rna_umi_by_manual_annot.tsv.gz",
+      "sha256": "9b9ab6323d0e81d836457523151757fcb114cd5459028b3827c74dceefa22336",
+      "note": "distilled by scripts/simpler_fly_fetch.py; its values are first read by score"
+    },
+    "protein_coding_genes": 13950
+  },
+  "rna_cells_per_tissue": {
+    "neural": 76961,
+    "ventral midline": 1261,
+    "epidermis": 56543,
+    "foregut and hindgut": 14049,
+    "tracheal system": 13461,
+    "salivary gland": 5143,
+    "Malpighian tubule": 1145,
+    "muscle": 31014,
+    "fat body": 5569,
+    "plasmatocytes": 7504,
+    "midgut": 17683,
+    "amnioserosa": 8471,
+    "germ cell": 17410,
+    "yolk": 21616
+  },
+  "registration": {
+    "claim": "On Drosophila melanogaster embryo distal elements accessible in clusters of exactly one tissue, the gene the worm's domain rule attributes is expressed highest in the element's tissue more often than the gene with the nearest annotated 5' end: the worm result (Serizay 2020, +2.89 points, registration 595d7c2) repeated on a second species and a second source.",
+    "node": "The worm's gene-structure rule, unchanged (simpler.domain_rule, imported). Drosophila has insulators and TADs, but no measured boundary set is used: this is a replication, and changing the node together with the species would leave a disagreement with the worm unattributable. Decision written in docs/SIMPLER-GENOMES.md section 8 before any RNA value was read.",
+    "attribution": "Domain rule: host protein-coding gene if the element's midpoint lies in one (nearest 5' end among overlapping hosts); otherwise the flanking protein-coding gene whose 5' end faces the element; divergent pair: nearer 5' end; convergent pair: nearer 5' end of the two, counted apart. Reads Ensembl 104 BDGP6.32 gene positions and strands only.",
+    "baseline": "Nearest annotated 5' end among all protein-coding genes of the chromosome arm (nearest TSS).",
+    "tissues": [
+      "neural",
+      "ventral midline",
+      "epidermis",
+      "foregut and hindgut",
+      "tracheal system",
+      "salivary gland",
+      "Malpighian tubule",
+      "muscle",
+      "fat body",
+      "plasmatocytes",
+      "midgut",
+      "amnioserosa",
+      "germ cell",
+      "yolk"
+    ],
+    "tissue_grouping": {
+      "atac_refined_broad_annotation": {
+        "Neural": "neural",
+        "Neural prim.": "neural",
+        "Brain": "neural",
+        "Brain prim.": "neural",
+        "Ventral midline": "ventral midline",
+        "Epidermis": "epidermis",
+        "Epidermis prim.": "epidermis",
+        "Hindgut": "foregut and hindgut",
+        "Hindgut prim.": "foregut and hindgut",
+        "Foregut prim.": "foregut and hindgut",
+        "Pharnyx": "foregut and hindgut",
+        "Tracheal system": "tracheal system",
+        "Tracheal system prim.": "tracheal system",
+        "Salivary gland": "salivary gland",
+        "Malpighian tubule": "Malpighian tubule",
+        "Muscle": "muscle",
+        "Muscle prim.": "muscle",
+        "Fat body": "fat body",
+        "Plasmatocytes": "plasmatocytes",
+        "Midgut": "midgut",
+        "Midgut prim.": "midgut",
+        "Amnioserosa": "amnioserosa",
+        "Amnioserosa anlage": "amnioserosa",
+        "Germ cell": "germ cell",
+        "Yolk": "yolk"
+      },
+      "rna_manual_annot": {
+        "brain": "neural",
+        "brain primordium": "neural",
+        "ventral nerve cord": "neural",
+        "ventral nerve cord primordium": "neural",
+        "peripheral nervous system": "neural",
+        "peripheral nervous system primordium": "neural",
+        "sensory nervous system": "neural",
+        "sensory nervous system primordium": "neural",
+        "glia": "neural",
+        "midline primordium": "ventral midline",
+        "epidermis": "epidermis",
+        "epidermis primordium": "epidermis",
+        "foregut / hindgut / anal pad": "foregut and hindgut",
+        "foregut / hindgut primordium": "foregut and hindgut",
+        "hindgut / anal pad": "foregut and hindgut",
+        "hindgut primordium": "foregut and hindgut",
+        "tracheal system": "tracheal system",
+        "tracheal primordium": "tracheal system",
+        "spiracle (tracheal system)": "tracheal system",
+        "spiracles (tracheal system)": "tracheal system",
+        "salivary gland": "salivary gland",
+        "salivary gland primordium": "salivary gland",
+        "salivary gland body primordium": "salivary gland",
+        "Malpighian tubule": "Malpighian tubule",
+        "somatic muscle": "muscle",
+        "somatic muscle primordium": "muscle",
+        "muscle": "muscle",
+        "visceral muscle": "muscle",
+        "visceral muscle primordium": "muscle",
+        "fat body": "fat body",
+        "plasmatocytes": "plasmatocytes",
+        "plasmatocytes anlage": "plasmatocytes",
+        "midgut": "midgut",
+        "midgut primordium": "midgut",
+        "proventriculus": "midgut",
+        "amnioserosa": "amnioserosa",
+        "germ cell": "germ cell",
+        "yolk nuclei": "yolk"
+      }
+    },
+    "labels_excluded": {
+      "atac": [
+        "Blastoderm",
+        "Ectoderm anlage",
+        "Endoderm anlage",
+        "Head ectoderm",
+        "Head ectoderm prim.",
+        "Mesectoderm anlage",
+        "Mesoderm anlage",
+        "Unknown"
+      ],
+      "rna": [
+        "anlage in statu nascendi",
+        "cellular blastoderm / pole cell",
+        "crystal cell",
+        "ectoderm anlage",
+        "ectoderm anlage in statu nascendi",
+        "ectoderm primordium",
+        "endoderm primordium",
+        "maternal",
+        "mesoderm primordium",
+        "procrystal cell",
+        "trunk mesoderm primordium",
+        "ubiquitous",
+        "unknown"
+      ]
+    },
+    "population": "Calderon 2022 Table S4 marker rows with p_val_adj < 0.05 and avg_logFC > 0, joined to Table S2 on (time window, cluster); a peak is single-tissue when every such call falls in clusters of one tissue and none in an excluded label. Distal: midpoint ((start + end) // 2 of the peak) more than 1,000 bp from every annotated transcript 5' end of any biotype; chromosome arms 2L, 2R, 3L, 3R, 4, X, Y.",
+    "endpoint": "Per tissue, UMI counts summed over every RNA cell whose manual_annot is grouped into it, all time windows pooled, scaled to counts per million of that tissue's total. Concordant: the attributed gene's CPM in the element's tissue is >= 5 and strictly higher than in each of the other 13 tissues. A protein-coding gene absent from the RNA rows is not concordant (kept in the denominator).",
+    "never_read": "for the attribution: any accessibility or RNA value; at all: supplementary sheets TableS3, TableS5, TableS6, TableS8, TableS9, TableS10 (RNA markers, RNA-derived gene clusters and motif-expression links, NNLS RNA-ATAC links)",
+    "statistic": "delta = concordance(domain rule) - concordance(nearest TSS), in points, on the same elements; 95% interval: percentile cluster bootstrap over 1-Mb windows, 2,000 resamples, seed 20261010 (simpler.cluster_bootstrap).",
+    "matched_control": "Per element, a protein-coding gene of the same chromosome arm drawn uniformly among those whose 5' end lies in the same distance bin as the domain-rule gene's (bins 0-1, 1-2, 2-5, 5-10, 10-20, 20-50, 50-100, >100 kb), the domain-rule gene excluded; if none, the gene whose 5'-end distance is closest. 1,000 draws, seed 20261010; one-sided p = (1 + draws with concordance >= observed) / 1,001 (simpler.control_test).",
+    "positive_control": "Single-tissue promoter elements (midpoint within 500 bp of a protein-coding gene's annotated 5' end), nearest-TSS gene, against its own matched-distance control built the same way. If its p >= 0.05 the readout is declared unresponsive and the primary reading is withheld.",
+    "falsifier": "The domain rule is falsified as a carrier of tissue information on this endpoint if its concordance is not above its matched-distance control (one-sided p >= 0.05).",
+    "decision": "DOMAIN_RULE_AHEAD if the interval's lower bound > 0; NEAREST_AHEAD if its upper bound < 0; NO_DIFFERENCE_DETECTED otherwise. Replication of the worm is read from the same label: DOMAIN_RULE_AHEAD replicates its direction, NO_DIFFERENCE_DETECTED does not replicate it, NEAREST_AHEAD reverses it.",
+    "strata_beside": "Reported beside the primary, deciding nothing: host vs intergenic elements, each tissue, the discordant elements alone, and the nearest-TSS gene against its own matched control. If the primary is DOMAIN_RULE_AHEAD and the intergenic stratum's lower bound is <= 0, the host caveat is appended to the reading.",
+    "stop_rule": "One run. If fewer than 200 elements have different genes under the two rules, stop unscored (UNDERPOWERED). No rule, grouping, population, threshold or endpoint is changed after an RNA value is read; a second definition would be a new registration, committed before it is run.",
+    "cannot_establish": "Accessibility is not function. Concordance says the attributed gene is expressed where the element is open, not that the element acts on it. The assays come from different nuclei; the RNA is pooled over 0-20 h while a marker call may come from one window; tissue labels were assigned by the source separately in each modality and grouped here by name. Inside gene bodies accessibility can follow the host's own transcription.",
+    "outcome_wording": {
+      "head": "On {n} D. melanogaster embryo distal elements accessible in clusters of exactly one of {t} tissues (Calderon et al. 2022, 0-20 h, the source's own marker call), the gene the domain rule attributes is expressed at 5 counts per million or more and highest in the element's own tissue, in RNA pooled over that tissue's cells, for {kd} of {n} ({cd}%), against {kn} of {n} ({cn}%) for the gene with the nearest 5' end; the rules differ on {k} elements; difference {d} points, 95% {lo} to {hi} over 1-Mb clusters.",
+      "DOMAIN_RULE_AHEAD": "On this endpoint the domain rule is ahead of nearest TSS.",
+      "NEAREST_AHEAD": "On this endpoint nearest TSS is ahead of the domain rule.",
+      "NO_DIFFERENCE_DETECTED": "No difference detected between the domain rule and nearest TSS.",
+      "replication_DOMAIN_RULE_AHEAD": "The worm's result (+2.89 points on Serizay et al. 2020) is replicated in direction on a second species and source.",
+      "replication_NO_DIFFERENCE_DETECTED": "The worm's result (+2.89 points on Serizay et al. 2020) is not replicated on this source.",
+      "replication_NEAREST_AHEAD": "The worm's result (+2.89 points on Serizay et al. 2020) is reversed on this source.",
+      "NOT_FALSIFIED": "The domain rule's genes match the element's tissue more often than genes at a matched distance ({cc}%, one-sided p {p}), so position carries tissue information here.",
+      "FALSIFIED": "The domain rule's genes match the element's tissue no more often than genes at a matched distance ({cc}%, one-sided p {p}): on this endpoint the attribution carries no tissue information beyond distance, and it is falsified as a carrier of it.",
+      "host_caveat": "The difference is not carried by the intergenic elements; inside gene bodies accessibility can follow the host gene's own transcription, so this run does not separate regulation from transcription.",
+      "tail": "Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it, and the two assays come from different nuclei."
+    }
+  },
+  "population_funnel": {
+    "marker_calls": {
+      "marker_rows": 17422,
+      "marker_rows_not_positive_or_not_significant": 2361,
+      "positive_marker_rows": 15061,
+      "peaks_with_a_positive_marker_call": 6442,
+      "peaks_with_a_call_in_an_excluded_label": 83,
+      "peaks_called_in_two_or_more_tissues": 2566,
+      "peaks_called_in_exactly_one_tissue": 3793
+    },
+    "classes": {
+      "not_in_peak_set": 0,
+      "chromosome_not_used": 0,
+      "neither_class": 815,
+      "distal": 2518,
+      "promoter": 460
+    }
+  },
+  "census": {
+    "elements": 2518,
+    "elements_by_tissue": {
+      "neural": 1330,
+      "ventral midline": 0,
+      "epidermis": 579,
+      "foregut and hindgut": 21,
+      "tracheal system": 11,
+      "salivary gland": 0,
+      "Malpighian tubule": 0,
+      "muscle": 301,
+      "fat body": 1,
+      "plasmatocytes": 2,
+      "midgut": 224,
+      "amnioserosa": 2,
+      "germ cell": 0,
+      "yolk": 47
+    },
+    "domain_cases": {
+      "convergent_fallback": 199,
+      "divergent": 263,
+      "faces_one": 454,
+      "host": 1601,
+      "one_flank": 1
+    },
+    "discordant": 822,
+    "discordant_fraction": 0.3264,
+    "discordant_by_case": {
+      "convergent_fallback": 7,
+      "faces_one": 171,
+      "host": 644
+    },
+    "discordant_by_tissue": {
+      "neural": 467,
+      "ventral midline": 0,
+      "epidermis": 181,
+      "foregut and hindgut": 10,
+      "tracheal system": 2,
+      "salivary gland": 0,
+      "Malpighian tubule": 0,
+      "muscle": 75,
+      "fat body": 0,
+      "plasmatocytes": 2,
+      "midgut": 72,
+      "amnioserosa": 0,
+      "germ cell": 0,
+      "yolk": 13
+    },
+    "host_elements": 1601,
+    "intergenic_elements": 917,
+    "intergenic_discordant": 178,
+    "clusters_1mb": 102,
+    "mde_points_unclustered": 3.188,
+    "positive_control_promoters": 460,
+    "positive_control_promoters_by_tissue": {
+      "neural": 221,
+      "ventral midline": 0,
+      "epidermis": 119,
+      "foregut and hindgut": 0,
+      "tracheal system": 2,
+      "salivary gland": 0,
+      "Malpighian tubule": 0,
+      "muscle": 42,
+      "fat body": 0,
+      "plasmatocytes": 3,
+      "midgut": 56,
+      "amnioserosa": 0,
+      "germ cell": 0,
+      "yolk": 17
+    },
+    "stop_rule_met": false
+  },
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Calderon D, Blecher-Gonen R, Huang X, Secchia S, Kentro J, Daza RM, Martin B, Dulja A, Schaub C, Trapnell C, Larschan E, O'Connor-Giles KM, Furlong EEM, Shendure J (2022) The continuum of Drosophila embryonic development at single-cell resolution. Science 377:eabn5800, doi:10.1126/science.abn5800; supplementary tables, peak set and cell annotations from the authors' site (DEAP), RNA counts from GEO GSE190147",
+        "version": "authors' site files as served on 2026-10-10; GEO GSE190147"
+      },
+      {
+        "accession": "Ensembl release 104, Drosophila melanogaster BDGP6.32 (dm6) GFF3",
+        "version": "Ensembl release 104"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_fly/SupplementaryTables.xlsx",
+        "sha256": "d80dd18c611953d4a5f53599b00bd5449387815e96cfa8ac8adf0ba54b7d443c",
+        "bytes": 17049285,
+        "partition": "Table S2 and Table S4 only (ATAC cluster labels and marker calls)"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/peaks.bed",
+        "sha256": "c99bee0ba98a2638f6ba58b1354a3aff4c59f8a4afd31db3616ff999020dd07c",
+        "bytes": 2532609,
+        "partition": "the peak set"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+        "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc",
+        "bytes": 5713526,
+        "partition": "gene and transcript positions and strands"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/fetch_record.json",
+        "sha256": "ccf6258d7f66a053e67c0efa187d9b316daf5cc7eed9385c69ad57d63f666a3f",
+        "bytes": 5018,
+        "partition": "cells per RNA annotation (labels only) and the distilled file's sha256"
+      }
+    ],
+    "assembly": "dm6 (BDGP6.32): the peaks, the source's RNA alignment and the gene models; nothing is lifted",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the peaks are BED (0-based, half-open) and the GFF3 is 1-based closed; the element midpoint (start + end) // 2 moves by at most 1 bp between the two conventions"
+    },
+    "parameters": {
+      "tissues": [
+        "neural",
+        "ventral midline",
+        "epidermis",
+        "foregut and hindgut",
+        "tracheal system",
+        "salivary gland",
+        "Malpighian tubule",
+        "muscle",
+        "fat body",
+        "plasmatocytes",
+        "midgut",
+        "amnioserosa",
+        "germ cell",
+        "yolk"
+      ],
+      "promoter_bp": 500,
+      "distal_bp": 1000,
+      "detection_cpm": 5.0,
+      "marker_p_adj": 0.05,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "control_draws": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "seed": 20261010,
+      "min_discordant": 200,
+      "alpha": 0.05
+    },
+    "exclusions": [
+      "Table S4 rows with avg_logFC <= 0 (less accessible in the cluster)",
+      "peaks with any positive marker call in a cluster whose label is excluded: Blastoderm, Ectoderm anlage, Endoderm anlage, Head ectoderm, Head ectoderm prim., Mesectoderm anlage, Mesoderm anlage, Unknown",
+      "peaks called in clusters of two or more tissues",
+      "peaks neither distal (> 1,000 bp from every transcript 5' end) nor promoter (<= 500 bp from a protein-coding gene's 5' end)",
+      "RNA cells whose label is excluded: anlage in statu nascendi, cellular blastoderm / pole cell, crystal cell, ectoderm anlage, ectoderm anlage in statu nascendi, ectoderm primordium, endoderm primordium, maternal, mesoderm primordium, procrystal cell, trunk mesoderm primordium, ubiquitous, unknown",
+      "genes that are not protein_coding, and chromosomes other than 2L, 2R, 3L, 3R, 4, X, Y",
+      "supplementary sheets never read: TableS3, TableS5, TableS6, TableS8, TableS9, TableS10"
+    ],
+    "partitions": {
+      "population": "fixed here, before any RNA value was read"
+    },
+    "code_cleanliness": {
+      "git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_fly_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_fly_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_fly_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_fly_run.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/simpler_fly_inventory.json"
+      ],
+      "argv": [
+        "scripts/simpler_fly_run.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "code_cleanliness_git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 67aff11"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 319,
+      "opens_under_data": 13,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

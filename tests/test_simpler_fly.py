@@ -177,3 +177,62 @@ def test_reading_fills_the_registered_wording_only() -> None:
     res["primary"]["delta_ci95_points"] = [-1.0, 7.0]
     text = sf.reading(res)
     assert w["replication_NO_DIFFERENCE_DETECTED"] in text and w["host_caveat"] not in text
+
+
+# ----------------------------------------------------------------------- the committed registration
+
+REGISTRATION = ROOT / "data/results/simpler_fly_registration.json"
+INVENTORY = ROOT / "data/results/simpler_fly_inventory.json"
+LOCAL_HOW = "Calderon 2022 tables and the Ensembl 104 GFF3 live in the git-ignored data/knowledge/simpler_fly"
+
+
+def test_committed_registration_is_the_module_registration() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(REGISTRATION, was="registration not yet written")
+    reg = json.loads(REGISTRATION.read_text())
+    assert reg["written_before_any_rna_value_was_read"] is True
+    assert reg["registration"] == json.loads(json.dumps(sf.REGISTRATION))
+    cen = reg["census"]
+    assert cen["elements"] == sum(cen["elements_by_tissue"].values())
+    assert cen["discordant"] == sum(cen["discordant_by_case"].values())
+    assert cen["discordant"] >= sf.MIN_DISCORDANT and not cen["stop_rule_met"]
+    assert cen["host_elements"] + cen["intergenic_elements"] == cen["elements"]
+    funnel = reg["population_funnel"]["marker_calls"]
+    assert funnel["peaks_with_a_positive_marker_call"] == (
+        funnel["peaks_with_a_call_in_an_excluded_label"]
+        + funnel["peaks_called_in_two_or_more_tissues"]
+        + funnel["peaks_called_in_exactly_one_tissue"]
+    )
+    classes = reg["population_funnel"]["classes"]
+    assert classes["distal"] == cen["elements"] and classes["promoter"] == cen["positive_control_promoters"]
+
+
+def test_inventory_counts_its_downloads_within_budget() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(INVENTORY, was="inventory not yet written")
+    inv = json.loads(INVENTORY.read_text())
+    assert inv["fetched_bytes"] == sum(f["bytes"] for f in inv["fetched"])
+    assert inv["lane_download_bytes"] == inv["fetched_bytes"] + inv["scouting_bytes"] <= inv["budget_bytes"]
+    assert all(f["licence"] for f in inv["fetched"])
+    assert [f["name"] for f in inv["fetched"] if not f["kept"]] == ["GSE190147_scirnaseq_gene_matrix.mtx.gz"]
+
+
+@pytest.mark.needs_local_data(str(sf.STORE), how=LOCAL_HOW)
+def test_census_recomputes_from_the_registered_inputs() -> None:
+    import json
+
+    reg = json.loads(REGISTRATION.read_text())
+    for key in ("supplementary_tables", "peaks", "gff3", "rna_by_annotation"):
+        entry = reg["registered_inputs"][key]
+        assert simpler.sha256(ROOT / entry["path"]) == entry["sha256"]
+    chroms, tss, _ = sf.read_annotation(ROOT / sf.GFF3)
+    calls, funnel = sf.tissue_calls(sf.read_markers(ROOT / sf.SUPP), sf.read_cluster_labels(ROOT / sf.SUPP))
+    els, counts = sf.elements(calls, sf.read_peaks(ROOT / sf.PEAKS), chroms, tss)
+    assert {"marker_calls": funnel, "classes": counts} == reg["population_funnel"]
+    assert sf.census(simpler.attribute(els, chroms)) == reg["census"]

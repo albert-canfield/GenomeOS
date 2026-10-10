@@ -1,0 +1,262 @@
+{
+  "result": "simpler_fly_inventory",
+  "date": "2026-10-10",
+  "question": "the Calderon 2022 tables for the fly test: what was fetched, its size, hash and licence",
+  "source": "Calderon D, Blecher-Gonen R, Huang X, Secchia S, Kentro J, Daza RM, Martin B, Dulja A, Schaub C, Trapnell C, Larschan E, O'Connor-Giles KM, Furlong EEM, Shendure J (2022) The continuum of Drosophila embryonic development at single-cell resolution. Science 377:eabn5800, doi:10.1126/science.abn5800; supplementary tables, peak set and cell annotations from the authors' site (DEAP), RNA counts from GEO GSE190147",
+  "fetched": [
+    {
+      "url": "https://shendure-web.gs.washington.edu/content/members/DEAP_website/public/SupplementaryTables.xlsx",
+      "what": "Calderon 2022 supplementary tables S1-S13; read: TableS2 (ATAC cluster annotations) and TableS4 (ATAC marker accessible regions)",
+      "bytes": 17049285,
+      "sha256": "d80dd18c611953d4a5f53599b00bd5449387815e96cfa8ac8adf0ba54b7d443c",
+      "kept": true,
+      "name": "SupplementaryTables.xlsx",
+      "licence": "not stated on the authors' site (DEAP); the article is Science 377:eabn5800"
+    },
+    {
+      "url": "https://shendure-web.gs.washington.edu/content/members/DEAP_website/public/ATAC/revision/peaks.bed",
+      "what": "the full ATAC peak set, dm6",
+      "bytes": 2532609,
+      "sha256": "c99bee0ba98a2638f6ba58b1354a3aff4c59f8a4afd31db3616ff999020dd07c",
+      "kept": true,
+      "name": "peaks.bed",
+      "licence": "not stated on the authors' site (DEAP)"
+    },
+    {
+      "url": "https://shendure-web.gs.washington.edu/content/members/DEAP_website/public/cell_to_annotations/rna_meta.rds",
+      "what": "RNA cell identifiers to the annotations used in the source's Fig. 3 (manual_annot)",
+      "bytes": 24110965,
+      "sha256": "21267b5451433c966e791b1dcb50d830f31986f2ba60dc5021c6098c6a3b3b87",
+      "kept": true,
+      "name": "rna_meta.rds",
+      "licence": "not stated on the authors' site (DEAP)"
+    },
+    {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190147/suppl/GSE190147_scirnaseq_gene_matrix.rows.txt.gz",
+      "what": "RNA matrix row names (genes)",
+      "bytes": 88224,
+      "sha256": "032a5833bc1de5953a14e64081d801d3bd0a8bf3b43b4a77dd49a1de7d1ae547",
+      "kept": true,
+      "name": "GSE190147_scirnaseq_gene_matrix.rows.txt.gz",
+      "licence": "GEO public record; no licence stated by the submitters"
+    },
+    {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190147/suppl/GSE190147_scirnaseq_gene_matrix.columns.txt.gz",
+      "what": "RNA matrix column names (cells) with per-cell QC fields",
+      "bytes": 19958916,
+      "sha256": "fda11b6db52daa6f8536c4e9d26071df4d3d9bb6f66876542865b2e8cb214e25",
+      "kept": true,
+      "name": "GSE190147_scirnaseq_gene_matrix.columns.txt.gz",
+      "licence": "GEO public record; no licence stated by the submitters"
+    },
+    {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190147/suppl/GSE190147_scirnaseq_gene_matrix.mtx.gz",
+      "what": "RNA UMI count matrix, genes x cells (MatrixMarket); summed by annotation, then deleted",
+      "bytes": 697773156,
+      "sha256": "6dc86f9fc4d467cc310eea07d09db778b5c10c242e29966498f50979771c3824",
+      "kept": false,
+      "name": "GSE190147_scirnaseq_gene_matrix.mtx.gz",
+      "licence": "GEO public record; no licence stated by the submitters"
+    },
+    {
+      "url": "https://ftp.ensembl.org/pub/release-104/gff3/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+      "what": "Ensembl 104 gene models for dm6 (BDGP6.32); its 13,968 protein-coding gene names all appear among the RNA matrix's row names",
+      "bytes": 5713526,
+      "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc",
+      "kept": true,
+      "name": "Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+      "licence": "Ensembl states no restrictions on use of its data; the gene models are FlyBase's (CC BY 4.0)"
+    }
+  ],
+  "distilled": {
+    "what": "UMI counts summed over cells by the source's manual_annot (rna_meta.rds), all windows pooled; one row per matrix row (gene name), one column per annotation",
+    "file": "data/knowledge/simpler_fly/rna_umi_by_manual_annot.tsv.gz",
+    "bytes": 1001331,
+    "sha256": "9b9ab6323d0e81d836457523151757fcb114cd5459028b3827c74dceefa22336",
+    "matrix_shape": [
+      23932,
+      547805
+    ],
+    "matrix_nonzero_entries": 212703167,
+    "cells_in_matrix": 547805,
+    "cells_with_an_annotation": 547805,
+    "annotations": 51,
+    "cells_per_annotation": {
+      "Malpighian tubule": 1145,
+      "amnioserosa": 8471,
+      "anlage in statu nascendi": 2823,
+      "brain": 30055,
+      "brain primordium": 21882,
+      "cellular blastoderm / pole cell": 9480,
+      "crystal cell": 237,
+      "ectoderm anlage": 569,
+      "ectoderm anlage in statu nascendi": 3264,
+      "ectoderm primordium": 16352,
+      "endoderm primordium": 2451,
+      "epidermis": 39478,
+      "epidermis primordium": 17065,
+      "fat body": 5569,
+      "foregut / hindgut / anal pad": 7048,
+      "foregut / hindgut primordium": 1858,
+      "germ cell": 17410,
+      "glia": 944,
+      "hindgut / anal pad": 2711,
+      "hindgut primordium": 2432,
+      "maternal": 122331,
+      "mesoderm primordium": 3199,
+      "midgut": 11851,
+      "midgut primordium": 3322,
+      "midline primordium": 1261,
+      "muscle": 6231,
+      "peripheral nervous system": 5029,
+      "peripheral nervous system primordium": 3088,
+      "plasmatocytes": 5611,
+      "plasmatocytes anlage": 1893,
+      "procrystal cell": 1909,
+      "proventriculus": 2510,
+      "salivary gland": 3499,
+      "salivary gland body primordium": 1146,
+      "salivary gland primordium": 498,
+      "sensory nervous system": 4851,
+      "sensory nervous system primordium": 2327,
+      "somatic muscle": 14852,
+      "somatic muscle primordium": 3108,
+      "spiracle (tracheal system)": 1002,
+      "spiracles (tracheal system)": 755,
+      "tracheal primordium": 3529,
+      "tracheal system": 8175,
+      "trunk mesoderm primordium": 2240,
+      "ubiquitous": 102125,
+      "unknown": 2995,
+      "ventral nerve cord": 7567,
+      "ventral nerve cord primordium": 1218,
+      "visceral muscle": 802,
+      "visceral muscle primordium": 6021,
+      "yolk nuclei": 21616
+    },
+    "method_follows": "https://shendure-web.gs.washington.edu/content/members/DEAP_website/public/scripts/RNA/misc/make_germ_pseudobulk.R (sums counts by manual_annot)"
+  },
+  "fetched_bytes": 767226681,
+  "scouting_bytes": 17768866,
+  "lane_download_bytes": 784995547,
+  "kept_bytes": 70454856,
+  "budget_bytes": 1500000000,
+  "not_used": [
+    {
+      "source": "Calderon 2022 ATAC peak-by-cell matrices (DEAP ATAC/revision/peak_matrices; GEO GSE190130)",
+      "bytes": "119 MB to 2.1 GB per window and experiment, about 15 GB in all",
+      "why_not": "over the 1.5 GB budget; Table S4 carries the source's own per-cluster call"
+    },
+    {
+      "source": "Calderon 2022 ATAC bigWigs per window and cluster (DEAP ATAC/revision/bigwigs)",
+      "bytes": "2 MB to 577 MB each, more than 100 files",
+      "why_not": "a per-element read of every cluster track would move most of each file"
+    },
+    {
+      "source": "Measured insulator or TAD boundary sets (dCTCF, BEAF-32, CP190; embryo Hi-C)",
+      "bytes": "not checked",
+      "why_not": "the node decision (docs/SIMPLER-GENOMES.md section 8): this run replicates the worm's rule"
+    }
+  ],
+  "money": "none; no model request",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Calderon D, Blecher-Gonen R, Huang X, Secchia S, Kentro J, Daza RM, Martin B, Dulja A, Schaub C, Trapnell C, Larschan E, O'Connor-Giles KM, Furlong EEM, Shendure J (2022) The continuum of Drosophila embryonic development at single-cell resolution. Science 377:eabn5800, doi:10.1126/science.abn5800; supplementary tables, peak set and cell annotations from the authors' site (DEAP), RNA counts from GEO GSE190147",
+        "version": "authors' site files as served on 2026-10-10; GEO GSE190147"
+      },
+      {
+        "accession": "Ensembl release 104, Drosophila melanogaster BDGP6.32 (dm6) GFF3",
+        "version": "Ensembl release 104"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_fly/fetch_record.json",
+        "sha256": "ccf6258d7f66a053e67c0efa187d9b316daf5cc7eed9385c69ad57d63f666a3f",
+        "bytes": 5018,
+        "partition": "the fetch record written by scripts/simpler_fly_fetch.py"
+      }
+    ],
+    "assembly": "dm6 (BDGP6.32): the peaks, the source's RNA alignment and the gene models; nothing is lifted",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the peaks are BED (0-based, half-open) and the GFF3 is 1-based closed; the element midpoint (start + end) // 2 moves by at most 1 bp between the two conventions"
+    },
+    "parameters": {
+      "download_budget_bytes": 1500000000
+    },
+    "exclusions": [
+      "the RNA matrix (697,773,156 bytes) was summed by annotation and deleted"
+    ],
+    "partitions": "n/a: an inventory has no evaluation partition",
+    "code_cleanliness": {
+      "git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_fly_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_fly_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_fly_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_fly_run.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_fly_run.py",
+        "inventory"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "code_cleanliness_git_sha": "67aff119701797cb87c45893931863f3ae82e87a",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 67aff11"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 18,
+      "opens_under_data": 2,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
