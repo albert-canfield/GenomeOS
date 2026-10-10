@@ -1,0 +1,712 @@
+{
+  "result": "closure_cell_result",
+  "date": "2026-10-10",
+  "question": "The gene-level closure asked whether a gene's attributed elements go with the RNA the cell makes. This asks the next link: when the project says element e drives gene G on K562's own track, and K562 is a cell that depends on G, does silencing e in K562 cost the cell its share of a pooled culture?",
+  "cell": "K562",
+  "registered": {
+    "result": "closure_cell_registration",
+    "sha256": "4d39ac10ebe7d4a4b065d8bc78336a193978d848c64554e0436be11a9d68e72c",
+    "committed_blob": "290be4df5ee23b53755c3b3d150ef4c368a91072",
+    "population_sha256": "107e18a6a6aed8319c3f2a78453903b791ac7a6490f234eac15e6a555052430a"
+  },
+  "gate": {
+    "registration": {
+      "path": "data/results/closure_cell_registration.json",
+      "tracked": true,
+      "modified_or_untracked": false,
+      "in_head": true,
+      "head_blob": "290be4df5ee23b53755c3b3d150ef4c368a91072",
+      "committed": true
+    },
+    "registration_sha256": "4d39ac10ebe7d4a4b065d8bc78336a193978d848c64554e0436be11a9d68e72c",
+    "population_sha256": "107e18a6a6aed8319c3f2a78453903b791ac7a6490f234eac15e6a555052430a",
+    "population_matches_the_registration": true
+  },
+  "streamed": {
+    "control_1": {
+      "accession": "ENCFF902VHH",
+      "side": "control",
+      "replicate": 1,
+      "streamed_bytes": 173389217,
+      "sha256": "4f629a932845d10b581d32e569182d10b53bb6aab8c8378e4ad684fc530f4ed7",
+      "md5": "ee1aa18adb6024e2264ba3a526724894",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 619890505.0
+      },
+      "library_total": 898118557.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "control_2": {
+      "accession": "ENCFF743IPS",
+      "side": "control",
+      "replicate": 2,
+      "streamed_bytes": 173219344,
+      "sha256": "7b7916d78b7701079dddca86c1c58e936af582d9d4f2cddfbde66467012725b6",
+      "md5": "2105a046ddd9b4e101349b5213d4e2ed",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 460698041.0
+      },
+      "library_total": 667576745.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "control_3": {
+      "accession": "ENCFF482NVE",
+      "side": "control",
+      "replicate": 3,
+      "streamed_bytes": 173240508,
+      "sha256": "281b015b0f2878a113fbe8a68862aa0592260d500c908c1e65396bc193a2fe71",
+      "md5": "e64121069019df41eae981269e7ce0c6",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 483420611.0
+      },
+      "library_total": 700586888.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "control_4": {
+      "accession": "ENCFF209ITV",
+      "side": "control",
+      "replicate": 4,
+      "streamed_bytes": 173325199,
+      "sha256": "933fe2e8a6aff6e9bc00b9f0fe9e23d5e98107f16325f944412c96b872159d62",
+      "md5": "2caa266ad796924082f030adffd094a9",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 564124991.0
+      },
+      "library_total": 817528779.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "screen_1": {
+      "accession": "ENCFF945GIJ",
+      "side": "screen",
+      "replicate": 1,
+      "streamed_bytes": 173343604,
+      "sha256": "42254b74303f194a71d911e8766ee8a0652a9d82eaf1762529700ae645a0262b",
+      "md5": "85e514674741eac7ae48a48f220da67b",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 576017409.0
+      },
+      "library_total": 835300242.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "screen_2": {
+      "accession": "ENCFF995GEZ",
+      "side": "screen",
+      "replicate": 2,
+      "streamed_bytes": 173281710,
+      "sha256": "a3b6263e2a3fde5a0eabcd70d5abe8dbfd91acec96818c05a2d11137e4d7e14f",
+      "md5": "5343e43b5969bd1e1cb8608a31ef87a9",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 521009568.0
+      },
+      "library_total": 755414775.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "screen_3": {
+      "accession": "ENCFF141MGA",
+      "side": "screen",
+      "replicate": 3,
+      "streamed_bytes": 173189415,
+      "sha256": "e02b636ef8098cc71315462a2b64a3adbfee5a0629bb2b9e2ff5ee9d1897f6ce",
+      "md5": "5bf218f98ff466ea3ff8e9fdf544e6b2",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 425278424.0
+      },
+      "library_total": 616899548.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "screen_4": {
+      "accession": "ENCFF100ABB",
+      "side": "screen",
+      "replicate": 4,
+      "streamed_bytes": 173228717,
+      "sha256": "57492661cf276b42a3beceea72bdb7784e63cc227ff76b606be65de1ad8c5d27",
+      "md5": "04ffc8a74b54a0f889db4a002780ea4b",
+      "md5_matches_encode": true,
+      "census": {
+        "rows": 1092527,
+        "malformed": 0,
+        "targeting": 1092527,
+        "non_targeting": 0,
+        "outside_the_population": 749580,
+        "unplaced_chromosome": 323,
+        "count_outside_the_population": 469290496.0
+      },
+      "library_total": 680408313.0,
+      "non_targeting": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    }
+  },
+  "population_elements": 47912,
+  "measured_elements": 47912,
+  "not_measured": {
+    "no_guide_seen": 0,
+    "under_min_guides": 0,
+    "under_min_control_count": 0
+  },
+  "depletion_cut": -0.10097234600907413,
+  "arms": {
+    "attributed_essential_neighbourhood_essential": {
+      "measured_elements": 145,
+      "mean_log2_ratio": -0.08423431322497014,
+      "median_log2_ratio": -0.01566043500753053,
+      "elements_at_or_below_the_floor_s_5th_percentile": 31,
+      "rate_with_denominator": "31 of 145",
+      "mean_guides_seen": 6.772413793103448,
+      "mean_pooled_control_count": 19104.17931034483,
+      "mean_prediction_magnitude": 0.3100103448275862,
+      "mean_distance_to_nearest_coding_tss": 21161.806896551723
+    },
+    "attributed_essential_neighbourhood_not": {
+      "measured_elements": 35,
+      "mean_log2_ratio": -0.053239040037787955,
+      "median_log2_ratio": -0.011528602226784259,
+      "elements_at_or_below_the_floor_s_5th_percentile": 4,
+      "rate_with_denominator": "4 of 35",
+      "mean_guides_seen": 6.485714285714286,
+      "mean_pooled_control_count": 17177.542857142857,
+      "mean_prediction_magnitude": 0.28425428571428574,
+      "mean_distance_to_nearest_coding_tss": 24117.742857142857
+    },
+    "attributed_not_neighbourhood_essential": {
+      "measured_elements": 147,
+      "mean_log2_ratio": 0.012153714518897364,
+      "median_log2_ratio": 0.014753387134275693,
+      "elements_at_or_below_the_floor_s_5th_percentile": 4,
+      "rate_with_denominator": "4 of 147",
+      "mean_guides_seen": 7.346938775510204,
+      "mean_pooled_control_count": 19262.94557823129,
+      "mean_prediction_magnitude": 0.26289387755102045,
+      "mean_distance_to_nearest_coding_tss": 39903.12925170068
+    },
+    "attributed_not_neighbourhood_not": {
+      "measured_elements": 5427,
+      "mean_log2_ratio": 0.005517405562051309,
+      "median_log2_ratio": 0.006236243117699196,
+      "elements_at_or_below_the_floor_s_5th_percentile": 272,
+      "rate_with_denominator": "272 of 5427",
+      "mean_guides_seen": 7.300902892942694,
+      "mean_pooled_control_count": 19874.335913027455,
+      "mean_prediction_magnitude": 0.3173208033904551,
+      "mean_distance_to_nearest_coding_tss": 48314.01953196978
+    },
+    "negative_direction_attributed_essential": {
+      "measured_elements": 31,
+      "mean_log2_ratio": -0.009571592310955982,
+      "median_log2_ratio": 0.00835265304839744,
+      "elements_at_or_below_the_floor_s_5th_percentile": 3,
+      "rate_with_denominator": "3 of 31",
+      "mean_guides_seen": 7.806451612903226,
+      "mean_pooled_control_count": 21229.967741935485,
+      "mean_prediction_magnitude": 0.21015161290322582,
+      "mean_distance_to_nearest_coding_tss": 16102.806451612903
+    },
+    "promoter_of_a_gene_k562_depends_on": {
+      "measured_elements": 757,
+      "mean_log2_ratio": -0.12127309811614312,
+      "median_log2_ratio": -0.046932578083162334,
+      "elements_at_or_below_the_floor_s_5th_percentile": 258,
+      "rate_with_denominator": "258 of 757",
+      "mean_guides_seen": 5.402906208718626,
+      "mean_pooled_control_count": 15320.627476882431,
+      "mean_prediction_magnitude": 0.20526195508586526,
+      "mean_distance_to_nearest_coding_tss": 607.0528401585204
+    }
+  },
+  "comparisons": {
+    "attributed_essential_neighbourhood_essential_below_attributed_not_neighbourhood_not": {
+      "u": 312355.0,
+      "z": -4.2424,
+      "p_one_sided_a_below_b": 1.1054785523972549e-05,
+      "n_a": 145,
+      "n_b": 5427
+    },
+    "attributed_essential_neighbourhood_not_below_attributed_not_neighbourhood_not": {
+      "u": 83180.0,
+      "z": -1.2681,
+      "p_one_sided_a_below_b": 0.10237409775851361,
+      "n_a": 35,
+      "n_b": 5427
+    },
+    "attributed_not_neighbourhood_essential_below_attributed_not_neighbourhood_not": {
+      "u": 420941.0,
+      "z": 1.1457,
+      "p_one_sided_a_below_b": 0.8740377788572453,
+      "n_a": 147,
+      "n_b": 5427
+    },
+    "negative_direction_attributed_essential_below_attributed_not_neighbourhood_not": {
+      "u": 80733.0,
+      "z": -0.387,
+      "p_one_sided_a_below_b": 0.34938299513740984,
+      "n_a": 31,
+      "n_b": 5427
+    },
+    "promoter_of_a_gene_k562_depends_on_below_attributed_not_neighbourhood_not": {
+      "u": 1291238.0,
+      "z": -16.5787,
+      "p_one_sided_a_below_b": 4.969224344620825e-62,
+      "n_a": 757,
+      "n_b": 5427
+    }
+  },
+  "secondary_pooled_comparison": {
+    "attributed_essential_pooled_below_attributed_not_pooled": {
+      "u": 405661.0,
+      "z": -4.3764,
+      "p_one_sided_a_below_b": 6.033354108913332e-06,
+      "n_a": 180,
+      "n_b": 5574
+    },
+    "median_attributed_essential_pooled": -0.014823827241268902,
+    "median_attributed_not_pooled": 0.006460217980840975,
+    "elements": "180 against 5574",
+    "decides": "nothing: the registration states this comparison carries the proximity confound, and arm C beside it is its control"
+  },
+  "power_stated_in_advance": {
+    "what_the_number_is": "P(a random element of the arm sits below a random element of the floor arm), 0.5 under the null; the value given is the smallest such probability the test can detect at one-sided alpha 0.05 and power 0.8, and it can detect nothing smaller",
+    "floor_arm_size": 5427,
+    "attributed_essential_neighbourhood_not": {
+      "n": 35,
+      "smallest_detectable_probability": 0.6217
+    },
+    "attributed_essential_neighbourhood_essential": {
+      "n": 145,
+      "smallest_detectable_probability": 0.5604
+    },
+    "attributed_not_neighbourhood_essential": {
+      "n": 147,
+      "smallest_detectable_probability": 0.56
+    },
+    "promoter_of_a_gene_k562_depends_on": {
+      "n": 757,
+      "smallest_detectable_probability": 0.5279
+    },
+    "note_on_the_median": "no detectable shift in log2 units can be stated in advance: it depends on the spread of the readout, which is an outcome and is not read here"
+  },
+  "per_replicate_pair": {
+    "attributed_essential_neighbourhood_essential": {
+      "elements_with_at_least_one_pair": 145,
+      "median_of_the_per_pair_means": -0.01509890839452839
+    },
+    "attributed_essential_neighbourhood_not": {
+      "elements_with_at_least_one_pair": 35,
+      "median_of_the_per_pair_means": -0.018098788793767213
+    },
+    "attributed_not_neighbourhood_essential": {
+      "elements_with_at_least_one_pair": 147,
+      "median_of_the_per_pair_means": 0.012478843060481479
+    },
+    "attributed_not_neighbourhood_not": {
+      "elements_with_at_least_one_pair": 5427,
+      "median_of_the_per_pair_means": 0.004933082728647682
+    },
+    "negative_direction_attributed_essential": {
+      "elements_with_at_least_one_pair": 31,
+      "median_of_the_per_pair_means": 0.0059462553207809046
+    },
+    "promoter_of_a_gene_k562_depends_on": {
+      "elements_with_at_least_one_pair": 757,
+      "median_of_the_per_pair_means": -0.04721533450594903
+    }
+  },
+  "assay_zero_from_the_non_targeting_guides": {
+    "log2_ratio": 0.09463216300844743,
+    "guides_and_counts": {
+      "screen": {
+        "guides": 0.0,
+        "count": 0.0
+      },
+      "control": {
+        "guides": 0.0,
+        "count": 0.0
+      }
+    },
+    "what_it_is": "the same ratio over the pooled non-targeting guides of the same library: the assay's own zero, not an arm and in no comparison"
+  },
+  "outcome": "no_difference_detected",
+  "decision": {
+    "sizes": {
+      "attributed_essential_neighbourhood_not": 35,
+      "attributed_essential_neighbourhood_essential": 145,
+      "attributed_not_neighbourhood_essential": 147,
+      "attributed_not_neighbourhood_not": 5427,
+      "promoter_of_a_gene_k562_depends_on": 757
+    },
+    "separates": {
+      "attributed_essential_neighbourhood_not": false,
+      "attributed_essential_neighbourhood_essential": true,
+      "attributed_not_neighbourhood_essential": false,
+      "promoter_of_a_gene_k562_depends_on": true
+    },
+    "min_per_arm": 30,
+    "rule": "5_negative"
+  },
+  "reading": "No difference was detected at the cell level: over 35 elements whose attributed gene is one K562 depends on and whose nearest coding gene is not, the median log2 relative guide abundance in the CRISPRi screen against the control is -0.012, against +0.006 over the 5427 elements where neither gene is one K562 depends on (one-sided Mann-Whitney p 0.1024); 4 of 35 fall at or below the floor arm's 5th percentile, which is 5% of 5427 by construction. The positive control does separate in the same population (757 promoter elements of genes K562 depends on, median -0.047, p 5.0e-62), so the readout is responsive and this is a negative result about the attribution, not about the assay. No difference detected is not no difference.",
+  "reading_is_the_registered_wording": "the sentence above is the registration's outcome_wordings['no_difference_detected'] with its numbers filled in and no other word changed",
+  "cannot_establish": [
+    "that a depleted element acts through the gene the project attributes it to: a pooled fitness screen measures the culture, not the gene",
+    "that an element with no depletion is not regulatory: the screen's power per element is set by its guide count and the gene's dependency, and absence here is not absence",
+    "anything about cells other than K562, or about any gene K562 does not depend on",
+    "any direction claim about elements whose predicted sign is negative: that arm is reported apart and decides nothing"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none",
+  "seconds": 118.6,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE4 functional characterisation (wgCERES, Gersbach and Reddy labs): ENCSR162HMH, a CRISPRi proliferation screen in K562, and ENCSR625TAF, ENCODE's control screen for it",
+        "version": "ENCODE portal, released; ENCODE data use policy (no restrictions)"
+      },
+      {
+        "accession": "DepMap CRISPRGeneEffect (Chronos), K562 = ACH-000551",
+        "version": "DepMap 24Q4 Public, doi:10.25452/figshare.plus.27993248.v1; DepMap Public 24Q4, Broad Institute, CC BY 4.0"
+      },
+      {
+        "accession": "the project's own frozen population and committed registration",
+        "version": "data/results/closure_cell_registration.json as committed, digested in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "the committed registration and census of this test",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/closure_cell_registration.json",
+            "sha256": "4d39ac10ebe7d4a4b065d8bc78336a193978d848c64554e0436be11a9d68e72c",
+            "bytes": 24350
+          }
+        ],
+        "sha256": "0254e7800f85778ee41c4b5482ccb04cad43e018a89398fbfc96877dbc1c1860",
+        "bytes": 24350,
+        "files": 1,
+        "partition": "the registered inputs of this run"
+      },
+      {
+        "path": "the frozen population and the distilled K562 dependency column",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/closure_cell/closure_cell_population.json.gz",
+            "sha256": "107e18a6a6aed8319c3f2a78453903b791ac7a6490f234eac15e6a555052430a",
+            "bytes": 1428093
+          }
+        ],
+        "sha256": "e7a2067c68c8cbb41de2c3bfbdec111029f8b2ca96aac9f9aba30d8d5de77e77",
+        "bytes": 1428093,
+        "files": 1,
+        "partition": "the registered inputs of this run"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF945GIJ/@@download/ENCFF945GIJ.tsv",
+        "sha256": "42254b74303f194a71d911e8766ee8a0652a9d82eaf1762529700ae645a0262b",
+        "md5": "85e514674741eac7ae48a48f220da67b",
+        "md5_matches_encode": true,
+        "bytes": 173343604,
+        "partition": "screen replicate 1: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF995GEZ/@@download/ENCFF995GEZ.tsv",
+        "sha256": "a3b6263e2a3fde5a0eabcd70d5abe8dbfd91acec96818c05a2d11137e4d7e14f",
+        "md5": "5343e43b5969bd1e1cb8608a31ef87a9",
+        "md5_matches_encode": true,
+        "bytes": 173281710,
+        "partition": "screen replicate 2: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF141MGA/@@download/ENCFF141MGA.tsv",
+        "sha256": "e02b636ef8098cc71315462a2b64a3adbfee5a0629bb2b9e2ff5ee9d1897f6ce",
+        "md5": "5bf218f98ff466ea3ff8e9fdf544e6b2",
+        "md5_matches_encode": true,
+        "bytes": 173189415,
+        "partition": "screen replicate 3: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF100ABB/@@download/ENCFF100ABB.tsv",
+        "sha256": "57492661cf276b42a3beceea72bdb7784e63cc227ff76b606be65de1ad8c5d27",
+        "md5": "04ffc8a74b54a0f889db4a002780ea4b",
+        "md5_matches_encode": true,
+        "bytes": 173228717,
+        "partition": "screen replicate 4: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF902VHH/@@download/ENCFF902VHH.tsv",
+        "sha256": "4f629a932845d10b581d32e569182d10b53bb6aab8c8378e4ad684fc530f4ed7",
+        "md5": "ee1aa18adb6024e2264ba3a526724894",
+        "md5_matches_encode": true,
+        "bytes": 173389217,
+        "partition": "control replicate 1: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF743IPS/@@download/ENCFF743IPS.tsv",
+        "sha256": "7b7916d78b7701079dddca86c1c58e936af582d9d4f2cddfbde66467012725b6",
+        "md5": "2105a046ddd9b4e101349b5213d4e2ed",
+        "md5_matches_encode": true,
+        "bytes": 173219344,
+        "partition": "control replicate 2: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF482NVE/@@download/ENCFF482NVE.tsv",
+        "sha256": "281b015b0f2878a113fbe8a68862aa0592260d500c908c1e65396bc193a2fe71",
+        "md5": "e64121069019df41eae981269e7ce0c6",
+        "md5_matches_encode": true,
+        "bytes": 173240508,
+        "partition": "control replicate 3: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      },
+      {
+        "path": "https://www.encodeproject.org/files/ENCFF209ITV/@@download/ENCFF209ITV.tsv",
+        "sha256": "933fe2e8a6aff6e9bc00b9f0fe9e23d5e98107f16325f944412c96b872159d62",
+        "md5": "2caa266ad796924082f030adffd094a9",
+        "md5_matches_encode": true,
+        "bytes": 173325199,
+        "partition": "control replicate 4: streamed over HTTP and discarded row by row, never written to disk; the digest is over the bytes read"
+      }
+    ],
+    "input_count": 10,
+    "assembly": "GRCh38: the elements, the guide quantifications and the library design are all on one build, and no coordinate is lifted",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "a guide counts for an element when its 3 bp target interval overlaps the element's interval; a guide inside two population elements counts for both"
+    },
+    "parameters": {
+      "min_guides": 3,
+      "min_pooled_control_count": 20,
+      "pseudocount": 1.0,
+      "depletion_percentile": 5.0,
+      "max_malformed_share": 0.001,
+      "alpha": 0.05
+    },
+    "exclusions": [
+      "every element outside the frozen population",
+      "every element whose guides were not seen, or seen fewer than MIN_GUIDES times, or whose pooled control count is under MIN_CONTROL_COUNT",
+      "the non-targeting guides from every arm: they are the assay's zero and not an arm"
+    ],
+    "partitions": {
+      "arms": "fixed by the census before any count was read and pinned by the registration's population digest",
+      "floor": "attributed_not_neighbourhood_not",
+      "positive_control": "promoter_of_a_gene_k562_depends_on"
+    },
+    "code_cleanliness": {
+      "git_sha": "460c46fc761ecda8ecbc68d69d55411c5bcf53bb",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/closure_cell_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/closure_cell_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/closure_cell_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "scripts/roadmap_truth_pass.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/closure_cell.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/closure_cell_run.py"
+      ],
+      "counting_path_count": 75,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "460c46fc761ecda8ecbc68d69d55411c5bcf53bb",
+      "dirty": true,
+      "dirty_code_paths": [
+        "scripts/roadmap_truth_pass.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/closure_cell_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "460c46fc761ecda8ecbc68d69d55411c5bcf53bb",
+      "code_cleanliness_git_sha": "460c46fc761ecda8ecbc68d69d55411c5bcf53bb",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 460c46f"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 97,
+      "opens_under_data": 6,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "https:/www.encodeproject.org/files/ENCFF100ABB/@@download/ENCFF100ABB.tsv",
+        "https:/www.encodeproject.org/files/ENCFF141MGA/@@download/ENCFF141MGA.tsv",
+        "https:/www.encodeproject.org/files/ENCFF209ITV/@@download/ENCFF209ITV.tsv",
+        "https:/www.encodeproject.org/files/ENCFF482NVE/@@download/ENCFF482NVE.tsv",
+        "https:/www.encodeproject.org/files/ENCFF743IPS/@@download/ENCFF743IPS.tsv",
+        "https:/www.encodeproject.org/files/ENCFF902VHH/@@download/ENCFF902VHH.tsv",
+        "https:/www.encodeproject.org/files/ENCFF945GIJ/@@download/ENCFF945GIJ.tsv",
+        "https:/www.encodeproject.org/files/ENCFF995GEZ/@@download/ENCFF995GEZ.tsv"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
