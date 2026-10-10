@@ -1,0 +1,2963 @@
+{
+  "result": "eqtl_arm_calibration",
+  "date": "2026-10-10",
+  "question": "on sequence outside the 882 real-unknown blocks, how often does a GTEx v8 fine-mapped cis-eQTL name the gene a CRISPRi screen measured an element to regulate, how often at matched windows, how clustered are its hits, and how many blocks would a test of the blocks' attribution need?",
+  "what_an_eqtl_is": "an association between a variant and a gene's expression across people; not a perturbation and not mechanism. Fine-mapping localises the association to a variant with a posterior; it does not say which element acts",
+  "fair_test_rule": "Fixed in the committed code before the calibration is run. A test inside the blocks is registered only if, at the calibrated rates and at the scale the test would use, BOTH hold for the blocks available to it (those whose attribution names a gene whose TSS lies on the same chromosome within the 1 Mb cis window and outside the unit): (1) the conditional test reaches 80% probability of detection at one-sided alpha 0.05 when half of the attributions are right and the rest behave as matched windows (f = 1/2); and (2) when none is right but the blocks behave as CRISPRi-tested elements that do not regulate the named gene, it rejects at most twice the nominal level (0.10), so the matched-window control is not fooled by sequence of the kind a screen tests. If neither scale meets both, no test is registered and the reason is recorded with the numbers. The rule reads the sizing table and the count of available blocks, nothing else.",
+  "window_design": "four control windows and one pseudo-block per unit, within a quarter of the unit's distance to the TSS (at least three unit lengths) and a quarter of its common-variant count. A design probe that read coordinates and common-variant counts only, before any eQTL value, found that ten disjoint windows in a tenth-wide band fit around under half of the positives at the element scale and about a tenth at the block scale, the losses near the TSS",
+  "eqtl_values_read_inside_the_blocks": 0,
+  "incidental_reads": [
+    "the held-track test as committed in 68a273b decoded chr21's DAP-G records outside chr21:30-35 Mb only, so it decoded the records of chr21's five real-unknown blocks as well, and asserted only that every PIP lies in [0, 1] and that Whole_Blood is among the chromosome's tissues; nothing was printed, counted or kept. 16a415f narrowed it to chr21:18-22 Mb, inside a gap between two blocks",
+    "a design probe before 68a273b read only coordinates and dbSNP common-variant counts (no eQTL value) to choose the number of windows and the bands; exploration printed DAP-G records only from outside the widened blocks"
+  ],
+  "superseded_first_run": {
+    "code": "16a415f",
+    "what_was_wrong": "the sizing's window null always took the FIRST drawn window as the pseudo-block and the other four as its controls. That window hit more often than the rest among the positives (0.0323 against 0.0242 at the element scale, 0.0723 against 0.0477 at the block scale), a gap the resampling then treated as real, so with no attribution right the test rejected more as blocks were added (0.36 of experiments at 882 blocks at the element scale, 0.91 at the block scale) and power rose as the share right FELL. The window null was not calibrated. It now chooses the pseudo-block at random among the five windows in every simulated block, and a right block's controls are four of its five windows chosen at random; the window rate is the mean over all five",
+    "what_did_not_change": "the units, windows, flanks, hits and every rate at the units; the tested-negative null (its no-attribution rejection rate stayed at or under 0.0255 at every size)",
+    "its_decision": "no fair test at either scale: at the element scale 285 available blocks gave 0.197 probability of detection at f = 1/2; at the block scale 179 gave 0.273"
+  },
+  "population": {
+    "gate": {
+      "expected": {
+        "blocks": 882,
+        "carrying": 531,
+        "elements": 3280
+      },
+      "got": {
+        "blocks": 882,
+        "carrying": 531,
+        "elements": 3280
+      },
+      "ok": true
+    },
+    "blocks_naming_any_gene": 331
+  },
+  "exclusion": {
+    "blocks": 882,
+    "margin_each_side": 1000,
+    "merged_spans": 828,
+    "bases": 32298924,
+    "every_block_inside": true,
+    "every_widened_edge_inside": true,
+    "digest": "1a043145a4347b3e51f955f04d0dabf348202d16dc6ffb6f3594896b49c09fc8"
+  },
+  "benchmark": {
+    "pairs": 14734,
+    "positive": 661,
+    "tested_negative": 14073,
+    "unit": "one (element, measured gene) pair; a pair tested in several screens counts once and is positive if any screen called it"
+  },
+  "track_rows_decoded_outside_the_exclusion": 7599342,
+  "available": {
+    "blocks": 882,
+    "naming_a_gene": 331,
+    "usable_at_the_block_scale": 179,
+    "usable_at_the_element_scale": 284,
+    "not_usable": {
+      "names_no_gene": 551,
+      "block_holds_the_tss": 143,
+      "element_holds_the_tss": 37,
+      "gene_without_a_tss_on_the_chromosome": 8,
+      "element_beyond_the_cis_window": 1,
+      "beyond_the_cis_window": 1
+    },
+    "distance_quartiles": {
+      "block": [
+        25372,
+        68130,
+        167254
+      ],
+      "element": [
+        7980,
+        31753,
+        99773
+      ]
+    },
+    "distance_band_shares": {
+      "block": {
+        "0": 0.09497206703910614,
+        "1": 0.3128491620111732,
+        "2": 0.41899441340782123,
+        "3": 0.17318435754189945
+      },
+      "element": {
+        "0": 0.29225352112676056,
+        "1": 0.2992957746478873,
+        "2": 0.3028169014084507,
+        "3": 0.1056338028169014
+      }
+    }
+  },
+  "scales": {
+    "element": {
+      "unit": "the CRISPRi element with 500 bases each side",
+      "length": null,
+      "dropped_before_drawing": {
+        "beyond_the_cis_window": 856,
+        "touches_the_exclusion": 4,
+        "holds_the_tss": 32,
+        "negative_overlapping_a_positive_of_its_gene": 26
+      },
+      "unmatched_after_drawing": {
+        "positive": 105,
+        "negative": 154
+      },
+      "median_distance_to_the_tss": {
+        "matched": 44288,
+        "matched_negative": 371033,
+        "unmatched": 5439,
+        "unmatched_negative": 19389
+      },
+      "positives": {
+        "units": 526,
+        "genes": 358,
+        "units_with_a_hit": 19,
+        "rate_at_the_units": 0.036122,
+        "rate_at_the_units_interval_over_genes": [
+          0.018116,
+          0.057734
+        ],
+        "rate_at_the_windows": 0.025856,
+        "rate_at_the_windows_interval_over_genes": [
+          0.018282,
+          0.03402
+        ],
+        "rate_at_the_first_drawn_window": 0.032319,
+        "difference_units_minus_windows": 0.010266,
+        "difference_interval_over_genes": [
+          -0.008434,
+          0.031361
+        ],
+        "naming": {
+          "units_holding_a_fine_mapped_variant_for_any_gene": 54,
+          "of_them_naming_the_units_own_gene": 19,
+          "windows_holding_one_for_any_gene": 225,
+          "of_them_naming_the_units_gene": 68
+        },
+        "matched_tissue": {
+          "units_whose_cell_maps_to_a_tissue": 518,
+          "with_a_hit_in_that_tissue": 2,
+          "rate_at_the_units": 0.003861,
+          "rate_at_the_windows": 0.002317
+        },
+        "units_with_a_hit_by_tissue": {
+          "Skin_Sun_Exposed_Lower_leg": 5,
+          "Adipose_Visceral_Omentum": 3,
+          "Cells_Cultured_fibroblasts": 3,
+          "Esophagus_Mucosa": 3,
+          "Skin_Not_Sun_Exposed_Suprapubic": 3,
+          "Testis": 3,
+          "Adipose_Subcutaneous": 2,
+          "Adrenal_Gland": 2,
+          "Artery_Aorta": 2,
+          "Brain_Cerebellar_Hemisphere": 2,
+          "Brain_Hippocampus": 2,
+          "Heart_Atrial_Appendage": 2,
+          "Liver": 2,
+          "Lung": 2,
+          "Spleen": 2,
+          "Whole_Blood": 2,
+          "Artery_Coronary": 1,
+          "Artery_Tibial": 1,
+          "Brain_Amygdala": 1,
+          "Brain_Anterior_cingulate_cortex_BA24": 1,
+          "Brain_Caudate_basal_ganglia": 1,
+          "Brain_Cerebellum": 1,
+          "Brain_Cortex": 1,
+          "Brain_Frontal_Cortex_BA9": 1,
+          "Brain_Hypothalamus": 1,
+          "Brain_Nucleus_accumbens_basal_ganglia": 1,
+          "Brain_Putamen_basal_ganglia": 1,
+          "Brain_Spinal_cord_cervical_c-1": 1,
+          "Brain_Substantia_nigra": 1,
+          "Breast_Mammary_Tissue": 1,
+          "Cells_EBV-transformed_lymphocytes": 1,
+          "Colon_Sigmoid": 1,
+          "Colon_Transverse": 1,
+          "Esophagus_Gastroesophageal_Junction": 1,
+          "Esophagus_Muscularis": 1,
+          "Heart_Left_Ventricle": 1,
+          "Kidney_Cortex": 1,
+          "Minor_Salivary_Gland": 1,
+          "Muscle_Skeletal": 1,
+          "Nerve_Tibial": 1,
+          "Ovary": 1,
+          "Pituitary": 1,
+          "Prostate": 1,
+          "Small_Intestine_Terminal_Ileum": 1,
+          "Stomach": 1,
+          "Thyroid": 1,
+          "Uterus": 1,
+          "Vagina": 1
+        },
+        "any_pip_descriptive": {
+          "meaning": "a variant of the track for the gene at any PIP (a member of a DAP-G signal cluster), which is LD-tagged association, not localised",
+          "rate_at_the_units": 0.247148,
+          "rate_at_the_windows": 0.240684
+        },
+        "fine_mapped_egene": {
+          "units_whose_gene_has_a_fine_mapped_variant_outside_the_exclusion": 374,
+          "units_whose_gene_is_in_the_track_at_all": 460,
+          "rate_at_the_units_among_egene_units": 0.050802,
+          "rate_at_the_windows_among_egene_units": 0.036364
+        },
+        "by_distance": {
+          "0-10000": {
+            "units": 75,
+            "rate_at_the_units": 0.12,
+            "rate_at_the_windows": 0.090667
+          },
+          "10000-50000": {
+            "units": 207,
+            "rate_at_the_units": 0.043478,
+            "rate_at_the_windows": 0.028986
+          },
+          "50000-200000": {
+            "units": 153,
+            "rate_at_the_units": 0.006536,
+            "rate_at_the_windows": 0.005229
+          },
+          "200000-1000001": {
+            "units": 91,
+            "rate_at_the_units": 0.0,
+            "rate_at_the_windows": 0.0
+          }
+        },
+        "clustering": {
+          "icc_of_the_windows_within_a_unit": 0.12492,
+          "design_effect_of_a_units_window_mean": 1.4997,
+          "correlation_of_the_units_hit_with_its_windows_mean": 0.20044,
+          "flank_rate_when_the_unit_hits": 0.184211,
+          "flank_rate_when_it_does_not": 0.0286,
+          "units_with_flanks": {
+            "hit": 19,
+            "no_hit": 507
+          }
+        },
+        "by_common_variant_tertile": {
+          "-1<c<=6": {
+            "units": 181,
+            "rate_at_the_units": 0.027624,
+            "rate_at_the_windows": 0.00663
+          },
+          "6<c<=10": {
+            "units": 177,
+            "rate_at_the_units": 0.022599,
+            "rate_at_the_windows": 0.022599
+          },
+          "10<c<=1e+12": {
+            "units": 168,
+            "rate_at_the_units": 0.059524,
+            "rate_at_the_windows": 0.05
+          }
+        }
+      },
+      "tested_negatives": {
+        "units": 13031,
+        "genes": 2091,
+        "units_with_a_hit": 15,
+        "rate_at_the_units": 0.001151,
+        "rate_at_the_units_interval_over_genes": [
+          0.000617,
+          0.001745
+        ],
+        "rate_at_the_windows": 0.001228,
+        "rate_at_the_windows_interval_over_genes": [
+          0.000855,
+          0.001622
+        ],
+        "rate_at_the_first_drawn_window": 0.001228,
+        "difference_units_minus_windows": -7.7e-05,
+        "difference_interval_over_genes": [
+          -0.000682,
+          0.000555
+        ],
+        "naming": {
+          "units_holding_a_fine_mapped_variant_for_any_gene": 1262,
+          "of_them_naming_the_units_own_gene": 15,
+          "windows_holding_one_for_any_gene": 6003,
+          "of_them_naming_the_units_gene": 80
+        },
+        "matched_tissue": {
+          "units_whose_cell_maps_to_a_tissue": 11160,
+          "with_a_hit_in_that_tissue": 4,
+          "rate_at_the_units": 0.000358,
+          "rate_at_the_windows": 0.000179
+        },
+        "units_with_a_hit_by_tissue": {
+          "Whole_Blood": 5,
+          "Thyroid": 4,
+          "Artery_Tibial": 3,
+          "Skin_Not_Sun_Exposed_Suprapubic": 3,
+          "Skin_Sun_Exposed_Lower_leg": 3,
+          "Cells_Cultured_fibroblasts": 2,
+          "Esophagus_Mucosa": 2,
+          "Muscle_Skeletal": 2,
+          "Spleen": 2,
+          "Adipose_Subcutaneous": 1,
+          "Artery_Aorta": 1,
+          "Breast_Mammary_Tissue": 1,
+          "Cells_EBV-transformed_lymphocytes": 1,
+          "Colon_Transverse": 1,
+          "Heart_Atrial_Appendage": 1,
+          "Lung": 1,
+          "Nerve_Tibial": 1,
+          "Pancreas": 1,
+          "Pituitary": 1
+        },
+        "any_pip_descriptive": {
+          "meaning": "a variant of the track for the gene at any PIP (a member of a DAP-G signal cluster), which is LD-tagged association, not localised",
+          "rate_at_the_units": 0.018801,
+          "rate_at_the_windows": 0.022301
+        },
+        "fine_mapped_egene": {
+          "units_whose_gene_has_a_fine_mapped_variant_outside_the_exclusion": 8931,
+          "units_whose_gene_is_in_the_track_at_all": 11180,
+          "rate_at_the_units_among_egene_units": 0.00168,
+          "rate_at_the_windows_among_egene_units": 0.001792
+        },
+        "by_distance": {
+          "0-10000": {
+            "units": 79,
+            "rate_at_the_units": 0.025316,
+            "rate_at_the_windows": 0.037975
+          },
+          "10000-50000": {
+            "units": 711,
+            "rate_at_the_units": 0.012658,
+            "rate_at_the_windows": 0.014065
+          },
+          "50000-200000": {
+            "units": 2952,
+            "rate_at_the_units": 0.001355,
+            "rate_at_the_windows": 0.000949
+          },
+          "200000-1000001": {
+            "units": 9289,
+            "rate_at_the_units": 0.0,
+            "rate_at_the_windows": 2.2e-05
+          }
+        },
+        "clustering": {
+          "icc_of_the_windows_within_a_unit": 0.067623,
+          "design_effect_of_a_units_window_mean": 1.2705,
+          "correlation_of_the_units_hit_with_its_windows_mean": 0.125849,
+          "flank_rate_when_the_unit_hits": 0.033333,
+          "flank_rate_when_it_does_not": 0.001037,
+          "units_with_flanks": {
+            "hit": 15,
+            "no_hit": 13016
+          }
+        },
+        "by_common_variant_tertile": {
+          "-1<c<=5": {
+            "units": 5027,
+            "rate_at_the_units": 0.000796,
+            "rate_at_the_windows": 0.000597
+          },
+          "5<c<=9": {
+            "units": 4246,
+            "rate_at_the_units": 0.001178,
+            "rate_at_the_windows": 0.001554
+          },
+          "9<c<=1e+12": {
+            "units": 3758,
+            "rate_at_the_units": 0.001597,
+            "rate_at_the_windows": 0.001703
+          }
+        }
+      },
+      "sizing": {
+        "window": {
+          "wrong_block_rate": 0.025856,
+          "right_block_rate": 0.036122,
+          "window_rate": 0.025856,
+          "by_share_right": {
+            "1.0": {
+              "block_rate_expected": 0.036122,
+              "block_to_window_ratio_expected": 1.3971,
+              "power_by_blocks": {
+                "25": 0.032,
+                "50": 0.057,
+                "75": 0.083,
+                "100": 0.11,
+                "150": 0.1355,
+                "200": 0.167,
+                "284": 0.211,
+                "300": 0.218,
+                "400": 0.2745,
+                "531": 0.3155,
+                "750": 0.418,
+                "882": 0.4665,
+                "1000": 0.5195,
+                "1500": 0.6835,
+                "2000": 0.7995,
+                "3000": 0.9155,
+                "5000": 0.99
+              },
+              "smallest_grid_blocks_reaching_80": 3000,
+              "power_at_the_available_blocks": 0.211
+            },
+            "0.75": {
+              "block_rate_expected": 0.033555,
+              "block_to_window_ratio_expected": 1.2978,
+              "power_by_blocks": {
+                "25": 0.028,
+                "50": 0.045,
+                "75": 0.061,
+                "100": 0.074,
+                "150": 0.098,
+                "200": 0.1215,
+                "284": 0.149,
+                "300": 0.138,
+                "400": 0.185,
+                "531": 0.218,
+                "750": 0.2915,
+                "882": 0.337,
+                "1000": 0.358,
+                "1500": 0.49,
+                "2000": 0.5795,
+                "3000": 0.7715,
+                "5000": 0.9225
+              },
+              "smallest_grid_blocks_reaching_80": 5000,
+              "power_at_the_available_blocks": 0.149
+            },
+            "0.5": {
+              "block_rate_expected": 0.030989,
+              "block_to_window_ratio_expected": 1.1985,
+              "power_by_blocks": {
+                "25": 0.0215,
+                "50": 0.0445,
+                "75": 0.046,
+                "100": 0.059,
+                "150": 0.0645,
+                "200": 0.0685,
+                "284": 0.0925,
+                "300": 0.1035,
+                "400": 0.1205,
+                "531": 0.1435,
+                "750": 0.1745,
+                "882": 0.203,
+                "1000": 0.209,
+                "1500": 0.286,
+                "2000": 0.3485,
+                "3000": 0.461,
+                "5000": 0.6575
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.0925
+            },
+            "0.25": {
+              "block_rate_expected": 0.028422,
+              "block_to_window_ratio_expected": 1.0993,
+              "power_by_blocks": {
+                "25": 0.02,
+                "50": 0.0275,
+                "75": 0.0305,
+                "100": 0.0375,
+                "150": 0.049,
+                "200": 0.0515,
+                "284": 0.064,
+                "300": 0.056,
+                "400": 0.0675,
+                "531": 0.08,
+                "750": 0.086,
+                "882": 0.1005,
+                "1000": 0.107,
+                "1500": 0.137,
+                "2000": 0.1525,
+                "3000": 0.1975,
+                "5000": 0.28
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.064
+            },
+            "0.1": {
+              "block_rate_expected": 0.026882,
+              "block_to_window_ratio_expected": 1.0397,
+              "power_by_blocks": {
+                "25": 0.015,
+                "50": 0.0215,
+                "75": 0.025,
+                "100": 0.023,
+                "150": 0.0325,
+                "200": 0.0395,
+                "284": 0.042,
+                "300": 0.0425,
+                "400": 0.043,
+                "531": 0.0585,
+                "750": 0.0635,
+                "882": 0.059,
+                "1000": 0.063,
+                "1500": 0.0715,
+                "2000": 0.0745,
+                "3000": 0.0745,
+                "5000": 0.1105
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.042
+            }
+          },
+          "rejection_rate_when_no_attribution_is_right": {
+            "25": 0.0135,
+            "50": 0.018,
+            "75": 0.028,
+            "100": 0.0365,
+            "150": 0.0285,
+            "200": 0.0285,
+            "284": 0.0345,
+            "300": 0.0325,
+            "400": 0.039,
+            "531": 0.0395,
+            "750": 0.041,
+            "882": 0.0425,
+            "1000": 0.045,
+            "1500": 0.0335,
+            "2000": 0.044,
+            "3000": 0.0525,
+            "5000": 0.046
+          },
+          "rejection_rate_at_the_available_blocks_when_none_is_right": 0.0345
+        },
+        "tested_negative": {
+          "wrong_block_rate": 0.001151,
+          "right_block_rate": 0.036122,
+          "window_rate": 0.002183,
+          "by_share_right": {
+            "1.0": {
+              "block_rate_expected": 0.036122,
+              "block_to_window_ratio_expected": 16.544,
+              "power_by_blocks": {
+                "25": 0.037,
+                "50": 0.0605,
+                "75": 0.0815,
+                "100": 0.113,
+                "150": 0.138,
+                "200": 0.15,
+                "284": 0.217,
+                "300": 0.226,
+                "400": 0.273,
+                "531": 0.311,
+                "750": 0.4265,
+                "882": 0.464,
+                "1000": 0.537,
+                "1500": 0.6865,
+                "2000": 0.7905,
+                "3000": 0.9105,
+                "5000": 0.9875
+              },
+              "smallest_grid_blocks_reaching_80": 3000,
+              "power_at_the_available_blocks": 0.217
+            },
+            "0.75": {
+              "block_rate_expected": 0.027379,
+              "block_to_window_ratio_expected": 12.5398,
+              "power_by_blocks": {
+                "25": 0.0315,
+                "50": 0.047,
+                "75": 0.06,
+                "100": 0.0835,
+                "150": 0.1,
+                "200": 0.1185,
+                "284": 0.1655,
+                "300": 0.1685,
+                "400": 0.2165,
+                "531": 0.2605,
+                "750": 0.34,
+                "882": 0.3835,
+                "1000": 0.4105,
+                "1500": 0.579,
+                "2000": 0.6915,
+                "3000": 0.827,
+                "5000": 0.961
+              },
+              "smallest_grid_blocks_reaching_80": 3000,
+              "power_at_the_available_blocks": 0.1655
+            },
+            "0.5": {
+              "block_rate_expected": 0.018636,
+              "block_to_window_ratio_expected": 8.5356,
+              "power_by_blocks": {
+                "25": 0.019,
+                "50": 0.031,
+                "75": 0.0475,
+                "100": 0.0535,
+                "150": 0.079,
+                "200": 0.0965,
+                "284": 0.121,
+                "300": 0.134,
+                "400": 0.152,
+                "531": 0.1915,
+                "750": 0.2465,
+                "882": 0.2815,
+                "1000": 0.299,
+                "1500": 0.412,
+                "2000": 0.5105,
+                "3000": 0.6755,
+                "5000": 0.847
+              },
+              "smallest_grid_blocks_reaching_80": 5000,
+              "power_at_the_available_blocks": 0.121
+            },
+            "0.25": {
+              "block_rate_expected": 0.009894,
+              "block_to_window_ratio_expected": 4.5314,
+              "power_by_blocks": {
+                "25": 0.006,
+                "50": 0.026,
+                "75": 0.0285,
+                "100": 0.0395,
+                "150": 0.0515,
+                "200": 0.0615,
+                "284": 0.069,
+                "300": 0.0735,
+                "400": 0.0995,
+                "531": 0.111,
+                "750": 0.1405,
+                "882": 0.1605,
+                "1000": 0.1805,
+                "1500": 0.2365,
+                "2000": 0.2755,
+                "3000": 0.3685,
+                "5000": 0.537
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.069
+            },
+            "0.1": {
+              "block_rate_expected": 0.004648,
+              "block_to_window_ratio_expected": 2.1289,
+              "power_by_blocks": {
+                "25": 0.002,
+                "50": 0.01,
+                "75": 0.012,
+                "100": 0.0165,
+                "150": 0.024,
+                "200": 0.0345,
+                "284": 0.033,
+                "300": 0.0415,
+                "400": 0.0495,
+                "531": 0.0535,
+                "750": 0.0675,
+                "882": 0.072,
+                "1000": 0.08,
+                "1500": 0.1115,
+                "2000": 0.1225,
+                "3000": 0.1575,
+                "5000": 0.225
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.033
+            }
+          },
+          "rejection_rate_when_no_attribution_is_right": {
+            "25": 0.0,
+            "50": 0.0005,
+            "75": 0.002,
+            "100": 0.0015,
+            "150": 0.006,
+            "200": 0.0075,
+            "284": 0.0095,
+            "300": 0.0105,
+            "400": 0.0085,
+            "531": 0.013,
+            "750": 0.021,
+            "882": 0.0145,
+            "1000": 0.023,
+            "1500": 0.0185,
+            "2000": 0.0215,
+            "3000": 0.0295,
+            "5000": 0.0205
+          },
+          "rejection_rate_at_the_available_blocks_when_none_is_right": 0.0095
+        },
+        "window_distance_reweighted": {
+          "meaning": "descriptive, not part of the rule: the window null with the positives resampled to the blocks' distribution of distance to the named gene's TSS",
+          "target_share_by_band": {
+            "0-10000": 0.2923,
+            "10000-50000": 0.2993,
+            "50000-200000": 0.3028,
+            "200000-1000001": 0.1056
+          },
+          "target_share_not_represented": 0,
+          "positives_by_band": {
+            "0-10000": 75,
+            "10000-50000": 207,
+            "50000-200000": 153,
+            "200000-1000001": 91
+          },
+          "right_block_rate_reweighted": 0.050062,
+          "by_share_right": {
+            "1.0": {
+              "power_by_blocks": {
+                "25": 0.053,
+                "50": 0.0645,
+                "75": 0.0935,
+                "100": 0.1175,
+                "150": 0.142,
+                "200": 0.1805,
+                "284": 0.238,
+                "300": 0.2545,
+                "400": 0.311,
+                "531": 0.4005,
+                "750": 0.4925,
+                "882": 0.5385,
+                "1000": 0.587,
+                "1500": 0.752,
+                "2000": 0.8635,
+                "3000": 0.9585,
+                "5000": 0.998
+              },
+              "smallest_grid_blocks_reaching_80": 2000,
+              "power_at_the_available_blocks": 0.238
+            },
+            "0.5": {
+              "power_by_blocks": {
+                "25": 0.029,
+                "50": 0.048,
+                "75": 0.052,
+                "100": 0.0585,
+                "150": 0.0825,
+                "200": 0.0885,
+                "284": 0.114,
+                "300": 0.1135,
+                "400": 0.1545,
+                "531": 0.1755,
+                "750": 0.2185,
+                "882": 0.241,
+                "1000": 0.281,
+                "1500": 0.3905,
+                "2000": 0.4495,
+                "3000": 0.5875,
+                "5000": 0.7675
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.114
+            }
+          }
+        }
+      },
+      "fair_test": {
+        "fair": false,
+        "available_blocks": 284,
+        "fooled_rate": 0.0095,
+        "why_not": [
+          "(1) 284 available blocks give 0.0925 probability of detection at f = 1/2; 80% needs more than 5000 blocks"
+        ]
+      }
+    },
+    "block": {
+      "unit": "a 11678-base window (the 882 blocks' median length) centred on the element",
+      "length": 11678,
+      "dropped_before_drawing": {
+        "beyond_the_cis_window": 856,
+        "holds_the_tss": 209,
+        "touches_the_exclusion": 49,
+        "negative_overlapping_a_positive_of_its_gene": 24
+      },
+      "unmatched_after_drawing": {
+        "positive": 176,
+        "negative": 1227
+      },
+      "median_distance_to_the_tss": {
+        "matched": 65269,
+        "matched_negative": 400621,
+        "unmatched": 21253,
+        "unmatched_negative": 117846
+      },
+      "positives": {
+        "units": 346,
+        "genes": 239,
+        "units_with_a_hit": 23,
+        "rate_at_the_units": 0.066474,
+        "rate_at_the_units_interval_over_genes": [
+          0.035398,
+          0.102857
+        ],
+        "rate_at_the_windows": 0.052601,
+        "rate_at_the_windows_interval_over_genes": [
+          0.036701,
+          0.069591
+        ],
+        "rate_at_the_first_drawn_window": 0.072254,
+        "difference_units_minus_windows": 0.013873,
+        "difference_interval_over_genes": [
+          -0.016951,
+          0.05
+        ],
+        "naming": {
+          "units_holding_a_fine_mapped_variant_for_any_gene": 91,
+          "of_them_naming_the_units_own_gene": 23,
+          "windows_holding_one_for_any_gene": 471,
+          "of_them_naming_the_units_gene": 91
+        },
+        "matched_tissue": {
+          "units_whose_cell_maps_to_a_tissue": 340,
+          "with_a_hit_in_that_tissue": 4,
+          "rate_at_the_units": 0.011765,
+          "rate_at_the_windows": 0.012941
+        },
+        "units_with_a_hit_by_tissue": {
+          "Skin_Sun_Exposed_Lower_leg": 9,
+          "Cells_Cultured_fibroblasts": 8,
+          "Adipose_Subcutaneous": 6,
+          "Esophagus_Mucosa": 6,
+          "Adipose_Visceral_Omentum": 5,
+          "Thyroid": 5,
+          "Nerve_Tibial": 4,
+          "Testis": 4,
+          "Whole_Blood": 4,
+          "Artery_Aorta": 3,
+          "Brain_Hypothalamus": 3,
+          "Esophagus_Muscularis": 3,
+          "Muscle_Skeletal": 3,
+          "Pituitary": 3,
+          "Skin_Not_Sun_Exposed_Suprapubic": 3,
+          "Adrenal_Gland": 2,
+          "Artery_Coronary": 2,
+          "Artery_Tibial": 2,
+          "Brain_Amygdala": 2,
+          "Brain_Anterior_cingulate_cortex_BA24": 2,
+          "Brain_Caudate_basal_ganglia": 2,
+          "Brain_Cerebellar_Hemisphere": 2,
+          "Brain_Cerebellum": 2,
+          "Brain_Cortex": 2,
+          "Brain_Frontal_Cortex_BA9": 2,
+          "Brain_Hippocampus": 2,
+          "Brain_Nucleus_accumbens_basal_ganglia": 2,
+          "Brain_Putamen_basal_ganglia": 2,
+          "Brain_Spinal_cord_cervical_c-1": 2,
+          "Brain_Substantia_nigra": 2,
+          "Breast_Mammary_Tissue": 2,
+          "Cells_EBV-transformed_lymphocytes": 2,
+          "Colon_Sigmoid": 2,
+          "Colon_Transverse": 2,
+          "Esophagus_Gastroesophageal_Junction": 2,
+          "Heart_Atrial_Appendage": 2,
+          "Heart_Left_Ventricle": 2,
+          "Kidney_Cortex": 2,
+          "Liver": 2,
+          "Lung": 2,
+          "Minor_Salivary_Gland": 2,
+          "Ovary": 2,
+          "Prostate": 2,
+          "Small_Intestine_Terminal_Ileum": 2,
+          "Spleen": 2,
+          "Stomach": 2,
+          "Uterus": 2,
+          "Vagina": 2
+        },
+        "any_pip_descriptive": {
+          "meaning": "a variant of the track for the gene at any PIP (a member of a DAP-G signal cluster), which is LD-tagged association, not localised",
+          "rate_at_the_units": 0.268786,
+          "rate_at_the_windows": 0.260116
+        },
+        "fine_mapped_egene": {
+          "units_whose_gene_has_a_fine_mapped_variant_outside_the_exclusion": 244,
+          "units_whose_gene_is_in_the_track_at_all": 306,
+          "rate_at_the_units_among_egene_units": 0.094262,
+          "rate_at_the_windows_among_egene_units": 0.07459
+        },
+        "by_distance": {
+          "0-10000": {
+            "units": 9,
+            "rate_at_the_units": 0.333333,
+            "rate_at_the_windows": 0.2
+          },
+          "10000-50000": {
+            "units": 128,
+            "rate_at_the_units": 0.109375,
+            "rate_at_the_windows": 0.092188
+          },
+          "50000-200000": {
+            "units": 123,
+            "rate_at_the_units": 0.04878,
+            "rate_at_the_windows": 0.034146
+          },
+          "200000-1000001": {
+            "units": 86,
+            "rate_at_the_units": 0.0,
+            "rate_at_the_windows": 0.004651
+          }
+        },
+        "clustering": {
+          "icc_of_the_windows_within_a_unit": 0.142443,
+          "design_effect_of_a_units_window_mean": 1.5698,
+          "correlation_of_the_units_hit_with_its_windows_mean": 0.314768,
+          "flank_rate_when_the_unit_hits": 0.152174,
+          "flank_rate_when_it_does_not": 0.037152,
+          "units_with_flanks": {
+            "hit": 23,
+            "no_hit": 323
+          }
+        },
+        "by_common_variant_tertile": {
+          "-1<c<=50": {
+            "units": 122,
+            "rate_at_the_units": 0.016393,
+            "rate_at_the_windows": 0.039344
+          },
+          "50<c<=65": {
+            "units": 113,
+            "rate_at_the_units": 0.061947,
+            "rate_at_the_windows": 0.038938
+          },
+          "65<c<=1e+12": {
+            "units": 111,
+            "rate_at_the_units": 0.126126,
+            "rate_at_the_windows": 0.081081
+          }
+        }
+      },
+      "tested_negatives": {
+        "units": 11847,
+        "genes": 2024,
+        "units_with_a_hit": 55,
+        "rate_at_the_units": 0.004643,
+        "rate_at_the_units_interval_over_genes": [
+          0.00317,
+          0.006247
+        ],
+        "rate_at_the_windows": 0.005318,
+        "rate_at_the_windows_interval_over_genes": [
+          0.004174,
+          0.006663
+        ],
+        "rate_at_the_first_drawn_window": 0.003883,
+        "difference_units_minus_windows": -0.000675,
+        "difference_interval_over_genes": [
+          -0.002034,
+          0.000705
+        ],
+        "naming": {
+          "units_holding_a_fine_mapped_variant_for_any_gene": 4484,
+          "of_them_naming_the_units_own_gene": 55,
+          "windows_holding_one_for_any_gene": 20830,
+          "of_them_naming_the_units_gene": 315
+        },
+        "matched_tissue": {
+          "units_whose_cell_maps_to_a_tissue": 10118,
+          "with_a_hit_in_that_tissue": 16,
+          "rate_at_the_units": 0.001581,
+          "rate_at_the_windows": 0.001028
+        },
+        "units_with_a_hit_by_tissue": {
+          "Whole_Blood": 18,
+          "Thyroid": 15,
+          "Skin_Sun_Exposed_Lower_leg": 11,
+          "Skin_Not_Sun_Exposed_Suprapubic": 10,
+          "Esophagus_Mucosa": 9,
+          "Artery_Tibial": 7,
+          "Muscle_Skeletal": 7,
+          "Cells_Cultured_fibroblasts": 5,
+          "Testis": 5,
+          "Breast_Mammary_Tissue": 4,
+          "Heart_Atrial_Appendage": 4,
+          "Nerve_Tibial": 4,
+          "Pancreas": 4,
+          "Adipose_Subcutaneous": 3,
+          "Artery_Aorta": 3,
+          "Brain_Cerebellum": 3,
+          "Esophagus_Muscularis": 3,
+          "Pituitary": 3,
+          "Artery_Coronary": 2,
+          "Brain_Cortex": 2,
+          "Brain_Frontal_Cortex_BA9": 2,
+          "Cells_EBV-transformed_lymphocytes": 2,
+          "Colon_Transverse": 2,
+          "Lung": 2,
+          "Spleen": 2,
+          "Adipose_Visceral_Omentum": 1
+        },
+        "any_pip_descriptive": {
+          "meaning": "a variant of the track for the gene at any PIP (a member of a DAP-G signal cluster), which is LD-tagged association, not localised",
+          "rate_at_the_units": 0.035536,
+          "rate_at_the_windows": 0.039689
+        },
+        "fine_mapped_egene": {
+          "units_whose_gene_has_a_fine_mapped_variant_outside_the_exclusion": 8133,
+          "units_whose_gene_is_in_the_track_at_all": 10226,
+          "rate_at_the_units_among_egene_units": 0.006763,
+          "rate_at_the_windows_among_egene_units": 0.007746
+        },
+        "by_distance": {
+          "0-10000": {
+            "units": 9,
+            "rate_at_the_units": 0.222222,
+            "rate_at_the_windows": 0.088889
+          },
+          "10000-50000": {
+            "units": 529,
+            "rate_at_the_units": 0.066163,
+            "rate_at_the_windows": 0.070699
+          },
+          "50000-200000": {
+            "units": 2354,
+            "rate_at_the_units": 0.005947,
+            "rate_at_the_windows": 0.009006
+          },
+          "200000-1000001": {
+            "units": 8955,
+            "rate_at_the_units": 0.000447,
+            "rate_at_the_windows": 0.000402
+          }
+        },
+        "clustering": {
+          "icc_of_the_windows_within_a_unit": 0.084039,
+          "design_effect_of_a_units_window_mean": 1.3362,
+          "correlation_of_the_units_hit_with_its_windows_mean": 0.14227,
+          "flank_rate_when_the_unit_hits": 0.072727,
+          "flank_rate_when_it_does_not": 0.00335,
+          "units_with_flanks": {
+            "hit": 55,
+            "no_hit": 11792
+          }
+        },
+        "by_common_variant_tertile": {
+          "-1<c<=45": {
+            "units": 3956,
+            "rate_at_the_units": 0.005308,
+            "rate_at_the_windows": 0.004044
+          },
+          "45<c<=63": {
+            "units": 4148,
+            "rate_at_the_units": 0.003857,
+            "rate_at_the_windows": 0.004725
+          },
+          "63<c<=1e+12": {
+            "units": 3743,
+            "rate_at_the_units": 0.004809,
+            "rate_at_the_windows": 0.00732
+          }
+        }
+      },
+      "sizing": {
+        "window": {
+          "wrong_block_rate": 0.052601,
+          "right_block_rate": 0.066474,
+          "window_rate": 0.052601,
+          "by_share_right": {
+            "1.0": {
+              "block_rate_expected": 0.066474,
+              "block_to_window_ratio_expected": 1.2637,
+              "power_by_blocks": {
+                "25": 0.044,
+                "50": 0.0635,
+                "75": 0.0855,
+                "100": 0.098,
+                "150": 0.1285,
+                "179": 0.1425,
+                "200": 0.1605,
+                "300": 0.211,
+                "400": 0.2645,
+                "531": 0.347,
+                "750": 0.43,
+                "882": 0.4885,
+                "1000": 0.519,
+                "1500": 0.6955,
+                "2000": 0.8105,
+                "3000": 0.932,
+                "5000": 0.9935
+              },
+              "smallest_grid_blocks_reaching_80": 2000,
+              "power_at_the_available_blocks": 0.1425
+            },
+            "0.75": {
+              "block_rate_expected": 0.063006,
+              "block_to_window_ratio_expected": 1.1978,
+              "power_by_blocks": {
+                "25": 0.0285,
+                "50": 0.0515,
+                "75": 0.0665,
+                "100": 0.081,
+                "150": 0.097,
+                "179": 0.1195,
+                "200": 0.12,
+                "300": 0.155,
+                "400": 0.187,
+                "531": 0.21,
+                "750": 0.3135,
+                "882": 0.3255,
+                "1000": 0.3785,
+                "1500": 0.485,
+                "2000": 0.606,
+                "3000": 0.7545,
+                "5000": 0.9165
+              },
+              "smallest_grid_blocks_reaching_80": 5000,
+              "power_at_the_available_blocks": 0.1195
+            },
+            "0.5": {
+              "block_rate_expected": 0.059538,
+              "block_to_window_ratio_expected": 1.1319,
+              "power_by_blocks": {
+                "25": 0.0325,
+                "50": 0.0485,
+                "75": 0.0545,
+                "100": 0.057,
+                "150": 0.077,
+                "179": 0.0665,
+                "200": 0.0765,
+                "300": 0.1205,
+                "400": 0.133,
+                "531": 0.143,
+                "750": 0.1905,
+                "882": 0.1975,
+                "1000": 0.213,
+                "1500": 0.2895,
+                "2000": 0.329,
+                "3000": 0.483,
+                "5000": 0.654
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.0665
+            },
+            "0.25": {
+              "block_rate_expected": 0.056069,
+              "block_to_window_ratio_expected": 1.0659,
+              "power_by_blocks": {
+                "25": 0.0235,
+                "50": 0.031,
+                "75": 0.037,
+                "100": 0.0455,
+                "150": 0.053,
+                "179": 0.056,
+                "200": 0.0645,
+                "300": 0.062,
+                "400": 0.069,
+                "531": 0.078,
+                "750": 0.093,
+                "882": 0.0975,
+                "1000": 0.1155,
+                "1500": 0.1295,
+                "2000": 0.151,
+                "3000": 0.207,
+                "5000": 0.27
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.056
+            },
+            "0.1": {
+              "block_rate_expected": 0.053988,
+              "block_to_window_ratio_expected": 1.0264,
+              "power_by_blocks": {
+                "25": 0.0175,
+                "50": 0.0345,
+                "75": 0.0285,
+                "100": 0.0335,
+                "150": 0.0435,
+                "179": 0.0465,
+                "200": 0.0385,
+                "300": 0.0495,
+                "400": 0.0455,
+                "531": 0.0495,
+                "750": 0.057,
+                "882": 0.0575,
+                "1000": 0.0525,
+                "1500": 0.071,
+                "2000": 0.0775,
+                "3000": 0.0915,
+                "5000": 0.103
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.0465
+            }
+          },
+          "rejection_rate_when_no_attribution_is_right": {
+            "25": 0.022,
+            "50": 0.027,
+            "75": 0.029,
+            "100": 0.0215,
+            "150": 0.0325,
+            "179": 0.0415,
+            "200": 0.0335,
+            "300": 0.0345,
+            "400": 0.031,
+            "531": 0.0415,
+            "750": 0.0455,
+            "882": 0.044,
+            "1000": 0.04,
+            "1500": 0.044,
+            "2000": 0.0455,
+            "3000": 0.052,
+            "5000": 0.0515
+          },
+          "rejection_rate_at_the_available_blocks_when_none_is_right": 0.0415
+        },
+        "tested_negative": {
+          "wrong_block_rate": 0.004643,
+          "right_block_rate": 0.066474,
+          "window_rate": 0.00666,
+          "by_share_right": {
+            "1.0": {
+              "block_rate_expected": 0.066474,
+              "block_to_window_ratio_expected": 9.9817,
+              "power_by_blocks": {
+                "25": 0.0425,
+                "50": 0.0575,
+                "75": 0.0835,
+                "100": 0.095,
+                "150": 0.1365,
+                "179": 0.1615,
+                "200": 0.1625,
+                "300": 0.219,
+                "400": 0.274,
+                "531": 0.334,
+                "750": 0.4385,
+                "882": 0.494,
+                "1000": 0.548,
+                "1500": 0.708,
+                "2000": 0.8015,
+                "3000": 0.94,
+                "5000": 0.992
+              },
+              "smallest_grid_blocks_reaching_80": 2000,
+              "power_at_the_available_blocks": 0.1615
+            },
+            "0.75": {
+              "block_rate_expected": 0.051016,
+              "block_to_window_ratio_expected": 7.6606,
+              "power_by_blocks": {
+                "25": 0.0405,
+                "50": 0.055,
+                "75": 0.0685,
+                "100": 0.0735,
+                "150": 0.115,
+                "179": 0.117,
+                "200": 0.1125,
+                "300": 0.163,
+                "400": 0.213,
+                "531": 0.2565,
+                "750": 0.332,
+                "882": 0.385,
+                "1000": 0.424,
+                "1500": 0.562,
+                "2000": 0.688,
+                "3000": 0.8325,
+                "5000": 0.959
+              },
+              "smallest_grid_blocks_reaching_80": 3000,
+              "power_at_the_available_blocks": 0.117
+            },
+            "0.5": {
+              "block_rate_expected": 0.035558,
+              "block_to_window_ratio_expected": 5.3394,
+              "power_by_blocks": {
+                "25": 0.026,
+                "50": 0.0385,
+                "75": 0.053,
+                "100": 0.0535,
+                "150": 0.0715,
+                "179": 0.0795,
+                "200": 0.0895,
+                "300": 0.109,
+                "400": 0.141,
+                "531": 0.178,
+                "750": 0.23,
+                "882": 0.242,
+                "1000": 0.276,
+                "1500": 0.3855,
+                "2000": 0.4735,
+                "3000": 0.617,
+                "5000": 0.819
+              },
+              "smallest_grid_blocks_reaching_80": 5000,
+              "power_at_the_available_blocks": 0.0795
+            },
+            "0.25": {
+              "block_rate_expected": 0.0201,
+              "block_to_window_ratio_expected": 3.0183,
+              "power_by_blocks": {
+                "25": 0.014,
+                "50": 0.03,
+                "75": 0.0315,
+                "100": 0.0385,
+                "150": 0.049,
+                "179": 0.0445,
+                "200": 0.047,
+                "300": 0.0595,
+                "400": 0.0825,
+                "531": 0.096,
+                "750": 0.1105,
+                "882": 0.1395,
+                "1000": 0.141,
+                "1500": 0.178,
+                "2000": 0.214,
+                "3000": 0.2915,
+                "5000": 0.445
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.0445
+            },
+            "0.1": {
+              "block_rate_expected": 0.010826,
+              "block_to_window_ratio_expected": 1.6256,
+              "power_by_blocks": {
+                "25": 0.0065,
+                "50": 0.018,
+                "75": 0.021,
+                "100": 0.027,
+                "150": 0.0305,
+                "179": 0.031,
+                "200": 0.0325,
+                "300": 0.03,
+                "400": 0.0415,
+                "531": 0.044,
+                "750": 0.051,
+                "882": 0.0665,
+                "1000": 0.0525,
+                "1500": 0.0625,
+                "2000": 0.0805,
+                "3000": 0.088,
+                "5000": 0.1105
+              },
+              "smallest_grid_blocks_reaching_80": null,
+              "power_at_the_available_blocks": 0.031
+            }
+          },
+          "rejection_rate_when_no_attribution_is_right": {
+            "25": 0.003,
+            "50": 0.005,
+            "75": 0.01,
+            "100": 0.012,
+            "150": 0.0135,
+            "179": 0.0165,
+            "200": 0.0115,
+            "300": 0.017,
+            "400": 0.0215,
+            "531": 0.014,
+            "750": 0.016,
+            "882": 0.0145,
+            "1000": 0.021,
+            "1500": 0.0175,
+            "2000": 0.0145,
+            "3000": 0.012,
+            "5000": 0.0085
+          },
+          "rejection_rate_at_the_available_blocks_when_none_is_right": 0.0165
+        },
+        "window_distance_reweighted": {
+          "meaning": "descriptive, not part of the rule: the window null with the positives resampled to the blocks' distribution of distance to the named gene's TSS",
+          "target_share_by_band": {
+            "0-10000": 0.095,
+            "10000-50000": 0.3128,
+            "50000-200000": 0.419,
+            "200000-1000001": 0.1732
+          },
+          "target_share_not_represented": 0,
+          "positives_by_band": {
+            "0-10000": 9,
+            "10000-50000": 128,
+            "50000-200000": 123,
+            "200000-1000001": 86
+          },
+          "right_block_rate_reweighted": 0.086314,
+          "by_share_right": {
+            "1.0": {
+              "power_by_blocks": {
+                "25": 0.053,
+                "50": 0.0965,
+                "75": 0.129,
+                "100": 0.1525,
+                "150": 0.228,
+                "179": 0.281,
+                "200": 0.306,
+                "300": 0.427,
+                "400": 0.525,
+                "531": 0.6375,
+                "750": 0.7905,
+                "882": 0.8575,
+                "1000": 0.886,
+                "1500": 0.9685,
+                "2000": 0.9935,
+                "3000": 0.9995,
+                "5000": 1.0
+              },
+              "smallest_grid_blocks_reaching_80": 882,
+              "power_at_the_available_blocks": 0.281
+            },
+            "0.5": {
+              "power_by_blocks": {
+                "25": 0.0305,
+                "50": 0.0535,
+                "75": 0.0665,
+                "100": 0.0985,
+                "150": 0.1015,
+                "179": 0.1,
+                "200": 0.1365,
+                "300": 0.1655,
+                "400": 0.194,
+                "531": 0.2555,
+                "750": 0.3435,
+                "882": 0.391,
+                "1000": 0.4115,
+                "1500": 0.5365,
+                "2000": 0.677,
+                "3000": 0.8315,
+                "5000": 0.96
+              },
+              "smallest_grid_blocks_reaching_80": 3000,
+              "power_at_the_available_blocks": 0.1
+            }
+          }
+        }
+      },
+      "fair_test": {
+        "fair": false,
+        "available_blocks": 179,
+        "fooled_rate": 0.0165,
+        "why_not": [
+          "(1) 179 available blocks give 0.0665 probability of detection at f = 1/2; 80% needs more than 5000 blocks"
+        ]
+      }
+    }
+  },
+  "seconds": 402.3,
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "UCSC gtexDapg (GTEx v8 cis-eQTL fine-mapping, DAP-G, 49 tissues)",
+        "version": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/gtex/eQtl/gtexDapg.bb"
+      },
+      {
+        "accession": "UCSC dbSnp155Common (dbSNP build 155, common variants)",
+        "version": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/snp/dbSnp155Common.bb"
+      },
+      {
+        "accession": "EPCrisprBenchmark (ENCODE-rE2G) training K562 and held-out 5 cell types",
+        "version": "https://raw.githubusercontent.com/EngreitzLab/CRISPR_comparison/main/resources/crispr_data/"
+      },
+      {
+        "accession": "GENCODE v50",
+        "version": "data/reference/gencode_v50_chr*.gff3.gz as held"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "the element archive the population is built from",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+            "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+            "bytes": 59143558
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+            "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+            "bytes": 30053316
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+            "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+            "bytes": 33499966
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+            "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+            "bytes": 31351611
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+            "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+            "bytes": 15228015
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+            "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+            "bytes": 20072956
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+            "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+            "bytes": 20640048
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+            "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+            "bytes": 21208708
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+            "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+            "bytes": 28806649
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+            "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+            "bytes": 13758030
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+            "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+            "bytes": 21448470
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+            "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+            "bytes": 49594427
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+            "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+            "bytes": 17561812
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+            "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+            "bytes": 7768557
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+            "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+            "bytes": 13336425
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+            "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+            "bytes": 39520954
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+            "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+            "bytes": 29236717
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+            "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+            "bytes": 33400922
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+            "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+            "bytes": 35593651
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+            "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+            "bytes": 31588372
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+            "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+            "bytes": 27866660
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+            "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+            "bytes": 26873186
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+            "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+            "bytes": 14767878
+          },
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chrY.json",
+            "sha256": "923e416de5a7f576cc2a36032c4845309d288b93b4bd54bb91f79a0732a5828b",
+            "bytes": 462897
+          }
+        ],
+        "sha256": "d8be757572cbaef70d78447644245d84063b4e198910b8aed0ea25d7ec525d9b",
+        "bytes": 622783785,
+        "files": 24,
+        "partition": "read by the run"
+      },
+      {
+        "path": "the CRISPRi benchmark (EPCrisprBenchmark), as held",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+            "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+            "bytes": 373837
+          },
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+            "bytes": 996546
+          }
+        ],
+        "sha256": "ef135b78ea3f8acca5a241cba86e1d363ace65b4a213b4361a06fb8fcf40f3dd",
+        "bytes": 1370383,
+        "files": 2,
+        "partition": "read by the run"
+      },
+      {
+        "path": "GTEx v8 DAP-G and dbSNP 155 Common, fetched whole from UCSC",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr1.npy",
+            "sha256": "f7e6ffbad31df5425bfcaaeea5265693e9942d968f42da1cd5ca0c01bf5ebac9",
+            "bytes": 8483176
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr10.npy",
+            "sha256": "9a085e634c508d2d726e61d9a28799242d6cafbe9abb2340bd64a24ec7494c98",
+            "bytes": 5478064
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr11.npy",
+            "sha256": "848d1d1540ceaec0bc0f69efde888e2ac785c15b06eadbd685e176723d7cd265",
+            "bytes": 5384112
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr12.npy",
+            "sha256": "a246a7f5f3d70339a5d9138d05e79cb85ed95f65a59cce356de7a1c5675b0955",
+            "bytes": 5258448
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr13.npy",
+            "sha256": "b9594b56c2c38a21d5950febde2eb3c2808cfd0bef34162de38dc164a385cd8b",
+            "bytes": 3947968
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr14.npy",
+            "sha256": "70405bf3dbb4cdfbebb304ca72100b833a3222d56b6609057ff7d312e8d09e96",
+            "bytes": 3547576
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr15.npy",
+            "sha256": "c33c4cca7687e63f449896b6462848ecbb7baf4c74e71004dc684ba940f1fbc0",
+            "bytes": 3211136
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr16.npy",
+            "sha256": "69771462350dc1c118d52f1cc392ecd33895eb0e90d668d4be205ccc5b1392bc",
+            "bytes": 3393552
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr17.npy",
+            "sha256": "bea17410a5f39012295b5fb8b6b239432bd90bf894f6777908b9729cf6a4dac8",
+            "bytes": 2985008
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr18.npy",
+            "sha256": "3756e21e6124182b2838e37533f4d480e1353f090f28406e83aac9cd267ade80",
+            "bytes": 3099168
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr19.npy",
+            "sha256": "094b2bcbacd77e4d07d588a167f8d56d8c63bbdf77124f6f4e219968e4e8b383",
+            "bytes": 2537592
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr2.npy",
+            "sha256": "e43222e603959fdffa79507eff6eac1f76bb89ad779d69530481f670084ac344",
+            "bytes": 9102168
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr20.npy",
+            "sha256": "0bee056c07051e75926f306daa01ca4862aa1346f943a70a771f28a3d3659583",
+            "bytes": 2387928
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr21.npy",
+            "sha256": "21f07979c42dbecb635a65dab72891797a9b717ee4f1ffef19f0c35ac6a8ca14",
+            "bytes": 1543592
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr22.npy",
+            "sha256": "a38356d0dfd1522b9ec5371f1039c711ed4b80a0768b1bce31f8d3b198e104c4",
+            "bytes": 1525760
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr3.npy",
+            "sha256": "2216482f9e7701fdd16918cd77fd8136320c084c762150abab1c961da08f845f",
+            "bytes": 7727648
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr4.npy",
+            "sha256": "3d026d39347a3467ee85f5249b3c8ebc76b70c64e96d9921b44bb611d0a70176",
+            "bytes": 7927512
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr5.npy",
+            "sha256": "4960ec0e73b672461efab5d127ce8fb569ffbc06f1a3bb9324da72cfccf9f52b",
+            "bytes": 6877616
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr6.npy",
+            "sha256": "444b89de3dfb9c4d21f3db2438eaac175767c4d4de120db1b92b8a62f74ef2ba",
+            "bytes": 7169264
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr7.npy",
+            "sha256": "1381247fa7d61b536703af06ffeb335146f2b335467309a74d9ce32188e1e90c",
+            "bytes": 6393648
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr8.npy",
+            "sha256": "2fd875479db29bd0248a6d746f5e6cf97b8362e43ca087421117e0f70f588641",
+            "bytes": 6008480
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chr9.npy",
+            "sha256": "1d466f6ac29a9f31f949ef348952b564ec2200c506aec6dd22564b57db890047",
+            "bytes": 4720800
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/common_positions/chrX.npy",
+            "sha256": "f54a1edf6979e519c650a86664445a2f5413411a91d17539bc3981ec5eba4629",
+            "bytes": 4106824
+          },
+          {
+            "path": "data/knowledge/eqtl_arm/gtexDapg.bb",
+            "sha256": "d5e928b900f47c85d38c8d481ef09d8bda0d600e9dd15ceef338ed728c3a5df7",
+            "bytes": 181906716
+          }
+        ],
+        "sha256": "2c11d6ebebcf88b001f862ea8277c8e5b4900ae97a1a2eccf8e4b148485bda18",
+        "bytes": 294723756,
+        "files": 24,
+        "partition": "read by the run"
+      },
+      {
+        "path": "GENCODE v50 per chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/gencode_v50_chr1.gff3.gz",
+            "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+            "bytes": 15781966
+          },
+          {
+            "path": "data/reference/gencode_v50_chr10.gff3.gz",
+            "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+            "bytes": 6971712
+          },
+          {
+            "path": "data/reference/gencode_v50_chr11.gff3.gz",
+            "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+            "bytes": 9161789
+          },
+          {
+            "path": "data/reference/gencode_v50_chr12.gff3.gz",
+            "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+            "bytes": 8537589
+          },
+          {
+            "path": "data/reference/gencode_v50_chr13.gff3.gz",
+            "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+            "bytes": 2925688
+          },
+          {
+            "path": "data/reference/gencode_v50_chr14.gff3.gz",
+            "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+            "bytes": 5446220
+          },
+          {
+            "path": "data/reference/gencode_v50_chr15.gff3.gz",
+            "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+            "bytes": 5424386
+          },
+          {
+            "path": "data/reference/gencode_v50_chr16.gff3.gz",
+            "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+            "bytes": 6795096
+          },
+          {
+            "path": "data/reference/gencode_v50_chr17.gff3.gz",
+            "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+            "bytes": 9026753
+          },
+          {
+            "path": "data/reference/gencode_v50_chr18.gff3.gz",
+            "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+            "bytes": 2682634
+          },
+          {
+            "path": "data/reference/gencode_v50_chr19.gff3.gz",
+            "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+            "bytes": 8518707
+          },
+          {
+            "path": "data/reference/gencode_v50_chr2.gff3.gz",
+            "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+            "bytes": 12336546
+          },
+          {
+            "path": "data/reference/gencode_v50_chr20.gff3.gz",
+            "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+            "bytes": 3974515
+          },
+          {
+            "path": "data/reference/gencode_v50_chr22.gff3.gz",
+            "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+            "bytes": 3912249
+          },
+          {
+            "path": "data/reference/gencode_v50_chr3.gff3.gz",
+            "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+            "bytes": 10518849
+          },
+          {
+            "path": "data/reference/gencode_v50_chr4.gff3.gz",
+            "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+            "bytes": 6522948
+          },
+          {
+            "path": "data/reference/gencode_v50_chr5.gff3.gz",
+            "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+            "bytes": 7000086
+          },
+          {
+            "path": "data/reference/gencode_v50_chr6.gff3.gz",
+            "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+            "bytes": 7623994
+          },
+          {
+            "path": "data/reference/gencode_v50_chr7.gff3.gz",
+            "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+            "bytes": 8058560
+          },
+          {
+            "path": "data/reference/gencode_v50_chr8.gff3.gz",
+            "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+            "bytes": 5864835
+          },
+          {
+            "path": "data/reference/gencode_v50_chr9.gff3.gz",
+            "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+            "bytes": 6759087
+          },
+          {
+            "path": "data/reference/gencode_v50_chrX.gff3.gz",
+            "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+            "bytes": 4849239
+          },
+          {
+            "path": "data/reference/gencode_v50_chrY.gff3.gz",
+            "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+            "bytes": 428494
+          }
+        ],
+        "sha256": "a8d723e66129fff2ed84331ece13c61e6f00ca989e0c1703ce1e82f2a80e0069",
+        "bytes": 159121942,
+        "files": 23,
+        "partition": "read by the run"
+      },
+      {
+        "path": "the organiser's per-chromosome inputs, as committed",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/budget_axes_chr1.json",
+            "sha256": "bbe15a3281883da171d426675a02f490941bf44e936f51ec211ee6f33817e41e",
+            "bytes": 1410873
+          },
+          {
+            "path": "data/results/budget_axes_chr10.json",
+            "sha256": "67dacff94903be15cd1289d30655adda202b740fa97d4a112c66c89fed17953b",
+            "bytes": 694899
+          },
+          {
+            "path": "data/results/budget_axes_chr11.json",
+            "sha256": "8a7e9732a819c58dda4dd3e2ba2d6bf160e76570b111cf1975bb386092b5f37b",
+            "bytes": 849479
+          },
+          {
+            "path": "data/results/budget_axes_chr12.json",
+            "sha256": "9d75232cc25e8cda2f9e1b90fc2cb204d7e956b295b23db8b12af3c10f83f720",
+            "bytes": 681846
+          },
+          {
+            "path": "data/results/budget_axes_chr13.json",
+            "sha256": "fee82bed10f6b311a4a7179955da6174e4a5114042adcfcf974a52c9cba7ca78",
+            "bytes": 453902
+          },
+          {
+            "path": "data/results/budget_axes_chr14.json",
+            "sha256": "14a6bf1b3185e139d6f9ea72f336a9795d0a235dc3da0960d512e45677e0556f",
+            "bytes": 551492
+          },
+          {
+            "path": "data/results/budget_axes_chr15.json",
+            "sha256": "1229865beee55ea8a733b6abf9668f5d6ce07be335dd6353d0e4664603fb5249",
+            "bytes": 400561
+          },
+          {
+            "path": "data/results/budget_axes_chr16.json",
+            "sha256": "17a2184e0240d127f2baec30bef35593846d9b90df8c6be07d19ff53a9f8ef90",
+            "bytes": 503231
+          },
+          {
+            "path": "data/results/budget_axes_chr17.json",
+            "sha256": "2a1f433a8840c30ccf745dd05c1bb3a8728f90f99a8817452b8d788f67cc1413",
+            "bytes": 594575
+          },
+          {
+            "path": "data/results/budget_axes_chr18.json",
+            "sha256": "7674dfd12ba8b59214dde98b19802968409385022b6236cb8ba6b4c43d0651ac",
+            "bytes": 361413
+          },
+          {
+            "path": "data/results/budget_axes_chr19.json",
+            "sha256": "dc751a44b4fa82d87666b78c3105fc449c07e409d19756d7d0477e0fc3979f4b",
+            "bytes": 622828
+          },
+          {
+            "path": "data/results/budget_axes_chr2.json",
+            "sha256": "ee44180e8a8a3c49b3b48c24d2869fe340c31e818df8f74d7a52dbdc57888856",
+            "bytes": 1133348
+          },
+          {
+            "path": "data/results/budget_axes_chr20.json",
+            "sha256": "8bb5d1c5a4bdfb091e29804a064b210a21bc3eadc9e218c62f05076a93c23f4b",
+            "bytes": 446278
+          },
+          {
+            "path": "data/results/budget_axes_chr21.json",
+            "sha256": "9f8112afa28902a6ef81caadad58d37cf709a3d1fbd35d2ca221d7b6aab08049",
+            "bytes": 263928
+          },
+          {
+            "path": "data/results/budget_axes_chr22.json",
+            "sha256": "256f84884d1f3f78f10b734d69616db8d357f95757780693855fbcb6e4d86b77",
+            "bytes": 372693
+          },
+          {
+            "path": "data/results/budget_axes_chr3.json",
+            "sha256": "3c68516f3219952cb8900758c858235aa0fb98b4c3023160a69f37b7e854192b",
+            "bytes": 759401
+          },
+          {
+            "path": "data/results/budget_axes_chr4.json",
+            "sha256": "67ca15d332a1ef621ccd7b3bc7d114244887c30de3bcbb460cb679a4e5cac7d2",
+            "bytes": 821190
+          },
+          {
+            "path": "data/results/budget_axes_chr5.json",
+            "sha256": "2a949b0d92ca50e162868e2141d15c9326c104eb4ef83625bc6b48f9e1ffacf0",
+            "bytes": 798553
+          },
+          {
+            "path": "data/results/budget_axes_chr6.json",
+            "sha256": "02f204b9005c8967b72c1a9d87b7466c0c173019662b94bb849fce135c9ffe47",
+            "bytes": 817084
+          },
+          {
+            "path": "data/results/budget_axes_chr7.json",
+            "sha256": "ce717d1e3be2f44415340cd7c347f9a8f945c6652d4ba64aa4adda3b1b5a900e",
+            "bytes": 819440
+          },
+          {
+            "path": "data/results/budget_axes_chr8.json",
+            "sha256": "422cdf37f516eb923c2c5e7a6f6053222d7edbe97aba7bc48097d77c8eabbcf0",
+            "bytes": 691288
+          },
+          {
+            "path": "data/results/budget_axes_chr9.json",
+            "sha256": "ff179fd23905d3dcd80328919baa4c8133404036eca2ac2a75adad1c75557658",
+            "bytes": 629119
+          },
+          {
+            "path": "data/results/budget_axes_chrX.json",
+            "sha256": "e8b4353c08dba5488b595c171839755fb63256e93c9c58e9df22dcf60a916cbd",
+            "bytes": 789566
+          },
+          {
+            "path": "data/results/budget_axes_chrY.json",
+            "sha256": "f1da714164c1552ef4a14eeb9384b2829fd69300e06109c19edcc5249488ec8b",
+            "bytes": 223696
+          },
+          {
+            "path": "data/results/budget_chr1.json",
+            "sha256": "43cd9c220b10cb815f4f80b9981e7d6aafcac54e17ef6a8cd41786ff16fd02f8",
+            "bytes": 1500070
+          },
+          {
+            "path": "data/results/budget_chr10.json",
+            "sha256": "52fdd69d524ff444b71111646f67214babb90bd44c3fee20b4625b90a0d95f37",
+            "bytes": 739499
+          },
+          {
+            "path": "data/results/budget_chr11.json",
+            "sha256": "c450b309b728d9069a81964749a65ea1a82e436e7fdf003f1fc68dbc6ac66aad",
+            "bytes": 897717
+          },
+          {
+            "path": "data/results/budget_chr12.json",
+            "sha256": "683da59ac29e6954e08d2a88588a8bc4a334722fde44dcf276142a832bd9e8df",
+            "bytes": 723141
+          },
+          {
+            "path": "data/results/budget_chr13.json",
+            "sha256": "375956c22dcf3b3209421617ae238686bfe500cb8d6fed64379ee7f86968ca1a",
+            "bytes": 479558
+          },
+          {
+            "path": "data/results/budget_chr14.json",
+            "sha256": "eaa66fcb33702cc0a8ca7fb83aafe707e2a91f9901e9572090e8bf8bda81e587",
+            "bytes": 584688
+          },
+          {
+            "path": "data/results/budget_chr15.json",
+            "sha256": "700640f9b4c965be96dee1d5e8a5f4f783f33f545ec5872912fd00e1a1970e39",
+            "bytes": 423577
+          },
+          {
+            "path": "data/results/budget_chr16.json",
+            "sha256": "e8f4b41323c8fa38529a42a39b67ff04dde92cf128cc12c30dea3bfc704622e0",
+            "bytes": 534109
+          },
+          {
+            "path": "data/results/budget_chr17.json",
+            "sha256": "6149a41eebb439b98cc0d34dafeec2a0deab79b69f2fd253c46fd85acc5dcb77",
+            "bytes": 633946
+          },
+          {
+            "path": "data/results/budget_chr18.json",
+            "sha256": "11926ebb301e129f7d9dceaa0d88f79c19824fd7438438a9e4ec7a622a99aa19",
+            "bytes": 382016
+          },
+          {
+            "path": "data/results/budget_chr19.json",
+            "sha256": "9ece03e49664c27b972ba1e3b71ea65fb88b8f2f422d5dac0eb6cad4274df251",
+            "bytes": 657776
+          },
+          {
+            "path": "data/results/budget_chr2.json",
+            "sha256": "c577cdd0d92b972880c57517c64b02634b38e68950818b31bc1f956a1eb6faa7",
+            "bytes": 1204585
+          },
+          {
+            "path": "data/results/budget_chr20.json",
+            "sha256": "cb91591d577cda316c59ee65391b13f4a5635f76a3f2a58865cc06a234d2153e",
+            "bytes": 474640
+          },
+          {
+            "path": "data/results/budget_chr21.json",
+            "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+            "bytes": 275463
+          },
+          {
+            "path": "data/results/budget_chr22.json",
+            "sha256": "160e8fcd633d26f29861634fb285033b86b798a38b6f747fd50be164d492fc0d",
+            "bytes": 394442
+          },
+          {
+            "path": "data/results/budget_chr3.json",
+            "sha256": "1ee8579a4a3212730b0fdb70823f6348a523bf0cdef2378e10a0223cb2991560",
+            "bytes": 806712
+          },
+          {
+            "path": "data/results/budget_chr4.json",
+            "sha256": "bb21d5f8ee7100417520714cbaa7c1f0b21026cec3e7f083af46ea6113b4bebf",
+            "bytes": 867246
+          },
+          {
+            "path": "data/results/budget_chr5.json",
+            "sha256": "5381271c1732beba0f99fe2f46cd1d3c8a8e184225edb47a0b42c4cbc0df5ee0",
+            "bytes": 845931
+          },
+          {
+            "path": "data/results/budget_chr6.json",
+            "sha256": "c5ed1e6616f91706cfbb1a2c3cdea6fce2e4a4d32c9d6c1497cbc105be86849b",
+            "bytes": 867522
+          },
+          {
+            "path": "data/results/budget_chr7.json",
+            "sha256": "66981ce528026399aad18eba64b9b74e5c70aec1c3defad4813a07c259e3995f",
+            "bytes": 869127
+          },
+          {
+            "path": "data/results/budget_chr8.json",
+            "sha256": "70901c75a6801b3c90425bdd663b90ef7dac1073868d5aeae0dad9d95187ac8e",
+            "bytes": 731185
+          },
+          {
+            "path": "data/results/budget_chr9.json",
+            "sha256": "827aac6243318d604c74e04557d9238d1ce8819ec02f1ee54695c8561d738c3d",
+            "bytes": 666533
+          },
+          {
+            "path": "data/results/budget_chrX.json",
+            "sha256": "5e2830f40aac05475680c3470747ae3b75ac9c538bda241bb8cb8ff80e73c068",
+            "bytes": 819979
+          },
+          {
+            "path": "data/results/budget_chrY.json",
+            "sha256": "8a807a0b037621d00e326e8bb1bcd3fdb18b876c6440391127ce919f569932a4",
+            "bytes": 229765
+          },
+          {
+            "path": "data/results/constrained_targets_chr1.json",
+            "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+            "bytes": 80409
+          },
+          {
+            "path": "data/results/constrained_targets_chr10.json",
+            "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+            "bytes": 82872
+          },
+          {
+            "path": "data/results/constrained_targets_chr11.json",
+            "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+            "bytes": 93050
+          },
+          {
+            "path": "data/results/constrained_targets_chr12.json",
+            "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+            "bytes": 93749
+          },
+          {
+            "path": "data/results/constrained_targets_chr13.json",
+            "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+            "bytes": 93299
+          },
+          {
+            "path": "data/results/constrained_targets_chr14.json",
+            "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+            "bytes": 86812
+          },
+          {
+            "path": "data/results/constrained_targets_chr15.json",
+            "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+            "bytes": 76206
+          },
+          {
+            "path": "data/results/constrained_targets_chr16.json",
+            "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+            "bytes": 83816
+          },
+          {
+            "path": "data/results/constrained_targets_chr17.json",
+            "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+            "bytes": 88799
+          },
+          {
+            "path": "data/results/constrained_targets_chr18.json",
+            "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+            "bytes": 89764
+          },
+          {
+            "path": "data/results/constrained_targets_chr19.json",
+            "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+            "bytes": 101189
+          },
+          {
+            "path": "data/results/constrained_targets_chr2.json",
+            "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+            "bytes": 88553
+          },
+          {
+            "path": "data/results/constrained_targets_chr20.json",
+            "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+            "bytes": 93809
+          },
+          {
+            "path": "data/results/constrained_targets_chr21.json",
+            "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+            "bytes": 111930
+          },
+          {
+            "path": "data/results/constrained_targets_chr22.json",
+            "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+            "bytes": 96441
+          },
+          {
+            "path": "data/results/constrained_targets_chr3.json",
+            "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+            "bytes": 87015
+          },
+          {
+            "path": "data/results/constrained_targets_chr4.json",
+            "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+            "bytes": 92315
+          },
+          {
+            "path": "data/results/constrained_targets_chr5.json",
+            "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+            "bytes": 80937
+          },
+          {
+            "path": "data/results/constrained_targets_chr6.json",
+            "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+            "bytes": 91754
+          },
+          {
+            "path": "data/results/constrained_targets_chr7.json",
+            "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+            "bytes": 91280
+          },
+          {
+            "path": "data/results/constrained_targets_chr8.json",
+            "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+            "bytes": 88507
+          },
+          {
+            "path": "data/results/constrained_targets_chr9.json",
+            "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+            "bytes": 81094
+          },
+          {
+            "path": "data/results/constrained_targets_chrX.json",
+            "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+            "bytes": 90048
+          },
+          {
+            "path": "data/results/constrained_targets_chrY.json",
+            "sha256": "e57ecf166af42a506bb6113e84d51ffa6ab326b4e74ba5d5d89421d9a40ca896",
+            "bytes": 5788
+          },
+          {
+            "path": "data/results/duplication_chr1.json",
+            "sha256": "c6a0ff4870a665a999f81cf14a6297c0443a94a376cf33b261f77258f4f1d622",
+            "bytes": 528568
+          },
+          {
+            "path": "data/results/duplication_chr10.json",
+            "sha256": "275f790e79d95092890ed921554d9f483e2d23645c2a1ce733b834877fbc9698",
+            "bytes": 260309
+          },
+          {
+            "path": "data/results/duplication_chr11.json",
+            "sha256": "668d35634f0245de5a01e875d8ea788835247f6db4cfe1e10f8fda811d2cfef1",
+            "bytes": 315109
+          },
+          {
+            "path": "data/results/duplication_chr12.json",
+            "sha256": "18603e506503c5925311f0998419ed91646e6fd007733c978e8897121a30dbc6",
+            "bytes": 241500
+          },
+          {
+            "path": "data/results/duplication_chr13.json",
+            "sha256": "3408b18be0bbf3fe329774fdf5463769d1804ccdec9dc38af059f68ff659c2de",
+            "bytes": 168106
+          },
+          {
+            "path": "data/results/duplication_chr14.json",
+            "sha256": "5b84dbe9a6c5dc725266aba71be62104c15a5945cf366004083711fa841f404d",
+            "bytes": 211604
+          },
+          {
+            "path": "data/results/duplication_chr15.json",
+            "sha256": "e8442a2476b831305d0efb25359efc2048b01e831bcbd07651219efecde4d4d7",
+            "bytes": 175964
+          },
+          {
+            "path": "data/results/duplication_chr16.json",
+            "sha256": "6830afb482da7be0940aec469e5eede11310734e43cca2b3f0ef1cd517a649ad",
+            "bytes": 206004
+          },
+          {
+            "path": "data/results/duplication_chr17.json",
+            "sha256": "79291ca68d9175a57947c261a523f17d9ff630263a14013134ca09979766723f",
+            "bytes": 228049
+          },
+          {
+            "path": "data/results/duplication_chr18.json",
+            "sha256": "d6695c82ccc770c8ee66c71d3e5cfcc3f566ebe5ea75918a80fa5577b8a35ce4",
+            "bytes": 129982
+          },
+          {
+            "path": "data/results/duplication_chr19.json",
+            "sha256": "5389277300089a6fa5fc0aa88c468cd60dde6dd4170bfbd68b88726318c9c537",
+            "bytes": 224361
+          },
+          {
+            "path": "data/results/duplication_chr2.json",
+            "sha256": "3538035cd41719535aea02820e24725cb4019448601483e616a844f252367b52",
+            "bytes": 429860
+          },
+          {
+            "path": "data/results/duplication_chr20.json",
+            "sha256": "0ce18d4fe15b071594dbc0dd172ff730ecd2dce15c2eef6b94e0bd2c17a82e33",
+            "bytes": 164031
+          },
+          {
+            "path": "data/results/duplication_chr21.json",
+            "sha256": "4efb8a6d42ed89a7cd436e3100f2fef0bb7d068d8c5060ae742fe5e34c6814cf",
+            "bytes": 118130
+          },
+          {
+            "path": "data/results/duplication_chr22.json",
+            "sha256": "852b3c0ba7d348cbcfa3d68e8c1e6848bc53c252d8a584d4cd72077f94191870",
+            "bytes": 157247
+          },
+          {
+            "path": "data/results/duplication_chr3.json",
+            "sha256": "2bf519ba9d8b5f7be164e7f5220ec81c03245b33033a66809357cf8588d363d2",
+            "bytes": 276227
+          },
+          {
+            "path": "data/results/duplication_chr4.json",
+            "sha256": "abef1504e80452f6ff5942a5006995404c9b635c3df9c62c35b21b2496713604",
+            "bytes": 302778
+          },
+          {
+            "path": "data/results/duplication_chr5.json",
+            "sha256": "1974b4d3a270e8ebe633d19ad0dccf9ed97c58f92763cddad4b2d50d99d903ea",
+            "bytes": 288379
+          },
+          {
+            "path": "data/results/duplication_chr6.json",
+            "sha256": "dff8c192ce36e76456230376c7d4000559d8d86ee2642d178f9e52f477822779",
+            "bytes": 288812
+          },
+          {
+            "path": "data/results/duplication_chr7.json",
+            "sha256": "b55814d3d0b5e19af6972eeb934dc1646e715d589c9e31fe5540d90035da6a5d",
+            "bytes": 316217
+          },
+          {
+            "path": "data/results/duplication_chr8.json",
+            "sha256": "369c874a82c1ffe373a8ba57b111f891c0b440d0ac72c8f1ad344bbde8303b97",
+            "bytes": 255757
+          },
+          {
+            "path": "data/results/duplication_chr9.json",
+            "sha256": "bbf7adc9b99fc4c62fec7f59338a1d93bc006d7cdd86452b3dd409d9c42b0ea1",
+            "bytes": 255702
+          },
+          {
+            "path": "data/results/duplication_chrX.json",
+            "sha256": "ec0ce9a6cf3925616acd81741efc0ff31a69f9dbe882fe21e7d3a2a1877a0605",
+            "bytes": 314974
+          },
+          {
+            "path": "data/results/duplication_chrY.json",
+            "sha256": "4b9ec18d3f5f7be4bf6d62f4bb350ffef69162f4791d10f47c0d44ab0cc49d88",
+            "bytes": 113258
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr1.json",
+            "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+            "bytes": 1680
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr10.json",
+            "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+            "bytes": 1719
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr11.json",
+            "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+            "bytes": 1651
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr12.json",
+            "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+            "bytes": 1645
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr13.json",
+            "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+            "bytes": 1654
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr14.json",
+            "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+            "bytes": 1657
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr15.json",
+            "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+            "bytes": 1660
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr16.json",
+            "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+            "bytes": 1627
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr17.json",
+            "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+            "bytes": 1649
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr18.json",
+            "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+            "bytes": 1703
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr19.json",
+            "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+            "bytes": 1643
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr2.json",
+            "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+            "bytes": 1677
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr20.json",
+            "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+            "bytes": 1640
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr21.json",
+            "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+            "bytes": 1619
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr22.json",
+            "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+            "bytes": 1608
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr3.json",
+            "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+            "bytes": 1655
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr4.json",
+            "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+            "bytes": 1663
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr5.json",
+            "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+            "bytes": 1643
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr6.json",
+            "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+            "bytes": 1708
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr7.json",
+            "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+            "bytes": 1668
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr8.json",
+            "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+            "bytes": 1663
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr9.json",
+            "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+            "bytes": 1661
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chrX.json",
+            "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+            "bytes": 1673
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chrY.json",
+            "sha256": "2162733f1654f460811a5fd9d4e7dc002e63ebf4c1254b0a35dd16fc469c9f44",
+            "bytes": 1517
+          },
+          {
+            "path": "data/results/enhancer_targets_chr1.json",
+            "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+            "bytes": 231503
+          },
+          {
+            "path": "data/results/enhancer_targets_chr10.json",
+            "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+            "bytes": 226154
+          },
+          {
+            "path": "data/results/enhancer_targets_chr11.json",
+            "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+            "bytes": 235882
+          },
+          {
+            "path": "data/results/enhancer_targets_chr12.json",
+            "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+            "bytes": 236541
+          },
+          {
+            "path": "data/results/enhancer_targets_chr13.json",
+            "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+            "bytes": 232682
+          },
+          {
+            "path": "data/results/enhancer_targets_chr14.json",
+            "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+            "bytes": 226799
+          },
+          {
+            "path": "data/results/enhancer_targets_chr15.json",
+            "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+            "bytes": 235302
+          },
+          {
+            "path": "data/results/enhancer_targets_chr16.json",
+            "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+            "bytes": 226186
+          },
+          {
+            "path": "data/results/enhancer_targets_chr17.json",
+            "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+            "bytes": 233113
+          },
+          {
+            "path": "data/results/enhancer_targets_chr18.json",
+            "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+            "bytes": 231108
+          },
+          {
+            "path": "data/results/enhancer_targets_chr19.json",
+            "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+            "bytes": 233210
+          },
+          {
+            "path": "data/results/enhancer_targets_chr2.json",
+            "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+            "bytes": 228771
+          },
+          {
+            "path": "data/results/enhancer_targets_chr20.json",
+            "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+            "bytes": 227506
+          },
+          {
+            "path": "data/results/enhancer_targets_chr21.json",
+            "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+            "bytes": 266488
+          },
+          {
+            "path": "data/results/enhancer_targets_chr22.json",
+            "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+            "bytes": 230906
+          },
+          {
+            "path": "data/results/enhancer_targets_chr3.json",
+            "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+            "bytes": 231751
+          },
+          {
+            "path": "data/results/enhancer_targets_chr4.json",
+            "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+            "bytes": 232560
+          },
+          {
+            "path": "data/results/enhancer_targets_chr5.json",
+            "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+            "bytes": 225597
+          },
+          {
+            "path": "data/results/enhancer_targets_chr6.json",
+            "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+            "bytes": 227287
+          },
+          {
+            "path": "data/results/enhancer_targets_chr7.json",
+            "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+            "bytes": 223619
+          },
+          {
+            "path": "data/results/enhancer_targets_chr8.json",
+            "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+            "bytes": 225706
+          },
+          {
+            "path": "data/results/enhancer_targets_chr9.json",
+            "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+            "bytes": 235646
+          },
+          {
+            "path": "data/results/enhancer_targets_chrX.json",
+            "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+            "bytes": 226730
+          },
+          {
+            "path": "data/results/enhancer_targets_chrY.json",
+            "sha256": "1add8228e48706801effb45d413701be0b5a98e891bc326b542734251ab0dca8",
+            "bytes": 207535
+          },
+          {
+            "path": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+            "sha256": "2b64229c75e2a3910d3fe3ce109896a917bee9882eaf37ab27d15b0c90108d99",
+            "bytes": 1862225
+          },
+          {
+            "path": "data/results/variation_chr1.json",
+            "sha256": "a48412273d8b9b4fedee2d870b3a657ad290da21e50122c849f07af7e5d15166",
+            "bytes": 1402301
+          },
+          {
+            "path": "data/results/variation_chr10.json",
+            "sha256": "19785e66eb1f544cb1fb8ad1d30e29e59f650dfe02f5b7909d9d07e77f7c6d95",
+            "bytes": 767517
+          },
+          {
+            "path": "data/results/variation_chr11.json",
+            "sha256": "d5f92b6b409a7a84b1b28c2f4af7a1b832eca51a60ca9f4983505e9071bb1bd8",
+            "bytes": 912203
+          },
+          {
+            "path": "data/results/variation_chr12.json",
+            "sha256": "da5b9430a856980755ac53b4574cdb6203d371b3c9ce3ca674b59e8be76eb1be",
+            "bytes": 776057
+          },
+          {
+            "path": "data/results/variation_chr13.json",
+            "sha256": "01b6eece2b4c5f7045a61dbc0265ca5091350db6de592e731ea007d25de87050",
+            "bytes": 562830
+          },
+          {
+            "path": "data/results/variation_chr14.json",
+            "sha256": "c61758ab1fd2a77ec102ceaca507482d0c1d103902a87c2dec2ef9539f3ebe86",
+            "bytes": 608223
+          },
+          {
+            "path": "data/results/variation_chr15.json",
+            "sha256": "f3dd7c46c300ae02d44b8a785586e5f4bff2ba1ecc764e673b68ffa9477c25f9",
+            "bytes": 483432
+          },
+          {
+            "path": "data/results/variation_chr16.json",
+            "sha256": "5720ba0d0a343c1b7983fba18cf385acc437c7b85fc8678bd696cb0f92cf0e54",
+            "bytes": 563247
+          },
+          {
+            "path": "data/results/variation_chr17.json",
+            "sha256": "e1503b269e094315a22714e5be27064843111682f681a4373aea223bee746b10",
+            "bytes": 668316
+          },
+          {
+            "path": "data/results/variation_chr18.json",
+            "sha256": "cc886fd465a12a6942c67942446e5fb7f1c920c4aac5d44f54c157faea489762",
+            "bytes": 481487
+          },
+          {
+            "path": "data/results/variation_chr19.json",
+            "sha256": "caae3fcebcbdce76e2c47d3abf6486ceabbf9b2e8d4e534c1973cc37aafb94fd",
+            "bytes": 691162
+          },
+          {
+            "path": "data/results/variation_chr2.json",
+            "sha256": "d2e34e45756cea76ec7661479bee68dee786d69ad8773725fe556cc0a5d7cc2b",
+            "bytes": 1159471
+          },
+          {
+            "path": "data/results/variation_chr20.json",
+            "sha256": "4ac435be54b70ba958e755bba265ecf9533f36b3f44845bdf9109e4bba27c6fc",
+            "bytes": 546743
+          },
+          {
+            "path": "data/results/variation_chr21.json",
+            "sha256": "f68d07ae0c32f653b5c20abf1c74e7bb35df2a661bda11be17d588ba40ed5f5e",
+            "bytes": 348031
+          },
+          {
+            "path": "data/results/variation_chr22.json",
+            "sha256": "488cb0217350c4ded89c59d4d7044ee12bd3f36e0cdf5589058e91dbb9aaef06",
+            "bytes": 447259
+          },
+          {
+            "path": "data/results/variation_chr3.json",
+            "sha256": "3226b141288da1534b4d87d43b2af62b5c2bf5a680bfd5f87d816a34fb8f08be",
+            "bytes": 851491
+          },
+          {
+            "path": "data/results/variation_chr4.json",
+            "sha256": "b7bb22de72321991a1a236fc96362386cafbd549eabe78240043ec8ae9e51878",
+            "bytes": 901104
+          },
+          {
+            "path": "data/results/variation_chr5.json",
+            "sha256": "afa63d7c2bb568abdd222893d254956ff649413f7cb279ef663e5492a999e4cc",
+            "bytes": 868598
+          },
+          {
+            "path": "data/results/variation_chr6.json",
+            "sha256": "2d564b14bf191563acba3dbfa7190c1989c663e014a782cb25d041b437524e6d",
+            "bytes": 896157
+          },
+          {
+            "path": "data/results/variation_chr7.json",
+            "sha256": "10f765e2fa58a4fb7d4931bc3344a2a29e6e3fe52db7e74b6d6c83fdb39d7ef0",
+            "bytes": 859998
+          },
+          {
+            "path": "data/results/variation_chr8.json",
+            "sha256": "807ae603b32b365661f3529ac0e9d8be10e801c8e00301c268daf1d870c26170",
+            "bytes": 750768
+          },
+          {
+            "path": "data/results/variation_chr9.json",
+            "sha256": "45df7529d90e827d9fab5baf8e3f919e913ef184b693eab77b773a02c2f35e2b",
+            "bytes": 682738
+          },
+          {
+            "path": "data/results/variation_chrX.json",
+            "sha256": "e13ff8e98e81dd07ac6b4b68897d6977ee64ed6322398070d6defdb89f7539f6",
+            "bytes": 772326
+          },
+          {
+            "path": "data/results/variation_chrY.json",
+            "sha256": "a5b7b851deebdb0278518a1a5ce2124768863915d5466789c9fd9995328fe95e",
+            "bytes": 135737
+          }
+        ],
+        "sha256": "e32a40918ed4fc89a97967e561a045d65e13bd0369b85d355819797281a715e1",
+        "bytes": 64917960,
+        "files": 169,
+        "partition": "read by the run"
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "pip": 0.5,
+      "margin": 500,
+      "exclusion_margin": 1000,
+      "cis_window": 1000000,
+      "tss_guard": 1000,
+      "windows_per_unit": 4,
+      "pseudo_block_windows": 1,
+      "distance_band": 0.25,
+      "min_band_in_unit_lengths": 3,
+      "count_band": 0.25,
+      "draw_tries_per_window": 1000,
+      "seed": 20261010,
+      "tissue_of_cell": {
+        "K562": "Whole_Blood",
+        "Jurkat": "Whole_Blood",
+        "GM12878": "Cells_EBV-transformed_lymphocytes",
+        "HCT116": "Colon_Transverse",
+        "WTC11": null
+      },
+      "alpha_one_sided": 0.05,
+      "power": 0.8,
+      "shares_right": [
+        1.0,
+        0.75,
+        0.5,
+        0.25,
+        0.1
+      ],
+      "n_grid": [
+        25,
+        50,
+        75,
+        100,
+        150,
+        200,
+        300,
+        400,
+        531,
+        750,
+        882,
+        1000,
+        1500,
+        2000,
+        3000,
+        5000
+      ],
+      "experiments": 2000,
+      "bootstraps": 2000,
+      "fooled_bound": 0.1,
+      "min_log2": 0.1
+    },
+    "exclusions": [
+      "every DAP-G record whose variant lies inside the 882 blocks widened by 1 kb: dropped on its position before any other field is split; not counted",
+      "every calibration unit, window and flank touching the widened blocks",
+      "units beyond the 1 Mb cis window or holding the gene's TSS with its 1 kb guard",
+      "tested negatives overlapping a measured positive element of the same gene",
+      "units for which the draw found fewer than 5 matched windows (counted in the result)"
+    ],
+    "partitions": "n/a: a calibration on measured pairs outside the blocks; nothing is trained",
+    "code_cleanliness": {
+      "git_sha": "63e91d30b376dc5e342e08e35b39d641b1fc172c",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/eqtl_arm_calibrate.py",
+        "form": "committed_repository_file",
+        "path": "scripts/eqtl_arm_calibrate.py",
+        "is_committed": true,
+        "declared_entry": "scripts/eqtl_arm_calibrate.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/eqtl_arm.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/measured_unknown.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/organise.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/eqtl_arm_calibrate.py"
+      ],
+      "counting_path_count": 139,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "63e91d30b376dc5e342e08e35b39d641b1fc172c",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/eqtl_arm_calibrate.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "63e91d30b376dc5e342e08e35b39d641b1fc172c",
+      "code_cleanliness_git_sha": "63e91d30b376dc5e342e08e35b39d641b1fc172c",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 63e91d3"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 666,
+      "opens_under_data": 508,
+      "files_read": 242,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
