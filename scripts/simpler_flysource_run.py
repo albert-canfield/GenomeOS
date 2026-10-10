@@ -517,6 +517,11 @@ def _build() -> dict[str, Any]:
         name: fs.attribute(rows, chroms, bounds, fs.BOUNDARY_SETS[name]["half_bin"])
         for name, bounds in sets.items()
     }
+    # A summary's `span_widths_bp` is keyed by the span width as an INTEGER and JSON writes every
+    # key as a string, so the summary that goes into a result file is not equal to the one computed
+    # here and `score`'s guard on it could never pass, whatever the boundaries were. Normalised once,
+    # at the one place the summaries are built, so what is compared is what was written.
+    summaries = json.loads(json.dumps(summaries))
     return {
         "chroms": chroms,
         "rows": rows,
