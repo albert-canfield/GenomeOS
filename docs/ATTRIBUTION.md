@@ -1,11 +1,39 @@
 # The 98%: attributing function to the non-coding genome
 
+**Status on 2026-10-10.** This is an append-only research record: every section is dated, later sections correct earlier ones beside them, and nothing is deleted. Start with "Where the 98% stands on 2026-10-10" below; each figure there was checked against its result file on that date.
+- Measured: 0.45% of the unknown space (4,554,153 of 1,008,756,271 bases) and 0.52% of the real unknown (160,447 of 30,602,182 bases) overlap any assay held here. Every model over that space extrapolates from about half a percent of it.
+- Milestone 1.3 (the 98%): every block carries a tier; clause 2 is not met (unknown blocks name a coding gene less often than matched random windows); clause 3 is split, and its designed experiment (284,001 oligos) is built and unrun.
+- Withdrawn: the tier reading of 2026-09-16 (withdrawn 2026-09-17); the 593,765-target band table (retired 2026-09-22 rather than corrected); every interval from fewer than 10 chromosome clusters (2026-10-02).
+- Superseded: since review R7 (2026-09-28) the tiers stored as `fossil` and `neutral` read repeat_unconstrained and unconstrained_unknown. The code and results list just below is the one of 2026-09-13 and is not complete; "What comes next, in order" near the end is the plan of 2026-09-13, and the current order of work is ROADMAP §5 item 14.
+- Open: the paid AstroREG-2 run 2 stopped at 363 of its 1,232 answers on 2026-10-03; resume or close is Albert's decision (ROADMAP §5 item 14, A1) and no result from it is described. Model lanes M1 to M3 of item 14 (compiled rules that run, the `reader` construct, closure at the cell level) started on 2026-10-10 and have no result yet.
+
 Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py`,
 `budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`, `lexicon.py`, `human_panel.py`),
 `scripts/budget_genome_wide.py`, `scripts/syntax_candidates.py`, `scripts/lexicon.py`, `scripts/human_panel.py`,
 `genomeos budget`. Results: `data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
 `syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`, `lexicon_<chrom>.json`, `human_panel_chr21.json`,
 `element_types.json` (`element_types.py`, `scripts/element_types.py`).
+
+## Where the 98% stands on 2026-10-10
+
+Each row gives the current figure with its denominator, the result file it was checked against, and
+the section of this record that holds its registration, run and limits.
+
+| question | current figure | result | section |
+|---|---|---|---|
+| How large is the unknown space? | 1,008,756,271 bases in 26,806 blocks, 98.53% carrying a sequence class | `unknown_genome_wide.json` | docs/UNKNOWN.md |
+| How is it tiered? | of those bases: structural 22.8%, repeat_unconstrained 32.6%, regulatory 34.2%, unconstrained_unknown 7.3%, constrained_unknown 3.2% (1,098 blocks, 32.0 Mb) | `budget_genome_wide.json` | "The genome (2026-09-12)" |
+| What is the real unknown? | the 882 constrained-unknown blocks that are not mostly copies (216 are), 30,602,182 bases | `unknown_coverage.json` | "99.5% of the unknown space has never been measured…" |
+| How much has an assay measured? | lentiMPRA, VISTA or the CRISPRi benchmark overlapping by a single base: 4,554,153 of 1,008,756,271 bases (0.45%); in the real unknown 160,447 of 30,602,182 (0.52%), 202 of 882 blocks | `unknown_coverage.json` | same |
+| Do the tiers differ in function? | withdrawn 2026-09-17: standardised on length, GC and promoter distance, no difference detected between any tier and the unconstrained_unknown (`neutral`) tier; what holds is only that elements inside UNKNOWN blocks act less than the genome's elements | | "The matched table, computed correctly…" |
+| Clause 2: does an unknown block name a target? | not met. chr21: 140 of 285 blocks (49.1%) name a coding gene against 10,908 of 16,706 length-matched random windows (65.3%). Real unknown, matched on scored-element count: 29.76% against 53.75%, −23.99 points, 95% −27.95 to −19.93, 531 blocks. This is how often a target is named; no measured outcome enters it | `unknown_scoring_chr21.json`, `clause2_element_count_control.json` | "The result: the window named no target…" (2026-09-27); "The result: matched on the number of scored elements…" (2026-09-28) |
+| Can a measurement decide clause 2 now? | no: 3 of the 882 real-unknown blocks hold an element a screen tested against a coding gene, and no design reaches 80% power at a three-quarters rate within the eligible blocks | `clause2_measured_arm.json`, `clause2_design_power_calibrated.json` | "The measured arm of clause 2…"; "The result: recalibrated, the power model…" |
+| Clause 3: the designed experiment | 284,001 oligos over 878 blocks, 41,037 test oligos from blocks no assay has touched; unrun | `unknown_library.json` | "The library after the exclusions…" (2026-09-17) |
+| The deletion sweep | 961,227 registry elements deleted in the model; 612,323 name a target, 440,377 a coding gene; without the model 93 of the 440,377 links survive on measurement | `enhancer_targets_all_genome_wide.json`, `c4_alphagenome_ablation.json` | "The all-elements sweep folded…"; "The result: without the model, 93 of 440,377…" |
+| The one independent prediction | +0.136 [+0.073, +0.227] on 1,918 held-out K562 CRISPRi pairs; +0.141 [+0.079, +0.232] on the 1,744 a scored element covers; against ENCODE-rE2G on matched inputs no difference detected, +0.0593 [−0.001, +0.1485]; HCT116 +0.022, passes, not replicated, interval withdrawn (5 clusters) | `crispri_published_v2.json`, `crispri_benchmark_v2.json`, `re2g_likeforlike.json` | "The CRISPRi benchmark rebuilt…"; "The paired comparison against ENCODE-rE2G, run"; docs/CRISPRI-RESULT.md |
+| Direction | measured decreases called 96 of 116, increases 15 of 36 (chance); `silencer_like`, a direction, is not enriched on ReSE's assay-validated records: −2.144 points, [−5.897, +1.158], NO_SIGNAL | `crispri_direction_both.json`, `silenceragree.json` | docs/NODES-READER-WRITER.md; "The repression calls…" (2026-10-02) |
+| Do the compiled rules run? | 22,580 of 440,589 can be simulated, every rate borrowed from mouse NIH 3T3 fibroblasts; no fixed activator-combination rule survives the measured enhancer pairs | `bridge_audit.json`, `activator_combination_choice.json` | "The result: no compiled rule can be simulated as compiled…" (R3); docs/DESIGN-MINIMAL-CELL.md |
+| A paid run in flight | AstroREG-2 run 2 stopped at 363 of 1,232 answers; no result is described | | ROADMAP §5 item 14 |
 
 ## The question, and the house
 

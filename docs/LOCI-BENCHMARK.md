@@ -1,5 +1,12 @@
 # The known-locus benchmark
 
+**Status on 2026-10-10.**
+- Curated panel, seventeen loci chosen because their answer is published: a derived layer names a published target at **15 of 17 (0.882)** against a chance floor of 7.12 of 17; the misses are MYC_8q24 and H19_ICR1 (`loci_benchmark.json`, 2026-09-17). This is README's "0.88". On 2026-09-27 the gene-input layer's window reading was falsified (its strict hits 10 → 9 of 17, HOXD lost) and not adopted; the panel's 15 of 17 is unchanged because another derived layer also names HOXD (ATTRIBUTION.md, 2026-09-27, fourth).
+- The 0.88 is measured where the nearest gene is mostly the answer. On the fourth frame, drawn by a committed rule (held-out CRISPRi elements whose regulated target is not their own nearest coding TSS), the derived rate is 10 of 50 (0.200) as published in §22, 9 of 50 with the reader repaired, and **10 of 58 (0.172)** on the corrected draw, where the nearest-coding-TSS-in-node baseline also reads 10 of 58 and chance is 6.82 of 58 (§24, `loci_fourth_rejoined.json`). Seven of the baseline's ten are elements of one gene, ITPRID2.
+- The fourth frame's positive control fails under the repaired reader (§24); the coordinator's call of 2026-09-22 stands: it fails the letter and passes the claim.
+- §25 (`loci_miss.json`): the misses are mostly neighbours, not aliases. The registered case for a second, tolerant rate is met by 0.003 (overlap share 0.153 against 0.15), the tolerance lifts the nearest-gene baseline as much as the model, and no rate moves.
+- No section has been added since 2026-09-22. One item §25 left undone now exists in code and has not been run: since 2026-10-03 (`32ef0e0`) `read_gene_input` is versioned, the repair that lets both stored heads of an element enter one ranking is an opt-in `GENE_INPUT_V2` (`benchmark/loci_gene_input.py`), v1 stays the default, and no rate has been recomputed with v2. Open: the rest of the "Left undone" lists of §20 to §25, among them a frame drawn for the overlap question. Results beyond `loci_benchmark.json`: `loci_third*.json`, `loci_fourth*.json`, `loci_noncoding.json`, `loci_reread.json`, `loci_miss.json` and the others named in each section.
+
 Albert's brief (2026-09-13): take the few blocks where biology is already
 known, their variants, their syntax, their enhancers and their context, and use
 them as a coherence check on everything the project builds. If the machinery
@@ -2764,6 +2771,9 @@ licensed.
 - **`read_gene_input` still reads `predicted_coding` alone**, as section 24 left it. Four of the
   seven overlaps in the fourth frame come from the eQTL layer, so the layer that has not been
   repaired is also the one contributing least to this reading.
+  *(2026-10-10: the repair exists since 2026-10-03 (`32ef0e0`) as an opt-in reading,
+  `GENE_INPUT_V2` in `benchmark/loci_gene_input.py`; v1 stays the default, the committed frames
+  replay under it, and no rate has been recomputed with v2.)*
 - **The overlap test is symmetric and unweighted.** It asks whether two bodies intersect, not by how
   much or in which direction, and the table of contents above is the reason someone will eventually
   want it to ask.

@@ -1,5 +1,12 @@
 # A predicted-deletion feature on the ENCODE CRISPRi enhancer–gene benchmark
 
+**Status on 2026-10-10.**
+- Headline, as README carries it: the deletion feature adds **+0.136, 95% +0.073 to +0.227** on all 1,918 held-out K562 pairs (118 regulated; `crispri_published_v2.json` → `heldout_published_pairs`, AUPRC 0.591 to 0.727) and **+0.141 [+0.079, +0.232]** on the 1,744 of them a scored element covers (114 regulated; `crispri_benchmark_v2.json` → `heldout.K562`, AUPRC 0.550 to 0.691). Two populations, not one figure twice; rebuilt 2026-10-02 at 2,000 draws over 22 chromosome clusters, no point estimate moved.
+- Superseded: "in the range of the published ENCODE-rE2G models" (below) is no longer the comparison to cite. Paired against ENCODE-rE2G reconstructed on the same 1,918 pairs with matched inputs (DNase shared, H3K27ac read by neither), the like-for-like test reads **no difference detected**: +0.0593, 95% [−0.001, +0.1485] (`re2g_likeforlike.json`; ATTRIBUTION.md, "The paired comparison against ENCODE-rE2G, run"). By its registered falsifier, nothing may say the deletion model ranks better than ENCODE-rE2G.
+- Withdrawn: every interval resting on fewer than 10 chromosome clusters (rule of 2026-10-02): HCT116's (5 clusters) and GM12878's (7). Their point estimates, +0.022 and +0.0146, stand.
+- Still one cell type. HCT116 passes its registered rule and is not a replication. A further cell type (WTC11 and Jurkat, 725 requests) was registered on 2026-10-02 as "eligible by locus count (22 against 20); power not computable under the registered profile; spend not authorised; requests withheld" (ROADMAP §5 item 13), and item 14 (A3) recommends holding it until the stopped AstroREG-2 run is settled; the decision is Albert's.
+- One figure in the coverage table below printed the wrong estimator's rebuilt interval; the correction sits beside it.
+
 *GenomeOS, 2026-09-27. Status: internal. Nothing here has been published or submitted.*
 
 ## The claim
@@ -64,6 +71,12 @@ unpaired, with our own interval not set against theirs on shared resamples; the 
 was chosen after the held-out filter was found; and the margin, 0.008, is smaller than either
 interval's width.
 
+*(Added 2026-10-10.)* Superseded as the comparison to cite: the paired, like-for-like test of
+2026-10-02 on the 1,918 held-out K562 pairs reads no difference detected, +0.0593 [−0.001, +0.1485]
+(`data/results/re2g_likeforlike.json`). The comparison that adds H3K27ac (`re2g_paired.json`) is
+reported only with its qualifiers and never cited alone: all 190 held-out positives carry H3K27ac
+and the comparator's held-out model does not read it.
+
 **The gain does not come from which pairs were scored.** Regulated pairs were more often on a
 scored element (96.6% against 90.6% in held-out K562), so three checks were registered:
 
@@ -73,11 +86,20 @@ scored element (96.6% against 90.6% in held-out K562), so three checks were regi
 | coverage matched, 1,000 random draws | median +0.145, all 1,000 above zero |
 | a "was it scored" flag in place of the deletion | +0.001 [−0.001, +0.003] |
 
+*(Correction 2026-10-10.)* The first row's rebuilt interval is that of a different estimator. This
+row is unweighted average precision, and its own 2,000-draw rebuild is **+0.1361 [+0.0749, +0.2258]**
+(`crispri_published_v2.json` → `coverage_arms_k562_heldout.arm1_all_pairs`; its 200-draw value of
+2026-09-27 was [+0.081, +0.2248], the figure the row quotes). [+0.0734, +0.2270] is the weighted
+estimator on the same 1,918 pairs (`heldout_published_pairs`), the one README cites. The point,
++0.1361, is the same under both.
+
 ## Limits
 
 1. **One cell type.** The second held-out cell type with usable n is HCT116 (396 pairs, 34
    regulated). AlphaGenome has HCT116 tracks, but scoring it costs 705 model requests, and that has
    not been done. GM12878 (68 pairs, 16 regulated) gives +0.015 [−0.094, +0.205]: uninformative.
+   *(2026-10-10: that interval is withdrawn in the rebuilt file, 7 chromosome clusters; the point,
+   +0.0146, stands — `crispri_published_v2.json` → `heldout_published_pairs.per_cell_type_weighted`.)*
    WTC11 (15 regulated) and Jurkat (7) are too small to carry a result.
    *(Added 2026-09-28.)* HCT116 is now scored: +0.022, interval withdrawn on 5 clusters (see above), which passes but is not
    replicated. Its 34 positives are five genes (SSFA2, FAM3C, MYC, KITLG, CCND1), and only 135 of
@@ -104,6 +126,11 @@ scored element (96.6% against 90.6% in held-out K562), so three checks were regi
   `PREREGISTERED_PUBLISHED`, `PUBLISHED`).
 - Scripts: `scripts/crispri_score.py`, `scripts/crispri_published.py`.
 - Results: `data/results/crispri_benchmark.json`, `data/results/crispri_published.json`.
+- *(Added 2026-10-10.)* The rebuilt results README cites: `data/results/crispri_published_v2.json`
+  and `data/results/crispri_benchmark_v2.json` (2026-10-02). The paired comparisons against
+  ENCODE-rE2G: `data/results/re2g_likeforlike.json` (the binding one) and
+  `data/results/re2g_paired.json` (H3K27ac, never cited alone). Accounts: `docs/ATTRIBUTION.md`, the
+  sections of 2026-10-02 on the rebuild and the paired comparison.
 - Full account, with the registrations and their dates: `docs/ATTRIBUTION.md`, the CRISPRi
   sections of 2026-09-16, 2026-09-22 and 2026-09-27.
 - Published figures: Gschwind et al. 2026, doi:10.1038/s41586-026-10781-4,

@@ -1,5 +1,13 @@
 # AlphaGenome in GenomeOS: what it gives us, and what we do with it
 
+**Status on 2026-10-10.**
+- Built: the four features a to d, the predicted contact map (use 4) and the predicted reader (use 5). Use 6 ran once, as a registered test over the VISTA panel, and failed its bar (dated note there); it is not a per-block tool. Self-hosting the open weights is not done.
+- The deletion sweep of feature b covers all 961,227 registry elements of 24 chromosomes, 778,780 requests, complete 2026-09-16 (`enhancer_targets_all_genome_wide.json` → `genome`): 612,323 name a target and 440,377 a coding gene. Without the model, 93 of those 440,377 predicted element links survive on measurement (`c4_alphagenome_ablation.json`; ATTRIBUTION.md, lane-c4).
+- Changed 2026-09-28 (review R4): an output carries its fold change and a certainty record and states no confidence. The "capped at 0.7" sentences below describe stored results and the code before that date; dated notes sit beside them.
+- Against measurement: on held-out K562 CRISPRi pairs the deletion feature adds +0.136 [+0.073, +0.227] (1,918 pairs) and +0.141 [+0.079, +0.232] (1,744), and against ENCODE-rE2G on matched inputs no difference is detected (docs/CRISPRI-RESULT.md). It calls the direction of a measured decrease 96 times in 116 and of a measured increase 15 times in 36, which is chance (`crispri_direction_both.json`; docs/NODES-READER-WRITER.md).
+- `silencer_like` (a rise on deletion; 230,839 of the 612,323) is a direction, not a function, and is not enriched on ReSE's assay-validated records, a powered null (`silenceragree.json`, 2026-10-03; the sentence under use 2).
+- Open: AstroREG-2 run 2, a paid run of this model, stopped at 363 of its 1,232 answers on 2026-10-03; whether to resume or close it is Albert's decision (ROADMAP §5 item 14, A1), and no result from it is described anywhere.
+
 Researched 2026-09-11 from the AlphaGenome documentation, the client source,
 the Nature paper (Avsec et al., *Nature* 649, 1206-1218, 28 January 2026) and
 the model card. Every claim below is from those sources. The feature is
@@ -16,6 +24,10 @@ thing this is* (regulatory, repeat, gap) and never reaches *what it does*.
 Enhancer targets, in particular, are inferred from the CTCF domain and
 labelled inferred at confidence 0.4 (D21), because nothing we have measures
 which gene an element reaches.
+*(2026-10-10: the classified share has been 98.5% since the curated repeat pass of 2026-09-11
+(`unknown_genome_wide.json` → `totals.classified_fraction`, 0.9853). Measured element–gene pairs now
+exist where the ENCODE CRISPRi benchmark screened an element (docs/CRISPRI-RESULT.md); everywhere
+else which gene an element reaches is still predicted or inferred.)*
 
 AlphaGenome is the first model that answers that question at the right scale.
 It reads up to 1 Mb of sequence and predicts, at base resolution, what the
@@ -53,6 +65,8 @@ unphased sequence, so it does not see a diploid individual.
    0.7. Verified against a published liver eQTL: rs12740374 raises PSRC1 by
    0.81 log2 and CELSR2 by 0.51 in liver tracks, while the coding variant APP
    A673T shows no expression effect at all (`data/results/alphagenome_rs12740374.json`).
+   *(2026-10-10: since review R4f of 2026-09-28 new rules state no confidence; see the note under
+   feature b and the module docstring of `genomeos/predict/alphagenome_adapter.py`.)*
 2. **Enhancer to gene** (built, feature b). For an enhancer-like element the
    registry says where and what kind; nothing says which gene. `genomeos predict
    --element chr21:START-END` deletes the element as a variant in its 1 Mb
@@ -136,6 +150,10 @@ unphased sequence, so it does not see a diploid individual.
    target is the nearest TSS for 60.9% and inside the node for 76.5%, the
    uniform sample's shape at forty times the size. The other chromosomes
    follow one at a time, smallest first, as the quota allows.
+   *(2026-10-10: done. All 24 chromosomes were complete on 2026-09-16: 961,227 elements, 778,780
+   requests, 612,323 naming a target, 440,377 a coding gene, the coding target inside the node for
+   75.4% (`enhancer_targets_all_genome_wide.json` → `genome`). How far that 75.4% sits above a control
+   is the audited +2.90 points of docs/NODES-READER-WRITER.md, not the ratio alone.)*
 
  The composition budget
    (docs/ATTRIBUTION.md) found that the regulatory tier holds 8.1 Mb of
@@ -178,6 +196,12 @@ unphased sequence, so it does not see a diploid individual.
    | silencer-like | 641 of 1,744 (36.8%) | 1,157 of 2,995 (38.6%) |
    | coding target = nearest TSS in the node | 71.9% | 70.7% |
    | coding target inside the node | 89.8% | 86.0% |
+
+   *(Correction 2026-10-10: the uniform column's denominator is 2,994, not 2,995
+   (`enhancer_targets_genome_wide.json` → `genome.with_predicted_target`); 24.5% and 38.6% are
+   unchanged at one decimal. Its 70.7% and 86.0% are read from `constrained_targets_genome_wide.json`
+   → `uniform_samples` and do not equal the 71.2% and 90.2% the table above reads from
+   `enhancer_targets_genome_wide.json`; both are kept as published.)*
 
    The first finding holds everywhere: constraint predicts function on 22 of
    24 chromosomes (chr9 and chr15 are the exceptions, at 62% and 61% against
@@ -412,6 +436,12 @@ unphased sequence, so it does not see a diploid individual.
    base pairs of an unclassified block gives a contribution profile: a direct,
    if expensive, answer to "what is this sequence for". Roughly three requests
    per base, so it is a per-block tool, never a scan.
+   *(2026-10-10: run once, as a registered test rather than a tool: `attribution/satmut_vista.py`,
+   3,200 windows of 25 bp over the VISTA panel's two arms, 2026-09-17. Positives minus negatives in
+   mean within-element Spearman with constraint read +0.0453 at one-sided p 0.1741, below the
+   registered weak bar of +0.05, which is failure and was the registered expectation
+   (`satmut_vista.json`; GRAMMAR-BY-COMPARISON.md §20 and §21). No per-block tool over UNKNOWN blocks
+   is built.)*
 7. **The twin, with its limitation stated** (built, feature d). The twin
    question is "what do this person's variants do to this gene", not "what
    does this variant do". `genomeos individual predict --name ME --gene APP
@@ -440,6 +470,10 @@ unphased sequence, so it does not see a diploid individual.
   from effect magnitude, capped at 0.7 (`genomeos/predict/alphagenome_adapter.py`).
   A prediction never becomes a measurement, and `genomeos verify` style checks
   stay the arbiter where a measurement exists.
+  *(Correction 2026-10-10: since review R4f of 2026-09-28 the adapter states no confidence. A rule
+  carries its log2 fold change in its unit and a `genomeos.certainty.Certainty` record whose model
+  score is |log2 fold change| and whose probability is None with its reason; the formula
+  `min(0.7, 0.2 + 0.25 |log2FC|)` it replaced survives only in stored results.)*
 - **Never per tick.** As with every external source (D23), knowledge is
   imported and cached, never called from inside a simulation. Responses cache
   under `data/knowledge/alphagenome/` keyed by variant, scorer and organism;

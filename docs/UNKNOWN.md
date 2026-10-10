@@ -1,5 +1,13 @@
 # Investigating the UNKNOWN blocks
 
+**Status on 2026-10-10.**
+- The classification below holds against `unknown_genome_wide.json` (2026-09-10): 26,806 UNKNOWN blocks, 1,008,756,271 bases (33% of hg38), 98.53% carrying a class. A class here comes from sequence, RepeatMasker and ENCODE chromatin evidence; it names what kind of sequence a block is, not what it does.
+- The next layer is in docs/ATTRIBUTION.md: every block carries a constraint tier (`budget_genome_wide.json`; of the 1,008.8 Mb, structural 22.8%, repeat_unconstrained 32.6%, regulatory 34.2%, unconstrained_unknown 7.3%, constrained_unknown 3.2%; since review R7 of 2026-09-28 the stored keys `fossil` and `neutral` read under those names). The "real unknown" is the 882 constrained-unknown blocks that are not mostly copies: 30,602,182 bases.
+- Measured: counting a block as measured if lentiMPRA, VISTA or the CRISPRi benchmark overlaps it by a single base, 4,554,153 of the 1,008,756,271 unknown bases (0.45%), and 160,447 of the real unknown's 30,602,182 bases (0.52%, in 202 of 882 blocks) (`unknown_coverage.json`, 2026-09-17).
+- Nothing in this document is withdrawn. The reading of 2026-09-16 that the tiers differ in function was withdrawn on 2026-09-17 (ATTRIBUTION.md, "The matched table, computed correctly").
+- Milestone 1.3 (the 98%), clause 2, is not met: on chr21, 140 of 285 unknown blocks (49.1%) name a coding gene against 10,908 of 16,706 length-matched random windows (65.3%) (`unknown_scoring_chr21.json`); this is how often a target is named, and no measured outcome enters it. Clause 3's designed experiment, 284,001 oligos over 878 blocks, is built and unrun (`unknown_library.json`).
+- The last section, "What it cannot do yet", carries dated notes for what has been built since.
+
 Forty-five percent of chromosome 21 is UNKNOWN in the block map: the space
 between annotated genes. It is not empty; it is where our knowledge is
 thinnest. `genomeos unknown` classifies it from the sequence itself, largest
@@ -113,6 +121,10 @@ chrM has no UNKNOWN space.
 | long orf | 1.2 Mb | 0.1% |
 | interspersed repeat DNA | 0.6 Mb | 0.1% |
 
+*(Header row added 2026-10-10; the rows are unchanged and agree with `unknown_genome_wide.json` → `chromosomes`.)*
+
+| chromosome | UNKNOWN blocks | UNKNOWN bases | classified | largest class |
+|---|---|---|---|---|
 | chr1 | 2,425 | 77.2 Mb | 99% | regulatory |
 | chr2 | 1,943 | 64.1 Mb | 98% | regulatory |
 | chr3 | 1,298 | 50.4 Mb | 99% | regulatory |
@@ -164,7 +176,18 @@ has run (`enhancer_targets_chr21`: 200 chr21 enhancers deleted one by one,
 docs/ALPHAGENOME.md feature b) the element carries a `predicted` target with
 a tissue and a magnitude next to the inferred one; 87% of the predicted
 coding targets fall inside the inferred node. Hi-C would make it a
-measurement. Repeat families are
+measurement.
+*(2026-10-10: measured since, in part. 4DN boundary calls are read by `genomeos domains --hic`
+(docs/NODES-READER-WRITER.md); on 661 CRISPRi Regulated=TRUE element-gene pairs the measured pair
+sits inside one CTCF node 5.89 points above the published uniform control, 95% +3.18 to +8.46 over
+chromosomes (`node_containment_measured.json`). The AlphaGenome sweep now covers all 961,227
+registry elements of 24 chromosomes, not 200 (`enhancer_targets_all_genome_wide.json`). Outside the
+elements a CRISPRi screen tested, an element's target is still predicted or inferred, not measured.)*
+Repeat families are
 named by RepeatMasker's curated library where a chromosome has been
 distilled with `genomeos repeats`; the sequence patterns remain the fallback
 for a chromosome that has not. Silencers have no curated source here yet.
+*(2026-10-10: one exists since 2026-10-03, ReSE's assay-validated silencer records, which validate
+in K562 and HepG2 only. Against them the predicted `silencer_like` label, a direction of effect, is
+not enriched: 420 of 1,181 joined elements, 35.563% against a stratum-matched 37.707%, difference
+−2.144 points, 95% [−5.897, +1.158], registered band NO_SIGNAL (`silenceragree.json`).)*

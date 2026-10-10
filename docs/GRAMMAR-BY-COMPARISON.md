@@ -1,5 +1,12 @@
 # The grammar by comparison: reading the genome as code across species and people
 
+**Status on 2026-10-10.**
+- All seven steps of §4 are built (§6 to §12, 2026-09-12), and area J's Next list in ROADMAP is done. The last substantive section here is §21 of 2026-09-17; area J has had no model work since (ROADMAP §5 item 14, finding 3).
+- What stands (§17, §18): comparison across species and people places and dates function; the presence of strict, family-collapsed motif sites predicts measured lentiMPRA activity on held-out chromosomes (Spearman 0.40 to 0.43 with counts, against 0.17 to 0.35 for GC and CpG alone) and transfers to VISTA; their arrangement, at this resolution and in this assay, adds nothing detectable (all three cell lines' intervals contain zero).
+- Negatives that stand: no motif-family pair in promoters beyond a GC-and-repeat-matched expectation in any of 42 libraries (§13); against a prevalence-matched real-gene null 14 of 42 libraries fail and no pair is called a dependency (§19); AlphaGenome in-silico mutagenesis over the VISTA panel read +0.0453 at one-sided p 0.1741, below the registered +0.05 bar, failure (§21, `satmut_vista.json`).
+- Corrected beside the text: the R6 note of 2026-09-28 under §17 (the ENCODE4 lentiMPRA reporter is integrated by lentivirus, so the explanation offered for the arrangement null is weaker; the null is unchanged), and the 2026-09-27 table under §1 of what became of its missing rows. Since review R7 (2026-09-28) the tiers this document calls `fossil` and `neutral` read repeat_unconstrained and unconstrained_unknown; the stored keys keep the old names.
+- Open: enhancer pair logic read outside promoters (GATA plus T-box in heart has never been read in enhancers; in the runtime, no fixed activator-combination rule survives the measured enhancer pairs, `activator_combination_choice.json`); a species-tree null, the only thing that would let a pair be called a dependency; a model that reads the sequence itself, scored on §17's own held-out elements; and two rows of the §1 table, mining packages from the graph and an aligner of our own.
+
 Two conversations on 2026-09-12 proposed a method rather than a metaphor:
 treat the genome as a 3 GB undocumented executable of which millions of
 slightly different versions exist (people, chimpanzees, mice, fish), and
@@ -132,7 +139,9 @@ closed on 2026-09-17 as species counts per clade (`orthologues_by_clade` in
    `genomicSuperDups`, and the HPRC duplications relative to hg38) replace
    the 20-mer `similar_to` heuristic and give the graph its `paralogue_of`
    edges. This is also the organising evidence ATTRIBUTION.md lists for the
-   compiled blocks and has not yet built.
+   compiled blocks and has not yet built. *(2026-10-10: built 2026-09-12, §7 and §10:
+   64,216 curated segmental-duplication pairs and 64,050 `paralogue_of` edges; the organiser reads a
+   block's duplicated fraction first.)*
 
 4. **Covariance as cross-reference.** Two libraries whose members are gained
    and lost together across the tree depend on each other. With the origin

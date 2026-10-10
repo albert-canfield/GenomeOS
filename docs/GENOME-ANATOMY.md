@@ -1,5 +1,11 @@
 # Genome anatomy: how DNA is organised, and what building one from zero means
 
+**Status on 2026-10-10.**
+- Every figure below was rechecked against its result file on 2026-10-10 and holds: `anatomy_comparison.json` (2026-09-10) for the three-genome table, and `anatomy_hg38_by_chromosome.json` (2026-09-10, GRCh38 with GENCODE 50) for the whole genome, whose 25 chromosomes sum to 3,088,286,401 bases, 37,358,643 of them protein-coding (1.21%), 20,107 coding genes and 39,410 CpG islands.
+- Nothing here is withdrawn or superseded. It is a count of sequence and annotation, not a claim about what any region does.
+- The closing list of what `genomeos anatomy` cannot count is still true of that command, but three of its four layers now exist elsewhere in the project (dated note under it). Replication origins are still not built.
+- Open: none of those layers feeds back into this inventory. How the space between and inside genes is classified, tiered and measured is in docs/UNKNOWN.md and docs/ATTRIBUTION.md.
+
 `genomeos anatomy` counts the blocks and elements of a chromosome from its
 sequence and annotation. Run on three very different genomes it shows the
 organisation principles directly. Numbers below are from
@@ -104,3 +110,10 @@ What the anatomy tool cannot yet count, and the next steps: regulatory
 elements (needs motif scanning and predicted-evidence models), transposable
 elements and repeat families (needs a repeat library), replication origins,
 and the 3-D folding that sets which enhancer reaches which promoter.
+
+*(2026-10-10: built since, outside `genomeos anatomy`: repeat families from RepeatMasker's curated
+library (`genomeos repeats`, `genome/repeats.py`, docs/UNKNOWN.md); ENCODE candidate regulatory
+elements (`genome/regulatory.py`, the `regulatory` class in docs/UNKNOWN.md); measured Hi-C
+boundaries from 4DN (`genome/hic.py`, `genomeos domains --hic`, docs/NODES-READER-WRITER.md) beside a
+predicted contact map (docs/ALPHAGENOME.md, use 4). Replication origins are still not built. The
+inventory above was not re-run with any of them.)*
