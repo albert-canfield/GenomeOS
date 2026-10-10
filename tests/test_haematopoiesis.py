@@ -31,6 +31,27 @@ def test_plan_solves_the_flows_from_the_outputs_upward():
     assert mutants_bio() == Path("data/organisms/human/haematopoiesis_mutants.bio").read_text()
 
 
+def test_sibling_partitions_are_shares_and_growth_is_solved_for_one_minus_their_sum():
+    """2026-10-10, lane-shareadopt (data/results/tobio_share_registration.json): a parent's outflows to
+    two children are written as `share:`, so both draw on the same starting count and the parent keeps
+    1 - sum(f); plan() solves growth for that. A single child keeps `fraction:`, where 1 - f is the same
+    number either way."""
+    p = plan()
+    bio = to_bio().splitlines()
+    children: dict[str, list[str]] = {}
+    for c in COMPARTMENTS:
+        if c["parent"]:
+            children.setdefault(c["parent"], []).append(c["id"])
+    for parent, kids in children.items():
+        for kid in kids:
+            line = next(x for x in bio if x.startswith(f"decision {parent}_to_{kid} "))
+            assert f"; {'share' if len(kids) > 1 else 'fraction'}: " in line, line
+    assert sum("; share: " in x for x in bio) == 8
+    for cid, c in p.items():
+        outs = [c["step_out"] * p[k]["share"] for k in children.get(cid, [])] or [c["step_out"]]
+        assert abs(c["retained"] - (1.0 - sum(outs))) < 1e-15, cid
+
+
 def test_steady_state_reproduces_pools_and_turnover():
     m = parse_file("data/organisms/human/haematopoiesis.bio")
     body = Body(m).run(until=THREE_YEARS)
