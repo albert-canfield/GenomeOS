@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -83,6 +84,53 @@ OUTCOMES = {
     "{n_p}, against the registered minimum of {min_per_arm}. No comparison was run and no reading "
     "is offered.",
 }
+
+
+#: One-sided alpha, and the power the smallest detectable separation below is quoted at.
+ALPHA = 0.05
+POWER = 0.8
+Z_ALPHA = 1.6449
+Z_BETA = 0.8416
+
+
+def smallest_detectable(n1: int, n2: int) -> float | None:
+    """The smallest separation a rank test on these two arm sizes can detect, as a probability.
+
+    The quantity is P(a random element of the first arm sits below a random element of the second),
+    which is 0.5 under the null and is what the Mann-Whitney statistic estimates. Its standard
+    error under the null is sqrt((n1 + n2 + 1) / (12 n1 n2)), so at one-sided alpha ALPHA and power
+    POWER the test can detect 0.5 + (Z_ALPHA + Z_BETA) times that, and nothing smaller. Stated here
+    because arm A is thin by construction -- most elements attributed to a gene K562 depends on sit
+    NEXT to that gene, and those are a different arm -- and a reader is owed the limit in advance
+    rather than after a null result.
+    """
+    if n1 <= 0 or n2 <= 0:
+        return None
+    se = math.sqrt((n1 + n2 + 1) / (12 * n1 * n2))
+    return round(0.5 + (Z_ALPHA + Z_BETA) * se, 4)
+
+
+def power_in_advance(arms: dict[str, Any]) -> dict[str, Any]:
+    """What each registered comparison can and cannot detect, from the arm sizes alone."""
+    floor = int(arms.get("attributed_not_neighbourhood_not") or 0)
+    out: dict[str, Any] = {
+        "what_the_number_is": "P(a random element of the arm sits below a random element of the "
+        "floor arm), 0.5 under the null; the value given is the smallest such probability the test "
+        f"can detect at one-sided alpha {ALPHA} and power {POWER}, and it can detect nothing smaller",
+        "floor_arm_size": floor,
+    }
+    for arm in (*cc.ARMS, cc.POSITIVE_CONTROL):
+        if arm == "attributed_not_neighbourhood_not":
+            continue
+        out[arm] = {
+            "n": int(arms.get(arm) or 0),
+            "smallest_detectable_probability": smallest_detectable(int(arms.get(arm) or 0), floor),
+        }
+    out["note_on_the_median"] = (
+        "no detectable shift in log2 units can be stated in advance: it depends on the spread of "
+        "the readout, which is an outcome and is not read here"
+    )
+    return out
 
 
 def decision_rule() -> dict[str, str]:
@@ -179,6 +227,13 @@ def registration(inventory: dict[str, Any], population_sha: str) -> dict[str, An
             "the_assay_s_own_null": "the non-targeting guides of the same library, pooled per file. "
             "Their pooled log2 ratio is reported as the assay's zero and is not an arm.",
         },
+        "power_stated_in_advance": power_in_advance(arms),
+        "secondary_pooled_comparison": "Arms A and B pooled (every element whose attributed gene is "
+        "one K562 depends on, whatever its neighbourhood) against arms C and D pooled, reported "
+        "beside the primary because it has more elements. It DECIDES NOTHING and cannot: pooling "
+        "puts back the proximity confound the arms were built to remove, since an element attributed "
+        "to a gene K562 depends on usually sits next to that gene. It is in the result for the "
+        "reader who wants the larger comparison, with arm C beside it as its control.",
         "matched_control": "Arms A and D are matched by construction on the three things that "
         "could otherwise carry the contrast: the element is distal (more than "
         f"{cc.PROMOTER_WINDOW} bp from any coding TSS), its nearest coding gene is one K562 does "
@@ -209,7 +264,8 @@ def registration(inventory: dict[str, Any], population_sha: str) -> dict[str, An
             "depletion_rate_cut": "the floor arm's own "
             f"{cc.DEPLETION_PERCENTILE}th percentile, so the floor arm's rate is "
             f"{cc.DEPLETION_PERCENTILE}% by construction",
-            "alpha": 0.05,
+            "alpha": ALPHA,
+            "power_the_detectable_separation_is_quoted_at": POWER,
             "sided": "one-sided, for depletion; the direction is part of the prediction",
             "min_per_arm": MIN_PER_ARM,
         },

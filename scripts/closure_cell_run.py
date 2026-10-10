@@ -223,6 +223,28 @@ def comparisons(by_arm: dict[str, list[float]]) -> dict[str, Any]:
     return out
 
 
+POOLED_KEY = "attributed_essential_pooled_below_attributed_not_pooled"
+
+
+def pooled_comparison(by_arm: dict[str, list[float]]) -> dict[str, Any]:
+    """The registered secondary: attributed-essential pooled against attributed-not pooled.
+
+    It decides nothing, as the registration says: pooling over the neighbourhood puts back the
+    proximity confound the arms exist to remove. It is here because it has more elements, and
+    because leaving it out would let a reader wonder what it would have said.
+    """
+    essential = [*by_arm.get(ARM_A, []), *by_arm.get(ARM_B, [])]
+    rest = [*by_arm.get(ARM_C, []), *by_arm.get(ARM_D, [])]
+    return {
+        POOLED_KEY: cc.mann_whitney_u(essential, rest),
+        "median_attributed_essential_pooled": cc.median(essential),
+        "median_attributed_not_pooled": cc.median(rest),
+        "elements": f"{len(essential)} against {len(rest)}",
+        "decides": "nothing: the registration states this comparison carries the proximity "
+        "confound, and arm C beside it is its control",
+    }
+
+
 def select(table: dict[str, Any], tests: dict[str, Any], min_per_arm: int) -> tuple[str, dict[str, Any]]:
     """The outcome the registration's decision rule selects, applied in the order it fixes."""
 
@@ -440,6 +462,8 @@ def main() -> int:
         "depletion_cut": cut,
         "arms": table,
         "comparisons": tests,
+        "secondary_pooled_comparison": pooled_comparison(by_arm),
+        "power_stated_in_advance": registration.get("power_stated_in_advance"),
         "per_replicate_pair": per_pair,
         "assay_zero_from_the_non_targeting_guides": {
             "log2_ratio": assay_zero,
