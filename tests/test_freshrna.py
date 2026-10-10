@@ -184,5 +184,8 @@ def test_the_result_carries_the_registered_wording() -> None:
     assert "NOTHING IS FITTED IN THIS LANE" in d["nothing_is_fitted"]
     assert d["alphagenome_requests"] == 0
     if d["outcome"] in ("BETTER", "WORSE", "INCONCLUSIVE"):
+        # SCOPE quotes "the model predicts expression" in order to FORBID it, and `reading` carries
+        # SCOPE, so the claim check belongs on the verdict sentence alone
+        d = {**d, "reading": d["verdict_sentence"]}
         assert fr.decide(*d["primary"]["ci"]) == d["outcome"]
         assert "the model predicts expression" not in d["reading"]
