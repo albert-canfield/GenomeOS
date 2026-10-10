@@ -1495,6 +1495,104 @@ is the per-gene term §9.2 asked for, but whether it supplies the 0.485 decades
 per decade is a proteome-scale run needing the turnover set that does not exist
 here. Nothing measured above is evidence about it.
 
+### 9.5 Stage 3 registered (2026-10-10), before the instrument existed
+
+The registration is `genomeos/runtime/metabolism_gate.py`, committed before
+`genomeos/runtime/metabolism.py`, `bio.std.core_metabolism`, the two demo programs
+(`data/demo/stage3_energy.bio`, `data/demo/stage3_erythrocyte.bio`) and
+`scripts/metabolism_gate.py` were written, and before any number existed.
+
+**Whether stage 3 may be built at all, checked first.** This document was a draft
+for Albert's review, and nothing past stage 1 was to be built until he had steered
+it. Of §10's decisions the one stage 3 touches is 4, whose cost accounting, and §10's
+own table records it as settled *by* this stage, not as a precondition of it: "the
+ATP budget gate (Buttgereit & Brand's hierarchy, Lynch & Marinov's totals): the
+accounting that lands in the published order of magnitude wins". ROADMAP-HISTORY
+item 5 reads "No decision blocks code any more", and ROADMAP area A lists stage 3 as
+its next item 2 with no steer pending. So stage 3 is free to build, and decision 4
+stays open unless the magnitude clause can be asked, which, below, it cannot.
+
+**What the sources say, read before anything was built** (PubMed abstracts; the
+bodies of the 1995 and 1999 papers are scans this project does not hold).
+Buttgereit & Brand's hierarchy is an *order of sensitivity to energy supply*, not a
+split of the budget: "pathways of macromolecule biosynthesis (protein synthesis and
+RNA/DNA synthesis) were most sensitive to energy supply, followed by sodium cycling
+and then calcium cycling across the plasma membrane. Mitochondrial proton leak was
+the least sensitive". §6's parenthesis, "protein synthesis and the Na⁺/K⁺-ATPase
+first", reads it as a split, and the abstract does not support that reading: it
+states no shares and puts sodium cycling *after* macromolecule synthesis. Hinkle
+2005 gives P/O "about 2.5 with NADH-linked substrates and 1.5 with succinate", and
+2.3 and 1.4 as "also possible"; that is the spread the yields carry. Rossignol et
+al. 2003 define the biochemical threshold effect as inhibiting a respiratory complex
+"up to a critical value, without affecting the rate of mitochondrial respiration or
+ATP synthesis". Mulquiney, Bubb & Kuchel 1999 (Biochem J 342:567, the first of the
+three papers whose second §6 cites) estimate that "19%" of glycolytic carbon flux
+passes through the 2,3-BPG shunt; none of the three abstracts states the ATP or
+2,3-BPG ranges §6 names.
+
+**The design.** One energy currency, refilled per hour by the processes a pool names
+in `regenerates: from` (Glycolysis, TCA, OXPHOS), with every stoichiometric number
+read from the program through `bio.std.core_metabolism`; the engine holds none.
+Supply follows demand: pyruvate is oxidised as far as oxygen, mitochondrial capacity
+and glucose allow, and the rest becomes lactate. That routing is the module's one
+structural claim, and it makes the cell Pasteur-competent by construction, so the
+Warburg effect is not expressible in stage 3. Every yield-dependent number is
+computed at both ends of the spread, the high arm (malate–aspartate shuttle, P/O 2.5
+and 1.5) and the low arm (glycerol 3-phosphate shuttle, 2.3 and 1.4), and a clause
+holds only in both. Heteroplasmy removes the OXPHOS capacity of the copies carrying
+the declared variant; the engine holds no table of which mtDNA variants are
+pathogenic.
+
+**The negatives, registered before the run.** Under `proportional` and
+`competitive` every ATP consumer gets the same scalar (§9.2), so *no* hierarchy can
+appear; `priority` carries one because the program writes it. The verdict is
+committed to in advance: **the hierarchy is reproduced as an input, not predicted.**
+The Pasteur clause holds by construction of the routing. The threshold sits at
+h* = 1 − 12·D/(Y·C), set by the program's declared reserve, and with no reserve there
+is none (the falsifier). Every cell here collapses without glucose, since the module
+has no other fuel.
+
+**The ten clauses**, each able to fail, with the numbers worked by hand:
+1. yields per glucose 32.0 (high) and 28.0 (low), 30.0 for P/O 2.5 and 1.5 through the
+   glycerol 3-phosphate shuttle, 2.0 anaerobic, and exactly 6 O₂ for 12 electron pairs
+   in both arms (the combustion stoichiometry checks the module's constants);
+2. with full oxygen and glucose, supply equals the declared demand of 1e10 ATP/h,
+   glucose uptake is D/Y, O₂ six times that, lactate 0, OXPHOS share 28/32 and 24/28;
+3. lowering oxygen (1, 0.75, 0.5, 0.25, 0.1, 0 of supply) never raises the OXPHOS
+   share and ends it at 0, never lowers glucose uptake, and hits the registered table
+   at every step (supply 1e10, 1e10, 1e10, 7.75e9, 5.5e9, 4e9 high);
+4. with uptake not limiting, anoxia multiplies glucose uptake by exactly 16.0 and 14.0;
+5. the red cell: TCA and OXPHOS make exactly 0, the yield is 2 − 2·0.19 = 1.62, and
+   every reading is identical to the bit at every oxygen level;
+6. with no glucose the red cell supplies 0 and every consumer is cut to 0;
+7. under the priority order the first cut falls on macromolecule synthesis, then
+   sodium, then calcium, with the anoxic factors exactly 1.0, 0.6, 0, 0; under
+   `proportional` and `competitive` the four factors are equal at every step;
+8. along a heteroplasmy sweep, OXPHOS ATP is unchanged to the bit below h* (0.8125
+   high, 0.785714 low) and strictly lower above it; with no reserve it falls at once;
+9. stage 4's demo division (1e10 ATP) is refused against the standing stock, as §9.4
+   found, paid when the pool is regenerated over 24 h (2.19e11 and 1.71e11 available),
+   and refused again with no glucose;
+10. the refusals: heteroplasmy without chrM, a fraction outside 0..1 or summing past 1,
+    and, at run time, an unknown process, OXPHOS without a mitochondrion, TCA without
+    OXPHOS, a missing substrate pool, capacity or stoichiometric constant.
+
+**Registered as not askable rather than attempted.** The budget's magnitude: no
+measured per-cell ATP turnover is held, so the demo's rates are declared, and §10
+decision 4 stays open. The budget's split: no shares are held. The red cell's ATP
+and 2,3-BPG ranges: not held, and a steady-state concentration is a kinetic quantity
+a module of stoichiometry and capacities cannot produce. Where Rossignol's measured
+thresholds sit; how far real cells raise glucose uptake (they also lower demand);
+aerobic glycolysis; other fuels; and proton leak, which spends the gradient rather
+than ATP.
+
+**Figures that must not move**: the 47 files and 288 checks of `bio test data/demo
+genomeos/std data/organisms` at `d32fe44`; stage 2's burden factors and 0.952005
+(the economy is unchanged when no capacity override is passed); stage 4's 8 of 8
+(`runtime/division.py` untouched); area E's figures (`runtime/body.py` untouched).
+Committed programs that write `regenerates: from Glycolysis, OXPHOS` with no
+mitochondrion still compile; the runtime refuses them only when asked to run them.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
