@@ -357,3 +357,128 @@ be computed from the shares before the run is a weak prediction by construction.
 
 `bio test data/demo genomeos/std data/organisms`: 54 files and 354/354 checks before, **56 files and
 383/383 after** — 4 new checks in the module and 25 in the mutants.
+
+---
+
+# The stomach, written before anything was built (2026-10-10, lane-stomach)
+
+The line the colonic section left open — "the stomach is still counts: with the colon modelled,
+`tissues.bio`'s `GutEpithelium` (1.97e11) now has mechanism for 1.8e11 of it, and the remaining
+1.7e10 is the stomach" — is what this section closes. The authoritative, machine-readable form of
+everything below is `REGISTRATION` in `scripts/stomach_registration.py`, committed before a single
+number of the module was fitted, so that the closed list provably cannot grow. Every citation here was
+fetched in this lane (PubMed E-utilities, PMC full text, EBI OLS4 for the Cell Ontology ids) and the
+sentence each gate rests on is quoted in that file.
+
+## The gastric gland's lineages, and how the stomach differs from both gut modules
+
+The oxyntic (corpus) gland unit has four regions — pit, isthmus, neck, base — and the isthmus, not the
+base, is where the division happens. Karam & Leblond's five-part series on the mouse corpus counted
+and timed every type:
+
+| | small intestine | colon | stomach (this module) |
+| --- | --- | --- | --- |
+| geometry | crypt and villus | crypt and flat surface | pit, isthmus, neck, base; the proliferative zone is in the MIDDLE and cells migrate in both directions from it |
+| where the stem cell sits | crypt base | crypt base | the isthmus: "granule-free cells, which are devoid of secretory granules and have the highest labeling index, 32.4%" (Karam & Leblond 1993, Anat Rec 236:259) |
+| mature lineages | 4: enterocyte, goblet, enteroendocrine, Paneth | 3: colonocyte, goblet, enteroendocrine | 4 in this module: pit (foveolar), parietal, chief (zymogenic), enteroendocrine, with the mucous neck cell an intermediate on the chief route |
+| residences | one fitted villus residence plus two measured | ONE shared fitted residence | four residences a factor of 60 apart: pit 3.1 d and parietal 54 d both measured, endocrine 86.6 d from a fetched half-life, chief 190 d inferred |
+| the amplifying step | transit-amplifying, 5 inferred divisions | the same | NONE: the division is in the isthmus itself and no division count per transit was fetched, so the root divides |
+| counts (the body program's source) | 1.2e11 cells, 2.2e10/day, 5.3 d | 6.0e10, 1.7e10/day, 3.4 d | **1.7e10 cells, 1.3e9/day, 13.0 d** (Sender & Milo 2021, Nat Med 27:45) |
+| the gates | lineage losses | lineage losses | mostly NOT lineage losses: see below |
+
+Two differences decide the shape of this module. First, the stomach's lineages do not share a
+residence, so its standing composition and its daily-output composition are not the same thing, and
+they diverge by an order of magnitude. Second — and this is the finding that shaped the closed list —
+**most well-sourced gastric transcription-factor phenotypes are maturation defects with the cell still
+present, not lineage losses.** In the intestine and the colon, deleting the gate deleted the lineage.
+In the stomach, deleting XBP1, HNF4A, SPDEF, FOXQ1 or KLF4 leaves the cell standing there, smaller or
+emptier or more numerous. A module whose gates are presence-or-absence has nothing to say about that,
+so those five factors are excluded, with the fetched sentence as the reason in each case.
+
+## The closed, sourced list: five gates, each with a fetched STOMACH phenotype
+
+A factor well sourced in the intestine or the colon is not a source for the stomach. Each gate below
+rests on a sentence about the stomach, quoted in the registration.
+
+| # | Factor | Step | Published stomach phenotype of its loss | Source | Registered as |
+| --- | --- | --- | --- | --- | --- |
+| S1 | RBPJ | the isthmus compartment | pan-Notch inhibition leaves "no Ki67+ cells in most glands" of corpus and antrum | Kim & Shivdasani 2011, J Exp Med 208:677 | **contested**: the same paper's genetic arm (Osr1-Cre; RBP-Jk Fl/Fl) leaves the units alive and merely "reduced by 47%" by competition |
+| S2 | ESRRG | parietal output | "whole swaths of gastric units completely lacking PCs ... the absence of PCs from birth onward" | Adkins-Threats et al. 2024, Cell Stem Cell 31:886 | **full**; the same mice's steady-state increase in proliferation is named as not expressible |
+| S3 | MIST1 (Bhlha15) | chief output | the mature chief cells are "uniformly structurally abnormal" and the immature transitional cells accumulate markedly; the neck cells differentiate normally | Ramsey et al. 2007, Development 134:211 | partial: the mature cell is present and spoiled, not absent |
+| S4 | NEUROG3 | endocrine output | the glandular stomach's A, D and G cells are absent and the enterochromaffin cells "decreased dramatically", with intestinal metaplasia | Lee et al. 2002, Genes Dev 16:1488 | partial, and with NO kept lineage registered: the metaplasia means the paper does not report the others normal |
+| S5 | ASCL1 | endocrine output | newborn nulls lose the neurogenin-3-dependent endocrine markers "with normal expression of enterochromaffin-like cells, mucous cells, chief cells, and parietal cells" | Hibdon et al. 2023, Am J Physiol Gastrointest Liver Physiol 325:G458 | partial: the ECL subtype is normal and this module has no subtypes; a newborn readout |
+
+Excluded, each with the fetched reason — the list is closed and none of these enters the module:
+
+- **XBP1** (Huh et al. 2010, Gastroenterology 139:2038) — "did not affect survival of ZCs but
+  prevented formation of their structure". The paper denies outright the loss a gate would state.
+- **HNF4A** (Moore et al. 2016, Am J Physiol Gastrointest Liver Physiol 311:G267) — reduced chief-cell
+  size and ER, "phenocopying ... Xbp1 deletion", plus *increased* proliferation in the isthmal zone.
+- **SPDEF** (Horst et al. 2010, J Biol Chem 285:35047) — a candidate the task named; "impaired terminal
+  maturation of antral mucous gland cells ... reduced numbers of secretory granules", plus hyperplasia.
+  In the colon SPDEF was excluded for want of a sentence; here the sentence exists and says the wrong
+  kind of thing.
+- **FOXQ1** (Verzi et al. 2008, Gastroenterology 135:591) — the best pit-cell candidate there was:
+  "virtual absence of ... MUC5AC ... a paucity of foveolar cell secretory vesicles". The cell is
+  present and empty.
+- **KLF4** (Katz et al. 2005, Gastroenterology 128:935) — "increased proliferation and altered
+  differentiation", no lineage missing. An increase, which the formalism cannot express.
+- **ATOH1** — the secretory gate of BOTH gut modules, and no stomach loss-of-function sentence was
+  found for it in this lane. Carrying the gut gate across would be an assumption, not a source: the
+  ground on which the colonic registration excluded ASCL2.
+- **SOX2** (Que et al. 2007, Development 134:2521) — the candidate the task named first. The fetched
+  phenotype is the squamous forestomach boundary in hypomorphic embryos, not an adult glandular lineage.
+- **GATA4** (DeLaForest et al. 2021, Cell Mol Gastroenterol Hepatol 12:1391) — developmental
+  morphogenesis of the hindstomach's columnar epithelium, before the gland's lineages exist.
+- **LGR5 with AXIN2** (Barker et al. 2010, Cell Stem Cell 6:25) — lineage tracing and organoids: a
+  marker of the antral stem cell, not a loss of function.
+- **POU2F3 / the caveolated (tuft) lineage** (Karam & Leblond 1993, Anat Rec 236:333) — "Little
+  information is available on the dynamics of caveolated cells". The stomach says the quiet part out
+  loud: no share of output, no residence, no lineage.
+
+## Which numbers are fitted, and to what
+
+- **Fitted (one knob):** `isthmus_residence_days`, the isthmal granule-free cell's turnover time,
+  fitted so that every compartment's pool sums to the published 1.7e10. It is held against a bound
+  fetched **before** the fit: "less than 2.6 days for granule-free and pre-pit cells" (Karam & Leblond
+  1993, part I).
+- **Measured, used as given:** 1.7e10 cells and 1.3e9 replaced per day (Sender & Milo 2021); per
+  gastric unit in the mouse corpus, 37 pit cells, 12.6 neck cells, 67.5 zymogenic cells and 26.0
+  parietal cells (Karam & Leblond 1993, parts II–IV); the pit residence 3.1 d and the parietal
+  residence 54 d (parts II and IV); the gastric endocrine half-life of about 2 months (Hibdon et al.
+  2023).
+- **Inferred, not fitted:** that a mouse corpus composition can stand for a human stomach that also has
+  an antrum; the neck residence 10.5 d, the midpoint of the fetched 1-to-2-week range; the endocrine
+  residence 86.6 d = 60 / ln 2, the mean the fetched half-life implies under the exponential loss law
+  the module applies; the chief residence 190 d, for which **no number was fetched in this lane**; the
+  endocrine standing count of 1.0 cell per unit, inside the carried <1% bound; and that no
+  transit-amplifying compartment is needed.
+- **Not claimed:** the standing composition, which comes back **by construction** because it is what
+  the module was built from; the published total, which is the fit target; the implied number of
+  gastric units; and the published 13.0-day lifespan, which is 1.7e10 / 1.3e9 and not independent.
+
+## Registered in advance about the formalism
+
+R1 one gate full, three partial, one contested, so no run may report "five of five". R2 **a number**:
+the one fitted number will come out at about **2.50 d** — arithmetic on the registered inputs, not
+insight — and the content is whether it lands inside the 2.6-day bound fetched before the fit. R3 **a
+number**: the pit cells will be about 22% of the standing epithelium and about 93% of the daily output,
+the chief cells about 40% standing and 2.8% of output; in the colon the two compositions were identical
+by construction. R4 blocking the chief route is not the colon's backing-up case: the neck compartment
+has exactly one outflow, so nothing leaves and it accumulates for as long as the run lasts — only the
+direction is registered, and the magnitude is a property of the run length, not of the stomach.
+R5 **a number**: moving the unfetched chief residence from 50 d to 1000 d will move the fitted number
+by less than 1% (2.504 → 2.497 d), so nothing in this module rests on it. R6 a knockout's effect on the
+standing count is not its effect on turnover — parietal loss is 16% of the cells and 4% of the output,
+endocrine loss 0.6% and 0.09%. R7 **the lineage that carries 93% of the stomach's turnover has no
+gate**, because every fetched pit-cell factor spoils the cell instead of removing it. R8 there is no
+corpus/antrum axis and no gland geometry: the G cell sits inside the one endocrine lineage.
+
+## Wiring into `body.bio` / `tissues.bio`: not wired, and why
+
+Not wired, for exactly the reason the small intestine and the colon are not. `tissues.bio` says of its
+one gut population: `cell_type GutEpithelium { ... evidence: curated "Cell Ontology; grouped from Small
+intestine epithelia, Colon epithelia, Stomach epithelia" }`, 1.97e11 cells and 4.03e10 replaced per
+day. **`tissues.bio` counts these 1.7e10 stomach cells inside that number**, so importing this module
+beside it would count them twice. It stands beside the body program as `haematopoiesis.bio`,
+`intestine.bio` and `colon.bio` do.
