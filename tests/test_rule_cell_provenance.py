@@ -310,14 +310,15 @@ def _rule_line_sites() -> list[str]:
     return sorted(sites)
 
 
-# SUPERSEDED 2026-10-10 by lane-readercompile (M2b, the reader construct's application half), and kept
-# rather than edited: `compile.gate_rule_line` is a THIRD function that writes a `rule` line. It emits
-# no new rule; it rewrites a compiled rule line for the reader layer (BioLang v0.5), adding `through:`
-# and, under `compile.SELECTION_READER_CELLS`, replacing a PREDICTED rule's argmax cell with the
-# thirteen reader cell types (a measured rule keeps the cell its screen silenced in). So P1's "no third
-# route puts a cell on a compiled rule" is false of the compiler from that commit, for gated programs.
-# No tracked program is gated, so the population this file counts did not move. `strict=True` so the
-# suite reds if the third site is removed and this pin would pass on a stale figure. Replaced by
+# SUPERSEDED 2026-10-10 by lane-readercompile in 98a1bcb (M2b, the reader construct's application
+# half), kept rather than edited: `compile.gate_rule_line` is a THIRD function that writes a `rule`
+# line. It emits no new rule; it rewrites a compiled rule line for the reader layer (BioLang v0.5),
+# adding `through:` and, under `compile.SELECTION_READER_CELLS`, replacing a PREDICTED rule's argmax
+# cell with the thirteen reader cell types (a measured rule keeps the cell its screen silenced in). So
+# P1's "no third route puts a cell on a compiled rule" is false of the compiler from that commit, for
+# gated programs. No tracked program is gated, so the population this file counts did not move.
+# `strict=True` so the suite reds if the third site is removed and this pin would pass on a stale
+# figure. Replaced by
 # `test_the_compiler_emits_a_rule_line_from_two_sites_and_rewrites_one_in_the_reader_layer`.
 @pytest.mark.xfail(
     strict=True,
