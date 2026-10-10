@@ -1,0 +1,2635 @@
+{
+  "result": "regulators_inventory",
+  "date": "2026-10-10",
+  "lane": "lane-regulators",
+  "question": "what evidence the project holds or can fetch publicly for WHICH factor acts at each compiled element, each with its evidence kind; metadata only, no outcome read",
+  "sources": {
+    "measured_occupancy": {
+      "name": "ENCODE 3 TF ChIP-seq peak clusters with cell types (UCSC track encRegTfbsClustered, hg38)",
+      "url": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/encRegTfbsClusteredWithCells.hg38.bed.gz",
+      "track_page": "https://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=encRegTfbsClustered",
+      "bytes": 125375233,
+      "sha256": "542eb15d4d90236c2d3437b285396bbaddee023ca3d9d0e7efb767fcd1ef7899",
+      "last_modified": "2020-01-27",
+      "assembly": "GRCh38",
+      "licence": "ENCODE data, no restrictions on use (ENCODE data use policy); UCSC clustering of the ENCODE uniform peaks",
+      "columns": "chrom, start, end, factor, score (0-1000), comma-separated ENCODE biosample names",
+      "kind": "measured occupancy (ChIP-seq peaks); not function",
+      "local_path": "data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz",
+      "present": true,
+      "factors": 340,
+      "cell_labels": 129,
+      "factors_per_test_cell": {
+        "K562": 249,
+        "HepG2": 119
+      },
+      "committed": false
+    },
+    "predicted_motifs": {
+      "name": "JASPAR 2026 CORE vertebrates, non-redundant (area J's operator source)",
+      "url": "https://jaspar.elixir.no/download/data/2026/CORE/JASPAR2026_CORE_vertebrates_non-redundant_pfms_jaspar.txt",
+      "local_path": "data/knowledge/jaspar/core_vertebrates_2026.jaspar",
+      "licence": "CC BY 4.0",
+      "threshold": "relative score 0.85 (genomeos/genome/motifs.py, area J)",
+      "kind": "predicted: a motif is not occupancy",
+      "identity": {
+        "path": "data/knowledge/jaspar/core_vertebrates_2026.jaspar",
+        "sha256": "4005b5449ba07d9b58495f51143186e7e3959efd0ad670770fbddf57bf941e8f",
+        "bytes": 336314,
+        "partition": null
+      }
+    },
+    "direction": {
+      "file": "data/knowledge/goa_human.gaf.gz",
+      "terms_activator": [
+        "GO:0001216",
+        "GO:0001228"
+      ],
+      "terms_repressor": [
+        "GO:0001217",
+        "GO:0001227"
+      ],
+      "qualifiers_used": "enables and contributes_to; any NOT qualifier is skipped",
+      "licence": "Gene Ontology annotations, CC BY 4.0",
+      "kind": "curated, factor-level: says what the factor does at the genes it regulates in general, not at this element",
+      "identity": {
+        "path": "data/knowledge/goa_human.gaf.gz",
+        "sha256": "db472faff1785878521693af62646546cea6af4a386609dd01c72c0554a46a30",
+        "bytes": 15041996,
+        "partition": null
+      }
+    },
+    "knockdown_rna_seq": {
+      "name": "ENCODE transcription-factor knockdown RNA-seq, with each experiment's non-targeting control experiments",
+      "portal": "https://www.encodeproject.org",
+      "assays": [
+        "CRISPRi RNA-seq",
+        "siRNA RNA-seq",
+        "shRNA RNA-seq",
+        "CRISPR RNA-seq"
+      ],
+      "cells": [
+        "K562",
+        "HepG2"
+      ],
+      "target_class": "transcription factor",
+      "licence": "ENCODE data, no restrictions on use (ENCODE data use policy)",
+      "metadata_cache": "data/knowledge/regulators/knockdown/experiments.json",
+      "metadata_fetched": "2026-10-10",
+      "experiments_listed": 163,
+      "by_cell_and_assay": {
+        "K562 CRISPRi RNA-seq": 51,
+        "K562 siRNA RNA-seq": 23,
+        "K562 shRNA RNA-seq": 23,
+        "K562 CRISPR RNA-seq": 25,
+        "HepG2 shRNA RNA-seq": 23,
+        "HepG2 CRISPR RNA-seq": 18
+      },
+      "with_target_chip_in_same_cell_and_files": 53,
+      "factor_cell_units_before_eligibility": 45,
+      "units": [
+        "ARID3A K562",
+        "ATF3 K562",
+        "BACH1 K562",
+        "BHLHE40 K562",
+        "CDC5L K562",
+        "CTCF HepG2",
+        "CTCF K562",
+        "E2F6 K562",
+        "E4F1 K562",
+        "FOXK2 K562",
+        "GATA1 K562",
+        "GATA2 K562",
+        "HMBOX1 K562",
+        "HNRNPK HepG2",
+        "HNRNPK K562",
+        "JUND K562",
+        "MAFK K562",
+        "MAX K562",
+        "MEIS2 K562",
+        "MITF K562",
+        "MXI1 K562",
+        "NR2C2 K562",
+        "NR2F2 K562",
+        "NRF1 K562",
+        "RCOR1 K562",
+        "RFX5 K562",
+        "RNF2 K562",
+        "SIX5 K562",
+        "SMAD2 K562",
+        "SMAD5 K562",
+        "SP1 K562",
+        "STAT1 K562",
+        "STAT2 K562",
+        "STAT5A K562",
+        "TEAD4 K562",
+        "THAP1 K562",
+        "TRIM28 K562",
+        "UBTF K562",
+        "USF2 K562",
+        "XRCC5 HepG2",
+        "XRCC5 K562",
+        "ZBTB33 K562",
+        "ZMIZ1 K562",
+        "ZNF143 K562",
+        "ZNF384 K562"
+      ],
+      "files_to_fetch": 145,
+      "bytes_to_fetch": 1577570574,
+      "project_exposure": "none: no file, script, result or document of this project read these experiments before this inventory (searched for the assay names on 2026-10-10)",
+      "experiments": [
+        {
+          "accession": "ENCSR557BMX",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "GATA2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR550FIL",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "TEAD4",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR591QYK",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "TRIM28",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR052BWT",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "USF2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR715EDZ",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "SP2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR734VBC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "HSF1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR381TNV",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NFATC1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR084NTT",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "SRF",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR808HQN",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NR2C2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR074FBG",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "TEAD2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR552HTC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "TFDP1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR898UNK",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ARID3A",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR781XJD",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ZNF143",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR688UTN",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NR2F2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR731FEO",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "SMAD5",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR810RIC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "HOXB9",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR850LOZ",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "GATA1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR263IOO",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "HMGB2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR862UHT",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "DLX1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR357LVC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NR4A1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR359VJC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "HOXB4",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR223QTD",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ZBTB33",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR713AEC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "HINFP",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR733ROU",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "MAF1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR052ZPX",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "RELA",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR043UMW",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "RNF2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR619EYC",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "RFX5",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR103URL",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ZNF384",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR267BHU",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ZNF395",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR469EFL",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "STAT2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR096VPS",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NFYA",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR650QAK",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "SP1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR024HAR",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "STAT6",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR620DOP",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "KLF2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR773VKE",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "FOXK2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR376CFR",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "STAT5A",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR123IMQ",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ATF3",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR104JMN",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "MXD3",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR294ZCD",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "THAP1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR608ORR",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "UBTF",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR545HTM",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "USF1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR073QLQ",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "ILF2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR184VVN",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "STAT1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR733TFF",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "MEIS2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR905SEH",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "MITF",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR389OCD",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "JUND",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR171KMM",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NFYB",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 4,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR190RZZ",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "BACH1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR299HUJ",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "NRF1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR104QKG",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "SIX5",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR095PIC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR942XXL",
+          "cell": "K562",
+          "assay": "CRISPRi RNA-seq",
+          "target": "HMBOX1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR016WFQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR626SFM",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "BHLHE40",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR109YDL",
+            "ENCSR126QVF"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR656ZOI",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "LMNB1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR312FIT",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "UBTF",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR644GSV"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR129WCZ",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "MAZ",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR109YDL",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 3
+        },
+        {
+          "accession": "ENCSR174FUO",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "STAT5A",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR341RCF",
+            "ENCSR074DIJ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR555CYH",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "ZNF180",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR401RKW",
+            "ENCSR608CVU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR047MQO",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "VEZF1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR942MUW",
+            "ENCSR109YDL",
+            "ENCSR074DIJ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 3
+        },
+        {
+          "accession": "ENCSR136ZPD",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "MAFG",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR169DSM",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "ARID3A",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR109YDL",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 3,
+          "control_files": 3
+        },
+        {
+          "accession": "ENCSR640PVZ",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "MAFK",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR128HAQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR874ZXG",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "E2F4",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR074DIJ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR977SOT",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "CEBPZ",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR045TQN",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "ATF3",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR128HAQ",
+            "ENCSR109YDL"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR390GWL",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "RCOR1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR561NXJ",
+            "ENCSR608CVU"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR631RKH",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "MXI1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR401RKW",
+            "ENCSR608CVU"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR100ODO",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "NFE2L2",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR128HAQ",
+            "ENCSR109YDL"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR820EGA",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "E2F6",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR509YMP",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "ZMIZ1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR126QVF",
+            "ENCSR644GSV"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR067CAG",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "CTCF",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR756JGE",
+            "ENCSR443QFD"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR965CCM",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "ZNF384",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR561NXJ",
+            "ENCSR109YDL"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR675SDG",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "MAX",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR092LZV",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "CTCF+RAD21",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR443QFD",
+            "ENCSR041KOX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR793ISR",
+          "cell": "K562",
+          "assay": "siRNA RNA-seq",
+          "target": "BACH1",
+          "lab": "Michael Snyder, Stanford",
+          "controls": [
+            "ENCSR608CVU",
+            "ENCSR287SHU"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR016OIX",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "MARK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR619PCR"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR810FHY",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "UPF2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR438MDN"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR577OVP",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "DNAJC2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR667PLJ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR608IXR",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "FUBP1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR260BQC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR309PPC",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "PA2G4",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR661HEL"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR410ZPU",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "BCLAF1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR245BNJ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR529JNJ",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "HNRNPK",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR129RWD"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR312HJY",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "CNOT8",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR898NWE"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR322XVS",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "PHF6",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR572FFX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR448JAM",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "ZC3H8",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR718EWL"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR231PWH",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "NKRF",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR619PCR"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR953IQF",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "NUP35",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR260BQC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR306IOF",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "PARN",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR667PLJ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR599UDS",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "AARS",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR572FFX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR165BCF",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "WRN",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR718EWL"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR535YPK",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "SFPQ",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR164MUK"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR007XKL",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "NFX1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR815CVQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR368ZRP",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "PAPOLA",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR942UNX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR850PWM",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "ZRANB2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR815CVQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR524YXQ",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "SRPK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR174OYC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR631RFX",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "MTPAP",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR174OYC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR126ARZ",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "ILF2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR419JMU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR717SJA",
+          "cell": "K562",
+          "assay": "shRNA RNA-seq",
+          "target": "XRN2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR661HEL"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR016WTN",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMAD2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR404OHQ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR974RYS",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "ZNF800",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR341TTW"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR765HSN",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "CIZ1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR978MMZ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR649MBU",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMAD5",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR978MMZ"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR064VKV",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "ZNF574",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR026FEM",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "ERN1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR148HLA",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "APTX",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR877JEM"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR307GHU",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "CHCHD3",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR220DTX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR183WOW",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMG5",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR271ZAB"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR157IJG",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMG7",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR271ZAB"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR916PCG",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "E4F1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR665DMA",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "MECP2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR404OHQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR262ZBE",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "RIOK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR347NKX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR613LSQ",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "CTCF",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR965MSX",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMAD4",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR516TLX"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR204OEJ",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "PAN2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR854OFV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR727WPW",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "SEPT11",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR271ZAB"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR659UXO",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "YBX1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR404OHQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR544ZMX",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "CDC5L",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR220DTX"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR637EFF",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "CEBPZ",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR163JUC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR628AFF",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "EIF2AK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR712CQC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR126UCL",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "DDX59",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR015KGT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR865UKM",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "RPS3",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR005JBU"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR619GGE",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "FUBP3",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR015KGT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR276GMG",
+          "cell": "K562",
+          "assay": "CRISPR RNA-seq",
+          "target": "XRCC5",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR292PXV"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR547NWD",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "AARS",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR856ZRV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR347ZHQ",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "XRN2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR856ZRV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR481AYC",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "BCLAF1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR856ZRV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR028YAQ",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "PA2G4",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR689PHN"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR318OXM",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "UPF2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR856ZRV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR853ZJS",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "HNRNPK",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR237YZT"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR732IYM",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "XRCC5",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR491FOC"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR004OSI",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "DNAJC2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR305XWT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR457WBK",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "NUP35",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR960MSV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR736TAW",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "FUBP1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR225PRV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR093FHC",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "WRN",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR225PRV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR701GSV",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "MTPAP",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR264TUE"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR184YDW",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "ZC3H8",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR093ERJ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR755KOM",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "FUBP3",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR376RJN"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR366FFV",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "ILF2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR305XWT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR681SMT",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "PHF6",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR674KEK"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR081QQH",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "ZRANB2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR491FOC"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR105OXX",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "MARK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR674KEK"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR929PXS",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "CEBPZ",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR067GHD"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR782MXN",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "SFPQ",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR104ABF"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR825QXH",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "PARN",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR305XWT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR517JDK",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "NKRF",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR246RRQ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR598GKQ",
+          "cell": "HepG2",
+          "assay": "shRNA RNA-seq",
+          "target": "DDX59",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR264TUE"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR749QMU",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "CIZ1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR306EWE"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR871XPX",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "CTCF",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "target_has_chip_in_cell": true,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR700FWD",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMAD4",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR548OTL",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "YBX1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR964HKT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR383QYT",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMAD5",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR308EYT",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "E4F1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR206ICZ",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "CHCHD3",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR462MFN"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR005UDT",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "ERN1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR821GQN",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "ZNF574",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR670KAS"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR036ANR",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "SMAD2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR964HKT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR489DNH",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "APTX",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR671FDZ"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR266XKN",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "MECP2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR964HKT"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR036HUB",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "SEPT11",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR452TFV"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR932GTJ",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "PAN2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR704VPL"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR485ZHW",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "RIOK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR911CLD"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR548ORV",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "NFX1",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR775ZWO"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR862BCF",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "ANXA2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR827PII"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        },
+        {
+          "accession": "ENCSR929EIP",
+          "cell": "HepG2",
+          "assay": "CRISPR RNA-seq",
+          "target": "SRPK2",
+          "lab": "Brenton Graveley, UConn",
+          "controls": [
+            "ENCSR827PII"
+          ],
+          "target_has_chip_in_cell": false,
+          "files_annotation": "V29",
+          "knockdown_files": 2,
+          "control_files": 2
+        }
+      ]
+    },
+    "larger_occupancy_not_fetched": {
+      "name": "ENCODE4 TF ChIP-seq experiments per test cell (portal search count, released)",
+      "counts": {
+        "K562": 776,
+        "HepG2": 828
+      },
+      "why_not_used": "the UCSC clusters are one 125 MB file with cell types per peak; the ENCODE4 set is several hundred files per cell type. It would add factors, not a new kind"
+    },
+    "held_not_used": {
+      "name": "Replogle et al. 2022 K562 genome-wide Perturb-seq pseudobulk (cached by N1)",
+      "local_path": "data/cache/n1/K562_gwps_raw_bulk_01.h5ad",
+      "why_not_used": "reading its perturbed rows is N1b step 2, which ROADMAP section 5 item 16 lists as the owner's decision; this lane reads none of it"
+    }
+  },
+  "what_no_source_gives": [
+    "the direction of a factor's effect at a given element: only factor-level curated direction (GO) exists here, and it is not element-level",
+    "a strength for a factor -> gene rule: no source here measures how much a factor moves a gene through one element",
+    "occupancy in the compiled contexts ENCODE did not profile for factors"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 21.2,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/encRegTfbsClustered/encRegTfbsClusteredWithCells.hg38.bed.gz",
+        "version": "2020-01-27"
+      },
+      {
+        "accession": "https://www.encodeproject.org JSON API",
+        "version": "metadata fetched 2026-10-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/regulators/encRegTfbsClusteredWithCells.hg38.bed.gz",
+        "sha256": "542eb15d4d90236c2d3437b285396bbaddee023ca3d9d0e7efb767fcd1ef7899",
+        "bytes": 125375233,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/regulators/knockdown/experiments.json",
+        "sha256": "536c685ef0618f302a9f22bdeb14521cd7098406da998b1d5cd22f6f34f77ebe",
+        "bytes": 6159494,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/jaspar/core_vertebrates_2026.jaspar",
+        "sha256": "4005b5449ba07d9b58495f51143186e7e3959efd0ad670770fbddf57bf941e8f",
+        "bytes": 336314,
+        "partition": null
+      },
+      {
+        "path": "data/knowledge/goa_human.gaf.gz",
+        "sha256": "db472faff1785878521693af62646546cea6af4a386609dd01c72c0554a46a30",
+        "bytes": 15041996,
+        "partition": null
+      }
+    ],
+    "input_count": 4,
+    "assembly": "GRCh38",
+    "coordinates": "n/a: identities and counts",
+    "parameters": {
+      "test_cells": [
+        "K562",
+        "HepG2"
+      ],
+      "kd_assays": [
+        "CRISPRi RNA-seq",
+        "siRNA RNA-seq",
+        "shRNA RNA-seq",
+        "CRISPR RNA-seq"
+      ]
+    },
+    "exclusions": [],
+    "partitions": "n/a: identities and counts, no evaluation partition",
+    "code_cleanliness": {
+      "git_sha": "45422038bc405cf1d30a709cc8af05086188d781",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/regulators_inventory.py",
+        "form": "committed_repository_file",
+        "path": "scripts/regulators_inventory.py",
+        "is_committed": true,
+        "declared_entry": "scripts/regulators_inventory.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/regulators_inventory.py"
+      ],
+      "counting_path_count": 47,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "45422038bc405cf1d30a709cc8af05086188d781",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/engine_package.json"
+      ],
+      "argv": [
+        "scripts/regulators_inventory.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "45422038bc405cf1d30a709cc8af05086188d781",
+      "code_cleanliness_git_sha": "45422038bc405cf1d30a709cc8af05086188d781",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 4542203"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 96,
+      "opens_under_data": 8,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
