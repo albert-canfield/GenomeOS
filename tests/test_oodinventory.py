@@ -232,3 +232,31 @@ def test_the_two_sibling_kinds_are_told_apart_and_a_tissue_has_neither():
     for curie, text in search.LINE_NEIGHBOURS.items():
         assert search._sibling_flag(curie, "x", "cell line", covered) == text
         assert ":" in text and "covered set holds" in text
+
+
+def test_a_single_nucleus_only_row_gets_the_pseudobulk_caveat_and_a_bulk_row_does_not():
+    from scripts import oodinventory_search as search
+
+    rows = [
+        {
+            "curie": "UBERON:0002394",
+            "label": "bile duct",
+            "absent_by_rule": True,
+            "rna": "ENCSR060SEA (snRNA-seq), ENCSR769KWM (snRNA-seq)",
+        },
+        {
+            "curie": "EFO:0001247",
+            "label": "T47D",
+            "absent_by_rule": True,
+            "rna": "ENCSR000BYD (polyA plus RNA-seq)",
+        },
+        {
+            "curie": "EFO:0002067",
+            "label": "K562",
+            "absent_by_rule": False,
+            "rna": "ENCSR000AAA (snRNA-seq)",
+        },
+    ]
+    got = search._shortlist_caveats(rows)
+    assert [c["curie"] for c in got] == ["UBERON:0002394"]
+    assert "pseudobulk" in got[0]["caveat"]

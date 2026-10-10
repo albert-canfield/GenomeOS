@@ -425,6 +425,34 @@ def _sibling_flag(term: str, name: str, classification: str, covered: set[str]) 
     return None
 
 
+def _shortlist_caveats(rows: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """What a reader of the shortlist would otherwise have to work out from the accessions.
+
+    A row only passes the rule's modality clause; it does not promise the modality is the one a
+    measured-RNA comparison can use. A term whose only RNA is single-nucleus needs a pseudobulk
+    before any per-gene value exists, and that is a step, not a download.
+    """
+    out: list[dict[str, str]] = []
+    for row in rows:
+        if not row["absent_by_rule"]:
+            continue
+        rna = row["rna"] or ""
+        if "RNA-seq" in rna and "snRNA-seq" not in rna and "scRNA-seq" not in rna:
+            continue
+        if "snRNA-seq" in rna or "scRNA-seq" in rna:
+            out.append(
+                {
+                    "curie": row["curie"],
+                    "label": row["label"],
+                    "caveat": "every RNA experiment on this term is single-nucleus or "
+                    "single-cell, so a per-gene value needs a pseudobulk first. The rule admits "
+                    "it ('bulk or single-cell with a usable pseudobulk'); it is a step before any "
+                    "comparison, not a file to download.",
+                }
+            )
+    return out
+
+
 def result_manifest(read_now: list[str], harvest: dict[str, Any]) -> dict[str, Any]:
     declared = [p for p in read_now if p.endswith("alphagenome_track_metadata_copy.csv")] or [
         str(ood.METADATA_PATH)
@@ -533,6 +561,7 @@ def main() -> int:
                 "rule's clause does not exclude a sibling, and they are the same cell type as "
                 "the covered GM12878."
             ),
+            "shortlist_caveats": _shortlist_caveats(rows),
             "other_sources_searched_and_excluded": OTHER_SOURCES,
             "excluded_assays": EXCLUDED_ASSAYS,
             "ols_problems": search["ols_problems"],
