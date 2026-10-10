@@ -139,3 +139,102 @@ def test_a_knockout_and_an_initial_value_reach_libroadrunner(cascade):
     assert again.levels["MEKp"][-1] > 0.5
     settings = adapter.settings()
     assert settings["integrator"] == "cvode" and settings["libroadrunner"] == rr_adapter.version()
+
+
+# ---- the score against BioModels' curation figures ------------------------------------------------
+# Fixed on 2026-10-10 BEFORE either engine was run on the scored models (genomeos/molecules/
+# sbml_reference.py has the reading). A change to any number below, or to any reference feature, fails
+# here: the tolerance is part of the question, not a knob for the answer.
+FROZEN_TOLERANCE = {"relative": 0.10, "pixels": 3, "period_relative": 0.03}
+FROZEN_AGREEMENT = 0.02
+FROZEN_REFERENCES_SHA256 = "66322616dcfb533c195a0313a6560a47f4c06d55b309b443a9c27c99cefe4884"
+SCHOEBERL = "data/knowledge/biomodels/BIOMD0000000019.xml"
+REPRESSILATOR = "data/models/BIOMD0000000012.xml"
+
+
+def test_the_tolerance_and_the_references_are_the_ones_fixed_before_the_runs():
+    import hashlib
+    import json
+
+    from genomeos.molecules import sbml_reference as ref
+
+    assert ref.TOLERANCE == FROZEN_TOLERANCE and ref.AGREEMENT == FROZEN_AGREEMENT
+    digest = hashlib.sha256(json.dumps(ref.REFERENCES, sort_keys=True).encode()).hexdigest()
+    assert digest == FROZEN_REFERENCES_SHA256
+    features = sum(len(d["features"]) for m in ref.REFERENCES.values() for d in m["doses"].values())
+    assert features == 52 and set(ref.REFERENCES) == {
+        "BIOMD0000000019",
+        "BIOMD0000000010",
+        "BIOMD0000000012",
+        "BIOMD0000000084",
+        "BIOMD0000000116",
+    }
+
+
+def test_each_feature_kind_reads_a_known_series_and_applies_the_rule():
+    """A cosine of period 10 and amplitude 1 around 2, on a grid of 0.01: every kind, and both bounds."""
+    import math
+
+    from genomeos.molecules import sbml_reference as ref
+
+    times = [i * 0.01 for i in range(4001)]
+    xs = [2 + math.cos(2 * math.pi * t / 10) for t in times]
+    axes = {"t": 0.1, "X": 0.01}
+
+    def one(feature):
+        return ref.score_feature(feature, times, xs, axes)
+
+    peak = one(("peak", "X", (1.0, 15.0), 3.0, 10.0))
+    assert [c["check"] for c in peak] == ["level", "time"] and all(c["pass"] for c in peak)
+    assert abs(peak[1]["simulated"] - 10.0) < 1e-9
+    assert one(("at", "X", 5.0, 1.0))[0]["pass"]
+    assert one(("min", "X", (0.0, 40.0), 1.0))[0]["pass"] and one(("max", "X", (0.0, 40.0), 3.0))[0]["pass"]
+    period = one(("period", "X", (0.0, 40.0), 10.0))[0]
+    assert period["pass"] and abs(period["simulated"] - 10.0) < 1e-9 and period["bound"] == 0.3
+    assert not one(("period", "X", (0.0, 40.0), 10.4))[0]["pass"]  # 4% off: outside 3%
+    assert one(("first_peak", "X", 12.0, 20.0))[0]["simulated"] == 20.0
+    # the bound is 10% of the REFERENCE: a simulated 3.0 passes against 3.33 (bound 0.333), fails against 3.34
+    assert (
+        one(("max", "X", (0.0, 40.0), 3.33))[0]["pass"]
+        and not one(("max", "X", (0.0, 40.0), 3.34))[0]["pass"]
+    )
+    # near zero the pixel bound rules: 3 px x 0.01 = 0.03 around a reference of 1.02
+    assert one(("min", "X", (0.0, 40.0), 1.02))[0]["bound"] == 0.102
+    assert one(("at", "X", 5.0, 0.02))[0]["bound"] == 0.03 and not one(("at", "X", 5.0, 0.02))[0]["pass"]
+
+
+def _score(path, model_id):
+    from genomeos.molecules import sbml_reference as ref
+
+    spec = ref.REFERENCES[model_id]
+    out = {}
+    for dose_name, dose in spec["doses"].items():
+        model = SbmlModel.from_file(path)
+        dt = spec["standin_dt"]
+        traj = runtime(model, "roadrunner").run(
+            duration=spec["duration"],
+            dt=dt,
+            record_every=max(1, round(spec["record_dt"] / dt)),
+            initial=dose["initial"],
+        )
+        checks = []
+        for feature in dose["features"]:
+            checks += ref.score_feature(
+                feature, traj.times, ref.series(model, traj, feature[1], dose["initial"]), spec["axes"]
+            )
+        out[dose_name] = [c for c in checks if not c["pass"]]
+    return out
+
+
+@needs_roadrunner
+@pytest.mark.needs_local_data(SCHOEBERL, how="genomeos kinetic BIOMD0000000019 caches it from BioModels")
+def test_schoeberl2002_reproduces_on_libroadrunner_at_all_three_egf_doses():
+    """The registered expectation: every feature of the curation figure, at 50, 0.5 and 0.125 ng/ml."""
+    failed = _score(SCHOEBERL, "BIOMD0000000019")
+    assert len(failed) == 3 and failed == {d: [] for d in failed}, failed
+
+
+@needs_roadrunner
+def test_the_repressilator_reproduces_on_libroadrunner():
+    failed = _score(REPRESSILATOR, "BIOMD0000000012")
+    assert failed == {"as curated": []}, failed
