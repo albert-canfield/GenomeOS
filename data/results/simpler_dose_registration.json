@@ -1,0 +1,520 @@
+{
+  "result": "simpler_dose_registration",
+  "date": "2026-10-10",
+  "written_before_any_rna_value_was_read": true,
+  "registered_inputs": {
+    "fig1": {
+      "path": "data/knowledge/simpler_dose/elife-37344-fig1-data1-v2.txt",
+      "sha256": "18a4e546affaab1d87a8bcb6fc0ac42dab452e6f2ca655654142ca72277a05fc"
+    },
+    "fig2": {
+      "path": "data/knowledge/simpler_dose/elife-37344-fig2-data1-v2.txt",
+      "sha256": "09bede4b3b2acdefa87aec2dffb518a21e1e1336cb2dc8a2712045ffc80e4656"
+    },
+    "fig4": {
+      "path": "data/knowledge/simpler_dose/elife-37344-fig4-data1-v2.txt",
+      "sha256": "91cd4e5335ece8f9059a37e8ea17dd90eab5705163777ac25c3fdb40a7ac2bd2"
+    },
+    "gff3": {
+      "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+      "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9"
+    },
+    "tiers": {
+      "path": "data/results/simpler_dose_tiers.json",
+      "sha256": "6c3ffd986fac3c7aa6242ebad4871849c2d70943692055163172b20ab45789d3"
+    },
+    "stage2_tiers": {
+      "path": "data/results/simpler_worm_tiers.json",
+      "sha256": "73aca3d7ba74176b6d25a395cc15d04fb140ea5a3652ec7cd0de535ac2dee828"
+    },
+    "lcap_emb_fwd": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_emb_linear_fwd.bw",
+      "sha256": "c1f0bc9cbe11dcac0505a3ee761a1e1c1af29713f2f2662b2f647c887295573c"
+    },
+    "lcap_emb_rev": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_emb_linear_rev.bw",
+      "sha256": "1eae67818e4fe13e6ee5fa796eb6bc2c46730058f8d622d43ca64f060f401354"
+    },
+    "lcap_l1_fwd": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l1_linear_fwd.bw",
+      "sha256": "1fe578a608dc6d5bc96b4f08abe47b3d7467728795f5b0c32aa5415ddb4ab933"
+    },
+    "lcap_l1_rev": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l1_linear_rev.bw",
+      "sha256": "b14d1acd85a9843603a12c0c3dea5ee7bebed813fc688fb3dda62c5df2bf3c09"
+    },
+    "lcap_l2_fwd": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l2_linear_fwd.bw",
+      "sha256": "37487528cc734645fde85a97fbdd93e5978ff375694595150600ced1907fa17c"
+    },
+    "lcap_l2_rev": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l2_linear_rev.bw",
+      "sha256": "1c4d17c40b7096b15a6d1069d53a8ced927c5f58b6712180b73f66239168b489"
+    },
+    "lcap_l3_fwd": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l3_linear_fwd.bw",
+      "sha256": "d48f0c79c9fabfb2411da1f50da56f274788e9ed087b0eb2824cd245d324f6b3"
+    },
+    "lcap_l3_rev": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l3_linear_rev.bw",
+      "sha256": "d0869b1a0b468f70ae826e4fab377f277f6a13cbafac9b6f5e86f60a885de26c"
+    },
+    "lcap_l4_fwd": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l4_linear_fwd.bw",
+      "sha256": "4c966cc1bf141cf933df14c1522dc6cca3d3e5673dae99759467dabdea6627e7"
+    },
+    "lcap_l4_rev": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l4_linear_rev.bw",
+      "sha256": "ebaac491a415563db09967a8c8241b09e8e29daabdc206227660410091b73bb1"
+    },
+    "lcap_ya_fwd": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_ya_linear_fwd.bw",
+      "sha256": "8658ada6d9316e9777c3b7b90c5694daabe9540e32c4495ba16f036c79e7aab3"
+    },
+    "lcap_ya_rev": {
+      "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_ya_linear_rev.bw",
+      "sha256": "391dc3b26a1cfbb9da28e51360afbeaaa1529263642b9ce5fc5088f3b13668c1"
+    }
+  },
+  "tiers_commit": "e4b794a",
+  "element_funnel": {
+    "rows": 42245,
+    "by_class": {
+      "putative_enhancer": 19231,
+      "non-coding_RNA": 824,
+      "coding_promoter": 13596,
+      "unassigned_promoter": 1791,
+      "other_element": 6512,
+      "pseudogene_promoter": 291
+    },
+    "dynamic_by_class": {
+      "putative_enhancer": 13852,
+      "coding_promoter": 10199
+    },
+    "no_ce11": 0,
+    "ties": 46
+  },
+  "registration": {
+    "hypothesis": "Stage 2's dose view, as a registered claim on a second source: among C. elegans putative enhancers, the domain-rule gene is concordant with the element's own group more often for the top third of elements by constrained fraction than for the bottom third, at the same group, position class, distance to that gene and measured length.",
+    "why_registered_here": "On Serizay et al. 2020 the view gave +6.69 [+2.11, +11.68] beside a FALSIFIED registered tier (stage 2, registration 752f7fc). It was seen after that registration's run, so it cannot be re-tested on that source; it is registered here before any RNA value of this source is read.",
+    "source": "J\u00e4nes et al. 2018 (eLife 7:e37344, CC BY 4.0): ATAC-seq of whole wild-type animals at six stages (embryo, L1, L2, L3, L4, young adult), 42,245 typed accessible elements (Figure 2 source data 1, ce11 coordinates), the source's developmental-dynamics call per element (Figure 4 source data 1, devel_is_dynamic) and per-stage ATAC heights (Figure 1 source data 1); strand-specific long nuclear RNA (chromatin-associated, over 200 nt) at the same six stages, GEO GSE114483, linear coverage normalised by DESeq2 size factors and averaged over two biological replicates. Both measured by the same study at the same stages; the source does not say whether ATAC and RNA came from the same nuclei preparations.",
+    "independence": "The RNA (stage, whole animal) and the element selection (developmentally dynamic, not tissue-specific) are new; the elements are not: Serizay 2020 extends the same lab's annotation, so many elements here are elements of stage 2's population and carry the same constrained fraction. The census counts the overlap; the elements that overlap none of stage 2's 5,814 are reported beside, and a DOSE_ADDS reading carries a registered caveat if that subset's interval does not exclude zero.",
+    "population": "Putative enhancers (the source's 'putative_enhancer' class) that the source calls developmentally dynamic (devel_is_dynamic True), on a chromosome with protein-coding genes, for which the domain rule names a gene. Ageing (glp-1) samples are not used.",
+    "adaptations": {
+      "group": "Stage 1's group was a tissue, called by the source ('accessible in exactly one of five tissues'). This source gives no per-stage call, so the element's group is the stage of its highest ATAC height among the six wild-type stages (atac_wt_<stage>_height, SPMR-normalised peak signal), among the elements the source calls dynamic; a tie goes to the earlier stage.",
+      "rna": "Stage 1 read the source's TPM. This source publishes no gene table, so the gene's value at a stage is coverage-TPM: the mean of the long-cap linear coverage over the union of the exons of all the gene's WBcel235 transcripts, on the gene's own strand, scaled per stage so that the protein-coding genes of the six nuclear chromosomes sum to one million. Coverage over a gene that overlaps another on the same strand is counted for both.",
+      "endpoint": "Concordant: at least 5 coverage-TPM at the element's stage and strictly higher than at each of the other five stages; a gene with no value is not concordant (stage 1's rule with six stages in place of five tissues).",
+      "strand_check": "Before scoring, per stage: summed own-strand mean coverage over the protein-coding genes against summed opposite-strand. Sense above antisense at all six stages: the tracks are read as labelled (fwd = plus strand). Antisense above sense at all six: fwd and rev are swapped. Anything else: INSTRUMENT_FAILED, nothing scored."
+    },
+    "constraint": "Stage 2's instrument, unchanged: UCSC ce11 phyloP135way read by HTTP range request, stage 2's cut 2.08 (re-derived there at 5% FDR by Zoonomia's procedure; its CDS-above-intron instrument check passed), exon bases of any WBcel235 transcript removed from each element first; per element the scored bases left (measured) and those at or above the cut (above). Constrained fraction = above / measured; elements with no scored base left are not measured and excluded.",
+    "dose": "Top third against bottom third of the constrained fraction, at tertile edges computed over this population's measured elements in the census, before any RNA value is read: top = fraction at or above the upper edge and above the lower edge, bottom = below the lower edge, the middle left out (simpler_tiers.by_fraction_tertile, the stage-2 view's own rule).",
+    "matching": "Strata: stage (6) x inside a gene body or between genes (2) x distance bin of the domain-rule gene's 5' end (stage 1's 8 bins) x measured-length tertile (edges fixed in the census). Only strata holding both arms count. The matched control of the dose test is the bottom third within the same strata.",
+    "statistic": "delta = concordance(top third) - concordance(bottom third), standardised to the top third's strata, in points; 95% percentile interval over 1-Mb windows, 2,000 resamples, seed 20261010 (simpler_tiers.matched_difference, unchanged).",
+    "falsifier": "The dose claim is falsified if delta is not above its within-stratum permutation null: the arm label shuffled within each stratum 1,000 times (seed 20261011), one-sided p = (1 + permutations with delta >= observed) / 1,001; FALSIFIED if p >= 0.05.",
+    "decision": "DOSE_ADDS if the interval's lower bound > 0; DOSE_BELOW if its upper bound < 0; NO_DIFFERENCE_DETECTED otherwise.",
+    "positive_control": "Developmentally dynamic coding promoters (the source's 'coding_promoter' class), stage by the same rule, nearest-TSS gene: concordance against a gene drawn from the same chromosome at the same 5'-end distance bin (stage 1's matched control, 1,000 draws). If one-sided p >= 0.05 the readout is declared unresponsive (UNRESPONSIVE) and neither reading is given.",
+    "secondary": "Stage 1's comparison on this source, with its own label, deciding nothing about the dose: on the whole population (measured or not), the domain rule against nearest TSS, stage 1's statistic (difference in concordance, 95% cluster bootstrap over 1-Mb windows, 2,000 resamples); DOMAIN_RULE_AHEAD, NEAREST_AHEAD or NO_DIFFERENCE_DETECTED; matched control and falsifier stage 1's (the domain rule's gene against a gene at the same distance bin; falsified as a carrier of stage information if one-sided p >= 0.05). Fewer than 200 elements where the rules differ: the secondary is not scored.",
+    "beside": "Deciding nothing: stage 2's own numeric edges (fraction >= 0.190476 against < 0.08); the elements overlapping none of stage 2's population; inside gene bodies and between genes; each stage; the middle third against the bottom third; stage 2's registered 5% tier on this source; the secondary's inside and between strata.",
+    "power": "Stated in the census before the run: 2.8 x sqrt(0.25 x (1/n_top + 1/n_bottom)) in support, before clustering.",
+    "confound": "Stages 1 and 2 named transcription: an element inside a gene body can be open when its host is transcribed, an element upstream of an annotated 5' end can lie in a transcribed outron, and transcribed sequence can be constrained for splicing or RNA-level reasons. Whole-animal RNA adds one more: a stage concordance can come from any tissue. A difference therefore does not separate regulatory constraint from transcription-linked constraint.",
+    "stop_rule": "One run. Fewer than 200 elements in the top or the bottom third in strata holding both: stop unscored (UNDERPOWERED). Nothing (source, population, stage rule, RNA construction, cut, edges, strata, endpoint) changes after any RNA value is read; another definition is a new registration committed before it is run.",
+    "outcome_wording": {
+      "common": "On C. elegans putative enhancers whose accessibility changes across development (J\u00e4nes et al. 2018, whole animals, six stages from embryo to young adult), each assigned to its stage of highest accessibility, with constraint measured on their exon-free bases (UCSC ce11 phyloP135way, stage 2's cut 2.08), the domain-rule gene is expressed at 5 coverage-TPM or more in long nuclear RNA and highest at the element's own stage for {kc} of {nc} elements in the top third by constrained fraction ({rc}), against {ru} for the {nu} in the bottom third at the same stage, position class, distance and measured length; difference {d} points, 95% {lo} to {hi} over 1-Mb clusters (within-stratum permutation p {perm}; {falsifier}).",
+      "DOSE_ADDS": "The dose view seen beside stage 2 replicates on a second source: on this endpoint the elements with the largest constrained fraction carry stage information beyond the domain rule's position that those with the smallest do not.",
+      "NO_DIFFERENCE_DETECTED": "No difference was detected: the dose view seen beside stage 2 does not replicate on this source. This is not evidence that constrained elements lack function.",
+      "DOSE_BELOW": "The elements with the largest constrained fraction have genes less often stage-concordant than matched elements with the smallest, the opposite of the dose view seen beside stage 2; one reading named in advance is that constrained elements sit near genes expressed across stages, which an endpoint asking for the highest stage counts against.",
+      "overlap_caveat": "On the elements that overlap none of stage 2's population the difference is {fresh}, an interval that does not exclude zero, so the replication rests partly on elements stage 2 already held.",
+      "positive_control": "The positive control separates: of {pn} developmentally dynamic coding promoters, the nearest-TSS gene is stage-concordant for {pk} ({pr}) against {pc} at a matched distance (one-sided p {pp}).",
+      "secondary_common": "Secondary, stage 1's comparison on this source: on {n} elements the domain-rule gene is stage-concordant for {kd} ({rd}) against {kn} ({rn}) for the gene with the nearest 5' end; the rules differ on {k}; difference {d} points, 95% {lo} to {hi} over 1-Mb clusters.",
+      "secondary_DOMAIN_RULE_AHEAD": "On this endpoint the domain rule is ahead of nearest TSS, as in stage 1.",
+      "secondary_NO_DIFFERENCE_DETECTED": "No difference was detected between the domain rule and nearest TSS.",
+      "secondary_NEAREST_AHEAD": "On this endpoint nearest TSS is ahead of the domain rule, the opposite of stage 1.",
+      "secondary_control_passed": "The domain rule's genes match the element's stage more often than genes at a matched distance ({cr}, one-sided p {cp}).",
+      "secondary_control_failed": "The domain rule's genes do not match the element's stage more often than genes at a matched distance ({cr}, one-sided p {cp}): falsified as a carrier of stage information here.",
+      "secondary_underpowered": "Secondary: fewer than 200 elements where the domain rule and nearest TSS differ; not scored.",
+      "always": "Conservation and accessibility are not function: this says the attributed gene is expressed when the element is open, not that the element acts on it, and it does not separate regulatory constraint from transcription-linked constraint. The RNA is from whole animals, so a stage concordance can come from any tissue.",
+      "INSTRUMENT_FAILED": "INSTRUMENT_FAILED: the long-cap RNA tracks show neither own-strand coverage above opposite-strand at all six stages nor the reverse at all six, so the RNA's strand cannot be read; nothing is scored.",
+      "UNRESPONSIVE": "UNRESPONSIVE: of {pn} developmentally dynamic coding promoters, the nearest-TSS gene is stage-concordant for {pk} ({pr}) against {pc} at a matched distance (one-sided p {pp}); the readout does not separate, so neither reading is given.",
+      "UNDERPOWERED": "UNDERPOWERED: fewer than 200 elements in the top or the bottom third in strata holding both; stopped unscored."
+    }
+  },
+  "census": {
+    "elements": 13852,
+    "elements_by_stage": {
+      "emb": 4735,
+      "l1": 974,
+      "l2": 1955,
+      "l3": 1160,
+      "l4": 1958,
+      "ya": 3070
+    },
+    "measured": 11842,
+    "not_measured": 2010,
+    "overlap_stage2_population": 3849,
+    "overlap_stage2_population_measured": 3407,
+    "fraction_tertile_edges": [
+      0.072848,
+      0.19403
+    ],
+    "length_edges_measured_bases": [
+      151.0,
+      151.0
+    ],
+    "dose_arms": {
+      "top": 3949,
+      "bottom": 3922
+    },
+    "dose_arms_by_stage": {
+      "emb": {
+        "top": 1743,
+        "bottom": 1145
+      },
+      "l1": {
+        "top": 254,
+        "bottom": 300
+      },
+      "l2": {
+        "top": 819,
+        "bottom": 357
+      },
+      "l3": {
+        "top": 320,
+        "bottom": 316
+      },
+      "l4": {
+        "top": 499,
+        "bottom": 538
+      },
+      "ya": {
+        "top": 314,
+        "bottom": 1266
+      }
+    },
+    "dose_arms_inside_gene_body": {
+      "top": 2222,
+      "bottom": 1734
+    },
+    "dose_arms_between_genes": {
+      "top": 1727,
+      "bottom": 2188
+    },
+    "strata": 136,
+    "strata_with_both_arms": 127,
+    "top_in_support": 3941,
+    "bottom_in_support": 3905,
+    "mde_points_unclustered": 3.161,
+    "stage2_edges_arms_in_support": {
+      "top": 4091,
+      "bottom": 4403
+    },
+    "not_overlapping_stage2_arms_in_support": {
+      "top": 2760,
+      "bottom": 2902
+    },
+    "tier_5pct": {
+      "constrained": 8908,
+      "not_constrained": 2934
+    },
+    "secondary": {
+      "discordant": 2919,
+      "discordant_fraction": 0.2107,
+      "discordant_inside_gene_body": 2125,
+      "mde_points_unclustered": 1.092,
+      "stop_rule_met": false
+    },
+    "positive_control_promoters": 10199,
+    "positive_control_promoters_by_stage": {
+      "emb": 2370,
+      "l1": 472,
+      "l2": 1583,
+      "l3": 1008,
+      "l4": 1653,
+      "ya": 3113
+    },
+    "clusters_1mb": 103,
+    "stop_rule_met": false
+  },
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "J\u00e4nes J et al. (2018) Chromatin accessibility dynamics across C. elegans development and ageing. eLife 7:e37344; source data (Figures 1, 2 and 4) and GEO GSE114483 (long cap RNA, wild type)",
+        "version": "eLife source data v2 and GEO GSE114483, as served on 2026-10-10"
+      },
+      {
+        "accession": "Ensembl gene models for WBcel235 (WBcel235.63.gff3.gz)",
+        "version": "release 63, the copy held in data/reference/celegans since 2026-09-10"
+      },
+      {
+        "accession": "UCSC ce11 phyloP135way: https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/ce11.phyloP135way.bw",
+        "version": "range-read 2026-10-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/simpler_dose_tiers.json",
+        "sha256": "6c3ffd986fac3c7aa6242ebad4871849c2d70943692055163172b20ab45789d3",
+        "bytes": 456376,
+        "partition": "the committed per-element counts (no RNA read)"
+      },
+      {
+        "path": "data/results/simpler_worm_tiers.json",
+        "sha256": "73aca3d7ba74176b6d25a395cc15d04fb140ea5a3652ec7cd0de535ac2dee828",
+        "bytes": 313614,
+        "partition": "stage 2's population coordinates, for the overlap count"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/elife-37344-fig1-data1-v2.txt",
+        "sha256": "18a4e546affaab1d87a8bcb6fc0ac42dab452e6f2ca655654142ca72277a05fc",
+        "bytes": 3835944,
+        "partition": "coordinates and the six wild-type ATAC heights"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/elife-37344-fig2-data1-v2.txt",
+        "sha256": "09bede4b3b2acdefa87aec2dffb518a21e1e1336cb2dc8a2712045ffc80e4656",
+        "bytes": 18827378,
+        "partition": "coordinates (ce10, ce11) and the class only"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/elife-37344-fig4-data1-v2.txt",
+        "sha256": "91cd4e5335ece8f9059a37e8ea17dd90eab5705163777ac25c3fdb40a7ac2bd2",
+        "bytes": 4739367,
+        "partition": "coordinates and the developmental-dynamics call only"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "gene positions and strands"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_emb_linear_fwd.bw",
+        "sha256": "c1f0bc9cbe11dcac0505a3ee761a1e1c1af29713f2f2662b2f647c887295573c",
+        "bytes": 28588834,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_emb_linear_rev.bw",
+        "sha256": "1eae67818e4fe13e6ee5fa796eb6bc2c46730058f8d622d43ca64f060f401354",
+        "bytes": 27839625,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l1_linear_fwd.bw",
+        "sha256": "1fe578a608dc6d5bc96b4f08abe47b3d7467728795f5b0c32aa5415ddb4ab933",
+        "bytes": 33889181,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l1_linear_rev.bw",
+        "sha256": "b14d1acd85a9843603a12c0c3dea5ee7bebed813fc688fb3dda62c5df2bf3c09",
+        "bytes": 33250390,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l2_linear_fwd.bw",
+        "sha256": "37487528cc734645fde85a97fbdd93e5978ff375694595150600ced1907fa17c",
+        "bytes": 35058628,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l2_linear_rev.bw",
+        "sha256": "1c4d17c40b7096b15a6d1069d53a8ced927c5f58b6712180b73f66239168b489",
+        "bytes": 34395798,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l3_linear_fwd.bw",
+        "sha256": "d48f0c79c9fabfb2411da1f50da56f274788e9ed087b0eb2824cd245d324f6b3",
+        "bytes": 28575916,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l3_linear_rev.bw",
+        "sha256": "d0869b1a0b468f70ae826e4fab377f277f6a13cbafac9b6f5e86f60a885de26c",
+        "bytes": 27868414,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l4_linear_fwd.bw",
+        "sha256": "4c966cc1bf141cf933df14c1522dc6cca3d3e5673dae99759467dabdea6627e7",
+        "bytes": 29296652,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_l4_linear_rev.bw",
+        "sha256": "ebaac491a415563db09967a8c8241b09e8e29daabdc206227660410091b73bb1",
+        "bytes": 28556737,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_ya_linear_fwd.bw",
+        "sha256": "8658ada6d9316e9777c3b7b90c5694daabe9540e32c4495ba16f036c79e7aab3",
+        "bytes": 21618472,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      },
+      {
+        "path": "data/knowledge/simpler_dose/GSE114483_lcap_wt_ya_linear_rev.bw",
+        "sha256": "391dc3b26a1cfbb9da28e51360afbeaaa1529263642b9ce5fc5088f3b13668c1",
+        "bytes": 21034057,
+        "partition": "hashed only, so the run can check them; no value is read here"
+      }
+    ],
+    "assembly": "WBcel235 (ce11): the source's ce11 columns, the GEO tracks, the gene models and phyloP",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the source data are bed-style (0-based, half-open); bigWig is 0-based half-open; the GFF3 (1-based closed) is converted on reading"
+    },
+    "parameters": {
+      "stages": [
+        "emb",
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "ya"
+      ],
+      "detection_coverage_tpm": 5.0,
+      "constraint_track": "phyloP135way",
+      "constraint_cut": 2.08,
+      "constrained_min_fraction_for_the_5pct_tier": 0.05,
+      "stage2_edges": [
+        0.08,
+        0.190476
+      ],
+      "min_per_arm": 200,
+      "min_discordant_secondary": 200,
+      "permutations": 1000,
+      "bootstrap": 2000,
+      "control_draws": 1000,
+      "cluster_bp": 1000000,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "seed": 20261010,
+      "alpha": 0.05,
+      "range_budget_bytes": 200000000,
+      "download_budget_bytes": 1500000000
+    },
+    "exclusions": [
+      "elements of classes other than putative_enhancer (population) and coding_promoter (positive control)",
+      "elements the source does not call developmentally dynamic (devel_is_dynamic False)",
+      "the ageing (glp-1) samples and their columns",
+      "exon bases of any WBcel235 transcript, removed from every element before its constrained fraction",
+      "elements with no scored base left after exon removal: no fraction, out of the dose test, counted",
+      "the source's own element-to-gene columns, never read (simpler_dose.NEVER_READ)",
+      "the RNA-derived flag columns of Figure 2 source data (lcap_*_passed_*), never read"
+    ],
+    "partitions": {
+      "population": "fixed here, before any RNA value of this source was read"
+    },
+    "code_cleanliness": {
+      "git_sha": "e4b794a8f6c7f3a8ac244728c4171e0e60ecf989",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_dose_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_dose_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_dose_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_dose.py",
+        "genomeos/attribution/simpler_tiers.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/simpler_dose_run.py"
+      ],
+      "counting_path_count": 41,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "e4b794a8f6c7f3a8ac244728c4171e0e60ecf989",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_dose_run.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "e4b794a8f6c7f3a8ac244728c4171e0e60ecf989",
+      "code_cleanliness_git_sha": "e4b794a8f6c7f3a8ac244728c4171e0e60ecf989",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record e4b794a"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 96,
+      "opens_under_data": 42,
+      "files_read": 18,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
