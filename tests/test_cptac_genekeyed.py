@@ -214,3 +214,60 @@ def test_the_apply_path_on_a_synthetic_profile(tmp_path, monkeypatch):
     assert st["unresolved_entities"] == ["MLLT4_Y2"]
     assert st["sites_with_resolved_key"] == 3 and st["unresolved_rate"] == round(1 / 3, 4)
     assert st["against_the_canonical_only_mapping_of_2026_09_28"] == {"same canonical site": 1}
+
+
+def _result(studies: list[str], sites: dict) -> dict:
+    return {"studies": studies, "sites": sites}
+
+
+def test_the_tiers_reader_labels_each_study_row_and_refuses_a_residue_disagreement():
+    a = _result(["luad"], {"P1": [[5, "S", [[0, 30, -0.1]]]]})
+    b = _result(
+        ["brca", "coad"], {"P1": [[5, "S", [[0, 12, 0.2], [1, 40, 0.0]]]], "P2": [[9, "T", [[1, 3, 1.0]]]]}
+    )
+    got = ptm.tumour_abundance_tiers("P1", 5, {"refseq-keyed": a, "gene-keyed": b})
+    assert got["residue"] == "S" and got["meaning"] == ptm.CPTAC_MEANING
+    rows = got[ptm.CPTAC_FIELD]
+    assert [(r["tier"], r["study"], r["tumours_with_value"]) for r in rows] == [
+        ("refseq-keyed", "luad", 30),
+        ("gene-keyed", "brca", 12),
+        ("gene-keyed", "coad", 40),
+    ]
+    assert ptm.tumour_abundance_tiers("P2", 9, {"refseq-keyed": a, "gene-keyed": b})[ptm.CPTAC_FIELD][0][
+        "tier"
+    ] == ("gene-keyed")
+    assert ptm.tumour_abundance_tiers("P3", 1, {"refseq-keyed": a, "gene-keyed": None}) is None
+    bad = _result(["x"], {"P1": [[5, "T", [[0, 1, 0.0]]]]})
+    try:
+        ptm.tumour_abundance_tiers("P1", 5, {"refseq-keyed": a, "gene-keyed": bad})
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("a residue disagreement between tiers must not be merged")
+
+
+def test_the_committed_tiers_agree_and_share_no_study():
+    a, b = ptm.load_tumour_abundance(), ptm.load_tumour_abundance(ptm.CPTAC_GENEKEYED_RESULT)
+    if not a or not b:
+        return
+    assert not set(a["studies"]) & set(b["studies"])
+    ka = {(acc, r[0]): r[1] for acc, rows in a["sites"].items() for r in rows}
+    kb = {(acc, r[0]): r[1] for acc, rows in b["sites"].items() for r in rows}
+    shared = set(ka) & set(kb)
+    assert shared and all(ka[k] == kb[k] for k in shared)
+    acc, pos = sorted(shared)[0]
+    got = ptm.tumour_abundance_tiers(acc, pos)
+    assert {r["tier"] for r in got[ptm.CPTAC_FIELD]} == {"refseq-keyed", "gene-keyed"}
+
+
+def test_census_of_the_committed_gene_keyed_result():
+    # pinned 2026-10-10 from data/results/cptac_genekeyed_result.json (lane-cptac); a re-run that moves
+    # any of these must say why
+    if not ck.RESULT.exists():
+        return
+    r = json.loads(ck.RESULT.read_text())
+    assert r["retired_profiles"] == ["brca_tcga_pan_can_atlas_2018_phosphoprotein_quantification"]
+    assert len(r["committed_profiles"]) == 6
+    assert r["joined_committed"] == 19813 and r["proteins_with_joined_sites"] == 5223
+    cal = r["calibration_on_refseq_keyed_truth"]
+    assert (cal["pooled"]["correct"], cal["pooled"]["wrong"]) == (79929, 256)

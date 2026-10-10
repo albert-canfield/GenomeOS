@@ -431,6 +431,38 @@ def load_tumour_abundance(path: Path = CPTAC_RESULT) -> dict[str, Any] | None:
     return load_index(path)
 
 
+CPTAC_GENEKEYED_RESULT = Path("data/results/cptac_genekeyed_result.json")
+
+
+def tumour_abundance_tiers(
+    accession: str, position: int, results: dict[str, dict[str, Any] | None] | None = None
+) -> dict[str, Any] | None:
+    """One curated phosphosite across both committed CPTAC tiers, each study row labelled with its tier.
+
+    ``refseq-keyed``: the profiles that name their RefSeq protein (``CPTAC_RESULT``). ``gene-keyed``: the
+    profiles whose gene key and isoform position passed the rule registered on 2026-10-10
+    (``CPTAC_GENEKEYED_RESULT``, genomeos/molecules/cptac_keys.py). The tiers share no study; each row is
+    that study's tumours, and no ratio is comparable across studies.
+    """
+    if results is None:
+        results = {
+            "refseq-keyed": load_tumour_abundance(),
+            "gene-keyed": load_tumour_abundance(CPTAC_GENEKEYED_RESULT),
+        }
+    residue, rows = None, []
+    for tier, result in results.items():
+        got = relative_abundance_in_tumours(accession, position, result)
+        if not got:
+            continue
+        if residue is not None and got["residue"] != residue:
+            raise ValueError(f"{accession} {position}: tiers disagree on the residue")
+        residue = got["residue"]
+        rows.extend({**row, "tier": tier} for row in got[CPTAC_FIELD])
+    if not rows:
+        return None
+    return {"residue": residue, CPTAC_FIELD: rows, "meaning": CPTAC_MEANING}
+
+
 def relative_abundance_in_tumours(
     accession: str, position: int, result: dict[str, Any] | None
 ) -> dict[str, Any] | None:

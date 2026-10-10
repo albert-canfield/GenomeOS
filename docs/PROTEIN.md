@@ -550,6 +550,56 @@ symbols UniProt has since renamed (TNKS1BP1, compiled as CNOT12).
   G2, the four TCGA quantifications (RefSeq of about 2013) likely to fail
   it, TCGA breast PanCan likely to fail G1.
 
+**Result, against the registration, negatives first.**
+`scripts/cptac_genekeyed.py apply` wrote
+`data/results/cptac_genekeyed_result.json` (7.2 MB, manifest complete);
+6.8 MB fetched from cBioPortal for values the 2026-09-28 caches lacked, per
+site and study summaries only. Six profiles committed, one retired; the
+expectation for the TCGA quantifications was wrong.
+
+- **Retired: TCGA breast PanCan, on G1 alone.** Median of site medians
+  -0.515 against ±0.5 (-0.518 under the canonical-only mapping). Its mapping
+  passed G2 (216 of 16,795, 1.29%) and G3 (0.62%). The registered retired
+  wording's second clause ("cannot be placed on an isoform ... closely
+  enough") describes a mapping failure and does not fit this profile; the
+  result keeps the registered text and this line corrects it.
+- **The cost is coverage, not correctness.** 28% to 31% of each profile's
+  entities with a resolved gene key are ambiguous (carriers disagree) and
+  refused; on the RefSeq-keyed truth, 31,952 of 113,928 (28.0%). None of the
+  2026-09-28 canonical-only matches moved to another canonical site: each
+  stays at the same site or is refused (breast 2020: 15,638 same, 6,168
+  refused).
+- **G0 passed:** 256 wrong of 80,185 resolved RefSeq-keyed truth sites
+  (0.32%; 0.20% to 0.41% per profile). The decoy estimator run on the same
+  sites expected 49, 81, 149 and 11 wrong against 45, 76, 130 and 5
+  observed, so G3 errs high, not low.
+- Gene keys: 4 to 27 unresolved and 13 to 52 ambiguous symbols per profile,
+  every one listed in the result with its entity count (approved symbols
+  with no compiled definition, such as AKAP2, readthrough loci, and symbols
+  that are approved for one record and previous for another, such as
+  ARFGAP1, refused as registered). Previous symbols recovered 74 to 300
+  symbols per profile.
+
+| committed profile | resolved / gene key resolved | unresolved (G2) | ambiguous | estimated wrong (G3) | curated sites with a value | tumours per site (median) |
+|---|---|---|---|---|---|---|
+| breast 2020 | 17,721 of 25,726 | 273 (1.06%) | 7,445 | 0.50% | 9,439 | 108 |
+| endometrial 2020 | 50,816 of 72,699 | 1,239 (1.70%) | 20,142 | 0.78% | 15,620 | 55 |
+| colon 2019 | 21,124 of 31,080 | 435 (1.40%) | 9,253 | 0.68% | 10,825 | 49 |
+| TCGA breast | 40,064 of 58,579 | 798 (1.36%) | 17,207 | 0.64% | 13,273 | 34 |
+| TCGA ovarian | 11,352 of 16,711 | 199 (1.19%) | 5,030 | 0.59% | 5,549 | 18 |
+| TCGA ovarian PanCan | 2,725 of 4,066 | 45 (1.11%) | 1,261 | 0.58% | 2,000 | 47 |
+
+19,813 curated phospho sites on 5,223 proteins carry a gene-keyed value;
+with the RefSeq-keyed tier, 25,944 of the 41,244 distinct curated phospho
+sites (62.9%) on 5,964 proteins have at least one, 12,973 in both tiers with
+no residue disagreement; no joined site is off S, T or Y. Read with its
+limits: these are relative abundances measured in each study's tumours, not
+occupancy and not in a person; ratios from different studies share no
+reference and are not compared, and the two TCGA ovarian quantifications
+may draw on the same tumours, so they are two processings, not two cohorts.
+`ptm.tumour_abundance_tiers(accession, position)` reads both tiers and
+labels every study row with its tier.
+
 ## Isoform-level expression (2026-09-12)
 
 The model is Gene → Transcript(s) → Protein isoform(s), and expression had
