@@ -1,0 +1,625 @@
+{
+  "result": "freshrna_posthoc",
+  "date": "2026-10-10",
+  "lane": "lane-freshrna",
+  "what": "M2i POST HOC: computed after the registered reading was committed; decides nothing",
+  "registered_reading": "the multiplicative composition (Zhou et al. 2024): better; on a measurement of the same thirteen reader cell types that this project had never read, the reader-gated run scaled by M2h's fitted constant +0.2146 lowered the squared error of measured log2(TPM+1) across those cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline on this measurement, and M2h's gain REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS (Delta MSE +0.03727 [98.33% CI +0.03202, +0.04299] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; the scale is the constant +0.2146 taken from ac5580b and NOTHING IS FITTED IN THIS LANE). WHAT THIS DOES AND DOES NOT LICENSE: PRE-STATED AND DELIBERATELY NARROW. This is a fresh MEASUREMENT of the SAME thirteen cell types, so the only thing a 'better' reading here adds to M2h is that the gain SURVIVES FRESH MEASUREMENT NOISE: it REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS, and nothing wider. Written in advance, a 'better' reading here would NOT license any of the following: (1) that the gain or the scale TRANSPORTS TO NEW CELL TYPES -- none is added here, the stop list forbids adding one, and no cell type outside the reader's thirteen is measured; (2) that 'the model predicts expression' -- the registered words stay 'closer to measured RNA than the no-rule baseline on this measurement', and the effect is about 2% of the variance (SIZE); (3) independence from the ELEMENTS, the ATTRIBUTION or the READER -- the predictions P are 7h's committed rows, built from the same compiled programs, the same attributed elements and the same ENCODE DNase-seq reader calls as before, and none of that is re-measured here; (4) independence from the compiled programs' own provenance, including AlphaGenome's training on ENCODE and GTEx RNA-seq of these same biosamples; (5) that the scale is a mechanism, a dosage or a correction of any stage of the pipeline. What it would license is exactly one sentence: the magnitude M2h fitted on one measurement of these cells still beats no rule on a different measurement of the same cells. SIZE: carried with every 'better' reading, in the supervisor's arithmetic of 2026-10-10 and not softened: M2h's gain is about 2% OF THE VARIANCE. mean(D*P) = +0.2013 and mean(P^2) = +0.9337 on M2h's held-out side give the best scale 0.2013/0.9337 = 0.216 (against the fitted 0.2146) and a gain of mean(D*P)^2/mean(P^2) = 0.0434, which against mean(D^2) = 2.152 is 2.0% of the measured variance, a correlation of about r = 0.14 between the rules' predicted and the measured deviation. M2i is a NOTABLE result if it confirms, not a breakthrough: the same 2% figure is computed here on the fresh measurement and reported beside the reading. NON-OVERLAP: PROVED AT ACCESSION LEVEL, not by name, and required before the registration: the chosen thirteen experiments share NO experiment accession, NO gene-quantification file accession and NO REPLICATE LIBRARY ACCESSION with the twenty-seven quantifications of the thirteen experiments items 7, 7d, 7h and M2h read (nor with any other accession of the READ set). Every library is a separate library preparation and a separate sequencing run, so no replicate is shared. BIOSAMPLE accessions are a separate and weaker matter and are reported honestly: eleven of the thirteen terms are served by an experiment that shares no ENCODE biosample accession with the read set either; for TWO -- hepatocyte and cardiac muscle cell -- the chosen experiment draws on the same ENCODE biosample as the experiment item 7 read, because the portal carries no other unread qualifying experiment of those terms under the clauses above, and adding a biosample is forbidden. For those two cells the fresh measurement is therefore a fresh LIBRARY PREPARATION AND SEQUENCING RUN of the same biological material, not a fresh biological sample; its VALUES are still ones this project has never read, which is the exposure this lane exists to remove. The per-cell table is in the result",
+  "registered_outcome": "BETTER",
+  "post_hoc": {
+    "label": "POST HOC. Computed after the registered reading was written and committed. Decides nothing",
+    "statement": "computed only AFTER the registered reading is written and committed, labelled post hoc, deciding nothing and changing no verdict: (1) THE DEPENDENCE-ROBUST INTERVAL the supervisor asked for -- the same Delta MSE with a 1-Mb LOCUS-CLUSTER bootstrap, genes assigned to clusters by (chromosome, gene start // 1,000,000) from data/cache/gencode_genes.tsv and CLUSTERS resampled with replacement, each carrying all of its genes and all of their pairs, at the same resample count and seed, because genes that share elements or a locus are not independent and the gene-level interval may be too narrow; the registered interval remains the gene-level one. (2) THE SCALE THE FRESH RNA WOULD IMPLY, sum(D'*P)/sum(P^2) over the primary population, beside the constant +0.2146 -- a DESCRIPTIVE comparison of two numbers, computed after the fact, which is NOT fitted into the registered reading and does not change it. (3) the gain as a fraction of the fresh mean(D'^2) (SIZE's 2% figure recomputed on this measurement) and the implied correlation. (4) the same reading restricted to the nine cells whose fresh experiment is polyA plus, with D' recentred over those nine, as a sensitivity to the mixed assay. (5) the per-cell Delta MSE. (6) the reading on M2h's training genes and on all of 7h's genes. (7) the correlation between the fresh y' and item 7's y per cell, as a descriptive check that the two measurements measure the same thing",
+    "dependence_robust_interval": {
+      "label": "POST HOC (1): the 1-Mb locus-cluster bootstrap, deciding nothing",
+      "span_bp": 1000000,
+      "clusters": 2122,
+      "delta_mse": 0.03727241565491676,
+      "ci": [
+        0.03215590487244872,
+        0.043021430122223044
+      ],
+      "registered_gene_level_ci": [
+        0.03202429380417028,
+        0.04299157342045463
+      ],
+      "note": "genes that share elements or a locus are not independent, so the registered gene-level interval may be too narrow; this one resamples 1-Mb locus clusters instead. The registered interval remains the gene-level one and this figure changes no verdict"
+    },
+    "implied_scale": {
+      "label": "POST HOC (2): the scale the FRESH RNA would imply, beside the constant used",
+      "scale_used_fixed_constant": 0.2145911381525326,
+      "scale_the_fresh_rna_would_imply": 0.2003062298911607,
+      "ratio_implied_over_used": 0.9334319749438204,
+      "m2h_training_scale_interval": [
+        0.20074141299120243,
+        0.2283000359194418
+      ],
+      "note": "DESCRIPTIVE AND POST HOC. It is sum(D'*P)/sum(P^2) on the primary population, computed only after the registered reading was committed; it was NOT fitted into the registered reading, which used the constant +0.2146 alone, and it is not a verdict of any kind"
+    },
+    "size_on_this_measurement": {
+      "label": "POST HOC (3): SIZE's 2% figure recomputed on the fresh measurement",
+      "mean_D2": 1.614971412380872,
+      "mean_P2": 0.9337121967026681,
+      "mean_D_times_P": 0.18702836992490532,
+      "delta_mse": 0.03727241565491676,
+      "fraction_of_variance": 0.02307930367632198,
+      "best_possible_gain": 0.03746294766234713,
+      "implied_correlation": 0.15230654037133945
+    },
+    "nine_polya_cells": {
+      "label": "POST HOC (4): the nine cells whose fresh experiment is polyA plus, D' recentred",
+      "cells": [
+        "K562",
+        "HepG2",
+        "GM12878",
+        "H1",
+        "SK_N_SH",
+        "keratinocyte",
+        "CD14_positive_monocyte",
+        "ovary",
+        "testis"
+      ],
+      "genes": 8328,
+      "pairs": 74952,
+      "delta_mse": 0.04597487612908184,
+      "ci": [
+        0.039457598256137774,
+        0.0525926847145947
+      ],
+      "mean_D2": 1.8317713977633066,
+      "mean_P2": 0.9421709796739777,
+      "mean_D_times_P": 0.20821280015269727
+    },
+    "per_cell_delta_mse": {
+      "label": "POST HOC (5)",
+      "values": {
+        "K562": -0.10136162975014809,
+        "HepG2": 0.1211717979111163,
+        "GM12878": 0.2268280324751216,
+        "IMR_90": 0.02678115260043113,
+        "H1": 0.007522185880915335,
+        "SK_N_SH": 0.04882025686357021,
+        "astrocyte": 0.02665926813842139,
+        "hepatocyte": 0.0253701925629305,
+        "keratinocyte": -0.022185112453980207,
+        "cardiac_muscle_cell": -0.05649054018451011,
+        "CD14_positive_monocyte": 0.1809946458632737,
+        "ovary": -0.012638836949027895,
+        "testis": 0.013069990555799682
+      }
+    },
+    "other_populations": {
+      "label": "POST HOC (6): M2h's training genes and all of 7h's genes",
+      "m2h_training_genes": {
+        "label": "M2h's training genes on the fresh measurement",
+        "genes": 8181,
+        "pairs": 106353,
+        "delta_mse": 0.03732684997108547,
+        "ci": [
+          0.031854617001476265,
+          0.04287012870965421
+        ],
+        "mean_D2": 1.625605000574147,
+        "mean_P2": 0.9481227581092723,
+        "mean_D_times_P": 0.1887013919401406
+      },
+      "all_seven_h_genes": {
+        "label": "all of 7h's genes on the fresh measurement",
+        "genes": 16509,
+        "pairs": 214617,
+        "delta_mse": 0.03729939046505279,
+        "ci": [
+          0.03332488195913516,
+          0.04121975695538793
+        ],
+        "mean_D2": 1.620240864498434,
+        "mean_P2": 0.9408533199002008,
+        "mean_D_times_P": 0.18785743244272063
+      }
+    },
+    "fresh_versus_read_correlation": {
+      "label": "POST HOC (7): per cell, the correlation of the fresh D' with item 7's D",
+      "values": {
+        "K562": 0.46007673730245685,
+        "HepG2": 0.9257757141079401,
+        "GM12878": 0.6240977549547967,
+        "IMR_90": 0.6821700506475473,
+        "H1": 0.7611919686539812,
+        "SK_N_SH": 0.4440290048367927,
+        "astrocyte": -0.0641500330021251,
+        "hepatocyte": 0.6436385689711849,
+        "keratinocyte": 0.8439092881816954,
+        "cardiac_muscle_cell": 0.6771159925667563,
+        "CD14_positive_monocyte": 0.7555769630465228,
+        "ovary": 0.513996509164874,
+        "testis": 0.33406243292444837
+      },
+      "mean": 0.5847300732582209,
+      "note": "a descriptive check that the two measurements measure the same thing"
+    }
+  },
+  "alphagenome_requests": 0,
+  "money": "none: public files only, no key read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ac5580b",
+        "version": "M2h, the fixed scale"
+      },
+      {
+        "accession": "90e5c86",
+        "version": "7h, the committed P rows"
+      },
+      {
+        "accession": "ENCSR000AEP",
+        "version": "ENCODE portal, released 2014-07-07"
+      },
+      {
+        "accession": "ENCSR985KAT",
+        "version": "ENCODE portal, released 2014-06-30"
+      },
+      {
+        "accession": "ENCSR000AEG",
+        "version": "ENCODE portal, released 2014-07-07"
+      },
+      {
+        "accession": "ENCSR797RXV",
+        "version": "ENCODE portal, released 2021-01-04"
+      },
+      {
+        "accession": "ENCSR000COU",
+        "version": "ENCODE portal, released 2011-10-17"
+      },
+      {
+        "accession": "ENCSR000BYL",
+        "version": "ENCODE portal, released 2012-02-23"
+      },
+      {
+        "accession": "ENCSR129VBC",
+        "version": "ENCODE portal, released 2021-05-18"
+      },
+      {
+        "accession": "ENCSR908ZAS",
+        "version": "ENCODE portal, released 2014-12-17"
+      },
+      {
+        "accession": "ENCSR000EYT",
+        "version": "ENCODE portal, released 2012-01-17"
+      },
+      {
+        "accession": "ENCSR379YAE",
+        "version": "ENCODE portal, released 2016-01-14"
+      },
+      {
+        "accession": "ENCSR992MUF",
+        "version": "ENCODE portal, released 2021-10-12"
+      },
+      {
+        "accession": "ENCSR725TPW",
+        "version": "ENCODE portal, released 2013-07-31"
+      },
+      {
+        "accession": "ENCSR755LFM",
+        "version": "ENCODE portal, released 2013-07-31"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": null
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_registration.json",
+        "sha256": "d92310fa32720d45d4d5689c18c2df06c86c426ab13d1d1a534847b400f7442c",
+        "bytes": 62330,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": null
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": null
+      },
+      {
+        "path": "data/results/magcal_registration.json",
+        "sha256": "2b25645be58c526a6c69bb15be5822bd921e14fb6b2761e1bcc78b505a302c90",
+        "bytes": 45173,
+        "partition": null
+      },
+      {
+        "path": "data/results/multrna_registration.json",
+        "sha256": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7",
+        "bytes": 134997,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF472HFI.tsv",
+        "sha256": "dbf86a3654fa4f47ae3fc3a87b2754f2b7c01c7a2a60625623e7c915cf660c4f",
+        "bytes": 10967642,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF628SMT.tsv",
+        "sha256": "ad08091aab7f7662511c4255e45f01a72ddd3f12fd93779a45d2630773db7381",
+        "bytes": 10966441,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF073RKC.tsv",
+        "sha256": "70feb107b43e4cb83f2480274b20bcb62d340ef7343bbc3dc8f82c6d718771d8",
+        "bytes": 10891080,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF355TDA.tsv",
+        "sha256": "9ef0afe156652004c32884d86f9cd0d5dab3d27c693e8b65b9db3a3a97fac9e6",
+        "bytes": 10897631,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TZG.tsv",
+        "sha256": "89d9dfa96436dafe545299cabc8cdd91c232bb6366acce64d81cbfb265e9195f",
+        "bytes": 10959672,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF477OQB.tsv",
+        "sha256": "c8bfce24e1daacf75b810a7266c7eda67eb1d6914fe1bbddfea0d6a86250ee77",
+        "bytes": 10960675,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF325KTI.tsv",
+        "sha256": "12f2ddfbd068720f05cef0c6802c9fc4b4ea98bac83845d62cbba4f3649cffbe",
+        "bytes": 11066214,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF321HCT.tsv",
+        "sha256": "8de9f71bce82827ea583865983d1bbf06e36e4c7495632c22c3fb36076e9dc8f",
+        "bytes": 10888164,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF736CCO.tsv",
+        "sha256": "1b9be5e12f0b64dc1a593ad04b16365ce4ea900b1524ba59023a41fef41df877",
+        "bytes": 10852917,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF172AFC.tsv",
+        "sha256": "8ecde96d56f0be82b514df1126702d0ab69dc35cd227ebc39366a290434e8fdf",
+        "bytes": 11176308,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF677KYO.tsv",
+        "sha256": "82988197d3175947c2afc136d284c5fb4aeefffd83fca904a18f1642af459529",
+        "bytes": 11176683,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF155ZUU.tsv",
+        "sha256": "7e7092df9bb7a08ae2e2121653ce8e53f7fefdc86507aa349c628f4c26569db9",
+        "bytes": 11049242,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF993LWR.tsv",
+        "sha256": "28e2b1d02ac8e2cdaca8e921b1303f8ce33e79f6c2e9f711e6462350c4ecaa3a",
+        "bytes": 11039475,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF526TMF.tsv",
+        "sha256": "460e8b573206306ea33e0ee6bf6711cadc335633d8b89943aa8549a1260ac2a9",
+        "bytes": 10815847,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF807ORH.tsv",
+        "sha256": "7ad4ef9694c2900a3e0cd8a40dc64e9b095c88b2b73a5fce15a0995c0f9844dd",
+        "bytes": 10821121,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF198VCX.tsv",
+        "sha256": "6f67af2f60f8e7aa7403711a2cc815b8f7d5362497aababae5d6e4a8dc11cfa8",
+        "bytes": 10834428,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF223GBX.tsv",
+        "sha256": "00f6512a82d649bcdfd44a295c68d6cbf6769cb907793d978afb5beb27c79fb2",
+        "bytes": 10941052,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF166LSM.tsv",
+        "sha256": "257cba8f9cb77e33765f977643f21c40271d862ab563846afbe09f2831594c10",
+        "bytes": 10853636,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF314OZK.tsv",
+        "sha256": "7bbfe61b268e2c7847fb7f3670288e4ee1fdf12d41ee45bc56af1849b9758216",
+        "bytes": 10806152,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TKR.tsv",
+        "sha256": "efe0bd2de174518201586aa3a7b6264af3bc148b0d33fac4b2f37e331d6afb0b",
+        "bytes": 10790670,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF306DIV.tsv",
+        "sha256": "947d2df99c7c3517589a6e2780fc17c8187b7d67d76d9befb5abb8f82d27d56c",
+        "bytes": 10831170,
+        "partition": null
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF416QUL.tsv",
+        "sha256": "26ebe77bfea175892c0da172c9f080cdce937f8ff0e377cb751da379502a3301",
+        "bytes": 11195080,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_result.json",
+        "sha256": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+        "bytes": 51911,
+        "partition": null
+      }
+    ],
+    "input_count": 30,
+    "assembly": "GRCh38, GENCODE V29 gene models",
+    "coordinates": "n/a: gene-level quantifications keyed by gene_id",
+    "parameters": {
+      "scale": 0.2145911381525326,
+      "nothing_is_fitted": "NOTHING IS FITTED IN THIS LANE. There is no free parameter of any kind: no scale, no intercept, no per-gene and no per-cell parameter, no threshold, no weighting and no transformation is estimated from the fresh RNA or from anything else. The single number the comparison needs, the scale, is the constant SCALE taken from `ac5580b` (SCALE_ORIGIN). The code REFUSES TO FIT: `fit_scale` raises NoFitError when called, and the run calls it nowhere, so a fit cannot be introduced by accident and cannot be introduced quietly. Because nothing is fitted, no training/held-out split is needed to protect the fresh measurement: no fresh value enters any estimate, so every gene of the population is out of sample by construction. The split is nevertheless used to DEFINE the primary population (POPULATION), for the one reason that M2h's +0.04339 was read on its held-out genes and the primary reading here must be the same genes, so the two numbers are comparable",
+      "interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "resamples": 2000,
+      "seed": 20261010,
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      }
+    },
+    "exclusions": [
+      "genes 7h did not admit",
+      "genes the fresh measurement does not resolve in all thirteen cells"
+    ],
+    "partitions": {
+      "primary": "the primary population is M2h's held-out genes, as the registration pins them",
+      "reported_beside": "M2h's training genes and all of 7h's genes, deciding nothing (POPULATION)"
+    },
+    "code_cleanliness": {
+      "git_sha": "761b4f9b1873f30e313fde77d38c49cc3f4d7e51",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/freshrna_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/freshrna_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/freshrna_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/freshrna_run.py"
+      ],
+      "counting_path_count": 154,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "761b4f9b1873f30e313fde77d38c49cc3f4d7e51",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/freshrna_run.py",
+        "--post-hoc"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "761b4f9b1873f30e313fde77d38c49cc3f4d7e51",
+      "code_cleanliness_git_sha": "761b4f9b1873f30e313fde77d38c49cc3f4d7e51",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 761b4f9"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 471,
+      "opens_under_data": 88,
+      "files_read": 30,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
