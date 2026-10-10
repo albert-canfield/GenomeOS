@@ -611,8 +611,8 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
         accessible, accessible_basis = surface_score(c)
         if accessible is None:
             return "unknown", (
-                f"curated localisation places {c.gene} at the {loc.primary.replace('_', ' ')}, but the "
-                f"surface score cannot establish that this tumour's product is reachable: {accessible_basis}"
+                f"{c.gene} is curated as reachable from outside the cell ({loc.primary.replace('_', ' ')}), "
+                f"but the surface score cannot establish that this tumour's product is: {accessible_basis}"
             )
         outside = [r for r in loc.extracellular_regions]
         if outside:
