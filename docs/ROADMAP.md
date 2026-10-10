@@ -617,7 +617,15 @@ History: ROADMAP-HISTORY.md §3 E, lines 1345–1655; gastrulation rows in §5 i
   `therapeutics/synthetic_lethality.py` exist. The demo runs at data level 1 only. The scan's healthy
   reference is 20 tissues of population consensus, not a matched normal.
 - **Next.** 1. Wire the deep-deletion dependency (DepMap) into the pipeline's evidence, registered
-  before it is scored. 2. Decide whether a surface score reads the alteration, then build it, since
+  before it is scored: **done 2026-10-10** (lane-depmapwire; `c2f1fa9` registered, `1181068`, `064ad9e`,
+  `e26ebf9`, `52edaac` measured). `therapeutics/dependency.py` turns a deep deletion in the patient's
+  copy-number table into dependency candidates from the 2026-09-16 sweep's 44 frozen pairs, each with its
+  sweep row and a test on DepMap lines of the stated lineage, in a list kept apart from the targets and
+  labelled cell-line or computational, never patient-derived. **The ten benchmark rows are identical in
+  every field**; no case carries a deep deletion. The CDKN2A glioma test case yields WDR77 and PRMT5,
+  unknown without a lineage and supported in CNS/Brain lines (47 deleted against 28 kept); exploratory,
+  after the registered result: in those lines the dependency rides on MTAP. A cell-line dependency is a
+  hypothesis for the tumour, not a measurement in it. 2. Decide whether a surface score reads the alteration, then build it, since
   it moves every case's numbers: **done 2026-10-10** (lane-surface; `7c0f234` registered, `1350f51`,
   `7242ea8`, `9602c6d` measured). `therapeutics/product.py` reads the product's extent from the
   reconstructed altered sequence or from `hgvsp` and holds it against the curated topology: a stop
