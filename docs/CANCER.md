@@ -212,6 +212,34 @@ The layer does not join the shared `LIBRARIES` catalogue on import —
 effect of importing `genomeos.cancer` would be a surprise. `register(LIBRARIES,
 LAYERS)` wires it in one call, whenever that area wants it.
 
+## Cohort expression across tumour types, attempted 2026-10-10
+
+Only `data/results/expression_brca_tcga_pan_can_atlas_2018.json` existed. ROADMAP §4 asked for the
+other TCGA studies. First checked: does anything read these files? `genomeos/therapeutics/providers.py`
+(`CBioPortalCohortProvider.warm`/`.cohort`) calls `CBioPortal().expression_distribution()` live, through
+its own `DiskCache("cohort")`, never through `data/results/expression_*.json`; the ten rows of
+`data/results/therapeutic_benchmark_v2.json` set no `cohort_study` at all. So these files are a
+standalone reference, not a benchmark input, and adding more cannot move a committed benchmark row.
+
+The rule fixed before any fetch: one TCGA PanCancer Atlas 2018 study per distinct tumour type named in
+the ten benchmark rows (`luad` lung adenocarcinoma, `skcm` melanoma, `lgg` glioma, `laml` AML, `dlbc`
+B-cell lymphoma, `stad` gastric/gastroesophageal; `brca` breast already present), each with the
+command's own default driver panel (no `--genes` override), so coverage stays systematic. The 25
+remaining PanCancer Atlas 2018 studies are cheap (same REST calls, no bulk download) and a reasonable
+next step, left for a following lane.
+
+**Blocked.** `genomeos cancer expression --study X` writes through `genomeos.results.save_result`,
+which refuses any name not already on `data/results_legacy.txt` unless the payload carries a complete
+`result_manifest`. `genomeos/cancer/cbioportal.py` caches nothing to disk — every call is a live REST
+round trip — so a new study's manifest can never carry a populated `inputs` entry (`sha256` of a real
+local file), and the write is refused and quarantined. The one sanctioned path, "add a name only in a
+reviewed commit that says why" (docs/DATA.md, "The result registry"), was attempted and the edit to
+`data/results_legacy.txt` was refused by this session's own permission classifier as a shared-resource
+change; per this lane's rules, a harness refusal is recorded and that step stops, not routed around.
+No study beyond the existing BRCA file was fetched. A later lane with that edit available, or a
+caching change to `genomeos/cancer/cbioportal.py` that gives a new study's manifest a real input to
+hash, can pick the six studies above back up without re-deriving the rule.
+
 ## Next
 
 - Expression: tumour-versus-normal RNA to find surface proteins that are
