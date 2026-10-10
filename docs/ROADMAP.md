@@ -538,7 +538,14 @@ History: ROADMAP-HISTORY.md §3 D, lines 1123–1344.
   follow a Wnt read at a measured contact, 22 maternal factors segregated by named divisions; all eight
   registered predictions held. Terminal-level knockouts: pop-1, skn-1, pal-1, mom-2 and mom-5 reproduced in
   direction; **pie-1 not** (the germ line is lost as published, but the program makes no intestine instead
-  of extra, because `presents_mom2` needs PIE-1 in P2). The shipped `embryo_factors.bio` stays at 0. 2. The second human mechanism module after haematopoiesis:
+  of extra, because `presents_mom2` needs PIE-1 in P2). The shipped `embryo_factors.bio` stays at 0. **pie-1
+  partly resolved 2026-10-10** (lane-pie1; `2b4b2ff` registered before any rule changed, `01c64ba` result,
+  `d2ffce1` applied): of three sourced corrections, only C3 survived, MOM-2 presented while P2 holds PIE-1 or
+  POS-1 (Oldenbroek 2013, Tabara 1999); C1 lost Du 2014's par-2 E→MS and C2 broke mom-2, mom-5 and par-2. pie-1
+  now keeps E's intestine (0 → 34) and loses the germ line; **the published extra intestine is still not
+  reproduced** (34 is the wild type's count). Wild type 56/56/0 and every other knockout unchanged; par-2's
+  outcome rests on a stated premise, not a measurement. Open: `founders.bio` keeps the PIE-1-only gate, and
+  Oldenbroek 2013's mom-2(or42) observation conflicts with the program's mom-2 expectation. 2. The second human mechanism module after haematopoiesis:
   the small-intestinal crypt as registered in `460c46f`, then its run and its mutants. 3. A measured contact table for the embryo over time, to replace the curated one: **topology done 2026-10-10** (CShaper, Cao et al. 2020, CC BY 4.0, 479 pairs reproducible in 17 embryos, `3007896`; it carries no time or area, and ABa never touches P2).
   4. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12. 5. A `differentiate` that may be
   read after a stated delay. 6. `share:` in `haematopoiesis.to_bio`.
