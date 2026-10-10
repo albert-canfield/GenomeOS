@@ -558,19 +558,27 @@ def dossier(name: str, root: Path | None = None) -> str:
         lines.append("")
         lines.append(
             "Raw weighted sums over the person's genotypes from PGS Catalog weight tables, with the share of "
-            "each score's variants read; not percentiles (the catalog publishes no population distribution), "
-            "and only within the ancestries each score was built in. _weights curated; the sum derived_"
+            "each score's variants read, and the percentile (with its interval) in a distribution modelled "
+            "from gnomAD allele frequencies of the person's declared group; UNKNOWN where the group is not "
+            "covered or the model does not hold. A percentile is a position among people, not a risk, and "
+            "only within the ancestries each score was built in. _weights and frequencies curated; the sum "
+            "and the percentile derived_"
         )
         lines.append("")
-        lines.append("| score | trait | publication | variants used | raw score |")
-        lines.append("|---|---|---|---|---|")
+        lines.append(
+            "| score | trait | publication | variants used | raw score | percentile (interval), group |"
+        )
+        lines.append("|---|---|---|---|---|---|")
+        from genomeos.genome.pgs_reference import cell
+
         for r in pgs:
             m = r.get("score") or {}
             pub = m.get("publication") or {}
             who = f"{pub.get('author') or ''} {pub.get('year') or ''}".strip()
             used = f"{r.get('variants_used', 0):,} of {r.get('variants_in_score', 0):,}"
             raw = f"{r.get('raw_score', 0):+.4f}"
-            lines.append(f"| {m.get('id', '')} | {m.get('trait') or ''} | {who} | {used} | {raw} |")
+            pct = cell(r.get("reference"))
+            lines.append(f"| {m.get('id', '')} | {m.get('trait') or ''} | {who} | {used} | {raw} | {pct} |")
     cv = load("coding.json")
     if cv:
         bc = cv["by_consequence"]

@@ -291,3 +291,65 @@ def test_score_person_reports_unknown_reference_without_ancestry(tmp_path, monke
     r = polygenic.score_person("P", "PGS999998", root, know)
     assert r["reference"]["status"] == "UNKNOWN" and r["reference"]["percentile"] is None
     assert "not a risk" in r["reference"]["note"]
+
+
+def test_describe_and_cell_word_the_percentile_and_unknown():
+    ok = {
+        "status": "ok",
+        "percentile": 62.14,
+        "group": "gnomADg:asj",
+        "group_label": "Ashkenazi Jewish",
+        "interval": {"combined": [48.0, 74.9]},
+        "variants": {"comparable": 280, "in_score": 313, "weight_share_comparable": 0.9},
+        "ld": {"reading": "holds"},
+    }
+    line = ref.describe(ok)
+    assert "62.1" in line and "48.0 to 74.9" in line and "280 of 313" in line and "not a risk" in line
+    assert ref.cell(ok) == "62.1 (48.0-74.9), asj"
+    gone = {"status": "UNKNOWN", "reason": "no ancestry declared for this person, and no group is borrowed"}
+    assert ref.describe(gone).startswith("percentile UNKNOWN: no ancestry")
+    assert ref.cell(gone) == "UNKNOWN" and ref.cell(None) == "UNKNOWN"
+
+
+def test_dossier_carries_the_percentile_column(tmp_path, monkeypatch):
+    from genomeos.genome import individuals as ind
+
+    root = tmp_path / "people"
+    d = root / "P"
+    d.mkdir(parents=True)
+    monkeypatch.setattr(
+        ind,
+        "list_individuals",
+        lambda r=None: [{"name": "P", "builtin": False, "chromosomes": [], "evidence": "t"}],
+    )
+    reference = {
+        "status": "ok",
+        "percentile": 10.0,
+        "group": "gnomADg:nfe",
+        "interval": {"combined": [5.0, 18.0]},
+    }
+    (d / "pgs_PGS1.json").write_text(
+        json.dumps(
+            {
+                "score": {"id": "PGS1", "trait": "t"},
+                "variants_used": 3,
+                "variants_in_score": 4,
+                "raw_score": 1.0,
+                "reference": reference,
+            }
+        )
+    )
+    (d / "pgs_PGS2.json").write_text(
+        json.dumps(
+            {
+                "score": {"id": "PGS2", "trait": "u"},
+                "variants_used": 3,
+                "variants_in_score": 4,
+                "raw_score": 1.0,
+            }
+        )
+    )
+    page = ind.dossier("P", root)
+    assert "| PGS1 | t |  | 3 of 4 | +1.0000 | 10.0 (5.0-18.0), nfe |" in page
+    assert "| PGS2 | u |  | 3 of 4 | +1.0000 | UNKNOWN |" in page
+    assert "not a risk" in page

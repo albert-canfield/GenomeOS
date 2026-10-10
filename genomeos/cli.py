@@ -3185,13 +3185,17 @@ def cmd_individual(args: argparse.Namespace) -> int:
             print(md)
         return 0
     if args.action == "pgs":
+        from genomeos.genome.pgs_reference import describe
         from genomeos.genome.polygenic import DEFAULT_SCORES, compare, score_person
 
         scores = args.score or list(DEFAULT_SCORES)
         for s in scores:
             try:
                 r = score_person(
-                    args.name, s, progress=lambda m: print("  " + m, flush=True) if args.verbose else None
+                    args.name,
+                    s,
+                    progress=lambda m: print("  " + m, flush=True) if args.verbose else None,
+                    fetch_frequencies=True,
                 )
             except FileNotFoundError as ex:
                 print(ex)
@@ -3205,6 +3209,7 @@ def cmd_individual(args: argparse.Namespace) -> int:
                 f"({r['called']:,} called, {r['assumed_reference']:,} reference inside trusted regions, "
                 f"{r['missing']:,} missing, {r['allele_mismatch']:,} allele mismatches)"
             )
+            print("    " + describe(r.get("reference")))
             others = compare([p["name"] for p in ind.list_individuals()], s)
             if len(others) >= 2:
                 print(

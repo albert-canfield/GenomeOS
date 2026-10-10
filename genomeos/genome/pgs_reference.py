@@ -831,3 +831,29 @@ def panel_check(
             "reading": "holds" if lo <= 1 <= hi else "fails",
         }
     return {"snv_rows": snv_rows, "groups": groups, "pooled": pooled}
+
+
+# -- words for the CLI and the dossier ------------------------------------------------------------------
+def describe(reference: dict[str, Any] | None) -> str:
+    """One line: the percentile with its interval, group and denominators, or UNKNOWN and why."""
+    if not reference:
+        return "percentile UNKNOWN: no reference computed"
+    if reference.get("status") != "ok":
+        return f"percentile UNKNOWN: {reference.get('reason')}"
+    v = reference["variants"]
+    lo, hi = reference["interval"]["combined"]
+    ld = "" if reference.get("ld") else "; LD not measured"
+    return (
+        f"percentile {reference['percentile']:.1f} (interval {lo:.1f} to {hi:.1f}{ld}) among gnomAD "
+        f"{reference.get('group_label') or reference['group']} genomes, the declared group, over "
+        f"{v['comparable']:,} of {v['in_score']:,} variants ({v['weight_share_comparable']:.0%} of the "
+        "|weight|); a position among people, not a risk"
+    )
+
+
+def cell(reference: dict[str, Any] | None) -> str:
+    """The dossier's short form: `62.1 (48.0-74.9), asj` or `UNKNOWN`."""
+    if not reference or reference.get("status") != "ok":
+        return "UNKNOWN"
+    lo, hi = reference["interval"]["combined"]
+    return f"{reference['percentile']:.1f} ({lo:.1f}-{hi:.1f}), {reference['group'].split(':')[-1]}"
