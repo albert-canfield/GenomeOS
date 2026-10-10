@@ -953,6 +953,7 @@ History: ROADMAP-HISTORY.md §3 H, lines 1986–2057.
   elements where neither gene is one K562 depends on (one-sided Mann-Whitney p 0.1024). The positive
   control separates in the same population (757 promoter elements, p 5.0e-62), so this is a negative
   result about the attribution, not about the assay. No difference detected is not no difference.
+- **A second screen for cell-level closure, searched: none qualifies (2026-10-10, lane-closure2; `8f0b545` code and gate committed before any counting, `04fee7e`, `62e1310`, `1017045` result).** The gate: a screen qualifies only if its arm A (attributed gene a dependency in that cell, nearest coding gene not) reaches M3's 35 elements and its own floor arm could detect a separation no larger than M3's 0.6217. Ten public element-level fitness screens were counted from positions and DepMap alone, no guide count or phenotype read; the chain needs a sweep track and a DepMap column in one cell, so only K562 and HepG2 are reachable. Best: Greenleaf's sparse cCRE tiling, 3,716 elements, arm A 12, detectable 0.7117. Reading: `NO_CANDIDATE_QUALIFIES`; nothing registered, nothing run. What would change it: a HepG2 screen beyond MYC and MYB, a sweep in a screened DepMap cell, or admitting the borderline dependency band.
 - **Missing.** Every target claim rests on the reused ENCODE CRISPRi file and one cell type. Only
   0.52% of the real unknown is measured, in 202 of its 882 blocks; deletion requests on them are
   stopped (§5 item 10's stop list) and the oligo library is not ordered (D8), so clause 2 moves only on
