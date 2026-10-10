@@ -25,9 +25,9 @@ from __future__ import annotations
 
 import copy
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
-from genomeos.ir import Action, Module, Rule
+from genomeos.ir import STRENGTH_UNKNOWN_WHY, UNKNOWN, Action, Module, Rule
 from genomeos.runtime.grn import (
     RATE_PROVENANCE_ATTRS,
     TRANSFERRED_RATE_QUANTITY,
@@ -681,6 +681,7 @@ UNRESOLVED = {
     "rate_split_infeasible": "the measured rate cannot carry this response and a positive basal rate",
     "observation_null_effect": "the observed removal fold is exactly 1: the mechanism moves nothing",
     "observation_missing": "no effect with a unit could be read from the rule",
+    "strength_unknown": "the rule states `strength: unknown`: no magnitude to read, and none is chosen",
     "observation_censored": "the only number is a strength clipped at 1",
     "observation_summarised": "an experimental strength is the maximum of several pairs, not one reading",
     "not_identifiable": "more than one mechanism regulates the gene in this context",
@@ -756,7 +757,12 @@ def _kind(rule: Rule) -> str:
 
 
 def observation_of(rule: Rule, module: Module) -> Observation | Unresolved:
-    """The removal response a compiled rule states, or why it states none (OBSERVATION_UNITS)."""
+    """The removal response a compiled rule states, or why it states none (OBSERVATION_UNITS).
+
+    A rule stating `strength: unknown` states none, whatever its note says: the program says the
+    magnitude is not known, and the bridge reads it as that, never as 0 or 1."""
+    if rule.strength is UNKNOWN:
+        return Unresolved("strength_unknown", rule.source, f"{rule.target}: {STRENGTH_UNKNOWN_WHY}")
     kind = _kind(rule)
     if kind == "predicted":
         m = _EFFECT.search(rule.evidence.note)
@@ -830,6 +836,15 @@ def parameterize(
     out = copy.deepcopy(module) if build else module
     regulatory = (Action.ACTIVATE, Action.INHIBIT)
     active = [r for r in module.active_rules(context) if r.action in regulatory]
+    unknown = [u for u, _why in module.strength_gate(context)]
+    if unknown:
+        # active_rules returns a rule stating `strength: unknown` as a copy at strength 0; the bridge
+        # reads the original, so the unknown is reported by name (strength_unknown), never read as 0
+        own = {id(r) for r in module.rules}
+        active = [
+            r if id(r) in own else next((u for u in unknown if replace(u, strength=r.strength) == r), r)
+            for r in active
+        ]
     if build:
         out.rules = [r for r in out.rules if r.action not in regulatory]
     b = Bridged(module=out, context=dict(context))

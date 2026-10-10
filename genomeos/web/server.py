@@ -2377,6 +2377,8 @@ class Api:
 
         ctx = {"cell_type": cell.id}
         silenced = module.silenced_genes(ctx)
+        # rules stating `strength: unknown`: the engine holds each at strength 0, and says why
+        unknown = {id(r): why for r, why in module.strength_gate(ctx)}
         rules = []
         for r in module.rules:
             if not r.applies(ctx):
@@ -2384,6 +2386,8 @@ class Api:
             elif r.source in silenced or r.target in silenced:
                 off = ", ".join(g for g in (r.source, r.target) if g in silenced)
                 status, why = "silenced", f"{off} is not in this cell type's `expresses` list"
+            elif id(r) in unknown:
+                status, why = "held", unknown[id(r)]
             else:
                 status, why = "active", ""
             rules.append(
@@ -2392,7 +2396,8 @@ class Api:
                     "source": r.source,
                     "action": r.action.value,
                     "target": r.target,
-                    "strength": r.strength,
+                    # the word the program states, never a number the reader would take as measured
+                    "strength": "unknown" if r.strength is UNKNOWN else r.strength,
                     "threshold": r.threshold,
                     "threshold_unit": r.threshold_unit,
                     "hill": r.hill,
@@ -2481,6 +2486,13 @@ class Api:
                 "The network runtime gates rules by their `when` clause alone and never applies "
                 f"`expresses`, so the {counts['silenced_out']} silenced rule(s) are integrated anyway "
                 "unless the run is asked to hold the silenced genes at zero."
+            )
+        if unknown:  # counted only then, so a program with none keeps the counts it always had
+            counts["held"] = sum(1 for r in rules if r["status"] == "held")
+            notes.append(
+                f"{counts['held']} rule(s) state `strength: unknown`. The engine holds each at strength 0 "
+                "rather than choose a number for it, so each is listed as held: it is in the network and "
+                "moves nothing until the program states its strength."
             )
 
         return {
