@@ -262,6 +262,10 @@ READER_STATES = ("open", "poised", "closed", "unknown")
 READER_OPEN = "open"
 READER_UNKNOWN = "unknown"
 
+#: Why a rule stated `strength: unknown` is held: the program says the number is not known, and the
+#: engine does not choose one for it (1.0 least of all, which is the strongest the rule can be).
+STRENGTH_UNKNOWN_WHY = "strength: unknown; the program states no strength, and the engine does not choose one"
+
 
 @dataclass(slots=True)
 class Reader:
@@ -357,6 +361,12 @@ class Rule:
     Hill function with `threshold` (the source level giving half-maximal effect)
     and `hill` (cooperativity).
 
+    `strength` is UNKNOWN where the program states `strength: unknown` (activates and inhibits
+    only). Such a rule is HELD, never run at a strength the engine chose: `Module.active_rules`
+    returns it as a copy at strength 0 and `strength_gate` names it with why. A rule with NO
+    strength line still runs at 1.0, as it always has: inline programs in tests and scripts rely on
+    it (every activates or inhibits rule in data/demo, genomeos/std and data/organisms states one).
+
     `threshold_unit` is empty when the threshold is an amount, as it always was, and names a molar
     unit when the program stated a concentration instead (v0.4 §4.1). A concentration is only a
     number once a volume divides it, so the located runtime converts it at the compartment where the
@@ -367,7 +377,7 @@ class Rule:
     source: str
     action: Action
     target: str
-    strength: float = 1.0
+    strength: float | _Unknown = 1.0  # UNKNOWN: stated `strength: unknown`, held (see the docstring)
     threshold: float = 1.0
     hill: float = 2.0
     when: dict[str, str] = field(default_factory=dict)
@@ -1002,12 +1012,37 @@ class Module:
         only enhancer would then drive the gene to maximum, the opposite of what closed means. Held, the
         gene keeps its activator and the activator's term is zero. `reader_gate` names every held rule
         and why. Rules without `through` are selected exactly as before.
+
+        A rule whose strength the program states `unknown` is held the same way, for the same reason,
+        in every cell: `strength_gate` names it. Rules with a stated or default strength are unchanged.
         """
         selected = self._selected(context)
-        if not any(r.through for r in selected):
+        held = self._held(context, selected)
+        if not held:
             return selected
-        held = {id(r) for r, state, _ in self.reader_gate(context, selected) if state != READER_OPEN}
         return [replace(r, strength=0.0) if id(r) in held else r for r in selected]
+
+    def _held(self, context: dict[str, str], selected: list[Rule]) -> set[int]:
+        """ids of the selected rules held at strength 0: an unknown strength, or a reader not `open`."""
+        held = {id(r) for r, _ in self.strength_gate(context, selected)}
+        if any(r.through for r in selected):
+            held |= {id(r) for r, state, _ in self.reader_gate(context, selected) if state != READER_OPEN}
+        return held
+
+    def held_rules(self, context: dict[str, str]) -> list[Rule]:
+        """The selected rules `active_rules` holds at strength 0 in this context, each once, whichever
+        gate holds it (the reader, an unknown strength, or both)."""
+        selected = self._selected(context)
+        held = self._held(context, selected)
+        return [r for r in selected if id(r) in held]
+
+    def strength_gate(
+        self, context: dict[str, str], rules: list[Rule] | None = None
+    ) -> list[tuple[Rule, str]]:
+        """(rule, why) for every rule that states `strength: unknown`, among `rules` (default: the rules
+        whose `when` and `expresses` gates pass in this context). Each is held at strength 0."""
+        pool = self._selected(context) if rules is None else rules
+        return [(r, STRENGTH_UNKNOWN_WHY) for r in pool if r.strength is UNKNOWN]
 
     def _selected(self, context: dict[str, str]) -> list[Rule]:
         """The rules the `when` and `expresses` gates pass, before the reader."""
@@ -1217,6 +1252,8 @@ class Module:
             rd.pop("__type__", None)
             rd["evidence"] = evid(conf(rd).get("evidence", {}))
             rd["action"] = Action(rd["action"])
+            if "strength" in rd:
+                rd["strength"] = unk(rd["strength"])  # "UNKNOWN": stated `strength: unknown`, held
             m.rules.append(Rule(**rd))
         for evd in data.get("events", []):
             evd.pop("__type__", None)
@@ -1275,6 +1312,7 @@ __all__ = [
     "READER_OPEN",
     "READER_STATES",
     "READER_UNKNOWN",
+    "STRENGTH_UNKNOWN_WHY",
     "REGIME_ALLOCATIONS",
     "REGIME_FATES",
     "REGIME_RECHECKS",

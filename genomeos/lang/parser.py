@@ -442,6 +442,20 @@ def _through(value: str, rule: Rule, line_no: int) -> str:
     return names[0]
 
 
+def _unknown_strength(rule: Rule, line_no: int) -> object:
+    """`strength: unknown`: the program says the number is not known. The rule is HELD at strength 0
+    by `Module.active_rules` rather than run at 1.0, which is what a rule with no strength line gets
+    (lane-engdebts, 2026-10-10). Only activates and inhibits carry their effect in a strength, so on
+    any other action holding at strength 0 would hold nothing, and the parser refuses it."""
+    if rule.action not in _GATED_ACTIONS:
+        raise BioLangError(
+            f"line {line_no}: rule {rule.id!r} {rule.action.value} {rule.target!r} cannot state "
+            "`strength: unknown`: only activates and inhibits rules carry their effect in a strength, so "
+            "holding any other rule at strength 0 would hold nothing"
+        )
+    return UNKNOWN
+
+
 def _reader(b: Block, ev: Evidence, conf: float) -> Reader:
     """`reader <CellType> { open: ...; poised: ...; closed: ...; unknown: ... }` (v0.5)."""
     cell = b.header.strip()
@@ -645,8 +659,17 @@ def _compile_block(b: Block, module: Module) -> None:
             confidence=conf,
         )
         for key in ("strength", "threshold", "hill"):
-            if key in p:
-                setattr(rule, key, _float(p[key], key, b.line))
+            if key not in p:
+                continue
+            if key == "strength" and p[key].strip().lower() == "unknown":
+                rule.strength = _unknown_strength(rule, b.line)
+                continue
+            # a strength names its other legal value in the error, so a typo is told what it may be
+            setattr(
+                rule,
+                key,
+                _float(p[key], "strength (a number or `unknown`)" if key == "strength" else key, b.line),
+            )
         # a threshold may be a concentration instead of an amount; the unit is what says which, and
         # the located runtime divides by the compartment's absolute volume (v0.4 §4.1)
         if "threshold" in p and len(p["threshold"].split()) > 1:

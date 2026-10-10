@@ -23,6 +23,10 @@ live in BIOLANG-v0.1.md, v0.2.md and v0.3.md, BIOLANG-v0.4-ECONOMY.md and BIOLAN
   in the cell's network at strength 0, so its target keeps its regulator and is never read as
   unregulated. No cell type in the context, no reader for it, or a reader silent on `E` all read
   `unknown`. A reader states accessibility, not function.
+- `strength: unknown` on an activates or inhibits rule states that its strength is not known. The
+  rule is held at strength 0 in every cell, kept in the network as a reader keeps a rule it holds,
+  and `bio check` and `bio run` name it with the reason; on any other action the parser refuses
+  it. A rule with no `strength` line runs at 1.0, as it always has.
 - `!=` is refused: `k != v` is a parse error naming the clause. Write the values that do match
   instead (`a|b`, `absent`, or a comparison); what `!=` would mean on a missing key is
   undecided, and no program in the repo uses it.
@@ -107,7 +111,7 @@ May contain `transcript` blocks.
 
 | property | form | meaning |
 |---|---|---|
-| `strength` | `0..1` |  |
+| `strength` | `0..1 | unknown` | activates and inhibits: `unknown` HOLDS the rule at strength 0 in every cell, reported with its reason by `bio check`, rather than running it at a strength the engine chose. A rule with no strength line runs at 1.0 (unchanged; inline programs rely on it) |
 | `threshold` | `number [M|mM|uM|nM|pM|fM]` | source level giving half-maximal effect: an amount, or v0.4 a concentration with a molar unit, divided by the absolute_volume of the compartment where the rule acts |
 | `hill` | `number` | cooperativity |
 | `when` | `k = v, k = v` | context in which the rule applies |

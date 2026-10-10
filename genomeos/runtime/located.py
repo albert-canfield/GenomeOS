@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import math
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from genomeos.ir import UNKNOWN, Action, Module, Regime, confidence_stated, molecules_in, to_molar
 from genomeos.lang.located import layout, rule_sites
@@ -102,7 +102,13 @@ class LocatedRuntime:
                 self.params[name] = p.value
         self.proteins = {p.id: p for p in module.proteins()}
         self.genes = {g.id: g for g in module.genes()}
-        self.rules = [r for r in module.rules if r.applies(context or {})]
+        # a rule stated `strength: unknown` is held at strength 0, as `Module.active_rules` holds it:
+        # kept, so its target keeps its regulator, and never run at a strength the engine chose
+        self.rules = [
+            replace(r, strength=0.0) if r.strength is UNKNOWN else r
+            for r in module.rules
+            if r.applies(context or {})
+        ]
         self._knock_out()
         self._build()
 

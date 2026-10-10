@@ -18,7 +18,8 @@
                                     the program's own `assert:` lines are checked too
     # test: B.mRNA final > 10 in cell_type=K562     v0.5: judged on a run in that context
     # test: active_rules == 3 in cell_type=K562     rules in that cell's network; held_rules: the
-                                    ones its reader holds at strength 0 (BIOLANG-v0.5-READER.md)
+                                    ones held there at strength 0, by its reader
+                                    (BIOLANG-v0.5-READER.md) or by a stated `strength: unknown`
 
 GenomeOS is the first application of this toolchain; nothing here needs
 the genome layer, so it can be packaged apart (docs/ARCHITECTURE.md).
@@ -36,7 +37,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import READER_OPEN, UNKNOWN, Module, confidence_stated
+from genomeos.ir import UNKNOWN, Module, confidence_stated
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
 from genomeos.lang.tools import (
@@ -241,7 +242,7 @@ def evaluate(
         elif subject == "active_rules":
             got = len(module.active_rules(ctx))
         elif subject == "held_rules":
-            got = sum(1 for _, state, _ in module.reader_gate(ctx) if state != READER_OPEN)
+            got = len(module.held_rules(ctx))  # the reader's holds and `strength: unknown`, each once
         elif ctx:
             kind, run = in_context.get(_key(ctx), (None, None))
             got = None

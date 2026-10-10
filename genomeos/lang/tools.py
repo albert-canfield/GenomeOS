@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import READER_OPEN, READER_STATES, UNKNOWN, Module, confidence_stated
+from genomeos.ir import READER_OPEN, READER_STATES, UNKNOWN, Module, Rule, confidence_stated
 from genomeos.lang import parse_file
 
 
@@ -82,6 +82,7 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
         )
         lines += [f"    {r.id}" for r in active]
         lines += reader_lines(module, context)
+        lines += strength_lines(module.strength_gate(context))
     elif module.readers or any(r.through for r in module.rules):
         cells = sorted({rd.cell_type for rd in module.readers})
         through = sum(1 for r in module.rules if r.through)
@@ -89,6 +90,8 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
             f"  readers: {len(module.readers)} for {len(cells)} cell types ({', '.join(cells) or 'none'}); "
             f"{through} rules act through an element (`--context cell_type=X` shows which run there)"
         )
+    if not context:
+        lines += strength_lines(module.strength_gate({}, module.rules), everywhere=True)
     lines += confidence_lines(module, weak=False)
     unknown_params = [p.name for p in module.parameters.values() if p.value is UNKNOWN]
     if unknown_params:
@@ -131,6 +134,23 @@ def reader_lines(module: Module, context: dict[str, str]) -> list[str]:
     return lines
 
 
+HELD_NAMED = 20  # rules named one per line in the `strength: unknown` report; the rest are counted
+
+
+def strength_lines(gate: list[tuple[Rule, str]], everywhere: bool = False) -> list[str]:
+    """The rules held at strength 0 because the program states `strength: unknown`, with why. They
+    are never run at 1.0, the strength a rule with no strength line gets (lane-engdebts, 2026-10-10).
+    `everywhere`: the gate was read over every rule, not one context's selection."""
+    if not gate:
+        return []
+    where = " in every cell" if everywhere else ""
+    lines = [f"  strength unknown: {len(gate)} rules held at strength 0{where}; {gate[0][1]}"]
+    lines += [f"    held {r.id}: strength unknown" for r, _ in gate[:HELD_NAMED]]
+    if len(gate) > HELD_NAMED:
+        lines.append(f"    ... and {len(gate) - HELD_NAMED} more")
+    return lines
+
+
 def compile_module(module: Module) -> str:
     return json.dumps(module.to_dict(), indent=2)
 
@@ -155,6 +175,7 @@ def run_module(
         f"{context or '{}'}; {hours} h simulated"
     ]
     lines += reader_lines(module, context or {})
+    lines += strength_lines(module.strength_gate(context or {}))
     for s in traj.species:
         xs = traj.levels[s]
         lines.append(f"  {s:<16} {spark(xs)}  final={xs[-1]:8.2f}  peaks={traj.peaks(s)}")
@@ -283,6 +304,8 @@ def run_located(
         f"  regime: {rg['treatment']} ({rg['integrator']}, dt {dt} h), update {rg['update']}, "
         f"allocation {rg['allocation']}, seed {rg['seed']}" + ("" if rg["declared"] else "  [not declared]"),
     ]
+    # the located runtime selects by `when` alone, so the report reads the gate over the same rules
+    lines += strength_lines(module.strength_gate({}, [r for r in module.rules if r.applies(context or {})]))
     for s in vm.species:
         xs = res.levels[s]
         conf = res.confidence.get(s)
