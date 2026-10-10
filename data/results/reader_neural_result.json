@@ -1,0 +1,2039 @@
+{
+  "result": "reader_neural_result",
+  "date": "2026-10-10",
+  "registration": "data/results/reader_neural_registration.json at 2e624a874d4c23db0dbbe24dd9cb39e5f71559bc",
+  "reading_committed_at": "2768b40152e800881f1a2bc0667e87e402127896",
+  "biosample": "spinal cord",
+  "comparator": "K562",
+  "counts": {
+    "n": 13,
+    "a": 6,
+    "k": 0,
+    "b": 6,
+    "c": 0,
+    "sc_read": 13669,
+    "sc_coding": 20094,
+    "k_read": 12775,
+    "k_coding": 20094
+  },
+  "per_gene": {
+    "PAX7": {
+      "spinal_cord": true,
+      "K562": false
+    },
+    "IRX3": {
+      "spinal_cord": true,
+      "K562": false
+    },
+    "DBX1": {
+      "spinal_cord": false,
+      "K562": false
+    },
+    "DBX2": {
+      "spinal_cord": true,
+      "K562": false
+    },
+    "PAX6": {
+      "spinal_cord": true,
+      "K562": false
+    },
+    "NKX6-1": {
+      "spinal_cord": true,
+      "K562": false
+    },
+    "NKX2-2": {
+      "spinal_cord": true,
+      "K562": false
+    },
+    "EVX1": {
+      "spinal_cord": false,
+      "K562": false
+    },
+    "EN1": {
+      "spinal_cord": false,
+      "K562": false
+    },
+    "VSX2": {
+      "spinal_cord": false,
+      "K562": false
+    },
+    "MNX1": {
+      "spinal_cord": false,
+      "K562": false
+    },
+    "ISL1": {
+      "spinal_cord": false,
+      "K562": false
+    },
+    "SIM1": {
+      "spinal_cord": false,
+      "K562": false
+    }
+  },
+  "excluded_genes": [],
+  "outcome": "PASS",
+  "p_one_sided": 0.01562,
+  "excess_spinal_cord": -0.2187,
+  "excess_K562": -0.6358,
+  "genome_wide_read_share_spinal_cord": 0.6803,
+  "genome_wide_read_share_K562": 0.6358,
+  "reading": "Sanity check passed. Fetal spinal cord's reader calls 6 of 13 registered ventral neural tube genes read and K562's 0 of 13 (6 read only in spinal cord, 0 only in K562; one-sided exact sign test p = 0.01562). Over the genome the two read 13,669 of 20,094 and 12,775 of 20,094 coding genes, so the excess at these genes is -0.219 in spinal cord against -0.636 in K562. The new biosample's promoter calls look like neural tissue's at these genes. This checks the biosample's label; accessibility is not function, and it says nothing about what any of these genes does.",
+  "descriptive_other_biosamples": {
+    "note": "not a test and not part of the verdict: the same counts for the rest of the panel",
+    "rows": {
+      "HepG2": {
+        "read_of_listed": "2 of 13",
+        "genome_wide": "11,641 of 20,094",
+        "excess": -0.4255
+      },
+      "GM12878": {
+        "read_of_listed": "0 of 13",
+        "genome_wide": "10,698 of 20,094",
+        "excess": -0.5324
+      },
+      "H1": {
+        "read_of_listed": "1 of 13",
+        "genome_wide": "12,042 of 20,094",
+        "excess": -0.5224
+      },
+      "IMR-90": {
+        "read_of_listed": "0 of 13",
+        "genome_wide": "12,737 of 20,094",
+        "excess": -0.6339
+      },
+      "SK-N-SH": {
+        "read_of_listed": "2 of 13",
+        "genome_wide": "13,556 of 20,094",
+        "excess": -0.5208
+      },
+      "cardiac muscle cell": {
+        "read_of_listed": "2 of 13",
+        "genome_wide": "12,951 of 20,094",
+        "excess": -0.4907
+      },
+      "keratinocyte": {
+        "read_of_listed": "2 of 13",
+        "genome_wide": "10,964 of 20,094",
+        "excess": -0.3918
+      },
+      "hepatocyte": {
+        "read_of_listed": "3 of 13",
+        "genome_wide": "14,135 of 20,094",
+        "excess": -0.4727
+      },
+      "astrocyte": {
+        "read_of_listed": "2 of 13",
+        "genome_wide": "12,639 of 20,094",
+        "excess": -0.4751
+      },
+      "CD14-positive monocyte": {
+        "read_of_listed": "0 of 13",
+        "genome_wide": "11,351 of 20,094",
+        "excess": -0.5649
+      },
+      "testis": {
+        "read_of_listed": "3 of 13",
+        "genome_wide": "15,078 of 20,094",
+        "excess": -0.5196
+      },
+      "ovary": {
+        "read_of_listed": "1 of 13",
+        "genome_wide": "14,006 of 20,094",
+        "excess": -0.6201
+      }
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE portal (https://www.encodeproject.org): DNase-seq and Histone ChIP-seq metadata and released GRCh38 peak files",
+        "version": "queried 2026-10-10",
+        "licence": "ENCODE data use policy (https://www.encodeproject.org/help/citing-encode/)"
+      },
+      {
+        "accession": "GENCODE v50 comprehensive annotation (GFF3)",
+        "version": "v50"
+      },
+      {
+        "accession": "reader v1 per-chromosome readings (data/results/reader_<biosample>_<chrom>.json)",
+        "version": "on disk at the run; each file's sha256 is in inputs"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/reader_neural_registration.json",
+        "sha256": "925ca610153f87989023aff3029c9db0a6cb334e1a0227b686c22c32aecd2198",
+        "bytes": 24350,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_genome_wide.json",
+        "sha256": "020cb2842bffdd1a3e2d66162ccbd47f5d251fd59f387f048ceaba4f4fc6d7f7",
+        "bytes": 175842,
+        "partition": null
+      },
+      {
+        "path": "GENCODE v50 GFF3 of the listed genes' chromosomes",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/gencode_v50_chr1.gff3.gz",
+            "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+            "bytes": 15781966
+          },
+          {
+            "path": "data/reference/gencode_v50_chr11.gff3.gz",
+            "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+            "bytes": 9161789
+          },
+          {
+            "path": "data/reference/gencode_v50_chr12.gff3.gz",
+            "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+            "bytes": 8537589
+          },
+          {
+            "path": "data/reference/gencode_v50_chr14.gff3.gz",
+            "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+            "bytes": 5446220
+          },
+          {
+            "path": "data/reference/gencode_v50_chr16.gff3.gz",
+            "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+            "bytes": 6795096
+          },
+          {
+            "path": "data/reference/gencode_v50_chr2.gff3.gz",
+            "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+            "bytes": 12336546
+          },
+          {
+            "path": "data/reference/gencode_v50_chr20.gff3.gz",
+            "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+            "bytes": 3974515
+          },
+          {
+            "path": "data/reference/gencode_v50_chr4.gff3.gz",
+            "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+            "bytes": 6522948
+          },
+          {
+            "path": "data/reference/gencode_v50_chr5.gff3.gz",
+            "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+            "bytes": 7000086
+          },
+          {
+            "path": "data/reference/gencode_v50_chr6.gff3.gz",
+            "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+            "bytes": 7623994
+          },
+          {
+            "path": "data/reference/gencode_v50_chr7.gff3.gz",
+            "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+            "bytes": 8058560
+          }
+        ],
+        "sha256": "88406445bd3095697d62be156a0ca971b615900734a1b745b3999c08f3feacea",
+        "bytes": 91239309,
+        "files": 11,
+        "partition": null
+      },
+      {
+        "path": "reader per-chromosome readings",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr1.json",
+            "sha256": "a249d9b65f61a9d77af603586fc970293b4adbd372274c52f3539287a5dfdc2e",
+            "bytes": 334089
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr10.json",
+            "sha256": "dc618fd5d897f55f6d96a3bb486f50c12b91117e675b9f435b86031fd698d95c",
+            "bytes": 186064
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr11.json",
+            "sha256": "7362ef942429a233098e81eec1bf2fb734fb2bf68b64cbb3b5dcbd61a96c18d7",
+            "bytes": 195986
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr12.json",
+            "sha256": "2aece2a3074ccb87ca4ce0092c5225b6b1a7f6df6b17d282f820a799b14f0fff",
+            "bytes": 187904
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr13.json",
+            "sha256": "6280a7114a9821a782782afa80007f12848f3dcd0f10951e59efaca118b69d26",
+            "bytes": 133139
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr14.json",
+            "sha256": "f4ba5a9ea7f1452f7f636b9e8867e37640e7ceb9082735b42c426c834d5c51ff",
+            "bytes": 129476
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr15.json",
+            "sha256": "ce91c54e9b671262f4368070f9ce4e7006aa47c2b0c169e03d2f8f9a4478345d",
+            "bytes": 111912
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr16.json",
+            "sha256": "45d92644b42c4cd581125d82ecf70a233d6fec17c0645da1730cceea05d6cce4",
+            "bytes": 117258
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr17.json",
+            "sha256": "c92dc05a59881ab60f84a27e4d8559c55ac5fe62a6b0ee17992b31c77bb4e8d9",
+            "bytes": 116530
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr18.json",
+            "sha256": "4e815b1e5deb3393350e9bd8a4af11f1440fdcff4efc87aa84a19f7d083be2b9",
+            "bytes": 112796
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr19.json",
+            "sha256": "cfd5ff849b2cd1b225dcd9b0d89233085699565221332d23ad80f58ba0e56fa2",
+            "bytes": 77617
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr2.json",
+            "sha256": "bc1cefdebf27713ccc821d33d2c783537f2841c4725ca7f0ea987541db091619",
+            "bytes": 330173
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr20.json",
+            "sha256": "f49d9be1dc20537a23f48b5efcae915b701b0909b2df50756eb2004656873ac2",
+            "bytes": 99251
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr21.json",
+            "sha256": "a4d3141c028522b09bc4321614f61a77c20d3847142ab2562d57e26e053fd25b",
+            "bytes": 48218
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr22.json",
+            "sha256": "972029aa423cf7cb8f51f878d8dab5d4e1cb1af6f764161bb44fb10e454fb24e",
+            "bytes": 53366
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr3.json",
+            "sha256": "04d63b767f436f4af6c6e9a1a2376108d01d59ae72d10e98e54e7be7988b0b79",
+            "bytes": 286450
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr4.json",
+            "sha256": "71a500c515f560092fcb881ffdd9617f27f8d0bc3d03ee1d46b35d5b9f4b2f7a",
+            "bytes": 262791
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr5.json",
+            "sha256": "c7586be5e4172222c28e1cb24974efadbc9a5f91d331d1c80550b2b807d7a4f3",
+            "bytes": 248689
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr6.json",
+            "sha256": "02076d9875c07de0d42a8d00e1a1bb05db2ca70b5dcfa39351d0d1d68b3f3c05",
+            "bytes": 236777
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr7.json",
+            "sha256": "5c7dd35032d16bc29c8f5ec9136b1eea4448bcfb4067404378db22e0089d9b3f",
+            "bytes": 227558
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr8.json",
+            "sha256": "98e3f362eb5d550029ef56841a3e2570386ecf43d57a873fec8ef67109bc8330",
+            "bytes": 221796
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr9.json",
+            "sha256": "ca76a99ee664d76e736aceb3ee5c1f4b8e28ffc6f56aa74d6d4e13148bb63323",
+            "bytes": 165035
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chrX.json",
+            "sha256": "1613f41c7572a9b9b92931cb6940c0700a437e0d37e74fb0229cedc95b89267e",
+            "bytes": 168803
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chrY.json",
+            "sha256": "ef398f336c948145be4a308966b982254ab30edb555186f71538c2acfeb97cd2",
+            "bytes": 11510
+          },
+          {
+            "path": "data/results/reader_GM12878_chr1.json",
+            "sha256": "6cff4c49a45a66bd22d9a8b3a22000492c254c375004ec158d0e369523cf8d1c",
+            "bytes": 331986
+          },
+          {
+            "path": "data/results/reader_GM12878_chr10.json",
+            "sha256": "22ac799840787f0f16f544333c22037c0ee9f58e3f04de2b520496176234fce9",
+            "bytes": 184897
+          },
+          {
+            "path": "data/results/reader_GM12878_chr11.json",
+            "sha256": "c4cc11370d40dbfcb1be6df3b3d08561ff78a6f60a218c3e7e4f7acfe21b5618",
+            "bytes": 195106
+          },
+          {
+            "path": "data/results/reader_GM12878_chr12.json",
+            "sha256": "1698a677bfa4c3c70c47865d953917f256f24b02bec9b66b1ec2ef2fc443f778",
+            "bytes": 187250
+          },
+          {
+            "path": "data/results/reader_GM12878_chr13.json",
+            "sha256": "454f5654d3af3fd8e66790ee5fe8d022a1dc7ad7467611e6d8c6bdb83c78b02d",
+            "bytes": 132339
+          },
+          {
+            "path": "data/results/reader_GM12878_chr14.json",
+            "sha256": "944450495d1d3b39cd582674e9bf6c2208cbd42ca72e124ecfba59caa38c185e",
+            "bytes": 128791
+          },
+          {
+            "path": "data/results/reader_GM12878_chr15.json",
+            "sha256": "6f228841fd0c483f99933b204bb3790b949207159fb809e1f651fd02cd440670",
+            "bytes": 111587
+          },
+          {
+            "path": "data/results/reader_GM12878_chr16.json",
+            "sha256": "a93585aea79b138707fbe591bfedf5acf59615b8e2b8945c256ef84059b88903",
+            "bytes": 116863
+          },
+          {
+            "path": "data/results/reader_GM12878_chr17.json",
+            "sha256": "c169a0f925fe2757437f3480a0349c38304e3bb94fd6e0028fd58a45e2931174",
+            "bytes": 116517
+          },
+          {
+            "path": "data/results/reader_GM12878_chr18.json",
+            "sha256": "d299e47c487c602bd167628124e059758dbab22c36be80b2fcb4c4a50d06fc3d",
+            "bytes": 112370
+          },
+          {
+            "path": "data/results/reader_GM12878_chr19.json",
+            "sha256": "518cb4a9876e5c22d459bb671476630a1f0807f97f8236917ae728d0f19ae81a",
+            "bytes": 77054
+          },
+          {
+            "path": "data/results/reader_GM12878_chr2.json",
+            "sha256": "185197d96d85f5a3517b0bbedece340be860486f6b2bd9a53c90c8e3fd2d8aa6",
+            "bytes": 327993
+          },
+          {
+            "path": "data/results/reader_GM12878_chr20.json",
+            "sha256": "9d7af8781be4f75610cf38018d5909b7cec3cf44cd4d7a05ec548f91f7b6bab0",
+            "bytes": 98691
+          },
+          {
+            "path": "data/results/reader_GM12878_chr21.json",
+            "sha256": "5fcaca258520af90b4dd009f8d0508892b4229a9a4102766deb59cf88b4e7c00",
+            "bytes": 48918
+          },
+          {
+            "path": "data/results/reader_GM12878_chr22.json",
+            "sha256": "c6da4671fff10faeb43b2c0e2651122336494b118a703ad71df858f626086599",
+            "bytes": 53551
+          },
+          {
+            "path": "data/results/reader_GM12878_chr3.json",
+            "sha256": "a5c3652de18d22122249921df23882dc5e6b1dae963e4556442f53011e32a2ae",
+            "bytes": 285570
+          },
+          {
+            "path": "data/results/reader_GM12878_chr4.json",
+            "sha256": "b3e4b6398b8b6b53da8972cf5d9fc04420b612c9882a5374a1dcf2c319c23bac",
+            "bytes": 260940
+          },
+          {
+            "path": "data/results/reader_GM12878_chr5.json",
+            "sha256": "cbe6f822fbdc02452eda19868038a46bab4da34fc5ad51b8316452b0b9a0d160",
+            "bytes": 247273
+          },
+          {
+            "path": "data/results/reader_GM12878_chr6.json",
+            "sha256": "5d5c2f37f978dc42833cfce50a9de5dfb0069a9c0818ccf8f6e5d2bc7a20f69b",
+            "bytes": 235209
+          },
+          {
+            "path": "data/results/reader_GM12878_chr7.json",
+            "sha256": "d9bc5380518c91e9589b47d2268cab7dd9d29048a5340a764c2ff9da801a4fa5",
+            "bytes": 226066
+          },
+          {
+            "path": "data/results/reader_GM12878_chr8.json",
+            "sha256": "bb7b9e23893404a10c1410622350e2061e75d3981d23047ee0fed98183839502",
+            "bytes": 220237
+          },
+          {
+            "path": "data/results/reader_GM12878_chr9.json",
+            "sha256": "42805dc9b248dfb0ee11e0ae78b49bff639006dfb688d25fded5f3ce2704253f",
+            "bytes": 163841
+          },
+          {
+            "path": "data/results/reader_GM12878_chrX.json",
+            "sha256": "f81cf476564b684af7373827d7d8f33f487f6f05a22ecb8ab5949e219121c4f6",
+            "bytes": 167563
+          },
+          {
+            "path": "data/results/reader_GM12878_chrY.json",
+            "sha256": "d491789b511df16fa43437a4d8f27561ffcd9ee2b67f2670579298f39fbb089a",
+            "bytes": 11583
+          },
+          {
+            "path": "data/results/reader_H1_chr1.json",
+            "sha256": "78da4f290c6c2bab9f7843fe1996d1914741c467a7570fef9129186206e55fc3",
+            "bytes": 333928
+          },
+          {
+            "path": "data/results/reader_H1_chr10.json",
+            "sha256": "afe925264cafca21862dfc7082b4eb1359d40996697d246bd70adc5e0610a75c",
+            "bytes": 186756
+          },
+          {
+            "path": "data/results/reader_H1_chr11.json",
+            "sha256": "049a40f7d0a6dc080c79dd41d82a78e201fdd4a320cd4775c5d41f74567029e8",
+            "bytes": 195679
+          },
+          {
+            "path": "data/results/reader_H1_chr12.json",
+            "sha256": "e43c59763074835768f8ecdacd2ed3c1715f217029cf0be2875d467009d8ef89",
+            "bytes": 187658
+          },
+          {
+            "path": "data/results/reader_H1_chr13.json",
+            "sha256": "48c0471d66dde32bbfb82b1d145fc26dce1da8fc4f416250bd9b12b73af86cec",
+            "bytes": 132645
+          },
+          {
+            "path": "data/results/reader_H1_chr14.json",
+            "sha256": "c376eecd79d2be84ce828eb7bc5356f20c320fb9336d7efe09ac47f2bcb9fead",
+            "bytes": 128950
+          },
+          {
+            "path": "data/results/reader_H1_chr15.json",
+            "sha256": "8b0abd4fec94a8b205874336cae5c119056893197093982bafa7e951487a2947",
+            "bytes": 111536
+          },
+          {
+            "path": "data/results/reader_H1_chr16.json",
+            "sha256": "b85bc8e9c57a5df66ab7680c83707f9473ccafc1ba97a75d4467674ba915b7be",
+            "bytes": 116418
+          },
+          {
+            "path": "data/results/reader_H1_chr17.json",
+            "sha256": "916726d2871616908035e5c2d62ab04959285d66d4f2496b170e9187106d06c2",
+            "bytes": 116437
+          },
+          {
+            "path": "data/results/reader_H1_chr18.json",
+            "sha256": "1a333748fb412c1fbf455c2f386e358dacdeebd35578b8e394c85ba818a04d7e",
+            "bytes": 112066
+          },
+          {
+            "path": "data/results/reader_H1_chr19.json",
+            "sha256": "2bc27aba5265a13f08ff3bfa27b79efe574f639ea8385c9973369305b1a09b03",
+            "bytes": 75927
+          },
+          {
+            "path": "data/results/reader_H1_chr2.json",
+            "sha256": "ee8069d296b3d24196ab9f9d6ea1e6c264bdfc5f7661a1fa3d8775c26fd977b1",
+            "bytes": 330955
+          },
+          {
+            "path": "data/results/reader_H1_chr20.json",
+            "sha256": "0d719574846697bb08127ef301bd836f00f00084f25a668c08d43da644528a53",
+            "bytes": 98245
+          },
+          {
+            "path": "data/results/reader_H1_chr21.json",
+            "sha256": "1ba10ebbf5dee5761f33bb8d32e0bdee6fd2079aaa3f750394ec231e6d55dfd7",
+            "bytes": 48174
+          },
+          {
+            "path": "data/results/reader_H1_chr22.json",
+            "sha256": "88ad0b4c06ed0745e6b3245d131943a3179adb4b8327103255a7d493ab3c3403",
+            "bytes": 53317
+          },
+          {
+            "path": "data/results/reader_H1_chr3.json",
+            "sha256": "a0b107e8e317bb1e313505736d5a1a860254d96f48adadb9459c235ac97170b5",
+            "bytes": 287566
+          },
+          {
+            "path": "data/results/reader_H1_chr4.json",
+            "sha256": "3e79710e6d14c01db084bde98761ddb6b0d502cb6ee312214b371f36c2e61448",
+            "bytes": 263286
+          },
+          {
+            "path": "data/results/reader_H1_chr5.json",
+            "sha256": "4f2455a4bc495faff0d4ce13a8dc4194c6bf9b993257293f3a367d2812052efa",
+            "bytes": 248804
+          },
+          {
+            "path": "data/results/reader_H1_chr6.json",
+            "sha256": "b7dc055ec5e1dd5f410f379b60035db7f28f8ea06ba5423db0a2707ca1cb253b",
+            "bytes": 236464
+          },
+          {
+            "path": "data/results/reader_H1_chr7.json",
+            "sha256": "2768eb718eeac6691a97439d5b3cbe2f67df58300b977981740d96c774769241",
+            "bytes": 227439
+          },
+          {
+            "path": "data/results/reader_H1_chr8.json",
+            "sha256": "1b66725490a48621a070c420debd2cd871a5426bb7cef3a162e6de5e197b1f08",
+            "bytes": 221488
+          },
+          {
+            "path": "data/results/reader_H1_chr9.json",
+            "sha256": "ef8ae88f66f23f9c6095b904811c62c88459d6263bf2f459813c742f070859ee",
+            "bytes": 164027
+          },
+          {
+            "path": "data/results/reader_H1_chrX.json",
+            "sha256": "b31b9caf374e6766e908efb51f9799752cb3b3755d5920006af21e89bda196c8",
+            "bytes": 166908
+          },
+          {
+            "path": "data/results/reader_H1_chrY.json",
+            "sha256": "2e269aeb638c53c0e0a70c6195572730989ea016853eed0571473db71dee84d2",
+            "bytes": 11619
+          },
+          {
+            "path": "data/results/reader_HepG2_chr1.json",
+            "sha256": "e2e49e290e16365a21c3edf2096bcc1252d7ffe71c1f790f84d81501b27958c4",
+            "bytes": 332388
+          },
+          {
+            "path": "data/results/reader_HepG2_chr10.json",
+            "sha256": "da22241fdb7e81201b3880efcf157df018f3c7d1fd6897b2159b79b057fefb1c",
+            "bytes": 185132
+          },
+          {
+            "path": "data/results/reader_HepG2_chr11.json",
+            "sha256": "919f39ab9bb5044892c0c4b403ff500f124f027c75d83a25dca38e4cb15be7de",
+            "bytes": 195363
+          },
+          {
+            "path": "data/results/reader_HepG2_chr12.json",
+            "sha256": "cd8a3024b487a67728fa1082d8c04050d664ac8ddf9d23d398baa1beb0001f16",
+            "bytes": 186755
+          },
+          {
+            "path": "data/results/reader_HepG2_chr13.json",
+            "sha256": "5c93fbd512f3481bf554b29dd97af9806c5409285b9b6050ab03e97acef4ff9f",
+            "bytes": 132406
+          },
+          {
+            "path": "data/results/reader_HepG2_chr14.json",
+            "sha256": "47dbebac3d68cc30c116c6d503853a3311ae303508c1385abf6a5f00372d2abf",
+            "bytes": 128221
+          },
+          {
+            "path": "data/results/reader_HepG2_chr15.json",
+            "sha256": "33e9f1ae1233054c54d78846199c1ad59b65874c1a3c61e03ff94f1d3f4ba730",
+            "bytes": 111006
+          },
+          {
+            "path": "data/results/reader_HepG2_chr16.json",
+            "sha256": "8e46357e2b85b9df7118e42cc63f758f5dcd50b49cc67ecebaea442f2b4ae1a2",
+            "bytes": 115842
+          },
+          {
+            "path": "data/results/reader_HepG2_chr17.json",
+            "sha256": "3ebc26149c267696d429985be03b9b6a1456c58ba0aca55d538a6aeaebeec5b1",
+            "bytes": 115553
+          },
+          {
+            "path": "data/results/reader_HepG2_chr18.json",
+            "sha256": "27874fff7f9d859f15b6af81b2a1762b2b7e83c69dc07424650ce48ea7a7dd9d",
+            "bytes": 111789
+          },
+          {
+            "path": "data/results/reader_HepG2_chr19.json",
+            "sha256": "1a22c8e0cd44544b351e2531355adf2810be996bc5c89b42681cb09c5c266752",
+            "bytes": 76106
+          },
+          {
+            "path": "data/results/reader_HepG2_chr2.json",
+            "sha256": "7b991c72b8447680666190ecbf3d3858ac263dee745640b89822d0feb3293c82",
+            "bytes": 329847
+          },
+          {
+            "path": "data/results/reader_HepG2_chr20.json",
+            "sha256": "35c367acc94a599b08fdb4d8a9cdb0b5b9c8b6f5ecf8ee41411661ded780330b",
+            "bytes": 97969
+          },
+          {
+            "path": "data/results/reader_HepG2_chr21.json",
+            "sha256": "486c7026a0fc61a49b752572a42bc05874ce98284570b3be3d22f363e460ea23",
+            "bytes": 48279
+          },
+          {
+            "path": "data/results/reader_HepG2_chr22.json",
+            "sha256": "b2a7c4de2fe4786a75beca1efa064df998cc1869881319a1d3ea9b85d2907ade",
+            "bytes": 52801
+          },
+          {
+            "path": "data/results/reader_HepG2_chr3.json",
+            "sha256": "52893adcb4ca381a17da3a3ca54a2e8d7f0f36cdc62dcfe48d3f3d05ed9b9d34",
+            "bytes": 286017
+          },
+          {
+            "path": "data/results/reader_HepG2_chr4.json",
+            "sha256": "d860905f3cbd266fb20c100f427c8fdfe73006dc8a15f8d2c7fae0c9c5c6636d",
+            "bytes": 262410
+          },
+          {
+            "path": "data/results/reader_HepG2_chr5.json",
+            "sha256": "da142910be23ad7244ad9b421f5048cc165f48587059e919c92fb61773c1213a",
+            "bytes": 248117
+          },
+          {
+            "path": "data/results/reader_HepG2_chr6.json",
+            "sha256": "1f9d66f567d8e5dce83928f69f945d6186fbb9955b8a3b9680af89b63c786484",
+            "bytes": 236134
+          },
+          {
+            "path": "data/results/reader_HepG2_chr7.json",
+            "sha256": "b22696be19afd45ee79bd9f8bce0d9a1475697c6f46b341a991d49b1e7c765bf",
+            "bytes": 226896
+          },
+          {
+            "path": "data/results/reader_HepG2_chr8.json",
+            "sha256": "2b4f484858bc834bc9cca728eb445e153b715224d67a5eebe1a965f1f85bf356",
+            "bytes": 221145
+          },
+          {
+            "path": "data/results/reader_HepG2_chr9.json",
+            "sha256": "15cfbcb28c5dbaab835965714bd0e00d9f8f155f608018904a01d76c23cab0ec",
+            "bytes": 163782
+          },
+          {
+            "path": "data/results/reader_HepG2_chrX.json",
+            "sha256": "8fc38633a064ef4bc592e39b5696d718feb93e2b2f0454bf0b5be1d0d40eb488",
+            "bytes": 166812
+          },
+          {
+            "path": "data/results/reader_HepG2_chrY.json",
+            "sha256": "6c9d866e6e59fbf48cc5dac175f0e38559abd2ce3d3e5ced3a204666f74f8440",
+            "bytes": 11465
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr1.json",
+            "sha256": "134c568aeb7d93eb3bed7b2493519846e17c390c7f9040b654d65c5616c2a647",
+            "bytes": 331215
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr10.json",
+            "sha256": "b0e8837545267b5fbc7b2fedb904a79abd54ade821c5c49ebfab153880d5c2cb",
+            "bytes": 184762
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr11.json",
+            "sha256": "1e36fe17be53e139cd0c231dbe1d1b68a77328469daa43a5ce577b4677deb96b",
+            "bytes": 194116
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr12.json",
+            "sha256": "781f67f21f5a244a1d3e6d27f35b646689fc56c6c8f7dfc47f77258046a2ff1c",
+            "bytes": 186431
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr13.json",
+            "sha256": "fd796fc164410f722fdaa69f4660f206978bf597b6edd4a6040a119f463cf540",
+            "bytes": 132290
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr14.json",
+            "sha256": "a262c85e122fd0a3f0f41ce1d1c971dbcaee97e1f3b6dab7bf0f7c70fa518a58",
+            "bytes": 128169
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr15.json",
+            "sha256": "50a9f1687da5d4d2d52c365333fdfe2e8ec274687b20340e26da9ce70216a46f",
+            "bytes": 110379
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr16.json",
+            "sha256": "adb737a894390d113864109b617c540ea042002246b81815f139c277a3c930b6",
+            "bytes": 116027
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr17.json",
+            "sha256": "6cb6cce6cb2e1f73b06b27aad1852ad14ec56a5a3490f9b89b4ffd16d144f1d0",
+            "bytes": 114908
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr18.json",
+            "sha256": "b6d55de296e635ddea6a0e81a5c19ca0ba83ec53e9e951d9cc72545350f8398f",
+            "bytes": 111946
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr19.json",
+            "sha256": "d27088b1f01e10ffd2e528c3d3373eb50248795b8fae0fb1320fa37276d5d35d",
+            "bytes": 75743
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr2.json",
+            "sha256": "865756b3e25a257252d6689e1b0211f4c27e393f996369d5a2589dd7d32acb2a",
+            "bytes": 329001
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr20.json",
+            "sha256": "19eac2445971d38054184efe1e56c4c3062233b6a59524bfc549968ad883a04c",
+            "bytes": 97704
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr21.json",
+            "sha256": "f574b476ffa8ae6bef15218f1e1ac59bd39077a44db6aaa5c6a31a5031e188ca",
+            "bytes": 48042
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr22.json",
+            "sha256": "69512806409fde225bcf06f9144eee6ada1240174569753d99c7f713d2e2b9c5",
+            "bytes": 52910
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr3.json",
+            "sha256": "3f724d1e7136f63b85a68d7c728ccc2846ed317629fbc2ee918cff935f8067ad",
+            "bytes": 286394
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr4.json",
+            "sha256": "62b005e0683798f18af19c1317974b0ddfe7c4382d431cecf890758d531c0f81",
+            "bytes": 262401
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr5.json",
+            "sha256": "648f8d81d2320919050b4d91fc29f4c1eaf83eb71d935ef201b221e84f7f0d2e",
+            "bytes": 247443
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr6.json",
+            "sha256": "fdec07dd62dc3eb5dc6d27947ac5508ab99967ec79f89f3b074e45d533559484",
+            "bytes": 235015
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr7.json",
+            "sha256": "7f5bade9b775fdd2b598ec6280c9372a4c74c02d152a35172f7979f699b9b1d7",
+            "bytes": 226721
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr8.json",
+            "sha256": "2df687facf0a92236bd872c6b0bb7f17caaebba9d09a2066e22b59bc87297e36",
+            "bytes": 221036
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr9.json",
+            "sha256": "c50516dc0c8d2b547921156164508d708c064933e42c9f3658ba6479f7bb1b0d",
+            "bytes": 163412
+          },
+          {
+            "path": "data/results/reader_IMR_90_chrX.json",
+            "sha256": "748fed5e5272ae9f77ab453daa19a1a2a026fd971e582c0fe069d59eb0c31d4e",
+            "bytes": 166732
+          },
+          {
+            "path": "data/results/reader_IMR_90_chrY.json",
+            "sha256": "c1af44bd3b328366d156fca634c1ddf3f4325952951a004af9686522cbac5580",
+            "bytes": 11232
+          },
+          {
+            "path": "data/results/reader_K562_chr1.json",
+            "sha256": "acdd8574b1d173c671ced47491b300fbc6c50d8ca6c32778af69f6808b6b0f17",
+            "bytes": 333099
+          },
+          {
+            "path": "data/results/reader_K562_chr10.json",
+            "sha256": "c0c9be33f83f073734e8eac15180b29681c128c519b5c67e73ce11fbd808d7bc",
+            "bytes": 185578
+          },
+          {
+            "path": "data/results/reader_K562_chr11.json",
+            "sha256": "c158600dad2c05ad39d94365693ea7f71871aad79b8ae9e470644da6f8a43f0d",
+            "bytes": 195095
+          },
+          {
+            "path": "data/results/reader_K562_chr12.json",
+            "sha256": "67c0be73abd678456a41b08a06a7aa479da7c5c1e82b4e4c20a96706b28f7308",
+            "bytes": 186706
+          },
+          {
+            "path": "data/results/reader_K562_chr13.json",
+            "sha256": "6fab6d682d7798c67391efb65ec8b67ba656d9a6e7a46ffaea1d4d33a9cb5408",
+            "bytes": 132387
+          },
+          {
+            "path": "data/results/reader_K562_chr14.json",
+            "sha256": "8ddf8a8b54ad0c16a50fb6a5b312c6a2a7c9ccf4d6a2efb487cb5e047dd57d62",
+            "bytes": 128264
+          },
+          {
+            "path": "data/results/reader_K562_chr15.json",
+            "sha256": "12b36959478a8c6ef415ce31da0aa3369718d3845f8a492974235fd0feaf2a4a",
+            "bytes": 111095
+          },
+          {
+            "path": "data/results/reader_K562_chr16.json",
+            "sha256": "48b2fbff68b9838372b5b7ea97c326f173b936dbc7b273489fbf1d61b36ef4bf",
+            "bytes": 115882
+          },
+          {
+            "path": "data/results/reader_K562_chr17.json",
+            "sha256": "6ef9fd2e9a003054252cb05317c01e573637aea45b98b9c8a9cd4897ac94b954",
+            "bytes": 115004
+          },
+          {
+            "path": "data/results/reader_K562_chr18.json",
+            "sha256": "365196facdbca7d3b3718c39af02512423bb02ae3b7decf618cf90b88742ebc7",
+            "bytes": 112165
+          },
+          {
+            "path": "data/results/reader_K562_chr19.json",
+            "sha256": "16cd14cebc530847fb2fecd38a1fc6197c4890e5695a5e7d19ae150da894247f",
+            "bytes": 74026
+          },
+          {
+            "path": "data/results/reader_K562_chr2.json",
+            "sha256": "6ee29579a2cbbdd210ce09c784250a97dde4cc52b51bc0aa892096664994d70e",
+            "bytes": 329776
+          },
+          {
+            "path": "data/results/reader_K562_chr20.json",
+            "sha256": "6c2e9ab0ae6f5006de4f6b14333eb2352d5b20774ef84991dc7516b555f053d3",
+            "bytes": 97923
+          },
+          {
+            "path": "data/results/reader_K562_chr21.json",
+            "sha256": "92fc10a002243611a2e7b22ed08a5b83ae979610b3dad4a6083154d15c78fdee",
+            "bytes": 48464
+          },
+          {
+            "path": "data/results/reader_K562_chr22.json",
+            "sha256": "5b3d52fc1c9c12da0aae02c39b0698d10149bdc5d66c891b70e6a4a72d78c913",
+            "bytes": 52522
+          },
+          {
+            "path": "data/results/reader_K562_chr3.json",
+            "sha256": "d502c9201edbb3bc48d0cafbfd8926c730cf6d2e409f406fda824c476c00c7db",
+            "bytes": 286255
+          },
+          {
+            "path": "data/results/reader_K562_chr4.json",
+            "sha256": "cb8d4e90163926709a73adfae49cb125e5e85166219af32b8e60d65e825e1f55",
+            "bytes": 262470
+          },
+          {
+            "path": "data/results/reader_K562_chr5.json",
+            "sha256": "7b57f57aa2eee947e368574622353f139a675905797e540351fe741956728cfc",
+            "bytes": 248622
+          },
+          {
+            "path": "data/results/reader_K562_chr6.json",
+            "sha256": "5affdcb75e8d8c245cefb75a30182ce22b4f38cd3c97054c8571d42a8196c49d",
+            "bytes": 236698
+          },
+          {
+            "path": "data/results/reader_K562_chr7.json",
+            "sha256": "c41f9eb9dd9f5e9cf00a1bb6748854938ee53ac35b3deff392e680327f6a88a3",
+            "bytes": 227281
+          },
+          {
+            "path": "data/results/reader_K562_chr8.json",
+            "sha256": "2c627d4631b227db30951e0ec4550dd56413ac1742fb1a8150e9dfff793fe801",
+            "bytes": 221529
+          },
+          {
+            "path": "data/results/reader_K562_chr9.json",
+            "sha256": "3d982c026c21638e8503fbba08df8f6a2ae53cf42d49eca2ffb08cc204d25a35",
+            "bytes": 164173
+          },
+          {
+            "path": "data/results/reader_K562_chrX.json",
+            "sha256": "724196ce01c97bd2fad44be8ce7b6bec0a42a12eaa4f1de51515e8abac019fed",
+            "bytes": 167025
+          },
+          {
+            "path": "data/results/reader_K562_chrY.json",
+            "sha256": "23c2eac9f2939828d2e77da5f715ae05d2e56ae3d324970edb3edb165102fdad",
+            "bytes": 11091
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr1.json",
+            "sha256": "29dcdca5e819cbaa624b035b956ea00189ee4c34cb1a7327ed5a4fbad738e0ab",
+            "bytes": 328942
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr10.json",
+            "sha256": "584eaadd7cca0f315e7f3685618ee44c9d9d67009785f327a065a734e7a1c452",
+            "bytes": 183204
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr11.json",
+            "sha256": "0204830897cc1b3f72aca7d45962b2d7fdaac8cf63a3cf7acdb9bfbceb72a02d",
+            "bytes": 193013
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr12.json",
+            "sha256": "7c943229028ef442d815a1440b25d4bb7f00644a5c4e68795ddc7ef7d362e869",
+            "bytes": 185558
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr13.json",
+            "sha256": "56a141ee4bdd4d586932228e6418858a2a021432ce77496c4086154909d260f8",
+            "bytes": 131464
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr14.json",
+            "sha256": "1a53a4aafa36849e745c861c24c927792103e40da76036e9a3494e2458c69f65",
+            "bytes": 127700
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr15.json",
+            "sha256": "91fd2be57970fd035adfef03a01447eedd3d6210513bac86609926f154548c7d",
+            "bytes": 109661
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr16.json",
+            "sha256": "75b5286ae5e1d85e44b7b54cb4f00886476e32bf07b290399fbb11047ec1abae",
+            "bytes": 114806
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr17.json",
+            "sha256": "99f6ab90476dfc6fccf9e4cc6a135917bfed93c501cf14ca616a9bd4ecbd5c45",
+            "bytes": 113910
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr18.json",
+            "sha256": "c918d270e1e083dd32336acf9c7217d4d19a8a9da09262590ff7dc13f4350a20",
+            "bytes": 111365
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr19.json",
+            "sha256": "f9a1df222b079f0dee89587fe37968e814237e38d41192d479fcd5f6475f2762",
+            "bytes": 74519
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr2.json",
+            "sha256": "b2968fdf0f9edd18142cc3cfb28728e1128de4a8a43f2176aeb1ab2fa991d99f",
+            "bytes": 326541
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr20.json",
+            "sha256": "39bc34d5c826c797a3692cd34406231dbe937b6d1b0bb98c1ccf75b681290b4c",
+            "bytes": 96717
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr21.json",
+            "sha256": "b22720be07b904ec1c38534a891763b2173c5912b60c036d9fc541779aa216f8",
+            "bytes": 47871
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr22.json",
+            "sha256": "7bbbacb5cfefca8727fa05972635829811f8798e28bd92f0df21f5ab9245827d",
+            "bytes": 51860
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr3.json",
+            "sha256": "fd6bb2ad90fac9e9514444a734924a0fcd9a7c4c3af8b33fdc092d8c0c8944bb",
+            "bytes": 284551
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr4.json",
+            "sha256": "28064ba877bce8bc7969d50f299dc9a44a75654c0d066e68692f8b812b8b2a1c",
+            "bytes": 261454
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr5.json",
+            "sha256": "8c7ac7d2d39c66d907d9598deff4025befd4ef96ff033ac452e452c101989088",
+            "bytes": 246408
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr6.json",
+            "sha256": "624d0b964adabaf79f7a3faba6d85f0518ca69999e927c6a66b440dc60b7fa25",
+            "bytes": 234298
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr7.json",
+            "sha256": "174c7ea58a09a4ae8e45e45b0d3f3d482accfcc2bfd29caf7fc6785b7dec2f3f",
+            "bytes": 225537
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr8.json",
+            "sha256": "f7c20c6a2a80766cfcea722dc91981acd50c4cc6026be87cef0f635b44a3f3cb",
+            "bytes": 219947
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr9.json",
+            "sha256": "c309fabb26522d37645ed522d4b0a36e7275dc5a6e071472025f3f1c3ab3c042",
+            "bytes": 162151
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chrX.json",
+            "sha256": "f2ed159757d582ba72fc2d66c5f21bc0f04fa577d8065dc454d62c08007c0bc9",
+            "bytes": 166504
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chrY.json",
+            "sha256": "e5abf9d45948a3c71d0b533653e0bc6a1b9af0606b502db9ccaf4ec834556cca",
+            "bytes": 11499
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr1.json",
+            "sha256": "197ce4e48537af805c2f38c7fd303f4fb31c6b2022af9e0f8dc59fd1421f3593",
+            "bytes": 330786
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr10.json",
+            "sha256": "3ba396bf300e85f28065ec4f3b871434b065a5a7bc1c5a541f24bc0baec75ecb",
+            "bytes": 184011
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr11.json",
+            "sha256": "89208453ec1ae1e8cc67d5526adccb49c5b5cfb13ac646fcd48751a4404cc6e7",
+            "bytes": 194144
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr12.json",
+            "sha256": "f2009356cc1861e3d2097bf68789cc55aaeb6e3b424170a8b00e8b8cc2a43d5f",
+            "bytes": 186125
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr13.json",
+            "sha256": "23339d8fc8f7fa3562cf22e2da94f837123b4991a744cb0620fd168bd3e6db6e",
+            "bytes": 131739
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr14.json",
+            "sha256": "05661ab603908c408c1cea6ab10b2316ac48de55c6143146855b57f7710d4ef0",
+            "bytes": 127789
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr15.json",
+            "sha256": "8f3ad9d7c57f963f20aa25be859b95e7c0ed898830a84efd564910db6cc8fe1f",
+            "bytes": 110531
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr16.json",
+            "sha256": "a97a4b3620d17234c2d53c202023d764f5d8fed7bf75c710d70eb92e41c40446",
+            "bytes": 115695
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr17.json",
+            "sha256": "d8b5603c69d5de601379432f154a2bb561a4b95af5c66e745c39ac70a2f4b442",
+            "bytes": 114738
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr18.json",
+            "sha256": "c04fb22f5bad898f60989f84172fb03fa982535db4acd49b83fab4617c459cbc",
+            "bytes": 111498
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr19.json",
+            "sha256": "07963c86ffd7ba7f389485404e8f835d5374aee8cf0d4b35f397f47217148ec3",
+            "bytes": 75959
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr2.json",
+            "sha256": "f710bc3f691afe4db7287366f30253b47574cb1d9cb22d190729d9e9aedbd3c3",
+            "bytes": 328447
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr20.json",
+            "sha256": "7db1f25f1f05da3d98119d22361e142e9bbddf3a8debea9ebc26644376a9dd8e",
+            "bytes": 97509
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr21.json",
+            "sha256": "648f4af55a0340131f8e64af03ca31748a5ab681be87f000ae9fe22dcbd7be3e",
+            "bytes": 47958
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr22.json",
+            "sha256": "5ad5433ec05066234d8fc8f1caf3eeebed058683bfa8aec5a4fff80d016485d0",
+            "bytes": 52728
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr3.json",
+            "sha256": "aa098debb7ef928e8a3a72d0aeb8c8e65277f703137f16f15d9c40878afc18c8",
+            "bytes": 285516
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr4.json",
+            "sha256": "8c953d2fb62d72d6ab700939eaabae8ec06ea8bc5d549c871bd2bc1fe569dddf",
+            "bytes": 261452
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr5.json",
+            "sha256": "e9a4f7421686ba2102f6f7aa544bf6fc72ee5f9f18e124352150748dc29ea839",
+            "bytes": 246781
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr6.json",
+            "sha256": "4a6921451efcfbd1daa5983962a6e0f144c06ca085e270bdea61fe345509c11f",
+            "bytes": 235033
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr7.json",
+            "sha256": "8f6e6dd684411d40828958fd5d72e441478dfd4dacb2d1b10d62388c05cc8bb1",
+            "bytes": 225700
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr8.json",
+            "sha256": "ba720a15df2d36a6de624962550066a9b4834862330eb4bef5524a22d17fc6ae",
+            "bytes": 220375
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr9.json",
+            "sha256": "f928195f9259403e7a3f3499787b1db16737605645a7130165493435f1d436a6",
+            "bytes": 163104
+          },
+          {
+            "path": "data/results/reader_astrocyte_chrX.json",
+            "sha256": "fd4be858e5e054fc7b0134ac87d355ed867ebdee921c456d22ed47c0b4675dbb",
+            "bytes": 166240
+          },
+          {
+            "path": "data/results/reader_astrocyte_chrY.json",
+            "sha256": "6a97a0a9ae9627ef6e0cf514d634c7049be1fd8e44a0d30f66d211fb0a24f0c7",
+            "bytes": 11669
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr1.json",
+            "sha256": "b874a726b709af2170b4b2d3cd352ed0b14a61eb860c3a552ab6102149618271",
+            "bytes": 332103
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr10.json",
+            "sha256": "dc01943ace9b2b6206a2cb511d5240cddc26dce75f583ce0e17c414680a98af9",
+            "bytes": 184965
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr11.json",
+            "sha256": "9cdce7afe61d5acf23093e3868df3f804a93d748daa2ae9a8f28b1793d8149fd",
+            "bytes": 194377
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr12.json",
+            "sha256": "1f7df2f6cd242fe8b224df0c50eed9d143449c85623640d71a75274b1fc7b0f4",
+            "bytes": 187054
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr13.json",
+            "sha256": "b68b00873c3dee55df844c5d57b3a28ab241f187b1ac06d14fe07d6ea9149d6d",
+            "bytes": 132179
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr14.json",
+            "sha256": "7f970981c4f939f304815e753d8e776b3e7936c11c398b17d184d80421834e35",
+            "bytes": 128112
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr15.json",
+            "sha256": "42de49045670d63dc507c0d6abfc89136a6b70292ab09be55a3b73bb7c4fc6a3",
+            "bytes": 110882
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr16.json",
+            "sha256": "06209bd19dc6b30554fb46bb09bbf02206d9342f3dc6af3ce20f5426747607e1",
+            "bytes": 116286
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr17.json",
+            "sha256": "7366056c878e51103546247ae891d0421b80e6ce864ba087f90fcf31223b8e54",
+            "bytes": 114914
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr18.json",
+            "sha256": "c0fa3ad970a14a5caf74f2bb74503adcda902db7efe299aa150a82d8c83a2327",
+            "bytes": 111657
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr19.json",
+            "sha256": "cb3ca08ec77c6373861851744104a8a3a157155a815d076149ad00546beec9c7",
+            "bytes": 75055
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr2.json",
+            "sha256": "b5ceec0767ab107d3bd71929996645b932449f051525ccbd3cf99e188655fa85",
+            "bytes": 329786
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr20.json",
+            "sha256": "1ae0ba278bd54c52aa55f5df41d5dc287ef2fd859490140c45ef7dd4f9b8c0e9",
+            "bytes": 97938
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr21.json",
+            "sha256": "877ddcdaa3ffca02729013eef02636f6bb3cdb5afc0b009a51e28401aca8ea32",
+            "bytes": 48094
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr22.json",
+            "sha256": "e4419732cab784586790b57e53b3f841bf5c8af2f69710784ee27d6b767ad3a9",
+            "bytes": 52918
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr3.json",
+            "sha256": "32d8cb79d97abf9b4c3c7da71571fbf6c5454b64c311619f1c4e5559d2ee704c",
+            "bytes": 286607
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr4.json",
+            "sha256": "ef621cb8674043515e201d052fdfedfd31901585b757d062d943ee458f2a7b6f",
+            "bytes": 262506
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr5.json",
+            "sha256": "fff1a04ef1b2fa836f6aa8b23e9d687a8defa8f5b683c9a2f7312de720a48534",
+            "bytes": 247816
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr6.json",
+            "sha256": "eeca99d69e909526aee9cbe7f4f3c23a408d32a3a9f2f2d4a2d5cb6b9061e931",
+            "bytes": 235990
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr7.json",
+            "sha256": "a7159f3e7739c751ed0bb70d92959c8462cb4d50907dd0317bca01ea3cfff12d",
+            "bytes": 226612
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr8.json",
+            "sha256": "b28fb4ff21cdbb2b0b5a593e189c9f9c86f6d1c16a3bd7d92b365ed204a84eb8",
+            "bytes": 221217
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr9.json",
+            "sha256": "a8f889779bf97fe21ca00f985fb79fde2f9627d3cf8895e952c0ae60b2e1b1fa",
+            "bytes": 163635
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chrX.json",
+            "sha256": "28f8ca5e3f4b72ffeb76812afb724bb7f8e8e1376a4b94839655e4293aba8116",
+            "bytes": 166522
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chrY.json",
+            "sha256": "1cd52bb4aec4a72c4edc5468b7a4b0b0577d5c152b55d88ea1618b1213c0e8eb",
+            "bytes": 11600
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr1.json",
+            "sha256": "6b89aefcfddf4c3cfc870c696d917bbdb63e471b89612c184299e2f18d61840b",
+            "bytes": 328454
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr10.json",
+            "sha256": "47ade9cbcf6ce5984667e2b9481816a55347da01b92b659f6e3815072e249c05",
+            "bytes": 183507
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr11.json",
+            "sha256": "d391835c671a945ff051a6b1a6353e1d5e6ebb45c1a9621c6df88efafda8773d",
+            "bytes": 192158
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr12.json",
+            "sha256": "f3880b8715617aa898281b28e478178e7f62bf8ccb35cd644e8eab778fb568b1",
+            "bytes": 184734
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr13.json",
+            "sha256": "6b3a933763ecef6c1b69d8b5059b65111bbad39451a49e8c27fd8c0093f4fe64",
+            "bytes": 131165
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr14.json",
+            "sha256": "1ad7fd2ad1e82518ebc4bd320e92bd558b62af2eb111a099c8c87c47fa319ab5",
+            "bytes": 126899
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr15.json",
+            "sha256": "729bbe046d210ee186a91d1b423f104bc12f9300975ae2ff3f7d264a49dea6a4",
+            "bytes": 109558
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr16.json",
+            "sha256": "84a207a06d4f3b35ebbd9ebe9b05b218d19917b768a6d0011cc7cf0bab896b82",
+            "bytes": 114928
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr17.json",
+            "sha256": "64bbf86c6915d2210875329a468da62e95ecfe5eae47c7325e95dd60cbced066",
+            "bytes": 112912
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr18.json",
+            "sha256": "4ff43770d3e921f34e0d4a0b33c82a05caa5bb4ddb7f7143b0138f7b47782668",
+            "bytes": 110856
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr19.json",
+            "sha256": "ba37acb473f8a016df45eefd51700ae33d29cce91ea30324404ac80be03811c5",
+            "bytes": 74230
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr2.json",
+            "sha256": "a42c3f7cc09a00e28001b8b55fc407068d4a6437742267e1e5632cee7dec319b",
+            "bytes": 326293
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr20.json",
+            "sha256": "865cdb172f6a2b5d59ecbc2f1d16fb9826729a5dcf1b88539f8e0181544ca39a",
+            "bytes": 96758
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr21.json",
+            "sha256": "a186f8c7e2f917ae5acc6b806c9ff2d47eb41cdbb4d17bd3e2767edc373c6d89",
+            "bytes": 47688
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr22.json",
+            "sha256": "8692091653d9645058e12c522bc46fb04df6ab49b918671dc0c9ef5fd6d7684b",
+            "bytes": 52008
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr3.json",
+            "sha256": "dbbc7ac7e24feda0d45804aa58cdefdc17dd03d5216d692c7c27fc9a59b12ec3",
+            "bytes": 283964
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr4.json",
+            "sha256": "0e6d3815a840420fe276b901d5ec3b70d9731af150bc8d10080bd3da79f65161",
+            "bytes": 260087
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr5.json",
+            "sha256": "aeaa8fc40c70b79ff88698f5bece5a35e8e78fe1bef96c76914c4173b343ddd9",
+            "bytes": 245949
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr6.json",
+            "sha256": "41497d1c6aaf203878854081d8d36ef6208453582035431d6bb3e065f5f2a515",
+            "bytes": 233165
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr7.json",
+            "sha256": "50cb9a189bb36bb8dfd01184cd9b7452263339a278350098b6877cfb397ac0d8",
+            "bytes": 224178
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr8.json",
+            "sha256": "5cc5332a143b3b23de956bc6cef8733e6e253f68c829075bf86e55c727e86f26",
+            "bytes": 219222
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr9.json",
+            "sha256": "c32274c77661fece16a091f253c474f8134d16b33de51ece8f7f486f5591e298",
+            "bytes": 162055
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chrX.json",
+            "sha256": "5c7f2fa5744b233de38f6579b6abdcd4351d72318bb218105964adbc3dd21d98",
+            "bytes": 164395
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chrY.json",
+            "sha256": "3e84fa3c9d7a2e73eea2534f4faccc806cbbe9a2522805b1dd332d35ae5b32bb",
+            "bytes": 11322
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr1.json",
+            "sha256": "a959e82c7ec99438883eea026f7daa222ebbba0d8eecf5424cf8d8badc6174e3",
+            "bytes": 333793
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr10.json",
+            "sha256": "2059f53ee384d42806d073ed4e4e353177ba1008a490b1b0a55fe815074fe59f",
+            "bytes": 186108
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr11.json",
+            "sha256": "1145abb210f9d47a095fdeb9dea6be753ca143a7eb851c0499752d01445ba918",
+            "bytes": 196484
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr12.json",
+            "sha256": "afa280ce55da18a8cfed429aa270d91c8a98d952a7010e114db42debd66b8058",
+            "bytes": 188213
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr13.json",
+            "sha256": "451a023671befabd3303fefb652bac3dcca6b1ee358114d8d35d6ba1ecd48724",
+            "bytes": 132795
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr14.json",
+            "sha256": "6859883a45bcf0e51517ac074eaca5c99b8da0678bb605c52f8668fd19775400",
+            "bytes": 129681
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr15.json",
+            "sha256": "1f09091d257dfd83c5d245fee557fa0ab68f01fb0068d41c2351c87a2a55a5f0",
+            "bytes": 112222
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr16.json",
+            "sha256": "3c8b226fa5c8c92062f4f25c3ad51bc63bd1f1048af9ae5fb760eee35b5b74a5",
+            "bytes": 118037
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr17.json",
+            "sha256": "f9c7f0b7040dbb059d8703607ea794b3bd3035900b7978844ae1c5d04c16864a",
+            "bytes": 117783
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr18.json",
+            "sha256": "89c7e9e6554aab7a8ee1a3c9c4a5af1717784cb63aca89ef0a778a38496bf2d3",
+            "bytes": 112542
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr19.json",
+            "sha256": "fea901125ee423c3cbf5a16ade70ec277aaf4321879de24bab19b9018259f527",
+            "bytes": 78464
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr2.json",
+            "sha256": "8aa894bd9fb2060f9fddf16aa934a4b0f6622ea41aba7adbd01bfb59174f452a",
+            "bytes": 329686
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr20.json",
+            "sha256": "29ca9a2202002fddaf953a23ace8e62e6359b046851c75fc139d63fb09db3730",
+            "bytes": 99255
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr21.json",
+            "sha256": "6c6df98dc4c41aa328ba1feb29c1120835d9b2a471cfae6890f7b04cf76fc6da",
+            "bytes": 48957
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr22.json",
+            "sha256": "896748ddc1594b533ee217acf50e721c783b33ad1a236722bc44f667fd515450",
+            "bytes": 53958
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr3.json",
+            "sha256": "1b8e3d9e59bfd03fd020b7ce8d64b264d7a64263bc00229117ff9976171f6041",
+            "bytes": 286718
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr4.json",
+            "sha256": "b3879aa7fca8c20c8403b17df6039a05dd49efe68eaf7052fb425896f7f07792",
+            "bytes": 261929
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr5.json",
+            "sha256": "3a97a72691ae2dbb43ea037ca845c529cc02ccce7ea41586691fe922842d5914",
+            "bytes": 248393
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr6.json",
+            "sha256": "3b2a0cf041b4a3fabd578f77b1dfce2f6f97eabd5b6bd2334369bdbb84656dcc",
+            "bytes": 236478
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr7.json",
+            "sha256": "b52199be5cbaae5964034eb7784091eea9868c343e209e9f93d0997ba44e19b2",
+            "bytes": 227237
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr8.json",
+            "sha256": "165b4aa346082b116f6ccac6563ebc238152d19ca7031e205cf5667f06c43c5f",
+            "bytes": 221211
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr9.json",
+            "sha256": "143bfac01fb3ce8fba0a7df26979d14a3f611ef62fd1c741024a29c85bc81f1e",
+            "bytes": 165205
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chrX.json",
+            "sha256": "748e5c7c53c69fccf6c9a7aec4ad47aa10066bef33dec08a2c5c54bbab6f072e",
+            "bytes": 168542
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chrY.json",
+            "sha256": "644323c486a3e7c8b7509c572770b0e376168a469e2d2501dac6ab7ccb07aa2d",
+            "bytes": 11618
+          },
+          {
+            "path": "data/results/reader_ovary_chr1.json",
+            "sha256": "39305a34ad38295edf0005c12300fa7fee0a1f86434a356b6bb77ec1caa4e317",
+            "bytes": 327260
+          },
+          {
+            "path": "data/results/reader_ovary_chr10.json",
+            "sha256": "ea48f4e53ad5653758b0b6e82c4e16f873fd6ec208ec8458782d94672b330b7a",
+            "bytes": 183685
+          },
+          {
+            "path": "data/results/reader_ovary_chr11.json",
+            "sha256": "f96d81625d97d9879bf5cad79b179cb64ad4060d3c870080c15ac679be07e34a",
+            "bytes": 192514
+          },
+          {
+            "path": "data/results/reader_ovary_chr12.json",
+            "sha256": "393769caddf02de99f5a5998c517872ba3d5722e0262631cb0341c634bd7c421",
+            "bytes": 185030
+          },
+          {
+            "path": "data/results/reader_ovary_chr13.json",
+            "sha256": "d6a6150e2dcb00b3964b0eeddf47162459b57c037a39920e12196c2ea3443284",
+            "bytes": 131603
+          },
+          {
+            "path": "data/results/reader_ovary_chr14.json",
+            "sha256": "934aa777a03ceda338a5ff391fd3ee91e3481d9529977ad125ddec7defc9fcf9",
+            "bytes": 127198
+          },
+          {
+            "path": "data/results/reader_ovary_chr15.json",
+            "sha256": "d17ffdc4aab70a305b8b55fab0d42bab0502e95482c7a213e3f96ea0d9d618a9",
+            "bytes": 109923
+          },
+          {
+            "path": "data/results/reader_ovary_chr16.json",
+            "sha256": "2f475bd6a2a847f3e69f8eabd740bd40cc3c068141bc95e338ac77690fd3aebe",
+            "bytes": 115142
+          },
+          {
+            "path": "data/results/reader_ovary_chr17.json",
+            "sha256": "a49b91814639d1d55a5e0104c5d49a951a130f1af0ab687cf35d62de68e7f030",
+            "bytes": 112944
+          },
+          {
+            "path": "data/results/reader_ovary_chr18.json",
+            "sha256": "70e4fa82c17c5821c26eb663664448399de5e3a2d67b71fd94856b481d300881",
+            "bytes": 111403
+          },
+          {
+            "path": "data/results/reader_ovary_chr19.json",
+            "sha256": "a3696ce85f6079d8370feb44f5b49987999fbdd4bfe9c087d9f8df0b241ed1b5",
+            "bytes": 74165
+          },
+          {
+            "path": "data/results/reader_ovary_chr2.json",
+            "sha256": "6c1bb3764a14fe7f1e7cb720efd8585ae3eaa0f35206d8cc6fd33c44c6e2ac3c",
+            "bytes": 325590
+          },
+          {
+            "path": "data/results/reader_ovary_chr20.json",
+            "sha256": "466027575fb1a2845c15adba92445caf349f996880181981d11e85929d85ffdb",
+            "bytes": 97040
+          },
+          {
+            "path": "data/results/reader_ovary_chr21.json",
+            "sha256": "6d32ea3a8885a1a27521c9addca14baf0b4de7e4a5ee01c2abab7b0d8dd46409",
+            "bytes": 47607
+          },
+          {
+            "path": "data/results/reader_ovary_chr22.json",
+            "sha256": "4170f7e3ae96ad81bad8bfaa574def98ca8be61037fca7e21494d34de231bf9d",
+            "bytes": 52021
+          },
+          {
+            "path": "data/results/reader_ovary_chr3.json",
+            "sha256": "08d6f8bf22a4c61b8f70d2ced7043ff6606f47fe07535ac9e919083e28525549",
+            "bytes": 283351
+          },
+          {
+            "path": "data/results/reader_ovary_chr4.json",
+            "sha256": "979e836120635c7f79b74fb2445d7165abb1cce10ae8b9a73a0f52c02b0e062b",
+            "bytes": 259793
+          },
+          {
+            "path": "data/results/reader_ovary_chr5.json",
+            "sha256": "9a40245764201a804d98f65aba72f800c792dc5776f4e79f1c4076b484cf2104",
+            "bytes": 245701
+          },
+          {
+            "path": "data/results/reader_ovary_chr6.json",
+            "sha256": "2da495502eaa6df7afffa0a8b11915b2ccb3d7d11c02a772252853395b443e81",
+            "bytes": 233488
+          },
+          {
+            "path": "data/results/reader_ovary_chr7.json",
+            "sha256": "7c411f9825f52922901ab4a865ee6d8cdb2eb4eb8155e95ff4a223dbad81dc35",
+            "bytes": 224507
+          },
+          {
+            "path": "data/results/reader_ovary_chr8.json",
+            "sha256": "ed2018719ec91a290ef96ba4085c9c68fb12690f2ee810851b181934a5c7448a",
+            "bytes": 219212
+          },
+          {
+            "path": "data/results/reader_ovary_chr9.json",
+            "sha256": "039101d4f6aae3dbda8b2edc1dcb5508ea08d95b4330813a233c9b65c4121452",
+            "bytes": 162264
+          },
+          {
+            "path": "data/results/reader_ovary_chrX.json",
+            "sha256": "dbc1f970e13f5be4e11277f3f90805b323a5a07fa1d602539d677dff4edefd33",
+            "bytes": 165370
+          },
+          {
+            "path": "data/results/reader_ovary_chrY.json",
+            "sha256": "5e7cea19f1262006f5aee82c05c91c4295f62bd55bf8be91babbe6c400ce3436",
+            "bytes": 11283
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr1.json",
+            "sha256": "55760328bc2a347a0f39f7072dc8eb721666882c44c8da68f380b5879620b988",
+            "bytes": 343016
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr10.json",
+            "sha256": "dc2c50b22791287edaa97f03d4e934b0f7646444882ec0f54a86ea72afebe334",
+            "bytes": 196619
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr11.json",
+            "sha256": "85d1b9b8216190c39c3f0b017db8edfa6094bad274e774cb0c6f4cec8835282a",
+            "bytes": 205797
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr12.json",
+            "sha256": "58c55133bf307a76489520ed96e6565ccdcca9cee3b2653162858c95aa190dba",
+            "bytes": 197665
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr13.json",
+            "sha256": "5ff27682d3d5f5fdc51085ca2d232ada0110bd98fd65d13b5e3500ac305628d0",
+            "bytes": 143426
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr14.json",
+            "sha256": "3967345af52781f8918c0dd650fca2e4106f3ce26af1c80b7175f8e4bd7efe29",
+            "bytes": 140005
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr15.json",
+            "sha256": "2a2a96166d7817eb64ba4f070fe6c7649f4eb666b050ead591d41771bc75b807",
+            "bytes": 122528
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr16.json",
+            "sha256": "1ef39cdf18543071d0cd2ec03f142ff08f5259729fe06dbd670cf68f371afd77",
+            "bytes": 128136
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr17.json",
+            "sha256": "7c14b54848d6423db8f32301272da2151fce967a84b82a49a1fa188c42714158",
+            "bytes": 126447
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr18.json",
+            "sha256": "46405e0b31bc40b6aaf9abc0a391e17cd7a0ccb73f37bed8809d55b72399cf6e",
+            "bytes": 123715
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr19.json",
+            "sha256": "389d3f6728a2f03e423a1c79f0ea6682fac3d69604136cccccdabcbd94078ac4",
+            "bytes": 88287
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr2.json",
+            "sha256": "d42a6756c0bf476a4cdd2eef9f150052b5725fcecc1727f3cf633ca9b1f67a6a",
+            "bytes": 340222
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr20.json",
+            "sha256": "da6d03999778ffc3b91e21a9b58b68c07598df18b6202547d5e72b4b6e17c0ee",
+            "bytes": 109526
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr21.json",
+            "sha256": "7aad180a4139893d0e0aef1028e3163203adf8964f3833ad74e707cbd68426c9",
+            "bytes": 59898
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr22.json",
+            "sha256": "2bb854b96c2262b782d52cb20e56833049b8e9b843c7b12107b1968bb294df61",
+            "bytes": 64816
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr3.json",
+            "sha256": "1f7d0187f5a001445fa25b6703350763f8a4d9cb3a36e4b57e3459cd07be1ecc",
+            "bytes": 297521
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr4.json",
+            "sha256": "192627401e3965eb528ee646d0afc8626fe1569fe8536ed49f07675a7e5c7a10",
+            "bytes": 273818
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr5.json",
+            "sha256": "2ffc00517abe3dd059f6c38cbee6cecd2464d517b3973f8f273be02f919bf2c4",
+            "bytes": 259396
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr6.json",
+            "sha256": "392270316989554f13aec2c6c5aff6e015c4ac3dbf8c360384493e7bd4023b6b",
+            "bytes": 246757
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr7.json",
+            "sha256": "a4f59307b95596f4435b35aa6449b3385f46fa744a41774639dc9ab4ffa2b576",
+            "bytes": 237587
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr8.json",
+            "sha256": "c3a73df40518c2f7fe1405892a4989e42e9386e62948a1abaa56e49d8d2dfcdf",
+            "bytes": 232671
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr9.json",
+            "sha256": "e94c83a1fb2c96ac905b016178ee0641b67e3818014b7bd1bd35bbd48e80ea2a",
+            "bytes": 175448
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chrX.json",
+            "sha256": "c96aaa013f93cdb5360fd6e20bffe7d3a52af5aae8d5f2ee04f77b288f8148d3",
+            "bytes": 178858
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chrY.json",
+            "sha256": "9a5213af5eb891c41ec45afd23cbd85a8568cfbb32d83fcdca02b3c913ea984a",
+            "bytes": 23906
+          },
+          {
+            "path": "data/results/reader_testis_chr1.json",
+            "sha256": "9f7ff7166f633e1108a0e0c070c4da00cb200fcb91b26ac3312e62a5ec3afebe",
+            "bytes": 325938
+          },
+          {
+            "path": "data/results/reader_testis_chr10.json",
+            "sha256": "d2973a2e4e1e59c3af1dbfa99f13995f62c8075b4fed10c8fb79863c31689833",
+            "bytes": 182278
+          },
+          {
+            "path": "data/results/reader_testis_chr11.json",
+            "sha256": "86ffab00f7d6f3fd59d26f63f2cd2ef4aa4bd105b80bbb924101f7bcb8926635",
+            "bytes": 191426
+          },
+          {
+            "path": "data/results/reader_testis_chr12.json",
+            "sha256": "0d0cac4a9255db2f15a35d03ab7358d62da7c10893169c561ac8f59a0d771ed8",
+            "bytes": 183750
+          },
+          {
+            "path": "data/results/reader_testis_chr13.json",
+            "sha256": "511186aaa74200ad7214d8eb2a98d81ec3ca45fcbdbbca5c074e32d26fe2ca1c",
+            "bytes": 130708
+          },
+          {
+            "path": "data/results/reader_testis_chr14.json",
+            "sha256": "79ed99c394991f962f5a0096f4ef4f267a4de0631bd7b006c10b4f2e4eb1e786",
+            "bytes": 126128
+          },
+          {
+            "path": "data/results/reader_testis_chr15.json",
+            "sha256": "d2fb30946b9d29ec29d78d09496d341499b53075da72035a9956dc0e791b0eb9",
+            "bytes": 108507
+          },
+          {
+            "path": "data/results/reader_testis_chr16.json",
+            "sha256": "0ee9e0720759a262c27e16d3c15155a92b63bd8bd525817453c0eb91fab41950",
+            "bytes": 113634
+          },
+          {
+            "path": "data/results/reader_testis_chr17.json",
+            "sha256": "623ef6cbb36aa52a8893d9fe961f7fe13c5c0b99b23ccd37a14034f27bec4a3a",
+            "bytes": 111926
+          },
+          {
+            "path": "data/results/reader_testis_chr18.json",
+            "sha256": "b056bf0f822a7cb54fcb790641390aa1aabad12677088bb7b965c053f89bb449",
+            "bytes": 110592
+          },
+          {
+            "path": "data/results/reader_testis_chr19.json",
+            "sha256": "fb7701b83fe88cac0987b25f46d000b8bb3046e737717223b1fc44b1f83a7f62",
+            "bytes": 72885
+          },
+          {
+            "path": "data/results/reader_testis_chr2.json",
+            "sha256": "8206ba716bb851725ff4c48bef2e183c8a52b111af8c7b4772a67ff1d90e14cf",
+            "bytes": 324548
+          },
+          {
+            "path": "data/results/reader_testis_chr20.json",
+            "sha256": "fa876302ac1c3a76b3410f590edf7056c86ff9215deb19acb78b6810ec76bd63",
+            "bytes": 95902
+          },
+          {
+            "path": "data/results/reader_testis_chr21.json",
+            "sha256": "1f31fd8a4cc1ed0cd7b49cb3dabc81052bcb7492063d50875bdee94b8926ed32",
+            "bytes": 47417
+          },
+          {
+            "path": "data/results/reader_testis_chr22.json",
+            "sha256": "0fdb0494b910ef4b25b4782cd185b4ebc156175bc597952199bd05ebdee6678f",
+            "bytes": 51408
+          },
+          {
+            "path": "data/results/reader_testis_chr3.json",
+            "sha256": "ac0ad730e62e19441e794f2e5abbac604d05fa75b90fdbfd5b20869fdbf0e783",
+            "bytes": 282805
+          },
+          {
+            "path": "data/results/reader_testis_chr4.json",
+            "sha256": "5159c73afda241502991f26e990c023ef6b604f189f0f7cff5aac99cce6dee47",
+            "bytes": 259075
+          },
+          {
+            "path": "data/results/reader_testis_chr5.json",
+            "sha256": "e88afa3b22d785fa9d92a25a043e7ba0778a04262874cb38665588e323a05b40",
+            "bytes": 244991
+          },
+          {
+            "path": "data/results/reader_testis_chr6.json",
+            "sha256": "aca5f76d4726a0916791aaec747e4d455fcb1eea1f4c27bab6b4bc5785ea4ed0",
+            "bytes": 232459
+          },
+          {
+            "path": "data/results/reader_testis_chr7.json",
+            "sha256": "fb8e712b798ea84a7973bd1a4674568fb9dbb21d871793d9d53a649320dec8b1",
+            "bytes": 223180
+          },
+          {
+            "path": "data/results/reader_testis_chr8.json",
+            "sha256": "e7c926749eaf0da27c6da754983fbb8b6c0b908a3e79587813929dec06804b1c",
+            "bytes": 218427
+          },
+          {
+            "path": "data/results/reader_testis_chr9.json",
+            "sha256": "38673e19d0ebee9d09dae29366763cf57447b8f4bce26e0fba5795918367ca30",
+            "bytes": 161000
+          },
+          {
+            "path": "data/results/reader_testis_chrX.json",
+            "sha256": "61ca4062135c1564dcdc679f6b069c508e03c8692097e44a65e87df7cad37581",
+            "bytes": 163469
+          },
+          {
+            "path": "data/results/reader_testis_chrY.json",
+            "sha256": "e29764a1aacc6fdea4399dad0d8a92658cbfde19bb8b993fe685ea04a2af3abc",
+            "bytes": 11861
+          }
+        ],
+        "sha256": "bc32e8403958f1355662dc00d2fe2fd35fc3b6c74d015c32b2bf2edc2e5aaaf6",
+        "bytes": 56705168,
+        "files": 336,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "code": {
+      "git_sha": "2768b40152e800881f1a2bc0667e87e402127896",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/reader_neural.py",
+        "check"
+      ],
+      "python": "3.12.13"
+    },
+    "parameters": {
+      "alpha": 0.05,
+      "genes": 13,
+      "comparator": "K562"
+    },
+    "exclusions": [],
+    "partitions": "n/a: a registered check on fixed genes, no evaluation split",
+    "code_cleanliness": {
+      "git_sha": "2768b40152e800881f1a2bc0667e87e402127896",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/reader_neural.py",
+        "form": "committed_repository_file",
+        "path": "scripts/reader_neural.py",
+        "is_committed": true,
+        "declared_entry": "scripts/reader_neural.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/reader_neural.py"
+      ],
+      "counting_path_count": 22,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "2768b40152e800881f1a2bc0667e87e402127896",
+      "code_cleanliness_git_sha": "2768b40152e800881f1a2bc0667e87e402127896",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 2768b40"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 957,
+      "opens_under_data": 854,
+      "files_read": 349,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
