@@ -6,9 +6,13 @@ Synthetic programs only. No RNA value of any gene is read here.
 
 from __future__ import annotations
 
+import importlib.util
 import itertools
 import math
 import random
+from collections import Counter
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -225,6 +229,106 @@ def test_the_decision_registers_only_when_a_unique_fit_differs_from_the_mean_or_
     assert cs.decide(_summary(None)) == "no_registration_identity_with_the_mean"
     assert cs.decide(_summary(0.2)) == "register_on_the_genes_that_differ"
     assert cs.decide(_summary(1e-15, miss=1)) == "register_on_the_genes_that_differ"
+
+
+def _summary_alone(differ: int, informative_symbol: int) -> dict:
+    s = _summary(1e-15)
+    s["unique_fit"]["differs_from_the_mean"] = {
+        "genes": differ,
+        "informative_symbol_on_one_gene_id": informative_symbol,
+    }
+    return s
+
+
+def test_a_unique_fit_the_mean_does_not_give_counts_against_condition_1():
+    assert cs.decide(_summary_alone(0, 0)) == "no_registration_identity_with_the_mean"
+    assert cs.decide(_summary_alone(3, 3)) == "register_on_the_genes_that_differ"
+
+
+def test_the_size_check_is_7ds_decision_2_and_opens_no_rna():
+    assert cs.MIN_GENES == c2.MIN_GENES == 100
+    got = cs.size_check(_summary_alone(3, 3))
+    assert got["under_7d_decision_2"] == "NOT_TESTABLE" and not got["registration_written"]
+    assert got["rna_opened"] is False
+    assert cs.size_check(_summary_alone(120, 100))["registration_written"]
+    assert not cs.size_check(_summary(1e-15))["registration_written"]
+
+
+def test_a_gene_can_have_only_the_capped_root_when_the_means_inhibitor_does_not_fit():
+    """STRUCTURE['a_capped_root_alone'] (the case the first full census run stopped on)."""
+    rho = {"a": 0.8, "b": 0.95, "c": 0.95, "d": 0.95, "i": 1.45}
+    assert c2.fit("mean", rho).reason == "inhibitor_strength_above_1"
+    assert cs.fit(rho).reason == "inhibitor_strength_above_1"
+    cap = cs.capped_root(rho)
+    assert cap.ok and cap.q > sum(1 - r for r in rho.values() if r < 1)
+    every = dict.fromkeys(rho, True)
+    for el in rho:
+        assert cs.level(cap, {**every, el: False}) == pytest.approx(rho[el])
+    gr = SimpleNamespace(gene="G", rho=rho)
+    assert cs.classify(gr)["status"] == "capped_root_only"
+    assert cs.difference_from_mean(cap, gr) is None
+    # a gene the mean refuses for its basal rate has no capped root either
+    assert not cs.capped_root({"a": 0.5, "b": 0.7, "c": 0.8, "d": 0.9}).ok
+
+
+def _census_module():
+    path = Path(__file__).resolve().parents[1] / "scripts" / "capsumrna_census.py"
+    spec = importlib.util.spec_from_file_location("capsumrna_census_under_test", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _root(diff):
+    return {
+        "ok": True,
+        "reason": "",
+        "w": 0.9,
+        "informative": True,
+        "range_log2": 1.0,
+        "difference_from_mean_log2": diff,
+        "harness_miss": [],
+        "max_abs_run_minus_closed_form_log2": 0.0,
+    }
+
+
+def _gene(name: str, status: str, mean_ok: bool, uncapped, capped) -> dict:
+    no = {"ok": False, "reason": "inhibitor_strength_above_1", "w": 0.9}
+    forms = {
+        f: {"ok": mean_ok, "reason": "" if mean_ok else "inhibitor_strength_above_1", "informative": mean_ok}
+        for f in c2.FORMS
+    }
+    forms["multiplicative"] = {"ok": True, "reason": "", "informative": True}
+    return {
+        "gene": name,
+        "symbol": name,
+        "excluded": "",
+        "status": status,
+        "forms": forms,
+        "roots": {"uncapped": uncapped or no, "capped": capped or {**no, "reason": "no_capped_root"}},
+        "n_activating": 4,
+        "n_inhibiting": 1,
+        "sum_d": 0.35,
+    }
+
+
+def test_the_census_summary_counts_a_capped_root_alone_and_fills_the_corrected_sentence(monkeypatch):
+    mod = _census_module()
+    monkeypatch.setattr(mod.rg, "symbol_gene_ids", lambda: {"A": "ENSG1", "B": "ENSG2"})
+    genes = [
+        _gene("A", "runnable", True, _root(0.0), None),
+        _gene("B", "capped_root_only", False, None, _root(None)),
+    ]
+    s = mod.summarise(genes, Counter())
+    assert s["capped_root_only"]["genes"] == 1 and s["unique_fit"]["differs_from_the_mean"]["genes"] == 1
+    assert s["roots"]["capped"]["mean_has_no_fit"] == 1
+    assert cs.decide(s) == "register_on_the_genes_that_differ"
+    assert cs.size_check(s)["under_7d_decision_2"] == "NOT_TESTABLE"
+    words = mod.sentence(s)
+    assert "1 genes have only a capped root" in words and "all with the mean's prediction" not in words
+    # with no gene on the capped root alone, the first summary and sentence are used, as committed
+    s0 = mod.summarise(genes[:1], Counter())
+    assert "capped_root_only" not in s0 and "all with the mean's prediction" in mod.sentence(s0)
 
 
 def test_no_word_claims_function_or_strengthens():

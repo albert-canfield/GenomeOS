@@ -30,6 +30,16 @@ genes with four or more activating elements) the definition does not choose the 
 the cap through the strength scale `bridge.DECLARED_STRENGTH` fixes by convention, which the bridge says
 licenses no prediction but the single removal it was fitted to.
 
+CORRECTED BEFORE ANY CENSUS WAS SAVED (2026-10-10; written as an addition because the commit guard
+refuses removing 43dd4ac's lines). The paragraph above is wrong in one clause: "the cap binds for no
+gene that has a fit with a unique root". The cap binds on no gene's UNCAPPED root, which is the mean on
+every gene. But the capped root's larger element-driven share (q = Z > D) fits an inhibitor the mean's
+cannot, so a gene the mean refuses with inhibitor_strength_above_1 can have the capped root ALONE: its
+one fit, with a prediction the mean does not give (`STRUCTURE['a_capped_root_alone']`). The first full
+census run, from 43dd4ac in a clean worktree, stopped at such a gene (SPMIP4) because
+`difference_from_mean` raised there; nothing was written. DECISION's text is unchanged and reads such a
+gene as a unique fit whose prediction is not the mean's, against its condition (1).
+
 So this module holds the fit, the closed form, the run and the census, and the rule (`DECISION`) that
 the census, not a registration, is the last step unless it finds a gene whose fit is unique and whose
 prediction differs from the mean's. No RNA value is read here. No model request, no key, no money.
@@ -96,6 +106,7 @@ FIT = {
         "a gene is runnable under the capped sum when combine2.fit('mean') is (q < 1, every s in (0, 1]),"
         " its W <= 1 (+ bridge.STRENGTH_TOLERANCE), and no capped root exists beside the uncapped one;"
         " otherwise it is reported by reason: the mean's reason, sum_past_the_cap, or fit_not_unique"
+        "; a gene with a capped root and no uncapped one is capped_root_only, its one fit the capped root"
     ),
 }
 STRUCTURE = {
@@ -119,6 +130,13 @@ STRUCTURE = {
         " the same conventions, so the fit is not unique (fit_not_unique). The capped root's prediction"
         " differs from the mean's; it is counted and run, never chosen, because the definition does not"
         " choose between the roots"
+    ),
+    "a_capped_root_alone": (
+        "the capped root's element-driven share q = Z exceeds the uncapped root's q = D, and an inhibitor's"
+        " fitted s_j*h = e_j/(q + e_j) falls as q rises, so a gene the mean refuses with"
+        " inhibitor_strength_above_1 can have a capped root and no uncapped one (capped_root_only). Its one"
+        " fit is the capped root, and the mean has no prediction for it. A gene the mean refuses with"
+        " basal_not_positive (D >= 1) has none, since Z > D"
     ),
     "what_the_bridge_licenses": (
         "where the cap binds, how far it binds is set by the strength scale, which bridge.DECLARED_STRENGTH"
@@ -150,6 +168,22 @@ CENSUS_SENTENCE = (
     " with the mean's prediction, {unique_inf} of them informative and {common} informative under all four"
     " forms, before the RNA tables' row check"
 )
+#: CENSUS_SENTENCE above says every gene with a unique fit has the mean's prediction, which
+#: STRUCTURE['a_capped_root_alone'] refutes; the census fills this one whenever a gene has the capped root
+#: alone (scripts/capsumrna_census.py, `sentence`)
+CENSUS_SENTENCE_CAPPED_ROOT_ALONE = (
+    "of the {n} multi-element genes combine2.classify admits, the capped sum at combine2's conventions fits"
+    " {fitted} on its uncapped root ({x} are not fitted: {reasons}); on every one of them its prediction in"
+    " the thirteen reader cells is the runtime's mean's (largest difference {dmax} in log2), and the runtime"
+    " under activator_combination='sum_capped' gives the closed form on every informative gene it ran, on"
+    " either root ({ran} runs of a gene on a root, {miss} of them failing the harness). {two} of the"
+    " {fitted} also have a second, capped root, on which the capped sum differs from the mean ({two_inf}"
+    " informative under it). {only} genes have only a capped root ({only_inf} informative under it,"
+    " {only_sym} of those with a symbol on one gene_id), the mean having no fit for them ({only_reasons})."
+    " {unique} genes have a unique fit, {differ} of them with a prediction other than the mean's;"
+    " {unique_inf} are informative and {common} informative under all four forms, before the RNA tables'"
+    " row check"
+)
 DECISION = (
     "fixed before the census was counted, from STRUCTURE: no registration and no RNA run if (1) every gene"
     " with a unique fit has the mean's prediction in every reader cell within CLOSED_FORM_TOLERANCE, and"
@@ -163,6 +197,15 @@ DECISION = (
     " condition fails, the registration goes ahead on the genes where the two differ"
 )
 DECISIONS = ("no_registration_identity_with_the_mean", "register_on_the_genes_that_differ")
+MIN_GENES = c2.MIN_GENES
+#: what "on 7d's design" carries for the genes DECISION would register on: 7d's DECISION 2, copied
+SIZE_CHECK = (
+    "7d's DECISION 2, part of the design this lane was asked to register on: a population of fewer than"
+    " MIN_GENES genes is NOT_TESTABLE, no comparison read. Applied to the genes whose unique fit differs from"
+    " the mean's, informative, with a symbol on one gene_id (POPULATION (f)'s row check, which needs the RNA"
+    " tables' rows, can only lower the count): below MIN_GENES no registration is written and no RNA table"
+    " is opened. It was written after an unsaved census run showed the count (EXPLORATION_PRECEDED_THIS)"
+)
 #: what this lane read before the census was saved, stated rather than claimed away
 EXPLORATION_PRECEDED_THIS = (
     "combine2.py, multrna.py, saturate.py, strengthform.py and their census scripts, and the per-form counts"
@@ -170,6 +213,10 @@ EXPLORATION_PRECEDED_THIS = (
     " unsaved smoke run of scripts/capsumrna_census.py on chr21, after DECISION and STRUCTURE were written"
     " and before this code was committed, which changed neither. No RNA table and no genes table of 7d or"
     " 7h was opened; their registered readings were known from the lane brief and docs/ROADMAP.md"
+    ". After 43dd4ac: one full census run from it in a clean worktree, which stopped with an exception at"
+    " SPMIP4 and wrote nothing (the correction in the module docstring); one unsaved full census run of the"
+    " corrected code before it was committed, whose counts led to SIZE_CHECK being written (7d's DECISION"
+    " 2, not a new rule)"
 )
 
 
@@ -289,6 +336,10 @@ def predicted_log2(f: CFit, gr: c2.GeneRules) -> list[float]:
 
 def difference_from_mean(f: CFit, gr: c2.GeneRules) -> float:
     """The largest |log2 level under the capped sum - log2 level under the mean| over the thirteen cells."""
+    # a_capped_root_alone (after 43dd4ac): no mean's prediction to compare with, which DECISION (1)
+    # reads as a difference; None, so that the raise below is reached by no gene
+    if not c2.fit("mean", gr.rho).ok:
+        return None
     mean = c2.fit("mean", gr.rho)
     if not mean.ok:
         raise ValueError(f"{gr.gene}: the mean has no fit ({mean.reason})")
@@ -343,6 +394,8 @@ def run_gene(small: Module, gr: c2.GeneRules, f: CFit, rate: float, label: dict[
 
 def decide(summary: dict[str, Any]) -> str:
     """DECISION, from the census counts: whether a registration on 7d's design would test anything."""
+    if summary["unique_fit"].get("differs_from_the_mean", {}).get("genes", 0):
+        return DECISIONS[1]  # a unique fit with a prediction the mean does not give (a_capped_root_alone)
     unique = summary["unique_fit"]
     same = unique["max_abs_difference_from_mean_log2"] is None or (
         unique["max_abs_difference_from_mean_log2"] <= CLOSED_FORM_TOLERANCE
@@ -352,3 +405,15 @@ def decide(summary: dict[str, Any]) -> str:
         r["run"] == r["informative"] for r in runs
     )
     return DECISIONS[0] if same and harness else DECISIONS[1]
+
+
+def size_check(summary: dict[str, Any]) -> dict[str, Any]:
+    """SIZE_CHECK on the census counts: whether the genes DECISION would register on reach MIN_GENES."""
+    n = summary["unique_fit"].get("differs_from_the_mean", {}).get("informative_symbol_on_one_gene_id", 0)
+    return {
+        "genes_whose_unique_fit_differs_from_the_mean": n,
+        "min_genes": MIN_GENES,
+        "under_7d_decision_2": "NOT_TESTABLE" if n < MIN_GENES else "at_or_above_the_registered_size",
+        "registration_written": n >= MIN_GENES and decide(summary) == DECISIONS[1],
+        "rna_opened": False,
+    }

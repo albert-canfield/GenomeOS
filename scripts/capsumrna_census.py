@@ -177,6 +177,8 @@ def _max(xs: list[float]) -> float | None:
 
 def summarise(genes: list[dict], why: Counter) -> dict[str, Any]:
     """The census counts (capsumrna.CENSUS); reads the gene table for the symbol check and no RNA."""
+    if any(g.get("status") == "capped_root_only" for g in genes):  # after 43dd4ac: a_capped_root_alone
+        return summarise_capped_root_alone(genes, why)
     ids = rg.symbol_gene_ids()
     elig = [g for g in genes if not g["excluded"]]
     forms: dict[str, Any] = {}
@@ -255,6 +257,8 @@ def summarise(genes: list[dict], why: Counter) -> dict[str, Any]:
 
 def sentence(s: dict[str, Any]) -> str:
     """CENSUS_SENTENCE, filled from the counts only."""
+    if "capped_root_only" in s:  # after 43dd4ac: CENSUS_SENTENCE's "all with the mean's prediction" is wrong
+        return sentence_capped_root_alone(s)
     un = s["roots"]["uncapped"]
     cap = s["roots"]["capped"]
     dmax = un["max_abs_difference_from_mean_log2"]
@@ -269,6 +273,143 @@ def sentence(s: dict[str, Any]) -> str:
         two=f"{s['two_roots']['genes']:,}",
         two_inf=f"{s['two_roots']['informative_on_the_capped_root']:,}",
         unique=f"{s['unique_fit']['genes']:,}",
+        unique_inf=f"{s['unique_fit']['informative']:,}",
+        common=f"{s['unique_fit']['informative_under_all_four']:,}",
+    )
+
+
+#: a gene's one fit, by its capped-sum status
+UNIQUE = {"runnable": "uncapped", "capped_root_only": "capped"}
+
+
+def _differs(g: dict) -> bool:
+    """capsumrna.DECISION (1): the unique fit's prediction is not the mean's (or the mean has none)."""
+    x = g["roots"][UNIQUE[g["status"]]]["difference_from_mean_log2"]
+    return x is None or x > cs.CLOSED_FORM_TOLERANCE
+
+
+def summarise_capped_root_alone(genes: list[dict], why: Counter) -> dict[str, Any]:
+    """`summarise` for a census in which some gene has the capped root alone (capsumrna.STRUCTURE
+    ['a_capped_root_alone']), whose difference from the mean is None; reads no RNA."""
+    ids = rg.symbol_gene_ids()
+    elig = [g for g in genes if not g["excluded"]]
+    forms: dict[str, Any] = {}
+    for f in (*c2.FORMS, MULT):
+        ok = [g for g in elig if g["forms"][f]["ok"]]
+        inf = [g for g in ok if g["forms"][f]["informative"]]
+        forms[f] = {
+            "runnable": len(ok),
+            "not_runnable": dict(Counter(g["forms"][f]["reason"] for g in elig if not g["forms"][f]["ok"])),
+            "informative": len(inf),
+            "informative_symbol_on_one_gene_id": sum(1 for g in inf if g["symbol"] in ids),
+        }
+    roots: dict[str, Any] = {}
+    for root in ROOTS:
+        ok = [g for g in elig if g["roots"][root]["ok"]]
+        inf = [g for g in ok if g["roots"][root]["informative"]]
+        ran = [g for g in inf if "harness_miss" in g["roots"][root]]
+        diffs = [x for g in ok if (x := g["roots"][root]["difference_from_mean_log2"]) is not None]
+        roots[root] = {
+            "fitted": len(ok),
+            "informative": len(inf),
+            "informative_and_mean_informative": sum(1 for g in inf if informative(g, "mean")),
+            "run": len(ran),
+            "harness_failing_genes": sum(1 for g in ran if g["roots"][root]["harness_miss"]),
+            "max_abs_run_minus_closed_form_log2": _max(
+                [g["roots"][root]["max_abs_run_minus_closed_form_log2"] for g in ran]
+            ),
+            "mean_has_no_fit": len(ok) - len(diffs),
+            "max_abs_difference_from_mean_log2": _max(diffs),
+            "difference_from_mean_log2_quantiles": mr.quantiles(diffs) if diffs else None,
+            "activating_count_quantiles": mr.quantiles([g["n_activating"] for g in ok]) if ok else None,
+        }
+    roots["uncapped"]["not_fitted"] = dict(
+        Counter(g["roots"]["uncapped"]["reason"] for g in elig if not g["roots"]["uncapped"]["ok"])
+    )
+    unique = [g for g in elig if g["status"] in UNIQUE]
+    uinf = [g for g in unique if _root_inf(g, UNIQUE[g["status"]])]
+    differ = [g for g in unique if _differs(g)]
+    common = [g for g in uinf if all(informative(g, f) for f in (*c2.FORMS, MULT))]
+    two = [g for g in elig if g["status"] == "fit_not_unique"]
+    alone = [g for g in elig if g["status"] == "capped_root_only"]
+    ainf = [g for g in alone if _root_inf(g, "capped")]
+    return {
+        **dict(why),
+        "classified": len(genes),
+        "excluded_by_reason": dict(Counter(g["excluded"] for g in genes if g["excluded"])),
+        "eligible_for_a_fit": len(elig),
+        "forms": forms,
+        "capped_sum_status": dict(sa._ranked(Counter(g["status"] for g in elig))),
+        "roots": roots,
+        "unique_fit": {
+            "genes": len(unique),
+            "by_status": dict(sa._ranked(Counter(g["status"] for g in unique))),
+            "informative": len(uinf),
+            "informative_symbol_on_one_gene_id": sum(1 for g in uinf if g["symbol"] in ids),
+            "max_abs_difference_from_mean_log2": _max(
+                [
+                    x
+                    for g in unique
+                    if (x := g["roots"][UNIQUE[g["status"]]]["difference_from_mean_log2"]) is not None
+                ]
+            ),
+            "differs_from_the_mean": {
+                "genes": len(differ),
+                "informative": sum(1 for g in differ if g in uinf),
+                "informative_symbol_on_one_gene_id": sum(
+                    1 for g in differ if g in uinf and g["symbol"] in ids
+                ),
+            },
+            "informative_under_all_four": len(common),
+            "informative_under_all_four_symbol_on_one_gene_id": sum(1 for g in common if g["symbol"] in ids),
+            "uncapped_informative_share_of_the_means_informative_genes": round(
+                sum(1 for g in uinf if g["status"] == "runnable") / max(1, forms["mean"]["informative"]), 4
+            ),
+        },
+        "two_roots": {
+            "genes": len(two),
+            "informative_on_the_capped_root": sum(1 for g in two if _root_inf(g, "capped")),
+            "informative_on_the_capped_root_symbol_on_one_gene_id": sum(
+                1 for g in two if _root_inf(g, "capped") and g["symbol"] in ids
+            ),
+            "summed_drop_quantiles": mr.quantiles([g["sum_d"] for g in two]) if two else None,
+        },
+        "capped_root_only": {
+            "genes": len(alone),
+            "informative": len(ainf),
+            "informative_symbol_on_one_gene_id": sum(1 for g in ainf if g["symbol"] in ids),
+            "why_the_mean_has_no_fit": dict(sa._ranked(Counter(g["forms"]["mean"]["reason"] for g in alone))),
+            "informative_under_competition": sum(1 for g in ainf if informative(g, "competition")),
+            "informative_under_the_multiplicative_form": sum(1 for g in ainf if informative(g, MULT)),
+            "activating_count_quantiles": mr.quantiles([g["n_activating"] for g in alone]) if alone else None,
+            "with_an_inhibiting_rule": sum(1 for g in alone if g["n_inhibiting"]),
+        },
+        "rna_read": "none",
+    }
+
+
+def sentence_capped_root_alone(s: dict[str, Any]) -> str:
+    """capsumrna.CENSUS_SENTENCE_CAPPED_ROOT_ALONE, filled from the counts only."""
+    un = s["roots"]["uncapped"]
+    cap = s["roots"]["capped"]
+    dmax = un["max_abs_difference_from_mean_log2"]
+    alone = s["capped_root_only"]
+    return cs.CENSUS_SENTENCE_CAPPED_ROOT_ALONE.format(
+        n=f"{s['eligible_for_a_fit']:,}",
+        fitted=f"{un['fitted']:,}",
+        x=f"{s['eligible_for_a_fit'] - un['fitted']:,}",
+        reasons=sa._reasons(Counter(un["not_fitted"])),
+        dmax="none" if dmax is None else f"{dmax:.1e}",
+        ran=f"{un['run'] + cap['run']:,}",
+        miss=f"{un['harness_failing_genes'] + cap['harness_failing_genes']:,}",
+        two=f"{s['two_roots']['genes']:,}",
+        two_inf=f"{s['two_roots']['informative_on_the_capped_root']:,}",
+        only=f"{alone['genes']:,}",
+        only_inf=f"{alone['informative']:,}",
+        only_sym=f"{alone['informative_symbol_on_one_gene_id']:,}",
+        only_reasons=sa._reasons(Counter(alone["why_the_mean_has_no_fit"])),
+        unique=f"{s['unique_fit']['genes']:,}",
+        differ=f"{s['unique_fit']['differs_from_the_mean']['genes']:,}",
         unique_inf=f"{s['unique_fit']['informative']:,}",
         common=f"{s['unique_fit']['informative_under_all_four']:,}",
     )
@@ -318,6 +459,8 @@ def census(chroms: list[str], workers: int, run: bool) -> dict:
         "reader_selection": s,
         "sentence": sentence(s),
         "decision": cs.decide(s),
+        "size_check_rule": cs.SIZE_CHECK,
+        "size_check": cs.size_check(s),
         "programs": programs,
         "ran_the_runtime": run,
         "seconds_collect": round(time.time() - t, 1),
@@ -367,6 +510,8 @@ def manifest(chroms: list[str]) -> dict:
             "observations unreadable or exactly 1, actions that disagree with the observation",
             "genes with no activating rule; under the capped sum the mean's reasons, sum_past_the_cap, and"
             " fit_not_unique (counted, both roots run)",
+            "capped_root_only genes (after 43dd4ac) are counted as unique fits whose prediction is not the"
+            " mean's",
         ],
         "partitions": "n/a: a census; no outcome read",
         "code_cleanliness": mf.code_cleanliness(__file__, OWN_CODE),
@@ -396,6 +541,7 @@ def main() -> int:
     print(json.dumps(s["forms"], indent=1))
     print(out["sentence"])
     print("decision:", out["decision"])
+    print("capped root alone:", s.get("capped_root_only"), "size check:", out["size_check"])
     if "committed_censuses_reproduced" in out:
         print("committed census problems:", out["committed_censuses_reproduced"]["problems"])
     if not args.no_save:
