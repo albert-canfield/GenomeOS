@@ -38,6 +38,8 @@ PUBLISHED = [
     "CD14-positive monocyte",
     "testis",
     "ovary",
+    # 2026-10-10, lane-readerneural: the fourteenth, fetal spinal cord, registered at 2e624a8
+    "spinal cord",
 ]
 
 
@@ -46,9 +48,10 @@ def test_a_rerun_on_the_default_cells_REFUSES_and_names_both_biosamples_it_would
     with pytest.raises(ValueError) as e:
         rgw.panel_or_refuse(list(rgw.DEFAULT_CELLS), PUBLISHED, "--rerun")
     msg = str(e.value)
-    assert "testis" in msg and "ovary" in msg, msg
+    assert "testis" in msg and "ovary" in msg and "spinal cord" in msg, msg
     # the refusal states both sizes, so the reader does not have to count the names
-    assert "11 biosamples" in msg and "drop 2 of the 13" in msg, msg
+    # (13 -> 14 and 2 -> 3 on 2026-10-10, lane-readerneural, spinal cord registered at 2e624a8)
+    assert "11 biosamples" in msg and "drop 3 of the 14" in msg, msg
     # and why it refuses rather than what it refuses
     assert "standardised by a fit over the panel" in msg, msg
 
@@ -58,7 +61,7 @@ def test_the_completeness_filter_dropping_one_biosample_REFUSES():
     complete = [c for c in PUBLISHED if c != "ovary"]
     with pytest.raises(ValueError) as e:
         rgw.panel_or_refuse(complete, PUBLISHED, "the roll-up")
-    assert "ovary" in str(e.value) and "drop 1 of the 13" in str(e.value)
+    assert "ovary" in str(e.value) and "drop 1 of the 14" in str(e.value)  # 13 -> 14 on 2026-10-10
 
 
 def test_the_guard_passes_the_panels_that_are_not_a_shrink():
@@ -79,9 +82,10 @@ def test_the_footgun_the_guard_exists_for_is_live_in_this_checkout():
     p = os.path.join(_ROOT, "data", "results", "reader_genome_wide.json")
     with open(p) as fh:  # a missing tracked file is an error here, never a skip
         on_disk = json.load(fh)["cell_types"]
-    assert len(on_disk) == 13
+    # 13 -> 14 on 2026-10-10 (lane-readerneural): fetal spinal cord, registered at 2e624a8
+    assert len(on_disk) == 14
     assert set(rgw.DEFAULT_CELLS) < set(on_disk)
-    assert sorted(set(on_disk) - set(rgw.DEFAULT_CELLS)) == ["ovary", "testis"]
+    assert sorted(set(on_disk) - set(rgw.DEFAULT_CELLS)) == ["ovary", "spinal cord", "testis"]
 
 
 def _calls(fn: ast.FunctionDef, name: str) -> list[int]:

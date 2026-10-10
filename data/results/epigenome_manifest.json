@@ -1,6 +1,6 @@
 {
   "result": "epigenome_manifest",
-  "date": "2026-09-14",
+  "date": "2026-10-10",
   "source": "https://www.encodeproject.org",
   "rule": {
     "experiment": "released, GRCh38, no drug treatment; per cell type the biosample covering the most marks, then complete files (peaks and signal), then the largest peak file",
@@ -2211,6 +2211,168 @@
         },
         "candidates": 3
       }
+    },
+    "spinal cord": {
+      "dnase": "ENCFF041JKB",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "spinal cord",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR036HAT",
+          "biosample": "Homo sapiens spinal cord tissue female embryo (113 days)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN130YZL/",
+          "peaks": {
+            "accession": "ENCFF282GYH",
+            "output_type": "pseudoreplicated peaks",
+            "size": 726493,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/7fa381a3-d407-4023-9025-e1659b712e13/ENCFF282GYH.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF569FQL",
+            "output_type": "fold change over control",
+            "size": 312969148,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/09c5c70c-6e2a-4f4f-9254-31dc3c4081f1/ENCFF569FQL.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27ac": {
+          "cell_type": "spinal cord",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR209QGZ",
+          "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN948OWO/",
+          "peaks": {
+            "accession": "ENCFF516MFW",
+            "output_type": "pseudoreplicated peaks",
+            "size": 1428915,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/83e9481a-3fb2-4bd4-9947-e8620c5b909c/ENCFF516MFW.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF116TJK",
+            "output_type": "fold change over control",
+            "size": 327480461,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/40cc3c58-2e62-4755-a618-fa1effac33ad/ENCFF116TJK.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "spinal cord",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR863GVT",
+          "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN633WKQ/",
+          "peaks": {
+            "accession": "ENCFF205KTX",
+            "output_type": "pseudoreplicated peaks",
+            "size": 2937425,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/b37aecce-645c-42bf-bbc8-8bb556dccc15/ENCFF205KTX.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF174WIT",
+            "output_type": "fold change over control",
+            "size": 287122181,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/02617cc6-6b50-46b3-bd9a-41c714999109/ENCFF174WIT.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "spinal cord",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR855JPU",
+          "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN777LEG/",
+          "peaks": {
+            "accession": "ENCFF470ARP",
+            "output_type": "pseudoreplicated peaks",
+            "size": 871411,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/c2f888bf-3b96-4623-a1d0-081cc6509eb4/ENCFF470ARP.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF259GNO",
+            "output_type": "fold change over control",
+            "size": 399587592,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/d72e4c1e-2eb4-4625-a4bc-ef53f4b60e08/ENCFF259GNO.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K9me3": {
+          "cell_type": "spinal cord",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR262LFG",
+          "biosample": "Homo sapiens spinal cord tissue female embryo (108 days)",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN453AOM/",
+          "peaks": {
+            "accession": "ENCFF674GTJ",
+            "output_type": "pseudoreplicated peaks",
+            "size": 958277,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/a27848aa-8e48-435d-9d18-a523f8141ed4/ENCFF674GTJ.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF141USZ",
+            "output_type": "fold change over control",
+            "size": 346450402,
+            "replicates": [
+              1
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/e1874493-9227-4e30-9386-0a27d1c4f046/ENCFF141USZ.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "spinal cord",
+        "experiment": "ENCSR458MAV",
+        "biosample": "Homo sapiens spinal cord tissue female embryo (115 days)",
+        "project": "Roadmap",
+        "released": "2013-07-31",
+        "cpg": {
+          "accession": "ENCFF517DRJ",
+          "output_type": "methylation state at CpG",
+          "size": 844997894,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/03/09/cd001535-e36e-4307-a610-ae383cc89688/ENCFF517DRJ.bigBed"
+        },
+        "candidates": 1
+      }
     }
   },
   "coverage": {
@@ -2331,11 +2493,20 @@
         "H3K27me3": true,
         "H3K9me3": true,
         "methylation": true
+      },
+      "spinal cord": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
       }
     },
-    "biosamples": 13,
-    "with_all_five_marks": 13,
-    "with_methylation": 10,
+    "biosamples": 14,
+    "with_all_five_marks": 14,
+    "with_methylation": 11,
     "complete": [
       "K562",
       "HepG2",
@@ -2346,7 +2517,8 @@
       "hepatocyte",
       "CD14-positive monocyte",
       "testis",
-      "ovary"
+      "ovary",
+      "spinal cord"
     ],
     "missing": {
       "cardiac muscle cell": [
@@ -2358,6 +2530,962 @@
       "astrocyte": [
         "methylation"
       ]
+    }
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE portal (https://www.encodeproject.org): DNase-seq and Histone ChIP-seq metadata and released GRCh38 peak files",
+        "version": "queried 2026-10-10",
+        "licence": "ENCODE data use policy (https://www.encodeproject.org/help/citing-encode/)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/epigenome_manifest.json",
+        "sha256": "4d06143e384c986e9f7481ecbebf0096871509a1fb45de73f03f022b77d9eafe",
+        "bytes": 79706,
+        "partition": null
+      },
+      {
+        "path": "data/results/reader_neural_registration.json",
+        "sha256": "925ca610153f87989023aff3029c9db0a6cb334e1a0227b686c22c32aecd2198",
+        "bytes": 24350,
+        "partition": null
+      },
+      {
+        "path": "ENCODE portal answers for the spinal cord marks and WGBS, as cached",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/epigenome/portal/1349c1bfee01201a4864168a91beac0b37b36b27.json.gz",
+            "sha256": "feb768d50268eb1e0567e48a6e6eb054bf9b7461ed7bb6ac74bc44260821329c",
+            "bytes": 2920
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/583ca444cfba0997d7f2714579d5122fe35eefab.json.gz",
+            "sha256": "9a45028e00f85ce7f6a81cedd1022e2a5d6bb0c792b74a726822176f04f9fecd",
+            "bytes": 2921
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/5c6bca357602d5a82278d6ec308cf6e7e0131b56.json.gz",
+            "sha256": "740ffab2f7c59aa5a152df00477c78eb9a109f4f0b1d1b9a9689afd37c02c0e4",
+            "bytes": 4382
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/5d07e36dec795cab337c5f5717ff00d666860ee7.json.gz",
+            "sha256": "9414a32de8ae9a9970b187481de1c6ead81510bf786fb7489ac972ff826543fc",
+            "bytes": 3970
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/5faa31fe9c1722a9b8e895d3a9b6976f2de5df8a.json.gz",
+            "sha256": "98fa0db11ea5187605533c3f19409dc03f257d3f24c85af3edba0561adf4763d",
+            "bytes": 1043
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/683e6a67c76c8153ab69a44249fcb8db785e99e1.json.gz",
+            "sha256": "07b840b4fbecda71ddf7b9f7f122c6de906ca98b1bb181a8ea5a3889de5526bc",
+            "bytes": 2908
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/699f50363b3df3dbd34f7bffd81b71c5b9615972.json.gz",
+            "sha256": "2892634593b141e514f41fb8a120a3493d7b878769fb715f413c870fe5d8a4d2",
+            "bytes": 2924
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/6b206a334124f66fd77872eee5f1cd2cde4162f4.json.gz",
+            "sha256": "09880f6b86cbcc436dccc109ac540f344ce7b2834028e5d90e9f20c4e2d08b35",
+            "bytes": 3030
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/6c6d3b95a3157f3e51b312bf9dccaee4de72db09.json.gz",
+            "sha256": "7375adde766b61c3844b3bb1ba5fef6b08e6de338b7fadd58f97bcdf28e432af",
+            "bytes": 4022
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/71378d56f94a7aebd66a9252787bac4bbe60d2a2.json.gz",
+            "sha256": "f0535e75b1cffba6735450fa3a8e92a2d744270206ad596a1aa3f9f41fdd2fb1",
+            "bytes": 2345
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/7926b64d3a777d0649abc6fdf3f750b792f791e3.json.gz",
+            "sha256": "e88141ada4a42d5943d0d11d45c430e433301f7187b4e8bb66e20c9f594fe62d",
+            "bytes": 1034
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/84ba7ab3e0967738370360dc0e07e79a8f1a9b77.json.gz",
+            "sha256": "296a1e767b5a368f8d95b23daaf08a75d647266309a9229de850870dfa0de22c",
+            "bytes": 1041
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/89677d1942ccd4080195b70717fd2033b66af0e5.json.gz",
+            "sha256": "82a32d164e3e912af2f8fb58190d01735299de5d876e9838b1af130d3ddb068c",
+            "bytes": 2909
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/c94bdb0597c70ccdb050bb9d42414b425a7d9389.json.gz",
+            "sha256": "0ae25608088ae3345526b94a294240c61ba94af66c920830483a1d46323dc54e",
+            "bytes": 4081
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/dd4ac85fc00b79fab6d6572ac05d0be2556f3c8d.json.gz",
+            "sha256": "64d4c30df3f102b0a2d6764ada61d4e98f58d9a09acdb85a92b71e2bb04d304d",
+            "bytes": 4094
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/ece17b88b561691adf57757d6e13e47b53db78de.json.gz",
+            "sha256": "4b4bfd2382dda92a980d5cf1446b7bdf24036ac487d2156367ec9f6d71e1a05a",
+            "bytes": 1052
+          },
+          {
+            "path": "data/knowledge/epigenome/portal/fff8425e60939613853ab516d57686c4004917d5.json.gz",
+            "sha256": "9e3c761a4eb4cf87a79df4827a9eb2e963c5958361983ee7d45b9a19addfa093",
+            "bytes": 1038
+          }
+        ],
+        "sha256": "9909c812b1a3077d3f365bc99a4bd9c7c3c8b7874641d59f8cf8a6eed7a9be75",
+        "bytes": 45714,
+        "files": 17,
+        "partition": null
+      },
+      {
+        "path": "spinal cord DNase and mark peaks as fetched",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr1.bed.gz",
+            "sha256": "7858261d652e55a190f8cd026d4d3de1f3fd2a84488b4f78c05572825965c81d",
+            "bytes": 66229
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr10.bed.gz",
+            "sha256": "9950cb056b7cf040b0b1d0198a959a6bf23b679d493238e7f4446f610078cd12",
+            "bytes": 35548
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr11.bed.gz",
+            "sha256": "31d572606868a22fcee36c5a02db1f742459429d2edd2701890b972cee39c03a",
+            "bytes": 39061
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr12.bed.gz",
+            "sha256": "77a07031db571f4fd65dfd1c4d061e516512a47b0fb3d34972f3b6c0c6607214",
+            "bytes": 32520
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr13.bed.gz",
+            "sha256": "37f9ef72afda8b26729a61fa72486f781656aaaab2c28bfe7dcf6dbc276df451",
+            "bytes": 18428
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr14.bed.gz",
+            "sha256": "83b6003d14ca182c1aa7a2c72557ded7cacd4a684897cd69b87670b2801e4e98",
+            "bytes": 23050
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr15.bed.gz",
+            "sha256": "e0aded699d5c17784c0c6a56ade6bc436e12bd4e87c0e7e1cadbb64fcc65e6f4",
+            "bytes": 23741
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr16.bed.gz",
+            "sha256": "46d60dd7f600bb582ef9a49ff1e59b5c5fc5a4bd93a637c1805c5c8daecd6fd5",
+            "bytes": 23516
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr17.bed.gz",
+            "sha256": "a9885a1ebbfa428d3cf5b4b56a594352d8dfbd9da26533009426a6d60e9e3487",
+            "bytes": 36237
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr18.bed.gz",
+            "sha256": "78e8cf1559ee627b668f4cc85f06d032187dbb397b80e9c85253298d8a3a706b",
+            "bytes": 14678
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr19.bed.gz",
+            "sha256": "124e84ce25fbd011fb9bfe8b7a9dd0a63f0e24db1a4a93bdc5d5307efd18b6ac",
+            "bytes": 24897
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr2.bed.gz",
+            "sha256": "f09b40f6b45eba184999730d7b6707083ab673c12fb175573f0c6e09a3057748",
+            "bytes": 54414
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr20.bed.gz",
+            "sha256": "66470c2c9e7297d775a3426bae524b7fd44d4d9e6251f700ea55ea578dfbf575",
+            "bytes": 18309
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr21.bed.gz",
+            "sha256": "e7d8767115ccd492c4286657cce1578c42f58bb1e4dc319e0eb5f265f5fbb650",
+            "bytes": 7871
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr22.bed.gz",
+            "sha256": "6bcce1fd103012a1c2f10eb14c622559c9ff02ee56c8bc1128c6067fcca52eac",
+            "bytes": 15627
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr3.bed.gz",
+            "sha256": "fc12de63a8b359b87869422999ce70c82250cb6d5561aa96841616cacc8bfdde",
+            "bytes": 44443
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr4.bed.gz",
+            "sha256": "692b46fa8d270588c8e314a0f08e7cd8e4c8646f245fbacb584db48402db8180",
+            "bytes": 28791
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr5.bed.gz",
+            "sha256": "77f0cc07f919f793d468c84b09f5080f903bfb58a3b7710dbb3980b9fb7614f3",
+            "bytes": 37204
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr6.bed.gz",
+            "sha256": "c7a58d3cd01bec0b18a9ba84fa7fb733e4f1cee976a7edad5b3aab5b87f1e89e",
+            "bytes": 42773
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr7.bed.gz",
+            "sha256": "ae841bc35b079a3a1b4130e55559c37131a3a5919e7cbcbc51dac678069e6043",
+            "bytes": 33949
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr8.bed.gz",
+            "sha256": "08e142d68d1a9ac6b5f05e694ecfeacfc432038aa0f67adc905564186f98135f",
+            "bytes": 27775
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr9.bed.gz",
+            "sha256": "e3a051e383c79600a2c62d377f7244d2cc6accfb4bc3f285e2da72b8ce544679",
+            "bytes": 32621
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chrX.bed.gz",
+            "sha256": "04aeb27361d2c7e45f0b56796d01960b1704976602586f34d7a47284ea411455",
+            "bytes": 15900
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chrY.bed.gz",
+            "sha256": "eced2066f0c93c9b20ce40732bbd039a4c9c78e4868f9e8dcf41bccdb4c3ee6c",
+            "bytes": 139
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr1.bed.gz",
+            "sha256": "633c1d4a7d277f0eb8b424ce057b2a03fba530482cdbe41ea4afdf1dfdb16c54",
+            "bytes": 39957
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr10.bed.gz",
+            "sha256": "e2da130ff079e53bdcf2d23afdf02dd2bd23452e4779eaab034694e64035d165",
+            "bytes": 20641
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr11.bed.gz",
+            "sha256": "e01f5450b37c83b4ab36b4693f69b5a680f8c0afe569e7df53c9d9a74630f6b1",
+            "bytes": 22881
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr12.bed.gz",
+            "sha256": "9462b5e8624aab7d412a03235cec83f06f7c0aef114c80c92a46bdb572469ace",
+            "bytes": 17243
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr13.bed.gz",
+            "sha256": "824c7437260f501138d29e89c93603799185fb9fa9ccf3bf503a1f3ea98a7ae1",
+            "bytes": 7791
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr14.bed.gz",
+            "sha256": "f2a44bf90380b91a63cb44f27946e6160eba28c0a553d5d8b105a810274b1e4d",
+            "bytes": 12312
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr15.bed.gz",
+            "sha256": "38e07e9939bd40c5b340fa75fef525fe492a7bba07f2f0b1f888d25bfbd59d08",
+            "bytes": 12096
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr16.bed.gz",
+            "sha256": "d107b15d94243b267f49cdb3809285249859e2aa2fcb820bc7f7af78945799c6",
+            "bytes": 16175
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr17.bed.gz",
+            "sha256": "5448c2924aa374a3e351bea2f024eaeacb68e7a523c2ae13e3a5d3b4544155b2",
+            "bytes": 21502
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr18.bed.gz",
+            "sha256": "8fb025793179f8a9704acf8c61162fe73ef70f34fdb740be8d9928cf8c6d3068",
+            "bytes": 7154
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr19.bed.gz",
+            "sha256": "5f181ef41f4e6374ce29d8a38c13e6d265d6ba1cf2bee27e9f470f70868b7136",
+            "bytes": 19399
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr2.bed.gz",
+            "sha256": "961864206e1f7cd290f4b55af964d69cb93007f9250af6777a29169c48566aff",
+            "bytes": 26182
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr20.bed.gz",
+            "sha256": "2a22c2f355c649bdedaeeee529aa9d29594afe90bcd1207ad90b1b57969f926f",
+            "bytes": 16181
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr21.bed.gz",
+            "sha256": "fa4759dfac6d396ba735903fa2a9886931172c1623012718dbaa874ec559c82c",
+            "bytes": 4017
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr22.bed.gz",
+            "sha256": "3eeecb9de10f0a6b2f4caace23345d7199726abf7f33c19e8127f8bb6ebd7bc2",
+            "bytes": 8371
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr3.bed.gz",
+            "sha256": "9905f5cd0d85c7a508344af213bd33aed48a925d4f57cd047e46d8d66bcb58ce",
+            "bytes": 16731
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr4.bed.gz",
+            "sha256": "7a56be2306c6ff9ec6359edcc40b44966add50fee1e0b34865a8bbfc627101c5",
+            "bytes": 15345
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr5.bed.gz",
+            "sha256": "4c3574c6fa9d6746586ffa9ce1dff0fcac92959495a12fefcce3dfd44731cdff",
+            "bytes": 21882
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr6.bed.gz",
+            "sha256": "e2a7ccbcd1ab3d5ad02f403ebfef485a7e27ee1d6be63bf2b57e499e25d38455",
+            "bytes": 24778
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr7.bed.gz",
+            "sha256": "c4e2128506e3b8a4fe9eb1072554bf688e64f7b8ecf462666ea65d81cc73a042",
+            "bytes": 16953
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr8.bed.gz",
+            "sha256": "b893c1c1b546a9daf2e711a6f63a58209a211193ca21324b606aa8c067e4b272",
+            "bytes": 16798
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr9.bed.gz",
+            "sha256": "0797ef1c0ba2f7b484b7c74c907e2b5c420efe356c2b24738689c0634842fc38",
+            "bytes": 17372
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chrX.bed.gz",
+            "sha256": "647a4c118206b16eec876eddc4bdeae9ab034c0eb5f94277aa500aff7e284347",
+            "bytes": 85723
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chrY.bed.gz",
+            "sha256": "3fc3696c71afbceaee8803f1cecfbb186e4910a84cff04b7ff0b7f66875a3b36",
+            "bytes": 141
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr1.bed.gz",
+            "sha256": "8478897e1966e7cf46d33090f197b545b23d6b57c96b5fdc78059f32abe7e183",
+            "bytes": 144217
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr10.bed.gz",
+            "sha256": "04c6727338ee38c58161f6a634fed0fd459412b45768b3876816fbf9e1ba5315",
+            "bytes": 82323
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr11.bed.gz",
+            "sha256": "4b7b62d4084b8ca9d9805af0cfe8ff0f3ebf2ffc4adf4b6b39bf40b6d15816b4",
+            "bytes": 88155
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr12.bed.gz",
+            "sha256": "e4363a53937196c30aff95e11af6ca510a0bfebd07436de2fb95099bb804a9ab",
+            "bytes": 62373
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr13.bed.gz",
+            "sha256": "89b426adfc523d75327cb7ec86949dee0a4c621d27ccd259659d2953e871168d",
+            "bytes": 30002
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr14.bed.gz",
+            "sha256": "2430e055a6a843cad73e427f44587a1c1808847cf4d2d6fbb6e4bbe328d4dc7e",
+            "bytes": 46039
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr15.bed.gz",
+            "sha256": "a7d4bdda7f85e5642ce3d49a84043423c5957c956ad1f2b3736725abd3a8f158",
+            "bytes": 52365
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr16.bed.gz",
+            "sha256": "f39e44f6227a342bcc8053093726ac15640deb6bee0b9228d7ec29115d3686ef",
+            "bytes": 61611
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr17.bed.gz",
+            "sha256": "3d50c20009c474c9a1c781ed1b51627e8341d1c1f5641784b5f78a59a6f57df4",
+            "bytes": 83849
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr18.bed.gz",
+            "sha256": "2d80fe33031c4cfdc6ac3b63f77cb1956bb850e5c35621e2ddf0684552a3fbf7",
+            "bytes": 32436
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr19.bed.gz",
+            "sha256": "fd34efa274d34ca58fb5368fdfd43ce97db601209873e0d86551b7242f50e772",
+            "bytes": 57423
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr2.bed.gz",
+            "sha256": "06b5900c5ea99b8cb06b3b6ea590aae04f289c9c60f610df37ce809f856a3cdb",
+            "bytes": 108747
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr20.bed.gz",
+            "sha256": "31e621e22431fc8ba22671494e98bc2da073aff0ecbdab4f0f253a7e28a20bab",
+            "bytes": 50489
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr21.bed.gz",
+            "sha256": "103dc918ad7376be7308e255046798b9f2c45c8d16e7b355d547c3e06abc22cc",
+            "bytes": 17060
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr22.bed.gz",
+            "sha256": "8dc5b2b02d980b359f41e79151ae9901fd3d7da1e3b66889f32f0b5fb143dfd0",
+            "bytes": 45353
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr3.bed.gz",
+            "sha256": "c7b3aa487b12d50054e495123b2db0f3f1c4e8488b3c344c7b97d78bc4801dab",
+            "bytes": 76412
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr4.bed.gz",
+            "sha256": "b698ca342d18b40a0761cddc8a37f6fddcfbfd0726f85b6aa4baed9faf22f664",
+            "bytes": 43704
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr5.bed.gz",
+            "sha256": "d7993fe2980a1ad3aff0ec7783aef478c806ccde1d9f39fd27de8182bccf05d6",
+            "bytes": 68781
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr6.bed.gz",
+            "sha256": "0f920da746a7b27928c90906ef33350bab297945c143ddf456d06b7a536458c2",
+            "bytes": 69434
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr7.bed.gz",
+            "sha256": "f7302dba8a6281f5c20a84e4b4974def4b44fa5787dce601b9646e89e2868d6f",
+            "bytes": 70911
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr8.bed.gz",
+            "sha256": "d5b5298be7bde2a200d38cb9dc4a088db08e0f0ca71e34a0c8f29af21b5d82ee",
+            "bytes": 56733
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chr9.bed.gz",
+            "sha256": "dd643a6beb183b91a88a76f2968676842603d998d1e5957b591d8861672d5c29",
+            "bytes": 64817
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chrX.bed.gz",
+            "sha256": "b6da0364ec4e4364c74a2849de24d9a22eb3c6b0ce04625ec110360ea1593e8e",
+            "bytes": 22782
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me1_chrY.bed.gz",
+            "sha256": "156369918297a264f841d0486aa538eb1c5681956c09ce03da511a617d220a36",
+            "bytes": 139
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr1.bed.gz",
+            "sha256": "a1fd3793b0d587261bd05d8ea4de79dd4c03df07a4556c3f1d90c209e4daa2d5",
+            "bytes": 33252
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr10.bed.gz",
+            "sha256": "f6025a27b1b0a7b709392ad9b5b2aac521d7e1d21f5ad2466fc74ee0e9617eda",
+            "bytes": 14909
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr11.bed.gz",
+            "sha256": "ff0f3e10cd82252eef19383193f44ba61f982d441831e9bd6793645de9e34f9c",
+            "bytes": 17991
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr12.bed.gz",
+            "sha256": "e4d44da85c94e960dc42a87b28512544e95c92f18d2dd1e9b5f0d4ebd82e4a79",
+            "bytes": 17804
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr13.bed.gz",
+            "sha256": "f05414e7e512b7e07761aea9cf9feb3211866fb289d1504780a5007a7f59cb67",
+            "bytes": 7753
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr14.bed.gz",
+            "sha256": "6267b20e9ac0763c965e8dca132d42f790c915dce49af3c7a5c26c1fecde56be",
+            "bytes": 10531
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr15.bed.gz",
+            "sha256": "0f5ad2518c386af4078e43a1dd787c25ea303107d6aaaea4d0a1b39483aac0dd",
+            "bytes": 11395
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr16.bed.gz",
+            "sha256": "0cd4b8a598b109270d428bbdd86d3d95ac548a90d6a59367655ebe2f1748d4e4",
+            "bytes": 13397
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr17.bed.gz",
+            "sha256": "f2c4ae5a93027fba130a0e4e14907f97414c334328a51341668ad860b05a6b89",
+            "bytes": 19507
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr18.bed.gz",
+            "sha256": "321ef699829c31dfccc5c3feb529f7793d1bc93ae0ee30d919cf08d3e908d764",
+            "bytes": 6622
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr19.bed.gz",
+            "sha256": "303b9f8cbd0352ae03a0d2fed1748a9bbd73ce278603ff4049a9b7bbf087c8c3",
+            "bytes": 21292
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr2.bed.gz",
+            "sha256": "39f6acb10b412b57a646890edcfbae046fc084dfc407562f4316b3044e712c9f",
+            "bytes": 23508
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr20.bed.gz",
+            "sha256": "19ba3db870007833042446735928d91c14cbc9017c80a425f5377a117350d992",
+            "bytes": 9090
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr21.bed.gz",
+            "sha256": "63ec8515fead0f3c4978113f4ea69d6599da3ab4aaa81264fb77cb0c464adbfc",
+            "bytes": 3422
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr22.bed.gz",
+            "sha256": "e6e40a7bcfa25b056c73853e868b8b2da0ec94218d9b8819147dc2446d9f78fb",
+            "bytes": 7909
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr3.bed.gz",
+            "sha256": "0294072cc9b47734529319051d5d79a4d336045958c7ca2ed143e4072776d5fb",
+            "bytes": 19391
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr4.bed.gz",
+            "sha256": "05b8edb65895fe683f52c6af198f746495bb5d84c1ff346bfc753c146448dd1e",
+            "bytes": 13981
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr5.bed.gz",
+            "sha256": "22115f9a93930dcdfa66355931912f8afedb81a531ddcd6e16fd60efdbf303be",
+            "bytes": 16312
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr6.bed.gz",
+            "sha256": "12fa80c581a0ee8f94c10577c90fcbf1b213fb696b6b10c78053068892163370",
+            "bytes": 19804
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr7.bed.gz",
+            "sha256": "598128e6c83e4e1a5556d2c4107643bd07982ff8fcb939aebd221f685f079339",
+            "bytes": 17098
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr8.bed.gz",
+            "sha256": "7f2c1a17e4e2f2d9f029ed6b020e1649efaba50113082fb75d548225571dbce9",
+            "bytes": 13292
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr9.bed.gz",
+            "sha256": "4d57593882cc529c9160332353a99d34f3fe231c0f6df6d8677e0bcacd18aaf2",
+            "bytes": 14287
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chrX.bed.gz",
+            "sha256": "706e0db071ad10b16237cd8efb518ed3ea559fd0fa76620245d1ea7714056fa1",
+            "bytes": 11489
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chrY.bed.gz",
+            "sha256": "4765e0e132ac255113ac92f0069e533a769172856faf4e07625c747b9a258529",
+            "bytes": 139
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr1.bed.gz",
+            "sha256": "5e781c2a11d11d38e42e62df18052945930355cb7c5b2f09061fedcd6f8febe8",
+            "bytes": 36685
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr10.bed.gz",
+            "sha256": "f330ddc549ede5e6b35b05d53c80ef7d5056829e8b975d18d2da97750af490b9",
+            "bytes": 24171
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr11.bed.gz",
+            "sha256": "f1ee64085a75b113d1e8df5da0aef7d5f0063a8490e8b5cc70ee186bf9c360d1",
+            "bytes": 26257
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr12.bed.gz",
+            "sha256": "d74d4c528a9c0a2a552859dc136928231f910ff5304bbcf49b699b695b6aeaaa",
+            "bytes": 27832
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr13.bed.gz",
+            "sha256": "294617a81abd1a9ad0739c0b9e60a256c61655daa4f7c9ab7a7e5fdadb639bed",
+            "bytes": 18779
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr14.bed.gz",
+            "sha256": "f61a983c2d62ea1d188da01b38eb6c5d3a32e8e100b3b9bb4e951f45b37a175f",
+            "bytes": 19504
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr15.bed.gz",
+            "sha256": "f5073ad5b0de0b9d7dcc40d648760a4d0b83cfb74457294ee6da1f0455ebe69f",
+            "bytes": 14589
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr16.bed.gz",
+            "sha256": "f99473b05d5709f2fe230479158a8ff998095e48e076af72b9d073cd7508d294",
+            "bytes": 13528
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr17.bed.gz",
+            "sha256": "2f84c173f534e637b959ed86b9b45ffedce10a67a1725dbc2354000ba047892d",
+            "bytes": 10228
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr18.bed.gz",
+            "sha256": "b5827459d3cda8a239f216e5ca53566129f91d1b4c2b22dbacc25dc7881c7cbb",
+            "bytes": 13666
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr19.bed.gz",
+            "sha256": "ddb86e5cd53d23b6296b0923340529b37363741ea3ccd9a663dcdc8918ec4250",
+            "bytes": 24422
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr2.bed.gz",
+            "sha256": "0761d4ce2a5a5e57fc85b49c95e5ea08960af8d109467aa0e01f64a14a284676",
+            "bytes": 45195
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr20.bed.gz",
+            "sha256": "3b2da020ac6290c6786e442cf58a38dfc20438def9d24f0acc867e896959c798",
+            "bytes": 9682
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr21.bed.gz",
+            "sha256": "a670f338f901c508600179e96c15ab0b59595ee7accc1477e629508d8ea2ef64",
+            "bytes": 9004
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr22.bed.gz",
+            "sha256": "4d88cc4c8e7154b2dbe83a2552a86ef61906154ab9d3cc7f14a05396ccefb860",
+            "bytes": 5935
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr3.bed.gz",
+            "sha256": "608226f32137b5e4bf8866371977972bbe8fa66eb170f824d325e66997c9874c",
+            "bytes": 36500
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr4.bed.gz",
+            "sha256": "1d96ecb74a3701931db5248d65fd77b1b56171b5e072215464d5d0de9553a461",
+            "bytes": 38394
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr5.bed.gz",
+            "sha256": "0d54b14ae5b33ad39eb4ea90f2c156f62b06f3ae04db920b6d678d8acb3fbed9",
+            "bytes": 36549
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr6.bed.gz",
+            "sha256": "88806ba41b084d7e5d352a5da50e736b7149f5f691c4a98c06d4ba08dc625ec1",
+            "bytes": 32320
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr7.bed.gz",
+            "sha256": "5a3cbd22e4fa2e356bec40f87623563f722149a111853d9ab02534c19d7cfe6e",
+            "bytes": 32597
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr8.bed.gz",
+            "sha256": "8046cf5b16bd05feaa70bb9e56e829317490b82163d2cf1c6f9be646f91becaf",
+            "bytes": 31659
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chr9.bed.gz",
+            "sha256": "9f7e3a2171ba345eadc4b3aefee3e59e1782876eebb57df4c8cc06a946bea983",
+            "bytes": 20508
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chrX.bed.gz",
+            "sha256": "c43d823f13e9cce0327ee588393a4840d47abf78c2a2cdb0753cf90c192a5a03",
+            "bytes": 28667
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K9me3_chrY.bed.gz",
+            "sha256": "e8cdab9f2b952e94e2198b0414c3847b21e61f182e04a8d8218c891204fe4953",
+            "bytes": 250
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr1.bed.gz",
+            "sha256": "3b4407e05f160585bf1c91f7a5bcb0bff9f9126d08fe43d2cada47fdd056dc78",
+            "bytes": 322398
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr10.bed.gz",
+            "sha256": "508e5be4ccb23ef3d91691946e5e2df3c852759430aa1244ed69ec90de3c128d",
+            "bytes": 197830
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr11.bed.gz",
+            "sha256": "a8edd48c1e5e7f9d5ac5e38cb7bffe147b6503194794f8f03b61ebcba2db728e",
+            "bytes": 190223
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr12.bed.gz",
+            "sha256": "e4486973ab3cf2f72832f26cc33e486140319498d195ab7de982148ad2c82d7f",
+            "bytes": 182376
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr13.bed.gz",
+            "sha256": "f55d5719d95d96d94e80f2041604d1d01d6bac60ed3170536b605609c0c1175e",
+            "bytes": 127852
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr14.bed.gz",
+            "sha256": "78fea46d804a2dc6581bf3ec364061d54571511ed444fd574ab3594a828da813",
+            "bytes": 122202
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr15.bed.gz",
+            "sha256": "ee828ac95ecb0a8e781913963f6cbd820c09a57f0fb5c5a9b3a727c795ffabe7",
+            "bytes": 117815
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr16.bed.gz",
+            "sha256": "a79bc8f18b9e2d7fee40816e8fd12c5779d2e49d843e53e75d2ed6f6fbc0d619",
+            "bytes": 123708
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr17.bed.gz",
+            "sha256": "23a78c6a3f920c176ea61a3e7aeb713456094a8087e51e8ec9225db869236593",
+            "bytes": 127429
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr18.bed.gz",
+            "sha256": "90e30d579841f648d03e2b526071d5c7e744f5043c378290a9ccd3f73fa59fa9",
+            "bytes": 107910
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr19.bed.gz",
+            "sha256": "7b46ba17d985866b493438e439e9142ebdf819a4a7f016caf877a37cb8d872e8",
+            "bytes": 75318
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr2.bed.gz",
+            "sha256": "c9315dbcd1329be3139974a39f0b0fd224dc047a326df9c41c5df62782b24fdf",
+            "bytes": 336546
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr20.bed.gz",
+            "sha256": "a7baa7a8fec6bfdc278411f2b4daa2ea0367d0e7cec000b9f99dbb1a259ab488",
+            "bytes": 97986
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr21.bed.gz",
+            "sha256": "b7809c03c2eae6ea84bcbf238d540ce1be97f8747eda87b246a830b990504fb3",
+            "bytes": 44704
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr22.bed.gz",
+            "sha256": "d1fd5e4f0083b3f6d12ab6b8da95e69c84ce6af55a789fcd80900eaeb27e62dd",
+            "bytes": 58283
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr3.bed.gz",
+            "sha256": "e7780374390c60fac3db44291d77fb4b7f304aab4378b704ce1a9786d0fbee98",
+            "bytes": 264850
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr4.bed.gz",
+            "sha256": "1fff4e8d111e9f19a86436a4960602d1b741acd0c2cead244ec2eb97c1bcce5f",
+            "bytes": 227951
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr5.bed.gz",
+            "sha256": "03d43fed11eb973c876a484a94a49b598b55062e9e78ef999e4d82fb5b532857",
+            "bytes": 240510
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr6.bed.gz",
+            "sha256": "1a28395dba5299811fdfbc24c5789dab3ed2f995e0d41f186127f56f5294ef5b",
+            "bytes": 230277
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr7.bed.gz",
+            "sha256": "2780de302841ea904821b85dad42abbafa737c8f79940221522812a0eb598ebe",
+            "bytes": 208419
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr8.bed.gz",
+            "sha256": "05bf78da6c3144bd22f59bcffef70ccc5a1aef63a3e3bae8b474d002eac9b8b5",
+            "bytes": 198233
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr9.bed.gz",
+            "sha256": "ea274a7e23c593131bb03c2667d6dc9a9dc286007668f2c08e43608fb0f52779",
+            "bytes": 163232
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chrX.bed.gz",
+            "sha256": "dd1b14a7e18c312a1f59c9e3b6752e22c1e4f31e1df721db59fb9c623fbf56c5",
+            "bytes": 125511
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chrY.bed.gz",
+            "sha256": "d66ab024e8ac0e1bd27c264574e2625d44e24ff3c19e216ff7a42ed0076fcc54",
+            "bytes": 6141
+          }
+        ],
+        "sha256": "5baf69969697e1055c5728a8baa6fc830c1f9cf4cef32fa1b157c2fa0124e3f5",
+        "bytes": 7400301,
+        "files": 144,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "code": {
+      "git_sha": "f29259c7f552d86d10ffacf21e38bd2514eaec90",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/dnase_spinal_cord_chr21.bed.gz"
+      ],
+      "argv": [
+        "scripts/reader_neural.py",
+        "fetch"
+      ],
+      "python": "3.12.13"
+    },
+    "parameters": {
+      "biosample": "spinal cord",
+      "registration_commit": "2e624a874d4c23db0dbbe24dd9cb39e5f71559bc"
+    },
+    "exclusions": [],
+    "partitions": "n/a: a manifest of fetched files, no evaluation split",
+    "code_cleanliness": {
+      "git_sha": "f29259c7f552d86d10ffacf21e38bd2514eaec90",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/reader_neural.py",
+        "form": "committed_repository_file",
+        "path": "scripts/reader_neural.py",
+        "is_committed": true,
+        "declared_entry": "scripts/reader_neural.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/reader_neural.py"
+      ],
+      "counting_path_count": 22,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "f29259c7f552d86d10ffacf21e38bd2514eaec90",
+      "code_cleanliness_git_sha": "f29259c7f552d86d10ffacf21e38bd2514eaec90",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record f29259c"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 429,
+      "opens_under_data": 327,
+      "files_read": 163,
+      "files_written": 144,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
     }
   }
 }

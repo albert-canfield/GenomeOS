@@ -14,7 +14,8 @@
     "astrocyte",
     "CD14-positive monocyte",
     "testis",
-    "ovary"
+    "ovary",
+    "spinal cord"
   ],
   "chromosomes": {
     "chr1": {
@@ -264,6 +265,23 @@
         "nodes": 1639,
         "nodes_open": 820,
         "nodes_silent": 175
+      },
+      "spinal cord": {
+        "peaks": 37689,
+        "coding_genes": 2066,
+        "genes_read": 1361,
+        "genes_read_open": 1523,
+        "genes_poised": 185,
+        "genes_read_by_marks": 23,
+        "read_fraction": 0.6588,
+        "enhancers_active": 21019,
+        "enhancers_active_fraction": 0.2386,
+        "enhancers_active_per_100k_peaks": 55769.6,
+        "nodes": 1639,
+        "nodes_open": 820,
+        "nodes_open_at_reference": 1585,
+        "h3k27me3_peaks": 4014,
+        "nodes_silent": 4
       }
     },
     "chr2": {
@@ -513,6 +531,23 @@
         "nodes": 1654,
         "nodes_open": 828,
         "nodes_silent": 196
+      },
+      "spinal cord": {
+        "peaks": 39258,
+        "coding_genes": 1252,
+        "genes_read": 894,
+        "genes_read_open": 1011,
+        "genes_poised": 126,
+        "genes_read_by_marks": 9,
+        "read_fraction": 0.7141,
+        "enhancers_active": 19504,
+        "enhancers_active_fraction": 0.2449,
+        "enhancers_active_per_100k_peaks": 49681.6,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_open_at_reference": 1628,
+        "h3k27me3_peaks": 2564,
+        "nodes_silent": 1
       }
     },
     "chr3": {
@@ -762,6 +797,23 @@
         "nodes": 1441,
         "nodes_open": 722,
         "nodes_silent": 174
+      },
+      "spinal cord": {
+        "peaks": 30919,
+        "coding_genes": 1084,
+        "genes_read": 794,
+        "genes_read_open": 877,
+        "genes_poised": 91,
+        "genes_read_by_marks": 8,
+        "read_fraction": 0.7325,
+        "enhancers_active": 15044,
+        "enhancers_active_fraction": 0.2407,
+        "enhancers_active_per_100k_peaks": 48656.2,
+        "nodes": 1441,
+        "nodes_open": 721,
+        "nodes_open_at_reference": 1419,
+        "h3k27me3_peaks": 1617,
+        "nodes_silent": 2
       }
     },
     "chr4": {
@@ -1011,6 +1063,23 @@
         "nodes": 1322,
         "nodes_open": 662,
         "nodes_silent": 145
+      },
+      "spinal cord": {
+        "peaks": 26606,
+        "coding_genes": 759,
+        "genes_read": 499,
+        "genes_read_open": 593,
+        "genes_poised": 98,
+        "genes_read_by_marks": 4,
+        "read_fraction": 0.6574,
+        "enhancers_active": 11243,
+        "enhancers_active_fraction": 0.2438,
+        "enhancers_active_per_100k_peaks": 42257.4,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_open_at_reference": 1295,
+        "h3k27me3_peaks": 1499,
+        "nodes_silent": 2
       }
     },
     "chr5": {
@@ -1260,6 +1329,23 @@
         "nodes": 1245,
         "nodes_open": 624,
         "nodes_silent": 168
+      },
+      "spinal cord": {
+        "peaks": 28122,
+        "coding_genes": 895,
+        "genes_read": 625,
+        "genes_read_open": 721,
+        "genes_poised": 102,
+        "genes_read_by_marks": 6,
+        "read_fraction": 0.6983,
+        "enhancers_active": 13263,
+        "enhancers_active_fraction": 0.2497,
+        "enhancers_active_per_100k_peaks": 47162.4,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_open_at_reference": 1229,
+        "h3k27me3_peaks": 2140,
+        "nodes_silent": 0
       }
     },
     "chr6": {
@@ -1509,6 +1595,23 @@
         "nodes": 1180,
         "nodes_open": 590,
         "nodes_silent": 152
+      },
+      "spinal cord": {
+        "peaks": 26907,
+        "coding_genes": 1052,
+        "genes_read": 764,
+        "genes_read_open": 841,
+        "genes_poised": 85,
+        "genes_read_by_marks": 8,
+        "read_fraction": 0.7262,
+        "enhancers_active": 14010,
+        "enhancers_active_fraction": 0.246,
+        "enhancers_active_per_100k_peaks": 52068.2,
+        "nodes": 1180,
+        "nodes_open": 591,
+        "nodes_open_at_reference": 1160,
+        "h3k27me3_peaks": 2446,
+        "nodes_silent": 1
       }
     },
     "chr7": {
@@ -1758,6 +1861,23 @@
         "nodes": 1133,
         "nodes_open": 568,
         "nodes_silent": 126
+      },
+      "spinal cord": {
+        "peaks": 24370,
+        "coding_genes": 935,
+        "genes_read": 641,
+        "genes_read_open": 700,
+        "genes_poised": 73,
+        "genes_read_by_marks": 14,
+        "read_fraction": 0.6856,
+        "enhancers_active": 12021,
+        "enhancers_active_fraction": 0.2439,
+        "enhancers_active_per_100k_peaks": 49327.0,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_open_at_reference": 1105,
+        "h3k27me3_peaks": 1660,
+        "nodes_silent": 2
       }
     },
     "chr8": {
@@ -2007,6 +2127,23 @@
         "nodes": 1112,
         "nodes_open": 556,
         "nodes_silent": 155
+      },
+      "spinal cord": {
+        "peaks": 23225,
+        "coding_genes": 706,
+        "genes_read": 463,
+        "genes_read_open": 536,
+        "genes_poised": 80,
+        "genes_read_by_marks": 7,
+        "read_fraction": 0.6558,
+        "enhancers_active": 11137,
+        "enhancers_active_fraction": 0.2457,
+        "enhancers_active_per_100k_peaks": 47952.6,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_open_at_reference": 1077,
+        "h3k27me3_peaks": 1643,
+        "nodes_silent": 4
       }
     },
     "chr9": {
@@ -2256,6 +2393,23 @@
         "nodes": 814,
         "nodes_open": 411,
         "nodes_silent": 91
+      },
+      "spinal cord": {
+        "peaks": 19076,
+        "coding_genes": 776,
+        "genes_read": 530,
+        "genes_read_open": 598,
+        "genes_poised": 74,
+        "genes_read_by_marks": 6,
+        "read_fraction": 0.683,
+        "enhancers_active": 10239,
+        "enhancers_active_fraction": 0.2459,
+        "enhancers_active_per_100k_peaks": 53674.8,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_open_at_reference": 790,
+        "h3k27me3_peaks": 1699,
+        "nodes_silent": 1
       }
     },
     "chr10": {
@@ -2505,6 +2659,23 @@
         "nodes": 922,
         "nodes_open": 461,
         "nodes_silent": 102
+      },
+      "spinal cord": {
+        "peaks": 23227,
+        "coding_genes": 732,
+        "genes_read": 524,
+        "genes_read_open": 613,
+        "genes_poised": 94,
+        "genes_read_by_marks": 5,
+        "read_fraction": 0.7158,
+        "enhancers_active": 12096,
+        "enhancers_active_fraction": 0.2551,
+        "enhancers_active_per_100k_peaks": 52077.3,
+        "nodes": 922,
+        "nodes_open": 462,
+        "nodes_open_at_reference": 897,
+        "h3k27me3_peaks": 2019,
+        "nodes_silent": 0
       }
     },
     "chr11": {
@@ -2754,6 +2925,23 @@
         "nodes": 947,
         "nodes_open": 475,
         "nodes_silent": 108
+      },
+      "spinal cord": {
+        "peaks": 22220,
+        "coding_genes": 1319,
+        "genes_read": 814,
+        "genes_read_open": 896,
+        "genes_poised": 99,
+        "genes_read_by_marks": 17,
+        "read_fraction": 0.6171,
+        "enhancers_active": 11728,
+        "enhancers_active_fraction": 0.2424,
+        "enhancers_active_per_100k_peaks": 52781.3,
+        "nodes": 947,
+        "nodes_open": 475,
+        "nodes_open_at_reference": 922,
+        "h3k27me3_peaks": 2250,
+        "nodes_silent": 3
       }
     },
     "chr12": {
@@ -3003,6 +3191,23 @@
         "nodes": 922,
         "nodes_open": 461,
         "nodes_silent": 123
+      },
+      "spinal cord": {
+        "peaks": 21356,
+        "coding_genes": 1041,
+        "genes_read": 740,
+        "genes_read_open": 813,
+        "genes_poised": 79,
+        "genes_read_by_marks": 6,
+        "read_fraction": 0.7109,
+        "enhancers_active": 11282,
+        "enhancers_active_fraction": 0.2422,
+        "enhancers_active_per_100k_peaks": 52828.2,
+        "nodes": 922,
+        "nodes_open": 462,
+        "nodes_open_at_reference": 901,
+        "h3k27me3_peaks": 1681,
+        "nodes_silent": 0
       }
     },
     "chr13": {
@@ -3245,6 +3450,23 @@
         "nodes": 662,
         "nodes_open": 331,
         "nodes_silent": 73
+      },
+      "spinal cord": {
+        "peaks": 15015,
+        "coding_genes": 322,
+        "genes_read": 251,
+        "genes_read_open": 269,
+        "genes_poised": 19,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.7795,
+        "enhancers_active": 6755,
+        "enhancers_active_fraction": 0.2635,
+        "enhancers_active_per_100k_peaks": 44988.3,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_open_at_reference": 647,
+        "h3k27me3_peaks": 740,
+        "nodes_silent": 0
       }
     },
     "chr14": {
@@ -3494,6 +3716,23 @@
         "nodes": 634,
         "nodes_open": 318,
         "nodes_silent": 65
+      },
+      "spinal cord": {
+        "peaks": 14387,
+        "coding_genes": 619,
+        "genes_read": 442,
+        "genes_read_open": 497,
+        "genes_poised": 57,
+        "genes_read_by_marks": 2,
+        "read_fraction": 0.7141,
+        "enhancers_active": 7635,
+        "enhancers_active_fraction": 0.2401,
+        "enhancers_active_per_100k_peaks": 53068.7,
+        "nodes": 634,
+        "nodes_open": 318,
+        "nodes_open_at_reference": 616,
+        "h3k27me3_peaks": 1200,
+        "nodes_silent": 5
       }
     },
     "chr15": {
@@ -3743,6 +3982,23 @@
         "nodes": 543,
         "nodes_open": 272,
         "nodes_silent": 61
+      },
+      "spinal cord": {
+        "peaks": 13852,
+        "coding_genes": 603,
+        "genes_read": 422,
+        "genes_read_open": 471,
+        "genes_poised": 52,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.6998,
+        "enhancers_active": 7651,
+        "enhancers_active_fraction": 0.2463,
+        "enhancers_active_per_100k_peaks": 55233.9,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_open_at_reference": 523,
+        "h3k27me3_peaks": 1191,
+        "nodes_silent": 3
       }
     },
     "chr16": {
@@ -3992,6 +4248,23 @@
         "nodes": 563,
         "nodes_open": 282,
         "nodes_silent": 83
+      },
+      "spinal cord": {
+        "peaks": 14602,
+        "coding_genes": 856,
+        "genes_read": 572,
+        "genes_read_open": 640,
+        "genes_poised": 78,
+        "genes_read_by_marks": 10,
+        "read_fraction": 0.6682,
+        "enhancers_active": 7600,
+        "enhancers_active_fraction": 0.2352,
+        "enhancers_active_per_100k_peaks": 52047.7,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_open_at_reference": 543,
+        "h3k27me3_peaks": 1609,
+        "nodes_silent": 5
       }
     },
     "chr17": {
@@ -4241,6 +4514,23 @@
         "nodes": 546,
         "nodes_open": 273,
         "nodes_silent": 53
+      },
+      "spinal cord": {
+        "peaks": 15029,
+        "coding_genes": 1187,
+        "genes_read": 829,
+        "genes_read_open": 929,
+        "genes_poised": 114,
+        "genes_read_by_marks": 14,
+        "read_fraction": 0.6984,
+        "enhancers_active": 9801,
+        "enhancers_active_fraction": 0.2368,
+        "enhancers_active_per_100k_peaks": 65213.9,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_open_at_reference": 530,
+        "h3k27me3_peaks": 2184,
+        "nodes_silent": 1
       }
     },
     "chr18": {
@@ -4475,6 +4765,23 @@
         "nodes": 560,
         "nodes_open": 280,
         "nodes_silent": 78
+      },
+      "spinal cord": {
+        "peaks": 12770,
+        "coding_genes": 267,
+        "genes_read": 193,
+        "genes_read_open": 224,
+        "genes_poised": 32,
+        "genes_read_by_marks": 1,
+        "read_fraction": 0.7228,
+        "enhancers_active": 5838,
+        "enhancers_active_fraction": 0.2657,
+        "enhancers_active_per_100k_peaks": 45716.5,
+        "nodes": 560,
+        "nodes_open": 281,
+        "nodes_open_at_reference": 549,
+        "h3k27me3_peaks": 687,
+        "nodes_silent": 1
       }
     },
     "chr19": {
@@ -4724,6 +5031,23 @@
         "nodes": 339,
         "nodes_open": 170,
         "nodes_silent": 12
+      },
+      "spinal cord": {
+        "peaks": 8829,
+        "coding_genes": 1479,
+        "genes_read": 1004,
+        "genes_read_open": 1100,
+        "genes_poised": 116,
+        "genes_read_by_marks": 20,
+        "read_fraction": 0.6788,
+        "enhancers_active": 5949,
+        "enhancers_active_fraction": 0.2025,
+        "enhancers_active_per_100k_peaks": 67380.2,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_open_at_reference": 319,
+        "h3k27me3_peaks": 1981,
+        "nodes_silent": 1
       }
     },
     "chr20": {
@@ -4973,6 +5297,23 @@
         "nodes": 478,
         "nodes_open": 239,
         "nodes_silent": 60
+      },
+      "spinal cord": {
+        "peaks": 11529,
+        "coding_genes": 548,
+        "genes_read": 384,
+        "genes_read_open": 436,
+        "genes_poised": 55,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.7007,
+        "enhancers_active": 6393,
+        "enhancers_active_fraction": 0.2372,
+        "enhancers_active_per_100k_peaks": 55451.5,
+        "nodes": 478,
+        "nodes_open": 240,
+        "nodes_open_at_reference": 467,
+        "h3k27me3_peaks": 1609,
+        "nodes_silent": 0
       }
     },
     "chr21": {
@@ -5199,6 +5540,23 @@
         "nodes": 228,
         "nodes_open": 115,
         "nodes_silent": 24
+      },
+      "spinal cord": {
+        "peaks": 5227,
+        "coding_genes": 221,
+        "genes_read": 136,
+        "genes_read_open": 145,
+        "genes_poised": 9,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.6154,
+        "enhancers_active": 2710,
+        "enhancers_active_fraction": 0.2232,
+        "enhancers_active_per_100k_peaks": 51846.2,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_open_at_reference": 215,
+        "h3k27me3_peaks": 378,
+        "nodes_silent": 4
       }
     },
     "chr22": {
@@ -5448,6 +5806,23 @@
         "nodes": 247,
         "nodes_open": 124,
         "nodes_silent": 12
+      },
+      "spinal cord": {
+        "peaks": 6845,
+        "coding_genes": 447,
+        "genes_read": 308,
+        "genes_read_open": 349,
+        "genes_poised": 44,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.689,
+        "enhancers_active": 4345,
+        "enhancers_active_fraction": 0.2205,
+        "enhancers_active_per_100k_peaks": 63477.0,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_open_at_reference": 232,
+        "h3k27me3_peaks": 831,
+        "nodes_silent": 0
       }
     },
     "chrX": {
@@ -5697,6 +6072,23 @@
         "nodes": 822,
         "nodes_open": 412,
         "nodes_silent": 92
+      },
+      "spinal cord": {
+        "peaks": 14763,
+        "coding_genes": 867,
+        "genes_read": 466,
+        "genes_read_open": 540,
+        "genes_poised": 77,
+        "genes_read_by_marks": 3,
+        "read_fraction": 0.5375,
+        "enhancers_active": 5459,
+        "enhancers_active_fraction": 0.2384,
+        "enhancers_active_per_100k_peaks": 36977.6,
+        "nodes": 822,
+        "nodes_open": 412,
+        "nodes_open_at_reference": 724,
+        "h3k27me3_peaks": 8780,
+        "nodes_silent": 5
       }
     },
     "chrY": {
@@ -5894,6 +6286,23 @@
         "nodes": 49,
         "nodes_open": 9,
         "nodes_silent": 21
+      },
+      "spinal cord": {
+        "peaks": 699,
+        "coding_genes": 61,
+        "genes_read": 13,
+        "genes_read_open": 13,
+        "genes_poised": 0,
+        "genes_read_by_marks": 0,
+        "read_fraction": 0.2131,
+        "enhancers_active": 131,
+        "enhancers_active_fraction": 0.1444,
+        "enhancers_active_per_100k_peaks": 18741.1,
+        "nodes": 49,
+        "nodes_open": 25,
+        "nodes_open_at_reference": 15,
+        "h3k27me3_peaks": 0,
+        "nodes_silent": 2
       }
     }
   },
@@ -5906,7 +6315,11 @@
       "genes_read_by_marks": 82,
       "marks_used_on": 24,
       "enhancers_active": 193255,
-      "nodes_silent": 2085
+      "peaks": 518503,
+      "enhancers_active_per_100k_peaks": 37271.7,
+      "nodes_silent": 2085,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "HepG2": {
       "coding_genes": 20094,
@@ -5916,7 +6329,11 @@
       "genes_read_by_marks": 179,
       "marks_used_on": 24,
       "enhancers_active": 124478,
-      "nodes_silent": 1465
+      "peaks": 176634,
+      "enhancers_active_per_100k_peaks": 70472.3,
+      "nodes_silent": 1465,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "GM12878": {
       "coding_genes": 20094,
@@ -5926,7 +6343,11 @@
       "genes_read_by_marks": 1096,
       "marks_used_on": 24,
       "enhancers_active": 57321,
-      "nodes_silent": 4933
+      "peaks": 76119,
+      "enhancers_active_per_100k_peaks": 75304.5,
+      "nodes_silent": 4933,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "H1": {
       "coding_genes": 20094,
@@ -5936,7 +6357,11 @@
       "genes_read_by_marks": 64,
       "marks_used_on": 24,
       "enhancers_active": 133114,
-      "nodes_silent": 1351
+      "peaks": 232709,
+      "enhancers_active_per_100k_peaks": 57201.9,
+      "nodes_silent": 1351,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "IMR-90": {
       "coding_genes": 20094,
@@ -5946,7 +6371,11 @@
       "genes_read_by_marks": 116,
       "marks_used_on": 24,
       "enhancers_active": 213753,
-      "nodes_silent": 1411
+      "peaks": 312250,
+      "enhancers_active_per_100k_peaks": 68455.7,
+      "nodes_silent": 1411,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "SK-N-SH": {
       "coding_genes": 20094,
@@ -5956,7 +6385,11 @@
       "genes_read_by_marks": 140,
       "marks_used_on": 24,
       "enhancers_active": 143197,
-      "nodes_silent": 850
+      "peaks": 232038,
+      "enhancers_active_per_100k_peaks": 61712.7,
+      "nodes_silent": 850,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "cardiac muscle cell": {
       "coding_genes": 20094,
@@ -5966,7 +6399,11 @@
       "genes_read_by_marks": 105,
       "marks_used_on": 24,
       "enhancers_active": 233853,
-      "nodes_silent": 775
+      "peaks": 332799,
+      "enhancers_active_per_100k_peaks": 70268.5,
+      "nodes_silent": 775,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "keratinocyte": {
       "coding_genes": 20094,
@@ -5976,7 +6413,11 @@
       "genes_read_by_marks": 2836,
       "marks_used_on": 24,
       "enhancers_active": 63062,
-      "nodes_silent": 4259
+      "peaks": 83639,
+      "enhancers_active_per_100k_peaks": 75397.8,
+      "nodes_silent": 4259,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "hepatocyte": {
       "coding_genes": 20094,
@@ -5986,7 +6427,11 @@
       "genes_read_by_marks": 60,
       "marks_used_on": 24,
       "enhancers_active": 197561,
-      "nodes_silent": 382
+      "peaks": 267741,
+      "enhancers_active_per_100k_peaks": 73788.1,
+      "nodes_silent": 382,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "astrocyte": {
       "coding_genes": 20094,
@@ -5996,7 +6441,11 @@
       "genes_read_by_marks": 102,
       "marks_used_on": 24,
       "enhancers_active": 203756,
-      "nodes_silent": 743
+      "peaks": 294713,
+      "enhancers_active_per_100k_peaks": 69137.1,
+      "nodes_silent": 743,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "CD14-positive monocyte": {
       "coding_genes": 20094,
@@ -6006,7 +6455,11 @@
       "genes_read_by_marks": 138,
       "marks_used_on": 24,
       "enhancers_active": 141431,
-      "nodes_silent": 2989
+      "peaks": 202328,
+      "enhancers_active_per_100k_peaks": 69901.8,
+      "nodes_silent": 2989,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "testis": {
       "coding_genes": 20094,
@@ -6016,7 +6469,11 @@
       "genes_read_by_marks": 97,
       "marks_used_on": 24,
       "enhancers_active": 142399,
-      "nodes_silent": 974
+      "peaks": 225744,
+      "enhancers_active_per_100k_peaks": 63079.9,
+      "nodes_silent": 974,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
     "ovary": {
       "coding_genes": 20094,
@@ -6026,9 +6483,228 @@
       "genes_read_by_marks": 211,
       "marks_used_on": 24,
       "enhancers_active": 108053,
-      "nodes_silent": 2349
+      "peaks": 248611,
+      "enhancers_active_per_100k_peaks": 43462.7,
+      "nodes_silent": 2349,
+      "nodes_open_at_reference": null,
+      "h3k27me3_peaks": null
     },
-    "seconds": 164
+    "spinal cord": {
+      "coding_genes": 20094,
+      "genes_read": 13669,
+      "genes_read_open": 15335,
+      "genes_poised": 1839,
+      "genes_read_by_marks": 173,
+      "marks_used_on": 24,
+      "enhancers_active": 232853,
+      "peaks": 456522,
+      "enhancers_active_per_100k_peaks": 51005.9,
+      "nodes_silent": 47,
+      "nodes_open_at_reference": 19388,
+      "h3k27me3_peaks": 46422
+    },
+    "seconds": 197
   },
-  "evidence": "experimental: ENCODE DNase-seq peaks and Histone ChIP-seq peaks; inferred: read = promoter open and not poised (H3K27me3 without H3K27ac), or closed with H3K4me3 and H3K27ac, where the marks were read"
+  "evidence": "experimental: ENCODE DNase-seq peaks and Histone ChIP-seq peaks; inferred: read = promoter open and not poised (H3K27me3 without H3K27ac), or closed with H3K4me3 and H3K27ac, where the marks were read",
+  "normalised": {
+    "K562": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -1.0596,
+      "genes_read_depth_residual_at_edge": true,
+      "genes_read_open_depth_residual": -1.5175,
+      "genes_read_open_depth_residual_at_edge": true
+    },
+    "HepG2": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.651,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 0.1312,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "GM12878": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.3849,
+      "genes_read_depth_residual_at_edge": true,
+      "genes_read_open_depth_residual": -0.1741,
+      "genes_read_open_depth_residual_at_edge": true
+    },
+    "H1": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.6514,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 1.1735,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "IMR-90": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.4,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": -0.6676,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "SK-N-SH": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": 0.7784,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 0.9639,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "cardiac muscle cell": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.2859,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 0.2145,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "keratinocyte": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.2636,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": -1.6752,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "hepatocyte": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": 1.1275,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 1.0688,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "astrocyte": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.4131,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": -0.6454,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "CD14-positive monocyte": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -1.1104,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 0.2813,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "testis": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": 2.2495,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 1.3862,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "ovary": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": 1.1076,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": 0.1427,
+      "genes_read_open_depth_residual_at_edge": false
+    },
+    "spinal cord": {
+      "nodes_open_depth_residual": null,
+      "nodes_open_depth_residual_at_edge": false,
+      "genes_poised_mark_residual": null,
+      "genes_poised_mark_residual_at_edge": false,
+      "genes_read_depth_residual": -0.0431,
+      "genes_read_depth_residual_at_edge": false,
+      "genes_read_open_depth_residual": -0.6823,
+      "genes_read_open_depth_residual_at_edge": false
+    }
+  },
+  "result_manifest": {
+    "code": {
+      "git_sha": "ff744449f991d0e90b751ba547e97b6b99dfacac",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_reader_genome_wide.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/dnase_spinal_cord_chr21.bed.gz",
+        "data/results/epigenome_manifest.json",
+        "data/results/reader_genome_wide.json",
+        "data/results/reader_spinal_cord_chr21.json"
+      ],
+      "argv": [
+        "scripts/reader_genome_wide.py",
+        "spinal cord"
+      ],
+      "python": "3.12.13"
+    },
+    "revision_stamps": {
+      "code_git_sha": "ff744449f991d0e90b751ba547e97b6b99dfacac",
+      "code_cleanliness_git_sha": null,
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": false,
+      "agree": null,
+      "revision_race": null,
+      "reading": "cannot say whether HEAD moved during the write: code_cleanliness.git_sha is absent. This is not a record that the two stamps agree"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 5,
+      "opens_under_data": 1,
+      "files_read": 0,
+      "files_written": 1,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    },
+    "complete": false,
+    "problems": [
+      "missing sources",
+      "missing inputs",
+      "missing assembly",
+      "missing coordinates",
+      "missing parameters",
+      "missing exclusions",
+      "missing partitions"
+    ]
+  }
 }

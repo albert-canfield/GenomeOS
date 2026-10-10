@@ -1,0 +1,2528 @@
+{
+  "result": "reader_spinal_cord_chr21",
+  "date": "2026-10-10",
+  "cell_type": "spinal cord",
+  "chrom": "chr21",
+  "peaks": 5227,
+  "coding_genes": 221,
+  "genes_read": 136,
+  "genes_read_open": 145,
+  "genes_read_by_marks": 0,
+  "genes_poised": 9,
+  "genes_silent": 85,
+  "genes_closed": 76,
+  "read_fraction": 0.6154,
+  "top_read": [
+    {
+      "gene": "ITSN1",
+      "signal": 17.65
+    },
+    {
+      "gene": "HSPA13",
+      "signal": 17.63
+    },
+    {
+      "gene": "DYRK1A",
+      "signal": 16.33
+    },
+    {
+      "gene": "CCT8",
+      "signal": 14.87
+    },
+    {
+      "gene": "RSPH1",
+      "signal": 13.76
+    },
+    {
+      "gene": "SLC37A1",
+      "signal": 13.76
+    },
+    {
+      "gene": "LTN1",
+      "signal": 13.06
+    },
+    {
+      "gene": "IFNAR1",
+      "signal": 12.87
+    },
+    {
+      "gene": "MORC3",
+      "signal": 12.14
+    },
+    {
+      "gene": "GART",
+      "signal": 12.03
+    },
+    {
+      "gene": "SON",
+      "signal": 12.03
+    },
+    {
+      "gene": "ZBTB21",
+      "signal": 11.83
+    },
+    {
+      "gene": "ATP5PF",
+      "signal": 11.79
+    },
+    {
+      "gene": "GABPA",
+      "signal": 11.79
+    },
+    {
+      "gene": "PTTG1IP",
+      "signal": 10.9
+    },
+    {
+      "gene": "ATP5PO",
+      "signal": 10.38
+    },
+    {
+      "gene": "TIAM1",
+      "signal": 10.04
+    },
+    {
+      "gene": "WDR4",
+      "signal": 10.01
+    },
+    {
+      "gene": "NDUFV3",
+      "signal": 10.01
+    },
+    {
+      "gene": "VPS26C",
+      "signal": 9.87
+    },
+    {
+      "gene": "PRMT2",
+      "signal": 9.76
+    },
+    {
+      "gene": "PAXBP1",
+      "signal": 9.64
+    },
+    {
+      "gene": "PKNOX1",
+      "signal": 9.26
+    },
+    {
+      "gene": "USP16",
+      "signal": 9.23
+    },
+    {
+      "gene": "C21orf58",
+      "signal": 8.61
+    }
+  ],
+  "silent_genes": [
+    "TPTE",
+    "POTED",
+    "LIPI",
+    "CHODL",
+    "TMPRSS15",
+    "CLDN17",
+    "CLDN8",
+    "KRTAP26-1",
+    "KRTAP27-1",
+    "KRTAP23-1",
+    "KRTAP13-2",
+    "KRTAP13-3",
+    "KRTAP13-4",
+    "KRTAP15-1",
+    "KRTAP19-1",
+    "KRTAP19-2",
+    "KRTAP19-3",
+    "KRTAP19-4",
+    "KRTAP19-5",
+    "KRTAP19-6",
+    "KRTAP6-2",
+    "KRTAP22-1",
+    "KRTAP6-1",
+    "KRTAP20-1",
+    "KRTAP20-4",
+    "KRTAP20-2",
+    "KRTAP20-3",
+    "KRTAP21-3",
+    "KRTAP21-2",
+    "KRTAP21-1",
+    "KRTAP8-1",
+    "KRTAP7-1",
+    "KRTAP11-1",
+    "KRTAP19-8",
+    "MRAP",
+    "TCP10L",
+    "IFNAR2",
+    "ENSG00000249209",
+    "SMIM11",
+    "C21orf140",
+    "SMIM34",
+    "KCNE1",
+    "CLIC6",
+    "RUNX1",
+    "SETD4",
+    "SIM2",
+    "KCNJ6",
+    "KCNJ15",
+    "BRWD1",
+    "GET1",
+    "IGSF5",
+    "FAM3B",
+    "TMPRSS2",
+    "TFF1",
+    "UBASH3A",
+    "ERVH48-1",
+    "CBS",
+    "CRYAA",
+    "SIK1",
+    "H2BC12L",
+    "PWP2",
+    "GATD3",
+    "ICOSLG",
+    "DNMT3L",
+    "KRTAP10-1",
+    "KRTAP10-2",
+    "KRTAP10-4",
+    "KRTAP10-5",
+    "KRTAP10-7",
+    "KRTAP10-8",
+    "KRTAP10-9",
+    "KRTAP12-4",
+    "KRTAP10-12",
+    "SLC19A1",
+    "COL6A2",
+    "FTCD",
+    "AIRE",
+    "DOP1B",
+    "ITGB2",
+    "KRTAP10-3",
+    "PCBP3",
+    "RIPK4",
+    "RIPPLY3",
+    "TRPM2",
+    "TSPEAR"
+  ],
+  "poised_genes": [
+    "AIRE",
+    "DOP1B",
+    "ITGB2",
+    "KRTAP10-3",
+    "PCBP3",
+    "RIPK4",
+    "RIPPLY3",
+    "TRPM2",
+    "TSPEAR"
+  ],
+  "read_by_marks": [],
+  "marks_used": true,
+  "h3k27me3_peaks": 378,
+  "enhancers": 12139,
+  "enhancers_active": 2710,
+  "enhancers_active_fraction": 0.2232,
+  "enhancers_active_per_100k_peaks": 51846.2,
+  "nodes": 228,
+  "nodes_open": 114,
+  "nodes_open_at_reference": 215,
+  "nodes_silent": 4,
+  "silent_node_ids": [
+    "chr21:D1",
+    "chr21:D7",
+    "chr21:D8",
+    "chr21:D10"
+  ],
+  "node_table": [
+    {
+      "id": "chr21:D1",
+      "start": 0,
+      "end": 5123889,
+      "peaks": 0,
+      "open_fraction": 0.0,
+      "peaks_per_100kb": 0.0,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D2",
+      "start": 5123889,
+      "end": 6434081,
+      "peaks": 14,
+      "open_fraction": 0.0009,
+      "peaks_per_100kb": 1.07,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D3",
+      "start": 6434081,
+      "end": 6508992,
+      "peaks": 1,
+      "open_fraction": 0.0013,
+      "peaks_per_100kb": 1.33,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D4",
+      "start": 6508992,
+      "end": 9874088,
+      "peaks": 18,
+      "open_fraction": 0.0007,
+      "peaks_per_100kb": 0.53,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D5",
+      "start": 9874088,
+      "end": 10332114,
+      "peaks": 4,
+      "open_fraction": 0.0016,
+      "peaks_per_100kb": 0.87,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D6",
+      "start": 10332114,
+      "end": 10425447,
+      "peaks": 2,
+      "open_fraction": 0.002,
+      "peaks_per_100kb": 2.14,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D7",
+      "start": 10425447,
+      "end": 10477912,
+      "peaks": 0,
+      "open_fraction": 0.0,
+      "peaks_per_100kb": 0.0,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D8",
+      "start": 10477912,
+      "end": 10561828,
+      "peaks": 0,
+      "open_fraction": 0.0,
+      "peaks_per_100kb": 0.0,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D9",
+      "start": 10561828,
+      "end": 13806627,
+      "peaks": 3,
+      "open_fraction": 0.0001,
+      "peaks_per_100kb": 0.09,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D10",
+      "start": 13806627,
+      "end": 13909714,
+      "peaks": 0,
+      "open_fraction": 0.0,
+      "peaks_per_100kb": 0.0,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D11",
+      "start": 13909714,
+      "end": 14119246,
+      "peaks": 12,
+      "open_fraction": 0.01,
+      "peaks_per_100kb": 5.73,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D12",
+      "start": 14119246,
+      "end": 14257790,
+      "peaks": 3,
+      "open_fraction": 0.0055,
+      "peaks_per_100kb": 2.17,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D13",
+      "start": 14257790,
+      "end": 14321240,
+      "peaks": 5,
+      "open_fraction": 0.0231,
+      "peaks_per_100kb": 7.88,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D14",
+      "start": 14321240,
+      "end": 14377564,
+      "peaks": 4,
+      "open_fraction": 0.0109,
+      "peaks_per_100kb": 7.1,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D15",
+      "start": 14377564,
+      "end": 14449011,
+      "peaks": 6,
+      "open_fraction": 0.0169,
+      "peaks_per_100kb": 8.4,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D16",
+      "start": 14449011,
+      "end": 14766403,
+      "peaks": 46,
+      "open_fraction": 0.0406,
+      "peaks_per_100kb": 14.49,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D17",
+      "start": 14766403,
+      "end": 14820497,
+      "peaks": 10,
+      "open_fraction": 0.0408,
+      "peaks_per_100kb": 18.49,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D18",
+      "start": 14820497,
+      "end": 14997849,
+      "peaks": 25,
+      "open_fraction": 0.0224,
+      "peaks_per_100kb": 14.1,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D19",
+      "start": 14997849,
+      "end": 15124123,
+      "peaks": 26,
+      "open_fraction": 0.0556,
+      "peaks_per_100kb": 20.59,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D20",
+      "start": 15124123,
+      "end": 15312610,
+      "peaks": 33,
+      "open_fraction": 0.0472,
+      "peaks_per_100kb": 17.51,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D21",
+      "start": 15312610,
+      "end": 15488674,
+      "peaks": 26,
+      "open_fraction": 0.0421,
+      "peaks_per_100kb": 14.77,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D22",
+      "start": 15488674,
+      "end": 15541201,
+      "peaks": 6,
+      "open_fraction": 0.0237,
+      "peaks_per_100kb": 11.42,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D23",
+      "start": 15541201,
+      "end": 15614996,
+      "peaks": 8,
+      "open_fraction": 0.0287,
+      "peaks_per_100kb": 10.84,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D24",
+      "start": 15614996,
+      "end": 15691404,
+      "peaks": 5,
+      "open_fraction": 0.0143,
+      "peaks_per_100kb": 6.54,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D25",
+      "start": 15691404,
+      "end": 15782529,
+      "peaks": 6,
+      "open_fraction": 0.0142,
+      "peaks_per_100kb": 6.58,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D26",
+      "start": 15782529,
+      "end": 15856977,
+      "peaks": 9,
+      "open_fraction": 0.0244,
+      "peaks_per_100kb": 12.09,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D27",
+      "start": 15856977,
+      "end": 15947219,
+      "peaks": 8,
+      "open_fraction": 0.0156,
+      "peaks_per_100kb": 8.87,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D28",
+      "start": 15947219,
+      "end": 16055204,
+      "peaks": 13,
+      "open_fraction": 0.0284,
+      "peaks_per_100kb": 12.04,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D29",
+      "start": 16055204,
+      "end": 16461127,
+      "peaks": 108,
+      "open_fraction": 0.0807,
+      "peaks_per_100kb": 26.61,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D30",
+      "start": 16461127,
+      "end": 16619430,
+      "peaks": 51,
+      "open_fraction": 0.1042,
+      "peaks_per_100kb": 32.22,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D31",
+      "start": 16619430,
+      "end": 16851197,
+      "peaks": 50,
+      "open_fraction": 0.0642,
+      "peaks_per_100kb": 21.57,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D32",
+      "start": 16851197,
+      "end": 16943177,
+      "peaks": 18,
+      "open_fraction": 0.0536,
+      "peaks_per_100kb": 19.57,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D33",
+      "start": 16943177,
+      "end": 16996205,
+      "peaks": 7,
+      "open_fraction": 0.032,
+      "peaks_per_100kb": 13.2,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D34",
+      "start": 16996205,
+      "end": 17586077,
+      "peaks": 77,
+      "open_fraction": 0.0323,
+      "peaks_per_100kb": 13.05,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D35",
+      "start": 17586077,
+      "end": 17679212,
+      "peaks": 14,
+      "open_fraction": 0.0345,
+      "peaks_per_100kb": 15.03,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D36",
+      "start": 17679212,
+      "end": 17925657,
+      "peaks": 30,
+      "open_fraction": 0.0269,
+      "peaks_per_100kb": 12.17,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D37",
+      "start": 17925657,
+      "end": 18043114,
+      "peaks": 16,
+      "open_fraction": 0.0381,
+      "peaks_per_100kb": 13.62,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D38",
+      "start": 18043114,
+      "end": 18205085,
+      "peaks": 16,
+      "open_fraction": 0.021,
+      "peaks_per_100kb": 9.88,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D39",
+      "start": 18205085,
+      "end": 18292359,
+      "peaks": 19,
+      "open_fraction": 0.0659,
+      "peaks_per_100kb": 21.77,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D40",
+      "start": 18292359,
+      "end": 18386586,
+      "peaks": 17,
+      "open_fraction": 0.0487,
+      "peaks_per_100kb": 18.04,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D41",
+      "start": 18386586,
+      "end": 18499985,
+      "peaks": 12,
+      "open_fraction": 0.0226,
+      "peaks_per_100kb": 10.58,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D42",
+      "start": 18499985,
+      "end": 18679561,
+      "peaks": 41,
+      "open_fraction": 0.0504,
+      "peaks_per_100kb": 22.83,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D43",
+      "start": 18679561,
+      "end": 18745290,
+      "peaks": 6,
+      "open_fraction": 0.0189,
+      "peaks_per_100kb": 9.13,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D44",
+      "start": 18745290,
+      "end": 18801660,
+      "peaks": 4,
+      "open_fraction": 0.0172,
+      "peaks_per_100kb": 7.1,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D45",
+      "start": 18801660,
+      "end": 18896188,
+      "peaks": 12,
+      "open_fraction": 0.0267,
+      "peaks_per_100kb": 12.69,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D46",
+      "start": 18896188,
+      "end": 18950528,
+      "peaks": 3,
+      "open_fraction": 0.0176,
+      "peaks_per_100kb": 5.52,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D47",
+      "start": 18950528,
+      "end": 19036144,
+      "peaks": 17,
+      "open_fraction": 0.0607,
+      "peaks_per_100kb": 19.86,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D48",
+      "start": 19036144,
+      "end": 19226745,
+      "peaks": 29,
+      "open_fraction": 0.0293,
+      "peaks_per_100kb": 15.22,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D49",
+      "start": 19226745,
+      "end": 19432111,
+      "peaks": 19,
+      "open_fraction": 0.0202,
+      "peaks_per_100kb": 9.25,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D50",
+      "start": 19432111,
+      "end": 19496148,
+      "peaks": 8,
+      "open_fraction": 0.0298,
+      "peaks_per_100kb": 12.49,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D51",
+      "start": 19496148,
+      "end": 19735090,
+      "peaks": 31,
+      "open_fraction": 0.0334,
+      "peaks_per_100kb": 12.97,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D52",
+      "start": 19735090,
+      "end": 19820850,
+      "peaks": 11,
+      "open_fraction": 0.0324,
+      "peaks_per_100kb": 12.83,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D53",
+      "start": 19820850,
+      "end": 20037881,
+      "peaks": 19,
+      "open_fraction": 0.0202,
+      "peaks_per_100kb": 8.75,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D54",
+      "start": 20037881,
+      "end": 20169602,
+      "peaks": 8,
+      "open_fraction": 0.0188,
+      "peaks_per_100kb": 6.07,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D55",
+      "start": 20169602,
+      "end": 20304958,
+      "peaks": 9,
+      "open_fraction": 0.017,
+      "peaks_per_100kb": 6.65,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D56",
+      "start": 20304958,
+      "end": 20388605,
+      "peaks": 5,
+      "open_fraction": 0.016,
+      "peaks_per_100kb": 5.98,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D57",
+      "start": 20388605,
+      "end": 20443772,
+      "peaks": 6,
+      "open_fraction": 0.0178,
+      "peaks_per_100kb": 10.88,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D58",
+      "start": 20443772,
+      "end": 20537284,
+      "peaks": 8,
+      "open_fraction": 0.0196,
+      "peaks_per_100kb": 8.56,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D59",
+      "start": 20537284,
+      "end": 20742189,
+      "peaks": 24,
+      "open_fraction": 0.0223,
+      "peaks_per_100kb": 11.71,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D60",
+      "start": 20742189,
+      "end": 20805513,
+      "peaks": 12,
+      "open_fraction": 0.0435,
+      "peaks_per_100kb": 18.95,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D61",
+      "start": 20805513,
+      "end": 20875937,
+      "peaks": 7,
+      "open_fraction": 0.0238,
+      "peaks_per_100kb": 9.94,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D62",
+      "start": 20875937,
+      "end": 21306959,
+      "peaks": 67,
+      "open_fraction": 0.0364,
+      "peaks_per_100kb": 15.54,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D63",
+      "start": 21306959,
+      "end": 21362190,
+      "peaks": 5,
+      "open_fraction": 0.0173,
+      "peaks_per_100kb": 9.05,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D64",
+      "start": 21362190,
+      "end": 21751493,
+      "peaks": 42,
+      "open_fraction": 0.0233,
+      "peaks_per_100kb": 10.79,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D65",
+      "start": 21751493,
+      "end": 21974014,
+      "peaks": 32,
+      "open_fraction": 0.028,
+      "peaks_per_100kb": 14.38,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D66",
+      "start": 21974014,
+      "end": 22091197,
+      "peaks": 10,
+      "open_fraction": 0.0151,
+      "peaks_per_100kb": 8.53,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D67",
+      "start": 22091197,
+      "end": 22217900,
+      "peaks": 9,
+      "open_fraction": 0.014,
+      "peaks_per_100kb": 7.1,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D68",
+      "start": 22217900,
+      "end": 22473095,
+      "peaks": 23,
+      "open_fraction": 0.0201,
+      "peaks_per_100kb": 9.01,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D69",
+      "start": 22473095,
+      "end": 22538128,
+      "peaks": 11,
+      "open_fraction": 0.043,
+      "peaks_per_100kb": 16.91,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D70",
+      "start": 22538128,
+      "end": 22754962,
+      "peaks": 23,
+      "open_fraction": 0.023,
+      "peaks_per_100kb": 10.61,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D71",
+      "start": 22754962,
+      "end": 23129785,
+      "peaks": 41,
+      "open_fraction": 0.0226,
+      "peaks_per_100kb": 10.94,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D72",
+      "start": 23129785,
+      "end": 23401496,
+      "peaks": 25,
+      "open_fraction": 0.017,
+      "peaks_per_100kb": 9.2,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D73",
+      "start": 23401496,
+      "end": 23478532,
+      "peaks": 14,
+      "open_fraction": 0.0316,
+      "peaks_per_100kb": 18.17,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D74",
+      "start": 23478532,
+      "end": 23585610,
+      "peaks": 16,
+      "open_fraction": 0.0345,
+      "peaks_per_100kb": 14.94,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D75",
+      "start": 23585610,
+      "end": 23725801,
+      "peaks": 19,
+      "open_fraction": 0.0295,
+      "peaks_per_100kb": 13.55,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D76",
+      "start": 23725801,
+      "end": 23881507,
+      "peaks": 21,
+      "open_fraction": 0.0338,
+      "peaks_per_100kb": 13.49,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D77",
+      "start": 23881507,
+      "end": 24018287,
+      "peaks": 18,
+      "open_fraction": 0.0286,
+      "peaks_per_100kb": 13.16,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D78",
+      "start": 24018287,
+      "end": 24098213,
+      "peaks": 12,
+      "open_fraction": 0.0274,
+      "peaks_per_100kb": 15.01,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D79",
+      "start": 24098213,
+      "end": 24183225,
+      "peaks": 13,
+      "open_fraction": 0.0383,
+      "peaks_per_100kb": 15.29,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D80",
+      "start": 24183225,
+      "end": 24250304,
+      "peaks": 10,
+      "open_fraction": 0.0317,
+      "peaks_per_100kb": 14.91,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D81",
+      "start": 24250304,
+      "end": 24375375,
+      "peaks": 14,
+      "open_fraction": 0.0319,
+      "peaks_per_100kb": 11.19,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D82",
+      "start": 24375375,
+      "end": 24576432,
+      "peaks": 28,
+      "open_fraction": 0.0316,
+      "peaks_per_100kb": 13.93,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D83",
+      "start": 24576432,
+      "end": 25079221,
+      "peaks": 62,
+      "open_fraction": 0.0305,
+      "peaks_per_100kb": 12.33,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D84",
+      "start": 25079221,
+      "end": 25160510,
+      "peaks": 12,
+      "open_fraction": 0.0369,
+      "peaks_per_100kb": 14.76,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D85",
+      "start": 25160510,
+      "end": 25274181,
+      "peaks": 10,
+      "open_fraction": 0.0192,
+      "peaks_per_100kb": 8.8,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D86",
+      "start": 25274181,
+      "end": 25326117,
+      "peaks": 10,
+      "open_fraction": 0.0462,
+      "peaks_per_100kb": 19.25,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D87",
+      "start": 25326117,
+      "end": 25632417,
+      "peaks": 39,
+      "open_fraction": 0.0291,
+      "peaks_per_100kb": 12.73,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D88",
+      "start": 25632417,
+      "end": 25710032,
+      "peaks": 17,
+      "open_fraction": 0.065,
+      "peaks_per_100kb": 21.9,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D89",
+      "start": 25710032,
+      "end": 25872118,
+      "peaks": 23,
+      "open_fraction": 0.0285,
+      "peaks_per_100kb": 14.19,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D90",
+      "start": 25872118,
+      "end": 26032478,
+      "peaks": 29,
+      "open_fraction": 0.0377,
+      "peaks_per_100kb": 18.08,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D91",
+      "start": 26032478,
+      "end": 26207209,
+      "peaks": 40,
+      "open_fraction": 0.0522,
+      "peaks_per_100kb": 22.89,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D92",
+      "start": 26207209,
+      "end": 26287159,
+      "peaks": 18,
+      "open_fraction": 0.0532,
+      "peaks_per_100kb": 22.51,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D93",
+      "start": 26287159,
+      "end": 26375041,
+      "peaks": 7,
+      "open_fraction": 0.0139,
+      "peaks_per_100kb": 7.97,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D94",
+      "start": 26375041,
+      "end": 26515161,
+      "peaks": 41,
+      "open_fraction": 0.0696,
+      "peaks_per_100kb": 29.26,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D95",
+      "start": 26515161,
+      "end": 26717355,
+      "peaks": 38,
+      "open_fraction": 0.0486,
+      "peaks_per_100kb": 18.79,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D96",
+      "start": 26717355,
+      "end": 27061916,
+      "peaks": 65,
+      "open_fraction": 0.0445,
+      "peaks_per_100kb": 18.86,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D97",
+      "start": 27061916,
+      "end": 27213451,
+      "peaks": 22,
+      "open_fraction": 0.038,
+      "peaks_per_100kb": 14.52,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D98",
+      "start": 27213451,
+      "end": 27315504,
+      "peaks": 12,
+      "open_fraction": 0.0257,
+      "peaks_per_100kb": 11.76,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D99",
+      "start": 27315504,
+      "end": 27525959,
+      "peaks": 28,
+      "open_fraction": 0.0268,
+      "peaks_per_100kb": 13.3,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D100",
+      "start": 27525959,
+      "end": 27759279,
+      "peaks": 23,
+      "open_fraction": 0.0261,
+      "peaks_per_100kb": 9.86,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D101",
+      "start": 27759279,
+      "end": 27825270,
+      "peaks": 9,
+      "open_fraction": 0.0233,
+      "peaks_per_100kb": 13.64,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D102",
+      "start": 27825270,
+      "end": 28528325,
+      "peaks": 66,
+      "open_fraction": 0.0211,
+      "peaks_per_100kb": 9.39,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D103",
+      "start": 28528325,
+      "end": 28663400,
+      "peaks": 11,
+      "open_fraction": 0.0182,
+      "peaks_per_100kb": 8.14,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D104",
+      "start": 28663400,
+      "end": 28781951,
+      "peaks": 19,
+      "open_fraction": 0.039,
+      "peaks_per_100kb": 16.03,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D105",
+      "start": 28781951,
+      "end": 29014155,
+      "peaks": 16,
+      "open_fraction": 0.0137,
+      "peaks_per_100kb": 6.89,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D106",
+      "start": 29014155,
+      "end": 29361588,
+      "peaks": 55,
+      "open_fraction": 0.0424,
+      "peaks_per_100kb": 15.83,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D107",
+      "start": 29361588,
+      "end": 29465683,
+      "peaks": 20,
+      "open_fraction": 0.0488,
+      "peaks_per_100kb": 19.21,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D108",
+      "start": 29465683,
+      "end": 29550381,
+      "peaks": 11,
+      "open_fraction": 0.0363,
+      "peaks_per_100kb": 12.99,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D109",
+      "start": 29550381,
+      "end": 29740152,
+      "peaks": 34,
+      "open_fraction": 0.0539,
+      "peaks_per_100kb": 17.92,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D110",
+      "start": 29740152,
+      "end": 29820593,
+      "peaks": 24,
+      "open_fraction": 0.086,
+      "peaks_per_100kb": 29.84,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D111",
+      "start": 29820593,
+      "end": 30004341,
+      "peaks": 27,
+      "open_fraction": 0.0379,
+      "peaks_per_100kb": 14.69,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D112",
+      "start": 30004341,
+      "end": 30072665,
+      "peaks": 8,
+      "open_fraction": 0.0212,
+      "peaks_per_100kb": 11.71,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D113",
+      "start": 30072665,
+      "end": 30171508,
+      "peaks": 14,
+      "open_fraction": 0.0295,
+      "peaks_per_100kb": 14.16,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D114",
+      "start": 30171508,
+      "end": 30257956,
+      "peaks": 14,
+      "open_fraction": 0.0362,
+      "peaks_per_100kb": 16.19,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D115",
+      "start": 30257956,
+      "end": 30345251,
+      "peaks": 9,
+      "open_fraction": 0.0214,
+      "peaks_per_100kb": 10.31,
+      "coding_genes": 4
+    },
+    {
+      "id": "chr21:D116",
+      "start": 30345251,
+      "end": 30434246,
+      "peaks": 13,
+      "open_fraction": 0.0328,
+      "peaks_per_100kb": 14.61,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D117",
+      "start": 30434246,
+      "end": 30505797,
+      "peaks": 9,
+      "open_fraction": 0.0194,
+      "peaks_per_100kb": 12.58,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D118",
+      "start": 30505797,
+      "end": 30606131,
+      "peaks": 10,
+      "open_fraction": 0.0202,
+      "peaks_per_100kb": 9.97,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D119",
+      "start": 30606131,
+      "end": 30733203,
+      "peaks": 15,
+      "open_fraction": 0.0254,
+      "peaks_per_100kb": 11.8,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D120",
+      "start": 30733203,
+      "end": 30793747,
+      "peaks": 5,
+      "open_fraction": 0.0191,
+      "peaks_per_100kb": 8.26,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D121",
+      "start": 30793747,
+      "end": 30855011,
+      "peaks": 6,
+      "open_fraction": 0.0226,
+      "peaks_per_100kb": 9.79,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D122",
+      "start": 30855011,
+      "end": 30953237,
+      "peaks": 12,
+      "open_fraction": 0.0331,
+      "peaks_per_100kb": 12.22,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D123",
+      "start": 30953237,
+      "end": 31092975,
+      "peaks": 22,
+      "open_fraction": 0.0416,
+      "peaks_per_100kb": 15.74,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D124",
+      "start": 31092975,
+      "end": 31207309,
+      "peaks": 24,
+      "open_fraction": 0.05,
+      "peaks_per_100kb": 20.99,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D125",
+      "start": 31207309,
+      "end": 31275731,
+      "peaks": 13,
+      "open_fraction": 0.0438,
+      "peaks_per_100kb": 19.0,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D126",
+      "start": 31275731,
+      "end": 31406121,
+      "peaks": 21,
+      "open_fraction": 0.0363,
+      "peaks_per_100kb": 16.11,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D127",
+      "start": 31406121,
+      "end": 31457829,
+      "peaks": 15,
+      "open_fraction": 0.0787,
+      "peaks_per_100kb": 29.01,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D128",
+      "start": 31457829,
+      "end": 31538089,
+      "peaks": 13,
+      "open_fraction": 0.0389,
+      "peaks_per_100kb": 16.2,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D129",
+      "start": 31538089,
+      "end": 31606843,
+      "peaks": 16,
+      "open_fraction": 0.0556,
+      "peaks_per_100kb": 23.27,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D130",
+      "start": 31606843,
+      "end": 31719889,
+      "peaks": 12,
+      "open_fraction": 0.0199,
+      "peaks_per_100kb": 10.62,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D131",
+      "start": 31719889,
+      "end": 31781346,
+      "peaks": 7,
+      "open_fraction": 0.0368,
+      "peaks_per_100kb": 11.39,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D132",
+      "start": 31781346,
+      "end": 31845358,
+      "peaks": 10,
+      "open_fraction": 0.034,
+      "peaks_per_100kb": 15.62,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D133",
+      "start": 31845358,
+      "end": 31933890,
+      "peaks": 34,
+      "open_fraction": 0.1194,
+      "peaks_per_100kb": 38.4,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D134",
+      "start": 31933890,
+      "end": 31992147,
+      "peaks": 14,
+      "open_fraction": 0.0653,
+      "peaks_per_100kb": 24.03,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D135",
+      "start": 31992147,
+      "end": 32157627,
+      "peaks": 29,
+      "open_fraction": 0.05,
+      "peaks_per_100kb": 17.52,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D136",
+      "start": 32157627,
+      "end": 32259569,
+      "peaks": 19,
+      "open_fraction": 0.0487,
+      "peaks_per_100kb": 18.64,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D137",
+      "start": 32259569,
+      "end": 32313120,
+      "peaks": 7,
+      "open_fraction": 0.0287,
+      "peaks_per_100kb": 13.07,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D138",
+      "start": 32313120,
+      "end": 32576292,
+      "peaks": 61,
+      "open_fraction": 0.0562,
+      "peaks_per_100kb": 23.18,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D139",
+      "start": 32576292,
+      "end": 32654398,
+      "peaks": 10,
+      "open_fraction": 0.0318,
+      "peaks_per_100kb": 12.8,
+      "coding_genes": 3
+    },
+    {
+      "id": "chr21:D140",
+      "start": 32654398,
+      "end": 32884243,
+      "peaks": 29,
+      "open_fraction": 0.0318,
+      "peaks_per_100kb": 12.62,
+      "coding_genes": 3
+    },
+    {
+      "id": "chr21:D141",
+      "start": 32884243,
+      "end": 32994526,
+      "peaks": 25,
+      "open_fraction": 0.0583,
+      "peaks_per_100kb": 22.67,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D142",
+      "start": 32994526,
+      "end": 33044822,
+      "peaks": 31,
+      "open_fraction": 0.163,
+      "peaks_per_100kb": 61.64,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D143",
+      "start": 33044822,
+      "end": 33099355,
+      "peaks": 17,
+      "open_fraction": 0.0835,
+      "peaks_per_100kb": 31.17,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D144",
+      "start": 33099355,
+      "end": 33187473,
+      "peaks": 29,
+      "open_fraction": 0.0938,
+      "peaks_per_100kb": 32.91,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D145",
+      "start": 33187473,
+      "end": 33467073,
+      "peaks": 45,
+      "open_fraction": 0.0398,
+      "peaks_per_100kb": 16.09,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D146",
+      "start": 33467073,
+      "end": 33605954,
+      "peaks": 17,
+      "open_fraction": 0.0241,
+      "peaks_per_100kb": 12.24,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D147",
+      "start": 33605954,
+      "end": 33747622,
+      "peaks": 17,
+      "open_fraction": 0.0229,
+      "peaks_per_100kb": 12.0,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D148",
+      "start": 33747622,
+      "end": 33863408,
+      "peaks": 19,
+      "open_fraction": 0.0384,
+      "peaks_per_100kb": 16.41,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D149",
+      "start": 33863408,
+      "end": 34225406,
+      "peaks": 83,
+      "open_fraction": 0.053,
+      "peaks_per_100kb": 22.93,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D150",
+      "start": 34225406,
+      "end": 34276148,
+      "peaks": 7,
+      "open_fraction": 0.0508,
+      "peaks_per_100kb": 13.8,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D151",
+      "start": 34276148,
+      "end": 34330251,
+      "peaks": 7,
+      "open_fraction": 0.0211,
+      "peaks_per_100kb": 12.94,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D152",
+      "start": 34330251,
+      "end": 34506458,
+      "peaks": 9,
+      "open_fraction": 0.0086,
+      "peaks_per_100kb": 5.11,
+      "coding_genes": 3
+    },
+    {
+      "id": "chr21:D153",
+      "start": 34506458,
+      "end": 34635138,
+      "peaks": 23,
+      "open_fraction": 0.0406,
+      "peaks_per_100kb": 17.87,
+      "coding_genes": 3
+    },
+    {
+      "id": "chr21:D154",
+      "start": 34635138,
+      "end": 35002217,
+      "peaks": 59,
+      "open_fraction": 0.0372,
+      "peaks_per_100kb": 16.07,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D155",
+      "start": 35002217,
+      "end": 35154994,
+      "peaks": 19,
+      "open_fraction": 0.0314,
+      "peaks_per_100kb": 12.44,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D156",
+      "start": 35154994,
+      "end": 35306607,
+      "peaks": 18,
+      "open_fraction": 0.0319,
+      "peaks_per_100kb": 11.87,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D157",
+      "start": 35306607,
+      "end": 35371834,
+      "peaks": 9,
+      "open_fraction": 0.036,
+      "peaks_per_100kb": 13.8,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D158",
+      "start": 35371834,
+      "end": 35439592,
+      "peaks": 14,
+      "open_fraction": 0.0455,
+      "peaks_per_100kb": 20.66,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D159",
+      "start": 35439592,
+      "end": 35493319,
+      "peaks": 3,
+      "open_fraction": 0.0107,
+      "peaks_per_100kb": 5.58,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D160",
+      "start": 35493319,
+      "end": 35603715,
+      "peaks": 17,
+      "open_fraction": 0.0398,
+      "peaks_per_100kb": 15.4,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D161",
+      "start": 35603715,
+      "end": 35675075,
+      "peaks": 8,
+      "open_fraction": 0.0217,
+      "peaks_per_100kb": 11.21,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D162",
+      "start": 35675075,
+      "end": 35831994,
+      "peaks": 15,
+      "open_fraction": 0.0224,
+      "peaks_per_100kb": 9.56,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D163",
+      "start": 35831994,
+      "end": 35999879,
+      "peaks": 23,
+      "open_fraction": 0.0345,
+      "peaks_per_100kb": 13.7,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D164",
+      "start": 35999879,
+      "end": 36389861,
+      "peaks": 62,
+      "open_fraction": 0.0394,
+      "peaks_per_100kb": 15.9,
+      "coding_genes": 7
+    },
+    {
+      "id": "chr21:D165",
+      "start": 36389861,
+      "end": 36575582,
+      "peaks": 24,
+      "open_fraction": 0.0268,
+      "peaks_per_100kb": 12.92,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D166",
+      "start": 36575582,
+      "end": 36661717,
+      "peaks": 10,
+      "open_fraction": 0.0272,
+      "peaks_per_100kb": 11.61,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D167",
+      "start": 36661717,
+      "end": 36741772,
+      "peaks": 14,
+      "open_fraction": 0.0427,
+      "peaks_per_100kb": 17.49,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D168",
+      "start": 36741772,
+      "end": 37028752,
+      "peaks": 61,
+      "open_fraction": 0.0576,
+      "peaks_per_100kb": 21.26,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D169",
+      "start": 37028752,
+      "end": 37166873,
+      "peaks": 31,
+      "open_fraction": 0.0474,
+      "peaks_per_100kb": 22.44,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D170",
+      "start": 37166873,
+      "end": 37527794,
+      "peaks": 52,
+      "open_fraction": 0.0344,
+      "peaks_per_100kb": 14.41,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D171",
+      "start": 37527794,
+      "end": 37700875,
+      "peaks": 32,
+      "open_fraction": 0.0388,
+      "peaks_per_100kb": 18.49,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D172",
+      "start": 37700875,
+      "end": 37903585,
+      "peaks": 41,
+      "open_fraction": 0.0517,
+      "peaks_per_100kb": 20.23,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D173",
+      "start": 37903585,
+      "end": 38041884,
+      "peaks": 37,
+      "open_fraction": 0.0669,
+      "peaks_per_100kb": 26.75,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D174",
+      "start": 38041884,
+      "end": 38126844,
+      "peaks": 11,
+      "open_fraction": 0.0317,
+      "peaks_per_100kb": 12.95,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D175",
+      "start": 38126844,
+      "end": 38334075,
+      "peaks": 35,
+      "open_fraction": 0.0445,
+      "peaks_per_100kb": 16.89,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D176",
+      "start": 38334075,
+      "end": 38427486,
+      "peaks": 20,
+      "open_fraction": 0.0534,
+      "peaks_per_100kb": 21.41,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D177",
+      "start": 38427486,
+      "end": 38614386,
+      "peaks": 36,
+      "open_fraction": 0.039,
+      "peaks_per_100kb": 19.26,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D178",
+      "start": 38614386,
+      "end": 38669380,
+      "peaks": 9,
+      "open_fraction": 0.0465,
+      "peaks_per_100kb": 16.37,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D179",
+      "start": 38669380,
+      "end": 38730996,
+      "peaks": 18,
+      "open_fraction": 0.0523,
+      "peaks_per_100kb": 29.21,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D180",
+      "start": 38730996,
+      "end": 39127715,
+      "peaks": 77,
+      "open_fraction": 0.0487,
+      "peaks_per_100kb": 19.41,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D181",
+      "start": 39127715,
+      "end": 39204324,
+      "peaks": 13,
+      "open_fraction": 0.0309,
+      "peaks_per_100kb": 16.97,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D182",
+      "start": 39204324,
+      "end": 39285949,
+      "peaks": 11,
+      "open_fraction": 0.0319,
+      "peaks_per_100kb": 13.48,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D183",
+      "start": 39285949,
+      "end": 39551886,
+      "peaks": 40,
+      "open_fraction": 0.0392,
+      "peaks_per_100kb": 15.04,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D184",
+      "start": 39551886,
+      "end": 39718295,
+      "peaks": 40,
+      "open_fraction": 0.0697,
+      "peaks_per_100kb": 24.04,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D185",
+      "start": 39718295,
+      "end": 39854786,
+      "peaks": 27,
+      "open_fraction": 0.0393,
+      "peaks_per_100kb": 19.78,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D186",
+      "start": 39854786,
+      "end": 40121132,
+      "peaks": 61,
+      "open_fraction": 0.0591,
+      "peaks_per_100kb": 22.9,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D187",
+      "start": 40121132,
+      "end": 40173858,
+      "peaks": 10,
+      "open_fraction": 0.0422,
+      "peaks_per_100kb": 18.97,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D188",
+      "start": 40173858,
+      "end": 40436468,
+      "peaks": 54,
+      "open_fraction": 0.0519,
+      "peaks_per_100kb": 20.56,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D189",
+      "start": 40436468,
+      "end": 40503531,
+      "peaks": 10,
+      "open_fraction": 0.0313,
+      "peaks_per_100kb": 14.91,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D190",
+      "start": 40503531,
+      "end": 40711573,
+      "peaks": 58,
+      "open_fraction": 0.0655,
+      "peaks_per_100kb": 27.88,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D191",
+      "start": 40711573,
+      "end": 40782583,
+      "peaks": 12,
+      "open_fraction": 0.0466,
+      "peaks_per_100kb": 16.9,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D192",
+      "start": 40782583,
+      "end": 40852768,
+      "peaks": 27,
+      "open_fraction": 0.111,
+      "peaks_per_100kb": 38.47,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D193",
+      "start": 40852768,
+      "end": 40925649,
+      "peaks": 6,
+      "open_fraction": 0.0206,
+      "peaks_per_100kb": 8.23,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D194",
+      "start": 40925649,
+      "end": 41026207,
+      "peaks": 12,
+      "open_fraction": 0.0276,
+      "peaks_per_100kb": 11.93,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D195",
+      "start": 41026207,
+      "end": 41116498,
+      "peaks": 22,
+      "open_fraction": 0.0692,
+      "peaks_per_100kb": 24.37,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D196",
+      "start": 41116498,
+      "end": 41289575,
+      "peaks": 38,
+      "open_fraction": 0.0535,
+      "peaks_per_100kb": 21.96,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D197",
+      "start": 41289575,
+      "end": 41541652,
+      "peaks": 39,
+      "open_fraction": 0.0329,
+      "peaks_per_100kb": 15.47,
+      "coding_genes": 4
+    },
+    {
+      "id": "chr21:D198",
+      "start": 41541652,
+      "end": 41808265,
+      "peaks": 62,
+      "open_fraction": 0.0628,
+      "peaks_per_100kb": 23.25,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D199",
+      "start": 41808265,
+      "end": 42045032,
+      "peaks": 53,
+      "open_fraction": 0.0545,
+      "peaks_per_100kb": 22.38,
+      "coding_genes": 3
+    },
+    {
+      "id": "chr21:D200",
+      "start": 42045032,
+      "end": 42289461,
+      "peaks": 70,
+      "open_fraction": 0.0643,
+      "peaks_per_100kb": 28.64,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D201",
+      "start": 42289461,
+      "end": 42381558,
+      "peaks": 14,
+      "open_fraction": 0.0339,
+      "peaks_per_100kb": 15.2,
+      "coding_genes": 3
+    },
+    {
+      "id": "chr21:D202",
+      "start": 42381558,
+      "end": 42574850,
+      "peaks": 63,
+      "open_fraction": 0.0812,
+      "peaks_per_100kb": 32.59,
+      "coding_genes": 4
+    },
+    {
+      "id": "chr21:D203",
+      "start": 42574850,
+      "end": 42830057,
+      "peaks": 85,
+      "open_fraction": 0.0862,
+      "peaks_per_100kb": 33.31,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D204",
+      "start": 42830057,
+      "end": 43042345,
+      "peaks": 31,
+      "open_fraction": 0.036,
+      "peaks_per_100kb": 14.6,
+      "coding_genes": 4
+    },
+    {
+      "id": "chr21:D205",
+      "start": 43042345,
+      "end": 43117326,
+      "peaks": 3,
+      "open_fraction": 0.0066,
+      "peaks_per_100kb": 4.0,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D206",
+      "start": 43117326,
+      "end": 43298896,
+      "peaks": 17,
+      "open_fraction": 0.0201,
+      "peaks_per_100kb": 9.36,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D207",
+      "start": 43298896,
+      "end": 43494935,
+      "peaks": 24,
+      "open_fraction": 0.0287,
+      "peaks_per_100kb": 12.24,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D208",
+      "start": 43494935,
+      "end": 43787885,
+      "peaks": 46,
+      "open_fraction": 0.0349,
+      "peaks_per_100kb": 15.7,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D209",
+      "start": 43787885,
+      "end": 43845081,
+      "peaks": 6,
+      "open_fraction": 0.0137,
+      "peaks_per_100kb": 10.49,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D210",
+      "start": 43845081,
+      "end": 44114151,
+      "peaks": 42,
+      "open_fraction": 0.0333,
+      "peaks_per_100kb": 15.61,
+      "coding_genes": 4
+    },
+    {
+      "id": "chr21:D211",
+      "start": 44114151,
+      "end": 44320196,
+      "peaks": 15,
+      "open_fraction": 0.0264,
+      "peaks_per_100kb": 7.28,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D212",
+      "start": 44320196,
+      "end": 44397482,
+      "peaks": 10,
+      "open_fraction": 0.0288,
+      "peaks_per_100kb": 12.94,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D213",
+      "start": 44397482,
+      "end": 44450102,
+      "peaks": 1,
+      "open_fraction": 0.0074,
+      "peaks_per_100kb": 1.9,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D214",
+      "start": 44450102,
+      "end": 44591489,
+      "peaks": 28,
+      "open_fraction": 0.049,
+      "peaks_per_100kb": 19.8,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D215",
+      "start": 44591489,
+      "end": 44649641,
+      "peaks": 6,
+      "open_fraction": 0.0192,
+      "peaks_per_100kb": 10.32,
+      "coding_genes": 6
+    },
+    {
+      "id": "chr21:D216",
+      "start": 44649641,
+      "end": 44806955,
+      "peaks": 31,
+      "open_fraction": 0.0409,
+      "peaks_per_100kb": 19.71,
+      "coding_genes": 7
+    },
+    {
+      "id": "chr21:D217",
+      "start": 44806955,
+      "end": 45192534,
+      "peaks": 90,
+      "open_fraction": 0.0509,
+      "peaks_per_100kb": 23.34,
+      "coding_genes": 5
+    },
+    {
+      "id": "chr21:D218",
+      "start": 45192534,
+      "end": 45246236,
+      "peaks": 11,
+      "open_fraction": 0.0579,
+      "peaks_per_100kb": 20.48,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D219",
+      "start": 45246236,
+      "end": 45381598,
+      "peaks": 42,
+      "open_fraction": 0.0635,
+      "peaks_per_100kb": 31.03,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D220",
+      "start": 45381598,
+      "end": 45498866,
+      "peaks": 26,
+      "open_fraction": 0.0498,
+      "peaks_per_100kb": 22.17,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D221",
+      "start": 45498866,
+      "end": 45695277,
+      "peaks": 40,
+      "open_fraction": 0.0467,
+      "peaks_per_100kb": 20.37,
+      "coding_genes": 2
+    },
+    {
+      "id": "chr21:D222",
+      "start": 45695277,
+      "end": 45756268,
+      "peaks": 18,
+      "open_fraction": 0.0604,
+      "peaks_per_100kb": 29.51,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D223",
+      "start": 45756268,
+      "end": 45811438,
+      "peaks": 13,
+      "open_fraction": 0.047,
+      "peaks_per_100kb": 23.56,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D224",
+      "start": 45811438,
+      "end": 45863511,
+      "peaks": 9,
+      "open_fraction": 0.0355,
+      "peaks_per_100kb": 17.28,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D225",
+      "start": 45863511,
+      "end": 45919229,
+      "peaks": 16,
+      "open_fraction": 0.0627,
+      "peaks_per_100kb": 28.72,
+      "coding_genes": 0
+    },
+    {
+      "id": "chr21:D226",
+      "start": 45919229,
+      "end": 46008382,
+      "peaks": 14,
+      "open_fraction": 0.0294,
+      "peaks_per_100kb": 15.7,
+      "coding_genes": 1
+    },
+    {
+      "id": "chr21:D227",
+      "start": 46008382,
+      "end": 46645231,
+      "peaks": 87,
+      "open_fraction": 0.0303,
+      "peaks_per_100kb": 13.66,
+      "coding_genes": 12
+    },
+    {
+      "id": "chr21:D228",
+      "start": 46645231,
+      "end": 46709983,
+      "peaks": 7,
+      "open_fraction": 0.0261,
+      "peaks_per_100kb": 10.81,
+      "coding_genes": 0
+    }
+  ],
+  "evidence": {
+    "peaks": "experimental: ENCODE DNase-seq narrowPeak (GRCh38, released)",
+    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof of it",
+    "nodes": "inferred: CTCF domains",
+    "depth": "enhancers_active and enhancers_active_fraction are depth-dominated (Spearman 0.83 against DNase peak count; use enhancers_active_per_100k_peaks for a comparison between biosamples). genes_read_by_marks is inverse DNase depth by construction: it counts promoters the marks rescue where the DNase file called nothing. nodes_open is a median split of this biosample against itself and therefore returns half the nodes for every biosample (9,988 to 10,016 of 20,002 across thirteen); it distinguishes nothing and is withdrawn as a between-biosample reading. genes_poised tracks the H3K27me3 peak call at 0.49, so a biosample with an under-called broad mark reads as un-poised. genes_read, genes_read_open and nodes_silent are banded as partly independent of depth (|rho| 0.53 to 0.59). Between biosamples, read the normalised counterparts, which exist for a panel and not for one row (genomeos.genome.reader.normalise_family): nodes_open_depth_residual is the log-DNase-depth residual of nodes_open_at_reference, the nodes at or above one fixed 4.79 peaks per 100 kb; genes_poised_mark_residual is genes_poised against the H3K27me3 peak count (h3k27me3_peaks) that calls it; genes_read_depth_residual and genes_read_open_depth_residual are the read counts against DNase depth. All four replicate across odd and even autosomes (Spearman 0.92 to 1.00) and sit inside |rho| < 0.4 of their covariate when each biosample is left out of its own fit. The biosamples at the top and bottom of the covariate are extrapolations (<name>_at_edge): compare those on a depth-matched count instead. nodes_open itself stays the within-biosample rank node_open_threshold defines."
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE DNase-seq narrowPeak for spinal cord: ENCFF041JKB",
+        "version": "released GRCh38, the largest peak file for the biosample term (reader.find_dnase_file)",
+        "licence": "ENCODE data use policy"
+      },
+      {
+        "accession": "ENCODE Histone ChIP-seq peaks for spinal cord (H3K27me3, H3K27ac, H3K4me3), as pinned in data/results/epigenome_manifest.json",
+        "version": "default analysis, replicated before pseudoreplicated narrowPeak",
+        "licence": "ENCODE data use policy"
+      },
+      {
+        "accession": "GENCODE v50 comprehensive annotation (GFF3)",
+        "version": "v50"
+      },
+      {
+        "accession": "GRCh38 reference sequence",
+        "version": "GRCh38"
+      },
+      {
+        "accession": "ENCODE cCREs (registry)",
+        "version": "as cached in data/results/ccres_<chrom>.bed.gz"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "reader inputs for spinal cord on chr21",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27ac_chr21.bed.gz",
+            "sha256": "e7d8767115ccd492c4286657cce1578c42f58bb1e4dc319e0eb5f265f5fbb650",
+            "bytes": 7871
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K27me3_chr21.bed.gz",
+            "sha256": "fa4759dfac6d396ba735903fa2a9886931172c1623012718dbaa874ec559c82c",
+            "bytes": 4017
+          },
+          {
+            "path": "data/knowledge/epigenome/peaks/spinal_cord_H3K4me3_chr21.bed.gz",
+            "sha256": "63ec8515fead0f3c4978113f4ea69d6599da3ab4aaa81264fb77cb0c464adbfc",
+            "bytes": 3422
+          },
+          {
+            "path": "data/reference/chr21.fa.fai",
+            "sha256": "c98f0f7e9a3e8c2ad7a89aac749d4dbe8dc156690b5f492296e6e8bf50a53fdb",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr21.fa.gz",
+            "sha256": "61aaf88c7d3ddef8c0726a1fbbaee6be9dac209a5bb05294e4bdc3db552c9a9c",
+            "bytes": 12844216
+          },
+          {
+            "path": "data/reference/chr21.fa.gz.fai",
+            "sha256": "c98f0f7e9a3e8c2ad7a89aac749d4dbe8dc156690b5f492296e6e8bf50a53fdb",
+            "bytes": 23
+          },
+          {
+            "path": "data/reference/chr21.fa.gz.gzi",
+            "sha256": "dc6b50836526089b65080f5cc1d6ab7c7297464c6c1e067ea50afa3d2232454a",
+            "bytes": 11672
+          },
+          {
+            "path": "data/results/ccres_chr21.bed.gz",
+            "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+            "bytes": 150095
+          },
+          {
+            "path": "data/results/dnase_spinal_cord_chr21.bed.gz",
+            "sha256": "b7809c03c2eae6ea84bcbf238d540ce1be97f8747eda87b246a830b990504fb3",
+            "bytes": 44704
+          },
+          {
+            "path": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+            "sha256": "2b64229c75e2a3910d3fe3ce109896a917bee9882eaf37ab27d15b0c90108d99",
+            "bytes": 1862225
+          }
+        ],
+        "sha256": "4d77a1dfcb2c837cdd836ed426c1673b0d4f51b9d25dc0ab602b660677d399ef",
+        "bytes": 14928268,
+        "files": 10,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "code": {
+      "git_sha": "ff744449f991d0e90b751ba547e97b6b99dfacac",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_reader_genome_wide.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/dnase_spinal_cord_chr21.bed.gz",
+        "data/results/epigenome_manifest.json",
+        "data/results/reader_genome_wide.json"
+      ],
+      "argv": [
+        "scripts/reader_genome_wide.py",
+        "spinal cord"
+      ],
+      "python": "3.12.13"
+    },
+    "parameters": {
+      "promoter_window_bp": 1000,
+      "node_open_min_density_per_100kb": 1.0,
+      "node_open_reference_density_per_100kb": 4.79,
+      "marks": [
+        "H3K27me3",
+        "H3K27ac",
+        "H3K4me3"
+      ]
+    },
+    "exclusions": [
+      "genes that are not protein_coding in GENCODE v50 are not called"
+    ],
+    "partitions": "n/a: a reading of one biosample on one chromosome, no evaluation split",
+    "code_cleanliness": {
+      "git_sha": "ff744449f991d0e90b751ba547e97b6b99dfacac",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/reader_genome_wide.py",
+        "form": "committed_repository_file",
+        "path": "scripts/reader_genome_wide.py",
+        "is_committed": true,
+        "declared_entry": "scripts/reader_genome_wide.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_reader_genome_wide.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/jobs.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/reader_genome_wide.py"
+      ],
+      "counting_path_count": 50,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "ff744449f991d0e90b751ba547e97b6b99dfacac",
+      "code_cleanliness_git_sha": "ff744449f991d0e90b751ba547e97b6b99dfacac",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record ff74444"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 81,
+      "opens_under_data": 23,
+      "files_read": 10,
+      "files_written": 1,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
