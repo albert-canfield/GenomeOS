@@ -388,3 +388,40 @@ def test_fetch_places_rows_without_id_and_matches_records(tmp_path, monkeypatch)
     assert t["variants"][2][8] == {}  # placed, but Ensembl lists no population for it
     assert not (know / "PGS999998_af_partial.json.gz").exists()
     assert ref.load_frequencies("PGS999998", know) == json.loads(json.dumps(t))
+
+
+WINDOW = "GGGCAAAATTT"  # positions 100..110; C at 103, a run of four A from 104
+
+
+def test_haplotype_reads_ensembl_insertions_as_zero_length_slots():
+    assert ref.haplotype(WINDOW, 100, 108, 107, "A") == "GGGCAAAAATTT"
+    assert ref.haplotype(WINDOW, 100, 104, 104, "-") == "GGGCAAATTT"
+    assert ref.haplotype(WINDOW, 100, 103, 103, "C") == WINDOW
+
+
+def test_indel_allele_matches_shifted_spellings_by_sequence():
+    ins_end_of_run = {"start": 108, "end": 107, "alleles": ["-", "A"], "id": "rs1"}
+    deletion = {"start": 104, "end": 104, "alleles": ["A", "-"], "id": "rs2"}
+    ins_row = ("chr1", 103, "CA", "C", 1.0)
+    # the file writes the insertion at the run's left edge, Ensembl at its right edge: same sequence
+    assert ref.indel_allele(ins_row, WINDOW, 100, ins_end_of_run, "C") == "A"
+    assert ref.indel_allele(ins_row, WINDOW, 100, deletion, "C") is None
+    # read with CA as hg38's allele, the same row is a deletion of one A, and the effect is the reference
+    assert ref.readings(ins_row, WINDOW, 100) == ["C", "CA"]
+    assert ref.indel_allele(ins_row, WINDOW, 100, deletion, "CA") == "A"
+    # effect allele is the reference one: Ensembl spells it '-'
+    assert ref.indel_allele(("chr1", 103, "C", "CA", 1.0), WINDOW, 100, ins_end_of_run, "C") == "-"
+    assert ref.indel_allele(("chr1", 104, "A", "AA", 1.0), WINDOW, 100, ins_end_of_run) == "-"
+    elsewhere = {"start": 101, "end": 101, "alleles": ["G", "-"]}
+    assert ref.indel_allele(ins_row, WINDOW, 100, elsewhere) is None
+
+
+def test_indel_lookup_refuses_a_row_placed_under_two_readings(monkeypatch):
+    ins = {"start": 108, "end": 107, "alleles": ["-", "A"], "id": "rs1"}
+    dele = {"start": 104, "end": 104, "alleles": ["A", "-"], "id": "rs2"}
+    row = ("chr1", 103, "CA", "C", 1.0)
+    window_at = lambda chrom, a, b: "N" * (100 - a) + WINDOW + "N" * (b - 110)  # noqa: E731
+    monkeypatch.setattr(ref, "_request", lambda path, payload=None: ([ins], 5))
+    assert ref._indel_lookup(row, window_at) == ("rs1", "A", 5)
+    monkeypatch.setattr(ref, "_request", lambda path, payload=None: ([ins, dele], 5))
+    assert ref._indel_lookup(row, window_at) == ("", "", 5)

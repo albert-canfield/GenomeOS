@@ -198,12 +198,19 @@ def effect_frequency(entries: list[dict], population: str, effect: str) -> tuple
     return min(max(p, 0.0), 1.0), an
 
 
-def match_record(row: tuple, record: dict | None) -> tuple[str, dict[str, list]]:
-    """(status, {population: [p, an]}) for one scoring row against Ensembl's record of its id."""
+def match_record(row: tuple, record: dict | None, allele: str | None = None) -> tuple[str, dict[str, list]]:
+    """(status, {population: [p, an]}) for one scoring row against Ensembl's record of its id.
+
+    `allele` is Ensembl's spelling of the effect allele when the haplotype comparison of
+    `indel_allele` has already shown the record to be the same variant; position and spelling are
+    then not checked again.
+    """
     chrom, pos, effect, other = row[0], row[1], row[2], row[3]
     if record is None:
         return "no_record", {}
     eff, others = ensembl_alleles(effect, other)
+    if allele is not None:
+        eff = allele
     snv = len(effect) == 1 and all(len(o) == 1 for o in others)
     c = chrom.removeprefix("chr")
     maps = [
@@ -213,12 +220,13 @@ def match_record(row: tuple, record: dict | None) -> tuple[str, dict[str, list]]
     ]
     if not maps:
         return "no_grch38_mapping", {}
-    ok = [m for m in maps if (m.get("start") == pos if snv else abs(int(m.get("start", 0)) - pos) <= 1)]
-    if not ok:
-        return "position_mismatch", {}
-    alleles = str(ok[0].get("allele_string", "")).split("/")
-    if eff not in alleles:
-        return "effect_allele_not_at_id", {}
+    if allele is None:
+        ok = [m for m in maps if (m.get("start") == pos if snv else abs(int(m.get("start", 0)) - pos) <= 1)]
+        if not ok:
+            return "position_mismatch", {}
+        alleles = str(ok[0].get("allele_string", "")).split("/")
+        if eff not in alleles:
+            return "effect_allele_not_at_id", {}
     pops = record.get("populations") or []
     freqs = {}
     for pop in POPULATIONS:
@@ -226,6 +234,110 @@ def match_record(row: tuple, record: dict | None) -> tuple[str, dict[str, list]]
         if f is not None:
             freqs[pop] = [round(f[0], 6), f[1]]
     return "matched", freqs
+
+
+INDEL_WINDOW = 30  # bases either side of an indel within which Ensembl's placement is looked for
+
+
+def haplotype(window: str, w0: int, start: int, end: int, allele: str) -> str:
+    """`window` (1-based, first base at w0) with [start, end] replaced by `allele` ('-' is empty).
+
+    Ensembl writes an insertion with end = start - 1, which this reads as a zero-length slot.
+    """
+    return window[: start - w0] + ("" if allele == "-" else allele) + window[end - w0 + 1 :]
+
+
+def indel_allele(
+    row: tuple, window: str, w0: int, candidate: dict, ref_allele: str | None = None
+) -> str | None:
+    """Ensembl's spelling of the row's effect allele when `candidate` (an overlap hit) is the same
+    variant, or None.
+
+    Indels in repeats are written at different positions and in different trims by the scoring file
+    and by Ensembl, so the test is the sequence each produces: the row's effect and other alleles,
+    put on the hg38 window with `ref_allele` as the reference one, must give the same two haplotypes
+    as two of the candidate's alleles. Without `ref_allele` every reading the window allows is tried.
+    """
+    pos, effect = row[1], row[2]
+    others = [o for o in row[3].split("/") if o]
+    try:
+        s, e = int(candidate["start"]), int(candidate["end"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    if not others or s < w0 or e > w0 + len(window) - 1:
+        return None
+    haps = {a: haplotype(window, w0, s, e, a) for a in candidate.get("alleles") or []}
+    if window not in haps.values():
+        return None
+    for r in [ref_allele] if ref_allele else readings(row, window, w0):
+
+        def put(x: str, r=r) -> str:
+            return window[: pos - w0] + x + window[pos - w0 + len(r) :]
+
+        he = put(effect)
+        ho = [put(o) for o in others]
+        if he in ho:
+            continue
+        spelled = [a for a, h in haps.items() if h == he]
+        if spelled and all(h in haps.values() for h in ho):
+            return spelled[0]
+    return None
+
+
+def readings(row: tuple, window: str, w0: int) -> list[str]:
+    """The row's alleles that match hg38 at its position: each is a possible reference allele.
+
+    Inside a repeat both can match (C/CA before an A is an insertion of A or a deletion of A), and a
+    scoring file without a reference column does not say which.
+    """
+    pos = row[1]
+    alleles = [*(o for o in row[3].split("/") if o), row[2]]
+    return [a for a in alleles if window[pos - w0 : pos - w0 + len(a)] == a]
+
+
+def _reference_windows():
+    """fetch(chrom, start1, end1) over the local hg38 sequence, and a closer; None where not fetched."""
+    from genomeos.coords import Locus
+    from genomeos.genome import IndexedGenome, reference_fasta
+
+    open_: dict[str, Any] = {}
+
+    def fetch(chrom: str, a: int, b: int) -> str | None:
+        if chrom not in open_:
+            fa = reference_fasta(chrom, Path("data/reference"))
+            open_[chrom] = IndexedGenome(str(fa)) if fa.exists() else None
+        g = open_[chrom]
+        return str(g.fetch(Locus(chrom, a - 1, b))).upper() if g is not None else None
+
+    def close() -> None:
+        for g in open_.values():
+            if g is not None:
+                g.close()
+
+    return fetch, close
+
+
+def _indel_lookup(row: tuple, window_at) -> tuple[str, str, int]:
+    """(rsID, Ensembl's effect allele, bytes) for an indel row placed by haplotype, or ("", "", bytes)."""
+    chrom, pos = row[0], row[1]
+    longest = max([len(row[2])] + [len(o) for o in row[3].split("/") if o])
+    w0, w1 = max(1, pos - INDEL_WINDOW), pos + longest + INDEL_WINDOW
+    window = window_at(chrom, w0, w1)
+    if not window:
+        return "", "", 0
+    d, nbytes = _request(
+        f"/overlap/region/human/{chrom.removeprefix('chr')}:{w0 + 1}-{w1 - 1}?feature=variation"
+    )
+    cands = [v for v in d or [] if str(v.get("id", "")).startswith("rs")]
+    hits = {}
+    for r in readings(row, window, w0):
+        found = [(v["id"], a) for v in cands if (a := indel_allele(row, window, w0, v, r)) is not None]
+        if found:
+            hits[r] = found[0]
+    if len(hits) != 1:  # nothing placed, or placed under two readings of which allele is hg38's
+        return "", "", nbytes
+    rs, a = next(iter(hits.values()))
+    return rs, a, nbytes
 
 
 def _request(path: str, payload: dict | None = None, tries: int = 12) -> tuple[Any, int]:
@@ -353,12 +465,53 @@ def fetch_frequencies(
             progress(f"{pgs_id}: {min(k + BATCH, len(unique)):,} of {len(unique):,} ids")
         time.sleep(0.1)
     records = {x: v for x, v in state["records"].items() if v is not None}
-    variants = []
+    first = []
     for i, r in enumerate(rows):
         status, freqs = match_record(r, records.get(ids[i]) if ids[i] else None)
-        if not ids[i]:
-            status = "no_id_at_position"
-        variants.append([r[0], r[1], r[2], r[3], r[4], ids[i], r[6], status, freqs])
+        first.append(("no_id_at_position" if not ids[i] else status, freqs))
+    # indels the first pass could not match are placed by the haplotypes they produce
+    indels = [
+        i
+        for i, r in enumerate(rows)
+        if first[i][0] != "matched"
+        and not (len(r[2]) == 1 and all(len(o) == 1 for o in r[3].split("/") if o))
+    ]
+    state.setdefault("indels", {})
+    todo = [i for i in indels if str(i) not in state["indels"]]
+    window_at, close = _reference_windows()
+    try:
+        for n, i in enumerate(todo, 1):
+            rs, allele, nb = _indel_lookup(rows[i], window_at)
+            state["indels"][str(i)] = [rs, allele]
+            fetched += nb
+            requests += 1
+            if n % 10 == 0:
+                save()
+    finally:
+        close()
+    save()
+    extra = sorted({v[0] for v in state["indels"].values() if v[0]} - set(state["records"]))
+    for k in range(0, len(extra), BATCH):
+        chunk = extra[k : k + BATCH]
+        d, nb = _request("/variation/homo_sapiens?pops=1", {"ids": chunk})
+        fetched += nb
+        requests += 1
+        for x in chunk:
+            state["records"][x] = (d or {}).get(x)
+        save()
+    records = {x: v for x, v in state["records"].items() if v is not None}
+    by_haplotype = 0
+    variants = []
+    for i, r in enumerate(rows):
+        status, freqs = first[i]
+        rid = ids[i]
+        placed = state["indels"].get(str(i)) if i in indels else None
+        if placed and placed[0]:
+            s2, f2 = match_record(r, records.get(placed[0]), allele=placed[1])
+            if s2 == "matched":
+                status, freqs, rid = "matched_by_haplotype", f2, placed[0]
+                by_haplotype += 1
+        variants.append([r[0], r[1], r[2], r[3], r[4], rid, r[6], status, freqs])
     table = {
         "pgs_id": pgs_id,
         "source": {
@@ -375,6 +528,7 @@ def fetch_frequencies(
         "requests": requests,
         "bytes": fetched,
         "ids_found_by_position": by_position,
+        "indels_matched_by_haplotype": by_haplotype,
         "seconds": round(time.time() - t0, 1),
         "columns": ["chrom", "pos", "effect", "other", "weight", "id", "author_af", "status", "freqs"],
         "variants": variants,

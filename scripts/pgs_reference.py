@@ -200,11 +200,12 @@ def build(panel: bool = True) -> Path:
                 "requests": table["requests"],
                 "bytes": table["bytes"],
                 "ids_found_by_position": table["ids_found_by_position"],
+                "indels_matched_by_haplotype": table.get("indels_matched_by_haplotype"),
                 "lookup": lookup,
             }
             entry["groups"] = {p: ref.group_distribution(table, p) for p in ref.POPULATIONS}
             entry["author_check"] = ref.author_check(table)
-            unmatched = len(rows) - lookup.get("matched", 0)
+            unmatched = len(rows) - sum(n for k, n in lookup.items() if k.startswith("matched"))
             if unmatched:
                 exclusions.append(f"{s}: {unmatched:,} rows carry no frequency (lookup: {lookup})")
         if panel:
