@@ -496,3 +496,146 @@ to. It is one source, pooled over 0–20 h, with accessibility and RNA from diff
    difference survives outside gene bodies. A registration that makes the between-gene stratum its
    primary, with the window of the marker call matched to the window of the RNA, would ask it
    directly.
+
+## 9. Drosophila: the boundary node, registered on Stadler 2017 boundaries (2026-10-10, lane-flynode)
+
+Section 8 left the fly's result inside gene bodies: the worm's gene-structure rule beat nearest TSS on
+all 2,518 distal elements (+2.70) but not between genes (+0.98 [-0.42, +2.31], 917 elements), so that
+run could not separate regulation from the host gene's transcription. The human node is a
+boundary-delimited domain, and the fly, unlike the worm, has measured boundaries. This registration
+asks the human form of the question on the same elements and endpoint. No money, no key, no model
+request.
+
+Code: `genomeos/attribution/simpler_flynode.py` (imports `simpler.py` and `simpler_fly.py`, both
+unchanged), `scripts/simpler_flynode_run.py` (`fetch`, `inventory`, `register`, `score`),
+`tests/test_simpler_flynode.py`. Results: `data/results/simpler_flynode_inventory.json`,
+`simpler_flynode_registration.json`, `simpler_flynode_result.json`, each written from a clean
+worktree of the committed tree with the stores linked read-only. Commits: code frozen `6bee65f` and
+`90a48c7` (the registration's manifest declares the RNA file it hashes), registration `f5985f7`.
+
+### The boundary set (fetched 2026-10-10)
+
+| file | what is read | bytes | sha256 | licence |
+|---|---|---|---|---|
+| `elife-29550-supp1-v2.xlsx` (eLife CDN) | Tables S4 (manual), S5 (computational), S7 (representative) boundary lists, dm6 columns | 386,317 | `e944d828...49db0e4` | CC BY 4.0 |
+
+Stadler, Haines and Eisen 2017 (eLife 6:e29550) made Hi-C on hand-sorted nuclear-cycle-14 embryos
+(2-3 h) at 500-bp resolution and called boundaries by eye over the whole genome (Table S4, 3,121
+distinct boundaries on the used arms), by a directionality score (Table S5, 2,666) and as a merge
+(Table S7, 954). Disk before the fetch: 27,064,115,200 bytes free. Scouting moved 11,639,184 bytes more (the GEO
+copy of the same tables, a scouting copy of this file, Cavalheiro 2023's supplementary archive),
+12,025,501 in all of the 200 MB budget.
+
+**Why this set.** Embryos; dm6 as the authors give it, so nothing is lifted; 500-bp resolution,
+finer than the spacing of fly genes; boundaries called by the authors, so no caller or threshold is
+chosen here; a stated licence; under 0.4 MB. Not used: Cavalheiro et al. 2023 (Sci Adv, CC BY;
+10-kb bins, and its table lists 878 boundaries of a differential analysis against the 772 its text
+reports), the GEO copy of Stadler's tables (dm3 only), Ogiyama et al. 2018 (contact matrices, no
+boundary list: calling one would choose a caller here), Hug et al. 2017 (not openly licensed),
+Ramirez et al. 2018 (Kc167 cells). **Stage:** the boundaries are from 2-3 h embryos, the marker calls
+mostly from 6-16 h, the RNA from 0-20 h. That boundaries formed at zygotic genome activation persist
+is the sources' report (Hug 2017, Cavalheiro 2023), not checked here.
+
+### The node, decided before any RNA value was read
+
+An element's domain runs from the boundary at or left of its midpoint to the next boundary right of
+it, or to the arm end; a gene is in the domain when its 5' end lies there or inside either
+boundary's 500-bp bin (a boundary is the bin start + 250, and the bins are shared, since fly
+boundaries sit mostly at promoters). The rule names the in-domain gene with the nearest 5' end. When
+the arm-wide nearest 5' end is in the domain it is nearest TSS itself; when the domain holds no 5' end
+it falls back to nearest TSS. So it differs from nearest TSS exactly where the nearest 5' end lies
+across a measured boundary and the domain holds another.
+
+### The census, and the population it fixed
+
+The lane's brief named the 917 between-gene elements as the primary population. The census, from
+positions and the element-side tissue call only, showed that between genes the boundary rule changes
+the nearest-TSS gene for **90 of 917**, under the stop rule's 200 (median domain around a primary
+element 84 kb; 17 of 2,518 elements sit inside a boundary bin). Between genes this boundary set cannot
+decide. The primary population was therefore fixed, with that census in view and no RNA value read,
+as the **1,634 distal elements outside the body of the gene the boundary rule names**: all 917
+between-gene elements and 717 elements inside a gene body for which the rule names another gene. On
+it the named gene never contains the element, which is the brief's reason, and the rules differ on
+234 (for 115 of these the nearest-TSS gene contains the element, which can favour nearest TSS). Between
+genes and all 2,518 distal elements are reported beside. On all distal elements the rules differ on
+273 of 2,518; for the computational list 301 of 1,697 primary elements, for the representative 86 of
+1,585.
+
+### The registered test
+
+Registered in `simpler_flynode.REGISTRATION` and `data/results/simpler_flynode_registration.json`
+(`f5985f7`). `score` refuses to run unless the registration, simpler_fly's registration and the five
+code files are committed and unchanged, every input matches its registered sha256, simpler_fly's own
+census recomputes, and this census recomputes.
+
+- **Outcome.** Boundary rule against nearest TSS on the 1,634: simpler_fly's statistic, percentile
+  cluster bootstrap over 1-Mb windows; BOUNDARY_RULE_AHEAD, NEAREST_AHEAD or NO_DIFFERENCE_DETECTED.
+- **Second registered comparison.** Boundary rule against the gene-structure rule on the same
+  elements, with its own label, not the outcome; the gene-structure rule names the host for 717 of
+  them, where its transcription can favour it. Two comparisons on one population, each at 95%, no
+  correction for the pair.
+- **Endpoint, matched control, falsifier, positive control.** simpler_fly's, unchanged; the matched
+  control and falsifier are applied to the boundary rule's gene on the primary population.
+- **Beside, deciding nothing.** The same boundaries rotated along each arm by one uniform offset
+  (number and spacing kept, 1,000 draws); the computational and representative lists; the elements
+  where the rules differ alone; tissues with 50 or more primary elements; the gene-structure rule
+  against nearest TSS.
+- **Power in advance.** 234 differing elements of 1,634: about 2.6 points at 80% power, two-sided
+  5%, before clustering.
+- **Stop rule.** One run; fewer than 200 differing primary elements would have stopped it unscored.
+
+### Result (2026-10-10, registration `f5985f7`)
+
+Run once by `scripts/simpler_flynode_run.py score` from a clean worktree of `f5985f7` (stores linked
+read-only), 12 seconds, no request to any model. Outcome **NO_DIFFERENCE_DETECTED**; second
+comparison **GENE_STRUCTURE_AHEAD**; falsifier **NOT_FALSIFIED**. The registered reading, verbatim:
+
+> On 1,634 D. melanogaster embryo distal elements accessible in clusters of exactly one of 14 tissues (Calderon et al. 2022, 0-20 h, the source's own marker call) and lying outside the body of the gene the boundary rule names, the gene with the nearest 5' end inside the element's domain, delimited by 3,121 Hi-C boundaries of nuclear-cycle-14 embryos (Stadler et al. 2017, the authors' manual call), is expressed at 5 counts per million or more and highest in the element's own tissue, in RNA pooled over that tissue's cells, for 88 of 1,634 (5.4%), against 84 of 1,634 (5.1%) for the gene with the nearest 5' end on the arm; the rules differ on 234 of 1,634 elements; difference +0.24 points, 95% -0.34 to +0.95 over 1-Mb clusters. No difference detected between the boundary rule and nearest TSS. With 234 elements differing, a difference smaller than about 2.6 points could go undetected. For 115 of the 234 elements where the rules differ, the nearest-TSS gene contains the element, which can favour nearest TSS. Against the gene-structure rule on the same elements (148 of 1,634, 9.1%; the two differ on 943, and the gene-structure rule names the host for 717), the difference is -3.67 points, 95% -5.96 to -1.37: the gene-structure rule is ahead of the boundary rule. The boundary rule's genes match the element's tissue more often than genes at a matched distance (4.4%, one-sided p 0.001), so position carries tissue information here. With the same boundaries rotated along each arm the rule averages 5.5% on these elements (one-sided p 0.612), so the measured positions are not shown to carry more than the boundaries' number and spacing. Between genes (beside, deciding nothing) the boundary rule names a different gene from nearest TSS for only 90 of 917 elements, fewer than the stop rule's 200, so this boundary set cannot decide the between-gene question: there it is concordant for 64 (7.0%) against 63 (6.9%) for nearest TSS, +0.11 points [-0.46, +0.70]. On all 2,518 distal elements (beside, deciding nothing; the rules differ on 273) the boundary rule is concordant for 238 (9.5%) against 231 (9.2%) for nearest TSS, +0.28 points [-0.22, +0.82], and against 299 (11.9%) for the gene-structure rule, -2.42 points [-3.85, -0.94]. Accessibility is not function, and a boundary is not a regulatory unit by itself: this says the attributed gene is expressed where the element is open, not that the element acts on it. The boundaries come from 2-3 h embryos, the marker calls mostly from 6-16 h, and accessibility and RNA from different nuclei.
+
+The positive control separates, so the readout is responsive: of 460 single-tissue promoter
+elements the nearest-TSS gene is concordant for 128 (27.8%) against 5.5% at a matched distance
+(one-sided p 0.001). No attributed gene is missing from the RNA rows.
+
+Beside the outcome, deciding nothing (percentile intervals over 1-Mb clusters):
+
+| comparison | elements (differ) | first rule | second rule | difference, points [95%] |
+|---|---|---|---|---|
+| boundary vs nearest, where they differ | 234 (234) | 6.8% | 5.1% | +1.71 [-2.50, +7.01] |
+| boundary vs nearest, computational list | 1,697 (301) | 4.8% | 5.3% | -0.47 [-1.23, +0.22] |
+| boundary vs nearest, representative list | 1,585 (86) | 5.4% | 5.4% | +0.00 [-0.36, +0.34] |
+| boundary vs gene structure, between genes | 917 (226) | 7.0% | 7.9% | -0.87 [-2.36, +0.63] |
+| gene structure vs nearest, primary | 1,634 (781) | 9.1% | 5.1% | +3.92 [+1.76, +6.02] |
+| boundary vs nearest, neural | 929 (138) | 6.6% | 6.1% | +0.43 [-0.49, +1.64] |
+| boundary vs nearest, epidermis | 354 (47) | 1.1% | 1.1% | +0.00 [-0.83, +0.87] |
+| boundary vs nearest, muscle | 195 (29) | 6.2% | 5.6% | +0.51 [+0.00, +1.66] |
+| boundary vs nearest, midgut | 110 (13) | 7.3% | 6.4% | +0.91 [+0.00, +3.00] |
+
+**What this says and what it does not.** No difference was detected between the boundary rule and
+nearest TSS on this endpoint: where the rules differ (234 elements) the in-domain gene is concordant
+for 16 and the across-boundary nearest gene for 12, and the difference over all 1,634 is +0.24
+[-0.34, +0.95]. A difference under about 2.6
+points could go undetected. The rotated boundaries do as well as the measured ones (5.5% against
+5.4%), so the measured positions are not shown to carry information here beyond how many boundaries
+there are and how they are spaced. Neither of the other two lists changes that.
+
+The gene-structure rule is ahead of the boundary rule on the same elements (-3.67), but on 717 of them
+it names the host, whose transcription can favour it; between genes, where no rule names a host, the
+two nodes are not told apart (-0.87 [-2.36, +0.63]). So this run does not rank the two nodes on
+regulation.
+
+The between-gene question the brief asked stays open: on this boundary set the boundary rule names
+the nearest-TSS gene for 827 of 917 between-gene elements, so it cannot separate regulation from
+transcription there. The boundaries come from 2-3 h embryos and the marker calls mostly from 6-16 h;
+a later-stage boundary set could place boundaries differently, and was not available as an openly
+licensed, author-called dm6 list.
+
+Accessibility is not function, and a boundary is not a regulatory unit by itself. Nothing here says
+that any element acts on the gene it is attributed to.
+
+### What follows from the boundary node
+
+1. The between-gene question needs a population where the rules differ often enough: a second fly
+   source with more between-gene elements (or the marker window matched to the RNA window, section 8
+   item 2), not another node on this one.
+2. A boundary set from the marker calls' own stages (6-16 h embryos), author-called and dm6, if one is
+   published under a stated licence; none was found on 2026-10-10.

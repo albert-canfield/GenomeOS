@@ -1,0 +1,683 @@
+{
+  "result": "simpler_flynode_result",
+  "date": "2026-10-10",
+  "registration_commit": "f5985f7",
+  "registered_inputs": {
+    "boundaries": {
+      "path": "data/knowledge/simpler_flynode/elife-29550-supp1-v2.xlsx",
+      "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4"
+    },
+    "simpler_fly_registration": {
+      "path": "data/results/simpler_fly_registration.json",
+      "sha256": "593349877cd416635629ee0d0ba65418cd1b1a9f21ebcdada01fb6f80a2c4177",
+      "note": "its registered inputs (tables, peaks, GFF3, RNA by annotation) are checked by sha256"
+    }
+  },
+  "rna_summary": {
+    "protein_coding_genes_in_rna": 13950,
+    "tissue_umi_totals": {
+      "neural": 43735657.0,
+      "ventral midline": 595736.0,
+      "epidermis": 22550613.0,
+      "foregut and hindgut": 5712315.0,
+      "tracheal system": 6172809.0,
+      "salivary gland": 2153976.0,
+      "Malpighian tubule": 578404.0,
+      "muscle": 15122249.0,
+      "fat body": 2163646.0,
+      "plasmatocytes": 3005000.0,
+      "midgut": 9698473.0,
+      "amnioserosa": 3948168.0,
+      "germ cell": 11742157.0,
+      "yolk": 11205491.0
+    }
+  },
+  "census": {
+    "primary_outside_the_boundary_gene": {
+      "elements": 1634,
+      "elements_by_tissue": {
+        "neural": 929,
+        "ventral midline": 0,
+        "epidermis": 354,
+        "foregut and hindgut": 14,
+        "tracheal system": 7,
+        "salivary gland": 0,
+        "Malpighian tubule": 0,
+        "muscle": 195,
+        "fat body": 0,
+        "plasmatocytes": 2,
+        "midgut": 110,
+        "amnioserosa": 0,
+        "germ cell": 0,
+        "yolk": 23
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 1340,
+        "boundary_moves": 234,
+        "empty_domain": 60
+      },
+      "differ_from_nearest_tss": 234,
+      "differ_from_nearest_tss_inside_a_gene_body": 144,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 115,
+      "differ_from_nearest_tss_where_the_boundary_gene_contains_the_element": 0,
+      "differ_from_gene_structure": 943,
+      "gene_structure_names_a_host": 717,
+      "gene_structure_differs_from_nearest_tss": 781,
+      "clusters_1mb": 98,
+      "mde_points_unclustered_vs_nearest_tss": 2.621,
+      "mde_points_unclustered_vs_gene_structure": 5.262
+    },
+    "between_genes": {
+      "elements": 917,
+      "elements_by_tissue": {
+        "neural": 520,
+        "ventral midline": 0,
+        "epidermis": 213,
+        "foregut and hindgut": 8,
+        "tracheal system": 7,
+        "salivary gland": 0,
+        "Malpighian tubule": 0,
+        "muscle": 121,
+        "fat body": 0,
+        "plasmatocytes": 1,
+        "midgut": 38,
+        "amnioserosa": 0,
+        "germ cell": 0,
+        "yolk": 9
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 795,
+        "boundary_moves": 90,
+        "empty_domain": 32
+      },
+      "differ_from_nearest_tss": 90,
+      "differ_from_nearest_tss_inside_a_gene_body": 0,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+      "differ_from_nearest_tss_where_the_boundary_gene_contains_the_element": 0,
+      "differ_from_gene_structure": 226,
+      "gene_structure_names_a_host": 0,
+      "gene_structure_differs_from_nearest_tss": 178,
+      "clusters_1mb": 92,
+      "mde_points_unclustered_vs_nearest_tss": 2.897,
+      "mde_points_unclustered_vs_gene_structure": 4.59
+    },
+    "all_distal": {
+      "elements": 2518,
+      "elements_by_tissue": {
+        "neural": 1330,
+        "ventral midline": 0,
+        "epidermis": 579,
+        "foregut and hindgut": 21,
+        "tracheal system": 11,
+        "salivary gland": 0,
+        "Malpighian tubule": 0,
+        "muscle": 301,
+        "fat body": 1,
+        "plasmatocytes": 2,
+        "midgut": 224,
+        "amnioserosa": 2,
+        "germ cell": 0,
+        "yolk": 47
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 2158,
+        "boundary_moves": 273,
+        "empty_domain": 87
+      },
+      "differ_from_nearest_tss": 273,
+      "differ_from_nearest_tss_inside_a_gene_body": 183,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 117,
+      "differ_from_nearest_tss_where_the_boundary_gene_contains_the_element": 39,
+      "differ_from_gene_structure": 949,
+      "gene_structure_names_a_host": 1601,
+      "gene_structure_differs_from_nearest_tss": 822,
+      "clusters_1mb": 102,
+      "mde_points_unclustered_vs_nearest_tss": 1.837,
+      "mde_points_unclustered_vs_gene_structure": 3.426
+    },
+    "domain_size_of_primary_elements": {
+      "median_bp": 84000,
+      "quartiles_bp": [
+        40500,
+        164000
+      ]
+    },
+    "distal_elements_within_a_boundary_bin": 17,
+    "alternative_lists_primary": {
+      "computational": {
+        "elements": 1697,
+        "elements_by_tissue": {
+          "neural": 962,
+          "ventral midline": 0,
+          "epidermis": 366,
+          "foregut and hindgut": 16,
+          "tracheal system": 7,
+          "salivary gland": 0,
+          "Malpighian tubule": 0,
+          "muscle": 204,
+          "fat body": 0,
+          "plasmatocytes": 2,
+          "midgut": 117,
+          "amnioserosa": 0,
+          "germ cell": 0,
+          "yolk": 23
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 1297,
+          "boundary_moves": 301,
+          "empty_domain": 99
+        },
+        "differ_from_nearest_tss": 301,
+        "differ_from_nearest_tss_inside_a_gene_body": 204,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 176,
+        "differ_from_nearest_tss_where_the_boundary_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 1013,
+        "gene_structure_names_a_host": 780,
+        "gene_structure_differs_from_nearest_tss": 782,
+        "clusters_1mb": 98,
+        "mde_points_unclustered_vs_nearest_tss": 2.863,
+        "mde_points_unclustered_vs_gene_structure": 5.251
+      },
+      "representative": {
+        "elements": 1585,
+        "elements_by_tissue": {
+          "neural": 904,
+          "ventral midline": 0,
+          "epidermis": 346,
+          "foregut and hindgut": 15,
+          "tracheal system": 7,
+          "salivary gland": 0,
+          "Malpighian tubule": 0,
+          "muscle": 186,
+          "fat body": 0,
+          "plasmatocytes": 2,
+          "midgut": 102,
+          "amnioserosa": 0,
+          "germ cell": 0,
+          "yolk": 23
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 1495,
+          "boundary_moves": 86,
+          "empty_domain": 4
+        },
+        "differ_from_nearest_tss": 86,
+        "differ_from_nearest_tss_inside_a_gene_body": 54,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 42,
+        "differ_from_nearest_tss_where_the_boundary_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 870,
+        "gene_structure_names_a_host": 668,
+        "gene_structure_differs_from_nearest_tss": 805,
+        "clusters_1mb": 98,
+        "mde_points_unclustered_vs_nearest_tss": 1.638,
+        "mde_points_unclustered_vs_gene_structure": 5.211
+      }
+    },
+    "positive_control_promoters": 460,
+    "stop_rule_met": false
+  },
+  "boundaries": 3121,
+  "primary": {
+    "n": 1634,
+    "a": "boundary_gene",
+    "b": "nearest_gene",
+    "differ": 234,
+    "a_concordant": 88,
+    "b_concordant": 84,
+    "a_rate_pct": 5.386,
+    "b_rate_pct": 5.141,
+    "delta_points": 0.245,
+    "delta_ci95_points": [
+      -0.338,
+      0.951
+    ],
+    "clusters": 98
+  },
+  "primary_vs_gene_structure": {
+    "n": 1634,
+    "a": "boundary_gene",
+    "b": "domain_gene",
+    "differ": 943,
+    "a_concordant": 88,
+    "b_concordant": 148,
+    "a_rate_pct": 5.386,
+    "b_rate_pct": 9.058,
+    "delta_points": -3.672,
+    "delta_ci95_points": [
+      -5.961,
+      -1.367
+    ],
+    "clusters": 98
+  },
+  "between_genes": {
+    "n": 917,
+    "a": "boundary_gene",
+    "b": "nearest_gene",
+    "differ": 90,
+    "a_concordant": 64,
+    "b_concordant": 63,
+    "a_rate_pct": 6.979,
+    "b_rate_pct": 6.87,
+    "delta_points": 0.109,
+    "delta_ci95_points": [
+      -0.458,
+      0.703
+    ],
+    "clusters": 92
+  },
+  "between_genes_vs_gene_structure": {
+    "n": 917,
+    "a": "boundary_gene",
+    "b": "domain_gene",
+    "differ": 226,
+    "a_concordant": 64,
+    "b_concordant": 72,
+    "a_rate_pct": 6.979,
+    "b_rate_pct": 7.852,
+    "delta_points": -0.872,
+    "delta_ci95_points": [
+      -2.358,
+      0.631
+    ],
+    "clusters": 92
+  },
+  "all_distal": {
+    "n": 2518,
+    "a": "boundary_gene",
+    "b": "nearest_gene",
+    "differ": 273,
+    "a_concordant": 238,
+    "b_concordant": 231,
+    "a_rate_pct": 9.452,
+    "b_rate_pct": 9.174,
+    "delta_points": 0.278,
+    "delta_ci95_points": [
+      -0.216,
+      0.816
+    ],
+    "clusters": 102
+  },
+  "all_distal_vs_gene_structure": {
+    "n": 2518,
+    "a": "boundary_gene",
+    "b": "domain_gene",
+    "differ": 949,
+    "a_concordant": 238,
+    "b_concordant": 299,
+    "a_rate_pct": 9.452,
+    "b_rate_pct": 11.875,
+    "delta_points": -2.423,
+    "delta_ci95_points": [
+      -3.846,
+      -0.936
+    ],
+    "clusters": 102
+  },
+  "control": {
+    "expected": 72.304,
+    "expected_rate": 0.04425,
+    "draws": 1000,
+    "draws_at_or_above_observed": 0,
+    "p_one_sided": 0.001
+  },
+  "positive_control": {
+    "n": 460,
+    "nearest_concordant": 128,
+    "nearest_rate_pct": 27.826,
+    "control": {
+      "expected": 25.5,
+      "expected_rate": 0.05543,
+      "draws": 1000,
+      "draws_at_or_above_observed": 0,
+      "p_one_sided": 0.001
+    },
+    "responsive": true
+  },
+  "rotation_beside": {
+    "draws": 1000,
+    "observed": 88,
+    "mean_rotated": 89.495,
+    "mean_rotated_rate_pct": 5.477,
+    "draws_at_or_above_observed": 612,
+    "p_one_sided": 0.61239
+  },
+  "beside": {
+    "primary_where_the_rules_differ": {
+      "n": 234,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 234,
+      "a_concordant": 16,
+      "b_concordant": 12,
+      "a_rate_pct": 6.838,
+      "b_rate_pct": 5.128,
+      "delta_points": 1.709,
+      "delta_ci95_points": [
+        -2.5,
+        7.009
+      ],
+      "clusters": 77
+    },
+    "primary_gene_structure_vs_nearest_tss": {
+      "n": 1634,
+      "a": "domain_gene",
+      "b": "nearest_gene",
+      "differ": 781,
+      "a_concordant": 148,
+      "b_concordant": 84,
+      "a_rate_pct": 9.058,
+      "b_rate_pct": 5.141,
+      "delta_points": 3.917,
+      "delta_ci95_points": [
+        1.761,
+        6.022
+      ],
+      "clusters": 98
+    },
+    "computational_list_vs_nearest_tss": {
+      "n": 1697,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 301,
+      "a_concordant": 82,
+      "b_concordant": 90,
+      "a_rate_pct": 4.832,
+      "b_rate_pct": 5.303,
+      "delta_points": -0.471,
+      "delta_ci95_points": [
+        -1.227,
+        0.222
+      ],
+      "clusters": 98
+    },
+    "representative_list_vs_nearest_tss": {
+      "n": 1585,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 86,
+      "a_concordant": 85,
+      "b_concordant": 85,
+      "a_rate_pct": 5.363,
+      "b_rate_pct": 5.363,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        -0.357,
+        0.336
+      ],
+      "clusters": 98
+    },
+    "tissue_neural": {
+      "n": 929,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 138,
+      "a_concordant": 61,
+      "b_concordant": 57,
+      "a_rate_pct": 6.566,
+      "b_rate_pct": 6.136,
+      "delta_points": 0.431,
+      "delta_ci95_points": [
+        -0.493,
+        1.638
+      ],
+      "clusters": 97
+    },
+    "tissue_epidermis": {
+      "n": 354,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 47,
+      "a_concordant": 4,
+      "b_concordant": 4,
+      "a_rate_pct": 1.13,
+      "b_rate_pct": 1.13,
+      "delta_points": 0.0,
+      "delta_ci95_points": [
+        -0.831,
+        0.867
+      ],
+      "clusters": 80
+    },
+    "tissue_muscle": {
+      "n": 195,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 29,
+      "a_concordant": 12,
+      "b_concordant": 11,
+      "a_rate_pct": 6.154,
+      "b_rate_pct": 5.641,
+      "delta_points": 0.513,
+      "delta_ci95_points": [
+        0.0,
+        1.657
+      ],
+      "clusters": 70
+    },
+    "tissue_midgut": {
+      "n": 110,
+      "a": "boundary_gene",
+      "b": "nearest_gene",
+      "differ": 13,
+      "a_concordant": 8,
+      "b_concordant": 7,
+      "a_rate_pct": 7.273,
+      "b_rate_pct": 6.364,
+      "delta_points": 0.909,
+      "delta_ci95_points": [
+        0.0,
+        3.0
+      ],
+      "clusters": 62
+    }
+  },
+  "attributed_genes_missing_from_rna_rows": 0,
+  "fly": {
+    "registration": "fd81e37",
+    "all_distal_delta_points": 2.7,
+    "all_distal_ci95_points": [
+      1.32,
+      4.1
+    ],
+    "between_genes_delta_points": 0.98,
+    "between_genes_ci95_points": [
+      -0.42,
+      2.31
+    ],
+    "between_genes_elements": 917
+  },
+  "comparison": "NO_DIFFERENCE_DETECTED",
+  "comparison_vs_gene_structure": "GENE_STRUCTURE_AHEAD",
+  "falsifier": "NOT_FALSIFIED",
+  "outcome": "NO_DIFFERENCE_DETECTED",
+  "reading": "On 1,634 D. melanogaster embryo distal elements accessible in clusters of exactly one of 14 tissues (Calderon et al. 2022, 0-20 h, the source's own marker call) and lying outside the body of the gene the boundary rule names, the gene with the nearest 5' end inside the element's domain, delimited by 3,121 Hi-C boundaries of nuclear-cycle-14 embryos (Stadler et al. 2017, the authors' manual call), is expressed at 5 counts per million or more and highest in the element's own tissue, in RNA pooled over that tissue's cells, for 88 of 1,634 (5.4%), against 84 of 1,634 (5.1%) for the gene with the nearest 5' end on the arm; the rules differ on 234 of 1,634 elements; difference +0.24 points, 95% -0.34 to +0.95 over 1-Mb clusters. No difference detected between the boundary rule and nearest TSS. With 234 elements differing, a difference smaller than about 2.6 points could go undetected. For 115 of the 234 elements where the rules differ, the nearest-TSS gene contains the element, which can favour nearest TSS. Against the gene-structure rule on the same elements (148 of 1,634, 9.1%; the two differ on 943, and the gene-structure rule names the host for 717), the difference is -3.67 points, 95% -5.96 to -1.37: the gene-structure rule is ahead of the boundary rule. The boundary rule's genes match the element's tissue more often than genes at a matched distance (4.4%, one-sided p 0.001), so position carries tissue information here. With the same boundaries rotated along each arm the rule averages 5.5% on these elements (one-sided p 0.612), so the measured positions are not shown to carry more than the boundaries' number and spacing. Between genes (beside, deciding nothing) the boundary rule names a different gene from nearest TSS for only 90 of 917 elements, fewer than the stop rule's 200, so this boundary set cannot decide the between-gene question: there it is concordant for 64 (7.0%) against 63 (6.9%) for nearest TSS, +0.11 points [-0.46, +0.70]. On all 2,518 distal elements (beside, deciding nothing; the rules differ on 273) the boundary rule is concordant for 238 (9.5%) against 231 (9.2%) for nearest TSS, +0.28 points [-0.22, +0.82], and against 299 (11.9%) for the gene-structure rule, -2.42 points [-3.85, -0.94]. Accessibility is not function, and a boundary is not a regulatory unit by itself: this says the attributed gene is expressed where the element is open, not that the element acts on it. The boundaries come from 2-3 h embryos, the marker calls mostly from 6-16 h, and accessibility and RNA from different nuclei.",
+  "reading_is_the_registered_wording": "the reading is REGISTRATION['outcome_wording'] with its numbers filled in and no other word changed",
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Stadler MR, Haines JE, Eisen MB (2017) Convergence of topological domain boundaries, insulators, and polytene interbands revealed by high-resolution mapping of chromatin contacts in the early Drosophila melanogaster embryo. eLife 6:e29550, doi:10.7554/eLife.29550; supplementary file 1 (GEO GSE100370 holds the reads)",
+        "version": "eLife supplementary file 1, v2, as served on 2026-10-10"
+      },
+      {
+        "accession": "Calderon D, Blecher-Gonen R, Huang X, Secchia S, Kentro J, Daza RM, Martin B, Dulja A, Schaub C, Trapnell C, Larschan E, O'Connor-Giles KM, Furlong EEM, Shendure J (2022) The continuum of Drosophila embryonic development at single-cell resolution. Science 377:eabn5800, doi:10.1126/science.abn5800; supplementary tables, peak set and cell annotations from the authors' site (DEAP), RNA counts from GEO GSE190147",
+        "version": "as fetched by lane-fly on 2026-10-10 (registration fd81e37)"
+      },
+      {
+        "accession": "Ensembl release 104, Drosophila melanogaster BDGP6.32 (dm6) GFF3",
+        "version": "Ensembl release 104"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/simpler_flynode_registration.json",
+        "sha256": "07a54fca360237b631b059842821792bfd949b44fb9b09d928ed6b30133d9fe3",
+        "bytes": 30206,
+        "partition": "the committed registration"
+      },
+      {
+        "path": "data/results/simpler_fly_registration.json",
+        "sha256": "593349877cd416635629ee0d0ba65418cd1b1a9f21ebcdada01fb6f80a2c4177",
+        "bytes": 22753,
+        "partition": "simpler_fly's committed registration"
+      },
+      {
+        "path": "data/knowledge/simpler_flynode/elife-29550-supp1-v2.xlsx",
+        "sha256": "e944d8284f0312ac3daafced7dbe20251858494882907b4b81d20c03849db0e4",
+        "bytes": 386317,
+        "partition": "Tables S4, S5 and S7 (boundary positions)"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/SupplementaryTables.xlsx",
+        "sha256": "d80dd18c611953d4a5f53599b00bd5449387815e96cfa8ac8adf0ba54b7d443c",
+        "bytes": 17049285,
+        "partition": "Table S2 and Table S4 only"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/peaks.bed",
+        "sha256": "c99bee0ba98a2638f6ba58b1354a3aff4c59f8a4afd31db3616ff999020dd07c",
+        "bytes": 2532609,
+        "partition": "the peak set"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/Drosophila_melanogaster.BDGP6.32.104.gff3.gz",
+        "sha256": "d882d9a2af1c090ad69b4c81e54b809506f7a8d5fdd90597c6ed05c79ad502bc",
+        "bytes": 5713526,
+        "partition": "gene and transcript positions and strands, and arm lengths"
+      },
+      {
+        "path": "data/knowledge/simpler_fly/rna_umi_by_manual_annot.tsv.gz",
+        "sha256": "9b9ab6323d0e81d836457523151757fcb114cd5459028b3827c74dceefa22336",
+        "bytes": 1001331,
+        "partition": "the endpoint: UMI sums by annotation"
+      }
+    ],
+    "assembly": "dm6 (BDGP6.32): the boundaries as the file gives them, the peaks, the RNA and the gene models",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the peaks are BED (0-based, half-open), the GFF3 1-based closed, and a boundary is the 500-bp bin start + 250; positions move by at most 1 bp between the conventions"
+    },
+    "parameters": {
+      "boundary_lists": {
+        "manual": "Manual Boundaries",
+        "computational": "Computational Boundaries",
+        "representative": "Representative Boundaries"
+      },
+      "primary_list": "manual",
+      "bin_bp": 500,
+      "rotation_draws": 1000,
+      "tissues": [
+        "neural",
+        "ventral midline",
+        "epidermis",
+        "foregut and hindgut",
+        "tracheal system",
+        "salivary gland",
+        "Malpighian tubule",
+        "muscle",
+        "fat body",
+        "plasmatocytes",
+        "midgut",
+        "amnioserosa",
+        "germ cell",
+        "yolk"
+      ],
+      "detection_cpm": 5.0,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "control_draws": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "seed": 20261010,
+      "min_discordant": 200,
+      "alpha": 0.05
+    },
+    "exclusions": [
+      "simpler_fly's population exclusions, unchanged (registration fd81e37)",
+      "primary population: distal elements whose midpoint lies in a protein-coding gene body",
+      "boundary rows on chromosomes other than 2L, 2R, 3L, 3R, 4, X, Y",
+      "sheets of the boundary file other than Tables S4, S5 and S7"
+    ],
+    "partitions": {
+      "population": "pinned by the committed registration's census",
+      "positive_control": "promoter"
+    },
+    "code_cleanliness": {
+      "git_sha": "f5985f7831d7c2a2f9b1cfb874d83a44a678bc45",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_flynode_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_flynode_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_flynode_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_flynode_run.py"
+      ],
+      "counting_path_count": 9,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "f5985f7831d7c2a2f9b1cfb874d83a44a678bc45",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_flynode_run.py",
+        "score"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "f5985f7831d7c2a2f9b1cfb874d83a44a678bc45",
+      "code_cleanliness_git_sha": "f5985f7831d7c2a2f9b1cfb874d83a44a678bc45",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record f5985f7"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 331,
+      "opens_under_data": 24,
+      "files_read": 7,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

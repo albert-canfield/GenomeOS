@@ -308,3 +308,33 @@ def test_census_recomputes_from_the_registered_inputs() -> None:
     alts = {k: fn.attribute(rows, chroms, v) for k, v in sets.items() if k != fn.PRIMARY_SET}
     arm = fn.read_arm_lengths(ROOT / sf.GFF3)
     assert fn.census(main, alts, sets[fn.PRIMARY_SET], arm) == reg["census"]
+
+
+RESULT = ROOT / "data/results/simpler_flynode_result.json"
+
+
+def test_result_reading_is_the_registered_wording() -> None:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(RESULT, REGISTRATION, was="result not yet written")
+    res = json.loads(RESULT.read_text())
+    reg = json.loads(REGISTRATION.read_text())
+    assert res["census"] == reg["census"]
+    assert res["registration_commit"]
+    assert res["positive_control"]["responsive"] is True
+    assert (
+        res["outcome"] == res["comparison"] == fn.label(res["primary"]["delta_ci95_points"], "NEAREST_AHEAD")
+    )
+    assert res["comparison_vs_gene_structure"] == fn.label(
+        res["primary_vs_gene_structure"]["delta_ci95_points"], "GENE_STRUCTURE_AHEAD"
+    )
+    assert fn.reading(res) == res["reading"]
+    assert (
+        res["primary"]["differ"]
+        == reg["census"]["primary_outside_the_boundary_gene"]["differ_from_nearest_tss"]
+    )
+    assert res["attributed_genes_missing_from_rna_rows"] == 0
+    assert res["alphagenome_requests"] == 0
+    assert res["result_manifest"]["complete"] is True and res["result_manifest"]["code"]["dirty"] is False
