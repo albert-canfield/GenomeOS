@@ -2566,6 +2566,137 @@ still say `direct_surface` with a surface figure of 0.0. In the eleven tumours
 none does: 7 candidates are `direct_surface` and none scores 0.0. Other records
 were not checked.
 
+## A demo case above data level 1, decided 2026-10-10 before it was built
+
+Roadmap area F, Next 3 (lane-demolevel). The demo tumour runs at data level 1.
+This section decides what level 2 honestly requires in this codebase, and then
+chooses the case. Both were written and committed before any demo input was
+built or any pipeline run was made on the case.
+
+### What level 2 requires here
+
+`PatientProfile.levels()` marks level 2 (`matched_normal`) present only when
+`normal_vcf` is set, which is the matched normal's own variant file. That file
+has one consumer. `rank_variants` reads it and removes every tumour record
+whose chromosome, position, reference and alternate alleles also appear in it.
+It then marks every remaining record somatic. The file's hash goes into the
+analysis's `input_hashes`. So at level 2 the pipeline holds the normal genome's
+calls, hashes them and does the subtraction itself.
+
+**A somatic call set produced against a matched normal does not satisfy level
+2.** That includes a TCGA MAF and the PanCan Atlas set cBioPortal serves. It is
+a level-1 input:
+
+- The subtraction happened upstream, in the caller. The profile would hold none
+  of the normal's data, could not hash it and could not repeat the subtraction.
+  It would be carrying a provenance claim, not an input. Reading that claim as
+  level 2 would reinterpret the level to get a higher number, and that is not
+  done here.
+- The open-access somatic sets are also filtered on purpose for *potential*
+  germline variants. The GDC says the criteria "are purposefully implemented to
+  overcompensate and filter out germline variants", and dbSNP novelty is one of
+  them. That is partly the same population estimate level 1 already makes.
+
+**So TCGA and CPTAC cannot reach level 2 from open data.** The normal's own
+calls are controlled access. In the GDC's words, "MAF files containing any
+germline mutation annotations are protected and distributed in the controlled
+access portion". Under the contiguity rule, a TCGA or CPTAC demo stays at level
+1 whatever RNA, copy number or proteomics is added. `levels()` already reports
+such inputs as present and used above the break (`highest_input_present`), not
+as a higher level.
+
+### The case, chosen before the pipeline was run on it
+
+**GIAB HG008.** HG008-T is a pancreatic ductal adenocarcinoma cell line, Liss
+lab batch 0823p23 (passage 23), established from a female patient's primary
+tumour. The matched normal is the same patient's duodenal tissue, HG008-N-D.
+NIST states that the patient "explicitly consented for fully public
+dissemination of genomic data and cell lines". It is the one public tumour
+found whose normal genome's calls are published openly.
+
+- **Licence.** NIST data use policy: not subject to copyright in the United
+  States, and a royalty-free worldwide grant elsewhere. A modified work must say
+  what changed and acknowledge NIST as the source.
+- **The tumour is a cell line, not a biopsy.** Its purity is not a biopsy's, and
+  the README calls it a mixture of cell populations.
+
+The inputs come from the NYGC Somatic Pipeline v7 analysis of 2024-04-12, on
+GRCh38-GIABv3, in
+`ReferenceSamples/giab/data_somatic/HG008/Liss_lab/analysis/NYGC-somatic-pipeline_20240412/`:
+
+| Role | File | md5 | What it is |
+|---|---|---|---|
+| tumour | `HG008-T--HG008-N.snv.indel.high_confidence.v7.annotated.vcf.gz` | `72e85c9ddd6c222137e4136f6a76d21f` | 11,142 PASS somatic calls, the set NYGC names as the pipeline's output; the HG008-T column is read |
+| normal | `HG008-N.haplotypecaller.gatk.annotated.unfiltered.vcf.gz` | `891836dd9da087bceea43ee3e436f1dc` | "All calls (including common germline variants)" in HG008-N |
+
+The normal file is the unfiltered one. The filtered file of the same name keeps
+"rare germline variants" only, and the level asks for the normal genome, not a
+subset of it filtered on population frequency.
+
+**How the two files are cut down.** Both are restricted to the same region set:
+
+- the union of every GENCODE v50 `CDS` feature,
+- plus 2 bp on each side, where a splice-site change sits.
+
+This keeps the pair small. A tumour call outside the region set is not read,
+and the demo says so. Each file is then rewritten:
+
+- **Tumour.** A single-sample VCF with the record's GT and an allele fraction
+  computed from the tumour's AD, the same treatment the FGFR3-TACC3 fixture
+  received. INFO is dropped.
+- **Normal.** A single-sample VCF with GT only. A record whose genotype carries
+  no alternate allele is dropped, because the subtraction matches alleles and
+  does not read the genotype.
+
+A script fetches the files, checks the md5s, cuts and rewrites them, and
+records what it did.
+
+**Level expected: 2. Level 3 is not reachable.** The only tumour RNA-seq for
+HG008 is raw FASTQ: UMD, 2025-09-25, a few GB per read file. It comes from
+NIST's passage-21 and passage-103 cultures, not from the 0823p23 batch the DNA
+calls come from. Using it would mean quantifying it, which this codebase does
+not do, and mixing passages, which the GIAB README advises against. The chain
+therefore breaks at level 3.
+
+Kourami HLA alleles on HG008-N and BIC-seq2 copy number both exist, and neither
+is supplied. This is kept the plainest level-2 case, and those inputs are named
+as what to add next.
+
+### What the run will report, stated before it
+
+1. **The level.** `level_reached` 2 and `highest_input_present` 2. The missing
+   data no longer lists the matched normal, and does list tumour RNA-seq.
+2. **What the normal removed.** The number of tumour records the normal's calls
+   remove. It is expected to be small, because NYGC's set is already filtered
+   on the normal's allele fraction. Whatever it is, it is reported, not
+   explained away.
+3. **The same tumour file without the normal.** The demo runs it again at level
+   1 and reports how many records the population rule sets aside as likely
+   germline there. The difference between the two runs is what level 2 changes.
+4. **What is refused.** Every conclusion that needs level 3 or above:
+   - expression in this tumour, and so surface expression;
+   - presentation, since no HLA is supplied;
+   - anything that needs proteomics.
+
+Reading the code before the run found two report sentences that would be false
+at level 2:
+
+- every origin's `somatic_basis` reads "no matched normal supplied";
+- the limitations always say "No matched normal sample means somatic status is
+  estimated".
+
+Both are corrected only where a normal is supplied, so every level-1 output
+stays byte for byte as it was.
+
+### What must not move
+
+- The eleven benchmark rows, scored offline, in every field but `seconds`.
+- The level-1 demo (`data/demo/cancer_tumour.vcf`, its offline machine and text
+  reports).
+
+Both are held before and after this lane's code changes. The committed
+`data/demo/therapeutics/` files are not rewritten.
+
 ## What this is not
 
 GenomeOS does not say a therapy will work. It says an alteration creates a
