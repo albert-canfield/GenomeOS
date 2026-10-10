@@ -1,0 +1,308 @@
+{
+  "result": "celegans_nolookup_registration",
+  "date": "2026-10-10",
+  "registration": {
+    "question": "Of the 555 embryonic terminal cells of the reference lineage, how many end with a terminal type, and the right one, in a program that contains none of the lookup's 555 fate_<cell> decisions?",
+    "program": "data/organisms/celegans/embryo_nolookup.bio",
+    "what_moves_off_the_lookup": {
+      "tissue_E": {
+        "cells": "E's 34 terminal descendants, all Intestine in the reference",
+        "founder_decided_by": "SKN-1 present and POP-1 absent (fate_E); POP-1 is absent in E only because EMS was polarised by MOM-2 read at the measured EMS-P2 contact (fate_EMS_polarised, div_EMS_polarised)",
+        "reads_a_measured_contact": true,
+        "circular": "yes, as a wild-type prediction: 'E's clone is intestine' is Sulston 1983's observation, the record the 555 are scored against"
+      },
+      "tissue_D": {
+        "cells": "D's 20 terminal descendants, all Muscle in the reference",
+        "founder_decided_by": "the name D with PAL-1 present and SKN-1 absent, both segregated by named divisions (fate_D)",
+        "reads_a_measured_contact": false,
+        "circular": "yes, as a wild-type prediction: 'D's clone is body-wall muscle' is Sulston 1983's observation"
+      },
+      "tissue_germline": {
+        "cells": "P4's two daughters, Z3 (P4a) and Z2 (P4p), Reproductive in the reference",
+        "founder_decided_by": "the name P4 with PIE-1 present (germline)",
+        "reads_a_measured_contact": false,
+        "circular": "yes, and it is also a translation of the program's GermCell into the reference's word for the germ line"
+      },
+      "not_moved": "every AB, MS and C terminal cell: none of those founders' clones is one tissue, and a rule naming a sub-founder would be the lookup under another name"
+    },
+    "definitions": {
+      "denominator": "the 555 embryonic terminal cells: reference cells that are terminal, do not die, and are born before 800 min (fate_rules.embryonic_terminal)",
+      "decided_without_the_lookup": "a cell of the 555 whose cell_type at 800 min is one of the 17 terminal types, in a program in which no decision is fate_<cell> for any of the 555 (asserted before counting; the run is void otherwise)",
+      "right": "that type equals the reference type; wrong otherwise",
+      "attribution": "walking from the cell up its parents in the run, the first cell on which a differentiate decision to that type fired; every decided cell must be attributed to one of tissue_E, tissue_D, tissue_germline, or the run is void",
+      "primary_arm": "embryo_nolookup.bio as committed, every timer at its mean, grown to 800 min"
+    },
+    "predictions": {
+      "P1 primary": "decided 56 (tissue_E 34, tissue_D 20, tissue_germline 2), right 56, wrong 0",
+      "P2 seeds": "the same 56 / 56 / 0 with the timers drawn, seeds 0 to 19, every seed",
+      "P3 founders": "the eight founder types under the measured table are the expected ones: ABa ABaPrecursor, ABp ABpPrecursor, EMS EMSPolarised, MS MSPrecursor, E EPrecursor, C CPrecursor, D DPrecursor, P4 GermCell (8 of 8)",
+      "P4 other tables": "the curated table (contacts_embryo.tsv) and the loosest measured reading (Sheet1, 3,011 detected pairs) give the same eight founder types and the same 56 / 56 / 0",
+      "P5 no table": "with no contact table nothing is induced: ABp takes ABaPrecursor, E takes MSPrecursor, Intestine 0, decided 22 (tissue_D 20, tissue_germline 2), right 22",
+      "P6 rearranged": "ABa and ABp swapped in the measured table alone: ABa takes ABpPrecursor and ABp takes ABaPrecursor",
+      "P7 knockouts, founder level": "the eight knockouts of scripts/celegans_contacts.py give their published founder transformations under the measured table: 8 of 8",
+      "P8 knockouts, terminal level": "Intestine / Muscle / Reproductive / decided among the 555 are POP-1 111/20/2/133, SKN-1 0/20/2/22, PIE-1 0/20/0/20, APX-1 and GLP-1 34/20/2/56 (as wild type), PAL-1 34/0/2/36, MOM-2 and MOM-5 0/20/2/22",
+      "P8 detail": {
+        "POP-1": {
+          "Intestine": 111,
+          "Muscle": 20,
+          "Reproductive": 2,
+          "decided": 133
+        },
+        "SKN-1": {
+          "Intestine": 0,
+          "Muscle": 20,
+          "Reproductive": 2,
+          "decided": 22
+        },
+        "PIE-1": {
+          "Intestine": 0,
+          "Muscle": 20,
+          "Reproductive": 0,
+          "decided": 20
+        },
+        "APX-1": {
+          "Intestine": 34,
+          "Muscle": 20,
+          "Reproductive": 2,
+          "decided": 56
+        },
+        "GLP-1": {
+          "Intestine": 34,
+          "Muscle": 20,
+          "Reproductive": 2,
+          "decided": 56
+        },
+        "PAL-1": {
+          "Intestine": 34,
+          "Muscle": 0,
+          "Reproductive": 2,
+          "decided": 36
+        },
+        "MOM-2": {
+          "Intestine": 0,
+          "Muscle": 20,
+          "Reproductive": 2,
+          "decided": 22
+        },
+        "MOM-5": {
+          "Intestine": 0,
+          "Muscle": 20,
+          "Reproductive": 2,
+          "decided": 22
+        }
+      },
+      "P8 published terminal phenotype reproduced": {
+        "POP-1": true,
+        "SKN-1": true,
+        "PIE-1": "False: 'no germ line' holds, 'extra intestine' does not (Intestine 0)",
+        "APX-1": "not testable at the terminal level",
+        "GLP-1": "not testable at the terminal level",
+        "PAL-1": true,
+        "MOM-2": true,
+        "MOM-5": "True in direction; penetrance not compared"
+      }
+    },
+    "published_terminal_phenotypes": {
+      "POP-1": "MS adopts the E fate: extra intestine, no MS-derived pharynx or muscle (Lin, Thorpe & Priess 1995, Cell 83:599). Registered reading: reproduced in direction if MS's terminal cells are Intestine; the count (111) is NOT comparable, because MS's divisions are still read from the lineage by name, where a pop-1 MS makes an E-like lineage",
+      "SKN-1": "no intestine and no pharynx; EMS daughters make C-like hypodermis and muscle (Bowerman et al. 1992, Cell 68:1061). Registered reading: reproduced if Intestine is 0; the extra C-like tissue is not decidable here (no C tissue rule)",
+      "PIE-1": "P2 takes the EMS fate: extra pharynx and intestine and no germ line (Mello et al. 1992, Cell 70:163). Registered reading: 'no germ line' reproduced if Reproductive is 0; 'extra intestine' NOT reproduced, predicted in advance and in the opposite direction: the program loses E's intestine too, because presents_mom2 requires PIE-1 in P2, so without PIE-1 no Wnt reaches EMS at the contact and E takes the MS fate; and the MS/E founder rules are guarded on the names MS and E, so a P2 turned EMS-like still divides into cells named C and P3, and D keeps its muscle",
+      "APX-1": "ABp becomes ABa-like (Mello et al. 1994, Cell 77:95). Registered reading: a founder-level phenotype only; no AB fate is decided without the lookup, so nothing terminal can move",
+      "GLP-1": "ABp becomes ABa-like (Priess, Schnabel & Schnabel 1987, Cell 51:601). As APX-1",
+      "PAL-1": "C and D lose their fates: no D muscle (Hunter & Kenyon 1996, Cell 87:217). Registered reading: reproduced if Muscle is 0; C's tissues are not decided either way",
+      "MOM-2": "E takes the MS fate, no intestine (Thorpe et al. 1997, Cell 90:695; Rocheleau et al. 1997, Cell 90:707). Registered reading: reproduced if Intestine is 0",
+      "MOM-5": "E takes the MS fate (Rocheleau et al. 1997). The published RNAi phenotype is partially penetrant; the program's knockout is complete, so only the direction is compared"
+    },
+    "what_is_circular": [
+      "every one of the expected 56 wild-type fates: each founder-tissue rule was written from the clonal observation in the same Sulston lineage the fates are scored against",
+      "every founder-level knockout phenotype: the founder rules cite these same papers",
+      "the terminal-level knockout outcomes follow from those two circular rule sets; a pass is consistency, not prediction, and a fail is a limit of the rules",
+      "what is not circular: the contact topology itself (CShaper, a segmentation study made for another purpose), and so whether the measured contacts deliver the founder signals to the cells the genetics says they reach"
+    ],
+    "void_if": [
+      "V1 any of the 555 has a fate_<cell> decision in the program",
+      "V2 the primary arm does not grow the reference tree to 800 min: the reference cells born by 800 min must all be matched by name with no parent mismatch",
+      "V3 genomeos.organism.diff.compare counts a different number of correct terminal fates than this instrument's right count on the primary arm (two instruments disagree)",
+      "V4 a decided cell cannot be attributed to tissue_E, tissue_D or tissue_germline"
+    ],
+    "falsifiers": {
+      "measured contacts": "any of the eight founder types differs under the measured table (P3): the measured geometry does not deliver the signals as the program writes them",
+      "contact dependence": "P5 fails with E still Intestine: the 34 do not depend on a contact and that claim is withdrawn",
+      "count": "P1 off: the founder rules do not carry the clones as written"
+    },
+    "wording": {
+      "P1 holds": "56 of 555 embryonic terminal fates are decided without the lookup, 56 right and 0 wrong, in embryo_nolookup.bio; all 56 are circular as wild-type predictions (each founder-tissue rule was written from Sulston's clonal observation, the record they are scored against); 34 follow a Wnt read at a measured contact (Cao et al. 2020), 22 follow maternal factors segregated by named divisions. The shipped embryo_factors.bio is unchanged and its count stays 0",
+      "P1 fails": "N of 555 decided without the lookup, R right, W wrong; stated with which clone departs from the registered 34 / 20 / 2",
+      "seeds vary": "the count is reported as its range over seeds 0 to 19, and the primary number as the means run only"
+    }
+  },
+  "frozen": {
+    "data/organisms/celegans/embryo_nolookup.bio": "72d2e4be67ea63456c53efa3e3a0180656d6e018983454b69cf56def500d4bac",
+    "data/organisms/celegans/lineage_embryo_tree.bio": "dcd531be104158ee09de633ecf1d060e5ee0ef2b37d2a94de89c34bfd125d151",
+    "data/organisms/celegans/founder_tissues.bio": "09359ffb0aa4662cd92b6b54cb3b86e14691de58f3e54535ef5e465b58e50502",
+    "data/organisms/celegans/founders_contacts.bio": "35f52d00f904f2d2cdb923d373983c01bdd672160cab6640d88eafe7b0a58f83",
+    "data/organisms/celegans/contacts_embryo_cshaper.tsv": "c03b60aaf3ad3f502592f615bd6eb5a3dac5a1f0064290b7acab0b6fa7bf4270",
+    "data/organisms/celegans/contacts_embryo_cshaper_detected.tsv": "03e469c054028a8bf2aaffb5be91e270a51dcfe22f9e88c3e56f51d48e698fe8",
+    "data/organisms/celegans/contacts_embryo.tsv": "812a36f45c1876cf894a5b7f058e6faf24f7e284b4a1f0e0d12c014926369f47",
+    "data/organisms/celegans/lineage_embryo.bio": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+    "data/organisms/celegans/lineage_larva.bio": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+    "data/organisms/celegans/timers.bio": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+    "data/organisms/celegans/reader.bio": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+    "data/organisms/celegans/cell_types.bio": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c"
+  },
+  "script_sha256_at_registration": "83cd79d68d6063fe303c865b8a55376aac67915ba0c0faf178719168f0d8f89c",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "WormWeb C. elegans cell lineage, json-celllineage.js (Sulston et al. 1983; Sulston and Horvitz 1977)",
+        "version": "as fetched and distilled into data/results/celegans_lineage_cells.json (first 0a8aa05, 2026-09-11); the page carries no release number, so the distilled file's sha256 pins it",
+        "url": "http://wormweb.org/js/json-celllineage.js",
+        "licence": "CC BY"
+      },
+      {
+        "accession": "Zenodo 4737593 (Ma et al. 2021, Nat Methods 18:893), Time_series_expression_dataset.zip",
+        "version": "Zenodo record 4737593",
+        "url": "https://zenodo.org/api/records/4737593/files/Time_series_expression_dataset.zip/content",
+        "licence": "CC BY 4.0"
+      },
+      {
+        "accession": "Cao et al. 2020, Nat Commun 11:6254, doi:10.1038/s41467-020-19863-x (CShaper), Supplementary Data 5 (41467_2020_19863_MOESM6_ESM.xls)",
+        "version": "sha256 519c34349af8e8f6cbd675c665f9a880c99fe1ad482b469067f4a6078a855c99, 461,824 bytes, distilled by scripts/celegans_cshaper_contacts.py",
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-020-19863-x/MediaObjects/41467_2020_19863_MOESM6_ESM.xls",
+        "licence": "CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/celegans_lineage_cells.json",
+        "sha256": "93635ad98a08e4641c9f8719d63cc3420ecee6fd161c0d8fab897720fb6d4ab6",
+        "bytes": 305885,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans",
+        "sha256": "8497f7fbab31e5441522f25195a2451c4f3cf68aa7dea882d0b140b074aaf9e6",
+        "bytes": 1476286,
+        "partition": null,
+        "files": 22
+      }
+    ],
+    "assembly": "n/a: a cell lineage and per-cell factor presence; nothing is placed on a genome",
+    "coordinates": "n/a: cells are named by their lineage path, not by a genomic interval",
+    "parameters": {
+      "mode": "register",
+      "atlas_presence_fraction_of_max": 0.2,
+      "atlas_minutes_per_frame": 1.25
+    },
+    "exclusions": [
+      "terminal cells of AB, MS and C: no founder-tissue rule names them, so they are counted as not decided, never as wrong",
+      "post-embryonic cells: the 555 are those born before 800 min"
+    ],
+    "partitions": "n/a: no evaluation split; every cell is read",
+    "code_cleanliness": {
+      "git_sha": "a3790d06b6f6e9911d70c77ddbaf560ac5e498fd",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/celegans_nolookup.py",
+        "form": "committed_repository_file",
+        "path": "scripts/celegans_nolookup.py",
+        "is_committed": true,
+        "declared_entry": "scripts/celegans_nolookup.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/targetchoice.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_simpler_worm.py",
+        "tests/test_targetchoice.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/organism/__init__.py",
+        "genomeos/organism/atlas_levels.py",
+        "genomeos/organism/celegans.py",
+        "genomeos/organism/diff.py",
+        "genomeos/organism/fate_rules.py",
+        "genomeos/organism/provenance.py",
+        "genomeos/organism/reference.py",
+        "genomeos/organism/tf_atlas.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/body.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/celegans_nolookup.py"
+      ],
+      "counting_path_count": 30,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "a3790d06b6f6e9911d70c77ddbaf560ac5e498fd",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/targetchoice.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_simpler_worm.py",
+        "tests/test_targetchoice.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/simpler_worm_result.json"
+      ],
+      "argv": [
+        "scripts/celegans_nolookup.py",
+        "--register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "a3790d06b6f6e9911d70c77ddbaf560ac5e498fd",
+      "code_cleanliness_git_sha": "a3790d06b6f6e9911d70c77ddbaf560ac5e498fd",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record a3790d0"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 146,
+      "opens_under_data": 35,
+      "files_read": 23,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
