@@ -576,6 +576,25 @@ def _the_intestine_programs(c: dict) -> None:
     assert mutants["rules_scanned"] == mutants["rules_written"]
 
 
+COLON = "data/organisms/human/colon.bio"
+COLON_MUTANTS = "data/organisms/human/colon_mutants.bio"
+
+
+def _the_colon_programs(c: dict) -> None:
+    """The two programs 3750411 added, the same shape as the small-intestinal pair above: a generated
+    module (its header says so) and a mutant file of experiments with no rules, which is why every
+    rule and slot figure below stays put while the program figures move by exactly two."""
+    (module,) = [f for f in c["files"] if f["path"] == COLON]
+    assert module["kind"] == "generated", module
+    (mutants,) = [f for f in c["files"] if f["path"] == COLON_MUTANTS]
+    assert mutants["kind"] == "hand_authored", mutants
+    assert mutants["rules_written"] == 0
+    assert mutants["rules_compiled"] == 0
+    assert mutants["rules_synthesised_by_the_parser"] == 0
+    assert mutants["rules_with_tiered_numbers"] == 0
+    assert mutants["rules_scanned"] == mutants["rules_written"]
+
+
 NOLOOKUP_HAND = (
     "data/organisms/celegans/embryo_nolookup.bio",
     "data/organisms/celegans/founder_tissues.bio",
@@ -624,8 +643,10 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after
     # 2026-10-10, a3790d0 and 1c2ae67: 51 = 38 + 13, the worm's no-lookup programs, three
     # hand-authored and the fate-less lineage generated (`_the_nolookup_programs`). 2026-10-10,
     # fa5a4f1 (lane-stage3): 54 = 41 + 13, two stage-3 demos and bio.std.core_metabolism, hand-authored
-    assert len(tracked_files) == 54
-    assert len(tracked_generated) == 13
+    # 2026-10-10, 3750411 (lane-colon): 56 = 42 + 14, the colonic module generated and its mutant file
+    # hand-authored (`_the_colon_programs`), the same two-program move 7646bd7 made
+    assert len(tracked_files) == 56
+    assert len(tracked_generated) == 14
     assert len(tracked_files) == len(hand) + len(tracked_generated)
     assert "data/organisms/human/noncoding_chr21_v3.bio" in {f["path"] for f in tracked_generated}
     assert c["programs_total"] == c["programs_hand_authored"] + c["programs_generated"]
@@ -634,7 +655,9 @@ def test_the_adoption_cost_of_the_hand_authored_corpus_is_what_is_reported_after
     _the_reader_demo(c)
     _the_intestine_programs(c)
     _the_nolookup_programs(c)
-    assert c["programs_hand_authored"] == 41  # 2026-10-10: a3790d0 and 1c2ae67 35 -> 38; fa5a4f1 -> 41
+    _the_colon_programs(c)
+    # 2026-10-10: a3790d0 and 1c2ae67 35 -> 38; fa5a4f1 -> 41; 3750411 (lane-colon) -> 42
+    assert c["programs_hand_authored"] == 42
     assert c["rules_hand_authored_written"] == 24
     assert c["rules_hand_authored_compiled"] == 46
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
@@ -669,9 +692,11 @@ def test_the_local_generated_corpus_adds_the_twenty_four_compiled_chromosomes_af
     # generated 36 -> 37 for lineage_embryo_tree.bio and the hand-authored 35 -> 38 for
     # embryo_nolookup.bio, founder_tissues.bio and mutants_nolookup.bio; the untracked 24 unchanged.
     # 2026-10-10, fa5a4f1 (lane-stage3): 75 -> 78 and the hand-authored 38 -> 41 for its three programs
-    assert c["programs_total"] == 78
-    assert c["programs_generated"] == 37
-    assert c["programs_hand_authored"] == 41
+    # 2026-10-10, 3750411 (lane-colon): 78 -> 80, the generated 37 -> 38 for colon.bio and the
+    # hand-authored 41 -> 42 for colon_mutants.bio; the untracked 24 unchanged, both being committed
+    assert c["programs_total"] == 80
+    assert c["programs_generated"] == 38
+    assert c["programs_hand_authored"] == 42
     assert c["programs_total"] == len(paths & tracked) + len(untracked)
 
 
@@ -696,12 +721,15 @@ def test_the_hand_authored_figures_are_the_same_in_a_checkout_without_the_local_
     # figures below do not move because the mutant file writes experiments and no rules.
     # 2026-10-10, a3790d0 and 1c2ae67: 47 -> 51, three hand-authored and one generated worm program,
     # none of which writes a rule. 2026-10-10, fa5a4f1 (lane-stage3): 51 -> 54, three hand-authored
+    # 2026-10-10, 3750411 (lane-colon): 54 -> 56, one program on each side and no rule written, so the
+    # rule and slot figures below again do not move
     _the_reader_demo(c)
     _the_intestine_programs(c)
+    _the_colon_programs(c)
     _the_nolookup_programs(c)
-    assert c["programs_total"] == 54
-    assert c["programs_hand_authored"] == 41
-    assert c["programs_generated"] == 13
+    assert c["programs_total"] == 56
+    assert c["programs_hand_authored"] == 42
+    assert c["programs_generated"] == 14
     assert c["rules_hand_authored_written"] == 24
     assert c["rules_hand_authored_compiled"] == 46
     assert c["rules_hand_authored_synthesised_by_the_parser"] == 22
@@ -733,4 +761,5 @@ def test_the_line_scan_is_calibrated_against_the_parse_before_it_is_believed():
     # 2026-10-10, 7646bd7: 34 -> 35, the scan compared on intestine_mutants.bio too and agreed.
     # 2026-10-10, a3790d0 and 1c2ae67: 35 -> 38, the three hand-authored no-lookup programs, agreed.
     # 2026-10-10, fa5a4f1 (lane-stage3): 38 -> 41, its three programs, agreed
-    assert c["scan_calibration"]["files_compared"] == 41
+    # 2026-10-10, 3750411 (lane-colon): 41 -> 42, the scan compared on colon_mutants.bio too and agreed
+    assert c["scan_calibration"]["files_compared"] == 42
