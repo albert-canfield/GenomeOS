@@ -368,3 +368,34 @@ def test_the_registration_as_written_holds_no_figure_and_the_module_s_words() ->
     assert written["tree_as_built"]["tips"] == 355 and written["tree_as_built"]["grafen_diagonal_is_one"]
     assert written["null"]["parameters"]["MODELS"] == list(pn.MODELS)
     assert written["null"]["parameters"]["CAL1_SEED"] == sn.A_CAL_SEED
+
+
+RESULT = Path("data/results/pair_null_result.json")
+
+
+def test_the_committed_reading_is_the_rule_applied_to_its_own_figures() -> None:
+    import tracked_paths as tp
+
+    tp.must_be_present(RESULT, REGISTRATION, Path("data/results/profiling_genome_wide.json"))
+    out = json.loads(RESULT.read_text())
+    import hashlib
+
+    assert out["registration"]["registration_sha256"] == hashlib.sha256(REGISTRATION.read_bytes()).hexdigest()
+    stored_14 = json.loads(Path("data/results/profiling_genome_wide.json").read_text())["null"]
+    cal1 = out.get("first_calibration_set")
+    bm = (cal1 or {}).get("brownian_section_22_recomputed") or {}
+    key, text, _ = pn.select(
+        out["reproduction"],
+        stored_14,
+        cal1,
+        bm.get("at_or_below_005"),
+        bm.get("section_22_recorded"),
+        out["figures"].get("selected"),
+        out.get("second_calibration_set"),
+        out.get("library_pairs"),
+        out.get("halves"),
+    )
+    assert (key, text) == (out["outcome"], out["reading"])
+    if out.get("library_pairs") is not None:
+        # no library pair is computed unless both calibration sets passed
+        assert cal1[out["figures"]["selected"]]["passes"] and out["second_calibration_set"]["passes"]
