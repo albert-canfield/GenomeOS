@@ -10,6 +10,7 @@ be wrong.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -21,11 +22,13 @@ from scripts.celegans_nolookup import (
     PROGRAM,
     TREE,
     attribute,
+    counts,
     decided,
     lookup_fates_present,
     terminal_cells,
     tree_text,
 )
+from tests.committed_data import committed
 
 ORG = Path("data/organisms/celegans")
 MEASURED = ORG / "contacts_embryo_cshaper.tsv"
@@ -122,3 +125,62 @@ def test_the_count_separates_right_wrong_and_undecided():
     assert d["by_rule"] == {"tissue_E": 2} and d["unattributed"] == []
     assert d["wrong_by_kind"] == {"Muscle->Intestine": 1}
     assert d["by_founder"] == {"none": {"Intestine": 2}}
+
+
+# ---- the registered result, pinned (2026-10-10, registration 6bdecd4, result 09be446) ----------------
+
+RESULT_RELATIVE = "data/results/celegans_nolookup.json"
+#: Intestine / Muscle / Reproductive / decided among the 555, per knockout, as registered and measured
+KNOCKOUTS = {
+    "POP-1": (111, 20, 2, 133),
+    "SKN-1": (0, 20, 2, 22),
+    "PIE-1": (0, 20, 0, 20),
+    "APX-1": (34, 20, 2, 56),
+    "GLP-1": (34, 20, 2, 56),
+    "PAL-1": (34, 0, 2, 36),
+    "MOM-2": (0, 20, 2, 22),
+    "MOM-5": (0, 20, 2, 22),
+}
+
+
+def _row(c: dict) -> tuple[int, int, int, int]:
+    return (c["Intestine"], c["Muscle"], c["Reproductive"], c["decided"])
+
+
+@committed(RESULT_RELATIVE)
+def test_the_committed_result_is_the_registered_one_and_nothing_is_void():
+    d = json.loads(Path(RESULT_RELATIVE).read_text())
+    p = d["primary"]
+    assert (p["cells"], p["decided"], p["right"], p["wrong"]) == (555, 56, 56, 0)
+    assert p["by_rule"] == {"tissue_D": 20, "tissue_E": 34, "tissue_germline": 2}
+    assert p["compare"]["fates_correct"] == 56  # the Body's own instrument agrees (V3)
+    assert all(d["predictions_held"].values()) and len(d["predictions_held"]) == 8
+    assert d["void"] == [] and d["script_changed_since_registration"] is False
+    assert {k: _row(v["terminal"]) for k, v in d["knockouts"].items()} == KNOCKOUTS
+    published = {k: v["published_terminal_phenotype_reproduced"] for k, v in d["knockouts"].items()}
+    assert published == {
+        "APX-1": None,
+        "GLP-1": None,
+        "MOM-2": True,
+        "MOM-5": True,
+        "PIE-1": False,  # registered as not reproduced: the program's pie-1 has no intestine at all
+        "SKN-1": True,
+        "POP-1": True,
+        "PAL-1": True,
+    }
+    assert d["result_manifest"]["complete"] is True
+
+
+def test_the_program_still_decides_the_registered_fates_and_no_more():
+    """A live re-run, so a change to the program, the founders or the runtime that moves the count fails
+    here and not only at the next registered run."""
+    ref = ReferenceLineage.load()
+    cells = terminal_cells(ref)
+    module = parse_file(PROGRAM)
+    targets = {d.id: d.to for d in module.decisions if d.action == "differentiate"}
+    d = decided(Body(module, means=True).run(until=800), cells, ref, targets)
+    assert (d["decided"], d["right"], d["wrong"]) == (56, 56, 0)
+    assert d["by_founder"] == {"D": {"Muscle": 20}, "E": {"Intestine": 34}, "P4": {"Reproductive": 2}}
+    for factor, row in KNOCKOUTS.items():
+        k = decided(Body(module, means=True, knockouts={factor}).run(until=800), cells, ref, targets)
+        assert _row(counts(k)) == row, factor

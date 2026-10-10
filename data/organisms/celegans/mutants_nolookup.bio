@@ -1,0 +1,28 @@
+# The classic knockouts in the program with no lookup (embryo_nolookup.bio), at the TERMINAL level.
+#
+# mutants.bio checks what each knockout does to the founders. In a program whose terminal fates come from
+# the lookup, that is as far as a knockout can reach: the lookup writes the wild-type fate on every
+# terminal cell whatever the founder became. Here the three clonal founders carry their tissue, so a
+# knockout that moves E, D or P4 moves their terminal cells too, and these experiments check that.
+#
+# Registered before the run in data/results/celegans_nolookup_registration.json (6bdecd4); measured in
+# data/results/celegans_nolookup.json (09be446), where the counts are taken over the 555 embryonic terminal
+# cells. The asserts below count ALIVE cells of a type at 799 min, which also takes in a clone's cells
+# that are not among the 555 (POP-1: 118 alive Intestine against 111 of the 555; the extra seven are
+# MS-derived cells the reference does not call terminal -- Md, Mv, Z1a, Z1p, Z4a, Z4p, which divide after
+# hatching -- and MSpppaaa, which dies at 1,089 min); pinned 2026-10-10 at 09be446, seed 0.
+#
+# What is circular: every phenotype below follows from founder rules that cite these same papers and from
+# founder-tissue rules written from Sulston's lineage, so a reproduced phenotype is consistency, not a
+# prediction. pie-1 is NOT reproduced and is pinned as it is: the program's pie-1 has no intestine at all.
+module organism.celegans.mutants_nolookup
+import embryo_nolookup.bio
+
+experiment pop1_terminal { knockout: POP-1; until: 800 min; expect: "MS adopts the E fate, so MS-derived intestine appears (Lin, Thorpe & Priess 1995). REPRODUCED in direction; the count is not comparable, because MS still divides by its own named lineage"; assert: type Intestine at 799 min = 118; assert: type Muscle at 799 min = 20; evidence: experimental "Lin et al. 1995, Cell 83:599"; confidence: 0.9 }
+experiment skn1_terminal { knockout: SKN-1; until: 800 min; expect: "no intestine: EMS daughters take the C fate (Bowerman et al. 1992). REPRODUCED; the extra C-like hypodermis and muscle are not decidable here (no C tissue rule)"; assert: type Intestine at 799 min = 0; assert: type Muscle at 799 min = 20; evidence: experimental "Bowerman et al. 1992, Cell 68:1061"; confidence: 0.9 }
+experiment pie1_terminal { knockout: PIE-1; until: 800 min; expect: "P2 takes the EMS fate: extra pharynx and intestine, no germ line (Mello et al. 1992). NOT REPRODUCED: no germ line holds, but the program has no intestine at all, because presents_mom2 needs PIE-1 in P2, so no Wnt reaches EMS and E takes the MS fate; and a P2 turned EMS-like still divides into cells named C and P3, so D keeps its muscle"; assert: type Intestine at 799 min = 0; assert: type Reproductive at 799 min = 0; assert: type Muscle at 799 min = 20; evidence: experimental "Mello et al. 1992, Cell 70:163"; confidence: 0.9 }
+experiment apx1_terminal { knockout: APX-1; until: 800 min; expect: "ABp becomes ABa-like (Mello et al. 1994): a founder-level phenotype only, since no AB fate is decided without the lookup; the three clonal tissues are as in the wild type"; assert: type ABaPrecursor at 100 min = 8; assert: type Intestine at 799 min = 34; evidence: experimental "Mello et al. 1994, Cell 77:95"; confidence: 0.9 }
+experiment glp1_terminal { knockout: GLP-1; until: 800 min; expect: "ABp becomes ABa-like (Priess et al. 1987): founder level only, as apx-1"; assert: type ABaPrecursor at 100 min = 8; assert: type Intestine at 799 min = 34; evidence: experimental "Priess, Schnabel & Schnabel 1987, Cell 51:601"; confidence: 0.9 }
+experiment pal1_terminal { knockout: PAL-1; until: 800 min; expect: "C and D lose their fates: no D muscle (Hunter & Kenyon 1996). REPRODUCED for D; C's tissues are not decided either way"; assert: type Muscle at 799 min = 0; assert: type Intestine at 799 min = 34; evidence: experimental "Hunter & Kenyon 1996, Cell 87:217"; confidence: 0.9 }
+experiment mom2_terminal { knockout: MOM-2; until: 800 min; expect: "E takes the MS fate: no intestine (Thorpe et al. 1997; Rocheleau et al. 1997). REPRODUCED"; assert: type Intestine at 799 min = 0; evidence: experimental "Thorpe et al. 1997, Cell 90:695"; confidence: 0.9 }
+experiment mom5_terminal { knockout: MOM-5; until: 800 min; expect: "E takes the MS fate (Rocheleau et al. 1997). REPRODUCED in direction; the published RNAi phenotype is partially penetrant and this knockout is complete"; assert: type Intestine at 799 min = 0; evidence: experimental "Rocheleau et al. 1997, Cell 90:707"; confidence: 0.8 }
