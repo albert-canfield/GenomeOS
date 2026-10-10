@@ -1600,3 +1600,38 @@ that drives expression in an embryo than in sequence that does not, which is the
 panel can answer and the question that was registered.
 
 Result `satmut_vista`; instrument `scripts/satmut_vista.py`; registration `attribution/satmut_vista.py`.
+
+## 22. A species-tree null (2026-10-10)
+
+Registered before it was run (lane-speciesnull: frozen code `5a87e2f`, registration `b37b198`, result
+`eb2967d`; `data/results/species_null_registration.json`, `species_null_result.json`). The tree is
+Ensembl Compara's own: the pan tree of Ensembl Genomes r63 with the vertebrate tree of r116 grafted
+in, all 355 species placed, both files pinned by sha256; Grafen branch lengths are the registered
+choice and equal lengths a sensitivity check. Both readings re-tested here reproduced first (860 of
+860 pairs, 42 of 42 libraries). §10 (origin per gene) and gene pairs were not re-tested, for the
+reasons the registration records.
+
+**§14's library pairs, registered reading:** "No reading: the species-tree null is not calibrated on
+this data. Of 860 pairs of random gene sets drawn to the tested pairs' origin-stratum make-up, 205
+(23.8%) have a tree-null p at or below 0.05, above the registered ceiling of 10%, so the null finds
+random genes alike more often than it should and a library pair's p under it is not evidence. §14's
+35 of 860 pairs stand as written, with their caveat. Under equal branch lengths instead of Grafen's,
+155 of 860 pairs have q at or below 0.05, 6 of them among §14's 35, and 71 of 860 random age-matched
+pairs have p at or below 0.05; the registered reading is the Grafen one."
+
+**§19's library coherence, registered reading:** "26 of 42 libraries' members co-occur beyond what the
+species tree and real genes predict. Each library's mean pair Jaccard, less what a stochastic Dollo
+model of every member's own birth and losses along the Ensembl Compara species tree predicts, was set
+against the same quantity for 200 random gene sets matched member for member on birth node: 26 are
+clear (empirical one-sided p at or below 0.05), 7 marginal and 9 at or below the random sets' median;
+with no effect anywhere about 2.1 would be clear, and more than 5 would arise by chance at most 5
+times in 100 if the libraries were independent. 21 of the 21 libraries §19 called clear stay clear,
+and 5 that §19 did not call clear are clear here. This is agreement of presence across species
+beyond birth clade and loss rate; it names no pair, calls nothing a dependency, and an orthologue's
+presence is not function."
+
+Two notes that decide nothing. In the pair null the simulated deviations swamp the age expectation
+(null means −0.14 to +0.04 where the age-expected r is −0.96 to +0.99), which is the likely cause of
+its miscalibration; the next pair null adds a tip-noise term and is calibrated on random pairs before
+any pair is read. The Dollo model alone falls below the observed co-occurrence of almost every random
+gene set, so only the comparison with real genes is read.
