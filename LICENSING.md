@@ -6,7 +6,7 @@ ships: `scripts/package_engine.py` carries `genomeos/lang`, `ir`, `runtime`, `st
 `coords.py`, `version.py` and `bio.py`, which is what NOTICE says too. The five files that
 moved to `genomeos/provenance/` on 2026-10-03 stay AGPL application files and are not in
 the engine package, as the History section records. One figure was wrong and is corrected in
-the table below: the selected engine tests are **32 today, 31 of them headed Apache-2.0**,
+the table below: the selected engine tests are **33 today, 32 of them headed Apache-2.0** (32 and 31 until `bc9fc7a` added tests/test_grn_competition.py on 2026-10-10),
 where the row read 31 and 30. Measured with `engine_tests()` in `scripts/package_engine.py`
 against the first line of each selected file; the one file declaring nothing is still
 `tests/test_unstated_confidence.py`, pinned in `tests/test_engine_licence_headers.py`, whose
@@ -26,7 +26,7 @@ built on it.
 | **Documentation** — `docs/`, `README.md`, and the other Markdown files | | **Creative Commons Attribution 4.0** | quote it, teach from it, translate it; credit the project. |
 | **Distilled results** — `data/results/` | | derived from their upstream sources, whose terms apply | each summary names its source; see [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md). |
 | **BioLang programs** — `data/demo/`, `data/organisms/` | | Apache License 2.0, as part of the engine's standard material | programs are meant to be copied and adapted. |
-| **Engine tests** — the test files `scripts/package_engine.py` selects because they import only the engine (32 today, 31 of them headed `SPDX-License-Identifier: Apache-2.0`; the row read 31 and 30 until the count was measured again on 2026-10-10; `tests/test_unstated_confidence.py` carries no header and takes the package's licence by default, which `tests/test_engine_licence_headers.py` pins) | | **Apache License 2.0**, taking precedence over the `tests/` entry above; decided by the copyright holder on 2026-09-28 | they ship inside the Apache-2.0 `biolang` package as its own test suite, so they carry its licence. |
+| **Engine tests** — the test files `scripts/package_engine.py` selects because they import only the engine (33 today, 32 of them headed `SPDX-License-Identifier: Apache-2.0`, since `bc9fc7a` added tests/test_grn_competition.py on 2026-10-10; 32 and 31 before it; the row read 31 and 30 until the count was measured again on 2026-10-10; `tests/test_unstated_confidence.py` carries no header and takes the package's licence by default, which `tests/test_engine_licence_headers.py` pins) | | **Apache License 2.0**, taking precedence over the `tests/` entry above; decided by the copyright holder on 2026-09-28 | they ship inside the Apache-2.0 `biolang` package as its own test suite, so they carry its licence. |
 
 **The dependency direction is the rule that keeps the split honest.** The
 application may import the engine; the engine may never import the

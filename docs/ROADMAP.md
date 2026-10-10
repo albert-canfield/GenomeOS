@@ -850,8 +850,13 @@ History: ROADMAP-HISTORY.md §3 H, lines 1986–2057.
   K562 remainder (36) bring 55 between them; both are left unread so a pooled arm stays possible.
 
   *(2026-10-10, read from `node_independence_audit.json`: the result lists 10 components, 7 CLEAN, 2
-  EVALUATION-ONLY and 1 EXPOSED. The counts in the sentence above are kept as written and are not
-  reconciled here; the result file's counts are the ones to quote.)*
+  EVALUATION-ONLY and 1 EXPOSED. The counts in the sentence above are kept as written; the result
+  file's counts are the ones to quote.)* *(Reconciled 2026-10-10, lane-docfix: the result file is right.
+  Its ten statuses are the ones registration `d3f51f0` fixed; `366db9a` changed none, and the file was
+  written once at `f752e5e`. "Eleven" counts the rows of the ATTRIBUTION table added at `f752e5e`, whose
+  eleventh row ("Which split: 471 training / 190 held-out") has no status; "nine CLEAN" comes from the
+  `f752e5e` commit message, whose nine, two and one add to twelve. The reading does not change: the one
+  EXPOSED component and its selection-premium reading are the same in every record.)*
 - **Compiled programs, the bridge and the rates (2026-09-28 to 2026-09-29).** Every compiled rule
   carries its cell as an executable `when` (R1, `8dcdade`, `6a4a8a9`): 440,589 rules, 212 of them
   experimental. The bridge audit found 0 of 440,589 rules simulable as compiled (R3, `06b7557`); with
@@ -1091,18 +1096,18 @@ Four rules govern the whole plan:
     - the CPTAC seven profiles, uncommitted at 14.3% mismatch;
     - the removal tool's orphan path, for `.claude/worktrees/lane-quarantine`;
     - disk: 92% used and 37 GiB free in the morning of 2026-10-10, then 93% and 33 GiB free by midday (`dd84686`);
-    - from the documentation pass (`dd84686`):
+    - from the documentation pass (`dd84686`); **done 2026-10-10 by lane-docfix** (`d58343c`, `7843655`, `c8f5f22`; LICENSING's engine-test count is now 33, 32 headed, after `bc9fc7a`):
       - a comment in `tests/test_engine_licence_headers.py` still gives the old engine-test count (31/30; it is 32 tests, 31 Apache-headed);
       - DESIGN-MINIMAL-CELL does not yet carry the SOX17-repressor mesoderm result (registration `430b510`, result `53d9936`);
       - the ACKNOWLEDGEMENTS tables lag the code (DepMap, CPTAC and Ochoa, 4DN, AlphaMissense, PGS Catalog and lentiMPRA are used but not tabled);
-    - figures that disagree with their result files (`74a4a0c`):
+    - figures that disagree with their result files (`74a4a0c`); **done 2026-10-10 by lane-docfix** (`7ffcc31`, `67971c5`: each figure now names the population it describes; ACKNOWLEDGEMENTS records that AlphaMissense states two different terms, and the stricter one governs):
       - CRISPRI-RESULT's coverage row "every held-out K562 pair" gives the weighted rebuild [0.0734, 0.2270], while that row's own unweighted estimator rebuilds to [0.0749, 0.2258] (`crispri_published_v2.json`, `coverage_arms_k562_heldout.arm1_all_pairs`; README's figure is correct);
       - ALPHAGENOME's constrained-versus-uniform table says "of 2,995" where `enhancer_targets_genome_wide.json` gives 2,994, and its 70.7% and 86.0% (`constrained_targets_genome_wide.json`, `uniform_samples`) differ from the 71.2% and 90.2% in the table above it;
-      - area I's node-independence bullet says "Eleven components … nine CLEAN, two EVALUATION-ONLY, one EXPOSED", while `node_independence_audit.json` lists 10 components: 7 CLEAN, 2 EVALUATION-ONLY, 1 EXPOSED (kept verbatim with a dated note in area I, not reconciled);
+      - **reconciled 2026-10-10 (lane-docfix; the result file is right, see area I):** area I's node-independence bullet says "Eleven components … nine CLEAN, two EVALUATION-ONLY, one EXPOSED", while `node_independence_audit.json` lists 10 components: 7 CLEAN, 2 EVALUATION-ONLY, 1 EXPOSED (kept verbatim with a dated note in area I, not reconciled);
     - **Done 2026-10-10 (`7e15a22`, lane-enginepkg):** `genomeos/verdict.py`'s `working_tree_hash` built its index with `git add -A`, so a local ignore rule that matches a TRACKED file leaves that file out, and the clean worktree's hash stops equalling the commit tree. On 2026-10-10 a `msg-*.txt` line the coordinator added to `.git/info/exclude` at 10:22 matched the tracked `msg-lane-silenceragree-manifest-1791050698.txt` (from `d352da7`), and every push gate refused every sha with "no green verdict exists for the tree being pushed" until the line was removed. lane-fastgate found it. It now adds every tracked path an ignore rule hid with `update-index`; the planted test fails on the old code and passes on the new, and a clean worktree of `050a9b2` hashes to its commit tree;
     - from the codebase-map refresh (`fc21c29`):
       - `benchmark/loci_gene_input_plan.py` is imported by nothing;
-      - 94 of 249 application modules and the 7 `std/*.bio` engine files carry no licence header, and no test checks presence;
+      - **done 2026-10-10 (lane-headers; `4c6e2d5`, `ab1d9d4`, `544ffe9`, `a60f30e`, test `fefe807`):** 94 of 249 application modules and the 7 `std/*.bio` engine files carried no licence header, and no test checked presence. 81 files gained the AGPL-3.0-or-later line as a one-line insertion, and `tests/test_licence_header_presence.py` requires one licence per `.py` file under `genomeos/` and `scripts/`, matched to its side. Still pinned: 30 files in the AstroREG-2 sender's signed closure (a header changes the closure digest, so they go with Albert's run-2 decision), 2 forge files held by lane-forgecal, and the 7 `std/*.bio` files (no SPDX convention for `.bio` yet);
       - `genome/` imports six `attribution` modules, and `predict/alphagenome_adapter.py` imports the paid-run guard `attribution.astrorun`, so the application's layers run both ways;
       - the `parser.py` docstring says v0.3 while the grammar says 0.4 and the parser accepts v0.5's `reader`;
       - the map itself is 62 KB.
