@@ -74,6 +74,12 @@ def payload() -> dict:
             "rebuilt_sha256": "10c5c3250f0484a93e364557e7c5c2bc1c9be4ff6ddf4121ff6875f989e1ed35",
             "differences": 0,
             "must_hold_failures": 0,
+            "claim_FINAL_FORM_verbatim": (
+                "0 value differences over 484 compared leaves; provenance: traced opens 395 committed"
+                " against 816 rebuilt, now DIAGNOSED as environment (see the opens diagnosis). The opens"
+                " leaf does not block a claim about result VALUES, being provenance metadata rather than"
+                " a value, but it does block 'reproduces exactly'"
+            ),
             "claim_as_it_may_be_stated": (
                 "ZERO differences over 484 COMPARED leaves, with 4 exempted leaves named below and 16"
                 " never compared. NOT 'reproduces exactly'"
@@ -138,6 +144,66 @@ def payload() -> dict:
                 " in and not anything the run computed -- and recorded here where a later reader sees it"
             ),
         },
+        "which_check_establishes_the_dirty_tree_is_acceptable": {
+            "not_an_assertion_but_the_manifests_own_computed_evidence": (
+                "foreign_uncommitted_code_on_the_counting_path is EMPTY (n = 0), so not one of the 7"
+                " uncommitted files is on the path that produced the numbers"
+            ),
+            "counting_path_count": 153,
+            "counting_path_is_computed_not_hand_written": (
+                "the transitive import closure of the entry script, from the files' import statements at"
+                " write time, never by importing"
+            ),
+            "own_uncommitted_code": 0,
+            "own_code_is_committed": True,
+            "entry_script": "scripts/magcal_run.py, committed_repository_file, on the counting path",
+            "the_7_named_so_a_reader_can_check_none_is_on_the_closure": [
+                "genomeos/attribution/simpler_flysource.py",
+                "genomeos/forge/__init__.py",
+                "genomeos/forge/calibration_inventory.py",
+                "genomeos/forge/design.py",
+                "scripts/forge_calibration_inventory.py",
+                "tests/test_forge_calibration_inventory.py",
+                "tests/test_licence_header_presence.py",
+            ],
+        },
+        "the_opens_gap_DIAGNOSED_by_root": {
+            "method": "classify the REBUILT run's recorded distinct paths by root",
+            "distinct_paths_rebuilt": 479,
+            "by_root": {
+                "the rebuild worktree": 210,
+                "venv / site-packages": 174,
+                "the uv CPython install": 89,
+                "under data/results": 6,
+            },
+            "environment_total": 473,
+            "the_6_under_data_results": [
+                "data/results/combine2_registration.json",
+                "data/results/combine2_result.json",
+                "data/results/magcal_registration.json",
+                "data/results/multrna_registration.json",
+                "data/results/multrna_result.json",
+                "data/results_legacy.txt",
+            ],
+            "verdict": (
+                "NOT ONE excess path is an undeclared data input: 473 of 479 are worktree, venv or"
+                " interpreter, and the 6 under data/results are the manifest's declared inputs plus"
+                " data/results_legacy.txt, which save_result reads on every registry write. The"
+                " 395 -> 816 excess is ENVIRONMENT, a fresh venv at a different path, and is NOT a"
+                " finding about ac5580b"
+            ),
+            "the_limit_this_diagnosis_cannot_escape": (
+                "the COMMITTED side records only a COUNT (395) and no paths, so only the REBUILT side"
+                " can be classified. This shows the rebuilt 816 holds no undeclared data read; it does"
+                " NOT show the committed 395 held none. That asymmetry is itself why the leaf needs a"
+                " tolerance rather than an exemption"
+            ),
+            "two_further_asymmetries": (
+                "opens counts every open while distinct_paths counts one per path, so 816 and 479 are"
+                " different quantities; and the audit hook sees Python-level reads only, so a C library"
+                " opening a file (htslib, pysam) is invisible to both sides"
+            ),
+        },
         "maxform_registration_COULD_NOT_REACH_A_VERDICT": {
             "artefact": "data/results/maxform_registration.json",
             "rebuilt": False,
@@ -151,6 +217,17 @@ def payload() -> dict:
                 " (22:07:45). link_machine_local_inputs cannot supply it either, because it links only"
                 " git-IGNORED declared inputs and the census is a TRACKED file. So the declared sha"
                 " PREDATES its input's existence in git and no checkout of that sha can rebuild it"
+            ),
+            "the_attestation_drops_A_FURTHER_NOTCH": (
+                "PRE-COMMITTED GENERATOR, UNCOMMITTED INPUT. The registration declares code sha"
+                " c7eda3d, which does NOT contain its tracked input maxform_census.json (that entered"
+                " git at b3c560b), so it was written against an uncommitted census and NO SINGLE SHA"
+                " REBUILDS IT"
+            ),
+            "the_negative_readings_STAND_and_carry_that_sentence": (
+                "`max` NOT_TESTABLE at 0 genes for a structural reason, and `or`'s 'calibration removes"
+                " the rules', are unaffected: the defect is in what can be REBUILT, not in what was"
+                " read. They travel with the sentence above"
             ),
             "this_is_the_finished_form": (
                 "'could not reach a verdict, and here is the dependency it named' -- not a comparison."
