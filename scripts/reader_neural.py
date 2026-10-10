@@ -195,6 +195,13 @@ ENCODE_SOURCE = {
 }
 
 
+def _portal_answers(label: str) -> dict:
+    """The ENCODE portal answers this step read, as genomeos.genome.epigenome._portal caches them
+    (data/knowledge/epigenome/portal): the reads the input tracer saw there, each hashed."""
+    reads = [r for r in mf.traced_reads() if r.startswith("data/knowledge/epigenome/portal/")]
+    return mf.files_entry(label, reads)
+
+
 def _committed(name: str) -> str:
     """The commit that last touched a tracked result, refusing one that is untracked or modified."""
     rel = f"data/results/{name}.json"
@@ -360,7 +367,10 @@ def register() -> None:
         },
         "panel_before": panel,
     }
-    reg_inputs = [mf.input_entry("data/results/reader_genome_wide.json")]
+    reg_inputs = [
+        mf.input_entry("data/results/reader_genome_wide.json"),
+        _portal_answers("ENCODE portal answers for the spinal cord marks and WGBS, as cached"),
+    ]
     m = _manifest(
         [ENCODE_SOURCE],
         reg_inputs,
@@ -432,6 +442,7 @@ def fetch() -> None:
         [ENCODE_SOURCE],
         [
             mf.input_entry("data/results/epigenome_manifest.json"),
+            _portal_answers("ENCODE portal answers for the spinal cord marks and WGBS, as cached"),
             mf.files_entry(f"{BIOSAMPLE} DNase and mark peaks as fetched", fetched),
         ],
         {"biosample": BIOSAMPLE, "registration_commit": reg_sha},
