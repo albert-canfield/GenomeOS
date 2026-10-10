@@ -1,0 +1,1114 @@
+{
+  "result": "metabolism_gate",
+  "date": "2026-10-10",
+  "pre_registration": {
+    "written": "2026-10-10, before genomeos/runtime/metabolism.py, bio.std.core_metabolism, the two demo programs and scripts/metabolism_gate.py existed and before any number was produced; committed in this file before any of them",
+    "decision_check": "\u00a710 decision 4 (whose cost accounting) is the one open decision stage 3 touches, and \u00a710 records it as measurable BY stage 3's ATP budget gate, not as a precondition; ROADMAP-HISTORY item 5: 'No decision blocks code any more'. Stage 3 is built; decision 4 stays open unless the magnitude clause is askable, and it is not (not_askable.magnitude)",
+    "claim": "a pool regenerated `from Glycolysis, TCA, OXPHOS` is refilled per hour by a reduced module whose every stoichiometric number is the program's; supply follows demand up to what glucose, oxygen and mitochondrial capacity allow; heteroplasmy removes the capacity of the copies that carry a declared variant; and what the cell cannot supply is divided among its consumers by the allocation it names",
+    "counter_claims_registered_in_advance": "(1) the hierarchy of Buttgereit & Brand cannot appear under `proportional` or `competitive`, which hand every consumer one scalar; under `priority` it appears because it is written in. The verdict will say 'reproduced as an input, not predicted'. (2) The Pasteur clause holds by construction of the routing; its passing is not evidence about cells. (3) The threshold's position is the program's declared reserve, and with no reserve there is none. (4) Every cell here collapses without glucose, because the reduced module has no other fuel",
+    "design": "data/demo/stage3_energy.bio: a nucleated cell with 1000 mitochondrial copies of capacity 2e+07 electron pairs per hour each, four ATP consumers at an equal 2.5e+09 ATP per hour (sum 1e+10), glucose uptake ceiling 2e+09/h, oxygen 3e+09/h, ATP stock 3e+09, priority order ca_pumping, na_k_pumping, rna_dna_synthesis, protein_synthesis, heteroplasmy m.3243A>G = 0.7. data/demo/stage3_erythrocyte.bio: no mitochondrion, two pumps at 1e+08 ATP per hour each, glucose ceiling 5e+08/h, 2,3-BPG shunt 0.19. Both import bio.std.core_metabolism. Arms: high and low ends of the yields' spread (ARMS). Sweeps: SUPPLY_SWEEP and HETEROPLASMY_SWEEP, fixed here",
+    "clauses": {
+      "1_yields": "per glucose, from the module's constants: aerobic 32.0 (high) and 28.0 (low) exactly, 30.0 with P/O 2.5 and 1.5 through the glycerol 3-phosphate shuttle, anaerobic 2.0, and 6.0 O2 for 12.0 electron pairs in both arms (the combustion stoichiometry)",
+      "2_budget": "at full oxygen and glucose: supply equals the demand 1e+10/h exactly, glucose uptake is demand / aerobic yield, O2 uptake six times glucose, lactate 0, and the OXPHOS share 28/32 (high) and 24/28 (low), to a relative 1e-09",
+      "3_pasteur": "along SUPPLY_SWEEP's oxygen steps the OXPHOS share never rises and reaches exactly 0 with no oxygen, glucose uptake never falls, and supply, glucose uptake and OXPHOS share equal PREDICTED_SUPPLY, PREDICTED_GLUCOSE and PREDICTED_OXPHOS_SHARE at every step in both arms",
+      "4_pasteur_uncapped": "with glucose uptake raised to 1e+11/h, anoxia leaves supply equal to demand and multiplies glucose uptake by exactly 16.0 (high) and 14.0 (low)",
+      "5_glycolysis_only": "the red cell: ATP from TCA and OXPHOS exactly 0; yield 1.62; glucose uptake 1.2345679e+08/h, lactate twice that, 2,3-BPG made at 0.38 per glucose; supply equal to demand and every reading identical, to the bit, at every oxygen level of SUPPLY_SWEEP (falsifier: a glycolysis that read oxygen); with the shunt set to 0, glucose uptake falls by exactly 0.81",
+      "6_glucose_removed": "with glucose uptake 0 the red cell's supply is exactly 0 and every consumer's factor is 0 under its allocation: the collapse. The nucleated cell also supplies exactly 0, reported as the module's limitation (no other fuel), not as the gate's contrast",
+      "7_hierarchy": "(a) under the program's priority order, along SUPPLY_SWEEP, the first step at which each consumer's factor falls below 1 comes for both macromolecule consumers before it comes for na_k_pumping, and for na_k_pumping before ca_pumping, in both arms; at the anoxic step with full glucose the factors are exactly PREDICTED_ANOXIC_FACTORS. (b) The same program with the allocation set to proportional, and to competitive: at every step the four factors are identical to one another. (c) Hence the verdict: reproduced as an input, not predicted",
+      "8_threshold": "along HETEROPLASMY_SWEEP at full oxygen and glucose: OXPHOS ATP equals its h = 0 value exactly at every h below the arm's PREDICTED_THRESHOLD, is strictly lower at every h above it, glucose uptake is strictly higher above it, and at h = 1 supply equals the anoxic step's. Falsifier: with capacity set to exactly what the demand needs (12 * D / Y), every h > 0 lowers OXPHOS ATP \u2014 no plateau, so the plateau is the reserve's",
+      "9_resource_checkpoint": "stage 4's demo division (1e+10 ATP) against this cell: refused under the standing-stock reading (capacity = pool size 3e+09, as \u00a79.4 found), paid when the pool is regenerated over 24 h (available 2.19e+11 high, 1.71e+11 low), and refused again with glucose removed (available = the stock)",
+      "10_refusals": "compile errors: heteroplasmy on a compartment whose genome does not read chrM; a fraction outside 0..1; fractions summing above 1; a variant not written m.<position><ref>><alt>. Refused by the runtime, never defaulted: a process outside Glycolysis, TCA and OXPHOS; OXPHOS with no compartment reading chrM; TCA without OXPHOS; Glycolysis with no Glucose pool; OXPHOS with no O2 pool or no stated capacity; a stoichiometric constant the program does not state (the engine holds none)"
+    },
+    "not_askable": {
+      "magnitude": "whether the budget lands within the published order of magnitude: this project holds no measured per-cell ATP turnover for any cell type (the three abstracts give none), so the demo's consumer rates are declared and no clause compares them with a measurement. \u00a710 decision 4, which this magnitude was to settle, therefore stays open",
+      "split": "whether the budget's split matches Buttgereit & Brand: the abstract states a hierarchy of sensitivity to supply, not shares; the shares are in the paper's body, a scan not held. \u00a76's parenthesis 'protein synthesis and the Na\u207a/K\u207a-ATPase first' reads the hierarchy as a split, and the abstract does not support that reading: sodium cycling comes after macromolecule synthesis",
+      "rbc_ranges": "whether the red cell keeps ATP and 2,3-BPG within Mulquiney & Kuchel's ranges: the ranges are in the papers' bodies, not held, and a steady-state concentration is a kinetic quantity the reduced module (stoichiometry and capacities, no rate laws) cannot produce. What is held and used is the shunt's 19% of glycolytic carbon flux",
+      "threshold_values": "whether the threshold sits where Rossignol's measured thresholds sit: the review's abstract gives no value, and the position here is the program's declared reserve, not a prediction",
+      "pasteur_magnitude": "how far real cells raise glucose uptake under hypoxia: they also lower demand, and no measured Pasteur ratio is held; 16 and 14 are the module's ceiling, not a prediction",
+      "warburg": "aerobic glycolysis: the routing oxidises pyruvate first whenever oxygen and capacity allow, so a cell that ferments with oxygen present is not expressible in stage 3",
+      "other_fuels": "fatty acids, glutamine and ketone bodies are not in the reduced module, so 'removing glucose collapses a glycolysis-only cell' cannot be contrasted with a cell that survives on them",
+      "proton_leak": "the abstract's least sensitive process spends the proton gradient, not ATP, and the module does not model leak; that rung of the hierarchy is not asked"
+    },
+    "must_not_move": {
+      "bio_test": "the 47 files and 288 checks `bio test data/demo genomeos/std data/organisms` passed at d32fe44 pass unchanged; the new files add to the count and none is subtracted",
+      "committed_programs": "programs that write `regenerates: from Glycolysis, OXPHOS` with no mitochondrion (stage 2's and stage 4's demos) still compile: the refusal is the runtime's, when it is asked to run them",
+      "stage_2": "Economy with no capacity override behaves exactly as before: burden factors 1.0,1.0,1.0,1.0,0.50,0.25,0.05; abundance MAE 0.952005",
+      "stage_4": "runtime/division.py untouched: 8 of 8 clauses",
+      "body_runtime": "runtime/body.py untouched: area E's figures stand"
+    }
+  },
+  "programs": [
+    "data/demo/stage3_energy.bio",
+    "data/demo/stage3_erythrocyte.bio"
+  ],
+  "clauses": {
+    "1_yields": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "aerobic": 32.0,
+          "anaerobic": 2.0,
+          "o2": 6.0,
+          "pairs": 12.0
+        },
+        "low": {
+          "aerobic": 28.0,
+          "anaerobic": 2.0,
+          "o2": 6.0,
+          "pairs": 12.0
+        },
+        "p_o_2.5_1.5_glycerol_phosphate": 30.0
+      }
+    },
+    "2_budget": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "supply": 10000000000.0,
+          "glucose": 312500000.0,
+          "o2": 1875000000.0,
+          "lactate": 0.0,
+          "oxphos_share": 0.875,
+          "limit": "demand"
+        },
+        "low": {
+          "supply": 10000000000.0,
+          "glucose": 357142857.14285713,
+          "o2": 2142857142.857143,
+          "lactate": 0.0,
+          "oxphos_share": 0.8571428571428572,
+          "limit": "demand"
+        }
+      }
+    },
+    "3_pasteur": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "supply": [
+            10000000000.0,
+            10000000000.0,
+            10000000000.0,
+            7750000000.0,
+            5500000000.0,
+            4000000000.0,
+            2000000000.0,
+            0.0
+          ],
+          "glucose": [
+            312500000.0,
+            312500000.0,
+            1250000000.0,
+            2000000000.0,
+            2000000000.0,
+            2000000000.0,
+            1000000000.0,
+            0.0
+          ],
+          "oxphos_share": [
+            0.875,
+            0.875,
+            0.7,
+            0.45161290322580644,
+            0.2545454545454545,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "lactate": [
+            0.0,
+            0.0,
+            2000000000.0,
+            3750000000.0,
+            3900000000.0,
+            4000000000.0,
+            2000000000.0,
+            0.0
+          ]
+        },
+        "low": {
+          "supply": [
+            10000000000.0,
+            10000000000.0,
+            10000000000.0,
+            7250000000.0,
+            5300000000.0,
+            4000000000.0,
+            2000000000.0,
+            0.0
+          ],
+          "glucose": [
+            357142857.14285713,
+            357142857.14285713,
+            1750000000.0,
+            2000000000.0,
+            2000000000.0,
+            2000000000.0,
+            1000000000.0,
+            0.0
+          ],
+          "oxphos_share": [
+            0.8571428571428572,
+            0.8571428571428572,
+            0.6,
+            0.41379310344827586,
+            0.22641509433962265,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "lactate": [
+            0.0,
+            0.0,
+            3000000000.0,
+            3750000000.0,
+            3900000000.0,
+            4000000000.0,
+            2000000000.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "4_pasteur_uncapped": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "aerobic_glucose": 312500000.0,
+          "anoxic_glucose": 5000000000.0,
+          "ratio": 16.0,
+          "anoxic_supply": 10000000000.0
+        },
+        "low": {
+          "aerobic_glucose": 357142857.14285713,
+          "anoxic_glucose": 5000000000.0,
+          "ratio": 14.0,
+          "anoxic_supply": 10000000000.0
+        }
+      }
+    },
+    "5_glycolysis_only": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "supply": 200000000.0,
+          "yield": 1.62,
+          "glucose": 123456790.12345678,
+          "lactate": 246913580.24691355,
+          "shunt_flux": 46913580.246913575,
+          "atp_by_process": {
+            "Glycolysis": 200000000.0,
+            "TCA": 0.0,
+            "OXPHOS": 0.0
+          },
+          "identical_at_every_oxygen_level": true,
+          "glucose_without_shunt": 100000000.0,
+          "ratio_with_to_without_shunt": 0.81
+        },
+        "low": {
+          "supply": 200000000.0,
+          "yield": 1.62,
+          "glucose": 123456790.12345678,
+          "lactate": 246913580.24691355,
+          "shunt_flux": 46913580.246913575,
+          "atp_by_process": {
+            "Glycolysis": 200000000.0,
+            "TCA": 0.0,
+            "OXPHOS": 0.0
+          },
+          "identical_at_every_oxygen_level": true,
+          "glucose_without_shunt": 100000000.0,
+          "ratio_with_to_without_shunt": 0.81
+        }
+      }
+    },
+    "6_glucose_removed": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "red_cell_supply": 0.0,
+          "red_cell_factors": {
+            "na_k_pumping": 0.0,
+            "ca_pumping": 0.0
+          },
+          "nucleated_supply": 0.0
+        },
+        "low": {
+          "red_cell_supply": 0.0,
+          "red_cell_factors": {
+            "na_k_pumping": 0.0,
+            "ca_pumping": 0.0
+          },
+          "nucleated_supply": 0.0
+        }
+      },
+      "reported_not_scored": "the nucleated cell supplies 0 too: no other fuel"
+    },
+    "7_hierarchy": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "priority": {
+            "factors": [
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.1,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.2,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.6,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.8
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.0
+              }
+            ],
+            "first_fall_step": {
+              "protein_synthesis": 3,
+              "rna_dna_synthesis": 4,
+              "na_k_pumping": 5,
+              "ca_pumping": 6
+            }
+          },
+          "proportional": {
+            "factors": [
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.775,
+                "rna_dna_synthesis": 0.775,
+                "na_k_pumping": 0.775,
+                "ca_pumping": 0.775
+              },
+              {
+                "protein_synthesis": 0.55,
+                "rna_dna_synthesis": 0.55,
+                "na_k_pumping": 0.55,
+                "ca_pumping": 0.55
+              },
+              {
+                "protein_synthesis": 0.4,
+                "rna_dna_synthesis": 0.4,
+                "na_k_pumping": 0.4,
+                "ca_pumping": 0.4
+              },
+              {
+                "protein_synthesis": 0.2,
+                "rna_dna_synthesis": 0.2,
+                "na_k_pumping": 0.2,
+                "ca_pumping": 0.2
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.0
+              }
+            ],
+            "identical_at_every_step": true,
+            "first_fall_step": {
+              "protein_synthesis": 3,
+              "rna_dna_synthesis": 3,
+              "na_k_pumping": 3,
+              "ca_pumping": 3
+            }
+          },
+          "competitive": {
+            "factors": [
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.43661971830985913,
+                "rna_dna_synthesis": 0.43661971830985913,
+                "na_k_pumping": 0.43661971830985913,
+                "ca_pumping": 0.43661971830985913
+              },
+              {
+                "protein_synthesis": 0.3548387096774194,
+                "rna_dna_synthesis": 0.3548387096774194,
+                "na_k_pumping": 0.3548387096774194,
+                "ca_pumping": 0.3548387096774194
+              },
+              {
+                "protein_synthesis": 0.2857142857142857,
+                "rna_dna_synthesis": 0.2857142857142857,
+                "na_k_pumping": 0.2857142857142857,
+                "ca_pumping": 0.2857142857142857
+              },
+              {
+                "protein_synthesis": 0.16666666666666666,
+                "rna_dna_synthesis": 0.16666666666666666,
+                "na_k_pumping": 0.16666666666666666,
+                "ca_pumping": 0.16666666666666666
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.0
+              }
+            ],
+            "identical_at_every_step": true,
+            "first_fall_step": {
+              "protein_synthesis": 3,
+              "rna_dna_synthesis": 3,
+              "na_k_pumping": 3,
+              "ca_pumping": 3
+            }
+          }
+        },
+        "low": {
+          "priority": {
+            "factors": [
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.9,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.12,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.6,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.8
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.0
+              }
+            ],
+            "first_fall_step": {
+              "protein_synthesis": 3,
+              "rna_dna_synthesis": 3,
+              "na_k_pumping": 5,
+              "ca_pumping": 6
+            }
+          },
+          "proportional": {
+            "factors": [
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.725,
+                "rna_dna_synthesis": 0.725,
+                "na_k_pumping": 0.725,
+                "ca_pumping": 0.725
+              },
+              {
+                "protein_synthesis": 0.53,
+                "rna_dna_synthesis": 0.53,
+                "na_k_pumping": 0.53,
+                "ca_pumping": 0.53
+              },
+              {
+                "protein_synthesis": 0.4,
+                "rna_dna_synthesis": 0.4,
+                "na_k_pumping": 0.4,
+                "ca_pumping": 0.4
+              },
+              {
+                "protein_synthesis": 0.2,
+                "rna_dna_synthesis": 0.2,
+                "na_k_pumping": 0.2,
+                "ca_pumping": 0.2
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.0
+              }
+            ],
+            "identical_at_every_step": true,
+            "first_fall_step": {
+              "protein_synthesis": 3,
+              "rna_dna_synthesis": 3,
+              "na_k_pumping": 3,
+              "ca_pumping": 3
+            }
+          },
+          "competitive": {
+            "factors": [
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 1.0,
+                "rna_dna_synthesis": 1.0,
+                "na_k_pumping": 1.0,
+                "ca_pumping": 1.0
+              },
+              {
+                "protein_synthesis": 0.42028985507246375,
+                "rna_dna_synthesis": 0.42028985507246375,
+                "na_k_pumping": 0.42028985507246375,
+                "ca_pumping": 0.42028985507246375
+              },
+              {
+                "protein_synthesis": 0.3464052287581699,
+                "rna_dna_synthesis": 0.3464052287581699,
+                "na_k_pumping": 0.3464052287581699,
+                "ca_pumping": 0.3464052287581699
+              },
+              {
+                "protein_synthesis": 0.2857142857142857,
+                "rna_dna_synthesis": 0.2857142857142857,
+                "na_k_pumping": 0.2857142857142857,
+                "ca_pumping": 0.2857142857142857
+              },
+              {
+                "protein_synthesis": 0.16666666666666666,
+                "rna_dna_synthesis": 0.16666666666666666,
+                "na_k_pumping": 0.16666666666666666,
+                "ca_pumping": 0.16666666666666666
+              },
+              {
+                "protein_synthesis": 0.0,
+                "rna_dna_synthesis": 0.0,
+                "na_k_pumping": 0.0,
+                "ca_pumping": 0.0
+              }
+            ],
+            "identical_at_every_step": true,
+            "first_fall_step": {
+              "protein_synthesis": 3,
+              "rna_dna_synthesis": 3,
+              "na_k_pumping": 3,
+              "ca_pumping": 3
+            }
+          }
+        }
+      },
+      "reading": "reproduced as an input, not predicted: the order appears under the priority the program writes, and under proportional and competitive every consumer falls together"
+    },
+    "8_threshold": {
+      "ok": true,
+      "measured": {
+        "high": {
+          "sweep": {
+            "0.0": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.2": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.4": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.6": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.7": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.75": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.78": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.8": {
+              "oxphos_atp": 8750000000.0,
+              "glucose": 312500000.0,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.82": {
+              "oxphos_atp": 8400000000.0,
+              "glucose": 500000000.0,
+              "supply": 10000000000.0,
+              "limit": "capacity"
+            },
+            "0.85": {
+              "oxphos_atp": 7000000000.0,
+              "glucose": 1250000000.0,
+              "supply": 10000000000.0,
+              "limit": "capacity"
+            },
+            "0.9": {
+              "oxphos_atp": 4666666666.666666,
+              "glucose": 2000000000.0,
+              "supply": 9000000000.0,
+              "limit": "capacity"
+            },
+            "0.95": {
+              "oxphos_atp": 2333333333.333333,
+              "glucose": 2000000000.0,
+              "supply": 6500000000.0,
+              "limit": "capacity"
+            },
+            "1.0": {
+              "oxphos_atp": 0.0,
+              "glucose": 2000000000.0,
+              "supply": 4000000000.0,
+              "limit": "capacity"
+            }
+          },
+          "registered_threshold": 0.8125,
+          "last_flat_point": 0.8,
+          "first_lower_point": 0.82,
+          "flat_below": true,
+          "lower_above": true,
+          "full_load_equals_anoxia": true,
+          "no_reserve": {
+            "oxphos_atp": {
+              "0.0": 8750000000.0,
+              "0.2": 7000000000.0,
+              "0.4": 5250000000.0,
+              "0.6": 3500000000.0,
+              "0.7": 2625000000.0,
+              "0.75": 2187500000.0,
+              "0.78": 1925000000.0,
+              "0.8": 1750000000.0,
+              "0.82": 1575000000.0,
+              "0.85": 1312500000.0,
+              "0.9": 875000000.0,
+              "0.95": 437500000.0,
+              "1.0": 0.0
+            },
+            "every_h_above_0_lower": true
+          }
+        },
+        "low": {
+          "sweep": {
+            "0.0": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.2": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.4": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.6": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.7": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.75": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.78": {
+              "oxphos_atp": 8571428571.428572,
+              "glucose": 357142857.14285713,
+              "supply": 10000000000.0,
+              "limit": "demand"
+            },
+            "0.8": {
+              "oxphos_atp": 8000000000.0,
+              "glucose": 666666666.6666672,
+              "supply": 10000000000.0,
+              "limit": "capacity"
+            },
+            "0.82": {
+              "oxphos_atp": 7200000000.0,
+              "glucose": 1100000000.0,
+              "supply": 10000000000.0,
+              "limit": "capacity"
+            },
+            "0.85": {
+              "oxphos_atp": 6000000000.0,
+              "glucose": 1750000000.0,
+              "supply": 10000000000.0,
+              "limit": "capacity"
+            },
+            "0.9": {
+              "oxphos_atp": 4000000000.0,
+              "glucose": 2000000000.0,
+              "supply": 8333333333.333332,
+              "limit": "capacity"
+            },
+            "0.95": {
+              "oxphos_atp": 2000000000.0,
+              "glucose": 2000000000.0,
+              "supply": 6166666666.666666,
+              "limit": "capacity"
+            },
+            "1.0": {
+              "oxphos_atp": 0.0,
+              "glucose": 2000000000.0,
+              "supply": 4000000000.0,
+              "limit": "capacity"
+            }
+          },
+          "registered_threshold": 0.7857142857142857,
+          "last_flat_point": 0.78,
+          "first_lower_point": 0.8,
+          "flat_below": true,
+          "lower_above": true,
+          "full_load_equals_anoxia": true,
+          "no_reserve": {
+            "oxphos_atp": {
+              "0.0": 8571428571.428572,
+              "0.2": 6857142857.142857,
+              "0.4": 5142857142.857142,
+              "0.6": 3428571428.5714283,
+              "0.7": 2571428571.428571,
+              "0.75": 2142857142.857143,
+              "0.78": 1885714285.7142856,
+              "0.8": 1714285714.2857141,
+              "0.82": 1542857142.8571427,
+              "0.85": 1285714285.7142856,
+              "0.9": 857142857.1428571,
+              "0.95": 428571428.57142854,
+              "1.0": 0.0
+            },
+            "every_h_above_0_lower": true
+          }
+        }
+      }
+    },
+    "9_resource_checkpoint": {
+      "ok": true,
+      "measured": {
+        "division_cost": [
+          [
+            "ATP",
+            10000000000.0,
+            "division"
+          ]
+        ],
+        "standing_stock": {
+          "ready": false,
+          "why": "cannot pay for the division: factor 0.3 of what it costs"
+        },
+        "high": {
+          "max_supply": 19000000000.0,
+          "available_over_interval": 219000000000.0,
+          "ready": true,
+          "available_without_glucose": 3000000000.0,
+          "ready_without_glucose": false,
+          "why_without_glucose": "cannot pay for the division: factor 0.3 of what it costs"
+        },
+        "low": {
+          "max_supply": 17000000000.0,
+          "available_over_interval": 171000000000.0,
+          "ready": true,
+          "available_without_glucose": 3000000000.0,
+          "ready_without_glucose": false,
+          "why_without_glucose": "cannot pay for the division: factor 0.3 of what it costs"
+        }
+      }
+    },
+    "10_refusals": {
+      "ok": true,
+      "measured": {
+        "compile": {
+          "heteroplasmy without chrM": "refused: line 2: compartment 'C' declares heteroplasmy but its genome does not read chrM; a mitochondrial var",
+          "fraction above 1": "refused: line 2: heteroplasmy m.3243A>G = 1.2: a fraction of copies, within 0..1",
+          "fractions summing past 1": "refused: line 2: heteroplasmy fractions sum to 1.1: variants are taken to sit in different copies, so togethe",
+          "not a substitution": "refused: line 2: heteroplasmy 'm.3243delA = 0.2': expected `m.<position><ref>><alt> = <fraction>`, a substitu",
+          "no m. prefix": "refused: line 2: heteroplasmy '3243A>G = 0.2': expected `m.<position><ref>><alt> = <fraction>`, a substitutio"
+        },
+        "run": {
+          "unknown process": "refused: pool ATP is regenerated from Photosynthesis; the reduced module (\u00a76) runs Glycolysis, TCA, OXPHOS on",
+          "no Glycolysis": "refused: pool ATP is not regenerated from Glycolysis, where glucose enters",
+          "TCA without OXPHOS": "refused: pool ATP names TCA without OXPHOS: nothing would reoxidise its NADH",
+          "OXPHOS without a mitochondrion": "refused: pool ATP is regenerated from OXPHOS and no compartment's genome reads chrM: oxidative phosphorylatio",
+          "no Glucose pool": "refused: no pool Glucose is declared: glycolysis has no substrate",
+          "no O2 pool": "refused: no pool O2 is declared: oxidative phosphorylation has no oxygen",
+          "no capacity": "refused: OXPHOS runs and `param oxphos_capacity_per_copy` (electron pairs per hour per mitochondrial copy) is",
+          "no stoichiometry": "refused: the engine holds no stoichiometry; import bio.std.core_metabolism or state it (not stated: core_meta"
+        },
+        "control_runs": true
+      }
+    }
+  },
+  "clauses_met": "10 of 10",
+  "passed": true,
+  "gate_as_worded": "(i) the budget's magnitude and its split are NOT ASKABLE (no measured turnover or shares held; \u00a710 decision 4 stays open), and Buttgereit & Brand's hierarchy is REPRODUCED AS AN INPUT, NOT PREDICTED; (ii) lowering oxygen shifts production to glycolysis and raises glucose uptake, BY CONSTRUCTION of the routing, and removing glucose collapses the glycolysis-only cell (and every cell, there being no other fuel); (iii) the red cell runs on glycolysis alone, and its ATP and 2,3-BPG ranges are NOT ASKABLE (not held; a concentration is not a stoichiometric quantity)",
+  "seconds": 1.44,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "PubMed abstracts PMID 7492307 (Buttgereit & Brand 1995), 15620362 (Hinkle 2005), 12467494 (Rossignol et al. 2003), 10477268 (Mulquiney, Bubb & Kuchel 1999)",
+        "version": "read 2026-10-10 and quoted in genomeos/runtime/metabolism_gate.py; no dataset is read"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/demo/stage3_energy.bio",
+        "sha256": "90f6b710e35590f702ecb03bb565741ae28eb7115880e8c3e4cb2c2a7005b765",
+        "bytes": 5558,
+        "partition": null,
+        "role": "the nucleated cell, every number declared"
+      },
+      {
+        "path": "data/demo/stage3_erythrocyte.bio",
+        "sha256": "73f13ff8a858c7bc5d7ca72c8c54ae933ff3272cb27ae3c4b00414a7916c865c",
+        "bytes": 3632,
+        "partition": null,
+        "role": "the glycolysis-only cell"
+      },
+      {
+        "path": "genomeos/std/core_metabolism.bio",
+        "sha256": "5378f6abe109435a4901bbfb2b499b964dc1be46bc56d07dbddffff4291bc589",
+        "bytes": 3951,
+        "partition": null,
+        "role": "the stoichiometry"
+      },
+      {
+        "path": "data/demo/stage4_division.bio",
+        "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+        "bytes": 2322,
+        "partition": null,
+        "role": "stage 4's division cost, read only"
+      },
+      {
+        "path": "genomeos/runtime/metabolism_gate.py",
+        "sha256": "21e661086c0ccb13661732bd22f2311b47f4635b631befd1e4a002e34b1bb005",
+        "bytes": 24602,
+        "partition": null,
+        "role": "the registration"
+      },
+      {
+        "path": "genomeos/runtime/metabolism.py",
+        "sha256": "11808d0c60e9300f7550405f992b2d2d194e25792c79f1f84478966493e803e6",
+        "bytes": 18353,
+        "partition": null,
+        "role": "the instrument"
+      }
+    ],
+    "assembly": "n/a: no genomic coordinate is read; m.3243A>G is a declared label, not a lookup",
+    "coordinates": "n/a: no genomic coordinate is read",
+    "parameters": {
+      "demand_per_h": 10000000000.0,
+      "glucose_uptake_per_h": 2000000000.0,
+      "o2_supply_per_h": 3000000000.0,
+      "mito_copies": 1000,
+      "capacity_per_copy": 20000000.0,
+      "supply_sweep": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          0.75,
+          1.0
+        ],
+        [
+          0.5,
+          1.0
+        ],
+        [
+          0.25,
+          1.0
+        ],
+        [
+          0.1,
+          1.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.5
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "heteroplasmy_sweep": [
+        0.0,
+        0.2,
+        0.4,
+        0.6,
+        0.7,
+        0.75,
+        0.78,
+        0.8,
+        0.82,
+        0.85,
+        0.9,
+        0.95,
+        1.0
+      ],
+      "bpg_shunt": 0.19,
+      "interval_h": 24.0,
+      "closed_form_rtol": 1e-09
+    },
+    "exclusions": [
+      "magnitude: whether the budget lands within the published order of magnitude: this project holds no measured per-cell ATP turnover for any cell type (the three abstracts give none), so the demo's consumer rates are declared and no clause compares them with a measurement. \u00a710 decision 4, which this magnitude was to settle, therefore stays open",
+      "split: whether the budget's split matches Buttgereit & Brand: the abstract states a hierarchy of sensitivity to supply, not shares; the shares are in the paper's body, a scan not held. \u00a76's parenthesis 'protein synthesis and the Na\u207a/K\u207a-ATPase first' reads the hierarchy as a split, and the abstract does not support that reading: sodium cycling comes after macromolecule synthesis",
+      "rbc_ranges: whether the red cell keeps ATP and 2,3-BPG within Mulquiney & Kuchel's ranges: the ranges are in the papers' bodies, not held, and a steady-state concentration is a kinetic quantity the reduced module (stoichiometry and capacities, no rate laws) cannot produce. What is held and used is the shunt's 19% of glycolytic carbon flux",
+      "threshold_values: whether the threshold sits where Rossignol's measured thresholds sit: the review's abstract gives no value, and the position here is the program's declared reserve, not a prediction",
+      "pasteur_magnitude: how far real cells raise glucose uptake under hypoxia: they also lower demand, and no measured Pasteur ratio is held; 16 and 14 are the module's ceiling, not a prediction",
+      "warburg: aerobic glycolysis: the routing oxidises pyruvate first whenever oxygen and capacity allow, so a cell that ferments with oxygen present is not expressible in stage 3",
+      "other_fuels: fatty acids, glutamine and ketone bodies are not in the reduced module, so 'removing glucose collapses a glycolysis-only cell' cannot be contrasted with a cell that survives on them",
+      "proton_leak: the abstract's least sensitive process spends the proton gradient, not ATP, and the module does not model leak; that rung of the hierarchy is not asked"
+    ],
+    "partitions": "n/a: nothing is fitted, so there is nothing to hold out",
+    "code_cleanliness": {
+      "git_sha": "4668ee27d572afaef2f9f09fd623c37b5416461e",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/metabolism_gate.py",
+        "form": "committed_repository_file",
+        "path": "scripts/metabolism_gate.py",
+        "is_committed": true,
+        "declared_entry": "scripts/metabolism_gate.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/secondtargets.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_saturate.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/division.py",
+        "genomeos/runtime/economy.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/metabolism.py",
+        "genomeos/runtime/metabolism_gate.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/metabolism_gate.py"
+      ],
+      "counting_path_count": 24,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "4668ee27d572afaef2f9f09fd623c37b5416461e",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/secondtargets.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_saturate.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/secondtargets.py",
+        "tests/test_saturate.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/metabolism_gate.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "4668ee27d572afaef2f9f09fd623c37b5416461e",
+      "code_cleanliness_git_sha": "4668ee27d572afaef2f9f09fd623c37b5416461e",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 4668ee2"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 92,
+      "opens_under_data": 6,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "genomeos/runtime/metabolism.py",
+        "genomeos/runtime/metabolism_gate.py",
+        "genomeos/std/core_metabolism.bio"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

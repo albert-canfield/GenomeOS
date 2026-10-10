@@ -2,7 +2,9 @@
 
 **Status on 2026-10-10.** Stage 1 (structure) is built and passed its gates on 2026-09-14 (§9.1).
 Stage 2 (economy) was implemented on 2026-09-21: gate (a) passed on three clauses of four, gate (b)
-failed, and the pool layer is optional (§9.2). Stage 3 (energy and mitochondria) is not implemented.
+failed, and the pool layer is optional (§9.2). Stage 3 (energy and mitochondria) was implemented on
+2026-10-10: all ten registered clauses are met, and of the gate as §6 words it the magnitude, the split
+and the red cell's ranges are not askable and the hierarchy is reproduced as an input (§9.5, §9.6).
 Stage 4 (division and dilution) was implemented on 2026-09-28: the mechanism passes all eight
 registered clauses and the gate as §8 words it is refuted (§9.4). `competence`, `commitment`, `order`
 and `regime` are built; `homeostat` and `role` are not, and no engine code applies §2's 0.3 cap. The
@@ -103,6 +105,7 @@ compartment RedCytosol    { parent: PlasmaMembrane; volume: 1.0; absolute_volume
 | `genome` | `chrM, ... \| nuclear` | chromosomes read here; `nuclear` = every chromosome except chrM/MT |
 | `translation` | `yes \| no` | ribosomes are present (cytosolic or mitochondrial) |
 | `copies` | `integer` | copies per cell (recorded in stage 1; heteroplasmy in stage 3) |
+| `heteroplasmy` | `m.POS REF>ALT = fraction, ...` | stage 3: the fraction of the copies carrying each mtDNA variant; needs `genome: chrM` (§6) |
 
 **Absolute volumes and concentrations** (§10 decision 2, resolved 2026-09-19; implemented
 2026-09-19). `volume` keeps its meaning and its name: a fraction of the cell, which is what the
@@ -146,7 +149,7 @@ process-bigraph place graph, so a located program maps onto a Composite whose
 stores nest the same way (`runtime/compose.py`).
 
 **BioIR.** `Compartment(Entity)`: `parent`, `membrane`, `volume`, `genome`,
-`translation`, `copies`, `absolute_volume_fl`; `kind = "compartment"`. `Rule.threshold_unit` is empty
+`translation`, `copies`, `absolute_volume_fl`, `heteroplasmy` (stage 3); `kind = "compartment"`. `Rule.threshold_unit` is empty
 for an amount and names a molar unit for a concentration.
 
 ### 4.2 Locations [engine]
@@ -267,7 +270,8 @@ protein is finished; ATP is converted to ADP, not destroyed).
 **BioIR.** `Pool(Entity)`: `location`, `size`, `regeneration`, `returns_as`.
 *(2026-10-10: the type also has `regenerates_from`, which keeps `regenerates: from Glycolysis,
 OXPHOS`; no runtime reads it, since the processes it names belong to stage 3, which is not
-implemented.)*
+implemented.)* *(Later on 2026-10-10: stage 3 reads it. `runtime/metabolism.py` runs Glycolysis, TCA
+and OXPHOS for the one pool that names them, and refuses any other name, §6.)*
 
 ### 5.2 `cost` [engine]
 
@@ -330,7 +334,7 @@ optional, as this paragraph agreed in advance.** It is expressible, it is
 charged, it reproduces a burden of the documented shape, and at proteome scale
 it does not improve a single prediction.
 
-## 6. Energy and mitochondria (stage 3, not implemented)
+## 6. Energy and mitochondria (stage 3, implemented 2026-10-10; ten registered clauses met, the gate as worded partly not askable)
 
 A reduced metabolic module (glycolysis, TCA, oxidative phosphorylation) in
 `bio.std.core_metabolism`, producing the ATP the pools spend, with
@@ -351,6 +355,21 @@ glycolysis and raises glucose consumption (the Pasteur effect); removing
 glucose collapses a glycolysis-only cell. (iii) The red blood cell (no
 mitochondria) runs on glycolysis alone and keeps its ATP and 2,3-BPG within
 the ranges of Mulquiney & Kuchel 1999 (Biochem J 342:581).
+
+**As built (2026-10-10).** The paragraphs above are left as written. The language gains one key,
+`heteroplasmy: m.3243A>G = 0.7` on a compartment whose genome reads chrM (a fraction of its `copies`;
+fractions of two variants add and may not pass 1, since nothing here knows their linkage). The
+module is `bio.std.core_metabolism` (`genomeos/std/core_metabolism.bio`): thirteen `param`s, the
+textbook stoichiometry of glycolysis and of pyruvate dehydrogenase with the TCA cycle, Hinkle's P/O
+ratios at both ends (2.5 and 1.5; 2.3 and 1.4), and half an O₂ per electron pair. The engine holds no
+such number. `genomeos/runtime/metabolism.py` refills the one pool that names `from Glycolysis, TCA,
+OXPHOS` per hour, reading the cell's own facts from the program: the `Glucose` and `O2` pools'
+`regenerates` rates, `param oxphos_capacity_per_copy`, and `param bpg_shunt` for the red cell. Supply
+follows demand, pyruvate is oxidised first and the rest becomes lactate; every reading is computed at
+both ends of the spread (32 and 28 ATP per glucose); heteroplasmy removes the capacity of the copies
+carrying the variant. What the cell cannot make is divided among its consumers by the program's own
+`allocation`, through stage 2's `Economy`, which now takes a per-pool capacity in place of the
+standing stock. The registration is §9.5 and the measurement §9.6.
 
 ## 7. Control (specified here, implemented after stage 2)
 
@@ -1173,6 +1192,7 @@ clause here needs it.
 | 2 | pool, cost, allocation | burden; absolute abundance vs PaxDb | not started; **no longer blocked** — decision 2 was resolved 2026-09-19 and the absolute volume it needed is implemented (§4.1), so the gate's concentration arm is now expressible |
 | 2 (superseding the row above, 2026-09-21) | pool, cost, allocation | burden; absolute abundance vs PaxDb | **implemented; gate (a) passed on three clauses of four, gate (b) failed** (§9.2). The burden reproduces the documented shape and vanishes when the pool is switched off; the abundance gate improves nothing, for a reason derived from the runtime and committed before the data were fetched. §5.3's consequence stands: the pool layer is **optional**. The row above is left standing rather than rewritten, the way §9.1 item 4 leaves its own superseded decision standing |
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
+| 3 (superseding the row above, 2026-10-10) | core metabolism (`bio.std.core_metabolism`), mitochondrial copies, `heteroplasmy` | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | **implemented; all ten registered clauses met, and the gate as §6 words it is partly not askable** (§9.5 registered, §9.6 measured). Not askable: the budget's magnitude (so §10 decision 4 stays open), its split, the red cell's ATP and 2,3-BPG ranges. Reproduced as an input, not predicted: Buttgereit & Brand's hierarchy, which appears under the `priority` the program writes and cannot appear under `proportional` or `competitive`. By construction: the Pasteur shift. Measured: the yields 32 and 28, 6 O₂ per glucose, the red cell's 1.62, the biochemical threshold at the declared reserve, and stage 4's division paid once ATP is regenerated over a cycle |
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | **implemented 2026-09-28; the mechanism passes all eight registered clauses and the gate as §8 words it is refuted rather than passed** (§9.3 registered, §9.4 measured). Partitioning is gene-blind, exactly as stage 2's `_share` was: dilution contributes 0.0 of the 9.392136 decades that separate a stable protein from a short-lived one, and in a steady state it compresses the separation 8.80-fold. The stage's own claim — conservation, and the removal of a protein nothing degrades — holds: 2,000 of 2,000 binomial splits conserve exactly, and a protein with no declared half-life falls by exactly 2^-8 over eight divisions and not at all when contents are duplicated. `partition` defaults to `duplicate`, so no committed program changes. The protein turnover set (§10 decision 6) stays open and no clause needed it |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
 | fate | commitment, competence | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | **passed 2026-09-14** (§7.2a): five arms reproduced, and each construct fails an arm when removed |
@@ -1593,6 +1613,84 @@ genomeos/std data/organisms` at `d32fe44`; stage 2's burden factors and 0.952005
 Committed programs that write `regenerates: from Glycolysis, OXPHOS` with no
 mitochondrion still compile; the runtime refuses them only when asked to run them.
 
+### 9.6 Stage 3 as measured (2026-10-10)
+
+The registration is `genomeos/runtime/metabolism_gate.py` (`e09edf7`), committed before anything it
+measures; the language surface is `ac89b41`, the runtime, the standard-library module and the two demo
+programs `fa5a4f1`, and the gate script `4668ee2`, which wrote `data/results/metabolism_gate.json` from
+the committed tree (its manifest is complete and records its own code as committed). The script
+refuses to run when a demo program declares a number the registration does not hold. Every
+prediction below was worked by hand into the registration; nothing was tuned after a run.
+
+**All ten registered clauses are met. The gate as §6 words it is not passed as worded**, because
+three of its asks are not askable here and one is met only as an input:
+
+- **(i) The ATP budget.** Its magnitude is **not askable**: this project holds no measured per-cell ATP
+  turnover, so the demo's 1e10 ATP per hour is declared, and §10 decision 4, which this magnitude was
+  to settle, stays open. Its split is **not askable**: Buttgereit & Brand's abstract states a hierarchy
+  of *sensitivity to supply*, not shares, and §6's parenthesis "protein synthesis and the Na⁺/K⁺-ATPase
+  first" reads it as a split the abstract does not support (it puts sodium cycling after
+  macromolecule synthesis). The hierarchy itself is **reproduced as an input, not predicted**: it
+  appears under the `priority` order the program writes and cannot appear under `proportional` or
+  `competitive`, which hand every consumer one scalar — §9.2's finding again.
+- **(ii) Oxygen and glucose.** Lowering oxygen shifts production to glycolysis and raises glucose
+  uptake, **by construction** of the module's one routing claim (oxidise first); removing glucose
+  collapses the glycolysis-only cell, and every other cell too, since the module has no other fuel.
+- **(iii) The red cell** runs on glycolysis alone, with TCA and OXPHOS at exactly 0. Its ATP and
+  2,3-BPG ranges are **not askable**: not held, and a concentration is a kinetic quantity a module of
+  stoichiometry and capacities cannot produce.
+
+| Clause | Reading | High arm | Low arm |
+|---|---|---|---|
+| 1 | ATP per glucose, aerobic / anaerobic | 32.0 / 2.0 | 28.0 / 2.0 |
+| 1 | P/O 2.5 and 1.5 through the glycerol 3-phosphate shuttle (§6's "30") | 30.0 | — |
+| 1 | O₂ per glucose, electron pairs | 6.0, 12.0 | 6.0, 12.0 |
+| 2 | full oxygen and glucose: supply, glucose, O₂, lactate | 1e10, 3.125e8, 1.875e9, 0 | 1e10, 3.5714e8, 2.1429e9, 0 |
+| 2 | OXPHOS share of the ATP made | 0.875 | 0.857143 |
+| 3 | supply along oxygen 1, 0.75, 0.5, 0.25, 0.1, 0 | 1e10, 1e10, 1e10, 7.75e9, 5.5e9, 4e9 | 1e10, 1e10, 1e10, 7.25e9, 5.3e9, 4e9 |
+| 3 | OXPHOS share along the same steps | 0.875 … 0.4516, 0.2545, **0** | 0.857 … 0.4138, 0.2264, **0** |
+| 3 | glucose uptake, full oxygen to none | 3.125e8 → 2e9 (the ceiling) | 3.5714e8 → 2e9 |
+| 4 | anoxia with uptake not limiting: glucose ×, supply | **×16.0**, 1e10 | **×14.0**, 1e10 |
+| 5 | red cell: yield, glucose, lactate, 2,3-BPG made per hour | 1.62, 1.2346e8, 2.4691e8, 4.6914e7 | the same |
+| 5 | red cell, every reading at oxygen 1 … 0 | identical to the bit | identical |
+| 5 | red cell glucose without the shunt / with it | 0.81 | 0.81 |
+| 6 | no glucose: red cell supply, its pumps' factors | 0, 0 and 0 | 0, 0 and 0 |
+| 7 | priority: step of first cut, protein / RNA-DNA / Na⁺ / Ca²⁺ | 3 / 4 / 5 / 6 | 3 / 3 / 5 / 6 |
+| 7 | priority factors at anoxia, Ca²⁺ / Na⁺ / RNA-DNA / protein | 1.0 / 0.6 / 0 / 0 | 1.0 / 0.6 / 0 / 0 |
+| 7 | proportional, competitive: step of first cut, all four | 3, together | 3, together |
+| 8 | heteroplasmy: last unchanged / first lower point (registered h*) | 0.80 / 0.82 (0.8125) | 0.78 / 0.80 (0.785714) |
+| 8 | OXPHOS ATP at h = 0 … 0.80, 0.82, 0.90, 1.0 | 8.75e9, 8.4e9, 4.67e9, 0 | 8.57e9 … 0 |
+| 8 | no reserve: OXPHOS ATP at h = 0.2 (of h = 0) | 7.0e9 (8.75e9) | 6.86e9 (8.57e9) |
+| 9 | stage 4's division (1e10 ATP) against the stock 3e9 | refused, factor 0.3 | refused |
+| 9 | ATP available over 24 h, regenerated / without glucose | 2.19e11 paid / 3e9 refused | 1.71e11 paid / 3e9 refused |
+| 10 | refusals asked / refused; the unbroken control runs | 13 / 13; yes | — |
+
+**Two findings, measured and deliberately not scored**, because the registration did not name them.
+First, under `competitive` every consumer of an oversubscribed pool gets `capacity / (capacity +
+demand)`: at oxygen 0.25 that is 0.4366 each, so the cell spends 4.37e9 of the 7.75e9 ATP it makes and
+leaves the rest unspent. That is stage 2's policy as written ("nobody is served in full"), and it is
+the regime's default for a pool with no allocation named. Second, stage 4's resource checkpoint, which
+§9.4 found refused every division because a standing stock cannot pay a draw over a cycle, is now
+askable: the same 1e10 ATP is paid when the pool is regenerated over one 24 h interval and refused
+again when glucose is removed. That is clause 9, and it is scored; what is not is whether 24 h is any
+real cell's cycle.
+
+**What did not move.** `bio test data/demo genomeos/std data/organisms`: 47 files and 288 of 288 checks
+at `d32fe44`; 54 files and 354 of 354 after, the four files other lanes added in between carrying 28
+and stage 3's three files 38, so the 47 files present before still pass with 288 checks between them. Stage 2's burden and abundance
+tests, stage 4's division and gate tests and the grammar, language, economy, engine-boundary and
+licence-header tests pass; `runtime/body.py` and `runtime/division.py` are untouched, and `Economy`
+behaves as before when no capacity is passed. Stage 2's and stage 4's demos, which write §5.1's
+`regenerates: from Glycolysis, OXPHOS` with no mitochondrion, compile as before; the runtime refuses
+them when asked to run them, since OXPHOS there has nowhere to happen.
+
+**And what stage 3 does not license anybody to say.** Not that any cell spends 1e10 ATP an hour, or
+spends it in equal quarters: those are the demo's declarations. Not that the hierarchy was predicted:
+it was written in. Not that real cells raise glucose uptake 16-fold without oxygen: that is the
+module's ceiling, and real cells also cut demand. Not that the threshold sits where Rossignol's
+measured thresholds sit: its position is the declared reserve. Not that a cell ferments only without
+oxygen: the routing assumes it, and the Warburg effect cannot be written in stage 3.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
@@ -1750,4 +1848,6 @@ shipped and was gated on 2026-09-21 (§9.2); and 5 is now closed by a negative
 rather than by a preference. *(2026-10-10: decision 10's construct was built on 2026-09-15,
 `144f399`. Stage 4 was implemented on 2026-09-28, so 6 no longer waits on a stage; it stays open
 and no stage 4 clause needed it (§9.4). 4 waits on stage 3's ATP budget, which is not
-implemented.)*
+implemented.)* *(Later on 2026-10-10: stage 3 is implemented, and the budget's magnitude, which was
+to settle 4, is registered not askable: no measured per-cell ATP turnover is held (§9.5, §9.6). So 4
+stays open; the demo states polymerisation-only costs and says so.)*
