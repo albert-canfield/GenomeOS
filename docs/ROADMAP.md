@@ -1014,7 +1014,11 @@ History: ROADMAP-HISTORY.md §3 I, lines 2058–3293; the area's §5 rows are it
   dependency; and a model that reads the sequence itself, scored on §17's own held-out elements, the
   one readout §17 names as able to overturn its negative.
 - **Next.** 1. A species-tree null for library pairs (§5, M6): **done 2026-10-10** (`eb2967d`; pairs: no reading, the null is not calibrated; libraries: 26 of 42 clear, all 21 of §19's plus 5); a calibrated pair null follows (lane-pairnull). 2. Enhancer pair logic outside
-  promoters, starting with GATA plus T-box in heart. 3. A sequence model scored on
+  promoters, starting with GATA plus T-box in heart (2026-10-10, lane-pairlogic: **inventory only, halted** — the harness's
+  safety classifier halted the write of the analysis module, so no registration and no result exist; not re-dispatched, item 16.
+  On hand: 191 VISTA heart-positive of 1,267 positives (120 heart only), 1,175 negatives, 1,076 other-tissue-only positives;
+  JASPAR 2026 GATA4/5/6 and TBX5/TBX20 cached; to disclose in any registration: §18's count model already held a GATA unit
+  and no T-box unit in a heart reading). 3. A sequence model scored on
   GRAMMAR-BY-COMPARISON §17's held-out elements.
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
 
@@ -1174,6 +1178,7 @@ Four rules govern the whole plan:
     - With the run-2 decision (item 5): 30 files in the AstroREG-2 sender's signed closure still lack their licence header, because adding it changes the closure digest; they can be headed in the same commit as the re-sign.
     - **Blocking the push of `dev` (about 100 commits since `c00250f`): a forced commit for the BioForge inventory fix.** The full gate refuses `tests/test_forge_calibration_inventory.py`, because the committed inventory was computed over the live program set and lanes have added programs since (`mutants_nolookup.bio`; live counts 39 → 47 experiment blocks, still 0 independent, shortfall 38). lane-pushfix wrote the fix (the inventory reads the program list its result records; a new test runs the live set and checks the decision stands; `--check` names programs added since; 13 tests pass) and it sits uncommitted in the tree (`genomeos/forge/calibration_inventory.py`, `scripts/forge_calibration_inventory.py`, `tests/test_forge_calibration_inventory.py`; patch at the coordinator's scratchpad). Committing it replaces lane-forgecal's lines, the stale-base guard asks for `--force`, and the harness denied it; the coordinator does not re-run a denied action. Recommendation: allow it, after which the coordinator pushes. The other census reds found today are fixed (`04159b9`, `c2d4811`, `e515ca7`).
     - A forced commit for the two forge licence headers: lane-ciextras inserted `# SPDX-License-Identifier: AGPL-3.0-or-later` at line 1 of `genomeos/forge/__init__.py` and `design.py` and emptied `DEFERRED_HELD` in `tests/test_licence_header_presence.py` (licence tests 37 passed); `commit_own.sh`'s stale-base guard refuses because emptying the pin removes 4 lines of `fefe807`, and the permission classifier denied the lane's `--force`. The change is left uncommitted in the tree, draft message `msg-lane-ciextras-forge-headers-1791636617.txt`. Recommendation: allow it; the removed lines are the pending entries the headers resolve. After it, `forge/design.py`'s `Knob.get` takes the two-line UNKNOWN check lane-strengthread specified (`f06f95b`'s report).
+    - Whether area J's enhancer pair-logic test (GATA plus T-box in heart) goes ahead: the harness's safety classifier halted lane-pairlogic's write of its analysis module on 2026-10-10, before any registration; the coordinator does not re-dispatch a halted step. Recommendation: Albert decides whether to resume it in his own session; the inventory is recorded in area J.
 
 17. **Keeping the record current.** At each lane's end:
     - the coordinator folds its row into the item above and marks it with `**done YYYY-MM-DD**`;
