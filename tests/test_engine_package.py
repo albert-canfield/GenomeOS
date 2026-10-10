@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import sys
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -72,6 +73,31 @@ def test_the_package_declares_apache_and_no_dependencies(built):
     assert 'license = "Apache-2.0"' in pyproject
     assert "dependencies = []" in pyproject  # the engine core takes nothing; the heavy engines are extras
     assert "Apache License" in (out / "LICENSE").read_text()
+
+
+#: Every third-party module an engine file imports, with the extra that installs it. The engine core
+#: takes nothing, so each is imported inside the function that needs it.
+ENGINE_EXTRAS = {"process_bigraph": "compose", "roadrunner": "roadrunner"}
+
+
+def test_every_extra_the_engine_imports_is_declared_as_the_application_declares_it(built):
+    """runtime/compose.py and runtime/roadrunner.py import process-bigraph and libroadrunner lazily, so
+    the package runs without them. Its own pyproject still has to offer each as an extra, under the
+    name and the requirement the application's pyproject gives it, or `pip install biolang[roadrunner]`
+    installs nothing. A new third-party import in the engine fails here until it is declared."""
+    out, _, _ = built
+    imported = set()
+    for path in (out / "biolang").rglob("*.py"):
+        _, other = package_engine._imported(path)
+        imported |= {m for m in other if m and m != "biolang" and m not in sys.stdlib_module_names}
+    assert imported == set(ENGINE_EXTRAS), f"the engine imports {sorted(imported)}"
+    packaged = tomllib.loads((out / "pyproject.toml").read_text())["project"]["optional-dependencies"]
+    application = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["optional-dependencies"]
+    for module, extra in ENGINE_EXTRAS.items():
+        assert packaged.get(extra) == application[extra], (
+            f"{module} is installed by the application's `{extra}` extra {application[extra]}, "
+            f"and the package declares {packaged.get(extra)} for it"
+        )
 
 
 def test_the_engine_carries_its_own_pytest_suite_and_it_passes_in_isolation(built):

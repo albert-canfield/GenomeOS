@@ -162,6 +162,7 @@ testpaths = ["tests"]
 
 [project.optional-dependencies]
 compose = ["process-bigraph>=1.8.4"]
+roadrunner = ["libroadrunner>=2.10"]
 sbml = ["python-libsbml>=5.20"]
 
 [build-system]
