@@ -1,0 +1,766 @@
+{
+  "result": "pgs_panel_inventory",
+  "date": "2026-10-10",
+  "question": "is there a public individual-level panel of the person's declared group for the polygenic scores lane-pgs left UNKNOWN?",
+  "person": "HG002",
+  "declared_group": "asj",
+  "declared_group_label": "Ashkenazi Jewish",
+  "declared_group_source": "the ancestry the GIAB donors declared (lane-pgs's DECLARED); never inferred, and never replaced by a group a panel does cover",
+  "gate": {
+    "min_people": 100,
+    "min_people_reads": "at least 100 people carrying the declared group's label in the panel, unrelated to each other and to the person. At 100 people an empirical percentile near the middle carries a 95% binomial interval of about +/-10 points (1.96 * sqrt(0.25 / 100) = 0.098), and the chi-square interval of a variance read from them spans about [0.77, 1.35] times the estimate (df 99), against [0.70, 1.77] for the 39 HPRC people lane-pgs had (df 37), whose lower bound for height-3290 sat at 1.016",
+    "access": "open",
+    "access_reads": "the per-person genotypes download without an application, a data-access committee, a signed letter, a login, or a request to the authors, under terms that permit research use; anything else fails the gate whatever its size",
+    "individual_level": "per-person genotypes (sequence or array calls) are released; aggregate allele frequencies, which lane-pgs already uses, do not qualify",
+    "label": "a panel person belongs to the declared group only through the panel's OWN population label (the sampling population the panel publishes): for asj, a label naming Ashkenazi Jews (ASJ_LABEL); for the other gnomAD groups, the frozen 1000 Genomes code table THOUSAND_GROUP. No person, panel or HG002, is assigned to a group by genetic similarity, and HG002's declared group (asj, as its donors declared) is never replaced by one a panel covers",
+    "unrelated": "people are counted once per family: a panel's own unrelated set where it publishes one (1000 Genomes phase 3's 2,504), founders only in a trio, and the person and the person's first-degree relatives (RELATIVES) never",
+    "coverage_floor": 0.8,
+    "coverage": "evaluated only for a candidate that meets access, individual level, label and size: the score's variants with a directly called genotype in the panel's release (no imputation) must carry at least coverage_floor of the score's total |weight|, the bar lane-pgs used",
+    "stop": "if no candidate meets the gate for the person's declared group, the lane stops and the inventory is the result: nothing is registered, no score is computed on any panel, and the person's UNKNOWN for PGS000297 and PGS000018 stands",
+    "other_groups": "for every other gnomAD group the inventory records which candidates meet access, individual level, label and size (coverage not evaluated): what a later registration could use for a person who declares that group. Descriptive; no score is computed"
+  },
+  "scores_left_unknown": {
+    "PGS000297": "height, 3,290 SNPs: R1 1.53 [1.016, 2.56] on the HPRC panel, independence fails",
+    "PGS000018": "metaGRS (coronary artery disease), 1,745,158 variants: R1 3.19 [2.12, 5.34], independence fails, and above the 20,000-variant per-variant lookup cap"
+  },
+  "scores_for_cross_check": {
+    "PGS000004": "PRS313 (breast cancer): R1 1.06 [0.70, 1.77], independence holds",
+    "PGS000115": "LDL-C, 223 variants: R1 0.63 [0.42, 1.06], independence holds"
+  },
+  "candidates": [
+    {
+      "candidate": "1kgp3",
+      "name": "1000 Genomes Project phase 3 (IGSR), 2,504 unrelated people; the same people re-sequenced at 30x by NYGC",
+      "data": "whole-genome sequence calls",
+      "access": "open",
+      "terms": "IGSR: no access restriction (Fort Lauderdale data-release principles)",
+      "metadata": "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel",
+      "count_from": "metadata",
+      "people_in_metadata": 2504,
+      "people_counted": 2504,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 661,
+        "ami": 0,
+        "amr": 347,
+        "asj": 0,
+        "eas": 504,
+        "fin": 99,
+        "mid": 0,
+        "nfe": 404,
+        "sas": 489
+      },
+      "declared_group_people": 0,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 0 asj people, fewer than 100"
+      ],
+      "note": "the 2,504 people of the phase 3 unrelated set, by the project's own population code"
+    },
+    {
+      "candidate": "hgdp",
+      "name": "HGDP-CEPH whole genomes (Bergstrom et al. 2020, Science 367:eaay5012)",
+      "data": "whole-genome sequence calls",
+      "access": "open",
+      "terms": "public release on the Sanger and ENA servers, no application",
+      "metadata": "https://ngs.sanger.ac.uk/production/hgdp/hgdp_wgs.20190516/metadata/hgdp_wgs.20190516.metadata.txt",
+      "count_from": "metadata",
+      "people_in_metadata": 929,
+      "people_counted": 929,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 0,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 0,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 0 asj people, fewer than 100"
+      ],
+      "note": "this release publishes no relatedness flag, so per-group counts are upper bounds on the unrelated people"
+    },
+    {
+      "candidate": "sgdp",
+      "name": "Simons Genome Diversity Project (Mallick et al. 2016, Nature 538:201)",
+      "data": "whole-genome sequence calls",
+      "access": "open",
+      "terms": "279 samples public; 21 under a signed letter and 44 (Fan et al.) under a signed letter with delay, which fail the access gate",
+      "metadata": "https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/SGDP_metadata.279public.21signedLetter.44Fan.samples.txt",
+      "count_from": "metadata",
+      "people_in_metadata": 279,
+      "people_counted": 279,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 0,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 0,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 0 asj people, fewer than 100"
+      ],
+      "note": "the fully public samples only; 65 rows are signed-letter or do-not-use and fail the access gate by name"
+    },
+    {
+      "candidate": "hprc2",
+      "name": "Human Pangenome Reference Consortium release 2",
+      "data": "phased diploid assemblies",
+      "access": "open",
+      "terms": "HPRC data release: open access on AWS and AnVIL",
+      "metadata": "https://raw.githubusercontent.com/human-pangenomics/hprc_intermediate_assembly/main/data_tables/sample/hprc_release2_sample_metadata.csv",
+      "count_from": "metadata",
+      "people_in_metadata": 234,
+      "people_counted": 233,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 0,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 0,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 0 asj people, fewer than 100"
+      ],
+      "note": "a release-2 child whose parents are also in the release is counted as related"
+    },
+    {
+      "candidate": "gnomad_hgdp_1kg",
+      "name": "gnomAD v3.1.2 HGDP + 1000 Genomes subset (the same people as 1kgp3 and hgdp, jointly called), with gnomAD's inferred group per sample",
+      "data": "whole-genome sequence calls",
+      "access": "open",
+      "terms": "gnomAD release on public cloud buckets, no application",
+      "metadata": "https://storage.googleapis.com/gcp-public-data--gnomad/release/3.1.2/vcf/genomes/gnomad.genomes.v3.1.2.hgdp_1kg_subset_sample_meta.tsv.bgz",
+      "count_from": "metadata (the projects' own population labels; gnomAD's inferred group is recorded beside them as description, never as a label)",
+      "people_in_metadata": 4151,
+      "people_counted": 3431,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 670,
+        "ami": 0,
+        "amr": 349,
+        "asj": 0,
+        "eas": 499,
+        "fin": 99,
+        "mid": 0,
+        "nfe": 428,
+        "sas": 498
+      },
+      "declared_group_people": 0,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 0 asj people, fewer than 100"
+      ],
+      "note": "labels are the HGDP and 1000 Genomes projects' own; gnomAD's inferred group posterior is not read as a label"
+    },
+    {
+      "candidate": "aadr_ho",
+      "name": "Allen Ancient DNA Resource v66.p1, present-day people on the Affymetrix Human Origins array (public subset)",
+      "data": "array genotypes (about 600,000 SNPs)",
+      "access": "open",
+      "terms": "Harvard Dataverse doi:10.7910/DVN/FFIDCW, public (.PUB) files",
+      "metadata": "https://dataverse.harvard.edu/api/access/datafile/13994526",
+      "count_from": "metadata (the .ind file's population column)",
+      "people_in_metadata": 27090,
+      "people_counted": 27090,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 8,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 8,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 8 asj people, fewer than 100"
+      ],
+      "note": "504 rows carry AADR's own QCremove, Ignore or outlier marks and are dropped; this file does not separate present-day from ancient people, so the count is an upper bound on present-day people"
+    },
+    {
+      "candidate": "ebc_jew2010",
+      "name": "Estonian Biocentre free data: Behar et al. 2010, Nature 466:238, Jewish populations",
+      "data": "array genotypes (Illumina)",
+      "access": "open",
+      "terms": "Estonian Biocentre free data repository, download without registration",
+      "metadata": "https://evolbio.ut.ee/jew/",
+      "count_from": "metadata (the released sample file's population column)",
+      "people_in_metadata": 466,
+      "people_counted": 466,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 21,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 21,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 21 asj people, fewer than 100"
+      ],
+      "note": "466 people in the sheet, 466 of them in the released genotype set"
+    },
+    {
+      "candidate": "ebc_khazar2013",
+      "name": "Estonian Biocentre free data: Behar et al. 2013, Human Biology 85:859, Ashkenazi origins",
+      "data": "array genotypes (Illumina)",
+      "access": "open",
+      "terms": "Estonian Biocentre free data repository, download without registration",
+      "metadata": "https://evolbio.ut.ee/khazar/",
+      "count_from": "metadata (the released sample file's population column)",
+      "people_in_metadata": 1774,
+      "people_counted": 1774,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 21,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 21,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 21 asj people, fewer than 100"
+      ],
+      "note": "the release carries no population column; only the people it shares with the 2010 release have a machine-readable label, and the rest count for no group"
+    },
+    {
+      "candidate": "giab",
+      "name": "Genome in a Bottle Ashkenazi trio (HG002 son, HG003 father, HG004 mother)",
+      "data": "whole-genome sequence calls",
+      "access": "open",
+      "terms": "NIST GIAB, public domain; the donors are Personal Genome Project participants",
+      "metadata": null,
+      "count_from": "the trio's published pedigree: the person and the person's two parents",
+      "people_in_metadata": 3,
+      "people_counted": 0,
+      "declared_size": null,
+      "group_counts": {
+        "afr": 0,
+        "ami": 0,
+        "amr": 0,
+        "asj": 0,
+        "eas": 0,
+        "fin": 0,
+        "mid": 0,
+        "nfe": 0,
+        "sas": 0
+      },
+      "declared_group_people": 0,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: 0 asj people, fewer than 100"
+      ],
+      "note": "the person and the person's two parents: by the gate's unrelated rule the person's own panel counts none of them"
+    },
+    {
+      "candidate": "tagc",
+      "name": "The Ashkenazi Genome Consortium phase I (Carmi et al. 2014, Nat Commun 5:4835), EGAD00001000781",
+      "data": "whole-genome sequence calls (Complete Genomics, 50x)",
+      "access": "controlled",
+      "terms": "European Genome-phenome Archive, controlled access through data-access committee EGAC00001000151 (policy EGAP00001000190)",
+      "metadata": "https://metadata.ega-archive.org/studies/EGAS00001000664/datasets",
+      "count_from": "metadata (EGA's dataset record: num_samples and access_type)",
+      "people_in_metadata": null,
+      "people_counted": null,
+      "declared_size": 128,
+      "group_counts": null,
+      "declared_group_people": null,
+      "meets_size_access_label": false,
+      "fails": [
+        "access: controlled (European Genome-phenome Archive, controlled access through data-access committee EGAC00001000151 (policy EGAP00001000190))",
+        "size: not counted"
+      ],
+      "note": "EGA's own record: EGAD00001000781 128 samples, access controlled, policy EGAP00001000190"
+    },
+    {
+      "candidate": "pgp",
+      "name": "Harvard Personal Genome Project public profiles",
+      "data": "mixed: whole genomes and consumer arrays uploaded per participant",
+      "access": "open",
+      "terms": "CC0 per participant",
+      "metadata": "https://my.pgp-hms.org/google_surveys/1",
+      "count_from": "metadata (the participant survey's ancestry answers), when the site answers",
+      "people_in_metadata": null,
+      "people_counted": null,
+      "declared_size": null,
+      "group_counts": null,
+      "declared_group_people": null,
+      "meets_size_access_label": false,
+      "fails": [
+        "size: not counted"
+      ],
+      "note": "the participant survey that carries the ancestry answers does not answer: https://my.pgp-hms.org/google_surveys/1 returns a 301 to itself (checked 2026-10-10), so no count can be taken from it. The project also uploads consumer array and whole-genome files per participant with no one population label"
+    },
+    {
+      "candidate": "controlled_cohorts",
+      "name": "application-controlled cohorts holding Ashkenazi Jewish people (dbGaP studies, UK Biobank, All of Us, TOPMed)",
+      "data": "array or sequence",
+      "access": "controlled",
+      "terms": "each needs an access application; excluded by the brief",
+      "metadata": null,
+      "count_from": "not counted: excluded by access before any count matters",
+      "people_in_metadata": null,
+      "people_counted": null,
+      "declared_size": null,
+      "group_counts": null,
+      "declared_group_people": null,
+      "meets_size_access_label": false,
+      "fails": [
+        "access: controlled (each needs an access application; excluded by the brief)",
+        "size: not counted"
+      ],
+      "note": "each needs an access application, which the lane may not make"
+    }
+  ],
+  "other_groups": {
+    "afr": {
+      "label": "African/African American",
+      "counts": {
+        "1kgp3": 661,
+        "gnomad_hgdp_1kg": 670
+      },
+      "qualifying": [
+        "1kgp3",
+        "gnomad_hgdp_1kg"
+      ]
+    },
+    "amr": {
+      "label": "Admixed American",
+      "counts": {
+        "1kgp3": 347,
+        "gnomad_hgdp_1kg": 349
+      },
+      "qualifying": [
+        "1kgp3",
+        "gnomad_hgdp_1kg"
+      ]
+    },
+    "eas": {
+      "label": "East Asian",
+      "counts": {
+        "1kgp3": 504,
+        "gnomad_hgdp_1kg": 499
+      },
+      "qualifying": [
+        "1kgp3",
+        "gnomad_hgdp_1kg"
+      ]
+    },
+    "fin": {
+      "label": "Finnish",
+      "counts": {
+        "1kgp3": 99,
+        "gnomad_hgdp_1kg": 99
+      },
+      "qualifying": []
+    },
+    "nfe": {
+      "label": "non-Finnish European",
+      "counts": {
+        "1kgp3": 404,
+        "gnomad_hgdp_1kg": 428
+      },
+      "qualifying": [
+        "1kgp3",
+        "gnomad_hgdp_1kg"
+      ]
+    },
+    "sas": {
+      "label": "South Asian",
+      "counts": {
+        "1kgp3": 489,
+        "gnomad_hgdp_1kg": 498
+      },
+      "qualifying": [
+        "1kgp3",
+        "gnomad_hgdp_1kg"
+      ]
+    }
+  },
+  "note": "a percentile is a position among people of the stated group on one score; it is not a risk. The other_groups counts are descriptive: no score is computed for anyone",
+  "seconds": 0.2,
+  "outcome": "NO_PANEL_QUALIFIES",
+  "reading": "No public individual-level panel qualifies for Ashkenazi Jewish (asj): of 12 candidates examined, the largest count of people carrying that group's own label in an openly downloadable release is 21 (ebc_jew2010), against the gate's minimum of 100 fixed before these counts were taken. The one panel of that group at the required size is controlled-access (tagc, 128 samples, EGA EGAD00001000781 under data-access committee EGAC00001000151), which the lane may not apply for. Nothing is registered, no score is computed on any panel, and the person's UNKNOWN for PGS000297 (height, 3,290 SNPs), PGS000018 (metaGRS (coronary artery disease), 1,745,158 variants) stands. This is a statement about what is published, not about the person.",
+  "largest_count_any_access": {
+    "candidate": "ebc_jew2010",
+    "people": 21
+  },
+  "largest_count_open_access": {
+    "candidate": "ebc_jew2010",
+    "people": 21
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "1000 Genomes Project phase 3 (IGSR), 2,504 unrelated people; the same people re-sequenced at 30x by NYGC -- sample metadata only",
+        "version": "IGSR: no access restriction (Fort Lauderdale data-release principles)"
+      },
+      {
+        "accession": "HGDP-CEPH whole genomes (Bergstrom et al. 2020, Science 367:eaay5012) -- sample metadata only",
+        "version": "public release on the Sanger and ENA servers, no application"
+      },
+      {
+        "accession": "Simons Genome Diversity Project (Mallick et al. 2016, Nature 538:201) -- sample metadata only",
+        "version": "279 samples public; 21 under a signed letter and 44 (Fan et al.) under a signed letter with delay, which fail the access gate"
+      },
+      {
+        "accession": "Human Pangenome Reference Consortium release 2 -- sample metadata only",
+        "version": "HPRC data release: open access on AWS and AnVIL"
+      },
+      {
+        "accession": "Genome in a Bottle Ashkenazi trio (HG002 son, HG003 father, HG004 mother) -- sample metadata only",
+        "version": "NIST GIAB, public domain; the donors are Personal Genome Project participants"
+      },
+      {
+        "accession": "gnomAD v3.1.2 HGDP + 1000 Genomes subset (the same people as 1kgp3 and hgdp, jointly called), with gnomAD's inferred group per sample -- sample metadata only",
+        "version": "gnomAD release on public cloud buckets, no application"
+      },
+      {
+        "accession": "Allen Ancient DNA Resource v66.p1, present-day people on the Affymetrix Human Origins array (public subset) -- sample metadata only",
+        "version": "Harvard Dataverse doi:10.7910/DVN/FFIDCW, public (.PUB) files"
+      },
+      {
+        "accession": "Estonian Biocentre free data: Behar et al. 2010, Nature 466:238, Jewish populations -- sample metadata only",
+        "version": "Estonian Biocentre free data repository, download without registration"
+      },
+      {
+        "accession": "Estonian Biocentre free data: Behar et al. 2013, Human Biology 85:859, Ashkenazi origins -- sample metadata only",
+        "version": "Estonian Biocentre free data repository, download without registration"
+      },
+      {
+        "accession": "The Ashkenazi Genome Consortium phase I (Carmi et al. 2014, Nat Commun 5:4835), EGAD00001000781 -- sample metadata only",
+        "version": "European Genome-phenome Archive, controlled access through data-access committee EGAC00001000151 (policy EGAP00001000190)"
+      },
+      {
+        "accession": "Harvard Personal Genome Project public profiles -- sample metadata only",
+        "version": "CC0 per participant"
+      },
+      {
+        "accession": "application-controlled cohorts holding Ashkenazi Jewish people (dbGaP studies, UK Biobank, All of Us, TOPMed) -- sample metadata only",
+        "version": "each needs an access application; excluded by the brief"
+      },
+      {
+        "accession": "lane-pgs's committed polygenic reference result, for the scores left UNKNOWN and the independence ratios the panel size is set against",
+        "version": "data/results/pgs_reference.json (committed 0d19277, registered e9f0c95)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/pgs_panel/1kgp3.panel",
+        "sha256": "b4023dc6ee2d62ee89c8d4d347db4d348e65518d66d346574cdae7a4bbd76858",
+        "bytes": 55156,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/aadr_v66.p1_HO.PUB.ind",
+        "sha256": "51f99bee3667b5c3a97b663cc12fd3e25486cf64049782657d99db347b65509e",
+        "bytes": 1176253,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/ebc_jew2010.fam",
+        "sha256": "4f4af0c1ff0e9652a82c17876a1f07a53f92b6c2cf718a011cf9af8be6cbb9a6",
+        "bytes": 12854,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/ebc_jew2010_samples.xlsx",
+        "sha256": "35d319ed381c0ba40d530ff1aaee879210be4b313f7e4f8a4b262d71cb94c2bf",
+        "bytes": 60011,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/ebc_khazar2013_full_panel.fam",
+        "sha256": "6843a2933eab2bda057c8df642df31c3668eb6c7be2d7cbcfbbb4953654c9c26",
+        "bytes": 51650,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/gnomad_hgdp_1kg_sample_meta.tsv.bgz",
+        "sha256": "d5c212dd6534fbaf6deb1110cc70a6e9fd0322b97f27d6f0acde2a3fa6cb52a9",
+        "bytes": 3409856,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/hgdp_metadata.txt",
+        "sha256": "da83551d80ae3ac189db620534a61a0534c052dfceedaba5b84613bb1b083e78",
+        "bytes": 109538,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/hprc2_sample_metadata.csv",
+        "sha256": "16503c78a616e34e1b1e529baa0d44460c4735020569725c30ebdc5897f68112",
+        "bytes": 25939,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/sgdp_metadata.txt",
+        "sha256": "1e4f0076ddadc57ce9feb252c1f9a782ea9d5ba4e6606627fcd60e9c5bf2ef33",
+        "bytes": 54485,
+        "partition": "not an evaluation partition: the search's inputs"
+      },
+      {
+        "path": "data/knowledge/pgs_panel/tagc_ega_datasets.json",
+        "sha256": "fe4824bbf868020966f26f434e8d335f6f581fd9aec167bf2a6713a50b3ac78a",
+        "bytes": 432,
+        "partition": "not an evaluation partition: the search's inputs"
+      }
+    ],
+    "input_count": 10,
+    "assembly": "n/a: no genotype, variant or coordinate is read here; the inventory counts people and reads access terms",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "n/a: no interval is read"
+    },
+    "parameters": {
+      "person": "HG002",
+      "declared_group": "asj",
+      "min_people": 100,
+      "access": "open",
+      "coverage_floor": 0.8,
+      "candidates": [
+        "1kgp3",
+        "hgdp",
+        "sgdp",
+        "hprc2",
+        "giab",
+        "gnomad_hgdp_1kg",
+        "aadr_ho",
+        "ebc_jew2010",
+        "ebc_khazar2013",
+        "tagc",
+        "pgp",
+        "controlled_cohorts"
+      ],
+      "gate_committed_in": "genomeos/genome/pgs_panel.py (167be45), before these counts",
+      "people_read": {
+        "1kgp3": 2504,
+        "hgdp": 929,
+        "sgdp": 279,
+        "hprc2": 234,
+        "gnomad_hgdp_1kg": 4151,
+        "aadr_ho": 27090,
+        "ebc_jew2010": 466,
+        "ebc_khazar2013": 1774,
+        "giab": 3,
+        "tagc": null,
+        "pgp": null,
+        "controlled_cohorts": null
+      }
+    },
+    "exclusions": [
+      "every genotype of every panel person: this search reads sample metadata only",
+      "every polygenic score on every panel: none is computed here",
+      "the person and the person's first-degree relatives, in the person's own panel",
+      "a panel person a release's own metadata flags as related, or as a child of parents in the same release",
+      "SGDP's signed-letter and do-not-use samples, and AADR's own QCremove, Ignore and outlier rows",
+      "any group assignment by genetic similarity: only a panel's own population label"
+    ],
+    "partitions": "n/a: a search and a gate, with no outcome measured",
+    "code_cleanliness": {
+      "git_sha": "854e2006388cd9211812bc2ff1e032321cd4f409",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/pgs_panel_inventory.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pgs_panel_inventory.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pgs_panel_inventory.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_panel.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/pgs_panel_inventory.py"
+      ],
+      "counting_path_count": 93,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "854e2006388cd9211812bc2ff1e032321cd4f409",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/pgs_panel_inventory.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "854e2006388cd9211812bc2ff1e032321cd4f409",
+      "code_cleanliness_git_sha": "854e2006388cd9211812bc2ff1e032321cd4f409",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 854e200"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 408,
+      "opens_under_data": 20,
+      "files_read": 10,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
