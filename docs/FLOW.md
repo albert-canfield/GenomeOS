@@ -114,3 +114,37 @@ clicking one traces it through DNA → RNA → protein like any variant typed
 into the box. Genotypes are measured (each person's file); consequences are
 derived by the local trace on the canonical transcript. Served in `/api/flow`
 as `individuals`.
+
+## The trace on the tissue's own isoform (2026-10-10)
+
+The consequence trace used to follow the canonical transcript only, so a
+variant's predicted consequence "in the cerebellum" could describe APP770
+when the cerebellum makes APP695. `trace_gene_in_tissue` (genomeos/flow/tissue.py)
+now takes a tissue and traces that tissue's dominant isoform beside the
+canonical one; `TissueTrace.substitute` returns the consequence on the
+tissue's isoform, the canonical consequence beside it, and how they compare
+(same, class_changed, residue_changed, change_differs).
+
+The tissue's dominant isoform comes from the cached GTEx v8 median transcript
+TPM (`data/knowledge/expression/gtex_isoforms_*.json`, read only, never
+fetched). It is ESTABLISHED when GTEx measured the tissue, the top isoform
+reaches 1 TPM, the next isoform is below 0.9 of the top, and the top isoform
+codes a protein in the local GENCODE v50 models. Otherwise the call is
+UNKNOWN with its reason (no_isoform_data, tissue_not_measured, low_expression,
+tie, dominant_not_in_local_models, dominant_non_coding) and the consequence is
+UNKNOWN: the trace never falls back to the canonical transcript. The isoform is
+GTEx's median across donors, not one person's own expression, and both
+consequences are predictions of the local trace.
+
+**Registered census (`data/results/flow_tissue_census_registration.json`,
+written before any count).** Over HG002's own coding SNVs in the genes the
+project holds GTEx isoform tables for (99 tables; 96 were fetched for the
+translation-disagreement genes, plus APP, FUT2 and TP53, so this is the
+project's set and not a sample of the genome), how many change consequence
+class or residue number between the canonical transcript and each tissue's
+dominant isoform, per tissue, with denominators. A census of disagreement
+between two predictions, not an accuracy claim; no prediction is registered.
+The script (`scripts/flow_tissue_census.py`), tissue.py and trace.py are
+pinned by sha256 and the tables by digest; the run refuses if any moved. The
+committed result carries counts only: no position, allele, genotype or protein
+change of the person.

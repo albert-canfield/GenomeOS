@@ -1,0 +1,786 @@
+{
+  "result": "flow_tissue_census_registration",
+  "date": "2026-10-10",
+  "registration": {
+    "question": "Over one person's own coding SNVs, how many change consequence class or residue number between the canonical transcript and a tissue's dominant isoform, per tissue, with denominators? A census of disagreement between two predictions of the local trace; not a test and not an accuracy claim.",
+    "person": "HG002: GIAB v4.2.1 benchmark calls (PASS rows inside the benchmark regions, chr1-22) imported locally (genomeos.genome.individuals.vcf_path). Its genotypes never enter the committed result: the result carries counts only, with no position, allele, genotype or protein change.",
+    "genes": "every cached GTEx isoform table (data/knowledge/expression/gtex_isoforms_*.json, pinned by digest in this file's manifest) that names a GTEx gencode_id, matched to the local GENCODE v50 models by the unversioned Ensembl gene id, on chr1-22 where the person has calls and the reference sequence is local, and whose canonical transcript codes a protein. Tables without a gencode_id ('not in GTEx') and genes the models or the person's chromosomes lack are counted as exclusions. A gene with no universe variant counts in the gene tally and adds nothing to the per-tissue counts.",
+    "gene_set_caveat": "the cached tables are the project's, not a sample of the genome: 96 of the 99 were fetched for the translation-disagreement genes (genes whose reference canonical transcript does not translate to the UniProt protein; data/results/translation_disagreements_isoforms.json) and the other three are APP, FUT2 and TP53. The census describes these genes only and is not extrapolated. A genome-wide census needs the GTEx v8 transcript TPM table, a download this lane was not cleared to make.",
+    "variants": "the person's VCF rows inside the gene's locus with a one-base REF, one one-base ALT and a genotype carrying a non-reference allele, read on the canonical transcript and on every tissue's established dominant isoform; the gene's universe is those in the CDS of at least one of them. Indels, multi-allelic rows and rows whose genotype carries no ALT are counted as exclusions.",
+    "canonical": "the transcript trace_gene follows (genomeos/flow/trace.py canonical_transcript): the Ensembl_canonical-tagged coding transcript in the local models, else the longest CDS.",
+    "tissues": "every tissue named in the included tables (GTEx tissueSiteDetailId), each read for every census gene; a tissue a gene's table does not measure is UNKNOWN tissue_not_measured for it.",
+    "rule": {
+      "min_tpm": 1.0,
+      "tie_ratio": 0.9,
+      "established": "the gene has an isoform table; GTEx measured the tissue; the top transcript's median TPM in the tissue is at least min_tpm; the next transcript's is below tie_ratio times the top's; the top transcript is in the local models and codes a protein there",
+      "reasons": [
+        "no_isoform_data",
+        "tissue_not_measured",
+        "low_expression",
+        "tie",
+        "dominant_not_in_local_models",
+        "dominant_non_coding"
+      ],
+      "never": "an UNKNOWN tissue is never read on the canonical transcript in its place"
+    },
+    "comparison": {
+      "same": "same consequence class, residue number, HGVS p. and c. on both, or the tissue's dominant isoform IS the canonical transcript",
+      "class_changed": "a different consequence class (e.g. missense on the canonical, intron on the tissue's isoform; synonymous on one, missense on the other)",
+      "residue_changed": "the same class at a different residue number",
+      "change_differs": "the same class and residue number, another amino acid or codon (counted beside the disagreement, not in it)",
+      "disagree": "class_changed + residue_changed"
+    },
+    "outputs": "per tissue: variants (the denominator, the same for every tissue), unknown by reason, established, same_transcript, other_transcript, same, class_changed, residue_changed, change_differs, disagree, genes_established_other_transcript, genes_disagreeing; over all variant-tissue pairs the same sums (pairs = variants x tissues); the tissues ranked by disagree; per gene counts only (variants, coding_on_canonical, tissues where another isoform is established, tissues with a disagreement); the exclusions with their counts",
+    "prediction": "none: a census, registered so that the gene set, the variant set, the rule and the wording are fixed before any count is seen",
+    "wording": {
+      "headline": "Over {variants} coding SNVs of {person} in {genes} genes with cached GTEx isoform tables, the consequence predicted on a tissue's dominant isoform differs in class or residue number from the one predicted on the canonical transcript in {disagree} of {established} variant-tissue pairs where the tissue's isoform is established ({unknown} of {pairs} pairs UNKNOWN; per tissue in per_tissue).",
+      "reading": "Both consequences are predictions of the local trace on GTEx's population-median isoform, not measurements and not this person's own expression; the genes are the project's cached set, not a sample of the genome.",
+      "if_no_variant": "No coding SNV of {person} falls in the census genes: the census is empty, and says nothing about disagreement."
+    },
+    "what_this_cannot_say": [
+      "which consequence is right: both are predictions; neither is checked against protein data",
+      "whether this person makes the isoform: the call is GTEx's median across donors",
+      "anything about genes outside the cached tables, or about indels",
+      "whether GENCODE v26's model of a transcript (GTEx's quantification) equals the v50 model traced"
+    ],
+    "what_is_already_known": [
+      "the area C reading that the cerebellum's dominant APP isoform is APP695 while the canonical is APP770 (genomeos individual protein, ROADMAP D)",
+      "data/results/translation_disagreements_isoforms.json, published earlier, names each of its 96 genes' most often dominant transcript and whether it codes in the local models (per gene, not per tissue, and with no person in it)",
+      "before this registration the census code ran only on synthetic transcripts (tests) and on a synthetic person outside the registry (one SNV at every eleventh base of each census gene, the reference base read, the next base by A>G, C>T, G>A, T>C as ALT, all heterozygous) to check that it runs and which files it reads; it has not been run on HG002 or on any real person",
+      "what that dry run printed, which reflects the GTEx side and the gene set, not any person: 99 tables, 86 with a gencode_id, 83 census genes traced; 11,666 synthetic coding SNVs (11,653 coding on the canonical); over 629,964 variant-tissue pairs (54 tissues), 172,339 established (122,106 on the canonical itself, 50,233 on another isoform) and 457,625 UNKNOWN (low_expression 420,547, dominant_non_coding 19,650, tie 14,617, dominant_not_in_local_models 2,811); class_changed 10,104, residue_changed 20,972, change_differs 0. A synthetic SNV every eleventh base weights genes by length, so these figures are not an expectation for a person's variants"
+    ]
+  },
+  "tables": 99,
+  "frozen": {
+    "genomeos/flow/tissue.py": "d02965931b8979f7b591b6b492309efca36f941c44fc192c4331373af294cc3a",
+    "genomeos/flow/trace.py": "8a132cfac8216555c2592be0cdac77c267cc7378980e17584262ba80b39b97f9",
+    "scripts/flow_tissue_census.py": "4675a49b522c948931292e0f413f3b9dd2545396111d1619085a811b268f2723"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "GTEx Portal API v2 medianTranscriptExpression, datasetId gtex_v8",
+        "version": "GTEx v8 (RSEM transcript TPM on GENCODE v26 models), cached per gene by genomeos.molecules.rna.gtex_isoforms"
+      },
+      {
+        "accession": "GENCODE comprehensive annotation (GFF3)",
+        "version": "v50"
+      },
+      {
+        "accession": "UCSC hg38 chromosome FASTA (GRCh38)",
+        "version": "hg38"
+      },
+      {
+        "accession": "GIAB v4.2.1 benchmark calls (open-consent HG002), PASS rows per chromosome",
+        "version": "NISTv4.2.1 GRCh38, chr1-22"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/expression/gtex_isoforms_*.json",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_AGAP9.json",
+            "sha256": "f9f8622db6c8e685eb385a9aadfe361de82624fd7c245dac535d038dceda21a9",
+            "bytes": 6577
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_AKR7L.json",
+            "sha256": "243ef6552a8baed99af238fa80f2bc818e9ba34ff2d5f88981d18f0ef7a7463c",
+            "bytes": 17185
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_APP.json",
+            "sha256": "187d4d7b518a486b97aad7dad142fb0f0839c441955ae5604c284499f67e8d75",
+            "bytes": 35412
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ARL9.json",
+            "sha256": "38ef90a3fe86665bf19960ccfcd367d8e925008e707787e2b3a40af1f51d1ff2",
+            "bytes": 12768
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ASPRV1.json",
+            "sha256": "cb21020df33c270a5714d1dea04a1981b66bdd6080e4dbed157557630f6eed05",
+            "bytes": 6520
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_C10ORF95.json",
+            "sha256": "b63c7f80a15db16b2ae49590adf063f3f0c9e124118bfc1c2d5dacd06bb10712",
+            "bytes": 6500
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_C12ORF76.json",
+            "sha256": "4fc6b45de3406518f076d5d6c8268dc04f4d78cee81b3e975b3c9e97d6a884a5",
+            "bytes": 22075
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_C16ORF82.json",
+            "sha256": "da27aeb0c3f15c67e1536e4fddcc3ae83b9274b62d6c98c20c62e099aab98497",
+            "bytes": 8351
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CALML4.json",
+            "sha256": "fd2aa7396fe9e463102026bdf804d27005082ef54c3dd3d05fa43606fc66cf2f",
+            "bytes": 23614
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CAPS.json",
+            "sha256": "92320a770638e50dfec59a429d82626e62281d60729127d1e1246adbdc73a63e",
+            "bytes": 14303
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CASP12.json",
+            "sha256": "571af1ecf1eeaaca310a8a5d8e2f42ac2faad2d9b63872efcd6f23fc37423152",
+            "bytes": 29279
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CCDC28A.json",
+            "sha256": "fa70e5448f0a474c26efc476273ab75389af5d71931e47abb5e2a79ab47b309e",
+            "bytes": 9954
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CPEB2.json",
+            "sha256": "6c6926da952923b987d229f193b2ad2ac8791c5ae422b7e77a988f4a11bb102a",
+            "bytes": 25362
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CXXC4.json",
+            "sha256": "5ef3626f56c7f1e25124454861c8791ec4f0517badf4e48ad81d4e73ab824fee",
+            "bytes": 9756
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_CYP2D7.json",
+            "sha256": "28a97228f60a388e3033fbecd6a10c4b466223bd24bec2b8b7f6a0e0b78de00d",
+            "bytes": 23841
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DEFB109D.json",
+            "sha256": "06b9cbf5fb965ff3f2f633e9c74abc1e7263c582a81450631cddb5c9b9746880",
+            "bytes": 100
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DEFB112.json",
+            "sha256": "53440a228cd4570b7e9d92a7883a005e4d41e7f78c9efde20bbb015385f931d3",
+            "bytes": 1950
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DRC8.json",
+            "sha256": "dddfaa4e8f4a2f8bc367cfa3f8bb34b90289b810e176056d633dabd71edc8190",
+            "bytes": 96
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_DUSP13B.json",
+            "sha256": "742a46b17159fd49f566a268868429d0eb98051edf328051789e4cf7ea991c94",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_EPM2A.json",
+            "sha256": "aa423b6fbc5fe9fa97c3da27ec8ee0c0c12d1741728159a4b0cdaf076f0c991f",
+            "bytes": 57866
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FAM174C.json",
+            "sha256": "20acc3f82958adfe36c4ad476112f6a7b77e50beb063a1f530feccfce0a13c51",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FAM246C.json",
+            "sha256": "da85a30a9de1c82f6576b8573d3f154692564601d9336be755f396a644c54633",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FCGBP.json",
+            "sha256": "a5ef5e3b262a6d872ba488f728ee22ea81164e18e0d236ced4ae3b2f71d9b655",
+            "bytes": 9730
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FCGR2C.json",
+            "sha256": "39fcd8a554d2a6768378f3fa6fa67673054a2b76008ef84837c996c3da9f1a33",
+            "bytes": 30152
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_FUT2.json",
+            "sha256": "4d00a353f827e4e14353d161ba8ac365f4b11ccf1836ae75d1528de03fc72b7e",
+            "bytes": 12053
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GAGE12B.json",
+            "sha256": "6845d828edcd9d68115f77896d69b83e50e06e107951e38fab192b33f4b1d1db",
+            "bytes": 2045
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GCNT7.json",
+            "sha256": "46a27f2fa565db4588f16b1457973a64d88398096cf2ca008308c896432b34f7",
+            "bytes": 6201
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GPATCH4.json",
+            "sha256": "e0c2cb1b9fbf2c614af479a22968eca0ca1d7ecf4d26a849d0cbcac01e39f8d6",
+            "bytes": 31290
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_GSTT2.json",
+            "sha256": "2f842a17f56f6868c929ab033726fb17f1a3e406fff8f034a02afee856e3757d",
+            "bytes": 9358
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_HLA-DQA1.json",
+            "sha256": "13fe09b287eb1758a9b9fbcbaf8393bd520365d9105a90f2a3085aef98fcb0d3",
+            "bytes": 16550
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_IFNL4.json",
+            "sha256": "dc090f14f2a9f9c2cec6ce3aae36560abd995d37ea301b588aab4856abbbeff5",
+            "bytes": 7269
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KCNE4.json",
+            "sha256": "d323b9002a54313b2780ed0b2dd1fa8e2751eccd828a3c7e8bcc1d96d2aebad8",
+            "bytes": 8216
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KIR2DS4.json",
+            "sha256": "5c943a024af54f851d7338d7726de2db231ff8d801a89e4cf764eef6638156e3",
+            "bytes": 5136
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KLHDC7B.json",
+            "sha256": "ca89bf396d49412dcf1990a96013866cab9bdbf138a7c8b241c6025faedf25ff",
+            "bytes": 11735
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_KRTAP5-4.json",
+            "sha256": "1d40eaa8cbbdd820d9311959b0e49c4ab4675d2b038fdad943bf08225cdbf7fb",
+            "bytes": 4070
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_LCN9.json",
+            "sha256": "a0335d2e4db35c7eab733a3cbf095db97cf1303bed11f936ce4c1d328c613470",
+            "bytes": 9123
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MICA.json",
+            "sha256": "4f9b7c7ea6ad71ef891f8973b666d8dbc84932abce77116802d8889fc1979995",
+            "bytes": 9990
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MROH5.json",
+            "sha256": "d66f2a33fbbe271a89ad398aaedd47d0936038081cb5c977f6f707f599ccef13",
+            "bytes": 9091
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MSLNL.json",
+            "sha256": "1259025ed885e50692a00128adc924be0950539b6ebad1f5fa7531295bbac3b2",
+            "bytes": 8345
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUC1.json",
+            "sha256": "992d1941cc21c0b94117fe2bf2533c6d46b4eccffa55009d0f97268a958c12d5",
+            "bytes": 55348
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUC19.json",
+            "sha256": "dcd546ceb22845ea07751121eb824abc602dcc1a1b53e9dd0ec3917a1a09cf76",
+            "bytes": 21726
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUC2.json",
+            "sha256": "a714f7d3057caf66735680aea8a49686bf6d155f63958d9f6e21712cb257b7cd",
+            "bytes": 11676
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_MUCL3.json",
+            "sha256": "8522984030db2b1e0f34cf599678f5afad4bfaa4fd73dc3275375fb582438f0c",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_NOBOX.json",
+            "sha256": "92a7cfce0e2bf0dc0519fbd078889c490571712fc738dadc756f7ad73c0b0885",
+            "bytes": 3688
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_NPFFR2.json",
+            "sha256": "c7c09aa6acfa58e7a9fbedbf7b1dc643f0bb057a411037a8b00e0ff653ef1763",
+            "bytes": 10330
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_NPIPB3.json",
+            "sha256": "7a1f989f819ec063aeb3aa971e91739bf8ea1bccc1df9eac6d290a88d09d6a7f",
+            "bytes": 28142
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OOSP1.json",
+            "sha256": "718d8614f28ca4d29f740b5c243299155f545923f4d87b5d2f85620d4bfab7e5",
+            "bytes": 4117
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR10AC1.json",
+            "sha256": "b5ef6ceb34cbca670c2c517f9b8a7a61ed4ff94c41dc5ec490902f96924d3819",
+            "bytes": 2402
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR10J4.json",
+            "sha256": "61c6ea89cb56d451a342b182dda33e3c23859dedd3b6313ddd6d84b3ea1ef214",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR11H7.json",
+            "sha256": "3de00605a7fd35393670279542cfb5b56ada2959e62b6d6a1bce60fc6f901f19",
+            "bytes": 5905
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR12D1.json",
+            "sha256": "03f41041b6eea30266874cd62f12c4ef86c9cdf64dec8f6a4a7b35201b4facdb",
+            "bytes": 2043
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR13C7.json",
+            "sha256": "2cf7cdfa7dfe00a5eecca03a71f5dca8b4056a1c99f74fa8d53485a511bb21d5",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR1P1.json",
+            "sha256": "36876163c62c158798aff89f3b5f5f10f6599270a2ab589e807cabc814c51154",
+            "bytes": 1969
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR2B8.json",
+            "sha256": "76868d1a1dcbef375b9f63ebea86d454c0a1b3c010ce326bbaed1b97776bcefb",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR2T7.json",
+            "sha256": "459f9bb0650a040e28a842c7d90bb15474912f5d777a0d4cf67b41f5550f9b8c",
+            "bytes": 2104
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4A8.json",
+            "sha256": "37360328ae00e6488fbd2ffc616028a08527d55d9b8f2aca85b0f1efa6256b79",
+            "bytes": 1969
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4C45.json",
+            "sha256": "b09cfd1a96d0c3d8feda1e0ee6c36d694f74ed1690706d684e130be2904e6a42",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4K3.json",
+            "sha256": "883f7b9d83faabdaafc1098cda361c2d1e67f1c7a6fd261772270c7ad83906fe",
+            "bytes": 1969
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR4Q2.json",
+            "sha256": "f0bd6043caf5c9f7df5161a64eebdc3a299b7953342574536ebb8adab2945846",
+            "bytes": 3552
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR52P1.json",
+            "sha256": "75e57457492df92f452b3ce3db1c77f7cf336a7eb1116a09508683f455d61a0a",
+            "bytes": 98
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5AC1.json",
+            "sha256": "1100ac1d845fc083c915f1895112c6682107b7bc491e93ac4016c3d8c629b6bb",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5AL1.json",
+            "sha256": "cf3154a45718d202e7f0c24fa1b70b61cdb91c396c981d8ce7fa7c8d83c4992b",
+            "bytes": 1971
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5G3.json",
+            "sha256": "4bece5ff1e2b7faa1a3462c9607d49e22b3267f4518903e57c5d7921a98ea646",
+            "bytes": 2138
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR5H8.json",
+            "sha256": "86ccd36bcf69c9ad08767a2c5aa86ca367c3b56b3d459b5977f63cefb30744f0",
+            "bytes": 2223
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR8J2.json",
+            "sha256": "f9111964b48d8e0b1f8415c1be4ef0edd0726cba6bc6fb000ce1dcb99e44a7c9",
+            "bytes": 2104
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_OR9H1.json",
+            "sha256": "19e88f0f2a2949f4ab2ae2aa252d52a4760d9a85146e275cf7a8c24f64313ce2",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PANK1.json",
+            "sha256": "e0ff32029802296a91d779006dc2279302589d7abaabb7ca1344828dc74c3919",
+            "bytes": 18799
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PINX1.json",
+            "sha256": "97e9ae6d1f64a8e2399bf64a4c77c0c5d84e01f47175c05f5af4f273d62d85a8",
+            "bytes": 23465
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PLA2G2F.json",
+            "sha256": "46caf7427cde90806452a36f9fbdd2f55d0561314f534e2face50ef994cd1c2a",
+            "bytes": 5603
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PNLIPRP2.json",
+            "sha256": "f79b3e873ea7e053c23490dbf9063bb4117d25b52037cb30fabda6facfbeaee3",
+            "bytes": 9515
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRB1.json",
+            "sha256": "e3475a7956ba30ea829cab6c5cfd454994af8889ef930258fd653fa39efff02e",
+            "bytes": 7386
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRB4.json",
+            "sha256": "ccd274ddf624bc43675cb3b6d4dd4c895dcf044963e769b92df6f7cc2fe27c81",
+            "bytes": 6746
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRR33.json",
+            "sha256": "b76f430f5100914624d4f40d79b31d2d93a3ceeb64e92591eae7aff278f0a340",
+            "bytes": 6522
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PRSS3.json",
+            "sha256": "cd259ba8d1caccd263aab00fd27f51629aa14088452a047bffe7843ffefac903",
+            "bytes": 19669
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PTCHD3.json",
+            "sha256": "681cf4933faa60de1809ace73a46ded0d0332986bb130d5abab6a91d9d5f0cd9",
+            "bytes": 5843
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_PTGES3L.json",
+            "sha256": "eaff06b708319438aca14ae624829039c8044c8dabae103b591308251f001ada",
+            "bytes": 19564
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RAVER1.json",
+            "sha256": "1e3d658dd9d984039c114b6275b0e2ec866a3958a6ad594ea0284a136e92bbbf",
+            "bytes": 18147
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RESP18.json",
+            "sha256": "737e66179739e5927b0d01ac20d5e293538a3547bfb1872bb3cf7d362e15e68d",
+            "bytes": 6531
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RFLNB.json",
+            "sha256": "e6932341cc48d5945a97d4fe2a9faa8747934a867bb0d53b4bd9e1bdbcbe2ed3",
+            "bytes": 6536
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RPL36.json",
+            "sha256": "dc865268acfe31399126bc5c692bd3ccbe9ce4fb131398a377cac8418ee95078",
+            "bytes": 24103
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RSPH3.json",
+            "sha256": "f89dd657b05933535fc499418563fe20fe6dfeb5bd61bd20cda7df545e67b7f7",
+            "bytes": 11530
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_RTL8C.json",
+            "sha256": "8274432b22389efd79d65c9fe7d388acede60cc0b0f5cc2ddf1759a896cb1cd7",
+            "bytes": 97
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SAMD1.json",
+            "sha256": "f10ad36c5b962016d1bf245e2630722f3dce230100367b8e753a95bf07b77a8f",
+            "bytes": 10007
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SCOC.json",
+            "sha256": "ab414ce7f5ee68d55ada9c6881c06da35b59beeab24912de90cc9bdf6ba679c3",
+            "bytes": 28417
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SCYGR10.json",
+            "sha256": "551991032f9dc8e1b74673b0d1ebe7b486426e9e4dc06355522d1e4e710c9a93",
+            "bytes": 99
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SERPINA2.json",
+            "sha256": "a61c5bae9f740c6498f732424fbe34238e49fcb1f51c6bcda74083813d7bc59c",
+            "bytes": 2207
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SFTA3.json",
+            "sha256": "2d22de46791f44c6f9c27337d2f4598823f136836167f69cd5c8e6709394c879",
+            "bytes": 366
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SH3BGR.json",
+            "sha256": "d39b4fff917a0a6a910fdaa0c7b8e5b9957b39b58a1d6f6b664303ff8fe249db",
+            "bytes": 22588
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SIGLEC16.json",
+            "sha256": "aa9ccdbae3e0695e2df086228baa5c4eb37b4ebae810f3a75cb715e53ed48b2a",
+            "bytes": 8110
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SLC22A31.json",
+            "sha256": "908f93dd928b3c0bd4e2fe10b85022220f06648d9017f0849feaedbb5b6e6f99",
+            "bytes": 20522
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SPATA31H1.json",
+            "sha256": "85621b78afe8710467b3a7cfb19c6a70777ede0bd46e2474a888fb7bc131d48e",
+            "bytes": 101
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_SWI5.json",
+            "sha256": "fd74773c808d3e9499ae291307742aa418d44674b9870c598d98767a61d1213b",
+            "bytes": 14850
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_TGIF1.json",
+            "sha256": "cae715b32f947514a33c7765bfdb28c6d3a9a8841d5081d9f404e77e3b6196e3",
+            "bytes": 48333
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_TP53.json",
+            "sha256": "f75997df456b27bc7595866587266c4d2b4efc928f58432dc4ed079993082460",
+            "bytes": 50167
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_UBE2NL.json",
+            "sha256": "1d8d250696db78a43a378ea03b2d7540fddcb2af6a888e050589a0a848a9e362",
+            "bytes": 2224
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_VN1R5.json",
+            "sha256": "c32791c5e36c39f2d21a2837ce7de15feffc5487406cf985a355d50ee53d9a2c",
+            "bytes": 2850
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_WFDC6.json",
+            "sha256": "8db0c5181f67d309d50a2fca0c15db6e392aa59e8b9756fe022cf62c6e2cbd24",
+            "bytes": 4123
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ZFP57.json",
+            "sha256": "16a5bbcfa2ab6058954811771471d20984fdd4991a98568cb2928a2596268459",
+            "bytes": 11682
+          },
+          {
+            "path": "data/knowledge/expression/gtex_isoforms_ZNF302.json",
+            "sha256": "d918a5b4dd8f73515443d597f3ad7635b25f6ff55c0637865c7effbb2a7420b1",
+            "bytes": 35235
+          }
+        ],
+        "sha256": "db04b90c09e9884dd4aed80a65dd8da079c9b0ad1b5353f7a2629524437c0993",
+        "bytes": 1127746,
+        "files": 99,
+        "partition": null
+      }
+    ],
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "mode": "register",
+      "min_tpm": 1.0,
+      "tie_ratio": 0.9,
+      "person": "HG002"
+    },
+    "exclusions": [],
+    "partitions": "n/a: a census of one person's variants; nothing is fitted, so nothing is held out",
+    "code_cleanliness": {
+      "git_sha": "12c29e7c6dc54edc424a8d75742e75b47e3a4bf1",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/flow_tissue_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/flow_tissue_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/flow_tissue_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/multrna_census.py",
+        "scripts/pie1_registration.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_pie1.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/flow_tissue_census.py"
+      ],
+      "counting_path_count": 92,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "12c29e7c6dc54edc424a8d75742e75b47e3a4bf1",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/multrna_census.py",
+        "scripts/pie1_registration.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_pie1.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/simpler_fly.py",
+        "scripts/multrna_census.py",
+        "scripts/pie1_registration.py",
+        "scripts/simpler_fly_fetch.py",
+        "scripts/simpler_fly_run.py",
+        "tests/test_pie1.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/flow_tissue_census.py",
+        "--register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "12c29e7c6dc54edc424a8d75742e75b47e3a4bf1",
+      "code_cleanliness_git_sha": "12c29e7c6dc54edc424a8d75742e75b47e3a4bf1",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 12c29e7"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 255,
+      "opens_under_data": 99,
+      "files_read": 99,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
