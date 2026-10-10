@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
-"""BioIR v0.4 - the Biological Intermediate Representation (v0.4 adds places: docs/BIOLANG-v0.4-ECONOMY.md).
+"""BioIR, labelled 0.4 - the Biological Intermediate Representation (v0.4 adds places:
+docs/BIOLANG-v0.4-ECONOMY.md). v0.5's reader adds `Reader`, `Rule.through` and `Module.readers`, and
+since 2026-10-10 `Rule.strength` may be UNKNOWN; both under the same label, BIOIR_VERSION, until
+Albert decides the version number (docs/BIOLANG-v0.5-READER.md, open decision 3).
 
 Everything the compiler emits and the VM executes is one of these types.
 Three principles are enforced by the types themselves:
@@ -105,6 +108,12 @@ class _Unknown:
 
 
 UNKNOWN = _Unknown()
+
+#: The label every BioIR file carries as `bioir_version`, equal to the grammar's (genomeos.lang.grammar
+#: .VERSION). It stays "0.4" with v0.5's reader and UNKNOWN strengths in the format: the number is
+#: Albert's decision, open in BIOLANG-v0.5-READER.md (decision 3). A file's readers, `through` and
+#: "UNKNOWN" strengths are what tell it from a v0.4 file meanwhile; `from_dict` reads both.
+BIOIR_VERSION = "0.4"
 
 
 class Action(StrEnum):
@@ -1212,7 +1221,7 @@ class Module:
             return obj
 
         return {
-            "bioir_version": "0.4",
+            "bioir_version": BIOIR_VERSION,
             RECORDS_UNSTATED: True,
             "name": self.name,
             "imports": list(self.imports),
@@ -1350,6 +1359,7 @@ class Module:
 
 __all__ = [
     "AVOGADRO",
+    "BIOIR_VERSION",
     "COST_UNITS",
     "DECISION_ACTIONS",
     "MOLAR_UNITS",

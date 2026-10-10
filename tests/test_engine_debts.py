@@ -260,3 +260,20 @@ def test_check_reports_the_cap_and_changes_no_confidence():
     assert "pool RNAPII: 0.6 (pool)" in text
     assert {k: e.confidence for k, e in m.entities.items()} == before
     assert "cap of 0.3" not in check_module(parse_file("data/demo/repressilator.bio"))
+
+
+# ---- debt 3: version labels ---------------------------------------------------------------------------
+
+
+def test_the_grammar_and_bioir_carry_one_label_until_albert_moves_it():
+    """0.4 with v0.5's reader in: the number is Albert's (BIOLANG-v0.5-READER.md, open decision 3).
+    Held equal so that neither label moves without the other (lane-engdebts, 2026-10-10)."""
+    from genomeos.ir import BIOIR_VERSION
+    from genomeos.lang import grammar
+    from genomeos.lang import parser as parser_module
+
+    assert grammar.VERSION == BIOIR_VERSION == "0.4"
+    assert parse("module t\ngene A { }\n").to_dict()["bioir_version"] == BIOIR_VERSION
+    assert "v0.3 parser" not in (parser_module.__doc__ or "")
+    assert "Version label 0.4" in parser_module.__doc__ and "open decision 3" in parser_module.__doc__
+    assert "Albert's decision" in grammar.render()

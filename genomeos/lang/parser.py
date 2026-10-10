@@ -1,8 +1,12 @@
 # SPDX-License-Identifier: Apache-2.0
 # Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
-"""BioLang v0.3 parser: source text -> BioIR Module.
+"""BioLang parser: source text -> BioIR Module.
 
-Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
+Version label 0.4 (`grammar.VERSION`, BioIR's `bioir_version`). The parser accepts v0.1 to v0.4,
+v0.5's `reader` and `through`, and `strength: unknown`; the number stays 0.4 until Albert decides
+whether the reader makes the language v0.5 (docs/BIOLANG-v0.5-READER.md, open decision 3, tied to
+BIOLANG-v0.4-ECONOMY.md §10 decision 1). docs/BIOLANG-GRAMMAR.md is generated from this parser and
+lists every block and property; the forms below are a reminder. Prose: docs/BIOLANG-v0.1.md to v0.5.
 
     module <dotted.name>
     import <dotted.name> | <relative/path.bio>
@@ -28,6 +32,10 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     commitment <Id> { establish: cell_type = Muscle; locks: cell_type; inherit: daughters; release: never }
     reader <CellType> { open: E1, E2; poised: E3; closed: E4; unknown: E5 }   # v0.5
     rule <A> activates <B> { through: E1 }   # v0.5: held at strength 0 where E1 is not open
+    rule <A> activates <B> { strength: unknown }   # held at strength 0 in every cell; no line: 1.0
+    element <Id> { class: enhancer; targets: G }
+    compartment <Id> { parent: P; volume: 0.5; absolute_volume: 2 pL }   # v0.4; and transport, pool,
+                                                                        # allocation, regime (v0.4)
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
 one line. Blocks may nest (transcript inside gene). `#` starts a comment.
