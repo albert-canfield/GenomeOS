@@ -202,7 +202,10 @@ CENSUS_SENTENCE = (
 )
 DECISION = (
     "1. If any gene misses the HARNESS under the multiplicative form, or under either of 7d's forms in this"
-    " run, the run stops before the RNA is opened (HARNESS_DEFECT). 2. After the RNA is opened and the"
+    " run, the run stops before the RNA is opened (HARNESS_DEFECT); if the run's predictor side differs"
+    " from the committed census (7d's code and this lane's read different gated programs, genes or"
+    " exclusions, or the multiplicative counts differ from data/results/multrna_census.json), likewise"
+    " (PREDICTOR_DEFECT). 2. After the RNA is opened and the"
     " populations assembled, if 7d's comparators do not reproduce (COMPARATOR), the run stops before the"
     " multiplicative form's comparison is computed (COMPARATOR_DEFECT). 3. A multiplicative population of"
     " fewer than MIN_GENES genes is NOT_TESTABLE (no comparison read for it). 4. On Delta MSE(M) and its"
@@ -232,6 +235,10 @@ STOP_RULE = (
 #: 7d's per-form sentences, word for word, and the one stop this design adds
 OUTCOMES = {
     **c2.OUTCOMES,
+    "PREDICTOR_DEFECT": (
+        "stopped before the measured RNA was opened: the run's predictor side differed from the committed"
+        " census ({what})"
+    ),
     "COMPARATOR_DEFECT": (
         "stopped before the multiplicative form's comparison was computed: 7d's comparators, recomputed in"
         " this run, did not reproduce the committed result ({what})"

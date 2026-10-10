@@ -236,6 +236,8 @@ def test_the_reading_fills_from_the_registered_slots_only():
         assert "{" not in text and "97.5% CI" in text
         assert text == c2.reading(kind, **nums)  # 7d's sentences, word for word
     assert "{" not in mr.reading("COMPARATOR_DEFECT", what="x")
+    assert "{" not in mr.reading("PREDICTOR_DEFECT", what="x")
+    assert "{" not in mr.reading("HARNESS_DEFECT", bad=1, n=2)
     truth = _by_gene(_rows(120, truth=True))
     h = mr.head_to_heads({mr.FORM: truth, "mean": truth, "competition": truth}, 200, 1)
     out = mr.combined_reading({"reading": "M sentence"}, h)
@@ -321,3 +323,75 @@ def test_no_outcome_sentence_strengthens():
     for s in [*mr.OUTCOMES.values(), *mr.HEAD_TO_HEAD.values(), mr.CENSUS_SENTENCE]:
         for word in ("proves", "validated", "equal", "mechanism", "function"):
             assert word not in s.lower()
+
+
+# ---- the run script's predictor-side steps (no RNA) ------------------------------------------------------
+
+
+def _run_script():
+    import sys
+    from pathlib import Path
+
+    scripts = str(Path(__file__).resolve().parents[1] / "scripts")
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    import multrna_run
+
+    return multrna_run
+
+
+def _record(gene: str, ok: bool, informative: bool, miss: list[str]) -> dict:
+    fr: dict = {"ok": ok, "reason": "" if ok else "inhibitor_strength_above_1"}
+    if ok:
+        fr["informative"] = informative
+        if informative:
+            fr.update(
+                {"s": [0.5] * 13, "closed_s": [0.5] * 13, "harness_miss": miss, "log2_rho": {"e": -1.0}}
+            )
+    return {
+        "gene": gene,
+        "symbol": gene,
+        "chrom": "chrT",
+        "n_rules": 2,
+        "n_inhibiting": 0,
+        "excluded": "",
+        "elements": ["e", "f"],
+        "states": {"e": ["open"] * 13, "f": ["closed"] * 13},
+        "open_share": [0.0] * 13,
+        "forms": {mr.FORM: fr},
+    }
+
+
+def test_the_run_takes_only_informative_multiplicative_genes_and_stops_on_a_harness_miss():
+    run = _run_script()
+    genes = [
+        _record("A", True, True, []),
+        _record("B", True, False, []),
+        _record("C", False, False, []),
+        {"gene": "X", "excluded": "no_activating_rule", "forms": {}},
+    ]
+    assert [r["gene"] for r in run.mult_runs(genes)] == ["A"]
+    assert run.mult_runs(genes)[0]["log2_rho"] == {"e": -1.0}
+    hc = run.harness_check([], genes)
+    assert (hc["failing"], hc["multiplicative_gene_runs"], hc["max_abs_run_minus_closed_form_log2"]) == (
+        0,
+        1,
+        0.0,
+    )
+    genes[0]["forms"][mr.FORM]["harness_miss"] = ["cell K562: run 1, closed form 2"]
+    assert run.harness_check([], genes)["failing_examples"] == [("A", mr.FORM)]
+
+
+def test_the_run_descriptives_and_table_name_their_genes():
+    run = _run_script()
+    rows = _rows(120, truth=True)
+    by_form = {mr.FORM: rows, "mean": rows[:60], "competition": rows[30:90]}
+    h = mr.head_to_heads({f: _by_gene(rs) for f, rs in by_form.items()}, 50, 1)
+    assert h == {"genes": 30, "compared": False}
+    d = run.descriptives(by_form, {"G100", "G101", "G999"}, h)
+    assert d["new_under_the_multiplicative_form"]["genes"] == 2
+    assert d["on_7d_mean_population"]["genes"] == 60
+    assert d["on_the_genes_in_all_three"]["genes"] == 30
+    rows[0].update({"symbol": "S", "gene_id": "ENSG", "chrom": "chrT"})
+    t = run._table(rows[:1])
+    assert t["columns"][-2:] == ["P", "D"] and len(t["rows"][0][-1]) == 13
