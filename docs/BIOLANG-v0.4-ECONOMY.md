@@ -1736,6 +1736,14 @@ changed. In short:
   comparator is the reading that can tell the form from compression in general. Nor can the gate tell
   a saturable allocation from noise in the transcript arm attenuating the slope.
 
+**Amendment 1 (2026-10-10), before any number was seen.** Run 1 computed every reading and was then
+refused at the write by the result contract, because the manifest's `partitions` was a string; the
+payload went to `data/quarantine/results/saturable_gate_result.json`. The run prints nothing before
+the write and the file was not opened. The fix (`411b8ff`, `4f71f08`, insertions only) makes
+`partitions` a dict and has `run` compare its payload with run 1's key for key; the new pins are in
+`data/results/saturable_gate_registration_amendment1.json`, whose binding words are the registration's.
+The reading is run 2's only if the two payloads are identical; otherwise run 1's is the registered run.
+
 ## 10. Open decisions for Albert
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
