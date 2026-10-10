@@ -1,5 +1,13 @@
 # The genome as code: a reverse-engineering guide
 
+**Status on 2026-10-10.** Still describes the code: the 45 libraries named here exist in
+`genomeos/lib/catalog.py` (`genomeos libs -v`), with members computed from GO and Reactome data
+(`genomeos/lib/membership.py`), and `genomeos age` runs the ageing clocks. The libraries are a Python
+catalogue, not BioLang modules; the BioLang prelude is the seven `bio.std` modules. Of §3's "planned
+v0.2" entities, `CellType`, `Gene`, `Transcript`, `Protein` and `Rule` exist and `Tissue` and `Organ`
+do not. Three §7 rows marked "planned" were built on 2026-09-12 and are marked there. The language's
+current grammar is BIOLANG-GRAMMAR.md (27 block kinds, the newest v0.5's `reader`).
+
 GenomeOS's purpose is to *unbuild* the genome: understand it, organise it,
 and produce a clear base for genetic building and construction. This document
 is the map. It answers the four questions the project asks of DNA, and it
@@ -111,11 +119,16 @@ retyping them.
 | Molecular parts | GENCODE, UniProt | ~19,400 proteins, ~20,000 ncRNAs | `Gene`, `Transcript`, `Protein` |
 | Interactions | Reactome, CellPhoneDB | ~2,900 pathways, ~2,000 ligand–receptor pairs | `Rule` |
 
+*(2026-10-10: built — `CellType` (BioLang v0.2), `Gene`, `Transcript`, `Protein` and `Rule`;
+`CellState` is the cell runtime's per-cell state (`runtime/cell.py`), not a template. Not built —
+`Tissue` and `Organ` entities: an organism program counts tissues as populations instead
+(BIOLANG-v0.3.md).)*
+
 The inventory question then becomes computable: **for each part, which
 libraries does it need?** A cardiomyocyte needs `core.*`, `core.energy` at
 high rate, `blueprint.organ_heart`, `systems.nervous` (ion channels) and
 `systems.circulation_respiration`. Membership tables are the Phase 1
-deliverable.
+deliverable. *(2026-10-10: built, `genomeos/lib/membership.py`, `genomeos libs --data`.)*
 
 ## 4. How systems connect
 
@@ -136,6 +149,9 @@ Every channel is a ligand encoded by one gene reaching a receptor encoded by
 another. That means the dependency graph between tissues can be *computed*
 from expression data plus the ligand–receptor table, and represented as
 `Rule`s with `when: tissue = X`. Building that graph is Phase 2.
+*(2026-10-10: the ligand–receptor table is built, as `binds` rules (`genomeos lr`,
+`genomeos/knowledge/ligand_receptor.py`) and as 148 contact `signal`s in `bio.std.signalling`. No
+committed program gates a rule on `tissue`, so the tissue-to-tissue graph is not built.)*
 
 ## 5. The reverse-engineering method
 
@@ -201,23 +217,25 @@ that the analogy stays tied to something that runs.
 | Statement | regulatory element, gene module | `element`, `gene` | yes |
 | Function | protein domain, rule, pathway (not the gene: one gene, several proteins) | `protein.domains`, `rule`, library | yes |
 | Arguments | concentrations, cofactors, cell state | `when:` clauses, the reader per cell type | yes |
-| Operator | binding site logic, splicing rule | `rule` with `threshold`, `hill`; motif combinations (planned) | partly |
+| Operator | binding site logic, splicing rule | `rule` with `threshold`, `hill`; motif combinations (planned) *(2026-10-10: built 2026-09-12, `genomeos motifs`, `5e654c0`)* | partly |
 | Constant | highly conserved sequence | Zoonomia phyloP per block, the tiers | yes |
 | Variable | expression level, methylation state | `CellState`, GTEx per tissue, the clocks | yes |
 | Type | cell type, protein family | `cell_type`, InterPro family | yes |
 | Library, import | conserved pathway reused across tissues | BioLib, `import bio.std.*` | yes, without an age |
-| Configuration | epigenetic state | the reader (DNase per cell type) | yes |
+| Configuration | epigenetic state | the reader (DNase per cell type) *(2026-10-10: and since v0.5 the `reader` block, which gates rules by it)* | yes |
 | Runtime state | RNA and protein concentrations | `S(t)` in the runtime | yes |
 | Event | division, death, differentiation | `event`, `decision` | yes |
 | Loop | circadian, segmentation, cell cycle | `timer.*`, the Boolean cell cycle | yes |
 | Exception | damage, misfolding | `core.dna_repair`, senescence hazard | partly |
 | Patch, variant | SNV, indel, SV | the twin, HG002 and any imported genome | yes |
-| Fork | evolutionary lineage | orthologue by clade (planned) | no |
+| Fork | evolutionary lineage | orthologue by clade (planned) *(2026-10-10: built 2026-09-12, `genomeos origin`, `0fb62dd`)* | no |
 | Refactor | rearrangement preserving function | synteny: mouse nodes in human neighbourhoods 93 to 94% | yes, two chromosomes |
 | Dead code | pseudogenes, fossils | the `fossil` tier (328 Mb) | yes |
-| Copy and paste | gene duplication | paralogues, segmental duplications (planned) | no |
+| Copy and paste | gene duplication | paralogues, segmental duplications (planned) *(2026-10-10: built 2026-09-12: paralogues per gene with `genomeos origin`, `0fb62dd`; segmental duplications with `genomeos duplications`, `132d21b`)* | no |
 | Package version | orthologous family across species | Ensembl or OrthoDB groups (planned) | no |
 | Pointer | enhancer to promoter contact | `element.targets`, the CTCF node | yes, inside the node 90% |
 
 The rows marked "no" are all comparisons across the tree of life that
 GenomeOS has not yet made; they are steps 2 and 3 of GRAMMAR-BY-COMPARISON.md.
+*(2026-10-10: steps 2 and 3 ran on 2026-09-12, origin per gene and segmental duplications;
+GRAMMAR-BY-COMPARISON.md has what they found. The "Held by data?" column is left as written.)*

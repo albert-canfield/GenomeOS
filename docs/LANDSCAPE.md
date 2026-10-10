@@ -1,5 +1,14 @@
 # Landscape (September 2026)
 
+**Status on 2026-10-10.** A survey taken on 2026-09-10; versions, dates and verdicts are as of then
+and were not re-checked. What the code took up since: process-bigraph as the composition layer
+(`runtime/compose.py`, the optional `compose` extra, decision D13), AlphaGenome as a source of
+`predicted` evidence (the `predict` extra), and biolearn for the epigenetic clocks (the `clocks`
+extra). libRoadRunner, MaBoSS, PySB and CompuCell3D were not adopted: SBML and Boolean networks run on
+zero-dependency stand-ins (`runtime/sbml.py`, `runtime/boolean.py`), space runs in
+`runtime/spatial.py` and the Body, and molecular noise is the located runtime's own tau-leap
+(`regime { treatment: stochastic }`), with no SSA or rule-based engine.
+
 What already exists, what each piece covers, and what GenomeOS adds. Compiled
 from a research pass on 2026-09-10; URLs are the primary sources.
 

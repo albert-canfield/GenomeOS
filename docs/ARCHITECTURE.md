@@ -1,5 +1,14 @@
 # GenomeOS Architecture
 
+**Status on 2026-10-10.** §2's package table, §4's engine table and the `bio` entry point in §10
+were brought current in `c00250f`; the rest was checked against the code on this date, and each
+correction sits beside the sentence it corrects. The stack diagram is the original picture: spatial
+engines exist (`runtime/spatial.py`, space inside the Body), the only stochastic molecular engine is
+the located runtime's tau-leap, and the genome engine is still linear. The current grammar is
+BIOLANG-GRAMMAR.md: 27 block kinds plus `module` and `import`, the newest v0.5's `reader`, which gates
+rules by chromatin state (§6); BioIR is versioned 0.4. The application is 1.0.0 and the packaged
+engine 0.1.0; the last committed engine build record (2026-09-29) passed its 12 checks.
+
 ## 1. The problem GenomeOS solves
 
 Existing tools approach biology from one of two ends. Genomics tools go
@@ -39,8 +48,8 @@ Python package mapping (as first written for v0.1, brought current 2026-10-10;
 | Layer | Package | Status |
 |---|---|---|
 | Genome engine | `genomeos.genome` | working: FASTA (gz), Sequence, Locus, Genome.fetch, anatomy, UNKNOWN classes, domains, reader, segments |
-| BioIR | `genomeos.ir` | working: 25 types (BioIR 0.4), JSON round-trip, `UNKNOWN` and `UNSTATED` as values |
-| BioLang | `genomeos.lang` | working: v0.4 grammar (26 block kinds), compile-time reference checks; the grammar document is generated from the parser |
+| BioIR | `genomeos.ir` | working: 32 dataclasses (BioIR 0.4; the generated grammar document lists 26 of them), JSON round-trip, `UNKNOWN` and `UNSTATED` as values |
+| BioLang | `genomeos.lang` | working: 27 block kinds, with v0.5's `reader`, compile-time reference checks; the grammar document is generated from the parser |
 | BioVM | `genomeos.runtime` | working: central dogma, network (ODE), Boolean, SBML, cell ageing, spatial, segmentation, gastrulation, Body, division, economy, debugger, uncertainty, composition |
 | Compiler from external data | `genomeos.molecules`, `genomeos.knowledge`, `genomeos.attribution` | working: the proteome and knowledge graph from public databases; the non-coding attributions compiled to BioLang on 24 chromosomes |
 | BioLib | `genomeos.lib`, `genomeos.std` | working: 45 libraries with data-computed membership; the `bio.std` prelude in BioLang |
@@ -62,6 +71,9 @@ the compiled semantics. Three consequences:
 1. **A genome file is not a runnable program.** It needs `S0`, a bootstrap
    state (for a human: the zygote's cytoplasm, ribosomes, mitochondria,
    maternal RNAs). BioTwin always pairs `G` with a bootstrap.
+   *(2026-10-10: in the code the bootstrap a twin carries is a `MeasuredState` (telomere length,
+   epigenetic age) and an `Environment`, `genomeos/twin/twin.py`; an organism program's bootstrap
+   is its `cell_type:` and `factors:` lines, which the Body grows from.)*
 2. **Age is state, not sequence.** Telomere length, methylation age, somatic
    mutations and senescence live in `CellState`, never in `Genome`.
 3. **Two twins with the same `G` diverge** if `S0` or `E` differ. That is a
@@ -82,6 +94,11 @@ of engines that a scheduler composes, not one `tick()` loop.
 | Spatial multicellular | morphogen gradients, development | `runtime/spatial.py`, and space inside the Body runtime | CompuCell3D or Tissue Forge adapter |
 | Composition / scheduling | all of the above in one organism | `runtime/compose.py` on process-bigraph (D13) | keep |
 
+*(2026-10-10: the stochastic molecular row's "—" is incomplete. The located runtime
+(`runtime/located.py`) runs a tau-leap, a Poisson number of firings per reaction, for every species
+a `regime { treatment: stochastic | auto }` makes stochastic (BIOLANG-v0.4-ECONOMY.md §8); no SSA
+or rule-based engine exists.)*
+
 **Composition decision (from the September 2026 research pass).** Vivarium
 2.0's `process-bigraph` already provides typed hierarchical state, processes
 with ports, multi-timescale scheduling and structural rewrites (division,
@@ -90,6 +107,8 @@ should not reinvent that scheduler. The plan is: BioIR stays GenomeOS's own
 format (it carries evidence and UNKNOWN, which process-bigraph does not), and
 BioVM engines are exposed as process-bigraph processes so that a GenomeOS
 organism is a composite of them. Decision point is Phase 2 in the action plan.
+*(2026-10-10: decided on 2026-09-10 as D13, DECISIONS.md. `runtime/compose.py` wraps the network,
+cell-ageing and Body runtimes as process-bigraph processes, behind the optional `compose` extra.)*
 
 ## 5. Uncertainty as a type
 
@@ -105,6 +124,8 @@ confidence: 0.0 .. 1.0
 role; a predicted role from an AI model is `predicted` with the model named.
 `genomeos check` reports mean confidence per kind and lists UNKNOWN regions
 and weak rules, so a simulation can say *where* it is guessing.
+*(2026-10-10: a confidence a block leaves out is `UNSTATED`, not 0.0: means leave it out and count
+it beside, and it is never listed as weak. BIOIR-v0.1.md, "Unstated confidence".)*
 
 ## 6. Context gating
 
@@ -113,6 +134,10 @@ The runtime activates only rules whose conditions match the current context.
 This is how one module can hold knowledge for many tissues without every
 rule firing everywhere, and how the same signalling library (WNT, BMP, Notch)
 is reused across organs with different outcomes.
+*(2026-10-10: two further gates now apply at rule selection, `Module.active_rules`: a rule whose
+source or target gene the `cell_type` does not list in `expresses` is dropped, and since v0.5 a rule
+acting `through` an element that the cell type's `reader` does not state `open` is held at strength
+0, BIOLANG-v0.5-READER.md.)*
 
 ## 7. Genome representation
 
@@ -142,6 +167,9 @@ L2 single cell        L5 organ    L6 organism
 
 A heart can run at L4 while skin runs at L3, the way a physics engine uses
 variable level of detail.
+*(2026-10-10: not built per tissue. An organism program chooses one resolution for the whole run,
+`cells` or `populations` (BIOLANG-v0.3.md), and the uncertainty report has four levels: molecular,
+cellular, tissue and organism.)*
 
 ## 9. Debugger
 
@@ -150,6 +178,10 @@ biological conditions (`break when telomere < 5000`,
 `break when cell.type == cardiomyocyte`), and an explanation trace that
 follows a differentiation event back through the rules and evidence that
 produced it. The evidence fields in BioIR exist so that this trace is possible.
+*(2026-10-10: built in part. `runtime/debugger.py` (`genomeos debug`) steps the network and
+cell-ageing runtimes, stops on a numeric breakpoint `name op value`, and `explain()` follows a level
+back to the rules and parameters behind it with their evidence. A breakpoint on a cell type, and
+debugging the Body, are not built.)*
 
 ## 10. BioLang as a separable engine (goal, 2026-09-10)
 
@@ -173,6 +205,9 @@ Boundaries we keep now so that the split is possible without a rewrite:
 1. **BioIR JSON is the contract.** Anything that talks to the engines does so
    through `Module.to_dict()` / `from_dict()`. Nothing in the language layer
    reads GenomeOS data paths (`data/…`) or results.
+   *(2026-10-10: holds for `genomeos/lang`. Two engines, `runtime/gastrulation.py` and
+   `runtime/segmentation.py`, default to a `data/demo/*.bio` program, which the engine package
+   carries as a fixture.)*
 2. **Engines take a Module and return a Trajectory or a typed result.** No
    engine reaches into the CLI, the web server or the knowledge files.
 3. **Standard library in BioLang, not Python.** What a program needs from the
@@ -185,12 +220,17 @@ Boundaries we keep now so that the split is possible without a rewrite:
 5. **No dependencies in the language core.** Parser, IR and built-in engines
    stay pure Python; heavier engines (process-bigraph, roadrunner, MaBoSS) are
    adapters behind the same interfaces.
+   *(2026-10-10: `pyproject.toml` declares no dependencies. process-bigraph is the one adapter
+   built (the `compose` extra); SBML and Boolean networks run on the zero-dependency stand-ins
+   `runtime/sbml.py` and `runtime/boolean.py`.)*
 
 The step that turns the language into a runtime is the v0.3 program layer:
 `experiment` and `organism` blocks (context, bootstrap state, clamps, run,
 breakpoints, observe, assert, report, fork and compare), executed by a small
 scheduler that maps clauses onto the engines. After that, the engine can be
 packaged separately with its own tests, and GenomeOS becomes its first user.
+*(2026-10-10: the `organism` and `experiment` blocks were built with the Body runtime
+(BIOLANG-v0.3.md), and the package followed: §10.1 and §10.2.)*
 
 ### 10.1 The engine leaves home, and it runs (2026-09-15)
 
@@ -272,3 +312,7 @@ it. `genomeos/version.py` stays the application's (1.0.0). The number starts
 fresh rather than tracking the language spec (v0.4) because each compiled module
 already records the spec as `bioir_version`, and a package release has to be
 able to move for a runtime fix that changes no syntax.
+
+*(2026-10-10: the last committed build record, `data/results/engine_package.json` of 2026-09-29,
+has 38 files, 23 with imports rewritten, version 0.1.0, 31 test files whose suite gave 317 passed,
+3 skipped and 3 xfailed in isolation, and 12 of 12 checks passing. It predates the v0.5 `reader`.)*

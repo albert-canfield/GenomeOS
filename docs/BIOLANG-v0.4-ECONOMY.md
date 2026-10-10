@@ -1,5 +1,15 @@
 # BioLang v0.4: structure, economy and control (specification)
 
+**Status on 2026-10-10.** Stage 1 (structure) is built and passed its gates on 2026-09-14 (§9.1).
+Stage 2 (economy) was implemented on 2026-09-21: gate (a) passed on three clauses of four, gate (b)
+failed, and the pool layer is optional (§9.2). Stage 3 (energy and mitochondria) is not implemented.
+Stage 4 (division and dilution) was implemented on 2026-09-28: the mechanism passes all eight
+registered clauses and the gate as §8 words it is refuted (§9.4). `competence`, `commitment`, `order`
+and `regime` are built; `homeostat` and `role` are not, and no engine code applies §2's 0.3 cap. The
+current grammar, [BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md), has 27 block kinds plus `module` and
+`import`: v0.4's 26 and v0.5's `reader` (2026-10-10, [BIOLANG-v0.5-READER.md](BIOLANG-v0.5-READER.md)),
+which gates rules by chromatin state at rule selection; BioIR is still versioned 0.4.
+
 **Status: DRAFT for Albert's review, 2026-09-14.** Nothing past stage 1 is to
 be implemented until he has steered the constructs below. Stage 1
 (compartments and transport) is implemented and passed its four gates; the
@@ -42,6 +52,8 @@ confident nonsense. So:
   reported as `inferred`, and its confidence is capped at **0.3**, whatever the
   program's author wrote. The cap lifts per construct when its gate passes and
   the pass is recorded in this document.
+  *(2026-10-10: no code in `genomeos/lang`, `genomeos/ir` or `genomeos/runtime` applies this cap or
+  the `inferred` relabelling; it holds only where a program's author writes the confidence.)*
 - The uncertainty report (`runtime/uncertainty.py`) carries confidence along
   the chain that produced a value: a protein's level in the mitochondrion is no
   better grounded than the weakest of its gene, its `produces` rule, the mRNA
@@ -120,7 +132,8 @@ come with it, all of them the same refusal — a concentration without a volume 
 - a concentration threshold under `units: au` is refused: arbitrary units have no copy number, so
   the regime must declare `units: copies`.
 
-**What it does not do.** No rate reads a volume yet, and stage 2 is not built here (§5). The field
+**What it does not do.** No rate reads a volume yet, and stage 2 is not built here (§5)
+*(2026-10-10: stage 2 was implemented on 2026-09-21, §9.2)*. The field
 makes the comparison *expressible*, which is what §9's registered gate needed to be runnable at all;
 it does not decide which unit a threshold should be stated in. The demonstration that the two units
 are the same statement in one cell and different statements across two is
@@ -252,6 +265,9 @@ by `cost` clauses and are returned by release (a ribosome is freed when a
 protein is finished; ATP is converted to ADP, not destroyed).
 
 **BioIR.** `Pool(Entity)`: `location`, `size`, `regeneration`, `returns_as`.
+*(2026-10-10: the type also has `regenerates_from`, which keeps `regenerates: from Glycolysis,
+OXPHOS`; no runtime reads it, since the processes it names belong to stage 3, which is not
+implemented.)*
 
 ### 5.2 `cost` [engine]
 
@@ -283,6 +299,8 @@ allocation growth_law     { pool: Ribosomes; policy: optimise; objective: growth
 Policies: `proportional` (demand-weighted shares), `priority` (an ordered
 list), `competitive` (saturable, as for transports), `optimise` (a declared
 objective, always labelled a modelling device, never the default; see §7.3).
+*(2026-10-10: `optimise` compiles, and the economy runtime refuses to run it with an error that the
+runtime solves no objective, `runtime/economy.py`; the other three run.)*
 
 **Gates, both required.**
 
@@ -335,6 +353,9 @@ mitochondria) runs on glycolysis alone and keeps its ATP and 2,3-BPG within
 the ranges of Mulquiney & Kuchel 1999 (Biochem J 342:581).
 
 ## 7. Control (specified here, implemented after stage 2)
+
+*(2026-10-10: stage 2 was implemented on 2026-09-21. `homeostat` (§7.1) and `role` (§7.2) are still
+not built; §7.2a, §7.4, §7.5 and §7.6 record what was.)*
 
 ### 7.1 `homeostat` [engine]
 
@@ -965,6 +986,8 @@ changing what its rules were fitted to, and should say so.
 
 ### 7.6 `order`: a sequence the runtime can be wrong about [engine] (specified, §10 decision 10)
 
+*(2026-10-10: `order` was built on 2026-09-15 in `144f399`; its gate results are in §9.)*
+
 The language can say *when* a thing happens (`timer`, `stage`, a crossing) and
 *where* it is (`locus`, `compartment`), but not that A happens before B. The
 known-locus benchmark hit this on HOXD, where position on the chromosome *is*
@@ -1223,6 +1246,8 @@ it there, and for an imported protein that link is the transport at 0.3.
    still works with import closed, because ribosomes are not yet a resource;
    in a cell the mitoribosome is imported. That dependence is stage 2's, and
    the program says so in its own evidence field.
+   *(2026-10-10: stage 2 made a ribosome pool expressible, but `human.oxphos` declares no pool, so
+   this still holds for that program.)*
 
 ### 9.2 Stage 2 as measured (2026-09-21)
 
@@ -1525,6 +1550,9 @@ here. Nothing measured above is evidence about it.
    argument about *when* to decide, not about which unit is right — and this decision
    does not say which unit is right, because the gate still cannot separate them until
    the language can express an absolute volume.
+   *(2026-10-10: stage 2 was implemented on 2026-09-21. Of 45 committed `.bio` files, 5
+   declare a compartment — the two above and three demos, `concentration_threshold`,
+   `stage2_pools` and `stage4_division` — and 4 pools are committed, all in the last two.)*
 
    **Resolved 2026-09-19 by Albert: add the absolute volume, unblock stage 2.** A
    `compartment` gains an absolute volume beside the fraction it already carries, so a
@@ -1597,7 +1625,8 @@ not behind any missing work of ours, because each needs the pools or the
 division layer that decision 2 holds; **3 and 7** are genuinely preference and
 data availability, and both are already argued in place; **10** must be built
 before it can be measured. So of the ten, exactly one was decidable and cheap,
-and it is done.
+and it is done. *(2026-10-10: decision 2 was resolved on 2026-09-19 and stage 2 implemented on
+2026-09-21; 10 was built on 2026-09-15, `144f399`.)*
 
 | Decision | Settled by | How |
 |---|---|---|
@@ -1610,7 +1639,7 @@ and it is done.
 | 7. which homeostats first | data availability, not preference | the pair whose failure direction is best documented; Na⁺/K⁺ and pH stand |
 | 8. `fates: first` default | **settled by measurement** (resolved above) | |
 | 9. commitment as refusal or rate | **measured, and still open** | the series ran and passed as a refusal (§7.2a); the published decline over the fourth hour is what a rate would fit, and separating them needs the per-stage frequencies |
-| 10. order as a construct | measurable once built | a published activation series |
+| 10. order as a construct | measurable once built *(2026-10-10: built 2026-09-15, `144f399`; position passed, time passed on the worm, activation not testable, §9)* | a published activation series |
 
 Decision 9's instrument is built and run (§7.2a, 2026-09-14): the series is
 `data/organisms/celegans/plasticity.bio`, `bio test` runs it, and removing
@@ -1620,4 +1649,7 @@ turned out to need no construct at all (§7.2a decision 3). The next engine work
 that needs no preference from Albert is therefore decision 10's construct
 sketch. 4 and 6 still need stage 2 or 4 first; 2 no longer holds stage 2, which
 shipped and was gated on 2026-09-21 (§9.2); and 5 is now closed by a negative
-rather than by a preference.
+rather than by a preference. *(2026-10-10: decision 10's construct was built on 2026-09-15,
+`144f399`. Stage 4 was implemented on 2026-09-28, so 6 no longer waits on a stage; it stays open
+and no stage 4 clause needed it (§9.4). 4 waits on stage 3's ATP budget, which is not
+implemented.)*

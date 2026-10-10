@@ -1,5 +1,15 @@
 # `bio`: the BioLang toolchain on its own
 
+**Status on 2026-10-10.** Still describes the code: `bio` (`genomeos/bio.py`, a console script in
+`pyproject.toml`) has the five verbs below, the REPL commands are as written, and `bio --version`
+prints the application's 1.0.0 (the packaged engine prints its own, 0.1.0). Since this was written:
+`bio run` also runs located (v0.4) programs and takes `--knockout`; a `# test:` line can name
+`P@Compartment` or a methylation context, can be judged `in cell_type=X` and count `active_rules` or
+`held_rules` there (v0.5 reader), and its confidence mean counts only rules that state one; and the
+separate package exists (`scripts/package_engine.py`, ARCHITECTURE.md §10.1 and §10.2). Over the
+committed `data/demo` and `genomeos/std` programs, `bio test` ran 20 files and 63 checks on
+2026-10-10, all passing.
+
 The roadmap's 1.x goal is BioLang as an engine like Node: write, check,
 compile, run and test biology without the rest of GenomeOS. `bio` is that
 entry point, installed next to `genomeos`:
@@ -30,7 +40,7 @@ summary at that point.
 
 Every run also checks that no level went NaN or infinite. The demo
 repressilator carries three such lines; `bio test data/demo genomeos/std`
-runs eight files and 11 checks.
+runs eight files and 11 checks. *(2026-10-10: 20 committed files and 63 checks, all passing.)*
 
 ## The REPL
 
@@ -46,4 +56,5 @@ evidence; `:show` prints the BioIR; `:load FILE` reads a file in.
 `genomeos/bio.py` imports the language (`genomeos.lang`), the IR
 (`genomeos.ir`) and the runtime (`genomeos.runtime`); none of those import
 the genome, knowledge or web layers. Packaging them as `biolang` with this
-entry point is a move, not a rewrite (docs/ARCHITECTURE.md).
+entry point is a move, not a rewrite (docs/ARCHITECTURE.md). *(2026-10-10: done since 2026-09-15:
+`scripts/package_engine.py` generates the package, ARCHITECTURE.md §10.1.)*

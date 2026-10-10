@@ -1,5 +1,13 @@
 # BioLang v0.2
 
+**Status on 2026-10-10.** Still describes the code: nested `transcript`, `cell_type`, `event`, the
+three import forms, cell-type context, the two blocks added on 2026-09-11, and the `check` commands
+at the end. The current grammar is [BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md): 27 block kinds plus
+`module` and `import`, the newest v0.5's `reader`, which gates rules by chromatin state at rule
+selection (BioIR still versioned 0.4). An `element` now also carries the five R7 axes (`origin`,
+`molecular_role`, `activity`, `target_relation`, `evidence_status`); its `class` accepts `unknown` and
+is a summary derived from the registry role, never from the activity. The prelude has seven modules.
+
 Adds to v0.1 (see [BIOLANG-v0.1.md](BIOLANG-v0.1.md)): nested blocks, cell
 types, events, imports and a standard prelude. All v0.1 files compile
 unchanged.
@@ -81,6 +89,10 @@ Both compile to BioIR entities (`Protein` with the new fields,
   whose `when` matches and whose source and target genes are expressed in `X`.
   `Module.silenced_genes(context)` lists what the context turns off. A cell type
   with no `expresses` list silences nothing.
+  *(2026-10-10: since v0.5 `active_rules` then applies the reader: a rule acting `through` an
+  element that the cell type's `reader` does not state `open` is returned held, at strength 0
+  ([BIOLANG-v0.5-READER.md](BIOLANG-v0.5-READER.md)). Rules without `through` are selected as
+  described here.)*
 - **Events** are declarative: rate with unit, guards (`when`), and effects
   (`var op value unit`, op in `+= -= *= =`). The cell runtime consumes the
   same facts; `bio.std.ageing` states them with their evidence.
@@ -93,6 +105,10 @@ Both compile to BioIR entities (`Protein` with the new fields,
 |---|---|
 | `bio.std.cell_types` | Cell, StemCell, Fibroblast, Neuron, Cardiomyocyte, HematopoieticStemCell with CL ids |
 | `bio.std.ageing` | divide, mutate, senesce events and telomere-at-birth parameter, all cited |
+
+*(2026-10-10: seven modules. [BIOLANG-v0.3.md](BIOLANG-v0.3.md) lists `development`, `human_stages`,
+`signalling` and `human_turnover`; `bio.std.methylation` holds the rates of the CpG methylation state
+machine, added on 2026-09-16 in `d3c5c52`.)*
 
 ## Check it
 

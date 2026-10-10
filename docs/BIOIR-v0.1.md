@@ -1,5 +1,15 @@
 # BioIR v0.1 — Biological Intermediate Representation
 
+**Status on 2026-10-10.** The code is at BioIR 0.4 (`genomeos/ir/model.py`, `"bioir_version": "0.4"`).
+What this document defines still holds: `Evidence` and its five kinds, the `Entity` base, `Rule`,
+`Parameter`, the compile-time invariants and `UNKNOWN`; a confidence left out is now `UNSTATED`
+(the section at the end). The IR has grown to 32 exported dataclasses, the newest `Reader`
+([BIOLANG-v0.5-READER.md](BIOLANG-v0.5-READER.md), 2026-10-10). The current reference is
+[BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md), whose "BioIR types" lists 26 of them with their fields; it
+omits `Pool`, `Allocation`, `Cost`, `Order`, `Competence` and `Commitment`, which
+[BIOLANG-v0.4-ECONOMY.md](BIOLANG-v0.4-ECONOMY.md) describes. What the v0.2 plan below got is marked
+beside it.
+
 BioIR is what BioLang compiles to and what BioVM executes. It is deliberately
 independent of any biological database so the compiler can improve while the
 runtime stays stable. The reference implementation is `genomeos/ir/model.py`;
@@ -74,6 +84,11 @@ Invariants enforced at compile time:
 `UNKNOWN` serialises as the string `"UNKNOWN"`; `Locus` as
 `chrom:start-end(strand)`.
 
+*(2026-10-10: the code writes `"bioir_version": "0.4"` and `"records_unstated_confidence": true`,
+puts a `__type__` key on every entity and evidence, and adds the lists the later versions brought:
+`events`, `timers`, `stages`, `decisions`, `experiments`, `fields`, `designs`, `competences`,
+`commitments`, `readers`, and `organism` and `regime`. An unstated confidence is written as `null`.)*
+
 ## What v0.2 adds (planned)
 
 - `Complex`, `Reaction`, `Signal`, `Receptor` entities for pathway import from
@@ -83,6 +98,12 @@ Invariants enforced at compile time:
 - a `Model` evidence subtype naming the AI model and its score for
   `predicted` rules (AlphaGenome, Evo 2, STATE)
 - cross-module references (`import` resolution) and namespacing
+
+*(2026-10-10: built — `CellType`, `Event` (a dataclass beside the entities, not an entity), `Signal`
+(an entity naming a `ligand` and a `receptor`, for signals between cells rather than pathway import),
+and `import` resolution across files. Not built — `Complex`, `Reaction`, `Receptor`, `Tissue`,
+`source_version` and `compiled_at`, an evidence subtype naming a model, and namespacing: an
+identifier declared in two different files is still an error.)*
 
 ## Unstated confidence (2026-09-28, item 12 S1)
 

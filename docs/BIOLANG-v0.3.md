@@ -1,8 +1,18 @@
 # BioLang v0.3: the organism layer
 
+**Status on 2026-10-10.** The constructs, commands, flags, file paths and named functions below were
+checked against the code and still hold: nine block kinds (`domain`, `organism`, `stage`, `timer`,
+`signal`, `decision`, `field`, `experiment`, `design`). [BIOLANG-v0.4-ECONOMY.md](BIOLANG-v0.4-ECONOMY.md)
+adds eight (`competence`, `commitment`, `order`, `compartment`, `transport`, `pool`, `allocation`,
+`regime`) and [BIOLANG-v0.5-READER.md](BIOLANG-v0.5-READER.md) adds `reader` (2026-10-10), which holds
+a rule acting `through` an element its cell type does not read as open. The current grammar is
+[BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md) (27 block kinds plus `module` and `import`; BioIR still
+versioned 0.4). The prelude has seven modules; measured figures are as recorded on their dates.
+
 Adds to v0.2 (see [BIOLANG-v0.2.md](BIOLANG-v0.2.md)): a program can now
 grow an organism from one cell. Six new block kinds, one runtime (the Body),
 one command (`genomeos grow`). All v0.1 and v0.2 files compile unchanged.
+*(2026-10-10: the constructs this document describes are nine block kinds; see the status above.)*
 
 ## The idea
 
@@ -124,6 +134,10 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   and the population decides again; `differentiate` with `fraction` splits
   that share into a new node; `die` with `fraction` and `after` is a
   recurring loss (turnover) that runs while the decision applies; `quiesce`
+  is re-read at every step, so `when: count = >=2.55e13` caps a tissue at
+  its adult count and lets it regrow after losses. Populations wait from
+  now, cells wait from birth. One runtime serves named cells (C. elegans)
+  and counted tissues (human); `turnover_per_day` and `culled` are reported.
   **A splitting `fraction` is a share of what is left at that decision point,
   not of the whole**, because the splits at one decision point run in sequence:
   three decisions taking 0.46, 0.55 and 1.0 leave 46%, 30% and 25% of the
@@ -151,10 +165,6 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   due together retain `1 - 0.1 - 0.1 = 0.8`, not `0.9 x 0.9 = 0.81`, so a
   generator no longer has to solve its growth term against the order the runtime
   applies them in.
-  is re-read at every step, so `when: count = >=2.55e13` caps a tissue at
-  its adult count and lets it regrow after losses. Populations wait from
-  now, cells wait from birth. One runtime serves named cells (C. elegans)
-  and counted tissues (human); `turnover_per_day` and `culled` are reported.
 - **Spread.** A timer's `sd` is applied when the run has a seed: the organism's
   `seed:` by default, `--seed N` to override, `--means` to switch it off.
   The C. elegans program declares `seed: 0`; at their means the distilled
@@ -297,6 +307,10 @@ resolver, never an empty module and never a network fetch.
 | `bio.std.human_stages` | the 23 Carnegie stages and the fetal period as `stage`s (days after fertilisation, O'Rahilly & Müller), cleavage, segmentation-clock and somite timers |
 | `bio.std.signalling` | 148 developmental and haematopoietic ligand-receptor pairs as contact `signal`s, generated from CellPhoneDB with the review that makes each pathway textbook |
 | `bio.std.human_turnover` | the measured lifespan of 17 human cell types as maintenance timers, generated from Sender & Milo 2021 |
+
+*(2026-10-10: the prelude also holds `bio.std.cell_types` and `bio.std.ageing`
+([BIOLANG-v0.2.md](BIOLANG-v0.2.md)) and `bio.std.methylation`, the rates of the CpG methylation
+state machine (2026-09-16, `d3c5c52`): seven modules, which `bio test` runs with the demos.)*
 
 The grammar itself is generated from the parser and the IR:
 [BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md) (`python -m genomeos.lang.grammar`),

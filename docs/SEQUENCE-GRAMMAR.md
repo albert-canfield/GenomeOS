@@ -1,5 +1,13 @@
 # The genome's own grammar: how BioLang reads DNA
 
+**Status on 2026-10-10.** The sequence grammar was built as Python, not as BioLang:
+`genomeos/genome/signals.py` (`genomeos signals learn|scan`), the segment parser
+`genomeos/genome/segments.py` (`genomeos segments`) and the JASPAR motif scan
+`genomeos/genome/motifs.py` (`genomeos motifs`) exist, and the measurements below are theirs. The
+language constructs sketched in §2 and §3 were never added: `requires` and `context` are not gene
+keys, there is no `segment` block, and BioLang's `signal` block (v0.3) is a signal between cells, not a
+sequence signal. The current grammar is BIOLANG-GRAMMAR.md (27 block kinds plus `module` and `import`).
+
 You asked the right question: raw DNA has its own way of saying where a
 block starts, what it needs, and where it ends. BioLang should be built on
 that, not on C++ or JavaScript habits. This document records what the data
@@ -55,9 +63,15 @@ and `requires` is *derived from the sequence* (motif scan + evidence), not
 typed by hand. The cell type supplies the environment in which the
 requirements are satisfied. This is the biological form of "imports".
 
+*(2026-10-10: `requires` and `context` were not added to the grammar. `genomeos motifs` (`5e654c0`,
+2026-09-12) derives the `requires` lists from JASPAR 2026 and keeps them in
+`data/results/motifs_chr*.json`, outside the language.)*
+
 ## 3. Design: a grammar of signals, learned from data
 
 BioLang v0.3 gets a sequence layer with two constructs and one rule:
+*(2026-10-10: not built in the language. v0.3 became the organism layer, and its `signal` keyword
+names a signal between cells; the parser below exists as Python, see the status at the top.)*
 
 ```
 signal splice_donor    { learned: chr21 GENCODE 50; consensus: MAG|GTRAGT;   examples: 1822 }
@@ -326,10 +340,12 @@ tested against it.
    fallback without the key.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
-   justification.
+   justification. *(2026-10-10: the `requires` lists were built on 2026-09-12,
+   `5e654c0`, `genomeos/genome/motifs.py`; see §2.)*
 3. Deep-model signals (AlphaGenome, Evo 2) for the delimiters no PWM can
    capture (enhancers, chromatin accessibility), entering as `predicted`.
    Splice sites: done above (feature c). Enhancer targets: docs/ALPHAGENOME.md
    feature b.
 4. Grammar written in BioLang itself, so a bio-engineer can add a signal
-   the way one adds a rule: with its examples and evidence.
+   the way one adds a rule: with its examples and evidence. *(2026-10-10: not
+   built.)*
