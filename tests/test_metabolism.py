@@ -202,3 +202,11 @@ def test_the_demo_cell_reads_its_declared_numbers():
     assert m.yields("high")["o2"] == m.yields("low")["o2"] == 6.0
     rbc = Metabolism.from_module(parse_file(RBC))
     assert rbc.processes == ("Glycolysis",) and rbc.shunt == 0.19
+
+
+def test_a_supply_names_a_declared_pool_or_is_refused():
+    m = cell()
+    with pytest.raises(MetabolismError, match="no pool declares"):
+        Metabolism.from_module(m.module, supply={"Oxygen": 0.0})
+    with pytest.raises(MetabolismError, match="cannot be negative"):
+        Metabolism.from_module(m.module, supply={"O2": -1.0})

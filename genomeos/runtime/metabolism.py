@@ -173,6 +173,9 @@ class Metabolism:
         which the program does not state as rates. An event's work is its own declared rate."""
         supply = dict(supply or {})
         pools = [e for e in module.entities.values() if isinstance(e, Pool)]
+        stray = sorted(k for k in supply if not isinstance(module.entities.get(k), Pool))
+        if stray:
+            raise MetabolismError(f"a supply is set for {', '.join(stray)}, which no pool declares")
         regenerated = [p for p in pools if p.regenerates_from]
         if not regenerated:
             raise MetabolismError("no pool is regenerated `from` a process; there is no metabolism to run")
@@ -393,15 +396,16 @@ def _constants(module: Module) -> dict[str, float]:
 
 
 def _rate(module: Module, pool_id: str, supply: dict[str, float], why: str) -> float:
-    """A substrate pool's per-hour rate: the override if one is given, else its `regenerates` rate."""
+    """A substrate pool's per-hour rate: the override if one is given, else its `regenerates` rate.
+    The pool must be declared either way: an override sets a declared pool's supply, never makes one."""
+    pool = module.entities.get(pool_id)
+    if not isinstance(pool, Pool):
+        raise MetabolismError(f"no pool {pool_id} is declared: {why}")
     if pool_id in supply:
         rate = float(supply[pool_id])
         if rate < 0:
             raise MetabolismError(f"a supply of {pool_id} cannot be negative")
         return rate
-    pool = module.entities.get(pool_id)
-    if not isinstance(pool, Pool):
-        raise MetabolismError(f"no pool {pool_id} is declared: {why}")
     if pool.regeneration is UNKNOWN:
         raise MetabolismError(f"pool {pool_id} states no `regenerates` rate per hour: {why or 'no supply'}")
     return float(pool.regeneration)
