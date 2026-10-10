@@ -329,6 +329,17 @@ POWER = 0.8
 Z_ALPHA = 1.6449
 Z_BETA = 0.8416
 
+#: The arm sizes below keep M3's own keys, `closure_cell.ARMS` and `closure_cell.POSITIVE_CONTROL`,
+#: so a candidate's table can be read against M3's result field for field. One of those keys names
+#: a cell: the positive control is `promoter_of_a_gene_k562_depends_on`, because M3 ran in K562
+#: alone. This search also counts that arm in HepG2, where the dependency behind the count is
+#: HepG2's, so the record carries this sentence beside the table rather than a renamed key.
+POSITIVE_CONTROL_READS = (
+    "the positive-control arm keeps M3's key, promoter_of_a_gene_k562_depends_on; in a HepG2 "
+    "candidate the count under that key is promoters of genes HEPG2 depends on, from HepG2's own "
+    "Chronos column, and the cell in the key is M3's and not this count's"
+)
+
 GATE = {
     "arm_a_at_least": M3_ARM_A,
     "smallest_detectable_separation_at_most": M3_DETECTABLE,

@@ -252,3 +252,31 @@ def test_the_committed_search_reports_every_candidate_against_the_same_gate():
             coverage["arm_a"], coverage["smallest_detectable_separation"]
         )
         assert coverage["arm_a"] <= coverage["counts"]["elements_with_min_guides"]
+
+
+def test_the_positive_controls_key_says_k562_and_the_record_says_whose_count_it_is():
+    """M3's control arm carries K562 in its key; in HepG2 the count under it is HepG2's.
+
+    The keys are M3's so a candidate's table reads against M3's result field for field, which
+    leaves one key naming a cell it may not be counting. The sentence the record carries is what
+    keeps that from being read as a K562 number.
+    """
+    assert cc.POSITIVE_CONTROL == "promoter_of_a_gene_k562_depends_on"
+    assert "k562" in cc2.POSITIVE_CONTROL_READS.lower()
+    assert "hepg2's own" in cc2.POSITIVE_CONTROL_READS.lower()
+    rows = [
+        {
+            "chrom": "chr1",
+            "id": "P",
+            "start": 100,
+            "end": 200,
+            "gene": "ESS",
+            "nearest_coding_gene": "ESS",
+            "nearest_coding_distance": 500,
+            "effects": {"K562": 0.5, "HepG2": 0.5},
+        }
+    ]
+    design = _design_covering(rows, cc.MIN_GUIDES)
+    in_hepg2 = cc2.arms_over(rows, design, {"ESS": -0.9}, "HepG2")
+    assert in_hepg2["sizes"] == {cc.POSITIVE_CONTROL: 1}  # counted from HepG2's dependency
+    assert cc2.arms_over(rows, design, {"ESS": 0.0}, "HepG2")["sizes"] == {}

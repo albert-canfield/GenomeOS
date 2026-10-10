@@ -289,6 +289,7 @@ def main() -> int:
         "cells_the_sweep_scored_without_a_dependency_column": cc2.CELLS_WITHOUT_A_DEPENDENCY_COLUMN,
         "other_cells_of_the_myc_myb_screen_the_chain_cannot_reach": (cc2.OTHER_CELLS_OF_THE_MYC_MYB_SCREEN),
         "gate_fixed_before_the_counting": cc2.GATE,
+        "arm_keys_are_m3s": cc2.POSITIVE_CONTROL_READS,
         "m3_for_comparison": {
             "result": cc2.M3_RESULT,
             "arm_a": cc2.M3_ARM_A,
