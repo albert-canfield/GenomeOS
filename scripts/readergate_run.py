@@ -132,13 +132,22 @@ def manifest(rna_read: bool) -> dict:
         mf.files_entry("reader v1 DNase narrowPeak files", [p for p in peak_files(CHROMS) if p.exists()]),
         mf.input_entry(REGISTRATION, partition=None),
         mf.input_entry(rg.RNA_SOURCES, partition=None),
+        # hashed by check_registration's pin check, which is a read of its bytes (the first run was
+        # refused at the write for leaving it undeclared)
+        mf.input_entry(RESULTS_DIR / "readergate_census.json", partition=None),
     ]
-    if rna_read:
-        inputs += [
-            mf.input_entry(p, partition="measured outcome, opened after the harness checks")
-            for p in reg["pinned_sha256"]
-            if p.startswith(rg.RNA_DIR.as_posix())
-        ]
+    # the RNA files are hashed by the pin check on every path; their VALUES are opened only after the
+    # harness checks, and the partition says which happened
+    opened = (
+        "measured outcome, values opened after the harness checks"
+        if rna_read
+        else ("measured outcome, hashed by the pin check; no value opened")
+    )
+    inputs += [
+        mf.input_entry(p, partition=opened)
+        for p in reg["pinned_sha256"]
+        if p.startswith(rg.RNA_DIR.as_posix())
+    ]
     return {
         "sources": [
             {"accession": "the 24 compiled non-coding programs M1 ran", "version": "pinned by sha256"},
