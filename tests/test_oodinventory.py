@@ -121,3 +121,114 @@ def test_committed_rule_file_matches_the_module_and_names_its_set():
     assert payload["covered_curie_count"] == len(payload["covered_curies"])
     assert payload["covered_curie_digest"] == ood.curie_digest(payload["covered_curies"])
     assert payload["rna_rows_with_accession"] == 0
+
+
+# --- the search, whose rule is the one above ---------------------------------------------------
+# These hold the parts of scripts/oodinventory_search.py that decide what the list contains: the
+# assay sets (a perturbation RNA-seq or a CAGE experiment must never count), the hand-declared
+# relations OLS cannot serve, and the sibling disclosure.
+
+
+def test_the_assay_sets_do_not_overlap_and_exclude_the_perturbations():
+    from scripts import oodinventory_search as search
+
+    assert not set(search.ACCESSIBILITY_ASSAYS) & set(search.RNA_ASSAYS)
+    for assay in search.ACCESSIBILITY_ASSAYS + search.RNA_ASSAYS:
+        assert assay not in search.EXCLUDED_ASSAYS
+    for assay in ("shRNA RNA-seq", "CRISPR RNA-seq", "siRNA RNA-seq", "CRISPRi RNA-seq"):
+        assert "genetically modified" in search.EXCLUDED_ASSAYS[assay]
+    for assay in ("CAGE", "RAMPAGE", "PRO-cap", "small RNA-seq", "microRNA-seq"):
+        assert assay in search.EXCLUDED_ASSAYS
+
+
+def test_every_hand_declared_relation_names_a_covered_curie():
+    from scripts import oodinventory_search as search
+
+    covered = ood.covered_curies()
+    for curie, (parents, evidence) in search.DECLARED_BY_HAND.items():
+        assert parents, curie
+        assert all(p in covered for p in parents), (curie, parents)
+        assert len(evidence) > 40, curie
+        # A hand declaration is only for a term OLS cannot answer: an NTR term, or an id
+        # migration where the covered set carries the same name under the old id.
+        assert curie.startswith("NTR:") or curie == "CL:4006001"
+
+
+def test_a_hand_declared_term_is_not_absent_and_an_undeclared_ntr_term_is_unchecked():
+    from scripts import oodinventory_search as search
+
+    covered = ood.covered_curies()
+    row = ood.verdict(
+        ood.Candidate(
+            curie="CL:4006001",
+            label="fibroblast of skin of scalp",
+            source="ENCODE",
+            related_covered=search.DECLARED_BY_HAND["CL:4006001"][0],
+            relation_checked=True,
+        ),
+        covered,
+    )
+    assert row["related_covered"] == ["NTR:0000524"]
+    assert row["absent_by_rule"] is False
+    unknown = ood.verdict(ood.Candidate(curie="NTR:9999999", label="invented", source="ENCODE"), covered)
+    assert unknown["absent_status"] == "relation_unchecked"
+    assert unknown["absent_by_rule"] is False
+
+
+def test_the_sibling_flag_fires_on_a_donor_line_and_a_cell_line_and_not_on_a_tissue():
+    from scripts import oodinventory_search as search
+
+    covered = ood.covered_curies()
+    assert search._sibling_flag("EFO:0010835", "GM19023", "cell line", covered)
+    assert search._sibling_flag("EFO:0001247", "T47D", "cell line", covered)
+    assert search._sibling_flag("UBERON:0002394", "bile duct", "tissue", covered) is None
+    # A covered term is not a candidate at all, so it carries no flag.
+    assert search._sibling_flag("EFO:0002784", "GM12878", "cell line", covered) is None
+
+
+def test_a_named_donor_line_is_a_leaf_and_a_tissue_is_not():
+    from scripts import oodinventory_search as search
+
+    assert search._donor_line("GM19023", "cell line") is True
+    assert search._donor_line("HG02571", "cell line") is True
+    assert search._donor_line("T47D", "cell line") is False
+    assert search._donor_line("bile duct", "tissue") is False
+
+
+def test_the_ols_url_knows_efo_from_the_obo_ontologies_and_refuses_ntr():
+    from scripts import oodinventory_search as search
+
+    assert "www.ebi.ac.uk%252Fefo%252FEFO_0001247" in search.ols_url("EFO:0001247", "hierarchicalAncestors")
+    assert "/ontologies/cl/" in search.ols_url("CL:0000451", "hierarchicalAncestors")
+    assert "/ontologies/uberon/" in search.ols_url("UBERON:0002394", "hierarchicalAncestors")
+    assert "/ontologies/clo/" in search.ols_url("CLO:0024877", "hierarchicalAncestors")
+    assert search.ols_url("NTR:0000497", "hierarchicalAncestors") is None
+
+
+def test_the_other_sources_each_name_the_clause_they_fail():
+    from scripts import oodinventory_search as search
+
+    named = {s["source"] for s in search.OTHER_SOURCES}
+    assert {"GTEx", "Tabula Sapiens", "GEO / SRA"} <= named
+    assert any("Human Cell Atlas" in s for s in named)
+    for entry in search.OTHER_SOURCES:
+        assert entry["clause_failed"] and len(entry["detail"]) > 60
+
+
+def test_the_two_sibling_kinds_are_told_apart_and_a_tissue_has_neither():
+    from scripts import oodinventory_search as search
+
+    covered = ood.covered_curies()
+    assert (
+        search._sibling_kind("EFO:0010835", "GM19023", "cell line", covered)
+        == "donor_variant_of_a_covered_lymphoblastoid_line"
+    )
+    assert (
+        search._sibling_kind("EFO:0001247", "T47D", "cell line", covered)
+        == "immortalised_or_cancer_line_with_covered_neighbours"
+    )
+    assert search._sibling_kind("UBERON:0002394", "bile duct", "tissue", covered) == ""
+    # Each named line's flag names the covered neighbour it rests on, not a generic sentence.
+    for curie, text in search.LINE_NEIGHBOURS.items():
+        assert search._sibling_flag(curie, "x", "cell line", covered) == text
+        assert ":" in text and "covered set holds" in text
