@@ -286,6 +286,34 @@ REGISTRATION: dict[str, Any] = {
 }
 
 
+#: outside the binding words, which no amendment changes; each entry says what changed and why
+AMENDMENTS: list[dict[str, str]] = [
+    {
+        "number": "1",
+        "date": "2026-10-10",
+        "what_happened": (
+            "run 1, against the registration committed in 9d2ab1f, computed every reading and was then"
+            " refused at the write by the result contract (genomeos/results.py): the manifest's"
+            " `partitions` was a string, and the contract takes a dict or 'n/a: why'. save_result"
+            " quarantined the payload at data/quarantine/results/saturable_gate_result.json. The run"
+            " printed nothing before the write, and the quarantined file was not opened, so no number"
+            " of run 1 was seen before this amendment"
+        ),
+        "change": (
+            "the result manifest's `partitions` becomes a dict naming the split rule; `run` also"
+            " compares its payload with run 1's quarantined payload key for key and records whether"
+            " they are identical. Nothing in REGISTRATION, the data, the fits, the split, the bar or"
+            " the readings changes; the pins are re-taken because the script's bytes changed"
+        ),
+        "rule": (
+            "the reading is run 2's only if run 2's payload is identical to run 1's; if they differ,"
+            " that is recorded and run 1's quarantined payload is the registered run"
+        ),
+    },
+]
+QUARANTINED_RUN_1 = ROOT / "data" / "quarantine" / "results" / f"{RESULT_NAME}.json"
+
+
 # ---- the rules fixed above, as code -----------------------------------------------------------
 
 
@@ -642,6 +670,10 @@ def _binding_words() -> dict[str, Any]:
 def _manifest(inputs: list[dict[str, Any]], partitions: str) -> dict[str, Any]:
     from genomeos import manifest as mf
 
+    # amendment 1: the contract takes a dict or 'n/a: why', and run 1 passed the split rule's text
+    if not partitions.startswith("n/a:"):
+        partitions = {"rule": partitions, "training": "even", "held_out": "odd"}  # type: ignore[assignment]
+
     return {
         "sources": [
             {"accession": "PaxDb 9606-WHOLE_ORGANISM-integrated", "version": "as fetched by gate (b)"},
@@ -689,6 +721,7 @@ def register() -> int:
         "pinned_sha256": pins,
         "what_the_run_will_write": f"data/results/{RESULT_NAME}.json",
         "protein_values_read": 0,
+        "amendments": AMENDMENTS,
     }
     inputs = [
         mf.input_entry(PAXDB_FILE.relative_to(ROOT), partition="pinned by sha256; no value read"),
@@ -756,7 +789,19 @@ def run() -> int:
         mf.input_entry(GTEX_FILE.relative_to(ROOT), partition="training and held-out, split by symbol hash"),
         mf.files_entry("data/knowledge/proteins/<symbol>.json for every GTEx symbol that has one", residues),
     ]
+    # amendment 1: run 1 was quarantined unread; its payload must equal this run's, key for key
+    if QUARANTINED_RUN_1.exists():
+        q = json.loads(QUARANTINED_RUN_1.read_text())
+        differ = sorted(k for k in out if q.get(k) != json.loads(json.dumps(out[k])))
+        out["run_1_quarantined_payload"] = {
+            "path": str(QUARANTINED_RUN_1.relative_to(ROOT)),
+            "identical_to_this_run": not differ,
+            "keys_that_differ": differ,
+        }
+        inputs.append(mf.input_entry(QUARANTINED_RUN_1.relative_to(ROOT), partition=None))
     print("saved", save_result(RESULT_NAME, out, manifest=_manifest(inputs, REGISTRATION["split"])))
+    if "run_1_quarantined_payload" in out:
+        print("run 1 payload identical:", out["run_1_quarantined_payload"]["identical_to_this_run"])
     for line in (reading, g["comparator_reading"], g["slope"]["reading"], g["binding"]["reading"]):
         print(line)
     if g["boundary"]:
