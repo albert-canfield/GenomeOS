@@ -335,6 +335,12 @@ def main() -> int:
         GENE_TABLE.as_posix(),
     )
     inputs = [mf.input_entry(p, partition=None) for p in pinned]
+    # the harness re-hashes everything the registration pinned, so declare those files too
+    inputs += [
+        mf.input_entry(p, partition=None)
+        for p in sorted(json.loads(REGISTRATION.read_text())["pinned_sha256"])
+        if p not in pinned
+    ]
     inputs += [
         mf.input_entry(f["path"], partition=None) for c in sources["biosamples"].values() for f in c["files"]
     ]
