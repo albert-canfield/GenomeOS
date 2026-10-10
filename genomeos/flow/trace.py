@@ -273,8 +273,8 @@ def trace(
     )
 
 
-def trace_gene(genome, gene: Gene, transcripts: list[Transcript]) -> CentralDogmaTrace | None:
-    """Trace a gene's canonical coding transcript (Ensembl_canonical tag, else the longest CDS)."""
+def canonical_transcript(transcripts: list[Transcript]) -> Transcript | None:
+    """The transcript `trace_gene` follows: the Ensembl_canonical coding one, else the longest CDS."""
     coding = [t for t in transcripts if t.cds_segments]
     pool = coding or transcripts
     if not pool:
@@ -282,4 +282,13 @@ def trace_gene(genome, gene: Gene, transcripts: list[Transcript]) -> CentralDogm
     canon = next((t for t in pool if "Ensembl_canonical" in t.tags), None)
     if canon is None:
         canon = max(pool, key=lambda t: sum(s.length for s in (t.cds_segments or t.exons)))
-    return trace(genome, canon, gene.symbol)
+    return canon
+
+
+def trace_gene(genome, gene: Gene, transcripts: list[Transcript]) -> CentralDogmaTrace | None:
+    """Trace a gene's canonical coding transcript (Ensembl_canonical tag, else the longest CDS).
+
+    The canonical transcript is not necessarily the one a tissue makes: `genomeos.flow.tissue`
+    traces the tissue's dominant isoform beside it (`trace_gene_in_tissue`)."""
+    canon = canonical_transcript(transcripts)
+    return None if canon is None else trace(genome, canon, gene.symbol)
