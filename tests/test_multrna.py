@@ -395,3 +395,27 @@ def test_the_run_descriptives_and_table_name_their_genes():
     rows[0].update({"symbol": "S", "gene_id": "ENSG", "chrom": "chrT"})
     t = run._table(rows[:1])
     assert t["columns"][-2:] == ["P", "D"] and len(t["rows"][0][-1]) == 13
+
+
+# ---- the committed registration ---------------------------------------------------------------------------
+
+
+def test_the_committed_registration_is_the_module_it_binds():
+    import json
+    from pathlib import Path
+
+    import tracked_paths as tp
+
+    reg_path = Path("data/results/multrna_registration.json")
+    # tracked by git from its registration commit, so its absence is a broken checkout, never a skip
+    tp.must_be_present(reg_path, was="registration not yet written")
+    reg = json.loads(reg_path.read_text())
+    assert {f: reg[f] for f in mr.BOUND} == mr.registered_fields()
+    assert reg["census_facts"]["seven_d_census_reproduced"]["problems"] == []
+    m = reg["census_facts"]["reader_selection"]["forms"][mr.FORM]
+    assert m["run"] == m["informative"] and m["harness_failing_genes"] == 0
+    assert reg["seven_d_committed_verbatim"]["outcomes"] == {"mean": "WORSE", "competition": "WORSE"}
+    assert reg["result_manifest"]["complete"] is True
+    assert reg["result_manifest"]["code_cleanliness"]["own_code_is_committed"] is True
+    assert reg["alphagenome_requests"] == 0
+    assert any(p.startswith("data/cache/readergate/rna") for p in reg["pinned_sha256"])
