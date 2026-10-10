@@ -1,0 +1,268 @@
+{
+  "result": "simpler_worm_inventory",
+  "date": "2026-10-10",
+  "question": "what public, measured C. elegans regulatory data exists, and what the project already holds",
+  "sources": [
+    {
+      "source": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+      "measures": "ATAC-seq accessibility (RPM) of 47,514 elements in FACS-sorted nuclei of five young-adult tissues (germline, neurons, muscle, hypodermis, intestine) with a tissue call per element; element classes (20,271 putative_enhancer, 15,277 coding_promoter, 8,565 other_element, 2,244 unassigned_promoter, 831 non-coding_RNA, 326 pseudogene_promoter); nuclear RNA-seq TPM of 20,222 protein-coding genes in the same five tissues with a tissue call per gene",
+      "assembly": "ce11 (WBcel235)",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7706728/supplementaryFiles",
+      "bytes": {
+        "bundle_streamed_then_discarded": 28664943,
+        "table_s2_kept": 14777075
+      },
+      "licence": "CC BY 4.0 (article and supplements)",
+      "fetched": true,
+      "used_by": "the registered test (elements and their tissue call; gene TPM as the endpoint)"
+    },
+    {
+      "source": "GEO GSE141213 (Serizay et al. 2020 raw and processed tracks)",
+      "measures": "per-tissue ATAC and stranded RNA bigWigs, young adult, plus L1/L3 muscle and L3 germline ATAC",
+      "assembly": "ce11",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE141nnn/GSE141213/suppl/",
+      "bytes": {
+        "raw_tar": 2386268160,
+        "single_bigwig_range": [
+          7135176,
+          236553287
+        ]
+      },
+      "licence": "public GEO record",
+      "fetched": false,
+      "used_by": "nothing: Table S2 already holds the per-element and per-gene values distilled from these"
+    },
+    {
+      "source": "Janes J et al. (2018) Chromatin accessibility dynamics across C. elegans development and ageing. eLife 7:e37344",
+      "measures": "ATAC-seq and long-cap / nuclear RNA across six stages and ageing; 42,245 elements annotated by type",
+      "assembly": "ce11",
+      "url": "https://elifesciences.org/articles/37344",
+      "bytes": "not checked",
+      "licence": "CC BY 4.0 (eLife)",
+      "fetched": false,
+      "used_by": "nothing: Table S2 extends the same annotation pipeline (its header says so) to 47,514 elements"
+    },
+    {
+      "source": "UCSC ce11 phyloP135way (135 nematodes) and phyloP26way / phastCons26way (26 nematodes)",
+      "measures": "per-base conservation scores across nematodes",
+      "assembly": "ce11",
+      "url": "https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/ce11.phyloP135way.bw",
+      "bytes": {
+        "phyloP135way_bw": 356259120,
+        "phyloP26way_bw": 180170767,
+        "phastCons26way_bw": 159951981
+      },
+      "licence": "UCSC Genome Browser download; terms for this track not checked",
+      "fetched": false,
+      "used_by": "nothing yet: readable by range request with genomeos/attribution/bigwig.py without download, for the worm constraint tiers (docs/SIMPLER-GENOMES.md)"
+    },
+    {
+      "source": "Durham TJ et al. (2021) Comprehensive characterization of tissue-specific chromatin accessibility in L2 C. elegans nematodes. Genome Res 31:1952",
+      "measures": "single-cell (sci-ATAC) accessibility at L2, cell-type resolved",
+      "assembly": "ce11",
+      "url": "https://genome.cshlp.org/content/31/10/1952",
+      "bytes": "not checked",
+      "licence": "not checked",
+      "fetched": false,
+      "used_by": "nothing: a candidate replication of the registered test at a second stage"
+    },
+    {
+      "source": "Daugherty AC et al. (2017) Chromatin accessibility dynamics reveal novel functional enhancers in C. elegans. Genome Res 27:2096",
+      "measures": "ATAC-seq across embryo, L3 and young adult, with transgenic reporter tests of selected elements",
+      "assembly": "ce11",
+      "url": "https://genome.cshlp.org/content/27/12/2096",
+      "bytes": "not checked",
+      "licence": "not checked",
+      "fetched": false,
+      "used_by": "nothing"
+    },
+    {
+      "source": "WormBase cis-regulatory features (enhancer, promoter, regulatory_region, TF_binding_site in the WormBase GFF3)",
+      "measures": "curated and imported regulatory annotations, mostly from reporter and ChIP studies",
+      "assembly": "WBcel235",
+      "url": "https://downloads.wormbase.org/releases/",
+      "bytes": "not checked",
+      "licence": "WormBase terms, not checked",
+      "fetched": false,
+      "used_by": "nothing"
+    },
+    {
+      "source": "Genome-wide reporter assays (STARR-seq, MPRA) in C. elegans",
+      "measures": "none found in one web search on 2026-10-10",
+      "assembly": null,
+      "url": null,
+      "bytes": null,
+      "licence": null,
+      "fetched": false,
+      "used_by": "nothing"
+    },
+    {
+      "source": "Further tissue or cell RNA: Kaletsky et al. 2018 (adult tissues), CeNGEN (Taylor et al. 2021, neuron classes), modERN TF ChIP-seq (Kudron et al. 2018)",
+      "measures": "tissue and neuron-class expression; transcription-factor binding",
+      "assembly": "ce11",
+      "url": null,
+      "bytes": "not checked",
+      "licence": "not checked",
+      "fetched": false,
+      "used_by": "nothing"
+    }
+  ],
+  "already_held": [
+    {
+      "path": "data/reference/celegans/WBcel235.dna.toplevel.fa.gz",
+      "bytes": 30316631,
+      "what": "WBcel235 genome (Ensembl), git-ignored"
+    },
+    {
+      "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+      "bytes": 8231538,
+      "what": "Ensembl gene models, 19,985 protein-coding genes; the attribution reads this"
+    },
+    {
+      "path": "data/knowledge/celegans/ma2021_atlas.zip",
+      "bytes": 88347568,
+      "what": "Ma et al. 2021 TF reporter expression per embryonic cell (Zenodo 4737593, CC BY 4.0)"
+    },
+    {
+      "path": "data/results/celegans_*.json",
+      "bytes": null,
+      "what": "16 results: lineage, Packer 2019 cell types, contacts, fates, TF atlas, time axis"
+    },
+    {
+      "path": "data/organisms/celegans/*.bio",
+      "bytes": null,
+      "what": "lineage, fates, contacts as BioLang (held by lane-wormcontact)"
+    }
+  ],
+  "held_before_this_lane": "no worm regulatory-element, accessibility, conservation or tissue-RNA data; the worm data the project held were the lineage, cell types, contacts and the TF reporter atlas",
+  "table_s2_sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+  "lane_download_bytes": 28664943,
+  "money": "none; no model request",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "Genome Res 30(12), December 2020; supplement as served by Europe PMC on 2026-10-10"
+      },
+      {
+        "accession": "Ensembl gene models for WBcel235 (WBcel235.63.gff3.gz)",
+        "version": "release 63, the copy held in data/reference/celegans since 2026-09-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "the one source fetched, digested here"
+      }
+    ],
+    "assembly": "WBcel235 (ce11): Table S2 and the gene models are on the same build; nothing is lifted",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "the GFF3 is 1-based closed; Table S2 does not state its base, and the element midpoint (start + end) // 2 moves by at most 1 bp either way"
+    },
+    "parameters": {
+      "download_budget_bytes": 1500000000
+    },
+    "exclusions": [
+      "sources whose size or licence was not checked are listed with 'not checked'"
+    ],
+    "partitions": "n/a: an inventory has no evaluation partition",
+    "code_cleanliness": {
+      "git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/simpler_worm_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_worm_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_worm_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "genomeos/attribution/targetchoice.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py",
+        "tests/test_targetchoice.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_worm_run.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "dirty": true,
+      "dirty_code_paths": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "genomeos/attribution/targetchoice.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py",
+        "tests/test_targetchoice.py"
+      ],
+      "untracked_code_paths": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py"
+      ],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_worm_run.py",
+        "inventory"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "code_cleanliness_git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 72ed222"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 17,
+      "opens_under_data": 2,
+      "files_read": 1,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}

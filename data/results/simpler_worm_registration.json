@@ -1,0 +1,254 @@
+{
+  "result": "simpler_worm_registration",
+  "date": "2026-10-10",
+  "written_before_the_rna_sheet_was_read": true,
+  "registered_inputs": {
+    "table_s2": {
+      "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+      "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70"
+    },
+    "gff3": {
+      "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+      "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9"
+    },
+    "protein_coding_genes": 19973
+  },
+  "registration": {
+    "claim": "On C. elegans distal elements accessible in exactly one of five tissues, the gene the worm domain rule attributes is expressed highest in the element's tissue more often than the gene with the nearest annotated 5' end.",
+    "attribution": "Domain rule (the worm instance of the human node model; C. elegans has no CTCF): host protein-coding gene if the element's midpoint lies in one (nearest 5' end among overlapping hosts); otherwise the flanking protein-coding gene whose 5' end faces the element (the element is upstream of it); divergent pair: nearer 5' end; convergent pair: nearer 5' end of the two, counted apart. Reads WBcel235 Ensembl gene models (positions, strands) only.",
+    "baseline": "Nearest annotated 5' end among all protein-coding genes of the chromosome (nearest TSS).",
+    "population": "Serizay et al. 2020 Table S2 ATAC_metrics rows with annot_dev_age_tissues == putative_enhancer and Annotation in {Germline, Neurons, Muscle, Hypod., Intest.} (accessible in exactly one tissue by the source's own call); midpoint = (start + end) // 2; chromosomes I-V and X.",
+    "endpoint": "Concordant: the attributed gene's TPM (RNA_metrics, young adults) in the element's tissue is >= 5 and strictly higher than in each of the other four tissues. A gene absent from RNA_metrics is not concordant (kept in the denominator).",
+    "never_read_for_attribution": [
+      "promoter_gene_id_fwd",
+      "promoter_locus_id_fwd",
+      "promoter_gene_id_rev",
+      "promoter_locus_id_rev",
+      "associated_gene_id",
+      "associated_locus_id",
+      "nb_associated_promoters",
+      "nb_associated_enhancers"
+    ],
+    "statistic": "delta = concordance(domain rule) - concordance(nearest TSS), in points, on the same elements; 95% interval: percentile cluster bootstrap over 1-Mb windows, 2,000 resamples, seed 20261010.",
+    "matched_control": "Per element, a protein-coding gene of the same chromosome drawn uniformly among those whose 5' end lies in the same distance bin as the domain-rule gene's (bins 0-1, 1-2, 2-5, 5-10, 10-20, 20-50, 50-100, >100 kb), the domain-rule gene excluded; if none, the gene whose 5'-end distance is closest to the domain-rule gene's. 1,000 draws, seed 20261010; one-sided p = (1 + draws with concordance >= observed) / 1,001.",
+    "positive_control": "Single-tissue coding_promoter elements, nearest-TSS gene, against its own matched-distance control built the same way. If its p >= 0.05 the readout is declared unresponsive and the primary reading is withheld.",
+    "falsifier": "The domain rule is falsified as a carrier of tissue information on this endpoint if its concordance is not above its matched-distance control (one-sided p >= 0.05).",
+    "decision": "DOMAIN_RULE_AHEAD if the interval's lower bound > 0; NEAREST_AHEAD if its upper bound < 0; NO_DIFFERENCE_DETECTED otherwise.",
+    "strata_beside": "Reported beside the primary, deciding nothing: host vs intergenic elements, each tissue, the discordant elements alone, and the nearest-TSS gene against its own matched control. If the primary is DOMAIN_RULE_AHEAD and the intergenic stratum's lower bound is <= 0, the host caveat is appended to the reading.",
+    "stop_rule": "One run. If fewer than 200 elements have different genes under the two rules, stop unscored (UNDERPOWERED). No rule, population, threshold or endpoint is changed after the RNA sheet is read; a second definition would be a new registration, committed before it is run.",
+    "outcome_wording": {
+      "head": "On {n} C. elegans putative enhancers accessible in exactly one of five tissues (Serizay et al. 2020, young adults), the gene the domain rule attributes is expressed at 5 TPM or more and highest in the element's own tissue for {kd} of {n} ({cd}%), against {kn} of {n} ({cn}%) for the gene with the nearest 5' end; the rules differ on {k} elements; difference {d} points, 95% {lo} to {hi} over 1-Mb clusters.",
+      "DOMAIN_RULE_AHEAD": "On this endpoint the domain rule is ahead of nearest TSS.",
+      "NEAREST_AHEAD": "On this endpoint nearest TSS is ahead of the domain rule.",
+      "NO_DIFFERENCE_DETECTED": "No difference detected between the domain rule and nearest TSS.",
+      "NOT_FALSIFIED": "The domain rule's genes match the element's tissue more often than genes at a matched distance ({cc}%, one-sided p {p}), so position carries tissue information here.",
+      "FALSIFIED": "The domain rule's genes match the element's tissue no more often than genes at a matched distance ({cc}%, one-sided p {p}): on this endpoint the attribution carries no tissue information beyond distance, and it is falsified as a carrier of it.",
+      "host_caveat": "The difference is not carried by the intergenic elements; inside gene bodies accessibility can follow the host gene's own transcription in the same nuclei, so this run does not separate regulation from transcription.",
+      "tail": "Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it."
+    }
+  },
+  "census": {
+    "elements": 5814,
+    "elements_by_tissue": {
+      "Germline": 470,
+      "Neurons": 1434,
+      "Muscle": 1432,
+      "Hypod.": 1487,
+      "Intest.": 991
+    },
+    "domain_cases": {
+      "one_flank": 1,
+      "host": 3479,
+      "divergent": 874,
+      "faces_one": 1319,
+      "convergent_fallback": 141
+    },
+    "discordant": 1248,
+    "discordant_fraction": 0.2147,
+    "discordant_by_case": {
+      "host": 942,
+      "faces_one": 300,
+      "convergent_fallback": 6
+    },
+    "discordant_by_tissue": {
+      "Germline": 111,
+      "Neurons": 305,
+      "Muscle": 297,
+      "Hypod.": 323,
+      "Intest.": 212
+    },
+    "host_elements": 3479,
+    "intergenic_elements": 2335,
+    "intergenic_discordant": 306,
+    "clusters_1mb": 103,
+    "mde_points_unclustered": 1.701,
+    "positive_control_promoters": 5347,
+    "stop_rule_met": false
+  },
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "Genome Res 30(12), December 2020; supplement as served by Europe PMC on 2026-10-10"
+      },
+      {
+        "accession": "Ensembl gene models for WBcel235 (WBcel235.63.gff3.gz)",
+        "version": "release 63, the copy held in data/reference/celegans since 2026-09-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "elements and their tissue call only (sheet ATAC_metrics)"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "gene positions and strands"
+      }
+    ],
+    "assembly": "WBcel235 (ce11): Table S2 and the gene models are on the same build; nothing is lifted",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "the GFF3 is 1-based closed; Table S2 does not state its base, and the element midpoint (start + end) // 2 moves by at most 1 bp either way"
+    },
+    "parameters": {
+      "element_type": "putative_enhancer",
+      "promoter_type": "coding_promoter",
+      "tissues": [
+        "Germline",
+        "Neurons",
+        "Muscle",
+        "Hypod.",
+        "Intest."
+      ],
+      "detection_tpm": 5.0,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "control_draws": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "seed": 20261010,
+      "min_discordant": 200,
+      "alpha": 0.05
+    },
+    "exclusions": [
+      "elements of any class other than putative_enhancer (primary) and coding_promoter (positive control)",
+      "elements whose tissue call is not exactly one of the five tissues (Ubiq., Low, Unclassified, combinations)",
+      "genes that are not protein_coding in the GFF3, and the MtDNA genes",
+      "the source's own element-to-gene columns, never read: promoter_gene_id_fwd, promoter_locus_id_fwd, promoter_gene_id_rev, promoter_locus_id_rev, associated_gene_id, associated_locus_id, nb_associated_promoters, nb_associated_enhancers"
+    ],
+    "partitions": {
+      "population": "fixed here, before the RNA sheet (RNA_metrics) was opened"
+    },
+    "code_cleanliness": {
+      "git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/simpler_worm_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_worm_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_worm_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "genomeos/attribution/targetchoice.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py",
+        "tests/test_targetchoice.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_worm_run.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "dirty": true,
+      "dirty_code_paths": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "genomeos/attribution/targetchoice.py",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py",
+        "tests/test_targetchoice.py"
+      ],
+      "untracked_code_paths": [
+        "data/organisms/celegans/embryo_nolookup.bio",
+        "data/organisms/celegans/founder_tissues.bio",
+        "data/organisms/celegans/lineage_embryo_tree.bio",
+        "scripts/celegans_nolookup.py",
+        "scripts/targetchoice_register.py",
+        "scripts/targetchoice_run.py",
+        "tests/test_celegans_nolookup.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/simpler_worm_inventory.json"
+      ],
+      "argv": [
+        "scripts/simpler_worm_run.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "code_cleanliness_git_sha": "72ed22285d94289d73199667984ad4b3f01be9c8",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 72ed222"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 311,
+      "opens_under_data": 6,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
