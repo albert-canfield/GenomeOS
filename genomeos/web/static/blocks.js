@@ -12,6 +12,8 @@
   const canvas = $('#b-canvas'), ctx = canvas.getContext('2d');
   const mini = $('#b-mini'), mctx = mini.getContext('2d');
   const muted = () => getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+  // the per-biosample read call on the Block card (static/readcall.js), loaded here so index.html is untouched
+  if (!window.readCallHtml) { const s = document.createElement('script'); s.src = '/static/readcall.js'; document.head.appendChild(s); }
 
   function resize() {
     const r = canvas.parentElement.getBoundingClientRect();
@@ -118,7 +120,7 @@
     const yPlus = 22 + (rowsDomain ? rowsDomain * (domainH + gapY) + 18 : 0);
     const yMinus = yPlus + rowsPlus * (geneH + gapY) + 18;
     const yOther = yMinus + rowsMinus * (geneH + gapY) + 18;
-    ctx.fillStyle = muted(); if (rowsDomain) ctx.fillText(st.reader ? `nodes: domains between CTCF boundaries (inferred) · reader ${st.reader}: fill = open fraction, red edge = silent node; genes: ● read ○ silent` : 'nodes: domains between CTCF boundaries (inferred)', 4, yDomain - 4); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
+    ctx.fillStyle = muted(); if (rowsDomain) ctx.fillText(st.reader ? `nodes: domains between CTCF boundaries (inferred) · reader ${st.reader}: fill = open fraction, red edge = silent node; genes: ● read on DNase (green) ◐ read by marks (cyan) ● poised (amber) ○ silent` : 'nodes: domains between CTCF boundaries (inferred)', 4, yDomain - 4); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
     st.hitboxes = [];
     const bs = st.data.blocks;
     for (const b of bs) {
@@ -142,11 +144,16 @@
       // three states, not two: read (filled green), poised (filled amber - H3K27me3 over a promoter
       // that also carries H3K4me3, a gene held ready rather than shut) and silent (hollow grey).
       // Poised genes were drawn as silent until 2026-09-17 because they arrive inside silent_genes.
+      // a fourth: read by marks (no DNase peak; H3K4me3 and H3K27ac over the promoter) is a half-filled
+      // cyan dot, apart from a read on the DNase file. It was drawn as a plain read until 2026-10-10.
+      const byMarks = rd === 'read' && b.attrs[st.reader + '_read_basis'] === 'marks';
       if (rd) {
-        const fill = rd === 'read' ? '#56d364' : rd === 'poised' ? '#d29922' : 'transparent';
-        const line = rd === 'read' ? '#56d364' : rd === 'poised' ? '#d29922' : '#8b949e';
-        ctx.beginPath(); ctx.arc(x0 + Math.min(6, w / 2), y + h - 6, 3.2, 0, Math.PI * 2);
+        const fill = byMarks ? 'transparent' : rd === 'read' ? '#56d364' : rd === 'poised' ? '#d29922' : 'transparent';
+        const line = byMarks ? '#39c5c5' : rd === 'read' ? '#56d364' : rd === 'poised' ? '#d29922' : '#8b949e';
+        const cx = x0 + Math.min(6, w / 2), cy = y + h - 6;
+        ctx.beginPath(); ctx.arc(cx, cy, 3.2, 0, Math.PI * 2);
         ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = line; ctx.lineWidth = 1.2; ctx.stroke();
+        if (byMarks) { ctx.beginPath(); ctx.arc(cx, cy, 3.2, Math.PI / 2, Math.PI * 1.5); ctx.closePath(); ctx.fillStyle = line; ctx.fill(); }
       }
       ctx.strokeStyle = b.id === st.sel ? '#fff' : col; ctx.lineWidth = b.id === st.sel ? 2 : 1; ctx.strokeRect(x0 + 0.5, y + 0.5, w - 1, h - 1);
       if (w > 30) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = 'bold 11px system-ui'; ctx.fillText(b.name + (b.attrs.gene_type !== 'protein_coding' ? ' · ' + b.attrs.gene_type : ''), x0 + 4, y + 11); }
@@ -308,10 +315,11 @@
       <div class="mono" style="font-size:12px">${b.type} · ${st.chrom}:${b.start.toLocaleString()}-${b.end.toLocaleString()} ${b.strand} · ${fmtPos(b.end - b.start)}</div>
       ${par ? `<div class="muted">inside ${par.type} <b>${par.name}</b></div>` : ''}
       ${kids.length ? `<div class="muted">contains ${Object.entries(kids.reduce((a, k) => (a[k.type] = (a[k.type] || 0) + 1, a), {})).map(([k, v]) => `${v} ${k}`).join(', ')}</div>` : ''}
-      ${Object.keys(b.attrs).length ? `<div class="muted" style="font-size:12px">${Object.entries(b.attrs).map(([k, v]) => `${k}=${v}`).join(' · ')}</div>` : ''}
+      ${Object.keys(b.attrs).length ? `<div class="muted" style="font-size:12px">${Object.entries(b.attrs).filter(([k]) => !k.endsWith('_read_basis')).map(([k, v]) => `${k}=${v}`).join(' · ')}</div>` : ''}
       ${b.type === 'unknown' && b.attrs.class ? `<div class="hint">Investigated: <b>${b.attrs.class}</b> (${b.evidence}, conf ${b.confidence}). ${b.attrs.patterns ? 'patterns: ' + b.attrs.patterns + '. ' : ''}${b.attrs.similar_to ? 'similar to ' + b.attrs.similar_to : ''}</div>` : ''}
       ${b.type === 'unknown' && !b.attrs.class ? '<div class="hint">UNKNOWN: no annotated gene here. In a human chromosome this space carries most of the regulation (enhancers, insulators) that we cannot yet read from sequence alone.</div>' : ''}
       <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button><button class="ghost" id="b-hl"><i class="ic">💡</i>${st.highlight === classOf(b) ? 'Clear highlight' : 'Highlight all ' + (b.type === 'unknown' && b.attrs.class ? b.attrs.class : b.type)}</button>${(b.type === 'gene' || par) ? `<button class="ghost" id="b-flow" data-tip="Open this gene in Flow: DNA → RNA → protein with its regulation"><i class="ic">🔁</i>Flow</button><button class="ghost" id="b-mol" data-tip="Open this gene in Molecules: isoforms, expression, protein definition, structure, graph"><i class="ic">🧫</i>Molecules</button><button class="ghost" id="b-decomp" data-tip="Read this gene back as a program: every layer GenomeOS holds for it, and the layers it does not"><i class="ic">🧾</i>Decompile</button>` : ''}</div>
+      <div id="b-readcall-out"></div>
       <div id="b-decomp-out"></div>`;
     $('#b-zoomto').onclick = () => { const pad = (b.end - b.start) * 0.15; st.view = [Math.max(0, b.start - pad), Math.min(st.length, b.end + pad)]; scheduleLoad(); };
     // the decompiled gene, in the tab where the gene is: what every layer says, and which layers are
@@ -329,6 +337,15 @@
       } catch (e) { out.innerHTML = `<span class="muted">${String(e)}</span>`; }
     };
     const geneName = b.type === 'gene' ? b.name : (par && par.type === 'gene' ? par.name : (par && par.parent && st.byId[par.parent] ? st.byId[par.parent].name : null));
+    // the reader's call on the gene in every biosample, read by marks apart from DNase, UNKNOWN with its reason
+    const rcOut = $('#b-readcall-out');
+    if (rcOut && geneName && !hovering) {
+      rcOut.innerHTML = '<span class="muted">reading the call in every biosample…</span>';
+      fetch(`/api/blocks/readcall?gene=${encodeURIComponent(geneName)}&chrom=${encodeURIComponent(st.chrom)}&path=${encodeURIComponent(st.path || '')}`)
+        .then(x => x.json())
+        .then(r => { rcOut.innerHTML = r.error ? `<span class="muted">${r.error}</span>` : window.readCallHtml ? window.readCallHtml(r, st.reader) : ''; })
+        .catch(e => { rcOut.innerHTML = `<span class="muted">${String(e)}</span>`; });
+    }
     const go = (tab, fill) => { fill(); const t = document.querySelector(`nav button[data-tab="${tab}"]`); if (t) t.click(); };
     if ($('#b-flow') && geneName) $('#b-flow').onclick = () => go('flow', () => { $('#f-gene').value = geneName; $('#f-chrom').value = st.chrom; setTimeout(() => $('#f-load').click(), 200); });
     if ($('#b-mol') && geneName) $('#b-mol').onclick = () => go('molecules', () => { $('#m-gene').value = geneName; $('#m-chrom').value = st.chrom; setTimeout(() => $('#m-load').click(), 200); });

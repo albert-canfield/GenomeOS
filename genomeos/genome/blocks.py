@@ -380,6 +380,9 @@ def _apply_reader(blocks: list[Block], chrom: str, results_dir: Path | None = No
         # it is H3K27me3 over a promoter that also carries H3K4me3, a gene held ready rather than shut.
         # Reading the narrower list first is what tells the two apart, and until 2026-09-17 nothing did.
         poised_genes = set(r.get("poised_genes") or [])
+        # read by marks (H3K4me3 and H3K27ac where the DNase file has no peak) is inside "read" and was
+        # shown nowhere; <cell>_read_basis says which of the two a read gene rests on (genome/readcall.py)
+        by_marks = set(r.get("read_by_marks") or [])
         for b in blocks:
             if b.type == "domain":
                 n = nodes.get(b.id)
@@ -391,6 +394,8 @@ def _apply_reader(blocks: list[Block], chrom: str, results_dir: Path | None = No
                 b.attrs[f"{cell}_read"] = (
                     "poised" if b.name in poised_genes else "silent" if b.name in silent_genes else "read"
                 )
+                if b.attrs[f"{cell}_read"] == "read":
+                    b.attrs[f"{cell}_read_basis"] = "marks" if b.name in by_marks else "DNase"
     return cells
 
 

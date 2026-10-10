@@ -2911,6 +2911,29 @@ class Api:
 
         return check_move(blocks, block_id, int(new_start), chrom_length)
 
+    def blocks_readcall(self, rel: str, chrom: str, gene: str) -> dict:
+        """The reader's call on one gene in every biosample it holds: read by DNase, read by marks,
+        poised, closed, or UNKNOWN with its reason (genome/readcall.py). An addition beside /api/blocks,
+        whose `<cell>_read` attributes fold the first two together and stay as they were."""
+        from genomeos.genome.readcall import read_calls
+
+        chrom = chrom or "chr21"
+        if not gene.strip():
+            raise ApiError("name a gene, for example ?gene=APP&chrom=chr21")
+        ann = self._annotation_for(rel, chrom)
+        if ann is None:
+            raise ApiError(f"no gene annotation for {chrom!r}", 404)
+        genes = [g for g in ann.genes.values() if g.locus.chrom == chrom]
+        want = gene.strip()
+        hits = [g for g in genes if g.symbol == want] or [
+            g for g in genes if g.symbol.upper() == want.upper()
+        ]
+        if not hits:
+            raise ApiError(f"no gene {want!r} on {chrom}", 404)
+        hit = next((g for g in hits if g.type == "protein_coding"), hits[0])
+        coding = sum(1 for g in genes if g.type == "protein_coding")
+        return read_calls(hit.symbol, chrom, hit.type, coding, self.root / "data" / "results")
+
     # ---- cancer -------------------------------------------------------------
 
     def cancer_knowledge(self, symbol: str | None = None, top: int = 30) -> dict:
@@ -3514,6 +3537,12 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "chrom", ""),
                         int(self._q(qs, "start", 0)),
                         int(self._q(qs, "end", 0)),
+                    )
+                )
+            if u.path == "/api/blocks/readcall":
+                return self._json(
+                    self.api.blocks_readcall(
+                        self._q(qs, "path", ""), self._q(qs, "chrom", ""), self._q(qs, "gene", "")
                     )
                 )
             if u.path == "/api/report":
