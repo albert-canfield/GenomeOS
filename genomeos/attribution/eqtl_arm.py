@@ -640,8 +640,10 @@ def _mean(xs: Sequence[float]) -> float | None:
 
 
 def window_rate(rows: Sequence[Mapping[str, Any]], field_: str = "w") -> float | None:
-    """The mean, over units, of the share of a unit's control windows (1..WINDOWS) that hit."""
-    return _mean([float(np.mean(r[field_][1:])) for r in rows if r[field_]])
+    """The mean, over units, of the share of a unit's matched windows that hit (all WINDOWS + 1 of them:
+    every one was drawn under the same rules, and which of them a test would hold out is chosen at
+    random in the sizing)."""
+    return _mean([float(np.mean(r[field_])) for r in rows if r[field_]])
 
 
 def icc(matrix: np.ndarray) -> float | None:
@@ -696,12 +698,12 @@ def summarise(
         a, b = sens(rs), window_rate(rs)
         return None if a is None or b is None else a - b
 
-    w = np.array([r["w"][1:] for r in rows], dtype=float)
+    w = np.array([r["w"] for r in rows], dtype=float)
     y = np.array([r["y"] for r in rows], dtype=float)
     groups = [f"{r['chrom']}:{r['gene']}" for r in rows]
     holding_any = [r for r in rows if r["y_any"]]
-    win_any = sum(sum(r["w_any"][1:]) for r in rows)
-    win_named = sum(sum(a and b for a, b in zip(r["w_any"][1:], r["w"][1:], strict=True)) for r in rows)
+    win_any = sum(sum(r["w_any"]) for r in rows)
+    win_named = sum(sum(a and b for a, b in zip(r["w_any"], r["w"], strict=True)) for r in rows)
     mapped = [r for r in rows if r["y_matched_tissue"] is not None]
     tissues: dict[str, int] = defaultdict(int)
     for r in rows:
@@ -717,7 +719,7 @@ def summarise(
         "rate_at_the_units_interval_over_genes": cluster_interval(groups, y, rng, bootstraps),
         "rate_at_the_windows": window_rate(rows),
         "rate_at_the_windows_interval_over_genes": cluster_interval(groups, w.mean(1), rng, bootstraps),
-        "rate_at_the_pseudo_block_window": _mean([float(r["w"][0]) for r in rows]),
+        "rate_at_the_first_drawn_window": _mean([float(r["w"][0]) for r in rows]),
         "difference_units_minus_windows": None if (d := diff(rows)) is None else round(d, 6),
         "difference_interval_over_genes": cluster_interval(groups, y - w.mean(1), rng, bootstraps),
         "naming": {
@@ -818,36 +820,75 @@ def conditional_p(y: np.ndarray, wsum: np.ndarray, k: int = WINDOWS) -> float:
     return upper_tail(h / (k + 1), int(y.sum()))
 
 
+Source = tuple[np.ndarray | None, np.ndarray]
+
+
+def draw(source: Source, idx: np.ndarray, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
+    """Blocks drawn from a calibrated source: (hit at the block, hits among its `WINDOWS` controls).
+
+    A source is (hits at the units, or None, and a units x (WINDOWS + 1) matrix of window hits). With
+    units, the block is the unit and one of its windows, chosen at random, is left out, so a block has
+    `WINDOWS` controls. Without (the window null), one window chosen at random is the block and the
+    other `WINDOWS` its controls, which makes that null exchangeable by construction: which window
+    was drawn first carries no weight."""
+    y, w = source
+    w = w[idx]
+    j = rng.integers(0, w.shape[1], len(idx))
+    left = w[np.arange(len(idx)), j]
+    block = left if y is None else y[idx]
+    return block, w.sum(1) - left
+
+
 def power(
-    right: tuple[np.ndarray, np.ndarray],
-    wrong: tuple[np.ndarray, np.ndarray],
+    right: Source,
+    wrong: Source,
     n: int,
     share: float,
     rng: np.random.Generator,
     experiments: int = EXPERIMENTS,
+    weights: np.ndarray | None = None,
 ) -> float:
     """Probability that the conditional test rejects at `ALPHA` with `n` blocks of which a share
-    `share` behave as a calibrated positive (`right`) and the rest as `wrong`; each block brings its
-    own `WINDOWS` windows. Each of `right` and `wrong` is (hit at the block, hits among its windows)."""
-    yr, wr = right
-    yw, ww = wrong
+    `share` behave as a calibrated positive (`right`, resampled with `weights` if given) and the rest
+    as `wrong`; each block brings its own `WINDOWS` windows."""
+    n_right, n_wrong = len(right[1]), len(wrong[1])
     rejected = 0
     for _ in range(experiments):
         r = int(rng.binomial(n, share))
-        ir = rng.integers(0, len(yr), r)
-        iw = rng.integers(0, len(yw), n - r)
-        y = np.concatenate([yr[ir], yw[iw]])
-        w = np.concatenate([wr[ir], ww[iw]])
-        if conditional_p(y, w) <= ALPHA:
+        ir = rng.choice(n_right, r, p=weights) if weights is not None else rng.integers(0, n_right, r)
+        iw = rng.integers(0, n_wrong, n - r)
+        yr, sr = draw(right, ir, rng)
+        yw, sw = draw(wrong, iw, rng)
+        if conditional_p(np.concatenate([yr, yw]), np.concatenate([sr, sw])) <= ALPHA:
             rejected += 1
     return rejected / experiments
 
 
-def arrays(rows: Sequence[Mapping[str, Any]], block: str = "y") -> tuple[np.ndarray, np.ndarray]:
-    """(hit at the block, hits among windows 1..WINDOWS); `block` 'y' is the unit, 'w0' the pseudo-block."""
-    y = np.array([r["y"] if block == "y" else r["w"][0] for r in rows], dtype=float)
-    w = np.array([sum(r["w"][1:]) for r in rows], dtype=float)
-    return y, w
+def source(rows: Sequence[Mapping[str, Any]], units: bool = True) -> Source:
+    """A calibrated group as a sizing source: its units' hits (or None for the window null) and its
+    window hits."""
+    w = np.array([r["w"] for r in rows], dtype=float).reshape(len(rows), WINDOWS + 1)
+    return (np.array([r["y"] for r in rows], dtype=float) if units else None), w
+
+
+def band_of(distance: int) -> int:
+    return next(i for i, (lo, hi) in enumerate(DISTANCE_BANDS) if lo <= distance < hi)
+
+
+def distance_weights(rows: Sequence[Mapping[str, Any]], target: Mapping[int, float]) -> dict[str, Any]:
+    """Resampling weights that give the positives the blocks' distribution over `DISTANCE_BANDS`
+    (`target`: band index -> share of the blocks). A band the blocks occupy and the positives do not
+    cannot be represented; its share is reported and the rest renormalised."""
+    bands = np.array([band_of(int(r["distance"])) for r in rows])
+    have = {b: int((bands == b).sum()) for b in range(len(DISTANCE_BANDS))}
+    missing = sum(s for b, s in target.items() if s > 0 and have.get(b, 0) == 0)
+    w = np.array([target.get(int(b), 0.0) / have[int(b)] for b in bands], dtype=float)
+    total = w.sum()
+    return {
+        "weights": (w / total) if total > 0 else None,
+        "target_share_not_represented": round(missing, 4),
+        "positives_by_band": {f"{lo}-{hi}": have[i] for i, (lo, hi) in enumerate(DISTANCE_BANDS)},
+    }
 
 
 def sizing(
@@ -858,22 +899,24 @@ def sizing(
     grid: Sequence[int] = N_GRID,
     shares: Sequence[float] = SHARES,
     experiments: int = EXPERIMENTS,
+    target_bands: Mapping[int, float] | None = None,
 ) -> dict[str, Any]:
-    """Power over the grid and at the available count, per share right and per null model."""
-    right = arrays(positives)
-    nulls = {
-        "window": arrays(positives, "w0"),
-        "tested_negative": arrays(negatives) if negatives else None,
+    """Power over the grid and at the available count, per share right and per null model; and, under
+    the window null, with the positives reweighted to the blocks' distances to their genes."""
+    right = source(positives)
+    nulls: dict[str, Source | None] = {
+        "window": source(positives, units=False),
+        "tested_negative": source(negatives) if negatives else None,
     }
     ns = sorted(set(grid) | ({available} if available > 0 else set()))
     out: dict[str, Any] = {}
     for name, wrong in nulls.items():
-        if wrong is None or not len(wrong[0]) or not len(right[0]):
+        if wrong is None or not len(wrong[1]) or not len(right[1]):
             out[name] = None
             continue
-        p0 = float(np.mean(wrong[0]))
+        p0 = float(np.mean(wrong[1])) if wrong[0] is None else float(np.mean(wrong[0]))
         sens = float(np.mean(right[0]))
-        win = float(np.mean(np.concatenate([right[1], wrong[1]])) / WINDOWS)
+        win = float(np.mean(np.concatenate([right[1], wrong[1]])))
         table = {}
         for f in shares:
             pw = {n: round(power(right, wrong, n, f, rng, experiments), 4) for n in ns}
@@ -886,9 +929,7 @@ def sizing(
                 "smallest_grid_blocks_reaching_80": reach[0] if reach else None,
                 "power_at_the_available_blocks": pw.get(available),
             }
-        fpr = {
-            n: round(power(right, wrong, n, 0.0, rng, experiments), 4) for n in sorted({50, 200, 882, *ns})
-        }
+        fpr = {n: round(power(right, wrong, n, 0.0, rng, experiments), 4) for n in ns}
         out[name] = {
             "wrong_block_rate": round(p0, 6),
             "right_block_rate": round(sens, 6),
@@ -896,6 +937,30 @@ def sizing(
             "by_share_right": table,
             "rejection_rate_when_no_attribution_is_right": {str(k): v for k, v in fpr.items()},
             "rejection_rate_at_the_available_blocks_when_none_is_right": fpr.get(available),
+        }
+    if target_bands is not None and out.get("window") is not None:
+        dw = distance_weights(positives, target_bands)
+        wts = dw.pop("weights")
+        rows_ = {}
+        if wts is not None:
+            sens_w = float(wts @ right[0])
+            for f in (1.0, 0.5):
+                pw = {n: round(power(right, nulls["window"], n, f, rng, experiments, wts), 4) for n in ns}
+                reach = [n for n in sorted(pw) if pw[n] >= POWER and n in grid]
+                rows_[str(f)] = {
+                    "power_by_blocks": {str(n): pw[n] for n in ns},
+                    "smallest_grid_blocks_reaching_80": reach[0] if reach else None,
+                    "power_at_the_available_blocks": pw.get(available),
+                }
+            dw["right_block_rate_reweighted"] = round(sens_w, 6)
+        out["window_distance_reweighted"] = {
+            "meaning": "descriptive, not part of the rule: the window null with the positives resampled "
+            "to the blocks' distribution of distance to the named gene's TSS",
+            "target_share_by_band": {
+                f"{lo}-{hi}": round(target_bands.get(i, 0.0), 4) for i, (lo, hi) in enumerate(DISTANCE_BANDS)
+            },
+            **dw,
+            "by_share_right": rows_,
         }
     return out
 
@@ -1003,5 +1068,11 @@ def available(
         "not_usable": dict(reasons),
         "distance_quartiles": {
             k: [int(x) for x in np.quantile(v, [0.25, 0.5, 0.75])] if v else None for k, v in usable.items()
+        },
+        "distance_band_shares": {
+            k: {i: sum(1 for d in v if band_of(int(d)) == i) / len(v) for i in range(len(DISTANCE_BANDS))}
+            if v
+            else None
+            for k, v in usable.items()
         },
     }

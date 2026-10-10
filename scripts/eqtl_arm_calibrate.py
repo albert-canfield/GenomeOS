@@ -166,7 +166,9 @@ def run(experiments: int, bootstraps: int) -> dict[str, Any]:
         s_pos, s_neg = ea.summarise(pos, rng, bootstraps), ea.summarise(neg, rng, bootstraps)
         say(sc, "positives", {k: s_pos.get(k) for k in ("units", "rate_at_the_units", "rate_at_the_windows")})
         say(sc, "negatives", {k: s_neg.get(k) for k in ("units", "rate_at_the_units", "rate_at_the_windows")})
-        sizes = ea.sizing(pos, neg, n_avail, rng, experiments=experiments)
+        sizes = ea.sizing(
+            pos, neg, n_avail, rng, experiments=experiments, target_bands=avail["distance_band_shares"][sc]
+        )
         decision = ea.fair_test(sizes, n_avail)
         say(sc, "decision", decision)
         out_scales[sc] = {
@@ -269,6 +271,35 @@ def result_manifest(reads: list[str], experiments: int, bootstraps: int) -> dict
     }
 
 
+#: what the lane's own checks touched beside the calibration, kept so the 0 above is checkable
+INCIDENTAL = [
+    "the held-track test as committed in 68a273b decoded chr21's DAP-G records outside chr21:30-35 Mb only, "
+    "so it decoded the records of chr21's five real-unknown blocks as well, and asserted only that every "
+    "PIP lies in [0, 1] and that Whole_Blood is among the chromosome's tissues; nothing was printed, "
+    "counted or kept. 16a415f narrowed it to chr21:18-22 Mb, inside a gap between two blocks",
+    "a design probe before 68a273b read only coordinates and dbSNP common-variant counts (no eQTL value) "
+    "to choose the number of windows and the bands; exploration printed DAP-G records only from outside "
+    "the widened blocks",
+]
+
+#: the first full run, at 16a415f (2026-10-10 13:08), superseded by this one; its figures are kept
+FIRST_RUN = {
+    "code": "16a415f",
+    "what_was_wrong": "the sizing's window null always took the FIRST drawn window as the pseudo-block and "
+    "the other four as its controls. That window hit more often than the rest among the positives (0.0323 "
+    "against 0.0242 at the element scale, 0.0723 against 0.0477 at the block scale), a gap the "
+    "resampling then treated as real, so with no attribution right the test rejected more as blocks were "
+    "added (0.36 of experiments at 882 blocks at the element scale, 0.91 at the block scale) and power "
+    "rose as the share right FELL. The window null was not calibrated. It now chooses the pseudo-block "
+    "at random among the five windows in every simulated block, and a right block's controls are four of "
+    "its five windows chosen at random; the window rate is the mean over all five",
+    "what_did_not_change": "the units, windows, flanks, hits and every rate at the units; the "
+    "tested-negative null (its no-attribution rejection rate stayed at or under 0.0255 at every size)",
+    "its_decision": "no fair test at either scale: at the element scale 285 available blocks gave 0.197 "
+    "probability of detection at f = 1/2; at the block scale 179 gave 0.273",
+}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--no-save", action="store_true")
@@ -294,6 +325,8 @@ def main(argv: list[str] | None = None) -> int:
         "that ten disjoint windows in a tenth-wide band fit around under half of the positives at the "
         "element scale and about a tenth at the block scale, the losses near the TSS",
         "eqtl_values_read_inside_the_blocks": 0,
+        "incidental_reads": INCIDENTAL,
+        "superseded_first_run": FIRST_RUN,
         **body,
         "alphagenome_requests": 0,
         "money": "none",

@@ -311,11 +311,41 @@ def synthetic_rows(n, y_rate, w_rate, rng):
 def test_power_rises_with_the_share_right_and_holds_level_with_none_right():
     rng = np.random.default_rng(3)
     pos = synthetic_rows(400, 0.4, 0.05, rng)
-    right, wrong = ea.arrays(pos), ea.arrays(pos, "w0")
+    right, wrong = ea.source(pos), ea.source(pos, units=False)
     hi = ea.power(right, wrong, 100, 1.0, rng, 200)
     lo = ea.power(right, wrong, 100, 0.25, rng, 200)
     none = ea.power(right, wrong, 100, 0.0, rng, 400)
     assert hi > 0.95 and hi >= lo and none <= ea.ALPHA + 0.03
+
+
+def test_the_window_null_holds_its_level_even_when_one_window_column_hits_more():
+    """The first run's flaw: a window null that always took the first-drawn window as the block
+    inherited any chance excess of that column and rejected more as blocks were added."""
+    rng = np.random.default_rng(5)
+    rows_ = synthetic_rows(500, 0.05, 0.03, rng)
+    for r in rows_[:40]:
+        r["w"][0] = True  # the first column now hits far more than the rest
+    right, wrong = ea.source(rows_), ea.source(rows_, units=False)
+    assert ea.power(right, wrong, 2000, 0.0, rng, 300) <= ea.ALPHA + 0.03
+
+
+def test_draw_leaves_out_one_window_and_keeps_the_controls_at_windows():
+    rng = np.random.default_rng(6)
+    y = np.array([1.0, 0.0])
+    w = np.array([[1, 1, 1, 1, 1], [0, 0, 0, 0, 0]], dtype=float)
+    block, controls = ea.draw((y, w), np.array([0, 1, 0]), rng)
+    assert list(block) == [1.0, 0.0, 1.0] and list(controls) == [4.0, 0.0, 4.0]
+    block, controls = ea.draw((None, w), np.array([0, 1]), rng)
+    assert list(block) == [1.0, 0.0] and list(controls) == [4.0, 0.0]
+
+
+def test_distance_weights_give_the_positives_the_blocks_distances():
+    rows_ = [{"distance": d} for d in (5_000, 5_000, 20_000, 100_000)]
+    got = ea.distance_weights(rows_, {0: 0.5, 1: 0.5, 2: 0.0, 3: 0.0})
+    assert list(got["weights"]) == pytest.approx([0.25, 0.25, 0.5, 0.0])
+    missing = ea.distance_weights(rows_, {0: 0.5, 3: 0.5})
+    assert missing["target_share_not_represented"] == 0.5
+    assert list(missing["weights"]) == pytest.approx([0.5, 0.5, 0.0, 0.0])
 
 
 def test_cluster_interval_moves_units_of_a_gene_together():
