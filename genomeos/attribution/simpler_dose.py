@@ -266,9 +266,13 @@ def exon_sums(vals: np.ndarray, exons: list[tuple[int, int]]) -> tuple[float, in
 
 
 def coverage(
-    paths: dict[tuple[str, str], Path], gene_exons: dict[str, tuple[str, str, list[tuple[int, int]]]]
+    paths: dict[tuple[str, str], Path],
+    gene_exons: dict[str, tuple[str, str, list[tuple[int, int]]]],
+    magnitude: bool = False,
 ) -> dict[tuple[str, str], dict[str, float]]:
-    """Per (stage, track strand) and gene: mean coverage over the gene's exon union."""
+    """Per (stage, track strand) and gene: mean coverage over the gene's exon union. With
+    `magnitude` (registration 2) each value is read as its absolute value, because the GEO rev
+    tracks store coverage as negative numbers."""
     by_chrom: dict[str, list[str]] = {}
     for g, (c, _, _) in gene_exons.items():
         by_chrom.setdefault(c, []).append(g)
@@ -280,11 +284,37 @@ def coverage(
             if c not in bw.chroms:
                 continue
             vals = chrom_values(bw, c)
+            if magnitude:
+                vals = np.abs(vals)
             for g in by_chrom[c]:
                 tot, n = exon_sums(vals, gene_exons[g][2])
                 cov[g] = tot / n if n else 0.0
         bw.close()
         out[key] = cov
+    return out
+
+
+def sign_census(paths: dict[tuple[str, str], Path]) -> dict[str, dict[str, float]]:
+    """Per track over its chromosomes: the number and sum of positive and of negative values. An
+    instrument check of the file format (registration 2's basis); no gene value is formed."""
+    out = {}
+    for (s, d), path in paths.items():
+        bw = BigWig(path)
+        pos = neg = 0
+        sp = sn = 0.0
+        for c in sorted(bw.chroms):
+            v = chrom_values(bw, c)
+            pos += int((v > 0).sum())
+            neg += int((v < 0).sum())
+            sp += float(v[v > 0].sum(dtype=np.float64))
+            sn += float(v[v < 0].sum(dtype=np.float64))
+        bw.close()
+        out[f"{s}_{d}"] = {
+            "positive_bases": pos,
+            "negative_bases": neg,
+            "positive_sum": sp,
+            "negative_sum": sn,
+        }
     return out
 
 
@@ -902,6 +932,37 @@ REGISTRATION: dict[str, Any] = {
         "UNDERPOWERED": (
             "UNDERPOWERED: fewer than 200 elements in the top or the bottom third in strata holding "
             "both; stopped unscored."
+        ),
+    },
+}
+
+
+#: Registration 2. Registration 1 (ff74444) ran once (b8d777a) and stopped at its strand check; the
+#: only change is that each coverage value is read as its magnitude. Wording, census, rules unchanged.
+REGISTRATION_V2: dict[str, Any] = {
+    **REGISTRATION,
+    "version": 2,
+    "history": (
+        "Registration 1 (ff74444) was run once (b8d777a) and stopped at its registered strand check, "
+        "INSTRUMENT_FAILED: with the tracks read as stored, own-strand coverage was neither above "
+        "opposite-strand at all six stages nor below it at all six, so nothing was scored. Seen before "
+        "this registration, and nothing else of the RNA: the twelve per-stage strand sums in that "
+        "result, and per track the number and sum of positive and of negative values over the six "
+        "chromosomes, which show every non-zero value of the six fwd tracks positive and every non-zero "
+        "value of the six rev tracks negative (43,188,260 to 61,500,850 bases per rev track): the GEO "
+        "rev tracks store coverage as negative numbers. No gene's value was saved or read, and no "
+        "concordance or outcome of either comparison was computed. The only change is that each value "
+        "is read as its magnitude; the population, census, constraint, edges, strata, endpoint, "
+        "controls, falsifiers, stop rule and wording are registration 1's."
+    ),
+    "adaptations": {
+        **REGISTRATION["adaptations"],
+        "rna": (
+            REGISTRATION["adaptations"]["rna"] + " Each track value is read as its absolute value (the "
+            "rev tracks store coverage as negative numbers; registration 2)."
+        ),
+        "strand_check": (
+            REGISTRATION["adaptations"]["strand_check"] + " Applied to the absolute values (registration 2)."
         ),
     },
 }

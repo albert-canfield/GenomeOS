@@ -420,3 +420,47 @@ def test_local_population_matches_the_source_counts() -> None:
     reg = ROOT / "data/results/simpler_dose_registration.json"
     if reg.exists():
         assert json.loads(reg.read_text())["element_funnel"] == json.loads(json.dumps(funnel))
+
+
+# --------------------------------------------------------------------------------------------- registration 2
+
+
+def test_magnitude_reads_negative_rev_coverage_as_coverage(monkeypatch: pytest.MonkeyPatch) -> None:
+    tracks = {
+        ("emb", "fwd"): _FakeBigWig({"chrI": [[(0, 10, 2.0)]]}, {"chrI": 20}),
+        ("emb", "rev"): _FakeBigWig({"chrI": [[(10, 20, -3.0)]]}, {"chrI": 20}),
+    }
+    monkeypatch.setattr(sd, "BigWig", lambda key: tracks[key])
+    exons = {"G1": ("chrI", "+", [(0, 5)]), "G2": ("chrI", "-", [(10, 20)])}
+    paths = {k: k for k in tracks}
+    assert sd.coverage(paths, exons)[("emb", "rev")]["G2"] == -3.0  # registration 1 read it as stored
+    assert sd.coverage(paths, exons, magnitude=True)[("emb", "rev")]["G2"] == 3.0
+    signs = sd.sign_census(paths)
+    assert signs["emb_fwd"]["positive_bases"] == 10 and signs["emb_fwd"]["negative_bases"] == 0
+    assert signs["emb_rev"] == {
+        "positive_bases": 0,
+        "negative_bases": 10,
+        "positive_sum": 0.0,
+        "negative_sum": -30.0,
+    }
+
+
+def test_negative_rev_tracks_fail_registration_one_and_pass_with_magnitude() -> None:
+    exons = {"P": ("chrI", "+", [(0, 1)]), "M": ("chrI", "-", [(5, 6)])}
+    stored = {}
+    for s in sd.STAGES:
+        stored[(s, "fwd")] = {"P": 10.0, "M": 1.0}
+        stored[(s, "rev")] = {"P": -1.0, "M": -12.0 if s != "emb" else -8.0}
+    assert sd.orientation(stored, exons)["verdict"] == "failed"
+    mag = {k: {g: abs(v) for g, v in d.items()} for k, d in stored.items()}
+    assert sd.orientation(mag, exons)["verdict"] == "as_labelled"
+
+
+def test_registration_two_changes_only_the_reading_of_the_rna() -> None:
+    r1, r2 = sd.REGISTRATION, sd.REGISTRATION_V2
+    changed = {k for k in set(r1) | set(r2) if r1.get(k) != r2.get(k)}
+    assert changed == {"version", "history", "adaptations"}
+    a1, a2 = r1["adaptations"], r2["adaptations"]
+    assert {k for k in a1 if a1[k] != a2[k]} == {"rna", "strand_check"}
+    assert a2["rna"].startswith(a1["rna"]) and "absolute value" in a2["rna"]
+    assert r2["outcome_wording"] == r1["outcome_wording"]

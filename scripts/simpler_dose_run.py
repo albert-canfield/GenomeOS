@@ -6,6 +6,8 @@
     uv run python scripts/simpler_dose_run.py tiers       # phyloP135way counts per element, by range read
     uv run python scripts/simpler_dose_run.py register    # census + registration; no RNA value read
     uv run python scripts/simpler_dose_run.py score       # refuses unless the registration is committed
+    uv run python scripts/simpler_dose_run.py register2   # after run 1 stopped at its strand check
+    uv run python scripts/simpler_dose_run.py score2      # registration 2, run once
 
 The phyloP track is read by HTTP range request and never stored. No model request is sent and no key
 is read. docs/SIMPLER-GENOMES.md section 10 holds the reasoning.
@@ -40,6 +42,11 @@ REGISTRATION = "simpler_dose_registration"
 RESULT = "simpler_dose_result"
 TIERS_FILE = f"data/results/{TIERS}.json"
 REGISTRATION_FILE = f"data/results/{REGISTRATION}.json"
+RESULT_FILE = f"data/results/{RESULT}.json"
+#: Registration 2: registration 1 ran once and stopped at its strand check (see sd.REGISTRATION_V2).
+REGISTRATION2 = "simpler_dose_v2_registration"
+RESULT2 = "simpler_dose_v2_result"
+REGISTRATION2_FILE = f"data/results/{REGISTRATION2}.json"
 STAGE2_TIERS = "data/results/simpler_worm_tiers.json"
 ENTRY = "scripts/simpler_dose_run.py"
 OWN_CODE = (
@@ -401,17 +408,75 @@ def register() -> None:
     print(json.dumps(cen, indent=1))
 
 
+def register2() -> None:
+    """Registration 2, after registration 1's single run stopped at its strand check."""
+    for rel in (REGISTRATION_FILE, RESULT_FILE, TIERS_FILE, STAGE2_TIERS):
+        if not _committed(rel):
+            sys.exit(f"refused: {rel} is not committed and clean")
+    mf.trace_begin()
+    reg1 = json.loads(Path(REGISTRATION_FILE).read_text())
+    run1 = json.loads(Path(RESULT_FILE).read_text())
+    if run1["outcome"] != "INSTRUMENT_FAILED":
+        sys.exit("refused: registration 2 exists only because run 1 stopped at its strand check")
+    _, _, _, _, cen, funnel = _build()
+    if json.loads(json.dumps(cen)) != reg1["census"]:
+        sys.exit("refused: the census does not recompute to registration 1's")
+    out = {
+        "result": REGISTRATION2,
+        "date": time.strftime("%Y-%m-%d"),
+        "written_before_any_gene_value_or_outcome_was_read": True,
+        "registration_1_commit": _commit_of(REGISTRATION_FILE),
+        "run_1_commit": _commit_of(RESULT_FILE),
+        "run_1_outcome": run1["outcome"],
+        "run_1_strand_check": run1["strand_check"],
+        "rna_seen_before_this_registration": {
+            "run_1_strand_check": "the twelve per-stage sums above",
+            "value_signs_per_track": sd.sign_census(sd.LCAP),
+        },
+        "registered_inputs": _inputs_hashed(),
+        "tiers_commit": _commit_of(TIERS_FILE),
+        "element_funnel": funnel,
+        "registration": sd.REGISTRATION_V2,
+        "census": cen,
+        "alphagenome_requests": 0,
+        "money": "none",
+    }
+    out["result_manifest"] = _manifest(
+        [
+            (REGISTRATION_FILE, "registration 1, for its census and commit"),
+            (RESULT_FILE, "run 1, for its outcome and strand sums"),
+            (TIERS_FILE, "the committed per-element counts (no RNA read)"),
+            (STAGE2_TIERS, "stage 2's population coordinates, for the overlap count"),
+            (str(sd.FIG1), "coordinates and the six wild-type ATAC heights"),
+            (str(sd.FIG2), "coordinates (ce10, ce11) and the class only"),
+            (str(sd.FIG4), "coordinates and the developmental-dynamics call only"),
+            (GFF, "gene positions and strands"),
+            *_lcap_inputs("hashed, and the sign of each value counted per track; no gene value formed"),
+        ],
+        {"population": "registration 1's, recomputed and checked"},
+    )
+    print(save_result(REGISTRATION2, out))
+    print(json.dumps(out["rna_seen_before_this_registration"], indent=1))
+
+
 # --------------------------------------------------------------------------------------------- score
 
 
-def score() -> None:
-    for rel in (REGISTRATION_FILE, TIERS_FILE, STAGE2_TIERS, *OWN_CODE):
+def score(version: int = 1) -> None:
+    reg_name, reg_file, result_name, registration, magnitude = {
+        1: (REGISTRATION, REGISTRATION_FILE, RESULT, sd.REGISTRATION, False),
+        2: (REGISTRATION2, REGISTRATION2_FILE, RESULT2, sd.REGISTRATION_V2, True),
+    }[version]
+    before = (RESULT_FILE,) if version == 2 else ()
+    for rel in (reg_file, *before, TIERS_FILE, STAGE2_TIERS, *OWN_CODE):
         if not _committed(rel):
             sys.exit(f"refused: {rel} must be committed and unchanged before any RNA value is read")
+    if version == 2 and Path(f"data/results/{RESULT2}.json").exists():
+        sys.exit("refused: registration 2 has been run; it runs once")
     mf.trace_begin()
-    reg = json.loads(Path(REGISTRATION_FILE).read_text())
-    if reg["registration"] != json.loads(json.dumps(sd.REGISTRATION)):
-        sys.exit("refused: simpler_dose.REGISTRATION differs from the committed registration")
+    reg = json.loads(Path(reg_file).read_text())
+    if reg["registration"] != json.loads(json.dumps(registration)):
+        sys.exit(f"refused: the module's registration differs from the committed {reg_name}")
     for key, entry in reg["registered_inputs"].items():
         if simpler.sha256(Path(entry["path"])) != entry["sha256"]:
             sys.exit(f"refused: {key} differs from the registered input")
@@ -420,15 +485,17 @@ def score() -> None:
         sys.exit("refused: the census does not recompute to the registered one")
     t0 = time.time()
     exons = sd.read_gene_exons(simpler.GFF3)
-    cov = sd.coverage(sd.LCAP, exons)
+    cov = sd.coverage(sd.LCAP, exons, magnitude=magnitude)
     strand = sd.orientation(cov, exons)
     genes = {g.gid for ch in chroms.values() for g in ch.genes}
     expr = sd.expression(cov, exons, strand["verdict"], genes)
     res = sd.score(rows, prom, overlap, chroms, expr, reg["census"], strand)
     out = {
-        "result": RESULT,
+        "result": result_name,
         "date": time.strftime("%Y-%m-%d"),
-        "registration_commit": _commit_of(REGISTRATION_FILE),
+        "registration_version": version,
+        "registration_commit": _commit_of(reg_file),
+        "coverage_read_as_magnitude": magnitude,
         **res,
         "rna_summary": {
             "genes_with_value": len(expr),
@@ -445,7 +512,8 @@ def score() -> None:
     }
     out["result_manifest"] = _manifest(
         [
-            (REGISTRATION_FILE, "the committed registration"),
+            (reg_file, "the committed registration"),
+            *([(RESULT_FILE, "run 1, which must be committed before run 2")] if version == 2 else []),
             (TIERS_FILE, "the committed per-element counts"),
             (STAGE2_TIERS, "stage 2's population coordinates, for the overlap"),
             (str(sd.FIG1), "coordinates and the six wild-type ATAC heights"),
@@ -456,13 +524,19 @@ def score() -> None:
         ],
         {"endpoint": "the long-cap tracks, read once, after the registration was committed"},
     )
-    print(save_result(RESULT, out))
+    print(save_result(result_name, out))
     print(out["outcome"], out.get("falsifier", ""))
     print(out["reading"])
 
 
 if __name__ == "__main__":
     os.chdir(ROOT)
-    {"fetch": fetch, "inventory": inventory, "tiers": tiers, "register": register, "score": score}[
-        sys.argv[1]
-    ]()
+    {
+        "fetch": fetch,
+        "inventory": inventory,
+        "tiers": tiers,
+        "register": register,
+        "score": score,
+        "register2": register2,
+        "score2": lambda: score(2),
+    }[sys.argv[1]]()
