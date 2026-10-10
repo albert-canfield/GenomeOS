@@ -468,7 +468,14 @@ History: ROADMAP-HISTORY.md §3 C, lines 956–1122.
   records as wrong after normalisation.
 - **Next.** 1. A population distribution for the polygenic scores (§5, M6). 2. Correct the
   `trio()` note to what the phasing and the read fractions found. 3. The tissue's own transcript in
-  the trace. 4. A per-candidate germline call, which waits for DNA that never went through culture.
+  the trace: **done 2026-10-10** (lane-twintrace; `26e9ef7` registered, `4a3566b` result, `bf26d7e` CLI and API):
+  `trace_gene_in_tissue` and `genomeos flow --tissue` follow the tissue's GTEx dominant isoform (at least 1 TPM, the next
+  below 0.9 of it) or answer UNKNOWN with a reason, never canonical in its place; over 299 coding SNVs of HG002 in 46
+  genes with cached isoform tables, the predicted consequence differs in class or residue number in 551 of 5,705
+  established variant-tissue pairs (10,441 of 16,146 UNKNOWN, mostly low expression); a census of disagreement between
+  two predictions, not an accuracy claim, on the project's cached genes. Open: the Flow tab does not draw it yet; a
+  genome-wide census needs the GTEx transcript TPM table; a small fix (a REF the genome does not carry must not read as
+  residue_changed) was refused its forced commit and dropped, with 0 of 5,246 SNVs affected in the census. 4. A per-candidate germline call, which waits for DNA that never went through culture.
 - **Owner.** Unowned since 2026-10-03; lanes are assigned in §5.
 
 History: ROADMAP-HISTORY.md §3 D, lines 1123–1344.
