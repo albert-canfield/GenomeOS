@@ -469,3 +469,12 @@ def build_inventory(root: Path | None = None) -> dict[str, Any]:
             " own acceptance phenotype and is not a prediction"
         ),
     }
+
+
+#: keys the writing run adds beside the census (its manifest, its wall time, its spend); not the census
+RUN_ONLY_KEYS = ("result_manifest", "seconds", "money")
+
+
+def census_of(payload: dict[str, Any]) -> dict[str, Any]:
+    """A written inventory without what the run added, as `--check` and the tests compare it."""
+    return {k: v for k, v in payload.items() if k not in RUN_ONLY_KEYS}
