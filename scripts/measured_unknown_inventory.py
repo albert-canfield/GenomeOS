@@ -904,9 +904,33 @@ def verdict(sources: list[dict[str, Any]], union: dict[str, Any]) -> dict[str, A
             "test must match its controls on the variants they carry; the fine-mapped track itself has "
             "not been read."
         ),
-        "next": "register a fine-mapped eQTL test over these blocks, matched on length, neighbourhood and "
-        "common-variant count, before the track is read; or record the clause as waiting on measurement "
-        "no public source has made",
+        "decision": {
+            "registered_test": False,
+            "why": (
+                "Among the sources inventoried here, only CRISPR perturbation names the gene an element "
+                f"was tested against, and it reaches {coding} blocks against a coding gene ({upper} as an "
+                f"upper bound), under the {mu.FLOOR_BLOCKS} the smallest calibrated design needs. The "
+                "calibrated sizing (cab70d9) describes that endpoint and no other. The fine-mapped eQTL "
+                f"route reaches {eqtl['blocks_touched']} blocks by the tested-variant proxy, but its "
+                "window rate, its clustering and its sensitivity have never been calibrated in this "
+                "project, and its control has yet to be chosen, so the sizing cannot say it is enough. "
+                "No test is registered by this lane."
+            ),
+            "what_the_clause_needs": [
+                f"{max(0, mu.FLOOR_BLOCKS - coding)} more blocks with an element tested against a coding "
+                f"gene for the smallest calibrated design, {max(0, 531 - coding)} more for the design for a "
+                "half; no published screen inventoried here supplies them",
+                "or, on natural variation: a power calibration of a fine-mapped eQTL arm measured on "
+                "sequence outside the 882 blocks, a control matched on length, common-variant count and "
+                "distance to the named gene's start, and a registration, all before the gtexDapg track "
+                "is read over the blocks",
+            ],
+            "prior_exposure": (
+                "earlier lanes range-read the gtexDapg track over storage units of the UNKNOWN space "
+                "(human_panel) and at 1,505 CRISPRi elements (finemap_dapg); whether any of those rows "
+                "lie in the 882 blocks is not checked here, because checking would read them"
+            ),
+        },
     }
 
 

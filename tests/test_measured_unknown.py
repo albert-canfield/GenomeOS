@@ -206,6 +206,9 @@ def test_committed_inventory_reads_no_value_and_its_shortfall_follows_its_counts
     u = d["gene_level_union"]
     coding = u["gene_resolved_sources"]["blocks_tested_against_a_coding_gene"]
     assert u["shortfall"]["short_of_the_floor"] == max(0, mu.FLOOR_BLOCKS - coding)
+    if coding < mu.FLOOR_BLOCKS:
+        assert d["verdict"]["element_perturbation_suffices"] is False
+        assert d["verdict"]["decision"]["registered_test"] is False
     upper = u["with_unresolved_libraries_as_upper_bound"]["blocks_touched"]
     assert upper >= u["gene_resolved_sources"]["blocks_touched"]
     keys = {r["source"] for r in d["table"]}
