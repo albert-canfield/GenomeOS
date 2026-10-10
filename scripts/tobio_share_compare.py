@@ -308,6 +308,8 @@ def measure() -> dict[str, Any]:
 
 
 def _manifest(stage: str, extra_inputs: list[str]) -> dict[str, Any]:
+    # every other file the run opened under data/ (the programs and tables `bio test` reads), each hashed
+    extra_inputs = [*extra_inputs, *sorted(set(mf.traced_reads()) - {BIO, MUTANTS, DESIGNS, *extra_inputs})]
     return {
         "sources": [
             {
