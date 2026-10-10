@@ -195,7 +195,8 @@ def extent_from_sequence(rebuilt: dict[str, Any]) -> Extent:
             novel_tail=novel > 0,
             first_altered=first,
             basis=(
-                f"the reading frame shifts at residue {first}, so the product carries reference "
+                f"read from {source}: the reading frame shifts at residue {first}, so the product "
+                f"carries reference "
                 f"residues 1-{first - 1} and then {novel} residues that have no reference counterpart"
             ),
             source=source,
@@ -206,7 +207,8 @@ def extent_from_sequence(rebuilt: dict[str, Any]) -> Extent:
             last_residue=mut,
             first_altered=first,
             basis=(
-                f"the altered sequence translates to {mut} residues against {ref} with no residue "
+                f"read from {source}: the altered sequence translates to {mut} residues against {ref} "
+                f"with no residue "
                 f"differing, so the product is reference residues 1-{mut}"
             ),
             source=source,
@@ -215,7 +217,10 @@ def extent_from_sequence(rebuilt: dict[str, Any]) -> Extent:
         return Extent(
             "substitution",
             first_altered=first,
-            basis=f"{novel or 1} residue(s) replaced at residue {first}; the product keeps its length",
+            basis=(
+                f"read from {source}: {novel or 1} residue(s) replaced at residue {first}; the product "
+                "keeps its length"
+            ),
             source=source,
         )
     replaced = (ref - mut) + novel
@@ -226,7 +231,8 @@ def extent_from_sequence(rebuilt: dict[str, Any]) -> Extent:
             removed=(span,),
             first_altered=first,
             basis=(
-                f"reference residues {span[0]}-{span[1]} are replaced by {novel} residue(s), so the "
+                f"read from {source}: reference residues {span[0]}-{span[1]} are replaced by {novel} "
+                f"residue(s), so the "
                 f"product does not contain them"
             ),
             source=source,
@@ -235,7 +241,8 @@ def extent_from_sequence(rebuilt: dict[str, Any]) -> Extent:
         "insertion",
         first_altered=first,
         basis=(
-            f"{novel} residue(s) are inserted after residue {first - 1}; every curated feature is "
+            f"read from {source}: {novel} residue(s) are inserted after residue {first - 1}; every "
+            "curated feature is "
             "still in the product, with the ones after the insertion shifted downstream"
         ),
         source=source,
@@ -267,7 +274,7 @@ def extent_from_notation(variant_type: str, hgvsp: str, residue: int | None) -> 
         elif rest.startswith("del"):
             kind, removed = "deletion", ((n1, n2),)
             basis = f"{hgvsp}: reference residues {n1}-{n2} are removed from the product"
-        elif rest.startswith(("dup", "ins", "ext")):
+        elif rest.startswith(("dup", "ins")) or "ext" in rest:
             kind = "insertion"
             basis = (
                 f"{hgvsp}: residues are added and none removed, so every curated feature is in the product"
