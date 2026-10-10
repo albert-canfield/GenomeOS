@@ -26,6 +26,12 @@ another is high lowers that gene's drive there (lane-sign, 2026-09-28).
 docs/DESIGN-MINIMAL-CELL.md compares; the runtime uses the one `ACTIVATOR_COMBINATION` names.
 The registered choice between them is `COMBINATION_TEST` (2026-09-28).
 
+Opt-in rules (2026-10-10). `OPT_IN_ACTIVATOR_RULES` are rules a caller may select for one run with
+`NetworkRuntime(..., activator_combination=...)`; no module and no default run gets one. The first is
+`competition`, the strength-dependent form R3 left open: A = W / (K + W), W the sum of the terms and K
+the gene's `PROMOTER_HALF_SATURATION` attribute (Bothma et al. 2015 eLife 4:e07956, Methods eq. 9,
+read for n elements of one transcriptional efficiency). Weak engagement (W << K) adds; strong saturates.
+
 Unresolved inputs (review R3, 2026-09-28). A regulator the runtime holds no state
 for, and a regulated gene with no `max_rate`, are still integrated as zero, as they
 always were, but every `run` now reports them by name (`NetworkRuntime.diagnose`):
@@ -123,6 +129,18 @@ COMBINATION_TEST = {
     "pass_rule": "switch to the single surviving rule, else mean retained, undetermined",
     "crispri_min_gene_cells_for_max": 10,
 }
+#: activator rules a caller selects for ONE run (`NetworkRuntime(activator_combination=...)`); never a
+#: default, never in ACTIVATOR_RULES, so the 2026-09-28 choice test and its pins are untouched.
+#: competition: A = W / (K + W), W = sum of t_i. Bothma et al. 2015 (eLife 4:e07956, PMC4532966),
+#: Methods eqs. 7-9: a promoter engaged by at most one enhancer at a time, enhancer i with engagement
+#: ratio k_on/k_off = t_i / K and transcriptional efficiency r, gives r * W/K / (1 + W/K). One r per
+#: gene is this rule's assumption (the paper's eq. 9 lets each enhancer have its own), so the rule is
+#: monotone and cannot give the snail pair below its stronger single
+OPT_IN_ACTIVATOR_RULES = ("competition",)
+#: the gene attribute `competition` reads as K, in the units of the terms; > 0. A gene declaring none
+#: takes DEFAULT_PROMOTER_HALF_SATURATION
+PROMOTER_HALF_SATURATION = "promoter_half_saturation"
+DEFAULT_PROMOTER_HALF_SATURATION = 1.0
 #: a rule source ending in this reads zero by the caller's declaration, never by omission
 EXPLICIT_ZERO_SUFFIX = "@zero"
 
@@ -220,16 +238,24 @@ def _hill(x: float, k: float, n: float) -> float:
     return xn / (k**n + xn)
 
 
-def combine_activators(terms: list[float], rule: str | None = None) -> float:
+def combine_activators(
+    terms: list[float], rule: str | None = None, half_saturation: float = DEFAULT_PROMOTER_HALF_SATURATION
+) -> float:
     """A gene's activator drive A from its terms t_i = s_i * H(x_i), under `rule`.
 
     mean: sum(t) / n (the runtime's rule since the first commit); sum_capped: min(1, sum(t));
-    max: max(t); or: 1 - prod(1 - t_i), independent binding of any one activator sufficing.
+    max: max(t); or: 1 - prod(1 - t_i), independent binding of any one activator sufficing;
+    competition (opt-in, OPT_IN_ACTIVATOR_RULES): W / (half_saturation + W), W = sum(t).
     `rule` defaults to `ACTIVATOR_COMBINATION`, read at call time.
     """
     rule = ACTIVATOR_COMBINATION if rule is None else rule
     if not terms:
         return 1.0
+    if rule == "competition":
+        if not half_saturation > 0:
+            raise ValueError(f"competition needs a half-saturation > 0, got {half_saturation!r}")
+        w = sum(terms)
+        return w / (half_saturation + w)
     if rule == "mean":
         return sum(terms) / len(terms)
     if rule == "sum_capped":
@@ -241,7 +267,8 @@ def combine_activators(terms: list[float], rule: str | None = None) -> float:
         for t in terms:
             miss *= 1.0 - t
         return 1.0 - miss
-    raise ValueError(f"unknown activator combination {rule!r}; one of {', '.join(ACTIVATOR_RULES)}")
+    names = ", ".join(ACTIVATOR_RULES + OPT_IN_ACTIVATOR_RULES)
+    raise ValueError(f"unknown activator combination {rule!r}; one of {names}")
 
 
 class NetworkRuntime:
@@ -251,9 +278,20 @@ class NetworkRuntime:
         context: dict[str, str] | None = None,
         seed: int | None = None,
         strict: bool = False,
+        activator_combination: str | None = None,
     ) -> None:
         self.module = module
         self.strict = strict  # refuse to run an unresolved model instead of warning (R3)
+        # None: ACTIVATOR_COMBINATION, read at every call as before; a name selects that rule for this
+        # run only (an opt-in rule never becomes the default this way)
+        if activator_combination is not None and activator_combination not in (
+            ACTIVATOR_RULES + OPT_IN_ACTIVATOR_RULES
+        ):
+            raise ValueError(
+                f"unknown activator combination {activator_combination!r}; one of"
+                f" {', '.join(ACTIVATOR_RULES + OPT_IN_ACTIVATOR_RULES)}"
+            )
+        self.activator_combination = activator_combination
         self.context = context or {}
         self.rng = random.Random(seed)
         self.params = dict(DEFAULTS)
@@ -299,6 +337,14 @@ class NetworkRuntime:
 
         self.species = [f"{g.id}.mRNA" for g in self.genes] + [p.id for p in self.proteins]
         self.transferred, self.defaulted = self._provenance()
+        # competition reads each gene's K once, and refuses one that is not a number > 0
+        self.half_saturation: dict[str, float] = {}
+        if activator_combination == "competition":
+            for g in self.genes:
+                k = float(g.attrs.get(PROMOTER_HALF_SATURATION, DEFAULT_PROMOTER_HALF_SATURATION))
+                if not k > 0:
+                    raise ValueError(f"{g.id}: {PROMOTER_HALF_SATURATION} must be > 0, got {k!r}")
+                self.half_saturation[g.id] = k
 
     def _provenance(self) -> tuple[list[Transferred], list[str]]:
         """Which numbers this run takes from elsewhere, and which from DEFAULTS (item 12 S5)."""
@@ -369,9 +415,11 @@ class NetworkRuntime:
             inhs = self.inhibitors[g.id]
             a = 1.0
             if acts:
-                a = combine_activators(
-                    [r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill) for r in acts]
-                )
+                terms = [r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill) for r in acts]
+                if self.activator_combination == "competition":
+                    a = combine_activators(terms, "competition", self.half_saturation[g.id])
+                else:
+                    a = combine_activators(terms, self.activator_combination)
             rep = 1.0
             for r in inhs:
                 rep *= 1.0 - r.strength * _hill(state.get(r.source, 0.0), r.threshold, r.hill)
