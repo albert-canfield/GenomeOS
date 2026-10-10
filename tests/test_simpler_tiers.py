@@ -252,3 +252,19 @@ def test_committed_registration_is_the_module_registration() -> None:
     assert reg["registered_inputs"]["tiers"]["sha256"] == simpler.sha256(TIERS)
     for name, cut in reg["cuts"].items():
         assert cut["cut"] == tiers["tracks"][name]["cut"]
+
+
+RESULT = ROOT / "data/results/simpler_worm_tiers_result.json"
+
+
+def test_result_reading_is_the_registered_wording() -> None:
+    tp.must_be_present(RESULT, was="result not yet written")
+    res = json.loads(RESULT.read_text())
+    reg = json.loads(REGISTRATION.read_text())
+    assert res["census"] == reg["census"]
+    assert res["registration_commit"]
+    assert res["outcome"] == st.outcome_label(*res["primary"]["delta_ci95_points"])
+    p = res["primary"]["permutation"]["p_one_sided"]
+    assert res["falsifier"] == ("FALSIFIED" if p >= 0.05 else "NOT_FALSIFIED")
+    assert st.reading(res) == res["reading"]
+    assert res["alphagenome_requests"] == 0

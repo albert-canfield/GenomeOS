@@ -1,0 +1,595 @@
+{
+  "result": "simpler_worm_tiers_result",
+  "date": "2026-10-10",
+  "outcome": "NO_DIFFERENCE_DETECTED",
+  "falsifier": "FALSIFIED",
+  "primary": {
+    "n": 5011,
+    "constrained_in_support": 3865,
+    "not_constrained_in_support": 1109,
+    "constrained_concordant_in_support": 2093,
+    "constrained_rate_pct": 54.153,
+    "matched_not_constrained_rate_pct": 51.519,
+    "delta_points": 2.634,
+    "delta_ci95_points": [
+      -1.346,
+      7.03
+    ],
+    "bootstrap": {
+      "reps": 2000,
+      "clusters_1mb": 103,
+      "reps_without_support": 0
+    },
+    "permutation": {
+      "perms": 1000,
+      "seed": 20261011,
+      "at_or_above_observed": 104,
+      "p_one_sided": 0.1049
+    },
+    "unmatched": {
+      "constrained": 3894,
+      "constrained_concordant": 2104,
+      "not_constrained": 1117,
+      "not_constrained_concordant": 599
+    }
+  },
+  "strata_beside": {
+    "inside_gene_body": {
+      "n": 2790,
+      "constrained_in_support": 2263,
+      "not_constrained_in_support": 505,
+      "constrained_concordant_in_support": 1227,
+      "constrained_rate_pct": 54.22,
+      "matched_not_constrained_rate_pct": 51.9,
+      "delta_points": 2.32,
+      "delta_ci95_points": [
+        -3.519,
+        8.131
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 103,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 181,
+        "p_one_sided": 0.18182
+      },
+      "unmatched": {
+        "constrained": 2284,
+        "constrained_concordant": 1234,
+        "not_constrained": 506,
+        "not_constrained_concordant": 269
+      }
+    },
+    "between_genes": {
+      "n": 2221,
+      "constrained_in_support": 1602,
+      "not_constrained_in_support": 604,
+      "constrained_concordant_in_support": 866,
+      "constrained_rate_pct": 54.057,
+      "matched_not_constrained_rate_pct": 50.98,
+      "delta_points": 3.077,
+      "delta_ci95_points": [
+        -2.076,
+        8.916
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 102,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 131,
+        "p_one_sided": 0.13187
+      },
+      "unmatched": {
+        "constrained": 1610,
+        "constrained_concordant": 870,
+        "not_constrained": 611,
+        "not_constrained_concordant": 330
+      }
+    },
+    "Germline": {
+      "n": 343,
+      "constrained_in_support": 163,
+      "not_constrained_in_support": 171,
+      "constrained_concordant_in_support": 92,
+      "constrained_rate_pct": 56.442,
+      "matched_not_constrained_rate_pct": 60.329,
+      "delta_points": -3.887,
+      "delta_ci95_points": [
+        -13.34,
+        6.342
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 92,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 750,
+        "p_one_sided": 0.75025
+      },
+      "unmatched": {
+        "constrained": 166,
+        "constrained_concordant": 93,
+        "not_constrained": 177,
+        "not_constrained_concordant": 101
+      }
+    },
+    "Neurons": {
+      "n": 1332,
+      "constrained_in_support": 1096,
+      "not_constrained_in_support": 225,
+      "constrained_concordant_in_support": 574,
+      "constrained_rate_pct": 52.372,
+      "matched_not_constrained_rate_pct": 46.318,
+      "delta_points": 6.055,
+      "delta_ci95_points": [
+        -1.471,
+        14.436
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 101,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 60,
+        "p_one_sided": 0.06094
+      },
+      "unmatched": {
+        "constrained": 1107,
+        "constrained_concordant": 578,
+        "not_constrained": 225,
+        "not_constrained_concordant": 104
+      }
+    },
+    "Muscle": {
+      "n": 1199,
+      "constrained_in_support": 972,
+      "not_constrained_in_support": 221,
+      "constrained_concordant_in_support": 451,
+      "constrained_rate_pct": 46.399,
+      "matched_not_constrained_rate_pct": 34.092,
+      "delta_points": 12.307,
+      "delta_ci95_points": [
+        3.494,
+        21.016
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 100,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 3,
+        "p_one_sided": 0.004
+      },
+      "unmatched": {
+        "constrained": 977,
+        "constrained_concordant": 454,
+        "not_constrained": 222,
+        "not_constrained_concordant": 73
+      }
+    },
+    "Hypod.": {
+      "n": 1306,
+      "constrained_in_support": 1028,
+      "not_constrained_in_support": 276,
+      "constrained_concordant_in_support": 577,
+      "constrained_rate_pct": 56.128,
+      "matched_not_constrained_rate_pct": 59.666,
+      "delta_points": -3.538,
+      "delta_ci95_points": [
+        -11.863,
+        5.158
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 103,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 812,
+        "p_one_sided": 0.81219
+      },
+      "unmatched": {
+        "constrained": 1030,
+        "constrained_concordant": 578,
+        "not_constrained": 276,
+        "not_constrained_concordant": 166
+      }
+    },
+    "Intest.": {
+      "n": 831,
+      "constrained_in_support": 606,
+      "not_constrained_in_support": 216,
+      "constrained_concordant_in_support": 399,
+      "constrained_rate_pct": 65.842,
+      "matched_not_constrained_rate_pct": 72.685,
+      "delta_points": -6.844,
+      "delta_ci95_points": [
+        -14.755,
+        2.528
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 101,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 965,
+        "p_one_sided": 0.96503
+      },
+      "unmatched": {
+        "constrained": 614,
+        "constrained_concordant": 401,
+        "not_constrained": 217,
+        "not_constrained_concordant": 155
+      }
+    },
+    "track_phyloP26way": {
+      "n": 4150,
+      "constrained_in_support": 1287,
+      "not_constrained_in_support": 2819,
+      "constrained_concordant_in_support": 735,
+      "constrained_rate_pct": 57.11,
+      "matched_not_constrained_rate_pct": 52.405,
+      "delta_points": 4.705,
+      "delta_ci95_points": [
+        0.947,
+        8.364
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 103,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 6,
+        "p_one_sided": 0.00699
+      },
+      "unmatched": {
+        "constrained": 1290,
+        "constrained_concordant": 735,
+        "not_constrained": 2860,
+        "not_constrained_concordant": 1505
+      }
+    },
+    "fraction_top_vs_bottom_tertile": {
+      "n": 3314,
+      "constrained_in_support": 1664,
+      "not_constrained_in_support": 1563,
+      "constrained_concordant_in_support": 908,
+      "constrained_rate_pct": 54.567,
+      "matched_not_constrained_rate_pct": 47.877,
+      "delta_points": 6.69,
+      "delta_ci95_points": [
+        2.107,
+        11.678
+      ],
+      "bootstrap": {
+        "reps": 2000,
+        "clusters_1mb": 103,
+        "reps_without_support": 0
+      },
+      "permutation": {
+        "perms": 1000,
+        "seed": 20261011,
+        "at_or_above_observed": 0,
+        "p_one_sided": 0.001
+      },
+      "unmatched": {
+        "constrained": 1673,
+        "constrained_concordant": 913,
+        "not_constrained": 1641,
+        "not_constrained_concordant": 889
+      }
+    }
+  },
+  "domain_genes_absent_from_rna_sheet": 28,
+  "reading": "On 5,011 C. elegans putative enhancers accessible in exactly one of five tissues (Serizay et al. 2020) with constraint measured on their exon-free bases (UCSC ce11 phyloP135way, cut re-derived at 5% FDR by Zoonomia's procedure), the domain-rule gene is expressed at 5 TPM or more and highest in the element's own tissue for 2,093 of 3,865 constrained elements (54.2%), against 51.5% for the 1,109 not constrained at the same tissue, position class, distance and measured length; difference +2.63 points, 95% -1.35 to +7.03 over 1-Mb clusters (within-stratum permutation p 0.105; FALSIFIED). No difference was detected: on this endpoint constraint adds no detectable tissue information to the domain rule's position. This is not evidence that constrained elements lack function. Conservation and accessibility are not function, and this run does not separate regulatory constraint from transcription-linked constraint.",
+  "registration_commit": "752f7fc",
+  "cuts": {
+    "phyloP135way": {
+      "cut": 2.08,
+      "cut_interval_95": [
+        2.05,
+        2.12
+      ],
+      "constrained_share_all_scored": 0.1569,
+      "constrained_share_non_exon": 0.07176,
+      "instrument_check": {
+        "rule": "the cut must place a larger share of CDS bases than of intron bases above it",
+        "cds_share": 0.39649,
+        "intron_share": 0.07728,
+        "passed": true
+      }
+    },
+    "phyloP26way": {
+      "cut": 2.15,
+      "cut_interval_95": [
+        2.12,
+        2.17
+      ],
+      "constrained_share_all_scored": 0.14436,
+      "constrained_share_non_exon": 0.03103,
+      "instrument_check": {
+        "rule": "the cut must place a larger share of CDS bases than of intron bases above it",
+        "cds_share": 0.31272,
+        "intron_share": 0.03928,
+        "passed": true
+      }
+    }
+  },
+  "census": {
+    "elements": 5814,
+    "not_measured": 803,
+    "constrained": 3894,
+    "not_constrained": 1117,
+    "by_tissue": {
+      "Germline": {
+        "constrained": 166,
+        "not_constrained": 177
+      },
+      "Neurons": {
+        "constrained": 1107,
+        "not_constrained": 225
+      },
+      "Muscle": {
+        "constrained": 977,
+        "not_constrained": 222
+      },
+      "Hypod.": {
+        "constrained": 1030,
+        "not_constrained": 276
+      },
+      "Intest.": {
+        "constrained": 614,
+        "not_constrained": 217
+      }
+    },
+    "inside_gene_body": {
+      "constrained": 2284,
+      "not_constrained": 506
+    },
+    "between_genes": {
+      "constrained": 1610,
+      "not_constrained": 611
+    },
+    "length_edges_measured_bases": [
+      150.0,
+      150.0
+    ],
+    "strata": 113,
+    "strata_with_both_tiers": 100,
+    "constrained_in_support": 3865,
+    "not_constrained_in_support": 1109,
+    "mde_points_unclustered": 4.769,
+    "fraction_tertile_edges": [
+      0.08,
+      0.190476
+    ],
+    "stop_rule_met": false
+  },
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "Genome Res 30(12), December 2020; supplement as served by Europe PMC on 2026-10-10"
+      },
+      {
+        "accession": "Ensembl gene models for WBcel235 (WBcel235.63.gff3.gz)",
+        "version": "release 63, the copy held in data/reference/celegans since 2026-09-10"
+      },
+      {
+        "accession": "Christmas et al. 2023, Science 380:eabn3943 (Zoonomia), Methods: phyloP p values to q values by an FDR correction, q <= 0.05 constrained or accelerated by the score's sign",
+        "version": "the procedure only; no Zoonomia number is used"
+      },
+      {
+        "accession": "UCSC ce11 phyloP135way: https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/ce11.phyloP135way.bw",
+        "version": "range-read 2026-10-10"
+      },
+      {
+        "accession": "UCSC ce11 phyloP26way: https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP26way/ce11.phyloP26way.bw",
+        "version": "range-read 2026-10-10"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/simpler_worm_tiers_registration.json",
+        "sha256": "6a79bb0c8c2942e12bca10b73e8316720393640cf540c1a349c374ee5096d746",
+        "bytes": 19770,
+        "partition": "the committed registration"
+      },
+      {
+        "path": "data/results/simpler_worm_tiers.json",
+        "sha256": "73aca3d7ba74176b6d25a395cc15d04fb140ea5a3652ec7cd0de535ac2dee828",
+        "bytes": 313614,
+        "partition": "the committed tiers"
+      },
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "elements (ATAC_metrics) and the endpoint (RNA_metrics)"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "gene positions and strands"
+      },
+      {
+        "path": "data/results/simpler_worm_registration.json",
+        "sha256": "86f5de1347b601de9e51ad216882e5f746cf2280c84f0842b57be6f092b11718",
+        "bytes": 14687,
+        "partition": "stage 1's census, read only to check the population count"
+      }
+    ],
+    "assembly": "WBcel235 (ce11): Table S2, the gene models and both phyloP tracks are on the same build",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "bigWig is 0-based half-open; the GFF3 (1-based closed) is converted on reading; Table S2 does not state its base and its start/end are taken as 0-based half-open, at most 1 bp off"
+    },
+    "parameters": {
+      "fdr_q": 0.05,
+      "hist_bin": 0.01,
+      "hist_limit": 20.0,
+      "sample_group_blocks": 16,
+      "sample_fraction": 0.1,
+      "cut_bootstrap": 1000,
+      "constrained_min_fraction": 0.05,
+      "primary_track": "phyloP135way",
+      "secondary_track": "phyloP26way",
+      "element_max_gap_bytes": 16384,
+      "workers": 3,
+      "min_per_tier": 200,
+      "permutations": 1000,
+      "bootstrap": 2000,
+      "cluster_bp": 1000000,
+      "distance_bins_bp": [
+        1000,
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ],
+      "detection_tpm": 5.0,
+      "seed": 20261010,
+      "bytes_budget_per_track": 200000000
+    },
+    "exclusions": [
+      "elements of any class other than putative_enhancer, and elements whose tissue call is not exactly one of the five tissues (stage 1's population)",
+      "exon bases of any transcript in the WBcel235 GFF3, removed from every element before its tier",
+      "elements with no scored base left after exon removal (not_measured): no tier, excluded and counted",
+      "chrM and every block outside chrI-V and chrX from the genome sample",
+      "the source's own element-to-gene columns, never read (simpler.NEVER_READ)"
+    ],
+    "partitions": {
+      "endpoint": "RNA_metrics read once, after the registration was committed"
+    },
+    "code_cleanliness": {
+      "git_sha": "752f7fc1d99f69d1e219ad6500970555517ec20e",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/simpler_tiers_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_tiers_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_tiers_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_tiers.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/simpler_tiers_run.py"
+      ],
+      "counting_path_count": 40,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "752f7fc1d99f69d1e219ad6500970555517ec20e",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/simpler_tiers_run.py",
+        "score"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "752f7fc1d99f69d1e219ad6500970555517ec20e",
+      "code_cleanliness_git_sha": "752f7fc1d99f69d1e219ad6500970555517ec20e",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 752f7fc"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 266,
+      "opens_under_data": 14,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
