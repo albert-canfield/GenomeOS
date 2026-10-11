@@ -1,0 +1,274 @@
+{
+  "result": "wormoutron_inventory",
+  "date": "2026-10-10",
+  "lane": "lane-wormoutron",
+  "area": "I",
+  "question": "Does the worm's between-gene lead of the domain rule over nearest TSS survive EXCLUDING the elements that fall in outrons or in trans-splicing-affected 5' regions by the WormBase WS298 map -- the confound stage 1 registered as a caveat for this very stratum and never tested?",
+  "why_this_lane_exists": "lane-flysource measured in Drosophila that the domain rule's lead over nearest TSS appears only where a host gene can be named and is absent between genes (+0.03 [-0.50, +0.60] on 789 elements, docs/SIMPLER-GENOMES.md section 11). The worm is NOT qualified by that: its between-gene stratum held at +3.73 [+2.79, +4.74] over 2,335 elements. But stage 1 registered a caveat for that very stratum -- trans-splicing and outrons -- and never tested it. This lane tests it.",
+  "candidates_considered": [
+    {
+      "map": "WormBase WS298 annotation GFF3 (CHOSEN)",
+      "defines": "operon|operon and dicistronic_mRNA|operon: operon spans with member WBGene ids (deprecated_operon is not used); SL1_acceptor_site and SL2_acceptor_site: measured trans-splice acceptor positions; TSS_region: WormBase's clustered transcription start site regions from the four published C. elegans TSS data sets (TSS_Chen, TSS_Kruesi, TSS_Saito, TSS_Gu in the WS298 TSS wiggle archive; WS298's release letter names WBPaper00042246, WBPaper00042529 and WBPaper00042354). Assembly WBcel235 (ce11), the same build as the Ensembl gene models stage 1 read; nothing is lifted over.",
+      "assembly": "WBcel235 (ce11); WormBase has used this build since WS235",
+      "liftover": "none needed",
+      "obtainable": true,
+      "how": "streamed from the EBI mirror and filtered in one pass to six feature classes; the 742 MB release file is not kept, the 8.0 MB extract is",
+      "why_chosen": "it is the only candidate that carries ALL THREE pieces the caveat needs -- WormBase's clustered TSS regions (which are the published Chen, Kruesi, Saito and Gu TSS data sets, Saito being the outron paper), the measured SL1 and SL2 trans-splice acceptor sites, and the operon annotation with member genes -- on the same assembly as the gene models stage 1 read, so nothing is lifted over",
+      "licence": "WormBase data are distributed for free reuse; the release, URL and WormBase's own published md5 are recorded instead of asserting a licence identifier this lane did not read, because wormbase.org/about/policies answered an unauthenticated fetch with HTTP 403 (Cloudflare)"
+    },
+    {
+      "map": "Saito et al. 2013 Genome Res 23:1348, supplementary TSS/outron tables",
+      "status": "NOT fetched separately",
+      "why_not": "WormBase's TSS_region features already carry this data set -- the WS298 TSS wiggle archive's members are TSS_Chen, TSS_Kruesi, TSS_Saito and TSS_Gu, and the release letter names WBPaper00042246, WBPaper00042529 and WBPaper00042354 -- on WBcel235, whereas the paper's own tables are on the build of 2013 and would need a liftover this lane could not verify"
+    },
+    {
+      "map": "Kruesi et al. 2013 eLife (GRO-cap TSSs); Chen et al. 2013 Genome Res; Gu et al.",
+      "status": "NOT fetched separately",
+      "why_not": "same reason: carried by WormBase's TSS_region features on WBcel235"
+    },
+    {
+      "map": "WormBase operon annotation as a standalone file",
+      "status": "does not exist on the FTP mirror",
+      "why_not": "the WS298 species directory has no operon-only extract; the operon features live in the full annotation GFF3, which is why that file was streamed"
+    }
+  ],
+  "map_chosen": "WormBase release WS298, c_elegans.PRJNA13758.WS298.annotations.gff3.gz, https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/, published md5 f41b0e0afb7bdcf15d7b35c9a1f7f3a9 (WS298/CHECKSUMS), streamed sha256 4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+  "map_defines": "operon|operon and dicistronic_mRNA|operon: operon spans with member WBGene ids (deprecated_operon is not used); SL1_acceptor_site and SL2_acceptor_site: measured trans-splice acceptor positions; TSS_region: WormBase's clustered transcription start site regions from the four published C. elegans TSS data sets (TSS_Chen, TSS_Kruesi, TSS_Saito, TSS_Gu in the WS298 TSS wiggle archive; WS298's release letter names WBPaper00042246, WBPaper00042529 and WBPaper00042354). Assembly WBcel235 (ce11), the same build as the Ensembl gene models stage 1 read; nothing is lifted over.",
+  "store": {
+    "data/knowledge/wormoutron/ws298_operon_sl_tss.gff3": {
+      "exists": true,
+      "bytes": 8387027
+    },
+    "data/knowledge/wormoutron/ws298_source_type_census.txt": {
+      "exists": true,
+      "bytes": 9332
+    },
+    "data/knowledge/wormoutron/ws298_CHECKSUMS.txt": {
+      "exists": true,
+      "bytes": 93901
+    }
+  },
+  "fetch_command": "curl -sS \"https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS298.annotations.gff3.gz\" | tee >(md5 -q) | gzip -dc | awk -F'\\t' 'NF>8 && ($2==\"operon\" || $2==\"deprecated_operon\" || $2==\"dicistronic_mRNA\" || $2==\"SL1\" || $2==\"SL2\" || $2==\"TSS_region\")' > data/knowledge/wormoutron/ws298_operon_sl_tss.gff3",
+  "registered_inputs": {
+    "table_s2": {
+      "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+      "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70"
+    },
+    "gff3": {
+      "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+      "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9"
+    },
+    "ws298_map": {
+      "path": "data/knowledge/wormoutron/ws298_operon_sl_tss.gff3",
+      "sha256": "dd5efa6826086fcb5c1be4b7bd06b44d7b94beac024b426f15bb037b386aa1cf"
+    },
+    "ws298_source_type_census": {
+      "path": "data/knowledge/wormoutron/ws298_source_type_census.txt",
+      "sha256": "56641e5656eebe8ea05fdd7998aca3c76f07e8859ab4152888f3ef620b0d9ea5"
+    },
+    "ws298_checksums": {
+      "path": "data/knowledge/wormoutron/ws298_CHECKSUMS.txt",
+      "sha256": "b816d73323e398b95021d776efded1c5b661e78f5e3579e5fc0e36a0aa7cd0e7"
+    },
+    "remote_release_file": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS298.annotations.gff3.gz",
+      "bytes": 742000000,
+      "kept_on_disk": false,
+      "published_md5": "f41b0e0afb7bdcf15d7b35c9a1f7f3a9",
+      "streamed_md5": "f41b0e0afb7bdcf15d7b35c9a1f7f3a9",
+      "streamed_sha256": "4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+      "verified": "the streamed md5 equals the md5 WormBase publishes in WS298/CHECKSUMS, and two independent streams gave the same sha256, so the 8.0 MB extract is of the authentic complete release file; the release file itself is not kept"
+    }
+  },
+  "disk": {
+    "store_bytes": 8490260,
+    "budget_bytes": 500000000,
+    "release_file_kept": false
+  },
+  "alphagenome_requests": 0,
+  "model_requests": 0,
+  "money": "none; no model request, no key read",
+  "stop_list": "docs/ROADMAP.md section 5, 'The stop list of 2026-09-27, reinstated': no AlphaGenome and no deletion request (0 model requests here), no new reader biosample (the human reader's 13 biosamples are untouched; a WormBase annotation release is not a reader biosample), nothing in area J, no node-model work, no BioForge calibration",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "as read in stage 1, unchanged"
+      },
+      {
+        "accession": "WormBase release WS298, c_elegans.PRJNA13758.WS298.annotations.gff3.gz, https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/, published md5 f41b0e0afb7bdcf15d7b35c9a1f7f3a9 (WS298/CHECKSUMS), streamed sha256 4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+        "version": "WormBase WS298, served 2026-10-10"
+      },
+      {
+        "accession": "Ensembl WBcel235 release 63 gene models (Caenorhabditis elegans)",
+        "version": "WBcel235.63"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/wormoutron/ws298_operon_sl_tss.gff3",
+        "sha256": "dd5efa6826086fcb5c1be4b7bd06b44d7b94beac024b426f15bb037b386aa1cf",
+        "bytes": 8387027,
+        "partition": "the WS298 extract: operon, SL1, SL2 and TSS_region features"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_source_type_census.txt",
+        "sha256": "56641e5656eebe8ea05fdd7998aca3c76f07e8859ab4152888f3ef620b0d9ea5",
+        "bytes": 9332,
+        "partition": "the whole-file source|type census from the same pass"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_CHECKSUMS.txt",
+        "sha256": "b816d73323e398b95021d776efded1c5b661e78f5e3579e5fc0e36a0aa7cd0e7",
+        "bytes": 93901,
+        "partition": "WormBase's published checksums for WS298"
+      },
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "hashed only, to pin stage 1's source; no sheet is opened"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "hashed only, to pin stage 1's gene models"
+      }
+    ],
+    "assembly": "WBcel235 (ce11) throughout: Table S2, the Ensembl gene models and the WormBase WS298 features are on the same build, so nothing is lifted over",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "both GFF3s are 1-based closed; the element midpoint is (start + end) // 2, and Table S2 does not state its base, so a midpoint moves by at most 1 bp either way"
+    },
+    "parameters": {
+      "outron_max_bp": 20000,
+      "sl_window_bp": 100,
+      "min_surviving": 800,
+      "min_surviving_discordant": 100,
+      "operon_sources_used": [
+        "operon",
+        "dicistronic_mRNA"
+      ],
+      "operon_sources_not_used": [
+        "deprecated_operon"
+      ],
+      "detection_tpm": 5.0,
+      "tissues": [
+        "Germline",
+        "Neurons",
+        "Muscle",
+        "Hypod.",
+        "Intest."
+      ],
+      "cluster_bp": 1000000,
+      "bootstrap_reps": 2000,
+      "control_draws": 1000,
+      "seed": 20261010,
+      "stage1_between_genes": {
+        "elements": 2335,
+        "domain_rate_pct": 53.9,
+        "nearest_rate_pct": 50.2,
+        "delta_points": 3.73,
+        "delta_ci95_points": [
+          2.79,
+          4.74
+        ],
+        "registration": "595d7c2 / eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4"
+      }
+    },
+    "exclusions": [
+      "elements with a host gene (domain_case == 'host'): the host stratum is not this lane's population",
+      "elements of any class other than putative_enhancer",
+      "elements whose tissue call is not exactly one of the five tissues",
+      "deprecated_operon features (111 of them), which WormBase no longer asserts",
+      "MtDNA, which carries no protein-coding gene in the models stage 1 read",
+      "the source table's own element-to-gene columns, which answer the question being asked"
+    ],
+    "partitions": "n/a: an inventory has no evaluation partition",
+    "code_cleanliness": {
+      "git_sha": "7fb90872bda03f5a034833e9b5fef9613bd81e67",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/wormoutron_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/wormoutron_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/wormoutron_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/wormoutron.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/wormoutron_run.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "7fb90872bda03f5a034833e9b5fef9613bd81e67",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json"
+      ],
+      "argv": [
+        "scripts/wormoutron_run.py",
+        "inventory"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "7fb90872bda03f5a034833e9b5fef9613bd81e67",
+      "code_cleanliness_git_sha": "7fb90872bda03f5a034833e9b5fef9613bd81e67",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 7fb9087"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 26,
+      "opens_under_data": 10,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
