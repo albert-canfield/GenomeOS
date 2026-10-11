@@ -1,0 +1,292 @@
+{
+  "result": "globcensus",
+  "date": "2026-10-11",
+  "question": "which committed results declare an input group built by a glob filtered on .exists(), so the declaration silently SHRINKS on a partial store instead of refusing",
+  "the_defect": "ABSENCE IS SILENT. files_entry(name, [p for p in paths if p.exists()]) makes the declared group a function of the filesystem at write time rather than of the commit. On a partial store it neither refuses nor warns, and the result still reads as complete",
+  "interim": "counts are measured; the classification of each varying group into legitimate scope or silent shrink is NOT done and is not claimed here",
+  "call_sites": {
+    "files_entry_calls_total": 82,
+    "exists_filtered": 18,
+    "the_brief_said": 17,
+    "why_the_brief_undercounted": "17 is what a one-line grep for files_entry.*exists() sees. The AST sees 18: scripts/trio_q100_phase.py:72 spans four lines with the filter on line 74",
+    "sites": [
+      {
+        "path": "scripts/capsumrna_census.py",
+        "line": 485,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/combine2_census.py",
+        "line": 250,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/combine2_register.py",
+        "line": 119,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/combine2_run.py",
+        "line": 102,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/combine2_run.py",
+        "line": 141,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/maxform_census.py",
+        "line": 342,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/maxform_register.py",
+        "line": 118,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/maxform_run.py",
+        "line": 80,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/multrna_census.py",
+        "line": 309,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/multrna_register.py",
+        "line": 111,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/multrna_run.py",
+        "line": 85,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/multrna_run.py",
+        "line": 167,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/reader_genome_wide.py",
+        "line": 88,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/readergate_census.py",
+        "line": 120,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/readergate_register.py",
+        "line": 112,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/readergate_run.py",
+        "line": 89,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/readergate_run.py",
+        "line": 132,
+        "exists_filtered": true,
+        "spans_lines": 1
+      },
+      {
+        "path": "scripts/trio_q100_phase.py",
+        "line": 72,
+        "exists_filtered": true,
+        "spans_lines": 4
+      }
+    ]
+  },
+  "committed_declarations": {
+    "group_declarations": 130,
+    "distinct_group_names": 88,
+    "constant_member_count": 82,
+    "varying_member_count": 6
+  },
+  "the_negative_the_lane_was_opened_on": {
+    "group": "reader v1 DNase narrowPeak files",
+    "results_declaring_it": 13,
+    "member_counts_seen": [
+      312
+    ],
+    "reading": "312 in every one of the 13: NO SHRINK ANYWHERE. The defect is real as a mechanism and so far UNREALISED for this group. The 13-against-312 reported on 2026-10-10 was a worktree of this lane's own making, not any artefact"
+  },
+  "groups_whose_count_varies": {
+    "data/knowledge/alphagenome/all_elements/chr*.json": [
+      23,
+      24
+    ],
+    "the all-enhancer sweep's committed per-chromosome results, read through attribution/targets.py": [
+      70,
+      73
+    ],
+    "the sweep's local per-chromosome element tables, which data/knowledge never commits": [
+      23,
+      24
+    ],
+    "GENCODE 50 per-chromosome annotation, for the nearest protein-coding TSS": [
+      22,
+      23
+    ],
+    "per_element_response_cache": [
+      1,
+      22,
+      24
+    ],
+    "HPRC panel store (meta, sites, blocks per chromosome)": [
+      1,
+      66
+    ]
+  },
+  "a_varying_count_is_not_itself_a_defect": "a result that covered 23 chromosomes should declare 23. What a count cannot do is tell that from a result that meant 24 and silently got 23",
+  "does_not_claim": "not that any committed result IS wrong; not that a varying member count is a defect (a result that covered fewer chromosomes should declare fewer); not that the constant-count groups are safe, since a group constant at a shrunken value would look identical to one constant at its full value; and nothing about groups built WITHOUT an exists() filter, which are the majority",
+  "the_limit_that_would_flatter_us": "a group CONSTANT at a shrunken value is indistinguishable here from one constant at its full value, so the constant-count groups are NOT shown safe. test_PLANTED_a_group_constant_at_a_shrunken_value_is_INVISIBLE_here holds that as a test",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed result registry, data/results/*.json",
+        "version": "as committed"
+      },
+      {
+        "accession": "the genomeos/ and scripts/ trees, read by AST",
+        "version": "as committed"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results",
+        "sha256": "2ef779d34a35ee85ffb04068eccbf6c04b259899521b9a8b1f9cf1aa81c53670",
+        "bytes": 506687143,
+        "partition": null,
+        "files": 1680
+      }
+    ],
+    "input_count": 1,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "searched_trees": [
+        "genomeos",
+        "scripts"
+      ],
+      "method": "ast.parse over every .py, then every files_entry call; group declarations read from result_manifest.inputs where group is true",
+      "why_not_grep": "a one-line pattern cannot see a call whose filter sits on a later line"
+    },
+    "exclusions": [
+      "static only: nothing was run, no store was read, no result's bytes were touched, and no varying count is classified"
+    ],
+    "code_cleanliness": {
+      "git_sha": "3e43ef4f9b71db480a1ed924d1653f1b1d48700d",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/globcensus_count.py",
+        "form": "committed_repository_file",
+        "path": "scripts/globcensus_count.py",
+        "is_committed": true,
+        "declared_entry": "scripts/globcensus_count.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/wormoutron_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/globcensus.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/globcensus_count.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "partitions": {
+      "none": "one population, the committed registry; no partition is taken and the absence of one is not a claim of independence"
+    },
+    "code": {
+      "git_sha": "3e43ef4f9b71db480a1ed924d1653f1b1d48700d",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/calibration_inventory.py",
+        "genomeos/forge/design.py",
+        "scripts/forge_calibration_inventory.py",
+        "scripts/wormoutron_run.py",
+        "tests/test_forge_calibration_inventory.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/globcensus_count.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "3e43ef4f9b71db480a1ed924d1653f1b1d48700d",
+      "code_cleanliness_git_sha": "3e43ef4f9b71db480a1ed924d1653f1b1d48700d",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 3e43ef4"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 3668,
+      "opens_under_data": 2943,
+      "files_read": 1680,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
