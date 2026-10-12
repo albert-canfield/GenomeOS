@@ -483,6 +483,23 @@ WHY_V2 = (
     " unknown, which is what lets its settled fourth condition decide them"
 )
 
+#: A third pass is AVAILABLE and is deliberately NOT TAKEN, recorded so the stop is a decision and not
+#: an oversight, and so a later lane can take it on purpose.
+THE_REFINEMENT_NOT_TAKEN = (
+    "condition (3) of the shrink test -- 'no exclusion in that result names them' -- is establishable"
+    " NEGATIVELY: where no exclusion mentions any chromosome token at all, no exclusion can name the"
+    " missing members, so the fact is FALSE and not unknown. Supplied that way, three declarations of"
+    " per_element_response_cache (hct116_count, reptest_answerable, rescore_cost) would have all three"
+    " conditions known, lane-shrinkimpact's settled fourth condition would decide them, and they would"
+    " move from UNDECIDABLE to LEGITIMATE_SCOPE. THIS PASS DOES NOT DO IT, for one reason: it moves"
+    " declarations AWAY from undecidability, which is the flattering direction, and this lane has"
+    " already corrected its facts once in that same direction's favour. A third pass that keeps making"
+    " the answer tidier is how a rule fixed in advance stops meaning anything. The verdict reported is"
+    " the one the rule gives on the facts as established, and for those six declarations"
+    " lane-shrinkimpact's recomputation -- realised in 0 of 6 -- is the stronger and independent answer"
+    " to the IMPACT question, which is not the question this rule asks"
+)
+
 #: Condition (2) as lane-shrinkimpact and globcensus stage 2 measured it, carried and not re-measured.
 SHRINKIMPACT_PRESENCE = (
     "globcensus.SHRINKS_FOUND and STAGE_2_READING: 'in every case the missing chromosomes are on disk"
@@ -708,6 +725,7 @@ def main() -> int:
         ],
         "varying_groups_the_inherited_six_CORRECTED": [r for r in rows_v2 if r["group"] in inherited_varying],
         "why_a_second_pass": WHY_V2,
+        "the_refinement_not_taken": THE_REFINEMENT_NOT_TAKEN,
         "which_pass_is_the_answer": (
             "the CORRECTED pass. The first is kept beside it because the error is instructive: its"
             " loose facts made the all-enhancer sweep read LEGITIMATE_SCOPE on 73 files against a"
