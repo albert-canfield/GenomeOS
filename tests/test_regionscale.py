@@ -23,6 +23,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from genomeos import manifest as mf
 from genomeos.attribution import hetblock as hb
 from genomeos.attribution import magcal as mc
 from genomeos.attribution import regionscale as rs
@@ -657,6 +658,113 @@ def test_the_register_script_refuses_without_a_reproducing_harness(tmp_path, mon
     monkeypatch.setattr(mod, "OUT", str(there))
     with pytest.raises(SystemExit, match="already exists"):
         mod.refuse_unless_harness_reproduced()
+
+
+# ---- the committed registration ------------------------------------------------------------------
+# Read data/results/regionscale_registration.json, committed WITH these tests (22e12de). No skip is
+# keyed on it (4f2652c): the run refuses to start without it, so an absent record must FAIL here.
+REGISTRATION = ROOT / "data/results/regionscale_registration.json"
+
+
+def _registration() -> dict:
+    return json.loads(REGISTRATION.read_text())
+
+
+def test_the_committed_registration_binds_every_field_of_the_module_WORD_FOR_WORD():
+    reg = _registration()
+    fields = rs.registered_fields()
+    drift = [f for f, v in fields.items() if reg.get(f) != v]
+    assert drift == [], drift
+    assert len(fields) == len(rs.BOUND) == 45
+
+
+def test_the_committed_registration_pins_every_input_the_run_will_read():
+    reg = _registration()
+    pinned = reg["pinned_sha256"]
+    assert "data/results/multrna_result.json" in pinned
+    assert "data/results/regionscale_harness.json" in pinned
+    for p, want in pinned.items():
+        assert not p.startswith("/"), p
+        assert mf.input_entry(p)["sha256"] == want, p
+
+
+def test_the_committed_registration_carries_the_harness_that_reproduced_M2h():
+    # "harness_record", NOT "harness". The module has a BOUND field called "harness" -- the
+    # registered text of what the harness must check -- and the writer's provenance block was
+    # originally called the same thing, so `**registered_fields()` silently overwrote it and the
+    # registration lost the PROOF that M2h reproduced. Reading the wrong key here is what caught
+    # it; this test asserts on the evidence, and the one below asserts the description is intact.
+    reg = _registration()
+    h = reg["harness_record"]
+    assert h["outcome"] == "HARNESS_REPRODUCES"
+    assert h["m2h_reproduces"] is True
+    assert "REPRODUCE" in h["m2h_reading"]
+    assert reg["harness"] == rs.registered_fields()["harness"]
+    assert isinstance(reg["harness"], str)
+
+
+def test_the_committed_registration_declares_the_design_feasible_on_COUNTS_alone():
+    d = _registration()["the_held_out_design_is_feasible"]
+    assert d["testable"] is True
+    assert d["admitted_count"] >= rs.MIN_REGIONS
+    assert d["min_genes_each_half"] == rs.MIN_GENES
+    assert d["min_regions"] == rs.MIN_REGIONS
+    assert set(d["admitted"]) & set(d["fallback_to_global_both_arms"]) == set()
+    assert "depend on no measured value" in d["these_are_counts"]
+
+
+def test_the_committed_registration_holds_NO_held_out_value_of_this_design():
+    # The names of the result quantities do appear in this file, and they MUST: both outcomes are
+    # pre-written as TEMPLATES before any value exists, so `dm_region`, `dm_global` and `p_perm`
+    # are present as UNFILLED FORMAT PLACEHOLDERS inside the outcome sentences. A test that merely
+    # banned the substring failed on those placeholders; it was MIS-SPECIFIED, not the registration.
+    # The correct and stronger assertion is the one below: the placeholders are STILL UNFILLED, and
+    # the quantity names occur NOWHERE outside the templates.
+    reg = _registration()
+    blob = json.dumps(reg)
+    for forbidden in ("delta_ci", "per_region_scales", "null_q", "delta_mse_region", "delta_mse_global"):
+        assert forbidden not in blob, forbidden
+    templated = {"outcomes", "mixed_clauses"}
+    elsewhere = json.dumps({k: v for k, v in reg.items() if k not in templated})
+    for name, placeholder in (
+        ("dm_region", "{dm_region:+.6g}"),
+        ("dm_global", "{dm_global:+.6g}"),
+        ("p_perm", "{p_perm:.6g}"),
+    ):
+        assert name not in elsewhere, name
+        carriers = [k for k, text in reg["outcomes"].items() if name in text]
+        assert carriers, name
+        for k in carriers:
+            assert placeholder in reg["outcomes"][k], (k, placeholder)
+    assert "no per-chromosome scale" in reg["what_is_not_in_this_file"]
+    assert reg["alphagenome_requests"] == 0
+
+
+def test_the_committed_registration_states_the_exposure_twice_and_the_interval_decided_now():
+    reg = _registration()
+    assert len(reg["prior_exposure"]) == 2
+    assert "LOOKED AT, TESTED, AND TESTED AGAIN" in reg["prior_exposure"][0]
+    assert "LOOKED AT, TESTED, AND TESTED AGAIN" in reg["prior_exposure_clause"]
+    assert "DECIDED NOW AND NOT AFTER" in reg["interval"]
+    assert "CORRECTION, DECIDED NOW" in reg["alpha"]
+
+
+def test_the_committed_registration_pre_writes_BOTH_outcomes_and_proposes_no_model():
+    o = _registration()["outcomes"]
+    assert "REAL BUT NOT USABLE" in o["NO_IMPROVEMENT"]
+    assert "WHOLE CORRECTION IN PRACTICE" in o["NO_IMPROVEMENT"]
+    assert "BETTER THAN THE SINGLE GLOBAL SCALE" in o["IMPROVES"]
+    assert "cannot be tested out of sample at this gene count" in o["INCONCLUSIVE_NOT_TESTABLE"].lower()
+    for kind, text in o.items():
+        if kind != "HARNESS_DEFECT":
+            assert "NO PER-REGION MODEL IS" in text or "PROPOSES NO FURTHER MODEL" in text, kind
+
+
+def test_the_committed_registration_manifest_is_complete_and_declares_its_readers():
+    m = _registration()["result_manifest"]
+    assert m["complete"] is True, m.get("problems")
+    assert len(m["readers"]) == 13
+    assert m["code_cleanliness"]["own_code_is_committed"] is True
 
 
 # ---- the run script's contract, and the TRIAL RUN it discloses ------------------------------------
