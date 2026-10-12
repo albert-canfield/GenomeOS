@@ -466,6 +466,98 @@ def varying_group_rows(groups: dict[str, list[tuple[str, Any]]]) -> list[dict[st
     return rows
 
 
+#: Why there is a second pass at all, and why the RULE is untouched by it.
+WHY_V2 = (
+    "the first pass's FACTS were too loose in three named ways, and each tightening is the registered"
+    " wording of VARIATION_CLASSES applied more strictly rather than a change to it. (1) COMMENSURABLE"
+    " SCOPE: LEGITIMATE_SCOPE requires the result's own declared scope to ACCOUNT FOR the count it"
+    " declares, and a 24-chromosome list does not account for a 73-FILE group -- the all-enhancer sweep"
+    " passed the first pass only because 73 >= 24, a comparison of files against chromosomes that means"
+    " nothing. Where the declared count EXCEEDS the stated scope the two are not commensurable and the"
+    " artefact states no scope this count can be read against. (2) EXCLUSIONS: the rule requires an"
+    " exclusion to name EVERY MISSING MEMBER, and a substring hit on 'chr' establishes nothing of the"
+    " kind -- globcensus found closure_cell_inventory naming chrY and NOT chr21, which is exactly the"
+    " case the loose test would flatter. Unless the missing members are known and each named, the fact"
+    " is UNESTABLISHED, not false. (3) PRESENCE IN THE STORE: for the two groups lane-shrinkimpact"
+    " recomputed, condition (2) was MEASURED true and is carried from its record rather than left"
+    " unknown, which is what lets its settled fourth condition decide them"
+)
+
+#: Condition (2) as lane-shrinkimpact and globcensus stage 2 measured it, carried and not re-measured.
+SHRINKIMPACT_PRESENCE = (
+    "globcensus.SHRINKS_FOUND and STAGE_2_READING: 'in every case the missing chromosomes are on disk"
+    " TODAY -- so the store was partial when they were written and has since been completed'. Measured"
+    " there, carried here, not re-measured"
+)
+
+
+def varying_group_rows_v2(groups: dict[str, list[tuple[str, Any]]]) -> list[dict[str, Any]]:
+    """The same rows with the three fact tightenings of `WHY_V2`. `classify_variation` is unchanged."""
+    rows: list[dict[str, Any]] = []
+    for group, decls in gc.varying(groups).items():
+        settled = SHRINKIMPACT_SETTLED.get(group)
+        per_result = []
+        for result_stem, count in sorted(groups[group]):
+            scope = _scope_from_result(result_stem)
+            scope_count = scope.get("scope_count")
+            # (1) commensurability: a scope the count cannot be read against is no scope at all
+            commensurable = scope_count is not None and count is not None and count <= scope_count
+            # (2) an exclusion must NAME every missing member, which this scan never establishes --
+            # it can only see that SOME chromosome token appears somewhere in the exclusions, and
+            # globcensus already found a result that names chrY and not chr21. So the fact is left
+            # unestablished rather than read off a substring. See WHY_V2.
+            named = None
+            # (3) presence in the store, carried from lane-shrinkimpact for the groups it recomputed
+            present = True if settled else None
+            cls = gs.classify_variation(
+                artefact_states_a_scope=commensurable,
+                declared_count=count,
+                scope_count=scope_count,
+                missing_members_present_in_store_today=present,
+                missing_members_named_in_exclusions=named,
+                missing_members_carry_eligible_data=(
+                    settled["missing_members_carry_eligible_data"] if settled else None
+                ),
+            )
+            per_result.append(
+                {
+                    "result": result_stem,
+                    "declared": count,
+                    "class": cls,
+                    "scope_count": scope_count,
+                    "scope_field": scope.get("scope_field"),
+                    "commensurable": commensurable,
+                    "the_field_that_decided_it": (
+                        scope.get("scope_field")
+                        if commensurable
+                        else f"no commensurable scope: declared {count} against {scope.get('scope_field')}"
+                    ),
+                }
+            )
+        classes = {r["class"] for r in per_result}
+        rows.append(
+            {
+                "group": group,
+                "counts_seen": decls,
+                "declarations": len(per_result),
+                "per_result": per_result,
+                "group_class": (
+                    next(iter(classes))
+                    if len(classes) == 1
+                    else "MIXED_ACROSS_RESULTS: " + ", ".join(sorted(classes))
+                ),
+                "fourth_condition": (
+                    settled["evidence"]
+                    if settled
+                    else "NOT ESTABLISHED for this group: no recomputation on the complete store"
+                    " exists, so a shrink verdict is unavailable"
+                ),
+                "condition_2_presence": SHRINKIMPACT_PRESENCE if settled else "not established",
+            }
+        )
+    return rows
+
+
 # ------------------------------------------------------------------------------------- manifest
 
 
@@ -563,6 +655,7 @@ def main() -> int:
     inherited_varying = list(
         json.loads((ROOT / gs.INHERITED_COUNT_SOURCE).read_text())["groups_whose_count_varies"]
     )
+    rows_v2 = varying_group_rows_v2(groups)
     rows_inherited = [r for r in rows if r["group"] in inherited_varying]
     rows_new = [r for r in rows if r["group"] not in inherited_varying]
     if len(rows_inherited) != len(inherited_varying):
@@ -613,6 +706,14 @@ def main() -> int:
             {"group": r["group"], "counts_seen": r["counts_seen"], "declarations": r["declarations"]}
             for r in rows_new
         ],
+        "varying_groups_the_inherited_six_CORRECTED": [r for r in rows_v2 if r["group"] in inherited_varying],
+        "why_a_second_pass": WHY_V2,
+        "which_pass_is_the_answer": (
+            "the CORRECTED pass. The first is kept beside it because the error is instructive: its"
+            " loose facts made the all-enhancer sweep read LEGITIMATE_SCOPE on 73 files against a"
+            " 24-chromosome list, and made two results read LEGITIMATE_SCOPE on a substring hit for"
+            " 'chr' in their exclusions. Both would have understated the undecidability"
+        ),
         "varying_groups_note": (
             "the answer is the inherited six. `varying_groups` holds every group varying in the tree"
             f" today, {len(rows)} of them, because {len(rows_new)} more appeared in results committed"
@@ -644,6 +745,11 @@ def main() -> int:
     sources = [Path("data/results"), Path("data/globscope_read_facts.json")]
     print(f"wrote {save_result(RESULT, payload, manifest=manifest(sources))}")
     print(json.dumps(counts, indent=1))
+    for r in rows_v2:
+        if r["group"] in inherited_varying:
+            print(f"  {r['group_class']:<52} {r['group'][:56]}")
+    return 0
+
     for r in rows:
         print(f"  {r['group_class']:<28} {r['group'][:70]}")
     return 0
