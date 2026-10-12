@@ -518,3 +518,192 @@ LIMITATIONS = [
     "rows included where a source has them. That is the no-filter rule applied consistently; it "
     "shifts all of a cell type's genes together and is part of the per-cell-type term above.",
 ]
+
+
+# --- step 3: the readers that sum counts, AGGREGATION step (1) ------------------------------------
+#
+# Each returns the summed integer count per identifier AND the library size, which is the sum over
+# EVERY row the archive supplies and not over the counted genes alone (AGGREGATION). The two are
+# returned together so no caller can normalise by the wrong total.
+
+
+def sum_counts_rsem(paths: list[Path]) -> tuple[dict[str, float], float]:
+    """ENCODE per-cell RSEM tables: `expected_count` summed per unversioned gene id over the files.
+
+    Each file of ENCODE's scRNA-seq is ONE CELL, so summing over the files IS summing over the cells.
+    """
+    counts: dict[str, float] = {}
+    total = 0.0
+    for path in paths:
+        with path.open() as handle:
+            header = handle.readline().rstrip("\n").split("\t")
+            i_gene, i_count = header.index("gene_id"), header.index("expected_count")
+            for line in handle:
+                fields = line.rstrip("\n").split("\t")
+                value = float(fields[i_count])
+                counts[unversioned(fields[i_gene])] = counts.get(unversioned(fields[i_gene]), 0.0) + value
+                total += value
+    return counts, total
+
+
+def sum_counts_starsolo(paths: list[Path]) -> tuple[dict[str, float], float]:
+    """ENCODE STARsolo tars: the gene-by-barcode matrix summed over every barcode, over the files.
+
+    The matrix is read as Matrix Market coordinates and accumulated by row, so no dense matrix is
+    built; the features file gives the row order and a mismatch between the two raises.
+    """
+    counts: dict[str, float] = {}
+    total = 0.0
+    for path in paths:
+        with tarfile.open(path, "r:gz") as tar:
+            names = tar.getnames()
+            features_member = tar.extractfile(_one_member(names, "features.tsv"))
+            if features_member is None:
+                raise ValueError(f"{path}: features.tsv is not a readable file")
+            features = [
+                line.split("\t", 1)[0].strip()
+                for line in io.TextIOWrapper(features_member, encoding="utf-8")
+                if line.strip()
+            ]
+            matrix_member = tar.extractfile(_one_member(names, "matrix.mtx"))
+            if matrix_member is None:
+                raise ValueError(f"{path}: matrix.mtx is not a readable file")
+            per_row = np.zeros(len(features), dtype=np.float64)
+            handle = io.TextIOWrapper(matrix_member, encoding="utf-8")
+            rows = _mtx_rows(handle, len(features))
+            for row, value in rows:
+                per_row[row] += value
+        for feature, value in zip(features, per_row, strict=True):
+            key = unversioned(feature)
+            counts[key] = counts.get(key, 0.0) + float(value)
+        total += float(per_row.sum())
+    return counts, total
+
+
+def _mtx_rows(handle: io.TextIOBase, n_features: int):
+    """The (row index, value) pairs of a Matrix Market coordinate file whose rows are the features."""
+    dims_seen = False
+    for line in handle:
+        if line.startswith("%"):
+            continue
+        fields = line.split()
+        if not fields:
+            continue
+        if not dims_seen:
+            if int(fields[0]) != n_features:
+                raise ValueError(
+                    f"the matrix declares {fields[0]} rows and features.tsv has {n_features}: the "
+                    "matrix is not gene-by-barcode and summing it would sum the wrong axis"
+                )
+            dims_seen = True
+            continue
+        yield int(fields[0]) - 1, float(fields[2])
+
+
+def sum_counts_h5ad(path: Path, matrix: str, index: str) -> tuple[dict[str, float], float]:
+    """An h5ad CSR matrix of cells by genes, summed over every cell, keyed by its var index.
+
+    Read in chunks with h5py so the 385 MB CELLxGENE matrix is never held twice, and summed with
+    `np.bincount` over the column indices, which is the sum over cells per gene.
+    """
+    with h5py.File(path, "r") as handle:
+        group = handle[matrix]
+        shape = tuple(int(x) for x in group.attrs["shape"])
+        encoding = group.attrs.get("encoding-type")
+        if encoding != "csr_matrix":
+            raise ValueError(f"{path}:{matrix} is {encoding!r}, not a csr_matrix of cells by genes")
+        keys = [raw.decode() if isinstance(raw, bytes) else str(raw) for raw in handle[index][:]]
+        if len(keys) != shape[1]:
+            raise ValueError(f"{path}: the var index has {len(keys)} rows and the matrix {shape[1]} columns")
+        per_gene = np.zeros(shape[1], dtype=np.float64)
+        data, indices = group["data"], group["indices"]
+        nnz = int(data.shape[0])
+        step = 1 << 22
+        for start in range(0, nnz, step):
+            stop = min(start + step, nnz)
+            per_gene += np.bincount(
+                indices[start:stop].astype(np.int64),
+                weights=data[start:stop].astype(np.float64),
+                minlength=shape[1],
+            )
+    counts: dict[str, float] = {}
+    for key, value in zip(keys, per_gene, strict=True):
+        name = unversioned(key) if key.startswith("ENSG") else key
+        counts[name] = counts.get(name, 0.0) + float(value)
+    return counts, float(per_gene.sum())
+
+
+def bulk_tpm(paths: list[Path]) -> dict[str, float]:
+    """The mean TPM per unversioned gene id over an experiment's qualifying files, M2h's RNA_SELECTION.
+
+    A gene with more than one row in a file is not in the result, which is lane-pseudobulk's clause:
+    the caller's population has already excluded such genes and this is the second check of it.
+    """
+    totals: dict[str, float] = {}
+    rows: dict[str, int] = {}
+    for path in paths:
+        with path.open() as handle:
+            header = handle.readline().rstrip("\n").split("\t")
+            i_gene, i_tpm = header.index("gene_id"), header.index("TPM")
+            for line in handle:
+                fields = line.rstrip("\n").split("\t")
+                key = unversioned(fields[i_gene])
+                totals[key] = totals.get(key, 0.0) + float(fields[i_tpm])
+                rows[key] = rows.get(key, 0) + 1
+    n = len(paths)
+    return {k: v / n for k, v in totals.items() if rows[k] == n}
+
+
+def percentile_interval(values: np.ndarray) -> list[float]:
+    """M2h's 98.33% percentile interval, the Bonferroni width of `ac5580b` kept for comparability."""
+    low, high = np.percentile(values, [0.8333, 99.1667])
+    return [float(low), float(high)]
+
+
+def control_p(observed: float, permuted: np.ndarray) -> float:
+    """M2h's control p: (1 + permutations with Delta MSE >= observed) / (1 + count)."""
+    return float((1 + int(np.sum(permuted >= observed))) / (1 + permuted.size))
+
+
+def permute_within_gene(p: np.ndarray, seed: int, count: int):
+    """M2h's within-gene cell permutation: each gene's P values permuted among its OWN cell types.
+
+    Yields one permuted P matrix per draw. Every gene keeps its own values and its own range; only
+    the tie between a prediction and the cell type it was made for is broken. Nothing is refitted,
+    which is M2i's one change to M2h's control.
+    """
+    rng = np.random.default_rng(seed)
+    n_genes, n_cells = p.shape
+    for _ in range(count):
+        order = np.argsort(rng.random((n_genes, n_cells)), axis=1)
+        yield np.take_along_axis(p, order, axis=1)
+
+
+def arm_reads(ci: list[float]) -> str:
+    """One arm's reading under :data:`CARRIED`'s ``which_governs_m2h``, carried from M2h.
+
+    The scale is a fixed constant here, so M2h's two straddle branches -- which it split by the
+    SCALE interval -- collapse into one, ``inconclusive``.
+    """
+    if ci[0] > 0.0:
+        return "better"
+    if ci[1] < 0.0:
+        return "worse"
+    return "inconclusive"
+
+
+def decide(single_cell_ci: list[float], difference_ci: list[float], margin_value: float) -> str:
+    """:data:`DECISION` as code: AGREEMENT, DISAGREEMENT or INCONCLUSIVE, and nothing else.
+
+    The order is the registration's: the two DISAGREEMENT conditions are the falsifier and take
+    precedence, AGREEMENT needs BOTH of its clauses, and everything else is INCONCLUSIVE, which
+    licenses nothing.
+    """
+    reads = arm_reads(single_cell_ci)
+    inside = -margin_value <= difference_ci[0] and difference_ci[1] <= margin_value
+    wholly_outside = difference_ci[0] > margin_value or difference_ci[1] < -margin_value
+    if reads == "worse" or wholly_outside:
+        return "DISAGREEMENT"
+    if reads == "better" and inside:
+        return "AGREEMENT"
+    return "INCONCLUSIVE"

@@ -338,3 +338,68 @@ def test_the_limitations_name_the_single_nucleus_count_and_the_normalisation() -
     assert "CPM" in joined
     assert "length-normalised TPM" in joined
     assert "FOUR CELL TYPES, not thirteen" in joined
+
+
+# --- the decision, as code rather than as prose in a script --------------------------------------
+
+
+def test_an_arms_reading_is_m2hs_rule_with_the_straddle_branches_collapsed() -> None:
+    assert pr.arm_reads([0.01, 0.05]) == "better"
+    assert pr.arm_reads([-0.05, -0.01]) == "worse"
+    assert pr.arm_reads([-0.01, 0.05]) == "inconclusive"
+    assert pr.arm_reads([0.0, 0.05]) == "inconclusive"
+    assert pr.arm_reads([-0.05, 0.0]) == "inconclusive"
+
+
+def test_agreement_needs_both_clauses_and_nothing_less() -> None:
+    m = 0.02
+    assert pr.decide([0.03, 0.05], [0.0, 0.01], m) == "AGREEMENT"
+    assert pr.decide([0.03, 0.05], [-0.02, 0.02], m) == "AGREEMENT"
+    # better, but the difference is not resolved against the margin
+    assert pr.decide([0.03, 0.05], [0.01, 0.03], m) == "INCONCLUSIVE"
+    # the difference is inside the margin, but the arm itself does not read better
+    assert pr.decide([-0.01, 0.05], [0.0, 0.01], m) == "INCONCLUSIVE"
+
+
+def test_the_falsifier_takes_precedence_over_everything_else() -> None:
+    m = 0.02
+    assert pr.decide([-0.05, -0.01], [0.0, 0.001], m) == "DISAGREEMENT"
+    assert pr.decide([0.03, 0.05], [0.03, 0.06], m) == "DISAGREEMENT"
+    assert pr.decide([0.03, 0.05], [-0.06, -0.03], m) == "DISAGREEMENT"
+
+
+def test_the_decision_has_exactly_three_outcomes_over_a_grid() -> None:
+    m = pr.margin()
+    outcomes = set()
+    for lo in (-0.05, -0.001, 0.0, 0.001, 0.05):
+        for hi in (lo, lo + 0.001, lo + 0.1):
+            for dlo in (-0.1, -m, 0.0, m, 0.1):
+                for dhi in (dlo, dlo + 0.0005, dlo + 0.2):
+                    outcomes.add(pr.decide([lo, hi], [dlo, dhi], m))
+    assert outcomes == {"AGREEMENT", "DISAGREEMENT", "INCONCLUSIVE"}
+
+
+def test_the_within_gene_permutation_keeps_every_genes_own_values() -> None:
+    p = np.array([[1.0, 2.0, 3.0, 4.0], [10.0, 20.0, 30.0, 40.0]])
+    draws = list(pr.permute_within_gene(p, seed=pr.PERMUTATIONS["seed"], count=25))
+    assert len(draws) == 25
+    for permuted in draws:
+        assert np.array_equal(np.sort(permuted, axis=1), np.sort(p, axis=1))
+    assert any(not np.array_equal(permuted, p) for permuted in draws), (
+        "a control that never moves anything would be no control"
+    )
+    again = list(pr.permute_within_gene(p, seed=pr.PERMUTATIONS["seed"], count=25))
+    assert all(np.array_equal(a, b) for a, b in zip(draws, again, strict=True))
+
+
+def test_the_control_p_is_m2hs_formula() -> None:
+    permuted = np.array([0.0, 0.1, 0.2, 0.3])
+    assert pr.control_p(0.4, permuted) == 1 / 5
+    assert pr.control_p(0.0, permuted) == 5 / 5
+
+
+def test_the_interval_is_the_9833_percent_percentile_interval() -> None:
+    values = np.arange(10_000, dtype=np.float64)
+    low, high = pr.percentile_interval(values)
+    assert low == pytest.approx(np.percentile(values, 0.8333))
+    assert high == pytest.approx(np.percentile(values, 99.1667))
