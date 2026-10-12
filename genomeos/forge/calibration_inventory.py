@@ -17,6 +17,7 @@ from __future__ import annotations
 import dataclasses
 import math
 import re
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -368,14 +369,27 @@ def design_record(
     }
 
 
-def build_inventory(root: Path | None = None) -> dict[str, Any]:
+def build_inventory(root: Path | None = None, programs: Iterable[str] | None = None) -> dict[str, Any]:
     """The census: every design and experiment block under the CI roots, as triples, with the four rules
-    applied, the independent count, and the registered decision. Runs each shipped design once (cached)."""
+    applied, the independent count, and the registered decision. Runs each shipped design once (cached).
+
+    `programs` restricts the census to those program paths, as a written result's `programs_scanned`
+    records them, so a committed census is recomputed over the inputs it read and a program added since
+    does not alter it (`programs_added_since` names those). A recorded program that is gone or holds no
+    block any more is refused, never dropped: the committed census can then no longer be recomputed."""
     from genomeos.forge.design_answers import repo_root, results_for
     from genomeos.lang import parse_file
 
     root = repo_root() if root is None else root
-    programs = programs_with_blocks(root)
+    found = programs_with_blocks(root)
+    if programs is None:
+        programs = found
+    else:
+        wanted = sorted(set(programs))
+        lost = [p for p in wanted if p not in found]
+        if lost:
+            raise ValueError(f"recorded program(s) gone or holding no design or experiment block: {lost}")
+        programs = {p: n for p, n in found.items() if p in wanted}  # the roots' own order
     parsed = {p: parse_file(str(root / p)) for p in programs}
     scripts = {
         p: {s: (root / s).read_text(encoding="utf-8") for s in named_scripts(root, p)} for p in programs
@@ -478,3 +492,12 @@ RUN_ONLY_KEYS = ("result_manifest", "seconds", "money", "date", "result")
 def census_of(payload: dict[str, Any]) -> dict[str, Any]:
     """A written inventory without what the run added, as `--check` and the tests compare it."""
     return {k: v for k, v in payload.items() if k not in RUN_ONLY_KEYS}
+
+
+def programs_added_since(payload: dict[str, Any], root: Path | None = None) -> list[str]:
+    """Programs under the CI roots holding a design or experiment block that a written inventory did not
+    scan: added after it was written, so they are outside its census and named rather than folded in."""
+    from genomeos.forge.design_answers import repo_root
+
+    found = programs_with_blocks(repo_root() if root is None else root)
+    return sorted(set(found) - set(payload["programs_scanned"]))

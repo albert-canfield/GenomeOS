@@ -134,12 +134,53 @@ RESULT = Path(__file__).resolve().parent.parent / "data" / "results" / "forge_ca
 
 
 def test_the_committed_inventory_is_what_the_code_computes() -> None:
-    """Shares the design run with tests/test_forge_design_answers.py through design_answers.results_for."""
+    """Exactly, over the programs the result RECORDS in `programs_scanned`: running lanes keep adding
+    programs, and one added after the census was written is outside it, named by the next test rather than
+    turning this one red. A recorded program that changed, or is gone, still fails here.
+
+    Shares the design run with tests/test_forge_design_answers.py through design_answers.results_for."""
     from genomeos.forge.calibration_inventory import build_inventory, census_of
 
     written = json.loads(RESULT.read_text(encoding="utf-8"))
-    assert census_of(written) == json.loads(json.dumps(build_inventory()))
+    recomputed = build_inventory(programs=written["programs_scanned"])
+    assert census_of(written) == json.loads(json.dumps(recomputed))
     assert written["result_manifest"]["complete"] and written["money"].startswith("none")
+
+
+def test_programs_added_since_are_named_and_leave_the_decision_standing() -> None:
+    """The live census, over every program under the roots today, must reach the committed decision. A
+    program that adds an independent triple fails here, and the result is then re-run, not this test edited.
+    First seen 2026-10-10: data/organisms/celegans/mutants_nolookup.bio (1c2ae67), eight experiments, every
+    one expressible and circular by same_source and acceptance_check."""
+    from genomeos.forge.calibration_inventory import build_inventory, programs_added_since
+
+    written = json.loads(RESULT.read_text(encoding="utf-8"))
+    added = programs_added_since(written)
+    live = build_inventory()
+    assert sorted(set(live["programs_scanned"]) - set(written["programs_scanned"])) == added
+    assert set(written["programs_scanned"]) <= set(live["programs_scanned"])
+    for key in (
+        "design_triples_independent",
+        "inverse_triples_independent",
+        "independent_triples",
+        "shortfall",
+    ):
+        assert live["counts"][key] == written["counts"][key], (key, added)
+    assert live["decision"] == written["decision"], added
+
+
+def test_a_recorded_program_that_is_gone_is_refused_and_a_new_one_is_named(tmp_path: Path) -> None:
+    """The pinned census cannot quietly shrink, and the programs outside it are listed, on a toy tree."""
+    from genomeos.forge.calibration_inventory import build_inventory, programs_added_since
+
+    (tmp_path / "data" / "organisms").mkdir(parents=True)
+    for name in ("kept", "new"):
+        (tmp_path / "data" / "organisms" / f"{name}.bio").write_text("experiment ko { knockout: A }\n")
+    (tmp_path / "data" / "organisms" / "no_block.bio").write_text("module plain\n")
+    recorded = {"programs_scanned": {"data/organisms/kept.bio": {"design": 0, "experiment": 1}}}
+    assert programs_added_since(recorded, tmp_path) == ["data/organisms/new.bio"]
+    with pytest.raises(ValueError, match="gone or holding no design or experiment block"):
+        build_inventory(tmp_path, programs=["data/organisms/kept.bio", "data/organisms/no_block.bio"])
 
 
 def test_no_triple_is_independent_so_no_calibration_is_registered() -> None:

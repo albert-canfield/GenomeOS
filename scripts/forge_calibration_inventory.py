@@ -8,7 +8,8 @@ shipped designs once (about a minute); poses no new design question to BioForge;
     uv run python scripts/forge_calibration_inventory.py [--check]
 
 `--check` writes nothing and exits 1 when the committed file's census (everything but its
-`result_manifest`) differs from what the code computes now.
+`result_manifest`) differs from what the code computes now over the programs the file records; programs
+added under the roots since it was written are printed by name, outside that comparison.
 """
 
 from __future__ import annotations
@@ -92,11 +93,19 @@ def main() -> int:
     args = ap.parse_args()
     mf.trace_begin()
     t0 = time.time()
-    inv = json.loads(json.dumps(ci.build_inventory(ROOT)))
     if args.check:
-        same = OUT.is_file() and ci.census_of(json.loads(OUT.read_text(encoding="utf-8"))) == inv
+        if not OUT.is_file():
+            print("forge calibration inventory: no committed file")
+            return 1
+        written = json.loads(OUT.read_text(encoding="utf-8"))
+        inv = json.loads(json.dumps(ci.build_inventory(ROOT, programs=written["programs_scanned"])))
+        same = ci.census_of(written) == inv
         print("forge calibration inventory: " + ("matches the committed file" if same else "DIFFERS"))
+        added = ci.programs_added_since(written, ROOT)
+        if added:
+            print(f"programs added since it was written, outside its census: {added}")
         return 0 if same else 1
+    inv = json.loads(json.dumps(ci.build_inventory(ROOT)))
     scripts = sorted({s for p in inv["programs_scanned"] for s in ci.named_scripts(ROOT, p)})
     inv["seconds"] = round(time.time() - t0, 1)
     inv["money"] = "none: nothing is fetched, no key is read"
