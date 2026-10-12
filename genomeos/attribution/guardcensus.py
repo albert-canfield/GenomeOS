@@ -765,3 +765,25 @@ DURATION_ESTIMATES_ARE_MEASURED = (
     " all and was reported as 'rate unknown' rather than as an estimate; a four-minute sample"
     " then gave 2.50%/min and an expected end of 20:03"
 )
+
+
+#: A correction to this lane's own wording, from the supervisor at 19:33. Additive, as the others.
+VEIL_IS_INSTRUMENTATION = (
+    "this lane called the bare run 'UNINSTRUMENTED, normal speed'. That is WRONG and the wording"
+    " is the dangerous part. The import veil wraps every finder in sys.meta_path, which is"
+    " precisely why the run is about 70% slower than the ~25-minute baseline, so it IS"
+    " instrumentation and it falls under INSTRUMENTED_RUNS_RULE. Calling it uninstrumented is how"
+    " a rule gets sidestepped by vocabulary rather than by argument -- the slowdown was visible,"
+    " this lane even named it in the same sentence, and still filed the run under the exemption"
+)
+
+#: And the method that replaces the veil, which tests the condition instead of simulating it.
+BARE_CONDITION_METHOD = (
+    "from the next one on, the bare condition is tested THE WAY CI TESTS IT: a"
+    " `git clone --no-local` with a fresh venv of the 13 base packages, no veil, OUTSIDE the"
+    " suite lock -- as lane-cired2 did. That needs no lock because it is a separate clone with"
+    " its own environment, and it needs no veil because the packages are genuinely absent rather"
+    " than hidden. The veil was a way to avoid touching the shared .venv, which was the right"
+    " constraint and the wrong solution: a real bare environment answers the same question"
+    " without instrumenting anything, and without holding anything other lanes need"
+)

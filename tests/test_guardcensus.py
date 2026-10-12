@@ -429,3 +429,19 @@ def test_duration_estimates_must_be_measured_over_a_meaningful_sample() -> None:
     assert "90-second window" in d
     assert "four and a half hours" in d
     assert "reported as 'rate unknown' rather than as an estimate" in d
+
+
+def test_the_veil_is_recorded_as_instrumentation_not_as_an_exemption() -> None:
+    """This lane filed an instrumented run under the exemption by calling it uninstrumented."""
+    v = gcn.VEIL_IS_INSTRUMENTATION
+    assert "That is WRONG and the wording" in v
+    assert "70% slower" in v
+    assert "sidestepped by vocabulary rather than by argument" in v
+
+
+def test_the_replacement_method_tests_the_condition_instead_of_simulating_it() -> None:
+    m = gcn.BARE_CONDITION_METHOD
+    assert "git clone --no-local" in m
+    assert "13 base packages" in m
+    assert "OUTSIDE the suite lock" in m
+    assert "right constraint and the wrong solution" in m
