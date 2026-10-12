@@ -245,6 +245,18 @@ def result_manifest(read_now: list[str], parameters: dict[str, Any]) -> dict[str
             "every normalised, decontaminated, imputed or scaled layer of either h5ad",
             "every measured value: this script reads gene axes only",
         ],
+        "partitions": {
+            "counted": (
+                "M2h's HELD-OUT side of the multiplicative form, 8,328 genes of 7h's committed "
+                "population under M2h's split on the gene symbol. Nothing is fitted here and no "
+                "training partition is read."
+            ),
+            "not_counted": (
+                "M2h's TRAINING genes, which this lane does not read: the scale it uses is the "
+                "constant +0.2146 already fitted on them in `ac5580b`."
+            ),
+        },
+        "code_cleanliness": mf.code_cleanliness(ENTRY, OWN_CODE),
         "code_revision": None,
         "entry": ENTRY,
         "own_code": list(OWN_CODE),
