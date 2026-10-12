@@ -1,0 +1,572 @@
+{
+  "result": "scalehet_registration",
+  "date": "2026-10-12",
+  "lane": "lane-scalehet",
+  "roadmap_item": "\u00a75, area I: is M2h's magnitude ONE global scale that the compiled rules are wrong by, or does it vary by region? Registered, with the null and the exposure",
+  "question": "M2h fitted ONE scale for the whole genome, +0.2146 [98.33% CI +0.2007, +0.2283], and that single number is what makes the compiled rules read better than no rule (held-out Delta MSE +0.04339, about 2% of the variance). lane-scalesplit then reported, POST HOC AND DECIDING NOTHING, within-chromosome scales ranging +0.1232 (chr13) to +0.2874 (chr14), median +0.2176, q1 +0.2041, q3 +0.2376, with no sign change and 10 of 24 inside M2h's interval. THE FALSIFIABLE QUESTION ASKED HERE, AND NO OTHER: IS THAT PER-CHROMOSOME SCALE VARIATION CONSISTENT WITH A SINGLE GLOBAL SCALE? Equivalently: at the gene counts the 24 chromosomes actually carry (chr1 1,700 down to chrY 13), is the observed dispersion of the per-chromosome fitted scales larger than the dispersion a SINGLE global scale would itself produce? The question matters for the MODEL and not for the statistics: one global error is one mis-specified constant in the compiled layer and the repair is one constant; regional variation means the error depends on something about the locus, which is a different defect and a different repair. 'CONSISTENT WITH A SINGLE GLOBAL SCALE' IS A FULL ANSWER AND IS A REACHABLE OUTCOME OF THIS TEST, not a failure to find something",
+  "why_not_already_answered": "the spread scalesplit reported is POST HOC and was registered as deciding nothing: no interval was placed on any per-chromosome scale and no comparison between chromosomes was registered. A spread that wide is exactly what sampling noise can look like at these gene counts -- chr13 carries 280 genes and chr18 238, and a scale fitted on a few hundred genes is a noisy number -- so the eye cannot tell a regional magnitude from a small-sample wobble, and nothing in scalesplit's design could. This lane does not re-report the spread; it tests it against a null that reproduces those very gene counts",
+  "what_is_not_asked": "this lane does NOT ask which region has which scale, does NOT fit a per-region scale, does NOT propose a regional model and does NOT read a per-chromosome scale as a verdict about that chromosome. If the test rejects a single global scale, THAT VARIATION EXISTS IS THE FINDING and the lane stops there: fitting per-region scales is a separate registration and a separate decision, which this lane is forbidden to pre-empt. Whatever the outcome, no held-out claim about a new endpoint is made: the chromosome-held-out reading is scalesplit's and is quoted, not re-decided",
+  "form": "multiplicative",
+  "form_words": "the multiplicative composition (Zhou et al. 2024)",
+  "source": "data/results/multrna_result.json",
+  "carried_verbatim": {
+    "endpoint": "y(G, X) = log2(TPM(G, X) + PSEUDOCOUNT), TPM(G, X) the mean over the chosen experiment's files (RNA_SELECTION). The measured deviation is D(G, X) = y(G, X) - mean over the thirteen cells X' of y(G, X'): G's level in X relative to its own mean across the reader cells",
+    "rna_selection": "per reader biosample, from the ENCODE portal: every released GRCh38 'gene quantifications' TSV with genome_annotation V29 (the ENCODE4 uniform RNA-seq pipeline, RSEM) of assay 'polyA plus RNA-seq', on the biosample's ontology term name, from a human experiment the portal lists as not perturbed (perturbed=false) and that carries no ERROR audit, and whose file biosample summary names no subcellular fraction, treatment, disease or genetic modification (none of 'fraction', 'treated', 'with ', 'genetically', 'transfected', 'knockdown'). polyA plus is the one assay with such an experiment for all thirteen (SK-N-SH has no whole-cell untreated total RNA-seq in this query). Of the qualifying experiments the one with the most qualifying files is taken, ties broken by the latest date_released and then the lowest accession; the gene's TPM in the biosample is the mean of its TPM over that experiment's qualifying files (its replicates). Chosen from portal metadata alone; no value of any file was read to choose",
+    "pseudocount": 1.0,
+    "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the thirteen reader cells",
+    "min_genes": 100,
+    "cells": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "selection": "reader_cells",
+    "metric": "Delta MSE(F, a) = mean over the pairs of D^2 - mean of (D - a*P_F)^2 = mean of (2a*D*P_F - a^2*P_F^2) (combine2.METRIC with the calibrated prediction in place of P), positive when the scaled form's squared error is below the no-rule baseline's. The registered endpoint is this quantity on the HELD-OUT pairs at a = a_F, with a_F fitted on the training pairs. Reported beside it, deciding nothing: the same quantity on the held-out pairs at a = 1 (the uncalibrated form on the held-out genes) and on the training pairs at a = a_F",
+    "predictions": {
+      "form": "per form F and gene G, P_F(G, X) for the thirteen cells X: the centred prediction of F's committed genes table, exactly as 7d's and 7h's PREDICTIONS['form'] define it (the gated run's log2 level in X minus its mean over the thirteen cells), rounded to five decimals by the committed table",
+      "calibrated": "P_F^a(G, X) = a_F * P_F(G, X), one real number a_F per form and nothing else. No per-gene parameter, no per-cell parameter, no intercept, no transformation of P and no reweighting of pairs or genes: a form's whole calibration is one number, fitted on the training genes alone",
+      "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the thirteen reader cells"
+    },
+    "fit": "a_F is the one scale that minimises the squared error over the TRAINING pairs of form F, in closed form: a_F = (sum over training pairs of D*P_F) / (sum over training pairs of P_F^2); it is undefined, and the form is NOT_FITTABLE, when the denominator is 0. Equivalently it is the scale that maximises Delta MSE on the training pairs. It is fitted on training pairs only; no held-out value enters it. a_F = 1 is the uncalibrated form, which is what 7d and 7h read",
+    "form_interval": [
+      0.8333333333333334,
+      99.16666666666667
+    ],
+    "control_alpha": 0.05,
+    "note": "the endpoint, the no-rule baseline, Delta MSE, the closed-form fit, the gene bootstrap, the within-gene cell permutation control, MIN_GENES, the 98.33% width, the four-way decision table and every reading word about the CALIBRATED FORM are 7d's, 7h's and M2h's, carried HERE WORD FOR WORD and imported from genomeos/attribution/magcal.py, which this lane does not edit; the chromosome-fold design and M2h's committed numbers are imported from genomeos/attribution/scalesplit.py, which this lane also does not edit. The population is 7h's, gene for gene, minus the chromosomes this lane's registered gene floor excludes. The ONLY thing this lane adds is a HETEROGENEITY STATISTIC on the per-chromosome scales and a null for it. No new endpoint, no new measurement, no new reader, no new form"
+  },
+  "population": "7h's committed genes table (data/results/multrna_result.json), 16,509 genes x 13 reader cells = 214,617 pairs, gene for gene the population M2h calibrated and scalesplit re-split -- RESTRICTED to the chromosomes admitted by MIN_GENES_RULE below. This lane admits no gene 7h did not admit and drops none it did except by that stated floor. P is the multiplicative composition's prediction and D the measured difference from the no-rule baseline, both read from 7h's committed rows and neither recomputed",
+  "min_genes": 100,
+  "min_genes_rule": "A CHROMOSOME IS ADMITTED ONLY IF IT CARRIES AT LEAST MIN_GENES = 100 GENES in 7h's committed table. THE MINIMUM IS FIXED NOW, BEFORE ANY VALUE OF THIS LANE IS READ, and it is magcal's own MIN_GENES imported unchanged -- the floor M2h registered for a group to be read at all -- so it is not a number tuned here. WHY A FLOOR AT ALL: the statistic weights each chromosome by the precision of its own fitted scale, and the null holds the per-chromosome gene counts fixed, so a chromosome with a handful of genes contributes a wildly noisy scale to both sides; including it would make the test a statement about that one group's noise rather than about regional structure. WHY 100 AND NOT A NUMBER CHOSEN TO SUIT THIS TABLE: 100 is magcal's registered floor, it was scalesplit's floor before this lane existed, and scalesplit's committed harness already reported which chromosomes fall below it -- chrY alone, at 13 genes. A chromosome's GENE COUNT depends on no measured value (scalesplit's harness states this in those words), so naming the excluded set here reads no result. EXPECTED EFFECT, stated now: 23 of the 24 chromosomes are admitted and chrY (13 genes) is excluded, which removes 13 of 16,509 genes. chrY's own fitted scale is reported among the descriptives, FLAGGED as below the floor and entering no statistic and no verdict. If the admitted count is below MIN_CHROMOSOMES = 10 the lane reads INCONCLUSIVE and no heterogeneity verdict is given",
+  "min_chromosomes": 10,
+  "prior_exposure": [
+    "STATED PLAINLY, AND NOT A CAVEAT ADDED AFTERWARDS. THIS IS A RE-ANALYSIS OF A MEASUREMENT ALREADY READ, NOT A FRESH TEST. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples, under the same log2(TPM+1) endpoint and the same no-rule baseline, has already been read by: item 7 (M2b, lane-readercompile) including its post-hoc information term; item 7d (M2c, lane-combine2) for the runtime's mean and promoter competition; item 7h (M2f, lane-multrna) for the multiplicative composition; the capped-sum census (lane-capsumrna), which reached NOT_TESTABLE; M2h (lane-magcal), which fitted the one scale and read 'better' on a random split; M2i (lane-freshrna), which replicated it with nothing fitted on RNA fresh to this project; lane-scalesplit, which re-split the same rows by chromosome; and lane-recovered. The P and D this lane groups by chromosome ARE 7h's committed rows, which are the rows M2h calibrated and scalesplit re-split, SO EVERY VALUE THIS LANE READS HAS BEEN READ BEFORE.",
+    "AND, SEPARATELY AND MORE SHARPLY: THE PER-CHROMOSOME SPREAD ITSELF WAS ALREADY SEEN. scalesplit computed and committed all 24 per-chromosome scales as post hoc descriptives, and the range (+0.1232 chr13 to +0.2874 chr14), the median (+0.2176), the quartiles (+0.2041, +0.2376), the absence of a sign change and the count inside M2h's interval (10 of 24) are in data/results/scalesplit_result.json and in this lane's brief. THIS LANE IS THEREFORE TESTING A PATTERN THAT HAS BEEN LOOKED AT, WHICH IS WEAKER THAN TESTING ONE THAT HAS NOT. Specifically: the statistic is registered before it is computed, but it is registered by someone who already knows roughly how wide the observed spread is and which two chromosomes sit at its ends; a statistic chosen after seeing a pattern can be chosen to flatter it, in either direction. Two things are done about that and neither removes it. (1) The PRIMARY statistic is a weighted dispersion over ALL admitted chromosomes, not a statistic about chr13 or chr14, and no chromosome is named in it. (2) The statistic the eye actually used -- the RANGE, max minus min, which is the +0.1232-to-+0.2874 sentence -- is registered too, as a SECONDARY reading, precisely so that the pattern that was looked at is the pattern that is tested, and so that a disagreement between the two cannot be quietly dropped. Any reading from this lane holds as a statement about THIS measurement's dependence on the chromosome grouping. It is not independent confirmation of M2h, it is not a blind prediction of an unseen measurement, and a 'consistent' reading is consistency at these gene counts and this grouping, not a proof that one constant is exactly right"
+  ],
+  "grouping": "BY CHROMOSOME, as 7h's committed table names it, which is a property of the gene's ADDRESS and of no measured value. The chromosome is the region unit for one reason stated in advance: it is the unit scalesplit's post hoc spread was computed on, and this lane's whole purpose is to test that spread rather than a spread of its own choosing. A gene is wholly in one group with all thirteen of its pairs. THE CHROMOSOME IS A COARSE AND ARBITRARY REGION UNIT and that is a LIMITATION, written as one: regional variation at a finer scale -- by compiled element, by locus, by expression level, by rule count -- would not have to show up between chromosomes, so a 'consistent' reading here is consistency BETWEEN CHROMOSOMES and is not a statement about every way the error could vary",
+  "no_split": "NO TRAINING AND HELD-OUT SPLIT IS USED HERE, AND THAT IS DELIBERATE AND IS NOT A WEAKENING. The question is about the DISPERSION OF FITTED SCALES, not about a held-out prediction, so the quantity of interest is in-sample by construction: a per-chromosome scale IS an in-sample fit on that chromosome's genes. A fitted dispersion is biased upward -- 23 scales fitted on 23 groups will differ even when one scale generated them all -- and THE NULL IS WHAT PRICES THAT BIAS EXACTLY, because the null statistic is computed by fitting 23 scales on 23 groups of the same sizes in the same way. Comparing a fitted dispersion to a null of fitted dispersions is the correct comparison; comparing it to zero would not be. The held-out question about whether the calibrated rules beat no rule is M2h's and scalesplit's, is already answered, and is QUOTED here, never re-decided",
+  "statistic": [
+    "PRIMARY, Q: the precision-weighted dispersion of the per-chromosome fitted scales about the global fitted scale. For an admitted chromosome c, let dp_c = sum over that chromosome's pairs of D*P and pp_c = sum over that chromosome's pairs of P^2; its fitted scale is a_c = dp_c / pp_c, which is magcal.FIT applied to that chromosome's rows and nothing else (magcal.fit_scale, imported read-only). Let a_g = (sum over admitted chromosomes of dp_c) / (sum of pp_c), the ONE global scale fitted on the admitted population, which is magcal.fit_scale on exactly those rows. Then Q = sum over admitted chromosomes of pp_c * (a_c - a_g)^2. WHY THAT WEIGHT: under the squared-error fit this calibration minimises, the variance of a_c is proportional to 1 / pp_c, so pp_c is the precision of a_c and pp_c * (a_c - a_g)^2 is each chromosome's squared deviation measured in units of its own noise -- Cochran's homogeneity form. It makes Q large when a PRECISELY fitted chromosome sits far from the global scale and small when a noisily fitted one does, which is the behaviour the question needs. Q IS NOT COMPARED TO A CHI-SQUARED DISTRIBUTION and no asymptotic assumption is made: its null is the permutation null below, so the unknown residual variance cancels and no normality, independence-of-pairs or large-sample claim is required.",
+    "SECONDARY, R: the RANGE of the per-chromosome fitted scales, max a_c - min a_c over the admitted chromosomes. This is the statistic the post hoc sentence used ('+0.1232 to +0.2874'), registered here so that the pattern that was looked at is the pattern that is tested. It is REPORTED BESIDE Q AND IS NOT THE VERDICT, for the reason that a range is driven by its two extreme groups and is the less powerful and less stable of the two. Its only registered force is the MIXED outcome below: if Q and R fall on opposite sides of ALPHA the lane says so in the reading and claims neither answer"
+  ],
+  "null": [
+    "THE NULL IS 'ONE GLOBAL SCALE, AND THE PER-CHROMOSOME DEVIATIONS ARE ONLY WHICH GENES HAPPENED TO LAND ON WHICH CHROMOSOME.' It is generated by PERMUTING THE CHROMOSOME LABELS AMONG THE ADMITTED GENES: one permutation draws a uniform random assignment of the admitted genes to the admitted chromosome labels that holds EACH CHROMOSOME'S GENE COUNT EXACTLY AT ITS OBSERVED VALUE (chr1 keeps 1,700 slots, chr13 keeps 280, chr18 keeps 238, and so on), recomputes the 23 per-chromosome scales and the global scale from the permuted grouping by the same formulas, and records Q and R. A GENE IS PERMUTED AS A BLOCK, carrying all thirteen of its pairs, its own P values, its own D values and its own pair sums; no pair is broken apart from its gene and no P is detached from its D. Nothing about any gene's data changes under the null -- only which group it is counted in.",
+    "WHY THIS NULL AND NOT ANOTHER, decided now. (1) IT HAS THE SAME PER-CHROMOSOME GENE COUNTS AS THE OBSERVED GROUPING, BY CONSTRUCTION, so it carries the same sampling noise the observed spread was computed at -- which is the precise objection the eye could not answer. (2) IT RESAMPLES WITHIN THE GLOBAL FIT: the whole admitted population, with its one global scale, is the thing being redistributed, so the null is exactly 'these genes, this one scale, a different accident of addresses'. (3) IT IS EXACT UNDER GENE EXCHANGEABILITY and assumes no distribution: it needs no model of the residuals, no variance estimate and no normality, and it prices the upward bias of fitting 23 scales because it fits 23 scales the same way. (4) It uses the REAL genes, so the heavy-tailed, heteroscedastic, decidedly non-normal distribution of real P and D values is present in the null exactly as it is in the observation. WHAT IT ASSUMES, AND THIS IS THE LIMITATION, NOT A CAVEAT: under the null, genes are EXCHANGEABLE between chromosomes. If the genes of one chromosome differ from another's in some way that moves the fitted scale but is not 'the compiled rules are wrong by a different amount there' -- gene density, expression level, rule count per gene, gene family -- then a rejection says the scale depends on SOMETHING ABOUT THE GROUP and does not say what. A rejection is therefore a finding of heterogeneity between chromosomes and NOT an identification of its cause, and this lane will not name one.",
+    "PERMUTATION COUNT AND SEED, FIXED NOW: PERMUTATIONS['count'] = 1000 draws at PERMUTATIONS['seed'] = 20261012, one numpy default_rng seeded once. 1000 is magcal's own permutation count, taken unchanged. The smallest attainable p is 1/(1+1000) = 0.000999, which is far below ALPHA, so the test CAN reject; and 1000 draws resolve a p near ALPHA = 0.05 to about +-0.007 (one standard error), which is stated as the resolution of the p and is not refined after the fact"
+  ],
+  "permutations": {
+    "count": 1000,
+    "seed": 20261012
+  },
+  "p_value": "one-sided, in the direction heterogeneity moves the statistic, and in magcal's own form: p = (1 + number of permutations with the null statistic >= the observed statistic) / (1 + count). It is one-sided because both Q and R can only be INFLATED by real regional variation -- Q is a sum of squared deviations and R a range, and neither has a meaningful low tail to test. A p at the floor, 0.000999, means no permutation of 1000 reached the observed value and is reported as that and never as 0. The small-p resolution of a 1000-draw permutation p is stated with it",
+  "alpha": "ALPHA = 0.05, one-sided, magcal.CONTROL_ALPHA taken UNCHANGED, AND THE CHOICE IS DELIBERATELY THE ONE THAT MAKES THIS LANE'S EXPECTED ANSWER THE HARDER TO OBTAIN. The expected answer is 'consistent with a single global scale', which is a FAILURE TO REJECT; a strict threshold would make failing to reject easy and the reading cheap. 0.05 is the LAXER of the two defensible thresholds available -- the other being 0.0167, the 0.05/3 Bonferroni divisor M2h's 98.33% interval came from -- so adopting 0.05 gives heterogeneity the EASIER passage and makes a 'consistent' reading the harder result to reach. The p against 0.0167 is reported beside it as a descriptive so a reader can see both, but THE VERDICT USES 0.05 AND ONLY 0.05. CORRECTION, DECIDED NOW: there are TWO registered readings in this lane, Q (primary) and R (secondary), and NO Bonferroni correction is applied to ALPHA over them -- for the same reason: splitting 0.05 between them would halve the chance of detecting heterogeneity and so inflate the chance of the expected 'consistent' answer. Instead the multiplicity is handled by the MIXED outcome, which refuses to pick a side when the two statistics disagree, so an uncorrected pair of tests cannot buy a cleaner verdict than the evidence supports. This lane registers NO interval that excludes 0 and makes NO claim of an effect's sign, so the 98.33% width is used only to DESCRIBE the null's spread (see INTERVAL) and never to decide",
+  "control_alpha": 0.05,
+  "interval": "98.33% percentile interval, magcal.FORM_INTERVAL taken UNCHANGED, DECIDED NOW AND NOT AFTER, and used for DESCRIPTION, with the verdict resting on the permutation p alone. What it is placed on, fixed here: (1) the NULL DISTRIBUTION OF Q -- its 98.33% percentile range and its median -- so a reader can see the observed Q against the range a single global scale itself produces; (2) the NULL DISTRIBUTION OF R, the same way, which is the direct answer in the units of the sentence that prompted this lane: how wide a min-to-max spread of per-chromosome scales does ONE global scale generate at these gene counts? (3) per admitted chromosome, the null's 98.33% range of THAT CHROMOSOME'S OWN fitted scale at its own gene count, beside its observed scale -- 23 bands, each deciding nothing, carrying NO correction over 23 and therefore NOT A TEST of any chromosome, named a descriptive here so it cannot later be read as 23 verdicts. WHY 98.33%: it is the width M2h and scalesplit's committed readings are stated at, so every number this lane prints beside theirs is at the same width and a comparison is not also a comparison of widths; and it is what magcal's own functions compute, which this lane calls read-only rather than editing magcal's file",
+  "form_interval": [
+    0.8333333333333334,
+    99.16666666666667
+  ],
+  "form_interval_words": "98.33% CI",
+  "control": "the registered null IS the control of this lane: a permutation of the chromosome labels is itself the 'no regional structure' control, and no second control is registered. M2h's within-gene cell permutation control (magcal.CONTROL, magcal.permuted_control) is a control for a HELD-OUT DELTA MSE reading and is run here ONCE AND ONLY in the harness, as part of reproducing M2h's committed numbers; it is not a control for a dispersion statistic and is not applied to one",
+  "harness": "run and committed BEFORE the registration, and it must pass or nothing is grouped, fitted or read. (1) 7h's committed genes table has 16,509 genes and 214,617 pairs, thirteen P and thirteen D per gene, no empty symbol, no empty chromosome, no repeated symbol. (2) its Delta MSE at scale 1 reproduces 7h's committed -0.5361286982098615 within TOLERANCE through magcal.delta_mse. (3) M2H'S COMMITTED GENE-LEVEL NUMBERS COME BACK, through M2h's OWN functions at M2h's OWN resamples, seeds and permutation count and under M2h's OWN sha256-of-symbol split: training 8,181 genes, held out 8,328, fitted scale +0.2145911381525326 [+0.20074141299120243, +0.2283000359194418], held-out Delta MSE +0.0433912108101358 [+0.0379045975793137, +0.04894398453032398], control p = 0.000999000999, outcome BETTER -- every one within M2H_TOLERANCE = 1e-9, because the same code at the same seeds must agree closely. THIS IS THE CHECK THAT MAKES EVERY LATER NUMBER ATTRIBUTABLE TO THE GROUPING AND TO NOTHING ELSE, and lane-scalesplit passed it bit-identically. M2h's split is reproduced in THE HARNESS ONLY and is NOT this lane's design. (4) this lane's own vectorised per-chromosome scale path agrees with magcal.fit_scale applied to each chromosome's rows, within TOLERANCE, for every chromosome in the table -- so the statistic and its null are computed by the same fit magcal registered and not by a lookalike. (5) the gene COUNT per chromosome is reported and the admitted set under MIN_GENES is listed; a count depends on no measured value. (6) THE STATISTIC AND ITS NULL ARE NOT COMPUTED BY THE HARNESS: no Q, no R, no permutation and no p is produced before the registration is committed. A miss in any of (1) to (5) stops the lane with HARNESS_DEFECT",
+  "tolerance": 0.0001,
+  "m2h_tolerance": 1e-09,
+  "m2h_committed": {
+    "result": "data/results/magcal_result.json",
+    "registration": "data/results/magcal_registration.json",
+    "code": "genomeos/attribution/magcal.py",
+    "commits": "2b0b604 code, fbce775 registration, ac5580b result",
+    "training_genes": 8181,
+    "held_out_genes": 8328,
+    "scale": 0.2145911381525326,
+    "scale_ci": [
+      0.20074141299120243,
+      0.2283000359194418
+    ],
+    "held_out_delta_mse": 0.0433912108101358,
+    "held_out_ci": [
+      0.0379045975793137,
+      0.04894398453032398
+    ],
+    "control_p": 0.000999000999000999,
+    "outcome": "BETTER",
+    "variance_share": "about 2% of the variance (+0.04339 against mean(D^2) 2.1524 on the held-out side)"
+  },
+  "seven_h_committed": {
+    "genes": 16509,
+    "pairs": 214617,
+    "delta_mse": -0.5361286982098615
+  },
+  "which_governs": "THE PERMUTATION p OF Q DECIDES, at ALPHA = 0.05, one-sided. R's p can only turn a verdict into MIXED; it can never, by itself, declare either answer. No interval, no descriptive, no per-chromosome band and no context number from M2h, 7h or scalesplit may change the verdict. The outcome is the registered function of (p_Q, p_R, the admitted chromosome count, the null's degeneracy) and of nothing else, and it is computed by `decide_heterogeneity` below, which is planted in all of its directions by tests/test_scalehet.py",
+  "not_vacuous": "the test can come out either way and both outcomes are statements. If the per-chromosome scales were driven by real regional variation, Q would exceed the dispersion that label permutation produces and p_Q would be small -- the floor 0.000999 is attainable at 1000 draws. If one global scale generated them, Q would sit inside the null's bulk and p_Q would be large. A planted test holds each direction: genes on one chromosome given a different slope must read HETEROGENEOUS, and genes whose slope is identical everywhere must read CONSISTENT_WITH_ONE_SCALE. THE OUTCOME IS NOT PREDETERMINED BY THE DESIGN, and 'consistent' is reported as a FULL ANSWER and not as an absence",
+  "outcomes": {
+    "CONSISTENT_WITH_ONE_SCALE": "CONSISTENT WITH A SINGLE GLOBAL SCALE. The dispersion of the {n_admitted} admitted chromosomes' fitted scales about the global scale {a_global:+.4f} is Q = {q_obs:.6g}, and under the registered null -- one global scale, the chromosome labels permuted among the same genes with every chromosome's gene count held at its observed value -- the null Q has median {q_med:.6g} and 98.33% range [{q_lo:.6g}, {q_hi:.6g}], giving p = {p_q:.6g} against ALPHA 0.05. The secondary range statistic agrees: the observed max-minus-min spread {r_obs:+.4f} (from {a_min:+.4f} on {chrom_min} to {a_max:+.4f} on {chrom_max}) lies against a null range with median {r_med:+.4f} and 98.33% range [{r_lo:+.4f}, {r_hi:+.4f}], p = {p_r:.6g}. SO THE PER-CHROMOSOME SPREAD scalesplit SAW POST HOC IS WHAT A SINGLE GLOBAL SCALE PRODUCES AT THESE GENE COUNTS, AND THIS TEST FINDS NO REGIONAL VARIATION IN THE MAGNITUDE BETWEEN CHROMOSOMES: read as it is registered, THE MAGNITUDE IS ONE CONSTANT the compiled rules are globally wrong by, and the repair indicated is one constant. The constant itself is M2h's {m2h_scale:+.4f} [98.33% CI +0.2007, +0.2283], which buys about 2% of the variance and is a MAGNITUDE CORRECTION AND NOT AN EXPLANATION OF EXPRESSION. Three limits bind this reading and are not caveats added afterwards: consistency is between CHROMOSOMES, a coarse region unit, and says nothing about variation by element, locus, expression level or rule count; a failure to reject is not a proof that one constant is exactly right, and the null's 98.33% Q range above is the honest measure of what this test could have detected; and the RNA is a measurement already read eight times over, with this very spread already seen post hoc",
+    "HETEROGENEOUS": "NOT CONSISTENT WITH A SINGLE GLOBAL SCALE. The dispersion of the {n_admitted} admitted chromosomes' fitted scales about the global scale {a_global:+.4f} is Q = {q_obs:.6g}, against a null -- one global scale, the chromosome labels permuted among the same genes with every chromosome's gene count held at its observed value -- whose Q has median {q_med:.6g} and 98.33% range [{q_lo:.6g}, {q_hi:.6g}]: p = {p_q:.6g} against ALPHA 0.05. The secondary range statistic agrees: the observed spread {r_obs:+.4f} (from {a_min:+.4f} on {chrom_min} to {a_max:+.4f} on {chrom_max}) against a null range of median {r_med:+.4f} and 98.33% range [{r_lo:+.4f}, {r_hi:+.4f}], p = {p_r:.6g}. SO THE MAGNITUDE THE COMPILED RULES ARE WRONG BY VARIES BETWEEN CHROMOSOMES BY MORE THAN THE SAMPLING NOISE OF THESE GENE COUNTS. THAT IS THE WHOLE FINDING AND THIS LANE STOPS HERE: no regional model is proposed, no per-region scale is fitted, no cause is named and no chromosome is read as a verdict about itself. A rejection of gene exchangeability between chromosomes says the fitted scale depends on SOMETHING about the group -- which could be gene density, expression level, rules per gene or gene family as easily as a locus-dependent defect -- and distinguishing those is a separate registration and a separate decision. M2h's one scale {m2h_scale:+.4f} and its about 2% of the variance are unaffected as a global average and are not withdrawn by this reading; what is withdrawn is the assumption that one constant is the whole of the correction. The RNA is a measurement already read eight times over and this very spread was already seen post hoc, which makes this a weaker test than one of an unlooked-at pattern",
+    "MIXED": "NEITHER ANSWER IS CLAIMED: the two registered statistics disagree across ALPHA = 0.05. The primary precision-weighted dispersion gives Q = {q_obs:.6g} with p = {p_q:.6g}, and the secondary range gives {r_obs:+.4f} with p = {p_r:.6g}, one of the two below 0.05 and the other above, on the same {n_admitted} admitted chromosomes, the same global scale {a_global:+.4f} and the same {count} permutations at seed {seed}. The registered rule for this case was fixed before any statistic was computed and is applied as written: when a dispersion that weights every chromosome by its own precision and a range driven by its two extreme chromosomes fall on opposite sides of the threshold, the evidence does not support either 'one global scale' or 'regional variation', and this lane says so rather than reporting whichever agrees with its expectation. Both p values, both nulls and all {n_admitted} per-chromosome scales are reported so a later lane can see exactly which statistic saw what. No regional model is proposed",
+    "INCONCLUSIVE": "INCONCLUSIVE, and nothing about the magnitude is claimed either way: {what}. No verdict on whether the magnitude is one global scale or regional is given, M2h's and scalesplit's committed readings stand untouched, and no regional model is proposed",
+    "HARNESS_DEFECT": "stopped before anything was split, fitted or read: the committed genes tables did not reproduce their committed readings' numbers ({what})"
+  },
+  "decision": "applied in this order, every step fixed before any statistic of this lane was computed. (1) THE HARNESS FIRST: if any of HARNESS (1) to (5) misses, the lane reads HARNESS_DEFECT and nothing is grouped, fitted or read. (2) ADMISSION: chromosomes with fewer than MIN_GENES = 100 genes are excluded (MIN_GENES_RULE); if fewer than MIN_CHROMOSOMES = 10 remain, the lane reads INCONCLUSIVE. (3) DEGENERACY: if the global fit is undefined (sum of P^2 zero), if any admitted chromosome's fit is undefined, or if the null Q distribution is degenerate (its 98.33% range has zero width, i.e. the permutation produced no spread at all), the lane reads INCONCLUSIVE with the reason named. (4) THE PRIMARY TEST: p_Q = (1 + permutations with null Q >= observed Q) / (1 + 1000), one-sided. (5) THE SECONDARY TEST: p_R, the same form on the range. (6) THE OUTCOME, by this table and no other: p_Q > 0.05 and p_R > 0.05 -> CONSISTENT_WITH_ONE_SCALE; p_Q <= 0.05 and p_R <= 0.05 -> HETEROGENEOUS; the two on opposite sides of 0.05 -> MIXED, which claims neither. (7) THE READING IS THE REGISTERED SENTENCE FOR THE OUTCOME, numbers filled and nothing else, followed by the prior exposure clause, always. (8) IF THE OUTCOME IS HETEROGENEOUS, NO REGIONAL MODEL IS PROPOSED IN THE READING, IN THE RESULT OR IN THE ROADMAP ROW: that what varies is a finding is the whole of it",
+  "falsifier": "THE CLAIM UNDER TEST IS 'ONE GLOBAL SCALE': that the per-chromosome scales differ only by which genes landed on which chromosome. IT IS FALSIFIED by p_Q <= 0.05 -- an observed precision-weighted dispersion larger than 95% of the dispersions a single global scale produces at these very gene counts -- in which case this lane reports HETEROGENEOUS and 'the magnitude is one constant' may not be said. IT IS NOT FALSIFIED by p_Q > 0.05, in which case the lane reports CONSISTENT_WITH_ONE_SCALE, which is a FULL ANSWER to the question asked and not an absence of one. WHAT WOULD HAVE FALSIFIED THE OPPOSITE CLAIM: 'the magnitude varies by region' predicts a Q above the null's 98.33% range and an observed spread wider than the null's; a Q sitting at the null's median is that prediction failing. WHAT 'INCONCLUSIVE' IS, exactly and in advance: fewer than MIN_CHROMOSOMES = 10 chromosomes admitted; an undefined global or per-chromosome fit; a degenerate null Q distribution; or the harness missing, which is reported as HARNESS_DEFECT. INCONCLUSIVE IS NOT a p near the threshold, which is reported with its value and decided by the table, and it is NOT the MIXED case, which is its own named outcome. WHAT NEITHER OUTCOME CAN SAY: neither can identify what makes a scale differ, neither can speak about regions finer than a chromosome, neither revises M2h's about 2% of the variance, and neither makes a scale an explanation of expression rather than a magnitude correction",
+  "prior_exposure_clause": "carried with every reading, always: this RNA is not a fresh measurement. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h, by the capped-sum census, by M2h, by M2i, by lane-scalesplit and by lane-recovered, and the P and D grouped here are 7h's committed rows. AND the per-chromosome spread tested here was ALREADY SEEN POST HOC by scalesplit, so this is a test of a pattern that has been looked at, which is weaker than a test of one that has not. A reading here is a statement about THIS measurement's dependence on the chromosome grouping and a hypothesis for a fresh one, not independent confirmation of anything",
+  "stop_rule": "one run of scripts/scalehet_run.py, after this registration is committed. The statistic, the null, the permutation count, the seed, the gene floor, the admitted-chromosome minimum, the threshold and the decision table are fixed here and are not revisited after a number is seen. NOTHING IS RE-RUN AT ANOTHER SEED, another permutation count, another gene floor or another region unit, and the run refuses to overwrite its own result file. If the outcome is HETEROGENEOUS, no per-region scale is fitted by this lane under any circumstances",
+  "limitations": [
+    "THE REGION UNIT IS THE CHROMOSOME, which is coarse and biologically arbitrary. It was chosen because it is the unit the post hoc spread was computed on, so that this lane tests that spread rather than one of its own choosing. Regional variation by compiled element, by locus, by expression level or by rules per gene need not show between chromosomes, so a 'consistent' reading is consistency BETWEEN CHROMOSOMES and nothing wider",
+    "THE NULL ASSUMES GENES ARE EXCHANGEABLE BETWEEN CHROMOSOMES. A rejection therefore says the fitted scale depends on something about the group, not that the compiled rules' error is locus-dependent; gene density, expression level, rules per gene and gene family would all produce it. This lane names no cause",
+    "GENES THAT SHARE A COMPILED ELEMENT ARE NOT INDEPENDENT. The permutation unit is the GENE, so correlation between genes within a chromosome is NOT priced into the null, and if it is substantial the null's Q is too narrow and p_Q is anti-conservative -- the error runs toward DETECTING heterogeneity, which is against this lane's expected answer and so does not flatter it. An element-level or locus-block permutation is not registered and is not computed: it would need a gene-to-element map this lane does not build, and naming it as the fix is a separate registration",
+    "A FAILURE TO REJECT IS NOT A PROOF OF IDENTITY. The null's own 98.33% Q range and the null's range of per-chromosome spreads are reported as the honest measure of what this test could have detected: a regional variation smaller than that spread would not be seen here",
+    "NO HELD-OUT PREDICTION IS MADE BY THIS LANE. The statistic is in-sample by construction and the null prices that exactly; the held-out reading that the calibrated rules beat no rule is M2h's and scalesplit's, is quoted verbatim, and is not re-decided here",
+    "THE RNA IS A MEASUREMENT ALREADY READ, by items 7, 7d, 7h, the capped-sum census, M2h, M2i, scalesplit and lane-recovered, AND THE SPREAD TESTED HERE WAS ALREADY SEEN POST HOC. Both are stated in PRIOR_EXPOSURE and both weaken every reading below what the same test on an unlooked-at pattern in a fresh measurement would carry",
+    "A SCALE IS A MAGNITUDE CORRECTION AND NEVER AN EXPLANATION OF EXPRESSION. Whatever this lane reads, the calibrated compiled rules buy about 2% of the variance on M2h's held-out side, and that number is not improved, revised or reinterpreted by anything here"
+  ],
+  "descriptives": [
+    "deciding nothing, reported beside the registered reading: every admitted chromosome's fitted scale with its gene count, pair count, dp_c, pp_c and weighted squared deviation, in the order the deviation ranks; the excluded chromosomes' scales and counts, FLAGGED as below MIN_GENES and entering no statistic; the global fitted scale on the admitted population and on all 24 chromosomes, beside M2h's committed +0.2146; the null distributions of Q and R, each with its median, its 98.33% percentile range and its minimum and maximum over the 1000 draws; per admitted chromosome, the null's 98.33% range of that chromosome's own scale at its own gene count beside its observed scale, with NO correction over 23 and therefore NOT a test of any chromosome; the descriptive p of Q against 0.0167 as well as against 0.05; how many admitted chromosomes lie inside M2h's committed scale interval and how many have a negative scale; and the median, quartiles, minimum and maximum of the admitted per-chromosome scales, recomputed here so that scalesplit's post hoc sentence is reproduced rather than quoted from memory",
+    "context, copied verbatim and not re-decided: 7h's registered reading, M2h's registered multiplicative reading with its committed numbers, and lane-scalesplit's registered reading and its committed post hoc per-chromosome spread"
+  ],
+  "committed_facts": {
+    "harness_targets": {
+      "seven_h": {
+        "genes": 16509,
+        "pairs": 214617,
+        "delta_mse": -0.5361286982098615
+      },
+      "m2h": {
+        "result": "data/results/magcal_result.json",
+        "registration": "data/results/magcal_registration.json",
+        "code": "genomeos/attribution/magcal.py",
+        "commits": "2b0b604 code, fbce775 registration, ac5580b result",
+        "training_genes": 8181,
+        "held_out_genes": 8328,
+        "scale": 0.2145911381525326,
+        "scale_ci": [
+          0.20074141299120243,
+          0.2283000359194418
+        ],
+        "held_out_delta_mse": 0.0433912108101358,
+        "held_out_ci": [
+          0.0379045975793137,
+          0.04894398453032398
+        ],
+        "control_p": 0.000999000999000999,
+        "outcome": "BETTER",
+        "variance_share": "about 2% of the variance (+0.04339 against mean(D^2) 2.1524 on the held-out side)"
+      }
+    },
+    "seven_h_verbatim": {
+      "source": "data/results/multrna_result.json",
+      "reading": "the multiplicative composition (Zhou et al. 2024): worse; the reader-gated run of genes with two or more compiled elements raised the squared error of measured log2(TPM+1) across the thirteen reader cell types above the no-rule baseline's (Delta MSE -0.5361 [97.5% CI -0.5637, -0.5088] over 214,617 gene-cell pairs, 16,509 genes; control p = 1). Head-to-head over the 2,405 genes in all three populations (31,265 gene-cell pairs), the multiplicative composition was closer to measured RNA than the runtime's mean (MSE(mean) - MSE(multiplicative) +0.04395 [97.5% CI +0.0385, +0.04979]) and closer to measured RNA than the promoter-competition form (Bothma 2015, declared half-occupied promoter) (MSE(competition) - MSE(multiplicative) +0.7383 [97.5% CI +0.6625, +0.8183]).",
+      "outcome": "WORSE"
+    },
+    "m2h_verbatim": {
+      "source": "data/results/magcal_result.json",
+      "reading": "the multiplicative composition (Zhou et al. 2024): better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; fitted scale +0.2146 [98.33% CI +0.2007, +0.2283], one number for the whole form, fitted on 8,181 training genes (106,353 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1)",
+      "outcome": "BETTER",
+      "split_rule": "held out when int(sha256(symbol as UTF-8).hexdigest()[:8], 16) is odd, training when even (scripts/saturable_gate.is_held_out, the convention lane-saturable registered today, taken unchanged); the split is on the gene SYMBOL, so a gene falls the same side in every form, is fixed by this registration before any held-out number is read, and depends on no measured value. A gene is wholly on one side with all thirteen of its pairs: no cell of a held-out gene enters any fit"
+    },
+    "scalesplit_verbatim": {
+      "source": "data/results/scalesplit_result.json",
+      "outcome": "SURVIVES_BOTH_FOLDS",
+      "transport_verdict": "SURVIVES_BOTH_FOLDS",
+      "reading": "M2h's scale SURVIVES a chromosome-held-out split: on both complementary chromosome folds, with the scale refitted on the training chromosomes, the scaled multiplicative composition is closer to measured RNA than the no-rule baseline on chromosomes that entered no fit, so the gain is not an artefact of a random split leaking through shared compiled elements. It remains about 2% of the variance. the multiplicative composition (Zhou et al. 2024), scale fitted on the even-numbered autosomes and the sex chromosomes and read on the odd-numbered autosomes held out: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04478 [98.33% CI +0.03949, +0.05059] over 115,505 gene-cell pairs, 8,885 genes; control p = 0.000999; fitted scale +0.212 [98.33% CI +0.1975, +0.2271], one number for the whole form, fitted on 7,624 training genes (99,112 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1); the multiplicative composition (Zhou et al. 2024), scale fitted on the odd-numbered autosomes and read on the even-numbered autosomes and the sex chromosomes held out: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04201 [98.33% CI +0.03619, +0.04848] over 99,112 gene-cell pairs, 7,624 genes; control p = 0.000999; fitted scale +0.2177 [98.33% CI +0.2042, +0.2322], one number for the whole form, fitted on 8,885 training genes (115,505 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1). odd_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03949, +0.05059] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said odd_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.1975, +0.2271] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said even_and_sex_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03619, +0.04848] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said even_and_sex_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.2042, +0.2322] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said. carried with every reading: this RNA is not a fresh measurement. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h and by today's capped-sum census, and the P and D calibrated here are 7d's and 7h's committed rows; the held-out split limits that exposure and does not eliminate it, so a reading here is a statement about this measurement and a hypothesis for a fresh one, not independent confirmation Added by this lane and binding on its own reading: the same rows were then read by M2h (lane-magcal), which fitted the one scale and read 'better' on a random split, and by M2i (lane-freshrna), which replicated it with nothing fitted on RNA fresh to this project. This lane is a RE-ANALYSIS of a measurement already read -- a leakage audit of M2h's split -- and not a fresh test of anything",
+      "post_hoc_rule": null
+    },
+    "note": "quoted and not re-decided. M2h's reading is the one whose MAGNITUDE this lane asks about; scalesplit's post hoc per-chromosome spread is the PATTERN this lane tests, and that it was already seen is why the exposure paragraph calls this a test of a looked-at pattern"
+  },
+  "exploration_preceded_this": "stated so that nothing here is read as a blind prediction. Before writing it this lane read: genomeos/attribution/magcal.py's constants and its fit, bootstrap, control, decision and reading functions in full; genomeos/attribution/scalesplit.py's registration constants, its POST_HOC paragraph and its committed M2H_COMMITTED and SEVEN_H_COMMITTED numbers; scripts/scalesplit_harness.py in full, which this lane's harness follows; the GENE COUNT PER CHROMOSOME of 7h's committed table (chr1 1,700, chr2 1,089, chr3 930, chr4 642, chr5 732, chr6 886, chr7 773, chr8 559, chr9 654, chr10 631, chr11 983, chr12 871, chr13 280, chr14 522, chr15 509, chr16 703, chr17 969, chr18 238, chr19 1,199, chr20 464, chr21 156, chr22 373, chrX 633, chrY 13), which is what told it that chrY alone falls below MIN_GENES; and the shape of data/results/scalesplit_result.json. IT ALSO KNEW, FROM ITS OWN BRIEF AND BEFORE REGISTERING, scalesplit's POST HOC per-chromosome spread: the range +0.1232 (chr13) to +0.2874 (chr14), the median +0.2176, the quartiles +0.2041 and +0.2376, the absence of a sign change, that 10 of the 24 lie inside M2h's committed interval, and that chrY was flagged at 13 genes. THAT IS WHY THE PRIOR EXPOSURE PARAGRAPH SAYS THIS IS A TEST OF A PATTERN THAT HAS BEEN LOOKED AT. It has computed NO heterogeneity statistic, NO range statistic, NO permutation of the chromosome labels and NO p value of any kind; this lane's step 1 (data/results/scalehet_harness.json, committed before this registration) states in its own words that it wrote no per-chromosome scale value and formed no dispersion. The first statistic of this design will be computed by scripts/scalehet_run.py after this registration is committed",
+  "decisions": [
+    "WHY THIS LANE EXISTS: M2h's one scale is ONE NUMBER for the whole genome, and that one number is what makes the compiled rules read better than no rule (about 2% of the variance). scalesplit then showed, post hoc, within-chromosome scales from +0.1232 to +0.2874. If that spread is real, the defect is not one mis-specified constant but an error that depends on the locus, which is a different defect and a different repair. NOBODY HAS TESTED IT: a spread that wide is also what sampling noise looks like at a few hundred genes per chromosome",
+    "design: M2h's rows, M2h's fit, M2h's floor, M2h's 98.33% width and M2h's alpha, every one imported read-only from genomeos/attribution/magcal.py, with ONE thing added -- a heterogeneity statistic on the per-chromosome fitted scales and a null for it. No new endpoint, no new measurement, no new reader biosample, no new composition form",
+    "the PRIMARY statistic is a PRECISION-WEIGHTED DISPERSION, Q = sum over admitted chromosomes of pp_c * (a_c - a_g)^2, Cochran's homogeneity form, where pp_c is that chromosome's sum of P^2 and is exactly the precision of its fitted scale. It uses every admitted chromosome and names none, so it is not a statistic about chr13 or chr14",
+    "the SECONDARY statistic is the RANGE, max minus min, because that is the statistic the post hoc sentence used and this lane should test the pattern that was looked at rather than a kinder one. It cannot declare either answer by itself: its only registered force is the MIXED outcome",
+    "THE NULL IS A PERMUTATION OF THE CHROMOSOME LABELS AMONG THE GENES, holding EVERY CHROMOSOME'S GENE COUNT EXACTLY at its observed value, with each gene moving as one block carrying all thirteen of its pairs. That is the one null that answers the actual objection: it has the same per-chromosome gene counts and therefore the same sampling noise as the observed spread, it redistributes the same genes under the same single global fit, it prices the upward bias of fitting 23 scales because it fits 23 scales the same way, and it assumes no distribution. Its assumption -- gene exchangeability between chromosomes -- is written as a LIMITATION, so a rejection is a finding that the scale depends on something about the group and NOT an identification of what",
+    "NO TRAIN-AND-HELD-OUT SPLIT, deliberately: the question is about the dispersion of FITTED scales, which is in-sample by construction, and the null prices that exactly. The held-out question of whether the calibrated rules beat no rule is M2h's and scalesplit's and is quoted, never re-decided",
+    "THE GENE FLOOR IS FIXED NOW at MIN_GENES = 100, magcal's own, which excludes chrY (13 genes) and admits the other 23 chromosomes. It is not tuned here and it was scalesplit's floor before this lane existed. Fewer than MIN_CHROMOSOMES = 10 admitted would read INCONCLUSIVE",
+    "THE THRESHOLD IS ALPHA = 0.05, one-sided, magcal's own, AND IS THE LAXER OF THE TWO DEFENSIBLE CHOICES. This lane expects 'consistent with one scale', which is a failure to reject, so it takes the threshold that gives heterogeneity the easier passage and makes its own expected answer the harder to obtain. No Bonferroni is applied over the two statistics, for the same reason; the multiplicity is handled by the MIXED outcome, which claims neither answer when they disagree",
+    "the 98.33% width, magcal.FORM_INTERVAL unchanged, is used for DESCRIPTION ONLY -- the null Q distribution, the null range distribution, and each admitted chromosome's own null band -- and the verdict rests on the permutation p alone. The 23 per-chromosome bands carry no correction over 23 and are declared NOT a test of any chromosome",
+    "1000 permutations at seed 20261012, fixed now. 1000 is magcal's own count; the attainable floor 0.000999 is far below ALPHA, so the test can reject",
+    "THE EXPOSURE IS DOUBLE AND IS STATED FIRST, NOT AS A CAVEAT: this RNA was read by items 7, 7d, 7h, the capped-sum census, M2h, M2i, scalesplit and lane-recovered, so this is a re-analysis of a measurement already read; AND the per-chromosome spread tested here was ALREADY SEEN POST HOC by scalesplit, so this is a test of a pattern that has been looked at, which is weaker than a test of one that has not",
+    "IF THE OUTCOME IS HETEROGENEOUS, THAT VARIATION EXISTS IS THE WHOLE FINDING. No regional model is proposed, no per-region scale is fitted, no cause is named and no chromosome is read as a verdict about itself, in the reading, in the result or in the ROADMAP row. Fitting per-region scales is a separate registration and a separate decision",
+    "nothing in area J, no node model, no BioForge calibration, no new reader biosample (the thirteen reader cells only, READER_TERMS unchanged), no AlphaGenome request and no deletion request: the stop list of 2026-09-27 as ROADMAP \u00a75 reinstated it. No stop item is touched by this item, and no file of magcal's, scalesplit's, recovered's, scalefit's, freshrna's, trainexp's or multrna's is edited"
+  ],
+  "readers": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "pinned_sha256": {
+    "data/results/multrna_result.json": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+    "data/results/magcal_result.json": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+    "data/results/magcal_registration.json": "2b25645be58c526a6c69bb15be5822bd921e14fb6b2761e1bcc78b505a302c90",
+    "data/results/multrna_registration.json": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7",
+    "data/results/scalesplit_result.json": "aeb1609698e678bcebb808f5ecf4d25348852e6d89c1bc6b0ee8475fcac44102",
+    "data/results/scalehet_harness.json": "4cb560bf57ddd95d0760c91117258c75b88de22ba3217990422b9402eaf1379c"
+  },
+  "what_the_run_will_write": "data/results/scalehet_result.json",
+  "the_code_that_runs_it": "genomeos/attribution/scalehet.py, scripts/scalehet_harness.py and scripts/scalehet_run.py, committed before this registration, with the committed magcal.py and scalesplit.py they import read-only for the words, constants and functions carried verbatim",
+  "stop_list_checked": "docs/ROADMAP.md \u00a75, 'The stop list of 2026-09-27, reinstated', read before this lane was briefed: no AlphaGenome request and no deletion request; no new reader biosample (the 13 covered cells only, READER_TERMS untouched); nothing in area J; no node-model work; no BioForge calibration. None is touched here",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/multrna_result.json (7h, lane-multrna)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/magcal_result.json (M2h, lane-magcal)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/scalesplit_result.json (lane-scalesplit)",
+        "version": "pinned; its post hoc per-chromosome spread is the pattern this lane tests"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq gene quantifications, V29, 13 reader biosamples",
+        "version": "read by 7d, 7h and M2h; this lane reads their committed rows, not the files"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "pinned by sha256; the source of the committed P and D. Its counts, committed uncalibrated Delta MSE and registered reading are read; no statistic of this lane is computed"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/magcal_registration.json",
+        "sha256": "2b25645be58c526a6c69bb15be5822bd921e14fb6b2761e1bcc78b505a302c90",
+        "bytes": 45173,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/multrna_registration.json",
+        "sha256": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7",
+        "bytes": 134997,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalesplit_result.json",
+        "sha256": "aeb1609698e678bcebb808f5ecf4d25348852e6d89c1bc6b0ee8475fcac44102",
+        "bytes": 67515,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalehet_harness.json",
+        "sha256": "4cb560bf57ddd95d0760c91117258c75b88de22ba3217990422b9402eaf1379c",
+        "bytes": 25545,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      }
+    ],
+    "input_count": 6,
+    "readers": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "reader_count": 13,
+    "assembly": "GRCh38; genes as 7h matched them, by gene_id",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "form": "multiplicative",
+      "grouping": "BY CHROMOSOME, as 7h's committed table names it, which is a property of the gene's ADDRESS and of no measured value. The chromosome is the region unit for one reason stated in advance: it is the unit scalesplit's post hoc spread was computed on, and this lane's whole purpose is to test that spread rather than a spread of its own choosing. A gene is wholly in one group with all thirteen of its pairs. THE CHROMOSOME IS A COARSE AND ARBITRARY REGION UNIT and that is a LIMITATION, written as one: regional variation at a finer scale -- by compiled element, by locus, by expression level, by rule count -- would not have to show up between chromosomes, so a 'consistent' reading here is consistency BETWEEN CHROMOSOMES and is not a statement about every way the error could vary",
+      "statistic": [
+        "PRIMARY, Q: the precision-weighted dispersion of the per-chromosome fitted scales about the global fitted scale. For an admitted chromosome c, let dp_c = sum over that chromosome's pairs of D*P and pp_c = sum over that chromosome's pairs of P^2; its fitted scale is a_c = dp_c / pp_c, which is magcal.FIT applied to that chromosome's rows and nothing else (magcal.fit_scale, imported read-only). Let a_g = (sum over admitted chromosomes of dp_c) / (sum of pp_c), the ONE global scale fitted on the admitted population, which is magcal.fit_scale on exactly those rows. Then Q = sum over admitted chromosomes of pp_c * (a_c - a_g)^2. WHY THAT WEIGHT: under the squared-error fit this calibration minimises, the variance of a_c is proportional to 1 / pp_c, so pp_c is the precision of a_c and pp_c * (a_c - a_g)^2 is each chromosome's squared deviation measured in units of its own noise -- Cochran's homogeneity form. It makes Q large when a PRECISELY fitted chromosome sits far from the global scale and small when a noisily fitted one does, which is the behaviour the question needs. Q IS NOT COMPARED TO A CHI-SQUARED DISTRIBUTION and no asymptotic assumption is made: its null is the permutation null below, so the unknown residual variance cancels and no normality, independence-of-pairs or large-sample claim is required.",
+        "SECONDARY, R: the RANGE of the per-chromosome fitted scales, max a_c - min a_c over the admitted chromosomes. This is the statistic the post hoc sentence used ('+0.1232 to +0.2874'), registered here so that the pattern that was looked at is the pattern that is tested. It is REPORTED BESIDE Q AND IS NOT THE VERDICT, for the reason that a range is driven by its two extreme groups and is the less powerful and less stable of the two. Its only registered force is the MIXED outcome below: if Q and R fall on opposite sides of ALPHA the lane says so in the reading and claims neither answer"
+      ],
+      "null": [
+        "THE NULL IS 'ONE GLOBAL SCALE, AND THE PER-CHROMOSOME DEVIATIONS ARE ONLY WHICH GENES HAPPENED TO LAND ON WHICH CHROMOSOME.' It is generated by PERMUTING THE CHROMOSOME LABELS AMONG THE ADMITTED GENES: one permutation draws a uniform random assignment of the admitted genes to the admitted chromosome labels that holds EACH CHROMOSOME'S GENE COUNT EXACTLY AT ITS OBSERVED VALUE (chr1 keeps 1,700 slots, chr13 keeps 280, chr18 keeps 238, and so on), recomputes the 23 per-chromosome scales and the global scale from the permuted grouping by the same formulas, and records Q and R. A GENE IS PERMUTED AS A BLOCK, carrying all thirteen of its pairs, its own P values, its own D values and its own pair sums; no pair is broken apart from its gene and no P is detached from its D. Nothing about any gene's data changes under the null -- only which group it is counted in.",
+        "WHY THIS NULL AND NOT ANOTHER, decided now. (1) IT HAS THE SAME PER-CHROMOSOME GENE COUNTS AS THE OBSERVED GROUPING, BY CONSTRUCTION, so it carries the same sampling noise the observed spread was computed at -- which is the precise objection the eye could not answer. (2) IT RESAMPLES WITHIN THE GLOBAL FIT: the whole admitted population, with its one global scale, is the thing being redistributed, so the null is exactly 'these genes, this one scale, a different accident of addresses'. (3) IT IS EXACT UNDER GENE EXCHANGEABILITY and assumes no distribution: it needs no model of the residuals, no variance estimate and no normality, and it prices the upward bias of fitting 23 scales because it fits 23 scales the same way. (4) It uses the REAL genes, so the heavy-tailed, heteroscedastic, decidedly non-normal distribution of real P and D values is present in the null exactly as it is in the observation. WHAT IT ASSUMES, AND THIS IS THE LIMITATION, NOT A CAVEAT: under the null, genes are EXCHANGEABLE between chromosomes. If the genes of one chromosome differ from another's in some way that moves the fitted scale but is not 'the compiled rules are wrong by a different amount there' -- gene density, expression level, rule count per gene, gene family -- then a rejection says the scale depends on SOMETHING ABOUT THE GROUP and does not say what. A rejection is therefore a finding of heterogeneity between chromosomes and NOT an identification of its cause, and this lane will not name one.",
+        "PERMUTATION COUNT AND SEED, FIXED NOW: PERMUTATIONS['count'] = 1000 draws at PERMUTATIONS['seed'] = 20261012, one numpy default_rng seeded once. 1000 is magcal's own permutation count, taken unchanged. The smallest attainable p is 1/(1+1000) = 0.000999, which is far below ALPHA, so the test CAN reject; and 1000 draws resolve a p near ALPHA = 0.05 to about +-0.007 (one standard error), which is stated as the resolution of the p and is not refined after the fact"
+      ],
+      "no_split": "NO TRAINING AND HELD-OUT SPLIT IS USED HERE, AND THAT IS DELIBERATE AND IS NOT A WEAKENING. The question is about the DISPERSION OF FITTED SCALES, not about a held-out prediction, so the quantity of interest is in-sample by construction: a per-chromosome scale IS an in-sample fit on that chromosome's genes. A fitted dispersion is biased upward -- 23 scales fitted on 23 groups will differ even when one scale generated them all -- and THE NULL IS WHAT PRICES THAT BIAS EXACTLY, because the null statistic is computed by fitting 23 scales on 23 groups of the same sizes in the same way. Comparing a fitted dispersion to a null of fitted dispersions is the correct comparison; comparing it to zero would not be. The held-out question about whether the calibrated rules beat no rule is M2h's and scalesplit's, is already answered, and is QUOTED here, never re-decided",
+      "min_genes": 100,
+      "min_chromosomes": 10,
+      "form_interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "interval_decision": "98.33% percentile interval, magcal.FORM_INTERVAL taken UNCHANGED, DECIDED NOW AND NOT AFTER, and used for DESCRIPTION, with the verdict resting on the permutation p alone. What it is placed on, fixed here: (1) the NULL DISTRIBUTION OF Q -- its 98.33% percentile range and its median -- so a reader can see the observed Q against the range a single global scale itself produces; (2) the NULL DISTRIBUTION OF R, the same way, which is the direct answer in the units of the sentence that prompted this lane: how wide a min-to-max spread of per-chromosome scales does ONE global scale generate at these gene counts? (3) per admitted chromosome, the null's 98.33% range of THAT CHROMOSOME'S OWN fitted scale at its own gene count, beside its observed scale -- 23 bands, each deciding nothing, carrying NO correction over 23 and therefore NOT A TEST of any chromosome, named a descriptive here so it cannot later be read as 23 verdicts. WHY 98.33%: it is the width M2h and scalesplit's committed readings are stated at, so every number this lane prints beside theirs is at the same width and a comparison is not also a comparison of widths; and it is what magcal's own functions compute, which this lane calls read-only rather than editing magcal's file",
+      "permutations": {
+        "count": 1000,
+        "seed": 20261012
+      },
+      "control_alpha": 0.05,
+      "alpha_decision": "ALPHA = 0.05, one-sided, magcal.CONTROL_ALPHA taken UNCHANGED, AND THE CHOICE IS DELIBERATELY THE ONE THAT MAKES THIS LANE'S EXPECTED ANSWER THE HARDER TO OBTAIN. The expected answer is 'consistent with a single global scale', which is a FAILURE TO REJECT; a strict threshold would make failing to reject easy and the reading cheap. 0.05 is the LAXER of the two defensible thresholds available -- the other being 0.0167, the 0.05/3 Bonferroni divisor M2h's 98.33% interval came from -- so adopting 0.05 gives heterogeneity the EASIER passage and makes a 'consistent' reading the harder result to reach. The p against 0.0167 is reported beside it as a descriptive so a reader can see both, but THE VERDICT USES 0.05 AND ONLY 0.05. CORRECTION, DECIDED NOW: there are TWO registered readings in this lane, Q (primary) and R (secondary), and NO Bonferroni correction is applied to ALPHA over them -- for the same reason: splitting 0.05 between them would halve the chance of detecting heterogeneity and so inflate the chance of the expected 'consistent' answer. Instead the multiplicity is handled by the MIXED outcome, which refuses to pick a side when the two statistics disagree, so an uncorrected pair of tests cannot buy a cleaner verdict than the evidence supports. This lane registers NO interval that excludes 0 and makes NO claim of an effect's sign, so the 98.33% width is used only to DESCRIBE the null's spread (see INTERVAL) and never to decide",
+      "tolerance": 0.0001,
+      "m2h_tolerance": 1e-09,
+      "free_parameters": "one real scale per admitted chromosome and one global scale, all in closed form; no per-gene and no per-cell parameter, and nothing is fitted that the null does not refit"
+    },
+    "exclusions": [
+      "chromosomes carrying fewer than MIN_GENES = 100 genes in 7h's committed table, by the floor fixed in this registration before any value of this lane was read; on 7h's table that is chrY alone, at 13 genes, which removes 13 of 16,509 genes"
+    ],
+    "partitions": "n/a: a registration; no statistic computed, no permutation drawn, no outcome read",
+    "code_cleanliness": {
+      "git_sha": "95151ed4356c8c93ec2c9616bdfd387093fb0212",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/scalehet_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/scalehet_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/scalehet_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/conftest.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/scalehet.py",
+        "genomeos/attribution/scalesplit.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/scalehet_harness.py",
+        "scripts/scalehet_register.py"
+      ],
+      "counting_path_count": 158,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "95151ed4356c8c93ec2c9616bdfd387093fb0212",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/conftest.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/scalehet_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "95151ed4356c8c93ec2c9616bdfd387093fb0212",
+      "code_cleanliness_git_sha": "95151ed4356c8c93ec2c9616bdfd387093fb0212",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 95151ed"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 302,
+      "opens_under_data": 9,
+      "files_read": 6,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
