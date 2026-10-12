@@ -124,3 +124,38 @@ def test_the_census_itself_states_that_chr21_has_elements_and_chrY_has_none() ->
     assert census["coverage"]["per_chromosome"]["chr21"] > 0
     assert census["coverage"]["counts"]["chromosomes_with_no_library_guide"] == 1
     assert any("chrY" in line for line in census["result_manifest"]["exclusions"])
+
+
+THE_FOUR = ("direction_link", "hct116_count", "reptest_answerable", "rescore_cost")
+
+
+def test_all_four_results_of_2026_10_02_declare_the_same_22_cache_chromosomes() -> None:
+    """The committed state the cache-group recount was briefed on, pinned so it cannot drift."""
+    declared = {}
+    for name in THE_FOUR:
+        path = ROOT / f"data/results/{name}.json"
+        tracked_paths.must_be_present(path, was=f"skipped when data/results/{name}.json is absent")
+        manifest = json.loads(path.read_text())["result_manifest"]
+        group = next(
+            e
+            for e in manifest["inputs"]
+            if isinstance(e, dict) and e.get("path") == "per_element_response_cache"
+        )
+        assert group["files"] == 22
+        declared[name] = sorted(Path(m["path"]).name.split(".")[0] for m in group["members"])
+    # All four name the SAME 22, and the two they all leave out are chr13 and chrY. If a later
+    # change makes them disagree, this lane's single explanation for all four stops being one.
+    assert len({tuple(v) for v in declared.values()}) == 1
+    missing = {f"chr{i}" for i in range(1, 23)} | {"chrX", "chrY"}
+    missing -= set(next(iter(declared.values())))
+    assert missing == {"chr13", "chrY"}
+
+
+def test_the_cache_group_is_built_with_an_exists_filter_in_all_four_entry_scripts() -> None:
+    """The mechanism, asserted against the tracked source rather than described in prose."""
+    for name in THE_FOUR:
+        path = ROOT / f"scripts/{name}.py"
+        tracked_paths.must_be_present(path, was=f"skipped when scripts/{name}.py is absent")
+        source = path.read_text()
+        assert "path.exists()" in source
+        assert "per_element_response_cache" in source
