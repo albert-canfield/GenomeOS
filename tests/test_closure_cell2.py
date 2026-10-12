@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import closure_cell as cc
 from genomeos.attribution import closure_cell2 as cc2
@@ -234,8 +235,8 @@ def test_fetch_design_refuses_a_file_whose_md5_is_not_encodes(tmp_path):
         cc2.fetch_design(accession, store=tmp_path, net=False)
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the search has not been run on this machine")
 def test_the_committed_search_reports_every_candidate_against_the_same_gate():
+    tp.must_be_present(RESULT, was="the search has not been run on this machine")
     record = json.loads(RESULT.read_text())
     assert record["gate_fixed_before_the_counting"]["arm_a_at_least"] == cc2.M3_ARM_A
     assert len(record["candidates"]) == len(cc2.CANDIDATES)

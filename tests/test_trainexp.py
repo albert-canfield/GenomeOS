@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import context_evidence as ce
 from genomeos.attribution import freshrna as fr
@@ -208,8 +209,8 @@ def test_nothing_in_this_lane_may_fit_anything():
 
 
 @needs_track_metadata
-@pytest.mark.skipif(not RESULT.exists(), reason="data/results/trainexp_independence.json not written yet")
 def test_the_result_reports_zero_accession_matches_for_rna_seq():
+    tp.must_be_present(RESULT, was="data/results/trainexp_independence.json not written yet")
     d = json.loads(RESULT.read_text())
     m = d["matching"]
     assert m["rna_seq_rows_carrying_an_accession"] == 0
@@ -219,8 +220,8 @@ def test_the_result_reports_zero_accession_matches_for_rna_seq():
 
 
 @needs_track_metadata
-@pytest.mark.skipif(not RESULT.exists(), reason="data/results/trainexp_independence.json not written yet")
 def test_the_result_covers_both_whole_sets():
+    tp.must_be_present(RESULT, was="data/results/trainexp_independence.json not written yet")
     d = json.loads(RESULT.read_text())
     fresh = d["matching"]["fresh_thirteen"]["tally"]
     read = d["matching"]["already_read_twenty_seven"]["tally"]
@@ -231,8 +232,8 @@ def test_the_result_covers_both_whole_sets():
 
 
 @needs_track_metadata
-@pytest.mark.skipif(not RESULT.exists(), reason="data/results/trainexp_independence.json not written yet")
 def test_the_eleven_cell_subset_reproduces_m2i_on_thirteen_and_fits_nothing():
+    tp.must_be_present(RESULT, was="data/results/trainexp_independence.json not written yet")
     d = json.loads(RESULT.read_text())["eleven_cell_subset"]
     assert d["thirteen_reproduces_the_committed_result"] is True
     assert d["scale"] == fr.SCALE
@@ -272,9 +273,9 @@ def test_the_eleven_cell_interval_brackets_its_point_estimate_and_excludes_zero(
 
 
 @needs_track_metadata
-@pytest.mark.skipif(not RESULT.exists(), reason="data/results/trainexp_independence.json not written yet")
 def test_the_recorded_constants_match_the_written_result():
     """Where the result file exists, the committed constants must be its values, not a retyping."""
+    tp.must_be_present(RESULT, was="data/results/trainexp_independence.json not written yet")
     d = json.loads(RESULT.read_text())
     m, e = d["matching"], d["eleven_cell_subset"]
     assert m["rna_seq_rows"] == tx.METADATA_AS_READ["rna_seq_rows"]

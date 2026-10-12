@@ -13,6 +13,7 @@ import math
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import combine2 as c2
 from genomeos.attribution import context_evidence as ce
@@ -152,8 +153,8 @@ def test_full_reading_carries_the_scope_the_size_and_the_non_overlap() -> None:
 
 
 # ---- the committed record --------------------------------------------------------------------------
-@pytest.mark.skipif(not SOURCES.exists(), reason="the sources file is not committed yet")
 def test_the_fresh_sources_are_disjoint_from_what_the_project_has_read() -> None:
+    tp.must_be_present(SOURCES, was="the sources file is not committed yet")
     d = json.loads(SOURCES.read_text())
     ov = d["non_overlap"]
     assert ov["intersection"]["experiments"] == []
@@ -165,8 +166,8 @@ def test_the_fresh_sources_are_disjoint_from_what_the_project_has_read() -> None
     assert all(a in fr.RNA_ASSAYS for a in d["assays"].values())
 
 
-@pytest.mark.skipif(not REGISTRATION.exists(), reason="the registration is not committed yet")
 def test_the_registration_pins_the_scale_and_the_population() -> None:
+    tp.must_be_present(REGISTRATION, was="the registration is not committed yet")
     d = json.loads(REGISTRATION.read_text())
     assert d["scale"] == fr.SCALE
     assert d["harness_check"]["passed"] is True
@@ -175,8 +176,8 @@ def test_the_registration_pins_the_scale_and_the_population() -> None:
     assert d["primary_population"]["genes"] == d["harness_check"]["m2h_held_out_genes_committed"]
 
 
-@pytest.mark.skipif(not RESULT.exists(), reason="the run has not happened yet")
 def test_the_result_carries_the_registered_wording() -> None:
+    tp.must_be_present(RESULT, was="the run has not happened yet")
     d = json.loads(RESULT.read_text())
     assert d["outcome"] in fr.OUTCOMES
     assert d["scale"] == fr.SCALE
