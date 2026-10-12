@@ -423,8 +423,12 @@ def main() -> int:
     ok = not problems
     reading = (
         rep["reading"]
-        + ". This lane's one-scale-per-gene metric IS magcal.delta_mse within TOLERANCE at a constant"
-        " scale, its per-arm bootstrap IS magcal.bootstrap_delta bit-for-bit, and two identical arms"
+        + ". This lane's one-scale-per-gene metric IS magcal.delta_mse at a constant scale, differing by"
+        f" {path['metric_abs_difference']:.3g} against TOLERANCE {rs.TOLERANCE}, and its per-arm"
+        " bootstrap IS magcal.bootstrap_delta, differing by"
+        f" {path['arm_interval_max_abs_difference']:.3g} -- the REGISTERED claim is agreement within"
+        " TOLERANCE, because the two accumulate a gene's term in a different ORDER and that costs about"
+        " 1e-17 on a small table; on THIS table the observed difference is exactly 0. Two identical arms"
         " give a DELTA interval of exactly [0, 0]. "
         + (
             f"{feas['admitted_count']} of the {feas['chromosomes_in_table']} chromosomes carry at least"
