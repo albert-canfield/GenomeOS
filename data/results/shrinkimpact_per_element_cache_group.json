@@ -1,0 +1,1423 @@
+{
+  "result": "shrinkimpact_per_element_cache_group",
+  "date": "2026-10-12",
+  "question": "four results of 2026-10-02 declare a 22-member per-element cache group against a 24-chromosome complement, and the group is built with an `.exists()` filter, so the declaration would have shrunk silently had an archive been absent. Was one, and did the runs need chr13 or chrY at all?",
+  "corrects": "nothing: this is an additive check on four committed results, none of which is touched here",
+  "the_four": [
+    "direction_link",
+    "hct116_count",
+    "reptest_answerable",
+    "rescore_cost"
+  ],
+  "comparisons": [
+    {
+      "label": "direction_link eligibility: links, by_arm, by_cell, by_arm_and_cell",
+      "leaves_compared": 16,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "direction_link eligibility: links, by_arm, by_cell, by_arm_and_cell: no number moves -- all 16 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    },
+    {
+      "label": "direction_link answerability: the four counts, absent among them",
+      "leaves_compared": 4,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "direction_link answerability: the four counts, absent among them: no number moves -- all 4 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    },
+    {
+      "label": "direction_link: the archives the rerun opened against the ones it declared",
+      "leaves_compared": 22,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "direction_link: the archives the rerun opened against the ones it declared: no number moves -- all 22 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    },
+    {
+      "label": "direction_link: the declared group's chromosomes against the benchmark's own",
+      "leaves_compared": 22,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "direction_link: the declared group's chromosomes against the benchmark's own: no number moves -- all 22 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    },
+    {
+      "label": "hct116_count: the declared group's chromosomes against the benchmark's own",
+      "leaves_compared": 22,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "hct116_count: the declared group's chromosomes against the benchmark's own: no number moves -- all 22 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    },
+    {
+      "label": "reptest_answerable: the declared group's chromosomes against the benchmark's own",
+      "leaves_compared": 22,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "reptest_answerable: the declared group's chromosomes against the benchmark's own: no number moves -- all 22 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    },
+    {
+      "label": "rescore_cost: the declared group's chromosomes against the benchmark's own",
+      "leaves_compared": 22,
+      "moved": [],
+      "moved_count": 0,
+      "only_in_committed": [],
+      "only_in_recomputed": [],
+      "reading": "rescore_cost: the declared group's chromosomes against the benchmark's own: no number moves -- all 22 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+    }
+  ],
+  "no_number_moves": true,
+  "every_archive_as_it_is_on_disk_now": {
+    "chr1": {
+      "present": true,
+      "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+      "bytes": 77622737
+    },
+    "chr2": {
+      "present": true,
+      "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+      "bytes": 51646793
+    },
+    "chr3": {
+      "present": true,
+      "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+      "bytes": 40830506
+    },
+    "chr4": {
+      "present": true,
+      "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+      "bytes": 25247071
+    },
+    "chr5": {
+      "present": true,
+      "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+      "bytes": 34546268
+    },
+    "chr6": {
+      "present": true,
+      "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+      "bytes": 41715184
+    },
+    "chr7": {
+      "present": true,
+      "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+      "bytes": 35337035
+    },
+    "chr8": {
+      "present": true,
+      "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+      "bytes": 30518026
+    },
+    "chr9": {
+      "present": true,
+      "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+      "bytes": 31161454
+    },
+    "chr10": {
+      "present": true,
+      "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+      "bytes": 30030494
+    },
+    "chr11": {
+      "present": true,
+      "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+      "bytes": 46496550
+    },
+    "chr12": {
+      "present": true,
+      "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+      "bytes": 41655248
+    },
+    "chr13": {
+      "present": true,
+      "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+      "bytes": 14622897
+    },
+    "chr14": {
+      "present": true,
+      "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+      "bytes": 31260018
+    },
+    "chr15": {
+      "present": true,
+      "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+      "bytes": 27369934
+    },
+    "chr16": {
+      "present": true,
+      "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+      "bytes": 38935424
+    },
+    "chr17": {
+      "present": true,
+      "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+      "bytes": 55243170
+    },
+    "chr18": {
+      "present": true,
+      "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+      "bytes": 13518960
+    },
+    "chr19": {
+      "present": true,
+      "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+      "bytes": 50085176
+    },
+    "chr20": {
+      "present": true,
+      "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+      "bytes": 22792705
+    },
+    "chr21": {
+      "present": true,
+      "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+      "bytes": 9769482
+    },
+    "chr22": {
+      "present": true,
+      "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+      "bytes": 24359126
+    },
+    "chrX": {
+      "present": true,
+      "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+      "bytes": 14376446
+    },
+    "chrY": {
+      "present": true,
+      "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+      "bytes": 470775
+    }
+  },
+  "the_upstream_population": {
+    "cached_crispri_pairs_per_chromosome": {
+      "chr1": 1251,
+      "chr2": 644,
+      "chr3": 900,
+      "chr4": 114,
+      "chr5": 327,
+      "chr6": 714,
+      "chr7": 478,
+      "chr8": 1223,
+      "chr9": 110,
+      "chr10": 260,
+      "chr11": 1894,
+      "chr12": 762,
+      "chr13": 11,
+      "chr14": 147,
+      "chr15": 67,
+      "chr16": 539,
+      "chr17": 830,
+      "chr18": 253,
+      "chr19": 2795,
+      "chr20": 246,
+      "chr21": 98,
+      "chr22": 105,
+      "chrX": 966,
+      "chrY": 0
+    },
+    "eligible_links_per_chromosome": {
+      "chr1": 21,
+      "chr2": 14,
+      "chr3": 11,
+      "chr4": 7,
+      "chr5": 7,
+      "chr6": 13,
+      "chr7": 10,
+      "chr8": 11,
+      "chr9": 6,
+      "chr10": 10,
+      "chr11": 49,
+      "chr12": 11,
+      "chr13": 0,
+      "chr14": 3,
+      "chr15": 4,
+      "chr16": 11,
+      "chr17": 14,
+      "chr18": 1,
+      "chr19": 27,
+      "chr20": 6,
+      "chr21": 3,
+      "chr22": 1,
+      "chrX": 20,
+      "chrY": 0
+    },
+    "contested_per_chromosome": {
+      "chr1": 0,
+      "chr2": 0,
+      "chr3": 0,
+      "chr4": 0,
+      "chr5": 0,
+      "chr6": 0,
+      "chr7": 0,
+      "chr8": 0,
+      "chr9": 0,
+      "chr10": 0,
+      "chr11": 0,
+      "chr12": 0,
+      "chr13": 0,
+      "chr14": 0,
+      "chr15": 0,
+      "chr16": 0,
+      "chr17": 0,
+      "chr18": 0,
+      "chr19": 0,
+      "chr20": 0,
+      "chr21": 0,
+      "chr22": 0,
+      "chrX": 0,
+      "chrY": 0
+    },
+    "chromosomes_with_an_eligible_link": [
+      "chr1",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr2",
+      "chr20",
+      "chr21",
+      "chr22",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX"
+    ]
+  },
+  "per_result_declaration_against_the_store": {
+    "direction_link": {
+      "declared_members": 22,
+      "declared_chromosomes": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX"
+      ],
+      "declared_and_byte_identical_on_disk": 22,
+      "declared_but_different_bytes": [],
+      "declared_but_missing_from_the_store": [],
+      "not_declared_though_present_in_the_store": [
+        "chr13",
+        "chrY"
+      ]
+    },
+    "hct116_count": {
+      "declared_members": 22,
+      "declared_chromosomes": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX"
+      ],
+      "declared_and_byte_identical_on_disk": 22,
+      "declared_but_different_bytes": [],
+      "declared_but_missing_from_the_store": [],
+      "not_declared_though_present_in_the_store": [
+        "chr13",
+        "chrY"
+      ]
+    },
+    "reptest_answerable": {
+      "declared_members": 22,
+      "declared_chromosomes": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX"
+      ],
+      "declared_and_byte_identical_on_disk": 22,
+      "declared_but_different_bytes": [],
+      "declared_but_missing_from_the_store": [],
+      "not_declared_though_present_in_the_store": [
+        "chr13",
+        "chrY"
+      ]
+    },
+    "rescore_cost": {
+      "declared_members": 22,
+      "declared_chromosomes": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX"
+      ],
+      "declared_and_byte_identical_on_disk": 22,
+      "declared_but_different_bytes": [],
+      "declared_but_missing_from_the_store": [],
+      "not_declared_though_present_in_the_store": [
+        "chr13",
+        "chrY"
+      ]
+    }
+  },
+  "limit_named": "the own counts of hct116_count, reptest_answerable and rescore_cost are NOT recomputed here: each runs a different downstream pipeline over the same upstream population, and this result speaks about their declared group and the files behind it. `direction_link`'s own counts ARE recomputed, eligibility and all four answerability counts, because `absent` is the figure that would have moved had an archive been missing.",
+  "wording": "a recomputed count is what the complete stores give; it does not by itself overturn a registered reading, and no registered test is re-run here",
+  "stores": "a clean worktree of the committed tree with data/cache, data/reference and data/knowledge cloned in at 0444 (scripts/link_stores_read_only.py)",
+  "alphagenome_requests": 0,
+  "model_requests": 0,
+  "money": "none: every byte read here is already on this machine",
+  "seconds": 58.8,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/direction_link.json, data/results/hct116_count.json, data/results/reptest_answerable.json, data/results/rescore_cost.json",
+        "version": "as committed 2026-10-02; opened read-only and not rewritten"
+      },
+      {
+        "accession": "ENCODE CRISPRi enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al.)",
+        "version": "the benchmark tables cached under data/knowledge, digested in inputs"
+      },
+      {
+        "accession": "the finished genome-wide AlphaGenome deletion sweep's per-element response cache, written with threshold=0.0",
+        "version": "all 24 per-chromosome archives on this machine, digested in the result"
+      },
+      {
+        "accession": "the project's own all-enhancer deletion sweep (enhancer_targets_all_<chrom>)",
+        "version": "as committed on this machine"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "the finished sweep's per-element response archives, every one of the 24",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/elements/chr1.json.gz",
+            "sha256": "75069c6c6dc0f107f17dd889973059927253f47d0c6500b0c25673b5a3c920e3",
+            "bytes": 77622737
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr10.json.gz",
+            "sha256": "ba19596a0a2521298f02c5c917b792f570f488a4736526f2dcbadf3f65e6e735",
+            "bytes": 30030494
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr11.json.gz",
+            "sha256": "3b5b50ba51087dd24b7cd5df147319abfd5e4ada45c3d8fe93da1d6accdbd3a3",
+            "bytes": 46496550
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr12.json.gz",
+            "sha256": "b80ed247f141b068db8d3bed45d947b217b9e746d0cd40b07baa812213f32bc5",
+            "bytes": 41655248
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr13.json.gz",
+            "sha256": "d25d22c3d823b98540791c3712ac6f477591c6746a9bfd2c23bb9fdaf1d81ee0",
+            "bytes": 14622897
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr14.json.gz",
+            "sha256": "07b1489f4de57e3c27c08a79926ee3bd9e7878f3334fb95d47c75475b86cb8c1",
+            "bytes": 31260018
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr15.json.gz",
+            "sha256": "a0bfe267c319c7b11da8741c8731eebc653851eaf93c37c1d31f9d282b97ca75",
+            "bytes": 27369934
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr16.json.gz",
+            "sha256": "2ab90dd9ede3ba57f2e70eecc758b42713db749836e25c10a5b4928f40d901e5",
+            "bytes": 38935424
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr17.json.gz",
+            "sha256": "5f59ff1463c509928ac356fb7910cf39981c58492fdb4c73e37e52792490e4b5",
+            "bytes": 55243170
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr18.json.gz",
+            "sha256": "5630b4d54ff4c7d44f3ac432600d51fd1109ac1ae5e0107e16212b6204b111fd",
+            "bytes": 13518960
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr19.json.gz",
+            "sha256": "8bafed7186b227240a1503ba235f8831d72cd106200810db9b0af579e16acedc",
+            "bytes": 50085176
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr2.json.gz",
+            "sha256": "d9bd69d4619bef36dba9d166344c8a9858914eec00377379347c04705fba9e28",
+            "bytes": 51646793
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr20.json.gz",
+            "sha256": "73d8a5629f2758a3cdff7e9e59d1f566779b27d1d10676382820d4cf9412123d",
+            "bytes": 22792705
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr21.json.gz",
+            "sha256": "be36ecec8444744f2ee2351d3586947bf6126172deb467ce9ad51f4f1d19e9b7",
+            "bytes": 9769482
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr22.json.gz",
+            "sha256": "a8c90415297690020ac496f44afe6e8de03290bb70461620e837def70b9e50ca",
+            "bytes": 24359126
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr3.json.gz",
+            "sha256": "13ddb2255b491a85f67cc81e363bb6306f59d7fec4e04e558d5bcb62c2fb09a3",
+            "bytes": 40830506
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr4.json.gz",
+            "sha256": "a170bf16e010ba0a43180673cdcbab74f1dc3f9d67f6dde148647f33367afa7c",
+            "bytes": 25247071
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr5.json.gz",
+            "sha256": "785e68f7192947283e69190899d8f58b45009d677abdc15d1fc94b1feff8c32e",
+            "bytes": 34546268
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr6.json.gz",
+            "sha256": "10ede7ae3e0f209ebc27ec74ce682b61a4aee27dd10a4b5f4d846f9fdf5bf231",
+            "bytes": 41715184
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr7.json.gz",
+            "sha256": "630c5f60b7f8b3d880cc50e8e6f27515b04c223f62ee20b713ca34fa0c2eaaca",
+            "bytes": 35337035
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr8.json.gz",
+            "sha256": "2af9b4658eeacd447f4e886e32c7a4627592c344de5af2bd11ad8fa187bf3cae",
+            "bytes": 30518026
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chr9.json.gz",
+            "sha256": "f4d70eb450f7686b17265f8f8986df580613da3cb33be20a657b988ffe2b16ac",
+            "bytes": 31161454
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrX.json.gz",
+            "sha256": "3d5776d736993663ac8898fa3415732627b4a7138d17b3ddcf688ea4df324349",
+            "bytes": 14376446
+          },
+          {
+            "path": "data/knowledge/alphagenome/elements/chrY.json.gz",
+            "sha256": "79019ba12154569ffdbbbd04895e7f87df56175d496601f188d87833a133012f",
+            "bytes": 470775
+          }
+        ],
+        "sha256": "dae60244f56738d071c120cf2a2b599d1f32ad322542e49039d5b0757a4d0781",
+        "bytes": 789611479,
+        "files": 24,
+        "partition": "not an evaluation partition: the recount's inputs"
+      },
+      {
+        "path": "the four committed results whose declarations are under examination",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/direction_link.json",
+            "sha256": "7322d6e3e3cc9adf281573e5f1f8ee54d347f64b76f3e3691c6c30901a0fd860",
+            "bytes": 62421
+          },
+          {
+            "path": "data/results/hct116_count.json",
+            "sha256": "3bb05feacb784cfdb0a0988245768203331fc7505ade2cbd1cea436833b221b3",
+            "bytes": 92138
+          },
+          {
+            "path": "data/results/reptest_answerable.json",
+            "sha256": "3266e27ed172239bd778427e67b0ac8430d435d08a882bdefcf59c9edfa32fa0",
+            "bytes": 150928
+          },
+          {
+            "path": "data/results/rescore_cost.json",
+            "sha256": "0685d4ee1bcffbfa4bab99b998ec8501bc0ac8d88a6bd8b1080c3079091d197e",
+            "bytes": 175971
+          }
+        ],
+        "sha256": "2387c2a515239258560bb17512e38a3a08f9f1ed50b22e7069e2701cca4a667a",
+        "bytes": 481458,
+        "files": 4,
+        "partition": "not an evaluation partition: the recount's inputs"
+      },
+      {
+        "path": "the cached ENCODE CRISPRi benchmark and the sweep's committed per-chromosome results",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+            "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+            "bytes": 373837
+          },
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+            "bytes": 996546
+          },
+          {
+            "path": "data/results/constrained_targets_chr1.json",
+            "sha256": "be68f325da42d1303772f6e0732aeff78b1d7c7918caeb0ab99894ecddf99343",
+            "bytes": 80409
+          },
+          {
+            "path": "data/results/constrained_targets_chr10.json",
+            "sha256": "081f93fa1e607c05bd31c2dc6d249cd6c9f5ac995c1dec73b5610758a88bdc30",
+            "bytes": 82872
+          },
+          {
+            "path": "data/results/constrained_targets_chr11.json",
+            "sha256": "f89cc056fe34317e5de9f74513d9cc4896816a41a992e832583f839194261e0f",
+            "bytes": 93050
+          },
+          {
+            "path": "data/results/constrained_targets_chr12.json",
+            "sha256": "1b8cbaafff4cff2d89f71c58ba88860f4c153829206f167e347fec282bc6d193",
+            "bytes": 93749
+          },
+          {
+            "path": "data/results/constrained_targets_chr13.json",
+            "sha256": "552f93557971cd0ffb41d8fec72953625a804cedd43aa06b584dd7de8dd69328",
+            "bytes": 93299
+          },
+          {
+            "path": "data/results/constrained_targets_chr14.json",
+            "sha256": "7c30d77375b05292eee45a2ec99337c778fd44290f4e468fec6b1ea841dcf3c5",
+            "bytes": 86812
+          },
+          {
+            "path": "data/results/constrained_targets_chr15.json",
+            "sha256": "f8a2924ea194000e293f9ff552505e10538f097d772ea0d697756ae8049b916b",
+            "bytes": 76206
+          },
+          {
+            "path": "data/results/constrained_targets_chr16.json",
+            "sha256": "1535e9d33968e356598c9285788dd7cac87994704760727218647959869958b0",
+            "bytes": 83816
+          },
+          {
+            "path": "data/results/constrained_targets_chr17.json",
+            "sha256": "d1706b5a70234fe6f7fe60e17ed2a3da212bacb99652513c5c20333071021bca",
+            "bytes": 88799
+          },
+          {
+            "path": "data/results/constrained_targets_chr18.json",
+            "sha256": "ecea41f8a13ca3fc48970b54eb7068c441c8ddc733f120e0f66ecd6dd3c346ea",
+            "bytes": 89764
+          },
+          {
+            "path": "data/results/constrained_targets_chr19.json",
+            "sha256": "0141dcfbe3f8f1c8b7b897ec2de41d1320323cced99018ed27102fdeecd3ca13",
+            "bytes": 101189
+          },
+          {
+            "path": "data/results/constrained_targets_chr2.json",
+            "sha256": "9fd0264dad93971378c8af2161490e58ae2033f5806524583a41c3747ae63726",
+            "bytes": 88553
+          },
+          {
+            "path": "data/results/constrained_targets_chr20.json",
+            "sha256": "46846ca37bc01f43f02ac43a866adaab6699c12471b554c047bb430896fd7785",
+            "bytes": 93809
+          },
+          {
+            "path": "data/results/constrained_targets_chr21.json",
+            "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+            "bytes": 111930
+          },
+          {
+            "path": "data/results/constrained_targets_chr22.json",
+            "sha256": "1bcef6de63fdc279e975f94c6f95cf6d8609d08487049a5c435f5b240545f6ab",
+            "bytes": 96441
+          },
+          {
+            "path": "data/results/constrained_targets_chr3.json",
+            "sha256": "5a48317b44bcdc996586ebc8db3d2c920009cf3686ea855f5db2a3c5a7b9cc70",
+            "bytes": 87015
+          },
+          {
+            "path": "data/results/constrained_targets_chr4.json",
+            "sha256": "263177977de37de70c25859b987584a87320ee6477f924d24fce1a423ee7cee4",
+            "bytes": 92315
+          },
+          {
+            "path": "data/results/constrained_targets_chr5.json",
+            "sha256": "ca6dca660d627de7704729307a31096247a1cb11c20c3e998f612616669f1ede",
+            "bytes": 80937
+          },
+          {
+            "path": "data/results/constrained_targets_chr6.json",
+            "sha256": "368d3a527828c19420736cfae20101f0697d5f60c40e4d5da98b66787035b27e",
+            "bytes": 91754
+          },
+          {
+            "path": "data/results/constrained_targets_chr7.json",
+            "sha256": "31d2ff6ad501ea49642031f8fda179b0c08a087d9275779d368acc8a066836c7",
+            "bytes": 91280
+          },
+          {
+            "path": "data/results/constrained_targets_chr8.json",
+            "sha256": "72933ff5c8d0520e7e6a68a71997332e150e20676441b33fdc79505f0beae2b2",
+            "bytes": 88507
+          },
+          {
+            "path": "data/results/constrained_targets_chr9.json",
+            "sha256": "c944c8e02b8d6a00c8d5a19c40aec83c8b141a5d2d4f040b2b5fd25b2fc329e1",
+            "bytes": 81094
+          },
+          {
+            "path": "data/results/constrained_targets_chrX.json",
+            "sha256": "c2a9fcb1ff78b6dd0f314075bef03a47cd1df01f6228cbec14bde683ef5a2978",
+            "bytes": 90048
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr1.json",
+            "sha256": "25524251649848bad83a8ab5f1733d625e8b387d11fa3956f25152b9a13197c3",
+            "bytes": 1680
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr10.json",
+            "sha256": "8e5dbc1532eab8202997ba5ca0d93d6bf9c3ecd84aa87645db5908d152c0aa61",
+            "bytes": 1719
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr11.json",
+            "sha256": "43401fcd2efc10b266131fd9ee6d4f1fc4411c2b73b8b5a7a49b75d7b389370b",
+            "bytes": 1651
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr12.json",
+            "sha256": "a0fccced75ce838c297750e6b1fb174d503445ff8c314e0ab980bc02dae5c105",
+            "bytes": 1645
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr13.json",
+            "sha256": "b7fccff0a809bc82019bc3128b7ed1e602d14b198fd5411d5796d92ab5a0501a",
+            "bytes": 1654
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr14.json",
+            "sha256": "f2cef91ce91a7781371a06ce57005bd90e91f03766df9e877bd7d4aff3a4c5d6",
+            "bytes": 1657
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr15.json",
+            "sha256": "6f96c0d729674eb2b7f966b8f9f31426ff9773a680042a3acde6465dbcee43ad",
+            "bytes": 1660
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr16.json",
+            "sha256": "2eb746085762487e522417d5ce9ce89cfa4d648b7db074cf5585402cf3879032",
+            "bytes": 1627
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr17.json",
+            "sha256": "f1b1a60799d54c626547afa10c847cbd77bf5e3f82ce982739b2c66f03834c3a",
+            "bytes": 1649
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr18.json",
+            "sha256": "6feba29b3eed21cc7d4ab066fc425ba7df06a0136072ee8948c6a85bb654202f",
+            "bytes": 1703
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr19.json",
+            "sha256": "96558fdabf8d808452c43ea7624c90cd64df5e8219a6f1124d89e4bf42c9e063",
+            "bytes": 1643
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr2.json",
+            "sha256": "073513f2f9ae16fcdf58b8ada2a5a5bdafae1db3addb1232607b76f162760226",
+            "bytes": 1677
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr20.json",
+            "sha256": "4b038ed6a5aa98e9cabbc3a0a90c86c5a61cb0c24d4f0126830b9b8b9818e384",
+            "bytes": 1640
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr21.json",
+            "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+            "bytes": 1619
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr22.json",
+            "sha256": "c15489d869fb56d75d269736aae2d23a620d3a1d8b3e66c8e39e00d185c3248e",
+            "bytes": 1608
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr3.json",
+            "sha256": "7494a7abe8d8ab8893791981481b016364f85bc07eae58fbf571e05e39895b99",
+            "bytes": 1655
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr4.json",
+            "sha256": "facd1c87779756767f45c4e89e17da0b86d6143072b15f9f05c482d180b0d2f7",
+            "bytes": 1663
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr5.json",
+            "sha256": "5b374087f3397041937d25f4e6297134a79c40dfeff12088c00b80ccaedf5cfa",
+            "bytes": 1643
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr6.json",
+            "sha256": "1bbfd7f1de8d8e45b1045fa435124ed96591c6a08f5fbb6a78b0a9a9b8a21aba",
+            "bytes": 1708
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr7.json",
+            "sha256": "b60a18366708a031be18d0714e68c4e7223023025d3c718ebea8198955d63aa3",
+            "bytes": 1668
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr8.json",
+            "sha256": "7e32c1905a2c4e76c87723c15219f6aa5383120c76cabc1eb974f0a95fbc4cd0",
+            "bytes": 1663
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr9.json",
+            "sha256": "31a548305d13c2683374626a2284f7136cbd19e52d571e88e5bd62efa6fa5181",
+            "bytes": 1661
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chrX.json",
+            "sha256": "f29a69dbcd1e8850d85dc56f378f1c1d028e8f4aaf92da346086815955e6baa6",
+            "bytes": 1673
+          },
+          {
+            "path": "data/results/enhancer_targets_chr1.json",
+            "sha256": "2b50fdb9c94ab803f0c8d075a3f71f001b94776783e81e658ff399f040a00d1c",
+            "bytes": 231503
+          },
+          {
+            "path": "data/results/enhancer_targets_chr10.json",
+            "sha256": "b0476fdd70d674184291e44a4df63f1f28edd3e518967aba8773bf765b44467a",
+            "bytes": 226154
+          },
+          {
+            "path": "data/results/enhancer_targets_chr11.json",
+            "sha256": "83351f16969435d5f2b2622cf1ed26334ce4a67dd869fd6ba2dceae0424a4ee2",
+            "bytes": 235882
+          },
+          {
+            "path": "data/results/enhancer_targets_chr12.json",
+            "sha256": "98a30b73f4d04f8d32ccc5510078176602d3debf12938f83105a5f83258a5764",
+            "bytes": 236541
+          },
+          {
+            "path": "data/results/enhancer_targets_chr13.json",
+            "sha256": "6d444c5742be28014140636b3b3ce6b508d5d25f42870a452251bd4d53dca70e",
+            "bytes": 232682
+          },
+          {
+            "path": "data/results/enhancer_targets_chr14.json",
+            "sha256": "4686401d05373f9919c8f453a2bff1934b4d53b41c924bace6f264340474d820",
+            "bytes": 226799
+          },
+          {
+            "path": "data/results/enhancer_targets_chr15.json",
+            "sha256": "93f9095060709f853ad3a7ebe1bab9942f124ac0f5d2c16cd7ccf5b5f7b960b0",
+            "bytes": 235302
+          },
+          {
+            "path": "data/results/enhancer_targets_chr16.json",
+            "sha256": "86146398e3017a46f94db7c420a05df40b10104d47774d1ba39beb8b7a3d71f7",
+            "bytes": 226186
+          },
+          {
+            "path": "data/results/enhancer_targets_chr17.json",
+            "sha256": "c7d919485f4eceb50f45f9afd77131c32ad079260e1a3c84203383bdda758252",
+            "bytes": 233113
+          },
+          {
+            "path": "data/results/enhancer_targets_chr18.json",
+            "sha256": "541887f70cf7cec47a067142bdc61d49ab854f0a546e113694a087649608a0ff",
+            "bytes": 231108
+          },
+          {
+            "path": "data/results/enhancer_targets_chr19.json",
+            "sha256": "febf74649289cc8464b42b33fab1c886fd32a62a8270e6984b510a0b6189b8dc",
+            "bytes": 233210
+          },
+          {
+            "path": "data/results/enhancer_targets_chr2.json",
+            "sha256": "5e399e38ac39ed0488d7738fe769e9494ac8542d002b4ead2ad545a9a0674588",
+            "bytes": 228771
+          },
+          {
+            "path": "data/results/enhancer_targets_chr20.json",
+            "sha256": "9da056e425ff57b7c4d22e3aee832b2a280862ca865e3ea955e08723c4216fba",
+            "bytes": 227506
+          },
+          {
+            "path": "data/results/enhancer_targets_chr21.json",
+            "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+            "bytes": 266488
+          },
+          {
+            "path": "data/results/enhancer_targets_chr22.json",
+            "sha256": "43c52508b53990f9283410673b12d6d98aa2b80cb3bd0f4de5698f431b861870",
+            "bytes": 230906
+          },
+          {
+            "path": "data/results/enhancer_targets_chr3.json",
+            "sha256": "eb9716dd54eb750b5fbf6cf711bbeca98b0b9751b899a7765dc053abfb23f155",
+            "bytes": 231751
+          },
+          {
+            "path": "data/results/enhancer_targets_chr4.json",
+            "sha256": "4d088374ac976a01cad0eb7958840d1c9007f72167ca29b2659018198e257a5c",
+            "bytes": 232560
+          },
+          {
+            "path": "data/results/enhancer_targets_chr5.json",
+            "sha256": "990a59e28c8ba28488b003c9dc90ac35d398dbc5e1669b73bfd7b2b88174ff5f",
+            "bytes": 225597
+          },
+          {
+            "path": "data/results/enhancer_targets_chr6.json",
+            "sha256": "f37b4efdd50d9288733b411feebf16ffd52f2102fb58f7344be0bccda465fac8",
+            "bytes": 227287
+          },
+          {
+            "path": "data/results/enhancer_targets_chr7.json",
+            "sha256": "7d258715f72f7272fd23f2eb090143249c0921609b760f4a8aba9735bb8dfb6d",
+            "bytes": 223619
+          },
+          {
+            "path": "data/results/enhancer_targets_chr8.json",
+            "sha256": "9a802421555d4cc6e22ba46bcd08ef3ce303dfab3b0ea33da0517cc510974090",
+            "bytes": 225706
+          },
+          {
+            "path": "data/results/enhancer_targets_chr9.json",
+            "sha256": "a212f058967e2ddfa8d6d195c4fe1cbddd62feb4044481f30c691cf61b1f9d7c",
+            "bytes": 235646
+          },
+          {
+            "path": "data/results/enhancer_targets_chrX.json",
+            "sha256": "09483c1d5d851e7cc37eefde078ad34ec932f365184fc43b26c8a438fa254928",
+            "bytes": 226730
+          }
+        ],
+        "sha256": "e4d013df7e9066bd3ad7376c6bcdb4983a052904d5d1d14257cb9adc7add5334",
+        "bytes": 8803244,
+        "files": 71,
+        "partition": "not an evaluation partition: the recount's inputs"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr1.json",
+        "sha256": "0f564380aaf9b2cd87089945ca98958fd8e38b2502c7b20d7fd7ecb53eb7f45c",
+        "bytes": 59143558,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr10.json",
+        "sha256": "87c9ece0f287a7fdd1c7f90233bd81290d207436b3626c5e91c499b5125cde82",
+        "bytes": 30053316,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr11.json",
+        "sha256": "736e7d7ae8151ddd0adda14f835466477797d866b727dd36f5181a6a82afe117",
+        "bytes": 33499966,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr12.json",
+        "sha256": "d5d5d1adf95fd179b80dc1efc48492b8eddac1ed4e03d6c47aa3e3b1dc5fd28e",
+        "bytes": 31351611,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr13.json",
+        "sha256": "039ed8136270bcb449ff63920440609c46b757100a1f3f4189a6d1eba18f82b0",
+        "bytes": 15228015,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr14.json",
+        "sha256": "3af9a1a521252c2c896810f1585e176cebc9c9972d2288aac179843e73e3c44d",
+        "bytes": 20072956,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr15.json",
+        "sha256": "a1803a52f64d722f5cf3932c349bd329229e50cf26f05414a312d03477d3dbfc",
+        "bytes": 20640048,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr16.json",
+        "sha256": "6593d60cce446b1a7260ebe1a869854593c35c256f9c83be77c136b9054dc3a3",
+        "bytes": 21208708,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr17.json",
+        "sha256": "2c21714fd7cf21e6bf280df027b76ced64b17c60737fccb6f767b4861369fe57",
+        "bytes": 28806649,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr18.json",
+        "sha256": "c7f1c46d31e3e567ffd6cbb5677dabcab145012529f86f5a4921ce9a17d2a379",
+        "bytes": 13758030,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr19.json",
+        "sha256": "5be247c8a346c110371cdc44cc6a3f9440af43f502ff2d27f29f246ae9b35761",
+        "bytes": 21448470,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr2.json",
+        "sha256": "e53a353b2f62ade7f3a1524d92041eee5cdc4218617f25fbae58eb523e90eb1f",
+        "bytes": 49594427,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr20.json",
+        "sha256": "c2eb26b516573a2fd8386ec53a5c3ea441a086a7d50570bccf99c544dc3c1285",
+        "bytes": 17561812,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+        "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+        "bytes": 7768557,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr22.json",
+        "sha256": "f150fd008b2af6f4974399a4814eb0b87d8c4912052d417ff7b71c228f485b89",
+        "bytes": 13336425,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr3.json",
+        "sha256": "0fa1c46c7e2bfe236725e73ad2b42b9c50af63b9b243b8b609c16a24a4be9d5f",
+        "bytes": 39520954,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr4.json",
+        "sha256": "ce183e86ba90063a2ede1729e90aa8772520ac5dd1bc339339c1e7ffec769e06",
+        "bytes": 29236717,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr5.json",
+        "sha256": "d7023bcc0c55d37c475d7d37340993657d497890d350a863f380567fdaa61d3a",
+        "bytes": 33400922,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr6.json",
+        "sha256": "ee1b934c7ad0c757433019669c13d8213b9a4a37e5fc9fef45b2eb3ff1350d2c",
+        "bytes": 35593651,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr7.json",
+        "sha256": "01024bd8148440c4bfcecebe78e53f46ecea03d512857b3b8ec38037c5a9d0b3",
+        "bytes": 31588372,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr8.json",
+        "sha256": "7c1877d86674112c1571452bfcb738669d214b39bb214809c1ba832c564b2855",
+        "bytes": 27866660,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chr9.json",
+        "sha256": "d97a9b7e44b62611e433b8b8c0de16d09d7a4234d9244b37321db189162b3177",
+        "bytes": 26873186,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/alphagenome/all_elements/chrX.json",
+        "sha256": "c53d67430ce9a24482d9e8649c5f9e125c30e7eccc33f9ffa1607f3a2296bc80",
+        "bytes": 14767878,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+        "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+        "bytes": 1085644,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+        "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+        "bytes": 1088965,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+        "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+        "bytes": 1085246,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/satmut/elements.tsv.gz",
+        "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+        "bytes": 2677485,
+        "partition": "read by the recount"
+      },
+      {
+        "path": "data/knowledge/vista/locus.tsv.gz",
+        "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+        "bytes": 121847,
+        "partition": "read by the recount"
+      }
+    ],
+    "input_count": 31,
+    "assembly": "GRCh38: the sweep's elements and the benchmark's tested intervals are on one build, and no coordinate is lifted here",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the committed join's own convention, unchanged: reciprocal overlap at 0.5 over the candidates within 200000 bp"
+    },
+    "parameters": {
+      "chromosomes": [
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "reciprocal_overlap": 0.5,
+      "reach": 200000,
+      "results_examined": [
+        "direction_link",
+        "hct116_count",
+        "reptest_answerable",
+        "rescore_cost"
+      ],
+      "group_label": "per_element_response_cache"
+    },
+    "exclusions": [
+      "the own counts of hct116_count, reptest_answerable and rescore_cost: three different downstream pipelines, not recomputed here, and said so in `limit_named`",
+      "hct116_count's separate `elements_hct116_per_element_opens` group: a partial cache of a different shape over five chromosomes, not the 24-chromosome archive set",
+      "every registered test: re-running one on a changed population needs a new registration and is not this recount's to do"
+    ],
+    "partitions": "n/a: a check of four declarations against the store behind them",
+    "code_cleanliness": {
+      "git_sha": "17ba875b6d597cc4a392a47bbb1a7bd42a9e7e57",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/shrinkimpact_cachegroup.py",
+        "form": "committed_repository_file",
+        "path": "scripts/shrinkimpact_cachegroup.py",
+        "is_committed": true,
+        "declared_entry": "scripts/shrinkimpact_cachegroup.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/shrinkimpact.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/shrinkimpact_cachegroup.py"
+      ],
+      "counting_path_count": 151,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "17ba875b6d597cc4a392a47bbb1a7bd42a9e7e57",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/shrinkimpact_cachegroup.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "17ba875b6d597cc4a392a47bbb1a7bd42a9e7e57",
+      "code_cleanliness_git_sha": "17ba875b6d597cc4a392a47bbb1a7bd42a9e7e57",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 17ba875"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 848,
+      "opens_under_data": 560,
+      "files_read": 127,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
