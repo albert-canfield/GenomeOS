@@ -167,19 +167,13 @@ def plan() -> dict:
         total = sum(by_id[k]["inflow"] for k in kids) or 1.0
         for k in kids:
             by_id[k]["share"] = by_id[k]["inflow"] / total
-    # A parent's outflows to its children are written as `share:` (BIOLANG-v0.3), so the flows due at one
-    # step all draw on the same starting count and the parent keeps 1 - sum(f_i), whatever the order of
-    # the lines; growth is applied as its own step, so the two multiply. The growth step is therefore
-    # solved for the discrete balance (1 + g) * (1 - sum(f_i)) = 1 - o / A, where the f_i are the step's
-    # outflow fractions and o / A the share the inflow must supply. Until 2026-10-10 the outflows were
-    # `fraction:`, each drawing on what the one before it left, and the balance was solved for
-    # prod(1 - f_i); the second sibling of a split then ran short (Monoblast and Monocyte at 0.91 of
-    # their solved pools at 3 yr).
-    # Registered and judged by scripts/tobio_share_compare.py (data/results/tobio_share_registration.json).
+    # The runtime applies each day's growth and outflows one after another, so they multiply. The
+    # growth step is therefore solved for the discrete balance: (1 + g) * prod(1 - f_i) = 1 - o / A,
+    # where the f_i are the day's outflow fractions and o / A the share the inflow must supply.
     for cid, c in by_id.items():
         c["step_out"] = c["out_fraction"] * STEP_DAYS  # outflow fraction per step
         outs = [c["step_out"] * by_id[k]["share"] for k in children[cid]] or [c["step_out"]]
-        c["retained"] = 1.0 - sum(outs)
+        c["retained"] = math.prod(1.0 - f for f in outs)
         if cid == "HSC":
             c["growth_fraction"] = 1.0 / c["retained"] - 1.0  # self-renewal exactly balances the outflow
         else:
@@ -277,11 +271,9 @@ def to_bio(module_name: str = "organism.human.haematopoiesis") -> str:
             sorted(set(parent_requires) | set(c["requires"]))
         )  # the source must exist, the target be allowed
         out_frac = p[c["parent"]]["step_out"] * pc["share"]
-        siblings = sum(1 for x in COMPARTMENTS if x["parent"] == c["parent"])
-        amount = "share" if siblings > 1 else "fraction"  # a partition draws on one base; see plan()
         lines.append(
             f"decision {c['parent']}_to_{c['id']} {{ action: differentiate; "
-            + f"when: cell_type = {c['parent']}{req}; to: {c['id']}; {amount}: {out_frac:.6g}; "
+            + f"when: cell_type = {c['parent']}{req}; to: {c['id']}; fraction: {out_frac:.6g}; "
             + f"after: {STEP_DAYS:g} d; "
             + f'evidence: experimental "{c["evidence"]}"; confidence: 0.7 }}'
         )
