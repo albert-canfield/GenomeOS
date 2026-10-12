@@ -52,3 +52,41 @@ def test_the_limits_are_fixed_before_the_count() -> None:
         "a plant can be",
     ):
         assert phrase in gcn.DOES_NOT_CLAIM, phrase
+
+
+# ------------------------------------------------------------------------ cases added after the rule
+
+
+def test_the_ordering_mechanism_is_named_with_its_measured_instance() -> None:
+    for phrase in ("036eec6", "40b0a8d", "3 failed", "7,258 passed", "passes 57 at HEAD"):
+        assert phrase in gcn.ORDERING_MECHANISM, phrase
+    assert "IN THE SAME COMMIT as that record, or after it, never before" in gcn.ORDERING_MECHANISM
+
+
+def test_the_ordering_case_explains_why_it_is_in_a_cannot_fire_census() -> None:
+    """It is the one case where nothing is broken, so its membership needs a reason."""
+    assert "nothing in it is broken" in gcn.WHY_ORDERING_IS_THIS_FAMILY
+    assert "two instruments that are each right and jointly wrong" in gcn.WHY_ORDERING_IS_THIS_FAMILY
+
+
+def test_the_extras_lock_blindness_is_quoted_from_the_source() -> None:
+    """The claim rests on one line, so the line is checked against the file."""
+    from pathlib import Path
+
+    src = (Path(__file__).resolve().parent / "extras_lock.py").read_text()
+    assert "names = [node.module] if node.level == 0 and node.module else []" in src
+    case = [c for c in gcn.CASES_ADDED if "extras_lock" in c["case"]][0]
+    assert "names = [node.module] if" in case["what"]
+    assert "INVISIBLE" in case["what"]
+
+
+def test_the_requires_extra_cost_is_counted_as_a_cost_not_a_fault() -> None:
+    case = [c for c in gcn.CASES_ADDED if "requires_extra" in c["case"]][0]
+    assert "36 real tests" in case["what"]
+    assert "DELIBERATE and its reason is good" in case["note"]
+    assert "not a defect in it" in case["note"]
+
+
+def test_the_inherited_fourth_condition_is_recorded_before_counting() -> None:
+    assert "CARRY DATA the result's own scope would have used" in gcn.FOURTH_CONDITION_INHERITED
+    assert "globcensus stage 2 was refuted" in gcn.FOURTH_CONDITION_INHERITED

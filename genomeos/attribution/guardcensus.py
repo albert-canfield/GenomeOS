@@ -122,3 +122,62 @@ DOES_NOT_CLAIM = (
     " satisfied by the wrong cause, which is the lesson of test_PLANTED_an_EFFECTIVE_line of"
     " 2026-10-03; and nothing about guards outside SCOPE"
 )
+
+
+# ------------------------------------------------------------- added 2026-10-12, after the rule landed
+# Three further cases, appended rather than folded into CASES so the order they arrived in is visible.
+# The first is the most interesting thing in this census, because nothing is broken in it.
+
+#: The ordering case. Named as a mechanism, as the coordinator asked, because the instance is incidental.
+ORDERING_MECHANISM = (
+    "A PREVENTION RULE THAT MAKES A TEST RAISE EARLIER CAN MOVE THE DEFECT FROM 'SILENTLY INERT' TO"
+    " 'RED FOR TWO MINUTES OF HISTORY', AND A PUSH THAT LANDS IN THOSE TWO MINUTES PAYS FOR IT."
+    " GENERATING_MECHANISM's cure is tracked_paths.must_be_present from the first version. That is"
+    " right. But must_be_present correctly RAISES NotTrackedError while the path is untracked, so a"
+    " test committed BEFORE its record turns every sha in between red. lane-scalehet:"
+    " tests/test_scalehet.py:570/581/589 read data/results/scalehet_result.json at 036eec6; the record"
+    " landed at 40b0a8d two minutes later; a push captured a sha inside the gap and got 3 failed,"
+    " 7,258 passed, while the same file passes 57 at HEAD. THE RULE: a test that reads a result record"
+    " is committed IN THE SAME COMMIT as that record, or after it, never before"
+)
+
+#: Why it belongs in a census of guards that cannot fire, which is not obvious.
+WHY_ORDERING_IS_THIS_FAMILY = (
+    "because nothing in it is broken. The guard is correct, the prevention rule is correct, and the"
+    " failure is in the ORDERING BETWEEN THEM: obeying either one alone produces a red that neither"
+    " mentions. The other cases here are instruments that cannot detect; this one is two instruments"
+    " that are each right and jointly wrong, which is a defect no single-guard audit can see and the"
+    " reason this census counts mechanisms and not only sites"
+)
+
+#: Two further cases from lane-cired2, verified here at the source rather than carried.
+CASES_ADDED = (
+    {
+        "case": "tests/extras_lock.py:401, read_module",
+        "kind": "guard blind to its own subject",
+        "what": "an ImportFrom is recorded by its MODULE only -- `names = [node.module] if"
+        " node.level == 0 and node.module else []` -- so every `from package import submodule` edge is"
+        " INVISIBLE to test_extra_only_imports.py, the guard written for exactly that defect",
+        "surfaced_by": "lane-cired2; verified here by reading extras_lock.py:401 directly",
+        "note": "the sharpest kind in this census: not a guard that cannot fire, but one that cannot"
+        " SEE the class of thing it exists to catch, so its green is silence rather than evidence",
+    },
+    {
+        "case": "requires_extra's AND semantics",
+        "kind": "correct rule, inexpressible case",
+        "what": "each named extra must be installed, so 'scipy by whichever extra supplies it' cannot"
+        " be written. Costing 36 real tests on this machine, where scipy is installed and"
+        " process_bigraph is not",
+        "surfaced_by": "lane-cired2",
+        "note": "the AND is DELIBERATE and its reason is good -- conftest.py records that seven tests"
+        " passed on pandas because some other extra dragged it in. So this is a cost of a correct"
+        " rule, not a defect in it, and it is counted as such rather than as a fault",
+    },
+)
+
+#: The inherited condition, carried here verbatim because the supervisor ruled it belongs in this lane.
+FOURTH_CONDITION_INHERITED = (
+    "a missing member must CARRY DATA the result's own scope would have used (supervisor, 2026-10-12,"
+    " after globcensus stage 2 was refuted). Registered here before counting, and generalised into"
+    " CANNOT_FIRE_TEST's condition (4): description cannot settle what only opening the thing can"
+)
