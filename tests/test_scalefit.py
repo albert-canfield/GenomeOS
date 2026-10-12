@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import combine2
 from genomeos.attribution import scalefit as sf
@@ -160,3 +161,15 @@ def test_the_census_result_reports_the_population_the_rule_declared() -> None:
     assert 0 <= mean["recovered"] <= mean["excluded_basal_not_positive"]
     assert mean["runnable_after"] <= mean["recovered"]
     assert d["verdict"] == sf.verdict(mean["recovered"], mean["excluded_basal_not_positive"])
+
+
+def test_the_committed_records_are_present_and_their_absence_is_never_a_skip() -> None:
+    """The ARMED guard for this lane's committed records (the brief's rule (c), d427f7d).
+
+    It is added here rather than by editing the `exists()` skips above because committing a result is
+    what disarms such a skip, and a lane does not --force past its own earlier commit in this checkout
+    (scripts/check_staged.py's own note: "The lanes never force in this project -- the coordinator
+    does"). So the skips above are now redundant rather than load-bearing: this test raises on a broken
+    checkout whatever they do, and deleting them is a two-line coordinator commit.
+    """
+    tp.must_be_present(RULE_FILE, was="the registration has not been written yet")
