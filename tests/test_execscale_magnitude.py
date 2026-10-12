@@ -280,6 +280,27 @@ def _demo() -> dict:
     return json.loads((ROOT / DEMO).read_text())
 
 
+@pytest.mark.xfail(
+    strict=False,
+    reason=(
+        "ITS LAST ASSERTION IS ABOUT THE WRONG OBJECT, and the record it reads is right."
+        ' `" ".join(d["difference"])` joins a DICT, which in Python iterates its KEYS, so the'
+        " string searched for 'not a finding' is the key name"
+        " 'the_direction_is_a_property_of_the_form_and_not_a_finding' -- underscores, never spaces --"
+        " and the assertion cannot pass whatever the record says. The caveat it meant to read is that"
+        " key's VALUE, and the record carries it in full. So this is a reader's error about where the"
+        " text lives, not a missing caveat. THE CORRECTLY SCOPED VERSION IS BESIDE IT:"
+        " test_the_demo_record_CAVEAT_IS_READ_FROM_THE_VALUE_AND_NOT_FROM_THE_KEYS repeats every other"
+        " assertion of this test and reads the caveat out of the value, so nothing this test holds is"
+        " lost by the mark. strict=False for the same reason the other mark in this lane is not"
+        " strict: a `difference` block that ever grew a KEY containing the words 'not a finding' with"
+        " spaces would make this assertion pass by accident, and an xpass must not then be a failure."
+        " NOTHING IS REMOVED: the one-line fix exists (2 added, 1 removed) and was NOT committed,"
+        " because removing a line of `44d68b2` inside its check_staged window needs a --force this"
+        " checkout does not grant. Its deletion is boarded for 2026-10-14 20:03, when that window"
+        " lapses; the fix then replaces the line and this mark and the twin test both go."
+    ),
+)
 def test_the_demo_record_says_it_claims_NOTHING_ABOUT_RNA_and_names_the_average():
     d = _demo()
     assert d["result_manifest"]["complete"] is True
@@ -292,6 +313,29 @@ def test_the_demo_record_says_it_claims_NOTHING_ABOUT_RNA_and_names_the_average(
     assert d["magnitude"]["default_in_the_runtime"] == 1.0
     # the direction of every change is arithmetic under this rule, and the record says so itself
     assert "not a finding" in " ".join(d["difference"])
+
+
+def test_the_demo_record_CAVEAT_IS_READ_FROM_THE_VALUE_AND_NOT_FROM_THE_KEYS():
+    """The test above, correctly scoped: the caveat read out of the value that holds it.
+
+    Every other assertion of the xfailed test is repeated here on purpose, so the mark on it costs
+    this file nothing. The one difference is the last pair: the direction caveat is read from
+    `difference[<the key>]`, which is where the demo writer puts it, instead of from the joined KEYS
+    of that dict. Both halves of the caveat are pinned -- that the direction is arithmetic under this
+    rule (`A >= 1`) and that it is therefore NOT EVIDENCE -- so this cannot be satisfied by a key
+    name or by a caveat that states only half of itself.
+    """
+    d = _demo()
+    assert d["result_manifest"]["complete"] is True
+    assert "NOTHING ABOUT RNA" in d["claim"] or "NOTHING about RNA" in d["does_not_claim"]
+    assert "nothing is fitted" in d["does_not_claim"]
+    assert d["magnitude"]["value"] == grn.MEASURED_MAGNITUDE_CORRECTION
+    assert d["magnitude"]["source_commit"] == "ac5580b"
+    assert "global AVERAGE" in d["magnitude"]["it_is_a_global_average"]
+    assert "d9e3ddd" in d["magnitude"]["it_is_a_global_average"]
+    assert d["magnitude"]["default_in_the_runtime"] == 1.0
+    caveat = d["difference"]["the_direction_is_a_property_of_the_form_and_not_a_finding"]
+    assert "A >= 1" in caveat and "not evidence" in caveat
 
 
 def test_the_demo_programme_differs_from_the_compiled_one_by_the_BLOCK_AND_NOTHING_ELSE():
