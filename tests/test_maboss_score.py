@@ -8,7 +8,12 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
+
 from genomeos.molecules import maboss_reference as ref
+from genomeos.runtime import maboss
+
+needs_maboss = pytest.mark.requires_extra("maboss")
 
 FROZEN_TOLERANCE = {"printed_phenotype_abs": 0.02, "unprinted_total_max": 0.02}
 FROZEN_AGREEMENT = 0.02
@@ -79,3 +84,37 @@ def test_each_check_applies_the_bound_both_ways():
         "CCA": 0.5,
     }
     assert abs(ref.total_variation({("A",): 0.5, (): 0.5}, {("A",): 0.4, (): 0.6}) - 0.1) < 1e-12
+
+
+# --------------------------------------------------------------------------------------------------
+# with the adapter
+
+
+@needs_maboss
+def test_the_maboss_adapter_reports_itself_available_when_the_extra_is_installed():
+    """tests/test_maboss.py skips its MaBoSS checks on `maboss.available()`, as the compose tests do, so
+    that they can travel with the engine package; this is what stops that flag from skipping them
+    quietly wherever the extra IS installed."""
+    assert maboss.available() is True and maboss.version().startswith("1.0.0")
+
+
+def test_the_published_model_translates_for_the_stand_in_in_every_panel():
+    base = maboss.MaBoSSModel.from_files(ref.ROOT_FILES["bnd"], ref.ROOT_FILES["cfg"])
+    assert len(base.nodes) == 32 and set(ref.OUTPUTS) <= set(base.nodes)
+    for panel, held in ref.CONDITIONS.items():
+        model = base.held(held) if held else base
+        net, initial, random_nodes, rate = maboss.to_network(model)
+        assert rate == 1.0 and sorted(random_nodes) == ["DNAdamage", "ECMicroenv", "GF", "TGFbeta"], panel
+        assert all(net.rules[n] == str(int(v)) and initial[n] is v for n, v in held.items()), panel
+
+
+@needs_maboss
+def test_cohen2015_reproduces_on_maboss_in_all_four_panels():
+    """The registered expectation for MaBoSS (ref.EXPECTED["maboss"]): every check of Fig 3 passes from
+    the published files, run as published."""
+    base = maboss.MaBoSSModel.from_files(ref.ROOT_FILES["bnd"], ref.ROOT_FILES["cfg"])
+    failed = {}
+    for panel, held in ref.CONDITIONS.items():
+        res = maboss.MaBoSSRuntime(base.held(held) if held else base).run()
+        failed[panel] = [c for c in ref.score(panel, ref.phenotypes(res.states)) if not c["pass"]]
+    assert failed == {p: [] for p in ref.CONDITIONS}, failed

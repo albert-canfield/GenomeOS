@@ -78,6 +78,7 @@ def test_the_package_declares_apache_and_no_dependencies(built):
 #: Every third-party module an engine file imports, with the extra that installs it. The engine core
 #: takes nothing, so each is imported inside the function that needs it.
 ENGINE_EXTRAS = {"process_bigraph": "compose", "roadrunner": "roadrunner"}
+ENGINE_EXTRAS["cmaboss"] = "maboss"  # runtime/maboss.py, since 2026-10-10
 
 
 def test_every_extra_the_engine_imports_is_declared_as_the_application_declares_it(built):

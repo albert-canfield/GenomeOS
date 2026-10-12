@@ -66,6 +66,16 @@ roadrunner = [
     # SUNDIALS (BSD), LLVM (NCSA) and Poco (Boost). Its one dependency, numpy 2, is already locked.
     "libroadrunner>=2.10",
 ]
+maboss = [
+    # MaBoSS's Python engine, behind genomeos/runtime/maboss.py: Boolean networks as continuous-time
+    # Markov processes. Chosen explicitly (engine="maboss"); runtime/boolean.py stays the default and
+    # nothing falls back silently. cmaboss is published only as pre-releases (1.0.0b32, wheels for
+    # cp38-cp314 on macOS arm64/x86_64, manylinux and Windows); the wheel carries no licence file, its
+    # source (github.com/sysbio-curie/MaBoSS, engine/python) is BSD-3-Clause, and the wheel links
+    # libSBML (LGPL-2.1) statically. It imports numpy without declaring it, so numpy is named here.
+    "cmaboss>=1.0.0b32",
+    "numpy>=2",
+]
 
 [dependency-groups]
 dev = [

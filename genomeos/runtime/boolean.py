@@ -5,8 +5,10 @@
 Reads BoolNet-style `.bnet` rules ("target, factors") and simulates
 synchronous or asynchronous updates, finds attractors, and exports the
 network as BioIR rules so logical models sit in the same representation as
-everything else. This is the in-house stand-in for MaBoSS; a MaBoSS adapter
-can replace the simulator without changing the file format or the IR.
+everything else. This is the in-house stand-in, and it stays the default:
+`runtime(net, engine="maboss")` runs the same network on MaBoSS (runtime/maboss.py,
+the `maboss` extra), which answers a different question -- state probabilities
+over continuous time -- and is never substituted silently.
 """
 
 from __future__ import annotations
@@ -164,3 +166,23 @@ class BooleanNetwork:
                     )
                 )
         return m
+
+
+#: the engines `runtime` can build; the first is the default
+ENGINES = ("standin", "maboss")
+
+
+def runtime(net: BooleanNetwork, engine: str = "standin", **settings: object):
+    """The simulator for `net` on the named engine. The stand-in is the network itself (discrete
+    synchronous or asynchronous steps, attractors) and is the default; MaBoSS runs only when named,
+    with `settings` passed to `MaBoSSModel.from_network`, and a missing extra raises
+    `EngineUnavailableError` rather than falling back."""
+    if engine == "standin":
+        if settings:
+            raise TypeError(f"the stand-in takes no simulation settings: {sorted(settings)}")
+        return net
+    if engine == "maboss":
+        from .maboss import MaBoSSRuntime
+
+        return MaBoSSRuntime.from_network(net, **settings)
+    raise ValueError(f"unknown Boolean engine {engine!r}; choose one of {ENGINES}")

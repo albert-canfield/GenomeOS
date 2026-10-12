@@ -40,6 +40,7 @@ disabled (docs/DECISIONS.md D34).
 | [MHCflurry 2](https://github.com/openvax/mhcflurry) (OpenVax) | peptide/HLA class I binding prediction | Apache 2.0 |
 | NetMHCpan 4.1 ([DTU Health Tech](https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/)) | peptide/HLA class I binding prediction | **academic licence**; not shipped, not downloaded, called only if the user installs it |
 | [biolearn](https://bio-learn.github.io/) | epigenetic clocks (our in-house implementation is the default) | MIT |
+| [MaBoSS](https://github.com/sysbio-curie/MaBoSS) (Institut Curie), Python engine `cmaboss` | Boolean networks as continuous-time Markov processes: state probabilities (runtime/boolean.py is the default) | BSD-3-Clause; the wheel links libSBML (LGPL-2.1) statically |
 
 AlphaGenome's own model release acknowledges the libraries it is built on,
 and they carry through to anyone who enables that feature: Abseil, anndata,
