@@ -839,3 +839,102 @@ def test_the_run_DISCLOSES_the_trial_run_that_preceded_the_registration_commit()
     assert "027d414" in d and "16:52:54" in d
     assert "no longer claimable" in d.lower()
     assert "none was READ" in d
+
+
+# ---- the committed result -------------------------------------------------------------------------
+# Read data/results/regionscale_result.json, committed BEFORE these tests (22e12de; and the record
+# could not be committed with them, because scripts/check_staged.py refuses a result whose manifest says
+# the lane's own code -- which declares this file -- was uncommitted when the numbers were computed).
+# No skip is keyed on it (4f2652c): an absent record must FAIL here.
+RESULT = ROOT / "data/results/regionscale_result.json"
+
+
+def _result() -> dict:
+    return json.loads(RESULT.read_text())
+
+
+def test_the_committed_result_outcome_is_what_the_REGISTERED_DECISION_RULE_returns():
+    """The verdict is recomputed from the record's own numbers, so the rule and not the writer decides."""
+    r = _result()
+    assert r["outcome"] in rs.OUTCOMES
+    # No branch on the record's own content: the committed record HAS measured numbers, so a record
+    # that lost them must fail here rather than quietly take a shorter path (the spirit of 4f2652c).
+    m = r["measured"]
+    lo, hi = m["delta_ci"]
+    nom_lo, _nom_hi = m["delta_ci_nominal"]
+    assert rs.decide_region(lo, hi, nom_lo, m["p_perm"], r["design"]["admitted_count"]) == r["outcome"]
+    # and the disagreement that produced MIXED is the registered clause for THAT disagreement, not
+    # another one: the permutation reached ALPHA while the interval did not clear 0
+    if r["outcome"] == "MIXED":
+        assert rs.why_mixed(lo, m["p_perm"]) in r["reading"]
+        assert rs.MIXED_CLAUSES["permutation_without_interval"] in r["reading"]
+        assert lo <= 0.0 and m["p_perm"] <= rs.CONTROL_ALPHA
+
+
+def test_the_committed_result_reading_IS_the_registered_sentence_and_nothing_else():
+    """The reading is the registered template with numbers filled, with the exposure clause ALWAYS."""
+    r = _result()
+    assert r["reading"].endswith(rs.PRIOR_EXPOSURE_CLAUSE)
+    template = rs.OUTCOMES[r["outcome"]]
+    prefix = template.split("{")[0]
+    assert r["reading"].startswith(prefix), prefix[:60]
+    assert "NO PER-REGION MODEL IS" in r["reading"] or "PROPOSES NO FURTHER MODEL" in r["reading"]
+
+
+def test_the_committed_result_carries_the_FRACTION_OF_VARIANCE_beside_better_or_worse():
+    """DECISION (6): the fraction of the held-out variance is in the sentence, so a summary cannot drop it."""
+    r = _result()
+    assert "% of the held-out variance" in r["reading"] or "% OF THE VARIANCE" in r["reading"]
+    d = r["descriptives"]
+    var = r["held_out_variance"]
+    assert (
+        abs(d["arms"]["region_arm_percent_of_variance"] - 100.0 * r["measured"]["region_arm_delta_mse"] / var)
+        < 1e-9
+    )
+    assert (
+        abs(d["arms"]["global_arm_percent_of_variance"] - 100.0 * r["measured"]["global_arm_delta_mse"] / var)
+        < 1e-9
+    )
+
+
+def test_the_committed_result_DELTA_is_exactly_the_difference_of_the_two_arms():
+    r = _result()
+    m = r["measured"]
+    assert m["delta"] == m["region_arm_delta_mse"] - m["global_arm_delta_mse"]
+    assert m["resamples"] == rs.BOOTSTRAP["resamples"] and m["bootstrap_seed"] == rs.BOOTSTRAP["seed"]
+    assert m["permutations"] == rs.PERMUTATIONS["count"]
+    assert len(m["per_region_scales"]) == r["design"]["admitted_count"]
+
+
+def test_the_committed_result_global_scale_IS_M2hs_committed_one():
+    """A check and not a value: the same fit on the same training genes must return +0.2145911381525326."""
+    g = _result()["global_scale_check"]
+    assert g["agrees"] is True
+    assert g["m2h_committed"] == rs.GLOBAL_SCALE_COMMITTED
+    assert g["abs_difference"] <= rs.M2H_TOLERANCE
+
+
+def test_the_committed_result_per_chromosome_table_is_named_a_DESCRIPTIVE_and_decides_nothing():
+    r = _result()
+    d = r["descriptives"]
+    assert len(d["per_admitted_chromosome"]) == r["design"]["admitted_count"]
+    assert "EACH DECIDING NOTHING" in d["per_admitted_chromosome_decides_nothing"]
+    assert d["p_against_the_stricter_divisor"]["threshold"] == 0.0167
+    assert "THE VERDICT USES 0.05 AND ONLY 0.05" in d["p_against_the_stricter_divisor"]["what_it_is"]
+
+
+def test_the_committed_result_PROPOSES_NO_MODEL_and_discloses_the_trial_run():
+    r = _result()
+    assert "NO FURTHER MODEL IS PROPOSED" in r["no_further_model_is_proposed"]
+    assert r["trial_run_before_the_registration_was_committed"] == _run_module().TRIAL_RUN_DISCLOSURE
+    assert r["alphagenome_requests"] == 0
+
+
+def test_the_committed_result_manifest_is_complete_declares_its_readers_and_uses_relative_paths():
+    m = _result()["result_manifest"]
+    assert m["complete"] is True, m.get("problems")
+    assert len(m["readers"]) == len(rs.CELLS) == 13
+    for e in m["inputs"]:
+        assert not e["path"].startswith("/"), e["path"]  # d72f959: input_entry paths RELATIVE
+    assert m["code_cleanliness"]["own_code_is_committed"] is True
+    assert m["code_cleanliness"]["foreign_uncommitted_code_on_the_counting_path"] == []
