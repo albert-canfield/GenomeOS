@@ -26,6 +26,17 @@ SO: DO NOT WRITE A SKIP ON A RECORD YOU WILL COMMIT. Write
 record exists. It raises by name while the file is absent, which is the wanted behaviour, and it
 needs no conversion later -- so there is nothing to remove and nothing to force.
 
+AND THE ORDERING THE RULE ABOVE DOES NOT STATE, which cost two pushes on 2026-10-12. `must_be_present`
+RAISES while its path is untracked -- that is the point of it -- so a test committed BEFORE the record it
+reads makes every sha between the two RED. lane-scalehet wrote `tests/test_scalehet.py:570/581/589`
+against `data/results/scalehet_result.json` at `036eec6`; the record landed at `40b0a8d` two minutes
+later; a push captured a sha in the gap and read 3 failed, 7,258 passed, while at HEAD that file passes
+57. Both rules were obeyed and the pair still produced a red, which is the instructive part: the
+prevention above moves the defect from "silently inert forever" to "red for two minutes of history", and
+a push landing in those two minutes pays for it. SO: A TEST THAT READS A RESULT RECORD IS COMMITTED IN
+THE SAME COMMIT AS THAT RECORD, OR AFTER IT, NEVER BEFORE; and a registration-stage test may read only
+what is already committed at its own commit.
+
 WHAT THIS CHECKS AND WHY IT IS NOT THE ONE ALREADY IN THE SUITE.
 `tests/test_local_data_symlinked_store.py` carries `test_no_skip_guard_is_keyed_on_a_path_that_git_
 TRACKS`, which reads `skipif` DECORATORS and nothing else. It was right about its own population and
