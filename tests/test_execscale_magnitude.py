@@ -267,3 +267,72 @@ def test_no_programme_MOVED_except_by_a_COMMIT_after_the_census():
     for path in moved:
         if path in d["compiled_rule_totals"]:
             assert len(parse((ROOT / path).read_text()).rules) == d["compiled_rule_totals"][path], path
+
+
+# ---- the chr21 demo record -----------------------------------------------------------------
+# These read data/results/execscale_demo.json, which is committed in the same commit as they are.
+
+DEMO = "data/results/execscale_demo.json"
+
+
+def _demo() -> dict:
+    must_be_present(DEMO)
+    return json.loads((ROOT / DEMO).read_text())
+
+
+def test_the_demo_record_says_it_claims_NOTHING_ABOUT_RNA_and_names_the_average():
+    d = _demo()
+    assert d["result_manifest"]["complete"] is True
+    assert "NOTHING ABOUT RNA" in d["claim"] or "NOTHING about RNA" in d["does_not_claim"]
+    assert "nothing is fitted" in d["does_not_claim"]
+    assert d["magnitude"]["value"] == grn.MEASURED_MAGNITUDE_CORRECTION
+    assert d["magnitude"]["source_commit"] == "ac5580b"
+    assert "global AVERAGE" in d["magnitude"]["it_is_a_global_average"]
+    assert "d9e3ddd" in d["magnitude"]["it_is_a_global_average"]
+    assert d["magnitude"]["default_in_the_runtime"] == 1.0
+    # the direction of every change is arithmetic under this rule, and the record says so itself
+    assert "not a finding" in " ".join(d["difference"])
+
+
+def test_the_demo_programme_differs_from_the_compiled_one_by_the_BLOCK_AND_NOTHING_ELSE():
+    p = _demo()["programmes"]
+    assert p["chrom"] == "chr21"
+    assert p["lines_added"] == p["magnitude_block_lines"] == 11
+    assert p["added_lines_are_the_magnitude_block"] is True
+    assert p["declared_tests_identical"] is True
+    # the counts the census is held to are the counts the calibrated programme still declares
+    assert p["declared_tests"] == [
+        "# test: entities >= 6172",
+        "# test: unknowns == 20",
+        "# test: rules == 5176",
+    ]
+    assert p["compiled_sha256"] != p["calibrated_sha256"]
+
+
+def test_the_demo_RAN_at_the_measured_magnitude_read_off_the_programme_and_was_not_vacuous():
+    d = _demo()
+    plain, cal = d["run_at_the_compiled_magnitude"], d["run_at_the_calibrated_magnitude"]
+    assert plain["magnitude_correction"] == 1.0
+    assert cal["magnitude_correction"] == grn.MEASURED_MAGNITUDE_CORRECTION
+    assert cal["read_from"] == "the programme's own param"
+    # a run with no active rule composes nothing whatever the magnitude is, so the count is the
+    # evidence that this run was not that run
+    assert plain["active_rules"] == cal["active_rules"] == 372
+    assert cal["genes_with_at_least_one_activator"] == 51
+    assert cal["context"] == {"cell_type": "K562"}
+    # and the two runs are the same run but for the magnitude
+    for key in ("genes", "active_rules", "clamped_sources", "species", "mrna_species"):
+        assert plain[key] == cal[key], key
+
+
+def test_the_demo_difference_is_the_51_genes_that_have_an_activator_in_that_cell():
+    f = _demo()["difference"]
+    assert f["species_compared"] == 193
+    assert f["species_whose_level_moved"] == 51
+    assert f["species_unmoved"] == 142
+    assert f["calibrated_is_lower_for"] == 51
+    assert f["calibrated_is_higher_for"] == 0
+    r = f["moved_level_ratio_calibrated_over_compiled"]
+    assert r["n"] == 51
+    assert 0.16 < r["min"] < 0.17
+    assert 0.76 < r["median"] < 0.77

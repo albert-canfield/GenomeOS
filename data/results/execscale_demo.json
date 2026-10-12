@@ -1,0 +1,714 @@
+{
+  "result": "execscale_demo",
+  "date": "2026-10-12",
+  "question": "does one compiled chr21 programme RUN under the calibrated magnitude, and what does it emit?",
+  "claim": "one compiled chr21 programme, emitted with the calibrated magnitude by compile_chromosome(magnitude='calibrated'), parses and RUNS under the multiplicative composition with the runtime reading the magnitude off the programme. What is reported is that it ran and what it emitted: the composed drive and the mRNA levels it produced, in arbitrary units, beside the same programme run at the compiled magnitude of 1.0",
+  "does_not_claim": "this demo says NOTHING about RNA. No measured expression is read, nothing is fitted, no prediction is scored and no comparison to a measurement is made. Whether the calibrated composition is closer to measured RNA is M2h's result (`ac5580b`) and M2i's (`f6e71c6`) and is not re-read here. The magnitude is also a global AVERAGE over a magnitude that varies by chromosome (hetblock2, `d9e3ddd`), so running it on chr21 applies an average and not a chr21 number. The levels are arbitrary units from declared rates and a declared clamp, and are not expression",
+  "magnitude": {
+    "value": 0.2146,
+    "source_commit": "ac5580b",
+    "it_is_a_global_average": "+0.2146 is a global AVERAGE over a magnitude that is not one global number: hetblock2 (`d9e3ddd`) measured it varying by chromosome, surviving a locus-block null",
+    "default_in_the_runtime": 1.0
+  },
+  "programmes": {
+    "chrom": "chr21",
+    "compiled_sha256": "8ee1c036599fbde53108f346ff5a9c1831f70d8c16e4e63bba5d14abea8c000d",
+    "calibrated_sha256": "37041a3a11570cec4bc12610fc55ab5db2d95533b604ee77e2aa3c08ee543c86",
+    "compiled_lines": 80583,
+    "calibrated_lines": 80594,
+    "lines_added": 11,
+    "magnitude_block_lines": 11,
+    "inserted_at_line": 86,
+    "added_lines_are_the_magnitude_block": true,
+    "declared_tests_identical": true,
+    "declared_tests": [
+      "# test: entities >= 6172",
+      "# test: unknowns == 20",
+      "# test: rules == 5176"
+    ]
+  },
+  "run_at_the_compiled_magnitude": {
+    "magnitude_correction": 1.0,
+    "read_from": "the caller's argument",
+    "seconds": 0.02,
+    "context": {
+      "cell_type": "K562"
+    },
+    "genes": 193,
+    "active_rules": 372,
+    "genes_with_at_least_one_activator": 51,
+    "most_activators_on_one_gene": 18,
+    "clamped_sources": 372,
+    "unresolved_entries": 0,
+    "species": 193,
+    "mrna_species": 193,
+    "genes_with_a_level_above_zero": 193,
+    "mrna_levels": {
+      "min": 0.31652014569049314,
+      "median": 0.6321205388524603,
+      "max": 2.339817972950165,
+      "sum": 130.79865469197372
+    },
+    "highest_genes": [
+      [
+        "KCNJ15.mRNA",
+        2.339817972950165
+      ],
+      [
+        "NCAM2.mRNA",
+        1.901853280021199
+      ],
+      [
+        "ERG.mRNA",
+        1.5068720090262524
+      ],
+      [
+        "SLC37A1.mRNA",
+        1.2365494795768555
+      ],
+      [
+        "MX2.mRNA",
+        1.2254959927138476
+      ],
+      [
+        "GRIK1.mRNA",
+        1.1832263189226686
+      ],
+      [
+        "COL18A1.mRNA",
+        1.0948517550166819
+      ],
+      [
+        "APP.mRNA",
+        1.054896572575339
+      ],
+      [
+        "SLC19A1.mRNA",
+        0.9768047714933671
+      ],
+      [
+        "RUNX1.mRNA",
+        0.9591246107975464
+      ]
+    ]
+  },
+  "run_at_the_calibrated_magnitude": {
+    "magnitude_correction": 0.2146,
+    "read_from": "the programme's own param",
+    "seconds": 0.02,
+    "context": {
+      "cell_type": "K562"
+    },
+    "genes": 193,
+    "active_rules": 372,
+    "genes_with_at_least_one_activator": 51,
+    "most_activators_on_one_gene": 18,
+    "clamped_sources": 372,
+    "unresolved_entries": 0,
+    "species": 193,
+    "mrna_species": 193,
+    "genes_with_a_level_above_zero": 193,
+    "mrna_levels": {
+      "min": 0.08916362498564474,
+      "median": 0.6321205388524603,
+      "max": 0.7569596127434705,
+      "sum": 116.5734273576455
+    },
+    "highest_genes": [
+      [
+        "NCAM2.mRNA",
+        0.7569596127434705
+      ],
+      [
+        "SLC37A1.mRNA",
+        0.7300234829088501
+      ],
+      [
+        "C2CD2.mRNA",
+        0.6876710523368404
+      ],
+      [
+        "SPATC1L.mRNA",
+        0.6785092430773991
+      ],
+      [
+        "MX2.mRNA",
+        0.6727999491260562
+      ],
+      [
+        "SLC19A1.mRNA",
+        0.6665996945187173
+      ],
+      [
+        "CLIC6.mRNA",
+        0.6618272048446973
+      ],
+      [
+        "DNMT3L.mRNA",
+        0.6538510688107754
+      ],
+      [
+        "IL10RB.mRNA",
+        0.6509110532968686
+      ],
+      [
+        "HUNK.mRNA",
+        0.6499679254413283
+      ]
+    ]
+  },
+  "difference": {
+    "the_direction_is_a_property_of_the_form_and_not_a_finding": "under the multiplicative rule A = exp(c * gain * W) with every term t_i >= 0, so W >= 0 and A >= 1: a correction below 1 can only move the drive TOWARD 1. That every moved species moved DOWN is therefore arithmetic, not evidence, and says nothing about whether the lower value is closer to anything measured",
+    "moved_level_ratio_calibrated_over_compiled": {
+      "n": 51,
+      "min": 0.16130082164025472,
+      "median": 0.7629442631292078,
+      "max": 0.959981946909194
+    },
+    "species_unmoved_have_no_activator_in_this_cell": "a gene with no active activator rule composes A = exp(0) = 1 under every magnitude, so its level is identical in the two runs; that is what the unmoved count is",
+    "species_compared": 193,
+    "species_whose_level_moved": 51,
+    "species_unmoved": 142,
+    "level_ratio_calibrated_over_compiled": {
+      "n": 193,
+      "min": 0.16130082164025472,
+      "median": 1.0,
+      "max": 1.0
+    },
+    "log_level_ratio_median": 0.0,
+    "calibrated_is_lower_for": 51,
+    "calibrated_is_higher_for": 0
+  },
+  "declared_by_the_demo": {
+    "max_rate": 1.0,
+    "basal_rate": 0.0,
+    "source_level": 1.0,
+    "hours": 1.0,
+    "dt": 0.05,
+    "multiplicative_gain": 1.0,
+    "units": "arbitrary concentration units and hours (grn.DEFAULTS); nothing here is measured"
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the compiler's own chr21 inputs in data/results",
+        "version": "as committed"
+      },
+      {
+        "accession": "M2h's fitted scale, ac5580b",
+        "version": "0.2146, read and not refitted"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "the compiler's committed per-chromosome results for this chromosome",
+        "group": true,
+        "members": [
+          {
+            "path": "data/results/budget_axes_chr21.json",
+            "sha256": "9f8112afa28902a6ef81caadad58d37cf709a3d1fbd35d2ca221d7b6aab08049",
+            "bytes": 263928
+          },
+          {
+            "path": "data/results/budget_chr21.json",
+            "sha256": "b3c18f7c34a12e68bd9772c021de9db3715dab8c70efd98de0e383208edb2665",
+            "bytes": 275463
+          },
+          {
+            "path": "data/results/ccres_chr21.bed.gz",
+            "sha256": "7f41f1cb4614a27d75ea32b62e173b32b200eed91a24fc80fb03115413ba2058",
+            "bytes": 150095
+          },
+          {
+            "path": "data/results/constrained_targets_chr21.json",
+            "sha256": "0d259df04bd07bdc4f7633823ef20bf700f1ddd76cd33c0edb554134087a2f15",
+            "bytes": 111930
+          },
+          {
+            "path": "data/results/dnase_CD14_positive_monocyte_chr21.bed.gz",
+            "sha256": "fe5e2266d2e24ab581c43d7c74adb365022a7f4d230de6fe2671cb4c022a8e59",
+            "bytes": 22361
+          },
+          {
+            "path": "data/results/dnase_GM12878_chr21.bed.gz",
+            "sha256": "f383e15521805c90895b02ae5cbb5dd583d22c57028c098fe34b72ee57daf9dc",
+            "bytes": 7453
+          },
+          {
+            "path": "data/results/dnase_H1_chr21.bed.gz",
+            "sha256": "bcb757ade8367a7c91a4f3044ba5406e5a2aa6e8b5fe9af0146dcb4e2f1cb6d1",
+            "bytes": 23407
+          },
+          {
+            "path": "data/results/dnase_HepG2_chr21.bed.gz",
+            "sha256": "413bb8f9ee36c88fac027beb2538b12cd27f5cdff9e60b1ced83c4df0b52c9fd",
+            "bytes": 16542
+          },
+          {
+            "path": "data/results/dnase_IMR_90_chr21.bed.gz",
+            "sha256": "1358f5f0e7f1429f8e65641fae84b4e30459f0be0b560509d929387d16793e37",
+            "bytes": 31329
+          },
+          {
+            "path": "data/results/dnase_K562_chr21.bed.gz",
+            "sha256": "51b47ea1224b57628a625b07491c6a7d8662049e1b37fa7ff6e4cbea38edf3fb",
+            "bytes": 44572
+          },
+          {
+            "path": "data/results/dnase_SK_N_SH_chr21.bed.gz",
+            "sha256": "b4ad8774d727769c7db3bb522a6947e0e2d6b4bd907d3e7c479a93943a4f45cd",
+            "bytes": 22747
+          },
+          {
+            "path": "data/results/dnase_cardiac_muscle_cell_chr21.bed.gz",
+            "sha256": "bee45380afec587096b0194933df22a3dce362a8032d05ae29103fdecc76a54f",
+            "bytes": 32669
+          },
+          {
+            "path": "data/results/dnase_keratinocyte_chr21.bed.gz",
+            "sha256": "33801c9a0399e16f37445e6ebb78e3f8e32412374ddbfc07014758a7311e0dc6",
+            "bytes": 8249
+          },
+          {
+            "path": "data/results/dnase_ovary_chr21.bed.gz",
+            "sha256": "e7b5de75c448354b3a493680e21eb7cb9745e128330c36d862000623433ffb28",
+            "bytes": 34344
+          },
+          {
+            "path": "data/results/dnase_testis_chr21.bed.gz",
+            "sha256": "d6acc141a76c5fe9d7f70be92f0437a409c5a6ac8dc49195d745fadef5e6a233",
+            "bytes": 27234
+          },
+          {
+            "path": "data/results/domains_chr21.json",
+            "sha256": "6bad711ecf1a3b11de1b1667b0b8ee9f9da25031a768147e13b412bfeae18ace",
+            "bytes": 105501
+          },
+          {
+            "path": "data/results/duplication_chr21.json",
+            "sha256": "4efb8a6d42ed89a7cd436e3100f2fef0bb7d068d8c5060ae742fe5e34c6814cf",
+            "bytes": 118130
+          },
+          {
+            "path": "data/results/enhancer_targets_all_chr21.json",
+            "sha256": "5e9573853a1aa617f7dbfcaf9e9486b4ad9d0393fa1003f5e5a2a764a58a0dbf",
+            "bytes": 1619
+          },
+          {
+            "path": "data/results/enhancer_targets_chr21.json",
+            "sha256": "d2caefb9608c9dbd6d4e61e8b6f11de2cdc0e1d28ec663411dda941e75ff9142",
+            "bytes": 266488
+          },
+          {
+            "path": "data/results/reader_CD14_positive_monocyte_chr21.json",
+            "sha256": "a4d3141c028522b09bc4321614f61a77c20d3847142ab2562d57e26e053fd25b",
+            "bytes": 48218
+          },
+          {
+            "path": "data/results/reader_GM12878_chr21.json",
+            "sha256": "5fcaca258520af90b4dd009f8d0508892b4229a9a4102766deb59cf88b4e7c00",
+            "bytes": 48918
+          },
+          {
+            "path": "data/results/reader_H1_chr21.json",
+            "sha256": "1ba10ebbf5dee5761f33bb8d32e0bdee6fd2079aaa3f750394ec231e6d55dfd7",
+            "bytes": 48174
+          },
+          {
+            "path": "data/results/reader_HepG2_chr21.json",
+            "sha256": "486c7026a0fc61a49b752572a42bc05874ce98284570b3be3d22f363e460ea23",
+            "bytes": 48279
+          },
+          {
+            "path": "data/results/reader_IMR_90_chr21.json",
+            "sha256": "f574b476ffa8ae6bef15218f1e1ac59bd39077a44db6aaa5c6a31a5031e188ca",
+            "bytes": 48042
+          },
+          {
+            "path": "data/results/reader_K562_chr21.json",
+            "sha256": "92fc10a002243611a2e7b22ed08a5b83ae979610b3dad4a6083154d15c78fdee",
+            "bytes": 48464
+          },
+          {
+            "path": "data/results/reader_SK_N_SH_chr21.json",
+            "sha256": "b22720be07b904ec1c38534a891763b2173c5912b60c036d9fc541779aa216f8",
+            "bytes": 47871
+          },
+          {
+            "path": "data/results/reader_astrocyte_chr21.json",
+            "sha256": "648f4af55a0340131f8e64af03ca31748a5ab681be87f000ae9fe22dcbd7be3e",
+            "bytes": 47958
+          },
+          {
+            "path": "data/results/reader_cardiac_muscle_cell_chr21.json",
+            "sha256": "877ddcdaa3ffca02729013eef02636f6bb3cdb5afc0b009a51e28401aca8ea32",
+            "bytes": 48094
+          },
+          {
+            "path": "data/results/reader_hepatocyte_chr21.json",
+            "sha256": "a186f8c7e2f917ae5acc6b806c9ff2d47eb41cdbb4d17bd3e2767edc373c6d89",
+            "bytes": 47688
+          },
+          {
+            "path": "data/results/reader_keratinocyte_chr21.json",
+            "sha256": "6c6df98dc4c41aa328ba1feb29c1120835d9b2a471cfae6890f7b04cf76fc6da",
+            "bytes": 48957
+          },
+          {
+            "path": "data/results/reader_ovary_chr21.json",
+            "sha256": "6d32ea3a8885a1a27521c9addca14baf0b4de7e4a5ee01c2abab7b0d8dd46409",
+            "bytes": 47607
+          },
+          {
+            "path": "data/results/reader_spinal_cord_chr21.json",
+            "sha256": "7aad180a4139893d0e0aef1028e3163203adf8964f3833ad74e707cbd68426c9",
+            "bytes": 59898
+          },
+          {
+            "path": "data/results/reader_testis_chr21.json",
+            "sha256": "1f31fd8a4cc1ed0cd7b49cb3dabc81052bcb7492063d50875bdee94b8926ed32",
+            "bytes": 47417
+          },
+          {
+            "path": "data/results/rmsk_chr21.bed.gz",
+            "sha256": "f4d3ca63604c892470f0bfe842d780f382c5bb618402c8a48c2a63470ac63aaf",
+            "bytes": 744112
+          },
+          {
+            "path": "data/results/unknown_chr21.json",
+            "sha256": "28f6f18a43bcbc0ddd9cab5044586fe99290689d0df00dcd8beed4a1ecb1c4fd",
+            "bytes": 355767
+          },
+          {
+            "path": "data/results/variation_chr21.json",
+            "sha256": "f68d07ae0c32f653b5c20abf1c74e7bb35df2a661bda11be17d588ba40ed5f5e",
+            "bytes": 348031
+          }
+        ],
+        "sha256": "afed6dae169977631030c2d95d8b797c4f3afb2f21b76dab74e62e7c00ed7fd9",
+        "bytes": 3697556,
+        "files": 36,
+        "partition": "chr21"
+      },
+      {
+        "path": "the local element tables and knowledge files the compiler's readers open",
+        "group": true,
+        "members": [
+          {
+            "path": "data/knowledge/alphagenome/all_elements/chr21.json",
+            "sha256": "5d0f8ae762e8aa0cc8e5fdfdddcfea60ee3837758267f34c8536f06b377b4346",
+            "bytes": 7768557
+          },
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.heldout_5_cell_types.GRCh38.tsv.gz",
+            "sha256": "7783534a5ecd0a3b4bccb1923d60c0507536afb81dc0c886392667df4e5ffd38",
+            "bytes": 373837
+          },
+          {
+            "path": "data/knowledge/crispri/EPCrisprBenchmark_combined_data.training_K562.GRCh38.tsv.gz",
+            "sha256": "9eddfe18f6797ba33db8ba7e75378cc6af6b79cbb83f62d470c6e0cefed79405",
+            "bytes": 996546
+          },
+          {
+            "path": "data/knowledge/mpra/ENCFF475FKV.bed.gz",
+            "sha256": "e54435ba9f049298f69050223f6b4ff2f54a12c822ec315b879915e46b9c834e",
+            "bytes": 1085644
+          },
+          {
+            "path": "data/knowledge/mpra/ENCFF769REH.bed.gz",
+            "sha256": "e90cbdd855790e9648444745bfa8b1ab749feea980b44a24cb99ba3fb60421ba",
+            "bytes": 1088965
+          },
+          {
+            "path": "data/knowledge/mpra/ENCFF802FUV.bed.gz",
+            "sha256": "b78bd67afb91309282d4d707ae25e7110a799cbafab562e15aeaef1c3334ded0",
+            "bytes": 1085246
+          },
+          {
+            "path": "data/knowledge/satmut/elements.tsv.gz",
+            "sha256": "fec2eed91fe27af3aae07ebce2eca65e9bad4bb6abba5d8c27f478887dd7b134",
+            "bytes": 2677485
+          },
+          {
+            "path": "data/knowledge/vista/locus.tsv.gz",
+            "sha256": "afef62dc08b637761647dde6e9a2b960d28b041946dfb6c70512fa5b63310061",
+            "bytes": 121847
+          }
+        ],
+        "sha256": "135d335071fedb375bfc9bbe65bf0e644537cc3b29f449752809e40d9f8fa7fd",
+        "bytes": 15198127,
+        "files": 8,
+        "partition": "chr21"
+      },
+      {
+        "path": "cached tables read while compiling",
+        "group": true,
+        "members": [
+          {
+            "path": "data/cache/entex/alphagenome_track_metadata_copy.csv",
+            "sha256": "5157dcca52644952bee2402b03cfa315c576d9f21de229ea9bf9b37e3068abf7",
+            "bytes": 403465
+          }
+        ],
+        "sha256": "4070a01ec5db4f51a894d8fd689215d14cb7b595cc52d9f4e041f25b1e864720",
+        "bytes": 403465,
+        "files": 1,
+        "partition": "chr21"
+      }
+    ],
+    "input_count": 3,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "chrom": "chr21",
+      "emission": "one_target",
+      "magnitudes": [
+        "compiled",
+        "calibrated"
+      ],
+      "activator_combination": "multiplicative",
+      "context": {
+        "cell_type": "K562"
+      },
+      "declared_by_the_demo": {
+        "max_rate": 1.0,
+        "basal_rate": 0.0,
+        "source_level": 1.0,
+        "hours": 1.0,
+        "dt": 0.05,
+        "multiplicative_gain": 1.0,
+        "units": "arbitrary concentration units and hours (grn.DEFAULTS); nothing here is measured"
+      },
+      "calibrated_programme_sha256": "37041a3a11570cec4bc12610fc55ab5db2d95533b604ee77e2aa3c08ee543c86"
+    },
+    "exclusions": [
+      "no model request, no key, no network, no money; no RNA is read, nothing is fitted, and no committed programme is written"
+    ],
+    "code_cleanliness": {
+      "git_sha": "1163f95331ad9ebc5e7aa31b9d9a1deb8c6efb94",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/execscale_demo.py",
+        "form": "committed_repository_file",
+        "path": "scripts/execscale_demo.py",
+        "is_committed": true,
+        "declared_entry": "scripts/execscale_demo.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/execscale_demo.py"
+      ],
+      "counting_path_count": 150,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "partitions": {
+      "chromosome": "chr21"
+    },
+    "code": {
+      "git_sha": "1163f95331ad9ebc5e7aa31b9d9a1deb8c6efb94",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/guardcensus.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_guardcensus.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/execscale_demo.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "1163f95331ad9ebc5e7aa31b9d9a1deb8c6efb94",
+      "code_cleanliness_git_sha": "1163f95331ad9ebc5e7aa31b9d9a1deb8c6efb94",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 1163f95"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 381,
+      "opens_under_data": 133,
+      "files_read": 45,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
