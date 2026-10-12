@@ -16,6 +16,7 @@ count here cannot silently become the registered one.
 
 from __future__ import annotations
 
+import json
 import math
 from pathlib import Path
 
@@ -544,3 +545,90 @@ def test_the_stop_rule_forbids_a_second_run_and_any_edit_of_the_prior_lanes():
 
 def test_no_nan_leaks_from_an_empty_scored_set():
     assert math.isnan(rs.delta_mse_rowwise([], [], [], []))
+
+
+# ---- the committed harness record ----------------------------------------------------------------
+# These tests read data/results/regionscale_harness.json and are committed WITH that record (22e12de).
+# No pytest.skip is keyed on it (4f2652c): if the record is absent the tests FAIL, which is correct,
+# because the registration and the run both refuse to exist without it.
+HARNESS_RESULT = ROOT / "data/results/regionscale_harness.json"
+
+
+def _harness() -> dict:
+    return json.loads(HARNESS_RESULT.read_text())
+
+
+def test_the_committed_harness_reproduces_M2h_FIRST_and_has_no_problems():
+    h = _harness()
+    assert h["outcome"] == "HARNESS_REPRODUCES"
+    assert h["problems"] == []
+    rep = h["m2h_reproduction_FIRST"]
+    assert rep["reproduces"] is True
+    got, want = rep["recomputed"], rep["committed"]
+    assert got["training_genes"] == want["training_genes"] == 8181
+    assert got["held_out_genes"] == want["held_out_genes"] == 8328
+    assert got["outcome"] == want["outcome"] == "BETTER"
+    for k in ("scale", "held_out_delta_mse", "control_p"):
+        assert abs(float(got[k]) - float(want[k])) <= rs.M2H_TOLERANCE, k
+    assert abs(float(got["scale"]) - rs.GLOBAL_SCALE_COMMITTED) <= rs.M2H_TOLERANCE
+
+
+def test_the_committed_harness_reading_does_NOT_overstate_the_agreement_with_magcal():
+    # the registered claim is agreement WITHIN TOLERANCE; "bit-for-bit" was the overstatement 027d414
+    # removed, and it must not come back in the stored sentence.
+    h = _harness()
+    assert "bit-for-bit" not in h["reading"]
+    assert "within TOLERANCE" in h["reading"]
+    assert "within TOLERANCE" in rs.HARNESS
+    assert "WITHIN TOLERANCE AND NOT BIT-FOR-BIT" in rs.HARNESS
+
+
+def test_the_committed_harness_shows_this_lanes_metric_IS_magcals():
+    p = _harness()["one_path"]
+    assert p["metric_abs_difference"] <= rs.TOLERANCE
+    assert p["arm_interval_max_abs_difference"] <= rs.TOLERANCE
+    assert p["delta_interval_of_two_identical_arms"] == [0.0, 0.0]
+    assert p["delta_interval_nominal_of_two_identical_arms"] == [0.0, 0.0]
+    assert p["constant_scale_used"] == rs.GLOBAL_SCALE_COMMITTED
+
+
+def test_the_committed_harness_says_the_held_out_design_CAN_be_made_honest():
+    f = _harness()["design_feasibility"]
+    assert f["the_held_out_design_is_testable"] is True
+    assert f["admitted_count"] >= rs.MIN_REGIONS
+    assert f["min_genes_each_half"] == rs.MIN_GENES
+    for c in f["admitted"]:
+        d = f["genes_per_chromosome_per_half"][c]
+        assert d["train"] >= rs.MIN_GENES and d["held"] >= rs.MIN_GENES, c
+    for c, d in f["fallback_to_global_both_arms"].items():
+        assert d["train"] < rs.MIN_GENES or d["held"] < rs.MIN_GENES, c
+    # nothing is dropped: every held-out gene is in the scored set, admitted or fallback
+    assert (
+        f["held_out_genes_in_admitted"] + f["held_out_genes_in_fallback"]
+        == rs.M2H_COMMITTED["held_out_genes"]
+    )
+    assert f["training_genes_in_admitted"] <= rs.M2H_COMMITTED["training_genes"]
+
+
+def test_the_committed_harness_confirms_M2hs_about_2_percent_of_the_variance():
+    v = _harness()["variance_denominator"]
+    assert v["confirms"] is True
+    assert 1.0 <= v["m2h_percent_of_variance"] <= 3.0
+    assert v["held_out_pairs"] == rs.M2H_COMMITTED["held_out_genes"] * CELLS
+
+
+def test_the_committed_harness_computed_NO_value_of_this_lanes_design():
+    h = _harness()
+    assert "no per-chromosome scale was fitted" in h["nothing_of_this_lanes_design_was_read"]
+    for forbidden in ("per_chromosome", "delta", "per_region_scales", "null"):
+        assert forbidden not in h, forbidden
+    assert h["alphagenome_requests"] == 0
+
+
+def test_the_committed_harness_manifest_is_complete_declares_its_readers_and_uses_relative_paths():
+    m = _harness()["result_manifest"]
+    assert m["complete"] is True, m.get("problems")
+    assert len(m["readers"]) == len(rs.CELLS) == 13
+    for e in m["inputs"]:
+        assert not e["path"].startswith("/"), e["path"]  # d72f959: input_entry paths RELATIVE
+    assert m["code_cleanliness"]["own_code_is_committed"] is True

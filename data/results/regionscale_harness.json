@@ -1,0 +1,606 @@
+{
+  "result": "regionscale_harness",
+  "date": "2026-10-12",
+  "lane": "lane-regionscale",
+  "step": "1 of 4: the harness, before the registration",
+  "question": "Does a PER-REGION magnitude correction predict held-out measured RNA better than M2h's SINGLE GLOBAL scale +0.2145911381525326, when every region's scale is fitted WITHOUT the genes it is then scored on? lane-scalehet rejected a single global scale as a description of the per-chromosome fitted scales (Q = 166.048, p_Q = 0.003996) and lane-hetblock2 showed that rejection survives a 1-Mb locus-block null (p_Q = 0.008991), and BOTH deliberately proposed no regional model. A dispersion test says a quantity VARIES; it does not say that modelling the variation PREDICTS BETTER, because a real per-region difference estimated from a few hundred genes can be swamped by its own estimation error. This lane asks the prediction question and only the prediction question: on the SAME held-out genes, scored by two predictors neither of which saw them, is the per-chromosome magnitude closer to measured log2(TPM+1) across the thirteen reader cells than the one number M2h fitted for the whole genome?",
+  "why_not_already_answered": "scalehet and hetblock2 each fitted per-chromosome scales and each read them IN SAMPLE, as a dispersion about a global scale, against a permutation null -- and each said so and each refused to go further, in these words: fitting per-region scales is 'a separate registration and a separate decision'. Neither computed a held-out Delta MSE under a per-region predictor, and neither could: an in-sample dispersion statistic and an out-of-sample squared error are different quantities with different null behaviour. M2h's own chromosome-held-out check (lane-scalesplit, ec9cfd4) refitted ONE GLOBAL scale on the remaining chromosomes; it never fitted a scale PER chromosome, so it tested the global scale's portability and not a regional model. The question is therefore open and is asked here for the first time",
+  "harness": "run and committed BEFORE the registration, and it must pass or nothing is fitted, scored or read. (1) 7h's committed genes table has 16,509 genes and 214,617 pairs, thirteen P and thirteen D per gene, no empty symbol, no empty chromosome, no repeated symbol. (2) its Delta MSE at scale 1 reproduces 7h's committed -0.5361286982098615 within TOLERANCE through magcal.delta_mse. (3) M2H'S COMMITTED NUMBERS COME BACK FIRST, AND ARE REPORTED BEFORE ANYTHING ELSE, through M2h's OWN functions at M2h's OWN resamples, seeds and permutation count and under M2h's OWN sha256-of-symbol split: training 8,181 genes, held out 8,328, fitted scale +0.2145911381525326 [+0.20074141299120243, +0.2283000359194418], held-out Delta MSE +0.0433912108101358 [+0.0379045975793137, +0.04894398453032398], control p = 0.000999000999, outcome BETTER -- every one within M2H_TOLERANCE = 1e-9, because the same code at the same seeds must agree closely. THIS IS THE CHECK THAT MAKES EVERY LATER NUMBER ATTRIBUTABLE TO THE REGIONAL UNIT AND TO NOTHING ELSE, and lane-scalesplit and lane-scalehet each passed it bit-identically. (4) THE TWO PATHS ARE ONE PATH: this lane's `delta_mse_rowwise` with every gene given THE SAME scale equals magcal.delta_mse at that scale within TOLERANCE, and this lane's paired bootstrap with both arms given M2h's fitted scale returns a DELTA interval of EXACTLY [0, 0] while its per-arm interval equals magcal.bootstrap_delta's within TOLERANCE -- so the metric and the interval are magcal's and not a lookalike. WITHIN TOLERANCE AND NOT BIT-FOR-BIT, and the reason is recorded rather than smoothed over: magcal accumulates a gene's term cell by cell as 2 a P D - a^2 P^2, while this lane accumulates sum(P D) and sum(P^2) first -- because its permutation null must re-weight those two group sums at a thousand different scales -- and then combines them. The two are ALGEBRAICALLY IDENTICAL and differ only in floating-point summation ORDER, by of order 1e-17 on a bound of a bootstrap interval, far below TOLERANCE = 1e-4. The harness reports the observed difference as a number so the claim is checkable, and tests/test_regionscale.py pins both halves: the agreement within TOLERANCE and the fact that the residual is a summation-order artefact (it vanishes when the per-cell order is reproduced). The per-chromosome scales are NOT fitted here and the constant scale used for the reduction is M2h's own committed one, not a value of this design. (5) the GENE COUNTS per chromosome per half, the admitted set under ADMISSION, and whether the admitted count clears MIN_REGIONS are reported; a count depends on no measured value (GENE_COUNTS_ARE_NOT_MEASUREMENTS), and these counts are what establish whether the held-out design is feasible at all. (6) the variance denominator of 'about X% of the variance' is reported -- the mean of D^2 over the held-out pairs, the no-rule baseline's own held-out MSE -- and M2h's committed +0.04339 is confirmed to be about 2% of it; that denominator is a quantity M2h's committed reading already states, re-derived and not newly exposed. (7) NO VALUE OF THIS LANE'S DESIGN IS COMPUTED BY THE HARNESS: no per-chromosome scale, no per-region Delta MSE, no DELTA, no bootstrap of DELTA and no permutation. A miss in any of (1) to (6) stops the lane with HARNESS_DEFECT and nothing is registered",
+  "prior_exposure": [
+    "THIS RNA IS NOT A FRESH MEASUREMENT AND THIS IS THE WEAKEST EXPOSURE POSITION OF ANY LANE IN THE SERIES. The same ENCODE polyA plus RNA-seq gene quantifications (V29) in the same thirteen reader biosamples have now been read by: item 7 (the information term), item 7d (lane-combine2, the runtime mean and promoter competition), item 7h (lane-multrna, the multiplicative composition whose committed table this lane reads), the capped-sum census, M2h (lane-magcal, the global magnitude), M2i (the fresh measurement with nothing fitted), lane-scalesplit (the chromosome-held-out refit), lane-recovered, lane-scalehet (the per-chromosome dispersion) and lane-hetblock2 (the same dispersion against a locus-block null). AND, SPECIFICALLY FOR THIS LANE: THE PER-CHROMOSOME SPREAD HAS NOW BEEN LOOKED AT, TESTED, AND TESTED AGAIN. The pattern this lane models is a pattern two committed lanes have already measured and published a p value for, and the regional unit is not chosen here but inherited from them. What that costs is stated plainly: a positive reading here cannot be called a discovery of regional variation, because the variation was discovered before this lane existed and this lane was opened BECAUSE of it; what a positive reading would add is only that the variation is USABLE OUT OF SAMPLE, which is a different and narrower claim. A negative reading is correspondingly cheap to believe and is the expected one. Nothing here is a fresh test of whether the compiled rules carry information about RNA at all -- that was M2h's and M2i's question -- and no reading of this lane may be quoted as one",
+    "THE ONE THING THE EXPOSURE DOES NOT TOUCH: the held-out genes of THIS lane's design are M2h's own held-out genes, and the per-region scales that score them are fitted on the training half alone. Exposure is a reason to discount a POSITIVE reading as a discovery and it is not a reason to doubt the ARITHMETIC of an out-of-sample comparison, whose two arms are scored on the same rows under the same metric. The design is stated so a reader can check that separation; it is not offered as a defence of the exposure"
+  ],
+  "m2h_reproduction_FIRST": {
+    "split_rule": "M2h's, sha256 of the gene symbol (magcal.SPLIT); carried UNCHANGED by this lane",
+    "m2h_tolerance": 1e-09,
+    "recomputed": {
+      "training_genes": 8181,
+      "held_out_genes": 8328,
+      "scale": 0.2145911381525326,
+      "scale_ci": [
+        0.20074141299120243,
+        0.2283000359194418
+      ],
+      "held_out_delta_mse": 0.0433912108101358,
+      "held_out_ci": [
+        0.0379045975793137,
+        0.04894398453032398
+      ],
+      "control_p": 0.000999000999000999,
+      "outcome": "BETTER"
+    },
+    "committed": {
+      "training_genes": 8181,
+      "held_out_genes": 8328,
+      "scale": 0.2145911381525326,
+      "scale_ci": [
+        0.20074141299120243,
+        0.2283000359194418
+      ],
+      "held_out_delta_mse": 0.0433912108101358,
+      "held_out_ci": [
+        0.0379045975793137,
+        0.04894398453032398
+      ],
+      "control_p": 0.000999000999000999,
+      "outcome": "BETTER"
+    },
+    "reproduces": true,
+    "reading": "M2h'S COMMITTED NUMBERS REPRODUCE from 7h's committed genes table through M2h's own functions at M2h's own seeds: training 8,181 genes, held out 8,328, fitted scale +0.2146 [98.33% CI +0.2007, +0.2283], held-out Delta MSE +0.04339 [+0.03790, +0.04894] (about 2% of the variance), control p = 0.000999, outcome BETTER"
+  },
+  "table_checks": {
+    "genes": 16509,
+    "committed_genes": 16509,
+    "pairs": 214617,
+    "committed_pairs": 214617,
+    "committed_delta_mse": -0.5361286982098615,
+    "recomputed_delta_mse_at_scale_1": -0.5361286933702997,
+    "abs_difference": 4.839561862368669e-09,
+    "tolerance": 0.0001
+  },
+  "one_path": {
+    "constant_scale_used": 0.2145911381525326,
+    "whose_scale_it_is": "M2h's own committed fitted scale, quoted; NOT a per-region value and NOT a value of this lane's design",
+    "metric_mine": 0.043391210810136416,
+    "metric_magcal": 0.0433912108101358,
+    "metric_abs_difference": 6.175615574477433e-16,
+    "tolerance": 0.0001,
+    "arm_interval_mine": [
+      0.0379045975793137,
+      0.04894398453032398
+    ],
+    "arm_interval_magcal": [
+      0.0379045975793137,
+      0.04894398453032398
+    ],
+    "arm_interval_max_abs_difference": 0.0,
+    "delta_interval_of_two_identical_arms": [
+      0.0,
+      0.0
+    ],
+    "delta_interval_nominal_of_two_identical_arms": [
+      0.0,
+      0.0
+    ],
+    "note": "with every gene given one and the same scale, this lane's metric IS magcal.delta_mse and this lane's per-arm bootstrap IS magcal.bootstrap_delta WITHIN TOLERANCE, because the draw sequence is magcal's own. It is not BIT-for-bit, and the reason is recorded rather than smoothed over: magcal accumulates a gene's term cell by cell while this lane accumulates sum(P D) and sum(P^2) first -- its permutation null must re-weight those two group sums at a thousand scales -- so the two differ in floating-point summation ORDER and not algebraically, by the number in arm_interval_max_abs_difference, which is of order 1e-17 against TOLERANCE = 1e-4. Two identical arms nonetheless give a DELTA interval of EXACTLY [0, 0], because the paired draw cancels the two arms' terms index for index; that is the property which makes a non-zero DELTA interval attributable to the scales and not to the resampling"
+  },
+  "design_feasibility": {
+    "genes_per_chromosome_per_half": {
+      "chr1": {
+        "train": 853,
+        "held": 847
+      },
+      "chr10": {
+        "train": 314,
+        "held": 317
+      },
+      "chr11": {
+        "train": 493,
+        "held": 490
+      },
+      "chr12": {
+        "train": 457,
+        "held": 414
+      },
+      "chr13": {
+        "train": 131,
+        "held": 149
+      },
+      "chr14": {
+        "train": 244,
+        "held": 278
+      },
+      "chr15": {
+        "train": 253,
+        "held": 256
+      },
+      "chr16": {
+        "train": 357,
+        "held": 346
+      },
+      "chr17": {
+        "train": 471,
+        "held": 498
+      },
+      "chr18": {
+        "train": 116,
+        "held": 122
+      },
+      "chr19": {
+        "train": 585,
+        "held": 614
+      },
+      "chr2": {
+        "train": 555,
+        "held": 534
+      },
+      "chr20": {
+        "train": 231,
+        "held": 233
+      },
+      "chr21": {
+        "train": 77,
+        "held": 79
+      },
+      "chr22": {
+        "train": 188,
+        "held": 185
+      },
+      "chr3": {
+        "train": 463,
+        "held": 467
+      },
+      "chr4": {
+        "train": 324,
+        "held": 318
+      },
+      "chr5": {
+        "train": 373,
+        "held": 359
+      },
+      "chr6": {
+        "train": 423,
+        "held": 463
+      },
+      "chr7": {
+        "train": 390,
+        "held": 383
+      },
+      "chr8": {
+        "train": 269,
+        "held": 290
+      },
+      "chr9": {
+        "train": 310,
+        "held": 344
+      },
+      "chrX": {
+        "train": 296,
+        "held": 337
+      },
+      "chrY": {
+        "train": 8,
+        "held": 5
+      }
+    },
+    "chromosomes_in_table": 24,
+    "min_genes_each_half": 100,
+    "min_regions": 10,
+    "admitted": [
+      "chr1",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr2",
+      "chr20",
+      "chr22",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX"
+    ],
+    "admitted_count": 22,
+    "fallback_to_global_both_arms": {
+      "chr21": {
+        "train": 77,
+        "held": 79
+      },
+      "chrY": {
+        "train": 8,
+        "held": 5
+      }
+    },
+    "fallback_count": 2,
+    "held_out_genes_in_admitted": 8244,
+    "held_out_genes_in_fallback": 84,
+    "training_genes_in_admitted": 8096,
+    "admitted_training_genes_min": 116,
+    "admitted_training_genes_median": 357,
+    "admitted_training_genes_max": 853,
+    "the_held_out_design_is_testable": true,
+    "what_that_means": "the design CAN be made honest at these gene counts: a region's scale is fitted on its training genes alone and scored on its held-out genes, and enough regions clear both floors for the comparison to be made",
+    "a_count_depends_on_no_measured_value": "the counts that establish the design's feasibility -- genes per chromosome per half, the admitted set, the floor cleared or not -- depend on no measured value, which is the reason the harness is permitted to compute and commit them BEFORE the registration. lane-scalesplit's harness states the same fact in the same words. No scale, no Delta MSE, no difference of Delta MSEs, no bootstrap and no permutation is computed before the registration is committed"
+  },
+  "variance_denominator": {
+    "held_out_pairs": 108264,
+    "held_out_variance": 2.1523792694453903,
+    "what_it_is": "the no-rule baseline's own held-out MSE, the mean of D^2 over the held-out gene-cell pairs; D is the measured deviation from that baseline, so this is the denominator every 'about X% of the variance' in this lane is taken against",
+    "m2h_held_out_delta_mse": 0.0433912108101358,
+    "m2h_percent_of_variance": 2.015964910371792,
+    "m2h_committed_wording": "about 2% of the variance",
+    "confirms": true
+  },
+  "problems": [],
+  "outcome": "HARNESS_REPRODUCES",
+  "reading": "M2h'S COMMITTED NUMBERS REPRODUCE from 7h's committed genes table through M2h's own functions at M2h's own seeds: training 8,181 genes, held out 8,328, fitted scale +0.2146 [98.33% CI +0.2007, +0.2283], held-out Delta MSE +0.04339 [+0.03790, +0.04894] (about 2% of the variance), control p = 0.000999, outcome BETTER. This lane's one-scale-per-gene metric IS magcal.delta_mse at a constant scale, differing by 6.18e-16 against TOLERANCE 0.0001, and its per-arm bootstrap IS magcal.bootstrap_delta, differing by 0 -- the REGISTERED claim is agreement within TOLERANCE, because the two accumulate a gene's term in a different ORDER and that costs about 1e-17 on a small table; on THIS table the observed difference is exactly 0. Two identical arms give a DELTA interval of exactly [0, 0]. 22 of the 24 chromosomes carry at least MIN_GENES = 100 TRAINING genes AND at least 100 HELD-OUT genes, above MIN_REGIONS = 10, SO AN HONEST HELD-OUT DESIGN FOR A PER-REGION SCALE EXISTS at these gene counts and the lane may proceed to register it; the remaining 2 (chr21, chrY) keep their 84 held-out genes in the scored set and are scored by the global scale under BOTH arms. M2h's committed held-out Delta MSE is 2.02% of the held-out variance, confirming its committed 'about 2% of the variance'. No per-chromosome scale, no per-region Delta MSE, no DELTA, no bootstrap of DELTA and no permutation was computed here",
+  "nothing_of_this_lanes_design_was_read": "no per-chromosome scale was fitted, no per-region Delta MSE was formed, no DELTA, no paired bootstrap of DELTA and no permutation of the chromosome labels was computed, and no value of this lane's design is written to this result. The constant scale used to check that this lane's metric IS magcal's is M2h's OWN committed scale. The gene counts depend on no measured value, and the variance denominator is the quantity M2h's committed 'about 2%' is already stated against",
+  "readers": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 5.9,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/multrna_result.json (7h, lane-multrna)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/magcal_result.json (M2h, lane-magcal)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/scalehet_result.json (lane-scalehet)",
+        "version": "pinned; its rejection of a single global scale is why this lane exists"
+      },
+      {
+        "accession": "data/results/hetblock_result.json (lane-hetblock2)",
+        "version": "pinned; its locus-block re-test of that rejection, carried word for word"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq gene quantifications, V29, 13 reader biosamples",
+        "version": "read by 7d, 7h and M2h; this lane reads their committed rows, not the files"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "pinned by sha256; the source of the committed P and D"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/magcal_registration.json",
+        "sha256": "2b25645be58c526a6c69bb15be5822bd921e14fb6b2761e1bcc78b505a302c90",
+        "bytes": 45173,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalehet_result.json",
+        "sha256": "dde2784c252bbfd98fd61de97f19bf36227714f7d11f57aec837bd857cbd8572",
+        "bytes": 109719,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/hetblock_result.json",
+        "sha256": "f561c0f7a51b4e24b174db70d225fc6a05286fcf25127e0a64d6f83bb9ac3faf",
+        "bytes": 119560,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      }
+    ],
+    "input_count": 5,
+    "readers": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "reader_count": 13,
+    "assembly": "GRCh38; genes as 7h matched them, by gene_id",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "form": "multiplicative",
+      "split_rule": "magcal.SPLIT, sha256 of the gene symbol, carried UNCHANGED",
+      "regional_unit": "chromosome, inherited from scalehet and hetblock2",
+      "min_genes_each_half": 100,
+      "min_regions": 10,
+      "form_interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "nominal_interval": [
+        2.5,
+        97.5
+      ],
+      "bootstrap": {
+        "resamples": 2000,
+        "seed": 20261010
+      },
+      "permutations_not_run_here": {
+        "count": 1000,
+        "seed": 20261013
+      },
+      "tolerance": 0.0001,
+      "m2h_tolerance": 1e-09
+    },
+    "exclusions": [
+      "none: the population is 7h's, unchanged. The ADMISSION floors are applied by the run, and a chromosome that does not clear them is NOT excluded -- its held-out genes stay in the scored set and are scored by the global scale under both arms"
+    ],
+    "partitions": {
+      "reproduced": "M2h's sha256-of-symbol training and held-out genes, to recover its numbers",
+      "this_lanes_own": "the same partition, taken WITHIN each chromosome: a region's scale is fitted on its training genes and scored on its held-out genes. No scale of this design is fitted here and no held-out value under it is read"
+    },
+    "code_cleanliness": {
+      "git_sha": "027d41422bd6e5aa12acb3d33f6bd51e828a678a",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/regionscale_harness.py",
+        "form": "committed_repository_file",
+        "path": "scripts/regionscale_harness.py",
+        "is_committed": true,
+        "declared_entry": "scripts/regionscale_harness.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/execscale_census.py",
+        "tests/test_execscale.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regionscale.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/scalehet.py",
+        "genomeos/attribution/scalesplit.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/regionscale_harness.py"
+      ],
+      "counting_path_count": 158,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "027d41422bd6e5aa12acb3d33f6bd51e828a678a",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/execscale_census.py",
+        "tests/test_execscale.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/regionscale_harness.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "027d41422bd6e5aa12acb3d33f6bd51e828a678a",
+      "code_cleanliness_git_sha": "027d41422bd6e5aa12acb3d33f6bd51e828a678a",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 027d414"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 395,
+      "opens_under_data": 6,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
