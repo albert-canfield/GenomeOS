@@ -1,0 +1,1596 @@
+{
+  "result": "emit7g_census",
+  "date": "2026-10-12",
+  "lane": "lane-emit7g",
+  "item": "ROADMAP \u00a75 item 7g, the next step: compile.py emits every coding target at its bar",
+  "population": "the 24 compiled non-coding programs as they stand (data/knowledge/compiled/noncoding_<chrom>.bio, git-ignored, pinned by sha256 in this census), which are the files M1 ran and every census of this series reads. Per program: every `element` block, every `region` block, and every `rule` line split into predicted and experimental by readergate.rule_targets",
+  "bar": "the bar is predict.enhancer_target.MIN_EFFECT, 0.1 |log2 fold change|, the same object the compiler names its one target with; the size rule is targets.genes_at_bar's, the larger of the predicted fall and the predicted rise over every track, ties to the fall, strongest first, which is the rule predict_target names the compiled target with. Nothing here is tuned or chosen",
+  "min_effect": 0.1,
+  "emission_now": "one `targets:` property and one `rule` line per attributed element, both naming predicted_coding['gene'] (compile.compile_chromosome's attributed-elements section). An element of the experimental layer (`<id>_measured`) carries no predicted rule and a `region` block carries none either",
+  "emission_at_the_bar": "one `rule` line per candidate target of the same elements: targetchoice.candidate_list(heads, responses.at_bar(chrom, element, MIN_EFFECT), coding) -- the compiled target first, then every protein-coding gene of the response cache's window at the bar, strongest first, deduplicated. The population of elements is unchanged, so no element without a compiled target gains one",
+  "rule_fields": [
+    "gene: the candidate's symbol",
+    "action: activates when the larger side is the predicted fall, inhibits when it is the predicted rise (compile.compiled_action's own reading of the sign, unchanged)",
+    "log2: the signed change targets.genes_at_bar returns, which is max_drop_log2fc for a fall and max_rise_log2fc for a rise",
+    "tissue: max_drop_tissue for a fall and max_rise_tissue for a rise, the cache record's own field",
+    "strength: min(1.0, |log2|) rounded to 3 places, as the compiled rule already states it"
+  ],
+  "genome_wide": {
+    "elements_reached": 440377,
+    "rules_predicted_now": 440377,
+    "rules_predicted_after": 542801,
+    "rules_added": 102424,
+    "elements_gaining_a_target": 73286,
+    "elements_keeping_one_target": 367091,
+    "elements_gaining_a_target_that_had_none": 0,
+    "now": {
+      "domain_blocks": 14279,
+      "element_blocks": 459449,
+      "elements_with_a_predicted_rule": 440377,
+      "elements_without_a_predicted_rule": 19072,
+      "gene_blocks": 18973,
+      "module_blocks": 24,
+      "region_blocks": 26806,
+      "rules_experimental": 212,
+      "rules_predicted": 440377,
+      "rules_total": 440589
+    },
+    "choice_counts": {
+      "compiled_target_not_at_the_bar": 0,
+      "compiled_target_not_first_at_the_bar": 0,
+      "compiled_targets_1": 440377,
+      "compiled_targets_2_or_more": 0,
+      "elements": 440377,
+      "experimental_rule_lines_removed": 212,
+      "no_coding_gene_at_the_bar": 0,
+      "not_cached": 0
+    },
+    "targets_per_element_after": {
+      "1": 367091,
+      "11+": 146,
+      "2": 55362,
+      "3": 12325,
+      "4-5": 4585,
+      "6-10": 868
+    },
+    "largest_candidate_list": 36,
+    "chromosomes": 24
+  },
+  "per_chromosome": {
+    "chr1": {
+      "now": {
+        "domain_blocks": 1257,
+        "element_blocks": 45805,
+        "elements_with_a_predicted_rule": 43681,
+        "elements_without_a_predicted_rule": 2124,
+        "gene_blocks": 1964,
+        "module_blocks": 1,
+        "region_blocks": 2425,
+        "rules_experimental": 19,
+        "rules_predicted": 43681,
+        "rules_total": 43700
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 43681,
+        "compiled_targets_2_or_more": 0,
+        "elements": 43681,
+        "experimental_rule_lines_removed": 19,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 43681,
+      "rules_predicted_now": 43681,
+      "rules_predicted_after": 55344,
+      "rules_added": 11663,
+      "elements_gaining_a_target": 8338,
+      "elements_keeping_one_target": 35343,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 35343,
+        "2": 6267,
+        "3": 1361,
+        "4-5": 600,
+        "6-10": 101,
+        "11+": 9
+      },
+      "largest_candidate_list": 22
+    },
+    "chr2": {
+      "now": {
+        "domain_blocks": 1126,
+        "element_blocks": 34314,
+        "elements_with_a_predicted_rule": 32917,
+        "elements_without_a_predicted_rule": 1397,
+        "gene_blocks": 1212,
+        "module_blocks": 1,
+        "region_blocks": 1943,
+        "rules_experimental": 12,
+        "rules_predicted": 32917,
+        "rules_total": 32929
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 32917,
+        "compiled_targets_2_or_more": 0,
+        "elements": 32917,
+        "experimental_rule_lines_removed": 12,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 32917,
+      "rules_predicted_now": 32917,
+      "rules_predicted_after": 38798,
+      "rules_added": 5881,
+      "elements_gaining_a_target": 4265,
+      "elements_keeping_one_target": 28652,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 28652,
+        "2": 3275,
+        "3": 717,
+        "4-5": 196,
+        "6-10": 77,
+        "11+": 0
+      },
+      "largest_candidate_list": 10
+    },
+    "chr3": {
+      "now": {
+        "domain_blocks": 1015,
+        "element_blocks": 28801,
+        "elements_with_a_predicted_rule": 27682,
+        "elements_without_a_predicted_rule": 1119,
+        "gene_blocks": 1053,
+        "module_blocks": 1,
+        "region_blocks": 1298,
+        "rules_experimental": 10,
+        "rules_predicted": 27682,
+        "rules_total": 27692
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 27682,
+        "compiled_targets_2_or_more": 0,
+        "elements": 27682,
+        "experimental_rule_lines_removed": 10,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 27682,
+      "rules_predicted_now": 27682,
+      "rules_predicted_after": 33333,
+      "rules_added": 5651,
+      "elements_gaining_a_target": 4350,
+      "elements_keeping_one_target": 23332,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 23332,
+        "2": 3421,
+        "3": 696,
+        "4-5": 200,
+        "6-10": 33,
+        "11+": 0
+      },
+      "largest_candidate_list": 9
+    },
+    "chr4": {
+      "now": {
+        "domain_blocks": 820,
+        "element_blocks": 21420,
+        "elements_with_a_predicted_rule": 20646,
+        "elements_without_a_predicted_rule": 774,
+        "gene_blocks": 722,
+        "module_blocks": 1,
+        "region_blocks": 1398,
+        "rules_experimental": 7,
+        "rules_predicted": 20646,
+        "rules_total": 20653
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 20646,
+        "compiled_targets_2_or_more": 0,
+        "elements": 20646,
+        "experimental_rule_lines_removed": 7,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 20646,
+      "rules_predicted_now": 20646,
+      "rules_predicted_after": 24265,
+      "rules_added": 3619,
+      "elements_gaining_a_target": 2701,
+      "elements_keeping_one_target": 17945,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 17945,
+        "2": 2086,
+        "3": 450,
+        "4-5": 135,
+        "6-10": 28,
+        "11+": 2
+      },
+      "largest_candidate_list": 13
+    },
+    "chr5": {
+      "now": {
+        "domain_blocks": 835,
+        "element_blocks": 23617,
+        "elements_with_a_predicted_rule": 22772,
+        "elements_without_a_predicted_rule": 845,
+        "gene_blocks": 836,
+        "module_blocks": 1,
+        "region_blocks": 1363,
+        "rules_experimental": 7,
+        "rules_predicted": 22772,
+        "rules_total": 22779
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 22772,
+        "compiled_targets_2_or_more": 0,
+        "elements": 22772,
+        "experimental_rule_lines_removed": 7,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 22772,
+      "rules_predicted_now": 22772,
+      "rules_predicted_after": 27436,
+      "rules_added": 4664,
+      "elements_gaining_a_target": 2720,
+      "elements_keeping_one_target": 20052,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 20052,
+        "2": 2112,
+        "3": 387,
+        "4-5": 140,
+        "6-10": 11,
+        "11+": 70
+      },
+      "largest_candidate_list": 25
+    },
+    "chr6": {
+      "now": {
+        "domain_blocks": 841,
+        "element_blocks": 24894,
+        "elements_with_a_predicted_rule": 23769,
+        "elements_without_a_predicted_rule": 1125,
+        "gene_blocks": 1008,
+        "module_blocks": 1,
+        "region_blocks": 1396,
+        "rules_experimental": 11,
+        "rules_predicted": 23769,
+        "rules_total": 23780
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 23769,
+        "compiled_targets_2_or_more": 0,
+        "elements": 23769,
+        "experimental_rule_lines_removed": 11,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 23769,
+      "rules_predicted_now": 23769,
+      "rules_predicted_after": 28748,
+      "rules_added": 4979,
+      "elements_gaining_a_target": 3583,
+      "elements_keeping_one_target": 20186,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 20186,
+        "2": 2613,
+        "3": 694,
+        "4-5": 246,
+        "6-10": 29,
+        "11+": 1
+      },
+      "largest_candidate_list": 11
+    },
+    "chr7": {
+      "now": {
+        "domain_blocks": 857,
+        "element_blocks": 23578,
+        "elements_with_a_predicted_rule": 22596,
+        "elements_without_a_predicted_rule": 982,
+        "gene_blocks": 875,
+        "module_blocks": 1,
+        "region_blocks": 1400,
+        "rules_experimental": 8,
+        "rules_predicted": 22596,
+        "rules_total": 22604
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 22596,
+        "compiled_targets_2_or_more": 0,
+        "elements": 22596,
+        "experimental_rule_lines_removed": 8,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 22596,
+      "rules_predicted_now": 22596,
+      "rules_predicted_after": 27209,
+      "rules_added": 4613,
+      "elements_gaining_a_target": 3425,
+      "elements_keeping_one_target": 19171,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 19171,
+        "2": 2631,
+        "3": 548,
+        "4-5": 208,
+        "6-10": 38,
+        "11+": 0
+      },
+      "largest_candidate_list": 10
+    },
+    "chr8": {
+      "now": {
+        "domain_blocks": 758,
+        "element_blocks": 19330,
+        "elements_with_a_predicted_rule": 18552,
+        "elements_without_a_predicted_rule": 778,
+        "gene_blocks": 647,
+        "module_blocks": 1,
+        "region_blocks": 1180,
+        "rules_experimental": 9,
+        "rules_predicted": 18552,
+        "rules_total": 18561
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 18552,
+        "compiled_targets_2_or_more": 0,
+        "elements": 18552,
+        "experimental_rule_lines_removed": 9,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 18552,
+      "rules_predicted_now": 18552,
+      "rules_predicted_after": 21591,
+      "rules_added": 3039,
+      "elements_gaining_a_target": 2474,
+      "elements_keeping_one_target": 16078,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 16078,
+        "2": 2050,
+        "3": 329,
+        "4-5": 84,
+        "6-10": 11,
+        "11+": 0
+      },
+      "largest_candidate_list": 7
+    },
+    "chr9": {
+      "now": {
+        "domain_blocks": 561,
+        "element_blocks": 20050,
+        "elements_with_a_predicted_rule": 19272,
+        "elements_without_a_predicted_rule": 778,
+        "gene_blocks": 737,
+        "module_blocks": 1,
+        "region_blocks": 1080,
+        "rules_experimental": 6,
+        "rules_predicted": 19272,
+        "rules_total": 19278
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 19272,
+        "compiled_targets_2_or_more": 0,
+        "elements": 19272,
+        "experimental_rule_lines_removed": 6,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 19272,
+      "rules_predicted_now": 19272,
+      "rules_predicted_after": 22952,
+      "rules_added": 3680,
+      "elements_gaining_a_target": 2694,
+      "elements_keeping_one_target": 16578,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 16578,
+        "2": 2059,
+        "3": 434,
+        "4-5": 162,
+        "6-10": 38,
+        "11+": 1
+      },
+      "largest_candidate_list": 13
+    },
+    "chr10": {
+      "now": {
+        "domain_blocks": 656,
+        "element_blocks": 21946,
+        "elements_with_a_predicted_rule": 21023,
+        "elements_without_a_predicted_rule": 923,
+        "gene_blocks": 715,
+        "module_blocks": 1,
+        "region_blocks": 1190,
+        "rules_experimental": 10,
+        "rules_predicted": 21023,
+        "rules_total": 21033
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 21023,
+        "compiled_targets_2_or_more": 0,
+        "elements": 21023,
+        "experimental_rule_lines_removed": 10,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 21023,
+      "rules_predicted_now": 21023,
+      "rules_predicted_after": 24658,
+      "rules_added": 3635,
+      "elements_gaining_a_target": 2842,
+      "elements_keeping_one_target": 18181,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 18181,
+        "2": 2194,
+        "3": 537,
+        "4-5": 106,
+        "6-10": 5,
+        "11+": 0
+      },
+      "largest_candidate_list": 9
+    },
+    "chr11": {
+      "now": {
+        "domain_blocks": 711,
+        "element_blocks": 26880,
+        "elements_with_a_predicted_rule": 25731,
+        "elements_without_a_predicted_rule": 1149,
+        "gene_blocks": 1174,
+        "module_blocks": 1,
+        "region_blocks": 1453,
+        "rules_experimental": 37,
+        "rules_predicted": 25731,
+        "rules_total": 25768
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 25731,
+        "compiled_targets_2_or_more": 0,
+        "elements": 25731,
+        "experimental_rule_lines_removed": 37,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 25731,
+      "rules_predicted_now": 25731,
+      "rules_predicted_after": 33737,
+      "rules_added": 8006,
+      "elements_gaining_a_target": 5097,
+      "elements_keeping_one_target": 20634,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 20634,
+        "2": 3504,
+        "3": 1005,
+        "4-5": 435,
+        "6-10": 134,
+        "11+": 19
+      },
+      "largest_candidate_list": 24
+    },
+    "chr12": {
+      "now": {
+        "domain_blocks": 718,
+        "element_blocks": 23702,
+        "elements_with_a_predicted_rule": 22814,
+        "elements_without_a_predicted_rule": 888,
+        "gene_blocks": 989,
+        "module_blocks": 1,
+        "region_blocks": 1165,
+        "rules_experimental": 9,
+        "rules_predicted": 22814,
+        "rules_total": 22823
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 22814,
+        "compiled_targets_2_or_more": 0,
+        "elements": 22814,
+        "experimental_rule_lines_removed": 9,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 22814,
+      "rules_predicted_now": 22814,
+      "rules_predicted_after": 28417,
+      "rules_added": 5603,
+      "elements_gaining_a_target": 3985,
+      "elements_keeping_one_target": 18829,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 18829,
+        "2": 2992,
+        "3": 671,
+        "4-5": 250,
+        "6-10": 70,
+        "11+": 2
+      },
+      "largest_candidate_list": 19
+    },
+    "chr13": {
+      "now": {
+        "domain_blocks": 407,
+        "element_blocks": 10053,
+        "elements_with_a_predicted_rule": 9711,
+        "elements_without_a_predicted_rule": 342,
+        "gene_blocks": 311,
+        "module_blocks": 1,
+        "region_blocks": 771,
+        "rules_predicted": 9711,
+        "rules_total": 9711
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 9711,
+        "compiled_targets_2_or_more": 0,
+        "elements": 9711,
+        "experimental_rule_lines_removed": 0,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 9711,
+      "rules_predicted_now": 9711,
+      "rules_predicted_after": 11067,
+      "rules_added": 1356,
+      "elements_gaining_a_target": 1191,
+      "elements_keeping_one_target": 8520,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 8520,
+        "2": 1044,
+        "3": 130,
+        "4-5": 17,
+        "6-10": 0,
+        "11+": 0
+      },
+      "largest_candidate_list": 5
+    },
+    "chr14": {
+      "now": {
+        "domain_blocks": 427,
+        "element_blocks": 13888,
+        "elements_with_a_predicted_rule": 13385,
+        "elements_without_a_predicted_rule": 503,
+        "gene_blocks": 586,
+        "module_blocks": 1,
+        "region_blocks": 942,
+        "rules_experimental": 2,
+        "rules_predicted": 13385,
+        "rules_total": 13387
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 13385,
+        "compiled_targets_2_or_more": 0,
+        "elements": 13385,
+        "experimental_rule_lines_removed": 2,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 13385,
+      "rules_predicted_now": 13385,
+      "rules_predicted_after": 16502,
+      "rules_added": 3117,
+      "elements_gaining_a_target": 2372,
+      "elements_keeping_one_target": 11013,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 11013,
+        "2": 1865,
+        "3": 344,
+        "4-5": 148,
+        "6-10": 15,
+        "11+": 0
+      },
+      "largest_candidate_list": 9
+    },
+    "chr15": {
+      "now": {
+        "domain_blocks": 436,
+        "element_blocks": 15055,
+        "elements_with_a_predicted_rule": 14474,
+        "elements_without_a_predicted_rule": 581,
+        "gene_blocks": 572,
+        "module_blocks": 1,
+        "region_blocks": 684,
+        "rules_experimental": 4,
+        "rules_predicted": 14474,
+        "rules_total": 14478
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 14474,
+        "compiled_targets_2_or_more": 0,
+        "elements": 14474,
+        "experimental_rule_lines_removed": 4,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 14474,
+      "rules_predicted_now": 14474,
+      "rules_predicted_after": 17160,
+      "rules_added": 2686,
+      "elements_gaining_a_target": 2115,
+      "elements_keeping_one_target": 12359,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 12359,
+        "2": 1655,
+        "3": 366,
+        "4-5": 91,
+        "6-10": 3,
+        "11+": 0
+      },
+      "largest_candidate_list": 6
+    },
+    "chr16": {
+      "now": {
+        "domain_blocks": 400,
+        "element_blocks": 15468,
+        "elements_with_a_predicted_rule": 14799,
+        "elements_without_a_predicted_rule": 669,
+        "gene_blocks": 819,
+        "module_blocks": 1,
+        "region_blocks": 862,
+        "rules_experimental": 8,
+        "rules_predicted": 14799,
+        "rules_total": 14807
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 14799,
+        "compiled_targets_2_or_more": 0,
+        "elements": 14799,
+        "experimental_rule_lines_removed": 8,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 14799,
+      "rules_predicted_now": 14799,
+      "rules_predicted_after": 19069,
+      "rules_added": 4270,
+      "elements_gaining_a_target": 3057,
+      "elements_keeping_one_target": 11742,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 11742,
+        "2": 2275,
+        "3": 521,
+        "4-5": 230,
+        "6-10": 29,
+        "11+": 2
+      },
+      "largest_candidate_list": 11
+    },
+    "chr17": {
+      "now": {
+        "domain_blocks": 468,
+        "element_blocks": 22627,
+        "elements_with_a_predicted_rule": 21608,
+        "elements_without_a_predicted_rule": 1019,
+        "gene_blocks": 1139,
+        "module_blocks": 1,
+        "region_blocks": 1022,
+        "rules_experimental": 11,
+        "rules_predicted": 21608,
+        "rules_total": 21619
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 21608,
+        "compiled_targets_2_or_more": 0,
+        "elements": 21608,
+        "experimental_rule_lines_removed": 11,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 21608,
+      "rules_predicted_now": 21608,
+      "rules_predicted_after": 29265,
+      "rules_added": 7657,
+      "elements_gaining_a_target": 5276,
+      "elements_keeping_one_target": 16332,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 16332,
+        "2": 3965,
+        "3": 838,
+        "4-5": 371,
+        "6-10": 82,
+        "11+": 20
+      },
+      "largest_candidate_list": 36
+    },
+    "chr18": {
+      "now": {
+        "domain_blocks": 335,
+        "element_blocks": 9608,
+        "elements_with_a_predicted_rule": 9250,
+        "elements_without_a_predicted_rule": 358,
+        "gene_blocks": 262,
+        "module_blocks": 1,
+        "region_blocks": 612,
+        "rules_experimental": 1,
+        "rules_predicted": 9250,
+        "rules_total": 9251
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 9250,
+        "compiled_targets_2_or_more": 0,
+        "elements": 9250,
+        "experimental_rule_lines_removed": 1,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 9250,
+      "rules_predicted_now": 9250,
+      "rules_predicted_after": 10120,
+      "rules_added": 870,
+      "elements_gaining_a_target": 721,
+      "elements_keeping_one_target": 8529,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 8529,
+        "2": 603,
+        "3": 98,
+        "4-5": 19,
+        "6-10": 1,
+        "11+": 0
+      },
+      "largest_candidate_list": 7
+    },
+    "chr19": {
+      "now": {
+        "domain_blocks": 304,
+        "element_blocks": 18207,
+        "elements_with_a_predicted_rule": 17265,
+        "elements_without_a_predicted_rule": 942,
+        "gene_blocks": 1418,
+        "module_blocks": 1,
+        "region_blocks": 1066,
+        "rules_experimental": 17,
+        "rules_predicted": 17265,
+        "rules_total": 17282
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 17265,
+        "compiled_targets_2_or_more": 0,
+        "elements": 17265,
+        "experimental_rule_lines_removed": 17,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 17265,
+      "rules_predicted_now": 17265,
+      "rules_predicted_after": 25113,
+      "rules_added": 7848,
+      "elements_gaining_a_target": 5106,
+      "elements_keeping_one_target": 12159,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 12159,
+        "2": 3390,
+        "3": 1085,
+        "4-5": 535,
+        "6-10": 92,
+        "11+": 4
+      },
+      "largest_candidate_list": 12
+    },
+    "chr20": {
+      "now": {
+        "domain_blocks": 381,
+        "element_blocks": 13309,
+        "elements_with_a_predicted_rule": 12702,
+        "elements_without_a_predicted_rule": 607,
+        "gene_blocks": 534,
+        "module_blocks": 1,
+        "region_blocks": 762,
+        "rules_experimental": 6,
+        "rules_predicted": 12702,
+        "rules_total": 12708
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 12702,
+        "compiled_targets_2_or_more": 0,
+        "elements": 12702,
+        "experimental_rule_lines_removed": 6,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 12702,
+      "rules_predicted_now": 12702,
+      "rules_predicted_after": 15360,
+      "rules_added": 2658,
+      "elements_gaining_a_target": 1902,
+      "elements_keeping_one_target": 10800,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 10800,
+        "2": 1453,
+        "3": 260,
+        "4-5": 161,
+        "6-10": 28,
+        "11+": 0
+      },
+      "largest_candidate_list": 10
+    },
+    "chr21": {
+      "now": {
+        "domain_blocks": 159,
+        "element_blocks": 5374,
+        "elements_with_a_predicted_rule": 5174,
+        "elements_without_a_predicted_rule": 200,
+        "gene_blocks": 193,
+        "module_blocks": 1,
+        "region_blocks": 446,
+        "rules_experimental": 2,
+        "rules_predicted": 5174,
+        "rules_total": 5176
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 5174,
+        "compiled_targets_2_or_more": 0,
+        "elements": 5174,
+        "experimental_rule_lines_removed": 2,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 5174,
+      "rules_predicted_now": 5174,
+      "rules_predicted_after": 6531,
+      "rules_added": 1357,
+      "elements_gaining_a_target": 813,
+      "elements_keeping_one_target": 4361,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 4361,
+        "2": 626,
+        "3": 96,
+        "4-5": 53,
+        "6-10": 23,
+        "11+": 15
+      },
+      "largest_candidate_list": 23
+    },
+    "chr22": {
+      "now": {
+        "domain_blocks": 199,
+        "element_blocks": 10033,
+        "elements_with_a_predicted_rule": 9612,
+        "elements_without_a_predicted_rule": 421,
+        "gene_blocks": 432,
+        "module_blocks": 1,
+        "region_blocks": 635,
+        "rules_experimental": 1,
+        "rules_predicted": 9612,
+        "rules_total": 9613
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 9612,
+        "compiled_targets_2_or_more": 0,
+        "elements": 9612,
+        "experimental_rule_lines_removed": 1,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 9612,
+      "rules_predicted_now": 9612,
+      "rules_predicted_after": 12356,
+      "rules_added": 2744,
+      "elements_gaining_a_target": 2109,
+      "elements_keeping_one_target": 7503,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 7503,
+        "2": 1602,
+        "3": 420,
+        "4-5": 80,
+        "6-10": 6,
+        "11+": 1
+      },
+      "largest_candidate_list": 12
+    },
+    "chrX": {
+      "now": {
+        "domain_blocks": 593,
+        "element_blocks": 11359,
+        "elements_with_a_predicted_rule": 10817,
+        "elements_without_a_predicted_rule": 542,
+        "gene_blocks": 757,
+        "module_blocks": 1,
+        "region_blocks": 1338,
+        "rules_experimental": 15,
+        "rules_predicted": 10817,
+        "rules_total": 10832
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 10817,
+        "compiled_targets_2_or_more": 0,
+        "elements": 10817,
+        "experimental_rule_lines_removed": 15,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 10817,
+      "rules_predicted_now": 10817,
+      "rules_predicted_after": 13628,
+      "rules_added": 2811,
+      "elements_gaining_a_target": 2135,
+      "elements_keeping_one_target": 8682,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 8682,
+        "2": 1667,
+        "3": 336,
+        "4-5": 118,
+        "6-10": 14,
+        "11+": 0
+      },
+      "largest_candidate_list": 9
+    },
+    "chrY": {
+      "now": {
+        "domain_blocks": 15,
+        "element_blocks": 131,
+        "elements_with_a_predicted_rule": 125,
+        "elements_without_a_predicted_rule": 6,
+        "gene_blocks": 18,
+        "module_blocks": 1,
+        "region_blocks": 375,
+        "rules_predicted": 125,
+        "rules_total": 125
+      },
+      "choice_counts": {
+        "compiled_target_not_at_the_bar": 0,
+        "compiled_target_not_first_at_the_bar": 0,
+        "compiled_targets_1": 125,
+        "compiled_targets_2_or_more": 0,
+        "elements": 125,
+        "experimental_rule_lines_removed": 0,
+        "no_coding_gene_at_the_bar": 0,
+        "not_cached": 0
+      },
+      "elements_reached": 125,
+      "rules_predicted_now": 125,
+      "rules_predicted_after": 142,
+      "rules_added": 17,
+      "elements_gaining_a_target": 15,
+      "elements_keeping_one_target": 110,
+      "elements_gaining_a_target_that_had_none": 0,
+      "targets_per_element_after": {
+        "1": 110,
+        "2": 13,
+        "3": 2,
+        "4-5": 0,
+        "6-10": 0,
+        "11+": 0
+      },
+      "largest_candidate_list": 3
+    }
+  },
+  "frozen_code": {
+    "sha256": {
+      "genomeos/attribution/emit7g.py": "3851139968a121f5ee1ecb1774874c9356469fe93c3f0e69e00aff52f2eeef5c",
+      "scripts/emit7g_census.py": "28f06506d63429ff8420aa3dc22f28d3bcc1ee51cd75a0733937367f2b5acb33",
+      "tests/test_emit7g.py": "d48dc279989d113799ff75bf3da74716a9dba0d0d02757f8d887e77efedfedb5"
+    }
+  },
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "network": "none",
+  "seconds": 211.6,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE SCREEN cCREs scored by AlphaGenome deletion (per-element response cache)",
+        "version": "the 2026-09 all-element sweep; pinned here by sha256"
+      },
+      {
+        "accession": "the compiled non-coding programs (data/knowledge/compiled)",
+        "version": "untracked, as built in this checkout; pinned by sha256"
+      },
+      {
+        "accession": "GENCODE v50 basic annotation, per chromosome",
+        "version": "pinned by sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/alphagenome/elements",
+        "sha256": "41dc8a631dee0a3f95ca7eb894c3f09bc930dc080b9f378aed0261a0f338034e",
+        "bytes": 805894526,
+        "partition": null,
+        "files": 3233,
+        "role": "ElementResponses: every gene's predicted deletion response at an element"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": null,
+        "role": "compiled program"
+      },
+      {
+        "path": "GENCODE v50 per-chromosome GFF3 (protein-coding symbols, targetchoice.CANDIDATES)",
+        "group": true,
+        "members": [
+          {
+            "path": "data/reference/gencode_v50_chr1.gff3.gz",
+            "sha256": "aaf6b4864b260fc6b117aa357348a61429ed1e2926a5ee8988190fab0086dd7f",
+            "bytes": 15781966
+          },
+          {
+            "path": "data/reference/gencode_v50_chr10.gff3.gz",
+            "sha256": "fb48c491f6c557cbdf788e992024458e32df4222eeb499d8d132e643df56d7da",
+            "bytes": 6971712
+          },
+          {
+            "path": "data/reference/gencode_v50_chr11.gff3.gz",
+            "sha256": "26ba68357fa099c79e36090c348f0c8127ab086ff3e03d801948baca7b25ab20",
+            "bytes": 9161789
+          },
+          {
+            "path": "data/reference/gencode_v50_chr12.gff3.gz",
+            "sha256": "ab7dc26557bf8b4b4f5f4afbb3c39dee2d988d139d9a3e8a25b9caa521f177b5",
+            "bytes": 8537589
+          },
+          {
+            "path": "data/reference/gencode_v50_chr13.gff3.gz",
+            "sha256": "b4f968bbc995734c48926ec6f26f94176c1baf517b9220f98fc1a7dd21905a55",
+            "bytes": 2925688
+          },
+          {
+            "path": "data/reference/gencode_v50_chr14.gff3.gz",
+            "sha256": "ead252cb5c72ba7d297ae1f5dbb55045857df7400c5597b2721af30f7d5dd217",
+            "bytes": 5446220
+          },
+          {
+            "path": "data/reference/gencode_v50_chr15.gff3.gz",
+            "sha256": "95cca8cba7505b7028a0dbf52f99f5eb7ea5c807f126396e3b7f565b7afd5c33",
+            "bytes": 5424386
+          },
+          {
+            "path": "data/reference/gencode_v50_chr16.gff3.gz",
+            "sha256": "6ebe8b530d02b720c9e4a123c9cfb8611da033636fbd71546c2f7aea0d6d2d93",
+            "bytes": 6795096
+          },
+          {
+            "path": "data/reference/gencode_v50_chr17.gff3.gz",
+            "sha256": "69b97b12a91525c4730b327a5b8b9340c68ec602bae9ad0e370eba3cdd15715a",
+            "bytes": 9026753
+          },
+          {
+            "path": "data/reference/gencode_v50_chr18.gff3.gz",
+            "sha256": "0dc191ba7fbd6b4114218aba6a21ffc49cec9a8993b66db8db02cb260f37fff5",
+            "bytes": 2682634
+          },
+          {
+            "path": "data/reference/gencode_v50_chr19.gff3.gz",
+            "sha256": "f612d13a4d0e38d2acc5143a8009b872bb2129da3433e75f505bea1711ecfe94",
+            "bytes": 8518707
+          },
+          {
+            "path": "data/reference/gencode_v50_chr2.gff3.gz",
+            "sha256": "723943255bab9cfd644595d20a2d0a23c2cc74523418f1b4e3ba72b3dbe67c4f",
+            "bytes": 12336546
+          },
+          {
+            "path": "data/reference/gencode_v50_chr20.gff3.gz",
+            "sha256": "cbe6080219a2765979b56d33a18c2e9226f0ae7ab78bb103655f62b7f3be5dac",
+            "bytes": 3974515
+          },
+          {
+            "path": "data/reference/gencode_v50_chr22.gff3.gz",
+            "sha256": "319925db9c371684c0d0cd2291e9a77911f3ea7a6098be7514f71a496a785857",
+            "bytes": 3912249
+          },
+          {
+            "path": "data/reference/gencode_v50_chr3.gff3.gz",
+            "sha256": "583b1635fd44adc8ff321de523c1dfca954de68a539fed8f8b97ae6b477f33f2",
+            "bytes": 10518849
+          },
+          {
+            "path": "data/reference/gencode_v50_chr4.gff3.gz",
+            "sha256": "6916780966c162ea956faa9837864c6faca7fe2c61e139fad809df35758ec3d6",
+            "bytes": 6522948
+          },
+          {
+            "path": "data/reference/gencode_v50_chr5.gff3.gz",
+            "sha256": "aca940ae60f5b6e5991420573c8b773ce0bb94ce8ef8a88c35cee686f599fb8f",
+            "bytes": 7000086
+          },
+          {
+            "path": "data/reference/gencode_v50_chr6.gff3.gz",
+            "sha256": "d38d3fb841ec917585846b0c54d10a84cb6e18e4afc0c5a8ab9562fb3f02493c",
+            "bytes": 7623994
+          },
+          {
+            "path": "data/reference/gencode_v50_chr7.gff3.gz",
+            "sha256": "15cddd8899d3273aa88f87524950ba0449cb582bfb0c34787cf9e98da9cbbc44",
+            "bytes": 8058560
+          },
+          {
+            "path": "data/reference/gencode_v50_chr8.gff3.gz",
+            "sha256": "4f013de2b717ede9a37da70db43ee6f673ddc9e3283526dabd36734924ee5f2e",
+            "bytes": 5864835
+          },
+          {
+            "path": "data/reference/gencode_v50_chr9.gff3.gz",
+            "sha256": "3f6c396bfdf3df02501e28bb72a7c88d7ad82942458f08cbb70e9f84718d9f78",
+            "bytes": 6759087
+          },
+          {
+            "path": "data/reference/gencode_v50_chrX.gff3.gz",
+            "sha256": "dbabf6ef9fcdc98cc4032f3a8c54e6903d9b5587651c214a47958e2386c1b781",
+            "bytes": 4849239
+          },
+          {
+            "path": "data/reference/gencode_v50_chrY.gff3.gz",
+            "sha256": "306f54edc1463cd6f12a9a6ef0da6dde5ec957b8d2dc281377d1eb5f2dcc4083",
+            "bytes": 428494
+          },
+          {
+            "path": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+            "sha256": "2b64229c75e2a3910d3fe3ce109896a917bee9882eaf37ab27d15b0c90108d99",
+            "bytes": 1862225
+          }
+        ],
+        "sha256": "4b0450872e93d5d6b4b3f604ddb93e20b3a8347b21774794187c5d2236f464d8",
+        "bytes": 160984167,
+        "files": 24,
+        "partition": null
+      }
+    ],
+    "input_count": 26,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "min_effect": 0.1,
+      "bar": "the bar is predict.enhancer_target.MIN_EFFECT, 0.1 |log2 fold change|, the same object the compiler names its one target with; the size rule is targets.genes_at_bar's, the larger of the predicted fall and the predicted rise over every track, ties to the fall, strongest first, which is the rule predict_target names the compiled target with. Nothing here is tuned or chosen",
+      "candidate_list": "targetchoice.candidate_list, the list registered at b746a23"
+    },
+    "exclusions": [
+      "experimental rule lines are counted and never replaced: what an assay measured is not a model's attribution (signaltrace.PREDICTED_ONLY names the same lines)",
+      "no label of any screen is read: this census has no outcome column at all"
+    ],
+    "partitions": {
+      "none": "a census of the compiled store; there is no split and no fit"
+    },
+    "code_cleanliness": {
+      "git_sha": "f26c5ae0e2256dd46d7009e0a167eace80173c4d",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/emit7g_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/emit7g_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/emit7g_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/wormoutron_run.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_pseudobulk.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/emit7g_census.py"
+      ],
+      "counting_path_count": 150,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "f26c5ae0e2256dd46d7009e0a167eace80173c4d",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/wormoutron_run.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_pseudobulk.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/pseudobulk_inventory.json",
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/emit7g_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "f26c5ae0e2256dd46d7009e0a167eace80173c4d",
+      "code_cleanliness_git_sha": "f26c5ae0e2256dd46d7009e0a167eace80173c4d",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record f26c5ae"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 3638,
+      "opens_under_data": 3353,
+      "files_read": 3281,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
