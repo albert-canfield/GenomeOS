@@ -679,3 +679,89 @@ def test_a_refusal_CANNOT_be_raised_without_a_declared_cause():
         ot.CensusDriftError("something drifted", cause="not_a_declared_cause")
     assert "is not one of this module's declared causes" in str(e.value)
     assert ot.CensusDriftError("x", cause=ot.CAUSE_NAMES[0]).cause == ot.CAUSE_NAMES[0]
+
+
+# ---- the compile.py re-declaration of 2026-10-12, and the chain that keeps the earlier one -------
+#
+# compile.py's declared head reads shifted a SECOND time on 2026-10-12, this time under a peer's
+# commit: lane-execscale2's 92c6ea8 inserted the opt-in magnitude parameter and pushed three of the
+# four reads down. The census follows the module, never the reverse, so the re-declaration is a
+# re-read of the tree and the earlier declaration is kept beside it rather than replaced. These
+# tests hold the content proof and the arithmetic, so a future adjustment by number alone turns red.
+
+_COMPILE = "genomeos/attribution/compile.py"
+#: What 92c6ea8 did to compile.py, read off `git diff --numstat` and the hunk headers, not recalled:
+#: three insert-only hunks, 57 lines added and 0 removed.
+_92C6EA8_INSERTS = ((649, 50), (820, 1), (950, 6))
+
+
+def test_the_compile_py_shift_is_declared_as_a_chain_with_the_earlier_lines_KEPT():
+    """The pre-shift declaration (358, 682, 702, 984) is still readable, not overwritten."""
+    chain = ot.shift_history(_COMPILE)
+    assert len(chain) == 1, chain
+    assert tuple(chain[0]["now"]) == (358, 682, 702, 984)
+    assert chain[0]["shifted_by"] == "92c6ea8"
+    assert tuple(ot.MOVED_LINES[_COMPILE]["now"]) == (358, 732, 752, 1041)
+    assert ot.effective_lines()[_COMPILE] == (358, 732, 752, 1041)
+    assert ot.REGISTERED_LINES[_COMPILE] == (332, 838, 880), "the registration is untouched"
+
+
+def test_every_compile_py_shift_is_ACCOUNTED_FOR_by_92c6ea8s_insertions():
+    """Each new line number is the old one plus the lines 92c6ea8 inserted ABOVE it, and the three
+    hunks' insertions sum to the numstat. A line that moved for any other reason fails here."""
+    assert sum(n for _, n in _92C6EA8_INSERTS) == 57
+    before = tuple(ot.shift_history(_COMPILE)[0]["now"])
+    after = tuple(ot.MOVED_LINES[_COMPILE]["now"])
+    assert len(before) == len(after) == 4, "four claims went in and four came out"
+    for old, new in zip(before, after, strict=True):
+        shift = sum(n for at, n in _92C6EA8_INSERTS if at < old)
+        assert new == old + shift, (old, new, shift)
+    assert [n - o for o, n in zip(before, after, strict=True)] == [0, 50, 50, 57]
+
+
+def test_PLANTED_a_shift_that_DROPS_a_claim_is_REFUSED(monkeypatch):
+    """A claim that vanished is a finding, not a number to adjust.
+
+    Mutation: delete the claim-count raise in check_shift_history_is_a_chain and this test fails.
+    """
+    _baseline_is_green(ot.check_shift_history_is_a_chain)
+    rec = ot.MOVED_LINES[_COMPILE]
+    dropped = {**rec, "now": (358, 732, 752)}
+    monkeypatch.setattr(ot, "MOVED_LINES", {_COMPILE: dropped})
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_shift_history_is_a_chain()
+    assert "does not change how many claims there are" in str(e.value)
+    assert e.value.cause == "shift_record_changes_the_claim_count"
+
+
+def test_PLANTED_a_shift_entry_that_OVERWRITES_the_history_is_REFUSED(monkeypatch):
+    """Mutation: delete the overwrite raise in check_shift_history_is_a_chain and this test fails."""
+    _baseline_is_green(ot.check_shift_history_is_a_chain)
+    rec = ot.MOVED_LINES[_COMPILE]
+    restated = {**rec, "shifted_since": ({**rec["shifted_since"][0], "now": rec["now"]},)}
+    monkeypatch.setattr(ot, "MOVED_LINES", {_COMPILE: restated})
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_shift_history_is_a_chain()
+    assert "has overwritten the record instead of superseding it" in str(e.value)
+    assert e.value.cause == "shift_record_overwrites_the_history"
+
+
+def test_PLANTED_a_shift_entry_with_NO_CONTENT_PROOF_is_REFUSED(monkeypatch):
+    """Mutation: delete the content-proof raise in check_shift_history_is_a_chain and this fails."""
+    _baseline_is_green(ot.check_shift_history_is_a_chain)
+    rec = ot.MOVED_LINES[_COMPILE]
+    mute = {**rec, "shifted_since": ({**rec["shifted_since"][0], "what": "  "},)}
+    monkeypatch.setattr(ot, "MOVED_LINES", {_COMPILE: mute})
+    with pytest.raises(ot.CensusDriftError) as e:
+        ot.check_shift_history_is_a_chain()
+    assert "carries no content proof" in str(e.value)
+    assert e.value.cause == "shift_record_has_no_content_proof"
+
+
+def test_check_all_RUNS_the_chain_guard_so_it_is_not_an_inert_declaration(monkeypatch):
+    """A guard nothing calls is a decoration. Mutation: drop the call from check_all and this fails."""
+    called: list[str] = []
+    monkeypatch.setattr(ot, "check_shift_history_is_a_chain", lambda: called.append("yes"))
+    monkeypatch.setattr(ot, "check_census_matches_tree", lambda root=None: {})
+    ot.check_all()
+    assert called == ["yes"]

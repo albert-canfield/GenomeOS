@@ -881,9 +881,39 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
     #: registered as compile.py's falsifier is unmoved -- chr21 recompiles to `# test: entities >=
     #: 6172`, `# test: unknowns == 20`, `# test: rules == 5176`, with rule lines identical to the
     #: tracked noncoding_chr21_v3.bio's, line for line.
+    #: SHIFTED AGAIN 2026-10-12 by lane-censusline, and the earlier declaration is KEPT below in
+    #: `shifted_since` rather than overwritten, which is this dict's own rule ("superseding is
+    #: additive: the pre-move record is kept, never overwritten"). compile.py is STILL NOT MOVED by
+    #: the census's wave: nothing about its reading changed. A PEER'S COMMIT, lane-execscale2's
+    #: 92c6ea8 (the opt-in magnitude parameter, default 1.0), inserted 57 lines into compile.py and
+    #: removed none, which pushed three of the four declared head reads down.
     "genomeos/attribution/compile.py": {
-        "now": (358, 682, 702, 984),
+        "now": (358, 732, 752, 1041),
         "was": (332, 838, 880),
+        "shifted_since": (
+            {
+                "now": (358, 682, 702, 984),
+                "shifted_by": "92c6ea8",
+                "what": "The four declared reads were re-read BY CONTENT in the tree 92c6ea8 wrote "
+                "and all four are the same claim, text for text, indentation included: 358 `    pc "
+                '= e["predicted_coding"]` (element_axes) is UNSHIFTED; 682 -> 732 `    heads = '
+                '{e["id"]: [e["predicted_coding"]] for e in elements}` (element_targets\' '
+                'ONE_TARGET path); 702 -> 752 `        pc = e["predicted_coding"]` (the same head '
+                "kept first under EVERY_CODING_TARGET_AT_THE_BAR); 984 -> 1041 `            pc = "
+                'e["predicted_coding"]` (the attributed-element loop\'s basis sentence). THE '
+                "ARITHMETIC TIES EVERY SHIFT TO THAT ONE COMMIT: `git diff --numstat 92c6ea8~1 "
+                "92c6ea8 -- genomeos/attribution/compile.py` is 57 added, 0 removed, in three "
+                "insert-only hunks -- 50 lines after old line 649, 1 after old 820, 6 after old "
+                "950. So 358 (above 649) is unchanged; 682 and 702 (between 649 and 820) each take "
+                "+50; 984 (below all three) takes +50+1+6 = +57. 50 + 1 + 6 = 57 = the numstat, so "
+                "no shift is left unexplained and no line moved for any other reason. FOUR CLAIMS "
+                "WENT IN AND FOUR CAME OUT: the commit removes zero lines from compile.py, so "
+                "nothing was dropped, and the tree matches on exactly four head reads, so nothing "
+                "was added. compile.py's `# test: entities >=`, `# test: unknowns ==` and `# test: "
+                "rules ==` lines -- the figure this module registered as compile.py's falsifier -- "
+                "are untouched by 92c6ea8, which adds a parameter defaulting to 1.0",
+            },
+        ),
         "what": "NOT MOVED BY THIS WAVE: the compact head is still what the default emission "
         "writes. Two registered reads moved with their text unchanged, pushed down by the "
         "docstring paragraph and the two new functions above them: element_axes' `pc = "
@@ -1028,6 +1058,21 @@ CAUSES: tuple[dict[str, str], ...] = (
         "cause": "move_record_restates_the_claim",
         "raised_by": "check_registered_lines_are_not_edited",
         "when": "a MOVED_LINES record's `was` is not what the registration said",
+    },
+    {
+        "cause": "shift_record_changes_the_claim_count",
+        "raised_by": "check_shift_history_is_a_chain",
+        "when": "a superseded `now` declaration holds a different number of lines from today's",
+    },
+    {
+        "cause": "shift_record_overwrites_the_history",
+        "raised_by": "check_shift_history_is_a_chain",
+        "when": "a shift entry restates today's lines or names no commit that shifted them",
+    },
+    {
+        "cause": "shift_record_has_no_content_proof",
+        "raised_by": "check_shift_history_is_a_chain",
+        "when": "a shift entry does not say by content that the new line is the same claim",
     },
     {
         "cause": "scope_counts_drifted",
@@ -1230,6 +1275,59 @@ def check_registered_lines_are_not_edited() -> None:
             )
 
 
+def shift_history(mod: str) -> tuple[dict[str, Any], ...]:
+    """The earlier `now` declarations a module's move record has been superseded from, oldest first.
+
+    A module the census declares by LINE NUMBER drifts whenever a peer inserts above one of its
+    reads, and the honest record of that is a chain: each entry the lines that were declared, the
+    commit whose insertions shifted them, and the content proof that the line at the new number is
+    the same claim. Empty for a record that has not shifted since it was written.
+    """
+    return tuple(MOVED_LINES.get(mod, {}).get("shifted_since") or ())
+
+
+def check_shift_history_is_a_chain() -> None:
+    """Refuse unless every superseded `now` declaration is KEPT and says what shifted it.
+
+    Two ways a re-declaration could quietly become a rewrite, and this refuses both:
+
+    - a chain entry with a DIFFERENT NUMBER OF LINES from today's `now`. Four declared reads must
+      come out as four: a count that changed means a claim was dropped or one was added while the
+      numbers were being adjusted, which is a finding to report and not a number to update.
+    - a chain entry restating today's lines, or carrying no commit and no content proof. That is an
+      overwrite wearing the shape of a history: the superseded declaration would no longer be
+      readable, which is exactly what `REGISTERED_LINES`' own rule forbids one level up.
+    """
+    for mod, rec in MOVED_LINES.items():
+        today = tuple(rec.get("now") or ())
+        for entry in shift_history(mod):
+            earlier = tuple(entry.get("now") or ())
+            if len(earlier) != len(today):
+                raise CensusDriftError(
+                    f"MOVED_LINES[{mod!r}] declared {len(earlier)} head read(s) {earlier} before "
+                    f"{entry.get('shifted_by')} and {len(today)} now, {today}. A shift moves lines; "
+                    "it does not change how many claims there are. Re-read the module: a claim that "
+                    "vanished is a finding to report, not a number to adjust.",
+                    cause="shift_record_changes_the_claim_count",
+                )
+            if earlier == today or not str(entry.get("shifted_by") or "").strip():
+                raise CensusDriftError(
+                    f"MOVED_LINES[{mod!r}]'s shift history holds {earlier} with "
+                    f"shifted_by={entry.get('shifted_by')!r}. A superseded declaration is kept with "
+                    "the commit that shifted it and the content proof that the line at the new "
+                    "number is the same claim; an entry that restates today's lines, or names no "
+                    "commit, has overwritten the record instead of superseding it.",
+                    cause="shift_record_overwrites_the_history",
+                )
+            if not str(entry.get("what") or "").strip():
+                raise CensusDriftError(
+                    f"MOVED_LINES[{mod!r}]'s shift from {earlier} to {today} carries no content "
+                    "proof. A line that moved may be a peer's edit and a line that vanished may be "
+                    "a dropped claim, so the record states which, by content.",
+                    cause="shift_record_has_no_content_proof",
+                )
+
+
 def check_one_falsifier_per_module() -> None:
     """Refuse unless every census module has a falsifier of its own, no two alike."""
     seen: dict[str, str] = {}
@@ -1385,6 +1483,7 @@ def check_head_invariant(census: dict[str, Any], where: str) -> None:
 
 def check_all(root: Path | None = None, payload: dict[str, Any] | None = None) -> None:
     check_registered_lines_are_not_edited()
+    check_shift_history_is_a_chain()
     check_census_matches_tree(root)
     check_scope_counts()
     check_one_falsifier_per_module()
