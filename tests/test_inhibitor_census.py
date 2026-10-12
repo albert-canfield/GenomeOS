@@ -285,3 +285,195 @@ def test_the_committed_residuemult_result_puts_every_one_of_the_neither_genes_on
     tracked_paths.must_be_present(RESIDUEMULT_FILE)
     d = json.loads(RESIDUEMULT_FILE.read_text())
     assert d["informative_under_neither_by_reason"] == {ic.REASON: d["counts"]["informative_under_neither"]}
+
+
+# ==== the committed result, with every verdict RECOMPUTED from its own rows ==============================
+
+
+def _result() -> dict:
+    tracked_paths.must_be_present(RESULT_FILE)
+    return json.loads(RESULT_FILE.read_text())
+
+
+def _tables(d: dict) -> tuple[list, list, list, dict, dict]:
+    g, e, o = d["the_39_gene_table"], d["the_39_element_table"], d["genes_with_an_offending_inhibitor_table"]
+    gi = {c: g["columns"].index(c) for c in g["columns"]}
+    ei = {c: e["columns"].index(c) for c in e["columns"]}
+    return g["rows"], e["rows"], o["rows"], gi, ei
+
+
+def test_the_result_opened_no_rna_sent_no_request_and_spent_nothing() -> None:
+    d = _result()
+    assert d["rna_read"] == "none"
+    assert d["alphagenome_requests"] == 0
+    assert d["money"].startswith("none")
+    assert d["conventions"]["scale_is_refitted"] is False
+    assert d["bound_violations"] == []
+    assert d["sign_disagreements"] == 0
+
+
+def test_the_re_derived_population_is_lane_residue_s_committed_one_to_the_gene() -> None:
+    d = _result()
+    q1 = d["Q1_re_derivation"]
+    committed = json.loads(Path("data/results/residue_census.json").read_text())["Q1_counts"]
+    assert q1["eligible_for_a_fit"] == committed["eligible_for_a_fit"]
+    assert q1["excluded_basal_not_positive"] == committed["excluded_basal_not_positive"]
+    assert q1["recovered_at_the_scale"] == committed["recovered_at_the_scale"]
+    assert q1["the_residue"] == committed["the_residue"]
+
+
+def test_the_39_are_re_derived_not_copied_and_the_two_sets_agree_with_nothing_on_either_side() -> None:
+    d = _result()
+    r = d["Q1_re_derivation"]["reconciliation"]
+    assert r["sets_agree"] is True
+    assert r["in_this_run_not_committed"] == [] and r["in_committed_not_this_run"] == []
+    assert r["re_derived_count"] == r["committed_neither_count"]
+    rows, _e, _o, gi, _ei = _tables(d)
+    assert len(rows) == r["re_derived_count"] == len(set(d["Q1_re_derivation"]["symbols"]))
+    assert {row[gi["reason_scaled"]] for row in rows} == {ic.REASON}
+    assert d["Q1_re_derivation"]["all_on_the_one_reason"] is True
+
+
+def test_every_one_of_the_39_is_in_the_residue_and_none_was_excluded_for_anything_else() -> None:
+    d = _result()
+    rows, _e, _o, gi, _ei = _tables(d)
+    assert all(row[gi["in_residue"]] == 1 for row in rows)
+    assert all(row[gi["excluded_by_the_mean"]] == 1 for row in rows)
+    assert all(row[gi["refused_scaled"]] == 1 and row[gi["refused_unscaled"]] == 1 for row in rows)
+
+
+def test_the_strength_distribution_is_RECOMPUTED_from_the_element_rows_not_trusted() -> None:
+    d = _result()
+    rows, els, _o, gi, ei = _tables(d)
+    worst: dict[str, float] = {}
+    for e in els:
+        worst[e[ei["symbol"]]] = max(worst.get(e[ei["symbol"]], 0.0), e[ei["strength_scaled"]])
+    for row in rows:
+        assert row[gi["max_strength_scaled"]] == pytest.approx(worst[row[gi["symbol"]]])
+    mine = ic.distribution([worst[row[gi["symbol"]]] for row in rows])
+    said = d["Q2_strength_distribution"]["per_gene_worst"]["max_strength_scaled"]
+    assert mine["n"] == said["n"]
+    assert mine["min"] == pytest.approx(said["min"]) and mine["max"] == pytest.approx(said["max"])
+    assert mine["quantiles"]["0.5"] == pytest.approx(said["quantiles"]["0.5"])
+    assert said["min"] > 1.0, "every one of them must clear the bound, or it was not refused for this"
+
+
+def test_the_offender_count_per_gene_is_RECOMPUTED_and_38_of_the_39_carry_exactly_one() -> None:
+    d = _result()
+    rows, els, _o, gi, ei = _tables(d)
+    per: dict[str, int] = {row[gi["symbol"]]: 0 for row in rows}
+    for e in els:
+        per[e[ei["symbol"]]] += int(e[ei["offends_scaled"]])
+    for row in rows:
+        assert row[gi["n_offending_scaled"]] == per[row[gi["symbol"]]]
+    assert (
+        ic.counts_of(list(per.values()))
+        == d["Q4_one_inhibitor_or_several"]["n_offending_at_the_scale_counts"]
+    )
+    assert (
+        sum(1 for v in per.values() if v == 1)
+        == d["Q4_one_inhibitor_or_several"]["genes_with_exactly_one_offender"]
+    )
+    assert sum(per.values()) == d["Q5_where_the_rules_came_from"]["offending_elements"]
+
+
+def test_the_provenance_counts_are_RECOMPUTED_from_the_offending_rows() -> None:
+    d = _result()
+    _rows, els, _o, _gi, ei = _tables(d)
+    off = [e for e in els if e[ei["offends_scaled"]]]
+    kinds: dict[str, int] = {}
+    hows: dict[str, int] = {}
+    for e in off:
+        kinds[e[ei["evidence_kind"]]] = kinds.get(e[ei["evidence_kind"]], 0) + 1
+        hows[e[ei["how_rho_was_read"]]] = hows.get(e[ei["how_rho_was_read"]], 0) + 1
+    assert kinds == d["Q5_where_the_rules_came_from"]["by_evidence_kind"]
+    assert hows == d["Q5_where_the_rules_came_from"]["by_how_rho_was_read"]
+
+
+def test_every_offending_fold_clears_the_derived_threshold_and_scaling_only_relieved_it() -> None:
+    d = _result()
+    _rows, els, _o, _gi, ei = _tables(d)
+    t = d["derived_thresholds"]
+    for e in els:
+        assert e[ei["strength_scaled"]] <= e[ei["strength"]] + 1e-12
+        if e[ei["offends_scaled"]]:
+            assert e[ei["rho"]] > t["fold_above_which_an_inhibitor_is_refused_at_the_scale"]
+            assert e[ei["offends_unscaled"]], "refused at the scale but not unscaled is impossible"
+        if e[ei["offends_unscaled"]]:
+            assert e[ei["rho"]] > t["fold_above_which_an_inhibitor_is_refused_unscaled"]
+
+
+def test_how_many_genes_OUTSIDE_the_39_carry_one_is_RECOMPUTED_from_the_offending_gene_table() -> None:
+    d = _result()
+    _rows, _els, off, gi, _ei = _tables(d)
+    the_39 = set(d["Q1_re_derivation"]["symbols"])
+    said = d["Q6_outside_the_39"]
+    for key, block in (
+        ("n_offending_unscaled", "above_the_bound_unscaled"),
+        ("n_offending_scaled", "above_the_bound_at_the_scale"),
+    ):
+        sel = [r for r in off if r[gi[key]] > 0]
+        assert len(sel) == said[block]["all_eligible"]["genes"]
+        assert (
+            sum(1 for r in sel if r[gi["symbol"]] not in the_39)
+            == said[block]["all_eligible"]["genes_outside_the_39"]
+        )
+        assert sum(r[gi[key]] for r in sel) == said[block]["all_eligible"]["elements"]
+    within = {r[gi["symbol"]] for r in off if r[gi["n_offending_scaled"]] > 0 and r[gi["in_residue"]]}
+    assert within == the_39, "inside the residue the offenders at the scale must be exactly the 39"
+    assert said["above_the_bound_at_the_scale"]["the_residue"]["genes_outside_the_39"] == 0
+
+
+def test_the_bound_is_not_special_to_the_39_and_the_result_says_so_in_its_own_numbers() -> None:
+    d = _result()
+    said = d["Q6_outside_the_39"]
+    assert said["above_the_bound_unscaled"]["all_eligible"]["genes_outside_the_39"] > len(
+        d["Q1_re_derivation"]["symbols"]
+    ), "if this ever fails the 39 ARE the whole population of this refusal and the reading changes"
+    assert said["above_the_bound_at_the_scale"]["all_eligible"]["genes_outside_the_39"] > 0
+
+
+def test_the_branch_and_its_wording_are_RECOMPUTED_from_the_committed_near_band_counts() -> None:
+    d = _result()
+    q7 = d["Q7_threshold_or_tail"]
+    near, above = q7["at_the_scale"]["just_below_the_bound"], q7["at_the_scale"]["above_the_bound"]
+    assert ic.branch(near, above) == d["branch"]
+    assert d["implication"] == ic.reading(
+        d["branch"],
+        near_below=near,
+        near_band=q7["near_band"],
+        above=above,
+        outside_genes=d["Q6_outside_the_39"]["above_the_bound_unscaled"]["all_eligible"][
+            "genes_outside_the_39"
+        ],
+        residue=d["Q1_re_derivation"]["the_residue"],
+    )
+    assert q7["near_band"] == ic.NEAR_BAND
+
+
+def test_the_offending_elements_are_a_thin_tail_of_the_layer_s_own_inhibitor_folds() -> None:
+    d = _result()
+    q7 = d["Q7_threshold_or_tail"]
+    all_elements = q7["inhibiting_elements_of_all_eligible_genes"]
+    assert all_elements == q7["strength_at_the_scale"]["n"] == q7["rho"]["n"]
+    assert q7["at_the_scale"]["above_the_bound"] < all_elements / 100
+    assert (
+        q7["rho"]["quantiles"]["0.5"]
+        < d["derived_thresholds"]["fold_above_which_an_inhibitor_is_refused_unscaled"]
+    )
+
+
+def test_the_strength_at_the_scale_can_never_exceed_the_ceiling_the_mapping_sets() -> None:
+    d = _result()
+    ceiling = 1.0 / ic.H
+    assert d["Q7_threshold_or_tail"]["strength_at_the_scale"]["max"] < ceiling
+    assert d["Q2_strength_distribution"]["per_gene_worst"]["max_strength_unscaled"]["max"] < ceiling
+
+
+def test_the_questions_in_the_result_are_the_ones_the_record_committed_word_for_word() -> None:
+    d = _result()
+    assert d["questions"] == ic.QUESTIONS
+    assert d["implication_rule"] == ic.IMPLICATION_RULE
+    assert d["bound_checks"] == ic.BOUND_CHECKS
+    assert d["what_this_is_not"] == ic.WHAT_THIS_IS_NOT
+    assert d["limitations"] == list(ic.LIMITATIONS)
