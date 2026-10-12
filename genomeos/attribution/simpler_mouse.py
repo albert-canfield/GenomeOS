@@ -224,6 +224,18 @@ CTCF_FILES = {
 #: first thing that should follow. Here the boundaries and the elements are both embryonic mouse.
 PRIMARY_SET = "bonev_2017_ncx_npc"
 
+#: How the PRIMARY boundary source is named in the registered reading, DERIVED from the primary
+#: set's own row above rather than written out a second time. The draft of this lane carried a
+#: hand-written string left over from an earlier arrangement in which an ENCODE CTCF set was
+#: primary, so the reading would have described the 4,796 edges of Bonev's `ncx NPC` domains as
+#: "CTCF peaks of embryonic-day-14.5 liver" -- the right count under the wrong source's name, the
+#: liver CTCF set having 49,312 boundaries. Deriving it is what makes that impossible to repeat.
+PRIMARY_SOURCE_SHORT = (
+    f"domain edges of the {BONEV_SHEETS[PRIMARY_SET][1]:,} topological domains Bonev et al. 2017 "
+    f"call on mm10 in {BONEV_SHEETS[PRIMARY_SET][2]} "
+    f"(Table S2, sheet `{BONEV_SHEETS[PRIMARY_SET][0]}`)"
+)
+
 #: The bin, carried verbatim from `simpler_flynode` (500 bp, half 250): the registered rule counts a
 #: gene's 5' end inside either flanking boundary's bin as inside the domain. NOT retuned for the
 #: mouse, so the only thing that differs from the fly's run is the organism and the source.

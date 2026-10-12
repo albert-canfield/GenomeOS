@@ -494,6 +494,18 @@ def score() -> None:
     res["outcome"] = res["between_genes"]["boundary_vs_nearest"]["label"]
     res["second_comparison"] = res["between_genes"]["boundary_vs_gene_structure"]["label"]
     res["falsifier"] = res["between_genes"]["falsifier"]["falsifier"]
+    # THE READING'S BOUNDARY SLOT IS CORRECTED HERE, BEFORE THE READING IS BUILT. The literal above
+    # at `boundary_source_short` is a leftover from an earlier arrangement of this lane in which an
+    # ENCODE CTCF set was primary: it names "CTCF peaks of embryonic-day-14.5 liver" while the count
+    # beside it is read from the census as the PRIMARY set's 4,796, so the reading would have
+    # described the edges of Bonev's `ncx NPC` domains under the liver CTCF set's name -- that set
+    # having 49,312 boundaries, not 4,796. `sm.PRIMARY_SOURCE_SHORT` is DERIVED from
+    # BONEV_SHEETS[PRIMARY_SET], so the name, the domain count and the sheet cannot drift from the
+    # set actually used. The stale literal is left in place and made INERT by this line, rather than
+    # deleted, because deleting a line cf05e75 added needs `commit_own.sh --force` and this lane's
+    # brief forbids --force; the assertion below is what makes "inert" a fact and not a hope.
+    res["configuration"]["boundary_source_short"] = sm.PRIMARY_SOURCE_SHORT
+    assert res["configuration"]["boundary_source_short"] == sm.PRIMARY_SOURCE_SHORT
     res["reading"] = sm.reading(res)
     res["result_manifest"] = _manifest(
         declared_inputs(), {"run": "one run on the committed registration, every reader declared"}

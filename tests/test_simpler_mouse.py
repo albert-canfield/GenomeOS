@@ -35,6 +35,7 @@ from genomeos.attribution import simpler_mouse as sm
 from genomeos.attribution.simpler import Chromosome, Gene
 
 INVENTORY = Path("data/results/simpler_mouse_inventory.json")
+REGISTRATION_FILE = Path("data/results/simpler_mouse_registration.json")
 
 
 def _gene(gid: str, start: int, end: int, strand: str = "+", chrom: str = "chr1") -> Gene:
@@ -513,3 +514,63 @@ def test_every_committed_boundary_set_is_counted_on_the_same_population():
     assert len(alts) == len(sm.BONEV_SHEETS) + len(sm.CTCF_FILES) - 1
     assert all(v["elements"] == n for v in alts.values())
     assert set(cen["boundary_sets"]) == set(sm.BONEV_SHEETS) | set(sm.CTCF_FILES)
+
+
+def test_the_committed_registration_was_written_before_any_rna_value_was_read():
+    tp.must_be_present(REGISTRATION_FILE, was="the mouse registration has not been written on this machine")
+    reg = json.loads(REGISTRATION_FILE.read_text())
+    assert reg["written_before_any_rna_value_was_read"] is True
+    assert reg["alphagenome_requests"] == 0
+    r = reg["registration"]
+    assert r["population"] == sm.REGISTRATION["population"]
+    assert r["endpoint"] == sm.REGISTRATION["endpoint"]
+    assert r["outcome"] == sm.REGISTRATION["outcome"]
+    assert r["matched_control_and_falsifier"] == sm.REGISTRATION["matched_control_and_falsifier"]
+    assert r["labels"] == list(sm.LABELS)
+    assert "MOUSE TISSUE SOURCE IS NOT A HUMAN READER BIOSAMPLE" in r["stop_list_of_2026_09_27"]
+
+
+def test_the_committed_registration_fixes_the_counts_every_set_reached():
+    tp.must_be_present(REGISTRATION_FILE, was="the mouse registration has not been written on this machine")
+    counts = json.loads(REGISTRATION_FILE.read_text())["registration"]["stop_rule_counts"]
+    assert set(counts) == set(sm.BONEV_SHEETS) | set(sm.CTCF_FILES)
+    assert min(counts.values()) >= sm.STOP_RULE
+    assert counts[sm.PRIMARY_SET] == max(counts.values())
+
+
+def test_the_registered_reading_names_the_PRIMARY_boundary_source_and_cannot_name_another():
+    """The draft named the wrong source with the right count, and this is what catches that.
+
+    `score`'s configuration filled the reading's boundary slot from a hand-written string left over
+    from an earlier arrangement in which an ENCODE CTCF set was primary, so the reading would have
+    called the 4,796 edges of Bonev's `ncx NPC` domains "CTCF peaks of embryonic-day-14.5 liver" --
+    the primary set's count under a different set's name, the liver CTCF set carrying 49,312
+    boundaries. The string is now derived from the primary set's own row, and this pins that.
+    """
+    short = sm.PRIMARY_SOURCE_SHORT
+    sheet, domains, biosample = sm.BONEV_SHEETS[sm.PRIMARY_SET]
+    assert f"`{sheet}`" in short
+    assert f"{domains:,}" in short
+    assert biosample in short
+    assert "Bonev" in short
+    # the primary set is an author-called Hi-C DOMAIN call, so no CTCF set's name may appear in it
+    assert "CTCF" not in short
+    for name, (_acc, _enc, ctcf_biosample) in sm.CTCF_FILES.items():
+        assert name not in short
+        assert ctcf_biosample not in short
+    # and no OTHER Bonev sheet may be named either
+    for name, (other_sheet, _n, other_biosample) in sm.BONEV_SHEETS.items():
+        if name == sm.PRIMARY_SET:
+            continue
+        assert f"`{other_sheet}`" not in short
+        assert other_biosample not in short
+
+
+def test_the_committed_registration_agrees_with_the_primary_source_the_reading_names():
+    tp.must_be_present(REGISTRATION_FILE, was="the mouse registration has not been written on this machine")
+    reg = json.loads(REGISTRATION_FILE.read_text())
+    sheet = sm.BONEV_SHEETS[sm.PRIMARY_SET][0]
+    assert f"`{sheet}`" in reg["registration"]["boundary_set"]["primary"]
+    assert "Bonev et al. 2017" in reg["registration"]["boundary_set"]["primary"]
+    assert reg["census"]["boundary_sets"][sm.PRIMARY_SET]["sheet"] == sheet
+    assert str(sm.BONEV_SHEETS[sm.PRIMARY_SET][1]) in reg["registration"]["boundary_set"]["primary"]
