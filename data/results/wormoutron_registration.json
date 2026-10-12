@@ -1,0 +1,327 @@
+{
+  "result": "registration, before any RNA value is re-read",
+  "date": "2026-10-12",
+  "written_before_the_rna_sheet_was_reread": true,
+  "prior_exposure": "Serizay et al. 2020's RNA was read in stage 1 (registration 595d7c2, result eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4), so THIS IS A RE-ANALYSIS OF A MEASUREMENT THIS PROJECT HAS ALREADY READ, NOT A FRESH TEST. What is new is the WormBase WS298 outron and operon map, which no earlier run read. The masks are built from positions and annotations alone, their definitions were fixed before the census was computed, and the surviving population is counted and committed before the RNA sheet is opened again; that bars tuning the mask to the answer, and it does not make the RNA unseen. The reading must be read as a re-analysis throughout.",
+  "registered_inputs": {
+    "table_s2": {
+      "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+      "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70"
+    },
+    "gff3": {
+      "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+      "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9"
+    },
+    "ws298_map": {
+      "path": "data/knowledge/wormoutron/ws298_operon_sl_tss.gff3",
+      "sha256": "dd5efa6826086fcb5c1be4b7bd06b44d7b94beac024b426f15bb037b386aa1cf"
+    },
+    "ws298_source_type_census": {
+      "path": "data/knowledge/wormoutron/ws298_source_type_census.txt",
+      "sha256": "56641e5656eebe8ea05fdd7998aca3c76f07e8859ab4152888f3ef620b0d9ea5"
+    },
+    "ws298_checksums": {
+      "path": "data/knowledge/wormoutron/ws298_CHECKSUMS.txt",
+      "sha256": "b816d73323e398b95021d776efded1c5b661e78f5e3579e5fc0e36a0aa7cd0e7"
+    },
+    "remote_release_file": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS298.annotations.gff3.gz",
+      "bytes": 742000000,
+      "kept_on_disk": false,
+      "published_md5": "f41b0e0afb7bdcf15d7b35c9a1f7f3a9",
+      "streamed_md5": "f41b0e0afb7bdcf15d7b35c9a1f7f3a9",
+      "streamed_sha256": "4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+      "verified": "the streamed md5 equals the md5 WormBase publishes in WS298/CHECKSUMS, and two independent streams gave the same sha256, so the 8.0 MB extract is of the authentic complete release file; the release file itself is not kept"
+    }
+  },
+  "registration": {
+    "question": "Does the worm's between-gene lead of the domain rule over nearest TSS survive EXCLUDING the elements that fall in outrons or in trans-splicing-affected 5' regions by the WormBase WS298 map -- the confound stage 1 registered as a caveat for this very stratum and never tested?",
+    "prior_exposure": "Serizay et al. 2020's RNA was read in stage 1 (registration 595d7c2, result eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4), so THIS IS A RE-ANALYSIS OF A MEASUREMENT THIS PROJECT HAS ALREADY READ, NOT A FRESH TEST. What is new is the WormBase WS298 outron and operon map, which no earlier run read. The masks are built from positions and annotations alone, their definitions were fixed before the census was computed, and the surviving population is counted and committed before the RNA sheet is opened again; that bars tuning the mask to the answer, and it does not make the RNA unseen. The reading must be read as a re-analysis throughout.",
+    "map": "WormBase release WS298, c_elegans.PRJNA13758.WS298.annotations.gff3.gz, https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/, published md5 f41b0e0afb7bdcf15d7b35c9a1f7f3a9 (WS298/CHECKSUMS), streamed sha256 4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+    "map_defines": "operon|operon and dicistronic_mRNA|operon: operon spans with member WBGene ids (deprecated_operon is not used); SL1_acceptor_site and SL2_acceptor_site: measured trans-splice acceptor positions; TSS_region: WormBase's clustered transcription start site regions from the four published C. elegans TSS data sets (TSS_Chen, TSS_Kruesi, TSS_Saito, TSS_Gu in the WS298 TSS wiggle archive; WS298's release letter names WBPaper00042246, WBPaper00042529 and WBPaper00042354). Assembly WBcel235 (ce11), the same build as the Ensembl gene models stage 1 read; nothing is lifted over.",
+    "population": "Stage 1's between-gene stratum: the Serizay et al. 2020 Table S2 putative enhancers accessible in exactly one of the five tissues whose midpoint lies in no protein-coding gene (domain_case != 'host'), recomputed by simpler.attribute from the same inputs and required to come to stage 1's 2,335 elements. EXCLUSION, applied to that stratum and nothing else: an element is removed if (a) its midpoint lies in the outron of the gene the domain rule attributes OR of the nearest-5'-end gene, or (b) its midpoint lies inside a WormBase operon span, or (c) either rule's gene is an operon member that is not the 5'-most member of its operon (order unknown counts as not 5'-most). A gene's outron is the interval between its annotated 5' end and the nearest TSS region upstream of it on the same strand, truncated so it does not reach past another protein-coding gene's annotated 5' end on that strand, and absent altogether if that TSS region is more than 20,000 bp away. The population the exclusion leaves is fixed by the census in this registration, before any RNA value is read.",
+    "attribution": "Unchanged and imported, not restated: simpler.domain_rule. Domain rule (the worm instance of the human node model; C. elegans has no CTCF): host protein-coding gene if the element's midpoint lies in one (nearest 5' end among overlapping hosts); otherwise the flanking protein-coding gene whose 5' end faces the element (the element is upstream of it); divergent pair: nearer 5' end; convergent pair: nearer 5' end of the two, counted apart. Reads WBcel235 Ensembl gene models (positions, strands) only.",
+    "baseline": "Nearest annotated 5' end among all protein-coding genes of the chromosome (nearest TSS).",
+    "endpoint": "Concordant: the attributed gene's TPM (RNA_metrics, young adults) in the element's tissue is >= 5 and strictly higher than in each of the other four tissues. A gene absent from RNA_metrics is not concordant (kept in the denominator).",
+    "statistic": "delta = concordance(domain rule) - concordance(nearest TSS), in points, on the same elements; 95% interval: percentile cluster bootstrap over 1-Mb windows, 2,000 resamples, seed 20261010.",
+    "matched_control": "Per element, a protein-coding gene of the same chromosome drawn uniformly among those whose 5' end lies in the same distance bin as the domain-rule gene's (bins 0-1, 1-2, 2-5, 5-10, 10-20, 20-50, 50-100, >100 kb), the domain-rule gene excluded; if none, the gene whose 5'-end distance is closest to the domain-rule gene's. 1,000 draws, seed 20261010; one-sided p = (1 + draws with concordance >= observed) / 1,001.",
+    "decision": "On the surviving population: LEAD_SURVIVES if the 95% interval's lower bound > 0 AND the point estimate is at or above stage 1's between-gene lower bound of +2.79 points; LEAD_ATTENUATED if the lower bound > 0 but the point estimate is below +2.79; NEAREST_AHEAD_AFTER_EXCLUSION if the upper bound < 0; LEAD_DOES_NOT_SURVIVE otherwise, i.e. when the interval includes 0.",
+    "falsifier": "The claim under test -- that the worm's between-gene lead is not an artefact of outron and operon transcription -- is falsified if the excluded population's interval crosses 0, or if its point estimate falls below stage 1's lower bound of +2.79 points. The first reads LEAD_DOES_NOT_SURVIVE, the second LEAD_ATTENUATED; both are stated first and plainly, and the worm would then join the fly.",
+    "inconclusive": "INCONCLUSIVE means the run cannot decide either way and is reported unscored, with no comparison read. It occurs when too few elements survive the exclusion: fewer than 800 surviving elements, or fewer than 100 of the survivors on which the two rules name different genes. Both floors were fixed before the census was computed. The reason for 800 and 100: the smallest difference at 80% power and two-sided 5% is about 2.8*sqrt(k)/n points before any inflation for clustering, which at n = 800 and k = 100 is about 3.5 points -- the smallest population in which stage 1's +3.73 could be seen at all. A run whose interval is wide but whose floors are met is NOT inconclusive: it reads LEAD_DOES_NOT_SURVIVE, because a lead that an adequate population cannot confirm is not a lead that survived.",
+    "strata_beside": "Reported beside the primary, deciding nothing: the excluded elements themselves; the strict exclusion (the outron of ANY protein-coding gene, union the operon mask); the SL-restricted exclusion (outrons only of genes with a measured SL1 or SL2 acceptor site within 100 bp of the annotated 5' end, union the operon mask); the outron mask and the operon mask each alone; each tissue among the survivors; and the survivors' domain-rule genes against their own matched-distance control.",
+    "stop_rule": "One run. No mask, cap, floor, population, threshold or endpoint is changed after the RNA sheet is read; a second definition would be a new registration, committed before it is run. If the run is re-executed in a worktree, this registration is committed there before the run too, and the two are never merged.",
+    "what_it_cannot_establish": "Accessibility is not function and conservation is not function. A concordance says the attributed gene is expressed where the element is open, never that the element regulates the gene. Survival of this exclusion says only 'survives exclusion of outron-affected elements on this map' -- one map, one stage (young adults), five tissues, one source, and a re-analysis of RNA this project has already read. It does not separate regulation from transcription in general, and it says nothing about the host-gene stratum, which is not the population here.",
+    "outcome_wording": {
+      "head": "On the {n} of stage 1's 2,335 C. elegans between-gene putative enhancers that survive excluding outron- and operon-affected elements by the WormBase WS298 map, the gene the domain rule attributes is expressed at 5 TPM or more and highest in the element's own tissue for {kd} of {n} ({cd}%), against {kn} of {n} ({cn}%) for the gene with the nearest 5' end; the rules differ on {k} of the survivors; difference {d} points, 95% {lo} to {hi} over 1-Mb clusters, against stage 1's +3.73 [+2.79, +4.74] on the unexcluded 2,335.",
+      "LEAD_SURVIVES": "The worm's between-gene lead survives exclusion of outron-affected elements on this map.",
+      "LEAD_ATTENUATED": "The worm's between-gene lead is attenuated by the exclusion: it is still above nearest TSS, but the point estimate falls below stage 1's lower bound, so the registered falsifier is met and the lead is NOT read as having survived.",
+      "LEAD_DOES_NOT_SURVIVE": "The worm's between-gene lead does NOT survive the exclusion: with outron- and operon-affected elements removed, the interval includes 0 and no difference between the domain rule and nearest TSS is detected. On this map the worm joins the fly, where the lead also appears only where a gene's own transcription can explain it.",
+      "NEAREST_AHEAD_AFTER_EXCLUSION": "After the exclusion nearest TSS is ahead of the domain rule between genes, so the worm's between-gene lead does not survive and reverses on this map.",
+      "INCONCLUSIVE": "The exclusion leaves too few elements to decide: {n} survivors and {k} on which the rules differ, against the registered floors of 800 and 100. The run is unscored and no comparison is read.",
+      "control_informative": "Among the survivors the domain rule's genes match the element's tissue more often than genes at a matched distance ({cc}%, one-sided p {p}), so position still carries tissue information in the population the exclusion leaves.",
+      "control_uninformative": "Among the survivors the domain rule's genes match the element's tissue no more often than genes at a matched distance ({cc}%, one-sided p {p}): in the population the exclusion leaves, the attribution carries no tissue information beyond distance.",
+      "exposure": "This is a re-analysis of RNA this project has already read in stage 1, not a fresh test.",
+      "tail": "Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it."
+    }
+  },
+  "census": {
+    "stage1_between_genes": {
+      "elements": 2335,
+      "domain_rate_pct": 53.9,
+      "nearest_rate_pct": 50.2,
+      "delta_points": 3.73,
+      "delta_ci95_points": [
+        2.79,
+        4.74
+      ],
+      "registration": "595d7c2 / eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4"
+    },
+    "between_genes_recomputed": 2335,
+    "matches_stage1": true,
+    "map": {
+      "outron_genes": 18837,
+      "sl_spliced_genes": 11023,
+      "operon_member_genes": 3465,
+      "operon_members_order_unknown": 52,
+      "operon_members_downstream": 2105,
+      "operon_first_agrees_with_list_order": 1453,
+      "outron_length_bp": {
+        "n": 18837,
+        "min": 1,
+        "p25": 167,
+        "median": 1082,
+        "p75": 3022,
+        "p90": 5942,
+        "max": 19993
+      },
+      "operons_used": 1431,
+      "deprecated_operons_skipped": 111,
+      "sl_acceptor_sites": 56651,
+      "tss_regions": 73499
+    },
+    "excluded_by": {
+      "outron_of_either_rule_gene": 537,
+      "outron_of_domain_rule_gene": 534,
+      "outron_of_nearest_tss_gene": 510,
+      "outron_with_sl_evidence": 403,
+      "outron_of_any_gene": 651,
+      "inside_an_operon_span": 34,
+      "domain_gene_is_a_downstream_operon_member": 55,
+      "nearest_gene_is_a_downstream_operon_member": 66,
+      "operon_mask": 73,
+      "primary_union": 590,
+      "strict_union": 703,
+      "sl_union": 461
+    },
+    "surviving": 1745,
+    "surviving_fraction": 0.7473,
+    "surviving_discordant": 259,
+    "surviving_clusters_1mb": 102,
+    "surviving_by_tissue": {
+      "Germline": 120,
+      "Neurons": 451,
+      "Muscle": 431,
+      "Hypod.": 500,
+      "Intest.": 243
+    },
+    "surviving_by_case": {
+      "one_flank": 1,
+      "divergent": 653,
+      "faces_one": 963,
+      "convergent_fallback": 128
+    },
+    "minimum_surviving": 800,
+    "minimum_surviving_discordant": 100,
+    "mde_points_unclustered": 2.582,
+    "inconclusive_unscored": false,
+    "strict_surviving": 1632,
+    "sl_surviving": 1874
+  },
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "as read in stage 1, unchanged"
+      },
+      {
+        "accession": "WormBase release WS298, c_elegans.PRJNA13758.WS298.annotations.gff3.gz, https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/, published md5 f41b0e0afb7bdcf15d7b35c9a1f7f3a9 (WS298/CHECKSUMS), streamed sha256 4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+        "version": "WormBase WS298, served 2026-10-10"
+      },
+      {
+        "accession": "Ensembl WBcel235 release 63 gene models (Caenorhabditis elegans)",
+        "version": "WBcel235.63"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "sheet ATAC_metrics only: positions, class and tissue call"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "protein-coding gene positions and strands"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_operon_sl_tss.gff3",
+        "sha256": "dd5efa6826086fcb5c1be4b7bd06b44d7b94beac024b426f15bb037b386aa1cf",
+        "bytes": 8387027,
+        "partition": "operon, SL1, SL2 and TSS_region positions and strands"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_source_type_census.txt",
+        "sha256": "56641e5656eebe8ea05fdd7998aca3c76f07e8859ab4152888f3ef620b0d9ea5",
+        "bytes": 9332,
+        "partition": "the whole-file source|type census from the same pass"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_CHECKSUMS.txt",
+        "sha256": "b816d73323e398b95021d776efded1c5b661e78f5e3579e5fc0e36a0aa7cd0e7",
+        "bytes": 93901,
+        "partition": "WormBase's published checksums for WS298"
+      }
+    ],
+    "assembly": "WBcel235 (ce11) throughout: Table S2, the Ensembl gene models and the WormBase WS298 features are on the same build, so nothing is lifted over",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "both GFF3s are 1-based closed; the element midpoint is (start + end) // 2, and Table S2 does not state its base, so a midpoint moves by at most 1 bp either way"
+    },
+    "parameters": {
+      "outron_max_bp": 20000,
+      "sl_window_bp": 100,
+      "min_surviving": 800,
+      "min_surviving_discordant": 100,
+      "operon_sources_used": [
+        "operon",
+        "dicistronic_mRNA"
+      ],
+      "operon_sources_not_used": [
+        "deprecated_operon"
+      ],
+      "detection_tpm": 5.0,
+      "tissues": [
+        "Germline",
+        "Neurons",
+        "Muscle",
+        "Hypod.",
+        "Intest."
+      ],
+      "cluster_bp": 1000000,
+      "bootstrap_reps": 2000,
+      "control_draws": 1000,
+      "seed": 20261010,
+      "stage1_between_genes": {
+        "elements": 2335,
+        "domain_rate_pct": 53.9,
+        "nearest_rate_pct": 50.2,
+        "delta_points": 3.73,
+        "delta_ci95_points": [
+          2.79,
+          4.74
+        ],
+        "registration": "595d7c2 / eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4"
+      }
+    },
+    "exclusions": [
+      "elements with a host gene (domain_case == 'host'): the host stratum is not this lane's population",
+      "elements of any class other than putative_enhancer",
+      "elements whose tissue call is not exactly one of the five tissues",
+      "deprecated_operon features (111 of them), which WormBase no longer asserts",
+      "MtDNA, which carries no protein-coding gene in the models stage 1 read",
+      "the source table's own element-to-gene columns, which answer the question being asked"
+    ],
+    "partitions": {
+      "population": "fixed here, before the RNA sheet (RNA_metrics) was opened again"
+    },
+    "code_cleanliness": {
+      "git_sha": "5d7aa0ea7908b40646d29ffac65409f9e276d563",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/wormoutron_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/wormoutron_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/wormoutron_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_emit7g.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/wormoutron.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/wormoutron_run.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5d7aa0ea7908b40646d29ffac65409f9e276d563",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_emit7g.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/wormoutron_run.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "5d7aa0ea7908b40646d29ffac65409f9e276d563",
+      "code_cleanliness_git_sha": "5d7aa0ea7908b40646d29ffac65409f9e276d563",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 5d7aa0e"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 318,
+      "opens_under_data": 13,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
