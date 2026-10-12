@@ -1,0 +1,457 @@
+{
+  "result": "execscale_census_note",
+  "date": "2026-10-12",
+  "question": "which of the census's 58 committed programmes does HEAD no longer match, and which commit moved each one?",
+  "claim": "a byte comparison and a git attribution, nothing else: every programme of data/results/execscale_census.json against its bytes on disk now, and for each difference the commits after 81d3949 that touched that path. The census is not rewritten. NOTHING about the magnitude, nothing about RNA, nothing fitted.",
+  "does_not_claim": "it says nothing about whether a change was correct, nothing about RNA, and nothing about the magnitude the census was taken for; it fits nothing and reads no measurement",
+  "readings": {
+    "the_census_record_is_sound": "its group_sha256 is exactly reproducible from the 58 blobs at 81d3949 in the record's own order, and every per-file digest matches those blobs. The record is a record of one tree and that tree still answers for it. tests/test_execscale_rescoped.py::test_the_recorded_group_digest_is_REPRODUCIBLE_from_the_tree_it_was_taken_on is the check.",
+    "the_two_group_digest_implementations_agree": "manifest.group_digest and the duplicate at scripts/execscale_census.py:125 return the same digest for the same list in the same order, on the committed group of 58 programmes. The duplicate is NOT removed here: removing it is a removal inside a check_staged window, so it is reported for the timed list instead.",
+    "a_group_digest_carries_the_LIST_as_well_as_the_CONTENT": "both implementations hash name + b'\\0' + bytes per member IN THE ORDER GIVEN and neither sorts internally, so membership and order move the digest while no per-file digest moves. The 58 per-file digests alone therefore do not carry the census's claim: a programme added, removed or reordered is invisible to them. And because manifest.files_entry SORTS its names before hashing while execscale_census.programs() concatenates per-tree sorted lists over three trees, the two routes to a group's digest disagree by construction -- which is how a checker can report that only the group digest differs on a tree whose every per-file digest matches."
+  },
+  "programs_in_the_census": 58,
+  "programs_identical_to_the_census": 57,
+  "programs_that_moved": [
+    {
+      "path": "data/organisms/human/haematopoiesis.bio",
+      "census_sha256": "2655f5ae7ca7941288cb69942efe175af573e7e6332d5a0cd8221e7682bdaa84",
+      "census_bytes": 20618,
+      "now_sha256": "41a822db0016898454ea86103305b69fc963a8ddda5f9168e091046b440912a7",
+      "now_bytes": 20643,
+      "commits_after_the_census": [
+        "71f9d47 The share: generator is restored because its own registered falsifier fired: dev carried a change the record said was NOT ADOPTED for two days"
+      ],
+      "is_committed": true
+    }
+  ],
+  "programs_with_an_uncommitted_difference": [],
+  "group_sha256_in_the_census": "fe56d749bba4741f091f3101c4728f5945bc3ecd82121931a5982533201643ce",
+  "group_sha256_of_the_working_tree_in_the_census_order": "dad2cc1a60314da245ff00c0d6c1e455abc246a687cb1535d5f0139e6d0bf6bf",
+  "group_sha256_of_the_working_tree_sorted_by_name": "d6af2e887613b73c6a33d863573732c394810fe0e2180d144a7444844af14fce",
+  "head": "2f8830c6428c3d565016cbc097b33f4d6c876ffe",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/execscale_census.json",
+        "version": "81d3949, unmodified"
+      },
+      {
+        "accession": "this checkout's git history",
+        "version": "HEAD at the time of writing"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/execscale_census.json",
+        "sha256": "f0367099a6914e7c25069ebc36435fd1a56416fd5ec37852634c9b2029182069",
+        "bytes": 62027,
+        "partition": null
+      },
+      {
+        "path": "the committed .bio programmes the census covers, as this note reads them from disk",
+        "group": true,
+        "members": [
+          {
+            "path": "data/demo/celegans_lineage.bio",
+            "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+            "bytes": 4382
+          },
+          {
+            "path": "data/demo/cell_context.bio",
+            "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+            "bytes": 1659
+          },
+          {
+            "path": "data/demo/concentration_threshold.bio",
+            "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+            "bytes": 3525
+          },
+          {
+            "path": "data/demo/flag_organism.bio",
+            "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+            "bytes": 2920
+          },
+          {
+            "path": "data/demo/gastrulation.bio",
+            "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+            "bytes": 3765
+          },
+          {
+            "path": "data/demo/hoxd_order.bio",
+            "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+            "bytes": 3064
+          },
+          {
+            "path": "data/demo/lateral_inhibition.bio",
+            "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+            "bytes": 4042
+          },
+          {
+            "path": "data/demo/methylation_erosion.bio",
+            "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+            "bytes": 3260
+          },
+          {
+            "path": "data/demo/reader_gating.bio",
+            "sha256": "0334ee0b99c0aaff110adb1493462bf2af21b74ccc4e84c4be7cc6881be93f1e",
+            "bytes": 3513
+          },
+          {
+            "path": "data/demo/repressilator.bio",
+            "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+            "bytes": 2363
+          },
+          {
+            "path": "data/demo/segmentation_clock.bio",
+            "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+            "bytes": 1639
+          },
+          {
+            "path": "data/demo/stage2_pools.bio",
+            "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+            "bytes": 2117
+          },
+          {
+            "path": "data/demo/stage3_energy.bio",
+            "sha256": "90f6b710e35590f702ecb03bb565741ae28eb7115880e8c3e4cb2c2a7005b765",
+            "bytes": 5558
+          },
+          {
+            "path": "data/demo/stage3_erythrocyte.bio",
+            "sha256": "73f13ff8a858c7bc5d7ca72c8c54ae933ff3272cb27ae3c4b00414a7916c865c",
+            "bytes": 3632
+          },
+          {
+            "path": "data/demo/stage4_division.bio",
+            "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+            "bytes": 2322
+          },
+          {
+            "path": "data/organisms/celegans/acvu.bio",
+            "sha256": "4ec51b82b4b10908430af52c70cc4596138a9e94e1fe7baec0ee7f6f39706145",
+            "bytes": 10543
+          },
+          {
+            "path": "data/organisms/celegans/cell_types.bio",
+            "sha256": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c",
+            "bytes": 2604
+          },
+          {
+            "path": "data/organisms/celegans/designs.bio",
+            "sha256": "fb6e55433a51517be7c9684bfa6f8275ca5672b4a752078a8723c0a57299385c",
+            "bytes": 955
+          },
+          {
+            "path": "data/organisms/celegans/embryo.bio",
+            "sha256": "c3bf6a9b151f74547c3c0e2c0106ef85eadd82381ad97e87e0db133cb3b46ad3",
+            "bytes": 2118
+          },
+          {
+            "path": "data/organisms/celegans/embryo_contacts.bio",
+            "sha256": "2ca48ec4b82b943c336131aa4c45971ddd42d672bc2d31261df63288eb97a94f",
+            "bytes": 3027
+          },
+          {
+            "path": "data/organisms/celegans/embryo_factors.bio",
+            "sha256": "f674d6c1b591cad143b1f7c66a203dc3b35e84c09f03da482ac6598ed222834f",
+            "bytes": 3794
+          },
+          {
+            "path": "data/organisms/celegans/embryo_nolookup.bio",
+            "sha256": "7602286f1716ca6f55247f8e1714659c4242209511214db8164e1503e1a7bac1",
+            "bytes": 3784
+          },
+          {
+            "path": "data/organisms/celegans/fates.bio",
+            "sha256": "b7ccefed754e4bbbd25ed1ff25b08d6d3db43838f9fddfc9a7cc130eb16d3298",
+            "bytes": 21509
+          },
+          {
+            "path": "data/organisms/celegans/founder_tissues.bio",
+            "sha256": "09359ffb0aa4662cd92b6b54cb3b86e14691de58f3e54535ef5e465b58e50502",
+            "bytes": 3324
+          },
+          {
+            "path": "data/organisms/celegans/founders.bio",
+            "sha256": "41cad2ec74552d79de29cc348e6ac51b0a1906980a3cec2f26d41c17c4b610e5",
+            "bytes": 7871
+          },
+          {
+            "path": "data/organisms/celegans/founders_contacts.bio",
+            "sha256": "0b7fb261f01ae6d024c579bd7e023d0f493112f1797a28e5deb253b312a1827f",
+            "bytes": 12269
+          },
+          {
+            "path": "data/organisms/celegans/lineage_embryo.bio",
+            "sha256": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+            "bytes": 239228
+          },
+          {
+            "path": "data/organisms/celegans/lineage_embryo_tree.bio",
+            "sha256": "dcd531be104158ee09de633ecf1d060e5ee0ef2b37d2a94de89c34bfd125d151",
+            "bytes": 145834
+          },
+          {
+            "path": "data/organisms/celegans/lineage_larva.bio",
+            "sha256": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+            "bytes": 123195
+          },
+          {
+            "path": "data/organisms/celegans/mutants.bio",
+            "sha256": "a083fef64ca7d797a3d01164fbc1cae51d25e12bdca60e69f7bf8291605ba701",
+            "bytes": 4459
+          },
+          {
+            "path": "data/organisms/celegans/mutants_nolookup.bio",
+            "sha256": "f4dce6f6c7f3c7363731ad3e08ea4150bc15353e3994eddb00e6dd4af730a839",
+            "bytes": 5097
+          },
+          {
+            "path": "data/organisms/celegans/plasticity.bio",
+            "sha256": "0b450393a8efb7fdf5e675a22b923687d20ee6d11982d82cf112afac3d2e673f",
+            "bytes": 6020
+          },
+          {
+            "path": "data/organisms/celegans/reader.bio",
+            "sha256": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+            "bytes": 792382
+          },
+          {
+            "path": "data/organisms/celegans/timers.bio",
+            "sha256": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+            "bytes": 13303
+          },
+          {
+            "path": "data/organisms/human/body.bio",
+            "sha256": "79c9baa7c90013a18f3d012864df1c50e55a2d9ddb84e25d02e466932ed91a9d",
+            "bytes": 5609
+          },
+          {
+            "path": "data/organisms/human/colon.bio",
+            "sha256": "1d1b88c34fe5bd70377a3479276a31f0f17f4dbc87b20b19bd4248c55e9497e6",
+            "bytes": 10979
+          },
+          {
+            "path": "data/organisms/human/colon_mutants.bio",
+            "sha256": "a2c4b0483b9222a22c8a05829228f3aa10a9a1276a4edcf1629af0133b5b1102",
+            "bytes": 4111
+          },
+          {
+            "path": "data/organisms/human/erythrocyte.bio",
+            "sha256": "0d3cc96e9d1826160839b2a12652bc4dcbc196f4aa7dd8ba2afdabc0a95b5f2f",
+            "bytes": 3199
+          },
+          {
+            "path": "data/organisms/human/haematopoiesis.bio",
+            "sha256": "41a822db0016898454ea86103305b69fc963a8ddda5f9168e091046b440912a7",
+            "bytes": 20643
+          },
+          {
+            "path": "data/organisms/human/haematopoiesis_designs.bio",
+            "sha256": "b5818f768dd55394b71a36f2e05260046d23caa7fe740832c3c909d61784a3de",
+            "bytes": 1207
+          },
+          {
+            "path": "data/organisms/human/haematopoiesis_mutants.bio",
+            "sha256": "fc76df6f7ae629522881f54c63fd5396de6e380d7b0ed1b770e5307dcb007196",
+            "bytes": 3401
+          },
+          {
+            "path": "data/organisms/human/intestine.bio",
+            "sha256": "e544fda061017a35b276539e94191879866a9ba6a667f416cf5f345149cf13f2",
+            "bytes": 10233
+          },
+          {
+            "path": "data/organisms/human/intestine_mutants.bio",
+            "sha256": "234244dbd2d40bd7f49fa0a750bc9a28383ac182fc65727497e90133a5b56ccb",
+            "bytes": 3812
+          },
+          {
+            "path": "data/organisms/human/noncoding_chr21.bio",
+            "sha256": "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192",
+            "bytes": 4979850
+          },
+          {
+            "path": "data/organisms/human/noncoding_chr21_v2.bio",
+            "sha256": "11bbff2f1a8ff41a49e0329aa2b3d9dae109638556a1e2a3fd13bcaefb367ecb",
+            "bytes": 4980025
+          },
+          {
+            "path": "data/organisms/human/noncoding_chr21_v3.bio",
+            "sha256": "17315af720e886466ba585832c9a99fb699fd128c92e0a093b2e06ea329cce93",
+            "bytes": 5276570
+          },
+          {
+            "path": "data/organisms/human/oxphos.bio",
+            "sha256": "0e212fa45dc96cf24b0db0117dbf3b6a704720fe2ae1f57d1115902d7be81d1a",
+            "bytes": 48211
+          },
+          {
+            "path": "data/organisms/human/stomach.bio",
+            "sha256": "8c26a44939cf10a288242427d8f3ff1200d30c6ba17d34046df1f775c76390bc",
+            "bytes": 15380
+          },
+          {
+            "path": "data/organisms/human/stomach_mutants.bio",
+            "sha256": "12ca662bd76389530478baf413599072476f08cd52870daac177424af6d3b08a",
+            "bytes": 3983
+          },
+          {
+            "path": "data/organisms/human/tissues.bio",
+            "sha256": "e4db081f958a1db9c1d7bd841711f03e5dedd7a6f0d113f17bd6a6de1b02b175",
+            "bytes": 28403
+          },
+          {
+            "path": "genomeos/std/ageing.bio",
+            "sha256": "a1732381e5aa12b58da46ce96b00e537711a032b59e188a44d7a3dad4024570f",
+            "bytes": 907
+          },
+          {
+            "path": "genomeos/std/cell_types.bio",
+            "sha256": "40d862845df9b92cd81aadaa041ad627f16b0ee085b0061d0055fb77f1c93408",
+            "bytes": 842
+          },
+          {
+            "path": "genomeos/std/core_metabolism.bio",
+            "sha256": "5378f6abe109435a4901bbfb2b499b964dc1be46bc56d07dbddffff4291bc589",
+            "bytes": 3951
+          },
+          {
+            "path": "genomeos/std/development.bio",
+            "sha256": "2ec2c5e109f858b42c74e4e5e93ea2e066be9b338dd466b04c2c22af7ab5b028",
+            "bytes": 943
+          },
+          {
+            "path": "genomeos/std/human_stages.bio",
+            "sha256": "7f33f6d770f767dca5581b628b83a04f892126af98a0d703dde3d69f31b266b9",
+            "bytes": 4213
+          },
+          {
+            "path": "genomeos/std/human_turnover.bio",
+            "sha256": "171bffc88359bc454569cb08a2e2f4c4b9770e3a17e69fcc34429cc50bf3cd31",
+            "bytes": 3288
+          },
+          {
+            "path": "genomeos/std/methylation.bio",
+            "sha256": "73a3a4e3700e2d6421cd8876765275610ddd5528198c5af1396bf3e082ce9be2",
+            "bytes": 3141
+          },
+          {
+            "path": "genomeos/std/signalling.bio",
+            "sha256": "ade53caa6c5a83bb3b46e1c4117bcc84c5e182e317fbe32e464bc38dbb24b199",
+            "bytes": 29470
+          }
+        ],
+        "sha256": "d6af2e887613b73c6a33d863573732c394810fe0e2180d144a7444844af14fce",
+        "bytes": 16891448,
+        "files": 58,
+        "partition": null
+      }
+    ],
+    "input_count": 2,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "census_commit": "81d3949",
+      "method": "sha256 per programme on disk against the census row and against the HEAD blob; for each difference, git log CENSUS_COMMIT..HEAD on that path; group digests by manifest.group_digest in two orders"
+    },
+    "exclusions": [
+      "the census record is not rewritten and not one byte of it is touched",
+      "no model request, no key, no network, no money; nothing is fitted and no RNA is read",
+      "no judgement of whether a change was right: the commit is named so a reader can judge"
+    ],
+    "code_cleanliness": {
+      "git_sha": "2f8830c6428c3d565016cbc097b33f4d6c876ffe",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/execscale_census_note.py",
+        "form": "committed_repository_file",
+        "path": "scripts/execscale_census_note.py",
+        "is_committed": true,
+        "declared_entry": "scripts/execscale_census_note.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_execscale_note.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/execscale_census_note.py"
+      ],
+      "counting_path_count": 5,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "partitions": {
+      "none": "one population, the 58 programmes of the census; no partition is taken or implied"
+    },
+    "code": {
+      "git_sha": "2f8830c6428c3d565016cbc097b33f4d6c876ffe",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_execscale_note.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "tests/test_execscale_note.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/execscale_census_note.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/execscale_census_note.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "2f8830c6428c3d565016cbc097b33f4d6c876ffe",
+      "code_cleanliness_git_sha": "2f8830c6428c3d565016cbc097b33f4d6c876ffe",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 2f8830c"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 373,
+      "opens_under_data": 203,
+      "files_read": 51,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "genomeos/std/ageing.bio",
+        "genomeos/std/cell_types.bio",
+        "genomeos/std/core_metabolism.bio",
+        "genomeos/std/development.bio",
+        "genomeos/std/human_stages.bio",
+        "genomeos/std/human_turnover.bio",
+        "genomeos/std/methylation.bio",
+        "genomeos/std/signalling.bio"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
