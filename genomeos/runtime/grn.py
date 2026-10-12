@@ -36,6 +36,20 @@ The second is `multiplicative` (lane-saturate, 2026-10-10): A = exp(G * W), G th
 whatever the others do: the log-link model Zhou et al. 2024 (Cell Genomics 100672) fitted to enhancer
 pairs in K562 single-cell CRISPRi, where enhancer effects combined multiplicatively.
 
+The measured magnitude correction (lane-execscale, 2026-10-12). `MEASURED_MAGNITUDE_CORRECTION` is
+the one scale M2h (`ac5580b`) fitted on training genes and read on genes held out of that fit: at
+0.2146 the multiplicative form's held-out Delta MSE moved from -0.5311 to +0.04339, about 2% of the
+variance, which is M2h's registered finding that the compiled rules carry their information at about
+a fifth of the magnitude the compiler emits. It enters a run only when asked for --
+`NetworkRuntime(..., magnitude_correction=...)`, or a programme's own
+`param magnitude_correction`, which no committed programme declares -- and DEFAULT_MAGNITUDE_CORRECTION
+is 1.0, the compiled magnitude, so a run that asks for nothing is the run that always was. The
+correction multiplies the multiplicative rule's exponent, the quantity M2h centred and scaled, and
+it applies to no other rule, because M2h fitted one scale per form. It is a global AVERAGE over a
+magnitude that is not one global number: `hetblock2` (`d9e3ddd`) measured it varying by chromosome,
+surviving a locus-block null. Nothing here fits it and nothing here claims anything about RNA; the
+RNA evidence is M2h's and M2i's, in those records.
+
 Unresolved inputs (review R3, 2026-09-28). A regulator the runtime holds no state
 for, and a regulated gene with no `max_rate`, are still integrated as zero, as they
 always were, but every `run` now reports them by name (`NetworkRuntime.diagnose`):
@@ -155,6 +169,25 @@ DEFAULT_PROMOTER_HALF_SATURATION = 1.0
 #: declaring none takes DEFAULT_MULTIPLICATIVE_GAIN
 MULTIPLICATIVE_GAIN = "multiplicative_gain"
 DEFAULT_MULTIPLICATIVE_GAIN = 1.0
+#: A MEASURED MAGNITUDE CORRECTION, not a tuning knob and not fitted here: the one scale lane-magcal
+#: fitted on training genes and read on genes held out of that fit in M2h (`ac5580b`; registered in
+#: `fbce775`, code frozen at `2b0b604`). On the multiplicative form's centred prediction -- the gated
+#: run's log2 level in a cell minus its mean over the thirteen cells -- the scale 0.2146 carried the
+#: held-out Delta MSE from -0.5311 to +0.04339, about 2% of the variance, and M2h's registered reading
+#: is that the compiled rules carry the information at about a FIFTH of the magnitude the engine runs
+#: them at. It is a GLOBAL AVERAGE and must be described that way: `hetblock2` (`d9e3ddd`) established
+#: that the magnitude is NOT one global number -- it varies by chromosome, and that variation survives
+#: a locus-block null -- so this single number averages over a quantity that differs between
+#: chromosomes. Nothing in this module fits it: it is the constant M2h committed, read off that result
+#: and nowhere re-estimated. It is what a caller or a programme may ASK for; it is never a default.
+MEASURED_MAGNITUDE_CORRECTION = 0.2146
+#: no run corrects any magnitude unless it is asked to: 1.0 is the magnitude the compiler emits and the
+#: magnitude every committed programme has always run at
+DEFAULT_MAGNITUDE_CORRECTION = 1.0
+#: the `param` a programme may declare the correction in, so that a compiled programme states its own
+#: magnitude with its own evidence (`attribution/compile.py`'s opt-in emission writes it). A programme
+#: declaring none runs at DEFAULT_MAGNITUDE_CORRECTION, which is every programme committed to date.
+MAGNITUDE_CORRECTION_PARAM = "magnitude_correction"
 #: a rule source ending in this reads zero by the caller's declaration, never by omission
 EXPLICIT_ZERO_SUFFIX = "@zero"
 
@@ -258,22 +291,38 @@ def combine_activators(
     half_saturation: float = DEFAULT_PROMOTER_HALF_SATURATION,
     *,
     gain: float = DEFAULT_MULTIPLICATIVE_GAIN,
+    magnitude_correction: float = DEFAULT_MAGNITUDE_CORRECTION,
 ) -> float:
     """A gene's activator drive A from its terms t_i = s_i * H(x_i), under `rule`.
 
     mean: sum(t) / n (the runtime's rule since the first commit); sum_capped: min(1, sum(t));
     max: max(t); or: 1 - prod(1 - t_i), independent binding of any one activator sufficing;
     competition (opt-in, OPT_IN_ACTIVATOR_RULES): W / (half_saturation + W), W = sum(t).
-    multiplicative (opt-in): exp(gain * W), W = sum(t), gain keyword-only.
+    multiplicative (opt-in): exp(c * gain * W), W = sum(t), gain and c keyword-only, c the
+    measured magnitude correction (`MEASURED_MAGNITUDE_CORRECTION`, M2h `ac5580b`) and 1.0 by
+    default, which is the magnitude the compiler emits. `c` multiplies the EXPONENT, which is this
+    rule's log drive and the quantity M2h scaled: log A = c * gain * W, so the drive's deviation
+    across cells is scaled by exactly c, as M2h's centred prediction a_F * P_F(G, X) is. The
+    per-gene constant that centring removes -- A's level at W's own mean -- is not determined by
+    that measurement and is left as the rule produces it. A correction other than 1.0 is refused
+    under any other rule: M2h fitted one scale PER FORM and 0.2146 is the multiplicative form's.
     `rule` defaults to `ACTIVATOR_COMBINATION`, read at call time.
     """
     rule = ACTIVATOR_COMBINATION if rule is None else rule
+    if not (math.isfinite(magnitude_correction) and magnitude_correction > 0):
+        raise ValueError(f"magnitude_correction must be a finite number > 0, got {magnitude_correction!r}")
+    if magnitude_correction != DEFAULT_MAGNITUDE_CORRECTION and rule != "multiplicative":
+        raise ValueError(
+            f"magnitude_correction {magnitude_correction!r} is the multiplicative form's measured "
+            f"magnitude (M2h, ac5580b); rule {rule!r} has its own fitted scale and this one does not "
+            f"transfer to it, so only {DEFAULT_MAGNITUDE_CORRECTION} is accepted here"
+        )
     if rule == "multiplicative" and not (math.isfinite(gain) and gain > 0):
         raise ValueError(f"multiplicative needs a finite gain > 0, got {gain!r}")
     if not terms:
         return 1.0
     if rule == "multiplicative":
-        return math.exp(gain * sum(terms))
+        return math.exp(magnitude_correction * gain * sum(terms))
     if rule == "competition":
         if not half_saturation > 0:
             raise ValueError(f"competition needs a half-saturation > 0, got {half_saturation!r}")
@@ -302,6 +351,7 @@ class NetworkRuntime:
         seed: int | None = None,
         strict: bool = False,
         activator_combination: str | None = None,
+        magnitude_correction: float | None = None,
     ) -> None:
         self.module = module
         self.strict = strict  # refuse to run an unresolved model instead of warning (R3)
@@ -315,6 +365,31 @@ class NetworkRuntime:
                 f" {', '.join(ACTIVATOR_RULES + OPT_IN_ACTIVATOR_RULES)}"
             )
         self.activator_combination = activator_combination
+        # The measured magnitude correction, opt-in and 1.0 unless this run is asked for another:
+        # the caller's argument first, then the programme's own `param magnitude_correction` (which
+        # no committed programme declares), then DEFAULT_MAGNITUDE_CORRECTION. At 1.0 the exponent
+        # below is multiplied by 1 and every committed number stays where it is.
+        declared = module.parameters.get(MAGNITUDE_CORRECTION_PARAM)
+        if magnitude_correction is None and declared is not None and declared.value is not UNKNOWN:
+            magnitude_correction = float(declared.value)
+        self.magnitude_correction = (
+            DEFAULT_MAGNITUDE_CORRECTION if magnitude_correction is None else float(magnitude_correction)
+        )
+        if not (math.isfinite(self.magnitude_correction) and self.magnitude_correction > 0):
+            raise ValueError(
+                f"magnitude_correction must be a finite number > 0, got {self.magnitude_correction!r}"
+            )
+        if (
+            self.magnitude_correction != DEFAULT_MAGNITUDE_CORRECTION
+            and activator_combination != "multiplicative"
+        ):
+            raise ValueError(
+                f"magnitude_correction {self.magnitude_correction!r} is the MULTIPLICATIVE form's "
+                f"measured magnitude (M2h, ac5580b), and M2h fitted one scale per form; this run's "
+                f"activator combination is {activator_combination!r}, so pass "
+                f"activator_combination='multiplicative' or leave the correction at "
+                f"{DEFAULT_MAGNITUDE_CORRECTION}"
+            )
         self.context = context or {}
         self.rng = random.Random(seed)
         self.params = dict(DEFAULTS)
@@ -452,7 +527,12 @@ class NetworkRuntime:
                 if self.activator_combination == "competition":
                     a = combine_activators(terms, "competition", self.half_saturation[g.id])
                 elif self.activator_combination == "multiplicative":
-                    a = combine_activators(terms, "multiplicative", gain=self.gain[g.id])
+                    a = combine_activators(
+                        terms,
+                        "multiplicative",
+                        gain=self.gain[g.id],
+                        magnitude_correction=self.magnitude_correction,
+                    )
                 else:
                     a = combine_activators(terms, self.activator_combination)
             rep = 1.0

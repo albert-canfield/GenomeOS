@@ -647,6 +647,56 @@ EMISSIONS = (ONE_TARGET, EVERY_CODING_TARGET_AT_THE_BAR)
 #: unchanged on purpose; the module docstring says what moving it would cost and who may move it
 EMISSION_DEFAULT = ONE_TARGET
 
+#: the magnitude a compiled programme declares it should be RUN at, as a compile option.
+#: `MAGNITUDE_COMPILED` writes nothing, which is every programme committed to date: the rules are run
+#: at the magnitude the compiler emits them with, and the runtime's own default correction is 1.0.
+MAGNITUDE_COMPILED = "compiled"
+#: `MAGNITUDE_CALIBRATED` writes one `param magnitude_correction` block carrying M2h's measured
+#: magnitude (`grn.MEASURED_MAGNITUDE_CORRECTION`, 0.2146 from `ac5580b`) with its evidence, so a run
+#: of that programme under the multiplicative composition composes at the measured magnitude without
+#: the caller passing anything. It changes no rule line, no entity and no count: the `# test:` lines
+#: above it are untouched, because the magnitude is not a rule and not an entity.
+MAGNITUDE_CALIBRATED = "calibrated"
+MAGNITUDES = (MAGNITUDE_COMPILED, MAGNITUDE_CALIBRATED)
+#: unchanged on purpose, for the same reason EMISSION_DEFAULT is: the default is what every committed
+#: programme was built from, and moving it is the coordinator's and the supervisor's decision, not a
+#: lane's. Flipping it would also retire the falsifier that the uncalibrated magnitude is what the
+#: compiler states.
+MAGNITUDE_DEFAULT = MAGNITUDE_COMPILED
+
+
+def magnitude_lines(magnitude: str = MAGNITUDE_DEFAULT) -> list[str]:
+    """The programme lines that declare the magnitude this compilation is to be run at.
+
+    Empty under `MAGNITUDE_COMPILED`. Under `MAGNITUDE_CALIBRATED`, one commented `param` block with
+    the measured correction and the result it was measured in. The number is imported from the engine
+    (`grn.MEASURED_MAGNITUDE_CORRECTION`) rather than restated, so a programme cannot declare a
+    magnitude the runtime does not hold.
+    """
+    if magnitude not in MAGNITUDES:
+        raise ValueError(f"no magnitude {magnitude!r}; the magnitudes are {MAGNITUDES}")
+    if magnitude == MAGNITUDE_COMPILED:
+        return []
+    from genomeos.runtime import grn
+
+    c = grn.MEASURED_MAGNITUDE_CORRECTION
+    return [
+        "",
+        "# ---- the magnitude these rules are to be RUN at, as a measured correction and not a tuning",
+        "# knob. Under the multiplicative composition the runtime multiplies that rule's exponent -- its",
+        f"# log drive -- by this number. A run that reads no {grn.MAGNITUDE_CORRECTION_PARAM} composes at",
+        f"# {grn.DEFAULT_MAGNITUDE_CORRECTION}, the magnitude the compiler emits, which is what every",
+        "# programme compiled without this option does. The correction is a GLOBAL AVERAGE over a",
+        "# magnitude that is not one global number: it varies by chromosome and that variation survives a",
+        "# locus-block null (hetblock2, d9e3ddd), so this one number averages over chromosomes and states",
+        "# nothing about this chromosome in particular. Nothing about RNA is claimed by declaring it; the",
+        "# RNA evidence is in M2h and M2i.",
+        f"param {grn.MAGNITUDE_CORRECTION_PARAM} = {c} {{ evidence: inferred "
+        f'"one scale fitted on training genes and read on held-out genes, M2h ac5580b: the '
+        f"multiplicative form's held-out Delta MSE +0.04339 at this scale, about 2% of the variance; "
+        f'a global average over a per-chromosome magnitude (hetblock2 d9e3ddd)"; confidence: 0.5 }}',
+    ]
+
 
 def extra_target_pc(row: dict[str, Any]) -> dict[str, Any]:
     """A `predicted_coding`-shaped record for one further coding target at the bar.
@@ -818,6 +868,7 @@ def compile_chromosome(
     layer: Any = None,
     direction_version: int = DIRECTION_RULE_DEFAULT,
     emission: str = EMISSION_DEFAULT,
+    magnitude: str = MAGNITUDE_DEFAULT,
 ) -> str:
     from genomeos.attribution import context_evidence as ce
     from genomeos.attribution.budget import read_axes
@@ -948,6 +999,12 @@ def compile_chromosome(
         f"# test: entities >= {n_entities}",
         f"# test: unknowns == {n_unknown}",
         f"# test: rules == {n_predicted_rules + n_measured_rules}",
+    ]
+    # Empty unless this compilation was asked for the calibrated magnitude; the counts above are
+    # written before it on purpose, because a magnitude is neither a rule nor an entity and must not
+    # move either number.
+    lines += magnitude_lines(magnitude)
+    lines += [
         "",
         f"# ---- the budget: {len(regions)} UNKNOWN blocks, {budget['unknown_bp'] / 1e6:.1f} Mb, "
         f"constrained {((budget.get('constrained_fraction') or 0) * 100):.2f}% of measured bases",

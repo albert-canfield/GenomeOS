@@ -29,6 +29,7 @@ import contextlib
 import hashlib
 import io
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -106,10 +107,26 @@ def programs() -> list[Path]:
     return out
 
 
+#: this checkout, found from this script's own location rather than from the working directory
+REPO = Path(__file__).resolve().parent.parent
+
+
+def as_repo_path(path: Path) -> Path:
+    """`path` as this repository names it: relative to REPO when it is inside REPO, else unchanged.
+
+    The group digest hashes a programme's NAME beside its bytes, and the name must be the repository's
+    so that the digest is the same wherever the checkout sits. The census writer already hands relative
+    names; this makes an absolute path under REPO hash the same, which is what the check comparing the
+    record to the tree needs. A path outside REPO (a temporary file in a test) is left as it is.
+    """
+    return Path(os.path.relpath(path, REPO)) if path.is_absolute() and path.is_relative_to(REPO) else path
+
+
 def group_digest(paths: list[Path]) -> str:
     """One digest over the group: each programme's repository path and bytes, in the order given."""
     h = hashlib.sha256()
     for p in paths:
+        p = as_repo_path(p)
         h.update(str(p).encode())
         h.update(b"\0")
         h.update(p.read_bytes())
