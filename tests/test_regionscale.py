@@ -632,3 +632,28 @@ def test_the_committed_harness_manifest_is_complete_declares_its_readers_and_use
     for e in m["inputs"]:
         assert not e["path"].startswith("/"), e["path"]  # d72f959: input_entry paths RELATIVE
     assert m["code_cleanliness"]["own_code_is_committed"] is True
+
+
+# ---- the registration script's contract ----------------------------------------------------------
+def test_the_register_script_refuses_without_a_reproducing_harness(tmp_path, monkeypatch):
+    """The registration cannot be written on a harness that did not reproduce M2h's numbers."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "regionscale_register", ROOT / "scripts/regionscale_register.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    bad = tmp_path / "h.json"
+    bad.write_text(json.dumps({"outcome": "HARNESS_DEFECT", "m2h_reproduction_FIRST": {}}))
+    monkeypatch.setattr(mod, "HARNESS_RESULT", str(bad))
+    monkeypatch.setattr(mod, "OUT", str(tmp_path / "nope.json"))
+    with pytest.raises(SystemExit, match="did not reproduce"):
+        mod.refuse_unless_harness_reproduced()
+    # and it refuses to overwrite a registration that already exists
+    there = tmp_path / "already.json"
+    there.write_text("{}")
+    monkeypatch.setattr(mod, "OUT", str(there))
+    with pytest.raises(SystemExit, match="already exists"):
+        mod.refuse_unless_harness_reproduced()
