@@ -1,0 +1,808 @@
+{
+  "result": "scsweep_inventory",
+  "date": "2026-10-12",
+  "lane": "lane-scsweep",
+  "stage": "the inventory, under lane-pseudobulk's rule adopted verbatim; no RNA value is read",
+  "question": "Which of the reader's 13 covered cell types have open single-cell or single-nucleus RNA in GEO, CELLxGENE or the 10x public datasets, under the rule lane-pseudobulk committed in `2b9cd0a`?",
+  "rule_adopted_verbatim": {
+    "result": "data/results/pseudobulk_rule.json",
+    "commit": "2b9cd0a",
+    "version": "pseudobulk-1",
+    "minimum": {
+      "cell_types": 4,
+      "cell_types_reason": "The registered control is M2h's WITHIN-GENE CELL PERMUTATION: a gene's values are permuted among its own cells. With n cells a gene has n! distinct permutations, so n = 4 is the smallest n for which 4! = 24 >= 20 permutations exist and a control p at or below 0.05 is attainable AT ALL. With three or fewer cell types the registered control cannot be run, so the comparison cannot be made as registered and no reading from it would be interpretable.",
+      "genes": 1000,
+      "genes_reason": "M2h's and M2i's registered floor is min_genes = 100, carried verbatim as the endpoint's own floor. 1,000 is the STRICTER floor this lane requires, because what must be resolvable here is not whether the endpoint is positive but whether TWO READINGS OF IT AGREE, and the difference at issue is the size M2h measured (Delta MSE about +0.04, about 2% of variance). Below 1,000 genes the gene bootstrap's interval on the bulk reading alone is wide enough to contain both agreement and disagreement, so the comparison would decide nothing.",
+      "genes_clause": "A gene counts toward the 1,000 only if it is in M2h's HELD-OUT population AND resolves in EVERY qualifying cell type in BOTH modalities: exactly one row for its unversioned gene_id in that cell type's bulk table (rows suffixed _PAR_Y not counted), and a row for the same gene in that cell type's pseudobulked single-nucleus matrix. No filter on expression and no filter on any measured value.",
+      "below_either": "NO_SOURCE_QUALIFIES, and the lane stops without reading a value. That is a COMPLETE answer: it says the out-of-domain test cannot be made interpretable this way, so the biosample question closes without a lift."
+    },
+    "how": "every clause and both numbers are lane-pseudobulk's. MINIMUM is IMPORTED from that lane's module rather than copied, so this lane cannot drift from it, and `pb.verdict` is called beside this lane's own to show the two agree."
+  },
+  "biosample_identity_policy": "The adopted single-cell clause requires the single-cell experiment's BIOSAMPLE to be the covered cell type. Applied to an archive with no `biosample_term_name` field, that is read as biosample IDENTITY and nothing wider: the cells the candidate file holds must BE the covered cell type, not a tissue that contains it and not a related type. A whole dissociated tissue counts for a covered type that IS a tissue -- `ovary`, `testis` -- which is exactly the relation of the ENCODE `ovary` snRNA-seq experiments lane-pseudobulk itself ADMITTED, and it does NOT count for a covered type that is a cell, because selecting that cell type's annotated subset out of a tissue is the cell-composition decision the adopted rule does not license. A purified or cultured preparation of the covered cell type DOES count, because its biosample is that cell type.",
+  "term_match_policy": "The adopted clause says EXACTLY, and what that word protects is stated in the rule's own `covered_set` clause: the covered set is NOT re-derived and NOT widened. It guards against admitting a cell type that is not in the thirteen; it cannot be read as a requirement that another archive spell a cell type the way ENCODE spells it, because no other archive has the field. So BOTH counts are reported and neither is hidden: `exact_label_count` admits a candidate only when the archive's own label is the IDENTICAL STRING to the covered biosample_term_name, and `same_biosample_count` also admits one whose label is a different string for the same biosample (`CD14+ Monocytes` for `CD14-positive monocyte`). The headline count of this lane is the STRICTER of the two, `exact_label_count`.",
+  "answer": "CELL_TYPE_MINIMUM_REACHED",
+  "answer_means": "CELL_TYPE_MINIMUM_REACHED: the adopted minimum's FIRST number, 4 cell types, is met. It is NOT the adopted rule's `QUALIFIES`, which needs BOTH numbers: the second -- 1,000 of M2h's held-out genes resolving in every qualifying cell type in both modalities -- cannot be counted without reading the matrices, which this lane does not do. The pseudobulk-against-bulk comparison becomes RUNNABLE and that is a separate registered lane, not this one.",
+  "pseudobulk_verdict_on_the_same_count": "NO_SOURCE_QUALIFIES",
+  "pseudobulk_verdict_note": "lane-pseudobulk's own function returns NO_SOURCE_QUALIFIES on a None gene count BY CONSTRUCTION, whatever the cell count: that is the ordered form of its rule and it is reprinted here so no reader mistakes this lane for having counted the genes. The cell-type half is what this lane settles.",
+  "exact_label_count": 4,
+  "exact_label_cells": [
+    "GM12878",
+    "K562",
+    "ovary",
+    "testis"
+  ],
+  "same_biosample_count": 5,
+  "same_biosample_cells": [
+    "CD14_positive_monocyte",
+    "GM12878",
+    "K562",
+    "ovary",
+    "testis"
+  ],
+  "minimum_cell_types": 4,
+  "already_qualifying_from_encode": [
+    "GM12878",
+    "ovary"
+  ],
+  "already_qualifying_source": "data/results/pseudobulk_inventory.json, read from the committed file (`21b58b6`): the two cell types ENCODE already supplies",
+  "added_by_this_lane_exact_label": [
+    "K562",
+    "testis"
+  ],
+  "added_by_this_lane_same_biosample_only": [
+    "CD14_positive_monocyte"
+  ],
+  "covered_cell_count": 13,
+  "covered_cells": {
+    "K562": "K562",
+    "HepG2": "HepG2",
+    "GM12878": "GM12878",
+    "IMR_90": "IMR-90",
+    "H1": "H1",
+    "SK_N_SH": "SK-N-SH",
+    "astrocyte": "astrocyte",
+    "hepatocyte": "hepatocyte",
+    "keratinocyte": "keratinocyte",
+    "cardiac_muscle_cell": "cardiac muscle cell",
+    "CD14_positive_monocyte": "CD14-positive monocyte",
+    "ovary": "ovary",
+    "testis": "testis"
+  },
+  "candidates": [
+    {
+      "cell": "K562",
+      "biosample_term_name": "K562",
+      "archive": "GEO",
+      "accession": "GSM9224207",
+      "series": "GSE306708",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9224207",
+      "assay": "inCAGE single-cell RNA-seq (droplet; library strategy RNA-Seq)",
+      "label_in_archive": "K562",
+      "found_by": "GEO esearch db=gds, gsm[Entry Type], \"Homo sapiens\"[Organism], \"K562\"[All Fields] AND (\"single cell\" OR \"single-cell\" OR \"single nucleus\" OR \"scRNA\" OR \"snRNA\"), then the sample's own brief read for its characteristics",
+      "notes": "The submission's characteristics read `cell line: K562, L1210`: the sample is a 1:1 human/mouse preparation and the supplementary files are split per line, so the file admitted here holds the K562 cells alone. The sample's OTHER file, `GSM9224207_Fixed_K562.h5ad`, is PFA-fixed, which is a treatment of the cells; only the FRESH file is admitted and the fixed one is recorded as rejected on that clause.",
+      "clauses": [
+        {
+          "clause": "released human",
+          "satisfied": true,
+          "evidence": "the sample's own organism field: ['Homo sapiens']"
+        },
+        {
+          "clause": "single-cell or single-nucleus RNA",
+          "satisfied": true,
+          "evidence": "library strategy ['RNA-Seq']; the submission's own title: ['inCAGE scRNA-seq of fresh and fixed K562 cells for comparing to PFA fixed cells (Fresh_Fixed)']"
+        },
+        {
+          "clause": "biosample identity: the cells ARE the covered cell type",
+          "satisfied": true,
+          "evidence": "the sample's own `cell line` characteristic reads 'K562, L1210', which this lane splits into ['K562', 'L1210']; the admitted file is the per-line file named in the candidate"
+        },
+        {
+          "clause": "label is the IDENTICAL STRING to the covered biosample_term_name",
+          "satisfied": true,
+          "evidence": "'K562' against 'K562'"
+        },
+        {
+          "clause": "not genetically modified",
+          "satisfied": true,
+          "evidence": "no modification word in the sample's characteristics, source or treatment protocol"
+        },
+        {
+          "clause": "not treated (of the ADMITTED file)",
+          "satisfied": null,
+          "evidence": "the sample carries BOTH a fresh and a PFA-fixed preparation and the fixed one is a treatment of the cells, so this clause is answered at the FILE and not at the sample: the words found in the sample's own text are ['fixed', 'pfa'], and the admitted file is GSM9224207_Fresh_K562.h5ad, the fresh one. THIS IS A JUDGEMENT THIS LANE RECORDS, not a field the archive supplies."
+        },
+        {
+          "clause": "at least one open per-cell per-gene file, no application",
+          "satisfied": true,
+          "evidence": "GSM9224207_Fresh_K562.h5ad: HTTP 200, 32557380 bytes"
+        }
+      ],
+      "files": [
+        {
+          "name": "GSM9224207_Fresh_K562.h5ad",
+          "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM9224nnn/GSM9224207/suppl/GSM9224207_Fresh_K562.h5ad",
+          "what": "AnnData matrix of the FRESH (unfixed) K562 cells, cells by genes",
+          "http_status": 200,
+          "bytes": 32557380,
+          "open_without_application": true,
+          "fetched": false,
+          "how_checked": "HTTP HEAD only: a status and a byte count. The file was not downloaded and its contents were not read."
+        }
+      ],
+      "archive_record": {
+        "fields": {
+          "Sample_title": [
+            "inCAGE scRNA-seq of fresh and fixed K562 cells for comparing to PFA fixed cells (Fresh_Fixed)"
+          ],
+          "Sample_geo_accession": [
+            "GSM9224207"
+          ],
+          "Sample_status": [
+            "Public on Sep 09 2025"
+          ],
+          "Sample_submission_date": [
+            "Sep 09 2025"
+          ],
+          "Sample_last_update_date": [
+            "Sep 10 2025"
+          ],
+          "Sample_type": [
+            "SRA"
+          ],
+          "Sample_channel_count": [
+            "1"
+          ],
+          "Sample_source_name_ch1": [
+            "Human and mouse Blood"
+          ],
+          "Sample_organism_ch1": [
+            "Homo sapiens"
+          ],
+          "Sample_taxid_ch1": [
+            "9606"
+          ],
+          "Sample_characteristics_ch1": [
+            "tissue: Human and mouse Blood",
+            "cell line: K562, L1210",
+            "cell type: Lymphoblast"
+          ],
+          "Sample_growth_protocol_ch1": [
+            "K562 and L1210 cells were cultured in IMDM (Thermo Fisher, 10566016) + 10% FBS (ATCC, 30-2020) + 1x penicillin/streptomycin (Thermo Fisher, 10378016) in T25 flasks (Corning). Cell lines were cultured until they reached ~80-90% confluency. For passaging, suspension cells (K562, L1210) were resuspended gently and collected into a 15 mL tube. 5 mL of 37\u00baC pre-warmed complete media was used to wash the flask and was added into the same 15 mL tube. Cells were centrifuged at 300g for 4 min, followed by media aspiration and resuspension in 5 mL of fresh pre-warmed complete media. Cells were counted using an automatic cell counter and 500,000 cells were seeded into 5 mL of 37\u00baC pre-warmed complete media in a 25cm2 flask. For encapsulation experiments, cells were washed twice with ice cold DPBS with 0.1% BSA"
+          ],
+          "Sample_molecule_ch1": [
+            "polyA RNA"
+          ],
+          "Sample_extract_protocol_ch1": [
+            "Cells were washed twice with DPBS with 0.1% BSA, mixed at 1:1 ration and were encapsulated into CAGEs at a final concentration of 1.2e6 cells/mL in core mix. Next, the CAGE core dextran was removed using dextranase enzyme. Following this, all steps were performed on ice. First, capsules were washed three times with an ice-cold 3X SSCI buffer with 800g spins for 1 min. Fresh cells were lysed by washing with ice-cold 7.5pH TEIS with 5 min incubations on ice. Fixed cells were reverse cross-linked in CAGEs by washing the CAGEs twice with 3x SSCI + 0.01U/\u03bcL RiboLock RNAse Inhibitor (ThermoFisher, EO0381). Next, CAGEs were washed three times with 100mM Tris (pH 7.5) with 10mM EDTA, 0.1% Igepal CA-630 (Millipore Sigma, I8896-50ML), 0.1% SDS. Finally, CAGEs were resuspended in the same solution to a volume of 1 mL and 50 \u03bcL of proteinase K (NEB, P8107S) was added followed by incubation at 56\u00baC for 30 min. After the reverse crosslinking, CAGEs were washed three times with 3X SSCI, three times. CAGEs were imaged and washed three times with 3X SSCI and three times with HI10, packed at 800g for 1 min and stored on ice. Reverse-transcription reaction was set on ice and performed in PCR strip tubes. A standard 100\u03bcL reaction was composed out of 60.5\u03bcL of packed capsules, 2.5\u03bcL of 10\u03bcM RT poly(T) primer housing a 10nt UMI and 6nt barcode (Table S3, RT), 3\u03bcL of 10% Igepal CA-630 (Millipore Sigma, I8896-50ML), 20\u03bcL of 5X SMARTseq3 RT buffer (100mM Tris pH 8.3, 150mM NaCl, 12.5mM MgCl2, 5mM GTP, 40mM DTT), 0.5\u03bcL of 10mM dNTPs (NEB, N0447L), 2.5\u03bcL of 40U/\u03bcL Recombinant RNase Inhibitor (Takara Bio, 2313A), 1.5\u03bcL of 50\u03bcM TSO, 5\u03bcL of Maxima H- reverse transcriptase (ThermoFisher, EP0753). Reaction volumes were scaled according to the amount of capsules used and number of reactions performed. To set up the reaction, capsules, RT primer and Igepal CA-630 (Millipore Sigma, I8896-50ML) were mixed on ice in a PCR tube, with each housing a different RT barcode. Capsules were incubated on ice for 10 min to allow the RT primer to diffuse in, followed by heating at 70\u00baC for 5 min and cooling down on ice. Next, RT master mix, composed out of the remaining reagents was added to each tube, ensuring a thought mixing of capsules with pipetting. Tubes were incubated on ice for 5 min and the reaction was carried out at 42\u00baC for 90 min, followed by cycling between 50\u00baC and 42\u00baC incubation of 2 mins for 15 cycles. Reactions were left at room temperature overnight and processed the next day. After the RT reaction, capsules were washed three times with TI100 (pH 8.0), twice with TIbS (pH 8.0), three times with ice-cold TI100 (pH 8.0) with 2 min incubations on ice. Finally capsules were washed twice with TI10 (pH 8.0). Next, Capsule dU PCR was performed to carry out cDNA amplification. After the cDNA amplification, capsules were washed three times with TI100 (pH 8.0), twice with TIbS (pH 8.0), three times with TI100 (pH 8.0), twice with TI10 (pH 8.0). Washed capsules were subjected to tree rounds of split-and-pool barcoding. Following split-and-pool barcoding, capsules were split into 8 tubes and were dissolved  using 10M NaOH. DNA was purified using MinElute PCR purification kit and barcoded cDNA was eluted into 20\u03bcL of the elution buffer. Barcoded and purified DNA was amplified using PCR. After the reaction, amplified barcoded cDNA was purified using 0.8X AMPure XP beads (Beckman Coulter, A63881) and was eluted into a 15\u03bcL Elution Buffer.",
+            "To construct Illumina sequencing libraries, 50 ng of barcoded and amplified cDNA was fragmented, blunted and dA-tailed by mixing it with 3.5 \u03bcL of NEBNext Ultra II FS Reaction buffer (NEB), 1 \u03bcL of fully mixed NEBNext Ultra II FS Enzyme mix (NEB) and nuclease free water to a final volume of 17.5 \u03bcL. The reaction mix was vortexed for 10 s, spanned down and placed into a preheated PCR machine for incubation at 37\u00b0C for 10 min; 65\u00b0C for 30 min; hold 4\u00b0C (lid at 75\u00baC). Fragmented DNA was purified using 0.8X AMPure XP beads (Beckman Coulter, A63881) and eluted into 16\u03bcL of water. Single-stranded DNA adapter, containing Illumina\u2019s TruSeq read 1 (Adp. TruSeq R1 FW and RV) sequences were annealed together at the final concentration of 1.5 \u03bcM by mixing 1.5 \u03bcL of forward ligation primer and reverse ligation primer (each at 100 \u03bcM) with 97 \u03bcL of nuclease-free water and heating the solution to 95\u00b0C for 2 min and cooling it at room temperature for 5 min. 16 \u03bcL of the purified fragmented DNA was mixed with 1.25 \u03bcL of 1.5 \u03bcM annealed adapters, 1.5\u03bcL of 10X T4 DNA ligase buffer, 15 \u03bcL of NEBNext Ultra II Ligation Master Mix (NEB, E7805S kit) and 0.5 \u03bcL of NEBNext Ultra II Ligation Master Enhancer (NEB, E7805S kit). The ligation reaction was carried out by incubating in the thermocycler for 15 min at 20\u00b0C (lid at 30\u00baC). After ligation, the reaction mix was diluted to 100 \u03bcL and was purified using AMPure XP beads (Beckman Coulter, A63881) with 0.8X volume ratio and eluted into 40 \u03bcL nuclease-free water. Indexing PCR was carried out by mixing purified DNA with 25 \u03bcL of 2x NEBNext\u00ae High-Fidelity 2X PCR Master Mix (NEB, M0543L) and 2.5 \u03bcL of 20\u03bcM P7 binding primer, 8 sets of 2.5\u03bcL of 20\u03bcM indexing primer that houses an 8bp library index and water to 50\u03bcL. PCR cycling program: 98 \u00b0C, 2 min; 3 cycles of 98 \u00b0C, 20 s; 55 \u00b0C, 30 s; 72 \u00b0C, 20 s and 9 cycles 98 \u00b0C, 20 s; 65 \u00b0C, 30 s; 72 \u00b0C, 20 s; with a 1 min final extension at 72 \u00b0C, and 4 \u00b0C, hold at the end. Following final library indexing, DNA was double-side purified using 0.6x-0.8x SPRIselect (Beckman Coulter, B23318) magnetic beads and eluted into 15\u03bcL."
+          ],
+          "Sample_description": [
+            "Library name: K562_fresh and K562_fixed",
+            "inCAGE scRNA-seq of fresh K562 cells for comparing to PFA fixed cells",
+            "inCAGE scRNA-seq of PFA fixed K562 cells for comparing to PFA fixed cells"
+          ],
+          "Sample_data_processing": [
+            "BCL sequencing files received from Illumina BaseSpace portal were converted to raw FASTQ files for each of the 4 (R1, R2, R3, R4) sequencing reads without read trimming or masking by using bcl2fastq software (Illumina, v2.20.0.422). Raw FASTQ files were processed using a custom pipeline (available at https://github.com/AllonKleinLab/paper-data/tree/master/Mazelis2025_CAGEs). In brief, sequencing reads were demultiplexed based on Read1 index sequence (stored as read3) (index used: TATGCAGT, TACTCCTT), and were filtered based on expected structure (all barcodes matching a barcode whitelist with hamming distance of 1). The demultiplexed reads were then processed using Trimmomatic (1) (with parameters: LEADING 28; SLIDINGWINDOW 4:20; MINLEN 20), followed by Poly-A length trim to 4 nt and selecting reads that are longer than MINLEN. For surviving reads, the fraction of length composed out of same base repeats (only considering > 5) was determined, rejecting reads whose fraction is greater than 0.5.",
+            "Count matrices were generated using STARsolo pipeline (2) (STAR 2.7.9a) with the with parameters (--soloFeatures Gene, GeneFull, --genomeSAsparseD 3, --outSAMtype BAM SortedByCoordinate, --outSAMattributes CB CR UR UB UY GN GX, --outFilterScoreMinOverLread 0.3, --outFilterMatchNminOverLread 0.3, --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts, --soloUMIfiltering MultiGeneUMI_CR, --soloUMIdedup 1MM_CR, --soloMultiMappers EM, --soloCellFilter EmptyDrops_CR, --quantMode TranscriptomeSAM GeneCounts) Human GRCh38.101 genome assembly was used.",
+            "Count matrices were filtered by selecting barcodes with >1000 UMIs and fraction of mitochondrial counts being below 0.4.  Different conditions were demultiplexed based on RT barcode",
+            "Assembly: Human GRCh38.101genome assembly",
+            "Supplementary files format and content: h5ad cell x genes expression matrix for different conditions"
+          ],
+          "Sample_platform_id": [
+            "GPL18573"
+          ],
+          "Sample_contact_name": [
+            "Ignas,,Mazelis"
+          ],
+          "Sample_contact_email": [
+            "ignas_mazelis@hms.harvard.edu"
+          ],
+          "Sample_contact_department": [
+            "System Biology"
+          ],
+          "Sample_contact_institute": [
+            "Harvard Medical School"
+          ],
+          "Sample_contact_address": [
+            "210 Longwood Avenue"
+          ],
+          "Sample_contact_city": [
+            "Boston"
+          ],
+          "Sample_contact_state": [
+            "MA"
+          ],
+          "Sample_contact_zip/postal_code": [
+            "02115"
+          ],
+          "Sample_contact_country": [
+            "USA"
+          ],
+          "Sample_instrument_model": [
+            "NextSeq 500"
+          ],
+          "Sample_library_selection": [
+            "cDNA"
+          ],
+          "Sample_library_source": [
+            "transcriptomic single cell"
+          ],
+          "Sample_library_strategy": [
+            "RNA-Seq"
+          ],
+          "Sample_relation": [
+            "BioSample: https://www.ncbi.nlm.nih.gov/biosample/SAMN51198014",
+            "SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX30382449",
+            "SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX30382450",
+            "SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX30382451",
+            "SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRX30382452"
+          ],
+          "Sample_supplementary_file_1": [
+            "ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM9224nnn/GSM9224207/suppl/GSM9224207_Fixed_K562.h5ad"
+          ],
+          "Sample_supplementary_file_2": [
+            "ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM9224nnn/GSM9224207/suppl/GSM9224207_Fresh_K562.h5ad"
+          ],
+          "Sample_series_id": [
+            "GSE306708"
+          ],
+          "Sample_data_row_count": [
+            "0"
+          ]
+        },
+        "http_status": 200
+      },
+      "admitted_on_biosample_identity": true,
+      "label_is_identical_string": true
+    },
+    {
+      "cell": "testis",
+      "biosample_term_name": "testis",
+      "archive": "CELLxGENE",
+      "accession": "ec6ef004-5f30-4a40-b282-980cca20a561",
+      "series": "collection e5f58829-1a66-40b5-a624-9046778e74f5 (Tabula Sapiens)",
+      "url": "https://api.cellxgene.cziscience.com/curation/v1/collections/e5f58829-1a66-40b5-a624-9046778e74f5/datasets/ec6ef004-5f30-4a40-b282-980cca20a561",
+      "assay": "10x 3' v3 single-cell RNA (suspension type: cell)",
+      "label_in_archive": "testis",
+      "found_by": "the whole CELLxGENE dataset listing read once, then every human dataset whose `tissue` labels contain a string identical to a covered biosample_term_name",
+      "notes": "Tabula Sapiens - Testis: a whole dissociated adult testis, `disease: normal`, raw counts declared at `raw.X`. Its biosample is the testis, which is the covered type itself, so no cell-composition decision arises. lane-pseudobulk excluded Tabula Sapiens; this lane reaches it through CELLxGENE's per-tissue distribution and disagrees with the SECOND half of that exclusion for the reason in ARCHIVES.",
+      "clauses": [
+        {
+          "clause": "released human",
+          "satisfied": true,
+          "evidence": "the record's organism: ['Homo sapiens']"
+        },
+        {
+          "clause": "single-cell or single-nucleus RNA",
+          "satisfied": true,
+          "evidence": "the record's assay [\"10x 3' v3\"], suspension type ['cell']"
+        },
+        {
+          "clause": "biosample identity: the cells ARE the covered cell type",
+          "satisfied": true,
+          "evidence": "the record's tissue is ['testis']: the covered type is itself a tissue, so a whole dissociated preparation of it IS the biosample and no cell-composition decision arises; disease ['normal']"
+        },
+        {
+          "clause": "label is the IDENTICAL STRING to the covered biosample_term_name",
+          "satisfied": true,
+          "evidence": "'testis' against 'testis', and the archive's own tissue label ['testis']"
+        },
+        {
+          "clause": "not genetically modified",
+          "satisfied": true,
+          "evidence": "the record's genetic_perturbation_strategy None and perturbation_types None"
+        },
+        {
+          "clause": "not treated",
+          "satisfied": true,
+          "evidence": "the record's disease: ['normal']"
+        },
+        {
+          "clause": "at least one open per-cell per-gene file, no application",
+          "satisfied": true,
+          "evidence": "H5AD: HTTP 200, 385384218 bytes; the record declares its raw counts at raw.X over 60606 features and 7513 cells"
+        }
+      ],
+      "files": [
+        {
+          "name": "H5AD",
+          "what": "AnnData matrix; raw counts declared at raw.X",
+          "url": "https://datasets.cellxgene.cziscience.com/09e3ae14-f355-4ed7-ad81-787b587c8a16.h5ad",
+          "http_status": 200,
+          "bytes": 385384218,
+          "open_without_application": true,
+          "fetched": false,
+          "how_checked": "HTTP HEAD only: a status and a byte count. The file was not downloaded and its contents were not read."
+        }
+      ],
+      "archive_record": {
+        "dataset_id": "ec6ef004-5f30-4a40-b282-980cca20a561",
+        "cell_count": 7513,
+        "feature_count": 60606,
+        "raw_data_location": "raw.X",
+        "citation": "Publication: https://doi.org/10.1126/science.abl4896 Dataset Version: https://datasets.cellxgene.cziscience.com/09e3ae14-f355-4ed7-ad81-787b587c8a16.h5ad curated and distributed by CZ CELLxGENE Discover in Collection: https://cellxgene.cziscience.com/collections/e5f58829-1a66-40b5-a624-9046778e74f5",
+        "suspension_type": [
+          "cell"
+        ],
+        "is_primary_data": [
+          false
+        ],
+        "tissue": [
+          "testis"
+        ],
+        "assay": [
+          "10x 3' v3"
+        ],
+        "disease": [
+          "normal"
+        ]
+      },
+      "admitted_on_biosample_identity": true,
+      "label_is_identical_string": true
+    },
+    {
+      "cell": "CD14_positive_monocyte",
+      "biosample_term_name": "CD14-positive monocyte",
+      "archive": "10x public datasets",
+      "accession": "cd14_monocytes (standard 1.1.0)",
+      "series": "Zheng et al. 2017, the FACS-purified immune populations",
+      "url": "https://www.10xgenomics.com/datasets/cd-14-plus-monocytes-1-standard-1-1-0",
+      "assay": "10x Chromium single-cell 3' RNA (Cell Ranger 1.1.0; 2,612 cells in the web summary this lane read)",
+      "label_in_archive": "CD14+ Monocytes",
+      "found_by": "the 10x public dataset catalogue, for the covered cell types; the dataset's own Cell Ranger web summary read from the CDN for its sample id and label",
+      "notes": "FACS-purified CD14-positive monocytes from a healthy donor: the biosample IS the covered cell type, unmodified and untreated. ITS LABEL IS NOT THE IDENTICAL STRING to ENCODE's `CD14-positive monocyte`, so under TERM_MATCH_POLICY it counts in `same_biosample_count` and NOT in the headline `exact_label_count`.",
+      "clauses": [
+        {
+          "clause": "released human",
+          "satisfied": true,
+          "evidence": "the dataset's own Cell Ranger web summary answered HTTP 200; sample id cd14_monocytes, label as the summary prints it beside it: CD14+ Monocytes; 2,612 cells"
+        },
+        {
+          "clause": "single-cell or single-nucleus RNA",
+          "satisfied": true,
+          "evidence": "10x Chromium single-cell 3' gene expression, Cell Ranger 1.1.0"
+        },
+        {
+          "clause": "biosample identity: the cells ARE the covered cell type",
+          "satisfied": true,
+          "evidence": "FACS-purified CD14-positive monocytes from a healthy donor: the preparation IS the covered cell type, not a tissue containing it. THIS IS READ FROM THE DATASET'S OWN DESCRIPTION, not from a typed field, because 10x publishes none."
+        },
+        {
+          "clause": "label is the IDENTICAL STRING to the covered biosample_term_name",
+          "satisfied": false,
+          "evidence": "'CD14+ Monocytes' against 'CD14-positive monocyte': NOT the identical string, so this candidate counts in same_biosample_count and NOT in the headline exact_label_count"
+        },
+        {
+          "clause": "not genetically modified",
+          "satisfied": true,
+          "evidence": "a primary purified donor population"
+        },
+        {
+          "clause": "not treated",
+          "satisfied": true,
+          "evidence": "no treatment is described; the cells were sorted, not treated"
+        },
+        {
+          "clause": "at least one open per-cell per-gene file, no application",
+          "satisfied": true,
+          "evidence": "cd14_monocytes_filtered_gene_bc_matrices.tar.gz: HTTP 200, 4222751 bytes. The 10x catalogue page itself answered HTTP 429 to this lane, so the licence is recorded as 10x states it and not as this lane verified it; what IS verified here is that the matrix downloads with no registration and no application."
+        }
+      ],
+      "files": [
+        {
+          "name": "cd14_monocytes_filtered_gene_bc_matrices.tar.gz",
+          "url": "https://cf.10xgenomics.com/samples/cell-exp/1.1.0/cd14_monocytes/cd14_monocytes_filtered_gene_bc_matrices.tar.gz",
+          "what": "filtered gene-barcode sparse count matrix (Matrix Market)",
+          "http_status": 200,
+          "bytes": 4222751,
+          "open_without_application": true,
+          "fetched": false,
+          "how_checked": "HTTP HEAD only: a status and a byte count. The file was not downloaded and its contents were not read."
+        }
+      ],
+      "archive_record": {
+        "summary_http_status": 200
+      },
+      "admitted_on_biosample_identity": true,
+      "label_is_identical_string": false
+    }
+  ],
+  "rejected": [
+    {
+      "cell": "K562",
+      "archive": "GEO / ENCODE Perturb-seq",
+      "accession": "e.g. GSM9550664 (ENCODE library ENCLB761BDY), GSM9964752-5 (K562 Zim3-dCas9 pooled dual-guide screen), GSE308682, GSE283574, GSE288996",
+      "clause_failed": "not genetically modified",
+      "why": "THE SUPERVISOR EXPECTED THE LIFT TO COME FROM PERTURB-SEQ NON-TARGETING CONTROL CELLS, AND UNDER THE ADOPTED RULE IT CANNOT. A non-targeting control cell in a Perturb-seq or CRISPRi screen carries a lentivirally integrated guide vector and a Cas9, dCas9 or Zim3-dCas9 effector; that is a genetically modified biosample, which the adopted single-cell clause excludes in the same words it excludes shRNA, siRNA, CRISPR and CRISPRi RNA-seq -- 'a knockdown is not the cell type's own RNA'. This lane does not relax that clause to admit them. The K562 candidate admitted above is an unmodified, unfixed K562 culture and owes nothing to Perturb-seq."
+    },
+    {
+      "cell": "K562",
+      "archive": "CELLxGENE",
+      "accession": "38a78e91-e361-45c8-bae3-1d6d5108d18e (sci-Plex, tissue label `K-562`)",
+      "clause_failed": "not treated",
+      "why": "The only CELLxGENE dataset whose tissue label is a covered cell line is 'Massively multiplex chemical transcriptomics at single-cell resolution': a chemical perturbation screen in which every arm receives a compound or a vehicle, so there is no untreated arm to admit. Finding one would mean reading the dataset's own cell annotations, which are inside a 321 MB matrix this lane does not fetch."
+    },
+    {
+      "cell": "HepG2",
+      "archive": "GEO",
+      "accession": "none admitted",
+      "clause_failed": "not genetically modified, not treated, or no open per-cell matrix",
+      "why": "THE SUPERVISOR EXPECTED HepG2 AND THIS SWEEP DID NOT FIND IT. 689 GEO samples match HepG2 under the single-cell terms, and the ones these queries surfaced are overexpression, CRISPRi, vector-control or drug-treatment arms, or preparations of another cell type in a study that merely mentions HepG2. Three query forms were tried: the plain single-cell sample sweep, the same narrowed by `untreated OR parental OR wild-type OR 'wild type'` (24 samples, none an unmodified HepG2 single-cell library), and the same narrowed by `benchmark OR mixture OR 'cell lines' OR titration` (364 samples, none an unmodified HepG2 single-cell library). THAT IS A STATEMENT ABOUT THESE QUERIES AND NOT ABOUT GEO: an archive listing is what is published, not what is usable, and this lane does not claim no such submission exists."
+    },
+    {
+      "cell": "H1",
+      "archive": "GEO",
+      "accession": "e.g. GSM7976019 (`cell line: H1`, `genotype: WT`)",
+      "clause_failed": "not treated",
+      "why": "The day-0 sample of a differentiation time course is an exact label match on an unmodified H1, and its own characteristics read `treatment: BMP4+CHIR` with a treatment protocol to match, so it is a treated biosample. No untreated H1 single-cell library with an open per-cell matrix was surfaced by these queries."
+    },
+    {
+      "cell": "astrocyte, hepatocyte, keratinocyte, cardiac muscle cell, CD14-positive monocyte",
+      "archive": "CELLxGENE",
+      "accession": "271, 89, 73, 39 and 66 datasets mention these labels respectively",
+      "clause_failed": "biosample identity",
+      "why": "Each appears as a CL `cell_type` annotation of cells INSIDE a tissue dataset, and NO human CELLxGENE dataset carries any of them as its `tissue`, which is where the biosample is stated. Admitting one would mean selecting that cell type's annotated subset out of a tissue, which is the cell-composition decision the adopted rule does not license -- the same ground on which lane-pseudobulk excluded Tabula Sapiens and the HCA, and this lane keeps it."
+    },
+    {
+      "cell": "IMR_90, SK_N_SH, GM12878, hepatocyte, keratinocyte, cardiac_muscle_cell, astrocyte",
+      "archive": "GEO",
+      "accession": "none examined beyond the per-cell-type search counts",
+      "clause_failed": "not evaluated",
+      "why": "The sweep recorded a GEO search count for all thirteen covered cell types, and read candidate submissions' metadata only for the cell types where one was needed: the two the supervisor named and the ones that could reach the minimum. GM12878 is already supplied by ENCODE, so no GEO candidate was sought for it. For the rest this lane states plainly that it did NOT evaluate individual submissions, so their absence from the count is UNSEARCHED and not a negative."
+    }
+  ],
+  "archives": {
+    "GEO": {
+      "name": "NCBI Gene Expression Omnibus",
+      "endpoint": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils (db=gds) and https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi (targ=self&form=text&view=brief)",
+      "searched": "yes",
+      "licence": "NCBI GEO holds public submissions available without restriction and without an application; no controlled-access tier is involved (dbGaP and EGA, which the adopted licence clause excludes, are separate archives and nothing here comes from them)",
+      "limit": "GEO is an archive of independent submissions with no common pipeline and no common quantification, so it CANNOT be swept exhaustively the way ENCODE's typed JSON API can. This lane recorded one search count per covered cell type and then read candidate submissions' own metadata. Its negatives are therefore NOT a claim that no such submission exists: they are a claim about these named queries."
+    },
+    "CELLxGENE": {
+      "name": "CZ CELLxGENE Discover",
+      "endpoint": "https://api.cellxgene.cziscience.com/curation/v1/datasets",
+      "searched": "yes, exhaustively: the whole dataset listing was read and every human dataset's tissue labels were matched against the covered term names",
+      "licence": "CZ CELLxGENE Discover distributes curated datasets openly over HTTPS with no registration and no application; its submission policy requires CC BY 4.0, and each dataset carries its own `citation` string naming the publication and the dataset version",
+      "limit": "CELLxGENE's `cell_type` field is a CL annotation of cells INSIDE a dataset; a dataset's biosample is its `tissue`. Under BIOSAMPLE_IDENTITY_POLICY a covered cell type appearing only as a `cell_type` label inside a tissue dataset does NOT qualify."
+    },
+    "10x public datasets": {
+      "name": "10x Genomics public example datasets",
+      "endpoint": "https://cf.10xgenomics.com/samples/cell-exp/ (the CDN the dataset pages link to) and https://www.10xgenomics.com/datasets",
+      "searched": "yes, for the covered cell types; the catalogue page itself answered HTTP 429 to this lane, so the per-dataset CDN files were read directly instead",
+      "licence": "10x states on its dataset pages that the public example datasets are offered under CC BY 4.0. THIS LANE COULD NOT FETCH THAT PAGE (HTTP 429) and does not quote it: what it verified itself is that the matrix downloads over HTTPS with no registration and no application (HTTP 200 on a HEAD, with a byte count).",
+      "limit": "The catalogue is small and is mostly PBMC, tissue and tumour preparations. Only the FACS-purified immune populations of Zheng et al. 2017 meet a covered cell type."
+    },
+    "Tabula Sapiens, Human Cell Atlas, GTEx snRNA pilot": {
+      "name": "the three sources lane-pseudobulk characterised beyond ENCODE",
+      "endpoint": "n/a",
+      "searched": "re-examined, not re-searched: Tabula Sapiens is reached here THROUGH CELLxGENE, which distributes it per tissue, and that is where this lane's testis candidate comes from",
+      "licence": "as lane-pseudobulk recorded: GTEx individual-level data and the HCA managed tiers are excluded by the adopted licence clause",
+      "limit": "lane-pseudobulk excluded Tabula Sapiens for the covered cell LINES (no match exists) and for the covered TISSUES (it read a tissue match as needing a cell-composition decision). The first half holds. THE SECOND HALF IS WHERE THIS LANE DIFFERS, and the difference is in the reading and not in the rule: pseudobulking a whole dissociated testis needs no composition decision, and it is the same relation as the ENCODE whole-ovary snRNA-seq that lane-pseudobulk ADMITTED."
+    },
+    "dbGaP, EGA": {
+      "name": "controlled-access archives",
+      "endpoint": "n/a",
+      "searched": "no, and deliberately",
+      "licence": "controlled access behind an application",
+      "limit": "excluded by the adopted licence clause, which this lane does not relax"
+    }
+  },
+  "geo_search_counts": [
+    {
+      "term": "K562",
+      "query": "\"K562\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 4377,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "HepG2",
+      "query": "\"HepG2\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 689,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "GM12878",
+      "query": "\"GM12878\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 565,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "IMR-90",
+      "query": "\"IMR-90\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 25,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "H1",
+      "query": "\"H1\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 10795,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "SK-N-SH",
+      "query": "\"SK-N-SH\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 39,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "astrocyte",
+      "query": "\"astrocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 409,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "hepatocyte",
+      "query": "\"hepatocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 2491,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "keratinocyte",
+      "query": "\"keratinocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 352,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "cardiac muscle cell",
+      "query": "\"cardiac muscle cell\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 2,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "CD14-positive monocyte",
+      "query": "\"CD14-positive monocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "ovary",
+      "query": "\"ovary\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 123,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "testis",
+      "query": "\"testis\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single cell\"[All Fields] OR \"single-cell\"[All Fields] OR \"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"scRNA\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "sample_count": 157,
+      "reasked": 0,
+      "null_count_means": "answered"
+    }
+  ],
+  "geo_count_caveat": "These counts are FREE-TEXT matches on ENCODE's own term string, because GEO has no biosample vocabulary to ask. `CD14-positive monocyte` therefore answers 0, since GEO submissions do not spell it that way -- and the 10x candidate admitted for THAT VERY CELL TYPE shows what a 0 here is worth: it is the absence of a string from an index, not the absence of the cell type from the open archives. A count here says how much was available to look through and nothing about what qualifies.",
+  "cellxgene_tissue_label_matches": {
+    "K562": 0,
+    "HepG2": 0,
+    "GM12878": 0,
+    "IMR-90": 0,
+    "H1": 0,
+    "SK-N-SH": 0,
+    "astrocyte": 0,
+    "hepatocyte": 0,
+    "keratinocyte": 0,
+    "cardiac muscle cell": 0,
+    "CD14-positive monocyte": 0,
+    "ovary": 17,
+    "testis": 9
+  },
+  "cellxgene_datasets_listed": 2240,
+  "what_a_listing_is": "An archive listing is what is PUBLISHED, not what is USABLE. No experimental data file was fetched: each candidate file's openness is an HTTP HEAD -- a status and a byte count -- and its per-gene-per-cell content is taken from the archive's own declaration of the file, not from reading it.",
+  "what_was_not_searched": [
+    "GEO exhaustively: it has no assay vocabulary and no common quantification, so the negatives here are about the named queries and not about the archive",
+    "individual GEO submissions for IMR-90, SK-N-SH, hepatocyte, keratinocyte, cardiac muscle cell and astrocyte: a search count was recorded for each, no candidate was evaluated, and their absence from the count is UNSEARCHED and not a negative",
+    "dbGaP and EGA, excluded by the adopted licence clause",
+    "any matrix's gene content: the adopted minimum's 1,000-gene clause is uncounted here"
+  ],
+  "wording_limit": "Agreement on this endpoint licenses the modality swap FOR THIS ENDPOINT ONLY. It is never 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here.",
+  "no_biosample_added": "This lane adds NO biosample. It works only in cell types the reader already covers, makes no AlphaGenome request and no deletion request, and touches nothing in area J, no node model and no BioForge calibration.",
+  "alphagenome_requests": 0,
+  "money": "$0.00: no model request, no key, no data needing an application",
+  "bytes_fetched_note": "catalogue metadata and HTTP headers only; no experimental data file was downloaded",
+  "pinned_sha256": {
+    "data/results/pseudobulk_rule.json": "c2a5bb60987fb8303dc998b5a5bf13850cc860c79726e29076844a5c3713e650",
+    "data/results/pseudobulk_inventory.json": "b23eeead5661d4d382774fa914ede0690dd4dd7e445d0e860097f1e5fad8ee4c",
+    "data/results/freshrna_result.json": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+    "data/results/freshrna_sources.json": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601"
+  },
+  "seconds": 22.15,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/pseudobulk_rule.json, lane-pseudobulk's rule and minimum ADOPTED VERBATIM (`2b9cd0a`), with its inventory (`21b58b6`) and M2i's freshrna records for the covered set",
+        "version": "as committed in this checkout; pinned by sha256 in pinned_sha256"
+      },
+      {
+        "accession": "NCBI GEO, esearch over db=gds for human single-cell samples of each covered cell type, then each candidate sample's own brief; metadata only",
+        "version": "queried 2026-10-12; one count per covered cell type in geo_search_counts; GEO holds public submissions available without restriction and without an application"
+      },
+      {
+        "accession": "CZ CELLxGENE Discover curation API, the whole dataset listing and the candidate dataset's own record; metadata only",
+        "version": "queried 2026-10-12; CELLxGENE's submission policy requires CC BY 4.0 and each dataset carries its own citation string"
+      },
+      {
+        "accession": "10x Genomics public example dataset cd14_monocytes (standard 1.1.0), its Cell Ranger web summary and an HTTP HEAD on its filtered gene-barcode matrix",
+        "version": "queried 2026-10-12; 10x states CC BY 4.0 on its dataset pages, which answered HTTP 429 to this lane and is therefore recorded as stated and not as verified"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/pseudobulk_rule.json",
+        "sha256": "c2a5bb60987fb8303dc998b5a5bf13850cc860c79726e29076844a5c3713e650",
+        "bytes": 26648,
+        "partition": "not an evaluation partition: a committed record that fixes the rule and the covered set"
+      },
+      {
+        "path": "data/results/pseudobulk_inventory.json",
+        "sha256": "b23eeead5661d4d382774fa914ede0690dd4dd7e445d0e860097f1e5fad8ee4c",
+        "bytes": 46712,
+        "partition": "not an evaluation partition: a committed record that fixes the rule and the covered set"
+      },
+      {
+        "path": "data/results/freshrna_result.json",
+        "sha256": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+        "bytes": 51911,
+        "partition": "not an evaluation partition: a committed record that fixes the rule and the covered set"
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": "not an evaluation partition: a committed record that fixes the rule and the covered set"
+      }
+    ],
+    "input_count": 4,
+    "assembly": "n/a: no coordinate is read. This result names accessions and counts cell types.",
+    "coordinates": "n/a: no interval is read or written",
+    "parameters": {
+      "adopted_rule_version": "pseudobulk-1",
+      "adopted_rule_result": "data/results/pseudobulk_rule.json",
+      "minimum_cell_types": 4,
+      "minimum_genes": 1000,
+      "match_field": "biosample_term_name",
+      "archives_searched": [
+        "10x public datasets",
+        "CELLxGENE",
+        "GEO"
+      ],
+      "geo_search_terms": [
+        "\"single cell\"[All Fields]",
+        "\"single-cell\"[All Fields]",
+        "\"single nucleus\"[All Fields]",
+        "\"single-nucleus\"[All Fields]",
+        "\"scRNA\"[All Fields]",
+        "\"snRNA\"[All Fields]"
+      ],
+      "geo_sample_counts": {
+        "K562": 4377,
+        "HepG2": 689,
+        "GM12878": 565,
+        "IMR-90": 25,
+        "H1": 10795,
+        "SK-N-SH": 39,
+        "astrocyte": 409,
+        "hepatocyte": 2491,
+        "keratinocyte": 352,
+        "cardiac muscle cell": 2,
+        "CD14-positive monocyte": 0,
+        "ovary": 123,
+        "testis": 157
+      }
+    },
+    "exclusions": [
+      "every non-human sample",
+      "every genetically modified biosample, Perturb-seq and CRISPRi non-targeting controls INCLUDED: a guide vector and a Cas9 effector are a genetic modification under the adopted clause, and this lane does not relax it",
+      "every treated biosample, a vehicle or fixation arm included",
+      "every controlled-access source: dbGaP, EGA, GTEx individual-level data, HCA managed access",
+      "every covered cell type appearing only as a cell_type annotation INSIDE a tissue dataset: that is a cell-composition decision the adopted rule does not license",
+      "every experimental data file: this sweep reads catalogue metadata and HTTP headers",
+      "no biosample is added, no AlphaGenome request and no deletion request is made (2026-09-27 stop list, reinstated)"
+    ],
+    "partitions": "n/a: nothing is fitted and nothing is held out; the output is a list and a count",
+    "code_cleanliness": {
+      "git_sha": "7d8a3f4424dba478f099c4c51e0ee1d73dc3f021",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/scsweep_sweep.py",
+        "form": "committed_repository_file",
+        "path": "scripts/scsweep_sweep.py",
+        "is_committed": true,
+        "declared_entry": "scripts/scsweep_sweep.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_scalefit.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/pseudobulk.py",
+        "genomeos/attribution/scsweep.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/scsweep_sweep.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "7d8a3f4424dba478f099c4c51e0ee1d73dc3f021",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_scalefit.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/scalefit_census.json",
+        "data/results/scsweep_inventory.json",
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/scsweep_sweep.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "7d8a3f4424dba478f099c4c51e0ee1d73dc3f021",
+      "code_cleanliness_git_sha": "7d8a3f4424dba478f099c4c51e0ee1d73dc3f021",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 7d8a3f4"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 29,
+      "opens_under_data": 11,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
