@@ -214,3 +214,56 @@ STAGE_2_DOES_NOT_CLAIM = (
 def is_shrink(declared: int, scope: int, missing_now_on_disk: bool, named_in_exclusions: bool) -> bool:
     """SHRINK_TEST as a function: all three conditions, none sufficient alone."""
     return declared < scope and missing_now_on_disk and not named_in_exclusions
+
+
+# ------------------------------------------------- stage 2 REFUTED, 2026-10-12, appended not rewritten
+# STAGE_2_READING above says "THE DEFECT IS REALISED". That is WRONG and it is left standing with this
+# note beside it, because the error is more instructive than the claim was. lane-shrinkimpact recomputed
+# all six on the COMPLETE stores and the shrink is realised in NONE of them; no registered number moves.
+# Folded at 9a68bf2.
+
+#: What each of the six actually was, from lane-shrinkimpact's recomputation.
+STAGE_2_REFUTED = (
+    "REALISED IN 0 OF 6. closure_cell_inventory's chr21 WAS READ and was filed under another group's"
+    " label -- a prefix-grouping artefact, not an absence; verified here independently, chr21 is"
+    " present in that same result's all-enhancer sweep group (70 files) and its local element-table"
+    " group (23), and missing only from GENCODE's. chrY is not in the CRISPRi library at all. And in"
+    " the four results of 2026-10-02, chr13 and chrY carry ZERO ELIGIBLE LINKS, so 22 IS the"
+    " benchmark's own scope rather than a shortfall of it"
+)
+
+#: The condition my three-condition test lacked, and the reason it could not have reached the right
+#: answer however carefully it was applied.
+FOURTH_CONDITION = (
+    "the missing member must CARRY DATA the result's own scope would have used. SHRINK_TEST's three"
+    " conditions cannot tell a LABELLING ARTEFACT (the member was read and filed elsewhere) or an"
+    " EMPTY CHROMOSOME (the member exists but contributes nothing eligible) from a genuine shrink,"
+    " because all three look identical from the manifest alone: short count, member on disk today, no"
+    " exclusion naming it. Only opening the member settles it"
+)
+
+#: The summary as it may now be stated, and the only form of it that is supported.
+STAGE_2_SUMMARY = "the mechanism is real in 18 places and realised in 0 of the 6 checked"
+
+#: Why this correction is appended rather than edited away.
+WHY_LEFT_STANDING = (
+    "the first draft of STAGE_2_READING was narrowed by this module's own silence guard before it was"
+    " committed, which was the right mechanism working -- and it still landed a wrong headline, because"
+    " a guard can only refuse what it can see and nothing in the manifest distinguishes these cases."
+    " A reader who sees only the corrected text learns that the census was careful; a reader who sees"
+    " both learns that care inside the manifest was not enough, and that the recomputation on the"
+    " complete store is what decided it"
+)
+
+
+def is_shrink_v2(
+    declared: int,
+    scope: int,
+    missing_now_on_disk: bool,
+    named_in_exclusions: bool,
+    missing_carries_eligible_data: bool,
+) -> bool:
+    """SHRINK_TEST plus FOURTH_CONDITION. `is_shrink` above is superseded and kept for the record."""
+    return (
+        declared < scope and missing_now_on_disk and not named_in_exclusions and missing_carries_eligible_data
+    )

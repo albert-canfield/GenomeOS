@@ -135,3 +135,48 @@ def test_stage_2_separates_what_it_shows_from_what_it_does_not() -> None:
     assert "not that any of the six results' NUMBERS are wrong" in gc.STAGE_2_DOES_NOT_CLAIM
     assert "chrY is routinely empty" in gc.STAGE_2_DOES_NOT_CLAIM
     assert "declare no chromosome scope at all" in gc.STAGE_2_DOES_NOT_CLAIM
+
+
+# -------------------------------------------------------------------- stage 2's refutation, 2026-10-12
+
+
+def test_the_realised_claim_is_refuted_and_the_summary_says_so() -> None:
+    assert "DEFECT IS REALISED" in gc.STAGE_2_READING, "the wrong claim is kept standing, not edited away"
+    assert "REALISED IN 0 OF 6" in gc.STAGE_2_REFUTED
+    assert gc.STAGE_2_SUMMARY == "the mechanism is real in 18 places and realised in 0 of the 6 checked"
+    module_text = (ROOT / "genomeos/attribution/globcensus.py").read_text()
+    assert "9a68bf2" in module_text, "the fold that refuted it must be named"
+
+
+def test_the_fourth_condition_is_what_the_three_could_not_see() -> None:
+    for phrase in ("LABELLING ARTEFACT", "EMPTY CHROMOSOME", "Only opening the member settles it"):
+        assert phrase in gc.FOURTH_CONDITION, phrase
+
+
+def test_PLANTED_the_three_condition_test_PASSES_every_case_that_was_not_a_shrink() -> None:
+    """Why the old test was insufficient, as a measurement rather than a concession.
+
+    A labelling artefact and an empty chromosome both satisfy all three original conditions. If this
+    ever fails, SHRINK_TEST has gained a discrimination it did not have.
+    """
+    assert gc.is_shrink(22, 24, True, False), "a labelling artefact passes the 3-condition test"
+    assert gc.is_shrink(23, 24, True, False), "an empty chromosome passes it too"
+    assert not gc.is_shrink_v2(22, 24, True, False, False), "the 4th condition refuses both"
+    assert gc.is_shrink_v2(22, 24, True, False, True), "and still admits a real shrink"
+
+
+def test_chr21_really_is_present_in_another_group_of_the_same_result() -> None:
+    """The prefix-grouping artefact, verified from the artefact rather than accepted."""
+    import json
+    import re
+
+    rm = json.loads((ROOT / "data/results/closure_cell_inventory.json").read_text())["result_manifest"]
+    where = {}
+    for i in rm["inputs"]:
+        if isinstance(i, dict) and i.get("group") is True:
+            chroms = {
+                c for m in (i.get("members") or []) for c in re.findall(r"chr[0-9XYM]+", str(m.get("path")))
+            }
+            where[str(i.get("path"))[:40]] = "chr21" in chroms
+    assert any(where.values()), "chr21 is in no group at all, so it was not merely mislabelled"
+    assert not all(where.values()), "chr21 is in every group, so there was nothing to explain"
