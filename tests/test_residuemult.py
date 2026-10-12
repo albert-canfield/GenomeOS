@@ -331,3 +331,125 @@ def test_the_stop_list_check_is_named_in_the_module() -> None:
 def test_every_bound_constant_is_a_real_attribute_so_the_record_cannot_drift() -> None:
     for field, const in rm.BOUND.items():
         assert hasattr(rm, const), (field, const)
+
+
+# ==== the committed record: the counts are RECOMPUTED from the table, never read as written ==============
+
+
+def _record() -> dict:
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(
+        RESULT_FILE,
+        was="the one lookup run of this lane, written at the committed definitions",
+    )
+    return json.loads(RESULT_FILE.read_text())
+
+
+def test_every_published_count_recomputes_from_the_per_gene_table() -> None:
+    """A committed number must be recomputable from the rows beside it (the lesson of 2026-10-12)."""
+    d = _record()
+    t = d["per_gene_table"]
+    i = {c: t["columns"].index(c) for c in t["columns"]}
+    rows = t["rows"]
+    c = d["counts"]
+    assert len(rows) == d["residue_genes"]
+    assert sum(1 for r in rows if r[i["in_committed_table"]]) == c["count_1_in_multrna_s_committed_table"]
+    assert (
+        sum(1 for r in rows if r[i["informative_unscaled"]])
+        == c["count_1b_informative_multiplicatively_predictor_side"]
+    )
+    assert (
+        sum(1 for r in rows if r[i["informative_scaled"]])
+        == c["count_2_informative_multiplicatively_at_the_scale"]
+    )
+    assert (
+        sum(1 for r in rows if r[i["in_committed_table"]] or r[i["informative_scaled"]])
+        == c["union_of_count_1_and_count_2"]
+    )
+    assert (
+        sum(1 for r in rows if not (r[i["in_committed_table"]] or r[i["informative_scaled"]]))
+        == c["informative_under_neither"]
+    )
+
+
+def test_the_two_counts_and_the_complement_close_on_the_population() -> None:
+    d = _record()
+    c = d["counts"]
+    assert c["union_of_count_1_and_count_2"] + c["informative_under_neither"] == d["residue_genes"]
+    assert c["count_1_in_multrna_s_committed_table"] <= c["union_of_count_1_and_count_2"]
+    assert c["count_2_informative_multiplicatively_at_the_scale"] <= c["union_of_count_1_and_count_2"]
+
+
+def test_the_branch_and_the_implication_recompute_by_the_committed_rule() -> None:
+    d = _record()
+    branch = rm.implication(d["counts"]["union_of_count_1_and_count_2"], d["residue_genes"])
+    assert branch == d["branch"]
+    assert d["most"] == rm.MOST
+    head = rm.READINGS[branch].split("{")[0]
+    assert d["implication"].startswith(head)
+
+
+def test_the_re_derived_population_reconciles_with_lane_residue_s_committed_counts() -> None:
+    """The re-derivation is the lane's own run: it must land on lane-residue's 3,708, or say it did not."""
+    d = _record()
+    rec = d["reconciliation"]
+    assert rec["agrees"] is (rec["differences"] == {})
+    assert rec["re_derived"]["the_residue"] == d["residue_genes"]
+    assert rec["agrees"], rec["differences"]
+    assert rec["committed"]["excluded_basal_not_positive"] == (
+        rec["committed"]["recovered_at_the_scale"] + rec["committed"]["the_residue"]
+    )
+
+
+def test_the_stated_bound_held_on_every_gene_and_no_violation_was_absorbed() -> None:
+    d = _record()
+    assert d["bound_violations"] == []
+    c = d["counts"]
+    # runnability cannot be lost to the scale: the exact half of the stated bound
+    assert c["runnable_at_the_scale"] >= c["runnable_unscaled"]
+    assert (
+        c["count_2_informative_multiplicatively_at_the_scale"]
+        >= c["count_1b_informative_multiplicatively_predictor_side"]
+    )
+    assert d["identity_checks"]["max_abs_q_after_minus_scale_times_q_before"] < 1e-9
+
+
+def test_no_residue_gene_is_refused_multiplicatively_for_the_reason_the_mean_refused_it() -> None:
+    """The structural point, checked on the real population and not only on a constructed gene."""
+    d = _record()
+    for where in ("unscaled", "at_the_scale"):
+        reasons = set(d["reasons_not_runnable"][where])
+        assert "basal_not_positive" not in reasons, (where, reasons)
+        assert reasons <= rm.saturate_refusals(), (where, reasons)
+
+
+def test_the_complement_is_reported_by_reason_so_it_cannot_read_as_genes_the_form_fits() -> None:
+    d = _record()
+    by_reason = d["informative_under_neither_by_reason"]
+    assert sum(by_reason.values()) == d["counts"]["informative_under_neither"]
+    assert set(by_reason) <= rm.saturate_refusals() | {"runnable_not_informative"}
+
+
+def test_the_record_carries_the_match_field_the_limitations_and_the_refusal_to_claim_expression() -> None:
+    d = _record()
+    assert d["match_field"] == rm.CONVENTIONS["match_field"] == "symbol"
+    assert d["rna_read"] == "none"
+    assert d["alphagenome_requests"] == 0
+    assert "NO RNA VALUE WAS OPENED IN THIS LANE" in d["what_this_is_not"]
+    assert "WORSE" in d["what_this_is_not"]
+    assert d["limitations"] == list(rm.LIMITATIONS)
+    assert d["prior_exposure"] == rm.PRIOR_EXPOSURE
+    assert d["implication_rule"] == rm.IMPLICATION_RULE
+
+
+def test_the_record_reports_whether_a_residue_symbol_names_more_than_one_gene_in_this_run() -> None:
+    """LIMITATIONS names symbol ambiguity as the match's weakness; the record must carry the count."""
+    d = _record()
+    assert isinstance(d["identity_checks"]["residue_symbols_not_unique_in_this_run"], list)
+    t = d["per_gene_table"]
+    i = t["columns"].index("symbol")
+    syms = [r[i] for r in t["rows"]]
+    assert len(set(syms)) + len(d["identity_checks"]["residue_symbols_not_unique_in_this_run"]) >= len(syms)
