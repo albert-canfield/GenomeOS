@@ -736,3 +736,32 @@ STATIC_COUNT = {
     " the single site where condition (4) was satisfied -- which is exactly what DOES_NOT_CLAIM"
     " predicted: 'condition (4) is expensive and NOT_ESTABLISHED will be the largest class'",
 }
+
+
+#: Standing rule, every session, from the supervisor at 19:25 on the case below. Carried verbatim.
+INSTRUMENTED_RUNS_RULE = (
+    "an INSTRUMENTED or traced run never takes the machine-wide suite lock. It runs in a clone,"
+    " scoped to the files it needs, never the whole suite. Any run that holds the lock writes its"
+    " expected duration on its board entry, and a lock held past 45 minutes is reported to the"
+    " coordinator"
+)
+
+#: The case that earned it, which is this lane's.
+WHY_THAT_RULE_EXISTS = (
+    "this lane's traced suite held the lock from 16:25 to 19:19 at 15x speed and reached 44%."
+    " Every gate on the machine queues behind that lock, so the project recorded NO COMMIT"
+    " between 16:54 and 19:19 and this lane was the cause rather than a bystander. The lock did"
+    " exactly what it was built to do -- serialise -- and the fault was entirely in what was"
+    " allowed to hold it: a measurement, not a verdict, with no duration estimate and no"
+    " threshold at which anyone would look"
+)
+
+#: And the honesty clause the first estimate failed.
+DURATION_ESTIMATES_ARE_MEASURED = (
+    "the estimate must be MEASURED over a sample long enough to mean something. This lane posted"
+    " '~20 min left' from a 90-second window early in the run; the truth was four and a half"
+    " hours. The first 3% of a pytest run is collection and startup, so a rate taken there"
+    " describes the wrong thing. On the replacement run a 75-second sample showed NO progress at"
+    " all and was reported as 'rate unknown' rather than as an estimate; a four-minute sample"
+    " then gave 2.50%/min and an expected end of 20:03"
+)

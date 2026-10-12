@@ -408,3 +408,24 @@ def test_the_static_count_claims_only_the_population() -> None:
 def test_the_count_records_that_the_tree_moved_under_it() -> None:
     assert "1,736 raise sites at 25db524 and 1,742" in gcn.STATIC_COUNT["tree_moves_under_the_count"]
     assert "NOT instrument drift" in gcn.STATIC_COUNT["tree_moves_under_the_count"]
+
+
+def test_the_instrumented_run_rule_is_carried_verbatim() -> None:
+    """Supervisor, 2026-10-12 19:25, on this lane's own 160-minute lock hold."""
+    r = gcn.INSTRUMENTED_RUNS_RULE
+    assert r.startswith("an INSTRUMENTED or traced run never takes the machine-wide suite lock")
+    assert "scoped to the files it needs" in r
+    assert "past 45 minutes is reported to the coordinator" in r
+
+
+def test_the_rule_records_that_this_lane_was_the_cause_not_a_bystander() -> None:
+    assert "NO COMMIT" in gcn.WHY_THAT_RULE_EXISTS
+    assert "cause rather than a bystander" in gcn.WHY_THAT_RULE_EXISTS
+    assert "The lock did" in gcn.WHY_THAT_RULE_EXISTS
+
+
+def test_duration_estimates_must_be_measured_over_a_meaningful_sample() -> None:
+    d = gcn.DURATION_ESTIMATES_ARE_MEASURED
+    assert "90-second window" in d
+    assert "four and a half hours" in d
+    assert "reported as 'rate unknown' rather than as an estimate" in d
