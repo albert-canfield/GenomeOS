@@ -127,3 +127,54 @@ def test_a_negative_must_travel_with_its_boundary() -> None:
     n = g4.NEGATIVE_CARRIES_ITS_BOUNDARY
     assert "IN THE SAME SENTENCE" in n
     assert "which archives" in n and "how many queries" in n and "which species" in n
+
+
+# --------------------------------------------- the inventory's answer, and its boundary's arithmetic
+
+
+def test_the_stated_query_count_EQUALS_the_sum_of_the_per_species_records() -> None:
+    """It said NINE while the records summed to SIX: a number written rather than counted."""
+    assert g4.stated_query_count() == sum(s["queries"] for s in g4.INVENTORY_BY_SPECIES)
+    assert g4.stated_query_count() == 6
+
+
+def test_the_negative_names_its_archives_species_and_count_in_one_sentence() -> None:
+    n = g4.INVENTORY_NEGATIVE
+    assert "NOT 'no such data exists'" in n
+    assert "none found by these queries in these archives for these species" in n
+    assert "could overturn it" in n
+    for archive in ("GEO/SRA", "ANISEED", "WormBase"):
+        assert archive in n, archive
+
+
+def test_every_species_names_WHICH_criterion_it_fails() -> None:
+    """ "No source" without a named criterion is unfalsifiable."""
+    assert len(g4.INVENTORY_BY_SPECIES) == len(g4.SEARCH_PROTOCOL["species"])
+    for entry in g4.INVENTORY_BY_SPECIES:
+        assert entry["fails"].startswith("criteri"), entry["species"]
+        assert entry["queries"] >= 1
+        assert entry["queries"] <= 4, "the protocol allows at most 4 per species"
+
+
+def test_ciona_is_recorded_as_failing_for_RESOLUTION_and_not_for_absence() -> None:
+    """It has both assays and integrates them; the failure is tissue vs lineage or stage."""
+    ciona = [s for s in g4.INVENTORY_BY_SPECIES if "Ciona" in s["species"]][0]
+    assert "BOTH assays exist" in ciona["found"]
+    assert "CARDIOPHARYNGEAL FATE CHOICE" in ciona["found"]
+    assert "LARVAL DEVELOPMENTAL STAGES" in ciona["found"]
+    assert "A stage is not a tissue" in ciona["found"]
+
+
+def test_the_by_product_is_proposed_and_explicitly_not_run() -> None:
+    """A within-worm source replication is cheaper and is the only route with data found."""
+    w = g4.WITHIN_WORM_REPLICATION_INSTEAD
+    assert "Durham et al. 2021" in w
+    assert "INDEPENDENT C. elegans source" in w
+    assert "changes neither the mechanism nor the lineage" in w
+    assert "Proposed, not run" in w
+
+
+def test_the_answer_is_the_one_declared_complete_in_advance() -> None:
+    assert g4.INVENTORY_ANSWER == "NO_SOURCE_QUALIFIES"
+    assert "COMPLETE ANSWER and the likely one" in g4.NO_SOURCE_QUALIFIES_IS_COMPLETE
+    assert "NOT CURRENTLY DECIDABLE" in g4.INVENTORY_READING

@@ -201,3 +201,122 @@ def result_carries_its_limit(result: dict) -> bool:
     if not isinstance(text, str):
         return False
     return "DOES NOT REACH 'OPERONS AND TRANS-SPLICING'" in text and "separates neither" in text
+
+
+# ============================ THE INVENTORY'S ANSWER: NO_SOURCE_QUALIFIES -- 2026-10-12
+# Five species, six archives, nine queries. The answer is the one declared likely in advance, and
+# it is a complete answer. NOTE THERE IS NO RESULT JSON: nothing was measured, no RNA value was
+# read, and a result record would imply a measurement. The inventory is a SOURCE ASSESSMENT and
+# lives here, in committed code, which also keeps it clear of the ordering trap this project
+# recorded today -- a test committed before the record it reads reddens every sha in between.
+
+#: The answer.
+INVENTORY_ANSWER = "NO_SOURCE_QUALIFIES"
+
+#: Per species: the queries actually run, what was found, and WHICH criterion it fails. The
+#: criterion is named because "no source" without it is unfalsifiable.
+INVENTORY_BY_SPECIES = (
+    {
+        "species": "Caenorhabditis briggsae",
+        "queries": 1,
+        "found": "nothing tissue-resolved. The searches return C. elegans work instead",
+        "fails": "criterion (1), accessibility resolved by tissue or cell type",
+    },
+    {
+        "species": "Caenorhabditis remanei",
+        "queries": 1,
+        "found": "nothing. Same searches, same C. elegans results",
+        "fails": "criterion (1)",
+    },
+    {
+        "species": "Pristionchus pacificus",
+        "queries": 1,
+        "found": "ATAC-seq EXISTS, as one input to a ChromHMM chromatin-state annotation beside"
+        " histone modifications (Genome Research gr.242362.118, 2019). But it is whole-animal"
+        " material for state annotation, not a tissue or cell-type panel, and no matched"
+        " tissue RNA from the same source was found",
+        "fails": "criteria (1) and (2)",
+    },
+    {
+        "species": "Ciona robusta / intestinalis / savignyi",
+        "queries": 2,
+        "found": "BOTH assays exist and are integrated, which is why this was the most promising"
+        " candidate -- but not by tissue. C. robusta: an accessome of 56,090 non-overlapping"
+        " accessible regions covering 9.25% of the genome, from FACS-purified cells, resolved by"
+        " CARDIOPHARYNGEAL FATE CHOICE -- one lineage, not a tissue panel. C. savignyi: ATAC-seq"
+        " and RNA-seq jointly across LARVAL DEVELOPMENTAL STAGES. A stage is not a tissue, and"
+        " the endpoint compares a gene's expression ACROSS TISSUES",
+        "fails": "criterion (1), and so criterion (2) with it",
+    },
+    {
+        "species": "Schistosoma mansoni",
+        "queries": 1,
+        "found": "rich single-cell RNA atlases (a miracidium whole-body atlas of about 365 cells"
+        " in 19 transcriptionally distinct clusters; a separate intra-mammalian stage atlas), and"
+        " an ATAC-seq PROJECT at Aberystwyth running October 2021 to July 2022 -- but no"
+        " published tissue-resolved accessibility matched to RNA in one source was found",
+        "fails": "criterion (2), RNA and accessibility from the same source",
+    },
+)
+
+#: The negative WITH ITS BOUNDARY IN THE SAME SENTENCE, as the coordinator's standing correction
+#: requires. This is the sentence to carry upward; it is not to be shortened.
+INVENTORY_NEGATIVE = (
+    "NO SOURCE QUALIFIES among five species -- C. briggsae, C. remanei, Pristionchus pacificus,"
+    " Ciona robusta/intestinalis/savignyi and Schistosoma mansoni -- on SIX queries across"
+    " GEO/SRA, ArrayExpress/ENA, ENCODE, WormBase and WormBase ParaSite, ANISEED and Ensembl"
+    " Metazoa. THAT IS NOT 'no such data exists': it is none found by these queries in these"
+    " archives for these species, and a deeper search of any one of them could overturn it"
+)
+
+#: What the inventory therefore says about the question.
+INVENTORY_READING = (
+    "the mechanism-versus-lineage question is NOT CURRENTLY DECIDABLE on the public data found"
+    " here. The worm's lead stands as registered, and whether it belongs to the worm or to"
+    " operons and trans-splicing cannot be separated on these sources. The failure is almost"
+    " always the SAME criterion: accessibility resolved by TISSUE with RNA for the same tissues"
+    " from the SAME source. Ciona has both assays and integrates them, and still fails, because"
+    " its resolution is a lineage or a developmental stage rather than a tissue panel"
+)
+
+#: And the by-product, which is worth more than the negative and is NOT this lane's to run.
+WITHIN_WORM_REPLICATION_INSTEAD = (
+    "THE SEARCHES FOUND SOMETHING BETTER THAN WHAT THEY WERE LOOKING FOR. Durham et al. 2021"
+    " (Genome Research 31:1952, gr.271791.120) is sci-ATAC-seq in L2 C. elegans built"
+    " deliberately TO MATCH available sci-RNA-seq, tissue by tissue -- an INDEPENDENT C. elegans"
+    " source from Serizay et al. 2020, which is the worm's registered source. That does not"
+    " answer the mechanism question, because it is the same species and so changes neither the"
+    " mechanism nor the lineage. It answers a DIFFERENT and currently unasked one: is the worm's"
+    " +4.47 a property of THE WORM or of SERIZAY 2020? A source replication inside the worm is"
+    " cheaper than a fourth genome, needs no new organism, and is the only one of these routes"
+    " for which qualifying data was actually found. Proposed, not run: it needs its own"
+    " registration, and this lane's registration is for a fourth genome"
+)
+
+
+def stated_query_count() -> int:
+    """The query count in :data:`INVENTORY_NEGATIVE`, parsed back out of the sentence.
+
+    It exists so a test can compare the sentence against the per-species records. The first
+    version of that sentence said NINE while the records summed to SIX -- a number written rather
+    than counted, which is the error this whole day was about, and the records caught it. A
+    boundary that can drift from its own evidence is not a boundary.
+    """
+    import re
+
+    words = {
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9,
+        "ten": 10,
+    }
+    match = re.search(r"on ([A-Za-z]+) queries", INVENTORY_NEGATIVE)
+    if match is None:
+        raise ValueError("INVENTORY_NEGATIVE no longer states a query count")
+    return words[match.group(1).lower()]
