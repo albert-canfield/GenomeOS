@@ -38,6 +38,14 @@ domain is unknown for 13 of 13 reader cells (18de375). An emitted target is a mo
 AlphaGenome's predicted change on deleting the element -- and never a measured regulatory
 relationship, whichever count this census reports.
 
+**The census against the compiler, on three chromosomes.** After `compile.py` gained the emission
+(`compile.EVERY_CODING_TARGET_AT_THE_BAR`, 30d6dd9), each chromosome was recompiled both ways and its
+rule lines counted with `compile.count_rules`, which reads them off the program text. The compiler and
+this census agree exactly, now and at the bar: chr21 5,174 -> 6,531, chr22 9,612 -> 12,356, chrY
+125 -> 142. Two independent paths to the same three pairs of numbers -- the census reads the committed
+program plus the cache, the compiler rebuilds the program from the attribution results -- so the
+genome-wide 440,377 -> 542,801 is not an artefact of the census's own reading.
+
 No model request, no key, no money: every input is already on this machine.
 """
 
