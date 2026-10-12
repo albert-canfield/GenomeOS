@@ -1,0 +1,1062 @@
+{
+  "result": "maboss_scores",
+  "date": "2026-10-10",
+  "question": "Does MaBoSS, behind runtime/maboss.py, reproduce the phenotype probabilities Cohen et al. 2015 print in Fig 3 from their published MaBoSS files, and what do the stand-in's two update schemes give, at a tolerance fixed before the runs?",
+  "source": {
+    "paper": "Cohen DPA, Martignetti L, Robine S, Barillot E, Zinovyev A, Calzone L (2015) Mathematical Modelling of Molecular Pathways Enabling Tumour Cell Invasion and Migration. PLoS Comput Biol 11(11): e1004571",
+    "doi": "10.1371/journal.pcbi.1004571",
+    "pmcid": "PMC4631357",
+    "licence": "CC BY 4.0 (PLoS Computational Biology)",
+    "model_files": "https://journals.plos.org/ploscompbiol/article/file?type=supplementary&id=10.1371/journal.pcbi.1004571.s017",
+    "model_zip_sha256": "b2cc7908f2e290c53b094defc519c20cf9d720157a48b63d9e835a8e15d54816",
+    "model_members": {
+      "SuppMat_models/SuppMat_Model_MaBoSS_MasterModel.bnd": "data/models/cohen2015_metastasis.bnd",
+      "SuppMat_models/SuppMat_Model_MaBoSS_MasterModel.cfg": "data/models/cohen2015_metastasis.cfg"
+    },
+    "bnd_sha256": "02fc71367b480cef46e7bcc858c756e7fb7e510ccbbf1d7b5b3cc074b7780cc7",
+    "cfg_sha256": "3acdbc7efb5d60942b16f40db238e0451945fa552e500b96adad796881b0bcb5",
+    "figure": "Fig 3, https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1004571.g003",
+    "figure_sha256": "91c8e1018222700f5590a4e90c4ccef4a1ecf240c12d13ccbf2280e9e8911687"
+  },
+  "tolerance": {
+    "printed_phenotype_abs": 0.02,
+    "unprinted_total_max": 0.02
+  },
+  "agreement_threshold": 0.02,
+  "phenotype_rule": {
+    "outputs": [
+      "Metastasis",
+      "Migration",
+      "Invasion",
+      "EMT",
+      "Apoptosis",
+      "CellCycleArrest"
+    ],
+    "precedence": [
+      "HS if none",
+      "Metastasis",
+      "Apoptosis",
+      "Migration",
+      "Invasion",
+      "EMT",
+      "CCA"
+    ]
+  },
+  "settings": {
+    "maboss": "the published .cfg as published: seed_pseudorandom 100, sample_count 50000, max_time 50, time_tick 0.1, thread_count 4; the last window [49.9, 50)",
+    "standin_async": {
+      "trajectories": 50000,
+      "seed": 100,
+      "t_end": 50.0
+    },
+    "standin": "synchronous attractor from each of the 2^4 initial states, equal weights; a cycle's states share its weight"
+  },
+  "table": {
+    "maboss": {
+      "checks_passed": "16/16",
+      "passes": true,
+      "per_panel": {
+        "A. Wild type": "5/5",
+        "B. p53 LoF": "5/5",
+        "C. NICD GoF": "4/4",
+        "D. p53 LoF NICD GoF": "2/2"
+      },
+      "expected": "16 of 16"
+    },
+    "standin_async": {
+      "checks_passed": "16/16",
+      "passes": true,
+      "per_panel": {
+        "A. Wild type": "5/5",
+        "B. p53 LoF": "5/5",
+        "C. NICD GoF": "4/4",
+        "D. p53 LoF NICD GoF": "2/2"
+      },
+      "expected": "16 of 16"
+    },
+    "standin": {
+      "checks_passed": "8/16",
+      "passes": false,
+      "per_panel": {
+        "A. Wild type": "3/5",
+        "B. p53 LoF": "2/5",
+        "C. NICD GoF": "1/4",
+        "D. p53 LoF NICD GoF": "2/2"
+      },
+      "expected": "fewer than 16; no value predicted"
+    },
+    "agreement": {
+      "all_panels_agree": true,
+      "total_variation": {
+        "A. Wild type": 0.0031,
+        "B. p53 LoF": 0.00232,
+        "C. NICD GoF": 0.00306,
+        "D. p53 LoF NICD GoF": 0.0
+      },
+      "expected": "maboss and standin_async within 0.02 total variation in all four panels"
+    }
+  },
+  "panels": {
+    "A. Wild type": {
+      "held": {},
+      "figure": {
+        "HS": 0.25,
+        "Metastasis": 0.25,
+        "EMT": 0.01,
+        "Apoptosis": 0.49
+      },
+      "engines": {
+        "maboss": {
+          "phenotypes": {
+            "Apoptosis": 0.49178,
+            "EMT": 0.01268,
+            "HS": 0.23884,
+            "Invasion": 2e-05,
+            "Metastasis": 0.25668
+          },
+          "checks": [
+            {
+              "check": "HS probability",
+              "figure": 0.25,
+              "engine": 0.23884,
+              "difference": -0.01116,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.25,
+              "engine": 0.25668,
+              "difference": 0.00668,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.01,
+              "engine": 0.01268,
+              "difference": 0.00268,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Apoptosis probability",
+              "figure": 0.49,
+              "engine": 0.49178,
+              "difference": 0.00178,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 2e-05,
+              "which": {
+                "Invasion": 2e-05
+              },
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 5,
+          "of": 5,
+          "states": {
+            "Apoptosis -- CellCycleArrest": 0.49178,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.25668,
+            "<nil>": 0.23884,
+            "CellCycleArrest -- EMT": 0.01268,
+            "CellCycleArrest -- EMT -- Invasion": 2e-05
+          },
+          "run": {
+            "window": [
+              49.900000000000006,
+              50.00000000000001
+            ],
+            "engine": "maboss",
+            "cmaboss": "1.0.0b32",
+            "discrete_time": "0",
+            "use_physrandgen": "0",
+            "seed_pseudorandom": "100",
+            "sample_count": "50000",
+            "max_time": "50",
+            "time_tick": "0.1",
+            "thread_count": "4"
+          },
+          "seconds": 0.54
+        },
+        "standin_async": {
+          "phenotypes": {
+            "Apoptosis": 0.48902,
+            "EMT": 0.01236,
+            "HS": 0.23914,
+            "Metastasis": 0.25946,
+            "Migration": 2e-05
+          },
+          "checks": [
+            {
+              "check": "HS probability",
+              "figure": 0.25,
+              "engine": 0.23914,
+              "difference": -0.01086,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.25,
+              "engine": 0.25946,
+              "difference": 0.00946,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.01,
+              "engine": 0.01236,
+              "difference": 0.00236,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Apoptosis probability",
+              "figure": 0.49,
+              "engine": 0.48902,
+              "difference": -0.00098,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 2e-05,
+              "which": {
+                "Migration": 2e-05
+              },
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 5,
+          "of": 5,
+          "states": {
+            "Apoptosis -- CellCycleArrest": 0.48902,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.25946,
+            "<nil>": 0.23914,
+            "CellCycleArrest -- EMT": 0.01236,
+            "CellCycleArrest -- EMT -- Invasion -- Migration": 2e-05
+          },
+          "run": {
+            "trajectories": 50000,
+            "seed": 100,
+            "t_end": 50.0,
+            "clock_rate": 32.0,
+            "stopped_at_a_fixed_point_before_t_end": 49998
+          },
+          "seconds": 27.34
+        },
+        "standin": {
+          "phenotypes": {
+            "Apoptosis": 0.375,
+            "HS": 0.375,
+            "Metastasis": 0.25
+          },
+          "checks": [
+            {
+              "check": "HS probability",
+              "figure": 0.25,
+              "engine": 0.375,
+              "difference": 0.125,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.25,
+              "engine": 0.25,
+              "difference": 0.0,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.01,
+              "engine": 0.0,
+              "difference": -0.01,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Apoptosis probability",
+              "figure": 0.49,
+              "engine": 0.375,
+              "difference": -0.115,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 3,
+          "of": 5,
+          "states": {
+            "<nil>": 0.375,
+            "Apoptosis -- CellCycleArrest": 0.25,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.25,
+            "Apoptosis": 0.125
+          },
+          "run": {
+            "initial_states": 16,
+            "attractor_lengths": {
+              "1": 8,
+              "2": 8
+            }
+          },
+          "seconds": 0.0
+        }
+      },
+      "standin_translation": {
+        "nodes": 32,
+        "random_nodes": [
+          "ECMicroenv",
+          "DNAdamage",
+          "GF",
+          "TGFbeta"
+        ],
+        "common_rate": 1.0,
+        "constant_rules": []
+      },
+      "agreement": {
+        "total_variation": 0.0031,
+        "bound": 0.02,
+        "agree": true
+      }
+    },
+    "B. p53 LoF": {
+      "held": {
+        "p53": 0
+      },
+      "figure": {
+        "HS": 0.23,
+        "Metastasis": 0.27,
+        "EMT": 0.03,
+        "Apoptosis": 0.47
+      },
+      "engines": {
+        "maboss": {
+          "phenotypes": {
+            "Apoptosis": 0.46734,
+            "EMT": 0.02566,
+            "HS": 0.22916,
+            "Metastasis": 0.27784
+          },
+          "checks": [
+            {
+              "check": "HS probability",
+              "figure": 0.23,
+              "engine": 0.22916,
+              "difference": -0.00084,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.27,
+              "engine": 0.27784,
+              "difference": 0.00784,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.03,
+              "engine": 0.02566,
+              "difference": -0.00434,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Apoptosis probability",
+              "figure": 0.47,
+              "engine": 0.46734,
+              "difference": -0.00266,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 5,
+          "of": 5,
+          "states": {
+            "Apoptosis -- CellCycleArrest": 0.46734,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.27784,
+            "<nil>": 0.22916,
+            "CellCycleArrest -- EMT": 0.02566
+          },
+          "run": {
+            "window": [
+              49.900000000000006,
+              50.00000000000001
+            ],
+            "engine": "maboss",
+            "cmaboss": "1.0.0b32",
+            "discrete_time": "0",
+            "use_physrandgen": "0",
+            "seed_pseudorandom": "100",
+            "sample_count": "50000",
+            "max_time": "50",
+            "time_tick": "0.1",
+            "thread_count": "4"
+          },
+          "seconds": 0.54
+        },
+        "standin_async": {
+          "phenotypes": {
+            "Apoptosis": 0.4658,
+            "EMT": 0.02604,
+            "HS": 0.2311,
+            "Metastasis": 0.27706
+          },
+          "checks": [
+            {
+              "check": "HS probability",
+              "figure": 0.23,
+              "engine": 0.2311,
+              "difference": 0.0011,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.27,
+              "engine": 0.27706,
+              "difference": 0.00706,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.03,
+              "engine": 0.02604,
+              "difference": -0.00396,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Apoptosis probability",
+              "figure": 0.47,
+              "engine": 0.4658,
+              "difference": -0.0042,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 5,
+          "of": 5,
+          "states": {
+            "Apoptosis -- CellCycleArrest": 0.4658,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.27706,
+            "<nil>": 0.2311,
+            "CellCycleArrest -- EMT": 0.02604
+          },
+          "run": {
+            "trajectories": 50000,
+            "seed": 100,
+            "t_end": 50.0,
+            "clock_rate": 32.0,
+            "stopped_at_a_fixed_point_before_t_end": 50000
+          },
+          "seconds": 23.1
+        },
+        "standin": {
+          "phenotypes": {
+            "Apoptosis": 0.5,
+            "HS": 0.25,
+            "Metastasis": 0.25
+          },
+          "checks": [
+            {
+              "check": "HS probability",
+              "figure": 0.23,
+              "engine": 0.25,
+              "difference": 0.02,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.27,
+              "engine": 0.25,
+              "difference": -0.02,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.03,
+              "engine": 0.0,
+              "difference": -0.03,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "Apoptosis probability",
+              "figure": 0.47,
+              "engine": 0.5,
+              "difference": 0.03,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 2,
+          "of": 5,
+          "states": {
+            "Apoptosis -- CellCycleArrest": 0.5,
+            "<nil>": 0.25,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.25
+          },
+          "run": {
+            "initial_states": 16,
+            "attractor_lengths": {
+              "1": 16
+            }
+          },
+          "seconds": 0.0
+        }
+      },
+      "standin_translation": {
+        "nodes": 32,
+        "random_nodes": [
+          "ECMicroenv",
+          "DNAdamage",
+          "GF",
+          "TGFbeta"
+        ],
+        "common_rate": 1.0,
+        "constant_rules": [
+          "p53"
+        ]
+      },
+      "agreement": {
+        "total_variation": 0.00232,
+        "bound": 0.02,
+        "agree": true
+      }
+    },
+    "C. NICD GoF": {
+      "held": {
+        "NICD": 1
+      },
+      "figure": {
+        "Invasion": 0.18,
+        "Metastasis": 0.36,
+        "EMT": 0.46
+      },
+      "engines": {
+        "maboss": {
+          "phenotypes": {
+            "EMT": 0.46228,
+            "Invasion": 0.18296,
+            "Metastasis": 0.35476
+          },
+          "checks": [
+            {
+              "check": "Invasion probability",
+              "figure": 0.18,
+              "engine": 0.18296,
+              "difference": 0.00296,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.36,
+              "engine": 0.35476,
+              "difference": -0.00524,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.46,
+              "engine": 0.46228,
+              "difference": 0.00228,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 4,
+          "of": 4,
+          "states": {
+            "CellCycleArrest -- EMT": 0.46228,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.35476,
+            "CellCycleArrest -- EMT -- Invasion": 0.18296
+          },
+          "run": {
+            "window": [
+              49.900000000000006,
+              50.00000000000001
+            ],
+            "engine": "maboss",
+            "cmaboss": "1.0.0b32",
+            "discrete_time": "0",
+            "use_physrandgen": "0",
+            "seed_pseudorandom": "100",
+            "sample_count": "50000",
+            "max_time": "50",
+            "time_tick": "0.1",
+            "thread_count": "4"
+          },
+          "seconds": 0.46
+        },
+        "standin_async": {
+          "phenotypes": {
+            "EMT": 0.46372,
+            "Invasion": 0.18458,
+            "Metastasis": 0.3517
+          },
+          "checks": [
+            {
+              "check": "Invasion probability",
+              "figure": 0.18,
+              "engine": 0.18458,
+              "difference": 0.00458,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.36,
+              "engine": 0.3517,
+              "difference": -0.0083,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.46,
+              "engine": 0.46372,
+              "difference": 0.00372,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 4,
+          "of": 4,
+          "states": {
+            "CellCycleArrest -- EMT": 0.46372,
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 0.3517,
+            "CellCycleArrest -- EMT -- Invasion": 0.18458
+          },
+          "run": {
+            "trajectories": 50000,
+            "seed": 100,
+            "t_end": 50.0,
+            "clock_rate": 32.0,
+            "stopped_at_a_fixed_point_before_t_end": 50000
+          },
+          "seconds": 23.75
+        },
+        "standin": {
+          "phenotypes": {
+            "EMT": 0.5,
+            "Invasion": 0.5
+          },
+          "checks": [
+            {
+              "check": "Invasion probability",
+              "figure": 0.18,
+              "engine": 0.5,
+              "difference": 0.32,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "Metastasis probability",
+              "figure": 0.36,
+              "engine": 0.0,
+              "difference": -0.36,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "EMT probability",
+              "figure": 0.46,
+              "engine": 0.5,
+              "difference": 0.04,
+              "bound": 0.02,
+              "pass": false
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 1,
+          "of": 4,
+          "states": {
+            "CellCycleArrest -- EMT -- Invasion": 0.5,
+            "EMT": 0.5
+          },
+          "run": {
+            "initial_states": 16,
+            "attractor_lengths": {
+              "2": 16
+            }
+          },
+          "seconds": 0.0
+        }
+      },
+      "standin_translation": {
+        "nodes": 32,
+        "random_nodes": [
+          "ECMicroenv",
+          "DNAdamage",
+          "GF",
+          "TGFbeta"
+        ],
+        "common_rate": 1.0,
+        "constant_rules": [
+          "NICD"
+        ]
+      },
+      "agreement": {
+        "total_variation": 0.00306,
+        "bound": 0.02,
+        "agree": true
+      }
+    },
+    "D. p53 LoF NICD GoF": {
+      "held": {
+        "p53": 0,
+        "NICD": 1
+      },
+      "figure": {
+        "Metastasis": 1.0
+      },
+      "engines": {
+        "maboss": {
+          "phenotypes": {
+            "Metastasis": 1.0
+          },
+          "checks": [
+            {
+              "check": "Metastasis probability",
+              "figure": 1.0,
+              "engine": 1.0,
+              "difference": -0.0,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 2,
+          "of": 2,
+          "states": {
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 1.0
+          },
+          "run": {
+            "window": [
+              49.900000000000006,
+              50.00000000000001
+            ],
+            "engine": "maboss",
+            "cmaboss": "1.0.0b32",
+            "discrete_time": "0",
+            "use_physrandgen": "0",
+            "seed_pseudorandom": "100",
+            "sample_count": "50000",
+            "max_time": "50",
+            "time_tick": "0.1",
+            "thread_count": "4"
+          },
+          "seconds": 0.54
+        },
+        "standin_async": {
+          "phenotypes": {
+            "Metastasis": 1.0
+          },
+          "checks": [
+            {
+              "check": "Metastasis probability",
+              "figure": 1.0,
+              "engine": 1.0,
+              "difference": 0.0,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 2,
+          "of": 2,
+          "states": {
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 1.0
+          },
+          "run": {
+            "trajectories": 50000,
+            "seed": 100,
+            "t_end": 50.0,
+            "clock_rate": 32.0,
+            "stopped_at_a_fixed_point_before_t_end": 50000
+          },
+          "seconds": 31.37
+        },
+        "standin": {
+          "phenotypes": {
+            "Metastasis": 1.0
+          },
+          "checks": [
+            {
+              "check": "Metastasis probability",
+              "figure": 1.0,
+              "engine": 1.0,
+              "difference": 0.0,
+              "bound": 0.02,
+              "pass": true
+            },
+            {
+              "check": "phenotypes the panel does not print, total",
+              "figure": 0.0,
+              "engine": 0.0,
+              "which": {},
+              "bound": 0.02,
+              "pass": true
+            }
+          ],
+          "passed": 2,
+          "of": 2,
+          "states": {
+            "CellCycleArrest -- EMT -- Invasion -- Metastasis -- Migration": 1.0
+          },
+          "run": {
+            "initial_states": 16,
+            "attractor_lengths": {
+              "1": 16
+            }
+          },
+          "seconds": 0.0
+        }
+      },
+      "standin_translation": {
+        "nodes": 32,
+        "random_nodes": [
+          "ECMicroenv",
+          "DNAdamage",
+          "GF",
+          "TGFbeta"
+        ],
+        "common_rate": 1.0,
+        "constant_rules": [
+          "NICD",
+          "p53"
+        ]
+      },
+      "agreement": {
+        "total_variation": 0.0,
+        "bound": 0.02,
+        "agree": true
+      }
+    }
+  },
+  "seconds": 107.7,
+  "money": "none: the paper's public supplement, no key",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "https://journals.plos.org/ploscompbiol/article/file?type=supplementary&id=10.1371/journal.pcbi.1004571.s017",
+        "version": "S1 File of doi:10.1371/journal.pcbi.1004571, zip sha256 b2cc7908f2e290c53b094defc519c20cf9d720157a48b63d9e835a8e15d54816; references read from Fig 3, https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1004571.g003"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/models/cohen2015_metastasis.bnd",
+        "sha256": "02fc71367b480cef46e7bcc858c756e7fb7e510ccbbf1d7b5b3cc074b7780cc7",
+        "bytes": 4534,
+        "partition": null
+      },
+      {
+        "path": "data/models/cohen2015_metastasis.cfg",
+        "sha256": "3acdbc7efb5d60942b16f40db238e0451945fa552e500b96adad796881b0bcb5",
+        "bytes": 2229,
+        "partition": null
+      }
+    ],
+    "input_count": 2,
+    "assembly": "n/a: a logical model, no genome coordinates",
+    "coordinates": "n/a: a logical model, no genome coordinates",
+    "parameters": {
+      "tolerance": {
+        "printed_phenotype_abs": 0.02,
+        "unprinted_total_max": 0.02
+      },
+      "agreement": 0.02,
+      "engines": [
+        "maboss",
+        "standin_async",
+        "standin"
+      ],
+      "settings": {
+        "maboss": "the published .cfg as published: seed_pseudorandom 100, sample_count 50000, max_time 50, time_tick 0.1, thread_count 4; the last window [49.9, 50)",
+        "standin_async": {
+          "trajectories": 50000,
+          "seed": 100,
+          "t_end": 50.0
+        },
+        "standin": "synchronous attractor from each of the 2^4 initial states, equal weights; a cycle's states share its weight"
+      }
+    },
+    "exclusions": [],
+    "partitions": "n/a: nothing was fitted; the references are printed in the paper's figure",
+    "code_cleanliness": {
+      "git_sha": "f14b3fe703e56e187f7bbd016f5b947d73f746d0",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/maboss_score.py",
+        "form": "committed_repository_file",
+        "path": "scripts/maboss_score.py",
+        "is_committed": true,
+        "declared_entry": "scripts/maboss_score.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/maboss_reference.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/maboss.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/roadrunner.py",
+        "genomeos/runtime/sbml.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/maboss_score.py"
+      ],
+      "counting_path_count": 31,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "f14b3fe703e56e187f7bbd016f5b947d73f746d0",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/maboss_score.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "f14b3fe703e56e187f7bbd016f5b947d73f746d0",
+      "code_cleanliness_git_sha": "f14b3fe703e56e187f7bbd016f5b947d73f746d0",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record f14b3fe"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 240,
+      "opens_under_data": 6,
+      "files_read": 2,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
