@@ -1,0 +1,715 @@
+{
+  "result": "hetblock_harness",
+  "date": "2026-10-12",
+  "lane": "lane-hetblock",
+  "step": "2 of 4: the harness, before the registration",
+  "question": "lane-scalehet read NOT CONSISTENT WITH A SINGLE GLOBAL SCALE -- Q = 166.048 against a null of median 78.9561 and 98.33% range [35.4193, 143.929], p_Q = 0.003996, with the range statistic agreeing at p_R = 0.013986 -- from a null whose EXCHANGEABLE UNIT IS THE GENE, and it flagged as its own limitation that genes sharing a compiled element are not independent, so that its null's Q may be too narrow and its p_Q anti-conservative IN EXACTLY THE REJECTING DIRECTION. THE FALSIFIABLE QUESTION ASKED HERE, AND NO OTHER: DOES THAT HETEROGENEITY SURVIVE A NULL WHOSE EXCHANGEABLE UNIT IS A LOCUS BLOCK RATHER THAN A GENE? Equivalently: when the null moves whole blocks of neighbouring genes -- so that the correlation between genes of one neighbourhood is carried into the null rather than broken by it -- is the observed dispersion Q = 166.048 still larger than the null produces at the same per-chromosome gene counts? 'THE HETEROGENEITY IS NOT ESTABLISHED UNDER A BLOCK NULL' IS A FULL ANSWER AND A REACHABLE OUTCOME OF THIS TEST, AND IT IS THE MORE VALUABLE ONE: it would WITHDRAW scalehet's rejection to NOT ESTABLISHED, which is a correction of this project's own committed reading and not a failure to find something",
+  "why_not_already_answered": "scalehet named the fix and did not run it, in its own words: 'An element-level or locus-block permutation would price it and is not done here'. Nobody has run it since. The dependence is not hypothetical in this project: lane-freshrna's committed POST_HOC (1) says 'genes that share elements or a locus are not independent and the gene-level interval may be too narrow' and reported a 1-Mb LOCUS-CLUSTER interval beside its gene-level one for that reason, and lane-scalesplit split by chromosome in the first place because a gene-level resample does not price between-region structure. So the one quantity that could alone explain scalehet's rejection has never been priced, and the direction of the error is known in advance: a gene-level null is TOO NARROW, which pushes p_Q DOWN, which is the direction that rejects",
+  "harness": "(1) the table is 7h's: 16,509 genes, 214,617 pairs, and 7h's committed uncalibrated Delta MSE comes back at scale 1 within TOLERANCE. (2) the global fitted scale from magcal.fit_scale on the whole table equals scalehet's committed global scale within TOLERANCE. (3) M2h's committed gene-level numbers are NOT re-bootstrapped here: lane-scalehet's own committed harness (data/results/scalehet_harness.json) already reproduced them bit-identically and its outcome HARNESS_REPRODUCES is read and required, not re-run. (4) SCALEHET'S COMMITTED Q, R, GLOBAL SCALE, NULL SUMMARIES AND BOTH p VALUES ARE REPRODUCED through scalehet's own observed_statistics and permutation_null at its committed count and seed, and reported BEFORE ANYTHING ELSE OF THIS LANE. (5) the address-level block structure: the element-sharing graph from the compiled programs (how many elements, how many drive two or more genes of any kind, how many drive two or more of the table's genes, and the component sizes over the table's genes), the 1-Mb and 5-Mb block counts, the largest block's share, and the gene-start join reporting zero genes without a start and zero chromosome disagreements. All of it depends on no measured value. (6) the singleton-block equivalence and the exact-count check of CONTROL (2) and (3). (7) NO Q, NO R AND NO p OF ANY BLOCK NULL OF THIS LANE IS COMPUTED IN THE HARNESS: those are the run's, after the registration is committed. The harness forms the block MEMBERSHIP and checks the draws' SIZES, and deliberately computes no statistic from a block draw",
+  "control": "THE HARNESS IS THE CONTROL, in three parts, and each is a planted check rather than a claim. (1) SCALEHET'S COMMITTED FIGURES COME BACK: its Q, its R, its global scale, its null median and 98.33% range for both statistics, and both p values, recomputed through SCALEHET'S OWN functions at scalehet's own count and seed and compared with data/results/scalehet_result.json. This is run and committed BEFORE anything else, and if they do not come back the lane stops. (2) THE SINGLETON-BLOCK EQUIVALENCE: this lane's block null, given one gene per block, reproduces scalehet's null BIT-IDENTICALLY -- every one of the 1,000 draws' Q and R equal, not merely close -- which is what shows the unit is the only thing that changed. (3) THE EXACT-COUNT CHECK: every draw of the block null is verified to give each chromosome exactly its observed gene count, and the check is run over the draws rather than asserted from the construction",
+  "prior_exposure": [
+    "STATED PLAINLY, AND NOT A CAVEAT ADDED AFTERWARDS. THIS IS A RE-ANALYSIS OF A MEASUREMENT ALREADY READ, NOT A FRESH TEST. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples, under the same log2(TPM+1) endpoint and the same no-rule baseline, has already been read by: item 7 (M2b, lane-readercompile); item 7d (M2c, lane-combine2); item 7h (M2f, lane-multrna); the capped-sum census (lane-capsumrna), which reached NOT_TESTABLE; M2h (lane-magcal), which fitted the one scale; M2i (lane-freshrna), which replicated it on RNA fresh to this project; lane-scalesplit, which re-split the same rows by chromosome; lane-recovered; AND lane-scalehet, which is the reading this lane re-tests. The P and D grouped here ARE 7h's committed rows, so EVERY VALUE THIS LANE READS HAS BEEN READ BEFORE, NINE TIMES OVER.",
+    "AND, SEPARATELY AND MORE SHARPLY: THE SPREAD WAS ALREADY SEEN POST HOC, AND HAS NOW BEEN TESTED ONCE AND REJECTED. scalesplit computed and committed all 24 per-chromosome scales as post hoc descriptives -- the range +0.1232 (chr13) to +0.2874 (chr14), the median +0.2176, the quartiles +0.2041 and +0.2376, no sign change, 10 of 24 inside M2h's interval -- and then scalehet registered a statistic for them and read NOT CONSISTENT WITH A SINGLE GLOBAL SCALE at p_Q = 0.003996. SO THIS LANE IS RE-TESTING A PATTERN THAT HAS BEEN LOOKED AT AND ACTED ON, WHICH IS WEAKER STILL THAN SCALEHET'S OWN TEST, WHICH WAS ALREADY WEAKER THAN A TEST OF AN UNLOOKED-AT PATTERN. Three things are done about that and none of them removes it. (1) NOT ONE NUMBER OF THE TEST IS RE-CHOSEN: the statistic, the secondary statistic, the p form, the gene floor, the admitted set, the draw count, the seed and ALPHA are scalehet's, imported by identity, and the only change is the exchangeable unit -- so this lane cannot tune its way to either answer by moving a threshold. (2) THE DIRECTION OF THE EXPECTED EFFECT WAS WRITTEN DOWN FIRST, by scalehet itself: a gene-level null is too narrow and its p_Q anti-conservative in the REJECTING direction, so a block null is expected to move p_Q UP, which is the direction that WITHDRAWS this project's committed reading and costs it a finding. (3) BOTH OUTCOMES ARE WRITTEN IN ADVANCE, in OUTCOMES below, in the words they will be reported in. A reading here holds as a statement about THIS measurement's dependence on the chromosome grouping at these gene counts and this block unit. It is not independent confirmation of anything, it is not a blind prediction of an unseen measurement, and a withdrawal is a withdrawal of a REJECTION to NOT ESTABLISHED and never a demonstration that one constant is exactly right"
+  ],
+  "scalehet_reproduction": {
+    "recomputed": {
+      "q_observed": 166.04792148316798,
+      "r_observed": 0.16420247148502493,
+      "global_scale": 0.21501821644770602,
+      "p_q": 0.003996003996003996,
+      "p_r": 0.013986013986013986,
+      "null_q_median": 78.95613453032229,
+      "null_q_98_33": [
+        35.419346005111905,
+        143.9288653653726
+      ],
+      "null_r_median": 0.09497160409012753,
+      "null_r_98_33": [
+        0.052091893649909106,
+        0.17056618399692858
+      ],
+      "admitted_count": 23,
+      "genes_admitted": 16496,
+      "pairs_admitted": 214448
+    },
+    "committed": {
+      "q_observed": 166.04792148316798,
+      "r_observed": 0.16420247148502493,
+      "global_scale": 0.21501821644770602,
+      "p_q": 0.003996003996003996,
+      "p_r": 0.013986013986013986,
+      "null_q_median": 78.95613453032229,
+      "null_q_98_33": [
+        35.419346005111905,
+        143.9288653653726
+      ],
+      "null_r_median": 0.09497160409012753,
+      "null_r_98_33": [
+        0.052091893649909106,
+        0.17056618399692858
+      ],
+      "admitted_count": 23,
+      "genes_admitted": 16496,
+      "pairs_admitted": 214448
+    },
+    "bit_identical": {
+      "q_observed": true,
+      "r_observed": true,
+      "global_scale": true,
+      "p_q": true,
+      "p_r": true,
+      "null_q_median": true,
+      "null_q_98_33": true,
+      "null_r_median": true,
+      "null_r_98_33": true,
+      "admitted_count": true,
+      "genes_admitted": true,
+      "pairs_admitted": true
+    },
+    "all_bit_identical": true,
+    "tolerance": 0.0001,
+    "genes": 16509,
+    "pairs": 214617,
+    "committed_genes": 16509,
+    "committed_pairs": 214617,
+    "delta_mse_at_scale_1": -0.5361286933702997,
+    "committed_delta_mse": -0.5361286982098615,
+    "whole_table_fit_scale": 0.21508380635401889,
+    "scalehet_harness_outcome": "HARNESS_REPRODUCES",
+    "reproduces": true,
+    "reading": "LANE-SCALEHET'S COMMITTED FIGURES REPRODUCE, and every one of them bit-identically through scalehet's own functions at its own count and seed: Q = 166.04792148316798, R = 0.16420247148502493, the global fitted scale 0.21501821644770602, the null Q median 78.95613453032229 with 98.33% range [35.419346005111905, 143.9288653653726], the null R median 0.09497160409012753 with 98.33% range [0.052091893649909106, 0.17056618399692858], p_Q = 0.003996003996003996 and p_R = 0.013986013986013986, over 23 admitted chromosomes, 16,496 genes and 214,448 pairs. 7h's committed uncalibrated Delta MSE comes back at scale 1 and magcal.fit_scale on the whole table is scalehet's global scale. scalehet's own harness, which reproduced M2h bit-identically, reads HARNESS_REPRODUCES and is not re-run"
+  },
+  "element_sharing_graph": {
+    "elements": 440558,
+    "elements_driving_two_or_more_genes_of_any_kind": 22,
+    "elements_driving_two_or_more_genes_of_this_table": 0,
+    "rules_touching_this_tables_genes": 396373,
+    "components_over_this_tables_genes": 16509,
+    "largest_component": 1,
+    "single_gene_components": 16509,
+    "every_component_is_one_gene": true,
+    "min_shared_elements": 1,
+    "note": "a count of rule lines in committed programs: it depends on NO measured value, nothing is run and no RNA is read. The components are taken over ALL genes the programs target, so a chain through a gene outside this table would still join two of the table's genes"
+  },
+  "locus_block_structure": {
+    "genes_without_a_start": 0,
+    "genes_on_a_different_chromosome": 0,
+    "this_lanes_starts_equal_freshrnas": true,
+    "gene_table": "data/cache/gencode_genes.tsv",
+    "one_mb": {
+      "span": 1000000,
+      "blocks": 2452,
+      "genes": 16509,
+      "largest": 52,
+      "largest_share": 0.0031497970803803987,
+      "single_gene_blocks": 385,
+      "median_size": 5
+    },
+    "five_mb": {
+      "span": 5000000,
+      "blocks": 596,
+      "genes": 16509,
+      "largest": 158,
+      "largest_share": 0.009570537282694289,
+      "single_gene_blocks": 9,
+      "median_size": 21
+    }
+  },
+  "governing_unit": {
+    "rule": "FIXED HERE, BEFORE ANY STATISTIC OF THIS LANE IS COMPUTED, AS A RULE AND NOT AS A PREFERENCE. The governing unit is the ELEMENT-SHARING COMPONENT if the compiled programs contain at least MIN_SHARED_ELEMENTS = 1 element driving two or more of the table's genes -- that is, if the element-sharing graph has ANY edge at all; otherwise it is the 1-Mb LOCUS BLOCK, because a component graph with no edges IS the gene unit and a null built on it cannot price any dependence. The count that decides it is a count of rule lines in committed programs and depends on NO MEASURED VALUE, exactly as scalehet took its per-chromosome gene counts and named its excluded chromosome before registering. STATED PLAINLY AND NOT HIDDEN: that count was taken before this module was written and is 0, so the rule selects the 1-Mb locus block; the rule is written as a rule so that the choice is a stated function of an address-level count rather than this lane's taste, and the harness recomputes and commits the count before the registration",
+    "elements_driving_two_or_more_genes_of_this_table": 0,
+    "min_shared_elements": 1,
+    "governing_unit": "locus_block_1mb",
+    "reading": "the element-sharing graph has 0 elements driving two or more of the table's genes, below MIN_SHARED_ELEMENTS = 1, so the GOVERNING UNIT IS locus_block_1mb. The count is a count of rule lines in committed programs and reads no measured value"
+  },
+  "singleton_block_equivalence": {
+    "draws": 1000,
+    "q_draws_equal": 1000,
+    "r_draws_equal": 1000,
+    "bit_identical": true,
+    "split_blocks_per_draw": {
+      "mean": 0.0,
+      "max": 0,
+      "cuts": 22
+    },
+    "note": "EQUAL, not merely close: this compares the two nulls' draws with ==, so the only thing this lane changes about scalehet's null is the exchangeable unit. The singleton-block null IS scalehet's already-committed distribution, so no new value is read by this check"
+  },
+  "exact_gene_counts": {
+    "observed_sizes": [
+      1700,
+      631,
+      983,
+      871,
+      280,
+      522,
+      509,
+      703,
+      969,
+      238,
+      1199,
+      1089,
+      464,
+      156,
+      373,
+      930,
+      642,
+      732,
+      886,
+      773,
+      559,
+      654,
+      633
+    ],
+    "checked": {
+      "one_mb": {
+        "span": 1000000,
+        "blocks": 2443,
+        "genes": 16496,
+        "largest": 52,
+        "largest_share": 0.0031522793404461687,
+        "single_gene_blocks": 380,
+        "median_size": 5,
+        "draws": 1000,
+        "draws_holding_every_count_exactly": 1000
+      },
+      "five_mb": {
+        "span": 5000000,
+        "blocks": 591,
+        "genes": 16496,
+        "largest": 158,
+        "largest_share": 0.00957807953443259,
+        "single_gene_blocks": 8,
+        "median_size": 21,
+        "draws": 1000,
+        "draws_holding_every_count_exactly": 1000
+      }
+    },
+    "note": "ON THE ADMITTED GENES ALONE, which is what the null runs on: the block counts here are the admitted ones and are smaller than the whole table's by chrY's blocks"
+  },
+  "degeneracy_check": {
+    "rule": "FIXED NOW. The block null is DEGENERATE, and the lane reads INCONCLUSIVE with no heterogeneity verdict, if any of: fewer than MIN_CHROMOSOMES = 10 chromosomes are admitted; a group's sum of P^2 is 0 so a fitted scale is undefined; the governing unit yields fewer than MIN_BLOCKS = 100 blocks; or one block holds more than MAX_BLOCK_SHARE = 0.10 of the admitted genes. The last two are what stop a block unit so coarse that the null is a statement about one block's noise: MIN_BLOCKS is magcal's own floor of 100, the number this project already requires for a group to be read at all, reused rather than chosen, and 0.10 is a tenth of the population. Both are satisfied by the counts of BLOCK_COUNTS_EXPECTED with room to spare, and both are written so that a FUTURE coarser unit cannot be slipped in under this registration",
+    "admitted_chromosomes": 23,
+    "blocks_of_the_governing_unit": 2443,
+    "largest_block_share": 0.0031522793404461687,
+    "degenerate": null
+  },
+  "problems": [],
+  "outcome": "HARNESS_REPRODUCES",
+  "reading": "LANE-SCALEHET'S COMMITTED FIGURES REPRODUCE, and every one of them bit-identically through scalehet's own functions at its own count and seed: Q = 166.04792148316798, R = 0.16420247148502493, the global fitted scale 0.21501821644770602, the null Q median 78.95613453032229 with 98.33% range [35.419346005111905, 143.9288653653726], the null R median 0.09497160409012753 with 98.33% range [0.052091893649909106, 0.17056618399692858], p_Q = 0.003996003996003996 and p_R = 0.013986013986013986, over 23 admitted chromosomes, 16,496 genes and 214,448 pairs. 7h's committed uncalibrated Delta MSE comes back at scale 1 and magcal.fit_scale on the whole table is scalehet's global scale. scalehet's own harness, which reproduced M2h bit-identically, reads HARNESS_REPRODUCES and is not re-run. AND THE BLOCK STRUCTURE, ADDRESSES ONLY: the 24 compiled programs carry 440558 elements, of which 22 drive two or more genes OF ANY KIND and 0 drive two or more of the table's genes, so all 16509 element-sharing components over the table's genes are SINGLE GENES and that unit IS scalehet's gene unit. BLOCK_SELECTION_RULE therefore fixes the governing unit at locus_block_1mb. The 16509 genes fall into 2452 1-Mb blocks (largest 52 genes, 0.0031 of the genes) and 596 5-Mb blocks (largest 158), of which 2443 and 591 fall on the 16496 genes of the admitted chromosomes, which is what the null runs on, with 0 genes missing a start and 0 on a different chromosome, this lane's start loader equal to lane-freshrna's committed one gene for gene. The singleton-block null reproduces scalehet's null BIT-IDENTICALLY in 1000 of 1000 Q draws and 1000 of 1000 R draws, and every draw of both block nulls holds every chromosome's gene count exactly. NO Q, NO R AND NO p OF ANY BLOCK NULL OF THIS LANE IS COMPUTED HERE",
+  "nothing_of_this_lanes_statistic_was_read": "no Q, no R and no p of a 1-Mb or 5-Mb block null was computed by this script and none is written to this result. The block MEMBERSHIP was formed and the draws' SIZES were checked through hetblock.draw_group_sizes, which records sizes alone. The one null whose statistics were computed is scalehet's OWN gene-level null, which is already committed in data/results/scalehet_result.json, and the singleton-block check compares this lane's machinery against it draw for draw. Element counts, component sizes, block counts and gene starts are ADDRESSES and depend on no measured value",
+  "readers": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 9.5,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/multrna_result.json (7h, lane-multrna)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/magcal_result.json (M2h, lane-magcal)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/scalesplit_result.json (lane-scalesplit)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/scalehet_result.json (lane-scalehet)",
+        "version": "pinned; its committed figures are what this harness reproduces"
+      },
+      {
+        "accession": "the 24 compiled non-coding programs 7d and 7h ran",
+        "version": "pinned by sha256; read as TEXT for the element-sharing graph, nothing run"
+      },
+      {
+        "accession": "GENCODE gene table, data/cache/gencode_genes.tsv",
+        "version": "pinned by sha256; gene starts only, lane-freshrna's own committed loader"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq gene quantifications, V29, 13 reader biosamples",
+        "version": "read by 7d, 7h and M2h; this lane reads their committed rows, not the files"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "pinned by sha256; the source of the committed P and D"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalesplit_result.json",
+        "sha256": "aeb1609698e678bcebb808f5ecf4d25348852e6d89c1bc6b0ee8475fcac44102",
+        "bytes": 67515,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalehet_result.json",
+        "sha256": "dde2784c252bbfd98fd61de97f19bf36227714f7d11f57aec837bd857cbd8572",
+        "bytes": 109719,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalehet_harness.json",
+        "sha256": "4cb560bf57ddd95d0760c91117258c75b88de22ba3217990422b9402eaf1379c",
+        "bytes": 25545,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/results/scalehet_registration.json",
+        "sha256": "df0b44d667daabcf4635de044eb3e6850f7a06cdbc81ed689d755bab1a5e69ce",
+        "bytes": 79449,
+        "partition": "pinned by sha256; committed numbers and readings, quoted and not re-decided"
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": "pinned by sha256; gene starts only"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": "pinned by sha256; read as text for the element-sharing graph, nothing run"
+      }
+    ],
+    "input_count": 31,
+    "readers": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "reader_count": 13,
+    "assembly": "GRCh38; genes as 7h matched them, by gene_id",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "form": "multiplicative",
+      "reproduced": "lane-scalehet's committed Q, R, global scale, null summaries and both p values",
+      "block_span": 1000000,
+      "robust_span": 5000000,
+      "min_genes": 100,
+      "min_chromosomes": 10,
+      "min_blocks": 100,
+      "max_block_share": 0.1,
+      "permutations_reproduced": {
+        "count": 1000,
+        "seed": 20261012
+      },
+      "tolerance": 0.0001
+    },
+    "exclusions": [
+      "none: the population is scalehet's, which is 7h's; the gene floor is scalehet's"
+    ],
+    "partitions": {
+      "reproduced": "scalehet's gene-level null, at its own count and seed",
+      "this_lanes_own": "not computed here: no Q, no R and no p of any block null of this lane. The block membership is formed and the draws' sizes are checked, and no statistic is formed from a block draw"
+    },
+    "code_cleanliness": {
+      "git_sha": "ae272c8c8d62bcc122968a44c671d28bf8c3bc47",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/hetblock_harness.py",
+        "form": "committed_repository_file",
+        "path": "scripts/hetblock_harness.py",
+        "is_committed": true,
+        "declared_entry": "scripts/hetblock_harness.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_mouse.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/hetblock.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/scalehet.py",
+        "genomeos/attribution/scalesplit.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/freshrna_run.py",
+        "scripts/hetblock_harness.py",
+        "scripts/scalehet_harness.py"
+      ],
+      "counting_path_count": 161,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "ae272c8c8d62bcc122968a44c671d28bf8c3bc47",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_mouse.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/simpler_mouse_registration.json",
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/hetblock_harness.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "ae272c8c8d62bcc122968a44c671d28bf8c3bc47",
+      "code_cleanliness_git_sha": "ae272c8c8d62bcc122968a44c671d28bf8c3bc47",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record ae272c8"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 475,
+      "opens_under_data": 63,
+      "files_read": 31,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
