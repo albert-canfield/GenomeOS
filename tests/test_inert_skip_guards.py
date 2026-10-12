@@ -13,6 +13,19 @@ and convert any skip keyed on your file to `tracked_paths.must_be_present`, whic
 instead of skipping. It costs 20 seconds at the one moment the defect is created, and it is the only
 moment at which the lane that caused it is the lane that can see it.
 
+AND PREVENTION, BECAUSE CONVERSION IS BLOCKED FOR TWO DAYS (2026-10-12, measured twice in one hour).
+The rule above cannot always be obeyed in the same step, and that is a defect in the rule rather than
+in the lane. Converting means DELETING the `pytest.skip` lines the lane itself added minutes earlier,
+and `scripts/check_staged.py` refuses a removal of lines committed inside its window, with `--force`
+as its only documented remedy -- a force the harness denies. lane-scalefit hit this at `8469df9`,
+detected it in the same step exactly as the rule asks, tried arming by pure addition at `404b8c2`,
+and was refused by this suite; HEAD then carried a red the lane could not clear. The coordinator hit
+it again while writing THIS paragraph, by rewording two lines of `d427f7d` instead of adding to them.
+SO: DO NOT WRITE A SKIP ON A RECORD YOU WILL COMMIT. Write
+`tracked_paths.must_be_present(<RECORD>, was="...")` in the first version of the test, before the
+record exists. It raises by name while the file is absent, which is the wanted behaviour, and it
+needs no conversion later -- so there is nothing to remove and nothing to force.
+
 WHAT THIS CHECKS AND WHY IT IS NOT THE ONE ALREADY IN THE SUITE.
 `tests/test_local_data_symlinked_store.py` carries `test_no_skip_guard_is_keyed_on_a_path_that_git_
 TRACKS`, which reads `skipif` DECORATORS and nothing else. It was right about its own population and
