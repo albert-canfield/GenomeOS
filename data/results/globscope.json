@@ -1,0 +1,1796 @@
+{
+  "result": "globscope",
+  "date": "2026-10-12",
+  "question": "which of the 18 exists()-filtered input-group call sites CAN silently shrink and which cannot, and for the 6 varying groups whether each variation is legitimate scope or a silent shrink",
+  "rule": {
+    "committed_at": "d31dd3d, before any call site was read",
+    "classes": {
+      "REFUSES": "the site raises, exits or otherwise returns an error on a short set rather than filtering it away. DECIDABLE TEST, from the code alone: the function enclosing the `files_entry` call contains a `raise` or a `SystemExit`/`sys.exit` whose reachability depends on a test over the globbed collection -- its length, its emptiness, a set difference against the expected members, or a per-member `.exists()` assertion. A refusal makes the remaining questions moot, because a short set never reaches the manifest",
+      "CANNOT_SHRINK": "every file the UNFILTERED glob can match is tracked in git, so a missing file is a tracked-file absence that the repository's existing guards already catch, and the `.exists()` filter can only ever drop a file whose absence is already loud. DECIDABLE TEST: the glob's directory prefix resolves to a literal path from the code, the unfiltered pattern matches at least one file on disk, and `git ls-files` reports EVERY matched file as tracked. THIS MUST BE PROVEN AND NOT ASSUMED: a directory under `data/knowledge`, `data/cache` or `data/reference` is git-ignored and is never this class, however tracked-looking its name",
+      "SCOPE_IS_DECLARED_ELSEWHERE": "the result's own artefact states the expected scope from a source INDEPENDENT of the glob -- an expected count, a chromosome list or a sample list -- so a shrink is detectable from the artefact by comparing the two. DECIDABLE TEST: the same manifest-writing function records a second entry (a parameter, a value entry or another input) whose value derives from the same constant or argument that feeds the glob and NOT from the filtered list, so that a short glob leaves the artefact internally inconsistent. A scope derived from the filtered list itself does NOT qualify, because it shrinks with it",
+      "CAN_SHRINK_SILENTLY": "the site filters on `.exists()` and records whatever is present, with no refusal, no tracked directory and no independent record of the expected scope. DECIDABLE TEST: the glob's directory resolves, at least one matched file is NOT tracked in git, and neither the REFUSES nor the SCOPE_IS_DECLARED_ELSEWHERE test is met. These are the live sites of the defect",
+      "UNDECIDABLE_FROM_THE_CODE": "the facts the four tests above need cannot be resolved statically -- the glob's directory or its expected member set is built from a runtime argument, a configuration value, or a function of another module whose return is data-dependent -- so no class can be decided without running the program or opening a store. DECLARED IN ADVANCE AS A LEGITIMATE OUTCOME: a site in this class is reported as undecidable with the fact that is missing named, and is never guessed into one of the other four"
+    },
+    "decision_order": [
+      "REFUSES",
+      "UNDECIDABLE_FROM_THE_CODE",
+      "CANNOT_SHRINK",
+      "SCOPE_IS_DECLARED_ELSEWHERE",
+      "CAN_SHRINK_SILENTLY"
+    ],
+    "why_undecidable_is_second": "a refusal is readable from the enclosing function whatever the glob resolves to, so REFUSES is decidable first. Every one of the three remaining classes needs the glob's member set resolved: CANNOT_SHRINK needs every matchable file shown tracked, and CAN_SHRINK_SILENTLY needs at least one shown untracked. If the member set does not resolve, NONE of the three is decidable, and placing UNDECIDABLE last would let the residual class CAN_SHRINK_SILENTLY collect every site whose directory simply could not be read -- which would inflate the finding this lane exists to measure. Placing it second makes an unresolved glob say so instead of accusing the site",
+    "variation_classes": {
+      "LEGITIMATE_SCOPE": "the result's OWN declared scope accounts for the count it declares: either the result's parameters state a member list or a count equal to the declared member count, or an exclusion in that same result names every missing member. A chr21-only result declaring 1 where a genome-wide one declares 24, with the narrower scope STATED IN THE ARTEFACT, is this class",
+      "SILENT_SHRINK": "all four conditions of `globcensus.is_shrink_v2` hold, carried whole and not weakened: the declared count is below the result's OWN declared scope; the missing members are present in the store today; no exclusion in that result names them; AND the missing members CARRY DATA the result's own scope would have used. The fourth condition is lane-shrinkimpact's and is the one that refuted stage 2 -- without it a labelling artefact and an empty chromosome look exactly like a shrink from the manifest alone",
+      "UNDECIDABLE": "the artefact does not state a scope the count can be read against, or it states one but the fourth condition cannot be settled without opening the members and recomputing, which this lane does not do. IF THE ARTEFACT DOES NOT STATE ITS SCOPE THE HONEST CLASS IS UNDECIDABLE AND NOT 'PROBABLY FINE'. This class is declared in advance as a legitimate outcome and is the expected one wherever a recomputation would be needed"
+    },
+    "prewritten_outcomes": {
+      "all_18_cannot_shrink": "the mechanism is INERT at every site: every glob reads a git-tracked directory, so the defect of 2026-10-11 has no live site in this repository and the existing tracked-file guards already cover it. The report would then say the mechanism is real in 18 places, realised in 0 of the 6 checked, and ineffective at all 18 by construction -- and the named fix would be documentation only",
+      "some_can_shrink_silently": "those sites are named with path:line as the LIVE sites of the defect, with the untracked store each one globs. The report names a fix and does not perform it: the shape would be a refusal or an expected-member list recorded beside the group. No count of live sites is a count of realised shrinks -- lane-shrinkimpact found 0 of 6 realised -- and the report will not let the two be read as one number",
+      "most_undecidable": "reported as the answer, with the missing fact named per site. ALL UNDECIDABLE FROM THE CODE IS A COMPLETE ANSWER and not a failure of the lane: it would establish that the defect cannot be triaged statically, which is itself the finding, and it would name what a decidable version of the question requires",
+      "the_six_varying": "each gets one of LEGITIMATE_SCOPE, SILENT_SHRINK or UNDECIDABLE with the ARTEFACT FIELD that decided it quoted. UNDECIDABLE is expected for any group whose fourth condition needs a recomputation, and is reported as such rather than softened"
+    }
+  },
+  "inherited": {
+    "site_count": 18,
+    "source": "data/results/globcensus.json",
+    "reading_carried_verbatim": "the defect is real as a mechanism in 18 places and so far unrealised where it was found",
+    "limit_carried_verbatim": "a group CONSTANT at a shrunken value is invisible to that method, so the 82 constant groups -- including the 13 that all say 312 -- are NOT shown safe",
+    "stage_2_refuted": "REALISED IN 0 OF 6. closure_cell_inventory's chr21 WAS READ and was filed under another group's label -- a prefix-grouping artefact, not an absence; verified here independently, chr21 is present in that same result's all-enhancer sweep group (70 files) and its local element-table group (23), and missing only from GENCODE's. chrY is not in the CRISPRi library at all. And in the four results of 2026-10-02, chr13 and chrY carry ZERO ELIGIBLE LINKS, so 22 IS the benchmark's own scope rather than a shortfall of it",
+    "stage_2_summary": "the mechanism is real in 18 places and realised in 0 of the 6 checked"
+  },
+  "class_counts": {
+    "REFUSES": 4,
+    "UNDECIDABLE_FROM_THE_CODE": 0,
+    "CANNOT_SHRINK": 0,
+    "SCOPE_IS_DECLARED_ELSEWHERE": 13,
+    "CAN_SHRINK_SILENTLY": 1
+  },
+  "sites": [
+    {
+      "path": "scripts/capsumrna_census.py",
+      "line": 485,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "chroms",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/capsumrna_census.py:482 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/combine2_census.py",
+      "line": 250,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "chroms",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/combine2_census.py:247 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/combine2_register.py",
+      "line": 119,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "inputs",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/combine2_register.py:116 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/combine2_run.py",
+      "line": 102,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "check_registration",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": true,
+      "refusal_at": [],
+      "glob_root_resolved": false,
+      "resolved_directories": [],
+      "matched_files_on_disk": 0,
+      "all_matched_files_tracked": null,
+      "independent_scope_recorded": false,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/combine2_run.py:103 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/combine2_run.py:111 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+      ],
+      "class": "REFUSES"
+    },
+    {
+      "path": "scripts/combine2_run.py",
+      "line": 141,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/combine2_run.py:138 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/maxform_census.py",
+      "line": 342,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "chroms",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/maxform_census.py:339 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/maxform_register.py",
+      "line": 118,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "inputs",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/maxform_register.py:115 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/maxform_run.py",
+      "line": 80,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "check_registration",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": true,
+      "refusal_at": [],
+      "glob_root_resolved": false,
+      "resolved_directories": [],
+      "matched_files_on_disk": 0,
+      "all_matched_files_tracked": null,
+      "independent_scope_recorded": false,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/maxform_run.py:85 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/maxform_run.py:89 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+      ],
+      "class": "REFUSES"
+    },
+    {
+      "path": "scripts/multrna_census.py",
+      "line": 309,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "chroms",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/multrna_census.py:306 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/multrna_register.py",
+      "line": 111,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "inputs",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/multrna_register.py:108 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/multrna_run.py",
+      "line": 85,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "check_registration",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": true,
+      "refusal_at": [],
+      "glob_root_resolved": false,
+      "resolved_directories": [],
+      "matched_files_on_disk": 0,
+      "all_matched_files_tracked": null,
+      "independent_scope_recorded": false,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/multrna_run.py:90 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/multrna_run.py:94 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+      ],
+      "class": "REFUSES"
+    },
+    {
+      "path": "scripts/multrna_run.py",
+      "line": 167,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/multrna_run.py:164 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/reader_genome_wide.py",
+      "line": 88,
+      "group_label": null,
+      "enclosing_function": "chromosome_manifest",
+      "feeders": [
+        "files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 29,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": false,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/reader_genome_wide.py:59 builds files = [gff, *ref, data/results/ccres_{chrom}.bed.gz] where ref at :56 is FIVE mutually exclusive spellings of the reference ('.fa.gz', '.fa.gz.fai', '.fa.gz.gzi', '.fa', '.fa.fai' -- 'whichever IndexedGenome seeks'), so part of the filtering is deliberate and no fixed expected count exists. Measured: data/reference/chr21.fa* = 4 on disk, 0 tracked (.gitignore:16 data/reference); data/results/ccres_chr*.bed.gz = 25 on disk, 25 tracked, not ignored. NOT all members tracked, so CANNOT_SHRINK is refused. No sibling entry in chromosome_manifest at :47-88 records an expected count or member list over the same feeder, and no raise in it governs on the group"
+      ],
+      "class": "CAN_SHRINK_SILENTLY"
+    },
+    {
+      "path": "scripts/readergate_census.py",
+      "line": 120,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "chroms",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/readergate_census.py:115 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/readergate_register.py",
+      "line": 112,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "inputs",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/readergate_register.py:109 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/readergate_run.py",
+      "line": 89,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "check_registration",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": true,
+      "refusal_at": [],
+      "glob_root_resolved": false,
+      "resolved_directories": [],
+      "matched_files_on_disk": 0,
+      "all_matched_files_tracked": null,
+      "independent_scope_recorded": false,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/readergate_run.py:87 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/readergate_run.py:93 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+      ],
+      "class": "REFUSES"
+    },
+    {
+      "path": "scripts/readergate_run.py",
+      "line": 132,
+      "group_label": "reader v1 DNase narrowPeak files",
+      "enclosing_function": "manifest",
+      "feeders": [
+        "CHROMS",
+        "peak_files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 312,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/readergate_run.py:129 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    },
+    {
+      "path": "scripts/trio_q100_phase.py",
+      "line": 72,
+      "group_label": null,
+      "enclosing_function": "trio_inputs",
+      "feeders": [
+        "files"
+      ],
+      "refusal_in_enclosing_scope": false,
+      "refusal_at": [],
+      "glob_root_resolved": true,
+      "resolved_directories": [],
+      "matched_files_on_disk": 158,
+      "all_matched_files_tracked": false,
+      "independent_scope_recorded": true,
+      "independent_scope_at": [],
+      "unresolved": [
+        "all_matched_files_tracked",
+        "glob_root_resolved"
+      ],
+      "read_evidence": [
+        "scripts/trio_q100_phase.py:78 is a sibling files_entry over the SAME `chroms` with NO exists() filter ([reference_fasta(c, Path('data/reference')) for c in chroms]), so its member count records len(chroms) independently of the filtered list, and the filtered group's own label at :73 states the scope as f'{chroms[0]}-{chroms[-1]}'. The store is genomeos/genome/individuals.py:28 ROOT = data/individuals, 158 files on disk and 0 tracked (.gitignore:19 data/individuals/), so CANNOT_SHRINK is refused"
+      ],
+      "class": "SCOPE_IS_DECLARED_ELSEWHERE"
+    }
+  ],
+  "the_population_moved_while_this_lane_worked": {
+    "inherited_sites_classified": 18,
+    "exists_filtered_sites_in_the_tree_now": 23,
+    "new_since_globcensus": [
+      "scripts/inhibitor_census_run.py:470",
+      "scripts/recovered_population.py:263",
+      "scripts/residue_census.py:373",
+      "scripts/residuemult_lookup.py:303",
+      "scripts/scalefit_census.py:230"
+    ],
+    "reading": "the first run of this script REFUSED, because its own AST scan saw 23 exists()-filtered sites where globcensus.json pins 18: five new ones were committed by other lanes in the one day between the census and this classification. The population is the inherited 18 and the newcomers are NOT classified here; none of them was read. That the mechanism gained five instances in a day is a finding about the mechanism and not about any of the five"
+  },
+  "read_facts_applied": [
+    {
+      "site": "scripts/combine2_run.py:102",
+      "sets": {
+        "refusal_in_enclosing_scope": true
+      },
+      "evidence": "scripts/combine2_run.py:103 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/combine2_run.py:111 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+    },
+    {
+      "site": "scripts/maxform_run.py:80",
+      "sets": {
+        "refusal_in_enclosing_scope": true
+      },
+      "evidence": "scripts/maxform_run.py:85 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/maxform_run.py:89 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+    },
+    {
+      "site": "scripts/multrna_run.py:85",
+      "sets": {
+        "refusal_in_enclosing_scope": true
+      },
+      "evidence": "scripts/multrna_run.py:90 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/multrna_run.py:94 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+    },
+    {
+      "site": "scripts/readergate_run.py:89",
+      "sets": {
+        "refusal_in_enclosing_scope": true
+      },
+      "evidence": "scripts/readergate_run.py:87 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/readergate_run.py:93 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+    },
+    {
+      "site": "scripts/capsumrna_census.py:485",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/capsumrna_census.py:482 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/combine2_census.py:250",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/combine2_census.py:247 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/combine2_register.py:119",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/combine2_register.py:116 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/combine2_run.py:141",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/combine2_run.py:138 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/maxform_census.py:342",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/maxform_census.py:339 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/maxform_register.py:118",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/maxform_register.py:115 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/multrna_census.py:309",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/multrna_census.py:306 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/multrna_register.py:111",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/multrna_register.py:108 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/multrna_run.py:167",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/multrna_run.py:164 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/readergate_census.py:120",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/readergate_census.py:115 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/readergate_register.py:112",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/readergate_register.py:109 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/readergate_run.py:132",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 312,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/readergate_run.py:129 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/trio_q100_phase.py:72",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 158,
+        "all_matched_files_tracked": false,
+        "independent_scope_recorded": true
+      },
+      "evidence": "scripts/trio_q100_phase.py:78 is a sibling files_entry over the SAME `chroms` with NO exists() filter ([reference_fasta(c, Path('data/reference')) for c in chroms]), so its member count records len(chroms) independently of the filtered list, and the filtered group's own label at :73 states the scope as f'{chroms[0]}-{chroms[-1]}'. The store is genomeos/genome/individuals.py:28 ROOT = data/individuals, 158 files on disk and 0 tracked (.gitignore:19 data/individuals/), so CANNOT_SHRINK is refused"
+    },
+    {
+      "site": "scripts/reader_genome_wide.py:88",
+      "sets": {
+        "glob_root_resolved": true,
+        "matched_files_on_disk": 29,
+        "all_matched_files_tracked": false
+      },
+      "evidence": "scripts/reader_genome_wide.py:59 builds files = [gff, *ref, data/results/ccres_{chrom}.bed.gz] where ref at :56 is FIVE mutually exclusive spellings of the reference ('.fa.gz', '.fa.gz.fai', '.fa.gz.gzi', '.fa', '.fa.fai' -- 'whichever IndexedGenome seeks'), so part of the filtering is deliberate and no fixed expected count exists. Measured: data/reference/chr21.fa* = 4 on disk, 0 tracked (.gitignore:16 data/reference); data/results/ccres_chr*.bed.gz = 25 on disk, 25 tracked, not ignored. NOT all members tracked, so CANNOT_SHRINK is refused. No sibling entry in chromosome_manifest at :47-88 records an expected count or member list over the same feeder, and no raise in it governs on the group"
+    }
+  ],
+  "varying_groups": [
+    {
+      "group": "data/knowledge/alphagenome/all_elements/chr*.json",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 3,
+      "per_result": [
+        {
+          "result": "astroreg2_endpoint_k562",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "astroreg2_request_plan",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 23,
+          "scope_field": "parameters.chromosomes (list of 23)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "astroreg_request_plan",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 23,
+          "scope_field": "parameters.chromosomes (list of 23)",
+          "exclusions_mention_a_member": false
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "the all-enhancer sweep's committed per-chromosome results, read through attribution/targets.py",
+      "counts_seen": [
+        70,
+        73
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 73,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 70,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 73,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 70,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "LEGITIMATE_SCOPE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "the sweep's local per-chromosome element tables, which data/knowledge never commits",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "LEGITIMATE_SCOPE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "GENCODE 50 per-chromosome annotation, for the nearest protein-coding TSS",
+      "counts_seen": [
+        22,
+        23
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 22,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "globcensus.STAGE_2_REFUTED: closure_cell_inventory's chr21 WAS READ and was filed under another group's label -- a prefix-grouping artefact, not an absence; chrY is not in the CRISPRi library at all"
+    },
+    {
+      "group": "per_element_response_cache",
+      "counts_seen": [
+        1,
+        22,
+        24
+      ],
+      "declarations": 8,
+      "per_result": [
+        {
+          "result": "direction_link",
+          "declared": 22,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "direction_link_chr21",
+          "declared": 1,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 1,
+          "scope_field": "parameters.chromosomes (list of 1)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "direction_link_registration",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "hct116_count",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "reptest_answerable",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "rescore_cost",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "respmap_direction_v2",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "respmap_direction_v2_registration",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "globcensus.STAGE_2_REFUTED: in the four results of 2026-10-02, chr13 and chrY carry ZERO ELIGIBLE LINKS, so 22 IS the benchmark's own scope rather than a shortfall of it"
+    },
+    {
+      "group": "GENCODE v50 per-chromosome GFF3 (protein-coding symbols, targetchoice.CANDIDATES)",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "emit7g_census",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "targetchoice_census",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "targetchoice_registration",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "targetchoice_result",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        }
+      ],
+      "group_class": "UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "HPRC panel store (meta, sites, blocks per chromosome)",
+      "counts_seen": [
+        1,
+        66
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "pgs_reference",
+          "declared": 66,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "pgs_reference_registration",
+          "declared": 1,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        }
+      ],
+      "group_class": "UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "GENCODE 50 per-chromosome annotation, wherever it lives: the nearest-gene comparator",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "LEGITIMATE_SCOPE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    }
+  ],
+  "varying_groups_the_inherited_six": [
+    {
+      "group": "data/knowledge/alphagenome/all_elements/chr*.json",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 3,
+      "per_result": [
+        {
+          "result": "astroreg2_endpoint_k562",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "astroreg2_request_plan",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 23,
+          "scope_field": "parameters.chromosomes (list of 23)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "astroreg_request_plan",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 23,
+          "scope_field": "parameters.chromosomes (list of 23)",
+          "exclusions_mention_a_member": false
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "the all-enhancer sweep's committed per-chromosome results, read through attribution/targets.py",
+      "counts_seen": [
+        70,
+        73
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 73,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 70,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 73,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 70,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "LEGITIMATE_SCOPE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "the sweep's local per-chromosome element tables, which data/knowledge never commits",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "LEGITIMATE_SCOPE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    },
+    {
+      "group": "GENCODE 50 per-chromosome annotation, for the nearest protein-coding TSS",
+      "counts_seen": [
+        22,
+        23
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 22,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "globcensus.STAGE_2_REFUTED: closure_cell_inventory's chr21 WAS READ and was filed under another group's label -- a prefix-grouping artefact, not an absence; chrY is not in the CRISPRi library at all"
+    },
+    {
+      "group": "per_element_response_cache",
+      "counts_seen": [
+        1,
+        22,
+        24
+      ],
+      "declarations": 8,
+      "per_result": [
+        {
+          "result": "direction_link",
+          "declared": 22,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "direction_link_chr21",
+          "declared": 1,
+          "class": "LEGITIMATE_SCOPE",
+          "readable": true,
+          "scope_count": 1,
+          "scope_field": "parameters.chromosomes (list of 1)",
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "direction_link_registration",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "hct116_count",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "reptest_answerable",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "rescore_cost",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "respmap_direction_v2",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": true
+        },
+        {
+          "result": "respmap_direction_v2_registration",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": true
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "globcensus.STAGE_2_REFUTED: in the four results of 2026-10-02, chr13 and chrY carry ZERO ELIGIBLE LINKS, so 22 IS the benchmark's own scope rather than a shortfall of it"
+    },
+    {
+      "group": "HPRC panel store (meta, sites, blocks per chromosome)",
+      "counts_seen": [
+        1,
+        66
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "pgs_reference",
+          "declared": 66,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        },
+        {
+          "result": "pgs_reference_registration",
+          "declared": 1,
+          "class": "UNDECIDABLE",
+          "readable": true,
+          "scope_count": null,
+          "scope_field": null,
+          "exclusions_mention_a_member": false
+        }
+      ],
+      "group_class": "UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable"
+    }
+  ],
+  "varying_groups_new_since_globcensus": [
+    {
+      "group": "GENCODE v50 per-chromosome GFF3 (protein-coding symbols, targetchoice.CANDIDATES)",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 4
+    },
+    {
+      "group": "GENCODE 50 per-chromosome annotation, wherever it lives: the nearest-gene comparator",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 2
+    }
+  ],
+  "varying_groups_the_inherited_six_CORRECTED": [
+    {
+      "group": "data/knowledge/alphagenome/all_elements/chr*.json",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 3,
+      "per_result": [
+        {
+          "result": "astroreg2_endpoint_k562",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "scope_count": null,
+          "scope_field": null,
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 24 against None"
+        },
+        {
+          "result": "astroreg2_request_plan",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "scope_count": 23,
+          "scope_field": "parameters.chromosomes (list of 23)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 23)"
+        },
+        {
+          "result": "astroreg_request_plan",
+          "declared": 23,
+          "class": "LEGITIMATE_SCOPE",
+          "scope_count": 23,
+          "scope_field": "parameters.chromosomes (list of 23)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 23)"
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable",
+      "condition_2_presence": "not established"
+    },
+    {
+      "group": "the all-enhancer sweep's committed per-chromosome results, read through attribution/targets.py",
+      "counts_seen": [
+        70,
+        73
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 73,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 73 against parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 70,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 70 against parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 73,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 73 against parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 70,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 70 against parameters.chromosomes (list of 24)"
+        }
+      ],
+      "group_class": "UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable",
+      "condition_2_presence": "not established"
+    },
+    {
+      "group": "the sweep's local per-chromosome element tables, which data/knowledge never commits",
+      "counts_seen": [
+        23,
+        24
+      ],
+      "declarations": 4,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "shrinkimpact_closure_cell2_inventory",
+          "declared": 24,
+          "class": "LEGITIMATE_SCOPE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "shrinkimpact_closure_cell_inventory",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable",
+      "condition_2_presence": "not established"
+    },
+    {
+      "group": "GENCODE 50 per-chromosome annotation, for the nearest protein-coding TSS",
+      "counts_seen": [
+        22,
+        23
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "closure_cell2_inventory",
+          "declared": 23,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "closure_cell_inventory",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        }
+      ],
+      "group_class": "UNDECIDABLE",
+      "fourth_condition": "globcensus.STAGE_2_REFUTED: closure_cell_inventory's chr21 WAS READ and was filed under another group's label -- a prefix-grouping artefact, not an absence; chrY is not in the CRISPRi library at all",
+      "condition_2_presence": "globcensus.SHRINKS_FOUND and STAGE_2_READING: 'in every case the missing chromosomes are on disk TODAY -- so the store was partial when they were written and has since been completed'. Measured there, carried here, not re-measured"
+    },
+    {
+      "group": "per_element_response_cache",
+      "counts_seen": [
+        1,
+        22,
+        24
+      ],
+      "declarations": 8,
+      "per_result": [
+        {
+          "result": "direction_link",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "direction_link_chr21",
+          "declared": 1,
+          "class": "LEGITIMATE_SCOPE",
+          "scope_count": 1,
+          "scope_field": "parameters.chromosomes (list of 1)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 1)"
+        },
+        {
+          "result": "direction_link_registration",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "scope_count": null,
+          "scope_field": null,
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 24 against None"
+        },
+        {
+          "result": "hct116_count",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "reptest_answerable",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "rescore_cost",
+          "declared": 22,
+          "class": "UNDECIDABLE",
+          "scope_count": 24,
+          "scope_field": "parameters.chromosomes (list of 24)",
+          "commensurable": true,
+          "the_field_that_decided_it": "parameters.chromosomes (list of 24)"
+        },
+        {
+          "result": "respmap_direction_v2",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "scope_count": null,
+          "scope_field": null,
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 24 against None"
+        },
+        {
+          "result": "respmap_direction_v2_registration",
+          "declared": 24,
+          "class": "UNDECIDABLE",
+          "scope_count": null,
+          "scope_field": null,
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 24 against None"
+        }
+      ],
+      "group_class": "MIXED_ACROSS_RESULTS: LEGITIMATE_SCOPE, UNDECIDABLE",
+      "fourth_condition": "globcensus.STAGE_2_REFUTED: in the four results of 2026-10-02, chr13 and chrY carry ZERO ELIGIBLE LINKS, so 22 IS the benchmark's own scope rather than a shortfall of it",
+      "condition_2_presence": "globcensus.SHRINKS_FOUND and STAGE_2_READING: 'in every case the missing chromosomes are on disk TODAY -- so the store was partial when they were written and has since been completed'. Measured there, carried here, not re-measured"
+    },
+    {
+      "group": "HPRC panel store (meta, sites, blocks per chromosome)",
+      "counts_seen": [
+        1,
+        66
+      ],
+      "declarations": 2,
+      "per_result": [
+        {
+          "result": "pgs_reference",
+          "declared": 66,
+          "class": "UNDECIDABLE",
+          "scope_count": null,
+          "scope_field": null,
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 66 against None"
+        },
+        {
+          "result": "pgs_reference_registration",
+          "declared": 1,
+          "class": "UNDECIDABLE",
+          "scope_count": null,
+          "scope_field": null,
+          "commensurable": false,
+          "the_field_that_decided_it": "no commensurable scope: declared 1 against None"
+        }
+      ],
+      "group_class": "UNDECIDABLE",
+      "fourth_condition": "NOT ESTABLISHED for this group: no recomputation on the complete store exists, so a shrink verdict is unavailable",
+      "condition_2_presence": "not established"
+    }
+  ],
+  "why_a_second_pass": "the first pass's FACTS were too loose in three named ways, and each tightening is the registered wording of VARIATION_CLASSES applied more strictly rather than a change to it. (1) COMMENSURABLE SCOPE: LEGITIMATE_SCOPE requires the result's own declared scope to ACCOUNT FOR the count it declares, and a 24-chromosome list does not account for a 73-FILE group -- the all-enhancer sweep passed the first pass only because 73 >= 24, a comparison of files against chromosomes that means nothing. Where the declared count EXCEEDS the stated scope the two are not commensurable and the artefact states no scope this count can be read against. (2) EXCLUSIONS: the rule requires an exclusion to name EVERY MISSING MEMBER, and a substring hit on 'chr' establishes nothing of the kind -- globcensus found closure_cell_inventory naming chrY and NOT chr21, which is exactly the case the loose test would flatter. Unless the missing members are known and each named, the fact is UNESTABLISHED, not false. (3) PRESENCE IN THE STORE: for the two groups lane-shrinkimpact recomputed, condition (2) was MEASURED true and is carried from its record rather than left unknown, which is what lets its settled fourth condition decide them",
+  "the_refinement_not_taken": "condition (3) of the shrink test -- 'no exclusion in that result names them' -- is establishable NEGATIVELY: where no exclusion mentions any chromosome token at all, no exclusion can name the missing members, so the fact is FALSE and not unknown. Supplied that way, three declarations of per_element_response_cache (hct116_count, reptest_answerable, rescore_cost) would have all three conditions known, lane-shrinkimpact's settled fourth condition would decide them, and they would move from UNDECIDABLE to LEGITIMATE_SCOPE. THIS PASS DOES NOT DO IT, for one reason: it moves declarations AWAY from undecidability, which is the flattering direction, and this lane has already corrected its facts once in that same direction's favour. A third pass that keeps making the answer tidier is how a rule fixed in advance stops meaning anything. The verdict reported is the one the rule gives on the facts as established, and for those six declarations lane-shrinkimpact's recomputation -- realised in 0 of 6 -- is the stronger and independent answer to the IMPACT question, which is not the question this rule asks",
+  "which_pass_is_the_answer": "the CORRECTED pass. The first is kept beside it because the error is instructive: its loose facts made the all-enhancer sweep read LEGITIMATE_SCOPE on 73 files against a 24-chromosome list, and made two results read LEGITIMATE_SCOPE on a substring hit for 'chr' in their exclusions. Both would have understated the undecidability",
+  "varying_groups_note": "the answer is the inherited six. `varying_groups` holds every group varying in the tree today, 8 of them, because 2 more appeared in results committed since the census of 2026-10-11; those are reported and not classified",
+  "varying_source": "data/results/globcensus.json : groups_whose_count_varies",
+  "does_not_claim": "not that any committed result is wrong; not that a CAN_SHRINK_SILENTLY site has ever shrunk, which is a different question and was answered 0 of 6 by lane-shrinkimpact; not that a CANNOT_SHRINK site is safe in any sense beyond the one its test establishes, namely that its absence would be a tracked-file absence; not anything about the 82 CONSTANT groups, which remain NOT SHOWN SAFE because a group constant at a shrunken value is invisible to the census method; and not anything about the 64 `files_entry` calls that carry no `exists()` filter, which are outside the 18",
+  "negative_boundary": "18 sites, from the AST scan of genomeos/ and scripts/ at this lane's commit, over the 6 varying groups of the 130 group declarations in data/results/*.json -- and nothing wider",
+  "stop_list": "2026-09-27, six items, none touched: static classification only, 0 model requests",
+  "model_requests": 0,
+  "money_spent": "$0.00",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/globcensus.json, the inherited 18",
+        "version": "as committed"
+      },
+      {
+        "accession": "the genomeos/ and scripts/ trees, read by AST",
+        "version": "as committed"
+      },
+      {
+        "accession": "git ls-files, for tracked-ness of each resolved directory",
+        "version": "HEAD"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results",
+        "sha256": "f5cb1c3cec8aef3a75dd350f5333b6950203cff5f7d6af3d38817149038c8df6",
+        "bytes": 511549785,
+        "partition": null,
+        "files": 1724
+      },
+      {
+        "path": "data/globscope_read_facts.json",
+        "sha256": "88f8f0d90ecb5067ac1f687bac90c3b6565ecbba1ce4f7121f0fffd05f1459d8",
+        "bytes": 18837,
+        "partition": null
+      }
+    ],
+    "input_count": 2,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "rule_committed_at": "d31dd3d, before any call site was read",
+      "classes": [
+        "REFUSES",
+        "CANNOT_SHRINK",
+        "SCOPE_IS_DECLARED_ELSEWHERE",
+        "CAN_SHRINK_SILENTLY",
+        "UNDECIDABLE_FROM_THE_CODE"
+      ],
+      "decision_order": [
+        "REFUSES",
+        "UNDECIDABLE_FROM_THE_CODE",
+        "CANNOT_SHRINK",
+        "SCOPE_IS_DECLARED_ELSEWHERE",
+        "CAN_SHRINK_SILENTLY"
+      ],
+      "method": "ast.parse only, never a grep; the class comes from globscope.classify_site",
+      "narrowings": "tracked-ness over the resolved directory not the pattern; a MIXED directory is UNDECIDABLE; independent scope searched over the whole module"
+    },
+    "exclusions": [
+      "static only: nothing was run on any store, no result's bytes were touched, and nothing was repaired",
+      "globcensus.py, tests/test_globcensus.py and data/results/globcensus.json are not touched"
+    ],
+    "code_cleanliness": {
+      "git_sha": "9cabb26c2cdd44285d246ce7c3da85bae139623b",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/globscope_classify.py",
+        "form": "committed_repository_file",
+        "path": "scripts/globscope_classify.py",
+        "is_committed": true,
+        "declared_entry": "scripts/globscope_classify.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/globcensus.py",
+        "genomeos/attribution/globscope.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/globscope_classify.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "partitions": {
+      "none": "one population, the 18 inherited sites; no partition is taken and the absence of one is not a claim of independence"
+    },
+    "code": {
+      "git_sha": "9cabb26c2cdd44285d246ce7c3da85bae139623b",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/globscope.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/globscope_classify.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "9cabb26c2cdd44285d246ce7c3da85bae139623b",
+      "code_cleanliness_git_sha": "9cabb26c2cdd44285d246ce7c3da85bae139623b",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 9cabb26"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 3890,
+      "opens_under_data": 3094,
+      "files_read": 1725,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
