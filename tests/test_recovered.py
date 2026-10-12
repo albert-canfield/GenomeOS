@@ -185,3 +185,159 @@ def test_the_population_record_carries_the_registered_words_verbatim(key: str) -
         "overlap_question": rc.OVERLAP_QUESTION,
     }[key]
     assert d[key] == want
+
+
+# ==== step 2: the registration ==========================================================================
+
+REGISTRATION_FILE = Path("data/results/recovered_registration.json")
+
+
+def test_the_registration_carries_7d_7h_and_m2h_s_endpoint_baseline_control_and_bootstrap_verbatim() -> None:
+    assert rc.MEASURED == c2.MEASURED
+    assert c2.PREDICTIONS["no_rule_baseline"] == rc.NO_RULE_BASELINE
+    assert rc.RNA_SELECTION == c2.RNA_SELECTION
+    assert rc.PSEUDOCOUNT == c2.PSEUDOCOUNT
+    assert rc.MIN_GENES == c2.MIN_GENES
+    assert rc.CONTROL_ALPHA == c2.CONTROL_ALPHA
+    assert rc.PERMUTATIONS == c2.PERMUTATIONS
+    assert list(rc.CELLS) == list(c2.CELLS)
+    assert rc.PREDICTIONS["form"] == mc.PREDICTIONS["form"]
+    assert rc.BOOTSTRAP["resamples"] == mc.BOOTSTRAP["resamples"]
+    assert rc.BOOTSTRAP["seed"] == mc.BOOTSTRAP["seed"]
+    assert rc.BOOTSTRAP["unit"] == mc.BOOTSTRAP["unit"]
+    assert mr.FORM_WORDS[mr.FORM] == rc.FORM_WORDS
+    assert rc.CARRIED["split"] == mc.SPLIT
+    assert rc.TOLERANCE == mc.TOLERANCE
+
+
+def test_the_interval_is_m2h_s_width_and_the_reason_is_recorded() -> None:
+    assert rc.INTERVAL == mc.FORM_INTERVAL
+    assert rc.INTERVAL_WORDS == mc.FORM_INTERVAL_WORDS == "98.33% CI"
+    assert "conservative choice" in rc.INTERVAL_REASON
+    assert "read at one width" in rc.INTERVAL_REASON
+    assert "DECIDED NOW" in rc.INTERVAL_REASON
+
+
+def test_the_four_way_table_is_the_supervisor_s_verbatim_and_names_the_scale_interval_it_uses() -> None:
+    assert rc.WHICH_GOVERNS == mc.WHICH_GOVERNS
+    assert "calibration removes the rules" in rc.WHICH_GOVERNS
+    assert "UNREACHABLE HERE" in rc.WHICH_SCALE_INTERVAL
+    # and the reason it is unreachable is a fact about M2h's committed interval, not an opinion
+    assert rc.SCALE_CI[0] > 0.0, "a scale interval including 0 would make CALIBRATION_REMOVES reachable"
+
+
+def test_the_decision_is_magcal_s_decide_and_a_straddle_reads_inconclusive_at_this_scale_interval() -> None:
+    lo, hi = rc.SCALE_CI
+    assert mc.decide(0.01, 0.05, lo, hi) == "BETTER"
+    assert mc.decide(-0.05, -0.01, lo, hi) == "WORSE"
+    assert mc.decide(-0.01, 0.05, lo, hi) == "INCONCLUSIVE"
+    # the branch this lane declared unreachable IS reachable for a lane that fits its own scale
+    assert mc.decide(-0.01, 0.05, -0.1, 0.1) == "CALIBRATION_REMOVES"
+
+
+def test_the_scale_is_not_refitted_and_the_choice_is_stated_rather_than_omitted() -> None:
+    assert rc.PREDICTIONS["calibrated"].count("NOTHING IS FITTED") == 1
+    assert "NOT REFITTED ON THIS POPULATION" in rc.NO_REFIT
+    assert "CANNOT distinguish" in rc.NO_REFIT
+
+
+def test_the_exposure_says_plainly_that_the_brief_s_claim_is_false_and_gives_the_measured_counts() -> None:
+    for want in ("7,999", "3,990", "4,009", "SUBPOPULATION READING", "THAT IS\n FALSE".replace("\n ", " ")):
+        assert want in rc.EXPOSURE, want
+    assert "NOT a fresh test of the endpoint" in rc.EXPOSURE
+    for want in ("7,999", "4,009", "SUBPOPULATION", "not independent confirmation"):
+        assert want in rc.EXPOSURE_CLAUSE, want
+
+
+def test_the_falsifier_names_worse_as_the_sharper_finding_and_says_it_is_reported_first() -> None:
+    assert "upper bound < 0, outcome WORSE" in rc.FALSIFIER
+    assert "recovers genes the fit can accept but not genes the model predicts" in rc.FALSIFIER
+    assert "REPORTED FIRST AND UNSOFTENED" in rc.DECISION
+
+
+def test_the_variance_clause_is_filled_from_the_numbers_and_not_written_by_hand() -> None:
+    s = rc.variance_clause(0.0434, 2.1524)
+    assert "about 2.0% of the variance" in s
+    assert "2.1524" in s
+    assert rc.variance_clause(-0.0434, 2.1524).startswith("about -2.0%")
+
+
+def test_the_full_reading_is_magcal_s_sentence_with_this_lane_s_three_clauses_after_it() -> None:
+    s = rc.full_reading(
+        "BETTER",
+        delta=0.0434,
+        mean_d2=2.1524,
+        held=4009,
+        total=8535,
+        form=rc.FORM_WORDS,
+        d="+0.0434",
+        ci=rc.INTERVAL_WORDS,
+        lo="+0.03",
+        hi="+0.05",
+        n=52117,
+        g=4009,
+        p=0.000999,
+        scale="the constant +0.2146",
+    )
+    assert s.startswith(mc.OUTCOMES["BETTER"].split("{")[0])
+    assert mc.PRIOR_EXPOSURE_CLAUSE in s
+    assert "4009 genes of the 8535" in s
+    assert "SUBPOPULATION" in s
+    assert "about 2.0% of the variance" in s
+
+
+def test_every_bound_field_resolves_and_registered_fields_returns_them_all() -> None:
+    fields = rc.registered_fields()
+    assert set(fields) == set(rc.BOUND)
+    assert fields["which_governs"] == mc.WHICH_GOVERNS
+    assert fields["exposure"] == rc.EXPOSURE
+    assert fields["scale"] == sf.SCALE
+
+
+def test_the_registration_record_is_there_and_reproduces_every_bound_field() -> None:
+    tp.must_be_present(REGISTRATION_FILE, was="a skip keyed on the registration record's absence")
+    d = json.loads(REGISTRATION_FILE.read_text())
+    for field, value in rc.registered_fields().items():
+        assert d[field] == value, field
+    assert sorted(d["bound_fields"]) == sorted(rc.BOUND)
+
+
+def test_the_registration_record_pins_the_population_of_step_1_by_its_sha256() -> None:
+    tp.must_be_present(REGISTRATION_FILE, was="a skip keyed on the registration record's absence")
+    reg = json.loads(REGISTRATION_FILE.read_text())["population_pin"]
+    pop = json.loads(POPULATION_FILE.read_text())
+    assert reg["population_sha256"] == pop["population_sha256"]
+    assert reg["held_out_sha256"] == pop["held_out_sha256"]
+    assert reg["genes"] == len(pop["symbols"]["all"])
+    assert reg["held_out_genes"] == len(pop["symbols"]["held_out"])
+    assert reg["held_out_genes"] >= rc.MIN_GENES
+
+
+def test_the_registration_record_reproduces_m2h_s_scale_and_interval_exactly() -> None:
+    tp.must_be_present(REGISTRATION_FILE, was="a skip keyed on the registration record's absence")
+    pin = json.loads(REGISTRATION_FILE.read_text())["scale_pin"]
+    m2h = json.loads(Path("data/results/magcal_result.json").read_text())
+    assert pin["scale"] == m2h["scales"]["multiplicative"]
+    assert pin["scale_ci"] == m2h["scale_cis"]["multiplicative"]
+    assert pin["scale_interval_excludes_zero"] is True
+    assert pin["is_refitted_here"] is False
+
+
+def test_the_registration_record_opened_no_rna_value() -> None:
+    tp.must_be_present(REGISTRATION_FILE, was="a skip keyed on the registration record's absence")
+    d = json.loads(REGISTRATION_FILE.read_text())
+    assert d["rna_read"].startswith("none")
+    assert d["alphagenome_requests"] == 0
+
+
+def test_the_registration_record_quotes_m2h_and_m2i_word_for_word() -> None:
+    tp.must_be_present(REGISTRATION_FILE, was="a skip keyed on the registration record's absence")
+    ctx = json.loads(REGISTRATION_FILE.read_text())["context_verbatim"]
+    m2h = json.loads(Path("data/results/magcal_result.json").read_text())
+    m2i = json.loads(Path("data/results/freshrna_result.json").read_text())
+    assert ctx["m2h_multiplicative_reading"] == m2h["per_form"]["multiplicative"]["reading"]
+    assert ctx["m2i_verdict_sentence"] == m2i["verdict_sentence"]
+    assert (
+        ctx["scalefit_verdict"]
+        == json.loads(Path("data/results/scalefit_census.json").read_text())["verdict"]
+    )
