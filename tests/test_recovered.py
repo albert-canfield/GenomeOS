@@ -341,3 +341,105 @@ def test_the_registration_record_quotes_m2h_and_m2i_word_for_word() -> None:
         ctx["scalefit_verdict"]
         == json.loads(Path("data/results/scalefit_census.json").read_text())["verdict"]
     )
+
+
+# ==== step 3: the one run ===============================================================================
+
+RESULT_FILE = Path("data/results/recovered_result.json")
+
+
+def test_the_run_never_fits_a_scale() -> None:
+    text = Path("scripts/recovered_run.py").read_text()
+    for banned in ("fit_scale", "bootstrap_scale", "brentq", "minimize", "curve_fit", "lstsq", "polyfit"):
+        assert banned not in text, f"{banned} would make this lane fit the scale it was told to fix"
+
+
+def test_the_run_reuses_magcal_s_functions_rather_than_reimplementing_them() -> None:
+    text = Path("scripts/recovered_run.py").read_text()
+    for needed in ("mc.delta_mse(", "mc.bootstrap_delta(", "mc.permuted_control(", "mc.decide("):
+        assert needed in text, needed
+    assert "rc.full_reading(" in text
+
+
+def test_the_result_is_there_and_its_harness_agreed_before_anything_was_read() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    assert d["harness_check"]["agrees"] is True
+    assert d["outcome"] in {"BETTER", "WORSE", "INCONCLUSIVE", "NOT_TESTABLE", "HARNESS_DEFECT"}
+    assert d["scale"] == sf.SCALE
+    assert d["scale_is_refitted"] is False
+    assert d["alphagenome_requests"] == 0
+
+
+def test_the_result_s_outcome_is_magcal_s_decide_on_its_own_two_intervals() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    di = d["decision_inputs"]
+    lo, hi = di["held_out_ci"]
+    slo, shi = di["scale_ci"]
+    assert mc.decide(lo, hi, slo, shi) == d["outcome"]
+    assert [slo, shi] == list(sf.SCALE_CI)
+    assert di["calibration_removes_was_unreachable"] is True
+    assert di["which_governs"] == mc.WHICH_GOVERNS
+
+
+def test_the_result_s_reading_is_the_registered_sentence_for_its_own_outcome() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    assert d["reading"].startswith(mc.OUTCOMES[d["outcome"]].split("{")[0])
+    assert mc.PRIOR_EXPOSURE_CLAUSE in d["reading"]
+    assert "SUBPOPULATION" in d["reading"]
+    assert "% of the variance" in d["reading"]
+
+
+def test_the_result_carries_the_variance_share_beside_the_reading_as_m2h_and_m2i_do() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    p = d["primary"]
+    assert p["variance_share"] == pytest.approx(p["delta_mse"] / p["mean_D2"], rel=1e-9)
+    assert rc.variance_clause(p["delta_mse"], p["mean_D2"]) in d["reading"]
+
+
+def test_the_result_reads_the_held_out_half_and_only_the_held_out_half() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    pop = json.loads(POPULATION_FILE.read_text())
+    assert d["primary"]["genes"] == len(pop["symbols"]["held_out"])
+    assert d["primary"]["pairs"] == 13 * d["primary"]["genes"]
+    assert d["primary"]["genes"] >= rc.MIN_GENES
+    assert "descriptive" in d["descriptives_not_verdicts"]["training_side"]["side"]
+
+
+def test_the_result_s_harness_reproduced_7h_s_delta_mse_and_m2h_s_split() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    h = json.loads(RESULT_FILE.read_text())["harness_check"]
+    s4 = h["4_delta_mse_at_scale_1_reproduces_7h"]
+    assert abs(s4["recomputed"] - s4["committed"]) <= rc.TOLERANCE
+    s6 = h["6_m2h_split_reproduces"]
+    assert s6["held_out_genes"] == s6["held_out_genes_committed"] == 8328
+    assert s6["held_out_pairs"] == s6["held_out_pairs_committed"] == 108264
+    assert h["7_this_population_s_held_out_half_is_held_out_under_m2h_s_split"] is True
+
+
+def test_the_result_carries_the_exposure_and_quotes_m2h_m2i_and_scalefit_unchanged() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    assert d["exposure"] == rc.EXPOSURE
+    assert d["falsifier"] == rc.FALSIFIER
+    assert d["limitations"] == list(rc.LIMITATIONS)
+    ctx = d["context_verbatim"]
+    m2h = json.loads(Path("data/results/magcal_result.json").read_text())
+    assert ctx["m2h_multiplicative_reading"] == m2h["per_form"]["multiplicative"]["reading"]
+    assert ctx["m2h_held_out_delta_mse"] == m2h["per_form"]["multiplicative"]["held_out_delta_mse"]
+    assert (
+        ctx["scalefit_verdict"]
+        == json.loads(Path("data/results/scalefit_census.json").read_text())["verdict"]
+    )
+
+
+def test_the_result_s_control_p_is_the_registered_formula() -> None:
+    tp.must_be_present(RESULT_FILE, was="a skip keyed on the result's absence")
+    d = json.loads(RESULT_FILE.read_text())
+    assert 0.0 < d["control_p"] <= 1.0
+    assert d["control_p"] >= 1.0 / (1 + rc.PERMUTATIONS["count"])
+    assert "REFITS the scale" in d["control_difference"]
