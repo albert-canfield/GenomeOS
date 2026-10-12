@@ -1,0 +1,288 @@
+{
+  "result": "pbrun_registration",
+  "date": "2026-10-12",
+  "lane": "lane-pbrun",
+  "roadmap_item": "area I: does pseudobulked single-cell or single-nucleus RNA reproduce bulk RNA-seq on M2h's endpoint, in cell types the reader already covers that have both?",
+  "stage": "step 2 of 3: registered BEFORE any comparison value is read, after the 1,000-gene clause cleared at 8,051 of 8,328",
+  "question": "Read M2h's endpoint twice on the same genes and the same four cell types -- once with the measured side taken from bulk RNA-seq and once with it taken from pseudobulked single-cell or single-nucleus RNA -- at M2h's FIXED scale +0.2146. Do the two readings agree?",
+  "what_it_gates": "AGREEMENT licenses the modality swap FOR THIS ENDPOINT ONLY and makes the bile-duct out-of-domain test (lane-oodinventory, `171f5bf`) interpretable, so the supervisor's recommendation to Albert can change. DISAGREEMENT closes Albert's biosample question without a lift. INCONCLUSIVE licenses nothing.",
+  "cells": [
+    "GM12878",
+    "K562",
+    "ovary",
+    "testis"
+  ],
+  "cells_source": "data/results/scsweep_inventory.json, field `exact_label_cells`, pinned by sha256 in the record",
+  "cell_count": 4,
+  "modality_per_cell": {
+    "GM12878": [
+      "single-cell"
+    ],
+    "K562": [
+      "single-cell"
+    ],
+    "ovary": [
+      "single-nucleus"
+    ],
+    "testis": [
+      "single-cell"
+    ]
+  },
+  "population": "exactly the 8,051 gene symbols of `qualifying_genes` in data/results/pbrun_gene_count.json, pinned by its sha256: M2h's HELD-OUT side of the multiplicative form (8,328 genes of 7h's committed population under M2h's split on the gene symbol) intersected with the genes that resolve, by lane-pseudobulk's clause word for word, in every one of the four cell types on BOTH sides. Each gene contributes its FOUR (gene, cell type) pairs. No filter on expression and no filter on any measured value; no gene is admitted that 7h did not admit.",
+  "population_genes": 8051,
+  "population_pairs": 32204,
+  "gene_clause_verbatim": "A gene counts toward the 1,000 only if it is in M2h's HELD-OUT population AND resolves in EVERY qualifying cell type in BOTH modalities: exactly one row for its unversioned gene_id in that cell type's bulk table (rows suffixed _PAR_Y not counted), and a row for the same gene in that cell type's pseudobulked single-nucleus matrix. No filter on expression and no filter on any measured value.",
+  "minimum": {
+    "cell_types": 4,
+    "cell_types_reason": "The registered control is M2h's WITHIN-GENE CELL PERMUTATION: a gene's values are permuted among its own cells. With n cells a gene has n! distinct permutations, so n = 4 is the smallest n for which 4! = 24 >= 20 permutations exist and a control p at or below 0.05 is attainable AT ALL. With three or fewer cell types the registered control cannot be run, so the comparison cannot be made as registered and no reading from it would be interpretable.",
+    "genes": 1000,
+    "genes_reason": "M2h's and M2i's registered floor is min_genes = 100, carried verbatim as the endpoint's own floor. 1,000 is the STRICTER floor this lane requires, because what must be resolvable here is not whether the endpoint is positive but whether TWO READINGS OF IT AGREE, and the difference at issue is the size M2h measured (Delta MSE about +0.04, about 2% of variance). Below 1,000 genes the gene bootstrap's interval on the bulk reading alone is wide enough to contain both agreement and disagreement, so the comparison would decide nothing.",
+    "genes_clause": "A gene counts toward the 1,000 only if it is in M2h's HELD-OUT population AND resolves in EVERY qualifying cell type in BOTH modalities: exactly one row for its unversioned gene_id in that cell type's bulk table (rows suffixed _PAR_Y not counted), and a row for the same gene in that cell type's pseudobulked single-nucleus matrix. No filter on expression and no filter on any measured value.",
+    "below_either": "NO_SOURCE_QUALIFIES, and the lane stops without reading a value. That is a COMPLETE answer: it says the out-of-domain test cannot be made interpretable this way, so the biosample question closes without a lift."
+  },
+  "sc_selection": {
+    "version": "pbrun-1",
+    "principle": "One single-cell or single-nucleus source per qualifying cell type, named from the committed inventories and chosen on METADATA ALONE before any value was read. No source is re-searched and no cell type is added: the four are lane-scsweep's `exact_label_cells` of `12b0c4e`.",
+    "encode": "For a cell type ENCODE supplies (GM12878, ovary), EVERY experiment lane-pseudobulk's committed inventory admitted for that biosample_term_name contributes, and from each experiment one file is taken by a fixed order: assembly GRCh38 over any other assembly, then the highest genome_annotation version present, then output_type by the priority 'sparse gene count matrix of unique reads' (the called-cell STARsolo matrix of unique reads) > 'gene quantifications' (the per-cell RSEM table), ties broken by the lowest file accession. For GM12878 ENCODE's scRNA-seq deposits ONE CELL PER FILE, so every qualifying file of each admitted experiment contributes as one cell.",
+    "geo_and_cellxgene": "For K562 and testis exactly one file is admitted by lane-scsweep and no choice arises: GSM9224207_Fresh_K562.h5ad (the FRESH unfixed preparation; the PFA-fixed file of the same sample is excluded as a treatment, which is lane-scsweep's judgement carried) and CELLxGENE dataset ec6ef004-5f30-4a40-b282-980cca20a561 (Tabula Sapiens - Testis), whose raw counts the archive declares at `raw.X`.",
+    "counts_layer": "Integer counts and nothing else: the STARsolo matrix.mtx for ENCODE snRNA-seq, the `expected_count` column of the per-cell RSEM table for ENCODE scRNA-seq, `X` for the GEO h5ad (which carries no raw layer and whose X is integral), and `raw.X` for the CELLxGENE h5ad, which is where that archive's schema declares raw counts. No normalised, imputed, decontaminated or scaled layer is read: not `layers/Q-Q_normalized` of the GEO file, and not `X`, `layers/decontXcounts` or `layers/scale_data` of the CELLxGENE file.",
+    "modality_note": "OF THE FOUR, ONE IS SINGLE-NUCLEUS: the ovary snRNA-seq. GM12878, K562 and testis are single-CELL. This is stated here, before any value is read, because the bile-duct source is single-NUCLEUS: an agreement read here licenses pseudobulked single-cell-or-nucleus RNA against bulk ON THIS ENDPOINT, and the nucleus-specific part of it rests on one of the four cell types. The per-cell-type descriptives make the ovary arm readable on its own and decide nothing."
+  },
+  "aggregation": {
+    "statement": "SUM THE COUNTS, THEN CPM, THEN LOG2. (1) For a cell type, every contributing file's integer count matrix is read (SC_SELECTION['counts_layer']) and the counts of a gene are SUMMED over ALL of that cell type's cells or nuclei and over all of its contributing files, giving one integer per gene per cell type. (2) That summed vector is scaled to counts per million: cpm(G, X) = 1e6 * c(G, X) / sum over all genes of c(., X), the sum taken over EVERY row of the matrix and not only over the counted genes. (3) The measured value is y_sc(G, X) = log2(cpm(G, X) + 1), with PSEUDOCOUNT 1.0 carried verbatim from M2h.",
+    "no_filter": "NO FILTER AT ANY STEP. No expression threshold, no minimum count, no minimum number of cells, no doublet removal, no mitochondrial-fraction cut, no cell-type subsetting inside a tissue, no highly-variable-gene selection and no removal of a donor or a batch. Every barcode present in the chosen matrix contributes and every gene row is kept. This is lane-pseudobulk's 'no filter on expression and no filter on any measured value' applied to the single-cell side.",
+    "why_sum": "Summing counts over cells is the aggregation that makes a pseudobulk stand for the library a bulk experiment would have sequenced from the same material, so it is the comparison the modality question asks. A mean of per-cell normalised values would weight a 1,000-UMI cell equally with a 20,000-UMI cell and would not be that library; it is not read here.",
+    "cpm_not_tpm": "The single-cell side is CPM and the bulk side is RSEM TPM, which is length-normalised. The difference is a PER-GENE factor, 1/length, and the endpoint centres each gene within itself across the cell types, so a per-gene factor cancels from both D's up to the pseudocount. What does NOT cancel is a per-CELL-TYPE term (the ratio of the two normalising sums), which shifts all of a cell type's genes together; it is declared as a limitation and no length-normalised variant of the single-cell side was computed or read."
+  },
+  "carried_verbatim": {
+    "endpoint_bulk": "y(G, X) = log2(TPM(G, X) + PSEUDOCOUNT), TPM(G, X) the mean over the chosen experiment's qualifying files of G's TPM in cell type X -- M2h's CARRIED['endpoint'] and M2i's MEASURED_FRESH, word for word, on M2i's committed selection of files",
+    "endpoint_single_cell": "y_sc(G, X) = log2(cpm(G, X) + PSEUDOCOUNT) with cpm as AGGREGATION defines it: the same transform and the same pseudocount, with the pseudobulked library in place of the bulk one",
+    "pseudocount": 1.0,
+    "measured_deviation": "D(G, X) = y(G, X) - mean over the compared cell types X' of y(G, X'): G's level in X relative to its own mean across those cell types. M2h's MEASURED with the mean taken over the four cell types compared here instead of thirteen (see `deviation_from_m2h`)",
+    "prediction": "P(G, X) = 7h's committed centred prediction of its genes table, unchanged and rounded to five decimals by that table, restricted to the four compared cell types' columns and then re-centred over those four columns -- the same centring the measured side gets",
+    "scaled_prediction": "P*(G, X) = SCALE * P(G, X) with SCALE the constant +0.2145911381525326 of `ac5580b`. One multiplication by a committed constant; nothing else, and nothing fitted",
+    "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the compared cell types",
+    "metric": "Delta MSE = mean over the pairs of D^2 - mean of (D - SCALE*P)^2 = mean of (2*SCALE*D*P - SCALE^2*P^2) (combine2.METRIC, magcal.METRIC and freshrna.METRIC), positive when the scaled run's squared error is below the no-rule baseline's",
+    "min_genes": 100,
+    "which_governs_m2h": "M2h's rule, carried: the held-out interval decides -- excludes 0 on the rules' side means 'better', excludes 0 on the baseline's side means 'worse' (the falsifier), straddles 0 means the reading does not resolve. The two branches M2h split by the SCALE interval collapse here into one, 'inconclusive', because the scale is a fixed constant and there is no scale interval to read"
+  },
+  "deviation_from_m2h": "ONE, NAMED AS A DEVIATION AND APPLIED IDENTICALLY TO BOTH ARMS. M2h centres a gene within itself over its THIRTEEN cell types; this comparison has FOUR, because only four of the thirteen have both modalities. So y, y_sc and P are each centred over the SAME FOUR columns. Centring one arm over thirteen and the other over four would make the two numbers incomparable, and `pr.centred` with its planted test exists to stop that. The consequence is stated rather than hidden: neither arm's Delta MSE here is M2h's +0.04339, which was read over thirteen cell types, and the comparison this lane reads is BETWEEN ITS OWN TWO ARMS.",
+  "scale": 0.2145911381525326,
+  "scale_origin": "M2h's fitted constant +0.2145911381525326 from `ac5580b`, per_form.multiplicative.scale of data/results/magcal_result.json, used as a FIXED CONSTANT. Nothing is fitted in this lane: a test parses this lane's module and fails on any fitter in it or on any right-hand side for SCALE other than lane-pseudobulk's own constant.",
+  "nothing_is_fitted": "no scale, no intercept, no per-gene or per-cell parameter, no normalisation chosen from a value, no threshold. The two arms differ in ONE thing, the measured side.",
+  "metric": "Delta MSE = mean over the pairs of D^2 - mean of (D - SCALE*P)^2 = mean of (2*SCALE*D*P - SCALE^2*P^2) (combine2.METRIC, magcal.METRIC and freshrna.METRIC), positive when the scaled run's squared error is below the no-rule baseline's",
+  "endpoint": "per arm, Delta MSE over the population's pairs at SCALE. The REGISTERED READING is: the single-cell arm's Delta MSE with its gene bootstrap interval, the bulk arm's beside it, and the PAIRED difference (single-cell minus bulk) with its own interval, read against the margin.",
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 20261010,
+    "unit": "gene: genes are resampled with replacement and carry all four of their pairs",
+    "interval": "the 98.33% percentile interval over gene resamples with replacement, each gene carrying its four pairs, with SCALE fixed -- M2h's unit, resample count, seed and width, kept unchanged for comparability with +0.04339 [98.33% CI +0.0379, +0.04894] and not for a multiplicity this lane has. The DIFFERENCE between the arms is read on the SAME resample: one draw of genes, both arms recomputed on it, the difference taken per draw, so the interval is PAIRED and the two arms' shared gene-sampling noise cancels from it"
+  },
+  "form_interval": [
+    0.8333,
+    99.1667
+  ],
+  "form_interval_words": "98.33% CI",
+  "control": "M2h's within-gene cell permutation with M2i's one change, that nothing is refitted: for each permutation, each gene's FOUR P values are permuted among its own four cell types by an independent draw of the seeded generator, every gene keeping its own prediction values and its own range and every pair keeping its own D, and Delta MSE is recomputed at the same constant SCALE. Only the tie between a prediction and the cell type it was made for is broken. PERMUTATIONS['count'] permutations at PERMUTATIONS['seed']; control p = (1 + permutations with Delta MSE >= observed) / (1 + count). It is run on BOTH arms, it is reported in every reading and it changes no verdict. Four cell types is the smallest number for which this control can reach a p at or below 0.05 at all, which is why lane-pseudobulk's minimum is four",
+  "permutations": {
+    "count": 1000,
+    "seed": 20261011
+  },
+  "control_alpha": 0.05,
+  "min_genes": 100,
+  "margin": 0.0216956054050679,
+  "margin_rule": "MARGIN = half of M2h's committed held-out Delta MSE for the multiplicative form, data/results/magcal_result.json per_form.multiplicative.held_out_delta_mse / 2. Fixed by this registration, computed from a committed number and from no value this lane reads.",
+  "which_governs": "M2h's rule, carried: the held-out interval decides -- excludes 0 on the rules' side means 'better', excludes 0 on the baseline's side means 'worse' (the falsifier), straddles 0 means the reading does not resolve. The two branches M2h split by the SCALE interval collapse here into one, 'inconclusive', because the scale is a fixed constant and there is no scale interval to read",
+  "decision": {
+    "agreement": "BOTH of these, and nothing less: (a) the SINGLE-CELL arm's own 98.33% interval excludes 0 on the rules' side, so that arm reads 'better' under CARRIED['which_governs_m2h']; and (b) the PAIRED difference (single-cell arm minus bulk arm) has its 98.33% interval wholly inside [-MARGIN, +MARGIN]. What it licenses: THE MODALITY SWAP FOR THIS ENDPOINT ONLY, which makes the bile-duct out-of-domain test interpretable, so the supervisor's recommendation to Albert can change. It is NEVER 'single-nucleus RNA equals bulk RNA'.",
+    "disagreement": "EITHER of these: the single-cell arm's interval excludes 0 on the BASELINE's side (it reads 'worse'), or the paired difference's interval lies WHOLLY OUTSIDE [-MARGIN, +MARGIN]. What it means: pseudobulked single-cell RNA does not reproduce bulk on this endpoint, the modality swap stays unlicensed, the bile-duct test stays uninterpretable, and Albert's biosample question CLOSES WITHOUT A LIFT.",
+    "inconclusive": "ANYTHING ELSE, and it licenses nothing. In particular: the single-cell arm's interval straddling 0, or a difference interval that neither lies inside the margin nor wholly outside it. The bile-duct test stays uninterpretable and no recommendation changes. This is written here so that an ambiguous result cannot be read afterwards as a weak agreement.",
+    "falsifier": "The single-cell arm's 98.33% interval excluding 0 on the BASELINE's side -- the scaled rules FURTHER from pseudobulked RNA than no rule at all -- or a paired difference interval wholly outside the margin. Either would be this lane's negative, and it is a result and not a failure: it closes the biosample question without a lift and says so.",
+    "stop_rule": "The run is executed ONCE, on the population this registration pins, and the registered reading is reported verbatim whatever it is. No clause is adjusted after a value is seen, no cell type is dropped, no gene set is re-cut, no alternative normalisation is tried and the margin is not moved. If the record and this registration disagree about any pinned number, the run is a HARNESS_DEFECT and nothing is read."
+  },
+  "agreement_means": "BOTH of these, and nothing less: (a) the SINGLE-CELL arm's own 98.33% interval excludes 0 on the rules' side, so that arm reads 'better' under CARRIED['which_governs_m2h']; and (b) the PAIRED difference (single-cell arm minus bulk arm) has its 98.33% interval wholly inside [-MARGIN, +MARGIN]. What it licenses: THE MODALITY SWAP FOR THIS ENDPOINT ONLY, which makes the bile-duct out-of-domain test interpretable, so the supervisor's recommendation to Albert can change. It is NEVER 'single-nucleus RNA equals bulk RNA'.",
+  "disagreement_means": "EITHER of these: the single-cell arm's interval excludes 0 on the BASELINE's side (it reads 'worse'), or the paired difference's interval lies WHOLLY OUTSIDE [-MARGIN, +MARGIN]. What it means: pseudobulked single-cell RNA does not reproduce bulk on this endpoint, the modality swap stays unlicensed, the bile-duct test stays uninterpretable, and Albert's biosample question CLOSES WITHOUT A LIFT.",
+  "inconclusive_means": "ANYTHING ELSE, and it licenses nothing. In particular: the single-cell arm's interval straddling 0, or a difference interval that neither lies inside the margin nor wholly outside it. The bile-duct test stays uninterpretable and no recommendation changes. This is written here so that an ambiguous result cannot be read afterwards as a weak agreement.",
+  "falsifier": "The single-cell arm's 98.33% interval excluding 0 on the BASELINE's side -- the scaled rules FURTHER from pseudobulked RNA than no rule at all -- or a paired difference interval wholly outside the margin. Either would be this lane's negative, and it is a result and not a failure: it closes the biosample question without a lift and says so.",
+  "stop_rule": "The run is executed ONCE, on the population this registration pins, and the registered reading is reported verbatim whatever it is. No clause is adjusted after a value is seen, no cell type is dropped, no gene set is re-cut, no alternative normalisation is tried and the margin is not moved. If the record and this registration disagree about any pinned number, the run is a HARNESS_DEFECT and nothing is read.",
+  "harness": "before any measured value is opened: (1) every input is on disk with the sha256 the count record pins; (2) the population is exactly the `qualifying_genes` of data/results/pbrun_gene_count.json, 8,051 symbols, and its count is at or above MINIMUM['genes'] and at or above CARRIED['min_genes']; (3) the four cell types are lane-scsweep's and are four; (4) SCALE equals M2h's committed per_form.multiplicative.scale exactly; (5) every gene of the population has exactly one row on both sides in all four cell types, re-checked and not assumed from the count record; (6) each arm's D matrix has mean 0 within every gene, to the tolerance, which is the check that both arms were centred the same way. A miss in any of them stops the run (HARNESS_DEFECT) and nothing is read",
+  "tolerance": 1e-09,
+  "prior_exposure": "THE BULK SIDE IS NOT A FRESH MEASUREMENT. It is RNA already read by items 7, 7d, 7h, M2h and M2i. Precisely: the bulk arm is M2i's committed selection of ENCODE polyA plus RNA-seq files (`data/results/freshrna_sources.json`, on disk under data/cache/freshrna/rna/), which M2i's own non-overlap check shows shares no experiment, file or library with the set items 7, 7d, 7h and M2h read -- but it is the SAME FOUR BIOSAMPLES under the SAME ENDPOINT, and M2i's registered reading has already been taken on it (`f6e71c6`). So a reading here is a statement about these measurements and not independent confirmation of anything, and the single-cell side is the only side of this comparison that this project has never read.",
+  "wording_limit": "Agreement on this endpoint licenses the modality swap FOR THIS ENDPOINT ONLY. It is never 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here.",
+  "limitations": [
+    "ONLY ONE OF THE FOUR CELL TYPES IS SINGLE-NUCLEUS (ovary); GM12878, K562 and testis are single-CELL. The bile-duct source is single-NUCLEUS, so the nucleus-specific part of any agreement read here rests on one cell type. The per-cell-type descriptives are reported so the ovary arm can be read on its own, and they decide nothing.",
+    "The single-cell side is CPM and the bulk side is length-normalised TPM. The per-GENE length factor cancels under the within-gene centring up to the pseudocount; the per-CELL-TYPE ratio of the two normalising sums does NOT cancel and is not corrected.",
+    "FOUR CELL TYPES, not thirteen. Neither arm's Delta MSE is comparable to M2h's +0.04339, which was read over thirteen; only the two arms here are comparable to each other.",
+    "The bulk and single-cell data of a cell type come from DIFFERENT sources and different donors for ovary and testis, and from different preparations for GM12878 and K562. lane-pseudobulk's rule deliberately does not require one source, and any disagreement must be read against that difference as well as against the modality.",
+    "GM12878's single-cell side is four cells from two ENCODE scRNA-seq experiments of 2014, quantified against GENCODE V24 while its bulk side is V29. Four cells is a thin pseudobulk and the annotation differs; both are recorded and neither is corrected.",
+    "The bulk side is not fresh: items 7, 7d, 7h, M2h and M2i have read RNA of these biosamples under this endpoint, and M2i has read these exact files (EXPOSURE).",
+    "Agreement would license the modality swap ON THIS ENDPOINT ONLY: this gene population, this metric, this fixed scale. It is never a statement about another endpoint, another gene set, or a cell type not counted here, and never 'single-nucleus RNA equals bulk RNA'.",
+    "A single-cell matrix's library size is the sum over EVERY row the archive supplies, spike-in rows included where a source has them. That is the no-filter rule applied consistently; it shifts all of a cell type's genes together and is part of the per-cell-type term above."
+  ],
+  "descriptives_not_verdicts": [
+    "each arm's Delta MSE at scale 1, the uncalibrated size 7d and 7h read",
+    "each arm's Delta MSE restricted to the pairs of ONE cell type, so the single-NUCLEUS ovary arm can be read on its own",
+    "the Pearson correlation between the two arms' D over all pairs, and per cell type",
+    "each cell type's nuclei or cells counted, and its pseudobulk library size"
+  ],
+  "what_the_run_will_write": "data/results/pbrun_result.json",
+  "the_code_that_runs_it": "scripts/pbrun_run.py, which must be committed before it may write into the registry; it reads this registration and refuses on any disagreement with it (HARNESS)",
+  "no_biosample_added": "This lane adds NO biosample. It works only in cell types the reader already covers, makes no AlphaGenome request and no deletion request, and touches nothing in area J, no node model and no BioForge calibration.",
+  "stop_list_check": "docs/ROADMAP.md section 5, 'The stop list of 2026-09-27, reinstated': NO biosample added, no AlphaGenome request, no deletion request, nothing in area J, no node-model work, no BioForge calibration.",
+  "alphagenome_requests": 0,
+  "money": "$0.00: no model request, no key, no data needing an application",
+  "pinned_sha256": {
+    "data/results/pbrun_gene_count.json": "a6b367da4a5de1778463ea59e1b521102451ef8898dae12ef92fe000ce7e6afe",
+    "data/results/magcal_result.json": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+    "data/results/multrna_result.json": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+    "data/results/freshrna_sources.json": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601"
+  },
+  "seconds": 0.01,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/pbrun_gene_count.json (this lane's committed count), data/results/magcal_result.json (M2h), data/results/multrna_result.json (7h's genes table)",
+        "version": "as committed in this checkout; pinned by sha256 in pinned_sha256"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": "M2h's HELD-OUT side, as the count record pins it"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "M2h's HELD-OUT side, as the count record pins it"
+      },
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "M2h's HELD-OUT side, as the count record pins it"
+      },
+      {
+        "path": "data/results/pbrun_gene_count.json",
+        "sha256": "a6b367da4a5de1778463ea59e1b521102451ef8898dae12ef92fe000ce7e6afe",
+        "bytes": 146273,
+        "partition": "M2h's HELD-OUT side, as the count record pins it"
+      }
+    ],
+    "input_count": 4,
+    "assembly": "n/a: a registration. No coordinate and no value is read.",
+    "coordinates": "n/a: no interval is read or written",
+    "parameters": {
+      "scale": 0.2145911381525326,
+      "margin": 0.0216956054050679,
+      "resamples": 2000,
+      "bootstrap_seed": 20261010,
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      },
+      "population_genes": 8051,
+      "cell_count": 4,
+      "sc_selection_version": "pbrun-1"
+    },
+    "exclusions": [
+      "every measured value: this is the registration and it reads none",
+      "every cell type outside lane-scsweep's four",
+      "every gene outside the 8,051 the committed count record pins"
+    ],
+    "partitions": {
+      "read": "M2h's HELD-OUT side of the multiplicative form, intersected to the 8,051 genes that resolve in all four cell types on both sides",
+      "not_read": "M2h's TRAINING genes: the scale is the constant already fitted on them"
+    },
+    "code_cleanliness": {
+      "git_sha": "0fe988d7c8283753ee56ce2c062873dbff28df01",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/pbrun_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pbrun_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pbrun_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/shrinkimpact_cachegroup.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/pbrun.py",
+        "genomeos/attribution/pseudobulk.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/pbrun_register.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "entry": "scripts/pbrun_register.py",
+    "own_code": [
+      "genomeos/attribution/pbrun.py",
+      "scripts/pbrun_count.py",
+      "scripts/pbrun_register.py",
+      "tests/test_pbrun.py"
+    ],
+    "code": {
+      "git_sha": "0fe988d7c8283753ee56ce2c062873dbff28df01",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/shrinkimpact_cachegroup.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/shrinkimpact_cachegroup.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/pbrun_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "0fe988d7c8283753ee56ce2c062873dbff28df01",
+      "code_cleanliness_git_sha": "0fe988d7c8283753ee56ce2c062873dbff28df01",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 0fe988d"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 157,
+      "opens_under_data": 10,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
