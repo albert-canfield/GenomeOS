@@ -1,0 +1,185 @@
+{
+  "result": "shrinkimpact_correction_closure_cell_inventory_dependency",
+  "date": "2026-10-12",
+  "corrects": "data/results/closure_cell_inventory.json",
+  "corrects_fields": [
+    "dependency.genes_asked",
+    "dependency.genes_with_a_value",
+    "dependency.genes_absent_from_the_release"
+  ],
+  "the_committed_result_is_not_rewritten": "data/results/closure_cell_inventory.json is opened read-only by this lane and stands exactly as committed on 2026-10-10. This file is additive and carries both values of every figure it touches.",
+  "old_and_new": [
+    {
+      "field": "dependency.genes_absent_from_the_release",
+      "committed_2026_10_10": 1244,
+      "on_the_complete_stores_2026_10_12": 1312
+    },
+    {
+      "field": "dependency.genes_asked",
+      "committed_2026_10_10": 15440,
+      "on_the_complete_stores_2026_10_12": 15971
+    },
+    {
+      "field": "dependency.genes_with_a_value",
+      "committed_2026_10_10": 14196,
+      "on_the_complete_stores_2026_10_12": 14659
+    }
+  ],
+  "which_quantity_each_is": {
+    "what_the_committed_figures_are": "a reading of this machine's distilled DepMap cache, data/knowledge/closure_cell/depmap_k562_gene_effect.json.gz, at the moment the census was written. `closure_cell.k562_gene_effect` returns the cache's ACCUMULATED UNION whenever the genes a run asks for are already covered -- the whole cached record comes back, `requested` included -- and the census writes these three fields from `len(held['requested'])`, `len(held['values'])` and `len(held['missing'])`.",
+    "what_the_field_names_claim": "a count over the genes THIS census asked DepMap about.",
+    "the_census_own_ask": 15440,
+    "and_it_is_unchanged": "dependency.genes_asked, against the genes the census' own population implies: no number moves -- all 1 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not"
+  },
+  "why_the_cache_grew": {
+    "reading": "`closure_cell2_inventory`, written later the same day, asked for more genes through the same persisted file, and its own record carries the three numbers the cache now holds.",
+    "the_siblings_own_figures": {
+      "genes_in_the_cache_for_this_cell": 15971,
+      "genes_with_a_value": 14659,
+      "genes_absent_from_the_release": 1312
+    },
+    "the_sibling_named_the_defect_first": "the two counts named genes_with_a_value and genes_absent_from_the_release are over the CACHE, which is reused between runs and holds more genes for K562 (M3's census asked about them) than for HepG2; the three counts over this search's own gene set are the ones to compare between cells",
+    "what_was_never_done": "nothing carried that note back to the census of the same morning, which is why a faithful rebuild of `closure_cell_inventory` from its manifest prints the larger figures into its `dependency` block."
+  },
+  "what_does_not_change_and_is_measured_not_argued": {
+    "the_frozen_population": "the frozen population the registration pins, row by row: no number moves -- all 622856 recomputed leaves equal the committed ones, and neither side carries a leaf the other does not",
+    "every_dependency_call": "the frozen population is compared row by row in the recount with `dependency_attributed` and `dependency_nearest` on every one of its 47,912 rows, and every leaf matches. No element's dependency label moves.",
+    "the_arm_sizes": {
+      "attributed_not_neighbourhood_not": 5427,
+      "attributed_essential_neighbourhood_essential": 145,
+      "attributed_essential_neighbourhood_not": 35,
+      "negative_direction_attributed_essential": 31,
+      "attributed_not_neighbourhood_essential": 147,
+      "promoter_of_a_gene_k562_depends_on": 757
+    },
+    "m3s_two_registered_populations": {
+      "attributed_essential_neighbourhood_not": 35,
+      "attributed_not_neighbourhood_not": 5427,
+      "promoter_of_a_gene_k562_depends_on": 757
+    },
+    "reading": "35 and 5,427 are unchanged on the complete stores, and so is the positive control's 757. A recomputed count is what the complete stores give; it does not by itself overturn a registered reading, and no registered test was re-run."
+  },
+  "this_is_not_the_input_shrink": "the defect this lane was opened on is a declared input group that shrinks silently on a partial store. This is a different defect found on the way: three fields that are not a function of the declared inputs' content alone. It is reported, not repaired -- `genomeos/attribution/closure_cell.py` is not this lane's to change, and the repair is a decision for whoever owns M3.",
+  "alphagenome_requests": 0,
+  "model_requests": 0,
+  "money": "none: every figure here is read from a committed result",
+  "seconds": 0.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/closure_cell_inventory.json",
+        "version": "as committed 2026-10-10; the result corrected"
+      },
+      {
+        "accession": "data/results/shrinkimpact_closure_cell_inventory.json",
+        "version": "as committed 2026-10-12; the recount that measured the movement"
+      },
+      {
+        "accession": "data/results/closure_cell2_inventory.json",
+        "version": "as committed 2026-10-10; the sibling whose cache_denominator_note named the defect first"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/closure_cell2_inventory.json",
+        "sha256": "aed089e00eacd9c5e8cd272bcc7ca81b38584d9833343e6d1b9f265a4aac6b50",
+        "bytes": 76145,
+        "partition": "read by the correction"
+      },
+      {
+        "path": "data/results/closure_cell_inventory.json",
+        "sha256": "58a0d3d9a2d3b3b1c630573c287f533dbe263e1650797d5e17b4c82ab84e7d85",
+        "bytes": 45353,
+        "partition": "read by the correction"
+      },
+      {
+        "path": "data/results/shrinkimpact_closure_cell_inventory.json",
+        "sha256": "9052bb5d08e316470021ee2005c11c9553f6415f7c90b97d148063b39939a45d",
+        "bytes": 46955,
+        "partition": "read by the correction"
+      }
+    ],
+    "input_count": 3,
+    "assembly": "n/a: no coordinate is read or written here. Every figure is copied from a committed result, and the results it reads are GRCh38 throughout.",
+    "coordinates": "n/a: no coordinate is read or written here. This file states two values of three counts and which quantity each is, every figure copied from a committed result, and the three results it reads are GRCh38 throughout.",
+    "parameters": {
+      "corrects": "data/results/closure_cell_inventory.json",
+      "fields": [
+        "dependency.genes_asked",
+        "dependency.genes_with_a_value",
+        "dependency.genes_absent_from_the_release"
+      ],
+      "recomputes_nothing": true,
+      "rewrites_nothing": true
+    },
+    "exclusions": [
+      "every recomputation: this file derives no number of its own, by design, because a correction that re-measured would need its own check",
+      "every repair: closure_cell.py and closure_cell_inventory.py are not this lane's to change, and no committed result is rewritten",
+      "every registered test: re-running one on a changed population needs a new registration and is not this lane's to decide"
+    ],
+    "partitions": "n/a: an additive correction, with no outcome measured",
+    "code_cleanliness": {
+      "git_sha": "0313c4d6f1e181ff968e5bdae0f92dd856a03d06",
+      "dirty": false,
+      "entry_script": {
+        "argv0": "scripts/shrinkimpact_correction.py",
+        "form": "committed_repository_file",
+        "path": "scripts/shrinkimpact_correction.py",
+        "is_committed": true,
+        "declared_entry": "scripts/shrinkimpact_correction.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/shrinkimpact_correction.py"
+      ],
+      "counting_path_count": 5,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "0313c4d6f1e181ff968e5bdae0f92dd856a03d06",
+      "dirty": false,
+      "dirty_code_paths": [],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [],
+      "argv": [
+        "scripts/shrinkimpact_correction.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "0313c4d6f1e181ff968e5bdae0f92dd856a03d06",
+      "code_cleanliness_git_sha": "0313c4d6f1e181ff968e5bdae0f92dd856a03d06",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 0313c4d"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 19,
+      "opens_under_data": 6,
+      "files_read": 3,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
