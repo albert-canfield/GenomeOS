@@ -1065,3 +1065,84 @@ Beside the outcome, deciding nothing (percentile intervals over 1-Mb clusters):
    not be read from the publisher page and must be checked by hand.
 3. **Not another boundary set on either population.** Route (a)'s sweep settles that, and the only
    6-16 h Hi-C of the right cell types (Mohana et al. 2023) publishes no boundary list.
+
+## 12. Mouse: the domain rule in a MAMMAL, and the worm becomes the outlier (2026-10-12, lane-mousedomain / lane-mousedomain2)
+
+Sections 6 and 11 left area I with two invertebrates that **disagree about the one stratum that
+matters**. Between genes, where neither rule can name the gene whose body the element sits in, the
+worm's domain rule is ahead of nearest TSS by **+3.73 points [+2.79, +4.74]** on 2,335 elements and
+still ahead at **+4.47 [+3.16, +5.78]** on the 1,745 that survive its own outron and trans-splicing
+exclusion, while the fly's is **+0.12 [-0.25, +0.61]** on Janssens 2022's 3,265 brain elements, no
+difference detected — with the fly's lead appearing only where a host gene *can* be named, which is
+consistent with host-gene transcription rather than with regulation. No mammal had been asked.
+
+**The answer: the mammal looks like the fly.** On 18,407 mouse between-gene elements the boundary
+rule is **+0.26 points [-0.01, +0.53]**, `NO_DIFFERENCE_DETECTED`. The full registered reading is in
+`aa2f0f3` and in `data/results/simpler_mouse_result.json`, printed by the template frozen at
+`cf05e75` before any RNA value was read.
+
+The population **is** the no-host-nameable stratum, which is why the comparison is clean:
+`gene_structure_names_a_host` is 0 on all 18,407, and of the 2,352 elements the two rules name
+different genes for, the nearest-TSS gene contains the element in 0 cases. Both are counted from
+positions alone and pinned by tests. So the fly's distinguishing measurement — does the lead survive
+where no host gene can be named? — is answered in the only way it can be here: **there is no lead to
+survive.**
+
+This population was powered in advance to about **0.74 points**, eleven times the fly's differing
+count and twice as sharp, so the worm's +3.73 would have been seen many times over had it been
+present. **The worm is now the outlier of three**, and the reading of the three together is that the
+worm's between-gene lead is a feature of the worm — a genome of operons, outrons and trans-splicing —
+rather than of the domain rule.
+
+**What is not claimed.** `NO_DIFFERENCE_DETECTED` is not "no difference": a difference below about
+0.74 points could go undetected, and the primary interval's lower edge is -0.01, touching zero and no
+more. Of the seven boundary sets reported beside, six have intervals excluding zero at the same small
+size (Bonev `ES` +0.47, `NPC` +0.34, `CN` +0.29; ENCODE e14.5 CTCF brain +0.42, liver +0.30, lung
++0.28) and one does not (`ncx CN` +0.23 [-0.03, +0.49]). **They decide nothing** — the primary set was
+fixed before any value was read and its registered verdict stands as printed — but the direction is
+consistently small and positive across every set, which is a weaker statement than the worm's and is
+not strengthened into it.
+
+**The three controls all separate, which is what makes the negative worth reading.** Falsifier
+`NOT_FALSIFIED`: 11.8% against 7.5% at a matched distance (p 0.001), so position carries tissue
+information. Rotated boundaries: 11.5% (p 0.001), so *where* the measured boundaries lie carries more
+than their number and spacing. Positive control: 11.3% against 7.6% on 6,021 promoter-class elements
+(p 0.001), so the readout is responsive and the primary reading is not withheld.
+
+**The source, and why Bonev is primary as a consequence rather than a preference.** mm10 throughout
+and no liftover. Elements: ENCODE SCREEN mouse cCRE registry v3. Accessibility and RNA: ENCODE
+ATAC-seq and polyA plus RNA-seq over the **same twelve** embryonic-day-14.5 biosample term names, on
+GENCODE vM21, the annotation ENCODE quantified that RNA on. Boundaries: Bonev et al. 2017 Table S2,
+sheet `ncx NPC`, 2,398 author-called domains in neural progenitors FACS-purified from embryonic
+neocortex, CC BY 4.0 stated in prose. The search that produced that choice is itself a finding and is
+recorded in full in `cf05e75`: Gorkin 2020 — the very ENCODE matrix this panel comes from — publishes
+no TAD table and generated no Hi-C; Dixon 2012 is mm9 with no stated licence; Vietri Rudan 2015
+deposits only matrices; Nora 2017 only a raw tar and 5C primers; Rao 2014's domains are a mm9 cell
+line; **ENCODE serves no TAD file for any organism and has no embryonic mouse Hi-C at all**; and 4D
+Nucleome's 110 mm10 boundary BEDs are pipeline calls behind a login with no stated licence.
+
+**What is worse here, registered as such.** Accessibility and RNA come from different animals of the
+same strain and stage, not the same nuclei. A tissue is a mixture of cell types, so an element open in
+one tissue and a gene highest in that tissue can belong to different cells of it. The boundaries come
+from neural progenitors of embryonic neocortex applied to all twelve tissues: stage-matched, but
+tissue-matched to only three. And a domain's edges are read as its boundaries, which is the only
+conversion made to the boundary set.
+
+**A mouse tissue source is not a human reader biosample.** docs/ROADMAP.md §5's "No more biosamples"
+clause has as its subject the human reader's 13 biosamples (`READER_TERMS` in
+`genomeos/genome/context_evidence.py`). This section's source is a comparative-genomics population,
+not a reading of a human element — the distinction section 11 recorded for its fly source, in the same
+words. No reader biosample was added, named, widened or opened.
+
+**Two defects of the same shape were found and fixed before the run, and both are worth naming.** The
+count came from the data and the string around it came from a hand. `score`'s configuration named the
+4,796 edges of Bonev's `ncx NPC` domains "CTCF peaks of embryonic-day-14.5 liver" — the right count
+under the wrong source's name, that CTCF set carrying 49,312 boundaries — so the *registered reading*
+would have misdescribed its own primary source; it is now derived from `BONEV_SHEETS[PRIMARY_SET]` and
+a test refuses any CTCF set's name, any CTCF biosample and any non-primary Bonev sheet in it. And a
+guard asserted an ungrouped `2398` against a record that writes `2,398`. Reviewing a predecessor's
+registration rather than adopting it is what caught the first.
+
+**Next.** Three organisms have now been asked and the worm is alone. What would separate "a feature of
+the worm" from "a feature of operonic genomes" is a fourth genome with operons and trans-splicing but
+not the worm's — an ascidian or another nematode — on this same registered endpoint.
