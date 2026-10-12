@@ -477,3 +477,14 @@ def test_the_questions_in_the_result_are_the_ones_the_record_committed_word_for_
     assert d["bound_checks"] == ic.BOUND_CHECKS
     assert d["what_this_is_not"] == ic.WHAT_THIS_IS_NOT
     assert d["limitations"] == list(ic.LIMITATIONS)
+
+
+def test_the_roadmap_row_is_under_a_hundred_words_and_keeps_the_registered_branch_wording() -> None:
+    assert len(ic.ROADMAP_ROW.split()) <= 110
+    assert "a_separated_tail" in ic.ROADMAP_ROW
+    assert "no RNA" in ic.ROADMAP_ROW and "nothing fitted" in ic.ROADMAP_ROW
+    d = _result()
+    assert d["branch"] in ic.ROADMAP_ROW
+    said = d["Q6_outside_the_39"]
+    assert str(said["above_the_bound_at_the_scale"]["all_eligible"]["genes_outside_the_39"]) in ic.ROADMAP_ROW
+    assert str(len(d["Q1_re_derivation"]["symbols"])) in ic.ROADMAP_ROW

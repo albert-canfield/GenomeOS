@@ -522,3 +522,17 @@ def branch(near_below: int, above: int) -> str:
 def reading(which: str, **numbers: Any) -> str:
     """BRANCHES, filled. The wording is the committed one; only the numbers are substituted."""
     return BRANCHES[which].format(**numbers)
+
+
+#: The finished ROADMAP row for this lane, written AFTER the run and carrying the registered wording of
+#: `BRANCHES` word for word. docs/ROADMAP.md has one editor (genomeos-f7); this is the row text to insert.
+ROADMAP_ROW = (
+    "**Area I, why 39 genes carry an inhibitor above 1 (lane-inhibitor, 2026-10-12; a4c79ce, 2816a3e,"
+    " 85ca300, a1a9a90).** Re-derived from the 24 compiled programs, matched on `symbol`: the 39 reconcile"
+    " exactly with lane-residuemult's set, all on `inhibitor_strength_above_1`. 38 carry ONE offending"
+    " element of a median 15 inhibitors; all 40 offenders are PREDICTED deletion notes, log2 fold 2.6"
+    " to 6.6. Worst strength at the scale 1.037 to 1.907 (median 1.178), ceiling 2. 149 genes OUTSIDE"
+    " the 39"
+    " carry one at the scale and 1,199 unscaled: the refusal is general to the compiled layer, not to"
+    " these genes. Branch `a_separated_tail`. 0 violations, no RNA, nothing fitted, no money."
+)
