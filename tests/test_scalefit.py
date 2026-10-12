@@ -173,3 +173,42 @@ def test_the_committed_records_are_present_and_their_absence_is_never_a_skip() -
     checkout whatever they do, and deleting them is a two-line coordinator commit.
     """
     tp.must_be_present(RULE_FILE, was="the registration has not been written yet")
+    tp.must_be_present(CENSUS_FILE, was="the census has not been computed yet")
+
+
+def test_the_answer_is_the_one_the_floor_decides() -> None:
+    """The committed numbers, against the rule's thresholds. The floor alone decides the wording."""
+    d = json.loads(CENSUS_FILE.read_text())
+    mean = d["per_form"]["mean"]
+    assert mean["excluded_basal_not_positive"] == 12_500
+    assert mean["recovered"] == 8_792
+    assert mean["runnable_after"] == 8_535
+    assert mean["recovered"] >= sf.FLOOR
+    assert mean["recovered"] < sf.STRONG_BAR
+    assert d["verdict"].startswith("the magnitude error partly explains")
+    assert d["reconciliation_with_7d"]["agrees"] is True
+    # the homogeneity identity, checked on the real population and not only on fixtures
+    assert d["max_abs_q_after_minus_scale_times_q_before"] < 1e-12
+    # every ratio was at or above 1 before, by construction, and 3,708 still are
+    r = mean["ratio_sum_of_drops_over_level"]
+    assert r["at_or_above_1_before"] == 12_500
+    assert r["at_or_above_1_after"] == 3_708
+    assert mean["still_basal_not_positive"] == 3_708
+
+
+def test_the_residue_is_the_many_element_genes_not_the_large_drops() -> None:
+    """Descriptive, deciding nothing: the genes that do not recover carry far more rules."""
+    d = json.loads(CENSUS_FILE.read_text())
+    mean = d["per_form"]["mean"]
+    rec = mean["rule_count_quantiles_of_the_recovered"]
+    left = mean["rule_count_quantiles_of_the_not_recovered"]
+    assert left["0.5"] > rec["0.5"]
+
+
+def test_the_result_claims_nothing_about_expression() -> None:
+    d = json.loads(CENSUS_FILE.read_text())
+    assert d["rna_read"] == "none"
+    assert d["alphagenome_requests"] == 0
+    assert "SEPARATE registration" in d["what_this_is_not"]
+    for word in ("proves", "validated", "mechanism", "causes"):
+        assert word not in d["verdict"].lower()
