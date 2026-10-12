@@ -108,3 +108,109 @@ DOES_NOT_CLAIM = (
     " safe, since a group constant at a shrunken value would look identical to one constant at its"
     " full value; and nothing about groups built WITHOUT an exists() filter, which are the majority"
 )
+
+
+# ---------------------------------------------------------------------------------------- stage 2
+# Stage 1 counted and deliberately stopped: it named 6 groups whose member count varies between the
+# results declaring them, and refused to call any of them a shrink from a count alone. Stage 2 does the
+# distinguishing check stage 1 said was needed -- each group read against ITS OWN result's declared
+# scope, and then against what the store holds now.
+#
+# AND THE COUNT ALONE WOULD HAVE BEEN WRONG, which is why stage 1 refused it: six of the seven short
+# declarations are missing chrY, and a group of 22 against a scope of 24 is exactly what a deliberate
+# chr1-22 analysis looks like. The verdict turns on WHICH chromosome is absent, not on how many.
+
+#: A short declaration is only a SHRINK when the scope it falls short of is the result's own, AND the
+#: missing member is present in the store now -- which together say the store was partial at write time
+#: rather than the analysis being narrower on purpose.
+SHRINK_TEST = (
+    "a declaration is a SILENT SHRINK when (1) its member count is below the result's own"
+    " parameters.chromosomes, (2) the missing chromosomes are present in the store today, and (3) no"
+    " exclusion in that result names them. All three are required: (1) alone is satisfied by any"
+    " deliberately narrower analysis, and (2) alone by a store that has merely grown since"
+)
+
+#: Measured 2026-10-12. Six declarations in six committed results meet all three conditions.
+SHRINKS_FOUND = (
+    {
+        "result": "direction_link",
+        "group": "per_element_response_cache",
+        "scope": 24,
+        "declared": 22,
+        "missing": ("chr13", "chrY"),
+        "written": "2026-10-02",
+    },
+    {
+        "result": "hct116_count",
+        "group": "per_element_response_cache",
+        "scope": 24,
+        "declared": 22,
+        "missing": ("chr13", "chrY"),
+        "written": "2026-10-02",
+    },
+    {
+        "result": "reptest_answerable",
+        "group": "per_element_response_cache",
+        "scope": 24,
+        "declared": 22,
+        "missing": ("chr13", "chrY"),
+        "written": "2026-10-02",
+    },
+    {
+        "result": "rescore_cost",
+        "group": "per_element_response_cache",
+        "scope": 24,
+        "declared": 22,
+        "missing": ("chr13", "chrY"),
+        "written": "2026-10-02",
+    },
+    {
+        "result": "closure_cell2_inventory",
+        "group": "GENCODE 50 per-chromosome annotation",
+        "scope": 24,
+        "declared": 23,
+        "missing": ("chr21",),
+        "written": "2026-10-10",
+    },
+    {
+        "result": "closure_cell_inventory",
+        "group": "GENCODE 50 per-chromosome annotation",
+        "scope": 24,
+        "declared": 22,
+        "missing": ("chr21", "chrY"),
+        "named_in_exclusions": ("chrY",),
+        "written": "2026-10-10",
+    },
+)
+
+#: The reading, and it is the one the framing predicted rather than the one the lane went looking for.
+#: NARROWED by its own guard before it was committed: the first draft said "NOT ONE of them says so",
+#: and the silence test refused it, because closure_cell_inventory DOES name one of its two.
+STAGE_2_READING = (
+    "THE DEFECT IS REALISED. Six committed results each declare parameters.chromosomes = 24 and an"
+    " input group of 22 or 23, and in every case the missing chromosomes are on disk TODAY -- so the"
+    " store was partial when they were written and has since been completed. Each result therefore"
+    " STATES a 24-chromosome scope and was computed on fewer. FIVE OF THE SIX are wholly silent: their"
+    " exclusions name guide counts, signs and thresholds and never an absent chromosome. THE SIXTH is"
+    " partly explained -- closure_cell_inventory states 'chrY: the library's design carries no guide"
+    " there', which is a declared exclusion and not a shrink, but it says nothing about chr21, which"
+    " is. So 9 of the 10 missing chromosomes across the six are unexplained, and chrY in that one"
+    " result is the only one any result accounts for. This is not one incident either: two stores"
+    " (data/knowledge/alphagenome/elements and data/reference) on two dates (2026-10-02 and"
+    " 2026-10-10), eight days apart"
+)
+
+#: What stage 2 still does not establish, kept separate from what it does.
+STAGE_2_DOES_NOT_CLAIM = (
+    "not that any of the six results' NUMBERS are wrong -- a two-chromosome shortfall may move a"
+    " genome-wide figure or may not, and this census computes no figure; not that chrY's absence is"
+    " the same kind of thing as chr13's or chr21's, since chrY is routinely empty; not that the other"
+    " declarations are safe, because a group constant at a shrunken value remains invisible here; and"
+    " nothing about results whose parameters declare no chromosome scope at all, of which there are"
+    " six and which cannot be classified by this test"
+)
+
+
+def is_shrink(declared: int, scope: int, missing_now_on_disk: bool, named_in_exclusions: bool) -> bool:
+    """SHRINK_TEST as a function: all three conditions, none sufficient alone."""
+    return declared < scope and missing_now_on_disk and not named_in_exclusions

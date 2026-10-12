@@ -76,3 +76,62 @@ def test_PLANTED_a_group_constant_at_a_shrunken_value_is_INVISIBLE_here() -> Non
 def test_the_census_says_what_it_does_not_claim() -> None:
     assert "not that any committed result IS wrong" in gc.DOES_NOT_CLAIM
     assert "constant at a shrunken value" in gc.DOES_NOT_CLAIM
+
+
+# ------------------------------------------------------------------------------------------ stage 2
+
+
+def _group(result: str, name_fragment: str) -> dict:
+    import json
+
+    rm = json.loads((ROOT / f"data/results/{result}.json").read_text())["result_manifest"]
+    hits = [
+        i
+        for i in rm["inputs"]
+        if isinstance(i, dict) and i.get("group") is True and name_fragment in str(i.get("path"))
+    ]
+    assert len(hits) == 1, f"{result}: {len(hits)} groups match {name_fragment!r}"
+    return {
+        "group": hits[0],
+        "scope": rm["parameters"].get("chromosomes"),
+        "exclusions": rm.get("exclusions"),
+    }
+
+
+def test_every_recorded_shrink_is_re_measured_from_its_own_result() -> None:
+    """The finding is pinned to the artefacts, not to the list in the module."""
+    import re
+
+    for row in gc.SHRINKS_FOUND:
+        got = _group(row["result"], row["group"].split(" per-chromosome")[0])
+        assert got["group"]["files"] == row["declared"], row["result"]
+        assert len(got["scope"]) == row["scope"], row["result"]
+        have = {c for m in got["group"]["members"] for c in re.findall(r"chr[0-9XYM]+", str(m["path"]))}
+        missing = {str(c) for c in got["scope"]} - have
+        assert missing == set(row["missing"]), f"{row['result']}: {sorted(missing)} vs {row['missing']}"
+
+
+def test_no_shrunken_result_names_the_missing_chromosome_in_its_exclusions() -> None:
+    """Condition (3), and the part that makes the defect SILENT rather than merely narrow."""
+    for row in gc.SHRINKS_FOUND:
+        got = _group(row["result"], row["group"].split(" per-chromosome")[0])
+        text = " ".join(str(x) for x in (got["exclusions"] or []))
+        named = tuple(c for c in row["missing"] if c in text)
+        assert named == row.get("named_in_exclusions", ()), (
+            f"{row['result']}: exclusions name {named}, the record says {row.get('named_in_exclusions', ())}"
+        )
+
+
+def test_the_shrink_test_needs_all_three_conditions() -> None:
+    assert gc.is_shrink(22, 24, True, False)
+    assert not gc.is_shrink(24, 24, True, False), "a full declaration is never a shrink"
+    assert not gc.is_shrink(22, 24, False, False), "a store that merely grew is not a shrink"
+    assert not gc.is_shrink(22, 24, True, True), "a named exclusion is a narrower analysis, not silence"
+
+
+def test_stage_2_separates_what_it_shows_from_what_it_does_not() -> None:
+    assert "DEFECT IS REALISED" in gc.STAGE_2_READING
+    assert "two stores" in gc.STAGE_2_READING and "eight days apart" in gc.STAGE_2_READING
+    assert "not that any of the six results' NUMBERS are wrong" in gc.STAGE_2_DOES_NOT_CLAIM
+    assert "chrY is routinely empty" in gc.STAGE_2_DOES_NOT_CLAIM
+    assert "declare no chromosome scope at all" in gc.STAGE_2_DOES_NOT_CLAIM
