@@ -235,3 +235,106 @@ def test_the_form_is_the_one_m2h_read_better_on() -> None:
     per_form = json.loads(pr.MAGCAL_RESULT.read_text())["per_form"]
     better = [name for name, f in per_form.items() if f["outcome"] == "BETTER"]
     assert better == [pr.FORM]
+
+
+# --- the committed count record, and the registration this lane may now write --------------------
+#
+# These read `data/results/pbrun_gene_count.json`, which `3ef7e82` makes git track, so they assert
+# it with `tracked_paths.must_be_present` and NEVER with a skip: a skip keyed on a tracked path can
+# never fire and reads to a later reviewer as a condition that is a constant.
+
+
+def test_the_committed_count_clears_both_numbers_of_the_minimum() -> None:
+    tracked_paths.must_be_present(
+        pr.GENE_COUNT_PATH, was="this lane's own committed count of the 1,000-gene clause"
+    )
+    count = json.loads(pr.GENE_COUNT_PATH.read_text())
+    assert count["qualifying_cell_count"] >= pr.MINIMUM["cell_types"]
+    assert count["qualifying_gene_count"] >= pr.MINIMUM["genes"]
+    assert count["answer"] == pr.verdict(count["qualifying_cell_count"], count["qualifying_gene_count"])
+    assert count["answer"] == "QUALIFIES"
+
+
+def test_the_counted_population_is_a_subset_of_m2hs_held_out_side() -> None:
+    tracked_paths.must_be_present(pr.GENE_COUNT_PATH, was="this lane's committed count")
+    count = json.loads(pr.GENE_COUNT_PATH.read_text())
+    genes = count["qualifying_genes"]
+    assert len(genes) == len(set(genes)) == count["qualifying_gene_count"]
+    assert all(pr.is_held_out(symbol) for symbol in genes)
+    assert len(genes) <= count["held_out_population"]
+
+
+def test_no_cell_type_is_counted_on_fewer_genes_than_the_shared_population() -> None:
+    tracked_paths.must_be_present(pr.GENE_COUNT_PATH, was="this lane's committed count")
+    count = json.loads(pr.GENE_COUNT_PATH.read_text())
+    per_cell = {e["cell"]: e["usable_on_both_sides"] for e in count["per_cell"]}
+    assert set(per_cell) == set(count["qualifying_cells"])
+    assert min(per_cell.values()) >= count["qualifying_gene_count"], (
+        "the shared population is the INTERSECTION over the four cell types, so it cannot exceed "
+        "any one of them"
+    )
+
+
+def test_the_count_record_names_every_input_it_read_including_the_two_h5ad_files() -> None:
+    tracked_paths.must_be_present(pr.GENE_COUNT_PATH, was="this lane's committed count")
+    manifest = json.loads(pr.GENE_COUNT_PATH.read_text())["result_manifest"]
+    paths = {i["path"] for i in manifest["inputs"]}
+    assert manifest["input_count"] == len(manifest["inputs"])
+    assert sum(1 for p in paths if p.endswith(".h5ad")) == 2, (
+        "both h5ad matrices are opened with h5py, which the read tracer does not see; they are "
+        "declared by hand and a missing one makes the result unrebuildable (9ce4c6e)"
+    )
+    assert all(not Path(p).is_absolute() for p in paths), (
+        "input_entry records the path verbatim, so an absolute path makes the result unrebuildable (d72f959)"
+    )
+    assert manifest["code_cleanliness"]["own_code_is_committed"]
+
+
+def test_the_margin_is_half_of_m2hs_committed_held_out_gain_and_not_a_round_number() -> None:
+    tracked_paths.must_be_present(pr.MAGCAL_RESULT, was="M2h's committed record")
+    committed = json.loads(pr.MAGCAL_RESULT.read_text())["per_form"][pr.FORM]
+    assert pr.margin() == committed["held_out_delta_mse"] / 2.0
+    assert pr.margin() > 0.0
+    assert "half of M2h's committed held-out Delta MSE" in pr.MARGIN_RULE
+
+
+def test_the_statistic_is_m2hs_unchanged() -> None:
+    assert pr.BOOTSTRAP["resamples"] == 2000
+    assert pr.BOOTSTRAP["seed"] == 20261010
+    assert pr.PERMUTATIONS == {"count": 1000, "seed": 20261011}
+    assert pr.CARRIED["pseudocount"] == 1.0
+    assert pr.CARRIED["min_genes"] == 100
+
+
+def test_the_three_outcomes_are_declared_and_inconclusive_licenses_nothing() -> None:
+    assert set(pr.DECISION) == {
+        "agreement",
+        "disagreement",
+        "inconclusive",
+        "falsifier",
+        "stop_rule",
+    }
+    assert "FOR THIS ENDPOINT ONLY" in pr.DECISION["agreement"]
+    assert "NEVER 'single-nucleus RNA equals bulk RNA'" in pr.DECISION["agreement"]
+    assert "CLOSES WITHOUT A LIFT" in pr.DECISION["disagreement"]
+    assert "licenses nothing" in pr.DECISION["inconclusive"]
+    assert "weak agreement" in pr.DECISION["inconclusive"]
+
+
+def test_the_exposure_of_the_bulk_side_is_stated_and_not_softened() -> None:
+    assert "already read by items 7, 7d, 7h, M2h and M2i" in pr.EXPOSURE
+    assert "NOT A FRESH MEASUREMENT" in pr.EXPOSURE
+
+
+def test_the_one_deviation_from_m2h_is_named_as_a_deviation() -> None:
+    assert "ONE, NAMED AS A DEVIATION" in pr.DEVIATION_FROM_M2H
+    assert "THIRTEEN" in pr.DEVIATION_FROM_M2H
+    assert "FOUR" in pr.DEVIATION_FROM_M2H
+
+
+def test_the_limitations_name_the_single_nucleus_count_and_the_normalisation() -> None:
+    joined = " ".join(pr.LIMITATIONS)
+    assert "ONLY ONE OF THE FOUR CELL TYPES IS SINGLE-NUCLEUS" in joined
+    assert "CPM" in joined
+    assert "length-normalised TPM" in joined
+    assert "FOUR CELL TYPES, not thirteen" in joined

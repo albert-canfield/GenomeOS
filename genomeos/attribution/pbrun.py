@@ -319,3 +319,202 @@ def open_gzip_or_plain(path: Path) -> io.TextIOBase:
     if magic == b"\x1f\x8b":
         return io.TextIOWrapper(gzip.open(path, "rb"), encoding="utf-8")
     return path.open(encoding="utf-8")
+
+
+# --- step 2: what the registration fixes, added before any comparison value was read -------------
+#
+# Everything below is written for `scripts/pbrun_register.py` and `scripts/pbrun_run.py`, and it was
+# written and committed BEFORE either arm's measured value was opened. The clauses carried from 7d,
+# 7h, M2h and M2i are carried WORD FOR WORD where they apply; the one deviation is named as a
+# deviation and is applied identically to both arms.
+
+#: M2h's and M2i's gene bootstrap, carried unchanged so this lane's intervals and `ac5580b`'s are
+#: read at the same width.
+BOOTSTRAP: dict[str, Any] = {
+    "resamples": 2000,
+    "seed": 20261010,
+    "unit": "gene: genes are resampled with replacement and carry all four of their pairs",
+    "interval": (
+        "the 98.33% percentile interval over gene resamples with replacement, each gene carrying its "
+        "four pairs, with SCALE fixed -- M2h's unit, resample count, seed and width, kept unchanged "
+        "for comparability with +0.04339 [98.33% CI +0.0379, +0.04894] and not for a multiplicity "
+        "this lane has. The DIFFERENCE between the arms is read on the SAME resample: one draw of "
+        "genes, both arms recomputed on it, the difference taken per draw, so the interval is PAIRED "
+        "and the two arms' shared gene-sampling noise cancels from it"
+    ),
+}
+
+#: M2h's within-gene cell permutation, with M2i's one change (nothing is refitted, there is nothing
+#: to refit). Count and seed are M2h's.
+PERMUTATIONS: dict[str, Any] = {"count": 1000, "seed": 20261011}
+
+CONTROL = (
+    "M2h's within-gene cell permutation with M2i's one change, that nothing is refitted: for each "
+    "permutation, each gene's FOUR P values are permuted among its own four cell types by an "
+    "independent draw of the seeded generator, every gene keeping its own prediction values and its "
+    "own range and every pair keeping its own D, and Delta MSE is recomputed at the same constant "
+    "SCALE. Only the tie between a prediction and the cell type it was made for is broken. "
+    "PERMUTATIONS['count'] permutations at PERMUTATIONS['seed']; control p = (1 + permutations with "
+    "Delta MSE >= observed) / (1 + count). It is run on BOTH arms, it is reported in every reading "
+    "and it changes no verdict. Four cell types is the smallest number for which this control can "
+    "reach a p at or below 0.05 at all, which is why lane-pseudobulk's minimum is four"
+)
+
+CARRIED: dict[str, Any] = {
+    "endpoint_bulk": (
+        "y(G, X) = log2(TPM(G, X) + PSEUDOCOUNT), TPM(G, X) the mean over the chosen experiment's "
+        "qualifying files of G's TPM in cell type X -- M2h's CARRIED['endpoint'] and M2i's "
+        "MEASURED_FRESH, word for word, on M2i's committed selection of files"
+    ),
+    "endpoint_single_cell": (
+        "y_sc(G, X) = log2(cpm(G, X) + PSEUDOCOUNT) with cpm as AGGREGATION defines it: the same "
+        "transform and the same pseudocount, with the pseudobulked library in place of the bulk one"
+    ),
+    "pseudocount": 1.0,
+    "measured_deviation": (
+        "D(G, X) = y(G, X) - mean over the compared cell types X' of y(G, X'): G's level in X "
+        "relative to its own mean across those cell types. M2h's MEASURED with the mean taken over "
+        "the four cell types compared here instead of thirteen (see `deviation_from_m2h`)"
+    ),
+    "prediction": (
+        "P(G, X) = 7h's committed centred prediction of its genes table, unchanged and rounded to "
+        "five decimals by that table, restricted to the four compared cell types' columns and then "
+        "re-centred over those four columns -- the same centring the measured side gets"
+    ),
+    "scaled_prediction": (
+        "P*(G, X) = SCALE * P(G, X) with SCALE the constant +0.2145911381525326 of `ac5580b`. One "
+        "multiplication by a committed constant; nothing else, and nothing fitted"
+    ),
+    "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the compared cell types",
+    "metric": (
+        "Delta MSE = mean over the pairs of D^2 - mean of (D - SCALE*P)^2 = mean of (2*SCALE*D*P - "
+        "SCALE^2*P^2) (combine2.METRIC, magcal.METRIC and freshrna.METRIC), positive when the scaled "
+        "run's squared error is below the no-rule baseline's"
+    ),
+    "min_genes": 100,
+    "which_governs_m2h": (
+        "M2h's rule, carried: the held-out interval decides -- excludes 0 on the rules' side means "
+        "'better', excludes 0 on the baseline's side means 'worse' (the falsifier), straddles 0 "
+        "means the reading does not resolve. The two branches M2h split by the SCALE interval "
+        "collapse here into one, 'inconclusive', because the scale is a fixed constant and there is "
+        "no scale interval to read"
+    ),
+}
+
+DEVIATION_FROM_M2H = (
+    "ONE, NAMED AS A DEVIATION AND APPLIED IDENTICALLY TO BOTH ARMS. M2h centres a gene within "
+    "itself over its THIRTEEN cell types; this comparison has FOUR, because only four of the "
+    "thirteen have both modalities. So y, y_sc and P are each centred over the SAME FOUR columns. "
+    "Centring one arm over thirteen and the other over four would make the two numbers "
+    "incomparable, and `pr.centred` with its planted test exists to stop that. The consequence is "
+    "stated rather than hidden: neither arm's Delta MSE here is M2h's +0.04339, which was read over "
+    "thirteen cell types, and the comparison this lane reads is BETWEEN ITS OWN TWO ARMS."
+)
+
+EXPOSURE = (
+    "THE BULK SIDE IS NOT A FRESH MEASUREMENT. It is RNA already read by items 7, 7d, 7h, M2h and "
+    "M2i. Precisely: the bulk arm is M2i's committed selection of ENCODE polyA plus RNA-seq files "
+    "(`data/results/freshrna_sources.json`, on disk under data/cache/freshrna/rna/), which M2i's own "
+    "non-overlap check shows shares no experiment, file or library with the set items 7, 7d, 7h and "
+    "M2h read -- but it is the SAME FOUR BIOSAMPLES under the SAME ENDPOINT, and M2i's registered "
+    "reading has already been taken on it (`f6e71c6`). So a reading here is a statement about these "
+    "measurements and not independent confirmation of anything, and the single-cell side is the only "
+    "side of this comparison that this project has never read."
+)
+
+#: The equivalence margin, stated BEFORE any value was read. It is not a round number chosen for
+#: convenience: it is HALF of M2h's own committed held-out Delta MSE for this form, read from
+#: `data/results/magcal_result.json`. The quantity that must survive the modality swap IS M2h's
+#: gain, so a swap that moves it by less than half leaves the reading's direction and order of
+#: magnitude intact, and a swap that moves it by more than half changes the conclusion a bile-duct
+#: test would draw from it.
+MARGIN_RULE = (
+    "MARGIN = half of M2h's committed held-out Delta MSE for the multiplicative form, "
+    "data/results/magcal_result.json per_form.multiplicative.held_out_delta_mse / 2. Fixed by this "
+    "registration, computed from a committed number and from no value this lane reads."
+)
+
+
+def margin() -> float:
+    """The equivalence margin of :data:`MARGIN_RULE`, from M2h's committed record."""
+    committed = json.loads(MAGCAL_RESULT.read_text())["per_form"][FORM]["held_out_delta_mse"]
+    return float(committed) / 2.0
+
+
+DECISION: dict[str, Any] = {
+    "agreement": (
+        "BOTH of these, and nothing less: (a) the SINGLE-CELL arm's own 98.33% interval excludes 0 "
+        "on the rules' side, so that arm reads 'better' under CARRIED['which_governs_m2h']; and (b) "
+        "the PAIRED difference (single-cell arm minus bulk arm) has its 98.33% interval wholly "
+        "inside [-MARGIN, +MARGIN]. What it licenses: THE MODALITY SWAP FOR THIS ENDPOINT ONLY, "
+        "which makes the bile-duct out-of-domain test interpretable, so the supervisor's "
+        "recommendation to Albert can change. It is NEVER 'single-nucleus RNA equals bulk RNA'."
+    ),
+    "disagreement": (
+        "EITHER of these: the single-cell arm's interval excludes 0 on the BASELINE's side (it reads "
+        "'worse'), or the paired difference's interval lies WHOLLY OUTSIDE [-MARGIN, +MARGIN]. What "
+        "it means: pseudobulked single-cell RNA does not reproduce bulk on this endpoint, the "
+        "modality swap stays unlicensed, the bile-duct test stays uninterpretable, and Albert's "
+        "biosample question CLOSES WITHOUT A LIFT."
+    ),
+    "inconclusive": (
+        "ANYTHING ELSE, and it licenses nothing. In particular: the single-cell arm's interval "
+        "straddling 0, or a difference interval that neither lies inside the margin nor wholly "
+        "outside it. The bile-duct test stays uninterpretable and no recommendation changes. This is "
+        "written here so that an ambiguous result cannot be read afterwards as a weak agreement."
+    ),
+    "falsifier": (
+        "The single-cell arm's 98.33% interval excluding 0 on the BASELINE's side -- the scaled rules "
+        "FURTHER from pseudobulked RNA than no rule at all -- or a paired difference interval wholly "
+        "outside the margin. Either would be this lane's negative, and it is a result and not a "
+        "failure: it closes the biosample question without a lift and says so."
+    ),
+    "stop_rule": (
+        "The run is executed ONCE, on the population this registration pins, and the registered "
+        "reading is reported verbatim whatever it is. No clause is adjusted after a value is seen, "
+        "no cell type is dropped, no gene set is re-cut, no alternative normalisation is tried and "
+        "the margin is not moved. If the record and this registration disagree about any pinned "
+        "number, the run is a HARNESS_DEFECT and nothing is read."
+    ),
+}
+
+HARNESS = (
+    "before any measured value is opened: (1) every input is on disk with the sha256 the count "
+    "record pins; (2) the population is exactly the `qualifying_genes` of "
+    "data/results/pbrun_gene_count.json, 8,051 symbols, and its count is at or above "
+    "MINIMUM['genes'] and at or above CARRIED['min_genes']; (3) the four cell types are "
+    "lane-scsweep's and are four; (4) SCALE equals M2h's committed per_form.multiplicative.scale "
+    "exactly; (5) every gene of the population has exactly one row on both sides in all four cell "
+    "types, re-checked and not assumed from the count record; (6) each arm's D matrix has mean 0 "
+    "within every gene, to the tolerance, which is the check that both arms were centred the same "
+    "way. A miss in any of them stops the run (HARNESS_DEFECT) and nothing is read"
+)
+
+TOLERANCE = 1e-9
+
+LIMITATIONS = [
+    "ONLY ONE OF THE FOUR CELL TYPES IS SINGLE-NUCLEUS (ovary); GM12878, K562 and testis are "
+    "single-CELL. The bile-duct source is single-NUCLEUS, so the nucleus-specific part of any "
+    "agreement read here rests on one cell type. The per-cell-type descriptives are reported so the "
+    "ovary arm can be read on its own, and they decide nothing.",
+    "The single-cell side is CPM and the bulk side is length-normalised TPM. The per-GENE length "
+    "factor cancels under the within-gene centring up to the pseudocount; the per-CELL-TYPE ratio of "
+    "the two normalising sums does NOT cancel and is not corrected.",
+    "FOUR CELL TYPES, not thirteen. Neither arm's Delta MSE is comparable to M2h's +0.04339, which "
+    "was read over thirteen; only the two arms here are comparable to each other.",
+    "The bulk and single-cell data of a cell type come from DIFFERENT sources and different donors "
+    "for ovary and testis, and from different preparations for GM12878 and K562. "
+    "lane-pseudobulk's rule deliberately does not require one source, and any disagreement must be "
+    "read against that difference as well as against the modality.",
+    "GM12878's single-cell side is four cells from two ENCODE scRNA-seq experiments of 2014, "
+    "quantified against GENCODE V24 while its bulk side is V29. Four cells is a thin pseudobulk and "
+    "the annotation differs; both are recorded and neither is corrected.",
+    "The bulk side is not fresh: items 7, 7d, 7h, M2h and M2i have read RNA of these biosamples "
+    "under this endpoint, and M2i has read these exact files (EXPOSURE).",
+    "Agreement would license the modality swap ON THIS ENDPOINT ONLY: this gene population, this "
+    "metric, this fixed scale. It is never a statement about another endpoint, another gene set, or "
+    "a cell type not counted here, and never 'single-nucleus RNA equals bulk RNA'.",
+    "A single-cell matrix's library size is the sum over EVERY row the archive supplies, spike-in "
+    "rows included where a source has them. That is the no-filter rule applied consistently; it "
+    "shifts all of a cell type's genes together and is part of the per-cell-type term above.",
+]
