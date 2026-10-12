@@ -52,3 +52,38 @@ def pytest_runtest_setup(item):
                 pytest.skip(
                     f"needs the {extra!r} extra (uv sync --extra {extra}): cannot import {', '.join(missing)}"
                 )
+
+
+# ---- test modules whose IMPORT needs an extra -------------------------------------------------------------
+# `requires_extra` cannot reach these. It runs in `pytest_runtest_setup`, AFTER collection, and a
+# module-level import in the code under test fails at COLLECTION -- which aborts the whole session with one
+# error instead of skipping one file. CI run 38246732777's successor would have reported "1 error" and
+# nothing else: `genomeos/attribution/pbrun.py:41` imports h5py (the `predict` extra) at module level, so
+# `tests/test_pbrun.py` cannot be imported without it.
+#
+# THE REAL FIX IS A LAZY IMPORT IN pbrun.py (its two uses are at :264 and :609), and it is NOT done here:
+# moving that line removes a line committed the same day, which `scripts/check_staged.py` refuses inside
+# its window with `--force` as the only remedy, and the harness denies that force. So this entry is a
+# STOPGAP that keeps the suite runnable until 2026-10-14, when the window lapses and the import can move.
+# It is keyed on the extra being genuinely absent, so once the extra is installed the file is collected
+# normally, and the header below says so on every run rather than skipping in silence.
+COLLECT_NEEDS_EXTRA: dict[str, str] = {"test_pbrun.py": "predict"}
+
+collect_ignore = [
+    name for name, extra in COLLECT_NEEDS_EXTRA.items() if extras_lock.missing_modules_for_extra(extra)
+]
+
+
+def pytest_report_header(config):
+    """Announce an uncollected test module, so a stopgap is never a silent absence."""
+    if not collect_ignore:
+        return None
+    lines = []
+    for name in collect_ignore:
+        extra = COLLECT_NEEDS_EXTRA[name]
+        missing = ", ".join(extras_lock.missing_modules_for_extra(extra))
+        lines.append(
+            f"NOT COLLECTED: tests/{name} imports code that needs the {extra!r} extra at module level "
+            f"(cannot import {missing}); install with `uv sync --extra {extra}`"
+        )
+    return lines
