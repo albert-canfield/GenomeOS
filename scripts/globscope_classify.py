@@ -475,6 +475,32 @@ def main() -> int:
     inherited = gs.inherited_site_count()
     calls = gc.files_entry_calls()
     filtered = [c for c in calls if c["exists_filtered"]]
+
+    # ADDED after the first run REFUSED, and added rather than substituted because the undo guard
+    # rightly refuses removing a line HEAD already holds and this lane does not --force.
+    #
+    # THE REFUSAL WAS THE PIN WORKING. The scan below saw 23 exists()-filtered sites where
+    # globcensus.json pins 18: five NEW ones were committed by other lanes in the one day between the
+    # census of 2026-10-11 and this classification. All 18 inherited sites are still exactly at the
+    # path:line globcensus recorded. The population is therefore THE INHERITED 18, each identified by
+    # that recorded path:line, with a refusal if any one of them has moved; the five newcomers are
+    # recorded in the result and are NOT classified, and none of them was read. That the mechanism
+    # gained five instances in a day is a finding about the MECHANISM and not about any of the five.
+    recorded = [
+        (s["path"], s["line"])
+        for s in json.loads((ROOT / gs.INHERITED_COUNT_SOURCE).read_text())["call_sites"]["sites"]
+        if s["exists_filtered"]
+    ]
+    if len(recorded) != inherited:
+        raise SystemExit("globcensus.json's own site list disagrees with its own count")
+    now = {(c["path"], c["line"]) for c in filtered}
+    missing = [k for k in recorded if k not in now]
+    if missing:
+        raise SystemExit(f"an inherited site is no longer at its recorded line: {missing}")
+    newcomers = sorted(now - set(recorded))
+    sites_in_the_tree_now = len(now)
+    filtered = [c for c in filtered if (c["path"], c["line"]) in set(recorded)]
+
     if len(filtered) != inherited:
         raise SystemExit(
             f"the scan sees {len(filtered)} exists()-filtered sites, globcensus.json pins {inherited};"
@@ -522,6 +548,17 @@ def main() -> int:
         },
         "class_counts": counts,
         "sites": facts,
+        "the_population_moved_while_this_lane_worked": {
+            "inherited_sites_classified": inherited,
+            "exists_filtered_sites_in_the_tree_now": sites_in_the_tree_now,
+            "new_since_globcensus": [f"{p}:{line}" for p, line in newcomers],
+            "reading": "the first run of this script REFUSED, because its own AST scan saw"
+            f" {sites_in_the_tree_now} exists()-filtered sites where globcensus.json pins"
+            f" {inherited}: five new ones were committed by other lanes in the one day between the"
+            " census and this classification. The population is the inherited 18 and the newcomers"
+            " are NOT classified here; none of them was read. That the mechanism gained five"
+            " instances in a day is a finding about the mechanism and not about any of the five",
+        },
         "read_facts_applied": applied,
         "varying_groups": rows,
         "varying_source": VARYING_SOURCE,
@@ -532,6 +569,24 @@ def main() -> int:
         "money_spent": "$0.00",
     }
     sources = [Path("data/results/globcensus.json")]
+
+    # TWO MECHANICAL CORRECTIONS, ADDED and not substituted, for the same reason as above: the undo
+    # guard refuses removing a line HEAD holds and this lane does not --force. Neither is a decision
+    # and neither touches a class; both were exposed by the first run, which died before
+    # classify_site was ever reached.
+    #   (1) declared_groups() reads the WHOLE result registry, so declaring globcensus.json alone left
+    #       1,305 traced reads undeclared and the manifest contract refused the write. data/results is
+    #       how globcensus_count.py declares the same read.
+    #   (2) save_result's third POSITIONAL is results_dir, so the superseded line below handed the
+    #       manifest in as a directory and raised TypeError.
+    # The two superseded lines are left standing underneath, unreached, as the record of what ran.
+    sources = [Path("data/results")]
+    print(f"wrote {save_result(RESULT, payload, manifest=manifest(sources))}")
+    print(json.dumps(counts, indent=1))
+    for r in rows:
+        print(f"  {r['group_class']:<28} {r['group'][:70]}")
+    return 0
+
     path = save_result(RESULT, payload, manifest(sources))
     print(f"wrote {path}")
     print(json.dumps(counts, indent=1))
