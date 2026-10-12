@@ -123,3 +123,26 @@ def test_the_rule_adds_no_biosample_and_makes_no_model_request():
     assert "adds NO biosample" in clause
     assert "AlphaGenome request" in clause
     assert "area J" in clause
+
+
+def test_the_committed_rule_states_the_minimum_and_matches_the_module():
+    """The committed record carries the same two numbers, so neither can drift from the other.
+
+    `data/results/pseudobulk_rule.json` is COMMITTED by this lane, so git tracks it and its absence
+    is a broken checkout, not a measurement that has not been made here. That is why this reads
+    `tracked_paths.must_be_present` and not a skip: a skip keyed on a tracked path can never fire.
+    """
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(pb.RULE_PATH, was="the rule had not been written on this machine")
+    rule = json.loads(pb.RULE_PATH.read_text())
+    assert rule["minimum"]["cell_types"] == pb.MINIMUM["cell_types"] == 4
+    assert rule["minimum"]["genes"] == pb.MINIMUM["genes"] == 1000
+    assert rule["selection_rule"]["version"] == pb.SELECTION_RULE["version"]
+    assert rule["covered_cell_count"] == 13
+    assert rule["alphagenome_requests"] == 0
+    assert rule["scale_if_used"] == pb.SCALE
+    assert rule["wording_limit"] == pb.WORDING_LIMIT
+    assert "before the minimum below was fixed" in rule["vocabulary_learned_first"]["what"]

@@ -1,0 +1,444 @@
+{
+  "result": "pseudobulk_rule",
+  "date": "2026-10-12",
+  "lane": "lane-pseudobulk",
+  "stage": "the rule AND THE MINIMUM, committed before anything is counted",
+  "question": "Which of the reader's 13 covered cell types have BOTH open bulk RNA-seq AND open single-nucleus (or single-cell) RNA from a public source?",
+  "why_this_lane_exists": "M2h (`ac5580b`) found the compiled rules fit measured RNA better when scaled by one fitted constant, held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894], scale +0.2146, about 2% of variance; M2i (`f6e71c6`) replicated it with nothing fitted on RNA fresh to this project, +0.03727 [+0.03202, +0.04299]. lane-trainexp measured that independence from AlphaGenome's training data is UNKNOWN FOR 13 OF 13 (`18de375`), and the only way past that is a cell type OUTSIDE AlphaGenome's training domain. lane-oodinventory (`c441b90` rule, `171f5bf` result) found exactly ONE such candidate with open paired data, bile duct UBERON:0002394, and ITS RNA IS SINGLE-NUCLEUS ONLY. The supervisor ruled a test there NOT INTERPRETABLE AS IT STANDS: it would change the cell type AND the assay modality at once, so a result would be ambiguous whichever way it fell. This lane is the prerequisite that would make it interpretable, and it needs no biosample lift.",
+  "symmetry": "If pseudobulk reproduces bulk on this endpoint, the bile-duct test becomes interpretable and the supervisor's recommendation to Albert can change. If it does not, the out-of-domain test cannot be done with that candidate and the biosample question closes without a lift. Both outcomes are useful and this rule prefers neither.",
+  "selection_rule": {
+    "version": "pseudobulk-1",
+    "question": "Which of the reader's 13 covered cell types have BOTH open bulk RNA-seq AND open single-nucleus (or single-cell) RNA from a public source?",
+    "covered_set": "The thirteen cell keys of M2h's and M2i's committed `cells` list, read from data/results/freshrna_result.json and pinned by its sha256. Each key's ENCODE biosample_term_name is taken from data/results/freshrna_sources.json's `biosamples` map, also pinned. The covered set is NOT re-derived and NOT widened: a cell type absent from that list is out of scope for this lane whatever data exists for it.",
+    "bulk": "Satisfied by construction and named, not re-searched: M2i already holds one released, open ENCODE bulk RNA-seq experiment per covered cell type (polyA plus RNA-seq or total RNA-seq) with its experiment accession, its file accessions and their sha256 in data/results/freshrna_sources.json, and the files are on disk under data/cache/freshrna/rna/. The bulk side of the comparison is those exact files and no others.",
+    "single_cell": "A RELEASED HUMAN experiment whose assay_title is one of snRNA-seq, scRNA-seq, long read scRNA-seq, and whose biosample_term_name is EXACTLY the covered cell type's term name. The biosample must not be genetically modified and must not be treated, for the same reason lane-oodinventory excluded shRNA, siRNA, CRISPR and CRISPRi RNA-seq: a knockdown is not the cell type's own RNA. The experiment must carry at least one OPEN processed file from which a per-gene value per nucleus or per cell can be read -- a gene-by-barcode sparse count matrix, or a per-gene count table. A browser track, a bam alone or a clustering figure does not satisfy this clause.",
+    "licence": "Open, no application, no controlled access. This excludes GTEx individual-level data and anything else behind dbGaP, and it excludes the managed-access tiers of the Human Cell Atlas. An open redistribution under CC BY 4.0 or the ENCODE data use policy satisfies it.",
+    "sources_searched": "ENCODE (www.encodeproject.org) exhaustively through its public JSON API for the three single-cell assay titles above. Beyond ENCODE, each source lane-oodinventory already characterised is re-examined against THIS lane's clauses, which differ from that lane's: this lane needs no matched chromatin accessibility, so a source that failed oodinventory's accessibility or same-source clause may still qualify here. Every source is recorded with the clause it passes or fails.",
+    "same_source_not_required": "This lane deliberately does NOT require the bulk and the single-nucleus data to come from one source. The question is whether the MODALITY changes the reading, so a cross-source pair is admissible and the source difference is recorded as a limitation that any disagreement must be read against.",
+    "minimum": {
+      "cell_types": 4,
+      "cell_types_reason": "The registered control is M2h's WITHIN-GENE CELL PERMUTATION: a gene's values are permuted among its own cells. With n cells a gene has n! distinct permutations, so n = 4 is the smallest n for which 4! = 24 >= 20 permutations exist and a control p at or below 0.05 is attainable AT ALL. With three or fewer cell types the registered control cannot be run, so the comparison cannot be made as registered and no reading from it would be interpretable.",
+      "genes": 1000,
+      "genes_reason": "M2h's and M2i's registered floor is min_genes = 100, carried verbatim as the endpoint's own floor. 1,000 is the STRICTER floor this lane requires, because what must be resolvable here is not whether the endpoint is positive but whether TWO READINGS OF IT AGREE, and the difference at issue is the size M2h measured (Delta MSE about +0.04, about 2% of variance). Below 1,000 genes the gene bootstrap's interval on the bulk reading alone is wide enough to contain both agreement and disagreement, so the comparison would decide nothing.",
+      "genes_clause": "A gene counts toward the 1,000 only if it is in M2h's HELD-OUT population AND resolves in EVERY qualifying cell type in BOTH modalities: exactly one row for its unversioned gene_id in that cell type's bulk table (rows suffixed _PAR_Y not counted), and a row for the same gene in that cell type's pseudobulked single-nucleus matrix. No filter on expression and no filter on any measured value.",
+      "below_either": "NO_SOURCE_QUALIFIES, and the lane stops without reading a value. That is a COMPLETE answer: it says the out-of-domain test cannot be made interpretable this way, so the biosample question closes without a lift."
+    },
+    "acceptable_answer": "NO_SOURCE_QUALIFIES is an acceptable and COMPLETE answer, and it is the answer whenever either number in `minimum` is not met.",
+    "procedure_registered_separately": "If and only if sources qualify, the pseudobulk aggregation -- how nuclei are aggregated to a per-gene value, stated exactly -- and the endpoint carried verbatim from 7d, 7h and M2h are REGISTERED in data/results/pseudobulk_registration.json and committed as their own commit BEFORE the run. No measured value is read before that commit.",
+    "wording_limit": "Agreement on this endpoint licenses the modality swap FOR THIS ENDPOINT ONLY. It is never 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here.",
+    "no_biosample": "This lane adds NO biosample. It works only in cell types the reader already covers, makes no AlphaGenome request and no deletion request, and touches nothing in area J, no node model and no BioForge calibration."
+  },
+  "minimum": {
+    "cell_types": 4,
+    "cell_types_reason": "The registered control is M2h's WITHIN-GENE CELL PERMUTATION: a gene's values are permuted among its own cells. With n cells a gene has n! distinct permutations, so n = 4 is the smallest n for which 4! = 24 >= 20 permutations exist and a control p at or below 0.05 is attainable AT ALL. With three or fewer cell types the registered control cannot be run, so the comparison cannot be made as registered and no reading from it would be interpretable.",
+    "genes": 1000,
+    "genes_reason": "M2h's and M2i's registered floor is min_genes = 100, carried verbatim as the endpoint's own floor. 1,000 is the STRICTER floor this lane requires, because what must be resolvable here is not whether the endpoint is positive but whether TWO READINGS OF IT AGREE, and the difference at issue is the size M2h measured (Delta MSE about +0.04, about 2% of variance). Below 1,000 genes the gene bootstrap's interval on the bulk reading alone is wide enough to contain both agreement and disagreement, so the comparison would decide nothing.",
+    "genes_clause": "A gene counts toward the 1,000 only if it is in M2h's HELD-OUT population AND resolves in EVERY qualifying cell type in BOTH modalities: exactly one row for its unversioned gene_id in that cell type's bulk table (rows suffixed _PAR_Y not counted), and a row for the same gene in that cell type's pseudobulked single-nucleus matrix. No filter on expression and no filter on any measured value.",
+    "below_either": "NO_SOURCE_QUALIFIES, and the lane stops without reading a value. That is a COMPLETE answer: it says the out-of-domain test cannot be made interpretable this way, so the biosample question closes without a lift."
+  },
+  "minimum_stated_before_counting": "This record is written and committed before the search runs. The two numbers in `minimum` -- 4 cell types and 1,000 genes -- are fixed here, with their reasons, and the search that follows cannot move them.",
+  "vocabulary_learned_first": {
+    "what": "ENCODE's own assay_title facet over type=Experiment&status=released&assay_slims=Transcription, read once before this rule was written, to learn WHICH assay titles exist for single-nucleus and single-cell RNA. A vocabulary, not a count: the query was made with limit=0 and no biosample breakdown, so no number of qualifying cell types was read before the minimum below was fixed.",
+    "titles_found": {
+      "snRNA-seq": 395,
+      "scRNA-seq": 30,
+      "long read scRNA-seq": 64
+    },
+    "titles_taken": [
+      "snRNA-seq",
+      "scRNA-seq",
+      "long read scRNA-seq"
+    ]
+  },
+  "covered_cells": [
+    {
+      "cell": "K562",
+      "biosample_term_name": "K562",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR000AEP",
+      "bulk_files": [
+        {
+          "accession": "ENCFF472HFI",
+          "path": "data/cache/freshrna/rna/ENCFF472HFI.tsv",
+          "sha256": "dbf86a3654fa4f47ae3fc3a87b2754f2b7c01c7a2a60625623e7c915cf660c4f"
+        },
+        {
+          "accession": "ENCFF628SMT",
+          "path": "data/cache/freshrna/rna/ENCFF628SMT.tsv",
+          "sha256": "ad08091aab7f7662511c4255e45f01a72ddd3f12fd93779a45d2630773db7381"
+        }
+      ]
+    },
+    {
+      "cell": "HepG2",
+      "biosample_term_name": "HepG2",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR985KAT",
+      "bulk_files": [
+        {
+          "accession": "ENCFF073RKC",
+          "path": "data/cache/freshrna/rna/ENCFF073RKC.tsv",
+          "sha256": "70feb107b43e4cb83f2480274b20bcb62d340ef7343bbc3dc8f82c6d718771d8"
+        },
+        {
+          "accession": "ENCFF355TDA",
+          "path": "data/cache/freshrna/rna/ENCFF355TDA.tsv",
+          "sha256": "9ef0afe156652004c32884d86f9cd0d5dab3d27c693e8b65b9db3a3a97fac9e6"
+        }
+      ]
+    },
+    {
+      "cell": "GM12878",
+      "biosample_term_name": "GM12878",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR000AEG",
+      "bulk_files": [
+        {
+          "accession": "ENCFF170TZG",
+          "path": "data/cache/freshrna/rna/ENCFF170TZG.tsv",
+          "sha256": "89d9dfa96436dafe545299cabc8cdd91c232bb6366acce64d81cbfb265e9195f"
+        },
+        {
+          "accession": "ENCFF477OQB",
+          "path": "data/cache/freshrna/rna/ENCFF477OQB.tsv",
+          "sha256": "c8bfce24e1daacf75b810a7266c7eda67eb1d6914fe1bbddfea0d6a86250ee77"
+        }
+      ]
+    },
+    {
+      "cell": "IMR_90",
+      "biosample_term_name": "IMR-90",
+      "bulk_assay": "total RNA-seq",
+      "bulk_experiment": "ENCSR797RXV",
+      "bulk_files": [
+        {
+          "accession": "ENCFF325KTI",
+          "path": "data/cache/freshrna/rna/ENCFF325KTI.tsv",
+          "sha256": "12f2ddfbd068720f05cef0c6802c9fc4b4ea98bac83845d62cbba4f3649cffbe"
+        }
+      ]
+    },
+    {
+      "cell": "H1",
+      "biosample_term_name": "H1",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR000COU",
+      "bulk_files": [
+        {
+          "accession": "ENCFF321HCT",
+          "path": "data/cache/freshrna/rna/ENCFF321HCT.tsv",
+          "sha256": "8de9f71bce82827ea583865983d1bbf06e36e4c7495632c22c3fb36076e9dc8f"
+        },
+        {
+          "accession": "ENCFF736CCO",
+          "path": "data/cache/freshrna/rna/ENCFF736CCO.tsv",
+          "sha256": "1b9be5e12f0b64dc1a593ad04b16365ce4ea900b1524ba59023a41fef41df877"
+        }
+      ]
+    },
+    {
+      "cell": "SK_N_SH",
+      "biosample_term_name": "SK-N-SH",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR000BYL",
+      "bulk_files": [
+        {
+          "accession": "ENCFF172AFC",
+          "path": "data/cache/freshrna/rna/ENCFF172AFC.tsv",
+          "sha256": "8ecde96d56f0be82b514df1126702d0ab69dc35cd227ebc39366a290434e8fdf"
+        },
+        {
+          "accession": "ENCFF677KYO",
+          "path": "data/cache/freshrna/rna/ENCFF677KYO.tsv",
+          "sha256": "82988197d3175947c2afc136d284c5fb4aeefffd83fca904a18f1642af459529"
+        }
+      ]
+    },
+    {
+      "cell": "astrocyte",
+      "biosample_term_name": "astrocyte",
+      "bulk_assay": "total RNA-seq",
+      "bulk_experiment": "ENCSR129VBC",
+      "bulk_files": [
+        {
+          "accession": "ENCFF155ZUU",
+          "path": "data/cache/freshrna/rna/ENCFF155ZUU.tsv",
+          "sha256": "7e7092df9bb7a08ae2e2121653ce8e53f7fefdc86507aa349c628f4c26569db9"
+        },
+        {
+          "accession": "ENCFF993LWR",
+          "path": "data/cache/freshrna/rna/ENCFF993LWR.tsv",
+          "sha256": "28e2b1d02ac8e2cdaca8e921b1303f8ce33e79f6c2e9f711e6462350c4ecaa3a"
+        }
+      ]
+    },
+    {
+      "cell": "hepatocyte",
+      "biosample_term_name": "hepatocyte",
+      "bulk_assay": "total RNA-seq",
+      "bulk_experiment": "ENCSR908ZAS",
+      "bulk_files": [
+        {
+          "accession": "ENCFF526TMF",
+          "path": "data/cache/freshrna/rna/ENCFF526TMF.tsv",
+          "sha256": "460e8b573206306ea33e0ee6bf6711cadc335633d8b89943aa8549a1260ac2a9"
+        },
+        {
+          "accession": "ENCFF807ORH",
+          "path": "data/cache/freshrna/rna/ENCFF807ORH.tsv",
+          "sha256": "7ad4ef9694c2900a3e0cd8a40dc64e9b095c88b2b73a5fce15a0995c0f9844dd"
+        }
+      ]
+    },
+    {
+      "cell": "keratinocyte",
+      "biosample_term_name": "keratinocyte",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR000EYT",
+      "bulk_files": [
+        {
+          "accession": "ENCFF198VCX",
+          "path": "data/cache/freshrna/rna/ENCFF198VCX.tsv",
+          "sha256": "6f67af2f60f8e7aa7403711a2cc815b8f7d5362497aababae5d6e4a8dc11cfa8"
+        },
+        {
+          "accession": "ENCFF223GBX",
+          "path": "data/cache/freshrna/rna/ENCFF223GBX.tsv",
+          "sha256": "00f6512a82d649bcdfd44a295c68d6cbf6769cb907793d978afb5beb27c79fb2"
+        }
+      ]
+    },
+    {
+      "cell": "cardiac_muscle_cell",
+      "biosample_term_name": "cardiac muscle cell",
+      "bulk_assay": "total RNA-seq",
+      "bulk_experiment": "ENCSR379YAE",
+      "bulk_files": [
+        {
+          "accession": "ENCFF166LSM",
+          "path": "data/cache/freshrna/rna/ENCFF166LSM.tsv",
+          "sha256": "257cba8f9cb77e33765f977643f21c40271d862ab563846afbe09f2831594c10"
+        },
+        {
+          "accession": "ENCFF314OZK",
+          "path": "data/cache/freshrna/rna/ENCFF314OZK.tsv",
+          "sha256": "7bbfe61b268e2c7847fb7f3670288e4ee1fdf12d41ee45bc56af1849b9758216"
+        }
+      ]
+    },
+    {
+      "cell": "CD14_positive_monocyte",
+      "biosample_term_name": "CD14-positive monocyte",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR992MUF",
+      "bulk_files": [
+        {
+          "accession": "ENCFF170TKR",
+          "path": "data/cache/freshrna/rna/ENCFF170TKR.tsv",
+          "sha256": "efe0bd2de174518201586aa3a7b6264af3bc148b0d33fac4b2f37e331d6afb0b"
+        }
+      ]
+    },
+    {
+      "cell": "ovary",
+      "biosample_term_name": "ovary",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR725TPW",
+      "bulk_files": [
+        {
+          "accession": "ENCFF306DIV",
+          "path": "data/cache/freshrna/rna/ENCFF306DIV.tsv",
+          "sha256": "947d2df99c7c3517589a6e2780fc17c8187b7d67d76d9befb5abb8f82d27d56c"
+        }
+      ]
+    },
+    {
+      "cell": "testis",
+      "biosample_term_name": "testis",
+      "bulk_assay": "polyA plus RNA-seq",
+      "bulk_experiment": "ENCSR755LFM",
+      "bulk_files": [
+        {
+          "accession": "ENCFF416QUL",
+          "path": "data/cache/freshrna/rna/ENCFF416QUL.tsv",
+          "sha256": "26ebe77bfea175892c0da172c9f080cdce937f8ff0e377cb751da379502a3301"
+        }
+      ]
+    }
+  ],
+  "covered_cell_count": 13,
+  "covered_cell_keys": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "bulk_side_is_already_on_disk": "All thirteen covered cell types satisfy the bulk clause by construction: M2i read one open ENCODE bulk RNA-seq experiment for each, and the files are on disk under data/cache/freshrna/rna/ with their sha256 in data/results/freshrna_sources.json. The open question is the single-nucleus clause alone.",
+  "what_the_search_will_write": "data/results/pseudobulk_inventory.json",
+  "scale_if_used": 0.2145911381525326,
+  "scale_origin": "M2h's fitted scale from `ac5580b`, used in this lane ONLY as the fixed constant +0.2146. Nothing is refitted here, and this lane fits nothing beyond what its registration declares.",
+  "wording_limit": "Agreement on this endpoint licenses the modality swap FOR THIS ENDPOINT ONLY. It is never 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here.",
+  "no_biosample_added": "This lane adds NO biosample. It works only in cell types the reader already covers, makes no AlphaGenome request and no deletion request, and touches nothing in area J, no node model and no BioForge calibration.",
+  "alphagenome_requests": 0,
+  "money": "$0.00: no model request, no key, no data needing an application",
+  "pinned_sha256": {
+    "data/results/freshrna_result.json": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+    "data/results/freshrna_sources.json": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+    "data/results/magcal_result.json": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+    "data/results/oodinventory_candidates.json": "d14e9546e3beb2b1d57f8ccc6c34431234d39fb53773a4f2aed90b4a18cc8b01"
+  },
+  "seconds": 0.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/freshrna_result.json and data/results/freshrna_sources.json, M2i's committed records (`f6e71c6`)",
+        "version": "as committed in this checkout; pinned by sha256 in pinned_sha256"
+      },
+      {
+        "accession": "ENCODE portal assay_title facet over released human transcription experiments; vocabulary only, no biosample breakdown and no file fetched",
+        "version": "queried 2026-10-12; counts in vocabulary_learned_first; ENCODE Consortium data: free to download and use without restriction under the ENCODE data use policy; cite the ENCODE Consortium and the experiment accession (https://www.encodeproject.org/help/citing-encode/)"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/freshrna_result.json",
+        "sha256": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+        "bytes": 51911,
+        "partition": "not an evaluation partition: a committed record that fixes the covered set"
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": "not an evaluation partition: a committed record that fixes the covered set"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "not an evaluation partition: a committed record that fixes the covered set"
+      },
+      {
+        "path": "data/results/oodinventory_candidates.json",
+        "sha256": "d14e9546e3beb2b1d57f8ccc6c34431234d39fb53773a4f2aed90b4a18cc8b01",
+        "bytes": 452293,
+        "partition": "not an evaluation partition: a committed record that fixes the covered set"
+      }
+    ],
+    "input_count": 4,
+    "assembly": "n/a: no coordinate is read. This record states a rule and a minimum.",
+    "coordinates": "n/a: no interval is read or written",
+    "parameters": {
+      "selection_rule_version": "pseudobulk-1",
+      "match_field": "biosample_term_name",
+      "single_cell_assays": [
+        "snRNA-seq",
+        "scRNA-seq",
+        "long read scRNA-seq"
+      ],
+      "minimum_cell_types": 4,
+      "minimum_genes": 1000,
+      "covered_cell_count": 13,
+      "scale_if_used": 0.2145911381525326
+    },
+    "exclusions": [
+      "every non-human experiment, and every experiment not status=released",
+      "genetically modified and treated biosamples: a knockdown is not the cell type's own RNA",
+      "every controlled-access source: GTEx individual-level data, dbGaP, HCA managed access",
+      "no biosample is added, no AlphaGenome request is made, no deletion is requested (2026-09-27 stop list, reinstated)",
+      "no experimental data file is fetched by this step"
+    ],
+    "partitions": "n/a: nothing is fitted and nothing is held out; this record states a rule",
+    "code_cleanliness": {
+      "git_sha": "2b9cd0a1e9b31ec6886bc83088168dcf653dcda7",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/pseudobulk_rule.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pseudobulk_rule.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pseudobulk_rule.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/emit7g_census.py",
+        "scripts/wormoutron_run.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/pseudobulk.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/pseudobulk_rule.py"
+      ],
+      "counting_path_count": 7,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "2b9cd0a1e9b31ec6886bc83088168dcf653dcda7",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/emit7g_census.py",
+        "scripts/wormoutron_run.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "scripts/emit7g_census.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/pseudobulk_rule.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "2b9cd0a1e9b31ec6886bc83088168dcf653dcda7",
+      "code_cleanliness_git_sha": "2b9cd0a1e9b31ec6886bc83088168dcf653dcda7",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 2b9cd0a"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 25,
+      "opens_under_data": 10,
+      "files_read": 4,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
