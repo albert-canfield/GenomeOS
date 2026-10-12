@@ -1,0 +1,786 @@
+{
+  "result": "hetblock_registration",
+  "date": "2026-10-12",
+  "lane": "lane-hetblock",
+  "step": "3 of 4: the registration, before any statistic of this lane is read",
+  "harness": "(1) the table is 7h's: 16,509 genes, 214,617 pairs, and 7h's committed uncalibrated Delta MSE comes back at scale 1 within TOLERANCE. (2) the global fitted scale from magcal.fit_scale on the whole table equals scalehet's committed global scale within TOLERANCE. (3) M2h's committed gene-level numbers are NOT re-bootstrapped here: lane-scalehet's own committed harness (data/results/scalehet_harness.json) already reproduced them bit-identically and its outcome HARNESS_REPRODUCES is read and required, not re-run. (4) SCALEHET'S COMMITTED Q, R, GLOBAL SCALE, NULL SUMMARIES AND BOTH p VALUES ARE REPRODUCED through scalehet's own observed_statistics and permutation_null at its committed count and seed, and reported BEFORE ANYTHING ELSE OF THIS LANE. (5) the address-level block structure: the element-sharing graph from the compiled programs (how many elements, how many drive two or more genes of any kind, how many drive two or more of the table's genes, and the component sizes over the table's genes), the 1-Mb and 5-Mb block counts, the largest block's share, and the gene-start join reporting zero genes without a start and zero chromosome disagreements. All of it depends on no measured value. (6) the singleton-block equivalence and the exact-count check of CONTROL (2) and (3). (7) NO Q, NO R AND NO p OF ANY BLOCK NULL OF THIS LANE IS COMPUTED IN THE HARNESS: those are the run's, after the registration is committed. The harness forms the block MEMBERSHIP and checks the draws' SIZES, and deliberately computes no statistic from a block draw",
+  "harness_outcome": "HARNESS_REPRODUCES",
+  "scalehet_figures_reproduce": "LANE-SCALEHET'S COMMITTED FIGURES REPRODUCE, and every one of them bit-identically through scalehet's own functions at its own count and seed: Q = 166.04792148316798, R = 0.16420247148502493, the global fitted scale 0.21501821644770602, the null Q median 78.95613453032229 with 98.33% range [35.419346005111905, 143.9288653653726], the null R median 0.09497160409012753 with 98.33% range [0.052091893649909106, 0.17056618399692858], p_Q = 0.003996003996003996 and p_R = 0.013986013986013986, over 23 admitted chromosomes, 16,496 genes and 214,448 pairs. 7h's committed uncalibrated Delta MSE comes back at scale 1 and magcal.fit_scale on the whole table is scalehet's global scale. scalehet's own harness, which reproduced M2h bit-identically, reads HARNESS_REPRODUCES and is not re-run",
+  "governing_unit": "locus_block_1mb",
+  "governing_unit_reading": "the element-sharing graph has 0 elements driving two or more of the table's genes, below MIN_SHARED_ELEMENTS = 1, so the GOVERNING UNIT IS locus_block_1mb. The count is a count of rule lines in committed programs and reads no measured value",
+  "element_sharing_graph": {
+    "elements": 440558,
+    "elements_driving_two_or_more_genes_of_any_kind": 22,
+    "elements_driving_two_or_more_genes_of_this_table": 0,
+    "rules_touching_this_tables_genes": 396373,
+    "components_over_this_tables_genes": 16509,
+    "largest_component": 1,
+    "single_gene_components": 16509,
+    "every_component_is_one_gene": true,
+    "min_shared_elements": 1,
+    "note": "a count of rule lines in committed programs: it depends on NO measured value, nothing is run and no RNA is read. The components are taken over ALL genes the programs target, so a chain through a gene outside this table would still join two of the table's genes"
+  },
+  "locus_block_structure": {
+    "genes_without_a_start": 0,
+    "genes_on_a_different_chromosome": 0,
+    "this_lanes_starts_equal_freshrnas": true,
+    "gene_table": "data/cache/gencode_genes.tsv",
+    "one_mb": {
+      "span": 1000000,
+      "blocks": 2452,
+      "genes": 16509,
+      "largest": 52,
+      "largest_share": 0.0031497970803803987,
+      "single_gene_blocks": 385,
+      "median_size": 5
+    },
+    "five_mb": {
+      "span": 5000000,
+      "blocks": 596,
+      "genes": 16509,
+      "largest": 158,
+      "largest_share": 0.009570537282694289,
+      "single_gene_blocks": 9,
+      "median_size": 21
+    }
+  },
+  "singleton_block_equivalence": {
+    "draws": 1000,
+    "q_draws_equal": 1000,
+    "r_draws_equal": 1000,
+    "bit_identical": true,
+    "split_blocks_per_draw": {
+      "mean": 0.0,
+      "max": 0,
+      "cuts": 22
+    },
+    "note": "EQUAL, not merely close: this compares the two nulls' draws with ==, so the only thing this lane changes about scalehet's null is the exchangeable unit. The singleton-block null IS scalehet's already-committed distribution, so no new value is read by this check"
+  },
+  "both_outcomes_are_written_here": {
+    "if_it_survives": "THE HETEROGENEITY SURVIVES A LOCUS-BLOCK NULL. With the exchangeable unit changed from the gene to the {unit} -- {n_blocks} blocks over the {genes} genes of the {chroms} admitted chromosomes, every chromosome's gene count held exactly at its observed value and nothing else of lane-scalehet's test altered -- the observed dispersion of the per-chromosome fitted scales about the global scale {global_scale} is Q = {q} against a block null whose Q has median {null_q_median} and 98.33% range [{null_q_lo}, {null_q_hi}]: p_Q = {p_q} against ALPHA {alpha} (and {p_q} against the stricter {stricter}, reported and deciding nothing). The secondary range statistic agrees: the observed spread {r} against a block null of median {null_r_median} and 98.33% range [{null_r_lo}, {null_r_hi}], p_R = {p_r}. {robust} SO SCALEHET'S REJECTION IS NOT EXPLAINED BY THE DEPENDENCE BETWEEN NEIGHBOURING GENES: its reading NOT CONSISTENT WITH A SINGLE GLOBAL SCALE STANDS, and the limitation it flagged against itself -- that its null was too narrow because its unit was the gene -- is now priced and does not account for the result. THAT IS THE WHOLE FINDING AND THIS LANE STOPS HERE: no regional model is proposed, no per-region scale is fitted, no cause is named and no chromosome or block is read as a verdict about itself. M2h's one scale +0.2146 and its about 2% of the variance are unaffected AS A GLOBAL AVERAGE and are not withdrawn; what remains withdrawn, by scalehet and not by this lane, is the assumption that one constant is the whole of the correction",
+    "if_it_does_not": "THE HETEROGENEITY IS NOT ESTABLISHED, AND SCALEHET'S REJECTION IS WITHDRAWN. With the exchangeable unit changed from the gene to the {unit} -- {n_blocks} blocks over the {genes} genes of the {chroms} admitted chromosomes, every chromosome's gene count held exactly at its observed value and nothing else of lane-scalehet's test altered -- the same observed dispersion Q = {q} about the same global scale {global_scale} sits inside what the block null itself produces: median {null_q_median}, 98.33% range [{null_q_lo}, {null_q_hi}], p_Q = {p_q} against ALPHA {alpha} (and against the stricter {stricter}). The secondary range statistic: observed {r}, block null median {null_r_median}, 98.33% range [{null_r_lo}, {null_r_hi}], p_R = {p_r}. {robust} SO THE SPREAD OF THE PER-CHROMOSOME SCALES IS WHAT THE CORRELATION BETWEEN NEIGHBOURING GENES PRODUCES AT THESE GENE COUNTS, AND LANE-SCALEHET'S READING -- NOT CONSISTENT WITH A SINGLE GLOBAL SCALE, p_Q = 0.003996 -- IS WITHDRAWN TO NOT ESTABLISHED. It was anti-conservative in exactly the direction it flagged against itself: its null's unit was the gene, the gene null is too narrow, and its p_Q was too small for that reason. SAID PLAINLY AND NOT SOFTENED: this project should no longer carry 'the magnitude varies between chromosomes' as a finding. IT IS NOT SHOWN THAT ONE CONSTANT IS THE WHOLE CORRECTION EITHER -- a failure to reject is not a proof of identity, and the block null's own 98.33% range is the honest measure of the variation this test could not have seen -- so the standing of the question returns to UNTESTED-AND-NOT-ESTABLISHED, not to settled. M2h's one scale +0.2146 and its about 2% of the variance stand as a GLOBAL AVERAGE, exactly as they did before, neither strengthened nor weakened by this reading. NO REGIONAL MODEL IS PROPOSED AND NONE IS RULED OUT",
+    "note": "BOTH ARE WRITTEN BEFORE EITHER IS SEEN, in the words they will be reported in, and the second one WITHDRAWS lane-scalehet's rejection to NOT ESTABLISHED and says so plainly. The withdrawal is the more valuable answer if that is what the data says, and it is the direction scalehet itself named as the one its null was biased against"
+  },
+  "pinned_sha256": {
+    "data/results/multrna_result.json": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+    "data/results/magcal_result.json": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+    "data/results/scalesplit_result.json": "aeb1609698e678bcebb808f5ecf4d25348852e6d89c1bc6b0ee8475fcac44102",
+    "data/results/scalehet_result.json": "dde2784c252bbfd98fd61de97f19bf36227714f7d11f57aec837bd857cbd8572",
+    "data/results/scalehet_harness.json": "4cb560bf57ddd95d0760c91117258c75b88de22ba3217990422b9402eaf1379c",
+    "data/results/scalehet_registration.json": "df0b44d667daabcf4635de044eb3e6850f7a06cdbc81ed689d755bab1a5e69ce",
+    "data/cache/gencode_genes.tsv": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+    "data/knowledge/compiled/noncoding_chr1.bio": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+    "data/knowledge/compiled/noncoding_chr2.bio": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+    "data/knowledge/compiled/noncoding_chr3.bio": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+    "data/knowledge/compiled/noncoding_chr4.bio": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+    "data/knowledge/compiled/noncoding_chr5.bio": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+    "data/knowledge/compiled/noncoding_chr6.bio": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+    "data/knowledge/compiled/noncoding_chr7.bio": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+    "data/knowledge/compiled/noncoding_chr8.bio": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+    "data/knowledge/compiled/noncoding_chr9.bio": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+    "data/knowledge/compiled/noncoding_chr10.bio": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+    "data/knowledge/compiled/noncoding_chr11.bio": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+    "data/knowledge/compiled/noncoding_chr12.bio": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+    "data/knowledge/compiled/noncoding_chr13.bio": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+    "data/knowledge/compiled/noncoding_chr14.bio": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+    "data/knowledge/compiled/noncoding_chr15.bio": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+    "data/knowledge/compiled/noncoding_chr16.bio": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+    "data/knowledge/compiled/noncoding_chr17.bio": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+    "data/knowledge/compiled/noncoding_chr18.bio": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+    "data/knowledge/compiled/noncoding_chr19.bio": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+    "data/knowledge/compiled/noncoding_chr20.bio": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+    "data/knowledge/compiled/noncoding_chr21.bio": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+    "data/knowledge/compiled/noncoding_chr22.bio": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+    "data/knowledge/compiled/noncoding_chrX.bio": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+    "data/knowledge/compiled/noncoding_chrY.bio": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+    "data/results/hetblock_harness.json": "400b454eec800dfc2ddc04da22107b705cb2912193a94efbfdf1f8573dcae26a"
+  },
+  "readers": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "nothing_of_this_lanes_statistic_is_in_this_file": "no Q, no R, no p and no block null of this lane appears here. The only numbers are other lanes' committed figures, the address-level counts the harness committed, and sha256 digests. The run refuses to start if any field below differs from the committed module or if any pinned sha256 has moved",
+  "registered": "2026-10-12",
+  "form": "multiplicative",
+  "source": "data/results/multrna_result.json",
+  "gene_table": "data/cache/gencode_genes.tsv",
+  "compiled_programs": "data/knowledge/compiled/noncoding_{chrom}.bio",
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "measured": "y(G, X) = log2(TPM(G, X) + PSEUDOCOUNT), TPM(G, X) the mean over the chosen experiment's files (RNA_SELECTION). The measured deviation is D(G, X) = y(G, X) - mean over the thirteen cells X' of y(G, X'): G's level in X relative to its own mean across the reader cells",
+  "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the thirteen reader cells",
+  "min_genes": 100,
+  "min_chromosomes": 10,
+  "control_alpha": 0.05,
+  "stricter_alpha": 0.0167,
+  "form_interval": [
+    0.8333333333333334,
+    99.16666666666667
+  ],
+  "form_interval_words": "98.33% CI",
+  "tolerance": 0.0001,
+  "scalehet_committed": {
+    "q_observed": 166.04792148316798,
+    "r_observed": 0.16420247148502493,
+    "global_scale": 0.21501821644770602,
+    "p_q": 0.003996003996003996,
+    "p_r": 0.013986013986013986,
+    "null_q_median": 78.95613453032229,
+    "null_q_98_33": [
+      35.419346005111905,
+      143.9288653653726
+    ],
+    "null_r_median": 0.09497160409012753,
+    "null_r_98_33": [
+      0.052091893649909106,
+      0.17056618399692858
+    ],
+    "admitted_count": 23,
+    "genes_admitted": 16496,
+    "pairs_admitted": 214448,
+    "outcome": "HETEROGENEOUS"
+  },
+  "m2h_committed": {
+    "result": "data/results/magcal_result.json",
+    "registration": "data/results/magcal_registration.json",
+    "code": "genomeos/attribution/magcal.py",
+    "commits": "2b0b604 code, fbce775 registration, ac5580b result",
+    "training_genes": 8181,
+    "held_out_genes": 8328,
+    "scale": 0.2145911381525326,
+    "scale_ci": [
+      0.20074141299120243,
+      0.2283000359194418
+    ],
+    "held_out_delta_mse": 0.0433912108101358,
+    "held_out_ci": [
+      0.0379045975793137,
+      0.04894398453032398
+    ],
+    "control_p": 0.000999000999000999,
+    "outcome": "BETTER",
+    "variance_share": "about 2% of the variance (+0.04339 against mean(D^2) 2.1524 on the held-out side)"
+  },
+  "seven_h_committed": {
+    "genes": 16509,
+    "pairs": 214617,
+    "delta_mse": -0.5361286982098615
+  },
+  "carried": {
+    "endpoint": "y(G, X) = log2(TPM(G, X) + PSEUDOCOUNT), TPM(G, X) the mean over the chosen experiment's files (RNA_SELECTION). The measured deviation is D(G, X) = y(G, X) - mean over the thirteen cells X' of y(G, X'): G's level in X relative to its own mean across the reader cells",
+    "no_rule_baseline": "P(G, X) = 0: G's level in X equals its mean over the thirteen reader cells",
+    "min_genes": 100,
+    "min_chromosomes": 10,
+    "cells": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "metric": "Delta MSE(F, a) = mean over the pairs of D^2 - mean of (D - a*P_F)^2 = mean of (2a*D*P_F - a^2*P_F^2) (combine2.METRIC with the calibrated prediction in place of P), positive when the scaled form's squared error is below the no-rule baseline's. The registered endpoint is this quantity on the HELD-OUT pairs at a = a_F, with a_F fitted on the training pairs. Reported beside it, deciding nothing: the same quantity on the held-out pairs at a = 1 (the uncalibrated form on the held-out genes) and on the training pairs at a = a_F",
+    "fit": "a_F is the one scale that minimises the squared error over the TRAINING pairs of form F, in closed form: a_F = (sum over training pairs of D*P_F) / (sum over training pairs of P_F^2); it is undefined, and the form is NOT_FITTABLE, when the denominator is 0. Equivalently it is the scale that maximises Delta MSE on the training pairs. It is fitted on training pairs only; no held-out value enters it. a_F = 1 is the uncalibrated form, which is what 7d and 7h read",
+    "form_interval": [
+      0.8333333333333334,
+      99.16666666666667
+    ],
+    "control_alpha": 0.05,
+    "statistic_q": [
+      "PRIMARY, Q: the precision-weighted dispersion of the per-chromosome fitted scales about the global fitted scale. For an admitted chromosome c, let dp_c = sum over that chromosome's pairs of D*P and pp_c = sum over that chromosome's pairs of P^2; its fitted scale is a_c = dp_c / pp_c, which is magcal.FIT applied to that chromosome's rows and nothing else (magcal.fit_scale, imported read-only). Let a_g = (sum over admitted chromosomes of dp_c) / (sum of pp_c), the ONE global scale fitted on the admitted population, which is magcal.fit_scale on exactly those rows. Then Q = sum over admitted chromosomes of pp_c * (a_c - a_g)^2. WHY THAT WEIGHT: under the squared-error fit this calibration minimises, the variance of a_c is proportional to 1 / pp_c, so pp_c is the precision of a_c and pp_c * (a_c - a_g)^2 is each chromosome's squared deviation measured in units of its own noise -- Cochran's homogeneity form. It makes Q large when a PRECISELY fitted chromosome sits far from the global scale and small when a noisily fitted one does, which is the behaviour the question needs. Q IS NOT COMPARED TO A CHI-SQUARED DISTRIBUTION and no asymptotic assumption is made: its null is the permutation null below, so the unknown residual variance cancels and no normality, independence-of-pairs or large-sample claim is required.",
+      "SECONDARY, R: the RANGE of the per-chromosome fitted scales, max a_c - min a_c over the admitted chromosomes. This is the statistic the post hoc sentence used ('+0.1232 to +0.2874'), registered here so that the pattern that was looked at is the pattern that is tested. It is REPORTED BESIDE Q AND IS NOT THE VERDICT, for the reason that a range is driven by its two extreme groups and is the less powerful and less stable of the two. Its only registered force is the MIXED outcome below: if Q and R fall on opposite sides of ALPHA the lane says so in the reading and claims neither answer"
+    ],
+    "note": "the endpoint, the no-rule baseline, the closed-form fit, MIN_GENES, the 98.33% width, the one-sided p and every reading word about the CALIBRATED FORM are 7d's, 7h's and M2h's; the primary statistic Q, the secondary range statistic R, the gene floor, MIN_CHROMOSOMES, the admitted chromosomes, the draw count and the seed are lane-scalehet's. All of them are IMPORTED from genomeos/attribution/magcal.py and genomeos/attribution/scalehet.py, neither of which this lane edits. THE ONLY THING THIS LANE CHANGES IS THE EXCHANGEABLE UNIT OF THE NULL: a locus block instead of a gene. No new endpoint, no new measurement, no new reader, no new form, no new statistic and no new threshold"
+  },
+  "question": "lane-scalehet read NOT CONSISTENT WITH A SINGLE GLOBAL SCALE -- Q = 166.048 against a null of median 78.9561 and 98.33% range [35.4193, 143.929], p_Q = 0.003996, with the range statistic agreeing at p_R = 0.013986 -- from a null whose EXCHANGEABLE UNIT IS THE GENE, and it flagged as its own limitation that genes sharing a compiled element are not independent, so that its null's Q may be too narrow and its p_Q anti-conservative IN EXACTLY THE REJECTING DIRECTION. THE FALSIFIABLE QUESTION ASKED HERE, AND NO OTHER: DOES THAT HETEROGENEITY SURVIVE A NULL WHOSE EXCHANGEABLE UNIT IS A LOCUS BLOCK RATHER THAN A GENE? Equivalently: when the null moves whole blocks of neighbouring genes -- so that the correlation between genes of one neighbourhood is carried into the null rather than broken by it -- is the observed dispersion Q = 166.048 still larger than the null produces at the same per-chromosome gene counts? 'THE HETEROGENEITY IS NOT ESTABLISHED UNDER A BLOCK NULL' IS A FULL ANSWER AND A REACHABLE OUTCOME OF THIS TEST, AND IT IS THE MORE VALUABLE ONE: it would WITHDRAW scalehet's rejection to NOT ESTABLISHED, which is a correction of this project's own committed reading and not a failure to find something",
+  "why_not_already_answered": "scalehet named the fix and did not run it, in its own words: 'An element-level or locus-block permutation would price it and is not done here'. Nobody has run it since. The dependence is not hypothetical in this project: lane-freshrna's committed POST_HOC (1) says 'genes that share elements or a locus are not independent and the gene-level interval may be too narrow' and reported a 1-Mb LOCUS-CLUSTER interval beside its gene-level one for that reason, and lane-scalesplit split by chromosome in the first place because a gene-level resample does not price between-region structure. So the one quantity that could alone explain scalehet's rejection has never been priced, and the direction of the error is known in advance: a gene-level null is TOO NARROW, which pushes p_Q DOWN, which is the direction that rejects",
+  "what_is_not_asked": "this lane does NOT ask which region has which scale, does NOT fit a per-region scale, does NOT propose a regional model, does NOT name a cause and does NOT read a per-block or per-chromosome scale as a verdict about that block or that chromosome. WHATEVER THE OUTCOME, NO REGIONAL MODEL IS PROPOSED: that variation exists, or is not established, is the finding and the lane stops there. This lane also does not re-decide M2h's held-out reading, does not revise +0.2146 and does not revise the about 2% of the variance: those stand as a GLOBAL AVERAGE either way, and what is at stake here is only whether one constant is the whole of the correction. And this lane does not re-test scalehet's question against a GENE null: that null is scalehet's, is reproduced here as a harness check, and is not re-decided",
+  "population": "scalehet's population, gene for gene: 7h's committed genes table (data/results/multrna_result.json), 16,509 genes x 13 reader cells = 214,617 pairs, restricted by MIN_GENES to the 23 chromosomes scalehet admitted (16,496 genes, 214,448 pairs; chrY's 13 genes excluded). P is the multiplicative composition's prediction and D the measured difference from the no-rule baseline, both read from 7h's committed rows and neither recomputed. NO GENE IS ADDED AND NONE IS DROPPED that scalehet did not drop: if this lane's population differed from scalehet's by one gene the two nulls would not be comparable and the comparison is the whole point",
+  "min_genes_rule": "SCALEHET'S FLOOR, UNCHANGED AND NOT RE-CHOSEN: a chromosome is admitted only if it carries at least MIN_GENES = 100 genes in 7h's committed table, which is magcal's registered floor imported by identity. 23 of the 24 chromosomes are admitted and chrY (13 genes) is excluded, exactly as scalehet committed. If the admitted count is below MIN_CHROMOSOMES = 10 this lane reads INCONCLUSIVE. A chromosome's GENE COUNT depends on no measured value, so naming the admitted set here reads no result",
+  "block_unit": "THE PERMUTATION UNIT IS A LOCUS BLOCK, NOT A GENE, and that is the whole of this lane's change to scalehet's null. THE PRIMARY UNIT IS THE 1-Mb LOCUS BLOCK: a gene belongs to the block (chromosome, gene start // 1,000,000), the gene's start read from data/cache/gencode_genes.tsv and joined on gene_id with the version suffix stripped, _PAR_Y rows skipped and the first occurrence kept. THAT IS lane-freshrna'S OWN COMMITTED UNIT, word for word from its POST_HOC (1) -- 'genes assigned to clusters by (chromosome, gene start // 1,000,000) from data/cache/gencode_genes.tsv' -- and this lane groups with freshrna.locus_clusters, THE SAME FUNCTION, imported by identity and not reimplemented. The unit is therefore NOT ONE CHOSEN HERE: it is the unit this project already committed for precisely this dependence, and choosing it costs this lane the freedom to pick a span that suits its answer. A gene travels in exactly one block with all thirteen of its pairs, its own P and its own D, exactly as a gene travelled as one block in scalehet's null",
+  "block_unit_why_not_elements": "THE BRIEF PREFERRED THE ELEMENT-SHARING COMPONENTS -- connected components of the graph on genes with an edge where two genes share a compiled element -- as the stricter and more faithful unit, BECAUSE THAT IS THE DEPENDENCE SCALEHET NAMED. THEY WERE COMPUTED FIRST, and the graph HAS NO EDGES. Read from the 24 compiled non-coding programs' rule lines through combine2.rule_lines -- an address-level parse of the committed programs, running nothing and reading no measured value -- the programs carry 440,558 elements, of which only 22 drive two or more genes OF ANY KIND, AND NOT ONE DRIVES TWO OF THE 16,509 GENES OF THIS TABLE. Taking the components over ALL targeted genes, so that a chain through a gene outside the table would still join two of the table's genes, EVERY ONE OF THE 16,509 GENES IS ITS OWN COMPONENT. So the element-sharing unit IS COMPUTABLE AND IS EXACTLY THE GENE UNIT: its null is scalehet's null, bit-identically at the same seed, and it can price nothing. THAT IS ITSELF A FINDING AND IS REPORTED AS ONE: the specific dependence scalehet feared -- two of these genes driven by one compiled element -- DOES NOT OCCUR IN THIS POPULATION, because the compiler attributes each element to one gene. WHAT REMAINS, and is not removed by that, is LOCUS PROXIMITY: neighbouring genes share chromatin, share the reader's open/held calls, share local sequence and are measured in the same neighbourhood of the same libraries, which is the dependence freshrna priced with a 1-Mb cluster and the one still unpriced in scalehet's null. HENCE THE 1-Mb LOCUS BLOCK IS THE PRIMARY UNIT. The element-sharing component null is run and reported anyway, as the degenerate case it is, so that the claim 'it prices nothing' is a committed number and not an assertion",
+  "block_selection_rule": "FIXED HERE, BEFORE ANY STATISTIC OF THIS LANE IS COMPUTED, AS A RULE AND NOT AS A PREFERENCE. The governing unit is the ELEMENT-SHARING COMPONENT if the compiled programs contain at least MIN_SHARED_ELEMENTS = 1 element driving two or more of the table's genes -- that is, if the element-sharing graph has ANY edge at all; otherwise it is the 1-Mb LOCUS BLOCK, because a component graph with no edges IS the gene unit and a null built on it cannot price any dependence. The count that decides it is a count of rule lines in committed programs and depends on NO MEASURED VALUE, exactly as scalehet took its per-chromosome gene counts and named its excluded chromosome before registering. STATED PLAINLY AND NOT HIDDEN: that count was taken before this module was written and is 0, so the rule selects the 1-Mb locus block; the rule is written as a rule so that the choice is a stated function of an address-level count rather than this lane's taste, and the harness recomputes and commits the count before the registration",
+  "min_shared_elements": 1,
+  "block_span": 1000000,
+  "robust_span": 5000000,
+  "block_robustness": "A SECOND, STRICTLY COARSER BLOCK NULL IS REGISTERED AND REPORTED: the 5-Mb locus block, (chromosome, gene start // 5,000,000), the same genes in fewer and larger blocks. It is registered NOW so that the answer's dependence on the span is visible rather than discovered afterwards, and it CANNOT DECIDE: the outcome name is fixed by the governing unit's p_Q alone, and the 5-Mb null enters the reading through one of the two REGISTERED clauses of ROBUST_CLAUSES and nowhere else. A coarser unit can only widen the null, so a 5-Mb null that does not reject while the 1-Mb null does means the rejection holds at the finer unit alone, and the registered clause says exactly that",
+  "block_counts_expected": "STATED NOW, from the same address-level pass: the 16,509 genes of the table fall into 2,452 1-Mb blocks, the largest holding 52 genes (0.31% of the genes) and 385 holding one; and into 596 5-Mb blocks, the largest holding 158 (0.96%). ON THE 16,496 GENES OF THE 23 ADMITTED CHROMOSOMES, which is what the null runs on, that is 2,443 1-Mb blocks and 591 5-Mb blocks -- chrY's 13 genes and its 9 and 5 blocks being the whole of the difference. Every block lies wholly within one chromosome, because the chromosome is part of the block key. These are COUNTS OF ADDRESSES and no measured value enters them",
+  "min_blocks": 100,
+  "max_block_share": 0.1,
+  "degeneracy_rule": "FIXED NOW. The block null is DEGENERATE, and the lane reads INCONCLUSIVE with no heterogeneity verdict, if any of: fewer than MIN_CHROMOSOMES = 10 chromosomes are admitted; a group's sum of P^2 is 0 so a fitted scale is undefined; the governing unit yields fewer than MIN_BLOCKS = 100 blocks; or one block holds more than MAX_BLOCK_SHARE = 0.10 of the admitted genes. The last two are what stop a block unit so coarse that the null is a statement about one block's noise: MIN_BLOCKS is magcal's own floor of 100, the number this project already requires for a group to be read at all, reused rather than chosen, and 0.10 is a tenth of the population. Both are satisfied by the counts of BLOCK_COUNTS_EXPECTED with room to spare, and both are written so that a FUTURE coarser unit cannot be slipped in under this registration",
+  "prior_exposure": [
+    "STATED PLAINLY, AND NOT A CAVEAT ADDED AFTERWARDS. THIS IS A RE-ANALYSIS OF A MEASUREMENT ALREADY READ, NOT A FRESH TEST. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples, under the same log2(TPM+1) endpoint and the same no-rule baseline, has already been read by: item 7 (M2b, lane-readercompile); item 7d (M2c, lane-combine2); item 7h (M2f, lane-multrna); the capped-sum census (lane-capsumrna), which reached NOT_TESTABLE; M2h (lane-magcal), which fitted the one scale; M2i (lane-freshrna), which replicated it on RNA fresh to this project; lane-scalesplit, which re-split the same rows by chromosome; lane-recovered; AND lane-scalehet, which is the reading this lane re-tests. The P and D grouped here ARE 7h's committed rows, so EVERY VALUE THIS LANE READS HAS BEEN READ BEFORE, NINE TIMES OVER.",
+    "AND, SEPARATELY AND MORE SHARPLY: THE SPREAD WAS ALREADY SEEN POST HOC, AND HAS NOW BEEN TESTED ONCE AND REJECTED. scalesplit computed and committed all 24 per-chromosome scales as post hoc descriptives -- the range +0.1232 (chr13) to +0.2874 (chr14), the median +0.2176, the quartiles +0.2041 and +0.2376, no sign change, 10 of 24 inside M2h's interval -- and then scalehet registered a statistic for them and read NOT CONSISTENT WITH A SINGLE GLOBAL SCALE at p_Q = 0.003996. SO THIS LANE IS RE-TESTING A PATTERN THAT HAS BEEN LOOKED AT AND ACTED ON, WHICH IS WEAKER STILL THAN SCALEHET'S OWN TEST, WHICH WAS ALREADY WEAKER THAN A TEST OF AN UNLOOKED-AT PATTERN. Three things are done about that and none of them removes it. (1) NOT ONE NUMBER OF THE TEST IS RE-CHOSEN: the statistic, the secondary statistic, the p form, the gene floor, the admitted set, the draw count, the seed and ALPHA are scalehet's, imported by identity, and the only change is the exchangeable unit -- so this lane cannot tune its way to either answer by moving a threshold. (2) THE DIRECTION OF THE EXPECTED EFFECT WAS WRITTEN DOWN FIRST, by scalehet itself: a gene-level null is too narrow and its p_Q anti-conservative in the REJECTING direction, so a block null is expected to move p_Q UP, which is the direction that WITHDRAWS this project's committed reading and costs it a finding. (3) BOTH OUTCOMES ARE WRITTEN IN ADVANCE, in OUTCOMES below, in the words they will be reported in. A reading here holds as a statement about THIS measurement's dependence on the chromosome grouping at these gene counts and this block unit. It is not independent confirmation of anything, it is not a blind prediction of an unseen measurement, and a withdrawal is a withdrawal of a REJECTION to NOT ESTABLISHED and never a demonstration that one constant is exactly right"
+  ],
+  "prior_exposure_clause": "carried with every reading, always: this RNA is not a fresh measurement and this pattern is not an unlooked-at one. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h, by the capped-sum census, by M2h, by M2i, by lane-scalesplit, by lane-recovered and by lane-scalehet, and the P and D grouped here are 7h's committed rows. AND THE SPREAD TESTED HERE WAS ALREADY SEEN POST HOC BY SCALESPLIT AND HAS ALREADY BEEN TESTED ONCE AND REJECTED BY SCALEHET, so this is a re-test of a pattern that has been looked at AND ACTED ON, which is weaker than a test of one that has not. Nothing here is a fresh measurement, a new reader or an independent confirmation",
+  "grouping": "BY CHROMOSOME, scalehet's grouping unchanged, as 7h's committed table names it and as a property of the gene's ADDRESS and of no measured value. The GROUPS being compared are the chromosomes; the BLOCKS are the units the null exchanges. The two are different things and both are addresses: the question is still whether the per-chromosome fitted scales disperse more than chance, and the only change is what chance is taken to be. THE CHROMOSOME IS A COARSE AND ARBITRARY REGION UNIT and that remains a LIMITATION exactly as scalehet wrote it: variation at a finer scale need not show between chromosomes",
+  "statistic": "SCALEHET'S, BY IDENTITY, BOTH OF THEM, so the two nulls are comparable. PRIMARY, Q = sum over admitted chromosomes of pp_c * (a_c - a_g)^2, the precision-weighted dispersion of the per-chromosome fitted scales about the global one, Cochran's homogeneity form, where a_c = dp_c / pp_c is magcal.FIT on that chromosome's rows, dp_c that chromosome's sum of D*P and pp_c its sum of P^2. The OBSERVED Q is computed by scalehet.observed_statistics, which calls scalehet.heterogeneity_q -- the same function objects -- and each NULL DRAW's Q is computed by the same numpy expression scalehet.permutation_null uses for its own draws, character for character, which is what makes the singleton-block case bit-identical rather than merely equal to within floating-point summation order; the two forms are the same sum in a different order and agree within TOLERANCE, which a test holds. Q is NOT compared to a chi-squared distribution, so no asymptotic, normality or independence-of-pairs claim is made. SECONDARY, R = max a_c - min a_c, the range, by scalehet.range_stat: the statistic the post hoc sentence used, carried so that the pattern that was looked at is the pattern re-tested. R can never declare either answer and its only force is MIXED. NO NEW STATISTIC IS INTRODUCED BY THIS LANE",
+  "null": "THE CHROMOSOME LABELS PERMUTED AMONG THE GENES BY WHOLE LOCUS BLOCKS, HOLDING EVERY CHROMOSOME'S GENE COUNT EXACTLY AT ITS OBSERVED VALUE. One draw: the blocks are shuffled; their genes are concatenated in that shuffled order into one sequence, each block's genes staying adjacent; the sequence is cut at the OBSERVED cumulative per-chromosome gene counts; each piece is one chromosome's genes for that draw; a scale is refitted per piece and globally; and Q and R are recorded. Nothing about any gene's data changes -- a gene moves as one block with all thirteen of its pairs, its own P and its own D -- and only which group it is counted in changes. FIVE THINGS ABOUT THIS NULL, DECIDED NOW. (1) IT HOLDS THE PER-CHROMOSOME GENE COUNTS EXACTLY, by construction of the cut, which is the one property that makes it comparable with scalehet's: the only difference between the two nulls is the exchangeable unit. (2) IT IS SCALEHET'S OWN NULL WITH THE UNIT REPLACED, to the letter: scalehet shuffles the gene indices and splits at the same cumulative bounds, and with one gene per block this lane's draw is scalehet's draw BIT-IDENTICALLY at the same seed, which the harness proves rather than asserts. (3) A CUT CAN FALL INSIDE A BLOCK, so a block can straddle two chromosomes in a draw; with 23 groups there are 22 cuts, so AT MOST 22 of the blocks are split in any draw and the rest travel whole. The mean number split per draw is reported. This is the price of holding the gene counts exact, and it is paid in the CONSERVATIVE direction only in the sense that it slightly weakens the blocking; it cannot manufacture a wider null. (4) THE GLOBAL FITTED SCALE IS INVARIANT ACROSS DRAWS, by construction: the same genes are redistributed so the total sums, and therefore the global scale, are the same in every draw -- exactly, but for the ORDER OF THE FLOATING-POINT SUMMATION, which moves the last bits and is held within TOLERANCE rather than claimed bit-equal. (5) IT PRICES THE CORRELATION BETWEEN NEIGHBOURING GENES AND NOTHING ELSE. It does not price a correlation between distant genes of one chromosome, it does not price gene density, expression level or rules per gene, and it cannot turn a true regional magnitude into chance or chance into a regional magnitude",
+  "permutations": {
+    "count": 1000,
+    "seed": 20261012
+  },
+  "permutations_why": "SCALEHET'S COUNT AND SCALEHET'S SEED, both unchanged: 1,000 draws at seed 20261012. The count is magcal's PERMUTATIONS count, which fixes the finest p this test can report at 1/1001 = 0.000999 and is the same granularity scalehet's p was read at. THE SEED IS DELIBERATELY THE SAME ONE: at one gene per block this lane's draws ARE scalehet's draws, so the element-sharing null reproduces scalehet's null bit-identically and the harness can show that the machinery differs from scalehet's in the UNIT and in nothing else. A seed is not re-drawn to suit an answer and the run is run ONCE",
+  "p_value": "scalehet.permutation_p, the same function object, which is magcal's one-sided form: p = (1 + draws with the statistic >= the observed) / (1 + count). It is one-sided because the question is whether the observed dispersion is LARGER than chance, and it can never be 0, so a p of 0.000999 means 'no draw of 1,000 reached it' and not 'impossible'",
+  "alpha": "ALPHA = CONTROL_ALPHA = 0.05, SCALEHET'S OWN LEVEL, imported by identity and NOT re-chosen here, and its laxness is deliberate in the SAME direction scalehet chose it: at 0.05 the test rejects a single global scale more readily, which makes 'the heterogeneity is not established' THE HARDER RESULT TO REACH -- and 'not established' is the result that withdraws this project's committed reading. So the threshold is set against the withdrawal, not for it. Both p values are ALSO reported against the STRICTER 0.0167, the complement of the 98.33% description this project reports intervals at (0.05/3), BECAUSE SCALEHET REPORTED BOTH and its rejection cleared both; the stricter number is a report and DECIDES NOTHING, and no outcome of this lane turns on it. Nothing is Bonferroni-adjusted for the two block spans either: the governing unit is fixed in advance by BLOCK_SELECTION_RULE and the 5-Mb null cannot change the outcome name",
+  "interval": "every null distribution is summarised at its MEDIAN and its 98.33% PERCENTILE RANGE, magcal's FORM_INTERVAL unchanged and the width this project reports every interval at, through scalehet.percentile_range -- the same function object. The range is a DESCRIPTION OF THE NULL and not a confidence interval on anything observed: it says what dispersion this null produces, which is the honest measure of what this test could and could not have detected. The minimum and maximum draw are reported beside it so that a p at the granularity floor can be read for what it is",
+  "control": "THE HARNESS IS THE CONTROL, in three parts, and each is a planted check rather than a claim. (1) SCALEHET'S COMMITTED FIGURES COME BACK: its Q, its R, its global scale, its null median and 98.33% range for both statistics, and both p values, recomputed through SCALEHET'S OWN functions at scalehet's own count and seed and compared with data/results/scalehet_result.json. This is run and committed BEFORE anything else, and if they do not come back the lane stops. (2) THE SINGLETON-BLOCK EQUIVALENCE: this lane's block null, given one gene per block, reproduces scalehet's null BIT-IDENTICALLY -- every one of the 1,000 draws' Q and R equal, not merely close -- which is what shows the unit is the only thing that changed. (3) THE EXACT-COUNT CHECK: every draw of the block null is verified to give each chromosome exactly its observed gene count, and the check is run over the draws rather than asserted from the construction",
+  "which_governs": "p_Q UNDER THE GOVERNING BLOCK UNIT DECIDES, and nothing else does. The governing unit is fixed by BLOCK_SELECTION_RULE before any statistic is computed. p_R under that same unit can only produce MIXED, never a verdict of its own, exactly as in scalehet. The 5-Mb robustness null and the element-sharing null are REPORTED ALWAYS and DECIDE NOTHING: they enter the reading through the registered clauses and cannot change the outcome name. scalehet's own gene-level p values are reproduced as a harness check and are not re-decided",
+  "not_vacuous": "THIS TEST CAN COME OUT EITHER WAY AND BOTH WAYS ARE WRITTEN DOWN. A block null is WIDER than a gene null exactly to the extent that neighbouring genes are correlated, so if that correlation is small the two nulls nearly coincide and scalehet's rejection survives almost unchanged; if it is large the null widens and the rejection does not survive. Neither is guaranteed by the construction. The planted tests hold both directions: a planted regional slope survives the block null and reads that the heterogeneity SURVIVES, and a planted single slope with strong within-block correlation reads NOT ESTABLISHED, so a test that could only say one thing would fail. AND THE DIRECTION THAT COSTS THIS PROJECT A FINDING IS THE ONE THE ERROR IS KNOWN TO RUN IN: scalehet wrote down in advance that its p_Q was anti-conservative toward REJECTING, so a withdrawal is the expected correction and is the outcome this lane was opened to make reachable",
+  "outcomes": {
+    "SURVIVES_BLOCK_NULL": "THE HETEROGENEITY SURVIVES A LOCUS-BLOCK NULL. With the exchangeable unit changed from the gene to the {unit} -- {n_blocks} blocks over the {genes} genes of the {chroms} admitted chromosomes, every chromosome's gene count held exactly at its observed value and nothing else of lane-scalehet's test altered -- the observed dispersion of the per-chromosome fitted scales about the global scale {global_scale} is Q = {q} against a block null whose Q has median {null_q_median} and 98.33% range [{null_q_lo}, {null_q_hi}]: p_Q = {p_q} against ALPHA {alpha} (and {p_q} against the stricter {stricter}, reported and deciding nothing). The secondary range statistic agrees: the observed spread {r} against a block null of median {null_r_median} and 98.33% range [{null_r_lo}, {null_r_hi}], p_R = {p_r}. {robust} SO SCALEHET'S REJECTION IS NOT EXPLAINED BY THE DEPENDENCE BETWEEN NEIGHBOURING GENES: its reading NOT CONSISTENT WITH A SINGLE GLOBAL SCALE STANDS, and the limitation it flagged against itself -- that its null was too narrow because its unit was the gene -- is now priced and does not account for the result. THAT IS THE WHOLE FINDING AND THIS LANE STOPS HERE: no regional model is proposed, no per-region scale is fitted, no cause is named and no chromosome or block is read as a verdict about itself. M2h's one scale +0.2146 and its about 2% of the variance are unaffected AS A GLOBAL AVERAGE and are not withdrawn; what remains withdrawn, by scalehet and not by this lane, is the assumption that one constant is the whole of the correction",
+    "WITHDRAWN_NOT_ESTABLISHED": "THE HETEROGENEITY IS NOT ESTABLISHED, AND SCALEHET'S REJECTION IS WITHDRAWN. With the exchangeable unit changed from the gene to the {unit} -- {n_blocks} blocks over the {genes} genes of the {chroms} admitted chromosomes, every chromosome's gene count held exactly at its observed value and nothing else of lane-scalehet's test altered -- the same observed dispersion Q = {q} about the same global scale {global_scale} sits inside what the block null itself produces: median {null_q_median}, 98.33% range [{null_q_lo}, {null_q_hi}], p_Q = {p_q} against ALPHA {alpha} (and against the stricter {stricter}). The secondary range statistic: observed {r}, block null median {null_r_median}, 98.33% range [{null_r_lo}, {null_r_hi}], p_R = {p_r}. {robust} SO THE SPREAD OF THE PER-CHROMOSOME SCALES IS WHAT THE CORRELATION BETWEEN NEIGHBOURING GENES PRODUCES AT THESE GENE COUNTS, AND LANE-SCALEHET'S READING -- NOT CONSISTENT WITH A SINGLE GLOBAL SCALE, p_Q = 0.003996 -- IS WITHDRAWN TO NOT ESTABLISHED. It was anti-conservative in exactly the direction it flagged against itself: its null's unit was the gene, the gene null is too narrow, and its p_Q was too small for that reason. SAID PLAINLY AND NOT SOFTENED: this project should no longer carry 'the magnitude varies between chromosomes' as a finding. IT IS NOT SHOWN THAT ONE CONSTANT IS THE WHOLE CORRECTION EITHER -- a failure to reject is not a proof of identity, and the block null's own 98.33% range is the honest measure of the variation this test could not have seen -- so the standing of the question returns to UNTESTED-AND-NOT-ESTABLISHED, not to settled. M2h's one scale +0.2146 and its about 2% of the variance stand as a GLOBAL AVERAGE, exactly as they did before, neither strengthened nor weakened by this reading. NO REGIONAL MODEL IS PROPOSED AND NONE IS RULED OUT",
+    "MIXED": "MIXED, AND THE HETEROGENEITY IS THEREFORE NOT ESTABLISHED. Under the {unit} null -- {n_blocks} blocks, {genes} genes, {chroms} chromosomes, every chromosome's gene count held exactly -- the two registered statistics fall on OPPOSITE sides of ALPHA {alpha}: Q = {q} against a null of median {null_q_median} and 98.33% range [{null_q_lo}, {null_q_hi}] gives p_Q = {p_q}, while the range {r} against a null of median {null_r_median} and 98.33% range [{null_r_lo}, {null_r_hi}] gives p_R = {p_r}. {robust} THE REGISTERED PROCEDURE CLAIMS NEITHER ANSWER WHEN THEY DISAGREE, and the consequence is stated plainly: scalehet's rejection is NOT CONFIRMED by this re-test, so it does not stand as established, and this lane does not assert the opposite either. The disagreement is reported and not resolved, because resolving it by picking the statistic that agrees with a prior reading is exactly what registering both in advance was meant to prevent. M2h's +0.2146 and its about 2% of the variance stand as a GLOBAL AVERAGE. No regional model is proposed",
+    "INCONCLUSIVE": "INCONCLUSIVE: {why}. No heterogeneity verdict is given, scalehet's reading is neither confirmed nor withdrawn by this lane, and no regional model is proposed. M2h's one scale +0.2146 and its about 2% of the variance stand as a GLOBAL AVERAGE, untouched"
+  },
+  "robust_clauses": {
+    "AGREES": "The registered coarser 5-Mb locus-block null AGREES with the governing one at ALPHA: there Q = {q5} against a null of median {null_q5_median} and 98.33% range [{null_q5_lo}, {null_q5_hi}], p_Q = {p_q5}, the same side of ALPHA, over {n_blocks5} blocks -- so the reading does not turn on the span of the block.",
+    "DISAGREES": "THE REGISTERED COARSER 5-Mb LOCUS-BLOCK NULL DOES NOT AGREE, and that is part of this reading and not a caveat added to it: over {n_blocks5} blocks, Q = {q5} against a null of median {null_q5_median} and 98.33% range [{null_q5_lo}, {null_q5_hi}] gives p_Q = {p_q5}, the OTHER side of ALPHA. A coarser block can only widen the null, so the governing unit's reading holds AT THE 1-Mb SPAN ALONE and does not hold once a 5-Mb locus block is priced; which span is the right one for this dependence is not decided here and was not decided in advance, so the answer must be read as span-dependent."
+  },
+  "decision": "APPLIED IN THIS ORDER AND IN NO OTHER, and fixed before any statistic of this lane is computed. (1) Reproduce lane-scalehet's committed Q, R, global scale, null summaries and both p values; if they do not come back within TOLERANCE the lane stops and reads nothing. (2) Fix the governing block unit by BLOCK_SELECTION_RULE from the address-level element-sharing count. (3) If the null is DEGENERATE by DEGENERACY_RULE, read INCONCLUSIVE and stop. (4) Compute Q and R on the admitted chromosomes -- which are scalehet's observed values and must equal them -- and the governing block null's p_Q and p_R. (5) If p_Q and p_R fall on opposite sides of ALPHA, read MIXED. (6) Otherwise if p_Q <= ALPHA read SURVIVES_BLOCK_NULL; if p_Q > ALPHA read WITHDRAWN_NOT_ESTABLISHED. (7) Fill the registered sentence for that outcome, selecting the ROBUST_CLAUSES clause by whether the 5-Mb null's p_Q falls on the same side of ALPHA, and append PRIOR_EXPOSURE_CLAUSE. Always. (8) Report the element-sharing null as a descriptive, whatever it shows. NO OTHER QUANTITY MAY MOVE THE OUTCOME, and the outcome name is a function of p_Q, p_R, ALPHA and the degeneracy checks alone",
+  "falsifier": "WHAT WOULD HAVE TO HAPPEN FOR EACH READING TO BE WRONG, WRITTEN BEFORE EITHER IS SEEN. A SURVIVES_BLOCK_NULL reading is wrong if the dependence between the genes grouped here is not captured by a 1-Mb locus block: if the correlation reaches far across a chromosome, or runs between genes of the same family or the same expression level wherever they sit, a block null of this span is still too narrow and a rejection could still be an artefact. It is also wrong if the correlation runs through the PREDICTOR side rather than the locus -- the same compiled strengths and the same reader calls drive every P -- which no permutation of addresses can price. A WITHDRAWN_NOT_ESTABLISHED reading is wrong if the block null is too WIDE for the wrong reason: if the straddling of blocks by the cuts, or one or two very large blocks, inflates the null's Q independently of any real correlation. BLOCK_COUNTS_EXPECTED and the reported mean number of split blocks per draw are what let a reader check that, and MAX_BLOCK_SHARE and MIN_BLOCKS are what refuse the degenerate case in advance. AND EITHER READING IS WRONG, as a claim about the genome, if the chromosome is the wrong region unit: both nulls compare CHROMOSOMES, and a magnitude that varies by element, by locus or by expression level need not vary between chromosomes at all",
+  "stop_rule": "THE RUN IS RUN ONCE. The registration is committed before the run; the run refuses to start unless every BOUND field of this module matches the committed registration and every pinned input's sha256 still matches the file on disk; it refuses to overwrite its own result; and the reading is the registered sentence for the outcome the registered procedure returns, with its numbers filled and no word changed. NO SECOND SPAN, NO SECOND SEED, NO SECOND UNIT AND NO SECOND STATISTIC IS TRIED AFTER A VALUE IS SEEN. If a defect is found after the reading is committed it is reported BESIDE the registered reading and corrected only under a new registration. NO REGIONAL MODEL IS FITTED WHATEVER THE OUTCOME",
+  "limitations": [
+    "THE BLOCK IS 1 Mb OF SEQUENCE, NOT THE DEPENDENCE ITSELF. A 1-Mb locus block prices the correlation between genes of one neighbourhood. It does not price a correlation that runs further than 1 Mb, nor one that runs between genes of the same family, the same expression level or the same rule count wherever they sit on the chromosome. The 5-Mb null is registered as the one sensitivity to the span and two spans are not a proof of span-independence",
+    "THE ELEMENT-SHARING UNIT, WHICH THE BRIEF PREFERRED, PRICES NOTHING HERE, AND THAT IS A FACT ABOUT THIS POPULATION RATHER THAN A CHOICE: not one of the programs' 440,558 elements drives two of the table's 16,509 genes, so every element-sharing component is a single gene and that null IS scalehet's. The dependence that remains, and that this lane prices, is LOCUS PROXIMITY, which is a DIFFERENT dependence from the one scalehet named -- so a reading here answers the question scalehet's limitation should have asked rather than the one it did ask",
+    "THE DEPENDENCE ON THE PREDICTOR SIDE IS NOT PRICED BY ANY PERMUTATION OF ADDRESSES. Every P comes from the same compiled programs, the same attributed elements, the same fitted strengths and the same ENCODE DNase-seq reader calls, and the scale is M2h's. A permutation null moves genes between labels; it cannot price a systematic error shared by every prediction",
+    "A FAILURE TO REJECT IS NOT A PROOF OF IDENTITY. The block null's own 98.33% Q range is reported as the honest measure of what this test could have detected: a regional variation smaller than that spread would not be seen here, so WITHDRAWN_NOT_ESTABLISHED returns the question to not established and never to settled",
+    "THE CUTS SPLIT BLOCKS. Holding every chromosome's gene count EXACTLY -- which is what makes this null comparable with scalehet's -- forces the cut to fall inside a block sometimes, at most 22 times in a draw of 23 groups. A split block is partly exchanged, so the blocking is very slightly weaker than a design that let the counts float; the mean number split per draw is reported so the size of that compromise is on the record",
+    "THE REGION UNIT BEING COMPARED IS STILL THE CHROMOSOME, which is coarse and biologically arbitrary, and is scalehet's unit carried unchanged so that this lane re-tests scalehet's reading rather than a reading of its own. Regional variation by compiled element, by locus, by expression level or by rule count need not show BETWEEN CHROMOSOMES at all",
+    "THE RNA IS A MEASUREMENT ALREADY READ, by items 7, 7d, 7h, the capped-sum census, M2h, M2i, scalesplit, recovered and scalehet, AND THE SPREAD RE-TESTED HERE WAS ALREADY SEEN POST HOC AND HAS ALREADY BEEN TESTED ONCE AND REJECTED. Both are in PRIOR_EXPOSURE and both weaken every reading below what the same test on an unlooked-at pattern in a fresh measurement would carry",
+    "A SCALE IS A MAGNITUDE CORRECTION AND NEVER AN EXPLANATION OF EXPRESSION. Whatever this lane reads, the calibrated compiled rules buy about 2% of the variance on M2h's held-out side as a GLOBAL AVERAGE, and that number is not improved, revised or reinterpreted by anything here"
+  ],
+  "descriptives": [
+    "reported and DECIDING NOTHING: the element-sharing graph's counts and component sizes; the 1-Mb and 5-Mb block counts, the largest block's gene share and the number of single-gene blocks; the mean and maximum number of blocks a draw's cuts split; the per-chromosome fitted scales with their deviation from the global scale, which are scalehet's committed values unchanged and are NOT read as verdicts about any chromosome; each admitted chromosome's 98.33% band under the block null, which carries NO correction over the 23 chromosomes and is NOT a test of any one of them; and the gene-level p values scalehet committed, quoted beside the block-level ones so the SIZE of the change in p is visible",
+    "AND, AS A DESCRIPTIVE AND NOT A VERDICT: the ratio of the block null's median Q to the gene null's median Q, which is how much the dependence between neighbouring genes widens the null. It is the quantity scalehet could not price, it is reported whatever the outcome, and it decides nothing"
+  ],
+  "seconds": 1.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/hetblock_harness.json (this lane, step 2)",
+        "version": "pinned; it reproduced lane-scalehet's committed figures bit-identically"
+      },
+      {
+        "accession": "data/results/scalehet_result.json (lane-scalehet)",
+        "version": "pinned; the reading this lane re-tests"
+      },
+      {
+        "accession": "data/results/multrna_result.json (7h, lane-multrna)",
+        "version": "pinned"
+      },
+      {
+        "accession": "the 24 compiled non-coding programs and the GENCODE gene table",
+        "version": "pinned by sha256; addresses only"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/results/scalesplit_result.json",
+        "sha256": "aeb1609698e678bcebb808f5ecf4d25348852e6d89c1bc6b0ee8475fcac44102",
+        "bytes": 67515,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/results/scalehet_result.json",
+        "sha256": "dde2784c252bbfd98fd61de97f19bf36227714f7d11f57aec837bd857cbd8572",
+        "bytes": 109719,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/results/scalehet_harness.json",
+        "sha256": "4cb560bf57ddd95d0760c91117258c75b88de22ba3217990422b9402eaf1379c",
+        "bytes": 25545,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/results/scalehet_registration.json",
+        "sha256": "df0b44d667daabcf4635de044eb3e6850f7a06cdbc81ed689d755bab1a5e69ce",
+        "bytes": 79449,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/cache/gencode_genes.tsv",
+        "sha256": "840316869ca1f89da30627fea3eef0aa7bf5f9d63b7ccf70ad5f196b5b6e6dcc",
+        "bytes": 5332638,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr1.bio",
+        "sha256": "6575d116160a0a0707af30ea7450215a8866c9633832d3023e82dcab3e25d94a",
+        "bytes": 41450505,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr2.bio",
+        "sha256": "c4d59a28662dd8254f72cfd416f5223a387b083ab5544a5c3cf355280290a85b",
+        "bytes": 31176997,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr3.bio",
+        "sha256": "7f35b06159033fbf85c50fc78c4417135c7f1e575e0c533308a6d5d0d9c5d7d3",
+        "bytes": 25913658,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr4.bio",
+        "sha256": "a44c9cb4ba92d1e9b96d37204311f99a4b3e7a297e5ccfff67187f403b14f241",
+        "bytes": 19591946,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr5.bio",
+        "sha256": "11fa88443085464269c4d43d727029f60f0431f27ccdbcfe5083bed585e78092",
+        "bytes": 21461188,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr6.bio",
+        "sha256": "5a454b683c2010ffab8d146cc903725dd8c58ed85a9e7504608b3e53260da0d2",
+        "bytes": 22566069,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr7.bio",
+        "sha256": "0fcb0a18fbb93579b452d731307d5c5f68b88986fbebac680931304f7663fc3e",
+        "bytes": 21423286,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr8.bio",
+        "sha256": "f3a2dffedd7bdb75202c60157bf0f013539c4b12c7b269dfa6a45478e5dfbaa8",
+        "bytes": 17604365,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr9.bio",
+        "sha256": "3a848beddd2d83bef4645011d24fe6cf83470880627cb313d67dc0c3f6edfa51",
+        "bytes": 18189257,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr10.bio",
+        "sha256": "fa2b9dcba64ef898294c32cbb7db045df0398189c8e2eb23dbe049e20c1baea6",
+        "bytes": 19929386,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr11.bio",
+        "sha256": "c13d6d6256d1e591ad6b6d1c8a512f295c5949e32878b29a9dd83b0f4a95fe52",
+        "bytes": 24409857,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr12.bio",
+        "sha256": "c1c2616bb69794bbf1ce4524dcc365fbba0b3c1d7f2e901f5550b11816350214",
+        "bytes": 21457838,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr13.bio",
+        "sha256": "d10c073861dd40aadc32922eb9d98f638c0233fe4bba81587f8c7c6d769a1220",
+        "bytes": 9261652,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr14.bio",
+        "sha256": "fab5e01e17da2d5ecaef9c6d140d5f6e4db584a7b91be6ce3fa3f1932381581e",
+        "bytes": 12734645,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr15.bio",
+        "sha256": "9ed3c9047e150d6ad170bcc88b8a2c4e7ae1c4ee699ae59ba19826c56b05689a",
+        "bytes": 13580933,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr16.bio",
+        "sha256": "09ffd595e822f09060ce307fb0bfcf12c65b4cf5d676637cba997649d7ba8519",
+        "bytes": 14058774,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr17.bio",
+        "sha256": "82c193dd1acbef5212f9b87d64c3de74fb16431f92ec43b7565ba59577005401",
+        "bytes": 20400200,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr18.bio",
+        "sha256": "e6206d8d370d02a7d0543c1234f66686b972e49c909945a33e1260ddca8867f5",
+        "bytes": 8786498,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr19.bio",
+        "sha256": "a9238f3e530363c93773432fa42fc32496d4a38ba65fc485496abc63b8c2471b",
+        "bytes": 16587267,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr20.bio",
+        "sha256": "d87430423df595e2534e00d2c9f8f619c6d00db8b0ff8a5f0de011e39780532c",
+        "bytes": 12095731,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr21.bio",
+        "sha256": "43b938da2ee3ebf95058dfc6c70b292073373a64817bf9d41802c80604d90071",
+        "bytes": 4970000,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chr22.bio",
+        "sha256": "73e189440e990000cae9c0f12bc1a17713d26bf633a299e3e70cf0f64c51eca8",
+        "bytes": 9186897,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrX.bio",
+        "sha256": "1b86599b73bc3ffccc8a2113799080b51e6bdd09ee72eca36e76ea44e5129abc",
+        "bytes": 10763687,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/knowledge/compiled/noncoding_chrY.bio",
+        "sha256": "ce6961d492d8b246f9762e1287a5bea621304bdc249d89699a4401389e906ed2",
+        "bytes": 347166,
+        "partition": "pinned by sha256"
+      },
+      {
+        "path": "data/results/hetblock_harness.json",
+        "sha256": "400b454eec800dfc2ddc04da22107b705cb2912193a94efbfdf1f8573dcae26a",
+        "bytes": 40916,
+        "partition": "pinned by sha256"
+      }
+    ],
+    "input_count": 32,
+    "readers": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "IMR_90",
+      "H1",
+      "SK_N_SH",
+      "astrocyte",
+      "hepatocyte",
+      "keratinocyte",
+      "cardiac_muscle_cell",
+      "CD14_positive_monocyte",
+      "ovary",
+      "testis"
+    ],
+    "reader_count": 13,
+    "assembly": "GRCh38; genes as 7h matched them, by gene_id",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "registration_only": "no statistic of this lane is computed here: the file fixes the words and the numbers the run is not allowed to differ from",
+      "bound_fields": 57,
+      "block_span": 1000000,
+      "robust_span": 5000000,
+      "permutations": {
+        "count": 1000,
+        "seed": 20261012
+      },
+      "control_alpha": 0.05,
+      "stricter_alpha": 0.0167,
+      "min_genes": 100,
+      "min_blocks": 100,
+      "max_block_share": 0.1
+    },
+    "exclusions": [
+      "none: the population is scalehet's, which is 7h's"
+    ],
+    "partitions": {
+      "none": "a registration partitions nothing"
+    },
+    "code_cleanliness": {
+      "git_sha": "aa200ac3fc5054823af3efdda7259fb613cabbf9",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/hetblock_register.py",
+        "form": "committed_repository_file",
+        "path": "scripts/hetblock_register.py",
+        "is_committed": true,
+        "declared_entry": "scripts/hetblock_register.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/simpler_mouse.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/simpler_mouse_run.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_mouse.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/freshrna.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/hetblock.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/scalehet.py",
+        "genomeos/attribution/scalesplit.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/freshrna_run.py",
+        "scripts/hetblock_harness.py",
+        "scripts/hetblock_register.py",
+        "scripts/scalehet_harness.py"
+      ],
+      "counting_path_count": 162,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "aa200ac3fc5054823af3efdda7259fb613cabbf9",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/simpler_mouse.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/simpler_mouse_run.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_simpler_mouse.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/simpler_mouse_registration.json",
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/hetblock_register.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "aa200ac3fc5054823af3efdda7259fb613cabbf9",
+      "code_cleanliness_git_sha": "aa200ac3fc5054823af3efdda7259fb613cabbf9",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record aa200ac"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 338,
+      "opens_under_data": 33,
+      "files_read": 32,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
