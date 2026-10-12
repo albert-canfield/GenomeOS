@@ -403,3 +403,77 @@ def test_the_interval_is_the_9833_percent_percentile_interval() -> None:
     low, high = pr.percentile_interval(values)
     assert low == pytest.approx(np.percentile(values, 0.8333))
     assert high == pytest.approx(np.percentile(values, 99.1667))
+
+
+# --- the committed result, which `22cc987` makes git track ---------------------------------------
+
+
+def test_the_committed_outcome_is_the_one_the_decision_function_returns() -> None:
+    tracked_paths.must_be_present(
+        pr.RESULT_PATH, was="this lane's own committed reading of the registered run"
+    )
+    tracked_paths.must_be_present(pr.REGISTRATION_PATH, was="this lane's committed registration")
+    result = json.loads(pr.RESULT_PATH.read_text())
+    assert result["outcome"] == pr.decide(
+        result["single_cell_arm"]["ci"],
+        result["paired_difference"]["ci"],
+        result["paired_difference"]["margin"],
+    )
+    assert result["outcome"] in {"AGREEMENT", "DISAGREEMENT", "INCONCLUSIVE"}
+
+
+def test_the_run_used_the_registered_population_cells_scale_and_margin() -> None:
+    tracked_paths.must_be_present(pr.RESULT_PATH, was="this lane's committed reading")
+    tracked_paths.must_be_present(pr.REGISTRATION_PATH, was="this lane's committed registration")
+    result = json.loads(pr.RESULT_PATH.read_text())
+    registration = json.loads(pr.REGISTRATION_PATH.read_text())
+    assert result["genes"] == registration["population_genes"]
+    assert result["cells"] == registration["cells"]
+    assert result["scale"] == registration["scale"] == pr.SCALE
+    assert result["paired_difference"]["margin"] == registration["margin"] == pr.margin()
+    assert result["pairs"] == result["genes"] * len(result["cells"])
+    assert result["registration_sha256"] == pr.sha256_of(pr.REGISTRATION_PATH)
+
+
+def test_every_harness_check_passed_in_the_committed_run() -> None:
+    tracked_paths.must_be_present(pr.RESULT_PATH, was="this lane's committed reading")
+    harness = json.loads(pr.RESULT_PATH.read_text())["harness_check"]
+    assert harness["both_arms_centred_within_every_gene"] is True
+    assert harness["every_registered_gene_resolved_on_both_sides"] is True
+    assert harness["scale_is_m2hs_constant"] is True
+    assert harness["pinned_inputs_match"] is True
+    assert harness["cell_types"] == pr.MINIMUM["cell_types"]
+    assert harness["population_genes"] >= pr.MINIMUM["genes"]
+
+
+def test_the_reading_carries_the_wording_limit_and_the_exposure() -> None:
+    tracked_paths.must_be_present(pr.RESULT_PATH, was="this lane's committed reading")
+    result = json.loads(pr.RESULT_PATH.read_text())
+    reading = result["reading"]
+    assert "NOTHING IS FITTED IN THIS LANE" in reading
+    assert "already read by items 7, 7d, 7h, M2h and M2i" in reading
+    assert "ONLY ONE OF THE FOUR CELL TYPES IS SINGLE-NUCLEUS" in reading
+    if result["outcome"] == "AGREEMENT":
+        assert "FOR THIS ENDPOINT ONLY" in reading
+        assert "NEVER 'single-nucleus RNA equals bulk RNA'" in reading
+
+
+def test_the_run_declared_every_input_it_read_with_no_absolute_path() -> None:
+    tracked_paths.must_be_present(pr.RESULT_PATH, was="this lane's committed reading")
+    manifest = json.loads(pr.RESULT_PATH.read_text())["result_manifest"]
+    paths = {i["path"] for i in manifest["inputs"]}
+    assert sum(1 for p in paths if p.endswith(".h5ad")) == 2
+    assert all(not Path(p).is_absolute() for p in paths)
+    assert manifest["code_cleanliness"]["own_code_is_committed"]
+    assert manifest["code_cleanliness"]["foreign_uncommitted_code_on_the_counting_path"] == []
+
+
+def test_the_single_nucleus_cell_type_is_named_and_is_exactly_one_of_the_four() -> None:
+    tracked_paths.must_be_present(pr.RESULT_PATH, was="this lane's committed reading")
+    result = json.loads(pr.RESULT_PATH.read_text())
+    nucleus = [c for c, m in result["modality_per_cell"].items() if "single-nucleus" in m]
+    assert nucleus == ["ovary"], (
+        "the bile-duct source is single-NUCLEUS, so how many of the four are nuclei bounds what this "
+        "reading can license; a change here changes the report and must not pass silently"
+    )
+    assert len(result["modality_per_cell"]) == pr.MINIMUM["cell_types"]
