@@ -12,9 +12,13 @@ described as the global AVERAGE it is.
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 import pytest
+
+from genomeos import manifest as mf
+from tests.tracked_paths import must_be_present
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -116,3 +120,48 @@ def test_the_census_keys_cover_every_counted_field_and_no_prose_field():
 @pytest.mark.parametrize("tree", ec.PROGRAM_TREES)
 def test_every_tree_the_claim_covers_exists_and_holds_programmes(tree: str):
     assert sorted((ROOT / tree).rglob("*.bio"))
+
+
+# ---- the committed record ------------------------------------------------------------------
+# These read data/results/execscale_census.json, which is committed in the same commit as they are.
+
+RECORD = "data/results/execscale_census.json"
+
+
+def _record() -> dict:
+    must_be_present(RECORD)
+    return json.loads((ROOT / RECORD).read_text())
+
+
+def test_the_record_registers_the_claim_and_the_counts_it_is_held_to():
+    d = _record()
+    assert d["claim"] == ec.CLAIM
+    assert d["verification"] == ec.VERIFICATION
+    assert d["magnitude"]["value"] == 0.2146
+    assert d["result_manifest"]["complete"] is True
+    assert d["bio_test"]["totals"] == {
+        "exit_code": 0,
+        "files": 58,
+        "checks_passed": 410,
+        "checks_total": 410,
+        "paths": list(ec.TEST_PATHS),
+    }
+    assert d["program_count"] == 58
+    assert len(d["programs"]) == 58
+
+
+def test_the_recorded_chr21_rule_total_is_the_one_the_programme_declares():
+    d = _record()
+    for path, lines in d["chr21"].items():
+        assert "# test: rules == 5176" in lines
+        assert d["compiled_rule_totals"][path] == 5176
+
+
+def test_the_committed_programmes_are_byte_identical_to_the_record():
+    """The claim's own check: every digest in the record against the bytes on disk now."""
+    d = _record()
+    for row in d["programs"]:
+        must_be_present(row["path"])
+        digest, size, _ = mf.sha256_of(ROOT / row["path"])
+        assert (digest, size) == (row["sha256"], row["bytes"]), row["path"]
+    assert ec.group_digest([ROOT / r["path"] for r in d["programs"]]) == d["group_sha256"]

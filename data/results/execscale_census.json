@@ -1,0 +1,1825 @@
+{
+  "result": "execscale_census",
+  "date": "2026-10-12",
+  "question": "what is the committed state that the calibrated magnitude, added as an opt-in parameter with default 1.0, must leave untouched?",
+  "claim": "With the calibrated magnitude at its default of 1.0, NOTHING changes: every committed .bio programme under data/organisms, genomeos/std and data/demo is byte-identical to the bytes digested here, and every count in this census -- the `bio test` file count and checks-passed total, each programme's entity and rule count, and each programme's declared `# test:` lines, chr21's `# test: rules == 5176` among them -- is unchanged. The parameter is opt-in: a run gets the measured magnitude only by asking for it by name, and no default run and no committed programme asks",
+  "verification": "sha256 over the bytes of each programme, plus one group digest over all of them in a fixed order, plus the counts recomputed by running `bio test`'s own checks in process. `--verify` recomputes every field of this record and compares field by field, printing the first mismatch with both values. Byte digests and integer counts, never a reading of a diff and never an eyeballed count: the error this guards against is a change that looks inert in a diff and moves a number",
+  "magnitude": {
+    "value": 0.2146,
+    "source_commit": "ac5580b",
+    "reading": "M2h: on genes held out of the fit, the multiplicative composition scaled by the one factor fitted on the training genes came closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; fitted scale +0.2146 [98.33% CI +0.2007, +0.2283]), about 2% of the measured variance",
+    "it_is_a_global_average": "lane-scalehet/hetblock2 (`d9e3ddd`) measured that the magnitude is NOT one global number: it varies by chromosome and that heterogeneity survives a locus-block null. +0.2146 is a global AVERAGE over a varying magnitude and must be described that way",
+    "nothing_is_fitted_here": "the constant is read from ac5580b; this lane fits nothing"
+  },
+  "does_not_claim": "this census says nothing about RNA, about whether the calibrated composition predicts expression, or about whether the default SHOULD be 1.0. It is a record of the committed state and of one safety property of an addition to it. The RNA evidence for the magnitude is M2h's (`ac5580b`) and M2i's (`f6e71c6`) and is not re-read here",
+  "programs": [
+    {
+      "path": "data/organisms/celegans/acvu.bio",
+      "sha256": "4ec51b82b4b10908430af52c70cc4596138a9e94e1fe7baec0ee7f6f39706145",
+      "bytes": 10543,
+      "lines": 105,
+      "module": "organism.celegans.acvu",
+      "entities": 30,
+      "rules": 4,
+      "declared_test_lines": [
+        "# test: cells >= 9"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/cell_types.bio",
+      "sha256": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c",
+      "bytes": 2604,
+      "lines": 24,
+      "module": "organism.celegans.cell_types",
+      "entities": 22,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: entities >= 20",
+        "# test: unknowns == 0"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/designs.bio",
+      "sha256": "fb6e55433a51517be7c9684bfa6f8275ca5672b4a752078a8723c0a57299385c",
+      "bytes": 955,
+      "lines": 24,
+      "module": "organism.celegans.designs",
+      "entities": 32,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/embryo.bio",
+      "sha256": "c3bf6a9b151f74547c3c0e2c0106ef85eadd82381ad97e87e0db133cb3b46ad3",
+      "bytes": 2118,
+      "lines": 43,
+      "module": "organism.celegans.embryo",
+      "entities": 32,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells >= 2150",
+        "# test: deaths == 131",
+        "# test: alive >= 940"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/embryo_contacts.bio",
+      "sha256": "2ca48ec4b82b943c336131aa4c45971ddd42d672bc2d31261df63288eb97a94f",
+      "bytes": 3027,
+      "lines": 58,
+      "module": "organism.celegans.embryo_contacts",
+      "entities": 33,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells >= 2150",
+        "# test: deaths == 131"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/embryo_factors.bio",
+      "sha256": "f674d6c1b591cad143b1f7c66a203dc3b35e84c09f03da482ac6598ed222834f",
+      "bytes": 3794,
+      "lines": 51,
+      "module": "organism.celegans.embryo_factors",
+      "entities": 32,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells >= 2150",
+        "# test: deaths == 131"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/embryo_nolookup.bio",
+      "sha256": "7602286f1716ca6f55247f8e1714659c4242209511214db8164e1503e1a7bac1",
+      "bytes": 3784,
+      "lines": 67,
+      "module": "organism.celegans.embryo_nolookup",
+      "entities": 33,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells >= 2150",
+        "# test: deaths == 131"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/fates.bio",
+      "sha256": "b7ccefed754e4bbbd25ed1ff25b08d6d3db43838f9fddfc9a7cc130eb16d3298",
+      "bytes": 21509,
+      "lines": 34,
+      "module": "organism.celegans.fates",
+      "entities": 22,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/founder_tissues.bio",
+      "sha256": "09359ffb0aa4662cd92b6b54cb3b86e14691de58f3e54535ef5e465b58e50502",
+      "bytes": 3324,
+      "lines": 34,
+      "module": "organism.celegans.founder_tissues",
+      "entities": 22,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: entities >= 3",
+        "# test: unknowns == 0"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/founders.bio",
+      "sha256": "41cad2ec74552d79de29cc348e6ac51b0a1906980a3cec2f26d41c17c4b610e5",
+      "bytes": 7871,
+      "lines": 50,
+      "module": "organism.celegans.founders",
+      "entities": 15,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: entities >= 14",
+        "# test: unknowns == 0"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/founders_contacts.bio",
+      "sha256": "0b7fb261f01ae6d024c579bd7e023d0f493112f1797a28e5deb253b312a1827f",
+      "bytes": 12269,
+      "lines": 84,
+      "module": "organism.celegans.founders_contacts",
+      "entities": 16,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: entities >= 16",
+        "# test: unknowns == 0"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/lineage_embryo.bio",
+      "sha256": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+      "bytes": 239228,
+      "lines": 1444,
+      "module": "organism.celegans.lineage",
+      "entities": 22,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/lineage_embryo_tree.bio",
+      "sha256": "dcd531be104158ee09de633ecf1d060e5ee0ef2b37d2a94de89c34bfd125d151",
+      "bytes": 145834,
+      "lines": 895,
+      "module": "organism.celegans.lineage_tree",
+      "entities": 22,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/lineage_larva.bio",
+      "sha256": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+      "bytes": 123195,
+      "lines": 749,
+      "module": "organism.celegans.lineage",
+      "entities": 22,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/mutants.bio",
+      "sha256": "a083fef64ca7d797a3d01164fbc1cae51d25e12bdca60e69f7bf8291605ba701",
+      "bytes": 4459,
+      "lines": 17,
+      "module": "organism.celegans.mutants",
+      "entities": 32,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/mutants_nolookup.bio",
+      "sha256": "f4dce6f6c7f3c7363731ad3e08ea4150bc15353e3994eddb00e6dd4af730a839",
+      "bytes": 5097,
+      "lines": 31,
+      "module": "organism.celegans.mutants_nolookup",
+      "entities": 33,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/plasticity.bio",
+      "sha256": "0b450393a8efb7fdf5e675a22b923687d20ee6d11982d82cf112afac3d2e673f",
+      "bytes": 6020,
+      "lines": 116,
+      "module": "organism.celegans.plasticity",
+      "entities": 32,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells >= 2150",
+        "# test: deaths == 131"
+      ]
+    },
+    {
+      "path": "data/organisms/celegans/reader.bio",
+      "sha256": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+      "bytes": 792382,
+      "lines": 1271,
+      "module": "organism.celegans.reader",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/celegans/timers.bio",
+      "sha256": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+      "bytes": 13303,
+      "lines": 80,
+      "module": "organism.celegans.timers",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: unknowns == 0"
+      ]
+    },
+    {
+      "path": "data/organisms/human/body.bio",
+      "sha256": "79c9baa7c90013a18f3d012864df1c50e55a2d9ddb84e25d02e466932ed91a9d",
+      "bytes": 5609,
+      "lines": 61,
+      "module": "organism.human.body",
+      "entities": 27,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells == 21",
+        "# test: deaths == 0"
+      ]
+    },
+    {
+      "path": "data/organisms/human/colon.bio",
+      "sha256": "1d1b88c34fe5bd70377a3479276a31f0f17f4dbc87b20b19bd4248c55e9497e6",
+      "bytes": 10979,
+      "lines": 83,
+      "module": "organism.human.colon",
+      "entities": 11,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/colon_mutants.bio",
+      "sha256": "a2c4b0483b9222a22c8a05829228f3aa10a9a1276a4edcf1629af0133b5b1102",
+      "bytes": 4111,
+      "lines": 17,
+      "module": "organism.human.colon_mutants",
+      "entities": 11,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/erythrocyte.bio",
+      "sha256": "0d3cc96e9d1826160839b2a12652bc4dcbc196f4aa7dd8ba2afdabc0a95b5f2f",
+      "bytes": 3199,
+      "lines": 53,
+      "module": "human.erythrocyte",
+      "entities": 7,
+      "rules": 2,
+      "declared_test_lines": [
+        "# test: entities >= 7",
+        "# test: stranded == 0",
+        "# test: HbA@Cytosol final > 5e8",
+        "# test: HbA@Cytosol final <= 5.6e8",
+        "# test: SLC4A1@PlasmaMembrane final > 1e6"
+      ]
+    },
+    {
+      "path": "data/organisms/human/haematopoiesis.bio",
+      "sha256": "2655f5ae7ca7941288cb69942efe175af573e7e6332d5a0cd8221e7682bdaa84",
+      "bytes": 20618,
+      "lines": 114,
+      "module": "organism.human.haematopoiesis",
+      "entities": 21,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/haematopoiesis_designs.bio",
+      "sha256": "b5818f768dd55394b71a36f2e05260046d23caa7fe740832c3c909d61784a3de",
+      "bytes": 1207,
+      "lines": 28,
+      "module": "organism.human.haematopoiesis_designs",
+      "entities": 21,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/haematopoiesis_mutants.bio",
+      "sha256": "fc76df6f7ae629522881f54c63fd5396de6e380d7b0ed1b770e5307dcb007196",
+      "bytes": 3401,
+      "lines": 15,
+      "module": "organism.human.haematopoiesis_mutants",
+      "entities": 21,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/intestine.bio",
+      "sha256": "e544fda061017a35b276539e94191879866a9ba6a667f416cf5f345149cf13f2",
+      "bytes": 10233,
+      "lines": 77,
+      "module": "organism.human.intestine",
+      "entities": 12,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/intestine_mutants.bio",
+      "sha256": "234244dbd2d40bd7f49fa0a750bc9a28383ac182fc65727497e90133a5b56ccb",
+      "bytes": 3812,
+      "lines": 16,
+      "module": "organism.human.intestine_mutants",
+      "entities": 12,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/noncoding_chr21.bio",
+      "sha256": "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192",
+      "bytes": 4979850,
+      "lines": 80528,
+      "module": "human.noncoding.chr21",
+      "entities": 6172,
+      "rules": 5176,
+      "declared_test_lines": [
+        "# test: entities >= 6172",
+        "# test: unknowns == 20",
+        "# test: rules == 5176"
+      ]
+    },
+    {
+      "path": "data/organisms/human/noncoding_chr21_v2.bio",
+      "sha256": "11bbff2f1a8ff41a49e0329aa2b3d9dae109638556a1e2a3fd13bcaefb367ecb",
+      "bytes": 4980025,
+      "lines": 80530,
+      "module": "human.noncoding.chr21",
+      "entities": 6172,
+      "rules": 5176,
+      "declared_test_lines": [
+        "# test: entities >= 6172",
+        "# test: unknowns == 20",
+        "# test: rules == 5176"
+      ]
+    },
+    {
+      "path": "data/organisms/human/noncoding_chr21_v3.bio",
+      "sha256": "17315af720e886466ba585832c9a99fb699fd128c92e0a093b2e06ea329cce93",
+      "bytes": 5276570,
+      "lines": 80583,
+      "module": "human.noncoding.chr21",
+      "entities": 6172,
+      "rules": 5176,
+      "declared_test_lines": [
+        "# test: entities >= 6172",
+        "# test: unknowns == 20",
+        "# test: rules == 5176"
+      ]
+    },
+    {
+      "path": "data/organisms/human/oxphos.bio",
+      "sha256": "0e212fa45dc96cf24b0db0117dbf3b6a704720fe2ae1f57d1115902d7be81d1a",
+      "bytes": 48211,
+      "lines": 578,
+      "module": "human.oxphos",
+      "entities": 214,
+      "rules": 200,
+      "declared_test_lines": [
+        "# test: stranded == 0",
+        "# test: MT-ND1p@Mitochondrion final > 0.05",
+        "# test: SDHBp@Mitochondrion final > 0.05",
+        "# test: CI@Mitochondrion final > 0.05",
+        "# test: CII@Mitochondrion final > 0.05",
+        "# test: CIII@Mitochondrion final > 0.05",
+        "# test: CIV@Mitochondrion final > 0.05",
+        "# test: CV@Mitochondrion final > 0.05"
+      ]
+    },
+    {
+      "path": "data/organisms/human/stomach.bio",
+      "sha256": "8c26a44939cf10a288242427d8f3ff1200d30c6ba17d34046df1f775c76390bc",
+      "bytes": 15380,
+      "lines": 102,
+      "module": "organism.human.stomach",
+      "entities": 11,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/stomach_mutants.bio",
+      "sha256": "12ca662bd76389530478baf413599072476f08cd52870daac177424af6d3b08a",
+      "bytes": 3983,
+      "lines": 17,
+      "module": "organism.human.stomach_mutants",
+      "entities": 11,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/organisms/human/tissues.bio",
+      "sha256": "e4db081f958a1db9c1d7bd841711f03e5dedd7a6f0d113f17bd6a6de1b02b175",
+      "bytes": 28403,
+      "lines": 143,
+      "module": "organism.human.tissues",
+      "entities": 24,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "genomeos/std/ageing.bio",
+      "sha256": "a1732381e5aa12b58da46ce96b00e537711a032b59e188a44d7a3dad4024570f",
+      "bytes": 907,
+      "lines": 33,
+      "module": "bio.std.ageing",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "genomeos/std/cell_types.bio",
+      "sha256": "40d862845df9b92cd81aadaa041ad627f16b0ee085b0061d0055fb77f1c93408",
+      "bytes": 842,
+      "lines": 10,
+      "module": "bio.std.cell_types",
+      "entities": 6,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "genomeos/std/core_metabolism.bio",
+      "sha256": "5378f6abe109435a4901bbfb2b499b964dc1be46bc56d07dbddffff4291bc589",
+      "bytes": 3951,
+      "lines": 66,
+      "module": "bio.std.core_metabolism",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: parameters == 13",
+        "# test: unknown_parameters == 0"
+      ]
+    },
+    {
+      "path": "genomeos/std/development.bio",
+      "sha256": "2ec2c5e109f858b42c74e4e5e93ea2e066be9b338dd466b04c2c22af7ab5b028",
+      "bytes": 943,
+      "lines": 11,
+      "module": "bio.std.development",
+      "entities": 5,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "genomeos/std/human_stages.bio",
+      "sha256": "7f33f6d770f767dca5581b628b83a04f892126af98a0d703dde3d69f31b266b9",
+      "bytes": 4213,
+      "lines": 36,
+      "module": "bio.std.human_stages",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "genomeos/std/human_turnover.bio",
+      "sha256": "171bffc88359bc454569cb08a2e2f4c4b9770e3a17e69fcc34429cc50bf3cd31",
+      "bytes": 3288,
+      "lines": 21,
+      "module": "bio.std.human_turnover",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "genomeos/std/methylation.bio",
+      "sha256": "73a3a4e3700e2d6421cd8876765275610ddd5528198c5af1396bf3e082ce9be2",
+      "bytes": 3141,
+      "lines": 56,
+      "module": "bio.std.methylation",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: parameters >= 8",
+        "# test: unknown_parameters >= 6"
+      ]
+    },
+    {
+      "path": "genomeos/std/signalling.bio",
+      "sha256": "ade53caa6c5a83bb3b46e1c4117bcc84c5e182e317fbe32e464bc38dbb24b199",
+      "bytes": 29470,
+      "lines": 154,
+      "module": "bio.std.signalling",
+      "entities": 148,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/demo/celegans_lineage.bio",
+      "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+      "bytes": 4382,
+      "lines": 47,
+      "module": "organism.celegans.early",
+      "entities": 5,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: cells >= 40",
+        "# test: deaths == 0"
+      ]
+    },
+    {
+      "path": "data/demo/cell_context.bio",
+      "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+      "bytes": 1659,
+      "lines": 42,
+      "module": "demo.cell_context",
+      "entities": 15,
+      "rules": 4,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/demo/concentration_threshold.bio",
+      "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+      "bytes": 3525,
+      "lines": 57,
+      "module": "demo.concentration_threshold",
+      "entities": 6,
+      "rules": 4,
+      "declared_test_lines": [
+        "# test: stranded == 0",
+        "# test: ectopic == 0",
+        "# test: Rp@Cytosol final > 990",
+        "# test: Tp@Cytosol final > 995",
+        "# test: Tp@Cytosol final < 1005",
+        "# test: Up@Cytosol final > 995",
+        "# test: Up@Cytosol final < 1005"
+      ]
+    },
+    {
+      "path": "data/demo/flag_organism.bio",
+      "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+      "bytes": 2920,
+      "lines": 43,
+      "module": "demo.flag_organism",
+      "entities": 10,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: alive == 30"
+      ]
+    },
+    {
+      "path": "data/demo/gastrulation.bio",
+      "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+      "bytes": 3765,
+      "lines": 43,
+      "module": "development.gastrulation",
+      "entities": 14,
+      "rules": 11,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/demo/hoxd_order.bio",
+      "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+      "bytes": 3064,
+      "lines": 42,
+      "module": "demo.hoxd_order",
+      "entities": 10,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: entities >= 10"
+      ]
+    },
+    {
+      "path": "data/demo/lateral_inhibition.bio",
+      "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+      "bytes": 4042,
+      "lines": 59,
+      "module": "demo.lateral_inhibition",
+      "entities": 13,
+      "rules": 4,
+      "declared_test_lines": [
+        "# test: cells == 3"
+      ]
+    },
+    {
+      "path": "data/demo/methylation_erosion.bio",
+      "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+      "bytes": 3260,
+      "lines": 65,
+      "module": "methylation_erosion",
+      "entities": 0,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: unknown_parameters == 0",
+        "# test: methylation.dense final > 0.6",
+        "# test: methylation.sparse final > 0.3",
+        "# test: methylation.solo_wcgw final < 0.3",
+        "# test: methylation.gap final > 0.3",
+        "# test: methylation.gap min < 0.05"
+      ]
+    },
+    {
+      "path": "data/demo/reader_gating.bio",
+      "sha256": "0334ee0b99c0aaff110adb1493462bf2af21b74ccc4e84c4be7cc6881be93f1e",
+      "bytes": 3513,
+      "lines": 66,
+      "module": "demo.reader_gating",
+      "entities": 13,
+      "rules": 5,
+      "declared_test_lines": [
+        "# test: rules == 5",
+        "# test: active_rules == 5 in cell_type=OpenCell",
+        "# test: held_rules == 1 in cell_type=OpenCell",
+        "# test: held_rules == 0 in cell_type=RepressedCell",
+        "# test: held_rules == 2 in cell_type=ClosedCell",
+        "# test: held_rules == 2 in cell_type=PoisedCell",
+        "# test: held_rules == 2 in cell_type=UnreadCell",
+        "# test: TGT.mRNA final > 50 in cell_type=OpenCell",
+        "# test: TGT.mRNA final < 30 in cell_type=RepressedCell",
+        "# test: TGT.mRNA final > 5 in cell_type=RepressedCell",
+        "# test: TGT.mRNA final < 1 in cell_type=ClosedCell",
+        "# test: TGT.mRNA final < 1 in cell_type=PoisedCell",
+        "# test: TGT.mRNA final < 1 in cell_type=UnreadCell",
+        "# test: Act final > 100 in cell_type=ClosedCell"
+      ]
+    },
+    {
+      "path": "data/demo/repressilator.bio",
+      "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+      "bytes": 2363,
+      "lines": 87,
+      "module": "synthetic.repressilator",
+      "entities": 7,
+      "rules": 6,
+      "declared_test_lines": [
+        "# test: rules >= 3",
+        "# test: TetR peaks >= 1",
+        "# test: confidence >= 0.6"
+      ]
+    },
+    {
+      "path": "data/demo/segmentation_clock.bio",
+      "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+      "bytes": 1639,
+      "lines": 21,
+      "module": "development.segmentation_clock",
+      "entities": 12,
+      "rules": 6,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/demo/stage2_pools.bio",
+      "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+      "bytes": 2117,
+      "lines": 32,
+      "module": "demo.stage2_pools",
+      "entities": 10,
+      "rules": 0,
+      "declared_test_lines": []
+    },
+    {
+      "path": "data/demo/stage3_energy.bio",
+      "sha256": "90f6b710e35590f702ecb03bb565741ae28eb7115880e8c3e4cb2c2a7005b765",
+      "bytes": 5558,
+      "lines": 83,
+      "module": "demo.stage3_energy",
+      "entities": 9,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: metabolism.high.yield_aerobic == 32",
+        "# test: metabolism.low.yield_aerobic == 28",
+        "# test: metabolism.high.yield_anaerobic == 2",
+        "# test: metabolism.copies == 1000",
+        "# test: metabolism.mutant_copies == 700",
+        "# test: metabolism.high.atp_supply == 1e10",
+        "# test: metabolism.high.glucose_uptake == 3.125e8",
+        "# test: metabolism.high.o2_uptake == 1.875e9",
+        "# test: metabolism.high.lactate == 0",
+        "# test: metabolism.high.oxphos_share == 0.875",
+        "# test: metabolism.low.met == 1",
+        "# test: metabolism.low.glucose_uptake > 3.5714e8",
+        "# test: metabolism.low.glucose_uptake < 3.5715e8",
+        "# test: metabolism.high.met == 0.4 in O2=0",
+        "# test: metabolism.low.met == 0.4 in O2=0",
+        "# test: metabolism.high.oxphos_share == 0 in O2=0",
+        "# test: metabolism.high.glucose_uptake == 2e9 in O2=0",
+        "# test: metabolism.high.lactate == 4e9 in O2=0",
+        "# test: metabolism.high.factor.ca_pumping == 1 in O2=0",
+        "# test: metabolism.high.factor.na_k_pumping == 0.6 in O2=0",
+        "# test: metabolism.high.factor.protein_synthesis == 0 in O2=0",
+        "# test: metabolism.high.atp_supply == 0 in Glucose=0"
+      ]
+    },
+    {
+      "path": "data/demo/stage3_erythrocyte.bio",
+      "sha256": "73f13ff8a858c7bc5d7ca72c8c54ae933ff3272cb27ae3c4b00414a7916c865c",
+      "bytes": 3632,
+      "lines": 58,
+      "module": "demo.stage3_erythrocyte",
+      "entities": 7,
+      "rules": 0,
+      "declared_test_lines": [
+        "# test: metabolism.copies == 0",
+        "# test: metabolism.high.yield_anaerobic == 1.62",
+        "# test: metabolism.high.atp_supply == 2e8",
+        "# test: metabolism.high.atp.OXPHOS == 0",
+        "# test: metabolism.high.atp.TCA == 0",
+        "# test: metabolism.high.o2_uptake == 0",
+        "# test: metabolism.high.glucose_uptake > 1.2345679e8",
+        "# test: metabolism.high.glucose_uptake < 1.234568e8",
+        "# test: metabolism.low.atp_supply == 2e8",
+        "# test: metabolism.high.bpg_shunt_flux > 4.6913e7",
+        "# test: metabolism.high.bpg_shunt_flux < 4.6914e7",
+        "# test: metabolism.high.atp_supply == 2e8 in O2=0",
+        "# test: metabolism.high.atp_supply == 0 in Glucose=0",
+        "# test: metabolism.high.factor.na_k_pumping == 0 in Glucose=0"
+      ]
+    },
+    {
+      "path": "data/demo/stage4_division.bio",
+      "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+      "bytes": 2322,
+      "lines": 38,
+      "module": "demo.stage4_division",
+      "entities": 5,
+      "rules": 0,
+      "declared_test_lines": []
+    }
+  ],
+  "program_count": 58,
+  "group_sha256": "fe56d749bba4741f091f3101c4728f5945bc3ecd82121931a5982533201643ce",
+  "compiled_rule_totals": {
+    "data/organisms/celegans/acvu.bio": 4,
+    "data/organisms/celegans/cell_types.bio": 0,
+    "data/organisms/celegans/designs.bio": 0,
+    "data/organisms/celegans/embryo.bio": 0,
+    "data/organisms/celegans/embryo_contacts.bio": 0,
+    "data/organisms/celegans/embryo_factors.bio": 0,
+    "data/organisms/celegans/embryo_nolookup.bio": 0,
+    "data/organisms/celegans/fates.bio": 0,
+    "data/organisms/celegans/founder_tissues.bio": 0,
+    "data/organisms/celegans/founders.bio": 0,
+    "data/organisms/celegans/founders_contacts.bio": 0,
+    "data/organisms/celegans/lineage_embryo.bio": 0,
+    "data/organisms/celegans/lineage_embryo_tree.bio": 0,
+    "data/organisms/celegans/lineage_larva.bio": 0,
+    "data/organisms/celegans/mutants.bio": 0,
+    "data/organisms/celegans/mutants_nolookup.bio": 0,
+    "data/organisms/celegans/plasticity.bio": 0,
+    "data/organisms/celegans/reader.bio": 0,
+    "data/organisms/celegans/timers.bio": 0,
+    "data/organisms/human/body.bio": 0,
+    "data/organisms/human/colon.bio": 0,
+    "data/organisms/human/colon_mutants.bio": 0,
+    "data/organisms/human/erythrocyte.bio": 2,
+    "data/organisms/human/haematopoiesis.bio": 0,
+    "data/organisms/human/haematopoiesis_designs.bio": 0,
+    "data/organisms/human/haematopoiesis_mutants.bio": 0,
+    "data/organisms/human/intestine.bio": 0,
+    "data/organisms/human/intestine_mutants.bio": 0,
+    "data/organisms/human/noncoding_chr21.bio": 5176,
+    "data/organisms/human/noncoding_chr21_v2.bio": 5176,
+    "data/organisms/human/noncoding_chr21_v3.bio": 5176,
+    "data/organisms/human/oxphos.bio": 200,
+    "data/organisms/human/stomach.bio": 0,
+    "data/organisms/human/stomach_mutants.bio": 0,
+    "data/organisms/human/tissues.bio": 0,
+    "genomeos/std/ageing.bio": 0,
+    "genomeos/std/cell_types.bio": 0,
+    "genomeos/std/core_metabolism.bio": 0,
+    "genomeos/std/development.bio": 0,
+    "genomeos/std/human_stages.bio": 0,
+    "genomeos/std/human_turnover.bio": 0,
+    "genomeos/std/methylation.bio": 0,
+    "genomeos/std/signalling.bio": 0,
+    "data/demo/celegans_lineage.bio": 0,
+    "data/demo/cell_context.bio": 4,
+    "data/demo/concentration_threshold.bio": 4,
+    "data/demo/flag_organism.bio": 0,
+    "data/demo/gastrulation.bio": 11,
+    "data/demo/hoxd_order.bio": 0,
+    "data/demo/lateral_inhibition.bio": 4,
+    "data/demo/methylation_erosion.bio": 0,
+    "data/demo/reader_gating.bio": 5,
+    "data/demo/repressilator.bio": 6,
+    "data/demo/segmentation_clock.bio": 6,
+    "data/demo/stage2_pools.bio": 0,
+    "data/demo/stage3_energy.bio": 0,
+    "data/demo/stage3_erythrocyte.bio": 0,
+    "data/demo/stage4_division.bio": 0
+  },
+  "bio_test": {
+    "totals": {
+      "exit_code": 0,
+      "files": 58,
+      "checks_passed": 410,
+      "checks_total": 410,
+      "paths": [
+        "data/demo",
+        "genomeos/std",
+        "data/organisms"
+      ]
+    },
+    "per_file": {
+      "data/demo/celegans_lineage.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.early",
+        "entities": 5,
+        "rules": 0,
+        "checks_ok": 4,
+        "checks_total": 4
+      },
+      "data/demo/cell_context.bio": {
+        "mark": "\u2713",
+        "module": "demo.cell_context",
+        "entities": 15,
+        "rules": 4,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/demo/concentration_threshold.bio": {
+        "mark": "\u2713",
+        "module": "demo.concentration_threshold",
+        "entities": 6,
+        "rules": 4,
+        "checks_ok": 7,
+        "checks_total": 7
+      },
+      "data/demo/flag_organism.bio": {
+        "mark": "\u2713",
+        "module": "demo.flag_organism",
+        "entities": 10,
+        "rules": 0,
+        "checks_ok": 5,
+        "checks_total": 5
+      },
+      "data/demo/gastrulation.bio": {
+        "mark": "\u2713",
+        "module": "development.gastrulation",
+        "entities": 14,
+        "rules": 11,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/demo/hoxd_order.bio": {
+        "mark": "\u2713",
+        "module": "demo.hoxd_order",
+        "entities": 10,
+        "rules": 0,
+        "checks_ok": 1,
+        "checks_total": 1
+      },
+      "data/demo/lateral_inhibition.bio": {
+        "mark": "\u2713",
+        "module": "demo.lateral_inhibition",
+        "entities": 13,
+        "rules": 4,
+        "checks_ok": 3,
+        "checks_total": 3
+      },
+      "data/demo/methylation_erosion.bio": {
+        "mark": "\u2713",
+        "module": "methylation_erosion",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 7,
+        "checks_total": 7
+      },
+      "data/demo/reader_gating.bio": {
+        "mark": "\u2713",
+        "module": "demo.reader_gating",
+        "entities": 13,
+        "rules": 5,
+        "checks_ok": 19,
+        "checks_total": 19
+      },
+      "data/demo/repressilator.bio": {
+        "mark": "\u2713",
+        "module": "synthetic.repressilator",
+        "entities": 7,
+        "rules": 6,
+        "checks_ok": 4,
+        "checks_total": 4
+      },
+      "data/demo/segmentation_clock.bio": {
+        "mark": "\u2713",
+        "module": "development.segmentation_clock",
+        "entities": 12,
+        "rules": 6,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/demo/stage2_pools.bio": {
+        "mark": "\u2713",
+        "module": "demo.stage2_pools",
+        "entities": 10,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/demo/stage3_energy.bio": {
+        "mark": "\u2713",
+        "module": "demo.stage3_energy",
+        "entities": 9,
+        "rules": 0,
+        "checks_ok": 22,
+        "checks_total": 22
+      },
+      "data/demo/stage3_erythrocyte.bio": {
+        "mark": "\u2713",
+        "module": "demo.stage3_erythrocyte",
+        "entities": 7,
+        "rules": 0,
+        "checks_ok": 14,
+        "checks_total": 14
+      },
+      "data/demo/stage4_division.bio": {
+        "mark": "\u2713",
+        "module": "demo.stage4_division",
+        "entities": 5,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "genomeos/std/ageing.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.ageing",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "genomeos/std/cell_types.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.cell_types",
+        "entities": 6,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "genomeos/std/core_metabolism.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.core_metabolism",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 2,
+        "checks_total": 2
+      },
+      "genomeos/std/development.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.development",
+        "entities": 5,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "genomeos/std/human_stages.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.human_stages",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "genomeos/std/human_turnover.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.human_turnover",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "genomeos/std/methylation.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.methylation",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 2,
+        "checks_total": 2
+      },
+      "genomeos/std/signalling.bio": {
+        "mark": "\u2713",
+        "module": "bio.std.signalling",
+        "entities": 148,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/organisms/celegans/acvu.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.acvu",
+        "entities": 30,
+        "rules": 4,
+        "checks_ok": 8,
+        "checks_total": 8
+      },
+      "data/organisms/celegans/cell_types.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.cell_types",
+        "entities": 22,
+        "rules": 0,
+        "checks_ok": 2,
+        "checks_total": 2
+      },
+      "data/organisms/celegans/designs.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.designs",
+        "entities": 32,
+        "rules": 0,
+        "checks_ok": 6,
+        "checks_total": 6
+      },
+      "data/organisms/celegans/embryo.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.embryo",
+        "entities": 32,
+        "rules": 0,
+        "checks_ok": 9,
+        "checks_total": 9
+      },
+      "data/organisms/celegans/embryo_contacts.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.embryo_contacts",
+        "entities": 33,
+        "rules": 0,
+        "checks_ok": 6,
+        "checks_total": 6
+      },
+      "data/organisms/celegans/embryo_factors.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.embryo_factors",
+        "entities": 32,
+        "rules": 0,
+        "checks_ok": 8,
+        "checks_total": 8
+      },
+      "data/organisms/celegans/embryo_nolookup.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.embryo_nolookup",
+        "entities": 33,
+        "rules": 0,
+        "checks_ok": 6,
+        "checks_total": 6
+      },
+      "data/organisms/celegans/fates.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.fates",
+        "entities": 22,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/organisms/celegans/founder_tissues.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.founder_tissues",
+        "entities": 22,
+        "rules": 0,
+        "checks_ok": 2,
+        "checks_total": 2
+      },
+      "data/organisms/celegans/founders.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.founders",
+        "entities": 15,
+        "rules": 0,
+        "checks_ok": 2,
+        "checks_total": 2
+      },
+      "data/organisms/celegans/founders_contacts.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.founders_contacts",
+        "entities": 16,
+        "rules": 0,
+        "checks_ok": 2,
+        "checks_total": 2
+      },
+      "data/organisms/celegans/lineage_embryo.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.lineage",
+        "entities": 22,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/organisms/celegans/lineage_embryo_tree.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.lineage_tree",
+        "entities": 22,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/organisms/celegans/lineage_larva.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.lineage",
+        "entities": 22,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/organisms/celegans/mutants.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.mutants",
+        "entities": 32,
+        "rules": 0,
+        "checks_ok": 29,
+        "checks_total": 29
+      },
+      "data/organisms/celegans/mutants_nolookup.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.mutants_nolookup",
+        "entities": 33,
+        "rules": 0,
+        "checks_ok": 19,
+        "checks_total": 19
+      },
+      "data/organisms/celegans/plasticity.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.plasticity",
+        "entities": 32,
+        "rules": 0,
+        "checks_ok": 22,
+        "checks_total": 22
+      },
+      "data/organisms/celegans/reader.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.reader",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      },
+      "data/organisms/celegans/timers.bio": {
+        "mark": "\u2713",
+        "module": "organism.celegans.timers",
+        "entities": 0,
+        "rules": 0,
+        "checks_ok": 1,
+        "checks_total": 1
+      },
+      "data/organisms/human/body.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.body",
+        "entities": 27,
+        "rules": 0,
+        "checks_ok": 5,
+        "checks_total": 5
+      },
+      "data/organisms/human/colon.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.colon",
+        "entities": 11,
+        "rules": 0,
+        "checks_ok": 4,
+        "checks_total": 4
+      },
+      "data/organisms/human/colon_mutants.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.colon_mutants",
+        "entities": 11,
+        "rules": 0,
+        "checks_ok": 25,
+        "checks_total": 25
+      },
+      "data/organisms/human/erythrocyte.bio": {
+        "mark": "\u2713",
+        "module": "human.erythrocyte",
+        "entities": 7,
+        "rules": 2,
+        "checks_ok": 5,
+        "checks_total": 5
+      },
+      "data/organisms/human/haematopoiesis.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.haematopoiesis",
+        "entities": 21,
+        "rules": 0,
+        "checks_ok": 3,
+        "checks_total": 3
+      },
+      "data/organisms/human/haematopoiesis_designs.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.haematopoiesis_designs",
+        "entities": 21,
+        "rules": 0,
+        "checks_ok": 3,
+        "checks_total": 3
+      },
+      "data/organisms/human/haematopoiesis_mutants.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.haematopoiesis_mutants",
+        "entities": 21,
+        "rules": 0,
+        "checks_ok": 39,
+        "checks_total": 39
+      },
+      "data/organisms/human/intestine.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.intestine",
+        "entities": 12,
+        "rules": 0,
+        "checks_ok": 5,
+        "checks_total": 5
+      },
+      "data/organisms/human/intestine_mutants.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.intestine_mutants",
+        "entities": 12,
+        "rules": 0,
+        "checks_ok": 37,
+        "checks_total": 37
+      },
+      "data/organisms/human/noncoding_chr21.bio": {
+        "mark": "\u2713",
+        "module": "human.noncoding.chr21",
+        "entities": 6172,
+        "rules": 5176,
+        "checks_ok": 3,
+        "checks_total": 3
+      },
+      "data/organisms/human/noncoding_chr21_v2.bio": {
+        "mark": "\u2713",
+        "module": "human.noncoding.chr21",
+        "entities": 6172,
+        "rules": 5176,
+        "checks_ok": 3,
+        "checks_total": 3
+      },
+      "data/organisms/human/noncoding_chr21_v3.bio": {
+        "mark": "\u2713",
+        "module": "human.noncoding.chr21",
+        "entities": 6172,
+        "rules": 5176,
+        "checks_ok": 3,
+        "checks_total": 3
+      },
+      "data/organisms/human/oxphos.bio": {
+        "mark": "\u2713",
+        "module": "human.oxphos",
+        "entities": 214,
+        "rules": 200,
+        "checks_ok": 19,
+        "checks_total": 19
+      },
+      "data/organisms/human/stomach.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.stomach",
+        "entities": 11,
+        "rules": 0,
+        "checks_ok": 5,
+        "checks_total": 5
+      },
+      "data/organisms/human/stomach_mutants.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.stomach_mutants",
+        "entities": 11,
+        "rules": 0,
+        "checks_ok": 22,
+        "checks_total": 22
+      },
+      "data/organisms/human/tissues.bio": {
+        "mark": "\u2713",
+        "module": "organism.human.tissues",
+        "entities": 24,
+        "rules": 0,
+        "checks_ok": 0,
+        "checks_total": 0
+      }
+    }
+  },
+  "chr21": {
+    "data/organisms/human/noncoding_chr21.bio": [
+      "# test: entities >= 6172",
+      "# test: unknowns == 20",
+      "# test: rules == 5176"
+    ],
+    "data/organisms/human/noncoding_chr21_v2.bio": [
+      "# test: entities >= 6172",
+      "# test: unknowns == 20",
+      "# test: rules == 5176"
+    ],
+    "data/organisms/human/noncoding_chr21_v3.bio": [
+      "# test: entities >= 6172",
+      "# test: unknowns == 20",
+      "# test: rules == 5176"
+    ]
+  },
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "the committed .bio programmes of this checkout",
+        "version": "as committed"
+      },
+      {
+        "accession": "genomeos.bio's own `# test:` checks, run in process",
+        "version": "as committed"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/organisms/celegans/acvu.bio",
+        "sha256": "4ec51b82b4b10908430af52c70cc4596138a9e94e1fe7baec0ee7f6f39706145",
+        "bytes": 10543,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/cell_types.bio",
+        "sha256": "642c7d5de7f04f4de08590180d45f5d4744652e02272767fb0fc402ba26aa73c",
+        "bytes": 2604,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/designs.bio",
+        "sha256": "fb6e55433a51517be7c9684bfa6f8275ca5672b4a752078a8723c0a57299385c",
+        "bytes": 955,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo.bio",
+        "sha256": "c3bf6a9b151f74547c3c0e2c0106ef85eadd82381ad97e87e0db133cb3b46ad3",
+        "bytes": 2118,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo_contacts.bio",
+        "sha256": "2ca48ec4b82b943c336131aa4c45971ddd42d672bc2d31261df63288eb97a94f",
+        "bytes": 3027,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo_factors.bio",
+        "sha256": "f674d6c1b591cad143b1f7c66a203dc3b35e84c09f03da482ac6598ed222834f",
+        "bytes": 3794,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/embryo_nolookup.bio",
+        "sha256": "7602286f1716ca6f55247f8e1714659c4242209511214db8164e1503e1a7bac1",
+        "bytes": 3784,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/fates.bio",
+        "sha256": "b7ccefed754e4bbbd25ed1ff25b08d6d3db43838f9fddfc9a7cc130eb16d3298",
+        "bytes": 21509,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/founder_tissues.bio",
+        "sha256": "09359ffb0aa4662cd92b6b54cb3b86e14691de58f3e54535ef5e465b58e50502",
+        "bytes": 3324,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/founders.bio",
+        "sha256": "41cad2ec74552d79de29cc348e6ac51b0a1906980a3cec2f26d41c17c4b610e5",
+        "bytes": 7871,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/founders_contacts.bio",
+        "sha256": "0b7fb261f01ae6d024c579bd7e023d0f493112f1797a28e5deb253b312a1827f",
+        "bytes": 12269,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/lineage_embryo.bio",
+        "sha256": "f07dae967f9094fdde9a91049378ca0b632e3d93ea51f14480a2245ceae3f9f9",
+        "bytes": 239228,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/lineage_embryo_tree.bio",
+        "sha256": "dcd531be104158ee09de633ecf1d060e5ee0ef2b37d2a94de89c34bfd125d151",
+        "bytes": 145834,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/lineage_larva.bio",
+        "sha256": "1d04a6acb426ca07f485a5b19c6e7c321514df902f5fab16c9ff89661153a8ae",
+        "bytes": 123195,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/mutants.bio",
+        "sha256": "a083fef64ca7d797a3d01164fbc1cae51d25e12bdca60e69f7bf8291605ba701",
+        "bytes": 4459,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/mutants_nolookup.bio",
+        "sha256": "f4dce6f6c7f3c7363731ad3e08ea4150bc15353e3994eddb00e6dd4af730a839",
+        "bytes": 5097,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/plasticity.bio",
+        "sha256": "0b450393a8efb7fdf5e675a22b923687d20ee6d11982d82cf112afac3d2e673f",
+        "bytes": 6020,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/reader.bio",
+        "sha256": "f3cfacdb84dd193b186dd203ae918678e53a0c25bd10decb6ffc27ca9eb4f965",
+        "bytes": 792382,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/celegans/timers.bio",
+        "sha256": "c967d934031540a4af78bc87b60cbdfe92aa7b02700820979d598c73826f513f",
+        "bytes": 13303,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/body.bio",
+        "sha256": "79c9baa7c90013a18f3d012864df1c50e55a2d9ddb84e25d02e466932ed91a9d",
+        "bytes": 5609,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/colon.bio",
+        "sha256": "1d1b88c34fe5bd70377a3479276a31f0f17f4dbc87b20b19bd4248c55e9497e6",
+        "bytes": 10979,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/colon_mutants.bio",
+        "sha256": "a2c4b0483b9222a22c8a05829228f3aa10a9a1276a4edcf1629af0133b5b1102",
+        "bytes": 4111,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/erythrocyte.bio",
+        "sha256": "0d3cc96e9d1826160839b2a12652bc4dcbc196f4aa7dd8ba2afdabc0a95b5f2f",
+        "bytes": 3199,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/haematopoiesis.bio",
+        "sha256": "2655f5ae7ca7941288cb69942efe175af573e7e6332d5a0cd8221e7682bdaa84",
+        "bytes": 20618,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/haematopoiesis_designs.bio",
+        "sha256": "b5818f768dd55394b71a36f2e05260046d23caa7fe740832c3c909d61784a3de",
+        "bytes": 1207,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/haematopoiesis_mutants.bio",
+        "sha256": "fc76df6f7ae629522881f54c63fd5396de6e380d7b0ed1b770e5307dcb007196",
+        "bytes": 3401,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/intestine.bio",
+        "sha256": "e544fda061017a35b276539e94191879866a9ba6a667f416cf5f345149cf13f2",
+        "bytes": 10233,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/intestine_mutants.bio",
+        "sha256": "234244dbd2d40bd7f49fa0a750bc9a28383ac182fc65727497e90133a5b56ccb",
+        "bytes": 3812,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/noncoding_chr21.bio",
+        "sha256": "778615512beaa46ddbb02f3cbee8502ceb1ff8d07dd43ce553e086b29e035192",
+        "bytes": 4979850,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/noncoding_chr21_v2.bio",
+        "sha256": "11bbff2f1a8ff41a49e0329aa2b3d9dae109638556a1e2a3fd13bcaefb367ecb",
+        "bytes": 4980025,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/noncoding_chr21_v3.bio",
+        "sha256": "17315af720e886466ba585832c9a99fb699fd128c92e0a093b2e06ea329cce93",
+        "bytes": 5276570,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/oxphos.bio",
+        "sha256": "0e212fa45dc96cf24b0db0117dbf3b6a704720fe2ae1f57d1115902d7be81d1a",
+        "bytes": 48211,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/stomach.bio",
+        "sha256": "8c26a44939cf10a288242427d8f3ff1200d30c6ba17d34046df1f775c76390bc",
+        "bytes": 15380,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/stomach_mutants.bio",
+        "sha256": "12ca662bd76389530478baf413599072476f08cd52870daac177424af6d3b08a",
+        "bytes": 3983,
+        "partition": null
+      },
+      {
+        "path": "data/organisms/human/tissues.bio",
+        "sha256": "e4db081f958a1db9c1d7bd841711f03e5dedd7a6f0d113f17bd6a6de1b02b175",
+        "bytes": 28403,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/ageing.bio",
+        "sha256": "a1732381e5aa12b58da46ce96b00e537711a032b59e188a44d7a3dad4024570f",
+        "bytes": 907,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/cell_types.bio",
+        "sha256": "40d862845df9b92cd81aadaa041ad627f16b0ee085b0061d0055fb77f1c93408",
+        "bytes": 842,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/core_metabolism.bio",
+        "sha256": "5378f6abe109435a4901bbfb2b499b964dc1be46bc56d07dbddffff4291bc589",
+        "bytes": 3951,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/development.bio",
+        "sha256": "2ec2c5e109f858b42c74e4e5e93ea2e066be9b338dd466b04c2c22af7ab5b028",
+        "bytes": 943,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/human_stages.bio",
+        "sha256": "7f33f6d770f767dca5581b628b83a04f892126af98a0d703dde3d69f31b266b9",
+        "bytes": 4213,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/human_turnover.bio",
+        "sha256": "171bffc88359bc454569cb08a2e2f4c4b9770e3a17e69fcc34429cc50bf3cd31",
+        "bytes": 3288,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/methylation.bio",
+        "sha256": "73a3a4e3700e2d6421cd8876765275610ddd5528198c5af1396bf3e082ce9be2",
+        "bytes": 3141,
+        "partition": null
+      },
+      {
+        "path": "genomeos/std/signalling.bio",
+        "sha256": "ade53caa6c5a83bb3b46e1c4117bcc84c5e182e317fbe32e464bc38dbb24b199",
+        "bytes": 29470,
+        "partition": null
+      },
+      {
+        "path": "data/demo/celegans_lineage.bio",
+        "sha256": "8537e10fb57a5fa6ee68891e5989bfdd1188ba434634cd6a94af61a7eba59ac6",
+        "bytes": 4382,
+        "partition": null
+      },
+      {
+        "path": "data/demo/cell_context.bio",
+        "sha256": "7e7dcde749b5bb34f70c8f7d491a4f6c4c222f697d27dd91eba36df3c530c1d5",
+        "bytes": 1659,
+        "partition": null
+      },
+      {
+        "path": "data/demo/concentration_threshold.bio",
+        "sha256": "822b607f373db211a31348a4ee727e5535fe764306249a66eb06e53fcff064c1",
+        "bytes": 3525,
+        "partition": null
+      },
+      {
+        "path": "data/demo/flag_organism.bio",
+        "sha256": "540966d3b1570e93f71df69466a0a08802f7267e8ea978d54ab7445fe4091bda",
+        "bytes": 2920,
+        "partition": null
+      },
+      {
+        "path": "data/demo/gastrulation.bio",
+        "sha256": "5cc80a157dbf4d5fdd0c25749f1d63cd7006dbf1613f1fe36f503001fcc3a528",
+        "bytes": 3765,
+        "partition": null
+      },
+      {
+        "path": "data/demo/hoxd_order.bio",
+        "sha256": "49b3064b1971b1cb18a24cc1094f47fdcb2f8ea449705131566f7aea20a1d865",
+        "bytes": 3064,
+        "partition": null
+      },
+      {
+        "path": "data/demo/lateral_inhibition.bio",
+        "sha256": "5a25866b2b82b638eaf02cbfd5e2399a05e56bde6a70a950b5ac2554b68252b2",
+        "bytes": 4042,
+        "partition": null
+      },
+      {
+        "path": "data/demo/methylation_erosion.bio",
+        "sha256": "780580db7c4b8f01040e63e9f4610309efa52112185b429abc430cdec778b567",
+        "bytes": 3260,
+        "partition": null
+      },
+      {
+        "path": "data/demo/reader_gating.bio",
+        "sha256": "0334ee0b99c0aaff110adb1493462bf2af21b74ccc4e84c4be7cc6881be93f1e",
+        "bytes": 3513,
+        "partition": null
+      },
+      {
+        "path": "data/demo/repressilator.bio",
+        "sha256": "eb4a05ad110dfebe2e5b5ee9bc7f2915a479b7d55152601448efbe23a9cf3d02",
+        "bytes": 2363,
+        "partition": null
+      },
+      {
+        "path": "data/demo/segmentation_clock.bio",
+        "sha256": "68d8ffe94e476c99137b07df72b675d5c39130cca7d57004cc810bc8ea1f551a",
+        "bytes": 1639,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage2_pools.bio",
+        "sha256": "dbddc73fe2f8b36b9e4412819f13f975294b5a50c57a88081839e67c4a2bb854",
+        "bytes": 2117,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage3_energy.bio",
+        "sha256": "90f6b710e35590f702ecb03bb565741ae28eb7115880e8c3e4cb2c2a7005b765",
+        "bytes": 5558,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage3_erythrocyte.bio",
+        "sha256": "73f13ff8a858c7bc5d7ca72c8c54ae933ff3272cb27ae3c4b00414a7916c865c",
+        "bytes": 3632,
+        "partition": null
+      },
+      {
+        "path": "data/demo/stage4_division.bio",
+        "sha256": "db75524a5aaa5cc5f59a83f5513fd4735b8da6e6ae55fbfb56f6c54dc9cee019",
+        "bytes": 2322,
+        "partition": null
+      },
+      {
+        "path": "the contact tables the C. elegans programmes read as they parse",
+        "group": true,
+        "members": [
+          {
+            "path": "data/organisms/celegans/contacts_acvu.tsv",
+            "sha256": "f760e59bcff87dfb18b9daac44bc411c197790999356dea4a9799427a255f684",
+            "bytes": 1582
+          },
+          {
+            "path": "data/organisms/celegans/contacts_embryo.tsv",
+            "sha256": "812a36f45c1876cf894a5b7f058e6faf24f7e284b4a1f0e0d12c014926369f47",
+            "bytes": 3993
+          },
+          {
+            "path": "data/organisms/celegans/contacts_embryo_cshaper.tsv",
+            "sha256": "c03b60aaf3ad3f502592f615bd6eb5a3dac5a1f0064290b7acab0b6fa7bf4270",
+            "bytes": 10422
+          }
+        ],
+        "sha256": "292c9c0d215db8f4def26c1a76bfc843a9d7113472f85beb568ab1c423dce153",
+        "bytes": 15997,
+        "files": 3,
+        "partition": null
+      }
+    ],
+    "input_count": 59,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "test_paths": [
+        "data/demo",
+        "genomeos/std",
+        "data/organisms"
+      ],
+      "program_trees": [
+        "data/organisms",
+        "genomeos/std",
+        "data/demo"
+      ],
+      "method": "sha256 per programme and over the group; counts from bio.main(['test', ...])",
+      "magnitude_guarded_against": 0.2146,
+      "magnitude_source": "ac5580b"
+    },
+    "exclusions": [
+      "no model request, no key, no network, no money; nothing is fitted and no RNA is read"
+    ],
+    "code_cleanliness": {
+      "git_sha": "0f068e22918186553dcdd0894814769fb5df219a",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/execscale_census.py",
+        "form": "committed_repository_file",
+        "path": "scripts/execscale_census.py",
+        "is_committed": true,
+        "declared_entry": "scripts/execscale_census.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/bio.py",
+        "genomeos/coords.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lang/tools.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/body.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/economy.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/metabolism.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/roadrunner.py",
+        "genomeos/runtime/sbml.py",
+        "genomeos/runtime/spatial.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/version.py",
+        "scripts/execscale_census.py"
+      ],
+      "counting_path_count": 29,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "partitions": {
+      "none": "one population, the committed programmes; no partition is taken and none is implied"
+    },
+    "code": {
+      "git_sha": "0f068e22918186553dcdd0894814769fb5df219a",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/regionscale_harness.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/execscale_census.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "0f068e22918186553dcdd0894814769fb5df219a",
+      "code_cleanliness_git_sha": "0f068e22918186553dcdd0894814769fb5df219a",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 0f068e2"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 862,
+      "opens_under_data": 664,
+      "files_read": 53,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [
+        "genomeos/std/ageing.bio",
+        "genomeos/std/cell_types.bio",
+        "genomeos/std/core_metabolism.bio",
+        "genomeos/std/development.bio",
+        "genomeos/std/human_stages.bio",
+        "genomeos/std/human_turnover.bio",
+        "genomeos/std/methylation.bio",
+        "genomeos/std/signalling.bio"
+      ],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
