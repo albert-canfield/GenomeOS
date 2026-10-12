@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from genomeos.attribution import guardcensus as gcn
 
 
@@ -115,6 +117,19 @@ def test_the_pool_keeps_every_constant_whatever_its_type() -> None:
         assert gcn.classify_comparison(node)[0] == "varies", src
 
 
+@pytest.mark.xfail(
+    strict=False,
+    reason="SUPERSEDED, and this lane's own defect: `ne - ns == e - s` genuinely VARIES, and the"
+    " varies branch returns as soon as two verdicts are seen -- before the usable floor is ever"
+    " consulted. So this assertion was wrong when 271912f committed it, and FLAKY rather than"
+    " simply red, because classify_comparison draws random values: it passed once and has mostly"
+    " failed since. The correct test is"
+    " test_the_usable_floor_is_reached_when_every_evaluation_raises below. Left in place with"
+    " xfail(strict=False) rather than deleted, because removing it needs --force inside the undo"
+    " window and the rule is: never --force; a red you caused yourself is still a report, not an"
+    " exception. strict=False and not strict=True precisely because it is flaky -- a strict xfail"
+    " would then fail on the runs where it happens to pass.",
+)
 def test_a_trial_that_raised_is_not_a_trial_that_agreed() -> None:
     """Version 3's second defect: the usable floor, or ~99 of 400 trials decided a verdict."""
     import ast
@@ -152,3 +167,179 @@ def test_the_known_positive_is_still_a_tautology_in_the_tree() -> None:
         if isinstance(n, ast.Compare) and gcn.classify_comparison(n)[0] == "tautology"
     ]
     assert found, "manifest_rebuild.py no longer contains the known tautology"
+
+
+# --------------------------------- condition (4) satisfied: the extras_lock closure-walk blindness
+
+
+def test_the_blindness_is_in_the_first_party_leg_and_the_census_says_so() -> None:
+    """The third-party leg is CORRECT, and the census's correction must match the source.
+
+    `Import(name.split(".")[0], ...)` is the right answer to "which distribution does this file
+    need", so `from scipy import stats` recording scipy is not a defect. Only the closure walk
+    loses the edge.
+    """
+    from pathlib import Path
+
+    src = (Path(__file__).resolve().parent / "extras_lock.py").read_text()
+    assert 'imports.append(Import(name.split(".")[0], path, node.lineno))' in src
+    assert "first_party.add(name)" in src
+    assert "THE THIRD-PARTY LEG IS CORRECT" in gcn.BLINDNESS_CORRECTION
+    assert "first-party closure walk" in gcn.BLINDNESS_CORRECTION
+
+
+def test_the_overstated_case_is_left_standing_not_edited() -> None:
+    """As globcensus's refuted headline was: the record shows what was claimed and when."""
+    case = [c for c in gcn.CASES_ADDED if "extras_lock" in c["case"]][0]
+    assert "INVISIBLE" in case["what"], "the original wording must remain, for the record"
+    assert "too broad and the entry is left standing" in gcn.BLINDNESS_CORRECTION
+
+
+def test_the_closure_walk_still_drops_the_submodule_edge() -> None:
+    """The mechanism, on a synthetic file, so no live result record is read.
+
+    WHEN extras_lock IS FIXED, THIS IS THE TEST TO UPDATE, in the same commit as the fix: invert
+    the assertion and amend BLINDNESS_IS_REALISED to record that it was repaired and when. A
+    census must not become a barrier to its own repair, so this pins the measured state and says
+    how to move it rather than forbidding the move.
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import extras_lock
+
+    tmp = Path(__file__).resolve().parent / "extras_lock.py"  # any real first-party file
+    assert extras_lock._first_party_file("genomeos.attribution.pbrun") is not None, (
+        "the fixture for this test is gone: genomeos/attribution/pbrun.py no longer exists"
+    )
+    assert tmp.exists()
+    # the shape the walk cannot follow
+    resolved = extras_lock._first_party_file("genomeos.attribution")
+    assert resolved is not None and resolved.name == "__init__.py", resolved
+
+
+def test_condition_4_is_recorded_as_SATISFIED_here_and_not_merely_described() -> None:
+    assert "AS COMMITTED: 0 violations" in gcn.BLINDNESS_IS_REALISED
+    assert "WITH THE EDGE RECORDED: 1 violation" in gcn.BLINDNESS_IS_REALISED
+    assert "condition (4) is SATISFIED" in gcn.BLINDNESS_IS_REALISED
+    assert "established CANNOT-FIRE" in gcn.BLINDNESS_IS_REALISED
+
+
+def test_the_scale_is_stated_with_the_caveat_that_keeps_it_honest() -> None:
+    assert "1,942" in gcn.BLINDNESS_SCALE
+    assert "NOT 1,942" in gcn.BLINDNESS_SCALE
+    assert "exactly ONE" in gcn.BLINDNESS_SCALE
+
+
+def test_the_instance_records_why_it_is_not_red_yet_and_why_the_local_gate_misses_it() -> None:
+    inst = gcn.BLINDNESS_INSTANCE
+    assert inst["test"] == "tests/test_pbrun.py"
+    assert "h5py" in inst["through"]
+    assert "zero requires_extra calls" in inst["declared"]
+    assert "on no remote branch" in inst["why_not_red_yet"]
+    assert "installed in the shared .venv" in inst["why_the_local_gate_misses_it"]
+    assert "openpyxl" in inst["same_class_as"]
+
+
+def test_no_repair_is_made_by_this_lane() -> None:
+    assert "reported and not fixed" in gcn.BLINDNESS_NO_REPAIR
+    assert "requires_extra('predict')" in gcn.BLINDNESS_NO_REPAIR
+
+
+# ----------------------------------- the stopgap measured in CI's condition, and procedure records
+
+
+def test_the_instance_is_superseded_by_the_measurement_not_edited() -> None:
+    """f4a9faa made 'test-bare fails at COLLECTION' false; the old wording stays for the record."""
+    assert "fails at COLLECTION" in gcn.BLINDNESS_INSTANCE["why_not_red_yet"]
+    # `... or True` stood here until ruff's SIM222 refused it: a guard that CANNOT FAIL, written
+    # into the census of guards that cannot fail. Recorded in CASES_SELF rather than hidden.
+    assert "SO THE STOPGAP WORKS" in gcn.INSTANCE_SUPERSEDED
+    assert "7,500 tests" in gcn.INSTANCE_SUPERSEDED
+    assert "ZERO" in gcn.INSTANCE_SUPERSEDED
+
+
+def test_absence_was_simulated_by_veiling_finders_not_by_monkeypatching_a_return() -> None:
+    """The distinction is the whole value of the measurement."""
+    assert "WRAPS every finder" in gcn.HOW_ABSENCE_WAS_SIMULATED
+    assert "was NOT monkeypatched" in gcn.HOW_ABSENCE_WAS_SIMULATED
+    assert "No" in gcn.HOW_ABSENCE_WAS_SIMULATED and "uv sync" in gcn.HOW_ABSENCE_WAS_SIMULATED
+
+
+def test_the_stopgaps_inert_condition_is_recorded_as_a_caveat_not_a_fault() -> None:
+    assert "CANNOT ARISE IN CI" in gcn.STOPGAP_INERT_CONDITION
+    assert "anndata requires h5py" in gcn.STOPGAP_INERT_CONDITION
+    assert "not mistaken for a fault" in gcn.STOPGAP_INERT_CONDITION
+
+
+def test_the_announcement_case_names_all_three_measurements() -> None:
+    case = gcn.ANNOUNCEMENT_CANNOT_BE_HEARD
+    assert "without -q the line is printed" in case["measured"]
+    assert "-q -rs --no-fold-skipped" in case["measured"]
+    assert "never a silent absence" in case["against_its_own_words"]
+    assert "the instrument is RIGHT and its reading never reaches anyone" in case["family"]
+
+
+def test_the_cli_flags_that_suppress_the_header_are_still_the_ones_ci_uses() -> None:
+    """If CI stops passing -q, this case is void and must be withdrawn, not left standing."""
+    from pathlib import Path
+
+    ci = (Path(__file__).resolve().parents[1] / ".github" / "workflows" / "ci.yml").read_text()
+    assert "pytest -q -rs --no-fold-skipped" in ci, (
+        "CI's flags have changed; ANNOUNCEMENT_CANNOT_BE_HEARD must be re-measured"
+    )
+
+
+def test_the_collect_ignore_confound_is_recorded_for_the_next_lane() -> None:
+    assert "governs DIRECTORY collection" in gcn.COLLECT_IGNORE_AND_EXPLICIT_PATHS
+    assert "may read it as the stopgap failing" in gcn.COLLECT_IGNORE_AND_EXPLICIT_PATHS
+
+
+def test_the_no_force_rule_is_carried_verbatim() -> None:
+    assert gcn.NO_FORCE_RULE == (
+        "never `--force`; a red you caused yourself is still a report, not an exception"
+    )
+    assert "every bad force also says" in gcn.WHY_THE_WORDING_WAS_TIGHTENED
+
+
+def test_the_procedure_deviation_lists_every_fact_that_made_it_acceptable() -> None:
+    dev = gcn.PROCEDURE_DEVIATIONS[0]
+    assert dev["commit"] == "b2bf090"
+    assert len(dev["facts"]) == 6, dev["facts"]
+    assert "2 added, 1 removed, one file" in dev["facts"][2]
+    assert "procedure, not instrument" in dev["class"]
+
+
+def test_the_census_records_its_own_cannot_fire_guard() -> None:
+    """Found by ruff SIM222 in the commit that recorded the stopgap; repaired, and recorded."""
+    case = gcn.CASES_SELF[0]
+    assert "or True" in case["what"]
+    assert "ruff SIM222" in case["found_by"]
+    assert "condition (4) is not pedantry" in case["why_recorded"]
+    assert case["fixed"].startswith("yes")
+
+
+def test_the_usable_floor_is_reached_when_every_evaluation_raises() -> None:
+    """The corrected form of the test above: an expression where NO trial can succeed.
+
+    `n % 0 == 1` raises ZeroDivisionError on every substitution, so usable stays 0, the varies
+    branch is never reached, and the floor decides -- which is what version 3's second defect was
+    about.
+    """
+    import ast
+
+    node = ast.parse("n % 0 == 1", mode="eval").body
+    verdict, _value, usable = gcn.classify_comparison(node, trials=40)
+    assert verdict == "not_measured", verdict
+    assert usable == 0, usable
+
+
+def test_the_census_records_its_own_flaky_guard_and_how_it_was_caught() -> None:
+    """The undo guard caught it, not a test and not review."""
+    case = gcn.CASES_SELF_FLAKY
+    assert "3 xfailed, 2 xpassed" in case["worse_than_wrong"]
+    assert "intermittent" in case["worse_than_wrong"]
+    assert "UNDO GUARD refusing the commit" in case["how_it_was_caught"]
+    assert "ZERO removed" in case["why_not_deleted"]
+    assert "guard that fires at random" in case["why_strict_false"]

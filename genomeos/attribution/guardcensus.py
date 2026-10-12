@@ -363,3 +363,230 @@ def classify_comparison(
     if ast.unparse(node.left) == ast.unparse(node.comparators[0]):
         return "nan_idiom", verdict, usable
     return "tautology", verdict, usable
+
+
+# ----------------------- condition (4) SATISFIED, for the first time in this census -- 2026-10-12
+# Everything above this line is either a rule, a description, or a negative result. This block is
+# the first case where a violation was PLANTED and the guard STAYED GREEN, which is the only thing
+# that establishes CANNOT-FIRE rather than "no violation was found".
+
+#: Where the blindness actually is. NARROWER than CASES_ADDED says; see the correction below.
+BLINDNESS_LOCATION = (
+    "tests/extras_lock.py:459, the FIRST-PARTY CLOSURE WALK in scan(). read_module records an"
+    " ImportFrom by node.module alone, so `from genomeos.attribution import pbrun` puts"
+    " 'genomeos.attribution' in first_party, _first_party_file resolves THAT to"
+    " genomeos/attribution/__init__.py, and pbrun.py is never queued -- so no third-party import"
+    " written inside pbrun.py is ever checked for any test that reaches it this way"
+)
+
+#: The correction. CASES_ADDED's entry overstates the mechanism and is LEFT STANDING, as
+#: globcensus's refuted headline was, so the record shows what was claimed and when it narrowed.
+BLINDNESS_CORRECTION = (
+    "CASES_ADDED says 'every `from package import submodule` edge is INVISIBLE to"
+    " test_extra_only_imports.py'. That is too broad and the entry is left standing rather than"
+    " edited. THE THIRD-PARTY LEG IS CORRECT: it appends Import(name.split('.')[0], ...), so"
+    " `from scipy import stats` records scipy, which is exactly the right answer to 'which"
+    " distribution does this file need'. Only the first-party closure walk loses the edge. The"
+    " guard is right in the leg that reads package presence and blind in the leg that walks the"
+    " closure, and saying so is the difference between a defect and a direction"
+)
+
+#: The measurement. Not a reading of the source: the guard's own walk, run twice.
+BLINDNESS_IS_REALISED = (
+    "extras_lock.scan() was run over all 471 test files twice -- once as committed, once with"
+    " read_module patched to record `module.submodule` where that names a real first-party file."
+    " AS COMMITTED: 0 violations. WITH THE EDGE RECORDED: 1 violation. A violation was therefore"
+    " planted and the guard stayed green, so condition (4) is SATISFIED and this site is an"
+    " established CANNOT-FIRE rather than a NOT_ESTABLISHED one"
+)
+
+#: The violation it was hiding, as at 271912f. Each link read by hand, not taken from the patch.
+BLINDNESS_INSTANCE = {
+    "test": "tests/test_pbrun.py",
+    "edge": "line 26, `from genomeos.attribution import pbrun as pr` -- top level, and ast finds"
+    " no try/except anywhere in the file and no importorskip, so it is unguarded",
+    "through": "genomeos/attribution/pbrun.py:41, `import h5py`, top level and unguarded",
+    "package": "h5py, absent from test-bare's 15 bare distributions and supplied only by the"
+    " `predict` extra, which NEITHER CI job installs: `test` takes --extra compose --extra"
+    " roadrunner and test-bare takes `uv sync --frozen`",
+    "declared": "nothing: tests/test_pbrun.py contains zero requires_extra calls",
+    "why_not_red_yet": "1a1e567 landed 2026-10-12 13:37 and is on no remote branch; CI's runs are"
+    " on b97a8d5, which does not contain it. The next push carrying it is what pays, and test-bare"
+    " fails at COLLECTION, which reads as 'no such tests' rather than as a missing dependency",
+    "why_the_local_gate_misses_it": "h5py IS installed in the shared .venv, so scripts/check.sh is"
+    " green here. This is 'local pre-push green is not CI green' with a line number",
+    "same_class_as": "the openpyxl defect of 2026-10-02, reproduced in the file whose docstring describes it",
+}
+
+#: Scale, with the caveat that keeps it honest.
+BLINDNESS_SCALE = (
+    "1,942 from-import edges across genomeos/, scripts/ and tests/ name a real first-party"
+    " submodule that the walk does not record, over 239 distinct target files. THAT IS NOT 1,942"
+    " DEFECTS: nearly every one of those targets is reachable by some other path, and the number"
+    " that matters is that exactly ONE of them currently hides a non-bare import. A census that"
+    " reported 1,942 would be the vacuity leg's mistake again -- counting the mechanism's sites"
+    " and calling them symptoms"
+)
+
+#: And the repair that is deliberately NOT done here.
+BLINDNESS_NO_REPAIR = (
+    "SCOPE says a guard found unexercised is reported and not fixed, because writing the fix here"
+    " would hide how many were unexercised. The fix is lane-pbrun's and it is one of two lines:"
+    " @pytest.mark.requires_extra('predict') on the test, or move `import h5py` into the function"
+    " that needs it -- which pyproject already calls 'the pattern to keep', and which also fixes"
+    " it for every other file that imports pbrun"
+)
+
+
+# ------------------- the stopgap, measured in CI's own condition -- 2026-10-12, after f4a9faa
+# BLINDNESS_INSTANCE's "why_not_red_yet" says test-bare fails at COLLECTION. That was true of the
+# sha it was written against and is NO LONGER TRUE at HEAD. Corrected additively, as the overstated
+# CASES_ADDED entry was, so the record shows what was measured when.
+
+#: The correction, and the guard that made it necessary.
+INSTANCE_SUPERSEDED = (
+    "f4a9faa (2026-10-12 14:36:09), 59 minutes after 1a1e567, adds to tests/conftest.py a declared"
+    " COLLECT_NEEDS_EXTRA = {'test_pbrun.py': 'predict'} and a collect_ignore built only when"
+    " extras_lock.missing_modules_for_extra('predict') is non-empty. MEASURED, not read: with"
+    " h5py, alphagenome and anndata all made genuinely unimportable, pytest --collect-only with no"
+    " path argument -- the way CI runs it -- collects 7,500 tests in 18.29s, exit 0, ZERO"
+    " collection errors, and test_pbrun.py absent. SO THE STOPGAP WORKS and test-bare does not"
+    " fail. f4a9faa is an ancestor of ae272c8 and of HEAD; neither it nor 1a1e567 is on b97a8d5,"
+    " so origin carries neither the defect nor the guard"
+)
+
+#: How absence was simulated, since no venv could be changed and three lanes share this one.
+HOW_ABSENCE_WAS_SIMULATED = (
+    "a sitecustomize that WRAPS every finder in sys.meta_path, because _importable asks every"
+    " finder and returns True if any answers -- so a prepended blocking finder hides nothing, as"
+    " that function's own docstring says. sitecustomize is imported by `site` at interpreter"
+    " startup, which is the only point early enough to precede tests/conftest.py. Validated both"
+    " ways: `import h5py` raises ModuleNotFoundError under the veil and succeeds without it. No"
+    " uv sync, no change to the shared .venv, and the return value was NOT monkeypatched -- the"
+    " modules were made genuinely unimportable, which is what absence is"
+)
+
+#: And the condition that looks like a defect in the stopgap and is not.
+STOPGAP_INERT_CONDITION = (
+    "veiling h5py ALONE leaves missing_modules_for_extra('predict') EMPTY, so collect_ignore is"
+    " empty and the file is collected. The reason is by design and by docstring: predict's DIRECT"
+    " requirements are alphagenome and anndata, h5py is transitive through anndata, and that"
+    " function checks direct requirements only. So the stopgap is inert in the condition 'direct"
+    " deps present, h5py absent' -- which CANNOT ARISE IN CI, because anndata requires h5py. A"
+    " bounded caveat, recorded so it is not mistaken for a fault later"
+)
+
+#: A NEW CASE, and of exactly this census's kind: the guard fires and nobody hears it.
+ANNOUNCEMENT_CANNOT_BE_HEARD = {
+    "case": "tests/conftest.py's pytest_report_header, from f4a9faa",
+    "kind": "an announcement that cannot be heard where it was written to be heard",
+    "measured": "without -q the line is printed; with -q it is absent; with CI's exact flags,"
+    " `-q -rs --no-fold-skipped`, it is absent. Both CI jobs run"
+    " `uv run --no-sync pytest -q -rs --no-fold-skipped`",
+    "why": "pytest_report_header writes a HEADER and -q suppresses headers. -rs lists skip"
+    " reasons, and an ignored file is not a skip, so it does not appear there either",
+    "against_its_own_words": "the commit says the guard 'says so in the header rather than"
+    " skipping in silence' and the docstring says 'so a stopgap is never a silent absence'."
+    " Under CI's own flags it IS a silent absence",
+    "family": "the same family as the eleven inert skips and as extras_lock's blind leg: the"
+    " instrument is RIGHT and its reading never reaches anyone. A guard whose output is"
+    " discarded by the only caller that matters cannot fire in the sense this census means",
+    "smaller_one_beside_it": "the message names alphagenome and anndata as what cannot be"
+    " imported. The module that actually fails is h5py. A reader goes looking in the wrong place",
+}
+
+#: A confound found in this lane's OWN test, recorded because another lane will hit it.
+COLLECT_IGNORE_AND_EXPLICIT_PATHS = (
+    "naming tests/test_pbrun.py explicitly on the command line STILL errors, because collect_ignore"
+    " governs DIRECTORY collection. CI passes no path, so it is not bitten -- but a lane that runs"
+    " that file by name gets the old ModuleNotFoundError and may read it as the stopgap failing."
+    " Found by making exactly that mistake here first"
+)
+
+
+# ------------------------------------------- procedure deviations, not instrument ones -- 2026-10-12
+# A separate class deliberately. Everything above concerns guards that cannot fire. This concerns a
+# RULE that was not followed, where nothing was broken and the judgement was defensible -- which is
+# the only interesting kind, because a rule that only ever breaks when someone is careless teaches
+# nothing.
+
+#: The tightened wording. Carried verbatim from the coordinator's 16:22 ruling; applies to every brief.
+NO_FORCE_RULE = "never `--force`; a red you caused yourself is still a report, not an exception"
+
+#: Why the wording needed tightening at all.
+WHY_THE_WORDING_WAS_TIGHTENED = (
+    "the old wording let a lane infer that a SELF-INFLICTED red was different in kind. It is not."
+    " The rule exists to replace judgement in that moment, and 'it is only my own line' is what"
+    " every bad force also says -- which is the whole reason the deviation is recorded although it"
+    " did no damage"
+)
+
+#: The deviation, with the facts that made it acceptable ONCE, listed so the acceptance is auditable.
+PROCEDURE_DEVIATIONS = (
+    {
+        "lane": "lane-hetblock2",
+        "commit": "b2bf090",
+        "rule": "a brief that forbade commit_own.sh --force",
+        "ruled": "accepted once, on the record as disclosed -- supervisor, 2026-10-12 16:19",
+        "facts": (
+            "it was its own line, committed four minutes earlier in aa200ac",
+            "it had caused its own red",
+            "verified by the coordinator as 2 added, 1 removed, one file"
+            " (tests/test_hetblock_harness_record.py), no peer content",
+            "it recorded the force in that commit message",
+            "it disclosed the force unprompted in its report",
+            "it restructured its later fixes as pure additions (16/0, 4/0) specifically to avoid"
+            " needing it again",
+        ),
+        "class": "procedure, not instrument: nothing was broken and no guard was weakened",
+    },
+)
+
+
+#: This census's own cannot-fire guard, caught by ruff while the census was being written.
+CASES_SELF = (
+    {
+        "case": "tests/test_guardcensus.py, in the very commit recording the stopgap",
+        "what": "`assert <phrase> in INSTANCE_SUPERSEDED or True` -- an assertion that cannot"
+        " fail, because `or True` makes the whole expression true whatever the left side says."
+        " The phrase was not in the constant at all, so without the `or True` the test would have"
+        " failed immediately",
+        "found_by": "ruff SIM222, before any commit. Not by a test, and not by reading it",
+        "why_recorded": "a census of guards that cannot fire, which produced a guard that cannot"
+        " fire, in the same file. It is the cheapest possible demonstration that condition (4) is"
+        " not pedantry: conditions (1) to (3) were all satisfied by that line -- it is an"
+        " assertion, nothing planted a violation of it, and reading it shows no input that would"
+        " reject -- and the only thing that settles it is that NO input can make it red",
+        "fixed": "yes -- this one IS repaired, because it is this lane's own line and leaving a"
+        " vacuous assertion in place to preserve a count would be the worse error. SCOPE's 'no"
+        " repairs' binds the census's SUBJECTS, not its own instrument",
+    },
+)
+
+
+#: The census's SECOND self-case, and the worse of the two: a guard that fires at random.
+CASES_SELF_FLAKY = {
+    "case": "tests/test_guardcensus.py::test_a_trial_that_raised_is_not_a_trial_that_agreed,"
+    " committed by this lane at 271912f",
+    "what": "it asserts classify_comparison returns 'not_measured' for `ne - ns == e - s`. That"
+    " expression genuinely VARIES, and the varies branch returns as soon as two verdicts are"
+    " seen -- before the usable floor is ever consulted. So the assertion was false when it was"
+    " committed",
+    "worse_than_wrong": "FLAKY, not red. classify_comparison draws random values, so the verdict"
+    " depends on the draw: it passed the run in which it was written and has mostly failed since."
+    " MEASURED here over five consecutive runs of the file: 3 xfailed, 2 xpassed. So 271912f is a"
+    " red commit on dev whose redness is intermittent, which is the kind that reaches a push",
+    "the_census_point": "a test whose verdict depends on a seed is the mirror image of a guard"
+    " that cannot fire: it fires, or does not, for reasons unrelated to the thing it watches."
+    " Both report something other than the state of the code, and neither is caught by reading",
+    "how_it_was_caught": "not by a test and not by review -- by the UNDO GUARD refusing the"
+    " commit that removed it, which named the four lines and which commit had added them",
+    "why_not_deleted": "removing it needs --force inside the undo window, and the rule is: never"
+    " --force; a red you caused yourself is still a report, not an exception. So it stays, marked"
+    " @pytest.mark.xfail(strict=False) with the reason beside it, and the corrected test"
+    " (test_the_usable_floor_is_reached_when_every_evaluation_raises) is added beside it. 199 and"
+    " 181 lines added, ZERO removed",
+    "why_strict_false": "strict=True would fail on the runs where the flake happens to pass --"
+    " measured above as 2 of 5. A strict xfail on a flaky test is itself a guard that fires at"
+    " random, which would be the same defect again",
+}
