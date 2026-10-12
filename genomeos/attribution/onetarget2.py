@@ -62,7 +62,9 @@ SCOPE_COUNTS = {
     # below and both are named in the prose amendment. 9 since 2026-10-10: attribution/measured_unknown.py
     # and attribution/eqtl_arm.py, each a head read under its own registration, named in the second
     # prose amendment.
-    "record_only": 9,
+    # 10 since lane-silencerclass's ruling of 2026-10-10 on attribution/silencerjoin.py, named in
+    # the third prose amendment.
+    "record_only": 10,
     "already_moved": 9,
     "excluded_by_name": 9,
     "identity_free_today": 11,
@@ -92,7 +94,17 @@ ROW_SAYS_FIVE_THE_TREE_SAYS_OTHERWISE = (
     "registration's declared reading of a block's attribution -- the ground of "
     "`benchmark/loci_gene_input.py` -- and each is a one-target reading in effect, which its "
     "entry says; moving either is a re-run of that registration, not this wave, and neither moves "
-    "this wave's 18.** `scripts/` holds 24 "
+    "this wave's 18.** **Amended 2026-10-10 by lane-silencerclass, both amendments above kept as "
+    "written: the record count is 10. `attribution/silencerjoin.py` joins assay-measured silencers "
+    "beside the derived call and reads the head's ACTION and never its target, so by class "
+    "`identity`'s own definition it is outside it -- its output does not depend on WHICH or HOW MANY "
+    "genes an element targets. Its join is coordinate-only and the consuming function is labelled "
+    "NOT_A_TEST in its payload. It is NOT excluded by name, because the action is head-derived and "
+    "the detector is right to see it; EXCLUDED_BY_NAME is for things out of scope, never for "
+    "silencing a finding. AND THE REASON IS STRONGER THAN AN AUDIT'S: `targets.WindowReading` has no "
+    "action field at all, so moving this module is undefined rather than merely wrong in subject. "
+    "The count has now moved three times in eight days, which is the rate the first amendment "
+    "predicted and the argument for the guard rather than against it.** `scripts/` holds 24 "
     "further head-reading entry points, "
     "named below and OUT of this registration's scope. So the real figure for this wave is 18, not "
     "5. Of those 18, two are frozen inside the paid study's 52-file import closure "
@@ -424,15 +436,19 @@ CENSUS: tuple[dict[str, Any], ...] = (
     {
         "module": "genomeos/cli.py",
         "lines": (3840, 3848, 4109),
-        # Registered at 24adf33 as 3363, 3365, 3366, 4229 and 4276. Each is +5 since 85bae7b
-        # (2026-10-10, a peer's pgs percentile lines in cmd_individual, above all eight sites); the
-        # text of every line is unchanged. The head reads' shift is in MOVED_LINES below.
+        # Registered at 24adf33 as 3363, 3365, 3366, 4229 and 4276. +5 since 85bae7b (2026-10-10, a
+        # peer's pgs percentile lines in cmd_individual), and +9 further since bf26d7e (2026-10-10,
+        # `genomeos flow --tissue/--variant`, which inserted 9 lines at cli.py:2744 in cmd_flow,
+        # above all eight sites). So +14 from the registered positions. 1181068 touched cli.py the
+        # same day and shifts NOTHING here: its hunks are at 4432, 4463 and 5609, all BELOW the last
+        # site. The text of every line is unchanged and was re-read at its new position before this
+        # was edited. The head reads' shift is in MOVED_LINES below.
         "not_head_lines": {
-            3368: "a MISSENSE variant's predicted protein change",
-            3370: "the same missense variant's predicted score",
-            3371: "the same missense variant's predicted class",
-            4234: "a contact-map comparison's count of MEASURED Hi-C boundaries",
-            4281: "the same count, for insulation minima from the predicted contact map",
+            3377: "a MISSENSE variant's predicted protein change",
+            3379: "the same missense variant's predicted score",
+            3380: "the same missense variant's predicted class",
+            4243: "a contact-map comparison's count of MEASURED Hi-C boundaries",
+            4290: "the same count, for insulation minima from the predicted contact map",
         },
         "reads": "a stored element row -> r['predicted'], r['predicted_coding'], e['predicted']",
         "claims_today": "the printed lines `predicted target: <gene>`, `strongest coding gene: "
@@ -494,6 +510,20 @@ RECORD_ONLY: tuple[dict[str, str], ...] = (
         "benchmark/loci_noncoding.py: it recomputes the shipped count from the committed element "
         "rows precisely to assert that the count counts a DIRECTION, so reading the window instead "
         "would destroy the thing it checks",
+    },
+    {
+        "module": "genomeos/attribution/silencerjoin.py",
+        "why": "it reads the head's ACTION and never its target, which puts it outside class "
+        "`identity` by that class's own definition -- its output does not depend on WHICH or HOW MANY "
+        "genes an element targets. Its single matching line takes `pred.get('action')` AFTER the "
+        "coordinate-only join (`pairs_on` reads start, end and id and no `predicted` field at all), "
+        "and the function that consumes it is labelled NOT_A_TEST in its own payload and counts "
+        "`with_no_named_predicted_target` by name rather than dropping those elements. AND THE MOVE IS "
+        "NOT MERELY WRONG IN SUBJECT, IT IS UNDEFINED: `targets.WindowReading` carries head, chead, "
+        "at_bar and not_cached -- a window of genes and no action -- so there is no action to read from "
+        "it, and obtaining one would mean re-imposing the winner-take-all choice the move exists to "
+        "remove. That is a stronger reason than respmap_v2.py's above, where the window at least has a "
+        "shape to read",
     },
     {
         "module": "genomeos/attribution/silenceragree.py",
@@ -824,13 +854,19 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
     #: module's current lines from, so a peer's line shift is recorded here rather than by editing
     #: the registered lines.
     "genomeos/cli.py": {
-        "now": (3845, 3853, 4114),
+        "now": (3854, 3862, 4123),
         "was": (3840, 3848, 4109),
         "what": "NOT MOVED BY THIS WAVE: no read changed. 85bae7b (2026-10-10, the pgs percentile "
         "beside the raw score in cmd_individual) added five lines above every site, so the three "
         "registered reads, `p = r['predicted']`, `pc = r.get('predicted_coding')` and "
-        "`p = e.get('predicted')`, sit 5 lines lower with their text unchanged, and so do the five "
-        "not_head_lines",
+        "`p = e.get('predicted')`, sat 5 lines lower with their text unchanged, and so did the five "
+        "not_head_lines. Then bf26d7e (2026-10-10, `genomeos flow --tissue/--variant`) inserted 9 "
+        "more lines at cli.py:2744 in cmd_flow, again above every site: +14 from the registered "
+        "positions in all. Each of the three reads was re-read at its new line and its text is "
+        "unchanged, which is what distinguishes a peer's shift from a dropped claim -- the guard's "
+        "own warning, and the reason these lines are re-declared here rather than assumed to have "
+        "moved together. 1181068 touched cli.py the same day and shifts nothing: its hunks are at "
+        "4432, 4463 and 5609, all below the last site",
     },
     "genomeos/report.py": {
         "now": (99, 100, 101, 105),
