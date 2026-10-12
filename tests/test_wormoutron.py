@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import simpler
 from genomeos.attribution import wormoutron as wo
@@ -296,7 +297,6 @@ def test_the_lane_spends_nothing_and_asks_no_model():
 
 def test_the_committed_registration_matches_the_module_if_it_exists():
     p = ROOT / "data" / "results" / "wormoutron_registration.json"
-    if not p.exists():
-        pytest.skip("the registration has not been written yet")
+    tp.must_be_present(p, was="the registration has not been written yet")
     reg = json.loads(p.read_text())
     assert reg["registration"] == json.loads(json.dumps(wo.REGISTRATION))

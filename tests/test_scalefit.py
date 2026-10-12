@@ -137,8 +137,7 @@ def test_the_transfer_across_forms_is_named_a_limitation() -> None:
 
 
 def test_the_rule_was_committed_and_holds_the_floor_and_no_count() -> None:
-    if not RULE_FILE.exists():
-        pytest.skip("the registration has not been written yet")
+    tp.must_be_present(RULE_FILE, was="the registration has not been written yet")
     d = json.loads(RULE_FILE.read_text())
     assert d["floor"] == sf.FLOOR and d["strong_bar"] == sf.STRONG_BAR
     assert d["scale"] == sf.SCALE
@@ -150,8 +149,7 @@ def test_the_rule_was_committed_and_holds_the_floor_and_no_count() -> None:
 
 
 def test_the_census_result_reports_the_population_the_rule_declared() -> None:
-    if not CENSUS_FILE.exists():
-        pytest.skip("the census has not been computed yet")
+    tp.must_be_present(CENSUS_FILE, was="the census has not been computed yet")
     d = json.loads(CENSUS_FILE.read_text())
     assert d["scale"] == sf.SCALE
     assert d["rna_read"] == "none" and d["alphagenome_requests"] == 0
