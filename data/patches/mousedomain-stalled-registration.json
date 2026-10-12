@@ -1,0 +1,852 @@
+{
+  "result": "the registration of the mammalian between-gene test, written before any RNA value was read",
+  "date": "2026-10-12",
+  "written_before_any_rna_value_was_read": true,
+  "registration": {
+    "question": "The domain rule attributes a non-coding element to a gene. Between genes, where no rule can name the gene whose body the element sits in, does the gene with the nearest 5' end inside the element's boundary-delimited domain match the element's own tissue more often than the gene with the nearest 5' end on the chromosome? Two invertebrates DISAGREE about exactly this stratum -- the worm's domain rule is ahead by +3.73 points [+2.79, +4.74] on 2,335 between-gene elements and still ahead at +4.47 [+3.16, +5.78] after its own outron exclusion, while the fly's is +0.12 [-0.25, +0.61] on 3,265 brain elements, no difference detected -- and NOBODY HAS ASKED A MAMMAL. This is that question in the mouse.",
+    "why_a_mammal": "the fly's lead appears only where a host gene CAN be named (on all 10,052 distal elements the gene-structure rule is ahead of the boundary rule by -2.25 [-2.88, -1.66]), which is consistent with the fly's lead coming from host-gene transcription rather than regulation. The worm's lead survives where no host can be named. A mammal has 100 times the worm's intergenic space per gene, so whichever pattern it shows is the informative one.",
+    "stop_list_of_2026_09_27": "read, not ignored. 'No more biosamples: 1.1 needs its readings to mean what their names say' has as its subject the HUMAN reader's 13 biosamples, READER_TERMS in genomeos/genome/context_evidence.py. This lane adds none, names none and widens none. A MOUSE TISSUE SOURCE IS NOT A HUMAN READER BIOSAMPLE, as lane-flysource recorded for its fly source (docs/SIMPLER-GENOMES.md section 11).",
+    "assembly": "mm10 (GRCm38): the gene models, the cCREs, the accessibility peaks and the boundaries",
+    "liftover": "none: every input is distributed in mm10/GRCm38 and no coordinate is converted here",
+    "gene_models": "GENCODE vM21 (GRCm38/mm10), gene records of type protein_coding -- M21 and not a later release because that is the annotation ENCODE quantified this panel's RNA on, so the gene positions and the RNA rows come from ONE annotation and no id has to be mapped between two",
+    "gene_models_licence": "GENCODE/Ensembl: no restriction on use of the annotation (EMBL-EBI terms of use); recorded from the GENCODE data-release page, not inferred",
+    "element_registry": "ENCODE SCREEN registry of candidate cis-regulatory elements, mouse mm10 v3 (ENCODE Project Consortium 2020, Nature 583:699; Moore et al.), 368,121 cCREs",
+    "element_registry_licence": "ENCODE data-use policy as encodeproject.org states it: ENCODE data are free of restriction on use; recorded from the portal, not inferred",
+    "accessibility_source": "ENCODE ATAC-seq, Mus musculus embryo (14.5 days), 12 tissues, Bing Ren lab (UCSD), ENCODE3; the file read per tissue is the experiment's own `replicated peaks` narrowPeak on mm10 (the ENCODE mouse developmental matrix; Gorkin et al. 2020, Nature 583:744)",
+    "rna_source": "ENCODE polyA plus RNA-seq, Mus musculus embryo (14.5 days), the SAME 12 tissues, Barbara Wold lab (Caltech), ENCODE3; the file read per tissue is the experiment's own preferred-default `gene quantifications` TSV on mm10 with GENCODE M21, and the column read is TPM",
+    "encode_licence": "ENCODE data-use policy as encodeproject.org states it: released ENCODE data carry no restriction on use or publication; recorded from the portal, not inferred",
+    "one_source_for_both_modalities": "ENCODE, one stage (embryonic day 14.5) and the SAME TWELVE TISSUE NAMES on both sides. The vocabulary is the source's own: the twelve are exactly the biosample term names that have both an ATAC-seq and a polyA plus RNA-seq experiment at e14.5, and no tissue is grouped, renamed or split here. ENCODE's e14.5 `brain` experiment is excluded because it contains forebrain, midbrain and hindbrain, which are three of the twelve. The accessibility and the RNA come from different animals of the same strain and stage, not the same nuclei, and that is stated in the reading.",
+    "boundary_set": {
+      "primary": "Bonev et al. 2017 (Cell 171:557-572.e24, DOI 10.1016/j.cell.2017.09.043, GEO GSE96107), Table S2 'Genomic Coordinates and Compartment Identity of the Topological Domains in Different Cell Types': the authors' own insulation-score domain call on mm10, read as the domain edges. The primary sheet is `ncx NPC` -- neural progenitors FACS-purified from EMBRYONIC NEOCORTEX, in vivo -- 2,398 domains. The other four sheets and three ENCODE e14.5 CTCF sets are beside",
+      "primary_url": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867417311376-mmc2.xlsx",
+      "primary_licence": "CC BY 4.0, verbatim from the article's front matter: 'This is an open access article under the CC BY license (http://creativecommons.org/licenses/by/4.0/)'",
+      "primary_method": "the authors' own, verbatim: 'The insulation score was computed ... at 1Kb resolution within a region of +/- 250Kb ... Domain boundaries were then defined as the local 2Kb maxima in regions, where the insulation score is above the 90% quantile of the genome-wide distribution. Boundaries within 10Kb of each other were merged and only boundaries, which were detected in at least 3 biological replicates, were retained. Domains shorter than 50Kb were discarded.' No caller and no threshold is chosen here",
+      "what_a_boundary_is_here": "Bonev's domains are read as their edges -- every domain start and end, deduplicated -- which is the only conversion and has no parameter. The three ENCODE e14.5 CTCF sets reported beside take every conservative-IDR peak as a boundary, which is the brief's CTCF option and not a Hi-C domain call. 4D Nucleome's 110 mm10 boundary BEDs are NOT used: they are DCIC-pipeline calls rather than author calls, the portal requires a login, and the portal states no licence",
+      "why_this_one": "it is the only author-called mouse Hi-C domain set found that is distributed in mm10 (so no liftover), states a licence in prose (CC BY 4.0), and was measured in EMBRYONIC tissue rather than a cell line. Of its five sheets, `ncx NPC` is the in-vivo progenitor population of the developing neocortex, the closest of the five to this panel's stage and to three of its twelve tissues. Section 11 registered its stage gap -- 2-3 h fly embryos against larval-to-adult brain elements -- as the price of a large enough population, and named a tissue-matched registration as the first thing that should follow; here the boundaries and the elements are both embryonic mouse.",
+      "what_was_searched_and_rejected": [
+        "Gorkin et al. 2020 (Nature 583:744), the ENCODE mouse developmental matrix this panel's accessibility and RNA come from, publishes NO TAD or boundary table and generated no Hi-C: its own TADs are borrowed from Dixon et al. 2012 mESC. Its `d-TAC` is developmental transposase-accessible chromatin, not a TAD",
+        "Dixon et al. 2012 (Nature 485:376, GSE35156), 2,200 mESC domains at 40-kb bins, is mm9 and would need a liftover; its article states no licence, and its supplementary legends could not be read from the 6.3 MB SI PDF, so which table holds the domains is inference rather than a read statement. Not used",
+        "Vietri Rudan et al. 2015 (Cell Rep 10:1297, GSE65126) is mm10 adult liver but deposits only 50-kb interaction matrices; its Table S1 is 'Genomic Regions of Interest' and not a domain list. No author-called domain table exists",
+        "Nora et al. 2017 (Cell 169:930, GSE98671) deposits a raw tar and 5C primers; no boundary or domain table, and no CC licence is stated",
+        "Rao et al. 2014 (Cell 159:1665, GSE63525) does publish 2,927 Arrowhead contact domains for CH12-LX, but that is a B-lymphoblast CELL LINE and the coordinates are mm9",
+        "ENCODE serves no TAD or boundary file for any organism (0 files of output type 'topologically associated domains'). Its 105 mm10 `contact domains` bedpe files are Arrowhead calls on a 5-kb grid with a median length near 130 kb -- sub-TAD scale -- and ENCODE has NO embryonic or fetal mouse Hi-C at all, so none is tissue-matched to this panel",
+        "4D Nucleome has 110 mm10 boundary BEDs, but they are DCIC-pipeline calls and not author calls, the portal requires a login to download, and the portal states no licence anywhere"
+      ],
+      "beside_deciding_nothing": [
+        "Bonev's other four sheets on the same elements: `ncx CN` (2,307 domains, cortical neurons of embryonic neocortex, in vivo), `ES` (2,712, in vitro), `NPC` (2,522, in vitro) and `CN` (2,442, in vitro). None is dropped and none is chosen on an outcome",
+        "ENCODE CTCF ChIP-seq, embryonic day 14.5 -- the panel's own stage -- conservative IDR thresholded peaks on mm10: LIVER (ENCSR397RHW, ENCFF123IQA) and LUNG (ENCSR677SIH, ENCFF558ZIE), both of which are among the panel's twelve tissues, and BRAIN (ENCSR000CEH, ENCFF756OJJ), a tissue that is the union of three of them. These three are EVERY CTCF ChIP-seq experiment ENCODE has released at e14.5"
+      ],
+      "bin": "500 bp (250 bp each side), carried verbatim from simpler_flynode and NOT retuned for the mouse: a gene's 5' end inside either flanking boundary's bin counts as inside the domain"
+    },
+    "node": "simpler_flysource.boundary_rule, unchanged: an element's domain runs from the boundary at or left of its midpoint to the next boundary right of it, or to the chromosome end; a gene is in the domain when its 5' end lies there or inside either boundary's bin; the rule names the in-domain gene with the nearest 5' end, and falls back to nearest TSS when the domain holds no 5' end. No new node is proposed here.",
+    "population": "THE BETWEEN-GENE ELEMENTS: ENCODE SCREEN mm10 cCREs whose SCREEN class is not PLS, pELS or DNase-H3K4me3, which overlap an ATAC-seq replicated peak in EXACTLY ONE of the twelve labels, and whose midpoint lies in no protein-coding gene body. On none of them can either rule name a host, which is the whole reason for this population.",
+    "labels": [
+      "embryonic facial prominence",
+      "forebrain",
+      "heart",
+      "hindbrain",
+      "intestine",
+      "kidney",
+      "limb",
+      "liver",
+      "lung",
+      "midbrain",
+      "neural tube",
+      "stomach"
+    ],
+    "endpoint": "the worm's, unchanged: the attributed gene is counted concordant when it reaches 5 transcripts per million in the element's own tissue and is higher there than in every other tissue. A gene absent from the RNA source's rows is not concordant, and the number of such genes is reported. Accessibility is not function; this endpoint says the attributed gene is expressed where the element is open, never that the element regulates it.",
+    "outcome": "the boundary rule against nearest TSS on the between-gene elements; percentile cluster bootstrap over 1-Mb windows; BOUNDARY_RULE_AHEAD, NEAREST_AHEAD or NO_DIFFERENCE_DETECTED",
+    "second_registered_comparison": "the boundary rule against the worm's gene-structure rule (simpler.domain_rule) on the same elements, with its own label, not the outcome. Two comparisons on one population, each at 95%, no correction for the pair.",
+    "matched_control_and_falsifier": "the matched-distance control applied to the boundary rule's gene on the population: FALSIFIED when the rule's genes match the element's tissue no more often than genes drawn at a matched distance from the element (one-sided p >= 0.05)",
+    "positive_control": "nearest TSS on the promoter-class elements (SCREEN's PLS, pELS and DNase-H3K4me3) against its own matched control. If it does not separate, the readout is declared unresponsive and the primary reading is withheld.",
+    "beside_deciding_nothing": [
+      "the same boundaries rotated along each chromosome by one uniform offset, number and spacing kept, 1,000 draws",
+      "the two other e14.5 CTCF sets on the same elements",
+      "the elements where the two rules differ, alone",
+      "all distal elements, and the gene-structure rule against nearest TSS",
+      "labels holding 50 or more population elements"
+    ],
+    "power_in_advance": "2,352 of 18,407 population elements change gene under the primary boundary set, across 2,148 1-Mb clusters: about 0.74 points at 80% power, two-sided 5%, before clustering. The fly's section 11 had 216 of 3,265 and about 1.3 points.",
+    "stop_rule": "one run; fewer than 200 between-gene elements changing gene under the boundary rule stops it unscored and the inventory becomes the result (NO_SOURCE_QUALIFIES). The worm's and the fly's rule, unchanged.",
+    "what_is_worse_here": "The accessibility and the RNA come from different animals of the same strain and stage, not the same nuclei; a tissue is a mixture of cell types, so an element open in one tissue and a gene highest in that tissue can belong to different cells of it; the boundaries come from neural progenitors of embryonic neocortex and are applied to all twelve tissues, so they are stage-matched and tissue-matched to only three of them; and a domain's edges are read as its boundaries, which is the only conversion made to the boundary set.",
+    "money": "none; no model request, no key read, no AlphaGenome and no deletion request",
+    "outcome_wording": {
+      "BOUNDARY_RULE_AHEAD": "the boundary-delimited domain picks the expressed gene better",
+      "NEAREST_AHEAD": "the nearest 5' end on the chromosome picks the expressed gene better",
+      "NO_DIFFERENCE_DETECTED": "no difference detected between the two rules on this endpoint"
+    },
+    "stop_rule_counts": {
+      "bonev_2017_cn": 2244,
+      "bonev_2017_es": 2279,
+      "bonev_2017_ncx_cn": 2240,
+      "bonev_2017_npc": 2277,
+      "ctcf_e14_5_brain": 1686,
+      "ctcf_e14_5_liver": 1188,
+      "ctcf_e14_5_lung": 922,
+      "bonev_2017_ncx_npc": 2352
+    }
+  },
+  "census": {
+    "population_funnel": {
+      "protein_coding_genes": 21938,
+      "transcript_5p_ends": 58784,
+      "atac_peaks_per_label": {
+        "embryonic facial prominence": 127081,
+        "forebrain": 152231,
+        "heart": 71203,
+        "hindbrain": 113785,
+        "intestine": 106319,
+        "kidney": 129448,
+        "limb": 102740,
+        "liver": 83927,
+        "lung": 146496,
+        "midbrain": 90145,
+        "neural tube": 127884,
+        "stomach": 85905
+      },
+      "ccres_on_the_chromosomes": 368121,
+      "open_in_no_label": 181380,
+      "open_in_more_than_one_label_excluded": 136699,
+      "open_in_exactly_one_label": 50042,
+      "single_label_ccres": 50042,
+      "promoter_class_positive_control": 6021,
+      "distal": 44021,
+      "no_protein_coding_gene_on_the_chromosome": 0,
+      "attributed_rows": 50042
+    },
+    "between_genes": {
+      "elements": 18407,
+      "elements_by_label": {
+        "embryonic facial prominence": 1496,
+        "forebrain": 2950,
+        "heart": 1316,
+        "hindbrain": 508,
+        "intestine": 1147,
+        "kidney": 1785,
+        "limb": 1343,
+        "liver": 3580,
+        "lung": 2623,
+        "midbrain": 301,
+        "neural tube": 761,
+        "stomach": 597
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 14999,
+        "boundary_moves": 2352,
+        "empty_domain": 1056
+      },
+      "differ_from_nearest_tss": 2352,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+      "differ_from_gene_structure": 4027,
+      "gene_structure_names_a_host": 0,
+      "clusters_1mb": 2148,
+      "mde_points_unclustered_vs_nearest_tss": 0.738,
+      "mde_points_unclustered_vs_gene_structure": 0.965
+    },
+    "all_distal": {
+      "elements": 44021,
+      "elements_by_label": {
+        "embryonic facial prominence": 3509,
+        "forebrain": 6671,
+        "heart": 3510,
+        "hindbrain": 1225,
+        "intestine": 2557,
+        "kidney": 4437,
+        "limb": 2804,
+        "liver": 9489,
+        "lung": 5959,
+        "midbrain": 622,
+        "neural tube": 1835,
+        "stomach": 1403
+      },
+      "boundary_cases": {
+        "nearest_in_domain": 37697,
+        "boundary_moves": 4553,
+        "empty_domain": 1771
+      },
+      "differ_from_nearest_tss": 4553,
+      "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 1005,
+      "differ_from_gene_structure": 11284,
+      "gene_structure_names_a_host": 25614,
+      "clusters_1mb": 2309,
+      "mde_points_unclustered_vs_nearest_tss": 0.429,
+      "mde_points_unclustered_vs_gene_structure": 0.676
+    },
+    "alternative_boundary_sets_between_genes": {
+      "bonev_2017_cn": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 14825,
+          "boundary_moves": 2244,
+          "empty_domain": 1338
+        },
+        "differ_from_nearest_tss": 2244,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 3958,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.721,
+        "mde_points_unclustered_vs_gene_structure": 0.957
+      },
+      "bonev_2017_es": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 15158,
+          "boundary_moves": 2279,
+          "empty_domain": 970
+        },
+        "differ_from_nearest_tss": 2279,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 3970,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.726,
+        "mde_points_unclustered_vs_gene_structure": 0.958
+      },
+      "bonev_2017_ncx_cn": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 15071,
+          "boundary_moves": 2240,
+          "empty_domain": 1096
+        },
+        "differ_from_nearest_tss": 2240,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 4076,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.72,
+        "mde_points_unclustered_vs_gene_structure": 0.971
+      },
+      "bonev_2017_npc": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 14790,
+          "boundary_moves": 2277,
+          "empty_domain": 1340
+        },
+        "differ_from_nearest_tss": 2277,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 4045,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.726,
+        "mde_points_unclustered_vs_gene_structure": 0.967
+      },
+      "ctcf_e14_5_brain": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 9530,
+          "boundary_moves": 1686,
+          "empty_domain": 7191
+        },
+        "differ_from_nearest_tss": 1686,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 3875,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.625,
+        "mde_points_unclustered_vs_gene_structure": 0.947
+      },
+      "ctcf_e14_5_liver": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 7398,
+          "boundary_moves": 1188,
+          "empty_domain": 9821
+        },
+        "differ_from_nearest_tss": 1188,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 3633,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.524,
+        "mde_points_unclustered_vs_gene_structure": 0.917
+      },
+      "ctcf_e14_5_lung": {
+        "elements": 18407,
+        "elements_by_label": {
+          "embryonic facial prominence": 1496,
+          "forebrain": 2950,
+          "heart": 1316,
+          "hindbrain": 508,
+          "intestine": 1147,
+          "kidney": 1785,
+          "limb": 1343,
+          "liver": 3580,
+          "lung": 2623,
+          "midbrain": 301,
+          "neural tube": 761,
+          "stomach": 597
+        },
+        "boundary_cases": {
+          "nearest_in_domain": 6749,
+          "boundary_moves": 922,
+          "empty_domain": 10736
+        },
+        "differ_from_nearest_tss": 922,
+        "differ_from_nearest_tss_where_the_nearest_gene_contains_the_element": 0,
+        "differ_from_gene_structure": 3511,
+        "gene_structure_names_a_host": 0,
+        "clusters_1mb": 2148,
+        "mde_points_unclustered_vs_nearest_tss": 0.462,
+        "mde_points_unclustered_vs_gene_structure": 0.901
+      }
+    },
+    "positive_control_promoters": 6021,
+    "labels": 12,
+    "between_gene_elements_that_change_gene": 2352,
+    "stop_rule": 200,
+    "stop_rule_met": true,
+    "verdict": "DECIDABLE",
+    "position_only_move_count_cross_check": {
+      "between_gene_elements": 18407,
+      "change_gene": 2352,
+      "nearest_5p_end_in_domain": 14999,
+      "empty_domain_falls_back_to_nearest_tss": 1056,
+      "all_distal_elements": 44021,
+      "all_distal_change_gene": 4553
+    },
+    "boundary_sets": {
+      "bonev_2017_cn": {
+        "domains": 2442,
+        "boundaries": 4884,
+        "chromosomes": 21,
+        "median_domain_bp": 682000,
+        "median_spacing_bp": 210000,
+        "mean_spacing_bp": 560460.9,
+        "kind": "author-called Hi-C domains, read as their edges",
+        "sheet": "CN",
+        "rows_the_registration_recorded": 2442,
+        "biosample": "cortical neurons, in vitro"
+      },
+      "bonev_2017_es": {
+        "domains": 2712,
+        "boundaries": 5424,
+        "chromosomes": 21,
+        "median_domain_bp": 570000,
+        "median_spacing_bp": 183000,
+        "mean_spacing_bp": 504445.9,
+        "kind": "author-called Hi-C domains, read as their edges",
+        "sheet": "ES",
+        "rows_the_registration_recorded": 2712,
+        "biosample": "embryonic stem cells, in vitro"
+      },
+      "bonev_2017_ncx_cn": {
+        "domains": 2307,
+        "boundaries": 4614,
+        "chromosomes": 21,
+        "median_domain_bp": 700000,
+        "median_spacing_bp": 212000,
+        "mean_spacing_bp": 593407.7,
+        "kind": "author-called Hi-C domains, read as their edges",
+        "sheet": "ncx CN",
+        "rows_the_registration_recorded": 2307,
+        "biosample": "cortical neurons, embryonic neocortex, in vivo"
+      },
+      "bonev_2017_ncx_npc": {
+        "domains": 2398,
+        "boundaries": 4796,
+        "chromosomes": 21,
+        "median_domain_bp": 645000,
+        "median_spacing_bp": 205000,
+        "mean_spacing_bp": 570789.8,
+        "kind": "author-called Hi-C domains, read as their edges",
+        "sheet": "ncx NPC",
+        "rows_the_registration_recorded": 2398,
+        "biosample": "neural progenitors, embryonic neocortex, in vivo"
+      },
+      "bonev_2017_npc": {
+        "domains": 2522,
+        "boundaries": 5044,
+        "chromosomes": 21,
+        "median_domain_bp": 648000,
+        "median_spacing_bp": 203000,
+        "mean_spacing_bp": 542608.3,
+        "kind": "author-called Hi-C domains, read as their edges",
+        "sheet": "NPC",
+        "rows_the_registration_recorded": 2522,
+        "biosample": "neural progenitors, in vitro"
+      },
+      "ctcf_e14_5_brain": {
+        "boundaries": 28324,
+        "chromosomes": 20,
+        "median_span_bp": 176,
+        "median_spacing_bp": 29412,
+        "mean_spacing_bp": 90269.8,
+        "kind": "author-called CTCF peaks, read as their span midpoints",
+        "encode_experiment": "ENCSR000CEH",
+        "encode_file": "ENCFF756OJJ",
+        "biosample": "brain, Bing Ren lab (UCSD), ENCODE2-Mouse"
+      },
+      "ctcf_e14_5_liver": {
+        "boundaries": 49312,
+        "chromosomes": 20,
+        "median_span_bp": 316,
+        "median_spacing_bp": 14721,
+        "mean_spacing_bp": 51866.5,
+        "kind": "author-called CTCF peaks, read as their span midpoints",
+        "encode_experiment": "ENCSR397RHW",
+        "encode_file": "ENCFF123IQA",
+        "biosample": "liver, Richard Myers lab (HAIB), ENCODE3"
+      },
+      "ctcf_e14_5_lung": {
+        "boundaries": 53325,
+        "chromosomes": 20,
+        "median_span_bp": 290,
+        "median_spacing_bp": 17106,
+        "mean_spacing_bp": 48074.9,
+        "kind": "author-called CTCF peaks, read as their span midpoints",
+        "encode_experiment": "ENCSR677SIH",
+        "encode_file": "ENCFF558ZIE",
+        "biosample": "lung, Richard Myers lab (HAIB), ENCODE3"
+      }
+    }
+  },
+  "inventory_commit_checked": true,
+  "reading_template_is_committed_in": "genomeos/attribution/simpler_mouse.reading",
+  "alphagenome_requests": 0,
+  "money": "none",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "ENCODE SCREEN registry of candidate cis-regulatory elements, mouse mm10 v3 (ENCODE Project Consortium 2020, Nature 583:699; Moore et al.), 368,121 cCREs",
+        "version": "SCREEN V3, as served on 2026-10-12"
+      },
+      {
+        "accession": "ENCODE ATAC-seq, Mus musculus embryo (14.5 days), 12 tissues, Bing Ren lab (UCSD), ENCODE3; the file read per tissue is the experiment's own `replicated peaks` narrowPeak on mm10 (the ENCODE mouse developmental matrix; Gorkin et al. 2020, Nature 583:744)",
+        "version": "as served on 2026-10-12"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq, Mus musculus embryo (14.5 days), the SAME 12 tissues, Barbara Wold lab (Caltech), ENCODE3; the file read per tissue is the experiment's own preferred-default `gene quantifications` TSV on mm10 with GENCODE M21, and the column read is TPM",
+        "version": "as served on 2026-10-12"
+      },
+      {
+        "accession": "Bonev et al. 2017 (Cell 171:557-572.e24, DOI 10.1016/j.cell.2017.09.043, GEO GSE96107), Table S2 'Genomic Coordinates and Compartment Identity of the Topological Domains in Different Cell Types': the authors' own insulation-score domain call on mm10, read as the domain edges. The primary sheet is `ncx NPC` -- neural progenitors FACS-purified from EMBRYONIC NEOCORTEX, in vivo -- 2,398 domains. The other four sheets and three ENCODE e14.5 CTCF sets are beside",
+        "version": "as served on 2026-10-12"
+      },
+      {
+        "accession": "GENCODE vM21 (GRCm38/mm10), gene records of type protein_coding -- M21 and not a later release because that is the annotation ENCODE quantified this panel's RNA on, so the gene positions and the RNA rows come from ONE annotation and no id has to be mapped between two",
+        "version": "GENCODE release M21"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_mouse/fetch_record.json",
+        "sha256": "b5aa7aedd39fb2128663496a2d46e32aa738a9983b8fe368cd2d10e8204a72c7",
+        "bytes": 17973,
+        "partition": "each input's registered sha256 and byte count"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF049CMP.bed.gz",
+        "sha256": "e041d095775b03235500c3ade5c1c25a805e81147d1a6fdd03ebd0f6c70780c0",
+        "bytes": 3136236,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of kidney at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF133VPS.bed.gz",
+        "sha256": "5faacd10eed205dbcefd3c9d83a5d53f92b3d56d480dabe01a135a1c21e48367",
+        "bytes": 2096427,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of liver at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF179ZMB.bed.gz",
+        "sha256": "1bb54d0bbec33f57e0f1523f4608aaece16da8c2ce4727ef261aad2f50f44ebc",
+        "bytes": 2051071,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of stomach at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF343ZQT.bed.gz",
+        "sha256": "95522aa198427b15348daf96cf69c5a2acd28097d59512645ef31b44d4376454",
+        "bytes": 2645485,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of hindbrain at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF426FDN.bed.gz",
+        "sha256": "0b39e508b2ecb3ed1a7d6f9d5d5e284732bec457a5f901a8285bdf15b1785ae2",
+        "bytes": 3023427,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of embryonic facial prominence at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF522NJW.bed.gz",
+        "sha256": "79f8690a1c048b5ac34abb1de682df008342cb69817e475bb2fbd6960c7bfafc",
+        "bytes": 3019410,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of neural tube at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF870PSK.bed.gz",
+        "sha256": "b3f37b17dd3aafebcc9695b79e031a1c745d23d30568a868e7547e0c1d11d96d",
+        "bytes": 2103506,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of midbrain at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF899IHU.bed.gz",
+        "sha256": "8accebc4f9129d51863e9339aeda30cb850793544272190b7db2b42f1da2f862",
+        "bytes": 2401524,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of limb at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF922LUD.bed.gz",
+        "sha256": "6414c53a7b73902dd359b0a5fd793a923097cc2684780754807a10c4f1207c70",
+        "bytes": 3584321,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of forebrain at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF923BLK.bed.gz",
+        "sha256": "c81528071e1a74287c333d74cf5b80d5fbe3d32270d7f1d593205e9ca4503cc4",
+        "bytes": 1756639,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of heart at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF964BLN.bed.gz",
+        "sha256": "9f2f89e777b1c2b1d863c7bfdf4bc6ce03035bcff9b1f6c04eaba8542e729350",
+        "bytes": 2529559,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of intestine at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/atac_ENCFF991RKC.bed.gz",
+        "sha256": "f83f784bf3995ee8881ff73f171abdfa6a61f88d68a6c6642c02fa06d48914bb",
+        "bytes": 3524427,
+        "partition": "columns 1-3 only: the replicated ATAC peaks of lung at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/bonev2017_TableS2.xlsx",
+        "sha256": "8ee574e6e776fe1e0654b1e4a41c433935aed7a02d2a9638ba007b23d982e52b",
+        "bytes": 378355,
+        "partition": "the chrom, start and end columns of all five sheets; the Compartment column is never read"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/ctcf_ENCFF123IQA.bed.gz",
+        "sha256": "912648ff5576a88f6351ddb6952e901d467b7476c3c66cb6c9dded6746cdfa59",
+        "bytes": 811932,
+        "partition": "columns 1-3 only: the conservative-IDR CTCF peaks of liver, Richard Myers lab (HAIB), ENCODE3 at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/ctcf_ENCFF558ZIE.bed.gz",
+        "sha256": "284c269867dc9a45579d271a9d8d2a21d07a5e64e9269d017657882d5691d15c",
+        "bytes": 858368,
+        "partition": "columns 1-3 only: the conservative-IDR CTCF peaks of lung, Richard Myers lab (HAIB), ENCODE3 at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/ctcf_ENCFF756OJJ.bed.gz",
+        "sha256": "e7998738b617c6e19506a5b50fcb48e4c45b26d11c4763d326a3344b62c52a73",
+        "bytes": 476327,
+        "partition": "columns 1-3 only: the conservative-IDR CTCF peaks of brain, Bing Ren lab (UCSD), ENCODE2-Mouse at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/gencode.vM21.annotation.gff3.gz",
+        "sha256": "eea010c345ba5c007830bbcdaaa693d2c091de6fc1e52628175435a2b787c917",
+        "bytes": 33490315,
+        "partition": "protein_coding gene and transcript records: chrom, start, end, strand, id"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/mm10-cCREs.bed",
+        "sha256": "10cfccaef776e77be3978797f7e4333b5d17f2bc23e95f0bccce3ececfd00716",
+        "bytes": 21403212,
+        "partition": "columns 1-3, 5 and 6: the element span, its id and SCREEN's own class"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF270DCV.tsv",
+        "sha256": "093f001ac2ae24822d486778a2ebf94948156b81e4b3836853a1d0b27f0b2c6a",
+        "bytes": 11895056,
+        "partition": "the gene_id and TPM columns only: forebrain at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF304ILZ.tsv",
+        "sha256": "5ea1e701a305fe8d57ecafa3a6ea07fdff207037a49dca643f0c3dfb5ef94647",
+        "bytes": 11883871,
+        "partition": "the gene_id and TPM columns only: hindbrain at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF361QMV.tsv",
+        "sha256": "77fb8f1ee7cd736c14ff07026b1a50a704c638ca05ba269de4de19935b732b53",
+        "bytes": 11872341,
+        "partition": "the gene_id and TPM columns only: stomach at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF394CND.tsv",
+        "sha256": "03613ca3ec243f30a84cd1033951f6dcfe121f551fcb9ea7aae4a20f7d6aab96",
+        "bytes": 11888932,
+        "partition": "the gene_id and TPM columns only: limb at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF449ACY.tsv",
+        "sha256": "98230e5f1acf146021525edfe9523b2cd16a9636e00c6b460bbd9f4b3a94db7e",
+        "bytes": 11882111,
+        "partition": "the gene_id and TPM columns only: kidney at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF457PAJ.tsv",
+        "sha256": "54c5145a5d9203feab2bf1037b04efcf820778f3e6acf999ac0d2a62c40d49ca",
+        "bytes": 11878844,
+        "partition": "the gene_id and TPM columns only: neural tube at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF554PCI.tsv",
+        "sha256": "54a1c8e944a5d614900cd6a0d56ed287095b24a9aa50f1a83100b144093c271f",
+        "bytes": 11882212,
+        "partition": "the gene_id and TPM columns only: heart at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF578AKP.tsv",
+        "sha256": "e3bf360d58b791beb7cb1e68b0d5dabe518a4d788960e9d101e68b08840ff6bd",
+        "bytes": 11909219,
+        "partition": "the gene_id and TPM columns only: liver at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF609AAY.tsv",
+        "sha256": "0dcd8d701e4bdcc233e30792e18a4ecfe22aee5edb4408335e91aa4ed42a1423",
+        "bytes": 11887980,
+        "partition": "the gene_id and TPM columns only: intestine at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF722NZT.tsv",
+        "sha256": "0758153f9734ebd11cfffbf7b25dd543bd735b90af93a70684faf7c88b6e5727",
+        "bytes": 11890440,
+        "partition": "the gene_id and TPM columns only: lung at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF932AJG.tsv",
+        "sha256": "a1f9336505ea9aa9522ee0b1d4e1d96d3442c10f055f82040a264198396a0731",
+        "bytes": 11890002,
+        "partition": "the gene_id and TPM columns only: embryonic facial prominence at e14.5"
+      },
+      {
+        "path": "data/knowledge/simpler_mouse/rna_ENCFF954BEO.tsv",
+        "sha256": "111e652faf6050f2520df8ea7a6cbe64fb4d47797398ea11c79f74044074f2f3",
+        "bytes": 11881926,
+        "partition": "the gene_id and TPM columns only: midbrain at e14.5"
+      }
+    ],
+    "assembly": "mm10 (GRCm38): the gene models, the cCREs, the accessibility peaks and the boundaries",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open",
+      "note": "the cCRE BED and the narrowPeak files are 0-based half-open as served, the GFF3 is 1-based closed, and a boundary is its peak span's midpoint; positions move by at most 1 bp"
+    },
+    "parameters": {
+      "assembly": "mm10 (GRCm38): the gene models, the cCREs, the accessibility peaks and the boundaries",
+      "liftover": "none: every input is distributed in mm10/GRCm38 and no coordinate is converted here",
+      "labels": [
+        "embryonic facial prominence",
+        "forebrain",
+        "heart",
+        "hindbrain",
+        "intestine",
+        "kidney",
+        "limb",
+        "liver",
+        "lung",
+        "midbrain",
+        "neural tube",
+        "stomach"
+      ],
+      "detection_tpm": 5.0,
+      "boundary_bin_bp": 500,
+      "primary_boundary_set": "bonev_2017_ncx_npc",
+      "cluster_bp": 1000000,
+      "bootstrap_reps": 2000,
+      "control_draws": 1000,
+      "rotation_draws": 1000,
+      "seed": 20261010,
+      "alpha": 0.05,
+      "stop_rule_min_between_gene_elements_that_change_gene": 200,
+      "min_label_for_a_per_label_row": 50
+    },
+    "exclusions": [
+      "cCREs whose SCREEN class is PLS, pELS or DNase-H3K4me3 (kept only as the positive control)",
+      "cCREs that overlap an ATAC replicated peak in more than one of the twelve labels",
+      "cCREs that overlap an ATAC replicated peak in none of the twelve labels",
+      "cCREs whose midpoint lies in a protein-coding gene body (reported beside, not the population)",
+      "cCREs on unplaced and alternate mm10 contigs, where a gene order and a boundary are undefined",
+      "Bonev Table S2's Compartment column: which compartment a domain sits in is not what the rule uses",
+      "ENCODE's e14.5 `brain` experiments, because brain contains forebrain, midbrain and hindbrain",
+      "the narrowPeak score, p-value, q-value and summit columns: the peak list IS the source's call",
+      "every RNA value, until the registration is committed"
+    ],
+    "partitions": {
+      "registration": "the design, fixed before any RNA value was read"
+    },
+    "code_cleanliness": {
+      "git_sha": "87eb944280a765867dba9285508b62e1b479a7e7",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/simpler_mouse_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/simpler_mouse_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/simpler_mouse_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/hetblock.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/hetblock_harness.py",
+        "scripts/hetblock_register.py",
+        "scripts/hetblock_run.py",
+        "tests/test_hetblock.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/simpler_fly.py",
+        "genomeos/attribution/simpler_flynode.py",
+        "genomeos/attribution/simpler_flysource.py",
+        "genomeos/attribution/simpler_mouse.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/simpler_mouse_run.py"
+      ],
+      "counting_path_count": 11,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "87eb944280a765867dba9285508b62e1b479a7e7",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/hetblock.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "scripts/hetblock_harness.py",
+        "scripts/hetblock_register.py",
+        "scripts/hetblock_run.py",
+        "tests/test_hetblock.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [
+        "genomeos/attribution/hetblock.py",
+        "scripts/hetblock_harness.py",
+        "scripts/hetblock_register.py",
+        "scripts/hetblock_run.py",
+        "tests/test_hetblock.py"
+      ],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/simpler_mouse_run.py",
+        "register"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "87eb944280a765867dba9285508b62e1b479a7e7",
+      "code_cleanliness_git_sha": "87eb944280a765867dba9285508b62e1b479a7e7",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 87eb944"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 385,
+      "opens_under_data": 54,
+      "files_read": 31,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
