@@ -83,6 +83,12 @@ EXCLUSIONS = [
 
 
 def _manifest(inputs: list[tuple[str, str]], partitions: Any) -> dict:
+    # genomeos/manifest.py's contract takes `partitions` as a dict, or as a string that begins
+    # "n/a: why"; a bare sentence is incomplete and save_result quarantines the result instead of
+    # writing it. Normalised here, as an addition, so the call sites stay exactly as committed.
+    if isinstance(partitions, str) and not partitions.startswith("n/a"):
+        key, _, rest = partitions.partition(" ")
+        partitions = {key: rest}
     return {
         "sources": [
             {"accession": simpler.SOURCE, "version": "as read in stage 1, unchanged"},
