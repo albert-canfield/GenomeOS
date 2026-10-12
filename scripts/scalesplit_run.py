@@ -59,6 +59,9 @@ from scalesplit_harness import (  # noqa: E402
 
 RESULT = "scalesplit_result"
 REGISTRATION = "data/results/scalesplit_registration.json"
+#: step 1's committed result; read because check_registration re-hashes every path the registration
+#: pins, and the registration pins it. Declared in inputs() for that reason (manifest contract).
+HARNESS_RESULT = "data/results/scalesplit_harness.json"
 #: M2i's replication, quoted as context and not re-decided
 M2I = {
     "lane": "lane-freshrna",
@@ -347,6 +350,10 @@ def main() -> int:
         *(
             mf.input_entry(p, partition="pinned by sha256; the source of the committed P and D")
             for p in SOURCE_FILES
+        ),
+        mf.input_entry(
+            HARNESS_RESULT,
+            partition="step 1's committed harness, pinned by sha256 and re-hashed by check_registration",
         ),
     ]
     rows = load_rows()
