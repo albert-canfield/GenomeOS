@@ -98,6 +98,12 @@ def _get(url: str, tries: int = 4, head: bool = False) -> tuple[int, bytes, dict
 
     A 404 is returned as a status and not raised: for a search it is the empty answer it is, and
     reading it as a failure is how lane-pseudobulk's first run died (`f26c5ae`).
+
+    A 429 IS RETURNED HERE AND IS NEVER READ AS AN ANSWER BY THE CALLER. The first run of this
+    sweep fired thirteen NCBI searches back to back and four came back 429, which the record then
+    carried as a `sample_count` of null -- a rate limit dressed as "nothing was found". The repair
+    is in `reask_unanswered`, which re-asks every rate-limited search with a backoff and, if the
+    limit still holds, records the status beside the null count so no reader can mistake the two.
     """
     last: Exception | None = None
     for attempt in range(tries):
@@ -124,11 +130,40 @@ def geo_count(term: str) -> dict[str, Any]:
         f"AND ({' OR '.join(GEO_SC_TERMS)})"
     )
     url = f"{EUTILS}/esearch.fcgi?db=gds&retmax=0&retmode=json&term=" + urllib.parse.quote(query)
+    time.sleep(0.4)  # below NCBI's three requests a second, which is its limit without a key
     status, body, _ = _get(url)
     count = None
     if status == 200:
         count = int(json.loads(body)["esearchresult"]["count"])
     return {"term": term, "query": query, "http_status": status, "sample_count": count}
+
+
+def reask_unanswered(counts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """A RATE LIMIT IS NOT A COUNT OF ZERO, and this is where that is enforced.
+
+    The first run of this sweep answered 9 of the 13 searches and left IMR-90, H1, cardiac muscle
+    cell and ovary at HTTP 429 with a null count -- a number a reader could have taken for a
+    negative about those cell types. Every unanswered search is re-asked here with a growing
+    backoff, and whatever is still unanswered carries `null_count_means` saying in words that it is
+    not a zero. Nothing about an ANSWERED search is touched.
+    """
+    out: list[dict[str, Any]] = []
+    for entry in counts:
+        current = entry
+        attempt = 0
+        while current["sample_count"] is None and attempt < 4:
+            time.sleep(5 * (attempt + 1))
+            current = geo_count(current["term"])
+            attempt += 1
+        current["reasked"] = attempt
+        current["null_count_means"] = (
+            "the search was NOT ANSWERED (see http_status): a null here is NOT a count of zero and "
+            "NOT a negative about this cell type"
+            if current["sample_count"] is None
+            else "answered"
+        )
+        out.append(current)
+    return out
 
 
 def geo_sample(accession: str) -> dict[str, Any]:
@@ -452,6 +487,7 @@ def main() -> int:
     already = sc.predecessor_qualifying()
 
     geo_counts = [geo_count(term) for term in covered.values()]
+    geo_counts = reask_unanswered(geo_counts)
 
     listing = cxg_datasets()
     cxg_tissue_matches: dict[str, int] = {}
@@ -562,6 +598,12 @@ def main() -> int:
         "rejected": [dict(r) for r in sc.REJECTED],
         "archives": sc.ARCHIVES,
         "geo_search_counts": geo_counts,
+        "geo_count_caveat": "These counts are FREE-TEXT matches on ENCODE's own term string, "
+        "because GEO has no biosample vocabulary to ask. `CD14-positive monocyte` therefore "
+        "answers 0, since GEO submissions do not spell it that way -- and the 10x candidate "
+        "admitted for THAT VERY CELL TYPE shows what a 0 here is worth: it is the absence of a "
+        "string from an index, not the absence of the cell type from the open archives. A count "
+        "here says how much was available to look through and nothing about what qualifies.",
         "cellxgene_tissue_label_matches": cxg_tissue_matches,
         "cellxgene_datasets_listed": len(listing),
         "what_a_listing_is": "An archive listing is what is PUBLISHED, not what is USABLE. No "
