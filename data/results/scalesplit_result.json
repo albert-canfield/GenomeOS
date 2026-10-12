@@ -1,0 +1,1042 @@
+{
+  "result": "scalesplit_result",
+  "date": "2026-10-12",
+  "lane": "lane-scalesplit",
+  "registration": "data/results/scalesplit_registration.json",
+  "registration_date": "2026-10-12",
+  "question": "M2h fitted ONE scale on training genes and read it on held-out genes, splitting by sha256 of the gene SYMBOL -- a RANDOM split -- and its multiplicative arm read 'better' (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894], fitted scale +0.2146, about 2% of the variance, control p = 0.000999). Genes that share a compiled element are not independent, so a random split can leak: a training gene and a held-out gene may be fitted through the same element. Does the scale survive a split that CANNOT leak through shared elements -- held out by CHROMOSOME, which is disjoint in element membership -- with the scale REFITTED on the training chromosomes; and is the magnitude of the scale the same?",
+  "why_stronger": "the compiler emits ONE PROGRAM PER CHROMOSOME and an element's target is chosen inside that program, so an element on chr7 can enter the rules of chr7 genes only. The 24 chromosomes are therefore DISJOINT IN ELEMENT MEMBERSHIP, and in a chromosome-held-out fold no training gene and no held-out gene can share a compiled element. A chromosome-held-out fit is a strictly stronger generalisation test of M2h's claim than its random split, on the same rows. The converse is the thing to keep in view: a chromosome split ALSO breaks regional structure that a random split preserves (replication timing, gene density, compartment, chromosome-specific gene families), so a drop between the two splits is evidence that M2h's number is not free of element-level leakage WITHOUT being proof that leakage is the whole of the difference. That distinction is registered here and is not softened afterwards",
+  "prior_exposure": "STATED PLAINLY, AND NOT A CAVEAT ADDED AFTERWARDS. This is a RE-ANALYSIS of a measurement already read, not a fresh test. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples, under the same log2(TPM+1) endpoint and the same no-rule baseline, has already been read by: item 7 (M2b, lane-readercompile) including its post-hoc information term; item 7d (M2c, lane-combine2) for the runtime's mean and promoter competition; item 7h (M2f, lane-multrna) for the multiplicative composition; the capped-sum census (lane-capsumrna), which reached NOT_TESTABLE; M2h (lane-magcal), which fitted the one scale and read 'better' on a random split; and M2i (lane-freshrna), which replicated it with nothing fitted on RNA fresh to this project. The P and D re-split here ARE 7h's committed rows, which are the rows M2h calibrated, so EVERY value this lane reads has been read before -- and the chromosome split was chosen BECAUSE M2h's random split read 'better' and a random split can leak. The chromosome split limits that exposure and does not eliminate it: the partition is fixed by this registration before any held-out number is read and no held-out gene enters its fold's fit, but every gene's RNA value was in M2h's population, the endpoint and baseline were chosen with those readings in hand, and nothing here is a blind prediction of an unseen measurement. Any reading from this lane therefore holds as a statement about THIS measurement's dependence on the split, and is not independent confirmation of M2h; it is the leakage audit of M2h and nothing more",
+  "which_split_is_whose": "M2h's split is NOT re-run as this lane's endpoint and is NOT this lane's split: it is reproduced in the HARNESS only, to prove that this lane reads the same rows through the same functions and gets M2h's committed numbers back. This lane's registered endpoint is read on the chromosome folds alone",
+  "refitted": "THE SCALE IS REFITTED ON THE TRAINING CHROMOSOMES OF EACH FOLD. It is NOT taken as M2h's constant +0.2146. This is deliberate and is the point of the lane: refitting tests whether the SCALE ITSELF TRANSPORTS from one set of chromosomes to another, which is a property of the compiled rules, rather than testing whether one number fitted on a random half happens to hold -- which is M2h's question and is already answered. Each fold's scale is the closed-form minimiser over that fold's TRAINING pairs alone (magcal.FIT, imported unchanged), bootstrapped on that fold's training genes with the scale refitted on each resample (magcal.bootstrap_scale). No held-out pair enters any fit",
+  "interval_decision": "98.33% percentile interval, magcal.FORM_INTERVAL taken UNCHANGED, DECIDED NOW AND NOT AFTER, for three reasons stated in advance. (1) COMPARABILITY: M2h's committed multiplicative reading is +0.04339 [98.33% CI +0.0379, +0.04894], and the whole point of this lane is to put its own number beside that one, which a different width would make a comparison of widths as well as of effects. (2) MACHINERY: this lane calls magcal.bootstrap_delta and magcal.bootstrap_scale read-only and they read magcal.FORM_INTERVAL; changing the width would mean editing magcal's file or reimplementing its bootstrap, both of which this lane is forbidden to do and both of which would be worse than a conservative width. (3) CONSERVATISM: two folds of one form are judged here, so a Bonferroni correction from 95% over two readings would be 97.5% -- 7d's own two-arm convention. 98.33% is WIDER than that, so using it cannot manufacture an exclusion of 0 that the correct correction would deny. M2h's 98.33% was Bonferroni over its three forms; here the same width is a deliberate over-correction and is labelled as one, never as a Bonferroni over two",
+  "harness_check": {
+    "table_checks": {
+      "genes": 16509,
+      "committed_genes": 16509,
+      "pairs": 214617,
+      "committed_pairs": 214617,
+      "committed_delta_mse": -0.5361286982098615,
+      "recomputed_delta_mse_at_scale_1": -0.5361286933702997,
+      "abs_difference": 4.839561862368669e-09,
+      "tolerance": 0.0001
+    },
+    "m2h_reproduction": {
+      "split_rule": "M2h's, sha256 of the gene symbol (magcal.SPLIT); NOT this lane's split",
+      "m2h_tolerance": 1e-09,
+      "recomputed": {
+        "training_genes": 8181,
+        "held_out_genes": 8328,
+        "scale": 0.2145911381525326,
+        "scale_ci": [
+          0.20074141299120243,
+          0.2283000359194418
+        ],
+        "held_out_delta_mse": 0.0433912108101358,
+        "held_out_ci": [
+          0.0379045975793137,
+          0.04894398453032398
+        ],
+        "control_p": 0.000999000999000999,
+        "outcome": "BETTER"
+      },
+      "committed": {
+        "training_genes": 8181,
+        "held_out_genes": 8328,
+        "scale": 0.2145911381525326,
+        "scale_ci": [
+          0.20074141299120243,
+          0.2283000359194418
+        ],
+        "held_out_delta_mse": 0.0433912108101358,
+        "held_out_ci": [
+          0.0379045975793137,
+          0.04894398453032398
+        ],
+        "control_p": 0.000999000999000999,
+        "outcome": "BETTER"
+      },
+      "reproduces": true
+    },
+    "chromosome_checks": {
+      "chromosomes_in_table": [
+        "chr1",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chrX",
+        "chrY"
+      ],
+      "genes_per_chromosome": {
+        "chr1": 1700,
+        "chr10": 631,
+        "chr11": 983,
+        "chr12": 871,
+        "chr13": 280,
+        "chr14": 522,
+        "chr15": 509,
+        "chr16": 703,
+        "chr17": 969,
+        "chr18": 238,
+        "chr19": 1199,
+        "chr2": 1089,
+        "chr20": 464,
+        "chr21": 156,
+        "chr22": 373,
+        "chr3": 930,
+        "chr4": 642,
+        "chr5": 732,
+        "chr6": 886,
+        "chr7": 773,
+        "chr8": 559,
+        "chr9": 654,
+        "chrX": 633,
+        "chrY": 13
+      },
+      "odd_chromosomes": [
+        "chr1",
+        "chr3",
+        "chr5",
+        "chr7",
+        "chr9",
+        "chr11",
+        "chr13",
+        "chr15",
+        "chr17",
+        "chr19",
+        "chr21"
+      ],
+      "even_and_sex_chromosomes": [
+        "chr2",
+        "chr4",
+        "chr6",
+        "chr8",
+        "chr10",
+        "chr12",
+        "chr14",
+        "chr16",
+        "chr18",
+        "chr20",
+        "chr22",
+        "chrX",
+        "chrY"
+      ],
+      "genes_on_odd": 8885,
+      "genes_on_even_and_sex": 7624,
+      "sets_are_disjoint": true,
+      "union_is_the_table": true,
+      "below_min_genes": {
+        "chrY": 13
+      }
+    },
+    "problems": []
+  },
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "outcome": "SURVIVES_BOTH_FOLDS",
+  "transport_verdict": "SURVIVES_BOTH_FOLDS",
+  "transport_sentence": "M2h's scale SURVIVES a chromosome-held-out split: on both complementary chromosome folds, with the scale refitted on the training chromosomes, the scaled multiplicative composition is closer to measured RNA than the no-rule baseline on chromosomes that entered no fit, so the gain is not an artefact of a random split leaking through shared compiled elements. It remains about 2% of the variance",
+  "transport_rule": "the transport verdict is a function of the two folds' outcomes and of nothing else, fixed here: both folds BETTER -> SURVIVES_BOTH_FOLDS; exactly one fold BETTER -> SURVIVES_ONE_FOLD; neither fold BETTER -> DOES_NOT_SURVIVE. A fold that is NOT_TESTABLE or NOT_FITTABLE counts as not BETTER and is named in the reading with its own registered sentence. The transport verdict NEVER overrides a fold's own sentence: both folds' registered sentences are reported in FOLDS order whatever the transport verdict is",
+  "reading": "M2h's scale SURVIVES a chromosome-held-out split: on both complementary chromosome folds, with the scale refitted on the training chromosomes, the scaled multiplicative composition is closer to measured RNA than the no-rule baseline on chromosomes that entered no fit, so the gain is not an artefact of a random split leaking through shared compiled elements. It remains about 2% of the variance. the multiplicative composition (Zhou et al. 2024), scale fitted on the even-numbered autosomes and the sex chromosomes and read on the odd-numbered autosomes held out: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04478 [98.33% CI +0.03949, +0.05059] over 115,505 gene-cell pairs, 8,885 genes; control p = 0.000999; fitted scale +0.212 [98.33% CI +0.1975, +0.2271], one number for the whole form, fitted on 7,624 training genes (99,112 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1); the multiplicative composition (Zhou et al. 2024), scale fitted on the odd-numbered autosomes and read on the even-numbered autosomes and the sex chromosomes held out: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04201 [98.33% CI +0.03619, +0.04848] over 99,112 gene-cell pairs, 7,624 genes; control p = 0.000999; fitted scale +0.2177 [98.33% CI +0.2042, +0.2322], one number for the whole form, fitted on 8,885 training genes (115,505 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1). odd_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03949, +0.05059] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said odd_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.1975, +0.2271] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said even_and_sex_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03619, +0.04848] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said even_and_sex_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.2042, +0.2322] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said. carried with every reading: this RNA is not a fresh measurement. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h and by today's capped-sum census, and the P and D calibrated here are 7d's and 7h's committed rows; the held-out split limits that exposure and does not eliminate it, so a reading here is a statement about this measurement and a hypothesis for a fresh one, not independent confirmation Added by this lane and binding on its own reading: the same rows were then read by M2h (lane-magcal), which fitted the one scale and read 'better' on a random split, and by M2i (lane-freshrna), which replicated it with nothing fitted on RNA fresh to this project. This lane is a RE-ANALYSIS of a measurement already read -- a leakage audit of M2h's split -- and not a fresh test of anything",
+  "outcomes": {
+    "odd_held": "BETTER",
+    "even_and_sex_held": "BETTER"
+  },
+  "scales": {
+    "odd_held": 0.21202069185763203,
+    "even_and_sex_held": 0.21768308324559754
+  },
+  "scale_cis": {
+    "odd_held": [
+      0.19750799861667334,
+      0.22712388506236897
+    ],
+    "even_and_sex_held": [
+      0.20421426646645366,
+      0.23223432299878866
+    ]
+  },
+  "held_out_delta_mse": {
+    "odd_held": 0.04478205382905605,
+    "even_and_sex_held": 0.04201061944035432
+  },
+  "held_out_cis": {
+    "odd_held": [
+      0.039486392882489244,
+      0.0505927599035672
+    ],
+    "even_and_sex_held": [
+      0.036185918672237256,
+      0.0484790168964419
+    ]
+  },
+  "per_fold": {
+    "odd_held": {
+      "fold_words": "the multiplicative composition (Zhou et al. 2024), scale fitted on the even-numbered autosomes and the sex chromosomes and read on the odd-numbered autosomes held out",
+      "split": {
+        "training_chromosomes": [
+          "chr2",
+          "chr4",
+          "chr6",
+          "chr8",
+          "chr10",
+          "chr12",
+          "chr14",
+          "chr16",
+          "chr18",
+          "chr20",
+          "chr22",
+          "chrX",
+          "chrY"
+        ],
+        "held_out_chromosomes": [
+          "chr1",
+          "chr3",
+          "chr5",
+          "chr7",
+          "chr9",
+          "chr11",
+          "chr13",
+          "chr15",
+          "chr17",
+          "chr19",
+          "chr21"
+        ],
+        "training_genes": 7624,
+        "held_out_genes": 8885,
+        "rule": "by CHROMOSOME, which is the one thing this lane changes. The 24 chromosomes carrying genes in 7h's committed table are partitioned by the PARITY OF THE CHROMOSOME NUMBER -- a property of the chromosome's NAME and of no measured value, fixed by this registration before any held-out number is read. ODD (eleven chromosomes): chr1, chr3, chr5, chr7, chr9, chr11, chr13, chr15, chr17, chr19, chr21. EVEN AND SEX (thirteen chromosomes): chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18, chr20, chr22, chrX, chrY. TWO COMPLEMENTARY FOLDS are registered and both are read, so that neither side is a chosen one: FOLD odd_held trains on EVEN AND SEX and holds out ODD; FOLD even_and_sex_held trains on ODD and holds out EVEN AND SEX. A gene is wholly on one side of a fold, with all thirteen of its pairs: no cell of a held-out gene enters that fold's fit. WHY PARITY: it is nameable in advance, needs no gene count, no RNA value and no fitted number to state, splits the genome into two pieces of comparable size, and puts no chromosome in both. The sex chromosomes are placed with the even autosomes by the one rule that they are not odd-numbered; chrY carries 13 genes and chrX 633, so that placement moves 646 of 16,509 genes and is declared here rather than tuned",
+        "refitted": "THE SCALE IS REFITTED ON THE TRAINING CHROMOSOMES OF EACH FOLD. It is NOT taken as M2h's constant +0.2146. This is deliberate and is the point of the lane: refitting tests whether the SCALE ITSELF TRANSPORTS from one set of chromosomes to another, which is a property of the compiled rules, rather than testing whether one number fitted on a random half happens to hold -- which is M2h's question and is already answered. Each fold's scale is the closed-form minimiser over that fold's TRAINING pairs alone (magcal.FIT, imported unchanged), bootstrapped on that fold's training genes with the scale refitted on each resample (magcal.bootstrap_scale). No held-out pair enters any fit"
+      },
+      "scale": 0.21202069185763203,
+      "scale_ci": [
+        0.19750799861667334,
+        0.22712388506236897
+      ],
+      "scale_interval_includes_zero": false,
+      "scale_is_negative": false,
+      "scale_clause": "fitted scale +0.212 [98.33% CI +0.1975, +0.2271], one number for the whole form, fitted on 7,624 training genes (99,112 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1",
+      "training_delta_mse_at_refitted_scale": 0.04204060500506129,
+      "training_delta_mse_at_scale_1": -0.5386463760225056,
+      "outcome": "BETTER",
+      "held_out_delta_mse": 0.04478205382905605,
+      "held_out_ci": [
+        0.039486392882489244,
+        0.0505927599035672
+      ],
+      "control_p": 0.000999000999000999,
+      "reading": "the multiplicative composition (Zhou et al. 2024), scale fitted on the even-numbered autosomes and the sex chromosomes and read on the odd-numbered autosomes held out: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04478 [98.33% CI +0.03949, +0.05059] over 115,505 gene-cell pairs, 8,885 genes; control p = 0.000999; fitted scale +0.212 [98.33% CI +0.1975, +0.2271], one number for the whole form, fitted on 7,624 training genes (99,112 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1)",
+      "magnitude_against_m2h": [
+        "odd_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03949, +0.05059] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said",
+        "odd_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.1975, +0.2271] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said"
+      ],
+      "descriptives_not_verdicts": {
+        "held_out_delta_mse_at_scale_1": -0.5339683318012585,
+        "held_out_ci_at_scale_1": [
+          -0.573459430536653,
+          -0.4965761198775387
+        ],
+        "training_side": {
+          "genes": 7624,
+          "pairs": 99112,
+          "mean_D2": 2.1803287241690392,
+          "mean_P2": 0.9352171506645465,
+          "mean_scaled_P2": 0.04204060500506129,
+          "mean_D_times_P": 0.19828538732102044
+        },
+        "held_out_side": {
+          "genes": 8885,
+          "pairs": 115505,
+          "mean_D2": 2.1489280325801996,
+          "mean_P2": 0.9456895781165259,
+          "mean_scaled_P2": 0.04251136966719348,
+          "mean_D_times_P": 0.20586062315763373
+        },
+        "held_out_delta_mse_by_cell": {
+          "K562": 0.05736033279363711,
+          "HepG2": 0.11365163606882508,
+          "GM12878": 0.11924415187935673,
+          "IMR_90": 0.030793339870096838,
+          "H1": -0.009891382608026694,
+          "SK_N_SH": -0.01067347427760602,
+          "astrocyte": -0.09896888981827134,
+          "hepatocyte": 0.18439487218378303,
+          "keratinocyte": 0.026630539085135206,
+          "cardiac_muscle_cell": 0.036818555338920624,
+          "CD14_positive_monocyte": 0.16094330938952872,
+          "ovary": -0.031041116036961386,
+          "testis": 0.002904825909325397
+        },
+        "predicted_range_log2_quantiles_held_out": {
+          "0.1": 0.45699999999999996,
+          "0.25": 0.8700000000000001,
+          "0.5": 1.814,
+          "0.75": 3.5069999999999997,
+          "0.9": 5.33
+        },
+        "scaled_predicted_range_log2_quantiles_held_out": {
+          "0.1": 0.09689345617893783,
+          "0.25": 0.1844580019161399,
+          "0.5": 0.38460553502974454,
+          "0.75": 0.7435565663447155,
+          "0.9": 1.1300702876011788
+        },
+        "control_delta_mse_median": -8.699589496821783e-06,
+        "control_delta_mse_95th_percentile": 3.8623124995647336e-05
+      }
+    },
+    "even_and_sex_held": {
+      "fold_words": "the multiplicative composition (Zhou et al. 2024), scale fitted on the odd-numbered autosomes and read on the even-numbered autosomes and the sex chromosomes held out",
+      "split": {
+        "training_chromosomes": [
+          "chr1",
+          "chr3",
+          "chr5",
+          "chr7",
+          "chr9",
+          "chr11",
+          "chr13",
+          "chr15",
+          "chr17",
+          "chr19",
+          "chr21"
+        ],
+        "held_out_chromosomes": [
+          "chr2",
+          "chr4",
+          "chr6",
+          "chr8",
+          "chr10",
+          "chr12",
+          "chr14",
+          "chr16",
+          "chr18",
+          "chr20",
+          "chr22",
+          "chrX",
+          "chrY"
+        ],
+        "training_genes": 8885,
+        "held_out_genes": 7624,
+        "rule": "by CHROMOSOME, which is the one thing this lane changes. The 24 chromosomes carrying genes in 7h's committed table are partitioned by the PARITY OF THE CHROMOSOME NUMBER -- a property of the chromosome's NAME and of no measured value, fixed by this registration before any held-out number is read. ODD (eleven chromosomes): chr1, chr3, chr5, chr7, chr9, chr11, chr13, chr15, chr17, chr19, chr21. EVEN AND SEX (thirteen chromosomes): chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18, chr20, chr22, chrX, chrY. TWO COMPLEMENTARY FOLDS are registered and both are read, so that neither side is a chosen one: FOLD odd_held trains on EVEN AND SEX and holds out ODD; FOLD even_and_sex_held trains on ODD and holds out EVEN AND SEX. A gene is wholly on one side of a fold, with all thirteen of its pairs: no cell of a held-out gene enters that fold's fit. WHY PARITY: it is nameable in advance, needs no gene count, no RNA value and no fitted number to state, splits the genome into two pieces of comparable size, and puts no chromosome in both. The sex chromosomes are placed with the even autosomes by the one rule that they are not odd-numbered; chrY carries 13 genes and chrX 633, so that placement moves 646 of 16,509 genes and is declared here rather than tuned",
+        "refitted": "THE SCALE IS REFITTED ON THE TRAINING CHROMOSOMES OF EACH FOLD. It is NOT taken as M2h's constant +0.2146. This is deliberate and is the point of the lane: refitting tests whether the SCALE ITSELF TRANSPORTS from one set of chromosomes to another, which is a property of the compiled rules, rather than testing whether one number fitted on a random half happens to hold -- which is M2h's question and is already answered. Each fold's scale is the closed-form minimiser over that fold's TRAINING pairs alone (magcal.FIT, imported unchanged), bootstrapped on that fold's training genes with the scale refitted on each resample (magcal.bootstrap_scale). No held-out pair enters any fit"
+      },
+      "scale": 0.21768308324559754,
+      "scale_ci": [
+        0.20421426646645366,
+        0.23223432299878866
+      ],
+      "scale_interval_includes_zero": false,
+      "scale_is_negative": false,
+      "scale_clause": "fitted scale +0.2177 [98.33% CI +0.2042, +0.2322], one number for the whole form, fitted on 8,885 training genes (115,505 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1",
+      "training_delta_mse_at_refitted_scale": 0.04481237516781377,
+      "training_delta_mse_at_scale_1": -0.5339683318012585,
+      "outcome": "BETTER",
+      "held_out_delta_mse": 0.04201061944035432,
+      "held_out_ci": [
+        0.036185918672237256,
+        0.0484790168964419
+      ],
+      "control_p": 0.000999000999000999,
+      "reading": "the multiplicative composition (Zhou et al. 2024), scale fitted on the odd-numbered autosomes and read on the even-numbered autosomes and the sex chromosomes held out: better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04201 [98.33% CI +0.03619, +0.04848] over 99,112 gene-cell pairs, 7,624 genes; control p = 0.000999; fitted scale +0.2177 [98.33% CI +0.2042, +0.2322], one number for the whole form, fitted on 8,885 training genes (115,505 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1)",
+      "magnitude_against_m2h": [
+        "even_and_sex_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03619, +0.04848] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said",
+        "even_and_sex_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.2042, +0.2322] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said"
+      ],
+      "descriptives_not_verdicts": {
+        "held_out_delta_mse_at_scale_1": -0.5386463760225056,
+        "held_out_ci_at_scale_1": [
+          -0.579147277820912,
+          -0.4995480466373873
+        ],
+        "training_side": {
+          "genes": 8885,
+          "pairs": 115505,
+          "mean_D2": 2.1489280325801996,
+          "mean_P2": 0.9456895781165259,
+          "mean_scaled_P2": 0.04481237516781377,
+          "mean_D_times_P": 0.20586062315763373
+        },
+        "held_out_side": {
+          "genes": 7624,
+          "pairs": 99112,
+          "mean_D2": 2.1803287241690392,
+          "mean_P2": 0.9352171506645465,
+          "mean_scaled_P2": 0.044316129508820176,
+          "mean_D_times_P": 0.19828538732102044
+        },
+        "held_out_delta_mse_by_cell": {
+          "K562": 0.08331231860351693,
+          "HepG2": 0.1409320205399201,
+          "GM12878": 0.10836913344154332,
+          "IMR_90": 0.016792352405578696,
+          "H1": -0.007393170761024999,
+          "SK_N_SH": 0.005239252708763989,
+          "astrocyte": -0.14871531194674575,
+          "hepatocyte": 0.17631376029373466,
+          "keratinocyte": 0.027152263630519598,
+          "cardiac_muscle_cell": 0.033530705367993095,
+          "CD14_positive_monocyte": 0.14978912525393212,
+          "ovary": -0.03847348729936097,
+          "testis": -0.0007109095137841794
+        },
+        "predicted_range_log2_quantiles_held_out": {
+          "0.1": 0.45099999999999996,
+          "0.25": 0.873,
+          "0.5": 1.76,
+          "0.75": 3.423,
+          "0.9": 5.268
+        },
+        "scaled_predicted_range_log2_quantiles_held_out": {
+          "0.1": 0.09817507054376448,
+          "0.25": 0.19003733167340664,
+          "0.5": 0.3831222265122517,
+          "0.75": 0.7451291939496804,
+          "0.9": 1.1467544825378078
+        },
+        "control_delta_mse_median": -8.7028917162783e-06,
+        "control_delta_mse_95th_percentile": 4.079558416022418e-05
+      }
+    }
+  },
+  "magnitude_comparison": "reported beside each fold's reading and DECIDING NOTHING: the fold's held-out Delta MSE and fitted scale against M2h's committed gene-level +0.04339 [98.33% CI +0.0379, +0.04894] and +0.2146 [+0.2007, +0.2283]. THE RULE, FIXED NOW AND NOT AFTER: if two intervals OVERLAP, the honest reading is CONSISTENT WITH THE SAME EFFECT, and neither 'stronger', 'weaker', 'strengthened' nor 'weakened' may be said; only a fold interval lying WHOLLY BELOW M2h's lower bound may be read as the chromosome split giving a SMALLER number than the random split, and wholly above as a LARGER one. The two populations are NOT independent -- they are the same 16,509 genes repartitioned -- so no test of the difference is registered and none will be computed",
+  "magnitude_findings": [
+    "odd_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03949, +0.05059] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said",
+    "odd_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.1975, +0.2271] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said",
+    "even_and_sex_held held-out Delta MSE: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.03619, +0.04848] against M2h's [+0.0379, +0.04894]), so neither 'stronger' nor 'weaker' is said",
+    "even_and_sex_held fitted scale: CONSISTENT WITH THE SAME EFFECT as M2h's -- the intervals overlap ([+0.2042, +0.2322] against M2h's [+0.2007, +0.2283]), so neither 'stronger' nor 'weaker' is said"
+  ],
+  "post_hoc_deciding_nothing": {
+    "what_this_is": "reported beside the registered reading, DECIDING NOTHING and able to change no verdict: (1) THE PER-CHROMOSOME SCALES -- for each of the 24 chromosomes, the one scale fitted on THAT CHROMOSOME'S GENES ALONE with its gene and pair count, so a reader can see whether the magnitude is uniform or regional; (2) for each of the 24 chromosomes, the scale fitted on the OTHER 23 (a leave-one-chromosome-out training scale) beside its own, which is what a 24-fold version of this lane would have fitted; (3) the spread of (1): its minimum, maximum, median and interquartile range, and how many of the 24 lie inside M2h's committed scale interval. A chromosome with fewer than MIN_GENES genes is reported with its count and FLAGGED as below the registered floor -- chrY carries 13 genes in 7h's table -- and no chromosome-level scale is read as a verdict about that chromosome. None of (1), (2) or (3) is a test: no interval is placed on a per-chromosome scale and no comparison between chromosomes is registered",
+    "per_chromosome": {
+      "chr1": {
+        "genes": 1700,
+        "pairs": 22100,
+        "scale_on_this_chromosome_alone": 0.19912942965575983,
+        "scale_on_the_other_23": 0.21712295468466197,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr10": {
+        "genes": 631,
+        "pairs": 8203,
+        "scale_on_this_chromosome_alone": 0.19500972461917732,
+        "scale_on_the_other_23": 0.2159056388448984,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr11": {
+        "genes": 983,
+        "pairs": 12779,
+        "scale_on_this_chromosome_alone": 0.2040691407367971,
+        "scale_on_the_other_23": 0.21581281285196555,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr12": {
+        "genes": 871,
+        "pairs": 11323,
+        "scale_on_this_chromosome_alone": 0.20115743306955344,
+        "scale_on_the_other_23": 0.21580082097895906,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr13": {
+        "genes": 280,
+        "pairs": 3640,
+        "scale_on_this_chromosome_alone": 0.12315105389874337,
+        "scale_on_the_other_23": 0.21686606700107824,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr14": {
+        "genes": 522,
+        "pairs": 6786,
+        "scale_on_this_chromosome_alone": 0.28735352538376796,
+        "scale_on_the_other_23": 0.21303755931700324,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr15": {
+        "genes": 509,
+        "pairs": 6617,
+        "scale_on_this_chromosome_alone": 0.24364192920985533,
+        "scale_on_the_other_23": 0.2142637788938744,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr16": {
+        "genes": 703,
+        "pairs": 9139,
+        "scale_on_this_chromosome_alone": 0.20560949006272042,
+        "scale_on_the_other_23": 0.21545152372637597,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr17": {
+        "genes": 969,
+        "pairs": 12597,
+        "scale_on_this_chromosome_alone": 0.23486184118485645,
+        "scale_on_the_other_23": 0.21378723863846616,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr18": {
+        "genes": 238,
+        "pairs": 3094,
+        "scale_on_this_chromosome_alone": 0.2248598076190081,
+        "scale_on_the_other_23": 0.21494066923186853,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr19": {
+        "genes": 1199,
+        "pairs": 15587,
+        "scale_on_this_chromosome_alone": 0.2615367525138653,
+        "scale_on_the_other_23": 0.21171573361150553,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr2": {
+        "genes": 1089,
+        "pairs": 14157,
+        "scale_on_this_chromosome_alone": 0.21758052529047178,
+        "scale_on_the_other_23": 0.21490544453025412,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr20": {
+        "genes": 464,
+        "pairs": 6032,
+        "scale_on_this_chromosome_alone": 0.22038566208088903,
+        "scale_on_the_other_23": 0.21490060245578688,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr21": {
+        "genes": 156,
+        "pairs": 2028,
+        "scale_on_this_chromosome_alone": 0.217350790655162,
+        "scale_on_the_other_23": 0.21506429954740924,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr22": {
+        "genes": 373,
+        "pairs": 4849,
+        "scale_on_this_chromosome_alone": 0.22941784565385484,
+        "scale_on_the_other_23": 0.2147566828662651,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr3": {
+        "genes": 930,
+        "pairs": 12090,
+        "scale_on_this_chromosome_alone": 0.2100937661753606,
+        "scale_on_the_other_23": 0.2153415617109009,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr4": {
+        "genes": 642,
+        "pairs": 8346,
+        "scale_on_this_chromosome_alone": 0.19645877130001294,
+        "scale_on_the_other_23": 0.21593502563907052,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr5": {
+        "genes": 732,
+        "pairs": 9516,
+        "scale_on_this_chromosome_alone": 0.20852225085928947,
+        "scale_on_the_other_23": 0.21539574611406823,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr6": {
+        "genes": 886,
+        "pairs": 11518,
+        "scale_on_this_chromosome_alone": 0.1633781160073915,
+        "scale_on_the_other_23": 0.21851626661751986,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr7": {
+        "genes": 773,
+        "pairs": 10049,
+        "scale_on_this_chromosome_alone": 0.2176414343753154,
+        "scale_on_the_other_23": 0.21495870468171344,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chr8": {
+        "genes": 559,
+        "pairs": 7267,
+        "scale_on_this_chromosome_alone": 0.23030657206147404,
+        "scale_on_the_other_23": 0.21456054569588756,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chr9": {
+        "genes": 654,
+        "pairs": 8502,
+        "scale_on_this_chromosome_alone": 0.2375828455797249,
+        "scale_on_the_other_23": 0.21415039645990253,
+        "below_min_genes": false,
+        "chromosome_set": "odd"
+      },
+      "chrX": {
+        "genes": 633,
+        "pairs": 8229,
+        "scale_on_this_chromosome_alone": 0.25163794363467884,
+        "scale_on_the_other_23": 0.2139642505241055,
+        "below_min_genes": false,
+        "chromosome_set": "even_and_sex"
+      },
+      "chrY": {
+        "genes": 13,
+        "pairs": 169,
+        "scale_on_this_chromosome_alone": 0.7332237826965474,
+        "scale_on_the_other_23": 0.21501821644770103,
+        "below_min_genes": true,
+        "chromosome_set": "even_and_sex"
+      }
+    },
+    "spread_of_the_within_chromosome_scales": {
+      "n": 24,
+      "min": 0.12315105389874337,
+      "q1": 0.2040691407367971,
+      "median": 0.2176414343753154,
+      "q3": 0.2375828455797249,
+      "max": 0.7332237826965474,
+      "inside_m2h_scale_interval": [
+        "chr11",
+        "chr12",
+        "chr16",
+        "chr18",
+        "chr2",
+        "chr20",
+        "chr21",
+        "chr3",
+        "chr5",
+        "chr7"
+      ],
+      "inside_m2h_scale_interval_count": 10,
+      "m2h_scale_interval": [
+        0.20074141299120243,
+        0.2283000359194418
+      ]
+    },
+    "deciding_nothing": "no interval is placed on any per-chromosome scale, no comparison between chromosomes is registered, and none of this can change a fold's verdict or the transport verdict"
+  },
+  "which_governs": "THE HELD-OUT INTERVAL DECIDES. The scale only splits the straddle case:\n- held-out Delta MSE excludes 0 on the rules' side -> \"better\" (shrinking the rules to 0 cannot produce this);\n- excludes 0 on the baseline's side -> \"worse\" (the falsifier);\n- straddles 0, AND the training-set scale interval includes 0 -> \"calibration removes the rules: no magnitude of the compiled rules improves on no rule\" (a negative);\n- straddles 0, AND the scale interval excludes 0 -> \"inconclusive\".\nA negative scale is reported beside whichever reading applies, as \"the rules point the wrong way on average\". Every reading carries the prior-exposure sentence (this RNA was read by items 7, 7d, 7h and today's capped-sum census).",
+  "not_vacuous": "a scale fitted to near 0 makes the calibrated prediction near-identical to the no-rule baseline, so its held-out Delta MSE comes out near 0 and the interval straddles 0. A dead scale can therefore MANUFACTURE A STRADDLE but it cannot manufacture a win: a held-out interval wholly above 0 requires the scaled prediction to lower the squared error on genes that entered no fit, which a prediction shrunk to nothing cannot do. 'better' is the one reading the vacuity trap cannot fake, which is why the held-out interval decides and the scale interval is what tells a dead-scale straddle (CALIBRATION_REMOVES, a negative) from a live-scale straddle (INCONCLUSIVE)",
+  "falsifier": "the reading under test is M2h's, that one scale on the compiled rules' multiplicative composition brings the run closer to measured RNA on data that entered no fit, and that this is a property of the rules rather than of a random split. It is FALSIFIED for a fold when that fold's held-out Delta MSE interval excludes 0 on the BASELINE's side (upper bound < 0, outcome WORSE): with the scale refitted freely on the training chromosomes, the form is still further from measured RNA than running no rule at all on chromosomes that entered no fit. An interval STRADDLING 0 falsifies nothing and is read by the scale, exactly as M2h registered: CALIBRATION_REMOVES when the scale interval includes 0 -- 'calibration removes the rules', A NEGATIVE AND NOT 'no difference detected' -- and INCONCLUSIVE when the scale interval excludes 0, meaning a magnitude is estimated and this measurement does not resolve the comparison. 'INCONCLUSIVE' is therefore exactly one case here: a live scale with a straddling held-out interval, and it is the one case from which nothing is concluded in either direction. An interval excluding 0 on the rules' side (BETTER) is a positive for that fold. ACROSS the folds, the thing being falsified is TRANSPORT: anything other than BETTER on BOTH folds means M2h's gain is not shown to survive a split that cannot leak through shared elements, and SURVIVES_ONE_FOLD and DOES_NOT_SURVIVE both say so in their own registered words. NOT_VACUOUS, carried from M2h, states why 'better' is the one reading a dead scale cannot fake",
+  "prior_exposure_clause": "carried with every reading: this RNA is not a fresh measurement. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h and by today's capped-sum census, and the P and D calibrated here are 7d's and 7h's committed rows; the held-out split limits that exposure and does not eliminate it, so a reading here is a statement about this measurement and a hypothesis for a fresh one, not independent confirmation Added by this lane and binding on its own reading: the same rows were then read by M2h (lane-magcal), which fitted the one scale and read 'better' on a random split, and by M2i (lane-freshrna), which replicated it with nothing fitted on RNA fresh to this project. This lane is a RE-ANALYSIS of a measurement already read -- a leakage audit of M2h's split -- and not a fresh test of anything",
+  "stop_rule": "one run, from this registration's committed code, on the files the registration pins by sha256 (7h's and M2h's registrations and results). No chromosome set, fold, population, scale definition, endpoint, metric, interval, control, decision, transport rule, falsifier or wording is changed after a held-out value of this lane is read; a defect found afterwards is reported beside the registered reading and corrected only under a new registration. The post hoc of POST_HOC decides nothing and cannot change a verdict",
+  "limitations": [
+    "PRIOR EXPOSURE, first because it is the largest: see PRIOR_EXPOSURE. These are the rows M2h calibrated and 7h, 7d and item 7 read before it. No number here is a blind prediction, and a fold that reads 'better' is not independent confirmation of M2h -- it is M2h's own measurement surviving a stronger split of itself",
+    "the bootstrap unit is the GENE, carried verbatim from M2h, so the held-out interval prices in variation between genes and NOT between chromosomes. With eleven and thirteen chromosomes a chromosome-level resample was considered and deliberately NOT registered, because changing M2h's unit would change more than the split. A fold interval is therefore narrower than one that priced in between-chromosome correlation would be, and the post-hoc per-chromosome scales are reported so that a reader can see that spread directly",
+    "a chromosome split removes element sharing AND regional structure at once. A drop from M2h's number is evidence that M2h's random split is not clean, but it does not apportion the drop between element leakage and genuine regional variation in the scale, and nothing here attempts to",
+    "two folds of one form are read and the interval is 98.33%, wider than a Bonferroni over two would require. That is conservative for exclusion of 0 and it is NOT conservative for a straddle: an over-wide interval makes CALIBRATION_REMOVES and INCONCLUSIVE easier to reach than the correct correction would. Both directions of that are stated here in advance",
+    "one scale is the smallest calibration there is and also the weakest: it can only shrink, grow or flip the predictions as a block, and cannot fix a form whose error is in the SHAPE of its prediction across cells or across genes. Carried from M2h",
+    "the calibration is a statistical rescaling and not a mechanism; nothing here attributes the size to any stage of the compiled pipeline. Carried from M2h",
+    "the P and D are the committed table's five-decimal roundings, which is why the harness admits TOLERANCE rather than exact equality. Carried from M2h",
+    "chromosomes are disjoint in element membership BY CONSTRUCTION of the compiler (one program per chromosome, cis targets). That is a property of the compiled programs and not of biology: it says nothing about whether a real regulatory element can act between chromosomes, and if a future compiler emitted a trans rule WHY_STRONGER would no longer hold",
+    "accessibility is not function, and an emitted target is a model attribution and never a measured regulatory relationship. Carried forward unchanged"
+  ],
+  "context_verbatim": {
+    "seven_h_reading": "the multiplicative composition (Zhou et al. 2024): worse; the reader-gated run of genes with two or more compiled elements raised the squared error of measured log2(TPM+1) across the thirteen reader cell types above the no-rule baseline's (Delta MSE -0.5361 [97.5% CI -0.5637, -0.5088] over 214,617 gene-cell pairs, 16,509 genes; control p = 1). Head-to-head over the 2,405 genes in all three populations (31,265 gene-cell pairs), the multiplicative composition was closer to measured RNA than the runtime's mean (MSE(mean) - MSE(multiplicative) +0.04395 [97.5% CI +0.0385, +0.04979]) and closer to measured RNA than the promoter-competition form (Bothma 2015, declared half-occupied promoter) (MSE(competition) - MSE(multiplicative) +0.7383 [97.5% CI +0.6625, +0.8183]).",
+    "m2h_reading": "the multiplicative composition (Zhou et al. 2024): better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; fitted scale +0.2146 [98.33% CI +0.2007, +0.2283], one number for the whole form, fitted on 8,181 training genes (106,353 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1)",
+    "m2h_committed": {
+      "result": "data/results/magcal_result.json",
+      "registration": "data/results/magcal_registration.json",
+      "code": "genomeos/attribution/magcal.py",
+      "commits": "2b0b604 code, fbce775 registration, ac5580b result",
+      "training_genes": 8181,
+      "held_out_genes": 8328,
+      "scale": 0.2145911381525326,
+      "scale_ci": [
+        0.20074141299120243,
+        0.2283000359194418
+      ],
+      "held_out_delta_mse": 0.0433912108101358,
+      "held_out_ci": [
+        0.0379045975793137,
+        0.04894398453032398
+      ],
+      "control_p": 0.000999000999000999,
+      "outcome": "BETTER",
+      "variance_share": "about 2% of the variance (+0.04339 against mean(D^2) 2.1524 on the held-out side)"
+    },
+    "m2i_replication": {
+      "lane": "lane-freshrna",
+      "commit": "f6e71c6",
+      "held_out_delta_mse": "+0.03727 [+0.03202, +0.04299]",
+      "note": "nothing fitted, on RNA fresh to this project; quoted, not re-decided here"
+    },
+    "note": "7h's and M2h's readings are their own, quoted and not re-decided here; M2i's numbers are quoted from its commit message and are not recomputed"
+  },
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR_90",
+    "H1",
+    "SK_N_SH",
+    "astrocyte",
+    "hepatocyte",
+    "keratinocyte",
+    "cardiac_muscle_cell",
+    "CD14_positive_monocyte",
+    "ovary",
+    "testis"
+  ],
+  "seconds": 12.5,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/multrna_result.json (7h, lane-multrna)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/magcal_result.json (M2h, lane-magcal)",
+        "version": "pinned"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq gene quantifications, V29, 13 reader biosamples",
+        "version": "read by 7d, 7h and M2h; this lane reads their committed rows, not the files"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/scalesplit_registration.json",
+        "sha256": "b64113aaecfdf47dd9c3e6acb7b8565d11aba682d7bdb223859a5bb6910c99e4",
+        "bytes": 68714,
+        "partition": "this lane's registration, re-checked field by field"
+      },
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "pinned by sha256; the source of the committed P and D"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "pinned by sha256; the source of the committed P and D"
+      },
+      {
+        "path": "data/results/magcal_registration.json",
+        "sha256": "2b25645be58c526a6c69bb15be5822bd921e14fb6b2761e1bcc78b505a302c90",
+        "bytes": 45173,
+        "partition": "pinned by sha256; the source of the committed P and D"
+      },
+      {
+        "path": "data/results/multrna_registration.json",
+        "sha256": "12a2cdad7806b51836ffe97f24d2ad8878a36b64f47e4cf64c44473e476575f7",
+        "bytes": 134997,
+        "partition": "pinned by sha256; the source of the committed P and D"
+      },
+      {
+        "path": "data/results/scalesplit_harness.json",
+        "sha256": "9fcabf3d56d0fb9b9b285724209baf8fc09e43745c901dd8043858aa9c29647e",
+        "bytes": 22289,
+        "partition": "step 1's committed harness, pinned by sha256 and re-hashed by check_registration"
+      }
+    ],
+    "input_count": 6,
+    "assembly": "GRCh38; genes as 7h matched them, by gene_id",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "form": "multiplicative",
+      "folds": [
+        "odd_held",
+        "even_and_sex_held"
+      ],
+      "split": "by CHROMOSOME, which is the one thing this lane changes. The 24 chromosomes carrying genes in 7h's committed table are partitioned by the PARITY OF THE CHROMOSOME NUMBER -- a property of the chromosome's NAME and of no measured value, fixed by this registration before any held-out number is read. ODD (eleven chromosomes): chr1, chr3, chr5, chr7, chr9, chr11, chr13, chr15, chr17, chr19, chr21. EVEN AND SEX (thirteen chromosomes): chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18, chr20, chr22, chrX, chrY. TWO COMPLEMENTARY FOLDS are registered and both are read, so that neither side is a chosen one: FOLD odd_held trains on EVEN AND SEX and holds out ODD; FOLD even_and_sex_held trains on ODD and holds out EVEN AND SEX. A gene is wholly on one side of a fold, with all thirteen of its pairs: no cell of a held-out gene enters that fold's fit. WHY PARITY: it is nameable in advance, needs no gene count, no RNA value and no fitted number to state, splits the genome into two pieces of comparable size, and puts no chromosome in both. The sex chromosomes are placed with the even autosomes by the one rule that they are not odd-numbered; chrY carries 13 genes and chrX 633, so that placement moves 646 of 16,509 genes and is declared here rather than tuned",
+      "refitted": "THE SCALE IS REFITTED ON THE TRAINING CHROMOSOMES OF EACH FOLD. It is NOT taken as M2h's constant +0.2146. This is deliberate and is the point of the lane: refitting tests whether the SCALE ITSELF TRANSPORTS from one set of chromosomes to another, which is a property of the compiled rules, rather than testing whether one number fitted on a random half happens to hold -- which is M2h's question and is already answered. Each fold's scale is the closed-form minimiser over that fold's TRAINING pairs alone (magcal.FIT, imported unchanged), bootstrapped on that fold's training genes with the scale refitted on each resample (magcal.bootstrap_scale). No held-out pair enters any fit",
+      "min_genes": 100,
+      "form_interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "interval_decision": "98.33% percentile interval, magcal.FORM_INTERVAL taken UNCHANGED, DECIDED NOW AND NOT AFTER, for three reasons stated in advance. (1) COMPARABILITY: M2h's committed multiplicative reading is +0.04339 [98.33% CI +0.0379, +0.04894], and the whole point of this lane is to put its own number beside that one, which a different width would make a comparison of widths as well as of effects. (2) MACHINERY: this lane calls magcal.bootstrap_delta and magcal.bootstrap_scale read-only and they read magcal.FORM_INTERVAL; changing the width would mean editing magcal's file or reimplementing its bootstrap, both of which this lane is forbidden to do and both of which would be worse than a conservative width. (3) CONSERVATISM: two folds of one form are judged here, so a Bonferroni correction from 95% over two readings would be 97.5% -- 7d's own two-arm convention. 98.33% is WIDER than that, so using it cannot manufacture an exclusion of 0 that the correct correction would deny. M2h's 98.33% was Bonferroni over its three forms; here the same width is a deliberate over-correction and is labelled as one, never as a Bonferroni over two",
+      "bootstrap": {
+        "resamples": 2000,
+        "seed": 20261010,
+        "unit": "gene: genes are resampled with replacement and carry all thirteen of their pairs",
+        "interval": "per fold, the 98.33% percentile interval (INTERVAL). The held-out Delta MSE interval resamples the HELD-OUT CHROMOSOMES' genes with replacement, each carrying its thirteen pairs, with the scale held fixed at the value fitted on the training chromosomes (magcal.bootstrap_delta); the SCALE interval resamples the TRAINING CHROMOSOMES' genes with replacement, each carrying its thirteen pairs, and refits the scale on each resample (magcal.bootstrap_scale). The unit is the GENE in both, as M2h registered it. A chromosome-level bootstrap is NOT registered as the endpoint's interval and is not computed: with eleven and thirteen chromosomes it would be a resample of eleven or thirteen units, and M2h's gene unit is what is carried verbatim. That the gene unit does not price in between-chromosome correlation is written as a LIMITATION, not read as a result"
+      },
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      },
+      "control_alpha": 0.05,
+      "tolerance": 0.0001,
+      "m2h_tolerance": 1e-09,
+      "free_parameters": "one real scale per fold; no per-gene and no per-cell parameter"
+    },
+    "exclusions": [
+      "none of this lane's own: the population is 7h's, unchanged"
+    ],
+    "partitions": {
+      "rule": "by CHROMOSOME, which is the one thing this lane changes. The 24 chromosomes carrying genes in 7h's committed table are partitioned by the PARITY OF THE CHROMOSOME NUMBER -- a property of the chromosome's NAME and of no measured value, fixed by this registration before any held-out number is read. ODD (eleven chromosomes): chr1, chr3, chr5, chr7, chr9, chr11, chr13, chr15, chr17, chr19, chr21. EVEN AND SEX (thirteen chromosomes): chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18, chr20, chr22, chrX, chrY. TWO COMPLEMENTARY FOLDS are registered and both are read, so that neither side is a chosen one: FOLD odd_held trains on EVEN AND SEX and holds out ODD; FOLD even_and_sex_held trains on ODD and holds out EVEN AND SEX. A gene is wholly on one side of a fold, with all thirteen of its pairs: no cell of a held-out gene enters that fold's fit. WHY PARITY: it is nameable in advance, needs no gene count, no RNA value and no fitted number to state, splits the genome into two pieces of comparable size, and puts no chromosome in both. The sex chromosomes are placed with the even autosomes by the one rule that they are not odd-numbered; chrY carries 13 genes and chrX 633, so that placement moves 646 of 16,509 genes and is declared here rather than tuned",
+      "odd_held": {
+        "training": "chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18, chr20, chr22, chrX, chrY: the scale is refitted here only",
+        "held_out": "chr1, chr3, chr5, chr7, chr9, chr11, chr13, chr15, chr17, chr19, chr21: the registered endpoint is read here only"
+      },
+      "even_and_sex_held": {
+        "training": "chr1, chr3, chr5, chr7, chr9, chr11, chr13, chr15, chr17, chr19, chr21: the scale is refitted here only",
+        "held_out": "chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18, chr20, chr22, chrX, chrY: the registered endpoint is read here only"
+      }
+    },
+    "code_cleanliness": {
+      "git_sha": "9ce4c6ef82963df64da8e4525391dfc4f2f7ad12",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/scalesplit_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/scalesplit_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/scalesplit_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/scalesplit.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/scalesplit_harness.py",
+        "scripts/scalesplit_run.py"
+      ],
+      "counting_path_count": 157,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "9ce4c6ef82963df64da8e4525391dfc4f2f7ad12",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/scalesplit_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "9ce4c6ef82963df64da8e4525391dfc4f2f7ad12",
+      "code_cleanliness_git_sha": "9ce4c6ef82963df64da8e4525391dfc4f2f7ad12",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 9ce4c6e"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 402,
+      "opens_under_data": 15,
+      "files_read": 6,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
