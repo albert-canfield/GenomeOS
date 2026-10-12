@@ -590,3 +590,34 @@ CASES_SELF_FLAKY = {
     " measured above as 2 of 5. A strict xfail on a flaky test is itself a guard that fires at"
     " random, which would be the same defect again",
 }
+
+
+#: The census's THIRD self-case, and the first that was a red on dev rather than an inert line.
+CASES_SELF_RED = {
+    "case": 'tests/test_guardcensus.py\'s literal "genomeos.attribution.pbrun", added by this'
+    " lane at ce65d51",
+    "what": "read_module collects first-party edges FROM STRING LITERALS as well as from import"
+    " statements -- deliberately, because the closure that hid openpyxl was a string. That"
+    " literal resolves, so the walk followed it to pbrun.py, found `import h5py` at line 41, and"
+    " test_no_test_module_needs_an_undeclared_package went RED",
+    "the_irony_is_the_finding": "the test documenting an edge the walk CANNOT follow supplied, by"
+    " hand and in a string, exactly the edge that makes it followable. The guard was right and"
+    " this lane was the violation",
+    "why_the_census_missed_it": "this lane scanned tests/test_*.py; the guard scans"
+    " TESTS.glob('*.py'), every .py in tests/ including conftest.py and extras_lock.py itself."
+    " Same function, different file set, different answer. A CENSUS THAT MEASURES A NARROWER"
+    " POPULATION THAN THE GUARD IT AUDITS WILL REPORT THE GUARD CLEAN WHILE THE GUARD IS RED,"
+    " which is worth more than the incident: the population must be the guard's own, not one that"
+    " resembles it",
+    "fix": "@pytest.mark.requires_extra('predict') on the one offending test -- the guard's own"
+    " prescribed remedy, and a pure insertion, because read_module collects requires_extra at"
+    " FILE level. 1 line added, 0 removed, 0 violations after; the other 35 guards still run bare",
+    "better_fix_not_taken": "dropping the literal is better, since the test never imports pbrun"
+    " and only hands a string to _first_party_file, so the marker makes it skip where it would"
+    " have run. But editing that line REMOVES a line ce65d51 added, the window is 2.days, and"
+    " --force is not this lane's to take. Reported to the coordinator with the better fix named",
+    "on_the_undo_guard": "its docstring says deleting your own lines passes. It refused only"
+    " because every commit here is authored Albert Canfield, so it cannot tell this lane's line"
+    " from a peer's -- which its refusal message states outright. A limitation of the detector,"
+    " not a licence",
+}

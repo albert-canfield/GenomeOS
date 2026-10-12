@@ -195,6 +195,7 @@ def test_the_overstated_case_is_left_standing_not_edited() -> None:
     assert "too broad and the entry is left standing" in gcn.BLINDNESS_CORRECTION
 
 
+@pytest.mark.requires_extra("predict")
 def test_the_closure_walk_still_drops_the_submodule_edge() -> None:
     """The mechanism, on a synthetic file, so no live result record is read.
 
