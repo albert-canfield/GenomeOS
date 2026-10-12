@@ -68,6 +68,12 @@ OWN_CODE = (
     "tests/test_globscope.py",
 )
 READ_FACTS = ROOT / "data/results/globscope_read_facts.json"
+# ADDED, superseding the line above: `data/results` is the RESULT REGISTRY, and `check_staged.py`
+# rightly refuses committing a file there that carries no `result_manifest` -- "a result no commit
+# reproduces". The evidence file is not a result, so it does not belong in the registry. It lives at
+# the path below, which the same guard is happy with. The superseded line is left standing, as every
+# correction in this lane is, because the undo guard refuses removing a line HEAD holds.
+READ_FACTS = ROOT / "data/globscope_read_facts.json"
 
 #: Top-level directories a literal path may start with for this scan to treat it as a repo path.
 REPO_TOPS = ("data", "genomeos", "scripts", "tests", "docs", "web")
@@ -352,6 +358,31 @@ def _apply_read_facts(facts: list[dict[str, Any]]) -> list[dict[str, Any]]:
             mechanical_unresolved = field in site["unresolved"] or (
                 field == "independent_scope_recorded" and not site["independent_scope_recorded"]
             )
+            # ADDED, additively, after reading the sites exposed that TWO of this scan's detectors
+            # are ONE-WAY instruments whose negative is "not established" and not "false". The
+            # project found the same class of error three times on 2026-10-12 (guardcensus: an
+            # instrument must be exercised on the population it will judge), and it is here too:
+            #
+            # (1) `refusal_in_enclosing_scope` intersects the governing test of a raise with the
+            #     glob's FEEDERS. At scripts/combine2_run.py:102 the refusal is TWO dataflow steps
+            #     away -- the group's sha256 is compared with the registration's pin, the mismatch
+            #     is appended to `moved`, and `if moved: raise` -- so the test misses it although the
+            #     site plainly refuses. A hit proves a refusal; a miss proves nothing.
+            # (2) `matched_files_on_disk` is 0 whenever no literal directory resolved, which is the
+            #     same "unmeasured" state as `glob_root_resolved` being false, not a measurement of
+            #     zero.
+            #
+            # Both are therefore readable with cited evidence. THE DIRECTION OF ERROR IS WHAT MAKES
+            # THIS ALLOWABLE: a supplied refusal can only move a site OUT of CAN_SHRINK_SILENTLY and
+            # into REFUSES, which SHRINKS this lane's own finding rather than inflating it. A read
+            # fact still may not name a class, and `refusal_in_enclosing_scope` may only be set
+            # TRUE -- the absence of a refusal is never supplied by reading.
+            if field == "refusal_in_enclosing_scope":
+                if value is not True:
+                    raise SystemExit(f"a read fact may only ESTABLISH a refusal, never deny one: {key}")
+                mechanical_unresolved = True
+            if field == "matched_files_on_disk" and site["unresolved"]:
+                mechanical_unresolved = True
             if not mechanical_unresolved:
                 raise SystemExit(
                     f"read fact overrides a fact the scan RESOLVED, which is not allowed: {key} {field}"
@@ -524,6 +555,22 @@ def main() -> int:
     groups = gc.declared_groups()
     rows = varying_group_rows(groups)
 
+    # ADDED for the same reason as the site pin, and found the same way: the question asked about SIX
+    # varying groups and `gc.varying()` now computes EIGHT, because results committed since the census
+    # of 2026-10-11 brought two more group names whose member count differs between results. The six
+    # are pinned to globcensus.json's own `groups_whose_count_varies`; the newcomers are reported and
+    # are not part of the answer.
+    inherited_varying = list(
+        json.loads((ROOT / gs.INHERITED_COUNT_SOURCE).read_text())["groups_whose_count_varies"]
+    )
+    rows_inherited = [r for r in rows if r["group"] in inherited_varying]
+    rows_new = [r for r in rows if r["group"] not in inherited_varying]
+    if len(rows_inherited) != len(inherited_varying):
+        raise SystemExit(
+            f"the inherited varying groups are {len(inherited_varying)} and only"
+            f" {len(rows_inherited)} of them were found; one has changed its name or stopped varying"
+        )
+
     payload = {
         "question": (
             "which of the 18 exists()-filtered input-group call sites CAN silently shrink and which"
@@ -561,6 +608,16 @@ def main() -> int:
         },
         "read_facts_applied": applied,
         "varying_groups": rows,
+        "varying_groups_the_inherited_six": rows_inherited,
+        "varying_groups_new_since_globcensus": [
+            {"group": r["group"], "counts_seen": r["counts_seen"], "declarations": r["declarations"]}
+            for r in rows_new
+        ],
+        "varying_groups_note": (
+            "the answer is the inherited six. `varying_groups` holds every group varying in the tree"
+            f" today, {len(rows)} of them, because {len(rows_new)} more appeared in results committed"
+            " since the census of 2026-10-11; those are reported and not classified"
+        ),
         "varying_source": VARYING_SOURCE,
         "does_not_claim": gs.DOES_NOT_CLAIM,
         "negative_boundary": gs.NEGATIVE_BOUNDARY,

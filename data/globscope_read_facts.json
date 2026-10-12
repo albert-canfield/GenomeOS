@@ -1,0 +1,190 @@
+{
+ "what_this_is": "facts supplied by READING the 18 sites, under the procedure declared in scripts/globscope_classify.py BEFORE any site was read: only facts the mechanical scan left unresolved, every one carrying path:line evidence, and no fact naming a class. Every class in data/results/globscope.json is computed by globscope.classify_site from these facts.",
+ "facts": [
+  {
+   "path": "scripts/combine2_run.py",
+   "line": 102,
+   "sets": {
+    "refusal_in_enclosing_scope": true
+   },
+   "evidence": "scripts/combine2_run.py:103 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/combine2_run.py:111 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+  },
+  {
+   "path": "scripts/maxform_run.py",
+   "line": 80,
+   "sets": {
+    "refusal_in_enclosing_scope": true
+   },
+   "evidence": "scripts/maxform_run.py:85 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/maxform_run.py:89 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+  },
+  {
+   "path": "scripts/multrna_run.py",
+   "line": 85,
+   "sets": {
+    "refusal_in_enclosing_scope": true
+   },
+   "evidence": "scripts/multrna_run.py:90 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/multrna_run.py:94 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+  },
+  {
+   "path": "scripts/readergate_run.py",
+   "line": 89,
+   "sets": {
+    "refusal_in_enclosing_scope": true
+   },
+   "evidence": "scripts/readergate_run.py:87 compares the group's own sha256 with reg['pinned_sha256'][group['path']] and appends the mismatch to `moved`, and scripts/readergate_run.py:93 raises SystemExit('refused: pinned inputs changed...') on it. A shrunken group has a different group digest, so the run REFUSES rather than recording the short set. BOUNDARY, recorded because it is part of the fact: the refusal is relative to THE REGISTRATION'S PIN, not to an intended scope -- a store partial at registration time would pin a short group and the run would then agree with it"
+  },
+  {
+   "path": "scripts/capsumrna_census.py",
+   "line": 485,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/capsumrna_census.py:482 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/combine2_census.py",
+   "line": 250,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/combine2_census.py:247 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/combine2_register.py",
+   "line": 119,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/combine2_register.py:116 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/combine2_run.py",
+   "line": 141,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/combine2_run.py:138 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/maxform_census.py",
+   "line": 342,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/maxform_census.py:339 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/maxform_register.py",
+   "line": 118,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/maxform_register.py:115 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/multrna_census.py",
+   "line": 309,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/multrna_census.py:306 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/multrna_register.py",
+   "line": 111,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/multrna_register.py:108 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/multrna_run.py",
+   "line": 167,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/multrna_run.py:164 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/readergate_census.py",
+   "line": 120,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/readergate_census.py:115 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/readergate_register.py",
+   "line": 112,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/readergate_register.py:109 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/readergate_run.py",
+   "line": 132,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 312,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/readergate_run.py:129 is a sibling per-chromosome input_entry over the SAME feeder (noncoding_{c}.bio for c in chroms/CHROMS) with NO exists() filter, so the artefact records the chromosome axis independently of the filtered list; with 'reader v1 ENCODE DNase-seq narrowPeak files, 13 biosamples' in the same manifest's sources, the expected 13 x 24 = 312 is recoverable from the artefact. the glob is scripts/readergate_census.py:48, peak_files(chroms) = [RESULTS_DIR / reader.peaks_path(b, c).name for b in ce.READER_TERMS for c in chroms], i.e. data/results/dnase_<biosample>_<chrom>.bed.gz, 13 x 24 = 312 members, all 312 on disk. measured at scripts/readergate_census.py:48: of the 312 members, 299 are NOT tracked -- .gitignore:50 ignores data/results/dnase_*_chr*.bed.gz, and the only 13 tracked are the chr21 ones, one per biosample. So the directory is NOT a tracked store and CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/trio_q100_phase.py",
+   "line": 72,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 158,
+    "all_matched_files_tracked": false,
+    "independent_scope_recorded": true
+   },
+   "evidence": "scripts/trio_q100_phase.py:78 is a sibling files_entry over the SAME `chroms` with NO exists() filter ([reference_fasta(c, Path('data/reference')) for c in chroms]), so its member count records len(chroms) independently of the filtered list, and the filtered group's own label at :73 states the scope as f'{chroms[0]}-{chroms[-1]}'. The store is genomeos/genome/individuals.py:28 ROOT = data/individuals, 158 files on disk and 0 tracked (.gitignore:19 data/individuals/), so CANNOT_SHRINK is refused"
+  },
+  {
+   "path": "scripts/reader_genome_wide.py",
+   "line": 88,
+   "sets": {
+    "glob_root_resolved": true,
+    "matched_files_on_disk": 29,
+    "all_matched_files_tracked": false
+   },
+   "evidence": "scripts/reader_genome_wide.py:59 builds files = [gff, *ref, data/results/ccres_{chrom}.bed.gz] where ref at :56 is FIVE mutually exclusive spellings of the reference ('.fa.gz', '.fa.gz.fai', '.fa.gz.gzi', '.fa', '.fa.fai' -- 'whichever IndexedGenome seeks'), so part of the filtering is deliberate and no fixed expected count exists. Measured: data/reference/chr21.fa* = 4 on disk, 0 tracked (.gitignore:16 data/reference); data/results/ccres_chr*.bed.gz = 25 on disk, 25 tracked, not ignored. NOT all members tracked, so CANNOT_SHRINK is refused. No sibling entry in chromosome_manifest at :47-88 records an expected count or member list over the same feeder, and no raise in it governs on the group"
+  }
+ ]
+}
