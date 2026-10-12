@@ -1,0 +1,481 @@
+{
+  "result": "LEAD_SURVIVES",
+  "date": "2026-10-12",
+  "registration": "data/results/wormoutron_registration.json",
+  "registration_unchanged": true,
+  "prior_exposure": "Serizay et al. 2020's RNA was read in stage 1 (registration 595d7c2, result eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4), so THIS IS A RE-ANALYSIS OF A MEASUREMENT THIS PROJECT HAS ALREADY READ, NOT A FRESH TEST. What is new is the WormBase WS298 outron and operon map, which no earlier run read. The masks are built from positions and annotations alone, their definitions were fixed before the census was computed, and the surviving population is counted and committed before the RNA sheet is opened again; that bars tuning the mask to the answer, and it does not make the RNA unseen. The reading must be read as a re-analysis throughout.",
+  "census": {
+    "stage1_between_genes": {
+      "elements": 2335,
+      "domain_rate_pct": 53.9,
+      "nearest_rate_pct": 50.2,
+      "delta_points": 3.73,
+      "delta_ci95_points": [
+        2.79,
+        4.74
+      ],
+      "registration": "595d7c2 / eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4"
+    },
+    "between_genes_recomputed": 2335,
+    "matches_stage1": true,
+    "map": {
+      "outron_genes": 18837,
+      "sl_spliced_genes": 11023,
+      "operon_member_genes": 3465,
+      "operon_members_order_unknown": 52,
+      "operon_members_downstream": 2105,
+      "operon_first_agrees_with_list_order": 1453,
+      "outron_length_bp": {
+        "n": 18837,
+        "min": 1,
+        "p25": 167,
+        "median": 1082,
+        "p75": 3022,
+        "p90": 5942,
+        "max": 19993
+      },
+      "operons_used": 1431,
+      "deprecated_operons_skipped": 111,
+      "sl_acceptor_sites": 56651,
+      "tss_regions": 73499
+    },
+    "excluded_by": {
+      "outron_of_either_rule_gene": 537,
+      "outron_of_domain_rule_gene": 534,
+      "outron_of_nearest_tss_gene": 510,
+      "outron_with_sl_evidence": 403,
+      "outron_of_any_gene": 651,
+      "inside_an_operon_span": 34,
+      "domain_gene_is_a_downstream_operon_member": 55,
+      "nearest_gene_is_a_downstream_operon_member": 66,
+      "operon_mask": 73,
+      "primary_union": 590,
+      "strict_union": 703,
+      "sl_union": 461
+    },
+    "surviving": 1745,
+    "surviving_fraction": 0.7473,
+    "surviving_discordant": 259,
+    "surviving_clusters_1mb": 102,
+    "surviving_by_tissue": {
+      "Germline": 120,
+      "Neurons": 451,
+      "Muscle": 431,
+      "Hypod.": 500,
+      "Intest.": 243
+    },
+    "surviving_by_case": {
+      "one_flank": 1,
+      "divergent": 653,
+      "faces_one": 963,
+      "convergent_fallback": 128
+    },
+    "minimum_surviving": 800,
+    "minimum_surviving_discordant": 100,
+    "mde_points_unclustered": 2.582,
+    "inconclusive_unscored": false,
+    "strict_surviving": 1632,
+    "sl_surviving": 1874
+  },
+  "primary": {
+    "n": 1745,
+    "domain_concordant": 922,
+    "nearest_concordant": 844,
+    "domain_rate_pct": 52.837,
+    "nearest_rate_pct": 48.367,
+    "delta_points": 4.47,
+    "delta_ci95_points": [
+      3.159,
+      5.783
+    ],
+    "clusters": 102
+  },
+  "label": "LEAD_SURVIVES",
+  "falsifier": "NOT_FALSIFIED",
+  "control": {
+    "expected": 398.846,
+    "expected_rate": 0.22857,
+    "draws": 1000,
+    "draws_at_or_above_observed": 0,
+    "p_one_sided": 0.001
+  },
+  "strata": {
+    "all_between_genes_unexcluded": {
+      "n": 2335,
+      "domain_concordant": 1259,
+      "nearest_concordant": 1172,
+      "domain_rate_pct": 53.919,
+      "nearest_rate_pct": 50.193,
+      "delta_points": 3.726,
+      "delta_ci95_points": [
+        2.785,
+        4.741
+      ],
+      "clusters": 102,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "excluded_elements": {
+      "n": 590,
+      "domain_concordant": 337,
+      "nearest_concordant": 328,
+      "domain_rate_pct": 57.119,
+      "nearest_rate_pct": 55.593,
+      "delta_points": 1.525,
+      "delta_ci95_points": [
+        0.165,
+        3.085
+      ],
+      "clusters": 100,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "strict_exclusion_survivors": {
+      "n": 1632,
+      "domain_concordant": 861,
+      "nearest_concordant": 787,
+      "domain_rate_pct": 52.757,
+      "nearest_rate_pct": 48.223,
+      "delta_points": 4.534,
+      "delta_ci95_points": [
+        3.153,
+        5.886
+      ],
+      "clusters": 102,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "sl_restricted_exclusion_survivors": {
+      "n": 1874,
+      "domain_concordant": 985,
+      "nearest_concordant": 905,
+      "domain_rate_pct": 52.561,
+      "nearest_rate_pct": 48.292,
+      "delta_points": 4.269,
+      "delta_ci95_points": [
+        3.11,
+        5.508
+      ],
+      "clusters": 102,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "outron_mask_only_survivors": {
+      "n": 1798,
+      "domain_concordant": 940,
+      "nearest_concordant": 863,
+      "domain_rate_pct": 52.28,
+      "nearest_rate_pct": 47.998,
+      "delta_points": 4.283,
+      "delta_ci95_points": [
+        2.962,
+        5.6
+      ],
+      "clusters": 102,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "operon_mask_only_survivors": {
+      "n": 2262,
+      "domain_concordant": 1234,
+      "nearest_concordant": 1146,
+      "domain_rate_pct": 54.553,
+      "nearest_rate_pct": 50.663,
+      "delta_points": 3.89,
+      "delta_ci95_points": [
+        2.936,
+        4.892
+      ],
+      "clusters": 102,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "surviving_discordant_only": {
+      "n": 259,
+      "domain_concordant": 131,
+      "nearest_concordant": 53,
+      "domain_rate_pct": 50.579,
+      "nearest_rate_pct": 20.463,
+      "delta_points": 30.116,
+      "delta_ci95_points": [
+        21.212,
+        39.033
+      ],
+      "clusters": 85,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "surviving_Germline": {
+      "n": 120,
+      "domain_concordant": 60,
+      "nearest_concordant": 61,
+      "domain_rate_pct": 50.0,
+      "nearest_rate_pct": 50.833,
+      "delta_points": -0.833,
+      "delta_ci95_points": [
+        -7.634,
+        4.478
+      ],
+      "clusters": 72,
+      "label": "NO_DIFFERENCE_DETECTED"
+    },
+    "surviving_Neurons": {
+      "n": 451,
+      "domain_concordant": 226,
+      "nearest_concordant": 202,
+      "domain_rate_pct": 50.111,
+      "nearest_rate_pct": 44.789,
+      "delta_points": 5.322,
+      "delta_ci95_points": [
+        2.766,
+        7.843
+      ],
+      "clusters": 95,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "surviving_Muscle": {
+      "n": 431,
+      "domain_concordant": 198,
+      "nearest_concordant": 171,
+      "domain_rate_pct": 45.94,
+      "nearest_rate_pct": 39.675,
+      "delta_points": 6.265,
+      "delta_ci95_points": [
+        3.306,
+        9.367
+      ],
+      "clusters": 89,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "surviving_Hypod.": {
+      "n": 500,
+      "domain_concordant": 288,
+      "nearest_concordant": 265,
+      "domain_rate_pct": 57.6,
+      "nearest_rate_pct": 53.0,
+      "delta_points": 4.6,
+      "delta_ci95_points": [
+        2.053,
+        7.182
+      ],
+      "clusters": 99,
+      "label": "DOMAIN_RULE_AHEAD"
+    },
+    "surviving_Intest.": {
+      "n": 243,
+      "domain_concordant": 150,
+      "nearest_concordant": 145,
+      "domain_rate_pct": 61.728,
+      "nearest_rate_pct": 59.671,
+      "delta_points": 2.058,
+      "delta_ci95_points": [
+        -1.031,
+        5.0
+      ],
+      "clusters": 87,
+      "label": "NO_DIFFERENCE_DETECTED"
+    }
+  },
+  "comparison_to_stage1": {
+    "stage1": {
+      "elements": 2335,
+      "domain_rate_pct": 53.9,
+      "nearest_rate_pct": 50.2,
+      "delta_points": 3.73,
+      "delta_ci95_points": [
+        2.79,
+        4.74
+      ],
+      "registration": "595d7c2 / eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4"
+    },
+    "point_minus_stage1_point": 0.74,
+    "at_or_above_stage1_lower_bound": true
+  },
+  "reading": "On the 1,745 of stage 1's 2,335 C. elegans between-gene putative enhancers that survive excluding outron- and operon-affected elements by the WormBase WS298 map, the gene the domain rule attributes is expressed at 5 TPM or more and highest in the element's own tissue for 922 of 1,745 (52.8%), against 844 of 1,745 (48.4%) for the gene with the nearest 5' end; the rules differ on 259 of the survivors; difference +4.47 points, 95% +3.16 to +5.78 over 1-Mb clusters, against stage 1's +3.73 [+2.79, +4.74] on the unexcluded 2,335. The worm's between-gene lead survives exclusion of outron-affected elements on this map. Among the survivors the domain rule's genes match the element's tissue more often than genes at a matched distance (22.9%, one-sided p 0.001), so position still carries tissue information in the population the exclusion leaves. This is a re-analysis of RNA this project has already read in stage 1, not a fresh test. Accessibility is not function: this says the attributed gene is expressed where the element is open, not that the element acts on it.",
+  "alphagenome_requests": 0,
+  "money": "none; no model request, no key read",
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "Serizay J, Dong Y, Janes J, Chesney M, Cerrato C, Ahringer J (2020) Distinctive regulatory architectures of germline-active and somatic genes in C. elegans. Genome Res 30:1752-1765, Supplemental Table S2 (sheets ATAC_metrics and RNA_metrics); CC BY 4.0",
+        "version": "as read in stage 1, unchanged"
+      },
+      {
+        "accession": "WormBase release WS298, c_elegans.PRJNA13758.WS298.annotations.gff3.gz, https://ftp.ebi.ac.uk/pub/databases/wormbase/releases/WS298/species/c_elegans/PRJNA13758/, published md5 f41b0e0afb7bdcf15d7b35c9a1f7f3a9 (WS298/CHECKSUMS), streamed sha256 4c84b835c5eba84d2128947ae5646329c0172e25c29b40b416b9bf7807146030",
+        "version": "WormBase WS298, served 2026-10-10"
+      },
+      {
+        "accession": "Ensembl WBcel235 release 63 gene models (Caenorhabditis elegans)",
+        "version": "WBcel235.63"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/knowledge/simpler_worm/supp_gr.265934.120_Supplemental_Table_S2.xlsx",
+        "sha256": "162662308d6118ae354cb3a66ddddaf4df31266c1c003c9e7e903b4deff06e70",
+        "bytes": 14777075,
+        "partition": "sheets ATAC_metrics and RNA_metrics"
+      },
+      {
+        "path": "data/reference/celegans/WBcel235.63.gff3.gz",
+        "sha256": "2acc6e9ae7e5bc98b18c107893bdaf9f95515140d4ef65fbf6197aafe9fe1bd9",
+        "bytes": 8231538,
+        "partition": "protein-coding gene positions and strands"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_operon_sl_tss.gff3",
+        "sha256": "dd5efa6826086fcb5c1be4b7bd06b44d7b94beac024b426f15bb037b386aa1cf",
+        "bytes": 8387027,
+        "partition": "operon, SL1, SL2 and TSS_region positions and strands"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_source_type_census.txt",
+        "sha256": "56641e5656eebe8ea05fdd7998aca3c76f07e8859ab4152888f3ef620b0d9ea5",
+        "bytes": 9332,
+        "partition": "the whole-file source|type census from the same pass"
+      },
+      {
+        "path": "data/knowledge/wormoutron/ws298_CHECKSUMS.txt",
+        "sha256": "b816d73323e398b95021d776efded1c5b661e78f5e3579e5fc0e36a0aa7cd0e7",
+        "bytes": 93901,
+        "partition": "WormBase's published checksums for WS298"
+      },
+      {
+        "path": "data/results/wormoutron_registration.json",
+        "sha256": "4f1d6e25f9a7bf8962daf6f9678b98647f718ca61f37ad2aa48c19dd326fc842",
+        "bytes": 23654,
+        "partition": "the committed registration"
+      }
+    ],
+    "assembly": "WBcel235 (ce11) throughout: Table S2, the Ensembl gene models and the WormBase WS298 features are on the same build, so nothing is lifted over",
+    "coordinates": {
+      "base": 1,
+      "interval": "closed",
+      "note": "both GFF3s are 1-based closed; the element midpoint is (start + end) // 2, and Table S2 does not state its base, so a midpoint moves by at most 1 bp either way"
+    },
+    "parameters": {
+      "outron_max_bp": 20000,
+      "sl_window_bp": 100,
+      "min_surviving": 800,
+      "min_surviving_discordant": 100,
+      "operon_sources_used": [
+        "operon",
+        "dicistronic_mRNA"
+      ],
+      "operon_sources_not_used": [
+        "deprecated_operon"
+      ],
+      "detection_tpm": 5.0,
+      "tissues": [
+        "Germline",
+        "Neurons",
+        "Muscle",
+        "Hypod.",
+        "Intest."
+      ],
+      "cluster_bp": 1000000,
+      "bootstrap_reps": 2000,
+      "control_draws": 1000,
+      "seed": 20261010,
+      "stage1_between_genes": {
+        "elements": 2335,
+        "domain_rate_pct": 53.9,
+        "nearest_rate_pct": 50.2,
+        "delta_points": 3.73,
+        "delta_ci95_points": [
+          2.79,
+          4.74
+        ],
+        "registration": "595d7c2 / eede7d9, docs/SIMPLER-GENOMES.md sections 3 and 4"
+      }
+    },
+    "exclusions": [
+      "elements with a host gene (domain_case == 'host'): the host stratum is not this lane's population",
+      "elements of any class other than putative_enhancer",
+      "elements whose tissue call is not exactly one of the five tissues",
+      "deprecated_operon features (111 of them), which WormBase no longer asserts",
+      "MtDNA, which carries no protein-coding gene in the models stage 1 read",
+      "the source table's own element-to-gene columns, which answer the question being asked"
+    ],
+    "partitions": {
+      "population": "pinned by the committed registration's census"
+    },
+    "code_cleanliness": {
+      "git_sha": "5657210dd54864af8afe09c7f76e22a8ebf2801f",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/wormoutron_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/wormoutron_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/wormoutron_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_emit7g.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/simpler.py",
+        "genomeos/attribution/wormoutron.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/wormoutron_run.py"
+      ],
+      "counting_path_count": 8,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "5657210dd54864af8afe09c7f76e22a8ebf2801f",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_emit7g.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/wormoutron_run.py",
+        "score"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "5657210dd54864af8afe09c7f76e22a8ebf2801f",
+      "code_cleanliness_git_sha": "5657210dd54864af8afe09c7f76e22a8ebf2801f",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 5657210"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 321,
+      "opens_under_data": 16,
+      "files_read": 6,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
