@@ -9,9 +9,13 @@ without the generated store; the census script reads that store.
 
 from __future__ import annotations
 
+import inspect
+
 import pytest
 
+from genomeos.attribution import compile as cp
 from genomeos.attribution import emit7g as e7
+from genomeos.attribution.direction_v2 import DIRECTION_RULE_DEFAULT, compiled_action
 from genomeos.attribution.targets import genes_at_bar
 from genomeos.predict.enhancer_target import MIN_EFFECT
 
@@ -189,3 +193,58 @@ def test_combine_adds_every_count_and_recomputes_none(census: dict) -> None:
     assert total["now"]["rules_total"] == 2 * census["now"]["rules_total"]
     assert total["targets_per_element_after"]["2"] == 2
     assert total["largest_candidate_list"] == census["largest_candidate_list"]
+
+
+# ---- the two emissions `compile.py` can write (ROADMAP §5 item 7g) ----------------------------------
+
+
+def test_the_default_emission_is_the_one_target_one_and_is_not_moved_here() -> None:
+    assert cp.EMISSION_DEFAULT == cp.ONE_TARGET
+    assert cp.EMISSIONS == (cp.ONE_TARGET, cp.EVERY_CODING_TARGET_AT_THE_BAR)
+    # the default is also the signature's, so no caller gains the new emission by not passing one
+    assert inspect.signature(cp.compile_chromosome).parameters["emission"].default == cp.ONE_TARGET
+
+
+def test_element_targets_under_the_default_is_one_record_per_element_and_opens_no_file() -> None:
+    elements = [
+        {"id": "E1", "predicted_coding": {"gene": "AAA", "log2_fold_change": -0.5}},
+        {"id": "E2", "predicted_coding": {"gene": "BBB", "log2_fold_change": -0.4}},
+    ]
+    got = cp.element_targets("chrT", elements, cp.ONE_TARGET)
+    assert {k: [t["gene"] for t in v] for k, v in got.items()} == {"E1": ["AAA"], "E2": ["BBB"]}
+    # identity, not a copy: the head rule line must be written from the element's own record
+    assert got["E1"][0] is elements[0]["predicted_coding"]
+
+
+def test_an_unknown_emission_is_refused_by_name() -> None:
+    with pytest.raises(ValueError, match="no emission"):
+        cp.element_targets("chrT", [], "every_target_anywhere")
+
+
+def test_a_further_target_is_predicted_coding_shaped_so_every_helper_applies() -> None:
+    """The point of the shape: the direction seam, the effect note and the cell label are the
+    committed ones, so a further target's rule line differs from the compiled target's in numbers
+    only."""
+    row = {
+        "gene": "CCC",
+        "rank": 1,
+        "head": False,
+        "log2": -0.3,
+        "action": "activates",
+        "tissue": "K562",
+        "strength": 0.3,
+    }
+    pc = cp.extra_target_pc(row)
+    assert pc == {"gene": "CCC", "log2_fold_change": -0.3, "tissue": "K562", "action": "activates"}
+    assert compiled_action(pc, DIRECTION_RULE_DEFAULT) == "activates"
+    assert cp._effect_note(pc) == "effect -0.3 log2 fold change on deletion, probability unavailable"
+    rise = cp.extra_target_pc({"gene": "DDD", "log2": 0.2, "action": "inhibits", "tissue": "HepG2"})
+    assert compiled_action(rise, DIRECTION_RULE_DEFAULT) == "inhibits"
+    assert rise["tissue"] == "HepG2"
+
+
+def test_no_strength_word_is_invented_for_a_gene_beyond_the_head() -> None:
+    """`basis` reads `pc.get('strength') or 'weak'`; the sweep states no strength word for a further
+    target, so the record carries none rather than a word nothing measured."""
+    pc = cp.extra_target_pc({"gene": "CCC", "log2": -0.3, "action": "activates", "tissue": "K562"})
+    assert "strength" not in pc

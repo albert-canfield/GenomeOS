@@ -33,6 +33,32 @@ screen found no effect on this gene", "none of the bases measured here matters" 
 stated in the measured block rather than dropped or turned back into UNKNOWN. The
 base-level assay is stated as a fact about bases and never as a verdict on the element.
 The layer is thin on purpose; the census in `measured_layer_genome` says how thin.
+
+**Two emissions per element since 2026-10-12** (ROADMAP §5 item 7g, lane-emit7g). `ONE_TARGET`, the
+default and what every committed program and result was built from, writes one `targets:` property and
+one `rule` line per attributed element, naming `predicted_coding["gene"]`.
+`EVERY_CODING_TARGET_AT_THE_BAR` writes one rule per candidate target instead: the compiled target
+first, then every protein-coding gene of the response cache's window whose predicted size on deletion
+reaches the compiler's own bar (`predict.enhancer_target.MIN_EFFECT`, 0.1 log2), strongest first. The
+candidate list is `targetchoice.candidate_list`, registered at b746a23 and read on the 1,918 held-out
+K562 CRISPRi pairs at 715d830, where keeping every coding gene at the bar ranked them better than
+keeping one target per element (+0.0318 [95% CI +0.0027, +0.0721] in average precision) and still below
+the anchor.
+
+**Why the default does not move, and what it would cost.** The emission changes a program's own
+self-test: genome-wide the census of 589b6ca reads 440,377 predicted rules now and 542,801 at the bar
+(102,424 added, on 73,286 of the elements), so `# test: rules ==` would go 440,589 -> 543,013 over the
+24 programs and 5,176 -> 6,533 on chr21. `attribution/onetarget2.py` registered compile.py's falsifier
+as exactly that line moving, and said in advance that it "is the single figure that decides whether
+this module may be moved in place at all". 440,589 is also the population of committed results
+(`gene_identity`, `argmaxcell`, `astroargmax`) and the tracked programs assert 5,176 of themselves. So
+the emission is selectable and the default is unchanged: no committed figure is rewritten here, and
+changing the default is a decision for whoever places the rewrite of those results.
+
+No element without a compiled target gains one under either emission: a `region` block is a budget
+unknown block and has no cache record, and an `<id>_measured` block carries no predicted rule. An
+emitted target is a model's attribution -- AlphaGenome's predicted change on deleting the element --
+and never a measured regulatory relationship.
 """
 
 from __future__ import annotations
@@ -49,8 +75,8 @@ from genomeos.attribution.direction_v2 import ACTIVATES as _ACTIVATES
 from genomeos.attribution.direction_v2 import DIRECTION_RULE_DEFAULT, compiled_action
 from genomeos.certainty import Certainty
 from genomeos.genome.repeats import INTERSPERSED as _INTERSPERSED
+from genomeos.predict.enhancer_target import MIN_EFFECT, link_score
 from genomeos.predict.enhancer_target import MODEL_SCORE_NAME as LINK_SCORE_NAME
-from genomeos.predict.enhancer_target import link_score
 from genomeos.provenance import compiled_defaults as cd
 from genomeos.results import RESULTS_DIR, load_result
 
@@ -609,6 +635,76 @@ def _attributed(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict]:
     return out
 
 
+# ---- the two emissions per element (ROADMAP §5 item 7g, lane-emit7g, 2026-10-12) --------------------
+
+#: one `targets:` property and one `rule` line per attributed element, naming `predicted_coding`'s gene.
+#: The default, and what every committed program, census and result was built from.
+ONE_TARGET = "one_target"
+#: one rule per candidate target: the compiled target first, then every protein-coding gene of the
+#: response cache's window at the compiler's own bar, strongest first (`targetchoice.candidate_list`).
+EVERY_CODING_TARGET_AT_THE_BAR = "every_coding_target_at_the_bar"
+EMISSIONS = (ONE_TARGET, EVERY_CODING_TARGET_AT_THE_BAR)
+#: unchanged on purpose; the module docstring says what moving it would cost and who may move it
+EMISSION_DEFAULT = ONE_TARGET
+
+
+def extra_target_pc(row: dict[str, Any]) -> dict[str, Any]:
+    """A `predicted_coding`-shaped record for one further coding target at the bar.
+
+    Shaped rather than special-cased, so every helper that already reads a `predicted_coding` record
+    applies to a further target unchanged: `compiled_action` (the one direction seam, which under v2
+    reads this gene's own cached row), `_effect_note` and `context`. The rule line a further target
+    writes therefore differs from the compiled target's in its numbers and in nothing else. The sweep
+    states no `strength` word for a gene beyond the head, so none is invented here.
+    """
+    return {
+        "gene": row["gene"],
+        "log2_fold_change": row["log2"],
+        "tissue": row.get("tissue"),
+        "action": row["action"],
+    }
+
+
+def element_targets(
+    chrom: str, elements: list[dict], emission: str = EMISSION_DEFAULT
+) -> dict[str, list[dict[str, Any]]]:
+    """Every target each attributed element's rules will name, in the order they are written.
+
+    Under `ONE_TARGET` this is the element's own `predicted_coding` record and nothing else, so the
+    count per element is 1 and the program is what the compiler has always written. Under
+    `EVERY_CODING_TARGET_AT_THE_BAR` the compiled record comes first, unchanged, and each further
+    protein-coding gene at `MIN_EFFECT` follows in the candidate list's own order. An element the
+    response cache does not hold keeps its compiled target alone, and an element whose window holds no
+    other coding gene at the bar keeps it too, so neither is dropped and neither is guessed at.
+    """
+    if emission not in EMISSIONS:
+        raise ValueError(f"no emission {emission!r}; the emissions are {EMISSIONS}")
+    heads = {e["id"]: [e["predicted_coding"]] for e in elements}
+    if emission == ONE_TARGET:
+        return heads
+    from genomeos.attribution import emit7g
+    from genomeos.attribution.targets import ElementResponses
+    from genomeos.genome import Annotation
+    from genomeos.genome.annotation import default_gencode
+
+    path = default_gencode({chrom})
+    if path is None:
+        raise FileNotFoundError(
+            f"no GENCODE annotation for {chrom} on this machine: the coding set the bar is read "
+            f"against is not available, and {EVERY_CODING_TARGET_AT_THE_BAR} would silently fall "
+            f"back to {ONE_TARGET}"
+        )
+    ann = Annotation.from_gff3(path, {chrom})
+    coding = {g.symbol for g in ann.protein_coding() if g.locus.chrom == chrom}
+    responses = ElementResponses()
+    out: dict[str, list[dict[str, Any]]] = {}
+    for e in elements:
+        pc = e["predicted_coding"]
+        rows = emit7g.candidate_rules(responses, chrom, e["id"], [pc["gene"]], coding)
+        out[e["id"]] = [pc, *(extra_target_pc(r) for r in rows if not r["head"])]
+    return out
+
+
 def _open_in(chrom: str, domain_id: str, readers: list[dict]) -> str:
     rows = []
     for r in readers:
@@ -721,6 +817,7 @@ def compile_chromosome(
     results_dir: Path = RESULTS_DIR,
     layer: Any = None,
     direction_version: int = DIRECTION_RULE_DEFAULT,
+    emission: str = EMISSION_DEFAULT,
 ) -> str:
     from genomeos.attribution import context_evidence as ce
     from genomeos.attribution.budget import read_axes
@@ -768,8 +865,13 @@ def compile_chromosome(
 
     # one experimental rule per (element, gene, cell), R1 of 2026-09-28
     n_measured_rules = sum(len(rule_links(r)) for r in measured_rows)
-    # one predicted rule per attributed element, emitted in the `if elements:` loop below
-    n_predicted_rules = len(elements)
+    # one predicted rule per target each attributed element names, emitted in the `if elements:` loop
+    # below: under ONE_TARGET that is one per element, as it has always been, and under
+    # EVERY_CODING_TARGET_AT_THE_BAR it is the length of the element's candidate list. It is counted
+    # here and not typed, because the header's cell sentence is written above the rules and
+    # `check_cell_counts` recounts it off the lines actually emitted.
+    targets_of = element_targets(chrom, elements, emission)
+    n_predicted_rules = sum(len(targets_of[e["id"]]) for e in elements)
 
     lines = [
         f"module human.noncoding.{chrom}",
@@ -835,7 +937,9 @@ def compile_chromosome(
     measured_genes = {
         g for r in measured_rows for g in r["measured"].get("crispri", {}).get("genes_regulated", [])
     }
-    genes = sorted({e["predicted_coding"]["gene"] for e in elements} | measured_genes)
+    # every gene any predicted rule will name, which under EVERY_CODING_TARGET_AT_THE_BAR is more
+    # than the heads: a rule may not name a gene the program never declared
+    genes = sorted({pc["gene"] for ts in targets_of.values() for pc in ts} | measured_genes)
     ident_of = {g: ident(g) for g in genes}
     used_domains = sorted({e["domain"] for e in elements if e.get("domain") in domains})
     n_entities = len(regions) + len(genes) + len(elements) + len(used_domains) + len(measured_rows)
@@ -843,7 +947,7 @@ def compile_chromosome(
         "#",
         f"# test: entities >= {n_entities}",
         f"# test: unknowns == {n_unknown}",
-        f"# test: rules == {len(elements) + n_measured_rules}",
+        f"# test: rules == {n_predicted_rules + n_measured_rules}",
         "",
         f"# ---- the budget: {len(regions)} UNKNOWN blocks, {budget['unknown_bp'] / 1e6:.1f} Mb, "
         f"constrained {((budget.get('constrained_fraction') or 0) * 100):.2f}% of measured bases",
@@ -892,8 +996,14 @@ def compile_chromosome(
             props = [f"class: {derived_class(axes)}", f"locus: {chrom}:{e['start']}-{e['end']}"]
             if e.get("domain") in domains:
                 props.append(f"domain: {ident(e['domain'])}")
+            targets = targets_of[e["id"]]
+            if len(targets) > 1:
+                basis += (
+                    f", and {len(targets) - 1} further coding gene(s) at the compiler's bar "
+                    f"({MIN_EFFECT} log2), each with its own rule and its own number"
+                )
             props += [
-                f"targets: {ident(pc['gene'])}",
+                "targets: " + ", ".join(ident(t["gene"]) for t in targets),
                 f"basis: {_text(basis)}",
                 'evidence: predicted "AlphaGenome RNA-seq gene scorer, expression change on deletion" '
                 + _text(_effect_note(pc)),
@@ -902,15 +1012,25 @@ def compile_chromosome(
             lines.append(f"element {e['id']} {{")
             lines += [f"  {p}" for p in props]
             lines.append("}")
-            strength = round(min(1.0, abs(float(pc["log2_fold_change"]))), 3)
-            label = context(pc.get("tissue"))
-            ctx = context_evidence_field(context_state, label, e["start"], e["end"])
-            lines.append(
-                f"rule {e['id']} {action} {ident(pc['gene'])} {{ strength: {strength}; "
-                f"when: cell_type = {label}; {ctx}"
-                f'evidence: predicted "AlphaGenome deletion, {_text(pc.get("tissue") or "strongest track")}" '
-                f"{_text(_effect_note(pc))} }}"
-            )
+            # one rule per target, the compiled target first and its line unchanged. A further
+            # target's action comes from the same seam (`compiled_action`) and its cell, strength and
+            # effect note from its own record, so the two kinds of line differ in their numbers only.
+            for t in targets:
+                t_action = (
+                    action
+                    if t is pc
+                    else compiled_action(t, direction_version, chrom=chrom, element_id=e["id"])
+                )
+                strength = round(min(1.0, abs(float(t["log2_fold_change"]))), 3)
+                label = context(t.get("tissue"))
+                ctx = context_evidence_field(context_state, label, e["start"], e["end"])
+                lines.append(
+                    f"rule {e['id']} {t_action} {ident(t['gene'])} {{ strength: {strength}; "
+                    f"when: cell_type = {label}; {ctx}"
+                    'evidence: predicted "AlphaGenome deletion, '
+                    f'{_text(t.get("tissue") or "strongest track")}" '
+                    f"{_text(_effect_note(t))} }}"
+                )
     from genomeos.attribution.measured import AGREES, DISAGREES, RECIPROCAL_OVERLAP, eligibility
 
     agree = sum(1 for r in measured_rows if r["agreement"]["verdict"] == AGREES)

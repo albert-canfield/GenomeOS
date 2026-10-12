@@ -876,6 +876,33 @@ MOVED_LINES: dict[str, dict[str, Any]] = {
         "`strongest_predicted` sit 1 line lower with their text unchanged; the module still cannot "
         "move before regulation.py does",
     },
+    #: Added 2026-10-12 by lane-emit7g (ROADMAP §5 item 7g). compile.py is NOT MOVED: its default
+    #: emission still writes one target and one rule per element, and the figure this module
+    #: registered as compile.py's falsifier is unmoved -- chr21 recompiles to `# test: entities >=
+    #: 6172`, `# test: unknowns == 20`, `# test: rules == 5176`, with rule lines identical to the
+    #: tracked noncoding_chr21_v3.bio's, line for line.
+    "genomeos/attribution/compile.py": {
+        "now": (358, 682, 702, 984),
+        "was": (332, 838, 880),
+        "what": "NOT MOVED BY THIS WAVE: the compact head is still what the default emission "
+        "writes. Two registered reads moved with their text unchanged, pushed down by the "
+        "docstring paragraph and the two new functions above them: element_axes' `pc = "
+        "e['predicted_coding']` 332 -> 358, and the attributed-element loop's 880 -> 984. The "
+        "third registered read, 838, was the compiled gene list `genes = sorted({e"
+        "['predicted_coding']['gene'] for e in elements} | measured_genes)`; its expression is "
+        "REPLACED, not dropped, by `sorted({pc['gene'] for ts in targets_of.values() for pc in ts} "
+        "| measured_genes)`, which reads the same head records through `element_targets` -- so "
+        "under ONE_TARGET the gene set is identical by construction (one record per element, the "
+        "element's own, held by identity) and chr21's `# test: entities >= 6172` is unchanged. The "
+        "head read that feeds it is now 682, `heads = {e['id']: [e['predicted_coding']] for e in "
+        "elements}`, which IS element_targets' ONE_TARGET path. 702 is the second new read, the "
+        "same head kept FIRST under EVERY_CODING_TARGET_AT_THE_BAR, where the further coding genes "
+        "at the compiler's bar follow it (targetchoice.candidate_list, registered at b746a23). "
+        "That emission is selectable and off by default for the reason this module registered: it "
+        "takes chr21's `# test: rules ==` 5,176 -> 6,533 and the 24 programs' 440,589 -> 543,013 "
+        "(census 589b6ca), which is the single figure this wave said decides whether the module "
+        "may be moved in place at all, and 440,589 is the population of committed results",
+    },
 }
 
 
