@@ -185,6 +185,15 @@ def bulk_sources(cells: list[str]) -> dict[str, list[dict[str, Any]]]:
     return out
 
 
+#: The two h5ad matrices this script reads through `h5py.File`, which the read tracer does not see.
+#: Declared BY HAND for the reason lane-scalesplit's run was quarantined (`9ce4c6e`): a manifest that
+#: declares four of five read inputs makes the result unrebuildable, and `h5py` opening a file is
+#: still an input read. Repository-relative, because `input_entry` records the path verbatim
+#: (`d72f959`).
+UNTRACED_READS = (str(GEO_K562), str(CXG_TESTIS))
+UNTRACED_PARTITION = "not an evaluation partition: a single-cell count matrix, read for its gene axis only"
+
+
 def result_manifest(read_now: list[str], parameters: dict[str, Any]) -> dict[str, Any]:
     inputs = [
         mf.input_entry(
@@ -197,6 +206,11 @@ def result_manifest(read_now: list[str], parameters: dict[str, Any]) -> dict[str
         for p in sorted(set(read_now))
         if "/data/" in p.replace("\\", "/") or p.startswith("data/")
     ]
+    declared = {i["path"] for i in inputs}
+    for p in UNTRACED_READS:
+        if p not in declared:
+            inputs.append(mf.input_entry(p, partition=UNTRACED_PARTITION))
+    inputs.sort(key=lambda i: i["path"])
     return {
         "sources": [
             {
