@@ -50,37 +50,47 @@ HARNESS_RESULT = "data/results/regionscale_harness.json"
 #: DISCLOSED IN THE RESULT ITSELF, because a reader cannot check a commit message.
 #: On 2026-10-12 at 19:38:34, before the registration was committed, lane-regionscale2 ran this script
 #: ONCE as a smoke test, expecting it to refuse because no registration existed -- but the registration
-#: had just been rewritten by the committed writer at 19:31:39, so the three refusals passed and the
-#: script computed DELTA, its bootstrap and its permutation null. NOTHING WAS WRITTEN INTO data/results:
-#: `save_result` refused on the entry script, which git did not yet track, and quarantined the record at
+#: had just been rewritten by the committed writer, so the three refusals passed and the script computed
+#: DELTA, its bootstrap and its permutation null. NOTHING WAS WRITTEN INTO data/results: `save_result`
+#: refused on the entry script, which git did not yet track, and quarantined the record at
 #: data/quarantine/results/regionscale_result.json (sha256 37fd95a1..., 49,121 bytes, git-ignored). The
 #: reading is printed only AFTER save_result returns, so it never printed; no value of it was read, and
 #: the file was moved OUT of the repository into this session's scratchpad, unopened, so it cannot be
-#: taken for the real result. WHY THE REGISTRATION IS STILL HONEST, and the check that settles it rather
-#: than an assurance: the registration's bytes are seven minutes OLDER than the trial (19:31:39 against
-#: 19:38:34) and are committed unchanged, so nothing in the design, the decision rule, the interval, the
-#: null or either pre-written outcome can have been tuned to a number -- the file that would have had to
-#: change predates the number. WHAT IT COST: the claim "no held-out value of this design had been
-#: computed before the registration was committed" is NO LONGER TRUE and is not made anywhere in this
-#: result. The claim that is true, and is the one made, is that no such value was READ by anyone before
-#: the registration was committed, and that the registered sentences predate it in the file's own mtime.
+#: taken for the real result. WHAT SETTLES THE REGISTRATION'S HONESTY IS GIT AND NOT AN ASSURANCE, AND
+#: NOT A FILE MTIME EITHER: every registered field -- the question, the held-out design, the admission
+#: floors, the comparison, the statistic, the interval and its width, the alpha and its correction, the
+#: null, the p-value form, the decision rule, the falsifier, BOTH pre-written outcome sentences, the stop
+#: rule, the limitations and the descriptives -- lives in genomeos/attribution/regionscale.py, which is
+#: UNCHANGED since 027d414 at 16:52:54, two hours and forty-five minutes before the trial, and the
+#: registration is a verbatim copy of those 45 fields with a committed test asserting the copy word for
+#: word. So no registered sentence could have been tuned to a number that did not exist when it was
+#: fixed; the registration FILE was rewritten after the trial, and what it contains was not.
+#: WHAT IT COST: the claim "no held-out value of this design had been computed before the registration
+#: was committed" is NO LONGER TRUE and is made nowhere. The claim that is true, and is the one made, is
+#: that no such value was READ, and that every registered sentence predates the computation in git.
 TRIAL_RUN_DISCLOSURE = (
     "A TRIAL RUN HAPPENED BEFORE THE REGISTRATION WAS COMMITTED, AND IT IS DISCLOSED HERE RATHER THAN"
     " ONLY IN A COMMIT MESSAGE. lane-regionscale2 ran scripts/regionscale_run.py once at 19:38:34 on"
     " 2026-10-12 as a smoke test, expecting the registration-absent refusal; the registration had just"
-    " been rewritten by the committed writer at 19:31:39, so the refusals passed and the script computed"
-    " DELTA, its paired bootstrap and its permutation null. NOTHING REACHED data/results: save_result"
-    " refused because the entry script was not yet tracked by git and quarantined the record at"
+    " been rewritten by the committed writer, so the refusals passed and the script computed DELTA, its"
+    " paired bootstrap and its permutation null. NOTHING REACHED data/results: save_result refused"
+    " because the entry script was not yet tracked by git and quarantined the record at"
     " data/quarantine/results/regionscale_result.json, sha256"
     " 37fd95a18592207ea70eb2e1d19ea4faaa67959ae6dd7c2f591e19da0fa2f1ea, 49,121 bytes. The reading prints"
     " only after save_result returns, so nothing printed; the file was moved out of the repository"
-    " unopened and no value in it was read. THE REGISTRATION IS UNCHANGED BY IT AND THE CHECK IS A"
-    " TIMESTAMP, NOT AN ASSURANCE: the registration's bytes are seven minutes older than the trial and"
-    " are committed as they were written, so no part of the design, the decision rule, the interval, the"
-    " null or either pre-written outcome could have been tuned to a number that did not exist when they"
-    " were fixed. WHAT IS NO LONGER CLAIMABLE: that no held-out value of this design had been COMPUTED"
-    " before the registration was committed. What is claimed, and is what the stop rule protects, is"
-    " that none was READ, and that the registered sentences predate the computation"
+    " unopened and no value in it was read. WHAT SETTLES THE REGISTRATION'S HONESTY IS GIT, NOT AN"
+    " ASSURANCE AND NOT A FILE MTIME: every registered field -- the question, the held-out design, the"
+    " admission floors, the comparison, the statistic, the interval and its width, the alpha and its"
+    " correction, the null, the p-value form, the decision rule, the falsifier, BOTH pre-written outcome"
+    " sentences, the stop rule, the limitations and the descriptives -- lives in"
+    " genomeos/attribution/regionscale.py, which is UNCHANGED since 027d414 at 16:52:54, two hours and"
+    " forty-five minutes BEFORE the trial, and the registration is a verbatim copy of those 45 fields"
+    " with a committed test asserting the copy word for word. No registered sentence could therefore"
+    " have been tuned to a number that did not exist when it was fixed: the registration FILE was"
+    " rewritten after the trial and what it CONTAINS was not. WHAT IS NO LONGER CLAIMABLE: that no"
+    " held-out value of this design had been COMPUTED before the registration was committed. What is"
+    " claimed, and is what the stop rule protects, is that none was READ, and that every registered"
+    " sentence predates the computation in git"
 )
 
 
