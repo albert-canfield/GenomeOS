@@ -55,6 +55,16 @@ OPEN_FILE_STATUS = ("released",)
 MATRIX_WORDS = ("matrix", "gene count", "gene quantification", "transcript quantification")
 
 
+# ENCODE ANSWERS AN EMPTY SEARCH WITH HTTP 404, NOT WITH AN EMPTY `@graph`. Measured here: the first
+# run of this script died after four retries on `assay_title=long read scRNA-seq` restricted to
+# released human experiments, which is not a portal failure but a count of zero. `fetch` therefore
+# reads a 404 as the empty result it is, and records `encode_http_status` so the record says that the
+# zero came from a 404 rather than from an answered search with no rows.
+#
+# THAT MAKES ONE OTHER CHECK NECESSARY, and `open_matrix_files` carries it: a per-experiment fetch
+# whose accession came from a search that had just returned it must NOT read a 404 as "this
+# experiment has no files", because that would turn a portal error into a cell type that looks like
+# it fails the single-cell clause. It asserts the record came back with its own accession in it.
 def fetch(url: str, tries: int = 4) -> dict[str, Any]:
     """One ENCODE portal JSON request, retried on a transient failure. No key, no cost."""
     last: Exception | None = None
@@ -63,6 +73,11 @@ def fetch(url: str, tries: int = 4) -> dict[str, Any]:
             req = urllib.request.Request(url, headers=HEADERS)
             with urllib.request.urlopen(req, timeout=180) as handle:
                 return json.load(handle)
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                return {"@graph": [], "total": 0, "encode_http_status": 404}
+            last = exc
+            time.sleep(2 * (attempt + 1))
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
             last = exc
             time.sleep(2 * (attempt + 1))
@@ -111,6 +126,14 @@ def modified_or_treated(experiment: dict[str, Any]) -> list[str]:
 def open_matrix_files(accession: str) -> tuple[list[dict[str, Any]], list[str]]:
     """The open per-cell matrix files of one experiment, and every output_type seen in it."""
     record = fetch(f"{pb.ENCODE}/experiments/{accession}/?format=json")
+    if record.get("accession") != accession:
+        raise RuntimeError(
+            f"{accession}: the portal did not return this experiment "
+            f"(encode_http_status {record.get('encode_http_status')}). The accession came from a "
+            f"search that had just returned it, so this is a portal fault and it must NOT be read "
+            f"as 'the experiment has no files', which would make the cell type look like it fails "
+            f"the single-cell clause"
+        )
     seen: list[str] = []
     out: list[dict[str, Any]] = []
     for f in record.get("files", []):
