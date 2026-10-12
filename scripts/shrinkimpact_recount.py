@@ -15,6 +15,19 @@ three `dependency` gene tallies; all of `coverage` (`counts` and `per_chromosome
 (`sizes`, `in_no_arm`, `dependency_of_the_attributed_gene`); `frozen_population.elements`; and, leaf
 by leaf, every row of the frozen population against the file the registration pins.
 
+AMENDED AFTER THE FIRST RUN, and the paragraph above is left standing because it is what the first
+run did. Of the three `dependency` gene tallies named there, none is a count over the census'
+population: the census fills them from `len(held["requested"])`, `len(held["values"])` and
+`len(held["missing"])`, and `closure_cell.k562_gene_effect` hands back the distilled cache's
+ACCUMULATED UNION whenever the ask is already covered. They are therefore a reading of this
+machine's cache at write time. The comparison against them is KEPT, because a committed figure
+that a faithful rebuild would not reproduce is a real finding and not a nuisance; a second
+comparison is ADDED beside it, of `dependency.genes_asked` against the genes the census' own
+population implies, which is the quantity that field is named for. The two together say which of
+the two possible things the movement is, and
+`dependency_block_is_a_property_of_the_cache_and_not_of_the_census` in the result carries the
+reading.
+
 WHAT IS NOT RECOMPUTED, said rather than left to be noticed. `screen_file_layout` is eight ranged
 HTTP reads of ENCODE's guide-quantification files and is not a count from a store, so it is left
 alone. `frozen_population.sha256` is a digest over bytes that include the run's own wall-clock
@@ -225,6 +238,13 @@ def recount_closure_cell() -> dict[str, Any]:
             },
             label="dependency gene tallies",
         ),
+        # The same field against the quantity it is NAMED for, rather than against the cache
+        # reading that wrote it. Added after the first run; see the amendment in the docstring.
+        si.compare(
+            {"genes_asked": committed["dependency"]["genes_asked"]},
+            {"genes_asked": len(genes)},
+            label="dependency.genes_asked, against the genes the census' own population implies",
+        ),
         si.compare(
             {"elements": committed["frozen_population"]["elements"]},
             {"elements": len(rows)},
@@ -245,6 +265,38 @@ def recount_closure_cell() -> dict[str, Any]:
         "(2026-10-10), which is not touched here",
         "comparisons": [_capped(r) for r in reports],
         "no_number_moves": si.every_reading_is_no_movement(reports),
+        "dependency_block_is_a_property_of_the_cache_and_not_of_the_census": {
+            "finding": "a SECOND defect, found by this recount and unrelated to the input shrink: "
+            "the census writes `dependency.genes_asked`, `genes_with_a_value` and "
+            "`genes_absent_from_the_release` from `len(held['requested'])`, `len(held['values'])` "
+            "and `len(held['missing'])`, and `closure_cell.k562_gene_effect` returns the DISTILLED "
+            "CACHE'S ACCUMULATED UNION, not the genes this run asked for. So those three fields are "
+            "a reading of this machine's cache at write time, and a faithful rebuild from the "
+            "manifest prints DIFFERENT numbers into them without one count over the census' "
+            "population changing.",
+            "committed_on_2026_10_10": {
+                "genes_asked": committed["dependency"]["genes_asked"],
+                "genes_with_a_value": committed["dependency"]["genes_with_a_value"],
+                "genes_absent_from_the_release": committed["dependency"]["genes_absent_from_the_release"],
+            },
+            "the_cache_now": {
+                "genes_asked": len(held["requested"]),
+                "genes_with_a_value": len(effects),
+                "genes_absent_from_the_release": len(held["missing"]),
+            },
+            "the_census_own_ask_now": len(genes),
+            "reading": "the census' own ask is unchanged, and the second of the two comparisons "
+            "tests exactly that. The cache has since grown -- `closure_cell2_inventory` of the same "
+            "day asked for more genes through the same persisted file -- so the three committed "
+            "figures now read low against it. This does not say a committed number was wrong when "
+            "it was written: it says those three fields are not a function of the declared inputs' "
+            "content alone, which is a reproducibility defect in its own right, and it is reported "
+            "and NOT repaired here.",
+            "what_is_not_affected": "every dependency CALL the arms rest on. The frozen population "
+            "is compared row by row above, `dependency_attributed` and `dependency_nearest` "
+            "included, and every leaf matches -- so no element's dependency label and no arm size "
+            "depends on the cache having grown.",
+        },
         "why_the_group_counts_are_below_24": {
             "chrY, absent from all three per-chromosome groups": extras["library_design_contigs"],
             "chrY reading": "the CRISPRi library's DESIGN file (ENCFF630CYG, md5 pinned in the "
