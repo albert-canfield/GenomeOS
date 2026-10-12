@@ -146,3 +146,50 @@ def test_the_committed_rule_states_the_minimum_and_matches_the_module():
     assert rule["scale_if_used"] == pb.SCALE
     assert rule["wording_limit"] == pb.WORDING_LIMIT
     assert "before the minimum below was fixed" in rule["vocabulary_learned_first"]["what"]
+
+
+def test_the_committed_inventory_answers_against_the_committed_minimum():
+    """The inventory's answer is the rule's own verdict function applied to its own count.
+
+    The record is COMMITTED by this lane, so git tracks it and `must_be_present` is the right
+    helper: its absence is a broken checkout, not a search that has not been run here.
+    """
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(pb.INVENTORY_PATH, was="the search had not been run on this machine")
+    inv = json.loads(pb.INVENTORY_PATH.read_text())
+    assert inv["minimum"]["cell_types"] == pb.MINIMUM["cell_types"]
+    assert inv["minimum"]["genes"] == pb.MINIMUM["genes"]
+    assert inv["covered_cell_count"] == 13
+    assert inv["qualifying_cell_count"] == len(inv["qualifying_cells"])
+    assert inv["answer"] == pb.verdict(
+        inv["qualifying_cell_count"],
+        None if inv["qualifying_cell_count"] < pb.MINIMUM["cell_types"] else 0,
+    )
+    assert inv["alphagenome_requests"] == 0
+    assert inv["bytes_fetched"] == 0
+    assert inv["bulk_clause_satisfied_for_all_thirteen"] is True
+    for cell in inv["per_cell"]:
+        assert cell["bulk"]["satisfied"] is True
+        assert cell["has_both"] == bool(cell["single_cell"]["admitted"])
+
+
+def test_the_reading_is_no_source_qualifies_at_two_of_thirteen():
+    """The reading as run, pinned so a later edit cannot quietly restate it.
+
+    Two of the thirteen covered cell types carry both modalities -- GM12878 and ovary -- and the
+    committed minimum is four, so the inventory answers NO_SOURCE_QUALIFIES. The rule declares that
+    acceptable and complete.
+    """
+    import json
+
+    import tracked_paths as tp
+
+    tp.must_be_present(pb.INVENTORY_PATH)
+    inv = json.loads(pb.INVENTORY_PATH.read_text())
+    assert inv["answer"] == "NO_SOURCE_QUALIFIES"
+    assert inv["qualifying_cell_count"] == 2
+    assert sorted(inv["qualifying_cells"]) == ["GM12878", "ovary"]
+    assert inv["encode_experiment_counts"]["long read scRNA-seq"] == 0
