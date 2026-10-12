@@ -26,6 +26,9 @@ fire. Only planting the violation and watching the guard stay green establishes 
 
 from __future__ import annotations
 
+import ast
+import random
+
 #: The four conditions. Registered before counting; none is sufficient alone.
 CANNOT_FIRE_TEST = (
     "a guard is counted CANNOT-FIRE only when all four hold: (1) it is a guard -- an assertion, raise"
@@ -181,3 +184,182 @@ FOURTH_CONDITION_INHERITED = (
     " after globcensus stage 2 was refuted). Registered here before counting, and generalised into"
     " CANNOT_FIRE_TEST's condition (4): description cannot settle what only opening the thing can"
 )
+
+
+# ------------------------------------------------ condition (3), MEASURED: the vacuity leg, 2026-10-12
+# CANNOT_FIRE_TEST's condition (3) has a clause that can be measured instead of read: "compares
+# values that can never differ". For a comparison built only of names, constants and arithmetic,
+# values can be SUBSTITUTED and the comparison EVALUATED, thousands of times. That is condition
+# (4)'s discipline -- plant the violation, do not reason about it -- applied to arithmetic.
+
+#: What the instrument is, and what it is not.
+VACUITY_INSTRUMENT = (
+    "every ==/!= comparison in genomeos/, scripts/ and tests/ whose leaves are only names,"
+    " constants and arithmetic is compiled and evaluated under random substitutions drawn from a"
+    " pool containing THE EXPRESSION'S OWN CONSTANTS. A comparison whose verdict never changes over"
+    " at least 150 usable evaluations is one whose two sides cannot differ. It is not a proof: it is"
+    " a search that plants many violations and reports whether any was found"
+)
+
+#: The four defects found in this instrument, each of which changed the count. Kept because the
+#: sequence IS the finding: a census is only as good as the instrument, and mine was wrong 4 times.
+VACUITY_INSTRUMENT_WAS_WRONG_FOUR_TIMES = (
+    {
+        "version": 1,
+        "count": 1600,
+        "defect": "the pool held random INTEGERS ONLY, so `action == 'activates'` could not come"
+        " out True and was reported always-False. The probe was measuring its own pool",
+    },
+    {
+        "version": 2,
+        "count": 20,
+        "defect": "collecting ast.Constant alone missed -32768 (a UnaryOp) and 512 * 1024 * 1024"
+        " and 490.0+50.0+7.0+3.0 (BinOps), so reachable comparisons were reported unreachable."
+        " Whole sides are folded now",
+    },
+    {
+        "version": 3,
+        "count": 7,
+        "defect": "a NaN in the pool DELETED THE ONE TRUE POSITIVE, because nan == nan is False."
+        " The discriminator is not the pool but the SHAPE: `v == v` has syntactically identical"
+        " sides and is the deliberate NaN idiom; a tautology has different sides that are"
+        " algebraically equal. Self-comparisons are set aside by shape and counted separately."
+        " Also: trials that RAISED were counted as agreeing, so `ne - ns == e - s` was called"
+        " invariant on about 99 usable trials out of 400 -- a floor on usable trials fixed it",
+    },
+    {
+        "version": 4,
+        "count": 1,
+        "defect": "the pool builder sorted constants into ints and strs, and BYTES fell through"
+        " the gap, so six bytes comparisons -- k == b's', magic == b'\\x1f\\x8b', data == b'hello'"
+        " -- were called tautologies because the only value satisfying them had been removed."
+        " Every constant stays in the pool now, whatever its type",
+    },
+)
+
+#: The reading. A NEGATIVE result, and the honest one.
+VACUITY_RESULT = (
+    "ONE tautology in genomeos/, scripts/ and tests/ together: scripts/manifest_rebuild.py:309,"
+    " `total == compared + (total - compared)`, always True over 2,555 usable plants -- and it was"
+    " ALREADY IN CASES before this leg ran, so the leg found nothing new. 16 self-comparisons were"
+    " set aside as the NaN idiom, which is correct code. 0 sites went unmeasured. So the 'compares"
+    " values that can never differ' clause of condition (3) is very nearly EMPTY in this codebase,"
+    " and the clause's value is as a rule for reading new code rather than as a yield of old code"
+)
+
+#: Why the sequence of counts matters more than the count.
+VACUITY_LESSON = (
+    "four versions of one instrument gave 1,600, 20, 7 and 1, and only the last is right. Every"
+    " earlier number was the POOL measuring itself: a value the code requires had been left out, so"
+    " the comparison could not be satisfied and was reported as unsatisfiable. This is the census's"
+    " own subject turned on the census -- an instrument that cannot detect reports absence, and"
+    " absence reads like a finding. The validation that caught each one was a KNOWN POSITIVE held"
+    " aside: manifest_rebuild.py:309 had to appear in the output, and version 3 was rejected"
+    " precisely because it stopped appearing"
+)
+
+#: The 16 set aside, by path, so the exclusion can be audited rather than trusted.
+NAN_IDIOM_SET_ASIDE = (
+    "genomeos/attribution/runrules.py:627",
+    "genomeos/cli.py:614",
+    "genomeos/genome/epigenome.py:554",
+    "genomeos/predict/alphagenome_adapter.py:407",
+    "genomeos/predict/contact_maps.py:63",
+    "genomeos/runtime/segmentation.py:44",
+    "genomeos/web/server.py:1874",
+    "scripts/context_contrast_feasibility.py:585",
+    "scripts/cptac_phospho.py:348",
+    "scripts/epigenome.py:368",
+    "scripts/epigenome.py:441",
+    "scripts/epigenome.py:925",
+    "scripts/placement_audit.py:381",
+    "scripts/placement_audit.py:561",
+    "scripts/placement_audit.py:830",
+    "scripts/residue_census.py:210",
+)
+
+
+def _fold(node: ast.expr) -> object | None:
+    """The value of a sub-expression that names nothing, or None.
+
+    A negative literal is a UnaryOp and ``512 * 1024 * 1024`` a BinOp, so collecting
+    ``ast.Constant`` alone misses the value the name is actually compared against.
+    """
+    if any(isinstance(n, ast.Name) for n in ast.walk(node)):
+        return None
+    try:
+        return eval(  # noqa: S307 -- a constant-only sub-expression of this repo's own source
+            compile(ast.Expression(body=node), "<fold>", "eval"), {"__builtins__": {}}, {}
+        )
+    except Exception:
+        return None
+
+
+def pool_for(node: ast.Compare) -> list[object]:
+    """The substitution pool: the expression's OWN constants, plus a few generic values.
+
+    Every collected constant stays in, whatever its type -- see version 4 in
+    :data:`VACUITY_INSTRUMENT_WAS_WRONG_FOUR_TIMES`.
+    """
+    vals = [n.value for n in ast.walk(node) if isinstance(n, ast.Constant)]
+    for side in [node.left, *node.comparators]:
+        folded = _fold(side)
+        if folded is not None:
+            vals.append(folded)
+    return [*vals, 0, 1, 2, -1, 7, 50, 3, 11, "", "x"]
+
+
+def classify_comparison(
+    node: ast.Compare, *, trials: int = 4000, min_usable: int = 150
+) -> tuple[str, bool | None, int]:
+    """``("tautology" | "nan_idiom" | "varies" | "not_measured", verdict, usable_trials)``.
+
+    A trial that RAISES is not a trial that agreed: a verdict needs ``min_usable`` successful
+    evaluations or the site is reported as not measured rather than as invariant.
+    """
+    safe = (
+        ast.Name,
+        ast.Constant,
+        ast.BinOp,
+        ast.UnaryOp,
+        ast.Add,
+        ast.Sub,
+        ast.Mult,
+        ast.FloorDiv,
+        ast.Mod,
+        ast.USub,
+        ast.UAdd,
+        ast.Compare,
+        ast.Eq,
+        ast.NotEq,
+        ast.Load,
+    )
+    if len(node.ops) != 1 or not isinstance(node.ops[0], (ast.Eq, ast.NotEq)):
+        return "varies", None, 0
+    if not all(isinstance(n, safe) for n in ast.walk(node)):
+        return "varies", None, 0
+    names = sorted({x.id for x in ast.walk(node) if isinstance(x, ast.Name)})
+    if not names:
+        return "varies", None, 0
+
+    pool = pool_for(node)
+    code = compile(ast.Expression(body=node), "<probe>", "eval")
+    seen: set[bool] = set()
+    usable = 0
+    for _ in range(trials):
+        env = {k: random.choice(pool) for k in names}
+        try:
+            got = bool(eval(code, {"__builtins__": {}}, env))  # noqa: S307 -- this repo's source
+        except Exception:
+            continue
+        usable += 1
+        seen.add(got)
+        if len(seen) > 1:
+            return "varies", None, usable
+    if usable < min_usable:
+        return "not_measured", None, usable
+    verdict = seen.pop()
+    # BY SHAPE, not by pool: identical sides are the deliberate NaN idiom, not a tautology.
+    if ast.unparse(node.left) == ast.unparse(node.comparators[0]):
+        return "nan_idiom", verdict, usable
+    return "tautology", verdict, usable

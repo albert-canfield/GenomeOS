@@ -90,3 +90,65 @@ def test_the_requires_extra_cost_is_counted_as_a_cost_not_a_fault() -> None:
 def test_the_inherited_fourth_condition_is_recorded_before_counting() -> None:
     assert "CARRY DATA the result's own scope would have used" in gcn.FOURTH_CONDITION_INHERITED
     assert "globcensus stage 2 was refuted" in gcn.FOURTH_CONDITION_INHERITED
+
+
+# ------------------------------------------------------ the vacuity leg: condition (3), measured
+
+
+def test_the_instrument_separates_a_tautology_from_the_nan_idiom() -> None:
+    """The discriminator is SHAPE, not the pool: both are invariant over non-NaN values."""
+    import ast
+
+    taut = ast.parse("total == compared + (total - compared)", mode="eval").body
+    idiom = ast.parse("v == v", mode="eval").body
+    assert gcn.classify_comparison(taut)[0] == "tautology"
+    assert gcn.classify_comparison(idiom)[0] == "nan_idiom"
+
+
+def test_the_pool_keeps_every_constant_whatever_its_type() -> None:
+    """Version 4's defect: bytes fell between the int and str filters and six sites were lost."""
+    import ast
+
+    for src in ("magic == b'BAM\\x01'", "k == 's'", "value == -32768", "n == 512 * 1024 * 1024"):
+        node = ast.parse(src, mode="eval").body
+        # the value that SATISFIES the comparison must be reachable, or the probe measures itself
+        assert gcn.classify_comparison(node)[0] == "varies", src
+
+
+def test_a_trial_that_raised_is_not_a_trial_that_agreed() -> None:
+    """Version 3's second defect: the usable floor, or ~99 of 400 trials decided a verdict."""
+    import ast
+
+    node = ast.parse("ne - ns == e - s", mode="eval").body
+    verdict, _value, usable = gcn.classify_comparison(node, trials=40, min_usable=10_000)
+    assert verdict == "not_measured"
+    assert usable < 10_000
+
+
+def test_the_four_wrong_versions_are_kept_with_their_counts() -> None:
+    counts = [v["count"] for v in gcn.VACUITY_INSTRUMENT_WAS_WRONG_FOUR_TIMES]
+    assert counts == [1600, 20, 7, 1], counts
+    assert "measuring its own pool" in gcn.VACUITY_INSTRUMENT_WAS_WRONG_FOUR_TIMES[0]["defect"]
+    assert "DELETED THE ONE TRUE POSITIVE" in gcn.VACUITY_INSTRUMENT_WAS_WRONG_FOUR_TIMES[2]["defect"]
+
+
+def test_the_vacuity_result_is_stated_as_the_negative_it_is() -> None:
+    assert "ALREADY IN CASES" in gcn.VACUITY_RESULT
+    assert "found nothing new" in gcn.VACUITY_RESULT
+    assert "very nearly EMPTY" in gcn.VACUITY_RESULT
+    assert len(gcn.NAN_IDIOM_SET_ASIDE) == 16
+
+
+def test_the_known_positive_is_still_a_tautology_in_the_tree() -> None:
+    """The validation that rejected version 3: this site must appear, or the leg is suspect."""
+    import ast
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    src = (root / "scripts" / "manifest_rebuild.py").read_text()
+    found = [
+        n
+        for n in ast.walk(ast.parse(src))
+        if isinstance(n, ast.Compare) and gcn.classify_comparison(n)[0] == "tautology"
+    ]
+    assert found, "manifest_rebuild.py no longer contains the known tautology"
