@@ -86,7 +86,8 @@ def test_the_count_that_picks_the_unit_is_address_level_and_the_graph_has_no_edg
     assert g["largest_component"] == 1
     assert g["components_over_this_tables_genes"] == g["single_gene_components"]
     assert g["min_shared_elements"] == hb.MIN_SHARED_ELEMENTS
-    assert "no measured value" in g["note"]
+    assert "no measured value" in g["note"].lower()
+    assert "no rna is read" in g["note"].lower()
 
 
 def test_the_governing_unit_is_fixed_by_the_registered_rule_and_is_the_1mb_locus_block() -> None:
