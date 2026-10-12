@@ -638,6 +638,10 @@ def main() -> int:
     #       manifest in as a directory and raised TypeError.
     # The two superseded lines are left standing underneath, unreached, as the record of what ran.
     sources = [Path("data/results")]
+    # ADDED, superseding the line above: `_apply_read_facts` reads the evidence file, which lives
+    # under data/, so the manifest contract requires it declared and hashed like any other input. The
+    # run REFUSED without it and quarantined its own output, which is the contract working.
+    sources = [Path("data/results"), Path("data/globscope_read_facts.json")]
     print(f"wrote {save_result(RESULT, payload, manifest=manifest(sources))}")
     print(json.dumps(counts, indent=1))
     for r in rows:
