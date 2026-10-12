@@ -42,8 +42,8 @@
         "score": 0.24
       }
     ],
-    "seconds": 8.0,
-    "target_class": "direct_surface",
+    "seconds": 1.4,
+    "target_class": "unknown",
     "score": 0.457,
     "evidence_tier": "observed_alteration",
     "mechanism_reach": "no_established_mechanism",
@@ -326,8 +326,8 @@
       },
       {
         "path": "data/knowledge/vep/vep_cache.jsonl",
-        "sha256": "e349b9533846933224187766b5c428f95c36de240bd24ae43f2750259bb1f238",
-        "bytes": 5140,
+        "sha256": "a62e259b5b70b5cefc36a4430f1954397331ae69269f49cd4f7b9933bd8fc5a0",
+        "bytes": 5782,
         "partition": null
       },
       {
@@ -373,7 +373,7 @@
     },
     "offline_reproducible": false,
     "code_cleanliness": {
-      "git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "git_sha": "448565ac8d169724fc8b08bf9c3c7280b2a2f584",
       "dirty": true,
       "entry_script": {
         "argv0": "scripts/therapeutic_sv_case.py",
@@ -392,6 +392,9 @@
         "genomeos/forge/__init__.py",
         "genomeos/forge/calibration_inventory.py",
         "genomeos/forge/design.py",
+        "genomeos/molecules/maboss_reference.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/maboss.py",
         "scripts/forge_calibration_inventory.py",
         "tests/test_forge_calibration_inventory.py",
         "tests/test_licence_header_presence.py"
@@ -480,19 +483,25 @@
       "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
     },
     "code": {
-      "git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "git_sha": "448565ac8d169724fc8b08bf9c3c7280b2a2f584",
       "dirty": true,
       "dirty_code_paths": [
         "genomeos/forge/__init__.py",
         "genomeos/forge/calibration_inventory.py",
         "genomeos/forge/design.py",
+        "genomeos/molecules/maboss_reference.py",
+        "genomeos/runtime/boolean.py",
+        "genomeos/runtime/maboss.py",
         "scripts/forge_calibration_inventory.py",
         "tests/test_forge_calibration_inventory.py",
         "tests/test_licence_header_presence.py"
       ],
-      "untracked_code_paths": [],
+      "untracked_code_paths": [
+        "genomeos/molecules/maboss_reference.py",
+        "genomeos/runtime/maboss.py"
+      ],
       "dirty_result_paths": [
-        "data/results/saturable_gate_result.json"
+        "data/results/therapeutic_sv_case_result.json"
       ],
       "argv": [
         "scripts/therapeutic_sv_case.py",
@@ -502,18 +511,18 @@
     },
     "complete": true,
     "revision_stamps": {
-      "code_git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
-      "code_cleanliness_git_sha": "b81a32c527e703ba4354917eabc5531cbaf5cc04",
+      "code_git_sha": "448565ac8d169724fc8b08bf9c3c7280b2a2f584",
+      "code_cleanliness_git_sha": "448565ac8d169724fc8b08bf9c3c7280b2a2f584",
       "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
       "comparable": true,
       "agree": true,
       "revision_race": false,
-      "reading": "no revision race: both stamps record b81a32c"
+      "reading": "no revision race: both stamps record 448565a"
     },
     "traced_inputs": {
       "hook": "sys.addaudithook(\"open\")",
       "active": true,
-      "opens": 22531,
+      "opens": 22528,
       "opens_under_data": 22329,
       "files_read": 20629,
       "files_written": 0,
