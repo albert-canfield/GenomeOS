@@ -1,6 +1,18 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """`scripts/inert_skip_guards.py`: the finder that resolves what a skip guard is keyed on.
 
+COMMITTING A RESULT IS WHAT CREATES THIS DEFECT, so run this file in the SAME step as the commit
+(2026-10-12, after eight guards went inert at once). A guard keyed on a result's ABSENCE is live only
+while that result is untracked. The moment the lane commits it, git tracks it, the condition can never
+be false again, and the skip is silently disarmed -- not by anyone editing the guard, but by the
+ordinary act of recording the measurement it was guarding. On 2026-10-10 lane-freshrna and
+lane-trainexp committed their records in the evening and disarmed SEVEN between them (plus
+`test_closure_cell2.py:237` from lane-closure2), and the suite stayed green until this file was run.
+THE RULE FOR EVERY LANE: when you commit a result file, run this test in the same step (about 20 s),
+and convert any skip keyed on your file to `tracked_paths.must_be_present`, which RAISES by name
+instead of skipping. It costs 20 seconds at the one moment the defect is created, and it is the only
+moment at which the lane that caused it is the lane that can see it.
+
 WHAT THIS CHECKS AND WHY IT IS NOT THE ONE ALREADY IN THE SUITE.
 `tests/test_local_data_symlinked_store.py` carries `test_no_skip_guard_is_keyed_on_a_path_that_git_
 TRACKS`, which reads `skipif` DECORATORS and nothing else. It was right about its own population and
