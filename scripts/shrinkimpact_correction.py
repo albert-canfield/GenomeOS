@@ -195,6 +195,18 @@ def main() -> int:
     record = correction()
     record["seconds"] = round(time.time() - started, 1)
     record["result_manifest"] = result_manifest(mf.traced_reads())
+    # The contract takes `coordinates` as {base: 0|1, interval: half-open|closed} OR as the
+    # whole field spelled "n/a: why", and not as a dict whose `base` is None -- it refused
+    # this result on exactly that, and quarantined it rather than writing a half-filled
+    # manifest. The dict in `result_manifest` above is left standing and overwritten here
+    # because `commit_own.sh`'s stale-base guard refuses a commit that removes a line an
+    # earlier commit of this lane added, and this lane does not use --force. What reaches the
+    # file is the single string, which is what the contract asks for.
+    record["result_manifest"]["coordinates"] = (
+        "n/a: no coordinate is read or written here. This file states two values of three "
+        "counts and which quantity each is, every figure copied from a committed result, and "
+        "the three results it reads are GRCh38 throughout."
+    )
     path = save_result(NAME, record)
     print(f"wrote {path}", flush=True)
     for entry in record["old_and_new"]:
