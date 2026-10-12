@@ -87,3 +87,32 @@ def pytest_report_header(config):
             f"(cannot import {missing}); install with `uv sync --extra {extra}`"
         )
     return lines
+
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    """Say it again where `-q` cannot hide it: both CI jobs run `pytest -q`, and `-q` suppresses the
+    report header, so `pytest_report_header` above announces nothing in the only environment the
+    stopgap was written for. Measured by genomeos-bf at the pushed tip: without `-q` the header
+    prints; with `-q`, and with `-q -rs --no-fold-skipped` as CI runs it, it is absent. An ignored
+    file is not a skip, so `-rs` does not list it either. That made the guard a SILENT ABSENCE under
+    CI's own flags -- the thing its own docstring says it exists to prevent -- so the announcement is
+    repeated here, in the terminal summary, which `-q` does not suppress.
+
+    It also names the import that ACTUALLY fails. The header lists the extra's missing DIRECT
+    requirements (alphagenome, anndata), while the import that breaks collection is `h5py`, which is
+    transitive through anndata -- so a reader of the header goes looking in the wrong module.
+    """
+    if not collect_ignore:
+        return
+    for name in collect_ignore:
+        extra = COLLECT_NEEDS_EXTRA[name]
+        missing = ", ".join(extras_lock.missing_modules_for_extra(extra)) or "nothing directly"
+        terminalreporter.write_line(
+            f"NOT COLLECTED: tests/{name} was not collected at all, so its tests are absent rather "
+            f"than failing. Its module-level import chain needs the {extra!r} extra, whose missing "
+            f"direct requirements are: {missing}. For tests/test_pbrun.py the import that actually "
+            f"fails is h5py, a transitive dependency of anndata, imported at "
+            f"genomeos/attribution/pbrun.py:41. Install with `uv sync --extra {extra}`. This is a "
+            f"STOPGAP (f4a9faa): the real fix moves that import into its two uses and deletes this "
+            f"guard, and is boarded for 2026-10-14 when the undo window lapses."
+        )
