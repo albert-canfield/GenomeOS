@@ -225,7 +225,7 @@ def test_the_generator_refuses_a_program_without_the_superseded_paragraph() -> N
 def test_the_compiler_refuses_a_header_whose_counts_disagree_with_its_rules() -> None:
     src = COMPILER.read_text()
     assert "refusing to write a header that contradicts its own rules" in src
-    assert "n_predicted_rules = len(elements)" in src
+    assert 'n_predicted_rules = sum(len(targets_of[e["id"]]) for e in elements)' in src
 
 
 # ---- the planted counterfactuals: each assertion above is shown to fail on the defect ----
@@ -291,7 +291,7 @@ def test_check_cell_counts_refuses_a_rule_tier_the_sentence_does_not_speak_for()
 
 def test_compile_chromosome_calls_the_check_with_counts_it_derived() -> None:
     src = COMPILER.read_text()
-    assert "n_predicted_rules = len(elements)" in src
+    assert 'n_predicted_rules = sum(len(targets_of[e["id"]]) for e in elements)' in src
     assert "check_cell_counts(lines, n_predicted_rules, n_measured_rules, chrom)" in src
 
 
@@ -310,7 +310,7 @@ def _module_from(source: str, name: str):
 def test_counterfactual_a_drifted_predicted_count_makes_the_compiler_refuse_chr21() -> None:
     """Plant +1 on the compiler's own predicted count: compiling chr21 must then refuse."""
     src = COMPILER.read_text()
-    old = "n_predicted_rules = len(elements)"
+    old = 'n_predicted_rules = sum(len(targets_of[e["id"]]) for e in elements)'
     assert src.count(old) == 1
     drifted = _module_from(src.replace(old, f"{old} + 1", 1), "compile_with_a_drifted_count")
     with pytest.raises(ValueError, match="declares 5175 predicted and 2 experimental"):
