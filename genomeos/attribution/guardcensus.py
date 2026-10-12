@@ -787,3 +787,53 @@ BARE_CONDITION_METHOD = (
     " constraint and the wrong solution: a real bare environment answers the same question"
     " without instrumenting anything, and without holding anything other lanes need"
 )
+
+
+# ================= THE BARE RUN'S VERDICT, and the red it uncovered -- 2026-10-12 19:57
+# The coordinator's question was narrow: "0 failed AND 0 error". Collection alone had shown 0
+# error; only a full run could show 0 failed. It did not.
+
+#: The verdict, with its tree and its duration, from the status line and not from an exit code.
+BARE_RUN_VERDICT = (
+    "at HEAD a2f0fa9 in a clean worktree, tree a83ca9d, under the import veil with h5py,"
+    " alphagenome and anndata unimportable: 1 failed, 7,489 passed, 83 skipped, 20 xfailed,"
+    " 1 xpassed in 2,213.66s (36:53). ZERO collection errors, so the stopgap holds under a full"
+    " run as well as under --collect-only, and tests/test_pbrun.py was not collected. So the"
+    " coordinator's test is HALF met: 0 error yes, 0 failed NO"
+)
+
+#: And the half that closed completely.
+ANNOUNCEMENT_NOW_ARRIVES = (
+    "b8ee5d6's pytest_terminal_summary line IS PRESENT under CI's own -q -rs"
+    " --no-fold-skipped, which the suppressed header was not. It also fixes the misdirection:"
+    " it names the extra's missing direct requirements (alphagenome, anndata) AND says that for"
+    " tests/test_pbrun.py 'the import that actually fails is h5py, a transitive dependency of"
+    " anndata, imported at genomeos/attribution/pbrun.py:41', and that it is a stopgap boarded"
+    " for 2026-10-14. ANNOUNCEMENT_CANNOT_BE_HEARD is therefore closed by measurement, not by"
+    " assertion -- the guard fires AND is now heard where the decision is read"
+)
+
+#: The failure, and it is NOT the bare condition's. Handed over rather than finished.
+BARE_RUN_RED_IS_NOT_THE_VEILS = {
+    "test": "tests/test_execscale.py::test_the_committed_programmes_are_byte_identical_to_the_record",
+    "not_the_veil": "it reproduces in the NORMAL environment with no veil and nothing hidden --"
+    " 1 failed in 0.22s -- so it is pre-existing and unrelated to h5py, alphagenome or anndata",
+    "how_long": "the record landed at 81d3949 (16:52), so dev has been red on this since about"
+    " then. THIS LANE'S LOCK HOLD IS WHY NOBODY SAW IT: no push gate could run between 16:54 and"
+    " 19:19, so the 160-minute hold did not only block work, it CONCEALED A RED for three hours."
+    " Two harms from one cause, and the second is the worse one",
+    "localised_not_solved": "at a2f0fa9 every PER-FILE digest matched its recorded sha256 and"
+    " only the GROUP digest differed, which puts the fault in the group computation or in the"
+    " order and names it covers, NOT in the programme bytes. In the current tree the failure has"
+    " MOVED to a per-file mismatch on data/organisms/human/haematopoiesis.bio, from 71f9d47"
+    " (19:20), so there are two separate drifts and only the second is about file contents",
+    "the_structural_part": "scripts/execscale_census.py:125 defines a SECOND implementation of"
+    " the group digest, in a file that already imports genomeos.manifest at line 39 -- and"
+    " manifest.group_digest's docstring says it is 'The one implementation of this digest ... so"
+    " the writer and the checker cannot answer differently about which bytes a group's digest"
+    " covers'. Two implementations are exactly how a writer and a checker come to disagree, and"
+    " no ordering of the current files (record order, sorted by path, sorted by str) reproduces"
+    " the recorded fe56d749",
+    "whose": "lane-execscale's. Reported, not repaired: SCOPE's no-repairs clause and the fact"
+    " that it is another lane's live work both point the same way",
+}

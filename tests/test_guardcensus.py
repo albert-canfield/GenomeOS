@@ -445,3 +445,42 @@ def test_the_replacement_method_tests_the_condition_instead_of_simulating_it() -
     assert "13 base packages" in m
     assert "OUTSIDE the suite lock" in m
     assert "right constraint and the wrong solution" in m
+
+
+# ----------------------------------------------------------------- the bare run's verdict
+
+
+def test_the_bare_verdict_is_read_from_the_status_line_not_an_exit_code() -> None:
+    v = gcn.BARE_RUN_VERDICT
+    assert "1 failed, 7,489 passed" in v
+    assert "tree a83ca9d" in v
+    assert "HALF met: 0 error yes, 0 failed NO" in v
+
+
+def test_the_announcement_case_is_closed_by_measurement() -> None:
+    a = gcn.ANNOUNCEMENT_NOW_ARRIVES
+    assert "IS PRESENT under CI's own -q -rs" in a
+    assert "the import that actually fails is h5py" in a
+    assert "closed by measurement, not by assertion" in a
+
+
+def test_the_red_is_shown_not_to_be_the_veils_and_is_handed_over() -> None:
+    r = gcn.BARE_RUN_RED_IS_NOT_THE_VEILS
+    assert "1 failed in 0.22s" in r["not_the_veil"]
+    assert "CONCEALED A RED for three hours" in r["how_long"]
+    assert "Two harms from one cause" in r["how_long"]
+    assert "only the GROUP digest differed" in r["localised_not_solved"]
+    assert "SECOND implementation" in r["the_structural_part"]
+    assert "Reported, not repaired" in r["whose"]
+
+
+def test_the_one_implementation_claim_is_still_in_manifest() -> None:
+    """The structural finding rests on that docstring, so it is checked against the source."""
+    from pathlib import Path
+
+    src = (Path(__file__).resolve().parents[1] / "genomeos" / "manifest.py").read_text()
+    assert "The one implementation of this digest" in src
+    # NOT "cannot answer differently": the docstring wraps as "cannot answer\n    differently",
+    # so a flat substring never matches it. The same lesson as AST-over-grep, in one line.
+    assert "the writer and the checker cannot answer" in src
+    assert "differently about which bytes a group's digest covers" in src
