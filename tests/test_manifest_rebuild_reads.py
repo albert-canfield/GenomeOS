@@ -376,12 +376,27 @@ def test_the_nine_committed_results_that_declare_an_absolute_input_are_measured_
     # the pilot's headline (+0.163). Mapping a .claude/worktrees/<lane>/ prefix onto the repo path,
     # with the manifest's own sha256 deciding identity, is strictly wider than "resolves inside the
     # root" and is a ROADMAP row rather than a silent widening here.
+    # A REGRESSION, 2026-10-12: the total above was 435 over three results until two more arrived.
+    # `silencerjoin` (3) and `silencerjoin_decision` (1) were committed on 2026-10-10 at 16:25-16:29,
+    # SEVEN DAYS AFTER the 2026-10-03 finding this block pins, and they declare absolute inputs
+    # recorded inside `.claude/worktrees/silencerjoin/` -- a worktree since deleted. So the writer
+    # defect was not merely historical: it kept producing unrebuildable results while the test that
+    # measures it sat green on its old numbers, and it took the pinned split going RED IN CI at the
+    # push gate to say so. Neither result is rewritten here. The existing three names and counts are
+    # untouched; the two new ones are added beside them and the total moves 435 -> 439.
+    #
+    # THE FIX IS AT THE CALL SITE, NOT HERE: `input_entry` records the path it is GIVEN, verbatim,
+    # while `files_entry` relativises -- so a lane that passes an absolute path hands the record a
+    # declaration only its own machine can resolve. Every lane brief now carries one line: pass input
+    # paths to `input_entry` RELATIVE to the repository.
     in_a_lane_worktree = {
         name: sum(1 for p in paths if "/.claude/worktrees/" in p) for name, paths in absolute.items()
     }
-    assert sum(in_a_lane_worktree.values()) == 435, in_a_lane_worktree
+    assert sum(in_a_lane_worktree.values()) == 439, in_a_lane_worktree
     assert {k: v for k, v in in_a_lane_worktree.items() if v} == {
         "prior_only_test": 336,
         "pilot_biological_gate": 98,
         "pilot_synthetic_gate": 1,
+        "silencerjoin": 3,
+        "silencerjoin_decision": 1,
     }, in_a_lane_worktree
