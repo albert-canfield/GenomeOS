@@ -163,6 +163,19 @@ def declared_inputs() -> list[tuple[str, str]]:
     out = [(str(sm.FETCH_RECORD), "each input's registered sha256 and byte count")]
     for name, spec in sorted(_inputs().items()):
         out.append((str(sm.STORE / name), spec["reads"]))
+    # THE COMMITTED REGISTRATION IS A READER OF THE SCORING RUN AND IS DECLARED AS ONE. `score`
+    # opens it to check that the census recomputes to the registered one, so the manifest contract
+    # counts it among the files read under data/ -- and quarantined the first write because it was
+    # not declared. It is NOT declared for `register`, which WRITES it: a result may not hash itself
+    # as its own input. The step is read from argv exactly as `main` dispatches on it.
+    if sys.argv[-1] == "score":
+        out.append(
+            (
+                f"data/results/{REGISTRATION}.json",
+                "the registration this run is scored against: the design, and the census the run "
+                "must recompute before any value is read",
+            )
+        )
     return out
 
 
