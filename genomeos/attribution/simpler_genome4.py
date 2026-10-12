@@ -138,3 +138,66 @@ DOES_NOT_CLAIM = (
     " criteria on the sources checked, each named; and nothing at all about the worm's own"
     " reading, which stands as registered at +4.47 [+3.16, +5.78] on its 1,745 survivors"
 )
+
+
+# ----------------------- the limit, as a LIMIT and not as prose -- registered before any source
+# The coordinator asked for this in the shape of globcensus's
+# `test_PLANTED_a_group_constant_at_a_shrunken_value_is_INVISIBLE_here`: a boundary a later summary
+# cannot drop, because a test fails if the result does not carry it.
+
+#: The key every result of this lane must carry, whatever it finds.
+LIMIT_KEY = "what_this_cannot_reach"
+
+#: And its text, fixed here, so the result cannot restate it more weakly.
+SECOND_NEMATODE_LIMIT = (
+    "IF THE QUALIFYING SOURCE IS A SECOND NEMATODE, THE READING SAYS THE ANSWER NARROWS 'THE"
+    " WORM' AND DOES NOT REACH 'OPERONS AND TRANS-SPLICING'. A nematode keeps both the mechanism"
+    " and the lineage, so a lead that reappears there is consistent with either explanation and"
+    " separates neither. Only a non-nematode genome with operons and trans-splicing drops the"
+    " lineage while keeping the mechanism, and only that comparison reaches the question as asked"
+)
+
+#: The archives to be searched, the number of queries, and the species. DECLARED BEFORE SEARCHING,
+#: because a negative's boundary is the negative: "no source qualifies" means nothing without them.
+SEARCH_PROTOCOL = {
+    "species": (
+        "Caenorhabditis briggsae",
+        "Caenorhabditis remanei",
+        "Pristionchus pacificus",
+        "Ciona robusta / Ciona intestinalis",
+        "Schistosoma mansoni",
+    ),
+    "archives": (
+        "GEO / SRA",
+        "ArrayExpress / ENA",
+        "ENCODE",
+        "WormBase and WormBase ParaSite",
+        "ANISEED (the Ciona-specific database)",
+        "Ensembl Metazoa (annotation only)",
+    ),
+    "queries_per_species": "at most 4, and the count actually run is recorded per species",
+    "what_a_search_can_and_cannot_show": "a search can show that a source EXISTS and meets the"
+    " four criteria; it cannot show that none exists. So a negative is reported as 'none found by"
+    " these queries in these archives for these species', never as 'no such data exists'",
+}
+
+#: The rule for carrying this lane's negative upward. The coordinator's standing correction,
+#: recorded here because this lane's negative is the kind that gets widened.
+NEGATIVE_CARRIES_ITS_BOUNDARY = (
+    "when this lane's negative is carried upward it travels WITH ITS OWN BOUNDARY IN THE SAME"
+    " SENTENCE: which archives were searched, how many queries were run, and which species. A"
+    " negative without those three is a different and much larger claim than the one measured,"
+    " and the coordinator records having inflated a lane's negative three times in two days"
+)
+
+
+def result_carries_its_limit(result: dict) -> bool:
+    """Whether a result of this lane carries :data:`LIMIT_KEY` with the limit's own wording.
+
+    The point of the function is that a test can call it: a result that drops the limit, or
+    softens it, fails rather than passing quietly with a weaker sentence.
+    """
+    text = result.get(LIMIT_KEY)
+    if not isinstance(text, str):
+        return False
+    return "DOES NOT REACH 'OPERONS AND TRANS-SPLICING'" in text and "separates neither" in text

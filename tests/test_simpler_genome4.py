@@ -86,3 +86,44 @@ def test_the_stop_list_is_named_and_the_biosample_clause_is_addressed() -> None:
 def test_it_does_not_claim_a_fourth_genome_would_settle_the_question() -> None:
     assert "one fourth genome separates two" in g4.DOES_NOT_CLAIM
     assert "leaves every other difference" in g4.DOES_NOT_CLAIM
+
+
+# ------------------------------- the limit, enforced as a limit rather than written as a caveat
+
+
+def test_a_result_WITHOUT_the_limit_is_REFUSED_by_its_own_check() -> None:
+    """The shape globcensus's invisible-shrink test has: the limit cannot be dropped silently."""
+    assert g4.result_carries_its_limit({g4.LIMIT_KEY: g4.SECOND_NEMATODE_LIMIT})
+    assert not g4.result_carries_its_limit({}), "a result with no limit must be refused"
+    assert not g4.result_carries_its_limit({g4.LIMIT_KEY: None})
+    # and a WEAKENED restatement must also be refused, which is the case that matters
+    weakened = (
+        "if the source is another nematode the result is a little less general, which is"
+        " worth bearing in mind when reading the comparison"
+    )
+    assert not g4.result_carries_its_limit({g4.LIMIT_KEY: weakened}), (
+        "a softened restatement of the limit must not pass as the limit"
+    )
+
+
+def test_the_limit_says_which_comparison_reaches_the_question() -> None:
+    limit = g4.SECOND_NEMATODE_LIMIT
+    assert limit.startswith("IF THE QUALIFYING SOURCE IS A SECOND NEMATODE")
+    assert "separates neither" in limit
+    assert "only that comparison reaches the question as asked" in limit
+
+
+def test_the_search_protocol_is_declared_before_searching() -> None:
+    """A negative's boundary IS the negative, so the archives and species are fixed in advance."""
+    p = g4.SEARCH_PROTOCOL
+    assert len(p["species"]) == 5
+    assert any("Ciona" in s for s in p["species"]), "the non-nematode arm must be in the protocol"
+    assert any("ANISEED" in a for a in p["archives"])
+    assert "at most 4" in p["queries_per_species"]
+    assert "never as 'no such data exists'" in p["what_a_search_can_and_cannot_show"]
+
+
+def test_a_negative_must_travel_with_its_boundary() -> None:
+    n = g4.NEGATIVE_CARRIES_ITS_BOUNDARY
+    assert "IN THE SAME SENTENCE" in n
+    assert "which archives" in n and "how many queries" in n and "which species" in n
