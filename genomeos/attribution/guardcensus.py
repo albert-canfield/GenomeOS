@@ -663,3 +663,76 @@ COUNT_POPULATION_WARNING = (
     " it. So the population above is taken from the TREE, not from a plausible glob, and the"
     " directory split is declared rather than chosen once the totals are in"
 )
+
+
+# ========================== THE SUITE-SCALE LEG IS ABANDONED, and why -- 2026-10-12 19:20
+# Condition (2) was to be measured, not grepped: sys.monitoring's RAISE event recording which of
+# the guards the whole suite ever fires. That leg is abandoned. It is recorded in full because a
+# census that quietly drops its central measurement is worth less than one that says it could not
+# afford it.
+
+#: What it cost, measured twice and wrong twice.
+SUITE_LEG_ABANDONED = (
+    "the traced suite reached 44% in 160 minutes -- about 15x the untraced suite -- while holding"
+    " the MACHINE-WIDE suite lock, which every lane's push gate queues behind. The remainder"
+    " would have been some four and a half hours more. Killed at 19:19 and the lock released."
+    " Nothing was salvaged: atexit does not run on SIGTERM, so no partial result survived"
+)
+
+#: The cause, which is not the callback and so could not be optimised away.
+WHY_IT_WAS_SLOW = (
+    "enabling RAISE monitoring GLOBALLY deoptimises the interpreter for all code, so the cost is"
+    " not in the callback and tuning the callback cannot remove it. A first version rebuilt"
+    " code.co_lines() on every exception and ran 15x slow; each (code, offset) pair was then"
+    " resolved once and remembered, a three-file benchmark showed 8.84s against 8.81s -- inside"
+    " noise -- and the full suite ran AT THE SAME 15x. The dedupe was real and irrelevant"
+)
+
+#: And the reason the benchmark lied, which is this lane's third instance of one mistake.
+WHY_THE_BENCHMARK_LIED = (
+    "the three files it benchmarked raise few exceptions, so it measured a population that does"
+    " not resemble the suite. THIS IS THE THIRD TIME THIS LANE MADE THE SAME MISTAKE IN ONE DAY:"
+    " the vacuity pool that could not express the values the code requires; the violation scan"
+    " over tests/test_*.py while the guard scanned tests/*.py; and now a benchmark over files"
+    " that do not raise. Each time the instrument measured something narrower than its subject"
+    " and each time the answer looked clean. That is one finding, not three, and it is the most"
+    " transferable thing this census produced: AN INSTRUMENT MUST BE EXERCISED ON THE POPULATION"
+    " IT WILL JUDGE, never on a convenient sample of it"
+)
+
+#: What a future lane should do instead, with the reading that a sample forces.
+SUITE_LEG_ALTERNATIVE = (
+    "a bounded sample inverts the reading and must be declared that way BEFORE running: in a"
+    " partial run only the POSITIVE is sound. A guard the sample fires certainly has a planting"
+    " test; a guard it does not fire is NOT MEASURED -- not even 'no violation found' -- because"
+    " another test outside the sample may plant it. So a sample can establish which guards ARE"
+    " exercised and can never establish the count of guards that are not, which was the"
+    " question. Measuring the question as asked needs the untraced suite plus per-test"
+    " instrumentation cheaper than RAISE monitoring, or a tolerated 5-hour exclusive run"
+)
+
+#: THE COUNT THAT IS SOUND, and it is static. A list and a count, as the brief asked.
+STATIC_COUNT = {
+    "measured_at": "HEAD a2f0fa9, by reading the working tree, which three lanes are editing",
+    "tree_moves_under_the_count": "1,736 raise sites at 25db524 and 1,742 an hour later. The"
+    " difference is peers committing, NOT instrument drift -- which is the practical reason a"
+    " census must name its tree, and this one names a sha it read rather than a clean worktree",
+    "raise_sites": 1742,
+    "guards": 1556,
+    "reraise": 88,
+    "unconditional": 94,
+    "loop": 4,
+    "guards_by_directory": {"genomeos/": 781, "scripts/": 750, "tests/": 25},
+    "top_guard_types": {
+        "SystemExit": 617,
+        "ValueError": 377,
+        "BioLangError": 115,
+        "RefusedError": 79,
+        "FileNotFoundError": 62,
+        "ApiError": 59,
+    },
+    "what_it_establishes": "the POPULATION of the census and nothing about any guard's state."
+    " Condition (2) is unmeasured for all 1,556, so every one of them is NOT_ESTABLISHED except"
+    " the single site where condition (4) was satisfied -- which is exactly what DOES_NOT_CLAIM"
+    " predicted: 'condition (4) is expensive and NOT_ESTABLISHED will be the largest class'",
+}

@@ -362,3 +362,49 @@ def test_never_fired_is_not_claimed_to_be_a_defect() -> None:
 def test_the_population_warning_cites_the_lanes_own_mistake() -> None:
     assert "CASES_SELF_RED is the reason" in gcn.COUNT_POPULATION_WARNING
     assert "two readers before the guard disproved it" in gcn.COUNT_POPULATION_WARNING
+
+
+# ------------------------------------------------- the abandoned suite leg, and the static count
+
+
+def test_the_abandoned_leg_states_its_cost_and_that_nothing_was_salvaged() -> None:
+    assert "44% in 160 minutes" in gcn.SUITE_LEG_ABANDONED
+    assert "MACHINE-WIDE suite lock" in gcn.SUITE_LEG_ABANDONED
+    assert "atexit does not run on SIGTERM" in gcn.SUITE_LEG_ABANDONED
+
+
+def test_the_cause_is_named_as_one_the_callback_could_not_fix() -> None:
+    """The dedupe was real and irrelevant; saying so is the point."""
+    assert "deoptimises the interpreter" in gcn.WHY_IT_WAS_SLOW
+    assert "AT THE SAME 15x" in gcn.WHY_IT_WAS_SLOW
+    assert "real and irrelevant" in gcn.WHY_IT_WAS_SLOW
+
+
+def test_the_three_instances_are_recorded_as_ONE_finding() -> None:
+    """The vacuity pool, the narrow glob and the unrepresentative benchmark are one mistake."""
+    w = gcn.WHY_THE_BENCHMARK_LIED
+    assert "THIRD TIME THIS LANE MADE THE SAME MISTAKE" in w
+    assert "one finding, not three" in w
+    assert "EXERCISED ON THE POPULATION IT WILL JUDGE" in w
+
+
+def test_a_sample_inverts_the_reading_and_the_inversion_is_stated() -> None:
+    alt = gcn.SUITE_LEG_ALTERNATIVE
+    assert "only the POSITIVE is sound" in alt
+    assert "NOT MEASURED" in alt
+    assert "can never establish the count of guards that are not" in alt
+
+
+def test_the_static_count_claims_only_the_population() -> None:
+    c = gcn.STATIC_COUNT
+    assert c["guards"] == 1556
+    assert c["raise_sites"] == 1742
+    assert c["guards"] + c["reraise"] + c["unconditional"] + c["loop"] == c["raise_sites"]
+    assert sum(c["guards_by_directory"].values()) == c["guards"]
+    assert "nothing about any guard's state" in c["what_it_establishes"]
+    assert "NOT_ESTABLISHED will be the largest class" in c["what_it_establishes"]
+
+
+def test_the_count_records_that_the_tree_moved_under_it() -> None:
+    assert "1,736 raise sites at 25db524 and 1,742" in gcn.STATIC_COUNT["tree_moves_under_the_count"]
+    assert "NOT instrument drift" in gcn.STATIC_COUNT["tree_moves_under_the_count"]
