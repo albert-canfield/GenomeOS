@@ -1,0 +1,1383 @@
+{
+  "result": "snsweep_inventory",
+  "date": "2026-10-12",
+  "lane": "lane-snsweep",
+  "stage": "the single-NUCLEUS inventory, under lane-pseudobulk's rule imported unchanged; no RNA value is read and no comparison is run",
+  "question": "Which of the reader's 13 covered cell types have open SINGLE-NUCLEUS RNA in ENCODE, CELLxGENE or GEO, under the rule lane-pseudobulk committed in `2b9cd0a`, so that the pseudobulk-against-bulk comparison could be run on the single-nucleus subset alone?",
+  "why_this_lane_exists": "lane-pbrun licensed the modality swap on M2h's endpoint (`22cc987`): AGREEMENT, paired difference +0.00757935 [98.33% CI -0.00243939, +0.0174182] inside the registered margin +-0.0216956, on 8,051 genes across GM12878, K562, ovary and testis. ONLY ONE OF THE FOUR IS SINGLE-NUCLEUS (ovary), which is bile duct's modality, and n = 1 cannot run the registered within-gene permutation, so it licenses nothing on its own. This lane establishes whether the single-nucleus licence CAN be made or CANNOT.",
+  "rule_adopted_verbatim": {
+    "result": "data/results/pseudobulk_rule.json",
+    "commit": "2b9cd0a",
+    "version": "pseudobulk-1",
+    "minimum": {
+      "cell_types": 4,
+      "cell_types_reason": "The registered control is M2h's WITHIN-GENE CELL PERMUTATION: a gene's values are permuted among its own cells. With n cells a gene has n! distinct permutations, so n = 4 is the smallest n for which 4! = 24 >= 20 permutations exist and a control p at or below 0.05 is attainable AT ALL. With three or fewer cell types the registered control cannot be run, so the comparison cannot be made as registered and no reading from it would be interpretable.",
+      "genes": 1000,
+      "genes_reason": "M2h's and M2i's registered floor is min_genes = 100, carried verbatim as the endpoint's own floor. 1,000 is the STRICTER floor this lane requires, because what must be resolvable here is not whether the endpoint is positive but whether TWO READINGS OF IT AGREE, and the difference at issue is the size M2h measured (Delta MSE about +0.04, about 2% of variance). Below 1,000 genes the gene bootstrap's interval on the bulk reading alone is wide enough to contain both agreement and disagreement, so the comparison would decide nothing.",
+      "genes_clause": "A gene counts toward the 1,000 only if it is in M2h's HELD-OUT population AND resolves in EVERY qualifying cell type in BOTH modalities: exactly one row for its unversioned gene_id in that cell type's bulk table (rows suffixed _PAR_Y not counted), and a row for the same gene in that cell type's pseudobulked single-nucleus matrix. No filter on expression and no filter on any measured value.",
+      "below_either": "NO_SOURCE_QUALIFIES, and the lane stops without reading a value. That is a COMPLETE answer: it says the out-of-domain test cannot be made interpretable this way, so the biosample question closes without a lift."
+    },
+    "how": "every clause and both numbers are lane-pseudobulk's. MINIMUM is IMPORTED from that lane's module rather than copied, as lane-scsweep did it (`sn.MINIMUM is pb.MINIMUM`), so this lane cannot drift from it, and `pb.verdict` is called beside this lane's own to show the two agree. The two cross-archive readings (BIOSAMPLE_IDENTITY_POLICY, TERM_MATCH_POLICY) are IMPORTED from lane-scsweep's module and not restated, for the same reason."
+  },
+  "modality_policy": "SINGLE-NUCLEUS ONLY, AND A SINGLE-CELL EXPERIMENT DOES NOT COUNT TOWARDS THIS MINIMUM HOWEVER WELL IT CLEARS EVERY OTHER CLAUSE. This is a NARROWING of the adopted single-cell clause, never a relaxation of it: every candidate admitted here would also be admitted by `2b9cd0a`, and candidates `2b9cd0a` admits are dropped here. Each archive states the modality in its own vocabulary and each is read from that archive's own words: (1) ENCODE -- `assay_title` EXACTLY `snRNA-seq`; `scRNA-seq` and `long read scRNA-seq` are single-CELL and are excluded, which is why ENCODE's GM12878 scRNA-seq, admitted by `2b9cd0a` and used by lane-pbrun, is NOT counted here. (2) CELLxGENE -- the schema's own `suspension_type` field EXACTLY `nucleus`; `cell` is excluded, which is why Tabula Sapiens - Testis, admitted by `12b0c4e` and used by lane-pbrun, is NOT counted here. (3) GEO -- no assay vocabulary exists, so the SAMPLE'S OWN WORDS are read and all three must agree: its `library_strategy` is RNA-Seq (which excludes an ATAC arm of the same multiome), and its `extract_protocol`, title or series design says nuclei (`Single nuclei`, `snRNA-seq`, `single-nucleus`, `DroNc-seq`, `snPATHO-seq`) and does not say the library was made from whole cells. The free-text word `nuclei` ALONE in a series summary is not taken as a modality: it matches nuclear extraction and nuclear RNA in bulk assays, and every GEO candidate's modality here comes from its own sample record.",
+  "modality_is_a_narrowing_not_a_relaxation": "Every candidate admitted here would also be admitted by `2b9cd0a`; candidates `2b9cd0a` admits are DROPPED here. A narrowing cannot inflate a count, so this lane's number can only be smaller than its predecessors'.",
+  "biosample_identity_policy": "The adopted single-cell clause requires the single-cell experiment's BIOSAMPLE to be the covered cell type. Applied to an archive with no `biosample_term_name` field, that is read as biosample IDENTITY and nothing wider: the cells the candidate file holds must BE the covered cell type, not a tissue that contains it and not a related type. A whole dissociated tissue counts for a covered type that IS a tissue -- `ovary`, `testis` -- which is exactly the relation of the ENCODE `ovary` snRNA-seq experiments lane-pseudobulk itself ADMITTED, and it does NOT count for a covered type that is a cell, because selecting that cell type's annotated subset out of a tissue is the cell-composition decision the adopted rule does not license. A purified or cultured preparation of the covered cell type DOES count, because its biosample is that cell type.",
+  "term_match_policy": "The adopted clause says EXACTLY, and what that word protects is stated in the rule's own `covered_set` clause: the covered set is NOT re-derived and NOT widened. It guards against admitting a cell type that is not in the thirteen; it cannot be read as a requirement that another archive spell a cell type the way ENCODE spells it, because no other archive has the field. So BOTH counts are reported and neither is hidden: `exact_label_count` admits a candidate only when the archive's own label is the IDENTICAL STRING to the covered biosample_term_name, and `same_biosample_count` also admits one whose label is a different string for the same biosample (`CD14+ Monocytes` for `CD14-positive monocyte`). The headline count of this lane is the STRICTER of the two, `exact_label_count`.",
+  "answer": "NO_SOURCE_QUALIFIES",
+  "answer_means": "The modality swap lane-pbrun licensed (`22cc987`) is licensed FOR SINGLE-CELL PSEUDOBULK ONLY on M2h's endpoint: three of its four cell types are single-CELL and only ovary is single-NUCLEUS, and n = 1 cannot run the registered within-gene permutation. This lane searched ENCODE, CELLxGENE and GEO for single-NUCLEUS RNA of the covered cell types under `2b9cd0a`'s rule imported unchanged, and found fewer than the minimum of 4. So the single-nucleus-only comparison CANNOT BE REGISTERED OR RUN, bile duct's single-nucleus test stays UNINTERPRETABLE -- it would change the cell type and the assay modality at once -- and THE BIOSAMPLE QUESTION CLOSES WITHOUT A LIFT. The minimum was not stretched, no single-CELL experiment was counted towards it, and no weaker test was proposed to rescue it.",
+  "pseudobulk_verdict_on_the_same_count": "NO_SOURCE_QUALIFIES",
+  "pseudobulk_verdict_note": "lane-pseudobulk's own function returns NO_SOURCE_QUALIFIES on a None gene count BY CONSTRUCTION, whatever the cell count: that is the ordered form of its rule and it is reprinted here so no reader mistakes this lane for having counted the genes. The cell-type half is what this lane settles.",
+  "exact_label_count": 1,
+  "exact_label_cells": [
+    "ovary"
+  ],
+  "same_biosample_count": 2,
+  "same_biosample_cells": [
+    "SK_N_SH",
+    "ovary"
+  ],
+  "minimum_cell_types": 4,
+  "count_against_the_minimum": "1 of 13 covered cell types on the headline exact-label count, 2 of 13 on the wider same-biosample count, against a minimum of 4",
+  "predecessor_single_nucleus_cells": [
+    "ovary"
+  ],
+  "predecessor_single_cell_only_cells": [
+    "GM12878",
+    "K562",
+    "testis"
+  ],
+  "predecessor_note": "lane-scsweep counted 4 cell types (`12b0c4e`) and lane-pbrun ran on them. Of those four, the ones this lane cannot count are single-CELL: that difference is the modality clause and NOT a disagreement about any other clause.",
+  "covered_cell_count": 13,
+  "covered_cells": {
+    "K562": "K562",
+    "HepG2": "HepG2",
+    "GM12878": "GM12878",
+    "IMR_90": "IMR-90",
+    "H1": "H1",
+    "SK_N_SH": "SK-N-SH",
+    "astrocyte": "astrocyte",
+    "hepatocyte": "hepatocyte",
+    "keratinocyte": "keratinocyte",
+    "cardiac_muscle_cell": "cardiac muscle cell",
+    "CD14_positive_monocyte": "CD14-positive monocyte",
+    "ovary": "ovary",
+    "testis": "testis"
+  },
+  "per_cell": [
+    {
+      "cell": "K562",
+      "biosample_term_name": "K562",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 1,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": true
+    },
+    {
+      "cell": "HepG2",
+      "biosample_term_name": "HepG2",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "GM12878",
+      "biosample_term_name": "GM12878",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": true
+    },
+    {
+      "cell": "IMR_90",
+      "biosample_term_name": "IMR-90",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "H1",
+      "biosample_term_name": "H1",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "SK_N_SH",
+      "biosample_term_name": "SK-N-SH",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [
+        {
+          "archive": "GEO",
+          "accession": "GSM8159281",
+          "label_in_archive": "SK.N.SH",
+          "label_is_identical_string": false
+        }
+      ],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": true,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "astrocyte",
+      "biosample_term_name": "astrocyte",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "hepatocyte",
+      "biosample_term_name": "hepatocyte",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "keratinocyte",
+      "biosample_term_name": "keratinocyte",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "cardiac_muscle_cell",
+      "biosample_term_name": "cardiac muscle cell",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "CD14_positive_monocyte",
+      "biosample_term_name": "CD14-positive monocyte",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "ovary",
+      "biosample_term_name": "ovary",
+      "encode_snRNA_seq_experiments": 5,
+      "cellxgene_nucleus_datasets_on_this_tissue": 2,
+      "single_nucleus_candidates_admitted": [
+        {
+          "archive": "ENCODE",
+          "accession": "ENCSR938CZJ, ENCSR297ZTQ, ENCSR876EUH, ENCSR362HUP, ENCSR298MPV",
+          "label_in_archive": "ovary",
+          "label_is_identical_string": true
+        },
+        {
+          "archive": "CELLxGENE",
+          "accession": "3a702020-cf66-4ef5-9d11-4a5e835b7efb",
+          "label_in_archive": "ovary",
+          "label_is_identical_string": true
+        }
+      ],
+      "counts_in_exact_label": true,
+      "counts_in_same_biosample": true,
+      "single_cell_only_in_the_predecessor_count": false
+    },
+    {
+      "cell": "testis",
+      "biosample_term_name": "testis",
+      "encode_snRNA_seq_experiments": 0,
+      "cellxgene_nucleus_datasets_on_this_tissue": 0,
+      "single_nucleus_candidates_admitted": [],
+      "counts_in_exact_label": false,
+      "counts_in_same_biosample": false,
+      "single_cell_only_in_the_predecessor_count": true
+    }
+  ],
+  "candidates": [
+    {
+      "cell": "ovary",
+      "biosample_term_name": "ovary",
+      "archive": "ENCODE",
+      "accession": "ENCSR938CZJ, ENCSR297ZTQ, ENCSR876EUH, ENCSR362HUP, ENCSR298MPV",
+      "series": "the five released human snRNA-seq experiments on biosample ovary that lane-pseudobulk's committed inventory (`21b58b6`) admitted",
+      "url": "https://www.encodeproject.org/experiments/ENCSR938CZJ/",
+      "assay": "snRNA-seq (ENCODE assay_title), 10x multiome",
+      "modality_evidence": "ENCODE assay_title is EXACTLY `snRNA-seq`",
+      "label_in_archive": "ovary",
+      "found_by": "the ENCODE assay_title=snRNA-seq facet over released human experiments, intersected with the thirteen covered biosample_term_names; the admitted experiments and their files are carried from lane-pseudobulk's committed inventory and not re-searched",
+      "notes": "THE ONE CELL TYPE THAT QUALIFIES, and it is the same one lane-pbrun's single-nucleus arm rested on. It is not new: it is the n = 1 the supervisor ruled licenses nothing on its own. Counting it again here changes nothing about that ruling; what this lane settles is whether three more can be found beside it.",
+      "clauses": [
+        {
+          "clause": "SINGLE-NUCLEUS modality",
+          "satisfied": true,
+          "evidence": "assay_title of the 5 experiments: ['snRNA-seq']; the single-nucleus title is 'snRNA-seq' and the excluded single-CELL titles are ['scRNA-seq', 'long read scRNA-seq']"
+        },
+        {
+          "clause": "released",
+          "satisfied": true,
+          "evidence": "status: ['released']"
+        },
+        {
+          "clause": "biosample IS the covered cell type",
+          "satisfied": true,
+          "evidence": "biosample_ontology.term_name: ['ovary'], covered term 'ovary'"
+        },
+        {
+          "clause": "label is the IDENTICAL string to the covered biosample_term_name",
+          "satisfied": true,
+          "evidence": "archive label 'ovary' against covered 'ovary'"
+        },
+        {
+          "clause": "not genetically modified",
+          "satisfied": true,
+          "evidence": "no applied_modifications on any replicate's biosample"
+        },
+        {
+          "clause": "not treated",
+          "satisfied": true,
+          "evidence": "no treatments on any biosample"
+        },
+        {
+          "clause": "at least one open per-nucleus per-gene file, no application",
+          "satisfied": true,
+          "evidence": "25 open matrix files across 5 experiments, e.g. ENCFF626SFP (unfiltered sparse gene count matrix of all reads); ENCFF560LLU (unfiltered sparse splice junction count matrix of unique reads); ENCFF935DXO (sparse gene count matrix of unique reads)"
+        },
+        {
+          "clause": "licence: open, no application",
+          "satisfied": true,
+          "evidence": "ENCODE Consortium data: free to download and use without restriction under the ENCODE data use policy; cite the ENCODE Consortium and the experiment accession (https://www.encodeproject.org/help/citing-encode/)"
+        }
+      ],
+      "files": [
+        {
+          "name": "ENCFF626SFP",
+          "output_type": "unfiltered sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 104674242,
+          "url": "https://www.encodeproject.org/files/ENCFF626SFP/@@download/ENCFF626SFP.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF560LLU",
+          "output_type": "unfiltered sparse splice junction count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 29489902,
+          "url": "https://www.encodeproject.org/files/ENCFF560LLU/@@download/ENCFF560LLU.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF935DXO",
+          "output_type": "sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 52506768,
+          "url": "https://www.encodeproject.org/files/ENCFF935DXO/@@download/ENCFF935DXO.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF548FOI",
+          "output_type": "sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 65039680,
+          "url": "https://www.encodeproject.org/files/ENCFF548FOI/@@download/ENCFF548FOI.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF848QOW",
+          "output_type": "unfiltered sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 79778816,
+          "url": "https://www.encodeproject.org/files/ENCFF848QOW/@@download/ENCFF848QOW.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF994JVH",
+          "output_type": "sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 98347078,
+          "url": "https://www.encodeproject.org/files/ENCFF994JVH/@@download/ENCFF994JVH.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF938HOM",
+          "output_type": "sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 127353191,
+          "url": "https://www.encodeproject.org/files/ENCFF938HOM/@@download/ENCFF938HOM.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF800GFT",
+          "output_type": "unfiltered sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 153268326,
+          "url": "https://www.encodeproject.org/files/ENCFF800GFT/@@download/ENCFF800GFT.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF111JYB",
+          "output_type": "unfiltered sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 210057861,
+          "url": "https://www.encodeproject.org/files/ENCFF111JYB/@@download/ENCFF111JYB.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF603EXK",
+          "output_type": "unfiltered sparse splice junction count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 43430508,
+          "url": "https://www.encodeproject.org/files/ENCFF603EXK/@@download/ENCFF603EXK.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF364KZY",
+          "output_type": "sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 102369204,
+          "url": "https://www.encodeproject.org/files/ENCFF364KZY/@@download/ENCFF364KZY.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF754MMW",
+          "output_type": "unfiltered sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 118392107,
+          "url": "https://www.encodeproject.org/files/ENCFF754MMW/@@download/ENCFF754MMW.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF022EJA",
+          "output_type": "unfiltered sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 159809307,
+          "url": "https://www.encodeproject.org/files/ENCFF022EJA/@@download/ENCFF022EJA.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF810QKU",
+          "output_type": "sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 79835689,
+          "url": "https://www.encodeproject.org/files/ENCFF810QKU/@@download/ENCFF810QKU.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF853EHL",
+          "output_type": "unfiltered sparse splice junction count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 28161457,
+          "url": "https://www.encodeproject.org/files/ENCFF853EHL/@@download/ENCFF853EHL.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF820ADE",
+          "output_type": "sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 56290280,
+          "url": "https://www.encodeproject.org/files/ENCFF820ADE/@@download/ENCFF820ADE.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF098NWM",
+          "output_type": "unfiltered sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 87029583,
+          "url": "https://www.encodeproject.org/files/ENCFF098NWM/@@download/ENCFF098NWM.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF198LCW",
+          "output_type": "unfiltered sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 121708909,
+          "url": "https://www.encodeproject.org/files/ENCFF198LCW/@@download/ENCFF198LCW.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF434WVE",
+          "output_type": "sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 73773274,
+          "url": "https://www.encodeproject.org/files/ENCFF434WVE/@@download/ENCFF434WVE.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF289ZKB",
+          "output_type": "unfiltered sparse splice junction count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 27854117,
+          "url": "https://www.encodeproject.org/files/ENCFF289ZKB/@@download/ENCFF289ZKB.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF082QMT",
+          "output_type": "sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 67614222,
+          "url": "https://www.encodeproject.org/files/ENCFF082QMT/@@download/ENCFF082QMT.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF873ZPA",
+          "output_type": "sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 84036083,
+          "url": "https://www.encodeproject.org/files/ENCFF873ZPA/@@download/ENCFF873ZPA.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF259IBE",
+          "output_type": "unfiltered sparse gene count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 96211035,
+          "url": "https://www.encodeproject.org/files/ENCFF259IBE/@@download/ENCFF259IBE.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF666HJO",
+          "output_type": "unfiltered sparse gene count matrix of all reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 124104725,
+          "url": "https://www.encodeproject.org/files/ENCFF666HJO/@@download/ENCFF666HJO.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        },
+        {
+          "name": "ENCFF821EYU",
+          "output_type": "unfiltered sparse splice junction count matrix of unique reads",
+          "file_format": "tar",
+          "assembly": "GRCh38",
+          "bytes": 18670623,
+          "url": "https://www.encodeproject.org/files/ENCFF821EYU/@@download/ENCFF821EYU.tar.gz",
+          "open_without_application": true,
+          "fetched": false
+        }
+      ],
+      "archive_record": {
+        "experiments": [
+          "ENCSR938CZJ",
+          "ENCSR297ZTQ",
+          "ENCSR876EUH",
+          "ENCSR362HUP",
+          "ENCSR298MPV"
+        ],
+        "assay_titles": [
+          "snRNA-seq"
+        ],
+        "terms": [
+          "ovary"
+        ],
+        "labs": [
+          "Michael Snyder, Stanford"
+        ]
+      },
+      "admitted_on_every_clause_but_the_label": true,
+      "label_is_identical_string": true
+    },
+    {
+      "cell": "ovary",
+      "biosample_term_name": "ovary",
+      "archive": "CELLxGENE",
+      "accession": "3a702020-cf66-4ef5-9d11-4a5e835b7efb",
+      "series": "collection of 'The regulatory landscapes of the human ovarian aging'",
+      "url": "https://api.cellxgene.cziscience.com/curation/v1/datasets/3a702020-cf66-4ef5-9d11-4a5e835b7efb",
+      "assay": "10x 3' v3, suspension type nucleus (snRNA-seq)",
+      "modality_evidence": "CELLxGENE `suspension_type` is EXACTLY `nucleus`",
+      "label_in_archive": "ovary",
+      "found_by": "the whole CELLxGENE dataset listing read once, then every human dataset whose `suspension_type` includes `nucleus` and whose `tissue` labels contain a string identical to a covered biosample_term_name",
+      "notes": "A SECOND SOURCE FOR A CELL TYPE ALREADY COUNTED, AND IT ADDS NOTHING TO THE COUNT. The adopted minimum counts CELL TYPES, not sources, and ovary is one cell type whether one archive supplies it or two. It is recorded because it is the honest answer to 'did the wider search find anything in ovary', and because it would be a second source for a future ovary-only reading -- not for this count.",
+      "clauses": [
+        {
+          "clause": "SINGLE-NUCLEUS modality",
+          "satisfied": true,
+          "evidence": "CELLxGENE suspension_type: ['nucleus'] (the schema's own field; `cell` is single-CELL and is excluded here)"
+        },
+        {
+          "clause": "the assay is RNA",
+          "satisfied": true,
+          "evidence": "assay: [\"10x 3' v3\"]"
+        },
+        {
+          "clause": "biosample IS the covered cell type",
+          "satisfied": true,
+          "evidence": "tissue labels: ['ovary'], covered term 'ovary'; the dataset's biosample is its `tissue`, and a covered type appearing only as a `cell_type` annotation inside a tissue dataset does NOT qualify"
+        },
+        {
+          "clause": "label is the IDENTICAL string to the covered biosample_term_name",
+          "satisfied": true,
+          "evidence": "archive label 'ovary' against covered 'ovary'"
+        },
+        {
+          "clause": "not genetically modified",
+          "satisfied": true,
+          "evidence": "perturbation_types: [], genetic_perturbation_strategy: None"
+        },
+        {
+          "clause": "not treated",
+          "satisfied": true,
+          "evidence": "disease: ['normal']; no chemical or genetic perturbation declared"
+        },
+        {
+          "clause": "at least one open per-nucleus per-gene file, no application",
+          "satisfied": true,
+          "evidence": "1 assets: H5AD (347816395 bytes)"
+        },
+        {
+          "clause": "licence: open, no application",
+          "satisfied": true,
+          "evidence": "CZ CELLxGENE Discover distributes curated datasets openly over HTTPS with no registration and no application; its submission policy requires CC BY 4.0. citation: Publication: https://doi.org/10.1101/2022.05.18.492547 Dataset Version: https://datasets.cellxgene.cziscience.com/e9e271ae-3414-4481-8b92-0ffe5e28594e.h5ad curated and distributed by CZ CELLxGENE Discover in Collection: https://cellxgene.cziscience.com/collections/ce781ec4-393a-4902-94a0-5a1ca0b600ca"
+        }
+      ],
+      "files": [
+        {
+          "name": "H5AD",
+          "url": "https://datasets.cellxgene.cziscience.com/e9e271ae-3414-4481-8b92-0ffe5e28594e.h5ad",
+          "bytes": 347816395,
+          "open_without_application": true,
+          "fetched": false
+        }
+      ],
+      "archive_record": {
+        "title": "The regulatory landscapes of the human ovarian aging(snRNA-seq)",
+        "collection_id": "ce781ec4-393a-4902-94a0-5a1ca0b600ca",
+        "cell_count": 42568,
+        "assays": [
+          "10x 3' v3"
+        ],
+        "suspension_type": [
+          "nucleus"
+        ],
+        "raw_counts_declared_at": "raw.X, the CELLxGENE schema's own place for raw counts"
+      },
+      "admitted_on_every_clause_but_the_label": true,
+      "label_is_identical_string": true
+    },
+    {
+      "cell": "SK_N_SH",
+      "biosample_term_name": "SK-N-SH",
+      "archive": "GEO",
+      "accession": "GSM8159281",
+      "series": "GSE262189, joint snRNA-seq and snATAC-seq of neuroblastoma cell lines",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM8159281",
+      "assay": "10x Genomics Multiome GEX on isolated nuclei (library strategy RNA-Seq)",
+      "modality_evidence": "the sample's own `extract_protocol` reads `Single nuclei` and its `library_strategy` is RNA-Seq; the ATAC arm of the same cell line is a separate sample (GSM8159280) and is not this one",
+      "label_in_archive": "SK.N.SH",
+      "found_by": "GEO esearch db=gds at the series level, '\"SK-N-SH\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism]' narrowed by the single-nucleus terms, then every sample of GSE262189 read for its cell line, library strategy and files",
+      "notes": "AN UNMODIFIED, UNTREATED SK-N-SH CULTURE WHOSE NUCLEI WERE SEQUENCED, with an open per-gene-per-nucleus matrix -- and ITS LABEL IS NOT THE IDENTICAL STRING to ENCODE's `SK-N-SH`: the submission spells it `SK.N.SH`. Under the IMPORTED TERM_MATCH_POLICY it therefore counts in `same_biosample_count` and NOT in the headline `exact_label_count`. That policy is lane-scsweep's and is imported unchanged; this lane does not reread it to let a near-spelling into the headline. The sample's characteristics read `tissue: Neuroblastoma tumor, cell line: SK.N.SH, cell type: Tumor cells`: SK-N-SH IS a neuroblastoma-derived line, which is what the reader's own covered `SK-N-SH` is, so the `tissue` field describes the line's origin and not a tumour biopsy.",
+      "clauses": [
+        {
+          "clause": "SINGLE-NUCLEUS modality",
+          "satisfied": true,
+          "evidence": "library_strategy 'RNA-Seq'; the sample's own words: 'SK.N.SH GEX | Single nuclei | 10X Genomics Cell Ranger pipeline | tissue: Neuroblastoma tumor | cell line: SK.N.SH | cell type: Tumor cells'. The ATAC arm of the same multiome has library_strategy ATAC-seq and is a different sample."
+        },
+        {
+          "clause": "biosample IS the covered cell type",
+          "satisfied": true,
+          "evidence": "the sample's own characteristics: 'tissue: Neuroblastoma tumor | cell line: SK.N.SH | cell type: Tumor cells'. The clause is read from the `cell line` field, compared to the covered term 'SK-N-SH' with punctuation and case ignored -- which is BIOSAMPLE IDENTITY and is a different question from whether the label is the identical string, the clause below. The `tissue` field names the line's origin, not a biopsy."
+        },
+        {
+          "clause": "label is the IDENTICAL string to the covered biosample_term_name",
+          "satisfied": false,
+          "evidence": "archive label 'SK.N.SH' against covered 'SK-N-SH'"
+        },
+        {
+          "clause": "not genetically modified",
+          "satisfied": true,
+          "evidence": "no modification word in the sample's own record (searched ['crispr', 'cas9', 'shrna', 'sirna', 'knockout', 'knockdown', 'overexpress', 'transduc', 'lentivir', 'guide rna', 'sgrna', 'transfect'])"
+        },
+        {
+          "clause": "not treated",
+          "satisfied": true,
+          "evidence": "no treatment word in the sample's own record (searched ['treatment:', 'treated', 'drug', 'dmso', 'vehicle', 'stimulat', 'fixed', 'pfa'])"
+        },
+        {
+          "clause": "at least one open per-nucleus per-gene file, no application",
+          "satisfied": true,
+          "evidence": "GSM8159281_SK.N.SH_filtered_feature_bc_matrix.h5: HTTP 200, 217000221 bytes"
+        },
+        {
+          "clause": "licence: open, no application",
+          "satisfied": true,
+          "evidence": "NCBI GEO holds public submissions available without restriction and without an application; this sample's record and its supplementary file both answered over HTTPS with no registration"
+        }
+      ],
+      "files": [
+        {
+          "name": "GSM8159281_SK.N.SH_filtered_feature_bc_matrix.h5",
+          "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM8159nnn/GSM8159281/suppl/GSM8159281_SK.N.SH_filtered_feature_bc_matrix.h5",
+          "what": "Cell Ranger filtered feature-barcode count matrix, genes by nuclei",
+          "http_status": 200,
+          "bytes": 217000221,
+          "open_without_application": true,
+          "fetched": false
+        }
+      ],
+      "archive_record": {
+        "http_status": 200,
+        "title": "SK.N.SH GEX",
+        "library_strategy": "RNA-Seq",
+        "characteristics": [
+          "tissue: Neuroblastoma tumor",
+          "cell line: SK.N.SH",
+          "cell type: Tumor cells"
+        ],
+        "extract_protocol": [
+          "Single nuclei",
+          "10X Genomics Cell Ranger pipeline"
+        ],
+        "series": [
+          "GSE262189"
+        ]
+      },
+      "admitted_on_every_clause_but_the_label": true,
+      "label_is_identical_string": false
+    }
+  ],
+  "rejected": [
+    {
+      "cell": "K562, GM12878, H1",
+      "archive": "GEO",
+      "accession": "GSE126074 (SNARE-seq), file GSE126074_CellLineMixture_SNAREseq_cDNA_counts.tsv.gz",
+      "clause_failed": "biosample identity",
+      "why": "THIS IS THE CLOSEST THING IN GEO TO SINGLE-NUCLEUS RNA OF THE COVERED CELL LINES AND IT CANNOT BE ADMITTED. SNARE-seq profiled 1,047 nuclei of a FOUR-LINE MIXTURE -- BJ, H1, K562 and GM12878 -- and the archive publishes ONE cDNA count table for the mixture, with no per-line split declared. Taking the K562 (or H1, or GM12878) barcodes out of it needs a per-barcode cell-line assignment the archive does not make, which is exactly the cell-identity decision the adopted rule does not license. The contrast is lane-scsweep's own K562 candidate, GSM9224207, which WAS admitted from a human/mouse mixture precisely BECAUSE the submitter split the supplementary files per line. Nuclei isolation is not a treatment and nothing here is modified: the biosample is a mixture of four cell lines, and that is the whole reason."
+    },
+    {
+      "cell": "GM12878",
+      "archive": "GEO",
+      "accession": "GSE157660 (SNARE-seq2), GSM4772950-61",
+      "clause_failed": "not treated",
+      "why": "A single-nucleus RNA library of GM12878 alone, which is what this lane needed, and the series' own design reads `GM12878 cells were freshly fixed with 1% formaldehyde` and the nuclei `fixed with 1% formaldehyde` before the protocol. Fixation is a treatment of the material, which is the clause on which lane-scsweep rejected the PFA-fixed half of its own K562 sample (`12b0c4e`). The same clause is applied here to the cell type where it costs this lane the most."
+    },
+    {
+      "cell": "cardiac_muscle_cell",
+      "archive": "GEO",
+      "accession": "GSE129096 (Drop-seq and DroNc-seq during cardiomyocyte differentiation)",
+      "clause_failed": "biosample identity, and the exact label",
+      "why": "DroNc-seq IS single-nucleus RNA, and the biosample is an hiPSC culture at one of five time points of a differentiation, in which the submitters themselves report SIX distinct cell types. The cardiomyocytes are an annotated subset inside that culture, so admitting it means the cell-composition decision the adopted rule does not license. Its label, `cardiomyocyte`, is also not the identical string to ENCODE's `cardiac muscle cell`. Recorded in full because ENCODE's own covered `cardiac muscle cell` is itself `in vitro differentiated cells` originated from RUES2, so the rejection rests on the composition decision and on the label, NOT on a claim that a differentiated cardiomyocyte can never be that biosample."
+    },
+    {
+      "cell": "K562",
+      "archive": "CELLxGENE",
+      "accession": "38a78e91-e361-45c8-bae3-1d6d5108d18e (sci-Plex, tissue label `K-562`)",
+      "clause_failed": "not treated, and the exact label",
+      "why": "The only CELLxGENE dataset with `suspension_type: nucleus` whose tissue label is a covered cell line, and it is 'Massively multiplex chemical transcriptomics at single-cell resolution': a chemical perturbation screen in which every arm receives a compound or a vehicle, so there is no untreated arm to admit. lane-scsweep rejected it on the same clause (`12b0c4e`). Its label `K-562` is also not the identical string to the covered `K562`."
+    },
+    {
+      "cell": "hepatocyte, astrocyte, cardiac_muscle_cell, CD14_positive_monocyte",
+      "archive": "CELLxGENE and GEO",
+      "accession": "e.g. GSE223581, GSE212046, GSE189175 (liver snRNA-seq); GSE242197, GSE268599, GSE180759 (brain snRNA-seq); GSE255992, GSE271229, GSE165838 (heart snRNA-seq); GSE277496 (blood monocytes)",
+      "clause_failed": "biosample identity",
+      "why": "SINGLE-NUCLEUS RNA OF THESE CELL TYPES IS PUBLISHED IN QUANTITY AND NONE OF IT IS ADMISSIBLE HERE. In every case the biosample is a TISSUE -- liver, brain, heart, blood -- and the covered cell type is a cell-type annotation of nuclei inside it. Admitting one means selecting that annotated subset, which is the cell-composition decision the adopted rule does not license, and it is the same ground on which lane-pseudobulk excluded Tabula Sapiens and the HCA and lane-scsweep excluded these very five labels. No human CELLxGENE dataset carries any of them as its `tissue`. Several of the named series are also disease cohorts (MASH, HCC, Huntington's, multiple sclerosis, atrial fibrillation, Crohn's), which is a second failure."
+    },
+    {
+      "cell": "testis",
+      "archive": "ENCODE, CELLxGENE, GEO",
+      "accession": "none admitted",
+      "clause_failed": "no single-nucleus experiment on this biosample",
+      "why": "THE CELL TYPE WHOSE SINGLE-CELL ARM lane-pbrun USED, AND IT HAS NO SINGLE-NUCLEUS ARM. ENCODE's released human snRNA-seq facet has no `testis` term. Every CELLxGENE human dataset whose tissue is `testis` -- Tabula Sapiens - Testis included, which is the one lane-pbrun read -- is `suspension_type: cell`. The three GEO series these queries surfaced are a pediatric solid-tumour atlas, a U7 snRNA study and a replication-timing series, none of them single-nucleus RNA of a normal testis."
+    },
+    {
+      "cell": "HepG2, IMR_90, keratinocyte",
+      "archive": "GEO, ENCODE, CELLxGENE",
+      "accession": "none admitted; the GEO series surfaced were read",
+      "clause_failed": "no single-nucleus experiment on this biosample, or not modified/treated",
+      "why": "No released human snRNA-seq exists on these terms in ENCODE and no human CELLxGENE nucleus dataset carries them as its tissue. In GEO the series these queries surfaced are tissue or disease studies that merely mention the line (MASH models, senescence and fibrosis cohorts, the ENCODE ChIP-seq and replication-timing deposits), or sample-multiplexing protocols on mixtures (GSE165047, CASB, a mixture of 16 cell types labelled with concanavalin A). THAT IS A STATEMENT ABOUT THESE QUERIES AND NOT ABOUT GEO: an archive listing is what is published, not what is usable, and this lane does not claim no such submission exists."
+    }
+  ],
+  "archives": {
+    "ENCODE": {
+      "name": "ENCODE portal",
+      "endpoint": "https://www.encodeproject.org/search/ (type=Experiment, status=released, assay_title, the biosample_ontology.term_name facet)",
+      "searched": "yes, exhaustively: the term_name facet of every RELEASED HUMAN experiment of each of the adopted rule's three assay titles was read, and the single-nucleus one was intersected with the thirteen covered term names",
+      "licence": "ENCODE Consortium data: free to download and use without restriction under the ENCODE data use policy, no application",
+      "limit": "The facet is the portal's own count over `biosample_ontology.term_name`, which is the adopted rule's match field. A covered term absent from the facet has NO released human experiment of that assay title, which IS a negative and not an unsearched gap."
+    },
+    "CELLxGENE": {
+      "name": "CZ CELLxGENE Discover",
+      "endpoint": "https://api.cellxgene.cziscience.com/curation/v1/datasets",
+      "searched": "yes, exhaustively: the whole dataset listing was read, and every human dataset whose `suspension_type` includes `nucleus` had its tissue labels matched against the covered term names",
+      "licence": "CZ CELLxGENE Discover distributes curated datasets openly over HTTPS with no registration and no application; its submission policy requires CC BY 4.0",
+      "limit": "CELLxGENE's `cell_type` field is a CL annotation of cells INSIDE a dataset; a dataset's biosample is its `tissue`. Under BIOSAMPLE_IDENTITY_POLICY a covered cell type appearing only as a `cell_type` label inside a tissue dataset does NOT qualify."
+    },
+    "GEO": {
+      "name": "NCBI Gene Expression Omnibus",
+      "endpoint": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils (db=gds) and https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi (targ=self&form=text&view=brief)",
+      "searched": "yes, for all thirteen covered cell types at BOTH the sample and the series level under single-NUCLEUS-only terms, and then candidate submissions' own records read",
+      "licence": "NCBI GEO holds public submissions available without restriction and without an application; dbGaP and EGA, which the adopted licence clause excludes, are separate archives and nothing here comes from them",
+      "limit": "GEO is an archive of independent submissions with no common pipeline and no common quantification, so it CANNOT be swept exhaustively the way ENCODE's typed JSON API can. Its negatives here are NOT a claim that no such submission exists: they are a claim about these named queries and the submissions they surfaced."
+    },
+    "Tabula Sapiens, Human Cell Atlas, GTEx snRNA pilot, 10x public datasets": {
+      "name": "the sources lane-pseudobulk and lane-scsweep characterised",
+      "endpoint": "n/a",
+      "searched": "re-examined against the MODALITY clause, not re-searched: Tabula Sapiens is reached through CELLxGENE, where every one of its datasets is `suspension_type: cell`; the 10x public CD14-positive monocyte dataset is a whole-CELL 3' library; the HCA open releases and the GTEx snRNA pilot fail the covered set, the GTEx individual-level data also the licence clause",
+      "licence": "as those lanes recorded",
+      "limit": "The three candidates lane-scsweep and lane-pseudobulk admitted for K562, GM12878 and testis are ALL single-CELL, so none of them counts here. That is the narrowing doing its work, and it is why this lane's count is not that lane's count."
+    },
+    "dbGaP, EGA": {
+      "name": "controlled-access archives",
+      "endpoint": "n/a",
+      "searched": "no, and deliberately",
+      "licence": "controlled access behind an application",
+      "limit": "excluded by the adopted licence clause, which this lane does not relax"
+    }
+  },
+  "encode_assay_facets": [
+    {
+      "assay_title": "snRNA-seq",
+      "http_status": 200,
+      "total": 136,
+      "terms": {
+        "heart left ventricle": 54,
+        "heart": 9,
+        "liver": 8,
+        "pancreas": 6,
+        "adrenal gland": 5,
+        "ovary": 5,
+        "psoas muscle": 5,
+        "right lobe of liver": 5,
+        "heart right ventricle": 3,
+        "left cardiac atrium": 3,
+        "mucosa of descending colon": 3,
+        "right cardiac atrium": 3,
+        "bile duct": 2,
+        "colonic mucosa": 2,
+        "fallopian tube": 2,
+        "left colon": 2,
+        "lower lobe of left lung": 2,
+        "placenta": 2,
+        "Right ventricle myocardium inferior": 1,
+        "Right ventricle myocardium superior": 1,
+        "kidney": 1,
+        "left lobe of liver": 1,
+        "left lung": 1,
+        "left ventricle myocardium superior": 1,
+        "lower lobe of right lung": 1,
+        "lung": 1,
+        "mucosa of gallbladder": 1,
+        "natural killer cell": 1,
+        "posterior vena cava": 1,
+        "upper lobe of left lung": 1,
+        "upper lobe of right lung": 1,
+        "ureter": 1,
+        "uterus": 1
+      }
+    },
+    {
+      "assay_title": "scRNA-seq",
+      "http_status": 200,
+      "total": 7,
+      "terms": {
+        "GM12878": 2,
+        "cerebellar granule cell": 2,
+        "pyramidal neuron": 2,
+        "Purkinje cell": 1
+      }
+    },
+    {
+      "assay_title": "long read scRNA-seq",
+      "http_status": 404,
+      "total": 0,
+      "terms": {}
+    }
+  ],
+  "encode_covered_terms_per_assay": {
+    "snRNA-seq": [
+      "ovary"
+    ],
+    "scRNA-seq": [
+      "GM12878"
+    ],
+    "long read scRNA-seq": []
+  },
+  "encode_facet_note": "The facet is ENCODE's own count over `biosample_ontology.term_name` for RELEASED HUMAN experiments. A covered term absent from the snRNA-seq facet has no such experiment at all, which IS a negative about ENCODE and not an unsearched gap. The two single-CELL facets are printed beside it so the exclusion is visible.",
+  "cellxgene_nucleus_datasets_listed": 520,
+  "cellxgene_datasets_listed": 2240,
+  "cellxgene_nucleus_matches": {
+    "ovary": [
+      {
+        "dataset_id": "3a702020-cf66-4ef5-9d11-4a5e835b7efb",
+        "title": "The regulatory landscapes of the human ovarian aging(snRNA-seq)",
+        "tissue_label": "ovary",
+        "label_is_identical_string": true,
+        "assay": [
+          "10x 3' v3"
+        ],
+        "disease": [
+          "normal"
+        ],
+        "cell_count": 42568
+      },
+      {
+        "dataset_id": "3a116a52-80db-41f2-a2ad-45db1b86712f",
+        "title": "Ovary ATAC",
+        "tissue_label": "ovary",
+        "label_is_identical_string": true,
+        "assay": [
+          "10x scATAC-seq"
+        ],
+        "disease": [
+          "normal"
+        ],
+        "cell_count": 18315
+      }
+    ],
+    "K562": [
+      {
+        "dataset_id": "38a78e91-e361-45c8-bae3-1d6d5108d18e",
+        "title": "Massively multiplex chemical transcriptomics at single-cell resolution - K562",
+        "tissue_label": "K-562",
+        "label_is_identical_string": false,
+        "assay": [
+          "sci-Plex"
+        ],
+        "disease": [
+          "normal"
+        ],
+        "cell_count": 146752
+      }
+    ]
+  },
+  "geo_search_counts": [
+    {
+      "term": "K562",
+      "entry_type": "gsm",
+      "query": "\"K562\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 261,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "K562",
+      "entry_type": "gse",
+      "query": "\"K562\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 14,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "HepG2",
+      "entry_type": "gsm",
+      "query": "\"HepG2\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "HepG2",
+      "entry_type": "gse",
+      "query": "\"HepG2\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 8,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "GM12878",
+      "entry_type": "gsm",
+      "query": "\"GM12878\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 2,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "GM12878",
+      "entry_type": "gse",
+      "query": "\"GM12878\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 9,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "IMR-90",
+      "entry_type": "gsm",
+      "query": "\"IMR-90\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "IMR-90",
+      "entry_type": "gse",
+      "query": "\"IMR-90\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 2,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "H1",
+      "entry_type": "gsm",
+      "query": "\"H1\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 27,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "H1",
+      "entry_type": "gse",
+      "query": "\"H1\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 256,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "SK-N-SH",
+      "entry_type": "gsm",
+      "query": "\"SK-N-SH\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 3,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "SK-N-SH",
+      "entry_type": "gse",
+      "query": "\"SK-N-SH\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 7,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "astrocyte",
+      "entry_type": "gsm",
+      "query": "\"astrocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "astrocyte",
+      "entry_type": "gse",
+      "query": "\"astrocyte\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 36,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "hepatocyte",
+      "entry_type": "gsm",
+      "query": "\"hepatocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "hepatocyte",
+      "entry_type": "gse",
+      "query": "\"hepatocyte\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 21,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "keratinocyte",
+      "entry_type": "gsm",
+      "query": "\"keratinocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "keratinocyte",
+      "entry_type": "gse",
+      "query": "\"keratinocyte\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 1,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "cardiac muscle cell",
+      "entry_type": "gsm",
+      "query": "\"cardiac muscle cell\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "cardiac muscle cell",
+      "entry_type": "gse",
+      "query": "\"cardiac muscle cell\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "CD14-positive monocyte",
+      "entry_type": "gsm",
+      "query": "\"CD14-positive monocyte\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "CD14-positive monocyte",
+      "entry_type": "gse",
+      "query": "\"CD14-positive monocyte\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "ovary",
+      "entry_type": "gsm",
+      "query": "\"ovary\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 19,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "ovary",
+      "entry_type": "gse",
+      "query": "\"ovary\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 13,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "testis",
+      "entry_type": "gsm",
+      "query": "\"testis\"[All Fields] AND gsm[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 0,
+      "reasked": 0,
+      "null_count_means": "answered"
+    },
+    {
+      "term": "testis",
+      "entry_type": "gse",
+      "query": "\"testis\"[All Fields] AND gse[Entry Type] AND \"Homo sapiens\"[Organism] AND (\"single nucleus\"[All Fields] OR \"single-nucleus\"[All Fields] OR \"snRNA-seq\"[All Fields] OR \"snRNA\"[All Fields])",
+      "http_status": 200,
+      "record_count": 3,
+      "reasked": 0,
+      "null_count_means": "answered"
+    }
+  ],
+  "geo_count_caveat": "These counts are FREE-TEXT matches on ENCODE's own term string under single-NUCLEUS-only terms, because GEO has no biosample vocabulary and no assay vocabulary to ask. A count here says how much was available to look through and NOTHING about what qualifies: `SK-N-SH` answered 3 at the sample level and 7 at the series level, and the one GEO candidate this lane admits on any clause was found through the SERIES-level search and not the sample-level one. The bare word `nuclei` was deliberately left out of the query, because it matches nuclear extraction and nuclear RNA in bulk assays.",
+  "what_a_listing_is": "An archive listing is what is PUBLISHED, not what is USABLE. No experimental data file was fetched: each candidate file's openness is an HTTP HEAD -- a status and a byte count -- and its per-gene-per-nucleus content is taken from the archive's own declaration of the file, not from reading it.",
+  "what_was_not_searched": [
+    "GEO exhaustively: it has no assay vocabulary and no common quantification, so the negatives here are about the named queries and the submissions they surfaced, not about the archive",
+    "the 10x public datasets and the HCA data portal beyond what lane-pseudobulk and lane-scsweep recorded: both were re-examined against the MODALITY clause from those lanes' own records and neither holds a single-NUCLEUS library of a covered cell type",
+    "dbGaP and EGA, excluded by the adopted licence clause",
+    "any matrix's gene content: the adopted minimum's 1,000-gene clause is uncounted here"
+  ],
+  "wording_limit": "Agreement on this endpoint licenses the modality swap FOR THIS ENDPOINT ONLY. It is never 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here.",
+  "no_biosample_added": "This lane adds NO biosample. It works only in cell types the reader already covers, makes no AlphaGenome request and no deletion request, and touches nothing in area J, no node model and no BioForge calibration.",
+  "stop_list_check": "ROADMAP section 5, the stop list of 2026-09-27 reinstated: no biosample is added, only cell types the reader already covers are looked at, no AlphaGenome and no deletion request is made, nothing in area J is touched, no node-model work and no BioForge calibration.",
+  "alphagenome_requests": 0,
+  "money": "$0.00: no model request, no key, no data needing an application",
+  "bytes_fetched_note": "catalogue metadata and HTTP headers only; no experimental data file was downloaded",
+  "pinned_sha256": {
+    "data/results/pseudobulk_rule.json": "c2a5bb60987fb8303dc998b5a5bf13850cc860c79726e29076844a5c3713e650",
+    "data/results/pseudobulk_inventory.json": "b23eeead5661d4d382774fa914ede0690dd4dd7e445d0e860097f1e5fad8ee4c",
+    "data/results/scsweep_inventory.json": "3fbd6bd3b8c9bb98cfb6b618911be4e4c467232bcff1e367eaaab93550517bcf",
+    "data/results/freshrna_result.json": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+    "data/results/freshrna_sources.json": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601"
+  },
+  "seconds": 46.0,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/pseudobulk_rule.json, lane-pseudobulk's rule and minimum ADOPTED VERBATIM (`2b9cd0a`), with its inventory (`21b58b6`), lane-scsweep's inventory (`12b0c4e`) and M2i's freshrna records",
+        "version": "as committed in this checkout; pinned by sha256 in pinned_sha256"
+      },
+      {
+        "accession": "ENCODE portal, the biosample_ontology.term_name facet of released human experiments per assay title, and each candidate experiment's own record",
+        "version": "queried 2026-10-12; ENCODE data use policy, open, no application"
+      },
+      {
+        "accession": "CZ CELLxGENE Discover curation API, the whole dataset listing and the candidate dataset's own record; metadata only",
+        "version": "queried 2026-10-12; CELLxGENE's submission policy requires CC BY 4.0 and each dataset carries its own citation string"
+      },
+      {
+        "accession": "NCBI GEO, esearch over db=gds at the sample and the series level for human single-NUCLEUS records of each covered cell type, then each candidate sample's own brief and an HTTP HEAD on its matrix",
+        "version": "queried 2026-10-12; GEO holds public submissions available without restriction and without an application"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/pseudobulk_rule.json",
+        "sha256": "c2a5bb60987fb8303dc998b5a5bf13850cc860c79726e29076844a5c3713e650",
+        "bytes": 26648,
+        "partition": "not an evaluation partition: a committed record that fixes the rule, the covered set and what the predecessor lanes already counted"
+      },
+      {
+        "path": "data/results/pseudobulk_inventory.json",
+        "sha256": "b23eeead5661d4d382774fa914ede0690dd4dd7e445d0e860097f1e5fad8ee4c",
+        "bytes": 46712,
+        "partition": "not an evaluation partition: a committed record that fixes the rule, the covered set and what the predecessor lanes already counted"
+      },
+      {
+        "path": "data/results/scsweep_inventory.json",
+        "sha256": "3fbd6bd3b8c9bb98cfb6b618911be4e4c467232bcff1e367eaaab93550517bcf",
+        "bytes": 56266,
+        "partition": "not an evaluation partition: a committed record that fixes the rule, the covered set and what the predecessor lanes already counted"
+      },
+      {
+        "path": "data/results/freshrna_result.json",
+        "sha256": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+        "bytes": 51911,
+        "partition": "not an evaluation partition: a committed record that fixes the rule, the covered set and what the predecessor lanes already counted"
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": "not an evaluation partition: a committed record that fixes the rule, the covered set and what the predecessor lanes already counted"
+      }
+    ],
+    "input_count": 5,
+    "assembly": "n/a: no coordinate is read. This result names accessions and counts cell types.",
+    "coordinates": "n/a: no interval is read or written",
+    "parameters": {
+      "adopted_rule_version": "pseudobulk-1",
+      "adopted_rule_result": "data/results/pseudobulk_rule.json",
+      "minimum_cell_types": 4,
+      "minimum_genes": 1000,
+      "match_field": "biosample_term_name",
+      "modality_counted": "snRNA-seq",
+      "modality_not_counted": [
+        "scRNA-seq",
+        "long read scRNA-seq"
+      ],
+      "archives_searched": [
+        "CELLxGENE",
+        "ENCODE",
+        "GEO"
+      ],
+      "geo_single_nucleus_terms": [
+        "\"single nucleus\"[All Fields]",
+        "\"single-nucleus\"[All Fields]",
+        "\"snRNA-seq\"[All Fields]",
+        "\"snRNA\"[All Fields]"
+      ],
+      "geo_record_counts": {
+        "K562 (gsm)": 261,
+        "K562 (gse)": 14,
+        "HepG2 (gsm)": 0,
+        "HepG2 (gse)": 8,
+        "GM12878 (gsm)": 2,
+        "GM12878 (gse)": 9,
+        "IMR-90 (gsm)": 0,
+        "IMR-90 (gse)": 2,
+        "H1 (gsm)": 27,
+        "H1 (gse)": 256,
+        "SK-N-SH (gsm)": 3,
+        "SK-N-SH (gse)": 7,
+        "astrocyte (gsm)": 0,
+        "astrocyte (gse)": 36,
+        "hepatocyte (gsm)": 0,
+        "hepatocyte (gse)": 21,
+        "keratinocyte (gsm)": 0,
+        "keratinocyte (gse)": 1,
+        "cardiac muscle cell (gsm)": 0,
+        "cardiac muscle cell (gse)": 0,
+        "CD14-positive monocyte (gsm)": 0,
+        "CD14-positive monocyte (gse)": 0,
+        "ovary (gsm)": 19,
+        "ovary (gse)": 13,
+        "testis (gsm)": 0,
+        "testis (gse)": 3
+      }
+    },
+    "exclusions": [
+      "every non-human sample",
+      "EVERY SINGLE-CELL EXPERIMENT, however well it clears every other clause: the modality is what this lane counts, so ENCODE scRNA-seq and long read scRNA-seq, and CELLxGENE `suspension_type: cell`, are excluded -- which drops GM12878, K562 and testis, three of the four cell types lane-pbrun read",
+      "every ATAC arm of a multiome, by library_strategy or assay label",
+      "every genetically modified biosample, Perturb-seq and CRISPRi non-targeting controls INCLUDED, as lane-scsweep recorded",
+      "every treated biosample, a vehicle or a FIXATION arm included",
+      "every controlled-access source: dbGaP, EGA, GTEx individual-level data, HCA managed access",
+      "every covered cell type appearing only as a cell_type annotation INSIDE a tissue dataset, and every unsplit multi-cell-line mixture: both are cell-composition decisions the adopted rule does not license",
+      "every experimental data file: this sweep reads catalogue metadata and HTTP headers",
+      "no biosample is added, no AlphaGenome request and no deletion request is made (2026-09-27 stop list, reinstated)"
+    ],
+    "partitions": "n/a: nothing is fitted and nothing is held out; the output is a list and a count",
+    "code_cleanliness": {
+      "git_sha": "c1f118705f849b2476d2dc6065e7a4b1c2ec9817",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/snsweep_sweep.py",
+        "form": "committed_repository_file",
+        "path": "scripts/snsweep_sweep.py",
+        "is_committed": true,
+        "declared_entry": "scripts/snsweep_sweep.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_astroreg2_send.py",
+        "tests/test_capsumrna.py",
+        "tests/test_combine2.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_multrna.py",
+        "tests/test_oodinventory.py",
+        "tests/test_readergate.py",
+        "tests/test_runrules.py",
+        "tests/test_s4joint.py",
+        "tests/test_saturate.py",
+        "tests/test_scalefit.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/pseudobulk.py",
+        "genomeos/attribution/scsweep.py",
+        "genomeos/attribution/snsweep.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/snsweep_sweep.py"
+      ],
+      "counting_path_count": 9,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "c1f118705f849b2476d2dc6065e7a4b1c2ec9817",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_astroreg2_send.py",
+        "tests/test_capsumrna.py",
+        "tests/test_combine2.py",
+        "tests/test_licence_header_presence.py",
+        "tests/test_multrna.py",
+        "tests/test_oodinventory.py",
+        "tests/test_readergate.py",
+        "tests/test_runrules.py",
+        "tests/test_s4joint.py",
+        "tests/test_saturate.py",
+        "tests/test_scalefit.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/snsweep_sweep.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "c1f118705f849b2476d2dc6065e7a4b1c2ec9817",
+      "code_cleanliness_git_sha": "c1f118705f849b2476d2dc6065e7a4b1c2ec9817",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record c1f1187"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 34,
+      "opens_under_data": 15,
+      "files_read": 5,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
