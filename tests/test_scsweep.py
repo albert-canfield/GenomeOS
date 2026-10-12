@@ -23,6 +23,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import tracked_paths as tp
+
 from genomeos.attribution import pseudobulk as pb
 from genomeos.attribution import scsweep as sc
 
@@ -155,3 +157,52 @@ def test_the_declared_inputs_are_relative_to_the_repository():
         assert not path.startswith("/"), path
         assert path.startswith("data/"), path
         assert (Path(__file__).resolve().parents[1] / path).exists(), path
+
+
+def test_the_committed_result_says_what_it_counted_and_declares_relative_inputs():
+    """The result as committed. `must_be_present` RAISES by name instead of skipping.
+
+    A skip keyed on this file's absence would go inert the moment the file was committed, which is
+    the defect `tests/test_inert_skip_guards.py` exists for (`d427f7d`): eight guards went inert
+    that way, not because anyone edited them but because the lanes recorded their measurements.
+    """
+    tp.must_be_present(
+        "data/results/scsweep_inventory.json", was="the sweep has not been run on this machine"
+    )
+    record = json.loads(sc.INVENTORY_PATH.read_text())
+    assert record["answer"] in ("NO_SOURCE_QUALIFIES", "CELL_TYPE_MINIMUM_REACHED")
+    assert record["answer"] == sc.verdict(record["exact_label_count"])
+    assert record["exact_label_count"] == len(record["exact_label_cells"])
+    assert record["same_biosample_count"] == len(record["same_biosample_cells"])
+    assert set(record["exact_label_cells"]) <= set(record["same_biosample_cells"])
+    assert set(record["already_qualifying_from_encode"]) <= set(record["exact_label_cells"])
+    assert record["minimum_cell_types"] == 4 == sc.MINIMUM["cell_types"]
+    assert record["rule_adopted_verbatim"]["commit"] == "2b9cd0a"
+    assert record["alphagenome_requests"] == 0
+    # Rule (d): every declared input path is RELATIVE to the repository, never worktree-absolute.
+    for entry in record["result_manifest"]["inputs"]:
+        assert not entry["path"].startswith("/"), entry["path"]
+        assert entry["path"].startswith("data/"), entry["path"]
+    # No file was fetched: every candidate file says so of itself.
+    for candidate in record["candidates"]:
+        for f in candidate["files"]:
+            assert f["fetched"] is False
+
+
+def test_a_rate_limited_search_is_NOT_recorded_as_a_count_of_zero():
+    """The first run's defect, pinned: four of thirteen NCBI searches answered 429.
+
+    A null `sample_count` carried a rate limit into the record where a reader could take it for a
+    negative about that cell type. Every search in the committed result is either answered or says
+    in its own words that it was not.
+    """
+    tp.must_be_present(
+        "data/results/scsweep_inventory.json", was="the sweep has not been run on this machine"
+    )
+    record = json.loads(sc.INVENTORY_PATH.read_text())
+    for search in record["geo_search_counts"]:
+        if search["sample_count"] is None:
+            assert search["http_status"] != 200
+            assert "NOT a count of zero" in search["null_count_means"]
+        else:
+            assert search["http_status"] == 200
