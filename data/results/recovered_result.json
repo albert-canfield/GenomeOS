@@ -1,0 +1,485 @@
+{
+  "result": "recovered_result",
+  "date": "2026-10-12",
+  "lane": "lane-recovered",
+  "registration": "data/results/recovered_registration.json",
+  "step": "3 of 3: THE ONE RUN",
+  "question": "lane-scalefit showed, with no RNA opened, that 8,535 of the 12,500 genes 7d excluded as basal_not_positive become fittable when every single-removal drop is multiplied by M2h's fixed 0.2146. ON THOSE GENES, does the scaled run come closer to measured log2(TPM+1) across the thirteen reader cell types than the no-rule baseline? One form (the multiplicative composition, M2h's arm that read better), one scale (M2h's constant +0.2146, NOT refitted), one endpoint, read on the genes of this population that M2h held out of its own fit",
+  "form": "multiplicative",
+  "form_words": "the multiplicative composition (Zhou et al. 2024)",
+  "scale": 0.2145911381525326,
+  "scale_rounded": 0.2146,
+  "scale_ci_carried_from_m2h": [
+    0.20074141299120243,
+    0.2283000359194418
+  ],
+  "scale_is_refitted": false,
+  "harness_check": {
+    "1_population_record_established": true,
+    "2_population_sha256_recomputes": true,
+    "3_7h_table_shape": {
+      "genes": 16509,
+      "pairs": 214617,
+      "genes_committed": 16509,
+      "pairs_committed": 214617,
+      "thirteen_each": true,
+      "no_symbol_twice": true
+    },
+    "4_delta_mse_at_scale_1_reproduces_7h": {
+      "recomputed": -0.5361286933702997,
+      "committed": -0.5361286982098615,
+      "tolerance": 0.0001
+    },
+    "5_scale_and_interval_are_m2h_s": true,
+    "6_m2h_split_reproduces": {
+      "held_out_genes": 8328,
+      "held_out_genes_committed": 8328,
+      "held_out_pairs": 108264,
+      "held_out_pairs_committed": 108264,
+      "training_genes": 8181,
+      "training_genes_committed": 8181
+    },
+    "7_this_population_s_held_out_half_is_held_out_under_m2h_s_split": true,
+    "agrees": true
+  },
+  "outcome": "BETTER",
+  "reading": "the multiplicative composition (Zhou et al. 2024): better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.038503 [98.33% CI +0.03153, +0.04603] over 52117 gene-cell pairs, 4009 genes; control p = 0.000999; the scale is the constant +0.2146 taken from ac5580b, M2h's fitted scale for this form [98.33% CI +0.2007, +0.2283] over its own 8,181 training genes, and NOTHING IS FITTED IN THIS LANE). carried with every reading: this RNA is not a fresh measurement. The same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples under the same endpoint was read by items 7, 7d and 7h and by today's capped-sum census, and the P and D calibrated here are 7d's and 7h's committed rows; the held-out split limits that exposure and does not eliminate it, so a reading here is a statement about this measurement and a hypothesis for a fresh one, not independent confirmation the population is the 4009 genes of the 8535 that 7d's mean form excluded as basal_not_positive and M2h's fixed 0.2146 makes fittable, restricted to those M2h held out of its own fit; a gene is in it because the FIT can accept it at that scale, which lane-scalefit established and which says nothing by itself about expression. carried with every reading: the RNA is not a fresh measurement and this population is not a fresh population. It is the same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples read by items 7, 7d, 7h, the capped-sum census, M2h and M2i, and the P and D are 7h's committed rows; 7,999 of the 8,535 recovered genes, including all 4,009 the endpoint is read on, were inside M2h's 16,509-gene calibration, and those 4,009 were inside the 8,328 M2h's +0.04339 and M2i's +0.03727 were read over. This is a SUBPOPULATION reading of M2h's held-out reading, not independent confirmation of it; what it adds is that the genes 7d could not fit at all are in it. about 1.8% of the variance of measured log2(TPM+1) on these genes (Delta MSE divided by the held-out mean(D^2) = 2.1483), carried beside the reading as M2h's and M2i's readings carry theirs (M2h 2.0%, M2i 2.3%).",
+  "primary": {
+    "side": "held out (the registered endpoint)",
+    "genes": 4009,
+    "pairs": 52117,
+    "delta_mse": 0.03850306110086975,
+    "ci": [
+      0.03152989365907307,
+      0.04602533680781333
+    ],
+    "variance_share": 0.017922965760056878,
+    "delta_mse_at_scale_1": -0.4811730004571272,
+    "mean_D2": 2.148252784518379,
+    "mean_P2": 0.8410883140620173,
+    "mean_scaled_P2": 0.03873157568412934,
+    "mean_D_times_P": 0.17995765680244508
+  },
+  "decision_inputs": {
+    "held_out_ci": [
+      0.03152989365907307,
+      0.04602533680781333
+    ],
+    "scale_ci": [
+      0.20074141299120243,
+      0.2283000359194418
+    ],
+    "which_governs": "THE HELD-OUT INTERVAL DECIDES. The scale only splits the straddle case:\n- held-out Delta MSE excludes 0 on the rules' side -> \"better\" (shrinking the rules to 0 cannot produce this);\n- excludes 0 on the baseline's side -> \"worse\" (the falsifier);\n- straddles 0, AND the training-set scale interval includes 0 -> \"calibration removes the rules: no magnitude of the compiled rules improves on no rule\" (a negative);\n- straddles 0, AND the scale interval excludes 0 -> \"inconclusive\".\nA negative scale is reported beside whichever reading applies, as \"the rules point the wrong way on average\". Every reading carries the prior-exposure sentence (this RNA was read by items 7, 7d, 7h and today's capped-sum census).",
+    "which_scale_interval": "THE SCALE INTERVAL THE TABLE'S STRADDLE BRANCH USES IS M2h's COMMITTED TRAINING INTERVAL, SCALE_CI = [+0.20074, +0.22830], because no scale is fitted in this lane and there is nothing here to bootstrap. IT EXCLUDES 0, SO THE 'calibration removes the rules' BRANCH IS UNREACHABLE HERE AND THAT IS DECLARED NOW, BEFORE ANY VALUE IS READ, not discovered afterwards. A straddling held-out interval therefore reads INCONCLUSIVE. The branch is kept in the table rather than deleted so that the table carried is the one the supervisor wrote, and so that the reason this lane cannot reach that branch is on the record: a dead-scale straddle is a thing a lane that FITS a scale can discover, and a lane that takes the scale as a constant cannot. M2i reached the same conclusion for the same reason (freshrna.DECISION: 'There is no fourth branch ... nothing is fitted here')",
+    "calibration_removes_was_unreachable": true
+  },
+  "control_p": 0.000999000999000999,
+  "control_delta_mse_median": -1.654896564159727e-05,
+  "control_delta_mse_max": 0.0004215631772425486,
+  "control_difference": "ONE DIFFERENCE BETWEEN THE CONTROL AND THE ENDPOINT, STATED IN ADVANCE. magcal.permuted_control REFITS the scale on each permutation's training pairs, while the endpoint takes SCALE fixed. The function is used as it stands rather than reimplemented, so the control is allowed a fit the observed reading is not. That can only make the control HARDER to beat, never easier, so it is the conservative direction; it is named here because an unexplained asymmetry between a reading and its control is exactly the kind of thing that should not be discovered afterwards",
+  "variance_share": 0.017922965760056878,
+  "descriptives_not_verdicts": {
+    "words": "deciding nothing: the held-out Delta MSE at scale 1 (the uncalibrated form 7h read) with its interval; the Delta MSE at SCALE on the training half and on the whole population; the gene and pair counts of each side; mean(D^2), mean(P^2), mean(SCALE^2 P^2) and mean(D*P) on each side; the held-out Delta MSE per reader cell; and M2h's and M2i's committed readings quoted verbatim beside this one, because the only honest way to read a subpopulation number is against the population's number",
+    "training_side": {
+      "side": "training (descriptive, decides nothing)",
+      "genes": 3990,
+      "pairs": 51870,
+      "delta_mse": 0.043914630583438245,
+      "ci": [
+        0.03570206763873976,
+        0.051711384318340436
+      ],
+      "variance_share": 0.020246387627747456,
+      "delta_mse_at_scale_1": -0.46022125370623707,
+      "mean_D2": 2.1690106596227428,
+      "mean_P2": 0.846520262700715,
+      "mean_scaled_P2": 0.03898171342388221,
+      "mean_D_times_P": 0.19314950449723894
+    },
+    "whole_population": {
+      "side": "the whole population (descriptive, decides nothing)",
+      "genes": 7999,
+      "pairs": 103987,
+      "delta_mse": 0.04120241880001457,
+      "ci": [
+        0.03581375922721643,
+        0.04663770381987835
+      ],
+      "variance_share": 0.019087502951089633,
+      "delta_mse_at_scale_1": -0.47072201039134687,
+      "mean_D2": 2.158607069012266,
+      "mean_P2": 0.8437978371359404,
+      "mean_scaled_P2": 0.03885634747830481,
+      "mean_D_times_P": 0.18653791337229675
+    },
+    "held_out_per_cell_delta_mse": {
+      "K562": 0.0409255750278187,
+      "HepG2": 0.11095247317444001,
+      "GM12878": 0.0885871122159502,
+      "IMR_90": 0.0030778019032288682,
+      "H1": -0.006790306428508285,
+      "SK_N_SH": -0.0007664342960245936,
+      "astrocyte": -0.06595923850622211,
+      "hepatocyte": 0.14676402084405785,
+      "keratinocyte": 0.017316924190926317,
+      "cardiac_muscle_cell": 0.018127042288941058,
+      "CD14_positive_monocyte": 0.1479207745855659,
+      "ovary": -0.01333104064518381,
+      "testis": 0.013715089956318243
+    }
+  },
+  "context_verbatim": {
+    "m2h_multiplicative_reading": "the multiplicative composition (Zhou et al. 2024): better; on genes held out of the fit, the reader-gated run scaled by the one factor fitted on the training genes lowered the squared error of measured log2(TPM+1) across the thirteen reader cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline (held-out Delta MSE +0.04339 [98.33% CI +0.0379, +0.04894] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; fitted scale +0.2146 [98.33% CI +0.2007, +0.2283], one number for the whole form, fitted on 8,181 training genes (106,353 gene-cell pairs) and applied unchanged to the held-out genes; the uncalibrated size 7d and 7h read is 1)",
+    "m2h_held_out_delta_mse": 0.0433912108101358,
+    "m2h_held_out_ci": [
+      0.0379045975793137,
+      0.04894398453032398
+    ],
+    "m2i_verdict_sentence": "the multiplicative composition (Zhou et al. 2024): better; on a measurement of the same thirteen reader cell types that this project had never read, the reader-gated run scaled by M2h's fitted constant +0.2146 lowered the squared error of measured log2(TPM+1) across those cell types below the no-rule baseline's, so it is closer to measured RNA than the no-rule baseline on this measurement, and M2h's gain REPLICATES ON A FRESH MEASUREMENT OF THE SAME CELLS (Delta MSE +0.03727 [98.33% CI +0.03202, +0.04299] over 108,264 gene-cell pairs, 8,328 genes; control p = 0.000999; the scale is the constant +0.2146 taken from ac5580b and NOTHING IS FITTED IN THIS LANE)",
+    "m2i_variance_fraction": 0.02307930367632198,
+    "scalefit_verdict": "the magnitude error partly explains the exclusions: scaling every single-removal drop by M2h's fixed 0.2146 gives 8792 of the 12500 genes 7d excluded as basal_not_positive a positive basal rate again, clearing the floor of 6251 but not the strong bar of 10000; the remaining 3708 need another cause. A recovered gene is a gene the fit can now accept and nothing more: this says nothing about expression",
+    "note": "quoted, not re-decided, and never strengthened"
+  },
+  "exposure": "STATED PLAINLY, AS THE FIRST THING THIS REGISTRATION SAYS ABOUT ITS EVIDENCE, AND MEASURED RATHER THAN ASSERTED. The RNA is the same measurement read by item 7 (M2b), item 7d (M2c), item 7h (M2f), the capped-sum census (lane-capsumrna), M2h (lane-magcal) and -- for the fresh replication -- M2i (lane-freshrna): the same ENCODE polyA plus RNA-seq of the same thirteen reader biosamples, the same log2(TPM+1) endpoint, the same no-rule baseline, and literally the same committed P and D rows. THE BRIEF THAT OPENED THIS LANE SAID THESE GENES ENTERED NONE OF THOSE READINGS. THAT IS FALSE, AND data/results/recovered_population.json MEASURED IT BEFORE THIS REGISTRATION WAS WRITTEN: 7,999 of the 8,535 (93.72%) have a row in 7h's committed multiplicative table, so they were inside 7h's 16,509-gene reading and inside M2h's 16,509-gene calibration; 3,990 are in M2h's 8,181 TRAINING genes, so their measured RNA helped fit the constant +0.2146 this lane applies; and 4,009 are in M2h's 8,328 HELD-OUT genes, which is the population M2h's +0.04339 and M2i's +0.03727 were both read over. The reason is structural: 7h's multiplicative form is not selected by the mean form's basal rate, so a gene the mean form could not fit may still have been fitted and read under the multiplicative one. WHAT IS THEREFORE NEW HERE IS THE POPULATION AND NOT THE MEASUREMENT, AND NOT EVEN THE POPULATION'S MEMBERSHIP OF AN EARLIER READING: this is a SUBPOPULATION READING of M2h's held-out reading, on the 4,009 of its 8,328 genes that 7d's mean form could not fit and the scaling makes fittable. It is NOT a fresh test of the endpoint, it is NOT independent of M2h's reading, and no reading from it may be worded as one. The only genes of this population that no previous reading of this endpoint touched are the 536 with no row in 7h's table, and they are excluded here for want of a P and a D",
+  "falsifier": "the reading under test is that the genes scaling makes FITTABLE are also genes the scaled run PREDICTS: that on the 4,009 held-out recovered genes the multiplicative composition at the fixed +0.2146 is closer to measured log2(TPM+1) than running no rule, as M2h found on all 8,328 of its held-out genes. It is FALSIFIED when the held-out Delta MSE interval EXCLUDES 0 ON THE BASELINE'S SIDE (upper bound < 0, outcome WORSE): the scaling then recovers genes the fit can accept but not genes the model predicts, M2h's gain does not reach into the population 7d could not fit, and the recovery is an arithmetic property of the drops and not a gain in prediction. A straddle (INCONCLUSIVE) falsifies nothing and confirms nothing and is reported as a failure to show the gain on this population, not as 'no difference'. An interval excluding 0 on the rules' side (BETTER) is the registered positive, in EXPOSURE's narrow terms and with VARIANCE_CLAUSE attached",
+  "stop_rule": "ONE run, from this registration's committed code, on the files it pins by sha256. No form, scale, population, split, endpoint, metric, interval, control, decision, falsifier or wording is changed after a value of this population is read; a defect found afterwards is reported beside the registered reading and corrected only under a new registration. There is no post-hoc block in this registration: anything computed after the reading is committed is labelled post hoc, decides nothing, and is not required",
+  "limitations": [
+    "PRIOR EXPOSURE, FIRST AND LARGEST: see EXPOSURE. This is a subpopulation reading of M2h's held-out reading on the same committed P and D rows, not a fresh test. 4,009 of the 4,009 genes the endpoint is read on were inside the 8,328 M2h's +0.04339 and M2i's +0.03727 were read over. No number here is a blind prediction",
+    "THE SCALE IS NOT REFITTED (NO_REFIT), so this lane cannot tell 'these genes need a different magnitude' from 'no magnitude helps on these genes'. A WORSE or INCONCLUSIVE reading here leaves that question open and naming it would need a second registration with its own split",
+    "THE TWO FORMS DIFFER. The population is defined by the MEAN form's exclusion and the recovery is computed at M2h's MULTIPLICATIVE scale applied to the mean's drops, which lane-scalefit already recorded as a TRANSFER ACROSS FORMS that M2h does not license (scalefit.LIMITATIONS[0]: M2h's own mean scale read +0.05032). The prediction read against RNA here is the MULTIPLICATIVE one. So 'the genes scaling makes fittable' is a mean-form statement and 'the scaled run' is a multiplicative-form prediction, and a reading here does not say that the mean form's scaled fit predicts anything",
+    "RECOVERY IS NOT A PROPERTY OF THE PREDICTION READ. A gene is in this population because the mean form's basal rate is positive again at 0.2146. Its multiplicative P was computed by 7h without reference to that, so this lane is asking whether a population selected on one form's fittability behaves differently under another form's prediction, and a difference from M2h's 8,328 could come from anything that distinguishes these genes -- their rule counts (median 15 for the recovered against 58 for the 3,708 that stay unfittable), their expression range, their loci -- and not from the recovery as such",
+    "536 of the 8,535 recovered-and-runnable genes have no row in 7h's table and are excluded for want of a P and a D. They are the only genes of this population no previous reading of this endpoint touched, so the one part of it that would have been a fresh population is exactly the part that cannot be read",
+    "the P and D are 7h's committed tables' five-decimal roundings, which is why the harness admits TOLERANCE rather than exact equality",
+    "the gene-level bootstrap treats genes as independent. Genes that share compiled elements or a locus are not, so the interval may be too narrow; M2i's post-hoc 1-Mb locus-cluster bootstrap moved its interval very little ([+0.03216, +0.04302] against [+0.03202, +0.04299]) but that is M2i's population and not this one",
+    "the control refits where the endpoint does not (CONTROL_DIFFERENCE), in the conservative direction"
+  ],
+  "rna_read": "7h's committed multiplicative P and D rows for this population's genes, the same rows items 7h, M2h and M2i read; no new RNA table and no new biosample",
+  "alphagenome_requests": 0,
+  "money": "none: no request is sent and no key is read",
+  "seconds": 2.3,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/recovered_registration.json (step 2)",
+        "version": "266f031"
+      },
+      {
+        "accession": "data/results/recovered_population.json (step 1)",
+        "version": "99e2ea5"
+      },
+      {
+        "accession": "data/results/multrna_result.json (7h, the P and D rows read here)",
+        "version": "pinned by sha256"
+      },
+      {
+        "accession": "data/results/magcal_result.json (M2h, the fixed scale and the split)",
+        "version": "ac5580b"
+      },
+      {
+        "accession": "data/results/freshrna_result.json (M2i, context)",
+        "version": "pinned"
+      },
+      {
+        "accession": "data/results/scalefit_census.json (lane-scalefit)",
+        "version": "7f65544"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/results/recovered_registration.json",
+        "sha256": "c9c7b7f1611a939ea802960b2a9eecdf01649f0f227b4b232f8ac419d647aecf",
+        "bytes": 44170,
+        "partition": null
+      },
+      {
+        "path": "data/results/recovered_population.json",
+        "sha256": "f496038d68bc54c9bf4e6f4d55597460711f269fb8ab57d4e47fde4d7a415b03",
+        "bytes": 357041,
+        "partition": null
+      },
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": null
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": null
+      },
+      {
+        "path": "data/results/freshrna_result.json",
+        "sha256": "e0f17e9400f5b0cf703426015070f521c842b89a80f81b1be2bab0887872de43",
+        "bytes": 51911,
+        "partition": null
+      },
+      {
+        "path": "data/results/scalefit_census.json",
+        "sha256": "903dd53e77dc92f9c720d7fed6d69a447f7f8e6631aff6e4a7626e4bfdd34e7f",
+        "bytes": 101488,
+        "partition": null
+      }
+    ],
+    "input_count": 6,
+    "assembly": "GRCh38",
+    "coordinates": {
+      "base": 0,
+      "interval": "half-open"
+    },
+    "parameters": {
+      "form": "multiplicative",
+      "population_form": "mean",
+      "scale": 0.2145911381525326,
+      "scale_is_refitted": false,
+      "interval": [
+        0.8333333333333334,
+        99.16666666666667
+      ],
+      "bootstrap_resamples": 2000,
+      "bootstrap_seed": 20261010,
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      },
+      "min_genes": 100
+    },
+    "exclusions": [
+      "the 536 recovered-and-runnable genes with no row in 7h's committed multiplicative table: they have no P and no D and cannot be read",
+      "the training half of this population is read as a descriptive only; the endpoint is the held-out half, the genes whose RNA did not enter M2h's fit of the scale"
+    ],
+    "partitions": {
+      "held_out": "the registered endpoint: genes with magcal.is_held_out(symbol) true",
+      "training": "descriptive only: genes M2h fitted its scale on"
+    },
+    "code_cleanliness": {
+      "git_sha": "0122178a927f4dc3ddf1eee219412a2812c2b8ec",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/recovered_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/recovered_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/recovered_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/attribution/pbrun.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/astrorun.py",
+        "genomeos/attribution/bigwig.py",
+        "genomeos/attribution/bridge.py",
+        "genomeos/attribution/budget.py",
+        "genomeos/attribution/cell2.py",
+        "genomeos/attribution/combine2.py",
+        "genomeos/attribution/compile.py",
+        "genomeos/attribution/constraint.py",
+        "genomeos/attribution/context_evidence.py",
+        "genomeos/attribution/correctness.py",
+        "genomeos/attribution/crispri.py",
+        "genomeos/attribution/crispri_direction.py",
+        "genomeos/attribution/direction_link.py",
+        "genomeos/attribution/direction_v2.py",
+        "genomeos/attribution/element_types.py",
+        "genomeos/attribution/emit7g.py",
+        "genomeos/attribution/eqtl.py",
+        "genomeos/attribution/executor.py",
+        "genomeos/attribution/fresh.py",
+        "genomeos/attribution/gene_identity.py",
+        "genomeos/attribution/gene_row_locus.py",
+        "genomeos/attribution/holdout.py",
+        "genomeos/attribution/human_panel.py",
+        "genomeos/attribution/increase_links.py",
+        "genomeos/attribution/increases.py",
+        "genomeos/attribution/magcal.py",
+        "genomeos/attribution/measured.py",
+        "genomeos/attribution/mpra.py",
+        "genomeos/attribution/multrna.py",
+        "genomeos/attribution/not_open_profile.py",
+        "genomeos/attribution/onetarget2.py",
+        "genomeos/attribution/pilot.py",
+        "genomeos/attribution/pilot_bio.py",
+        "genomeos/attribution/readergate.py",
+        "genomeos/attribution/recovered.py",
+        "genomeos/attribution/regulators.py",
+        "genomeos/attribution/repress2.py",
+        "genomeos/attribution/runrules.py",
+        "genomeos/attribution/s4joint.py",
+        "genomeos/attribution/saturate.py",
+        "genomeos/attribution/scalefit.py",
+        "genomeos/attribution/signaltrace.py",
+        "genomeos/attribution/target_calibration.py",
+        "genomeos/attribution/targetchoice.py",
+        "genomeos/attribution/targets.py",
+        "genomeos/attribution/variation.py",
+        "genomeos/attribution/vista.py",
+        "genomeos/cancer/__init__.py",
+        "genomeos/cancer/alterations.py",
+        "genomeos/cancer/cbioportal.py",
+        "genomeos/cancer/compare.py",
+        "genomeos/cancer/libraries.py",
+        "genomeos/cancer/tumour.py",
+        "genomeos/certainty.py",
+        "genomeos/coords.py",
+        "genomeos/flow/__init__.py",
+        "genomeos/flow/tissue.py",
+        "genomeos/flow/trace.py",
+        "genomeos/genome/__init__.py",
+        "genomeos/genome/anatomy.py",
+        "genomeos/genome/annotation.py",
+        "genomeos/genome/bgzf.py",
+        "genomeos/genome/domains.py",
+        "genomeos/genome/epigenome.py",
+        "genomeos/genome/fasta.py",
+        "genomeos/genome/fetch.py",
+        "genomeos/genome/genome.py",
+        "genomeos/genome/index.py",
+        "genomeos/genome/individuals.py",
+        "genomeos/genome/lookup.py",
+        "genomeos/genome/missense.py",
+        "genomeos/genome/motifs.py",
+        "genomeos/genome/pgs_reference.py",
+        "genomeos/genome/polygenic.py",
+        "genomeos/genome/reader.py",
+        "genomeos/genome/regulation.py",
+        "genomeos/genome/regulatory.py",
+        "genomeos/genome/repeats.py",
+        "genomeos/genome/sequence.py",
+        "genomeos/genome/signals.py",
+        "genomeos/genome/unknown.py",
+        "genomeos/genome/variants.py",
+        "genomeos/importable.py",
+        "genomeos/ir/__init__.py",
+        "genomeos/ir/model.py",
+        "genomeos/knowledge/__init__.py",
+        "genomeos/knowledge/across.py",
+        "genomeos/knowledge/cells.py",
+        "genomeos/knowledge/go.py",
+        "genomeos/knowledge/homology.py",
+        "genomeos/knowledge/ligand_receptor.py",
+        "genomeos/knowledge/obo.py",
+        "genomeos/knowledge/profiling.py",
+        "genomeos/knowledge/reactome.py",
+        "genomeos/knowledge/satmut.py",
+        "genomeos/lang/__init__.py",
+        "genomeos/lang/grammar.py",
+        "genomeos/lang/located.py",
+        "genomeos/lang/parser.py",
+        "genomeos/lib/__init__.py",
+        "genomeos/lib/catalog.py",
+        "genomeos/lib/membership.py",
+        "genomeos/manifest.py",
+        "genomeos/molecules/__init__.py",
+        "genomeos/molecules/alphafold.py",
+        "genomeos/molecules/compiler.py",
+        "genomeos/molecules/ptm.py",
+        "genomeos/molecules/reactome.py",
+        "genomeos/molecules/report.py",
+        "genomeos/molecules/rna.py",
+        "genomeos/molecules/uniprot.py",
+        "genomeos/predict/__init__.py",
+        "genomeos/predict/alphagenome_adapter.py",
+        "genomeos/predict/enhancer_target.py",
+        "genomeos/predict/individual_effects.py",
+        "genomeos/provenance/__init__.py",
+        "genomeos/provenance/compiled_defaults.py",
+        "genomeos/provenance/number_provenance.py",
+        "genomeos/provenance/rule_evidence_tier.py",
+        "genomeos/provenance/rule_number_sources.py",
+        "genomeos/provenance/rule_number_sources_findings.py",
+        "genomeos/results.py",
+        "genomeos/runtime/__init__.py",
+        "genomeos/runtime/cell.py",
+        "genomeos/runtime/central_dogma.py",
+        "genomeos/runtime/grn.py",
+        "genomeos/runtime/located.py",
+        "genomeos/runtime/methylation.py",
+        "genomeos/runtime/uncertainty.py",
+        "genomeos/runtime/variant_effect.py",
+        "genomeos/therapeutics/__init__.py",
+        "genomeos/therapeutics/atlas.py",
+        "genomeos/therapeutics/binding.py",
+        "genomeos/therapeutics/dependency.py",
+        "genomeos/therapeutics/depmap.py",
+        "genomeos/therapeutics/design.py",
+        "genomeos/therapeutics/evidence.py",
+        "genomeos/therapeutics/expression.py",
+        "genomeos/therapeutics/localisation.py",
+        "genomeos/therapeutics/logic.py",
+        "genomeos/therapeutics/mechanisms.py",
+        "genomeos/therapeutics/model.py",
+        "genomeos/therapeutics/neoantigen.py",
+        "genomeos/therapeutics/pipeline.py",
+        "genomeos/therapeutics/product.py",
+        "genomeos/therapeutics/providers.py",
+        "genomeos/therapeutics/report.py",
+        "genomeos/therapeutics/safety.py",
+        "genomeos/therapeutics/scan.py",
+        "genomeos/therapeutics/scoring.py",
+        "genomeos/therapeutics/structure.py",
+        "genomeos/therapeutics/synthetic_lethality.py",
+        "genomeos/therapeutics/trafficking.py",
+        "genomeos/version.py",
+        "scripts/recovered_run.py"
+      ],
+      "counting_path_count": 157,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "code": {
+      "git_sha": "0122178a927f4dc3ddf1eee219412a2812c2b8ec",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/attribution/pbrun.py",
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/recovered_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "0122178a927f4dc3ddf1eee219412a2812c2b8ec",
+      "code_cleanliness_git_sha": "0122178a927f4dc3ddf1eee219412a2812c2b8ec",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 0122178"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 401,
+      "opens_under_data": 14,
+      "files_read": 6,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
