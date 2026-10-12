@@ -24,6 +24,43 @@ from genomeos.genome.reader import PeakIndex
 from genomeos.lang.parser import parse
 from genomeos.runtime import grn
 
+#: `scipy` is reached only through an extra, so the tests below that reach it skip where no extra
+#: installed it. There are exactly two doors. `combine2.solve_z` imports `scipy.optimize.brentq` for
+#: the competition form's root find -- and `classify` fits EVERY form, so a test that calls it needs
+#: scipy whatever its own parametrisation says. `runrules._spearman` imports `scipy.stats.spearmanr`,
+#: which `score_form` and `census` read, so the scoring tests need it for a second reason.
+#:
+#: THE EXTRA NAMED IS `compose`, and it is named for what CI installs rather than because
+#: process-bigraph has anything to do with a root find. scipy arrives with `clocks`, `compose`, `hla`
+#: and `predict` -- tests/test_extra_only_imports.py pins that it arrives with more than one, so no
+#: message may pick one as its owner -- and `compose` is the one the `test` job syncs
+#: (.github/workflows/ci.yml). So these tests RUN wherever scipy is, a developer checkout and CI's
+#: `test`, and skip BY NAME in `test-bare`, whose declared purpose is to show what the project itself
+#: declares and nothing more.
+#:
+#: WHAT IT COSTS, stated rather than glossed, in three parts.
+#:
+#: (1) `requires_extra` is an AND and not an OR: tests/conftest.py skips unless EVERY extra a marker
+#: names is installed, so "scipy, by whichever of the four brought it" cannot be written. One name has
+#: to be chosen, and the chosen name is read as a question about that extra's OWN requirement -- so the
+#: skip line says "cannot import process_bigraph" on a test that wants scipy. The name is right about
+#: WHERE the test should run and misleading about WHAT it needs, which is why this paragraph exists.
+#:
+#: (2) A checkout that synced a DIFFERENT scipy-bearing extra therefore skips these tests although it
+#: can run them. This checkout is one: it holds `predict` (alphagenome, anndata, and scipy behind them)
+#: and not `compose`, so `uv run pytest` here skips 36 tests it used to pass. `uv sync --extra compose`
+#: -- README's own line -- runs them again. CI's `test` job is the environment this is tuned to, and
+#: `-rs --no-fold-skipped` prints every skip there by name, so what is not run is on the record.
+#:
+#: (3) In `test-bare` the `mean` parametrisation of the two parametrised tests stops running too,
+#: because the marker is on the test and not on one param. The alternative,
+#: `pytest.param("competition", marks=...)`, would replace `c2.FORMS` with a hand-written list, and
+#: "every form the module declares" is exactly what those tests claim; a list that does not grow with
+#: FORMS would weaken that claim to buy back one parametrisation in one job.
+#:
+#: No assertion is touched by any of it: the marker moves WHERE a test runs, never what it claims.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 CELLS = list(c2.CELLS)
 
 _EV = 'evidence: predicted "AlphaGenome deletion, {cell}" effect {x:+.3f} log2 fold change on deletion, probability unavailable'  # noqa: E501
@@ -113,6 +150,7 @@ def _rho(*xs: float) -> dict[str, float]:
 # ---- the joint fit ---------------------------------------------------------------------------------------
 
 
+@needs_scipy
 @pytest.mark.parametrize("form", c2.FORMS)
 def test_the_fit_reproduces_every_single_removal_and_the_intact_level(form):
     rho = _rho(-0.5, -0.2, -0.05, +0.1, +0.03)
@@ -138,6 +176,7 @@ def test_the_mean_is_linear_in_the_contributions_under_the_hold():
         assert c2.level(f, {**none, el: True}) - c2.level(f, none) == pytest.approx(d[el])
 
 
+@needs_scipy
 def test_competition_occupancy_is_the_declared_theta_and_its_singles_fall_short_of_adding():
     rho = _rho(-0.5, -0.2, -0.3)
     f = c2.fit("competition", rho)
@@ -150,6 +189,7 @@ def test_competition_occupancy_is_the_declared_theta_and_its_singles_fall_short_
     assert f.q > c2.fit("mean", rho).q
 
 
+@needs_scipy
 def test_competition_tends_to_the_mean_as_engagement_weakens():
     rho = _rho(-0.4, -0.15, +0.05)
     weak = c2.fit("competition", rho, theta=1e-7)
@@ -159,6 +199,7 @@ def test_competition_tends_to_the_mean_as_engagement_weakens():
         assert c2.level(weak, o) == pytest.approx(c2.level(mean, o), rel=1e-5)
 
 
+@needs_scipy
 def test_what_makes_a_gene_not_runnable():
     assert c2.fit("mean", _rho(-1.0, -1.0)).reason == "basal_not_positive"  # d = 0.5 + 0.5
     assert c2.fit("mean", _rho(-0.1, +0.5)).reason == "inhibitor_strength_above_1"  # e > q
@@ -173,6 +214,7 @@ def test_what_makes_a_gene_not_runnable():
 # ---- reading the gated program and running it ------------------------------------------------------------
 
 
+@needs_scipy
 def test_gene_rules_reads_each_rule_its_fold_states_and_compiled_cell():
     _m, genes = _genes()
     assert set(genes) == {"TGT", "TWO"}
@@ -188,6 +230,7 @@ def test_gene_rules_reads_each_rule_its_fold_states_and_compiled_cell():
     assert c2.classify(tgt)[1] == ""
 
 
+@needs_scipy
 @pytest.mark.parametrize("form", c2.FORMS)
 def test_the_runtime_gives_the_closed_form_in_every_reader_cell_and_every_removal(form):
     m, genes = _genes()
@@ -218,6 +261,7 @@ def test_a_held_activator_is_counted_in_the_mean_by_the_runtime():
     assert small.entities["TGT"].attrs[grn.RATE_PROVENANCE_ATTRS[2]] == "t"
 
 
+@needs_scipy
 def test_competition_writes_the_half_saturation_the_runtime_reads():
     m, genes = _genes()
     gr = genes["TWO"]
@@ -243,6 +287,7 @@ def test_multi_rule_genes_counts_rule_lines_over_programs():
     assert why["genes_with_any_rule"] == 3
 
 
+@needs_scipy
 def test_the_compiled_context_census_fits_only_pairs_observed_in_one_track():
     text = PROGRAM + "\n".join([_element("F3", 1300, "TWO", -0.2), _rule("F3", "TWO", -0.2, "K562")])
     out = c2.compiled_context_census({"chrT": text})
@@ -288,6 +333,7 @@ def _synthetic_rows(form: str, n: int, truth: bool, seed: int = 7) -> list[dict]
     return rows
 
 
+@needs_scipy
 @pytest.mark.parametrize("form", c2.FORMS)
 def test_the_vectorised_control_is_the_scalar_closed_form(form):
     rows = _synthetic_rows(form, 30, truth=False)
@@ -295,6 +341,7 @@ def test_the_vectorised_control_is_the_scalar_closed_form(form):
     assert c2.closed_dmse(arr, arr["open"]) == pytest.approx(c2.dmse(rows), rel=1e-9)
 
 
+@needs_scipy
 def test_a_true_prediction_beats_and_a_random_one_does_not():
     good = c2.score_form(_synthetic_rows("mean", 120, truth=True), "mean")
     assert good["outcome"] == "BEATS_AND_CONTROL"
@@ -305,6 +352,7 @@ def test_a_true_prediction_beats_and_a_random_one_does_not():
     assert small["outcome"] == "NOT_TESTABLE" and "fewer than the registered 100" in small["reading"]
 
 
+@needs_scipy
 def test_the_head_to_head_is_positive_when_competition_is_closer():
     truth = {r["gene"]: r for r in _synthetic_rows("competition", 120, truth=True)}
     noise = {g: {**r, "P": rg._centre([x * 3 for x in r["P"]])} for g, r in truth.items()}

@@ -24,6 +24,14 @@ from genomeos.genome.reader import PeakIndex
 from genomeos.lang.parser import parse
 from genomeos.runtime import grn
 
+#: The tests below reach `scipy`, by one of the two doors this project opens it through:
+#: `combine2.solve_z` (`scipy.optimize.brentq`, the competition form's root find) and
+#: `runrules._spearman` (`scipy.stats.spearmanr`, which every registered score reads). No bare
+#: environment holds it. The reasoning for naming `compose` -- the extra CI's `test` job syncs, of the
+#: four that reach scipy -- and what naming one of four costs is written out at tests/test_combine2.py's
+#: `needs_scipy`. The marker moves WHERE these tests run, never what they claim.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 CELLS = list(cs.CELLS)
 
 _EV = 'evidence: predicted "AlphaGenome deletion, {cell}" effect {x:+.3f} log2 fold change on deletion, probability unavailable'  # noqa: E501
@@ -178,6 +186,7 @@ def test_the_capped_root_reproduces_every_removal_and_differs_from_the_mean():
     assert cs.capped_root({"a": 0.8, "b": 0.95, "c": 0.95}).reason == "no_capped_root"  # k = 3
 
 
+@needs_scipy
 def test_classify_names_each_gene_status():
     _m, genes = _genes()
     assert c2.classify(genes["PAST"])[0]["mean"].ok  # the mean runs it; the capped sum cannot

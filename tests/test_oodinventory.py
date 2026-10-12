@@ -12,7 +12,19 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from genomeos.attribution import oodinventory as ood
+
+#: `needs_local_data`, in the shape tests/test_trainexp.py and tests/test_astrorun.py already use for
+#: this same file. `ood.rna_rows()` and `ood.covered_curies()` read AlphaGenome's recorded track
+#: metadata, which lives in `data/cache` -- git-ignored machine-local data by the data boundary, so a
+#: fresh clone and CI cannot have it and the tests below FAILED there with FileNotFoundError. They now
+#: skip BY NAME, which is the difference between "not run here" and "passed". No assertion is weakened:
+#: the covered set is still read from the file and never from a constant.
+needs_track_metadata = pytest.mark.needs_local_data(
+    str(ood.METADATA_PATH), how="scripts/entex_feasibility.py writes it (AG_METADATA)"
+)
 
 COVERED = {"UBERON:0002048", "CL:0000084", "EFO:0002067"}
 
@@ -31,6 +43,7 @@ def _candidate(**kw) -> ood.Candidate:
     return ood.Candidate(**base)
 
 
+@needs_track_metadata
 def test_covered_set_is_the_rna_rows_of_the_metadata_we_hold():
     rows = ood.rna_rows()
     assert rows, "the metadata copy has rna_seq rows"
@@ -41,6 +54,7 @@ def test_covered_set_is_the_rna_rows_of_the_metadata_we_hold():
     assert curies == {r["ontology_curie"].strip() for r in rows}
 
 
+@needs_track_metadata
 def test_no_rna_row_carries_an_encode_accession():
     # lane-trainexp's finding, re-measured here: accession-level matching is impossible.
     assert not [r for r in ood.rna_rows() if r["name"].startswith("ENC")]
@@ -141,6 +155,7 @@ def test_the_assay_sets_do_not_overlap_and_exclude_the_perturbations():
         assert assay in search.EXCLUDED_ASSAYS
 
 
+@needs_track_metadata
 def test_every_hand_declared_relation_names_a_covered_curie():
     from scripts import oodinventory_search as search
 
@@ -154,6 +169,7 @@ def test_every_hand_declared_relation_names_a_covered_curie():
         assert curie.startswith("NTR:") or curie == "CL:4006001"
 
 
+@needs_track_metadata
 def test_a_hand_declared_term_is_not_absent_and_an_undeclared_ntr_term_is_unchecked():
     from scripts import oodinventory_search as search
 
@@ -175,6 +191,7 @@ def test_a_hand_declared_term_is_not_absent_and_an_undeclared_ntr_term_is_unchec
     assert unknown["absent_by_rule"] is False
 
 
+@needs_track_metadata
 def test_the_sibling_flag_fires_on_a_donor_line_and_a_cell_line_and_not_on_a_tissue():
     from scripts import oodinventory_search as search
 
@@ -215,6 +232,7 @@ def test_the_other_sources_each_name_the_clause_they_fail():
         assert entry["clause_failed"] and len(entry["detail"]) > 60
 
 
+@needs_track_metadata
 def test_the_two_sibling_kinds_are_told_apart_and_a_tissue_has_neither():
     from scripts import oodinventory_search as search
 

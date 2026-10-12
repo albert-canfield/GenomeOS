@@ -20,6 +20,20 @@ import tracked_paths as tp
 
 from genomeos.attribution import astrorun
 
+#: `requires_extra("predict")`, for the reason tests/test_astrorun.py writes out at its own
+#: `needs_predict`: anndata is declared in the `predict` extra and no CI job syncs it, so the
+#: sender's dry check REFUSES item (g) there -- "anndata is not installed, so the recording path
+#: cannot be exercised" -- which is the gate behaving exactly as designed. A check that cannot run
+#: must refuse. The four tests below are the ones that require the dry check to ALLOW, so they are
+#: the ones that cannot run where the extra is absent; the PLANTED refusals in the same class need
+#: nothing and keep running everywhere. They became active when run 2's ledger was committed at
+#: bb2a924, which is why CI first saw them on 2026-10-11.
+#:
+#: Nothing here weakens item (g). The gate still refuses without anndata, so no purchase can slip
+#: through an environment that lacks it, and the environment that CAN buy has the extra: alphagenome
+#: is declared in it too.
+needs_predict = pytest.mark.requires_extra("predict")
+
 ROOT = Path(__file__).resolve().parents[1]
 _SPEC = importlib.util.spec_from_file_location("astroreg2_send", ROOT / "scripts/astroreg2_send.py")
 sender = importlib.util.module_from_spec(_SPEC)
@@ -1825,6 +1839,7 @@ class TestAResumeOfRun2IsPossibleOnlyUnderTheOperatorsWords:
 
     # ------------------------------------------------------------------ the dry check writes nothing
 
+    @needs_predict
     def test_ALLOWED_the_dry_check_with_words_passes_and_writes_NOTHING(self, tmp_path, monkeypatch, capsys):
         w = self.world(tmp_path, monkeypatch)
         led1_before, led2_before = w.led1.read_bytes(), w.led2.read_bytes()
@@ -1942,6 +1957,7 @@ class TestAResumeOfRun2IsPossibleOnlyUnderTheOperatorsWords:
 
     # ------------------------------------------------------------------ the send itself
 
+    @needs_predict
     def test_ALLOWED_a_resume_buys_exactly_the_uncharged_remainder_at_the_REAL_numbers(
         self, tmp_path, monkeypatch, capsys
     ):
@@ -1979,6 +1995,7 @@ class TestAResumeOfRun2IsPossibleOnlyUnderTheOperatorsWords:
         with pytest.raises(astrorun.CapRefusedError):
             astrorun.astroreg2_budget(run_id=2).take(chrom="chr1", element="one-more")
 
+    @needs_predict
     def test_PLANTED_the_pilot_does_NOT_re_fire_on_a_resume_past_ten(self, tmp_path, monkeypatch, capsys):
         """Every resumed answer nameless: a pilot that re-fired would stop at once. It must not."""
         w = self.world(tmp_path, monkeypatch, n=40, charged=14, answered=13)
@@ -1992,6 +2009,7 @@ class TestAResumeOfRun2IsPossibleOnlyUnderTheOperatorsWords:
         assert out["pilot"]["passed"] is True
         assert len(out["unusable_answers"]) == 26, "recorded, not stopped on"
 
+    @needs_predict
     def test_PLANTED_a_resume_BEFORE_ten_answers_still_meets_the_pilot(self, tmp_path, monkeypatch, capsys):
         """The other direction: the pilot counts the RUN's answers, so it fires at the tenth overall."""
         w = self.world(tmp_path, monkeypatch, n=40, charged=7, answered=6)

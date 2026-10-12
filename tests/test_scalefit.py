@@ -12,6 +12,14 @@ import tracked_paths as tp
 from genomeos.attribution import combine2
 from genomeos.attribution import scalefit as sf
 
+#: The tests below reach `scipy`, by one of the two doors this project opens it through:
+#: `combine2.solve_z` (`scipy.optimize.brentq`, the competition form's root find) and
+#: `runrules._spearman` (`scipy.stats.spearmanr`, which every registered score reads). No bare
+#: environment holds it. The reasoning for naming `compose` -- the extra CI's `test` job syncs, of the
+#: four that reach scipy -- and what naming one of four costs is written out at tests/test_combine2.py's
+#: `needs_scipy`. The marker moves WHERE these tests run, never what they claim.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 RULE_FILE = Path("data/results/scalefit_rule.json")
 CENSUS_FILE = Path("data/results/scalefit_census.json")
 
@@ -55,6 +63,7 @@ def test_the_ratio_is_the_mean_form_s_q_exactly() -> None:
 # ==== q is homogeneous of degree 1 in the drops, under BOTH forms ========================================
 
 
+@needs_scipy
 @pytest.mark.parametrize("form", ["mean", "competition"])
 @pytest.mark.parametrize(
     "rho",
@@ -69,6 +78,7 @@ def test_q_scales_linearly_so_the_threshold_is_exact(form: str, rho: dict[str, f
     assert sf.q_is_homogeneous(form, rho) == pytest.approx(0.0, abs=1e-12)
 
 
+@needs_scipy
 @pytest.mark.parametrize("form", ["mean", "competition"])
 def test_a_gene_recovers_exactly_when_its_unscaled_q_is_below_the_threshold(form: str) -> None:
     for n in range(2, 40):

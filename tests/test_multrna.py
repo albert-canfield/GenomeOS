@@ -20,6 +20,14 @@ from genomeos.attribution import saturate as sa
 from genomeos.genome.reader import PeakIndex
 from genomeos.lang.parser import parse
 
+#: The tests below reach `scipy`, by one of the two doors this project opens it through:
+#: `combine2.solve_z` (`scipy.optimize.brentq`, the competition form's root find) and
+#: `runrules._spearman` (`scipy.stats.spearmanr`, which every registered score reads). No bare
+#: environment holds it. The reasoning for naming `compose` -- the extra CI's `test` job syncs, of the
+#: four that reach scipy -- and what naming one of four costs is written out at tests/test_combine2.py's
+#: `needs_scipy`. The marker moves WHERE these tests run, never what they claim.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 CELLS = list(mr.CELLS)
 
 _EV = 'evidence: predicted "AlphaGenome deletion, {cell}" effect {x:+.3f} log2 fold change on deletion, probability unavailable'  # noqa: E501
@@ -129,6 +137,7 @@ def test_the_runtime_gives_the_closed_form_in_every_reader_cell_and_every_remova
             assert a == pytest.approx(b, abs=1e-9)
 
 
+@needs_scipy
 def test_a_gene_7d_cannot_fit_is_run_and_an_inhibitor_above_2_is_not():
     _m, genes = _genes()
     fits, why = c2.classify(genes["MUL"])
@@ -193,6 +202,7 @@ def test_the_vectorised_control_is_the_scalar_closed_form():
     assert mr.closed_dmse(arr, arr["open"]) == pytest.approx(c2.dmse(rows), rel=1e-9)
 
 
+@needs_scipy
 def test_a_true_prediction_beats_and_a_random_one_does_not():
     good = mr.score_form(_rows(120, truth=True))
     assert good["outcome"] == "BEATS_AND_CONTROL"

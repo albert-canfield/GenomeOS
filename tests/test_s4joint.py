@@ -25,6 +25,14 @@ from genomeos.attribution import signaltrace as st
 from genomeos.genome.reader import PeakIndex
 from genomeos.results import RESULTS_DIR
 
+#: The tests below reach `scipy`, by one of the two doors this project opens it through:
+#: `combine2.solve_z` (`scipy.optimize.brentq`, the competition form's root find) and
+#: `runrules._spearman` (`scipy.stats.spearmanr`, which every registered score reads). No bare
+#: environment holds it. The reasoning for naming `compose` -- the extra CI's `test` job syncs, of the
+#: four that reach scipy -- and what naming one of four costs is written out at tests/test_combine2.py's
+#: `needs_scipy`. The marker moves WHERE these tests run, never what they claim.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 
 def _element(name: str, start: int, gene: str, effect: str) -> str:
     return (
@@ -169,6 +177,7 @@ def test_each_form_has_its_own_chain_and_every_stage_follows_one_that_exists():
 # ---- the joint fit on the synthetic program --------------------------------------------------------------
 
 
+@needs_scipy
 def test_every_reached_gene_is_read_and_fitted_as_combine2_fits_it(joint):
     assert joint.reached_genes == {"TGT", "TWO", "BIG", "ONE", "SUP_1"}
     assert set(joint.genes) == joint.reached_genes
@@ -185,6 +194,7 @@ def test_every_reached_gene_is_read_and_fitted_as_combine2_fits_it(joint):
     assert joint.genes["TGT"].elements == ["E1"]  # the experimental twin was removed before gating
 
 
+@needs_scipy
 def test_the_k562_hold_is_the_forms_closed_form_with_the_other_elements_as_k562_states_them(joint):
     for form in sj.FORMS:
         f = c2.fit(form, RHO)
@@ -200,6 +210,7 @@ def test_the_k562_hold_is_the_forms_closed_form_with_the_other_elements_as_k562_
 # ---- the pairs through the joint stages ------------------------------------------------------------------
 
 
+@needs_scipy
 def test_a_pair_is_kept_at_the_joint_bridge_where_the_bridge_kept_none(traced):
     f, why = traced["two"]
     assert f["s4_bridge_kept"] == 0.0 and why["s4_bridge"] == "not_identifiable"
@@ -212,6 +223,7 @@ def test_a_pair_is_kept_at_the_joint_bridge_where_the_bridge_kept_none(traced):
         assert f[f"s7_run_{form}_drop"] > 0.0 and f[f"s7_run_{form}_drop"] != pytest.approx(0.4, abs=1e-3)
 
 
+@needs_scipy
 def test_each_drop_names_its_reason(traced):
     for form in sj.FORMS:
         f, why = traced["two6"]
@@ -228,6 +240,7 @@ def test_each_drop_names_its_reason(traced):
         assert not any(f[f"{s}_kept"] for s in sj.JOINT_STAGES) and f"s4_joint_{form}" not in why
 
 
+@needs_scipy
 def test_the_joint_columns_never_read_the_label(look, joint):
     p, q = copy.deepcopy(PAIRS["two"]), copy.deepcopy(PAIRS["two"])
     q.regulated = not p.regulated
@@ -237,6 +250,7 @@ def test_the_joint_columns_never_read_the_label(look, joint):
 # ---- the harness ---------------------------------------------------------------------------------------
 
 
+@needs_scipy
 def test_the_harness_passes_a_sound_trace_and_names_each_defect(look, joint, traced):
     rows = []
     for k, p in PAIRS.items():

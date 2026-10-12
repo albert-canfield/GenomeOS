@@ -27,6 +27,14 @@ from genomeos.genome.reader import PeakIndex
 from genomeos.results import RESULTS_DIR
 from genomeos.runtime import grn
 
+#: The tests below reach `scipy`, by one of the two doors this project opens it through:
+#: `combine2.solve_z` (`scipy.optimize.brentq`, the competition form's root find) and
+#: `runrules._spearman` (`scipy.stats.spearmanr`, which every registered score reads). No bare
+#: environment holds it. The reasoning for naming `compose` -- the extra CI's `test` job syncs, of the
+#: four that reach scipy -- and what naming one of four costs is written out at tests/test_combine2.py's
+#: `needs_scipy`. The marker moves WHERE these tests run, never what they claim.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 
 def _element(name: str, start: int, gene: str, effect: str) -> str:
     return (
@@ -207,6 +215,7 @@ def test_the_fit_refuses_what_the_runtime_cannot_carry():
 # ---- the joint lookup on the synthetic program -------------------------------------------------------------
 
 
+@needs_scipy
 def test_every_reached_gene_is_read_with_combine2s_exclusions_and_fitted(joint):
     assert joint.reached_genes == {"TGT", "TWO", "BIG", "ONE", "SUP_1", "INH", "MIX"}
     assert set(joint.genes) == joint.reached_genes
@@ -221,6 +230,7 @@ def test_every_reached_gene_is_read_with_combine2s_exclusions_and_fitted(joint):
     assert joint.counts["runs"] == 5
 
 
+@needs_scipy
 def test_a_k562_hold_is_the_elements_own_observation_whatever_the_others_states(joint):
     two = joint.genes["TWO"]
     assert two.k562 == {"E5": "open", "E6": "closed"}
@@ -236,6 +246,7 @@ def test_a_k562_hold_is_the_elements_own_observation_whatever_the_others_states(
 # ---- the pairs through the multiplicative stages ---------------------------------------------------------
 
 
+@needs_scipy
 def test_a_pair_m2d_dropped_for_its_basal_rate_is_kept_here(traced):
     f, why = traced["big"]
     assert f["s4_bridge_kept"] == 0.0 and why["s4_bridge"] == "not_identifiable"
@@ -247,6 +258,7 @@ def test_a_pair_m2d_dropped_for_its_basal_rate_is_kept_here(traced):
     assert f[f"{sa.S7}_drop"] == pytest.approx(f[f"{sa.S5}_drop"], abs=sa.CLOSED_FORM_TOLERANCE)
 
 
+@needs_scipy
 def test_each_drop_names_its_reason(traced):
     f, why = traced["two6"]
     assert f[f"{sa.S4}_kept"] == 1.0 and f[f"{sa.S5}_kept"] == 0.0
@@ -264,6 +276,7 @@ def test_each_drop_names_its_reason(traced):
     assert not any(f[f"{s}_kept"] for s in sa.MULT_STAGES) and sa.S4 not in why
 
 
+@needs_scipy
 def test_the_columns_never_read_the_label(look, joint):
     p, q = copy.deepcopy(PAIRS["big"]), copy.deepcopy(PAIRS["big"])
     q.regulated = not p.regulated
@@ -273,6 +286,7 @@ def test_the_columns_never_read_the_label(look, joint):
 # ---- the harness and the census --------------------------------------------------------------------------
 
 
+@needs_scipy
 def test_the_harness_passes_a_sound_trace_and_names_each_defect(look, joint, traced):
     rows = []
     for k, p in PAIRS.items():
@@ -294,6 +308,7 @@ def test_the_harness_passes_a_sound_trace_and_names_each_defect(look, joint, tra
     assert sa.harness({}, {}, [stray]) == [f"{sa.S7} keeps 1 pairs that {sa.S5} dropped"]
 
 
+@needs_scipy
 def test_the_census_counts_the_identifiable_genes_and_the_concave_bound(joint):
     m2d = {
         "descriptives_not_verdicts": {"per_form": {"mean": {"runnable": 3}, "competition": {"runnable": 1}}}

@@ -21,6 +21,14 @@ from genomeos.attribution import bridge
 from genomeos.attribution import runrules as rr
 from genomeos.lang.parser import parse
 
+#: The tests below reach `scipy`, by one of the two doors this project opens it through:
+#: `combine2.solve_z` (`scipy.optimize.brentq`, the competition form's root find) and
+#: `runrules._spearman` (`scipy.stats.spearmanr`, which every registered score reads). No bare
+#: environment holds it. The reasoning for naming `compose` -- the extra CI's `test` job syncs, of the
+#: four that reach scipy -- and what naming one of four costs is written out at tests/test_combine2.py's
+#: `needs_scipy`. The marker moves WHERE these tests run, never what they claim.
+needs_scipy = pytest.mark.requires_extra("compose")
+
 
 def _rule(el: str, action: str, gene: str, cell: str, x: float) -> str:
     """A rule as the compiler writes a predicted one (compile.compile_chromosome)."""
@@ -216,6 +224,7 @@ def _pop(make_d, n_genes=400, tissues=("Liver", "Lung", "Whole_Blood"), seed=1):
     return pop
 
 
+@needs_scipy
 def test_score_reaches_each_registered_outcome():
     assert rr.score(_pop(lambda m, r: 2 * m + r.gauss(0, 0.3)))["outcome"] == "BEATS_AND_CONTROL"
     # a shift every gene of a tissue shares (the gate), not tied to the gene's own rule
@@ -232,6 +241,7 @@ def test_score_stops_below_the_registered_size():
     assert out["reading"].startswith("not testable at the registered size")
 
 
+@needs_scipy
 def test_score_descriptives_add_up():
     out = rr.score(_pop(lambda m, r: 2 * m + r.gauss(0, 0.3)))
     d = out["descriptives"]
