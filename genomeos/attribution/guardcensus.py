@@ -837,3 +837,19 @@ BARE_RUN_RED_IS_NOT_THE_VEILS = {
     "whose": "lane-execscale's. Reported, not repaired: SCOPE's no-repairs clause and the fact"
     " that it is another lane's live work both point the same way",
 }
+
+
+#: Added to the rule's rationale on the supervisor's instruction, 20:10. An ADDITION, because
+#: WHY_THAT_RULE_EXISTS is inside the undo window and the point belongs beside it, not over it.
+WHY_THAT_RULE_EXISTS_ADDENDUM = (
+    "A LOCK HELD BY A MEASUREMENT HIDES REDS AS WELL AS BLOCKING WORK, AND A CONCEALED RED DOES"
+    " NOT ANNOUNCE ITSELF. WHY_THAT_RULE_EXISTS gives only the first harm: no commit landed"
+    " between 16:54 and 19:19. The second is worse. tests/test_execscale.py's byte-identity test"
+    " had been red since its record landed at 81d3949 (16:52), and no push gate could run to"
+    " find it, so the 160-minute hold did not merely delay three hours of work -- it removed the"
+    " only instrument that would have reported a red already present. A blocked queue is visible"
+    " to everyone waiting in it; a red nobody can measure looks exactly like a green. That is the"
+    " asymmetry: the cost of holding the lock is not the time, it is the BLINDNESS, and the"
+    " 45-minute threshold is better understood as a limit on how long the project may be blind"
+    " than as a limit on how long one lane may be slow"
+)

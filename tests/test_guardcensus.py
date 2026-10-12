@@ -484,3 +484,13 @@ def test_the_one_implementation_claim_is_still_in_manifest() -> None:
     # so a flat substring never matches it. The same lesson as AST-over-grep, in one line.
     assert "the writer and the checker cannot answer" in src
     assert "differently about which bytes a group's digest covers" in src
+
+
+def test_the_rules_rationale_carries_the_concealment_harm_as_an_addition() -> None:
+    """Supervisor, 20:10. The original stays; the second harm is added beside it."""
+    assert "no commit landed" in gcn.WHY_THAT_RULE_EXISTS_ADDENDUM
+    assert "HIDES REDS AS WELL AS BLOCKING WORK" in gcn.WHY_THAT_RULE_EXISTS_ADDENDUM
+    assert "looks exactly like a green" in gcn.WHY_THAT_RULE_EXISTS_ADDENDUM
+    assert "it is the BLINDNESS" in gcn.WHY_THAT_RULE_EXISTS_ADDENDUM
+    # and the original is untouched
+    assert "NO COMMIT" in gcn.WHY_THAT_RULE_EXISTS
