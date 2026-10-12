@@ -425,6 +425,10 @@ def main() -> int:
         }
     )
     entries = [mf.input_entry(p, partition="pinned by sha256") for p in (*SOURCE_FILES, REGISTRATION)]
+    # the harness record is READ by refuse_unless_registered (its outcome must be HARNESS_REPRODUCES),
+    # so it is DECLARED here too: the manifest contract counts every file read under data/, and this
+    # one was missing from the list above. `declare every reader` applies to the run's own inputs.
+    entries.append(mf.input_entry(HARNESS_RESULT, partition="pinned by sha256"))
     print("saved", save_result(RESULT, out, manifest=manifest(entries, adm)))
     print(out["outcome"])
     print(out["reading"])
