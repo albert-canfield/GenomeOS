@@ -1714,3 +1714,71 @@ M2h's scale, conditional on an inventory finding a cell type absent from AlphaGe
 accessibility and RNA from one source. It is the only test that could turn a notable in-domain result
 into an independent one. (5) The ROADMAP fold, blocked in the coordinator's session. (6) The halted
 epidermis module write.
+
+### 2026-10-12, the evening: two readings registered, and the red the lock had hidden
+
+**A per-region magnitude does NOT beat the single global scale, and no verdict is taken**
+(lane-regionscale2, seven commits; `fa5c473` the registration, `61a5d97` the result, `3ad486d` the
+tests that recompute the verdict from the record's own numbers; 0 model requests). The registered
+reading, verbatim: *"INCONCLUSIVE, THE TWO REGISTERED READINGS DISAGREE, and no verdict is taken. On
+M2h's own 8,328 held-out genes (108,264 gene-cell pairs) the per-region arm reads DELTA =
++6.53352e-05 [98.33% CI −0.000817518, +0.000961623], nominal 95% CI [−0.000655443, +0.000814913],
+permutation p = 0.012987 against ALPHA 0.05 at 1,000 draws, with the per-region arm at Delta MSE
++0.0434565 and the global arm at +0.0433912 — about 2.02% and about 2.02% of the held-out variance.
+The permutation p reaches ALPHA but the registered interval does not clear 0, so the improvement is
+distinguishable from permuted labels and is still not distinguishable from 0. The registration
+requires the interval and the permutation to AGREE before better may be said, and it requires the
+nominal width to agree before no improvement may be said, PRECISELY so that neither a multiplicity nor
+a chosen interval width can buy a verdict; the condition is not met, so none is taken. lane-scalehet's
+and lane-hetblock2's readings stand untouched and are not weakened by this: the regional variation is
+real, and whether it is USABLE is what this lane leaves open. NO PER-REGION MODEL IS PROPOSED."* MIXED
+is one of the three outcomes the registration declared in advance do not falsify and do not conclude.
+**Disclosed in the result itself:** a smoke test computed DELTA at 19:38:34 before the registration was
+committed; `save_result` refused on an untracked `argv[0]` and quarantined it (sha256 37fd95a1…,
+49,121 bytes), the reading never printed and the file was left UNOPENED. The claim made is not that no
+held-out value had been *computed* — it is that none was *read*, and what makes the registration
+honest is git: all 45 registered fields, including both pre-written outcomes, unchanged since
+`027d414`, 2 h 45 m earlier.
+
+**The calibrated magnitude is now an opt-in runtime parameter, default 1.0** (lane-execscale2, three
+commits, no `--force`; `92c6ea8` the parameter, `1163f95` the demo writer committed before it ran,
+`44d68b2` the demo result). `grn.MEASURED_MAGNITUDE_CORRECTION = 0.2146` carries M2h (`ac5580b`) in
+its docstring and is called a **global average over a per-chromosome magnitude** (hetblock2 `d9e3ddd`);
+it multiplies the MULTIPLICATIVE rule's exponent — the quantity M2h centred and scaled — and is
+refused on any other form. `DEFAULT_MAGNITUDE_CORRECTION = 1.0`, so nothing changes unless a caller
+asks. The chr21 demo: 80,583 compiled lines against 80,594 calibrated, **an 11-line block inserted at
+line 86 and nothing else**, every declared `# test:` line identical; in K562 **372 of 5,176 rules
+active and 51 of 193 genes composing**; levels at 1.0 min 0.3165 median 0.6321 max 2.3398 sum 130.80,
+at 0.2146 min 0.0892 median 0.6321 max 0.7570 sum 116.57; 51 moved, 142 unmoved for want of an
+activator in that cell. **Nothing about RNA is claimed, and the direction of every change is arithmetic
+under this rule** — both stated in the record.
+
+**The guard census closed, and the lock that ran it had been hiding a red for three hours**
+(lane-guardcensus). A full bare run under the import veil: 1 failed, 7,489 passed, 83 skipped, 20
+xfailed, 1 xpassed in 36 m 53 s, **zero collection errors** — so the `f4a9faa` collect stopgap holds
+under a full run, and `b8ee5d6`'s terminal-summary line **is present under CI's own `-q -rs
+--no-fold-skipped` and names h5py and `pbrun.py:41` directly**, closing
+ANNOUNCEMENT_CANNOT_BE_HEARD by measurement. The one failure was not the veil's:
+`test_the_committed_programmes_are_byte_identical_to_the_record` reproduces in the normal environment
+in 0.22 s, and its record landed at 16:52, **so dev had been red since then and the machine-wide suite
+lock concealed it for three hours** — two harms from one cause, the hidden red the worse of them. That
+same hold killed seven lanes at the 600-second watchdog; two of them (regionscale, execscale) were
+finished by successor lanes from preserved patches, and nothing they had committed was lost.
+
+**The test's claim was wrong, not the code.** The pin asserts all 58 programmes' bytes, so it reddens
+on *any* legitimate programme change by anyone — and `71f9d47`, the restore of the `share:` generator
+that honoured a registered falsifier, correctly moved
+`data/organisms/human/haematopoiesis.bio` from 20,618 to 20,643 bytes. Verified by comparison: the
+lane's `--verify` moved exactly **3** fields of the census (that file's bytes, its sha256, the group
+sha256) and the **same 3 moved in a clean worktree without the lane's change**. Every other field was
+identical: 58 programmes' entity and rule counts, every `# test:` line, chr21's `rules == 5176`, `bio
+test` 58 files 410/410. The repair is additive and dispatched (lane-execfix): `xfail(strict=False)` with
+its reason on the wrong-claim test, the correctly scoped claim **added** — compile with the parameter at
+its default and without it from the same tree and require byte identity between the two — an additive
+note on the census for `71f9d47`, and an agreement test for the second group-digest implementation at
+`scripts/execscale_census.py:125`, whose deletion goes on the timed list rather than being forced.
+
+**What waits on Albert, now one item and a half.** **Run 2, resumed or closed** — a re-sign is needed
+either way. And the half, new tonight: `grn.py` is inside the AstroREG-2 sender's 52-file import
+closure and `92c6ea8` changed it, so `closure_sha256(sender_closure())` **has moved** and that sign-off
+must be re-issued before any paid send, whichever way the decision goes.
