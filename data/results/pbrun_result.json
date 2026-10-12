@@ -1,0 +1,479 @@
+{
+  "result": "pbrun_result",
+  "date": "2026-10-12",
+  "lane": "lane-pbrun",
+  "registration": "data/results/pbrun_registration.json",
+  "registration_sha256": "5039c67603e002b123a280bbc2ff47433b54ccea490805b64b8d4c528d41beb5",
+  "gene_count_record": "data/results/pbrun_gene_count.json",
+  "question": "Read M2h's endpoint twice on the same genes and the same four cell types -- once with the measured side taken from bulk RNA-seq and once with it taken from pseudobulked single-cell or single-nucleus RNA -- at M2h's FIXED scale +0.2146. Do the two readings agree?",
+  "what_it_gates": "AGREEMENT licenses the modality swap FOR THIS ENDPOINT ONLY and makes the bile-duct out-of-domain test (lane-oodinventory, `171f5bf`) interpretable, so the supervisor's recommendation to Albert can change. DISAGREEMENT closes Albert's biosample question without a lift. INCONCLUSIVE licenses nothing.",
+  "outcome": "AGREEMENT",
+  "reading": "pseudobulked single-cell and single-nucleus RNA against bulk RNA-seq on M2h's endpoint, over the same 8,051 genes and the same four cell types at the fixed constant +0.2146. THE SINGLE-CELL ARM: better; on these genes the reader-gated run scaled by M2h's fitted constant +0.2146 lowered the squared error of measured pseudobulk log2(CPM+1) below the no-rule baseline's, so it is closer to measured pseudobulk log2(CPM+1) than the no-rule baseline (Delta MSE +0.0388337 [98.33% CI +0.0307512, +0.0474467] over 32,204 gene-cell pairs, 8,051 genes; control p = 0.000999001; the scale is the constant +0.2146 taken from ac5580b and NOTHING IS FITTED IN THIS LANE). THE BULK ARM, read on the same genes, the same cell types and the same prediction: better; on these genes the reader-gated run scaled by M2h's fitted constant +0.2146 lowered the squared error of measured bulk log2(TPM+1) below the no-rule baseline's, so it is closer to measured bulk log2(TPM+1) than the no-rule baseline (Delta MSE +0.0312544 [98.33% CI +0.0226991, +0.0404224] over 32,204 gene-cell pairs, 8,051 genes; control p = 0.000999001; the scale is the constant +0.2146 taken from ac5580b and NOTHING IS FITTED IN THIS LANE). THE PAIRED DIFFERENCE, single-cell minus bulk, on the same gene resamples: +0.00757935 [98.33% CI -0.00243939, +0.0174182] against a registered equivalence margin of +-0.0216956, which is half of M2h's own committed held-out gain. THE REGISTERED OUTCOME IS AGREEMENT. Agreement licenses THE MODALITY SWAP FOR THIS ENDPOINT ONLY and makes the bile-duct out-of-domain test interpretable, so the supervisor's recommendation to Albert can change. It is NEVER 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here. CARRIED WITH EVERY READING: the bulk side is NOT a fresh measurement. It is RNA already read by items 7, 7d, 7h, M2h and M2i -- precisely, M2i's committed selection of ENCODE polyA plus RNA-seq of these same four biosamples under this same endpoint -- so the single-cell side is the only side of this comparison the project has never read. ONLY ONE OF THE FOUR CELL TYPES IS SINGLE-NUCLEUS (the ovary); GM12878, K562 and testis are single-CELL, and the bile-duct source is single-NUCLEUS, so the nucleus-specific part of anything this reading licenses rests on one of the four cell types.",
+  "cells": [
+    "GM12878",
+    "K562",
+    "ovary",
+    "testis"
+  ],
+  "modality_per_cell": {
+    "GM12878": [
+      "single-cell"
+    ],
+    "K562": [
+      "single-cell"
+    ],
+    "ovary": [
+      "single-nucleus"
+    ],
+    "testis": [
+      "single-cell"
+    ]
+  },
+  "genes": 8051,
+  "pairs": 32204,
+  "scale": 0.2145911381525326,
+  "nothing_is_fitted": "no scale, no intercept, no per-gene or per-cell parameter, no normalisation chosen from a value, no threshold. The two arms differ in ONE thing, the measured side.",
+  "single_cell_arm": {
+    "delta_mse": 0.038833743757479236,
+    "ci": [
+      0.03075120774439853,
+      0.047446747062485854
+    ],
+    "control_p": 0.000999000999000999,
+    "reads": "better",
+    "delta_mse_at_scale_1": -0.4206063363543916
+  },
+  "bulk_arm": {
+    "delta_mse": 0.0312543979763833,
+    "ci": [
+      0.022699081320520245,
+      0.04042244728418855
+    ],
+    "control_p": 0.000999000999000999,
+    "reads": "better",
+    "delta_mse_at_scale_1": -0.4559262747560813
+  },
+  "paired_difference": {
+    "single_cell_minus_bulk": 0.007579345781095939,
+    "ci": [
+      -0.0024393856852736604,
+      0.01741815854922745
+    ],
+    "margin": 0.0216956054050679,
+    "margin_rule": "MARGIN = half of M2h's committed held-out Delta MSE for the multiplicative form, data/results/magcal_result.json per_form.multiplicative.held_out_delta_mse / 2. Fixed by this registration, computed from a committed number and from no value this lane reads.",
+    "interval_inside_the_margin": true,
+    "interval_wholly_outside_the_margin": false
+  },
+  "which_governs": "M2h's rule, carried: the held-out interval decides -- excludes 0 on the rules' side means 'better', excludes 0 on the baseline's side means 'worse' (the falsifier), straddles 0 means the reading does not resolve. The two branches M2h split by the SCALE interval collapse here into one, 'inconclusive', because the scale is a fixed constant and there is no scale interval to read",
+  "decision": {
+    "agreement": "BOTH of these, and nothing less: (a) the SINGLE-CELL arm's own 98.33% interval excludes 0 on the rules' side, so that arm reads 'better' under CARRIED['which_governs_m2h']; and (b) the PAIRED difference (single-cell arm minus bulk arm) has its 98.33% interval wholly inside [-MARGIN, +MARGIN]. What it licenses: THE MODALITY SWAP FOR THIS ENDPOINT ONLY, which makes the bile-duct out-of-domain test interpretable, so the supervisor's recommendation to Albert can change. It is NEVER 'single-nucleus RNA equals bulk RNA'.",
+    "disagreement": "EITHER of these: the single-cell arm's interval excludes 0 on the BASELINE's side (it reads 'worse'), or the paired difference's interval lies WHOLLY OUTSIDE [-MARGIN, +MARGIN]. What it means: pseudobulked single-cell RNA does not reproduce bulk on this endpoint, the modality swap stays unlicensed, the bile-duct test stays uninterpretable, and Albert's biosample question CLOSES WITHOUT A LIFT.",
+    "inconclusive": "ANYTHING ELSE, and it licenses nothing. In particular: the single-cell arm's interval straddling 0, or a difference interval that neither lies inside the margin nor wholly outside it. The bile-duct test stays uninterpretable and no recommendation changes. This is written here so that an ambiguous result cannot be read afterwards as a weak agreement.",
+    "falsifier": "The single-cell arm's 98.33% interval excluding 0 on the BASELINE's side -- the scaled rules FURTHER from pseudobulked RNA than no rule at all -- or a paired difference interval wholly outside the margin. Either would be this lane's negative, and it is a result and not a failure: it closes the biosample question without a lift and says so.",
+    "stop_rule": "The run is executed ONCE, on the population this registration pins, and the registered reading is reported verbatim whatever it is. No clause is adjusted after a value is seen, no cell type is dropped, no gene set is re-cut, no alternative normalisation is tried and the margin is not moved. If the record and this registration disagree about any pinned number, the run is a HARNESS_DEFECT and nothing is read."
+  },
+  "falsifier": "The single-cell arm's 98.33% interval excluding 0 on the BASELINE's side -- the scaled rules FURTHER from pseudobulked RNA than no rule at all -- or a paired difference interval wholly outside the margin. Either would be this lane's negative, and it is a result and not a failure: it closes the biosample question without a lift and says so.",
+  "harness_check": {
+    "pinned_inputs_match": true,
+    "population_genes": 8051,
+    "cell_types": 4,
+    "scale_is_m2hs_constant": true,
+    "both_arms_centred_within_every_gene": true,
+    "every_registered_gene_resolved_on_both_sides": true
+  },
+  "descriptives_not_verdicts": {
+    "per_cell": [
+      {
+        "cell": "GM12878",
+        "single_cell_delta_mse": 0.14399641853192063,
+        "bulk_delta_mse": 0.1664741996612493,
+        "correlation_of_the_two_arms_D": 0.5095456453337095
+      },
+      {
+        "cell": "K562",
+        "single_cell_delta_mse": 0.017035703412846655,
+        "bulk_delta_mse": -0.11665731466673737,
+        "correlation_of_the_two_arms_D": 0.1865635781129262
+      },
+      {
+        "cell": "ovary",
+        "single_cell_delta_mse": 0.0027760688622468707,
+        "bulk_delta_mse": 0.001600520561781525,
+        "correlation_of_the_two_arms_D": 0.6385944240658871
+      },
+      {
+        "cell": "testis",
+        "single_cell_delta_mse": -0.008473215777097193,
+        "bulk_delta_mse": 0.07360018634923975,
+        "correlation_of_the_two_arms_D": 0.01854615936637206
+      }
+    ],
+    "correlation_of_the_two_arms_D_over_all_pairs": 0.3377156618375276,
+    "sources_per_cell": [
+      {
+        "cell": "GM12878",
+        "modality": [
+          "single-cell"
+        ],
+        "files": 4,
+        "cells_or_nuclei": 4,
+        "library_size_counts": 113927847.28000098,
+        "identifier_matched_on": "unversioned_ensembl_gene_id",
+        "accessions": [
+          "ENCFF044RAX",
+          "ENCFF879AXZ",
+          "ENCFF513SFV",
+          "ENCFF863OEM"
+        ]
+      },
+      {
+        "cell": "K562",
+        "modality": [
+          "single-cell"
+        ],
+        "files": 1,
+        "cells_or_nuclei": 658,
+        "library_size_counts": 4458743.0,
+        "identifier_matched_on": "gene_symbol",
+        "accessions": [
+          "GSM9224207"
+        ]
+      },
+      {
+        "cell": "ovary",
+        "modality": [
+          "single-nucleus"
+        ],
+        "files": 5,
+        "cells_or_nuclei": 91839,
+        "library_size_counts": 196453625.0,
+        "identifier_matched_on": "unversioned_ensembl_gene_id",
+        "accessions": [
+          "ENCFF935DXO",
+          "ENCFF994JVH",
+          "ENCFF810QKU",
+          "ENCFF820ADE",
+          "ENCFF082QMT"
+        ]
+      },
+      {
+        "cell": "testis",
+        "modality": [
+          "single-cell"
+        ],
+        "files": 1,
+        "cells_or_nuclei": 7513,
+        "library_size_counts": 102305260.0,
+        "identifier_matched_on": "unversioned_ensembl_gene_id",
+        "accessions": [
+          "ec6ef004-5f30-4a40-b282-980cca20a561"
+        ]
+      }
+    ],
+    "control_delta_mse_median_single_cell": -0.03521826090822193,
+    "control_delta_mse_median_bulk": -0.03490087969623268
+  },
+  "aggregation": {
+    "statement": "SUM THE COUNTS, THEN CPM, THEN LOG2. (1) For a cell type, every contributing file's integer count matrix is read (SC_SELECTION['counts_layer']) and the counts of a gene are SUMMED over ALL of that cell type's cells or nuclei and over all of its contributing files, giving one integer per gene per cell type. (2) That summed vector is scaled to counts per million: cpm(G, X) = 1e6 * c(G, X) / sum over all genes of c(., X), the sum taken over EVERY row of the matrix and not only over the counted genes. (3) The measured value is y_sc(G, X) = log2(cpm(G, X) + 1), with PSEUDOCOUNT 1.0 carried verbatim from M2h.",
+    "no_filter": "NO FILTER AT ANY STEP. No expression threshold, no minimum count, no minimum number of cells, no doublet removal, no mitochondrial-fraction cut, no cell-type subsetting inside a tissue, no highly-variable-gene selection and no removal of a donor or a batch. Every barcode present in the chosen matrix contributes and every gene row is kept. This is lane-pseudobulk's 'no filter on expression and no filter on any measured value' applied to the single-cell side.",
+    "why_sum": "Summing counts over cells is the aggregation that makes a pseudobulk stand for the library a bulk experiment would have sequenced from the same material, so it is the comparison the modality question asks. A mean of per-cell normalised values would weight a 1,000-UMI cell equally with a 20,000-UMI cell and would not be that library; it is not read here.",
+    "cpm_not_tpm": "The single-cell side is CPM and the bulk side is RSEM TPM, which is length-normalised. The difference is a PER-GENE factor, 1/length, and the endpoint centres each gene within itself across the cell types, so a per-gene factor cancels from both D's up to the pseudocount. What does NOT cancel is a per-CELL-TYPE term (the ratio of the two normalising sums), which shifts all of a cell type's genes together; it is declared as a limitation and no length-normalised variant of the single-cell side was computed or read."
+  },
+  "deviation_from_m2h": "ONE, NAMED AS A DEVIATION AND APPLIED IDENTICALLY TO BOTH ARMS. M2h centres a gene within itself over its THIRTEEN cell types; this comparison has FOUR, because only four of the thirteen have both modalities. So y, y_sc and P are each centred over the SAME FOUR columns. Centring one arm over thirteen and the other over four would make the two numbers incomparable, and `pr.centred` with its planted test exists to stop that. The consequence is stated rather than hidden: neither arm's Delta MSE here is M2h's +0.04339, which was read over thirteen cell types, and the comparison this lane reads is BETWEEN ITS OWN TWO ARMS.",
+  "prior_exposure": "THE BULK SIDE IS NOT A FRESH MEASUREMENT. It is RNA already read by items 7, 7d, 7h, M2h and M2i. Precisely: the bulk arm is M2i's committed selection of ENCODE polyA plus RNA-seq files (`data/results/freshrna_sources.json`, on disk under data/cache/freshrna/rna/), which M2i's own non-overlap check shows shares no experiment, file or library with the set items 7, 7d, 7h and M2h read -- but it is the SAME FOUR BIOSAMPLES under the SAME ENDPOINT, and M2i's registered reading has already been taken on it (`f6e71c6`). So a reading here is a statement about these measurements and not independent confirmation of anything, and the single-cell side is the only side of this comparison that this project has never read.",
+  "wording_limit": "Agreement on this endpoint licenses the modality swap FOR THIS ENDPOINT ONLY. It is never 'single-nucleus RNA equals bulk RNA', and it is never a statement about any other endpoint, any other gene set or any cell type not counted here.",
+  "limitations": [
+    "ONLY ONE OF THE FOUR CELL TYPES IS SINGLE-NUCLEUS (ovary); GM12878, K562 and testis are single-CELL. The bile-duct source is single-NUCLEUS, so the nucleus-specific part of any agreement read here rests on one cell type. The per-cell-type descriptives are reported so the ovary arm can be read on its own, and they decide nothing.",
+    "The single-cell side is CPM and the bulk side is length-normalised TPM. The per-GENE length factor cancels under the within-gene centring up to the pseudocount; the per-CELL-TYPE ratio of the two normalising sums does NOT cancel and is not corrected.",
+    "FOUR CELL TYPES, not thirteen. Neither arm's Delta MSE is comparable to M2h's +0.04339, which was read over thirteen; only the two arms here are comparable to each other.",
+    "The bulk and single-cell data of a cell type come from DIFFERENT sources and different donors for ovary and testis, and from different preparations for GM12878 and K562. lane-pseudobulk's rule deliberately does not require one source, and any disagreement must be read against that difference as well as against the modality.",
+    "GM12878's single-cell side is four cells from two ENCODE scRNA-seq experiments of 2014, quantified against GENCODE V24 while its bulk side is V29. Four cells is a thin pseudobulk and the annotation differs; both are recorded and neither is corrected.",
+    "The bulk side is not fresh: items 7, 7d, 7h, M2h and M2i have read RNA of these biosamples under this endpoint, and M2i has read these exact files (EXPOSURE).",
+    "Agreement would license the modality swap ON THIS ENDPOINT ONLY: this gene population, this metric, this fixed scale. It is never a statement about another endpoint, another gene set, or a cell type not counted here, and never 'single-nucleus RNA equals bulk RNA'.",
+    "A single-cell matrix's library size is the sum over EVERY row the archive supplies, spike-in rows included where a source has them. That is the no-filter rule applied consistently; it shifts all of a cell type's genes together and is part of the per-cell-type term above."
+  ],
+  "no_biosample_added": "This lane adds NO biosample. It works only in cell types the reader already covers, makes no AlphaGenome request and no deletion request, and touches nothing in area J, no node model and no BioForge calibration.",
+  "stop_list_check": "docs/ROADMAP.md section 5, 'The stop list of 2026-09-27, reinstated': NO biosample added, no AlphaGenome request, no deletion request, nothing in area J, no node-model work, no BioForge calibration.",
+  "alphagenome_requests": 0,
+  "money": "$0.00: no model request, no key, no data needing an application",
+  "pinned_sha256": {
+    "data/results/pbrun_gene_count.json": "a6b367da4a5de1778463ea59e1b521102451ef8898dae12ef92fe000ce7e6afe",
+    "data/results/magcal_result.json": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+    "data/results/multrna_result.json": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+    "data/results/freshrna_sources.json": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601"
+  },
+  "seconds": 46.04,
+  "result_manifest": {
+    "sources": [
+      {
+        "accession": "data/results/pbrun_registration.json and data/results/pbrun_gene_count.json (this lane's committed registration and count), data/results/multrna_result.json (7h's prediction rows), data/results/magcal_result.json (M2h's constant and the margin), data/results/freshrna_sources.json (the bulk files)",
+        "version": "as committed in this checkout; pinned by sha256 in pinned_sha256"
+      },
+      {
+        "accession": "ENCODE polyA plus RNA-seq gene quantifications of GM12878, K562, ovary and testis (M2i's selection), and ENCODE scRNA-seq and snRNA-seq processed files of GM12878 and ovary",
+        "version": "ENCODE Consortium data: free to download and use without restriction under the ENCODE data use policy; cite the ENCODE Consortium and the experiment accession (https://www.encodeproject.org/help/citing-encode/)"
+      },
+      {
+        "accession": "GEO GSM9224207 (GSE306708) GSM9224207_Fresh_K562.h5ad",
+        "version": "NCBI GEO holds public submissions available without restriction and without an application; no controlled-access tier is involved"
+      },
+      {
+        "accession": "CELLxGENE Discover dataset ec6ef004-5f30-4a40-b282-980cca20a561, Tabula Sapiens - Testis",
+        "version": "CZ CELLxGENE Discover distributes curated datasets openly over HTTPS with no registration and no application; its submission policy requires CC BY 4.0"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "data/cache/freshrna/rna/ENCFF170TZG.tsv",
+        "sha256": "89d9dfa96436dafe545299cabc8cdd91c232bb6366acce64d81cbfb265e9195f",
+        "bytes": 10959672,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF306DIV.tsv",
+        "sha256": "947d2df99c7c3517589a6e2780fc17c8187b7d67d76d9befb5abb8f82d27d56c",
+        "bytes": 10831170,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF416QUL.tsv",
+        "sha256": "26ebe77bfea175892c0da172c9f080cdce937f8ff0e377cb751da379502a3301",
+        "bytes": 11195080,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF472HFI.tsv",
+        "sha256": "dbf86a3654fa4f47ae3fc3a87b2754f2b7c01c7a2a60625623e7c915cf660c4f",
+        "bytes": 10967642,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF477OQB.tsv",
+        "sha256": "c8bfce24e1daacf75b810a7266c7eda67eb1d6914fe1bbddfea0d6a86250ee77",
+        "bytes": 10960675,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/freshrna/rna/ENCFF628SMT.tsv",
+        "sha256": "ad08091aab7f7662511c4255e45f01a72ddd3f12fd93779a45d2630773db7381",
+        "bytes": 10966441,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/09e3ae14-f355-4ed7-ad81-787b587c8a16.h5ad",
+        "sha256": "13904c514e65fa1ec22c060bda7421031461177fb647ab1389b2fa0bb74a8b72",
+        "bytes": 385384218,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF044RAX.tsv",
+        "sha256": "cea94bb6fe10e60881e3dece4a514da9a884a5c600058590558b49586de07dce",
+        "bytes": 10045728,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF082QMT.tar.gz",
+        "sha256": "148bb94166fe269cd8606ec45edb24c810710db4f3154937f46084b7bd186972",
+        "bytes": 67614222,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF513SFV.tsv",
+        "sha256": "1b6f9d5bea5abca48935602cdd36a7ce64998a1e135ac1a938c62d429f3462e3",
+        "bytes": 10036030,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF810QKU.tar.gz",
+        "sha256": "b3b5a238541cf8c0afa62e3997c98a80843afead48310c3bab94ac28c72b32d0",
+        "bytes": 79835689,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF820ADE.tar.gz",
+        "sha256": "5c68920e200f356654e4047d881463bb73b8e26556a17e0597acd41e51a73142",
+        "bytes": 56290280,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF863OEM.tsv",
+        "sha256": "8794ffa6ff00c4a48f1844790a0cd9543dc7c75c4ef2cc7e478d98537cf01b67",
+        "bytes": 10033117,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF879AXZ.tsv",
+        "sha256": "e666e6ef8134813278dc304eab892b147283c1cc7014d270e80726cf69954980",
+        "bytes": 10031535,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF935DXO.tar.gz",
+        "sha256": "262484afd1d7be934cbf2b640e495d2d02130c7e8d2819ec8b1f218e462eb94a",
+        "bytes": 52506768,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/ENCFF994JVH.tar.gz",
+        "sha256": "309b8c6b5e809460b4295f2e4fa17756fa66f14d24d51d9139e3ac934812c753",
+        "bytes": 98347078,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/cache/pbrun/GSM9224207_Fresh_K562.h5ad",
+        "sha256": "14eb3129e57769899e0d301f515531a7e410e52dc7488fb1f981c43b2ea99ca6",
+        "bytes": 32557380,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/results/freshrna_sources.json",
+        "sha256": "01be306325aa4dbbf8452b1ac6bc53124eecc2b797b41d795be153aaad8af601",
+        "bytes": 89464,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/results/magcal_result.json",
+        "sha256": "e15e9787b9b2ec1891f494bcda124c4c7733138e4a1a314aae629705cc71db4f",
+        "bytes": 42264,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/results/multrna_result.json",
+        "sha256": "421f71f46992f24f32bbdd1b7370710a01792fcee0ef990cda7535546ce45bc3",
+        "bytes": 4572616,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/results/pbrun_gene_count.json",
+        "sha256": "a6b367da4a5de1778463ea59e1b521102451ef8898dae12ef92fe000ce7e6afe",
+        "bytes": 146273,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/results/pbrun_registration.json",
+        "sha256": "5039c67603e002b123a280bbc2ff47433b54ccea490805b64b8d4c528d41beb5",
+        "bytes": 32058,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      },
+      {
+        "path": "data/results/pseudobulk_inventory.json",
+        "sha256": "b23eeead5661d4d382774fa914ede0690dd4dd7e445d0e860097f1e5fad8ee4c",
+        "bytes": 46712,
+        "partition": "M2h's HELD-OUT side, as the registration pins it"
+      }
+    ],
+    "input_count": 23,
+    "assembly": "GRCh38 on every side; GM12878's single-cell tables are GENCODE V24 and everything else V29, and genes are matched on the unversioned Ensembl id or on the symbol",
+    "coordinates": "n/a: no interval is read or written. The endpoint is a per-gene level.",
+    "parameters": {
+      "scale": 0.2145911381525326,
+      "margin": 0.0216956054050679,
+      "resamples": 2000,
+      "bootstrap_seed": 20261010,
+      "permutations": {
+        "count": 1000,
+        "seed": 20261011
+      },
+      "genes": 8051,
+      "cell_count": 4,
+      "sc_selection_version": "pbrun-1",
+      "tolerance": 1e-09
+    },
+    "exclusions": [
+      "every gene outside the 8,051 the committed count record pins",
+      "every cell type outside the registered four",
+      "every normalised, decontaminated, imputed or scaled layer of either h5ad",
+      "nothing else: no expression filter, no cell filter, no gene dropped for its value"
+    ],
+    "partitions": {
+      "read": "M2h's HELD-OUT side of the multiplicative form, the registered 8,051 genes",
+      "not_read": "M2h's TRAINING genes: the scale is the constant already fitted on them"
+    },
+    "code_cleanliness": {
+      "git_sha": "722bf512657f9f4ccb4c272d371a57765b53750f",
+      "dirty": true,
+      "entry_script": {
+        "argv0": "scripts/pbrun_run.py",
+        "form": "committed_repository_file",
+        "path": "scripts/pbrun_run.py",
+        "is_committed": true,
+        "declared_entry": "scripts/pbrun_run.py",
+        "declared_entry_matches_argv0": true,
+        "argv0_is_on_the_counting_path": true,
+        "why": "argv[0] is a file inside this repository that git tracks and reports unmodified: the commit holds the code that wrote the bytes, so a rebuild can run it. The only clean form",
+        "forms_are_decided_in_advance": "genomeos.manifest.ENTRY_FORMS: one clean form (a tracked, unmodified file inside this repository), every other form refuses, and a form that cannot be classified is 'unknown' and refuses too. Read from sys.argv[0] at write time, never declared"
+      },
+      "own_uncommitted_code": [],
+      "own_code_is_committed": true,
+      "foreign_uncommitted_code": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "foreign_uncommitted_code_on_the_counting_path": [],
+      "counting_path": [
+        "genomeos/__init__.py",
+        "genomeos/attribution/__init__.py",
+        "genomeos/attribution/pbrun.py",
+        "genomeos/attribution/pseudobulk.py",
+        "genomeos/manifest.py",
+        "genomeos/results.py",
+        "genomeos/version.py",
+        "scripts/pbrun_count.py",
+        "scripts/pbrun_run.py"
+      ],
+      "counting_path_count": 9,
+      "counting_path_is_computed": "the transitive import closure of this script, computed from the files' import statements at write time (genomeos.manifest.counting_path), never by importing: it follows every import that resolves to a file in this repository rather than only the package, counts the __init__.py of each package above a module, resolves bare imports against the directories the source literally puts on sys.path as well as the repository root, and matches every path component against what its directory lists, so a class name such as genomeos.genome.Genome cannot enter it as a file; not a hand-written list",
+      "note": "several lanes work in this one checkout. A file under foreign_uncommitted_code belongs to another lane; this lane did not write it and did not commit it. The counting path is the computed closure above, so a foreign file outside it cannot have entered a number here, and foreign_uncommitted_code_on_the_counting_path names any that could"
+    },
+    "entry": "scripts/pbrun_run.py",
+    "own_code": [
+      "genomeos/attribution/pbrun.py",
+      "scripts/pbrun_count.py",
+      "scripts/pbrun_register.py",
+      "scripts/pbrun_run.py",
+      "tests/test_pbrun.py"
+    ],
+    "code": {
+      "git_sha": "722bf512657f9f4ccb4c272d371a57765b53750f",
+      "dirty": true,
+      "dirty_code_paths": [
+        "genomeos/forge/__init__.py",
+        "genomeos/forge/design.py",
+        "tests/test_licence_header_presence.py"
+      ],
+      "untracked_code_paths": [],
+      "dirty_result_paths": [
+        "data/results/therapeutic_sv_case_result.json",
+        "data/results/wormoutron_inventory.json"
+      ],
+      "argv": [
+        "scripts/pbrun_run.py"
+      ],
+      "python": "3.12.13"
+    },
+    "complete": true,
+    "revision_stamps": {
+      "code_git_sha": "722bf512657f9f4ccb4c272d371a57765b53750f",
+      "code_cleanliness_git_sha": "722bf512657f9f4ccb4c272d371a57765b53750f",
+      "sampled": "code_cleanliness.git_sha is read while the writer computes; code.git_sha is read when the result is written. Both are HEAD of the same checkout at two moments",
+      "comparable": true,
+      "agree": true,
+      "revision_race": false,
+      "reading": "no revision race: both stamps record 722bf51"
+    },
+    "traced_inputs": {
+      "hook": "sys.addaudithook(\"open\")",
+      "active": true,
+      "opens": 92,
+      "opens_under_data": 56,
+      "files_read": 23,
+      "files_written": 0,
+      "undeclared": [],
+      "declared_not_read": [],
+      "cwd_at_open": ".",
+      "cwd_at_close": ".",
+      "note": "Every file this writer opened for reading under data/ was recorded by an audit hook on the \"open\" event, canonicalised through data/'s links so one file has one spelling, and compared against the inputs the manifest declares; a member of a declared group counts as declared and hashed on its own, a file under a declared directory counts as declared by prefix. The hook is per interpreter, so a file read by a subprocess is not in this record, nor is one reached through a path that canonicalises to neither this checkout's data/ nor one of its link targets."
+    }
+  }
+}
