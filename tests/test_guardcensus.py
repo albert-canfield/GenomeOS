@@ -344,3 +344,21 @@ def test_the_census_records_its_own_flaky_guard_and_how_it_was_caught() -> None:
     assert "UNDO GUARD refusing the commit" in case["how_it_was_caught"]
     assert "ZERO removed" in case["why_not_deleted"]
     assert "guard that fires at random" in case["why_strict_false"]
+
+
+def test_the_reading_of_the_count_is_registered_before_the_count() -> None:
+    """Fixed before fired.json existed, so it cannot be fitted to the numbers."""
+    assert "1,736 raise sites" in gcn.COUNT_POPULATION
+    assert "1,550 guards" in gcn.COUNT_POPULATION
+    assert "not doing the work" in gcn.COUNT_POPULATION
+
+
+def test_never_fired_is_not_claimed_to_be_a_defect() -> None:
+    assert "NOT a defect and NOT a cannot-fire" in gcn.COUNT_READING
+    assert "only condition (4) can tell the two apart" in gcn.COUNT_READING
+    assert "EXPECTED and nearly uninformative" in gcn.COUNT_READING
+
+
+def test_the_population_warning_cites_the_lanes_own_mistake() -> None:
+    assert "CASES_SELF_RED is the reason" in gcn.COUNT_POPULATION_WARNING
+    assert "two readers before the guard disproved it" in gcn.COUNT_POPULATION_WARNING

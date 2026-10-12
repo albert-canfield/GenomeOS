@@ -621,3 +621,45 @@ CASES_SELF_RED = {
     " from a peer's -- which its refusal message states outright. A limitation of the detector,"
     " not a licence",
 }
+
+
+# ------------------------- HOW THE COUNT WILL BE READ, registered BEFORE the count exists
+# The raise-site measurement is running as this is written and its numbers are not known here.
+# Registering the reading first is the same discipline as registering the rule first: a reading
+# chosen after the numbers are seen can be fitted to them.
+
+#: The population, and how condition (1) is applied to it. By SHAPE, not by name.
+COUNT_POPULATION = (
+    "every `raise` in genomeos/, scripts/ and tests/, classified by the ancestors BETWEEN the"
+    " raise and its own enclosing function: `guard` if a conditional decides whether it happens,"
+    " `reraise` if it is bare or inside an except handler, `loop` if only an iteration reaches"
+    " it, `unconditional` if it sits on a straight path. Only `guard` is in the census, because"
+    " nothing can plant a violation of a raise that reaching the call already causes. Measured"
+    " at 25db524: 1,736 raise sites, of which 1,550 guards, 88 reraise, 94 unconditional, 4 loop."
+    " A first version of the classifier counted any conditional anywhere in the FILE and gave"
+    " 1,556 guards; restricting it to the raise's own function moved it to 1,550, so the idiom"
+    " `if not valid: raise ...` really is dominant and the definition is not doing the work"
+)
+
+#: What NEVER FIRED will and will not mean. Fixed before the number is known.
+COUNT_READING = (
+    "a guard the whole suite never fires is a guard NO TEST PLANTS A VIOLATION OF -- condition"
+    " (2), measured rather than grepped. It is NOT a defect and NOT a cannot-fire: per"
+    " DOES_NOT_CLAIM, most will be right and merely unproven, and only condition (4) can tell"
+    " the two apart. THE THREE DIRECTORIES MUST BE READ SEPARATELY AND THIS IS THE POINT OF"
+    " REGISTERING IT NOW: scripts/ holds entry points the suite mostly does not import, so a"
+    " high never-fired count there is EXPECTED and nearly uninformative; genomeos/ is the tested"
+    " library, so a never-fired guard there is the interesting class; tests/ is the smallest and"
+    " most surprising, because a guard in the suite that the suite never fires is one nobody"
+    " wrote a planting test for although they had the file open"
+)
+
+#: And the trap this census already walked into once, so the count does not repeat it.
+COUNT_POPULATION_WARNING = (
+    "CASES_SELF_RED is the reason this is written down: this lane reported '0 violations' from"
+    " tests/test_*.py while the guard it was auditing scanned tests/*.py and was RED. A census"
+    " that measures a narrower population than the guard it audits will report that guard clean"
+    " while the guard is red, and that 0 passed through two readers before the guard disproved"
+    " it. So the population above is taken from the TREE, not from a plausible glob, and the"
+    " directory split is declared rather than chosen once the totals are in"
+)
