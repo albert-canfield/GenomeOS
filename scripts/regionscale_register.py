@@ -130,12 +130,16 @@ def main() -> int:
         "step": "2 of 4: the registration, before any held-out value of this design is read",
         "date": date.today().isoformat(),
         "registered": rs.REGISTERED,
-        "harness": {
+        "harness_record": {
             "result": HARNESS_RESULT,
             "outcome": harness["outcome"],
             "m2h_reproduces": harness["m2h_reproduction_FIRST"]["reproduces"],
             "m2h_reading": harness["m2h_reproduction_FIRST"]["reading"],
         },
+        # NOTE the ORDER and the NAME. `registered_fields()` carries a BOUND field called "harness"
+        # -- the registered HARNESS text -- so the provenance block above is called "harness_record".
+        # Written as "harness" it was silently OVERWRITTEN by this spread and the registration lost the
+        # proof that M2h reproduced; a test reading this file caught it.
         **rs.registered_fields(),
         "the_held_out_design_is_feasible": {
             "admitted": adm,
