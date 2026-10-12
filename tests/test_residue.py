@@ -19,6 +19,8 @@ from genomeos.attribution import residue as rs
 from genomeos.attribution import scalefit as sf
 
 QUESTIONS_FILE = Path("data/results/residue_questions.json")
+CENSUS_FILE = Path("data/results/residue_census.json")
+GENES_FILE = Path("data/results/residue_genes.json")
 
 # ==== the scale is inherited, not re-declared, and nothing here fits =====================================
 
@@ -243,3 +245,112 @@ def test_the_registration_discloses_its_prior_exposure_word_for_word_from_the_mo
     assert "58" in d["prior_exposure"]
     assert d["cap_bound"] == rs.CAP_BOUND
     assert d["decision_rule"] == rs.DECISION_RULE
+
+
+# ==== the committed census: the outcome is RECOMPUTED, never read as written ==============================
+
+
+def _census() -> dict:
+    tp.must_be_present(
+        CENSUS_FILE,
+        GENES_FILE,
+        was="the one census run of this lane and its per-gene table, written at the committed questions",
+    )
+    return json.loads(CENSUS_FILE.read_text())
+
+
+def test_the_branch_and_the_verdict_recompute_from_the_reported_medians_by_the_decision_function() -> None:
+    """The lesson of 2026-10-12: a committed reading must be recomputable from the numbers beside it."""
+    d = _census()
+    inp = d["decision_inputs"]
+    branch = rs.decide(
+        inp["median_top1_of_the_residue"],
+        inp["median_top3_of_the_residue"],
+        inp["median_k_min_of_the_residue"],
+    )
+    assert branch == d["branch"]
+    assert d["verdict"].startswith(rs.READINGS[branch])
+
+
+def test_the_medians_the_decision_read_are_the_0_point_5_quantiles_the_record_publishes() -> None:
+    d = _census()
+    res, inp = d["residue"], d["decision_inputs"]
+    assert res["Q3_top1_share"]["quantiles"]["0.5"] == pytest.approx(inp["median_top1_of_the_residue"])
+    assert res["Q4_top3_share"]["quantiles"]["0.5"] == pytest.approx(inp["median_top3_of_the_residue"])
+    assert res["Q6_k_min"]["quantiles"]["0.5"] == pytest.approx(inp["median_k_min_of_the_residue"])
+
+
+def test_the_counts_close_and_the_residue_is_what_the_per_gene_table_says_it_is() -> None:
+    d = _census()
+    g = json.loads(GENES_FILE.read_text())
+    counts = d["Q1_counts"]
+    assert counts["recovered_at_the_scale"] + counts["the_residue"] == counts["excluded_basal_not_positive"]
+    assert d["residue"]["genes"] == counts["the_residue"]
+    assert d["recovered"]["genes"] == counts["recovered_at_the_scale"]
+    assert len(g["rows"]) == counts["excluded_basal_not_positive"]
+    i = g["columns"].index("in_residue")
+    assert sum(1 for r in g["rows"] if r[i]) == counts["the_residue"]
+
+
+def test_the_residue_is_recomputable_from_the_table_and_every_member_exceeds_the_level_at_the_scale() -> None:
+    """A gene is in the residue exactly when its scaled summed drop is not below the gene's level."""
+    g = json.loads(GENES_FILE.read_text())
+    i_res, i_q, i_sum = (g["columns"].index(c) for c in ("in_residue", "q_after", "sum_d"))
+    for row in g["rows"]:
+        assert bool(row[i_res]) == (not row[i_q] < 1.0)
+        assert row[i_q] == pytest.approx(rs.SCALE * row[i_sum])
+
+
+def test_every_declared_question_is_answered_for_both_populations_with_its_whole_distribution() -> None:
+    d = _census()
+    for name in ("residue", "recovered"):
+        block = d[name]
+        for key in ("Q2_n_activating", "Q3_top1_share", "Q4_top3_share", "Q5_q_after_scaling", "Q8_n_eff"):
+            dist = block[key]
+            assert set(dist["quantiles"]) == {str(q) for q in rs.QUANTILES}, f"{name}.{key}"
+            assert dist["n"] + dist["n_nan"] == block["genes"]
+
+
+def test_the_cap_curve_covers_the_whole_declared_ladder_and_no_other_level() -> None:
+    d = _census()
+    per = d["Q7_per_element_cap"]["per_level"]
+    assert list(per) == [str(c) for c in rs.CAP_LEVELS]
+    assert d["Q7_per_element_cap"]["primary_level"] == rs.CAP_PRIMARY
+    for cap, v in per.items():
+        assert v["recovered"] + v["still_not_fittable"] == d["residue"]["genes"]
+        # CAP_BOUND: a cap fits every gene with fewer than 1/L activating elements, so it is a floor
+        assert v["recovered"] >= v["genes_below_the_bound_1_over_L"], f"L={cap} breaks its own bound"
+
+
+def test_the_cap_counts_recompute_from_the_per_gene_table() -> None:
+    d = _census()
+    g = json.loads(GENES_FILE.read_text())
+    i_res = g["columns"].index("in_residue")
+    for cap in rs.CAP_LEVELS:
+        i = g["columns"].index(f"fits_under_{cap}")
+        n = sum(1 for r in g["rows"] if r[i_res] and r[i])
+        assert n == d["Q7_per_element_cap"]["per_level"][str(cap)]["recovered"]
+
+
+def test_the_census_re_derived_its_population_and_reports_whether_it_agrees_with_what_came_before() -> None:
+    d = _census()
+    rec = d["reconciliation"]
+    assert rec["eligible_for_a_fit"]["re_derived"] == d["Q1_counts"]["eligible_for_a_fit"]
+    assert rec["the_residue"]["re_derived"] == d["Q1_counts"]["the_residue"]
+    assert rec["agrees"] is True, f"this run disagrees with the committed counts: {rec}"
+
+
+def test_the_identity_and_the_cap_cross_check_held_on_every_gene_of_the_run() -> None:
+    d = _census()
+    checks = d["identity_checks"]
+    assert checks["max_abs_q_after_minus_scale_times_q_before"] < 1e-9
+    assert checks["max_abs_capped_sum_minus_combine2_q"] < 1e-9
+    assert checks["cap_verdict_disagreements_with_combine2"] == 0
+
+
+def test_the_census_opened_no_rna_and_claims_nothing_about_expression_or_any_form() -> None:
+    d = _census()
+    assert d["rna_read"] == "none" and d["alphagenome_requests"] == 0
+    assert d["scale_is_refitted"] is False
+    assert "not a claim about expression and not a proposed form" in d["what_this_is_not"]
+    assert d["form"] == "mean"
