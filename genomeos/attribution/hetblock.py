@@ -660,12 +660,28 @@ BOUND = {
 }
 
 
+def as_written(value: Any) -> Any:
+    """`value` as json writes it, NESTED AND NOT ONLY AT THE TOP LEVEL.
+
+    json.dump turns every tuple into a list at EVERY depth, so a top-level-only normalisation makes
+    the run's word-for-word check fail on a field that round-trips perfectly -- CARRIED, whose values
+    are tuples inside a dict. This LOOSENS NOTHING: no number, no string and no key is touched and the
+    comparison stays ==; it only stops a tuple that json cannot represent from reading as drift.
+    """
+    if isinstance(value, (list, tuple)):
+        return [as_written(v) for v in value]
+    if isinstance(value, dict):
+        return {k: as_written(v) for k, v in value.items()}
+    return value
+
+
 def registered_fields() -> dict[str, Any]:
     """The BOUND fields, as the registration writes them and the run re-checks them."""
     out: dict[str, Any] = {}
     for field, name in BOUND.items():
         v = globals()[name]
         out[field] = list(v) if isinstance(v, tuple) else v
+    out = {field: as_written(v) for field, v in out.items()}
     return out
 
 

@@ -529,6 +529,22 @@ def test_every_bound_field_names_a_real_constant_and_registered_fields_returns_t
         assert fields[field] is not None
 
 
+def test_registered_fields_survives_jsons_round_trip_at_EVERY_depth_and_loosens_nothing():
+    """A nested tuple must not read as drift, and nothing but tuple-vs-list may be forgiven."""
+    fields = hb.registered_fields()
+    assert json.loads(json.dumps(fields)) == fields, "a BOUND field does not round-trip through json"
+    # CARRIED is the field that caught this: tuples inside a dict, which json writes as lists
+    assert isinstance(hb.CARRIED, dict)
+    assert fields["carried"] == json.loads(json.dumps(hb.CARRIED))
+    # and the normalisation changes nothing else: a changed number, string or key is still drift
+    assert hb.as_written(("a", ("b", 1))) == ["a", ["b", 1]]
+    assert hb.as_written({"k": (1.5,)}) == {"k": [1.5]}
+    assert hb.as_written(0.0167) == 0.0167
+    assert hb.as_written("x") == "x"
+    assert hb.as_written({"k": (1.5,)}) != {"k": [1.6]}
+    assert hb.as_written({"k": (1.5,)}) != {"j": [1.5]}
+
+
 def test_the_binding_set_covers_every_decision_the_run_could_otherwise_move():
     for name in (
         "CONTROL_ALPHA",
