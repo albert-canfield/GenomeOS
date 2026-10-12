@@ -657,3 +657,77 @@ def test_the_register_script_refuses_without_a_reproducing_harness(tmp_path, mon
     monkeypatch.setattr(mod, "OUT", str(there))
     with pytest.raises(SystemExit, match="already exists"):
         mod.refuse_unless_harness_reproduced()
+
+
+# ---- the run script's contract, and the TRIAL RUN it discloses ------------------------------------
+def _run_module():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("regionscale_run", ROOT / "scripts/regionscale_run.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_run_script_refuses_to_run_twice_and_refuses_without_a_registration(tmp_path, monkeypatch):
+    """STOP_RULE's ONE RUN, and the registration that must exist: both driven through the real script."""
+    mod = _run_module()
+    there = tmp_path / "already.json"
+    there.write_text("{}")
+    monkeypatch.setattr(mod, "OUT", str(there))
+    with pytest.raises(SystemExit, match="ONE RUN"):
+        mod.refuse_unless_registered()
+    monkeypatch.setattr(mod, "OUT", str(tmp_path / "nope.json"))
+    monkeypatch.setattr(mod, "REGISTRATION", str(tmp_path / "absent.json"))
+    with pytest.raises(SystemExit, match="does not exist"):
+        mod.refuse_unless_registered()
+
+
+def test_the_run_script_refuses_a_registration_that_DRIFTED_from_the_module(tmp_path, monkeypatch):
+    """A registration that no longer binds a BOUND field word for word is a different experiment."""
+    mod = _run_module()
+    drifted = dict(rs.registered_fields())
+    drifted["question"] = drifted["question"] + " AND SOMETHING ELSE"
+    drifted["pinned_sha256"] = {}
+    p = tmp_path / "reg.json"
+    p.write_text(json.dumps(drifted))
+    monkeypatch.setattr(mod, "OUT", str(tmp_path / "nope.json"))
+    monkeypatch.setattr(mod, "REGISTRATION", str(p))
+    with pytest.raises(SystemExit, match="word for word"):
+        mod.refuse_unless_registered()
+
+
+def test_the_run_script_refuses_when_a_PINNED_INPUT_MOVED(tmp_path, monkeypatch):
+    """A moved input makes the registered numbers unreproducible, so the run does not start."""
+    mod = _run_module()
+    body = dict(rs.registered_fields())
+    body["pinned_sha256"] = {"data/results/multrna_result.json": "0" * 64}
+    p = tmp_path / "reg.json"
+    p.write_text(json.dumps(body))
+    monkeypatch.setattr(mod, "OUT", str(tmp_path / "nope.json"))
+    monkeypatch.setattr(mod, "REGISTRATION", str(p))
+    with pytest.raises(SystemExit, match="pinned input moved"):
+        mod.refuse_unless_registered()
+
+
+def test_the_run_DISCLOSES_the_trial_run_that_preceded_the_registration_commit():
+    """The disclosure is a module constant, so it cannot be dropped from one code path only.
+
+    A trial run computed DELTA before the registration was committed. It wrote nothing into
+    data/results -- save_result refused on an untracked entry script and quarantined it -- and no value
+    of it was read. What makes the registration honest regardless is a TIMESTAMP and not an assurance,
+    and the constant has to say so, name the quarantined file's sha256, and state plainly which claim is
+    no longer available.
+    """
+    d = _run_module().TRIAL_RUN_DISCLOSURE
+    assert "TRIAL RUN HAPPENED BEFORE THE REGISTRATION WAS COMMITTED" in d
+    assert "37fd95a18592207ea70eb2e1d19ea4faaa67959ae6dd7c2f591e19da0fa2f1ea" in d
+    assert "NOTHING REACHED data/results" in d
+    # the honesty check must be GIT and not a file mtime: the module holding every registered field is
+    # unchanged since 027d414, hours before the trial, and a committed test asserts the copy word for word
+    assert "WHAT SETTLES THE REGISTRATION'S HONESTY IS GIT" in d
+    assert "NOT A FILE MTIME" in d
+    assert "027d414" in d and "16:52:54" in d
+    assert "no longer claimable" in d.lower()
+    assert "none was READ" in d
