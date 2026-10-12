@@ -22,15 +22,19 @@ is written only once git tracks the record, so it is never an inert skip and nev
 from __future__ import annotations
 
 import gzip
+import json
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import simpler
 from genomeos.attribution import simpler_flynode as fn
 from genomeos.attribution import simpler_flysource as fs
 from genomeos.attribution import simpler_mouse as sm
 from genomeos.attribution.simpler import Chromosome, Gene
+
+INVENTORY = Path("data/results/simpler_mouse_inventory.json")
 
 
 def _gene(gid: str, start: int, end: int, strand: str = "+", chrom: str = "chr1") -> Gene:
@@ -474,3 +478,38 @@ def test_every_declared_input_is_distinct_and_named_by_its_encode_accession():
     accs += [a for _e, a, _w in sm.CTCF_FILES.values()]
     assert len(accs) == len(set(accs)) == 27
     assert all(a.startswith("ENCFF") for a in accs)
+
+
+# ------------------------------------- the committed record, with it and not before it (4f2652c)
+
+
+def test_the_committed_inventory_counts_the_between_gene_stratum_and_states_its_verdict():
+    """`must_be_present`, not a skip: the inventory is tracked from this commit on."""
+    tp.must_be_present(INVENTORY, was="the mouse inventory has not been written on this machine")
+    inv = json.loads(INVENTORY.read_text())
+    stop = inv["stop_rule"]
+    assert stop["threshold"] == sm.STOP_RULE
+    assert stop["met"] is (stop["between_gene_elements_that_change_gene"] >= sm.STOP_RULE)
+    assert stop["verdict"] in ("DECIDABLE", "NO_SOURCE_QUALIFIES")
+    assert inv["read_before_any_rna_value_was_read"] is True
+    assert inv["alphagenome_requests"] == 0
+    assert inv["census"]["between_genes"]["elements"] >= stop["between_gene_elements_that_change_gene"]
+    assert "READER_TERMS" in inv["stop_list_of_2026_09_27"]
+
+
+def test_the_committed_inventory_names_no_host_on_the_between_gene_population():
+    """The whole point of this population: neither rule can name a gene body the element sits in."""
+    tp.must_be_present(INVENTORY, was="the mouse inventory has not been written on this machine")
+    bg = json.loads(INVENTORY.read_text())["census"]["between_genes"]
+    assert bg["gene_structure_names_a_host"] == 0
+    assert bg["differ_from_nearest_tss_where_the_nearest_gene_contains_the_element"] == 0
+
+
+def test_every_committed_boundary_set_is_counted_on_the_same_population():
+    tp.must_be_present(INVENTORY, was="the mouse inventory has not been written on this machine")
+    cen = json.loads(INVENTORY.read_text())["census"]
+    n = cen["between_genes"]["elements"]
+    alts = cen["alternative_boundary_sets_between_genes"]
+    assert len(alts) == len(sm.BONEV_SHEETS) + len(sm.CTCF_FILES) - 1
+    assert all(v["elements"] == n for v in alts.values())
+    assert set(cen["boundary_sets"]) == set(sm.BONEV_SHEETS) | set(sm.CTCF_FILES)
