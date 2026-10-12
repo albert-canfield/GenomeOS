@@ -7,14 +7,18 @@ of real genes except through the committed record itself.
 
 from __future__ import annotations
 
+import json
 import math
 from pathlib import Path
 
 import pytest
+import tracked_paths as tp
 
 from genomeos.attribution import combine2
 from genomeos.attribution import residue as rs
 from genomeos.attribution import scalefit as sf
+
+QUESTIONS_FILE = Path("data/results/residue_questions.json")
 
 # ==== the scale is inherited, not re-declared, and nothing here fits =====================================
 
@@ -194,3 +198,48 @@ def test_the_module_discloses_the_prior_exposure_and_claims_nothing_about_expres
     assert "PROPOSES NO FORM" in rs.__doc__
     assert "NO RNA VALUE IS OPENED" in rs.__doc__
     assert "PROPOSES NO FORM" in rs.CAP_BOUND or "PROPOSES NO FORM" in rs.CAP_BOUND.upper()
+
+
+# ==== the committed registration ========================================================================
+
+
+def test_the_registration_is_committed_and_declares_the_cap_ladder_the_code_uses() -> None:
+    tp.must_be_present(
+        QUESTIONS_FILE,
+        was="the questions, the cap ladder and the decision rule, committed before any count",
+    )
+    d = json.loads(QUESTIONS_FILE.read_text())
+    assert d["lane"] == rs.LANE
+    assert d["cap_levels"] == list(rs.CAP_LEVELS)
+    assert d["cap_primary"] == rs.CAP_PRIMARY
+    assert d["cap_primary"] in d["cap_levels"]
+    assert d["quantiles_reported"] == list(rs.QUANTILES)
+    assert d["questions"] == rs.QUESTIONS
+    assert len(d["questions"]) == 8
+    assert d["decision_thresholds"] == {
+        "concentrated_median_top1_at_or_above": rs.CONCENTRATED_TOP1,
+        "few_median_top3_at_or_above": rs.FEW_TOP3,
+        "few_median_k_min_at_or_below": rs.FEW_KMIN,
+        "diffuse_median_top1_below": rs.DIFFUSE_TOP1,
+    }
+    assert d["readings"] == rs.READINGS
+
+
+def test_the_registration_holds_no_count_of_its_own_and_names_scalefit_s_only_as_a_target() -> None:
+    """The record that declares the questions must not already contain an answer to one of them."""
+    d = json.loads(QUESTIONS_FILE.read_text())
+    assert set(d) & {"Q1_counts", "residue", "recovered", "branch", "verdict"} == set()
+    target = d["to_be_reconciled_against"]
+    assert "AFTER this lane's own count" in target["used_as"]
+    assert target["still_basal_not_positive_the_residue"] > 0  # recorded as the target of a check
+    assert d["rna_read"] == "none" and d["alphagenome_requests"] == 0
+    assert "NO claim about expression" in d["what_this_lane_does_not_do"]
+    assert "proposes NO combination form" in d["what_this_lane_does_not_do"]
+
+
+def test_the_registration_discloses_its_prior_exposure_word_for_word_from_the_module() -> None:
+    d = json.loads(QUESTIONS_FILE.read_text())
+    assert d["prior_exposure"] == rs.PRIOR_EXPOSURE
+    assert "58" in d["prior_exposure"]
+    assert d["cap_bound"] == rs.CAP_BOUND
+    assert d["decision_rule"] == rs.DECISION_RULE
