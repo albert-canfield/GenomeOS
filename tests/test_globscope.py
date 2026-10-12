@@ -209,3 +209,220 @@ def test_does_not_claim_keeps_the_constant_groups_unclaimed():
 def test_the_stop_list_was_read_and_nothing_on_it_is_touched():
     assert "2026-09-27" in globscope.STOP_LIST_READ
     assert "0 model requests" in globscope.STOP_LIST_READ
+
+
+# ====================================================================== the result, read back
+#
+# These guards READ data/results/globscope.json. They are in the same file as the rule's guards above
+# but were added in their own commit, AFTER the record: OWN_CODE declares this test file, so
+# check_staged condition (a) refuses a record written while its test was edited. No pytest.skip is
+# keyed on the record -- tracked_paths.must_be_present raises instead, from this version on.
+
+from tests import tracked_paths  # noqa: E402
+
+RESULT = ROOT / "data/results/globscope.json"
+
+
+def _result() -> dict:
+    tracked_paths.must_be_present("data/results/globscope.json")
+    return json.loads(RESULT.read_text())
+
+
+def test_the_classes_sum_to_the_inherited_eighteen():
+    d = _result()
+    assert sum(d["class_counts"].values()) == globscope.inherited_site_count() == 18
+    assert len(d["sites"]) == 18
+
+
+def test_every_site_carries_exactly_one_class_from_the_registered_set():
+    d = _result()
+    for s in d["sites"]:
+        assert s["class"] in globscope.CLASSES, s["path"]
+
+
+def test_the_class_of_every_site_is_RECOMPUTED_from_its_own_recorded_facts():
+    """The record cannot carry a class its own facts do not produce under the committed rule."""
+    d = _result()
+    for s in d["sites"]:
+        assert s["class"] == globscope.classify_site(
+            refusal_in_enclosing_scope=s["refusal_in_enclosing_scope"],
+            glob_root_resolved=s["glob_root_resolved"],
+            matched_files_on_disk=s["matched_files_on_disk"],
+            all_matched_files_tracked=s["all_matched_files_tracked"],
+            independent_scope_recorded=s["independent_scope_recorded"],
+        ), f"{s['path']}:{s['line']}"
+
+
+def test_the_counts_agree_with_the_sites_they_count():
+    d = _result()
+    for name, n in d["class_counts"].items():
+        assert sum(1 for s in d["sites"] if s["class"] == name) == n, name
+
+
+def test_the_four_refusals_are_the_check_registration_functions_and_each_cites_its_raise():
+    d = _result()
+    refusers = [s for s in d["sites"] if s["class"] == "REFUSES"]
+    assert len(refusers) == 4
+    assert {s["enclosing_function"] for s in refusers} == {"check_registration"}
+    for s in refusers:
+        ev = " ".join(s.get("read_evidence", []))
+        assert "pinned_sha256" in ev and "SystemExit" in ev, s["path"]
+        # the boundary travels with the fact, not in a separate paragraph
+        assert "REGISTRATION'S PIN" in ev, s["path"]
+
+
+def test_the_one_live_site_is_named_and_its_untracked_store_is_cited():
+    d = _result()
+    live = [s for s in d["sites"] if s["class"] == "CAN_SHRINK_SILENTLY"]
+    assert len(live) == 1
+    assert live[0]["path"] == "scripts/reader_genome_wide.py"
+    assert live[0]["line"] == 88
+    ev = " ".join(live[0]["read_evidence"])
+    assert ".gitignore:16" in ev and "mutually exclusive" in ev.lower()
+
+
+def test_no_site_is_CANNOT_SHRINK_and_the_ignored_stores_are_why():
+    """The uncomfortable half of the answer: not one glob reads a wholly tracked store."""
+    d = _result()
+    assert d["class_counts"]["CANNOT_SHRINK"] == 0
+    assert all(s["all_matched_files_tracked"] is not True for s in d["sites"])
+    evidence = " ".join(" ".join(s.get("read_evidence", [])) for s in d["sites"])
+    assert ".gitignore:50" in evidence and "299" in evidence
+
+
+def test_no_read_fact_names_a_class_and_every_one_cites_a_path_line():
+    d = _result()
+    for a in d["read_facts_applied"]:
+        assert "class" not in a["sets"] and "classification" not in a["sets"]
+        assert ":" in a["evidence"]
+        assert set(a["sets"]) <= {
+            "refusal_in_enclosing_scope",
+            "glob_root_resolved",
+            "matched_files_on_disk",
+            "all_matched_files_tracked",
+            "independent_scope_recorded",
+        }
+
+
+def test_a_read_fact_never_DENIES_a_refusal():
+    d = _result()
+    for a in d["read_facts_applied"]:
+        if "refusal_in_enclosing_scope" in a["sets"]:
+            assert a["sets"]["refusal_in_enclosing_scope"] is True
+
+
+# ----------------------------------------------------------------- the six varying groups
+
+
+def test_the_inherited_six_are_six_and_are_the_ones_globcensus_named():
+    d = _result()
+    rows = d["varying_groups_the_inherited_six_CORRECTED"]
+    assert len(rows) == 6
+    inherited = json.loads((ROOT / "data/results/globcensus.json").read_text())
+    assert {r["group"] for r in rows} == set(inherited["groups_whose_count_varies"])
+
+
+def test_every_varying_class_is_RECOMPUTED_from_the_committed_rule():
+    d = _result()
+    for r in d["varying_groups_the_inherited_six_CORRECTED"]:
+        classes = set()
+        for x in r["per_result"]:
+            assert x["class"] in globscope.VARIATION_CLASSES
+            classes.add(x["class"])
+        expected = (
+            next(iter(classes))
+            if len(classes) == 1
+            else "MIXED_ACROSS_RESULTS: " + ", ".join(sorted(classes))
+        )
+        assert r["group_class"] == expected, r["group"]
+
+
+def test_no_varying_group_is_called_a_SILENT_SHRINK_by_this_rule():
+    d = _result()
+    for r in d["varying_groups_the_inherited_six_CORRECTED"]:
+        for x in r["per_result"]:
+            assert x["class"] != "SILENT_SHRINK", (r["group"], x["result"])
+
+
+def test_every_LEGITIMATE_SCOPE_names_the_field_that_decided_it():
+    d = _result()
+    for r in d["varying_groups_the_inherited_six_CORRECTED"]:
+        for x in r["per_result"]:
+            if x["class"] == "LEGITIMATE_SCOPE":
+                assert x["commensurable"] is True
+                assert "parameters." in str(x["the_field_that_decided_it"])
+                assert x["declared"] <= x["scope_count"]
+
+
+def test_PLANTED_an_incommensurable_scope_is_UNDECIDABLE_and_not_legitimate():
+    """The first pass's error, held as a test: 73 files against a 24-chromosome list decides nothing."""
+    d = _result()
+    sweep = next(
+        r
+        for r in d["varying_groups_the_inherited_six_CORRECTED"]
+        if r["group"].startswith("the all-enhancer sweep")
+    )
+    assert sweep["group_class"] == "UNDECIDABLE"
+    for x in sweep["per_result"]:
+        assert x["commensurable"] is False
+        assert "no commensurable scope" in x["the_field_that_decided_it"]
+
+
+def test_the_result_keeps_BOTH_passes_and_says_which_is_the_answer():
+    d = _result()
+    assert d["varying_groups_the_inherited_six"], "the first pass is kept"
+    assert "CORRECTED" in d["which_pass_is_the_answer"]
+    assert "flatter" in d["why_a_second_pass"] or "flatter" in d["which_pass_is_the_answer"]
+
+
+def test_the_refinement_not_taken_is_recorded_as_a_decision():
+    d = _result()
+    note = d["the_refinement_not_taken"]
+    assert "NOT DO IT" in note.upper()
+    assert "flattering direction" in note
+    assert "0 of 6" in note
+
+
+# ------------------------------------------------- the carried wording, inside the record itself
+
+
+def test_the_record_carries_the_inherited_reading_word_for_word():
+    d = _result()
+    assert d["inherited"]["reading_carried_verbatim"] == globscope.INHERITED_READING
+    assert d["inherited"]["limit_carried_verbatim"] == globscope.INHERITED_LIMIT
+
+
+def test_the_record_carries_shrinkimpacts_refutation_and_does_not_restate_it_as_its_own():
+    from genomeos.attribution import globcensus
+
+    d = _result()
+    assert d["inherited"]["stage_2_refuted"] == globcensus.STAGE_2_REFUTED
+    assert d["inherited"]["stage_2_summary"] == globcensus.STAGE_2_SUMMARY
+    assert "realised in 0 of the 6 checked" in d["inherited"]["stage_2_summary"]
+
+
+def test_the_population_move_is_recorded_rather_than_absorbed():
+    d = _result()
+    moved = d["the_population_moved_while_this_lane_worked"]
+    assert moved["inherited_sites_classified"] == 18
+    assert moved["exists_filtered_sites_in_the_tree_now"] == 23
+    assert len(moved["new_since_globcensus"]) == 5
+    assert len(d["varying_groups_new_since_globcensus"]) == 2
+    for named in moved["new_since_globcensus"]:
+        assert not any(s["path"] in named and str(s["line"]) in named for s in d["sites"])
+
+
+def test_the_record_claims_no_money_and_no_model_request():
+    d = _result()
+    assert d["model_requests"] == 0
+    assert d["money_spent"] == "$0.00"
+    assert "2026-09-27" in d["stop_list"]
+
+
+def test_the_manifest_is_complete_and_its_inputs_are_repo_relative():
+    d = _result()
+    m = d["result_manifest"]
+    assert m["complete"] is True
+    assert m["code_cleanliness"]["own_code_is_committed"] is True
+    for entry in m["inputs"]:
+        assert not str(entry["path"]).startswith("/"), entry["path"]
